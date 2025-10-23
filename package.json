@@ -6,10 +6,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --require-config --check .",
-    "format:write": "prettier --require-config --write ."
+    "format:write": "prettier --require-config --write .",
+    "build:tokens": "node scripts/build-tokens.js",
+    "package:tokens": "npm run build:tokens && node scripts/package-tokens.js && npm pack ./build",
+    "version:patch": "npm version patch --no-git-tag-version",
+    "version:minor": "npm version minor --no-git-tag-version",
+    "version:major": "npm version major --no-git-tag-version"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "style-dictionary": "^4.4.0"
+  }
 }
