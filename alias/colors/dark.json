@@ -1,0 +1,80 @@
+{
+  "color": {
+    "content-default": { "value": "{color.gray.900}" },
+    "content-hover": { "value": "{color.gray.1000}" },
+    "content-focus": { "value": "{color.gray.1000}" },
+    "content-disabled": { "value": "{color.gray.500}" },
+
+    "content-subdued-default": { "value": "{color.gray.700}" },
+    "content-subdued-interactive": { "value": "{color.gray.800}" },
+    "content-subdued-disabled": { "value": "{color.gray.500}" },
+    "content-subdued-selected": { "value": "{color.gray.800}" },
+
+    "background-base": { "value": "{color.gray.25}" },
+    "background-elevated": { "value": "{color.gray.50}" },
+    "background-layer-1": { "value": "{color.gray.75}" },
+    "background-layer-2": { "value": "{color.gray.100}" },
+    "background-pasteboard": { "value": "{color.gray.200}" },
+    "background-disabled": { "value": "{color.gray.200}" },
+
+    "background-accent-default": { "value": "{color.blue.700}" },
+    "background-accent-interactive": { "value": "{color.blue.800}" },
+    "background-accent-disabled": { "value": "{color.gray.200}" },
+
+    "background-negative-default": { "value": "{color.red.700}" },
+    "background-negative-interactive": { "value": "{color.red.800}" },
+    "background-negative-disabled": { "value": "{color.gray.200}" },
+
+    "background-neutral-default": { "value": "{color.gray.300}" },
+    "background-neutral-interactive": { "value": "{color.gray.400}" },
+    "background-neutral-disabled": { "value": "{color.gray.200}" },
+
+    "background-primary-default": {
+      "value": "{color.background-neutral-default}"
+    },
+    "background-primary-interactive": {
+      "value": "{color.background-neutral-interactive}"
+    },
+    "background-primary-disabled": {
+      "value": "{color.background-neutral-disabled}"
+    },
+
+    "background-outline-transparent": { "value": "rgba(0,0,0,0)" },
+    "background-outline-subtle": { "value": "rgba(255,255,255,0.12)" },
+
+    "background-secondary-transparent": { "value": "rgba(255,255,255,0.09)" },
+    "background-secondary-subtle": { "value": "rgba(255,255,255,0.12)" },
+    "background-secondary-disabled": { "value": "{color.background-disabled}" },
+
+    "border-disabled": { "value": "{color.gray.400}" },
+    "border-focus-indicator": { "value": "{color.blue.800}" },
+
+    "border-accent-default": { "value": "{color.blue.700}" },
+    "border-accent-interactive": { "value": "{color.blue.800}" },
+    "border-accent-disabled": { "value": "{color.gray.400}" },
+
+    "border-primary-default": { "value": "{color.gray.400}" },
+    "border-primary-interactive": { "value": "{color.gray.500}" },
+    "border-primary-disabled": { "value": "{color.border-disabled}" },
+
+    "border-secondary-default": { "value": "{color.gray.200}" },
+    "border-secondary-interactive": { "value": "{color.gray.300}" },
+    "border-secondary-disabled": { "value": "{color.gray.200}" },
+
+    "divider-primary": { "value": "{color.gray.300}" },
+    "divider-secondary": { "value": "{color.gray.200}" },
+
+    "shadow-default": { "value": "rgba(0,0,0,0.48)" },
+    "shadow-elevated": { "value": "rgba(0,0,0,0.56)" },
+    "shadow-dragged": { "value": "rgba(0,0,0,0.64)" },
+
+    "icon-default": { "value": "{color.content-default}" },
+    "icon-interactive": { "value": "{color.content-hover}" },
+
+    "link-default": { "value": "{color.blue.800}" },
+    "link-hover": { "value": "{color.blue.900}" },
+
+    "text-default": { "value": "{color.gray.900}" },
+    "text-muted": { "value": "{color.gray.800}" }
+  }
+}
