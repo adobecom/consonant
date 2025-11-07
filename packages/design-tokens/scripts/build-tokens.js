@@ -896,3 +896,14 @@ function toSlug(value) {
     .replace(/^-+|-+$/g, "");
   return normalized || "token";
 }
+
+// Export functions for testing
+module.exports = {
+  toPx,
+  toRem,
+  roundTo,
+  stripTrailingZeros,
+  quoteFontFamily,
+  isNumericKey,
+  findNumericKey,
+};

@@ -32,6 +32,14 @@ export default defineConfig({
           setupFiles: ['.storybook/vitest.setup.js'],
         },
       },
+      {
+        test: {
+          name: 'design-tokens',
+          include: ['packages/design-tokens/**/*.test.js'],
+          environment: 'node',
+          globals: true,
+        },
+      },
     ],
   },
 });
