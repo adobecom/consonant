@@ -1,0 +1,26 @@
+{
+  "name": "storybook",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/storybook",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/storybook/scripts/prepare-story-data.js && storybook dev -p 6006",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "node apps/storybook/scripts/prepare-story-data.js && storybook build",
+        "cwd": "{workspaceRoot}",
+        "outputs": ["{workspaceRoot}/storybook-static"]
+      }
+    }
+  },
+  "tags": ["scope:storybook", "type:app"]
+}
+

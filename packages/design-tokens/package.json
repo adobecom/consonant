@@ -1,0 +1,41 @@
+{
+  "name": "consonant-design-tokens",
+  "version": "0.0.1",
+  "description": "Design token build output for Consonant.",
+  "license": "ISC",
+  "main": "css/tokens-base.css",
+  "style": "css/tokens-base.css",
+  "scripts": {
+    "build": "nx build design-tokens",
+    "package": "nx package design-tokens",
+    "sync": "nx sync-figma design-tokens",
+    "minify": "nx minify design-tokens",
+    "clean": "nx clean design-tokens"
+  },
+  "exports": {
+    "./css/tokens-base.css": "./css/tokens-base.css",
+    "./css/tokens-base.min.css": "./css/tokens-base.min.css",
+    "./css/tokens-light.css": "./css/tokens-light.css",
+    "./css/tokens-light.min.css": "./css/tokens-light.min.css",
+    "./css/tokens-dark.css": "./css/tokens-dark.css",
+    "./css/tokens-dark.min.css": "./css/tokens-dark.min.css",
+    "./css/tokens-mobile.css": "./css/tokens-mobile.css",
+    "./css/tokens-mobile.min.css": "./css/tokens-mobile.min.css",
+    "./css/tokens-tablet.css": "./css/tokens-tablet.css",
+    "./css/tokens-tablet.min.css": "./css/tokens-tablet.min.css",
+    "./css/tokens-desktop.css": "./css/tokens-desktop.css",
+    "./css/tokens-desktop.min.css": "./css/tokens-desktop.min.css",
+    "./css/tokens-desktop-wide.css": "./css/tokens-desktop-wide.css",
+    "./css/tokens-desktop-wide.min.css": "./css/tokens-desktop-wide.min.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "css/"
+  ],
+  "keywords": [
+    "design-tokens",
+    "css",
+    "consonant"
+  ],
+  "private": false
+}

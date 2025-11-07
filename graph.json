@@ -1,0 +1,124 @@
+{
+  "graph": {
+    "nodes": {
+      "design-tokens": {
+        "name": "design-tokens",
+        "type": "lib",
+        "data": {
+          "root": "packages/design-tokens",
+          "name": "design-tokens",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "packages/design-tokens",
+          "projectType": "library",
+          "tags": [
+            "scope:design-tokens",
+            "type:package"
+          ],
+          "targets": {
+            "build": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "node packages/design-tokens/scripts/build-tokens.js",
+                "outputs": [
+                  "dist/packages/design-tokens"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "cache": true
+            },
+            "package": {
+              "executor": "nx:run-commands",
+              "dependsOn": [
+                "build"
+              ],
+              "options": {
+                "command": "node packages/design-tokens/scripts/package-tokens.js && npm pack ./dist/packages/design-tokens",
+                "outputs": [
+                  "*.tgz"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "sync": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "node packages/design-tokens/scripts/sync-figma-variables.js"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "rm -rf tokens dist/packages/design-tokens"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "storybook": {
+        "name": "storybook",
+        "type": "app",
+        "data": {
+          "root": "apps/storybook",
+          "name": "storybook",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/storybook",
+          "projectType": "application",
+          "tags": [
+            "scope:storybook",
+            "type:app"
+          ],
+          "targets": {
+            "serve": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "node apps/storybook/scripts/prepare-story-data.js && storybook dev -p 6006",
+                "cwd": ""
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-commands",
+              "dependsOn": [
+                "^build"
+              ],
+              "options": {
+                "command": "node apps/storybook/scripts/prepare-story-data.js && storybook build",
+                "cwd": "",
+                "outputs": [
+                  "storybook-static"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "cache": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      }
+    },
+    "dependencies": {
+      "design-tokens": [],
+      "storybook": []
+    }
+  }
+}

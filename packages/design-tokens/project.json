@@ -1,0 +1,43 @@
+{
+  "name": "design-tokens",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/design-tokens",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node packages/design-tokens/scripts/build-tokens.js",
+        "outputs": ["{workspaceRoot}/dist/packages/design-tokens"]
+      }
+    },
+    "package": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node packages/design-tokens/scripts/package-tokens.js && npm pack ./dist/packages/design-tokens",
+        "outputs": ["{workspaceRoot}/*.tgz"]
+      }
+    },
+    "sync-figma": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node packages/design-tokens/scripts/sync-figma-variables.js"
+      }
+    },
+    "minify": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node packages/design-tokens/scripts/minify-css.js"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -rf packages/design-tokens/tokens dist/packages/design-tokens"
+      }
+    }
+  },
+  "tags": ["scope:design-tokens", "type:package"]
+}
+

@@ -1,0 +1,11 @@
+{
+  "name": "@consonant-2/storybook",
+  "version": "0.0.1",
+  "description": "Storybook application for Consonant design tokens",
+  "private": true,
+  "scripts": {
+    "serve": "nx serve storybook",
+    "build": "nx build storybook"
+  }
+}
+
