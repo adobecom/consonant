@@ -1,0 +1,113 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root[data-theme="desktop"] {
+  --typography-logo-2xl-line-height: 1.25px;
+  --container-width-card-min: 320px; /** Placeholder token: awaiting design definition for final value */
+  --density-action-stack: 6px; /** Placeholder token: awaiting design definition for final value */
+  --density-action-inline: 12px; /** Placeholder token: awaiting design definition for final value */
+  --typography-heading-4xl-font-family: var(--typography-font-family-default);
+  --typography-heading-4xl-font-weight: var(--typography-font-weight-black);
+  --typography-heading-3xl-font-family: var(--typography-font-family-default);
+  --typography-heading-3xl-font-weight: var(--typography-font-weight-black);
+  --typography-heading-2xl-font-family: var(--typography-font-family-default);
+  --typography-heading-2xl-font-weight: var(--typography-font-weight-black);
+  --typography-heading-xl-font-family: var(--typography-font-family-default);
+  --typography-heading-xl-font-weight: var(--typography-font-weight-black);
+  --typography-heading-lg-font-family: var(--typography-font-family-default);
+  --typography-heading-lg-font-weight: var(--typography-font-weight-black);
+  --typography-heading-md-font-family: var(--typography-font-family-default);
+  --typography-heading-md-font-weight: var(--typography-font-weight-black);
+  --typography-title-2xl-font-family: var(--typography-font-family-default);
+  --typography-title-2xl-font-weight: var(--typography-font-weight-bold);
+  --typography-title-xl-font-family: var(--typography-font-family-default);
+  --typography-title-xl-font-weight: var(--typography-font-weight-bold);
+  --typography-title-lg-font-family: var(--typography-font-family-default);
+  --typography-title-lg-font-weight: var(--typography-font-weight-bold);
+  --typography-title-md-font-family: var(--typography-font-family-default);
+  --typography-title-md-font-weight: var(--typography-font-weight-bold);
+  --typography-title-sm-font-family: var(--typography-font-family-default);
+  --typography-title-sm-font-weight: var(--typography-font-weight-bold);
+  --typography-title-xs-font-family: var(--typography-font-family-default);
+  --typography-title-xs-font-weight: var(--typography-font-weight-bold);
+  --typography-title-2xs-font-family: var(--typography-font-family-default);
+  --typography-title-2xs-font-weight: var(--typography-font-weight-bold);
+  --typography-detail-lg-font-family: var(--typography-font-family-default);
+  --typography-detail-lg-font-weight: var(--typography-font-weight-bold);
+  --typography-detail-md-font-family: var(--typography-font-family-default);
+  --typography-detail-md-font-weight: var(--typography-font-weight-bold);
+  --typography-detail-sm-font-family: var(--typography-font-family-default);
+  --typography-detail-sm-font-weight: var(--typography-font-weight-bold);
+  --typography-body-2xl-font-family: var(--typography-font-family-default);
+  --typography-body-2xl-font-weight: var(--typography-font-weight-bold);
+  --typography-body-xl-font-family: var(--typography-font-family-default);
+  --typography-body-xl-font-weight: var(--typography-font-weight-bold);
+  --typography-body-lg-font-family: var(--typography-font-family-default);
+  --typography-body-lg-font-weight: var(--typography-font-weight-bold);
+  --typography-body-md-font-family: var(--typography-font-family-default);
+  --typography-body-md-font-weight: var(--typography-font-weight-bold);
+  --typography-body-sm-font-family: var(--typography-font-family-default);
+  --typography-body-sm-font-weight: var(--typography-font-weight-bold);
+  --typography-body-xs-font-family: var(--typography-font-family-default);
+  --typography-body-xs-font-weight: var(--typography-font-weight-bold);
+  --typography-label-2xl-font-family: var(--typography-font-family-default);
+  --typography-label-2xl-font-weight: var(--typography-font-weight-bold);
+  --typography-logo-2xl-font-family: var(--typography-font-family-default);
+  --typography-logo-2xl-font-weight: var(--typography-font-weight-bold);
+  --border-radius-action: var(--border-radius-xs); /** Placeholder token: awaiting design definition for final value */
+  --border-radius-card: var(--border-radius-xs); /** Placeholder token: awaiting design definition for final value */
+  --typography-heading-4xl-font-size: var(--typography-font-size-13xl);
+  --typography-heading-4xl-line-height: var(--typography-line-height-13xl);
+  --typography-heading-3xl-font-size: var(--typography-font-size-12xl);
+  --typography-heading-3xl-line-height: var(--typography-line-height-12xl);
+  --typography-heading-2xl-font-size: var(--typography-font-size-8xl);
+  --typography-heading-2xl-line-height: var(--typography-line-height-8xl);
+  --typography-heading-xl-font-size: var(--typography-font-size-6xl);
+  --typography-heading-xl-line-height: var(--typography-line-height-6xl);
+  --typography-heading-lg-font-size: var(--typography-font-size-4xl);
+  --typography-heading-lg-line-height: var(--typography-line-height-4xl);
+  --typography-heading-md-font-size: var(--typography-font-size-3xl);
+  --typography-heading-md-line-height: var(--typography-line-height-3xl);
+  --typography-title-2xl-font-size: var(--typography-font-size-5xl);
+  --typography-title-2xl-line-height: var(--typography-line-height-5xl);
+  --typography-title-xl-font-size: var(--typography-font-size-4xl);
+  --typography-title-xl-line-height: var(--typography-line-height-4xl);
+  --typography-title-lg-font-size: var(--typography-font-size-3xl);
+  --typography-title-lg-line-height: var(--typography-line-height-3xl);
+  --typography-title-md-font-size: var(--typography-font-size-2xl);
+  --typography-title-md-line-height: var(--typography-line-height-2xl);
+  --typography-title-sm-font-size: var(--typography-font-size-xl);
+  --typography-title-sm-line-height: var(--typography-line-height-xl);
+  --typography-title-xs-font-size: var(--typography-font-size-lg);
+  --typography-title-xs-line-height: var(--typography-line-height-lg);
+  --typography-title-2xs-font-size: var(--typography-font-size-md);
+  --typography-title-2xs-line-height: var(--typography-line-height-md);
+  --typography-detail-lg-font-size: var(--typography-font-size-2xl);
+  --typography-detail-lg-line-height: var(--typography-line-height-2xl);
+  --typography-detail-md-font-size: var(--typography-font-size-lg);
+  --typography-detail-md-line-height: var(--typography-line-height-lg);
+  --typography-detail-sm-font-size: var(--typography-font-size-sm);
+  --typography-detail-sm-line-height: var(--typography-line-height-sm);
+  --typography-body-2xl-font-size: var(--typography-font-size-4xl);
+  --typography-body-2xl-line-height: var(--typography-line-height-4xl);
+  --typography-body-xl-font-size: var(--typography-font-size-2xl);
+  --typography-body-xl-line-height: var(--typography-line-height-2xl);
+  --typography-body-lg-font-size: var(--typography-font-size-xl);
+  --typography-body-lg-line-height: var(--typography-line-height-xl);
+  --typography-body-md-font-size: var(--typography-font-size-lg);
+  --typography-body-md-line-height: var(--typography-line-height-lg);
+  --typography-body-sm-font-size: var(--typography-font-size-md);
+  --typography-body-sm-line-height: var(--typography-line-height-md);
+  --typography-body-xs-font-size: var(--typography-font-size-xs);
+  --typography-body-xs-line-height: var(--typography-line-height-xs);
+  --typography-label-2xl-font-size: var(--typography-font-size-lg);
+  --typography-label-2xl-line-height: var(--typography-line-height-lg);
+  --typography-logo-2xl-font-size: var(--typography-font-size-11xl);
+  --density-surface-card-inset: var(--spacing-md); /** Placeholder token: awaiting design definition for final value */
+  --density-surface-card-stack: var(--spacing-xl); /** Placeholder token: awaiting design definition for final value */
+  --density-surface-card-inline: var(--spacing-md); /** Placeholder token: awaiting design definition for final value */
+  --density-surface-card-gap: var(--spacing-md); /** Placeholder token: awaiting design definition for final value */
+  --density-surface-card-heading-gap: var(--spacing-xs); /** Placeholder token: awaiting design definition for final value */
+  --density-form-gap: var(--border-radius-sm); /** Placeholder token: awaiting design definition for final value */
+}

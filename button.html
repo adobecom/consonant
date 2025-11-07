@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Button Component</title>
+    <link rel="stylesheet" href="button.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Button Component Examples</h1>
+
+      <section>
+        <h2>Default Variant</h2>
+        <button class="btn" data-state="default">Label</button>
+        <button class="btn" data-state="hover">Label</button>
+        <button class="btn" data-state="active">Label</button>
+        <button class="btn" data-state="disabled" disabled>Label</button>
+      </section>
+
+      <section>
+        <h2>Outlined Variant</h2>
+        <button class="btn btn--outlined" data-state="default">Label</button>
+        <button class="btn btn--outlined" data-state="hover">Label</button>
+        <button class="btn btn--outlined" data-state="active">Label</button>
+        <button class="btn btn--outlined" data-state="disabled" disabled>
+          Label
+        </button>
+      </section>
+
+      <section>
+        <h2>Interactive States (hover/active)</h2>
+        <button class="btn">Hover me</button>
+        <button class="btn btn--outlined">Hover me</button>
+      </section>
+    </div>
+  </body>
+</html>

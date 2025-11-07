@@ -1,6 +1,6 @@
 {
   "name": "consonant-2",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,13 +11,30 @@
     "package:tokens": "npm run build:tokens && node scripts/package-tokens.js && npm pack ./build",
     "version:patch": "npm version patch --no-git-tag-version",
     "version:minor": "npm version minor --no-git-tag-version",
-    "version:major": "npm version major --no-git-tag-version"
+    "version:major": "npm version major --no-git-tag-version",
+    "storybook": "node scripts/prepare-story-data.js && storybook dev -p 6006",
+    "build-storybook": "node scripts/prepare-story-data.js && storybook build",
+    "sync:figma": "node scripts/sync-figma-variables.js",
+    "tokens:clean": "rm -rf tokens build",
+    "archive": "git archive --format=zip --output=consonant-2-$(node -p \"require('./package.json').version\").zip HEAD"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "style-dictionary": "^4.4.0"
+    "@chromatic-com/storybook": "^4.1.1",
+    "@rollup/rollup-darwin-arm64": "^4.52.5",
+    "@storybook/addon-a11y": "^9.1.15",
+    "@storybook/addon-docs": "^9.1.15",
+    "@storybook/addon-vitest": "^9.1.15",
+    "@storybook/web-components-vite": "^9.1.15",
+    "@vitest/browser-playwright": "^4.0.3",
+    "@vitest/coverage-v8": "^4.0.3",
+    "lit": "^3.3.1",
+    "playwright": "^1.56.1",
+    "storybook": "^9.1.15",
+    "style-dictionary": "^4.4.0",
+    "vitest": "^4.0.3"
   }
 }
