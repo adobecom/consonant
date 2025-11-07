@@ -1,22 +1,8 @@
 {
   "fileId": "7YKv4XjtE2sUEP7CpOZQIQ",
   "apiBase": "https://api.figma.com",
-  "generatedAt": "2025-11-07T15:29:40.205Z",
+  "generatedAt": "2025-11-07T20:41:06.617Z",
   "files": [
-    {
-      "fileName": "semantic-variablecollectionid-4-218.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:4:218",
-        "name": "Semantic",
-        "slug": "semantic",
-        "idSlug": "variablecollectionid-4-218"
-      },
-      "mode": {
-        "id": "4:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
     {
       "fileName": "component-variablecollectionid-4-522.mode-1.json",
       "collection": {
@@ -57,6 +43,20 @@
         "id": "4:1",
         "name": "mobile",
         "slug": "mobile"
+      }
+    },
+    {
+      "fileName": "responsive-variablecollectionid-4-519.tablet.json",
+      "collection": {
+        "id": "VariableCollectionId:4:519",
+        "name": "Responsive",
+        "slug": "responsive",
+        "idSlug": "variablecollectionid-4-519"
+      },
+      "mode": {
+        "id": "97:1",
+        "name": "tablet",
+        "slug": "tablet"
       }
     },
     {
@@ -113,6 +113,20 @@
         "id": "50:1",
         "name": "Dark",
         "slug": "dark"
+      }
+    },
+    {
+      "fileName": "semantic-variablecollectionid-4-218.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:4:218",
+        "name": "Semantic",
+        "slug": "semantic",
+        "idSlug": "variablecollectionid-4-218"
+      },
+      "mode": {
+        "id": "4:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
       }
     },
     {
