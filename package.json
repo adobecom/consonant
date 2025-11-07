@@ -16,6 +16,8 @@
     "tokens:sync": "nx sync-figma design-tokens",
     "tokens:minify": "nx minify design-tokens",
     "tokens:clean": "nx clean design-tokens",
+    "tokens:test": "nx test design-tokens",
+    "tokens:analyze": "node packages/design-tokens/scripts/analyze-performance.js",
     "storybook": "nx serve storybook",
     "storybook:build": "nx build storybook"
   },

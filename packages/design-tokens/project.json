@@ -40,10 +40,9 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vitest run packages/design-tokens/scripts/__tests__/unit-conversions.test.js"
+        "command": "vitest run packages/design-tokens/scripts/__tests__/"
       }
     }
   },
   "tags": ["scope:design-tokens", "type:package"]
 }
-

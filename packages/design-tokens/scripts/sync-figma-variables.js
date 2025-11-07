@@ -465,4 +465,15 @@ async function safeParseJson(response) {
   }
 }
 
+// Export functions for testing
+module.exports = {
+  normalizeVariables,
+  normalizeCollections,
+  parseEnv,
+  stripQuotes,
+  splitVariablePath,
+  transformVariables,
+  hydrateEnv,
+};
+
 main();

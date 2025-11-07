@@ -10,7 +10,8 @@
     "package": "nx package design-tokens",
     "sync": "nx sync-figma design-tokens",
     "minify": "nx minify design-tokens",
-    "clean": "nx clean design-tokens"
+    "clean": "nx clean design-tokens",
+    "test": "nx test design-tokens"
   },
   "exports": {
     "./css/tokens-base.css": "./css/tokens-base.css",
