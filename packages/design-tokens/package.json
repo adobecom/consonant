@@ -1,6 +1,6 @@
 {
-  "name": "consonant-design-tokens",
-  "version": "0.0.1",
+  "name": "s2a-tokens",
+  "version": "0.0.2",
   "description": "Design token build output for Consonant.",
   "license": "ISC",
   "main": "css/tokens-base.css",
@@ -31,7 +31,8 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "css/"
+    "css/",
+    "README.md"
   ],
   "keywords": [
     "design-tokens",

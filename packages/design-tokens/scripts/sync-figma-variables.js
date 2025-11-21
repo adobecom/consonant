@@ -247,7 +247,7 @@ function transformVariables({ variables, collections }) {
   }
 
   for (const variable of variables) {
-    if (!variable || variable.remote) {
+    if (!variable || variable.remote || variable.deletedButReferenced) {
       continue;
     }
 

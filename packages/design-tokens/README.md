@@ -1,0 +1,357 @@
+# S2A Design Tokens
+
+This package is the **source of truth** for every design token that ships in S2A.
+It outputs **CSS only** (no JS runtime required).
+All CSS is generated from our internal Figma Variables → JSON export (`tokens/`), but these raw JSON files are **not** included in the published package.
+
+**Package name:** `s2a-tokens`  
+**Current version:** `0.0.2`
+
+---
+
+# Token Architecture Overview
+
+The design tokens follow a **four-tier system** that maps directly to our Figma setup:
+
+1. **Primitives** → raw values (spacing, type, radii, color ramps)
+2. **Semantic** → meaning-based tokens (surface, text, border, action, spacing t-shirt scale)
+3. **Responsive** → breakpoint-specific overrides (typography, container, density, border-radius)
+4. **Component** → UI-specific tokens (Button, Card, Input, etc.)
+
+Every tier builds on the one below it.
+
+The CSS output mirrors this architecture **exactly**, including light/dark modes and responsive breakpoints where appropriate.
+
+---
+
+# How the CSS Files Build on Each Other
+
+### 1. **Primitives**
+
+Core raw values. No themes. No modes. No breakpoints.
+
+| File                              | Contains                                                                |
+| --------------------------------- | ----------------------------------------------------------------------- |
+| **`tokens.primitives.css`**       | All non-color primitives (spacing, typography, radii, opacity, shadows) |
+| **`tokens.primitives.light.css`** | Color primitives for **light** mode                                     |
+| **`tokens.primitives.dark.css`**  | Color primitives for **dark** mode                                      |
+
+**Who uses primitives?**
+Semantics. Everything semantic maps directly to these raw values.
+Developers usually don’t use primitives directly unless they customize tokens.
+
+---
+
+### 2. **Semantic Tokens**
+
+Meaning-based mappings. These define your design language.
+
+| File                            | Contains                                                              |
+| ------------------------------- | --------------------------------------------------------------------- |
+| **`tokens.semantic.css`**       | Non-color semantics (spacing steps, radii, typography mappings, etc.) |
+| **`tokens.semantic.light.css`** | Semantic color tokens for **light** (surface, text, border, action)   |
+| **`tokens.semantic.dark.css`**  | Semantic color tokens for **dark**                                    |
+
+**How semantics work:**
+
+- They **reference primitives**
+- They provide a stable contract for all components
+- They change per mode (light/dark) but not per breakpoint
+
+**Component tokens depend on these.**
+
+---
+
+### 3. **Responsive Tokens**
+
+Breakpoint-specific overrides that adapt typography, containers, and density across screen sizes.
+
+> **Note:** Responsive tokens are currently filtered out from the build output. The build logic is preserved for future use, but responsive CSS files are not generated at this time.
+
+| File                                     | Contains                                              | Status       |
+| ---------------------------------------- | ----------------------------------------------------- | ------------ |
+| **`tokens.responsive.mobile.css`**       | Mobile defaults (no media query)                      | Filtered out |
+| **`tokens.responsive.tablet.css`**       | Tablet overrides (`@media (min-width: 768px)`)        | Filtered out |
+| **`tokens.responsive.desktop.css`**      | Desktop overrides (`@media (min-width: 1024px)`)      | Filtered out |
+| **`tokens.responsive.desktop-wide.css`** | Desktop-wide overrides (`@media (min-width: 1440px)`) | Filtered out |
+
+**How responsive tokens work (when enabled):**
+
+- They **reference primitives and semantic tokens**
+- They override typography scales, container widths, density, and border-radius at specific breakpoints
+- They are scoped with media queries (except mobile, which is the default)
+- They layer on top of all other token tiers
+
+---
+
+### 4. **Component Tokens**
+
+| File                             | Contains                                                         |
+| -------------------------------- | ---------------------------------------------------------------- |
+| **`tokens.component.css`**       | Structural component tokens (radii, spacing, layout) — no colors |
+| **`tokens.component.light.css`** | Component color tokens for **light**                             |
+| **`tokens.component.dark.css`**  | Component color tokens for **dark**                              |
+
+**How component tokens work:**
+
+- They **reference semantic tokens** (and can also reference responsive tokens depending on dynamic behavior)
+- They encapsulate UI-level patterns (Button, Card, Input)
+- They inherit theme automatically via light/dark variants
+
+---
+
+# File Structure
+
+The package outputs CSS files in two directories:
+
+- **`css/dev/`** - Uncompressed CSS files for development inspection
+- **`css/min/`** - Minified consolidated CSS file for production (`tokens.min.css`)
+
+## Available Files
+
+### Development Files (`css/dev/`)
+
+- `tokens.primitives.css` - Non-color core primitives
+- `tokens.primitives.light.css` - Color primitives for light mode
+- `tokens.primitives.dark.css` - Color primitives for dark mode
+- `tokens.semantic.css` - Non-color semantic tokens
+- `tokens.semantic.light.css` - Semantic color tokens for light mode
+- `tokens.semantic.dark.css` - Semantic color tokens for dark mode
+- `tokens.component.css` - Non-color component tokens
+- `tokens.component.light.css` - Component color tokens for light mode
+- `tokens.component.dark.css` - Component color tokens for dark mode
+
+### Production File (`css/min/`)
+
+- `tokens.min.css` - Consolidated minified file containing all token layers
+
+---
+
+# How Everything Layers in CSS (Order Matters)
+
+Here is the correct stacking order for any app. **Import these in your root `index.css` or main stylesheet:**
+
+**For development (using individual files):**
+
+```css
+/* 1. Raw primitives */
+@import "s2a-tokens/css/dev/tokens.primitives.css";
+@import "s2a-tokens/css/dev/tokens.primitives.light.css";
+@import "s2a-tokens/css/dev/tokens.primitives.dark.css";
+
+/* 2. Semantic layer */
+@import "s2a-tokens/css/dev/tokens.semantic.css";
+@import "s2a-tokens/css/dev/tokens.semantic.light.css";
+@import "s2a-tokens/css/dev/tokens.semantic.dark.css";
+
+/* 3. Responsive overrides (currently filtered out - not available) */
+/* @import "s2a-tokens/css/dev/tokens.responsive.mobile.css"; */
+/* @import "s2a-tokens/css/dev/tokens.responsive.tablet.css"; */
+/* @import "s2a-tokens/css/dev/tokens.responsive.desktop.css"; */
+/* @import "s2a-tokens/css/dev/tokens.responsive.desktop-wide.css"; */
+
+/* 4. Components (the top of the pyramid) */
+@import "s2a-tokens/css/dev/tokens.component.css";
+@import "s2a-tokens/css/dev/tokens.component.light.css";
+@import "s2a-tokens/css/dev/tokens.component.dark.css";
+```
+
+**For production (using consolidated minified file):**
+
+```css
+/* Single consolidated file with all token layers */
+@import "s2a-tokens/css/min/tokens.min.css";
+```
+
+**Why this order?**
+
+The import order matters because CSS custom properties cascade and can reference each other:
+
+1. **Primitives first** — These are the foundation. They contain raw values (like `--spacing-16: 16px`) that everything else references.
+
+2. **Semantic second** — These reference primitives (like `--spacing-md: var(--spacing-16)`). They must come after primitives so the references resolve.
+
+3. **Responsive third** — These override semantic values at breakpoints using media queries. They come between semantic and component so components can reference the responsive overrides. _(Currently filtered out - not available)_
+
+4. **Component last** — These reference semantic tokens (like `--s2a-button-padding: var(--s2a-spacing-md)`), and can also reference responsive tokens depending on dynamic behavior. They come last so they can use semantic, responsive, and primitive token values.
+
+**Where do I import these?**
+
+Import all token files in your **root `index.css`** (or main global stylesheet) at the top, before any component styles. This ensures all CSS custom properties are available throughout your app.
+
+**What happens if you import in the wrong order?**
+
+If you import responsive tokens before primitives, the CSS variables they reference won't exist yet, causing `var()` references to fail. Similarly, if components come before semantics, their references to semantic tokens will be undefined.
+
+**Can you skip files?**
+
+Yes! You can skip files you don't need:
+
+- Skip dark mode files if you only support light mode
+- Skip responsive files if you don't need breakpoint-specific overrides (currently filtered out anyway)
+- Skip component files if you only use semantic tokens
+
+Just make sure whatever you import, you maintain the layer order (primitives → semantic → responsive → component).
+
+**Or use the consolidated minified file:**
+
+For production, you can simply import the single consolidated file which includes all layers in the correct order:
+
+```css
+@import "s2a-tokens/css/min/tokens.min.css";
+```
+
+---
+
+# TL;DR for Engineers
+
+1. **For production, use the consolidated minified file:**
+
+   ```css
+   @import "s2a-tokens/css/min/tokens.min.css";
+   ```
+
+   **Or import individual files for development:**
+
+   ```css
+   @import "s2a-tokens/css/dev/tokens.primitives.css";
+   @import "s2a-tokens/css/dev/tokens.primitives.light.css";
+   @import "s2a-tokens/css/dev/tokens.primitives.dark.css";
+
+   @import "s2a-tokens/css/dev/tokens.semantic.css";
+   @import "s2a-tokens/css/dev/tokens.semantic.light.css";
+   @import "s2a-tokens/css/dev/tokens.semantic.dark.css";
+
+   /* Responsive tokens (currently filtered out - not available) */
+
+   @import "s2a-tokens/css/dev/tokens.component.css";
+   @import "s2a-tokens/css/dev/tokens.component.light.css";
+   @import "s2a-tokens/css/dev/tokens.component.dark.css";
+   ```
+
+   **Import these in your root `index.css` or main global stylesheet.**
+
+2. **Switch themes by setting the data attribute:**
+
+   ```ts
+   document.documentElement.dataset.theme = "dark";
+   ```
+
+3. **All light/dark files include the proper `:root[data-theme="X"]` wrappers**
+   so they never override each other.
+
+4. **All tokens cascade correctly:**
+   Component → Responsive → Semantic → Primitives.
+
+5. **Responsive tokens are scoped with media queries** (except mobile, which is the default base).
+
+**Common questions:**
+
+**Q: Do I need to import all these files?**  
+A: No! Import only what you need. If you only support light mode, skip the dark files. If you don't need responsive breakpoints, skip responsive files. Just maintain the layer order.
+
+**Q: What if I import them in the wrong order?**  
+A: CSS custom property references will fail. If `tokens.semantic.css` references `--spacing-16` but `tokens.primitives.css` hasn't been imported yet, the reference will be undefined.
+
+**Q: Can I import just the files I need?**  
+A: Yes! For example, if you only need semantic tokens in light mode:
+
+```css
+/* In your root index.css */
+@import "s2a-tokens/css/dev/tokens.primitives.css";
+@import "s2a-tokens/css/dev/tokens.primitives.light.css";
+@import "s2a-tokens/css/dev/tokens.semantic.css";
+@import "s2a-tokens/css/dev/tokens.semantic.light.css";
+```
+
+Or use the consolidated minified file which includes everything:
+
+```css
+@import "s2a-tokens/css/min/tokens.min.css";
+```
+
+**Q: Where do I put these imports?**  
+A: Import them in your **root `index.css`** (or main global stylesheet) at the very top, before any component styles. This ensures all CSS custom properties are available throughout your app.
+
+**Q: Why are light/dark files separate?**  
+A: They use `:root[data-theme="light"]` and `:root[data-theme="dark"]` selectors, so they never conflict. You can import both and switch themes at runtime without reloading.
+
+---
+
+# File Output Summary Table
+
+| Layer          | Light | Dark | Non-Color | Responsive | Status       | Purpose                                               |
+| -------------- | ----- | ---- | --------- | ---------- | ------------ | ----------------------------------------------------- |
+| **Primitives** | ✔    | ✔   | ✔        |            | Available    | Raw values. Foundation.                               |
+| **Semantic**   | ✔    | ✔   | ✔        |            | Available    | Language of the system. Maps meaning → primitives.    |
+| **Component**  | ✔    | ✔   | ✔        |            | Available    | UI-level patterns. Maps components → semantics.       |
+| **Responsive** |       |      | ✔        | ✔         | Filtered out | Breakpoint-specific overrides. Adapts to screen size. |
+
+**Output Locations:**
+
+- Development files: `css/dev/` (uncompressed, individual files)
+- Production file: `css/min/tokens.min.css` (consolidated, minified)
+
+---
+
+# Example Usage
+
+All CSS custom properties are prefixed with `s2a-`:
+
+```css
+.card {
+  padding: var(
+    --s2a-spacing-md
+  ); /* semantic → references --s2a-spacing-16 (primitive) */
+  border-radius: var(
+    --s2a-border-radius-sm
+  ); /* semantic → references --s2a-border-radius-8 (primitive) */
+  background: var(
+    --s2a-color-background-default
+  ); /* semantic color → references --s2a-color-gray-25 (primitive color) */
+  box-shadow: var(--s2a-shadow-level-1-x) var(--s2a-shadow-level-1-y)
+    var(--s2a-shadow-level-1-blur) var(--s2a-shadow-level-1-color); /* primitive */
+}
+
+.button {
+  background: var(
+    --s2a-button-color-background-primary-solid-default
+  ); /* component → references --s2a-color-gray-800 (semantic → primitive) */
+  color: var(
+    --s2a-button-color-content-primary-solid-default
+  ); /* component → references --s2a-color-gray-25 (semantic → primitive) */
+}
+
+/* Responsive tokens (currently filtered out - not available) */
+.heading {
+  font-size: var(
+    --s2a-typography-heading-xl-font-size
+  ); /* would reference responsive tokens when enabled */
+  line-height: var(--s2a-typography-heading-xl-line-height);
+}
+```
+
+---
+
+# CSS Processing Features
+
+The build system automatically applies several CSS optimizations and modernizations:
+
+- **Hex Color Shorthand**: Converts full hex colors to shorthand when possible (`#ffffff` → `#fff`)
+- **Modern Color Syntax**: Converts legacy `rgba()` to modern space-separated `rgb()` syntax (`rgba(0, 0, 0, 0.16)` → `rgb(0 0 0 / 16%)`)
+- **Alpha Percentage Conversion**: Converts decimal alpha values to percentages (`0.12` → `12%`)
+- **Zero Unit Removal**: Removes units from zero values (`0px` → `0`, but `0%` remains `0%`)
+- **Font Weight Conversion**: Maps string font-weight values to numeric CSS values (`"Regular"` → `400`)
+- **Line-Height Unitless Conversion**: Converts line-height values to unitless ratios based on associated font-size
+
+These optimizations are applied automatically to all generated CSS files.
+
+---
+
+# Versioning
+
+Same as before — SemVer:
+
+- **Patch:** internal fixes, no breaking changes
+- **Minor:** additive tokens or new modes
+- **Major:** token removals/renames or breaking structural changes

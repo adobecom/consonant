@@ -5,7 +5,7 @@
         "primary": {
           "solid-default": {
             "$type": "color",
-            "$value": "{color.gray.800}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -47,7 +47,7 @@
           },
           "outlined-default": {
             "$type": "color",
-            "$value": "#00000000",
+            "$value": "{color.transparent.white.00}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -61,7 +61,7 @@
           },
           "outlined-hover": {
             "$type": "color",
-            "$value": "{color.transparent.black.08}",
+            "$value": "{color.transparent.white.08}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -75,7 +75,7 @@
           },
           "outlined-active": {
             "$type": "color",
-            "$value": "{color.transparent.black.08}",
+            "$value": "{color.transparent.white.08}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -91,7 +91,7 @@
         "secondary": {
           "solid-default": {
             "$type": "color",
-            "$value": "{color.transparent.black.08}",
+            "$value": "{color.transparent.white.08}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -105,7 +105,7 @@
           },
           "solid-hover": {
             "$type": "color",
-            "$value": "{color.transparent.black.12}",
+            "$value": "{color.transparent.white.12}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -119,7 +119,7 @@
           },
           "solid-active": {
             "$type": "color",
-            "$value": "{color.transparent.black.12}",
+            "$value": "{color.transparent.white.12}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -133,7 +133,7 @@
           },
           "outlined-default": {
             "$type": "color",
-            "$value": "{color.transparent.black.00}",
+            "$value": "{color.transparent.white.00}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -147,7 +147,7 @@
           },
           "outlined-hover": {
             "$type": "color",
-            "$value": "{color.transparent.black.08}",
+            "$value": "{color.transparent.white.12}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -161,7 +161,7 @@
           },
           "outlined-active": {
             "$type": "color",
-            "$value": "{color.transparent.black.08}",
+            "$value": "{color.transparent.white.12}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -267,7 +267,7 @@
         "primary": {
           "solid-default": {
             "$type": "color",
-            "$value": "{color.gray.800}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: button components need to be reworked from original s2a designs.",
             "$extensions": {
               "com.figma": {
@@ -309,7 +309,7 @@
           },
           "outlined-default": {
             "$type": "color",
-            "$value": "#00000000",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -571,7 +571,7 @@
           },
           "outlined-default": {
             "$type": "color",
-            "$value": "#00000000",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -585,7 +585,7 @@
           },
           "outlined-hover": {
             "$type": "color",
-            "$value": "{color.transparent.black.08}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -599,7 +599,7 @@
           },
           "outlined-active": {
             "$type": "color",
-            "$value": "{color.transparent.black.08}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -615,7 +615,7 @@
         "secondary": {
           "solid-default": {
             "$type": "color",
-            "$value": "{color.transparent.black.08}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -629,7 +629,7 @@
           },
           "solid-hover": {
             "$type": "color",
-            "$value": "{color.transparent.black.12}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -643,7 +643,7 @@
           },
           "solid-active": {
             "$type": "color",
-            "$value": "{color.transparent.black.12}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -657,7 +657,7 @@
           },
           "outlined-default": {
             "$type": "color",
-            "$value": "{color.transparent.black.08}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -671,7 +671,7 @@
           },
           "outlined-hover": {
             "$type": "color",
-            "$value": "{color.transparent.black.12}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
@@ -685,7 +685,7 @@
           },
           "outlined-active": {
             "$type": "color",
-            "$value": "{color.transparent.black.12}",
+            "$value": "{color.gray.1000}",
             "$description": "Placeholder token: awaiting design definition for final value",
             "$extensions": {
               "com.figma": {
