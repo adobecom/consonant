@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Complete CSS Output Restructure
 
 - **BREAKING**: Completely reorganized CSS output to mirror Figma variable collections and token tiers
-- New file structure organized by layer (primitives, semantic, component, responsive) and mode (core, light, dark)
+- New file structure organized by layer (primitives, semantic, component) and mode (core, light, dark)
 - Output files now follow the pattern: `tokens.{layer}.{mode}.css`
 
 **New Output Files:**
@@ -31,10 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `tokens.component.css` - Non-color component tokens
 - `tokens.component.light.css` - Component color tokens for light mode
 - `tokens.component.dark.css` - Component color tokens for dark mode
-- `tokens.responsive.mobile.css` - Responsive tokens for mobile (currently filtered out)
-- `tokens.responsive.tablet.css` - Responsive tokens for tablet (currently filtered out)
-- `tokens.responsive.desktop.css` - Responsive tokens for desktop (currently filtered out)
-- `tokens.responsive.desktop-wide.css` - Responsive tokens for desktop-wide (currently filtered out)
 
 #### CSS Variable Prefixing
 
@@ -104,13 +100,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Documentation
 
 - Comprehensive README.md update with:
-  - Four-tier token architecture explanation
+  - Three-tier token architecture explanation (primitives, semantic, component)
   - Detailed file structure documentation
   - Import order guidelines
   - Usage examples with real token names
   - TL;DR section for quick reference
   - Common questions and answers
-- Added README.md to package files for npm distribution
+- Added README.md and CHANGELOG.md to package files for npm distribution
 
 #### Testing
 
@@ -131,18 +127,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed line-height unitless conversion precision issues
 - Fixed component token builds failing due to missing primitive color references
 - Fixed reference resolution order for semantic tokens
+- Fixed button outlined tokens to reference primitive `color.transparent.black.00` instead of direct values
 
 ### 🗑️ Removed
 
 - Old file structure (tokens-base.css, tokens-light.css, etc.)
 - Individual minified CSS files (replaced with consolidated `tokens.min.css`)
 - Uncompressed files from main `css/` directory (moved to `css/dev/`)
+- Responsive token files (removed from build output and documentation)
 
 ### 📝 Notes
 
-- Responsive tokens are currently filtered out from build output (logic preserved for future use)
 - Letter-spacing tokens are temporarily filtered out due to conversion issues (will be re-enabled in future release)
-- Import order is critical: Primitives → Semantic → Responsive → Component
+- Import order is critical: Primitives → Semantic → Component
 
 ---
 

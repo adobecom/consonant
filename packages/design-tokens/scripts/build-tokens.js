@@ -637,6 +637,7 @@ async function buildFromFigma() {
   // ============================================================================
   await copyPackageJson();
   await copyReadme();
+  await copyChangelog();
 }
 
 async function copyPackageJson() {
@@ -668,6 +669,24 @@ async function copyReadme() {
       console.warn("⚠️  Warning: README.md not found in packages/design-tokens. Skipping copy.");
     } else {
       console.warn(`⚠️  Warning: Could not copy README.md: ${error.message}`);
+    }
+  }
+}
+
+async function copyChangelog() {
+  const PACKAGE_DIR = path.join(__dirname, "..");
+  const BUILD_DIR = path.join(process.cwd(), "dist", "packages", "design-tokens");
+  const sourceChangelogPath = path.join(PACKAGE_DIR, "CHANGELOG.md");
+  const destChangelogPath = path.join(BUILD_DIR, "CHANGELOG.md");
+
+  try {
+    await fs.copyFile(sourceChangelogPath, destChangelogPath);
+    console.log("📄 Copied CHANGELOG.md to dist/packages/design-tokens/");
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      console.warn("⚠️  Warning: CHANGELOG.md not found in packages/design-tokens. Skipping copy.");
+    } else {
+      console.warn(`⚠️  Warning: Could not copy CHANGELOG.md: ${error.message}`);
     }
   }
 }
