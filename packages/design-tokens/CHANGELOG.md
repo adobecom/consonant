@@ -28,9 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `tokens.semantic.css` - Non-color semantic tokens (t-shirt sizing, etc.)
 - `tokens.semantic.light.css` - Semantic color tokens for light mode
 - `tokens.semantic.dark.css` - Semantic color tokens for dark mode
-- `tokens.component.css` - Non-color component tokens
-- `tokens.component.light.css` - Component color tokens for light mode
-- `tokens.component.dark.css` - Component color tokens for dark mode
+- ~~`tokens.component.css`~~ - Component tokens (currently filtered out - not in use yet)
+- ~~`tokens.component.light.css`~~ - Component tokens (currently filtered out - not in use yet)
+- ~~`tokens.component.dark.css`~~ - Component tokens (currently filtered out - not in use yet)
 
 #### CSS Variable Prefixing
 
@@ -135,11 +135,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Individual minified CSS files (replaced with consolidated `tokens.min.css`)
 - Uncompressed files from main `css/` directory (moved to `css/dev/`)
 - Responsive token files (removed from build output and documentation)
+- Component token files (filtered out from build output - not in use yet, logic preserved)
 
 ### 📝 Notes
 
 - Letter-spacing tokens are temporarily filtered out due to conversion issues (will be re-enabled in future release)
-- Import order is critical: Primitives → Semantic → Component
+- Component tokens are currently filtered out from build output (not in use yet, logic preserved for future use)
+- Import order is critical: Primitives → Semantic → Component (when component tokens are enabled)
 
 ---
 

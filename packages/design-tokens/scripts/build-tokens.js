@@ -368,8 +368,12 @@ async function buildFromFigma() {
   // ============================================================================
   // 3. COMPONENT
   // ============================================================================
+  // NOTE: Component tokens are currently filtered out per user request.
+  // Component tokens are not being used yet, so they are excluded from the build output.
+  // The build logic is preserved below for future use when component tokens are ready.
 
   // 3a. Component (non-color) - extract from light mode file (non-color tokens are mode-agnostic)
+  /*
   if (componentFiles.has("light")) {
     try {
       const componentLightTokens = await loadTokensForMode(componentFiles.get("light"));
@@ -407,24 +411,13 @@ async function buildFromFigma() {
         },
       });
     } catch (error) {
-      console.warn(
-        `⚠️  Warning: Failed to build tokens.component.css due to missing references.`,
-      );
-      console.warn(
-        `   This may be expected if component tokens reference colors or other tokens that haven't been defined yet.`,
-      );
-      console.warn(`   Error: ${error.message.split("\n")[0]}`);
-      // Create an empty file so the build doesn't break
-      const emptyCss = `/**\n * Do not edit directly, this file was auto-generated.\n *\n * Note: This file is empty because component tokens reference tokens\n * that are not yet defined. Define the missing tokens in Figma and re-sync to generate this file.\n */\n\n:root {\n}\n`;
-      await fs.writeFile(
-        path.join(process.cwd(), "dist", "packages", "design-tokens", "css", "tokens.component.css"),
-        emptyCss,
-        "utf8",
-      );
+      // Error handling code removed - component tokens are filtered out
     }
   }
+  */
 
   // 3b. Component Color (light)
+  /*
   if (componentFiles.has("light")) {
     try {
       const componentLightTokens = await loadTokensForMode(componentFiles.get("light"));
@@ -475,24 +468,13 @@ async function buildFromFigma() {
         },
       });
     } catch (error) {
-      console.warn(
-        `⚠️  Warning: Failed to build tokens.component.light.css due to missing color references.`,
-      );
-      console.warn(
-        `   This is expected if component tokens reference colors that haven't been defined in Figma yet.`,
-      );
-      console.warn(`   Error: ${error.message.split("\n")[0]}`);
-      // Create an empty file so the build doesn't break
-      const emptyCss = `/**\n * Do not edit directly, this file was auto-generated.\n *\n * Note: This file is empty because component color tokens reference colors\n * that are not yet defined in the primitives-color collection.\n * Define the missing colors in Figma and re-sync to generate this file.\n */\n\n:root[data-theme="light"] {\n}\n`;
-      await fs.writeFile(
-        path.join(process.cwd(), "dist", "packages", "design-tokens", "css", "tokens.component.light.css"),
-        emptyCss,
-        "utf8",
-      );
+      // Error handling code removed - component tokens are filtered out
     }
   }
+  */
 
   // 3c. Component Color (dark)
+  /*
   if (componentFiles.has("dark")) {
     try {
       const componentDarkTokens = await loadTokensForMode(componentFiles.get("dark"));
@@ -543,22 +525,10 @@ async function buildFromFigma() {
         },
       });
     } catch (error) {
-      console.warn(
-        `⚠️  Warning: Failed to build tokens.component.dark.css due to missing color references.`,
-      );
-      console.warn(
-        `   This is expected if component tokens reference colors that haven't been defined in Figma yet.`,
-      );
-      console.warn(`   Error: ${error.message.split("\n")[0]}`);
-      // Create an empty file so the build doesn't break
-      const emptyCss = `/**\n * Do not edit directly, this file was auto-generated.\n *\n * Note: This file is empty because component color tokens reference colors\n * that are not yet defined in the primitives-color collection.\n * Define the missing colors in Figma and re-sync to generate this file.\n */\n\n:root[data-theme="dark"] {\n}\n`;
-      await fs.writeFile(
-        path.join(process.cwd(), "dist", "packages", "design-tokens", "css", "tokens.component.dark.css"),
-        emptyCss,
-        "utf8",
-      );
+      // Error handling code removed - component tokens are filtered out
     }
   }
+  */
 
   // ============================================================================
   // 4. RESPONSIVE
@@ -715,7 +685,8 @@ async function minifyAllCssFiles() {
     }
   }
   
-  // Define files in the correct import order (primitives → semantic → component)
+  // Define files in the correct import order (primitives → semantic)
+  // NOTE: Component tokens are currently filtered out - not included in build output
   const cssFiles = [
     "tokens.primitives.css",
     "tokens.primitives.light.css",
@@ -723,10 +694,11 @@ async function minifyAllCssFiles() {
     "tokens.semantic.css",
     "tokens.semantic.light.css",
     "tokens.semantic.dark.css",
-    "tokens.component.css",
-    "tokens.component.light.css",
-    "tokens.component.dark.css",
-    // Responsive tokens filtered out per Milo's request
+    // Component tokens filtered out per user request - not being used yet
+    // "tokens.component.css",
+    // "tokens.component.light.css",
+    // "tokens.component.dark.css",
+    // Responsive tokens filtered out per user request
     // "tokens.responsive.mobile.css",
     // "tokens.responsive.tablet.css",
     // "tokens.responsive.desktop.css",

@@ -76,32 +76,31 @@
           "VariableID:162:300"
         ]
       },
-      "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283": {
-        "defaultModeId": "17135:0",
-        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
+      "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944": {
+        "defaultModeId": "82:0",
+        "id": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
         "name": "Primitives (Color)",
         "remote": true,
         "modes": [
           {
-            "modeId": "17135:0",
+            "modeId": "82:0",
             "name": "Light"
           },
           {
-            "modeId": "17536:0",
+            "modeId": "82:1",
             "name": "Dark"
           }
         ],
-        "key": "fdf1816f97e476e039b3ef2de68e13a2db903d1e",
+        "key": "6e7ac02d57674b3b03de2e5ceafbc65ec7c30619",
         "hiddenFromPublishing": true,
         "variableIds": [
-          "VariableID:4f8df863fc70b792c94920cdc80ec40acc2f1708/17536:680",
-          "VariableID:202424f62e521fdf1876c7f21a0c7c2e8a936e45/17536:630",
-          "VariableID:7f289f619345fd4f036df21c47fd11003db2752d/17536:620",
-          "VariableID:9b3fd5ac8bc5f427bfe2d78e2baed80902231575/17536:578",
-          "VariableID:1a0d6ad18b49bf7e1f4d47fdcbd0440e1044a25f/17536:658",
-          "VariableID:d03172844429d8a2ccfccc4ddf27199cae6e7c08/17536:664",
-          "VariableID:ada838e433f2af1eb3d4bef06f6f03db83d48875/17536:659",
-          "VariableID:378e5da625b6647402079caf04386b24ba48aa4b/17536:591"
+          "VariableID:08bd673841027e49e0720f1be8ac7077ff38788c/82:1051",
+          "VariableID:bc4c0b82465566af1ea6a5abf5e123a82aea8f5d/82:1004",
+          "VariableID:539903a1eb329fb9e1140247c10ef20b540b1ced/82:964",
+          "VariableID:e91b4ad5b9cb11925ea9187e319cf6bc78137d62/82:1080",
+          "VariableID:92a6e6a05a86063f05a339332576a8fd91478aa5/82:1081",
+          "VariableID:67e7b9b08aacc7a68f15b49e86108e238f2d83bf/82:1082",
+          "VariableID:ba51b0b1128855c4575ef4df04fbb0d867b5325b/82:1101"
         ]
       },
       "VariableCollectionId:4:218": {
@@ -724,31 +723,32 @@
           "VariableID:82:408"
         ]
       },
-      "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944": {
-        "defaultModeId": "82:0",
-        "id": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+      "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283": {
+        "defaultModeId": "17135:0",
+        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
         "name": "Primitives (Color)",
         "remote": true,
         "modes": [
           {
-            "modeId": "82:0",
+            "modeId": "17135:0",
             "name": "Light"
           },
           {
-            "modeId": "82:1",
+            "modeId": "17536:0",
             "name": "Dark"
           }
         ],
-        "key": "6e7ac02d57674b3b03de2e5ceafbc65ec7c30619",
+        "key": "fdf1816f97e476e039b3ef2de68e13a2db903d1e",
         "hiddenFromPublishing": true,
         "variableIds": [
-          "VariableID:08bd673841027e49e0720f1be8ac7077ff38788c/82:1051",
-          "VariableID:bc4c0b82465566af1ea6a5abf5e123a82aea8f5d/82:1004",
-          "VariableID:539903a1eb329fb9e1140247c10ef20b540b1ced/82:964",
-          "VariableID:e91b4ad5b9cb11925ea9187e319cf6bc78137d62/82:1080",
-          "VariableID:92a6e6a05a86063f05a339332576a8fd91478aa5/82:1081",
-          "VariableID:67e7b9b08aacc7a68f15b49e86108e238f2d83bf/82:1082",
-          "VariableID:ba51b0b1128855c4575ef4df04fbb0d867b5325b/82:1101"
+          "VariableID:4f8df863fc70b792c94920cdc80ec40acc2f1708/17536:680",
+          "VariableID:202424f62e521fdf1876c7f21a0c7c2e8a936e45/17536:630",
+          "VariableID:7f289f619345fd4f036df21c47fd11003db2752d/17536:620",
+          "VariableID:9b3fd5ac8bc5f427bfe2d78e2baed80902231575/17536:578",
+          "VariableID:1a0d6ad18b49bf7e1f4d47fdcbd0440e1044a25f/17536:658",
+          "VariableID:d03172844429d8a2ccfccc4ddf27199cae6e7c08/17536:664",
+          "VariableID:ada838e433f2af1eb3d4bef06f6f03db83d48875/17536:659",
+          "VariableID:378e5da625b6647402079caf04386b24ba48aa4b/17536:591"
         ]
       },
       "VariableCollectionId:27a4206887fe2c99a83dde8d9268493c141504fc/17135:365": {
@@ -1658,23 +1658,23 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:4f8df863fc70b792c94920cdc80ec40acc2f1708/17536:680": {
+      "VariableID:08bd673841027e49e0720f1be8ac7077ff38788c/82:1051": {
         "name": "color/gray/25",
-        "id": "VariableID:4f8df863fc70b792c94920cdc80ec40acc2f1708/17536:680",
+        "id": "VariableID:08bd673841027e49e0720f1be8ac7077ff38788c/82:1051",
         "remote": true,
-        "key": "4f8df863fc70b792c94920cdc80ec40acc2f1708",
-        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
+        "key": "08bd673841027e49e0720f1be8ac7077ff38788c",
+        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "17135:0": {
+          "82:0": {
             "r": 1,
             "g": 1,
             "b": 1,
             "a": 1
           },
-          "17536:0": {
+          "82:1": {
             "r": 0.06666667014360428,
             "g": 0.06666667014360428,
             "b": 0.06666667014360428,
@@ -1686,23 +1686,23 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:202424f62e521fdf1876c7f21a0c7c2e8a936e45/17536:630": {
+      "VariableID:bc4c0b82465566af1ea6a5abf5e123a82aea8f5d/82:1004": {
         "name": "color/gray/50",
-        "id": "VariableID:202424f62e521fdf1876c7f21a0c7c2e8a936e45/17536:630",
+        "id": "VariableID:bc4c0b82465566af1ea6a5abf5e123a82aea8f5d/82:1004",
         "remote": true,
-        "key": "202424f62e521fdf1876c7f21a0c7c2e8a936e45",
-        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
+        "key": "bc4c0b82465566af1ea6a5abf5e123a82aea8f5d",
+        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "17135:0": {
+          "82:0": {
             "r": 0.9725490212440491,
             "g": 0.9725490212440491,
             "b": 0.9725490212440491,
             "a": 1
           },
-          "17536:0": {
+          "82:1": {
             "r": 0.10588235408067703,
             "g": 0.10588235408067703,
             "b": 0.10588235408067703,
@@ -1714,51 +1714,23 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:7f289f619345fd4f036df21c47fd11003db2752d/17536:620": {
-        "name": "color/gray/300",
-        "id": "VariableID:7f289f619345fd4f036df21c47fd11003db2752d/17536:620",
-        "remote": true,
-        "key": "7f289f619345fd4f036df21c47fd11003db2752d",
-        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
-        "resolvedType": "COLOR",
-        "description": "",
-        "hiddenFromPublishing": true,
-        "valuesByMode": {
-          "17135:0": {
-            "r": 0.8549019694328308,
-            "g": 0.8549019694328308,
-            "b": 0.8549019694328308,
-            "a": 1
-          },
-          "17536:0": {
-            "r": 0.2235294133424759,
-            "g": 0.2235294133424759,
-            "b": 0.2235294133424759,
-            "a": 1
-          }
-        },
-        "scopes": [
-          "ALL_SCOPES"
-        ],
-        "codeSyntax": {}
-      },
-      "VariableID:9b3fd5ac8bc5f427bfe2d78e2baed80902231575/17536:578": {
+      "VariableID:539903a1eb329fb9e1140247c10ef20b540b1ced/82:964": {
         "name": "color/gray/400",
-        "id": "VariableID:9b3fd5ac8bc5f427bfe2d78e2baed80902231575/17536:578",
+        "id": "VariableID:539903a1eb329fb9e1140247c10ef20b540b1ced/82:964",
         "remote": true,
-        "key": "9b3fd5ac8bc5f427bfe2d78e2baed80902231575",
-        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
+        "key": "539903a1eb329fb9e1140247c10ef20b540b1ced",
+        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "17135:0": {
+          "82:0": {
             "r": 0.7764706015586853,
             "g": 0.7764706015586853,
             "b": 0.7764706015586853,
             "a": 1
           },
-          "17536:0": {
+          "82:1": {
             "r": 0.2666666805744171,
             "g": 0.2666666805744171,
             "b": 0.2666666805744171,
@@ -1770,23 +1742,51 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:1a0d6ad18b49bf7e1f4d47fdcbd0440e1044a25f/17536:658": {
-        "name": "color/gray/800",
-        "id": "VariableID:1a0d6ad18b49bf7e1f4d47fdcbd0440e1044a25f/17536:658",
+      "VariableID:e91b4ad5b9cb11925ea9187e319cf6bc78137d62/82:1080": {
+        "name": "color/gray/700",
+        "id": "VariableID:e91b4ad5b9cb11925ea9187e319cf6bc78137d62/82:1080",
         "remote": true,
-        "key": "1a0d6ad18b49bf7e1f4d47fdcbd0440e1044a25f",
-        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
+        "key": "e91b4ad5b9cb11925ea9187e319cf6bc78137d62",
+        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "17135:0": {
+          "82:0": {
+            "r": 0.3137255012989044,
+            "g": 0.3137255012989044,
+            "b": 0.3137255012989044,
+            "a": 1
+          },
+          "82:1": {
+            "r": 0.686274528503418,
+            "g": 0.686274528503418,
+            "b": 0.686274528503418,
+            "a": 1
+          }
+        },
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "codeSyntax": {}
+      },
+      "VariableID:92a6e6a05a86063f05a339332576a8fd91478aa5/82:1081": {
+        "name": "color/gray/800",
+        "id": "VariableID:92a6e6a05a86063f05a339332576a8fd91478aa5/82:1081",
+        "remote": true,
+        "key": "92a6e6a05a86063f05a339332576a8fd91478aa5",
+        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+        "resolvedType": "COLOR",
+        "description": "",
+        "hiddenFromPublishing": true,
+        "valuesByMode": {
+          "82:0": {
             "r": 0.16078431904315948,
             "g": 0.16078431904315948,
             "b": 0.16078431904315948,
             "a": 1
           },
-          "17536:0": {
+          "82:1": {
             "r": 0.8588235378265381,
             "g": 0.8588235378265381,
             "b": 0.8588235378265381,
@@ -1798,23 +1798,23 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:d03172844429d8a2ccfccc4ddf27199cae6e7c08/17536:664": {
+      "VariableID:67e7b9b08aacc7a68f15b49e86108e238f2d83bf/82:1082": {
         "name": "color/gray/900",
-        "id": "VariableID:d03172844429d8a2ccfccc4ddf27199cae6e7c08/17536:664",
+        "id": "VariableID:67e7b9b08aacc7a68f15b49e86108e238f2d83bf/82:1082",
         "remote": true,
-        "key": "d03172844429d8a2ccfccc4ddf27199cae6e7c08",
-        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
+        "key": "67e7b9b08aacc7a68f15b49e86108e238f2d83bf",
+        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "17135:0": {
+          "82:0": {
             "r": 0.07450980693101883,
             "g": 0.07450980693101883,
             "b": 0.07450980693101883,
             "a": 1
           },
-          "17536:0": {
+          "82:1": {
             "r": 0.9490196108818054,
             "g": 0.9490196108818054,
             "b": 0.9490196108818054,
@@ -1826,51 +1826,23 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:ada838e433f2af1eb3d4bef06f6f03db83d48875/17536:659": {
-        "name": "color/gray/1000",
-        "id": "VariableID:ada838e433f2af1eb3d4bef06f6f03db83d48875/17536:659",
-        "remote": true,
-        "key": "ada838e433f2af1eb3d4bef06f6f03db83d48875",
-        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
-        "resolvedType": "COLOR",
-        "description": "",
-        "hiddenFromPublishing": true,
-        "valuesByMode": {
-          "17135:0": {
-            "r": 0,
-            "g": 0,
-            "b": 0,
-            "a": 1
-          },
-          "17536:0": {
-            "r": 1,
-            "g": 1,
-            "b": 1,
-            "a": 1
-          }
-        },
-        "scopes": [
-          "ALL_SCOPES"
-        ],
-        "codeSyntax": {}
-      },
-      "VariableID:378e5da625b6647402079caf04386b24ba48aa4b/17536:591": {
+      "VariableID:ba51b0b1128855c4575ef4df04fbb0d867b5325b/82:1101": {
         "name": "color/red/900",
-        "id": "VariableID:378e5da625b6647402079caf04386b24ba48aa4b/17536:591",
+        "id": "VariableID:ba51b0b1128855c4575ef4df04fbb0d867b5325b/82:1101",
         "remote": true,
-        "key": "378e5da625b6647402079caf04386b24ba48aa4b",
-        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
+        "key": "ba51b0b1128855c4575ef4df04fbb0d867b5325b",
+        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "17135:0": {
+          "82:0": {
             "r": 0.843137264251709,
             "g": 0.19607843458652496,
             "b": 0.125490203499794,
             "a": 1
           },
-          "17536:0": {
+          "82:1": {
             "r": 0.9882352948188782,
             "g": 0.26274511218070984,
             "b": 0.18039216101169586,
@@ -14340,23 +14312,23 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:08bd673841027e49e0720f1be8ac7077ff38788c/82:1051": {
+      "VariableID:4f8df863fc70b792c94920cdc80ec40acc2f1708/17536:680": {
         "name": "color/gray/25",
-        "id": "VariableID:08bd673841027e49e0720f1be8ac7077ff38788c/82:1051",
+        "id": "VariableID:4f8df863fc70b792c94920cdc80ec40acc2f1708/17536:680",
         "remote": true,
-        "key": "08bd673841027e49e0720f1be8ac7077ff38788c",
-        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+        "key": "4f8df863fc70b792c94920cdc80ec40acc2f1708",
+        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "82:0": {
+          "17135:0": {
             "r": 1,
             "g": 1,
             "b": 1,
             "a": 1
           },
-          "82:1": {
+          "17536:0": {
             "r": 0.06666667014360428,
             "g": 0.06666667014360428,
             "b": 0.06666667014360428,
@@ -14368,23 +14340,23 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:bc4c0b82465566af1ea6a5abf5e123a82aea8f5d/82:1004": {
+      "VariableID:202424f62e521fdf1876c7f21a0c7c2e8a936e45/17536:630": {
         "name": "color/gray/50",
-        "id": "VariableID:bc4c0b82465566af1ea6a5abf5e123a82aea8f5d/82:1004",
+        "id": "VariableID:202424f62e521fdf1876c7f21a0c7c2e8a936e45/17536:630",
         "remote": true,
-        "key": "bc4c0b82465566af1ea6a5abf5e123a82aea8f5d",
-        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+        "key": "202424f62e521fdf1876c7f21a0c7c2e8a936e45",
+        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "82:0": {
+          "17135:0": {
             "r": 0.9725490212440491,
             "g": 0.9725490212440491,
             "b": 0.9725490212440491,
             "a": 1
           },
-          "82:1": {
+          "17536:0": {
             "r": 0.10588235408067703,
             "g": 0.10588235408067703,
             "b": 0.10588235408067703,
@@ -14396,23 +14368,51 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:539903a1eb329fb9e1140247c10ef20b540b1ced/82:964": {
-        "name": "color/gray/400",
-        "id": "VariableID:539903a1eb329fb9e1140247c10ef20b540b1ced/82:964",
+      "VariableID:7f289f619345fd4f036df21c47fd11003db2752d/17536:620": {
+        "name": "color/gray/300",
+        "id": "VariableID:7f289f619345fd4f036df21c47fd11003db2752d/17536:620",
         "remote": true,
-        "key": "539903a1eb329fb9e1140247c10ef20b540b1ced",
-        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+        "key": "7f289f619345fd4f036df21c47fd11003db2752d",
+        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "82:0": {
+          "17135:0": {
+            "r": 0.8549019694328308,
+            "g": 0.8549019694328308,
+            "b": 0.8549019694328308,
+            "a": 1
+          },
+          "17536:0": {
+            "r": 0.2235294133424759,
+            "g": 0.2235294133424759,
+            "b": 0.2235294133424759,
+            "a": 1
+          }
+        },
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "codeSyntax": {}
+      },
+      "VariableID:9b3fd5ac8bc5f427bfe2d78e2baed80902231575/17536:578": {
+        "name": "color/gray/400",
+        "id": "VariableID:9b3fd5ac8bc5f427bfe2d78e2baed80902231575/17536:578",
+        "remote": true,
+        "key": "9b3fd5ac8bc5f427bfe2d78e2baed80902231575",
+        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
+        "resolvedType": "COLOR",
+        "description": "",
+        "hiddenFromPublishing": true,
+        "valuesByMode": {
+          "17135:0": {
             "r": 0.7764706015586853,
             "g": 0.7764706015586853,
             "b": 0.7764706015586853,
             "a": 1
           },
-          "82:1": {
+          "17536:0": {
             "r": 0.2666666805744171,
             "g": 0.2666666805744171,
             "b": 0.2666666805744171,
@@ -14424,51 +14424,23 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:e91b4ad5b9cb11925ea9187e319cf6bc78137d62/82:1080": {
-        "name": "color/gray/700",
-        "id": "VariableID:e91b4ad5b9cb11925ea9187e319cf6bc78137d62/82:1080",
-        "remote": true,
-        "key": "e91b4ad5b9cb11925ea9187e319cf6bc78137d62",
-        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
-        "resolvedType": "COLOR",
-        "description": "",
-        "hiddenFromPublishing": true,
-        "valuesByMode": {
-          "82:0": {
-            "r": 0.3137255012989044,
-            "g": 0.3137255012989044,
-            "b": 0.3137255012989044,
-            "a": 1
-          },
-          "82:1": {
-            "r": 0.686274528503418,
-            "g": 0.686274528503418,
-            "b": 0.686274528503418,
-            "a": 1
-          }
-        },
-        "scopes": [
-          "ALL_SCOPES"
-        ],
-        "codeSyntax": {}
-      },
-      "VariableID:92a6e6a05a86063f05a339332576a8fd91478aa5/82:1081": {
+      "VariableID:1a0d6ad18b49bf7e1f4d47fdcbd0440e1044a25f/17536:658": {
         "name": "color/gray/800",
-        "id": "VariableID:92a6e6a05a86063f05a339332576a8fd91478aa5/82:1081",
+        "id": "VariableID:1a0d6ad18b49bf7e1f4d47fdcbd0440e1044a25f/17536:658",
         "remote": true,
-        "key": "92a6e6a05a86063f05a339332576a8fd91478aa5",
-        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+        "key": "1a0d6ad18b49bf7e1f4d47fdcbd0440e1044a25f",
+        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "82:0": {
+          "17135:0": {
             "r": 0.16078431904315948,
             "g": 0.16078431904315948,
             "b": 0.16078431904315948,
             "a": 1
           },
-          "82:1": {
+          "17536:0": {
             "r": 0.8588235378265381,
             "g": 0.8588235378265381,
             "b": 0.8588235378265381,
@@ -14480,23 +14452,23 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:67e7b9b08aacc7a68f15b49e86108e238f2d83bf/82:1082": {
+      "VariableID:d03172844429d8a2ccfccc4ddf27199cae6e7c08/17536:664": {
         "name": "color/gray/900",
-        "id": "VariableID:67e7b9b08aacc7a68f15b49e86108e238f2d83bf/82:1082",
+        "id": "VariableID:d03172844429d8a2ccfccc4ddf27199cae6e7c08/17536:664",
         "remote": true,
-        "key": "67e7b9b08aacc7a68f15b49e86108e238f2d83bf",
-        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+        "key": "d03172844429d8a2ccfccc4ddf27199cae6e7c08",
+        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "82:0": {
+          "17135:0": {
             "r": 0.07450980693101883,
             "g": 0.07450980693101883,
             "b": 0.07450980693101883,
             "a": 1
           },
-          "82:1": {
+          "17536:0": {
             "r": 0.9490196108818054,
             "g": 0.9490196108818054,
             "b": 0.9490196108818054,
@@ -14508,23 +14480,51 @@
         ],
         "codeSyntax": {}
       },
-      "VariableID:ba51b0b1128855c4575ef4df04fbb0d867b5325b/82:1101": {
-        "name": "color/red/900",
-        "id": "VariableID:ba51b0b1128855c4575ef4df04fbb0d867b5325b/82:1101",
+      "VariableID:ada838e433f2af1eb3d4bef06f6f03db83d48875/17536:659": {
+        "name": "color/gray/1000",
+        "id": "VariableID:ada838e433f2af1eb3d4bef06f6f03db83d48875/17536:659",
         "remote": true,
-        "key": "ba51b0b1128855c4575ef4df04fbb0d867b5325b",
-        "variableCollectionId": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+        "key": "ada838e433f2af1eb3d4bef06f6f03db83d48875",
+        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
         "resolvedType": "COLOR",
         "description": "",
         "hiddenFromPublishing": true,
         "valuesByMode": {
-          "82:0": {
+          "17135:0": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "17536:0": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          }
+        },
+        "scopes": [
+          "ALL_SCOPES"
+        ],
+        "codeSyntax": {}
+      },
+      "VariableID:378e5da625b6647402079caf04386b24ba48aa4b/17536:591": {
+        "name": "color/red/900",
+        "id": "VariableID:378e5da625b6647402079caf04386b24ba48aa4b/17536:591",
+        "remote": true,
+        "key": "378e5da625b6647402079caf04386b24ba48aa4b",
+        "variableCollectionId": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/17536:283",
+        "resolvedType": "COLOR",
+        "description": "",
+        "hiddenFromPublishing": true,
+        "valuesByMode": {
+          "17135:0": {
             "r": 0.843137264251709,
             "g": 0.19607843458652496,
             "b": 0.125490203499794,
             "a": 1
           },
-          "82:1": {
+          "17536:0": {
             "r": 0.9882352948188782,
             "g": 0.26274511218070984,
             "b": 0.18039216101169586,

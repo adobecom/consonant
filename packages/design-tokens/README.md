@@ -15,11 +15,11 @@ The design tokens follow a **three-tier system** that maps directly to our Figma
 
 1. **Primitives** → raw values (spacing, type, radii, color ramps)
 2. **Semantic** → meaning-based tokens (surface, text, border, action, spacing t-shirt scale)
-3. **Component** → UI-specific tokens (Button, Card, Input, etc.)
+3. **Component** → UI-specific tokens (Button, Card, Input, etc.) _(currently filtered out - not in use yet)_
 
 Every tier builds on the one below it.
 
-The CSS output mirrors this architecture **exactly**, including light/dark modes.
+The CSS output currently includes primitives and semantic tokens. Component tokens are filtered out from the build output until they are ready for use.
 
 ---
 
@@ -63,13 +63,15 @@ Meaning-based mappings. These define your design language.
 
 ### 3. **Component Tokens**
 
-| File                             | Contains                                                         |
-| -------------------------------- | ---------------------------------------------------------------- |
-| **`tokens.component.css`**       | Structural component tokens (radii, spacing, layout) — no colors |
-| **`tokens.component.light.css`** | Component color tokens for **light**                             |
-| **`tokens.component.dark.css`**  | Component color tokens for **dark**                              |
+> **Note:** Component tokens are currently filtered out from the build output. The build logic is preserved for future use, but component CSS files are not generated at this time.
 
-**How component tokens work:**
+| File                             | Contains                                                         | Status       |
+| -------------------------------- | ---------------------------------------------------------------- | ------------ |
+| **`tokens.component.css`**       | Structural component tokens (radii, spacing, layout) — no colors | Filtered out |
+| **`tokens.component.light.css`** | Component color tokens for **light**                             | Filtered out |
+| **`tokens.component.dark.css`**  | Component color tokens for **dark**                              | Filtered out |
+
+**How component tokens work (when enabled):**
 
 - They **reference semantic tokens**
 - They encapsulate UI-level patterns (Button, Card, Input)
@@ -94,9 +96,9 @@ The package outputs CSS files in two directories:
 - `tokens.semantic.css` - Non-color semantic tokens
 - `tokens.semantic.light.css` - Semantic color tokens for light mode
 - `tokens.semantic.dark.css` - Semantic color tokens for dark mode
-- `tokens.component.css` - Non-color component tokens
-- `tokens.component.light.css` - Component color tokens for light mode
-- `tokens.component.dark.css` - Component color tokens for dark mode
+- ~~`tokens.component.css`~~ - Component tokens (currently filtered out - not in use yet)
+- ~~`tokens.component.light.css`~~ - Component tokens (currently filtered out - not in use yet)
+- ~~`tokens.component.dark.css`~~ - Component tokens (currently filtered out - not in use yet)
 
 ### Production File (`css/min/`)
 
@@ -128,10 +130,10 @@ Here is the correct stacking order for any app. **Import these in your root `ind
 @import "s2a-tokens/css/dev/tokens.semantic.light.css";
 @import "s2a-tokens/css/dev/tokens.semantic.dark.css";
 
-/* 3. Components (the top of the pyramid) */
-@import "s2a-tokens/css/dev/tokens.component.css";
-@import "s2a-tokens/css/dev/tokens.component.light.css";
-@import "s2a-tokens/css/dev/tokens.component.dark.css";
+/* 3. Components (currently filtered out - not in use yet) */
+/* @import "s2a-tokens/css/dev/tokens.component.css"; */
+/* @import "s2a-tokens/css/dev/tokens.component.light.css"; */
+/* @import "s2a-tokens/css/dev/tokens.component.dark.css"; */
 ```
 
 **Why this order?**
@@ -142,7 +144,7 @@ The import order matters because CSS custom properties cascade and can reference
 
 2. **Semantic second** — These reference primitives (like `--s2a-spacing-md: var(--s2a-spacing-16)`). They must come after primitives so the references resolve.
 
-3. **Component last** — These reference semantic tokens (like `--s2a-button-padding: var(--s2a-spacing-md)`). They come last so they can use semantic and primitive token values.
+3. **Component last** — These reference semantic tokens (like `--s2a-button-padding: var(--s2a-spacing-md)`). They come last so they can use semantic and primitive token values. _(Currently filtered out - not in use yet)_
 
 **Where do I import these?**
 
@@ -157,9 +159,10 @@ If you import components before primitives, the CSS variables they reference won
 Yes! You can skip files you don't need:
 
 - Skip dark mode files if you only support light mode
-- Skip component files if you only use semantic tokens
 
 Just make sure whatever you import, you maintain the layer order (primitives → semantic → component).
+
+**Note:** Component tokens are currently filtered out from the build output and are not available for import.
 
 **Recommended: Use the consolidated minified file for production**
 
@@ -190,9 +193,7 @@ For production, simply import the single consolidated minified file which includ
    @import "s2a-tokens/css/dev/tokens.semantic.light.css";
    @import "s2a-tokens/css/dev/tokens.semantic.dark.css";
 
-   @import "s2a-tokens/css/dev/tokens.component.css";
-   @import "s2a-tokens/css/dev/tokens.component.light.css";
-   @import "s2a-tokens/css/dev/tokens.component.dark.css";
+   /* Component tokens (currently filtered out - not in use yet) */
    ```
 
    **Import these in your root `index.css` or main global stylesheet.**
@@ -207,7 +208,7 @@ For production, simply import the single consolidated minified file which includ
    so they never override each other.
 
 4. **All tokens cascade correctly:**
-   Component → Semantic → Primitives.
+   Semantic → Primitives. (Component tokens are currently filtered out)
 
 **Common questions:**
 
@@ -244,11 +245,11 @@ A: They use `:root[data-theme="light"]` and `:root[data-theme="dark"]` selectors
 
 # File Output Summary Table
 
-| Layer          | Light | Dark | Non-Color | Status    | Purpose                                            |
-| -------------- | ----- | ---- | --------- | --------- | -------------------------------------------------- |
-| **Primitives** | ✔    | ✔   | ✔        | Available | Raw values. Foundation.                            |
-| **Semantic**   | ✔    | ✔   | ✔        | Available | Language of the system. Maps meaning → primitives. |
-| **Component**  | ✔    | ✔   | ✔        | Available | UI-level patterns. Maps components → semantics.    |
+| Layer          | Light | Dark | Non-Color | Status       | Purpose                                            |
+| -------------- | ----- | ---- | --------- | ------------ | -------------------------------------------------- |
+| **Primitives** | ✔    | ✔   | ✔        | Available    | Raw values. Foundation.                            |
+| **Semantic**   | ✔    | ✔   | ✔        | Available    | Language of the system. Maps meaning → primitives. |
+| **Component**  | ✔    | ✔   | ✔        | Filtered out | UI-level patterns. Maps components → semantics.    |
 
 **Output Locations:**
 
@@ -276,14 +277,15 @@ All CSS custom properties are prefixed with `s2a-`:
     var(--s2a-shadow-level-1-blur) var(--s2a-shadow-level-1-color); /* primitive */
 }
 
-.button {
+/* Component tokens are currently filtered out - not available yet */
+/* .button {
   background: var(
     --s2a-button-color-background-primary-solid-default
-  ); /* component → references --s2a-color-gray-800 (semantic → primitive) */
+  ); 
   color: var(
     --s2a-button-color-content-primary-solid-default
-  ); /* component → references --s2a-color-gray-25 (semantic → primitive) */
-}
+  ); 
+} */
 
 .heading {
   font-size: var(--s2a-typography-heading-xl-font-size);
