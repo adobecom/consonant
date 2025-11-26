@@ -1,0 +1,357 @@
+8.21-ai-tokens-intro
+===
+
+[00:00:00] Now for the moment you've all been waiting for talking about AI and design tokens. AI is kind of a big deal, but you don't have to take my word for it. Let's hear from Sundar Phai from Google 
+
+AI and ai. Ai ai. Generative ai. Generative ai. Generative ai. AI is ai, ai, ai, ai, ai, ai, ai, ai. It uses AI to bring ai, ai, AI from ai, ai.
+
+AI kind of a big deal, right? And at the time of this recording, there's probably 3 million people on the planet. Uttering the words AI right this second. But artificial intelligence has been around as a concept, as a field of study, as a suite of technologies for decades now, going all the way back to the 1950s.
+
+It's really broken through in the last couple years, thanks to what is known as generative ai, which uses LLMs, which are large [00:01:00] language models to generate text images and other media as well. And a lot of this breakthrough is due to the fact that things like chat, GPT have made this technology more accessible and available for just everyday people.
+
+So here's our friend chat, GPT, helping break down the differences between AI and machine learning and generative AI and large language models. And it gave this helpful little diagram. So that's what these tools help do. AI is obviously a huge field. We could talk for hours, days, weeks, years, about it, but we're gonna come back and focus on this idea of a large language model and really drilling into what it says right on the tin, which is large language model.
+
+This word sticks out to us because this is what we've been talking about in this entire course. Right? So these are just a few samples of some of the things I pulled from some of our other [00:02:00] slides from earlier chapters. In this course we're talking about design tokens are a shared language so that everyone has the shared understanding or lack of understanding due to differing language.
+
+We also talk about how our design tokens are really this language and this API in between different tools to connect them together. So it's really all of these people and technologies and processes all hanging together because of this design token language. So bringing this all back together. Yes, ai, these LLMs, these large language models can indeed help us with our design token systems.
+
+I'm not equipped, nor do I have the desire to talk about the underlying technology or anything like that, but at its very course, we pass in some input, analyzes them, does something with them, and provides us some output. What we're going to do is revisit a bunch of what we've covered in this [00:03:00] course, and we're gonna sprinkle a little AI on it.
+
+Before we dig into things, I think it's really important to frame what exactly we're going to be covering here. We've spent the last couple years actually figuring out how to connect design systems with ai, and we've used certain tools, we've learned some things along the way. What we're here to do is not give you specific answers or anything like that.
+
+What we really wanna do is just kind of spark your imagination on how you can apply this new crop of tools, these new paradigms, to various aspects of our design token work. So this is not comprehensive. We're not offering guaranteed results. We're not saying you should use exactly this model and exactly this tool, and you'll get this thing out the other end.
+
+A lot of that has to do with the fact that the AI landscape, the concepts, the technologies, the tools, the models, all of the applications of all of those things [00:04:00] are just continuing to evolve and improve at a staggering rate. So I. We guarantee these videos will ultimately look hilariously antiquated, pretty much as soon as we hit the publish button.
+
+Right? And this is nothing new, right? This is just part of the arc of technology. When we look at all of the technologies that have come before, and even just the evolution of the web to take a narrow slice, for instance. Things progress really rapidly, which is especially true for things like ai, which are unmoored from the physical world, and instead operate in the world of just data and computers and stuff, which is why we're really here to help spark your imagination as well as give you some guiding principles to consider as you reach for and use these tools.
+
+And again, there's a lot that can be said about the applications and the ethics and all of this stuff around ai. I think that where we've landed and what we would encourage you to do [00:05:00] is to really treat this new paradigm, really treat this new crop of tools with simultaneous curiosity as well as skepticism, right?
+
+I think that that's a really healthy place to be. What we tend to see with these hype cycle things are people. Claiming they're the savior or people claiming they're the devil. And the reality, of course, is that these general technologies can be used for good, for ill. There's a lot of good things that they provide.
+
+There's also a lot of bad things that they do and other externalities. So yeah, we just encourage you to hold multiple thoughts and attitudes in your head at the same time. I know it's difficult to do, but. I feel like that's a healthy way to be as this technology is unfolding before our very eyes.
+
+8.22-ai-naming-1
+===
+
+[00:00:00] With all that out of the way, let's talk about how AI can help us, starting with our naming conventions. In chapter three, we detailed the hard but necessary process of arriving at our naming conventions, and this is an area where AI could help us out. One idea is around taking an existing product and extracting those conventions into a draft token nomenclature.
+
+So by way of example, let's go to the Jane Goodall Institute for the famed Primatologists and we are going to extract a token nomenclature from the existing CSS from this website. So we are going to use our old trusty friend view source. We're going to find the CSS file in here, and once we have that in place, we can feed that into chat GPT and say.
+
+Create a detailed design token taxonomy based on the CSS, and what that will do is rip through the provided CSS and start to interpret it. [00:01:00] And you can see that it's returning to us some color token values. Using this dot notation here, we have a few things that are in place. Kind of useful to hear some typography, some spacing, uh, as well as some border tokens and some other stuff as well.
+
+Uh, so that's helpful, which is good, A good first step. So we can now kind of take it a step further and say, actually give us a text tree diagram outlining this taxonomy. And then it will start to go through and start to cluster things in a way that may be a little bit more helpful from there. So. We'll let it do its thing here.
+
+It'll get through. Here we go. Here's some border stuff. I don't exactly love how this is being clustered, but at the same time, it's something, it is interpreting it and this is helpful, but also kind of not. I feel like it might be missing the Mark A. Little [00:02:00] bit, so let's actually say no. Distill this into the nomenclature, right?
+
+Describe the actual naming algorithm, right, and say, use this image, which is just a screenshot from what's provided in this course as a reference. And so it is going to process this, it is going to distill it. And we are going to chunk things out into the three different tiers. So it kind of understood and processed that image.
+
+And now I feel like we're getting somewhere here, right? We have this like category subcategory role and component name, et cetera, et cetera. So this is kind of nice.
+
+So, all right, we're starting to get some stuff here. And this kind of gives us a little bit more of a head start, right? And we could also say, well take now make a text diagram of this anatomy. So I just pulled up, [00:03:00] uh, our slides from chapter three, fed that into chat GPT, and it is able to start to process and interpret that, right?
+
+So this is just an idea of like, you could take existing code. You can try to rip out and extract some sort of structured naming conventions around this and oh, we're even creating a prettier typographic version of this. Oh, okay. This is starting to feel better. Right? So you can see that it's created us this nice little tree.
+
+So obviously we could continue to pick at this, but I think that the idea is this like. Can we just take what we have right now and start to make sense of it and sort of outline the naming structure and the naming conventions that are in place. And these AI tools can help expedite that process of ultimately landing at a place where we have more solid, more considered naming conventions in [00:04:00] place.
+
+8.23-ai-naming-2
+===
+
+[00:00:00] Another thing is that we might have existing naming conventions, but then we also might have strong opinions. And AI can help guide these kinds of decisions and help us reach consensus or at least a better understanding. And this is really helpful for these kinds of arguments that we've talked about already in the course, which is we have a bunch of different names and synonyms for things.
+
+And what we wanna do is we wanna say our design system team is arguing about design token taxonomy. Given the attached image, we're trying to decide if we should use the word default or initial. Please help us. AD is going to give us some rationale and gives us some sort of food for thought and some fodder for our conversation, for our arguments.
+
+And you can see that it is ultimately giving some recommendation and it is saying to, to use default. Obviously this thing isn't making decisions for us. What it is doing is putting out some food for thought, weighing some [00:01:00] pros and cons, and putting some things on the table so that we're able to have better conversations and ultimately reach agreement on things.
+
+I think from there we can say, okay, now give us some other states that we should consider in our taxonomy and it will do so. D to flee. Right? So here's a structured state taxonomies, so you got default hover, active, focused, disabled, selected. Checked, visited error this morning, conflating some things here, but at the, again, at the end of the day, this stuff is really there to help facilitate conversation, make sure that we're not missing things, and just giving us ultimately this different perspective.
+
+So we'd like you to ponder the question, how can AI help us with this hard but necessary token naming process? Right. Obviously these tools, the models, the technologies, the approaches, all of that stuff is going to continue to change. But when we're talking about, we have a task in front of us, which [00:02:00] is we need to establish sturdy and durable and sensible naming conventions for our token system, how can we use the available AI landscape to help us arrive at those things?
+
+8.24-figma-ai
+===
+
+[00:00:00] Now let's get into building a design token system, which we detailed in chapter four. And in chapter four, we outline kind of a step-by-step process for how to go about this. And the first step in that process is choosing tools. So we could start with design tools and might as well start with the dominant player here, which is Figma.
+
+Of course, we are recording this about a week or two out from their big config conference that they have every year. So all of this is subject to change, but you could see that they have this idea of like a first draft feature, and they also have other things like being able to rename layers to take that grunt work out, as well as just kind of populating things with some dummy or sample data, right?
+
+So all of these things are helpful tools in our toolkit. There's also prototyping features that allows people to create and stitch together little flows to create prototypes bit faster and easier. I think it's pretty safe to assume that [00:01:00] Figma will continue to weave AI into more of its product, and that will of course help accelerate things, make things a little less tedious, but also open new doors and new opportunities, new ways of thinking, and hopefully expand our concept of what can be done in design.
+
+8.25-ai-design-tools
+===
+
+[00:00:00] Now, of course, Figma isn't the only design tool in town, and this new paradigm has really unlocked an explosion of new tools entering the market. This one is called Motif and you can describe some stuff and it will generate some UI based on that design, right? So there's a ton of these. Uh, there's another one called Wizard or ui.
+
+Uh. And this one will create some UI design as well. Kind of started out a little bit more as a prototyping or wire frame tool, and has gotten more into UI design as well. There's also an open source design tool called Pen Pot, and it just actually released a native design token capabilities and the tools, so it was worth just bringing that up right now.
+
+It's also worth saying that this is another area because it is open source. A lot of people are playing around with it and how to integrate AI capabilities into the [00:01:00] tool. I'll just say the design tool landscape is changing very rapidly and AI is being woven into pretty much every aspect of existing software.
+
+8.26-ai-dev-tools
+===
+
+[00:00:00] Just like the design tool landscape, the development tool landscape is being totally and completely overhauled and rethought. Thanks to ai. There are a number of different solutions that developers can use and wield to inject AI into their workflows. Hub copilot is a really popular one. It comes in the form of a plugin for VS code as well as other IDs.
+
+And what it will do is allow you to chat with your code base and do really smart things with it. Throughout this course, we've been using a tool called Cursor, which is a fork of VS code that has injected AI into it. Uh, a lot of these things do similar things where you're basically able to chat with the code base, you're able to have these tools generate new files and crawl through your code base and extract things and rename things and generate things.
+
+It's, uh, it's pretty powerful. It's, it does a lot for you, but like all of [00:01:00] these things, we have to be careful with what they're actually doing under the hood. Uh, windsurf is yet another one. And all of these tools kind of do something similar where we basically have a place where we're writing our code, we're running our projects locally, so this is our environment that we are creating and maintaining our design token library.
+
+These new tools, kind of super impose AI on top of our code bases and allow us to do smart things with them. And we'll show some examples of these things in action.
+
+8.27-ai-sync-tools
+===
+
+[00:00:00] Then lastly, there's no shortage of design to code synchronization tools out there. For instance, UX Pin has been around for a long time trying to bridge these worlds together, and of course, they're now leveraging AI to help do that. There's also tools like Builder io, which is a really powerful way to get designs into code and try to synchronize them.
+
+They have some design tokens capabilities built into their system as well. There's also anima, which is a way to create designs and turn those into live web applications. And there's also Huba Stink ai, which is the reason for better design to code. If you haven't heard of that one before, it's because we just invented it, uh, using our friend Claude here and we said, make a marketing website homepage for a hot new AI powered design to code tool named after the band Hua stank.
+
+And it dutifully went ahead and generated that website. [00:01:00] So you could see it has created a bunch of source code and uh, it has. Made a marketing website and has woven in some nice, um, uh, hub astan references. Wow. Uh, you could see, right, this did a pretty good job at generating this code, but we're not satisfied.
+
+We said, make it more hub astan. And that interpreted that and got inside, uh, and peppered in some more of huba STAs, uh, lyrics. I found the reason to use Hoo stake. I'm not a perfect person, but this code qua, it's fantastic. So anyways, this is just a, a, a little preview of what we're gonna be talking about here, uh, in this section here.
+
+But like. These tools are really powerful and it's worth saying that a lot of the crop of tools, both on the design and code front are all kind of sitting on [00:02:00] top of these base level models that we have coming out of open ai. In the form of GPT. We have Claude, which is what we are just looking at. We have Gemini, we have copilot.
+
+There's a whole bunch of these things out there, and just even interacting directly with these models can get you pretty far down the road. So I. So it's just important to recognize that there's a bunch of tools that are kinda sitting on top of these base level tools, but it's worth saying that all of these things are breeding like rabbits, uh, accelerating at at a crazy pace.
+
+So if you feel overwhelmed by this, if you feel like you can't keep up, uh, you're certainly in good company. This is just the state of the field right now where we have all of this advancement, all of these people doing all of sorts of experimentation. Building all sorts of products. Things are going to be born, things are going to die, things are going to get merged, things are going to improve, things are going to go off the rails.
+
+[00:03:00] Uh, who knows, who knows? But that's just where we're at in the industry right now. So with that in mind, we encourage you to just ask this question, right? Given the landscape right now, what existing and emerging AI tools can help us create and manage various aspects of our token system. The answers to those questions are really going to depend on what we're talking about, what these tools capabilities are, and so on and so forth.
+
+So again, we recommend you treat all of these tools with equal parts, curiosity and skepticism, and make sure you're using your thinking judging selves.
+
+8.28-ai-environment-setup-2
+===
+
+[00:00:00] In chapter four, we detailed how to set up our environments for our token systems. And with this new crop of AI tools, there are ways to expedite that process. So this one is called Bolt New, and what you could do with this is pass in some commands and it will go ahead and build some software for you.
+
+So we're going to do that. We're gonna say create a design token system architecture using style dictionary. And we are going to give it some themes to create, let's call 'em vanilla, chocolate, strawberry, and dark chocolate. I wonder where that came from, but let's see how they do. So it's gonna rip through this.
+
+It's going to stand up an entire environment. It's doing NPM install. It has created a style dictionary as a development dependency, and you could see that it is creating a vanilla style. It is creating a chocolate theme. It is creating a strawberry theme, and it is creating a [00:01:00] dark chocolate theme. And you can see we got some color ramps here, and it is also going through and standing up and scaffolding out an entire application to view this stuff.
+
+And from here it is running some NPM commands. And there we go. We got a. Reference website for a design token system. And you could see it has a nice little theme switcher here. So we have vanilla, chocolate, strawberry, and dark chocolate and holy smokes, right? That was a couple minutes of work. Uh, and.
+
+Yeah, so it's all here, right? And we can go through and start to crawl into this and just kind of take a look. They have some, some samples applied to buttons and icons, but you could just see that this is a pretty quick way of getting this stuff off the ground [00:02:00] now. Is this any good? That's the real question.
+
+Like how does this actually map to our environment? We didn't give it any other context aside from just vanilla, strawberry, chocolate, dark chocolate, right? So there's a lot that can happen to guide it and have it make more informed decisions. Maybe feed in here is our naming conventions, our nomenclature.
+
+Here's our whole taxonomy. Here are these conventions, or here's the sample theme that we want to use, and we want you to build this in exactly this way. And oh, by the way, add storybook to this rather than making your own custom website. So all to say is that's kind of a theme with a lot of these tools is that they do what you ask them to do.
+
+If they say, make a website, it will make a website. Now, does it actually meet your requirements? Is this using the right technology? Is this using the right components? Are these using the right conventions? Is [00:03:00] this what everyone agrees to? Does that matter? All of that good stuff. We're at this really interesting inflection point where these tools can clearly just generate software very, very quickly and easily, and at surface level at least, it seems to be doing a pretty good job, but it's up to us to discern whether or not what's being generated is good and know what we are looking for coming out the other end.
+
+So some questions to ask around environment setup is, how might AI help us stand up our design token environments quickly and reliably? Are there tools or are there processes that can help expedite this stuff or make sure that we're doing it correctly?
+
+8.29-ai-mvp-brand-guidelines
+===
+
+[00:00:00] In chapter four, we then went on to create an MVP token architecture, and this is another opportunity where AI can help us out. So what we're going to do is present a couple ideas for you to keep in mind that these are not comprehensive, but hopefully this is all just food for thought that this helps spark your imagination for how you might go about doing this for your own system.
+
+So one of the things we can do is to take those brand guidelines we talked about earlier in the course. These things that are kind of there, but they're also kind of vague, and can we take those vague brand guidelines and actually generate a design token system out of those, right? Can we create a draft theme from a looser set?
+
+Guidelines. Here is Spotify's brand guidelines, and they have a bunch of different detailed guidelines for how to use their logo, playing views, uh, liking a song. Some of this stuff [00:01:00] is relevant, some of it isn't. But using the icon legibility, here's our colors, right? And here's how to use these things. Yes and no.
+
+And here's our fonts, right? So what we could do is we could say, okay, let's take that and let's plug this in, and we're gonna use Claude again here. And we're gonna say, create a design token system out of this. Just passing in the link, right? It says, I'll create a comprehensive design token system based on Spotify's design documentation.
+
+Let me analyze the information and structure it into a usable token system. And you could see it's ripping through everything, spacing, tokens, border radius tokens, probably taking a stab at some of these things. But I think that it is indeed using, you know, Spotify Green for instance, and, uh, [00:02:00] listening to what was presented on those brand guidelines.
+
+Yep. So there's brand, primary, brand, secondary, using some SaaS stuff, react native. Okay, so color tokens, typography, tokens, pacing tokens. Okay, so that technically created a design token system, so this is a pretty good first pass. It extracted those colors. That typography probably invented a bunch of stuff along the way, but this helps us at least sort of get the ball rolling with the stuff, even if it is just kind of standing up some sample.
+
+JSON. We're going to be doing other demonstrations to go further than this, but we just wanted to spark your imagination on how you can kind of take. Just some brand guidelines and turn that into a first draft of your design token system.
+
+8.30-ai-mvp-image
+===
+
+[00:00:00] Similarly, you can take an image or a comp and pass that into these systems and extrapolate out a draft theme here is Ian. He is dropping in a screenshot from ESPN and it says, you know, focus on color, typography, borders, shadows, et cetera, and it correctly analyzed that. This is from espn.com. And you could see that it is spitting out brand colors, secondary colors, status colors, and uh, creating and interpreting some, uh, type scales, box shadow values and stuff.
+
+Again, is this accurate? Is this right? Who knows? We'll have to to investigate that a little bit, but once we have this in place, we can actually sort of feed it additional context. We could actually say. I actually have this here. I want you, here's a sample CSS file from these tokens. And I want you to [00:01:00] translate the tokens that you generated into this format.
+
+And what that's going to do is take that in and then start to map those values into our token system. Naming conventions,
+
+so we'll let it do its thing, ripping through them. I didn't wanna subject you to all of that, but it basically splat out all of the different CSS custom properties. And then from here what we're able to do is actually plug that theme value in into our Frosted tokens web experience. And you could see that we have this bright red ESPN web, uh, theme kind of plugged in and applied to our token systems.
+
+So all to say. Start with an image of a website and very quickly be able to sort of bash it into the shape of [00:02:00] our token architecture and plug it into, uh, a totally different environment. That's pretty cool.
+
+8.31-ai-mvp-existing-product
+===
+
+[00:00:00] We don't just have to work from brand guidelines or an image or a comp, but we could actually extrapolate a theme from an existing product. So let's take a look at what that looks like. How can AI convert an existing products code base into a draft design token theme? For this demonstration, we're going to use one of my favorite web apps of all time, which is Radio with five os.
+
+And what it does is it allows you to listen to music from all over the world in this very visual way. So we have a globe and we can click on a country. Also we can click on what era we want to listen to, what decades, so we can listen to 1970s Moroccan music and hear what that sounds like and travel across the entire world and also travel through time listening to different kinds of music.
+
+I have discovered so much cool music through this. Uh, it's really amazing. So definitely recommend you [00:01:00] check this service out. It is amazing. It's also really cheap for the. Pro version and I think that there are a lot more indie than a lot of services out there. So, uh, maybe consider throwing them a couple bucks.
+
+But anyways, I love this service, but I also don't think that they have a super well considered design system. So this is a good opportunity. Maybe AI can help create a powerful design token system for radio. Uh, so we can take messy styles. Pass those into AI and maybe get some, uh, cleaned up styles coming out the other end.
+
+So if we take radio's website and plunk this into CSS stats, which we talked about earlier, what it's going to do is it's going to return. All of the different background color values that are in use in the CSS On this website, you can see there's a lot of them. Same thing with text colors. There's a lot going on [00:02:00] here.
+
+So let's actually take a screenshot of all of these background properties. We're gonna plunk this thing into Claude and we are going to say, Hey. Make some sense of this. Help us clean this up, right? So first thing we're going to do is we're going to display this as a list of hex values, and we're just going to organize it a little bit better.
+
+And you can see that it is following suit and it is organizing things. There's a lot of different blue values. There's a lot of different reds. There's a lot of oranges and greens, a lot of similar colors there. We can all see right? Claude's pretty good because it uses these color chiclets, so you can kind of see at a glance.
+
+Uh, the hex values at the time of this recording chat. GPT doesn't do this, uh, as, as elegantly, I think. Um, so, okay, so we have these values here. So now we could say, let's clean these up, remove similar colors, [00:03:00] and make a call on which ones are more versatile. So what it's doing is presenting us with a more reduced, uh, set of hex values to work with, which could be welcome for the radio team.
+
+And that's great. Now, from here we could kind of take those cleaned up style values and we can turn that into a draft theme. So let's go ahead and do that. So we're gonna say represent these colors according to this format provided by this tier, right? So we're passing in our tier one colors js ON file, and it is going to map these things to our token system conventions.
+
+And once you know it, it gives us our red, our green, our grays, our browns, our yellows, and there we go. Okay, so that's pretty good. So now we could say, okay, we [00:04:00] wanna do the same thing, but with our tier two color tokens. So we have our tier one in place. Let's actually apply these things, use the dot notation and fill these things in.
+
+Here we go. So we're saying background neutral background, gray background, blue. And so on and so forth. So once Claude has generated those things, we could actually come into Cursor and say, Hey, make us a new theme called Radio and add it to Storybooks theme. Switcher, right? And that because Cursor has access to our code base, it knows what to do.
+
+It's going to add. The appropriate folders, the create the appropriate files and update existing files to append our radio theme to the mix. So it's gone through, has generated these [00:05:00] things. We're gonna replace that with what Claude generated earlier. And this just kind of shows you the interplay between these different environments.
+
+You technically can do all of this stuff inside of Cursor. Uh, sometimes the Claude Web interface is nicer and shows. Some things that, uh, inside of Cursor, it's, it's a little less ergonomic maybe. Uh, but all of these tools do different things and similar things, and there's no real right or wrong way to do this.
+
+So what this is doing is just ripping through our code base, creating all of the available things, right, like radio tokens, wiring up, importing our different values. And updating our list of available themes and adding radio to the mix, right? Adding a build script. [00:06:00] And again, this is what we would be doing if we were to be adding any new theme to this, right?
+
+So this is a really helpful way to just kind of scaffold up a new theme. And you could see once we get in here, once you know it, we have a radio theme, which is fantastic. So let me zoom in on this, and there we go. Wouldn't you know it? So what we wanna do is actually replace those with the actual values that Claude generated from our cleaned up styles.
+
+So this was just cursor generating these things, but we're actually gonna slap those in from the live website. And hopefully that gives us a little bit more of an accurate, uh, description. We gotta do a little bit of cleanup work here in order to get this right, so it generated base. And we want that to be brand in order for things to show up properly.
+
+Uh, so hopefully this does the trick and [00:07:00] we are changing base to brand and we're just kind of massaging things into place. Right? So that's a theme with a lot of this work is that it's usually. Not just a one time deal. What we're doing is we're iterating over these things. We are manipulating things. We are changing things.
+
+And here we go. Okay. I think that we have our tier one styles in place, this really vibrant color palette, and you could see these things in action, which is awesome. And now we could come into our checkout page and we could see this like. Radio Blue applied. We have this different blue value for our dashboard, but you can see we're switching between this theme.
+
+The homepage looks interesting. That's a nice little like blueberry, uh, ice cream flavor. And here we go. We got our tier two values and that's mapping those sort of vibrant tier one color variables that were extracted from radio's CSS files [00:08:00] and map those two. Background content in border colors, right?
+
+So that's the spirit of this. So the question becomes like, how can these AI tools help us establish a solid token architecture faster? What we just saw with radio is that we're able to say. Take this existing CSS file from the live product, clean it up, plug it into our token architecture and add it as a new theme, and it will do that pretty dutifully and do that pretty easily now as we saw it.
+
+It doesn't just happen as one shot, but at the same time, you can iterate your way through this in order to start to get the results that you're looking for.
+
+8.32-ai-build-colors
+===
+
+[00:00:00] We could also use AI to help build out a themes tokens. For instance, we could take some color samples and feed them into AI and have them produce color ramps. For instance. This website coolers generates different color palettes, so we can pick one at random. Let's find this one, and we can plug those hex values into our AI tooling, and we can basically say, let's create a color ramp out of each one of these hex values, and the AI tool will come up with that.
+
+We could say, that's a good start. How about let's make. 100 through 900 ramps for this, and that gets us a bit closer to what we're looking for. So is this good? Is this accessible? Uh, to be determined a little bit, but at the same time, this does help us fill in the gaps between all of those kind of vague brand guidelines that we tend to see.[00:01:00] 
+
+We can also use these AI tools to help facilitate the translation between our design tools and code. What we can do is quite literally just take a screenshot of our Figma variables panel and feed that into an AI agent, and, uh, see what it comes back with. We could basically say, create separate JSON files for vanilla, strawberry, chocolate, and dark chocolate, and sure enough.
+
+Here is Claude delivering the goods. So starting with our vanilla file, you could see what it's doing is it's creating these hex values, background default, and setting those to these hex values. It's technically working, but it's not doing that aliasing that we were hoping for and what we've been talking about in this course.
+
+So that's the idea. So now we can basically say, okay, try that again, except this time [00:02:00] use notation so that we're able to do these alias variables in between these tokens. So let's give that a shot and this time around, let's see what it does. There we go. Background, default, value, color, neutral, white.
+
+Right. Default, hover, background default. H default hover. So you could see that it's getting the aliasing. Right? Right. So that's pretty cool. I mean, we, we literally imported a screenshot of a design tool and basically said, do these mappings and it complied. Uh, is this true? Is this a hundred percent accurate?
+
+We have worked with these tools for the last couple years and know not to trust them too much, I think here, but at the same time, like this is a pretty good first stab at getting this thing translated into code. Now, does this mean that designers and developers don't need to [00:03:00] work together anymore? Does this mean that tools like.
+
+Token Studio or the Figma API, that is bridging the gap in between us or all of the other tools that we've talked about to help synchronize these things are suddenly irrelevant. Absolutely not. But at the same time, it is just worth investigating, right? Like again, treating this with simultaneous curiosity and skepticism.
+
+8.33-testing-with-ai
+===
+
+[00:00:00] You could also use these AI tools to help test our token system. So we could say, here's our system, here's what we're testing for, and tell us how we're doing. What I did was added our theme CSS to Claude, and I added a new one called Vanilla Wrong, where I made a glaring error. And let's see if Claude is smart enough to catch it.
+
+So I'm gonna say run an accessibility test on the attached files. And let's see what it does. And it says, oh, in vanilla wrong. The content default variable is set to white. While the background default is also set to white. This will render invisible text, which is a hundred percent accurate. And that was what I did.
+
+The good news is, is that plugging in our sample architecture into a cloud and asking for an accessibility review, it gives us, the design system appears to have a solid foundation for accessibility. With the exception of the critical content color issue in [00:01:00] vanilla, wrong csx. So again, is this a stand-in?
+
+Is this a replacement for actually testing with users? Is this a stand-in for other accessibility testing models? No, absolutely not. But it can help catch some glaring errors or maybe make some suggestions. 
+
+I.
+
+8.35-new-component-with-ai
+===
+
+[00:00:00] In chapter six, we talked about how to adopt a token system, and we could talk about the various ways that AI can help us in that mission. So we could start with creating new components that are wired up to the design token system. So we could take our existing component system as well as our new requirements for our new components, and we can create a design token powered.
+
+New component that's based on old conventions. So, uh, we're back here in Cursor and we are going to say create a toast component that has the same structure and same variance as alert, and we are going to feed it that context. So with Cursor you could basically point it at specific files and say, pay attention to this and create me some other things.
+
+What that's going to do is going to generate some new files, so it's creating a toast stories ts, which likely looks very similar to alert [00:01:00] stories ts. It's gonna do its thing. You could see that it's getting the design system conventions correct? Right. We have this DS dash C dash toast. If we are to look at our alert, uh, CSS class structure, it is, it follows the same conventions.
+
+And, uh, once we have that in place, we can give it a look.
+
+Okay, so it's generated those things. We need to accept them. So that's the kind of dance. Right now, the, the user experience of this is a little interesting in this moment in time. I wouldn't be surprised if by the time you're watching this, the interaction for interacting with AI generated code is significantly different.
+
+But at the same time, there's some good stuff here. So we're going to build our project, come in here, and once you know. There is our new [00:02:00] toast component, and you can see that it has that blue information. It's got our error, our warning and success states all wired up to our token system. So those background color values, text color values, and border values are all wired up to our token system.
+
+Pretty cool. Simply by having existing components, by having that design token system in place, you could basically say, make me new stuff that is in the same shape as this old stuff.
+
+8.37-translate
+===
+
+[00:00:00] AI can help us maintain and evolve our design token systems as well. So we've talked a lot throughout this course about how the design token source of truth is defined in JSON. They are transformed into different formats and then apps consume and use those formatted tokens. And token translation can take many different shapes and forms and sizes, and there's all sorts of weird types of software, both past, present, and future that we can use AI to basically splat out any format that we need from that same source of truth.
+
+Now, does that mean that tools like Style Dictionary are no longer relevant and are obsolete? I certainly don't think so, but at the same time it's helpful to know that. This translation is such a big part of what large language models do. We've used this a lot to create glue code between the token system and really weird and brittle [00:01:00] existing application code, for instance.
+
+So this translation can be really, really helpful.
+
+8.38-dark-mode
+===
+
+[00:00:00] Then of course, we could apply AI tooling to all of the advanced design token use cases that we've talked about in this chapter. We won't be comprehensive here, but you could see how we could take something like a light theme and have AI facilitate the creation of a dark theme. So let's give this a try.
+
+What we are going to do is come into our Frosted tokens code base, and we actually want to create a dark strawberry theme. So we are going to go in here, we're going to give it. Our strawberry theme to use and it's gonna go through and generate a bunch of new files. And it did that and we're able to come in to see how it did, eh, it didn't really quite work that well.
+
+So we're gonna give it some additional instructions. Eh, still not working. Let's keep trying. We was gonna say, it looks like they didn't, it didn't generate the tier two and tier three use cases. Let's go ahead and [00:01:00] apply those things. We're speeding it up just for sanity's sake, but there we go. We got there eventually, right?
+
+Sometimes these things take a few iterations through this stuff, and you might be wondering, it's like, oh, well, you could have just copied and pasted that theme and gotten there in less time than suffering through a few iterations, and you'd be right. So again. Curiosity and skepticism. It's knowing about how to wield these tools, when to wield these tools.
+
+What are these things good at? What are these things not so good at? Right? So this is all just kind of part of the process. This becomes part of our toolkit that we are able to employ in order to get work done.
+
+8.39-ai-plus-design-systems
+===
+
+[00:00:00] By now, it seems pretty safe to assume that we're not going to put the AI cat back in the bag, and that there are a lot of really practical applications for AI in our design system work. So you like to say that AI is part of our design system toolkit in the same way that design systems are a part of our AI toolkit.
+
+In this course we've talked about how design systems, including design token systems, are really core pieces of infrastructure to help. Organization design and build better software, and this critical infrastructure, I think is really important. With the advent of this more generative, more explosive, but also a little bit more volatile and weird, uh, generative AI technology that's out there, the way that we see it is that at least in this realm.
+
+We have this critical frontend infrastructure that serves as these really welcome and helpful constraints for an otherwise really inventive new technology. [00:01:00] That's just going out there and building webpages, and just naming things, whatever they want. What we're able to do with our design systems is say, this is how we do things and we want you to generate new things using the infrastructure and the conventions that we already have established.
+
+I. It's through that balancing act of the more inventive and generative side of ai, coupled with the sturdy and reliable constraints of the design system that we can make some really interesting things happen that aren't just these hypothetical or we can't trust 'em type of experiences, but because it's wielding the design system, we're able to trust it a bit more than if it was to just generate it on its own.
+
+For the last couple years we've worked at the intersection of AI and design systems, and this change is just [00:02:00] really breakneck. A lot of things are evolving and emerging every single day. Again, most of what we covered in the previous videos might even be woefully outdated, even a couple weeks or a couple months from now.
+
+8.39-ai-plus-design-systems
+===
+
+[00:00:00] By now, it seems pretty safe to assume that we're not going to put the AI cat back in the bag, and that there are a lot of really practical applications for AI in our design system work. So you like to say that AI is part of our design system toolkit in the same way that design systems are a part of our AI toolkit.
+
+In this course we've talked about how design systems, including design token systems, are really core pieces of infrastructure to help. Organization design and build better software, and this critical infrastructure, I think is really important. With the advent of this more generative, more explosive, but also a little bit more volatile and weird, uh, generative AI technology that's out there, the way that we see it is that at least in this realm.
+
+We have this critical frontend infrastructure that serves as these really welcome and helpful constraints for an otherwise really inventive new technology. [00:01:00] That's just going out there and building webpages, and just naming things, whatever they want. What we're able to do with our design systems is say, this is how we do things and we want you to generate new things using the infrastructure and the conventions that we already have established.
+
+I. It's through that balancing act of the more inventive and generative side of ai, coupled with the sturdy and reliable constraints of the design system that we can make some really interesting things happen that aren't just these hypothetical or we can't trust 'em type of experiences, but because it's wielding the design system, we're able to trust it a bit more than if it was to just generate it on its own.
+
+For the last couple years we've worked at the intersection of AI and design systems, and this change is just [00:02:00] really breakneck. A lot of things are evolving and emerging every single day. Again, most of what we covered in the previous videos might even be woefully outdated, even a couple weeks or a couple months from now.
+
+8.40-ai-principles
+===
+
+[00:00:00] Let's talk about some principles for wielding AI in design systems work. At the risk of sounding like a broken record, this field is changing extremely rapidly, so these principles are certainly not exhaustive, but these are some of the things that we've really focused on in our work over the last couple years.
+
+Here's kind where we've landed for some guiding principles. So the first really comes down to respect, and this is something that really underpins all of our work and is something that we're extremely passionate about. At the end of the day, we really want to make respectful use of people's time, energy, talents, and potential.
+
+There is a lot of opportunity here for these AI tools to take away some of our drudgery, to free up our human brains to do more important and thoughtful and fulfilling work. I hope that you have ambitions beyond manually translating a [00:01:00] Figma variable data table into A-J-S-O-N format. So. There is a lot of work that can be automated and frankly should be automated, but at the same time, we also want to protect our humanity and protect our livelihoods.
+
+Another important principle is around organization specific solutions. There's a whole host of really amazing and powerful tools out there, but they kind of don't have a lot of context or don't really honor a lot of existing conventions. What we've found over the last 12 years of working with design systems is that in order for software to be successful at an organization really has to go with the grain of how the organization works.
+
+It's the reason why we're not all just spinning up Wix websites, which that's not a knock on Wix, but at the same time, our organizations are trying to get specific things done, and that applies to these AI tools. These [00:02:00] AI tools should bend and work with the culture and the conventions that are in place at our organizations.
+
+Security and privacy is pretty no-brainer, but it should clear a really high bar for security and privacy. We don't want to be uploading a bunch of user data to chat GPT, for instance, and so this is where things get a little interesting from where do these AI systems live? How are they used, et cetera, et cetera.
+
+It's really important for humans to own both the input and the output of these AI processes. There's a phrase that gets used a lot, which is garbage in and garbage out, and so it's really important for humans to be able to manipulate, control what's going into these systems as well as being able to modify, extend, and fix them.
+
+In fact, that is our absolute duty to do that predictability and reliability. Obviously really key we've been talking about in this entire [00:03:00] course about how design systems and design token systems are critical infrastructure. So producing predictable and reliable results is really, really key. And lastly, we're bringing it all back to respect.
+
+These tools really need to be treated as an enhancement to our jobs rather than a replacement to our jobs. AI should work with the grain of all of the hard work, all of the hard human consensus, and decision making and tool decisions, et cetera, et cetera, and needs to honor that.
+
+8.41-ai-and-our-role
+===
+
+[00:00:00] In a lot of respects, AI versus humans, and is AI going to take our jobs is a bit of a false dichotomy. This does feel like an existential crisis for a lot of people in our field, and a lot of it really has to do with this fact of like, well, I'm used to making this stuff. I'm used to being the one drawing these rectangles or coding these rectangles, and now all of a sudden, here's all of these AI tools that are doing this for me.
+
+So the process goes a little something like this, which is what we've been covering in this chapter, right? We have humans, us wielding these AI tools that are ultimately splatting out different websites, including our little hub, Stan, designed to code marketing website, right? And this is what the entire world is undergoing.
+
+There's lots and lots and lots of people using these tools to create digital products. We're already seeing the results of [00:01:00] that activity. There is a term called AI slop that really does a good job at articulating a lot of the quality that comes out of the other end of these AI systems. And this is the stuff that is just flooding the web with all sorts of crap.
+
+And another really important term is this term in acidification. Which was coined by writer Corey, Dr. O, back in 2022, and has really taken off with the rise of ai. In fact, I think that this was even the word of the year and nestled within this, there's a lot of bigger concepts in play here, but. Back in 2013, I created a talk called Death to Bullshit that we went on to make a website about that really embodies a lot of the concepts that we talk about in the presentation where you basically say, turn bullshit on, and it just turns the website into this [00:02:00] giant, uh, embodiment of all of the worst practices that we tend to encounter on the web.
+
+I'm sad to say that nearly 12 years later, uh, things don't seem to have gotten better. Perhaps that's why this law, which is called Sturgeon's Law, still feels extremely relevant. Theodore Sturgeon was a science fiction writer and in an interview he was asked, why is 90% of all science fiction writing crap?
+
+And he said, well, 90% of everything is crap. I think that this really holds true, especially in this AI powered era. It is so incredibly easy to produce things, produce content, produce stuff, and it's important to recognize that ease, right? Lots and lots and lots of people are doing this process [00:03:00] right this second.
+
+We're just creating a bunch of stuff and flooding the zone with it, so it's our obligation in order to prevent becoming part of the 90% of crap. We need to do this harder process of being on the other end of whatever's coming out of these systems and using our thinking, feeling, judging, discerning, moral, ethical cells to make sure that whatever is being generated or produced.
+
+Good is, is universal, is accessible, follows the principles of the web, and ultimately is good for humanity and good for the world at large. This is our job. I know it doesn't seem like it sometimes when we are creating design tokens or making rectangles, but at the end of the day, we are human beings with agency and need to make sure that whatever comes out.
+
+Of these systems, whether human produced, AI produced, or a combination [00:04:00] of the two are sound and it's through us that we get to serve as this really important filter. And when we contrast these processes, this takes longer. This takes more work to use our critical thinking skills, to use our judgment, to use our moral and ethical selves to push back on things.
+
+And this is our job. As human beings, we need to make sure that the work that we do is sound and good, good for our organizations, good for ourselves, good for our families, good for our communities, and good for the world at large. Through that lens, I really hope that you understand just how valuable you are.
+
+You will not be replaced by ai. There are aspects of our jobs that very well may be encroached upon by these technologies, but you are so much bigger than just those skills that can be performed by an ai. I hope you take that to [00:05:00] heart.

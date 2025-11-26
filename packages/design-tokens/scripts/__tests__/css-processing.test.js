@@ -2,7 +2,8 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-import { pruneCssDuplicates, filterResponsiveCss, shorthandHexColors, modernizeColorSyntax, dropZeroUnits } from '../build-tokens.js';
+import { pruneCssDuplicates, filterResponsiveCss } from '../build-tokens.js';
+import { shorthandHexColors, modernizeColorSyntax, dropZeroUnits } from '../transformers/css-processors.js';
 
 describe('pruneCssDuplicates', () => {
   let tempDir;

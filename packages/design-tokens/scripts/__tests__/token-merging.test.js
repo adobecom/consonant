@@ -4,7 +4,7 @@ import {
   mergeTokenTrees,
   isTokenGroup,
   clone,
-} from "../build-tokens.js";
+} from "../utils/token-utils.js";
 
 describe("isTokenGroup", () => {
   it("identifies token groups (objects without $value)", () => {

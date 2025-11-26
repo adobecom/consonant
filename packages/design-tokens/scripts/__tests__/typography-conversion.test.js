@@ -4,7 +4,7 @@ import {
   convertNumberTokens,
   collectTypographyDimensions,
   populateLineHeightFontSizeMap,
-} from "../build-tokens.js";
+} from "../transformers/typography-transformers.js";
 
 describe("getTypographyContext", () => {
   it("returns undefined context for non-typography paths", () => {

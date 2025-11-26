@@ -1,64 +1,8 @@
 {
   "fileId": "7YKv4XjtE2sUEP7CpOZQIQ",
   "apiBase": "https://api.figma.com",
-  "generatedAt": "2025-11-24T14:34:51.044Z",
+  "generatedAt": "2025-11-25T17:40:44.191Z",
   "files": [
-    {
-      "fileName": "semantic-color-variablecollectionid-40-22.light.json",
-      "collection": {
-        "id": "VariableCollectionId:40:22",
-        "name": "Semantic (Color)",
-        "slug": "semantic-color",
-        "idSlug": "variablecollectionid-40-22"
-      },
-      "mode": {
-        "id": "40:0",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "semantic-color-variablecollectionid-40-22.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:40:22",
-        "name": "Semantic (Color)",
-        "slug": "semantic-color",
-        "idSlug": "variablecollectionid-40-22"
-      },
-      "mode": {
-        "id": "50:1",
-        "name": "Dark",
-        "slug": "dark"
-      }
-    },
-    {
-      "fileName": "primitives-color-variablecollectionid-6e7ac02d57674b3b03de2e5ceafbc65ec7c30619-82-944.light.json",
-      "collection": {
-        "id": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
-        "name": "Primitives (Color)",
-        "slug": "primitives-color",
-        "idSlug": "variablecollectionid-6e7ac02d57674b3b03de2e5ceafbc65ec7c30619-82-944"
-      },
-      "mode": {
-        "id": "82:0",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "primitives-color-variablecollectionid-6e7ac02d57674b3b03de2e5ceafbc65ec7c30619-82-944.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
-        "name": "Primitives (Color)",
-        "slug": "primitives-color",
-        "idSlug": "variablecollectionid-6e7ac02d57674b3b03de2e5ceafbc65ec7c30619-82-944"
-      },
-      "mode": {
-        "id": "82:1",
-        "name": "Dark",
-        "slug": "dark"
-      }
-    },
     {
       "fileName": "semantic-variablecollectionid-4-218.mode-1.json",
       "collection": {
@@ -172,17 +116,31 @@
       }
     },
     {
-      "fileName": "semantic-variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142.mode-1.json",
+      "fileName": "semantic-color-variablecollectionid-40-22.light.json",
       "collection": {
-        "id": "VariableCollectionId:973e742b9219b09ddd242f148a68d0bf608baeeb/4:142",
-        "name": "Semantic",
-        "slug": "semantic",
-        "idSlug": "variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142"
+        "id": "VariableCollectionId:40:22",
+        "name": "Semantic (Color)",
+        "slug": "semantic-color",
+        "idSlug": "variablecollectionid-40-22"
       },
       "mode": {
-        "id": "4:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
+        "id": "40:0",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "semantic-color-variablecollectionid-40-22.dark.json",
+      "collection": {
+        "id": "VariableCollectionId:40:22",
+        "name": "Semantic (Color)",
+        "slug": "semantic-color",
+        "idSlug": "variablecollectionid-40-22"
+      },
+      "mode": {
+        "id": "50:1",
+        "name": "Dark",
+        "slug": "dark"
       }
     },
     {
@@ -206,6 +164,34 @@
         "name": "Primitives (Color)",
         "slug": "primitives-color",
         "idSlug": "variablecollectionid-82-22"
+      },
+      "mode": {
+        "id": "82:1",
+        "name": "Dark",
+        "slug": "dark"
+      }
+    },
+    {
+      "fileName": "primitives-color-variablecollectionid-6e7ac02d57674b3b03de2e5ceafbc65ec7c30619-82-944.light.json",
+      "collection": {
+        "id": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+        "name": "Primitives (Color)",
+        "slug": "primitives-color",
+        "idSlug": "variablecollectionid-6e7ac02d57674b3b03de2e5ceafbc65ec7c30619-82-944"
+      },
+      "mode": {
+        "id": "82:0",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "primitives-color-variablecollectionid-6e7ac02d57674b3b03de2e5ceafbc65ec7c30619-82-944.dark.json",
+      "collection": {
+        "id": "VariableCollectionId:6e7ac02d57674b3b03de2e5ceafbc65ec7c30619/82:944",
+        "name": "Primitives (Color)",
+        "slug": "primitives-color",
+        "idSlug": "variablecollectionid-6e7ac02d57674b3b03de2e5ceafbc65ec7c30619-82-944"
       },
       "mode": {
         "id": "82:1",
@@ -239,6 +225,20 @@
         "id": "17536:0",
         "name": "Dark",
         "slug": "dark"
+      }
+    },
+    {
+      "fileName": "semantic-variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:973e742b9219b09ddd242f148a68d0bf608baeeb/4:142",
+        "name": "Semantic",
+        "slug": "semantic",
+        "idSlug": "variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142"
+      },
+      "mode": {
+        "id": "4:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
       }
     },
     {

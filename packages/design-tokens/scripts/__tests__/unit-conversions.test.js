@@ -4,10 +4,9 @@ import {
   toRem,
   roundTo,
   stripTrailingZeros,
-  quoteFontFamily,
-  isNumericKey,
-  findNumericKey,
-} from "../build-tokens.js";
+} from "../transformers/unit-conversions.js";
+import { quoteFontFamily } from "../utils/string-utils.js";
+import { isNumericKey, findNumericKey } from "../utils/token-utils.js";
 
 describe("toPx", () => {
   it("converts positive numbers to px strings", () => {
