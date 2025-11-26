@@ -5,7 +5,7 @@ It outputs **CSS only** (no JS runtime required).
 All CSS is generated from our internal Figma Variables → JSON export (`tokens/`), but these raw JSON files are **not** included in the published package.
 
 **Package name:** `s2a-tokens`  
-**Current version:** `0.0.3`
+**Current version:** `0.0.4`
 
 ---
 
