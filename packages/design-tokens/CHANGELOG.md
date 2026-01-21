@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2025-11-26
+
+### ✨ Improvements
+
+- **Dataviz palette filtering**: Removed all `color/dataviz/*` primitives from the generated CSS outputs.
+  - `tokens.primitives.light.css` and `tokens.primitives.dark.css` now only contain the core palette used by the system UI.
+  - Helps keep the public token surface focused on supported UI colors while preserving dataviz variables in the Figma export.
+
+### 🧰 Internal
+
+- Further modularized the token build pipeline into dedicated transformer and utility modules:
+  - `transformers/unit-conversions`, `transformers/css-processors`, `transformers/typography-transformers`
+  - `utils/token-utils`, `utils/string-utils`, `utils/css-file-utils`
+- Updated tests to import from the new modules while preserving existing behavior and coverage (205 tests).
+
+---
+
 ## [0.0.3] - 2024-12-XX
 
 ### 🎉 Major Changes

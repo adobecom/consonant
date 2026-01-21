@@ -2,8 +2,14 @@
 const fs = require('fs');
 const path = require('path');
 
-const FONT_SOURCE_PATH = path.resolve(__dirname, '../../../primitives/tmp.json');
-const LINE_HEIGHT_PATH = path.resolve(__dirname, '../../../primitives/tmp-line-height.json');
+// Read directly from the real design tokens instead of a temporary file.
+// This points at the primitives core token JSON which includes typography.
+const FONT_SOURCE_PATH = path.resolve(
+  __dirname,
+  '../../../packages/design-tokens/tokens/primitives-core-variablecollectionid-1-2.mode-1.json',
+);
+// Line-height values also live in the same token file.
+const LINE_HEIGHT_PATH = FONT_SOURCE_PATH;
 const OUTPUT_DIR = path.resolve(__dirname, '../stories/generated');
 const OUTPUT_MODULE = path.join(OUTPUT_DIR, 'typographyScale.js');
 
@@ -25,21 +31,30 @@ const formatPx = (pxValue) => {
 };
 
 const fontSource = JSON.parse(fs.readFileSync(FONT_SOURCE_PATH, 'utf-8'));
-const fontEntries = Object.entries(fontSource.typography['font-size']).map(([token, { value }]) => {
-  const rem = value;
-  const remNumber = stripUnits(value, 'rem');
-  const px = formatPx(remNumber * 16);
+const fontSizeTokens = (fontSource.typography && fontSource.typography['font-size']) || {};
+
+// primitives-core tokens store numeric font sizes under `$value` (in px).
+// Here we derive both px and rem representations for the stories.
+const fontEntries = Object.entries(fontSizeTokens).map(([token, node]) => {
+  const raw = node.$value;
+  const pxNumber = typeof raw === 'number' ? raw : Number.parseFloat(String(raw));
+  const px = formatPx(pxNumber);
+  const remNumber = pxNumber / 16;
+  const rem = Number.isNaN(remNumber) ? null : `${remNumber}rem`;
   return { token, rem, px };
 });
 
-const lineHeightSource = fs.existsSync(LINE_HEIGHT_PATH)
-  ? JSON.parse(fs.readFileSync(LINE_HEIGHT_PATH, 'utf-8'))
-  : { typography: { 'line-height': {} } };
-const lineHeightEntries = Object.entries(lineHeightSource.typography['line-height']).map(([token, { value }]) => ({
-  token,
-  value,
-  number: Number.parseFloat(value)
-}));
+const lineHeightSource = JSON.parse(fs.readFileSync(LINE_HEIGHT_PATH, 'utf-8'));
+const lineHeightTokens = (lineHeightSource.typography && lineHeightSource.typography['line-height']) || {};
+const lineHeightEntries = Object.entries(lineHeightTokens).map(([token, node]) => {
+  const raw = node.$value;
+  const number = Number.parseFloat(String(raw));
+  return {
+    token,
+    value: raw,
+    number
+  };
+});
 
 const fallbackLineHeight = lineHeightEntries[lineHeightEntries.length - 1] ?? { token: null, value: null, number: Number.NaN };
 const resolvedLineHeights = fontEntries.map((_, index) => {

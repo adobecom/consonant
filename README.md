@@ -5,6 +5,12 @@ This is an NX monorepo containing:
 - **`packages/design-tokens`** - Publishable design token package that syncs from Figma and builds CSS custom properties
 - **`apps/storybook`** - Storybook application for documenting and testing components
 
+## Token Pipeline Runbook
+
+📖 **[Complete Token Pipeline Runbook](docs/RUNBOOK_token-pipeline.md)** - Comprehensive guide for running releases, troubleshooting, and maintaining the token pipeline.
+
+📋 **[Quick Reference Steps](docs/FIGJAM_token-pipeline_steps.md)** - FigJam-friendly step cards for quick reference.
+
 ## Deliverable
 
 - `consonant-design-tokens-0.0.1.tgz` is the packaged artifact you should ingest. Install directly (`npm install ./consonant-design-tokens-0.0.1.tgz`) or publish to your internal registry; it exposes the CSS outputs in `css/` (`tokens-base.css`, `tokens-light.css`, `tokens-dark.css`, etc.).

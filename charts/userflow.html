@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adobe DS North Star — Team Org + Agentic Workflow</title>
+
+    <!-- D3 + Dagre-D3 (layout engine) -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre-d3@0.6.4/dist/dagre-d3.min.js"></script>
+
+    <style>
+      :root {
+        --bg: #0b0d12;
+        --panel: #0f1420;
+        --card: #111827;
+        --muted: #9aa4b2;
+        --text: #e5e7eb;
+        --stroke: #2b3445;
+        --accent: #60a5fa;
+        --good: #34d399;
+        --warn: #fbbf24;
+        --bad: #fb7185;
+      }
+
+      html,
+      body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        max-width: none;
+        box-sizing: border-box;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .wrap {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 16px;
+        padding: 16px;
+        box-sizing: border-box;
+        margin: 0;
+      }
+      .wrap.right-collapsed {
+        grid-template-columns: 1fr;
+        padding: 0;
+        gap: 0;
+        width: 100vw;
+        max-width: none;
+      }
+
+      .left {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        min-width: 0;
+      }
+      .wrap.right-collapsed .left {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        width: 100vw;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .title {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .title h1 {
+        font-size: 14px;
+        margin: 0;
+        letter-spacing: 0.2px;
+      }
+      .title p {
+        font-size: 12px;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .btns {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      button {
+        appearance: none;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: rgba(96, 165, 250, 0.8);
+      }
+
+      .svgWrap {
+        position: absolute;
+        inset: 48px 0 0 0;
+        overflow: auto;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Right panel */
+      .right {
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .rightHeader {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .rightHeaderContent {
+        flex: 1;
+      }
+      .toggleBtn {
+        appearance: none;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .toggleBtn:hover {
+        border-color: rgba(96, 165, 250, 0.8);
+      }
+      .right.collapsed {
+        display: none;
+      }
+      .rightHeader h2 {
+        margin: 0;
+        font-size: 14px;
+      }
+      .rightHeader p {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .card {
+        padding: 14px;
+        overflow: auto;
+      }
+      .card h3 {
+        margin: 0 0 6px;
+        font-size: 16px;
+      }
+      .pillRow {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 8px 0 12px;
+      }
+      .pill {
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--stroke);
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .pill.accent {
+        border-color: rgba(96, 165, 250, 0.6);
+        color: rgba(96, 165, 250, 0.95);
+      }
+      .pill.good {
+        border-color: rgba(52, 211, 153, 0.6);
+        color: rgba(52, 211, 153, 0.95);
+      }
+      .pill.warn {
+        border-color: rgba(251, 191, 36, 0.6);
+        color: rgba(251, 191, 36, 0.95);
+      }
+
+      .section {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px dashed rgba(255, 255, 255, 0.12);
+      }
+      .section h4 {
+        margin: 0 0 8px;
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      ul {
+        margin: 0 0 0 18px;
+        padding: 0;
+        line-height: 1.5;
+        font-size: 13px;
+        color: var(--text);
+      }
+      li {
+        margin: 6px 0;
+      }
+
+      /* Graph styling (dagre-d3 uses SVG elements with classes) */
+      svg {
+        width: 100%;
+        height: 100%;
+      } /* big canvas; container scrolls */
+      .node rect {
+        rx: 12px;
+        ry: 12px;
+        fill: rgba(255, 255, 255, 0.03);
+        stroke: rgba(255, 255, 255, 0.16);
+        stroke-width: 1.3px;
+      }
+      .node.selected rect {
+        stroke: rgba(96, 165, 250, 0.9);
+        stroke-width: 2.2px;
+      }
+      .node text {
+        fill: var(--text);
+        font-weight: 600;
+        font-size: 12px;
+      }
+      .edgePath path {
+        stroke: rgba(255, 255, 255, 0.22);
+        stroke-width: 1.4px;
+        fill: none;
+      }
+      .edgeLabel text {
+        fill: rgba(255, 255, 255, 0.6);
+        font-size: 10px;
+      }
+      .dashed path {
+        stroke-dasharray: 6 5;
+        opacity: 0.9;
+      }
+      .strong path {
+        stroke: rgba(96, 165, 250, 0.55);
+        stroke-width: 2px;
+      }
+      .legend {
+        position: absolute;
+        right: 12px;
+        bottom: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(6px);
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        display: inline-block;
+        margin-right: 6px;
+      }
+      .dot.a {
+        background: rgba(96, 165, 250, 0.8);
+      }
+      .dot.b {
+        background: rgba(255, 255, 255, 0.35);
+      }
+      .dot.c {
+        background: rgba(255, 255, 255, 0.35);
+        border: 1px dashed rgba(255, 255, 255, 0.45);
+        background: transparent;
+      }
+
+      @media (max-width: 1100px) {
+        .wrap {
+          grid-template-columns: 1fr;
+        }
+        svg {
+          width: 1200px;
+          height: 900px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="left">
+        <div class="toolbar">
+          <div class="title">
+            <h1>North Star Team Org + Agentic Workflow</h1>
+            <p>
+              <strong>Note:</strong> This is an alternative operator-focused view. For the leadership view, see <a href="north-star-diagrams.html" style="color: var(--accent); text-decoration: underline;">North Star — Team Org + Lifecycle</a>. Click a role to see responsibilities + how AI/MCP/automation is leveraged.
+            </p>
+          </div>
+          <div class="btns">
+            <button id="btnCenter">Center view</button>
+            <button id="btnReset">Reset selection</button>
+            <button id="togglePanel" class="toggleBtn" title="Toggle panel">Panel</button>
+          </div>
+        </div>
+
+        <div class="svgWrap">
+          <svg id="svg">
+            <g id="g"></g>
+          </svg>
+        </div>
+
+        <div class="legend">
+          <span><span class="dot a"></span>Strong ownership / direction</span>
+          <span><span class="dot b"></span>Collaboration / handoff</span>
+          <span><span class="dot c"></span>Dotted = governance/influence</span>
+        </div>
+      </div>
+
+      <div class="right" id="rightPanel">
+        <div class="rightHeader">
+          <div class="rightHeaderContent">
+            <h2 id="panelTitle">Role details</h2>
+            <p id="panelSubtitle">Select a role node in the diagram.</p>
+          </div>
+        </div>
+        <div class="card" id="panel"></div>
+      </div>
+    </div>
+
+    <script>
+      // -----------------------------
+      // Data: Roles + relationships
+      // -----------------------------
+      const roles = {
+        architect: {
+          title: "System Architect / Compiler Operator",
+          pills: ["Leadership", "Contracts", "Automation-first"],
+          owns: [
+            "Defines system-of-record: Tokens product + Component/Block Specs product",
+            "Architects pipelines (token export/build/distribution) + spec schema + generators",
+            "Sets guardrails for agentic workflows (AI prompts, validation gates, deterministic outputs)",
+            "Runs governance: decisions, deprecations, migrations, release policy",
+          ],
+          leverages: [
+            "Uses MCP + Cursor/Claude to draft specs, migration maps, and doc scaffolds (with strict validation)",
+            "Automates repetitive tasks: spec linting, token coverage reports, artifact generation, changelogs",
+            "Maintains a ‘compiler mindset’: Milo/Figma/docs are outputs, not sources of truth",
+          ],
+          outputs: [
+            "Tokens as Product (versioned, validated, distributed)",
+            "Specs as Product (YAML/JSON contracts)",
+            "Generators (Figma-assisted componentization, Milo scaffolds, Storybook, Docs, Tag Manifest)",
+          ],
+        },
+
+        dsDesigners: {
+          title: "Design System Designers (UX / Visual)",
+          pills: ["Intent", "Patterns", "Figma authoring"],
+          owns: [
+            "Define UX intent, interaction states, pattern rules, and component anatomy",
+            "Author Figma components using Variables (no hard-coded values)",
+            "Validate generated outputs (Figma + reference builds) match intent",
+          ],
+          leverages: [
+            "Use AI to draft usage guidelines, do/don’t examples, and edge-case checklists",
+            "Use MCP tooling to keep design artifacts aligned with spec + tokens (validation, reporting)",
+          ],
+          outputs: [
+            "Design intent + canonical pattern decisions",
+            "Inputs for specs (anatomy/variants/constraints) and token semantics",
+          ],
+        },
+
+        designEngineers: {
+          title: "Design Engineers (Bridge: design ↔ code)",
+          pills: ["Bridge role", "Implementation", "Storybook"],
+          owns: [
+            "Implement components/blocks from specs (Milo target today: HTML/CSS/JS)",
+            "Build Storybook/reference implementations to document API + states",
+            "Write tests and a11y checks; partner with platform for integration",
+          ],
+          leverages: [
+            "Use Cursor/Claude for scaffold generation from specs (stories, tests, boilerplate)",
+            "Use MCP to pull design/spec context and accelerate implementation with guardrails",
+            "Automate matrix coverage: ensure all variants/states are represented and tested",
+          ],
+          outputs: [
+            "Milo block implementations aligned to contracts",
+            "Storybook stories + reference behaviors + test matrix",
+          ],
+        },
+
+        miloPlatform: {
+          title: "Milo / Platform Engineers (Runtime + integration)",
+          pills: ["Runtime", "Performance", "Integration"],
+          owns: [
+            "Own Milo runtime constraints: performance, security, bundling, release mechanics",
+            "Integrate DS outputs into production workflows (consumption patterns + hooks)",
+            "Provide extension points so spec-driven outputs can land cleanly",
+          ],
+          leverages: [
+            "Automate compatibility checks (perf budgets, integration tests)",
+            "Use AI for migration assistance and code review acceleration, not as source of truth",
+          ],
+          outputs: [
+            "Reliable runtime substrate for blocks and token consumption",
+            "Integration pathways for DS outputs to ship safely",
+          ],
+        },
+
+        docsDevEx: {
+          title: "Docs / DevEx (Publishing + IA)",
+          pills: ["Docs", "DX", "Enablement"],
+          owns: [
+            "Own documentation IA and publishing workflows",
+            "Ensure docs are generated from contracts and remain current",
+            "Build contributor guides and adoption playbooks",
+          ],
+          leverages: [
+            "Use AI to draft docs from spec fields (usage, examples, FAQs) with human review",
+            "Automate doc freshness: docs update on token/spec release",
+          ],
+          outputs: [
+            "Docs site (props/variants/tokens/a11y) generated from contracts",
+            "Onboarding + contributor workflows",
+          ],
+        },
+
+        a11y: {
+          title: "Accessibility DRI (Requirements + gates)",
+          pills: ["A11y", "Compliance", "Gates"],
+          owns: [
+            "Define accessibility requirements per component/block (ARIA, keyboard, focus, contrast)",
+            "Establish gates (a11y tests, checklists, sign-offs) tied to releases",
+          ],
+          leverages: [
+            "Automate a11y checks (Playwright/axe) and surface failures early",
+            "Use AI to draft test cases/checklists, then enforce via deterministic tooling",
+          ],
+          outputs: [
+            "A11y contracts inside specs + enforcement in CI",
+            "Consistent compliance guidance across teams",
+          ],
+        },
+      };
+
+      const edges = [
+        // Strong ownership / direction from Architect
+        {
+          from: "architect",
+          to: "dsDesigners",
+          label: "sets system direction",
+          cls: "strong",
+        },
+        {
+          from: "architect",
+          to: "designEngineers",
+          label: "defines contracts",
+          cls: "strong",
+        },
+        {
+          from: "architect",
+          to: "miloPlatform",
+          label: "aligns integration",
+          cls: "strong",
+        },
+        {
+          from: "architect",
+          to: "docsDevEx",
+          label: "drives doc automation",
+          cls: "strong",
+        },
+        {
+          from: "architect",
+          to: "a11y",
+          label: "defines gates",
+          cls: "strong",
+        },
+
+        // Collaboration lanes
+        {
+          from: "dsDesigners",
+          to: "designEngineers",
+          label: "spec + intent",
+          cls: "",
+        },
+        {
+          from: "designEngineers",
+          to: "miloPlatform",
+          label: "integration",
+          cls: "",
+        },
+        {
+          from: "docsDevEx",
+          to: "dsDesigners",
+          label: "content alignment",
+          cls: "dashed",
+        },
+        {
+          from: "a11y",
+          to: "designEngineers",
+          label: "test expectations",
+          cls: "dashed",
+        },
+        {
+          from: "a11y",
+          to: "dsDesigners",
+          label: "requirements",
+          cls: "dashed",
+        },
+      ];
+
+      // -----------------------------
+      // Build Dagre graph
+      // -----------------------------
+      const g = new dagreD3.graphlib.Graph({ multigraph: true })
+        .setGraph({
+          rankdir: "TB", // top-to-bottom org flow
+          nodesep: 40,
+          ranksep: 55,
+          marginx: 20,
+          marginy: 20,
+        })
+        .setDefaultEdgeLabel(() => ({}));
+
+      // Node styles
+      const nodeStyle = (key) => {
+        const base =
+          "fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.16); stroke-width: 1.3px;";
+        if (key === "architect")
+          return base + " stroke: rgba(96,165,250,0.85); stroke-width: 2px;";
+        return base;
+      };
+
+      Object.entries(roles).forEach(([key, r]) => {
+        g.setNode(key, {
+          label: r.title,
+          rx: 12,
+          ry: 12,
+          padding: 14,
+          style: nodeStyle(key),
+        });
+      });
+
+      edges.forEach((e, i) => {
+        g.setEdge(
+          e.from,
+          e.to,
+          {
+            label: e.label,
+            lineInterpolate: "basis",
+            class: e.cls || "",
+            arrowhead: "vee",
+          },
+          `e${i}`,
+        );
+      });
+
+      // -----------------------------
+      // Render
+      // -----------------------------
+      const svg = d3.select("#svg");
+      const inner = d3.select("#g");
+      const render = new dagreD3.render();
+
+      // Clear any previous
+      inner.selectAll("*").remove();
+
+      render(inner, g);
+
+      // Add zoom/pan
+      const zoom = d3
+        .zoom()
+        .scaleExtent([0.5, 1.4])
+        .on("zoom", (event) => {
+          inner.attr("transform", event.transform);
+        });
+
+      svg.call(zoom);
+
+      // Center initial view
+      function centerView() {
+        const graphWidth = g.graph().width;
+        const graphHeight = g.graph().height;
+        const svgWidth = svg.node().clientWidth;
+        const svgHeight = svg.node().clientHeight;
+
+        const scale = 0.95;
+        const translateX = (svgWidth - graphWidth * scale) / 2;
+        const translateY = 24;
+
+        svg
+          .transition()
+          .duration(350)
+          .call(
+            zoom.transform,
+            d3.zoomIdentity.translate(translateX, translateY).scale(scale),
+          );
+      }
+
+      centerView();
+      d3.select("#btnCenter").on("click", centerView);
+
+      // -----------------------------
+      // Interactivity: click nodes → update panel
+      // -----------------------------
+      const panel = d3.select("#panel");
+      const panelTitle = d3.select("#panelTitle");
+      const panelSubtitle = d3.select("#panelSubtitle");
+
+      function setPanel(key) {
+        const r = roles[key];
+        if (!r) return;
+
+        panelTitle.text(r.title);
+        panelSubtitle.text(
+          "Responsibilities + how this role leverages AI/MCP/automation in the ecosystem.",
+        );
+
+        panel.html("");
+        panel.append("h3").text(r.title);
+
+        const pills = panel.append("div").attr("class", "pillRow");
+        (r.pills || []).forEach((p, idx) => {
+          const cls =
+            idx === 0 ? "pill accent" : idx === 1 ? "pill good" : "pill warn";
+          pills.append("span").attr("class", cls).text(p);
+        });
+
+        const s1 = panel.append("div").attr("class", "section");
+        s1.append("h4").text("Owns");
+        const ul1 = s1.append("ul");
+        r.owns.forEach((x) => ul1.append("li").text(x));
+
+        const s2 = panel.append("div").attr("class", "section");
+        s2.append("h4").text("Leverages AI / MCP / Agentic workflows");
+        const ul2 = s2.append("ul");
+        r.leverages.forEach((x) => ul2.append("li").text(x));
+
+        const s3 = panel.append("div").attr("class", "section");
+        s3.append("h4").text("Key outputs / artifacts");
+        const ul3 = s3.append("ul");
+        r.outputs.forEach((x) => ul3.append("li").text(x));
+      }
+
+      // Highlight selection
+      function clearSelection() {
+        inner.selectAll("g.node").classed("selected", false);
+      }
+
+      inner
+        .selectAll("g.node")
+        .style("cursor", "pointer")
+        .on("click", function (event, key) {
+          clearSelection();
+          d3.select(this).classed("selected", true);
+          setPanel(key);
+        });
+
+      d3.select("#btnReset").on("click", () => {
+        clearSelection();
+        panelTitle.text("Role details");
+        panelSubtitle.text("Select a role node in the diagram.");
+        panel.html("");
+        centerView();
+      });
+
+      // Default panel
+      setPanel("architect");
+      inner
+        .selectAll("g.node")
+        .filter((d) => d === "architect")
+        .classed("selected", true);
+
+      // Improve edge labels readability
+      inner.selectAll("g.edgeLabel").attr("opacity", 0.85);
+
+      // Optional: make dashed edges visually distinct
+      inner.selectAll("g.edgePath.dashed path").attr("stroke-dasharray", "6 5");
+
+      // Panel toggle
+      const rightPanel = d3.select("#rightPanel");
+      const wrap = d3.select(".wrap");
+      const toggleBtn = d3.select("#togglePanel");
+      
+      function updateToggleButton() {
+        const isCollapsed = rightPanel.classed("collapsed");
+        toggleBtn.text(isCollapsed ? "Show Panel" : "Hide Panel");
+        toggleBtn.attr("title", isCollapsed ? "Show panel" : "Hide panel");
+      }
+      
+      toggleBtn.on("click", () => {
+        const isCollapsed = rightPanel.classed("collapsed");
+        rightPanel.classed("collapsed", !isCollapsed);
+        wrap.classed("right-collapsed", !isCollapsed);
+        updateToggleButton();
+      });
+      
+      // Initialize button text
+      updateToggleButton();
+    </script>
+  </body>
+</html>

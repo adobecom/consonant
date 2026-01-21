@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adobe DS North Star — Team Flow + Authoring Surface</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre-d3@0.6.4/dist/dagre-d3.min.js"></script>
+
+    <style>
+      :root {
+        --bg: #0b0d12;
+        --panel: #0f1420;
+        --muted: #9aa4b2;
+        --text: #e5e7eb;
+        --stroke: #2b3445;
+      }
+      html,
+      body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        max-width: none;
+        box-sizing: border-box;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      .wrap {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        display: grid;
+        grid-template-columns: 1.35fr 0.65fr;
+        gap: 16px;
+        padding: 16px;
+        box-sizing: border-box;
+        margin: 0;
+      }
+      .wrap.right-collapsed {
+        grid-template-columns: 1fr;
+        padding: 0;
+        gap: 0;
+        width: 100vw;
+        max-width: none;
+      }
+      .left {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        min-width: 0;
+      }
+      .wrap.right-collapsed .left {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        width: 100vw;
+      }
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .title {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 320px;
+      }
+      .title h1 {
+        font-size: 14px;
+        margin: 0;
+        letter-spacing: 0.2px;
+      }
+      .title p {
+        font-size: 12px;
+        margin: 0;
+        color: var(--muted);
+      }
+      .btns {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-left: auto;
+      }
+      button {
+        appearance: none;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: rgba(96, 165, 250, 0.8);
+      }
+      .svgWrap {
+        position: absolute;
+        inset: 58px 0 0 0;
+        overflow: auto;
+        width: 100%;
+        height: 100%;
+      }
+
+      .right {
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .rightHeader {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .rightHeaderContent {
+        flex: 1;
+      }
+      .toggleBtn {
+        appearance: none;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .toggleBtn:hover {
+        border-color: rgba(96, 165, 250, 0.8);
+      }
+      .right.collapsed {
+        display: none;
+      }
+      .rightHeader h2 {
+        margin: 0;
+        font-size: 14px;
+      }
+      .rightHeader p {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .card {
+        padding: 14px;
+        overflow: auto;
+      }
+      .card h3 {
+        margin: 0 0 6px;
+        font-size: 16px;
+      }
+
+      .pillRow {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 8px 0 12px;
+      }
+      .pill {
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--stroke);
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .pill.accent {
+        border-color: rgba(96, 165, 250, 0.6);
+        color: rgba(96, 165, 250, 0.95);
+      }
+      .pill.good {
+        border-color: rgba(52, 211, 153, 0.6);
+        color: rgba(52, 211, 153, 0.95);
+      }
+      .pill.warn {
+        border-color: rgba(251, 191, 36, 0.6);
+        color: rgba(251, 191, 36, 0.95);
+      }
+
+      .section {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px dashed rgba(255, 255, 255, 0.12);
+      }
+      .section h4 {
+        margin: 0 0 8px;
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      ul {
+        margin: 0 0 0 18px;
+        padding: 0;
+        line-height: 1.5;
+        font-size: 13px;
+        color: var(--text);
+      }
+      li {
+        margin: 6px 0;
+      }
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+      .node rect {
+        rx: 12px;
+        ry: 12px;
+        fill: rgba(255, 255, 255, 0.03);
+        stroke: rgba(255, 255, 255, 0.16);
+        stroke-width: 1.3px;
+      }
+      .node.selected rect {
+        stroke: rgba(96, 165, 250, 0.95);
+        stroke-width: 2.4px;
+      }
+      .node text {
+        fill: var(--text);
+        font-weight: 650;
+        font-size: 12px;
+      }
+
+      .cluster rect {
+        fill: rgba(255, 255, 255, 0.02);
+        stroke: rgba(255, 255, 255, 0.12);
+        stroke-width: 1.2px;
+        rx: 14px;
+        ry: 14px;
+      }
+      .cluster text {
+        fill: rgba(229, 231, 235, 0.85);
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 0.02em;
+      }
+
+      .edgePath path {
+        stroke: rgba(255, 255, 255, 0.22);
+        stroke-width: 1.4px;
+        fill: none;
+      }
+      .edgeLabel text {
+        fill: rgba(255, 255, 255, 0.6);
+        font-size: 10px;
+      }
+
+      .dashed path {
+        stroke-dasharray: 6 5;
+        opacity: 0.95;
+      }
+      .strong path {
+        stroke: rgba(96, 165, 250, 0.55);
+        stroke-width: 2px;
+      }
+      .contract path {
+        stroke: rgba(96, 165, 250, 0.7);
+        stroke-width: 2.2px;
+      }
+      .ship path {
+        stroke: rgba(52, 211, 153, 0.55);
+        stroke-width: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="left">
+        <div class="toolbar">
+          <div class="title">
+            <h1>North Star Team Flow + Authoring Surface</h1>
+            <p>
+              Authoring is a consumption surface: DS repo produces an authoring
+              contract; Platform integrates it into Sidekick/DA/SharePoint;
+              feedback loops into UX Scaling.
+            </p>
+          </div>
+          <div class="btns">
+            <button id="btnCenter">Center view</button>
+            <button id="btnReset">Reset selection</button>
+            <button id="togglePanel" class="toggleBtn" title="Toggle panel">Panel</button>
+          </div>
+        </div>
+        <div class="svgWrap">
+          <svg id="svg"><g id="g"></g></svg>
+        </div>
+      </div>
+
+      <div class="right" id="rightPanel">
+        <div class="rightHeader">
+          <div class="rightHeaderContent">
+            <h2 id="panelTitle">Details</h2>
+            <p id="panelSubtitle">Select a node in the diagram.</p>
+          </div>
+        </div>
+        <div class="card" id="panel"></div>
+      </div>
+    </div>
+
+    <script>
+      const nodes = {
+        architect: {
+          title: "Architect\\nAI: High",
+          pills: ["Web dev expert", "Design systems expert", "AI: High"],
+          owns: [
+            "Expert in both web development and design system design — bridges technical implementation and design patterns",
+            "Defines system-of-record: Tokens product + Component/Block Specs product",
+            "Architects pipelines (token export/build/distribution) + spec schema + generators",
+            "Sets guardrails for agentic workflows (AI prompts, validation gates, deterministic outputs)",
+            "Runs governance: decisions, deprecations, migrations, release policy",
+          ],
+          leverages: [
+            "Uses MCP + Cursor/Claude to draft specs, migration maps, and doc scaffolds (strict validation)",
+            "Automates repetitive work: spec linting, token coverage reports, artifact generation, changelogs",
+            "Maintains compiler mindset: Milo/Figma/docs are outputs, not sources of truth",
+          ],
+          outputs: [
+            "Versioned Tokens product + releases",
+            "Versioned Specs product (YAML/JSON)",
+            "Generators (Figma-assisted componentization, Milo scaffolds, Storybook, Docs, Tag Manifest)",
+          ],
+        },
+
+        uxScaling: {
+          title: "Consonant UX Scaling (Systemization)\\nAI: Medium",
+          pills: ["System-ready design", "Normalization", "AI: Medium"],
+          owns: [
+            "Scales MVP into a system candidate (still design exploration — not yet componentized)",
+            "Inventories variants across redesign (and existing surfaces) and collapses near-duplicates",
+            "Defines variant axes + essential states + responsive completeness",
+            "Captures authoring/content rules + fallbacks; maintains decision log + rationale",
+          ],
+          leverages: [
+            "AI-assisted variant discovery & clustering (find all button-like instances, group deltas vs noise)",
+            "AI drafts requirements/rationale + spec checklists; humans decide what becomes site-wide",
+            "Token gap detection: identify where semantic tokens are missing and propose additions",
+          ],
+          outputs: [
+            "Stage 2 system-ready design spec package",
+            "Variant axes + constraints + state completeness + authoring intent",
+            "Decision log (what's kept/cut/adjusted and why)",
+          ],
+        },
+
+        dsDesigners: {
+          title: "Design System Designers (UX / Visual)\\nAI: Medium",
+          pills: ["Intent", "Patterns", "AI: Medium"],
+          owns: [
+            "Define design intent, interaction states, pattern rules, component anatomy (system view)",
+            "Author Figma components using Variables (no hard-coded values)",
+            "Validate reference outputs match intent (Figma + Storybook + Milo parity)",
+          ],
+          leverages: [
+            "Use AI to draft usage guidelines, do/don't examples, edge-case checklists",
+            "Use MCP to validate alignment: specs/tokens/variants coverage and drift detection",
+          ],
+          outputs: [
+            "Canonical pattern decisions and system rules",
+            "Inputs for specs (anatomy/variants/constraints) and token semantics",
+          ],
+        },
+
+        designEngineers: {
+          title: "Design Engineers (Bridge: design ↔ code)\\nAI: High",
+          pills: ["Bridge role", "Implementation", "AI: High"],
+          owns: [
+            "Implement components/blocks from specs (Milo target today: HTML/CSS/JS)",
+            "Build Storybook/reference implementations to document API + states",
+            "Write tests and a11y checks; partner with platform for integration",
+          ],
+          leverages: [
+            "Use Cursor/Claude for scaffold generation from specs (stories, tests, boilerplate)",
+            "Use MCP to pull design/spec context and accelerate implementation with guardrails",
+            "Automate matrix coverage: ensure all variants/states are represented and tested",
+          ],
+          outputs: [
+            "Milo block implementations aligned to contracts",
+            "Storybook stories + reference behaviors + test matrix",
+          ],
+        },
+
+        miloPlatform: {
+          title:
+            "Milo / Platform Engineers (Runtime + integration)\\nAI: Medium",
+          pills: ["Runtime", "Performance", "AI: Medium"],
+          owns: [
+            "Own runtime constraints: performance, security, bundling, release mechanics",
+            "Integrate DS outputs into production workflows (consumption patterns + hooks)",
+            "Provide extension points so spec-driven outputs land cleanly",
+          ],
+          leverages: [
+            "Automate compatibility checks (perf budgets, integration tests)",
+            "Use AI for migration assistance and code review acceleration (not as source of truth)",
+          ],
+          outputs: [
+            "Reliable runtime substrate for blocks and token consumption",
+            "Integration pathways for DS outputs to ship safely",
+          ],
+        },
+
+        docsDevEx: {
+          title: "Docs / DevEx (Publishing + IA)\\nAI: Medium",
+          pills: ["Docs", "DX", "AI: Medium"],
+          owns: [
+            "Own documentation IA and publishing workflows",
+            "Ensure docs are generated from contracts and remain current",
+            "Build contributor guides and adoption playbooks",
+          ],
+          leverages: [
+            "Use AI to draft docs from spec fields (usage, examples, FAQs) with human review",
+            "Automate doc freshness: docs update on token/spec release",
+          ],
+          outputs: [
+            "Docs site generated from contracts (props/variants/tokens/a11y)",
+            "Onboarding + contributor workflows",
+          ],
+        },
+
+        tokens: {
+          title: "Tokens as Product\\n(versioned)",
+          pills: ["Primitives→Semantics→Component", "Versioned", "Validated"],
+          owns: [
+            "Token taxonomy + naming + mode/theme governance",
+            "Exports + transforms to CSS vars/JSON bundles",
+            "Release discipline + migration notes",
+          ],
+          leverages: [
+            "Automation validates modes complete and prevents breaking changes",
+            "AI assists mapping/rename proposals (human-approved)",
+          ],
+          outputs: [
+            "Token bundles consumed by Milo + tooling",
+            "Single design↔dev styling contract",
+          ],
+        },
+
+        specs: {
+          title: "Specs as Product\\n(YAML/JSON contracts)",
+          pills: ["API + anatomy", "Constraints", "A11y criteria"],
+          owns: [
+            "Defines component/block API: anatomy, props, variants, states, constraints",
+            "Defines token bindings + a11y acceptance criteria",
+            "Enables deterministic generation for code/docs/authoring metadata",
+          ],
+          leverages: [
+            "AI drafts scaffolds; schema validation keeps outputs deterministic",
+            "Automation checks completeness and generates manifests",
+          ],
+          outputs: [
+            "Build-ready contracts for Milo (and future targets)",
+            "Reduced drift across design/code/docs",
+          ],
+        },
+
+        authorContract: {
+          title: "Authoring Contract\\n(Tag Manifest + authoring rules)",
+          pills: ["Versioned artifact", "Legacy compat", "Sidekick-ready"],
+          owns: [
+            "Defines author-facing API: presets/axes, allowed combos, required fields/fallbacks",
+            "Maps tag/preset → block + variant axes/values",
+            "Backwards compatibility mapping for legacy tags",
+          ],
+          leverages: [
+            "Generated automatically from specs per release",
+            "AI can suggest correct presets/tags based on intent",
+          ],
+          outputs: [
+            "Tag Manifest / presets list",
+            "Authoring rules and docs surface",
+          ],
+        },
+
+        authoringSurface: {
+          title: "Authoring Surfaces\\n(Sidekick / DA / SharePoint)",
+          pills: ["Consumption surface", "Author UX", "Constraints"],
+          owns: [
+            "Where authors select variants and enter content",
+            "Constraints feed back into scaling/design rules",
+            "Needs discoverability (no memorization) and guardrails",
+          ],
+          leverages: [
+            "Uses manifest to power selector UI (search/presets; future axis dropdowns)",
+            "AI can assist author suggestions, but selection must be constrained and predictable",
+          ],
+          outputs: [
+            "Correct variant selection in authored content",
+            "Feedback on constraints and usability",
+          ],
+        },
+
+        miloRuntime: {
+          title: "Milo Runtime (Production)",
+          pills: ["Production UI", "Performance", "QA"],
+          owns: [
+            "Delivers production UI using blocks + token bundles",
+            "Must remain stable during C1/C2 coexistence and rollout",
+          ],
+          leverages: [
+            "Automation validates integration; CI/CD prevents regressions",
+          ],
+          outputs: ["Production pages and experiences"],
+        },
+
+        docsOut: {
+          title: "Docs Output",
+          pills: ["Generated", "Always current", "DX"],
+          owns: [
+            "Prop tables, variant matrices, token coverage, a11y checklists",
+          ],
+          leverages: [
+            "Generated from specs on release; AI drafts prose (reviewed)",
+          ],
+          outputs: ["Always-current docs"],
+        },
+
+        storybook: {
+          title: "Storybook / Reference Builds",
+          pills: ["API truth", "A11y checks", "Tests"],
+          owns: [
+            "Reference implementations and states",
+            "Runs a11y SDK checks (axe/Level Access)",
+            "Supports regression confidence",
+          ],
+          leverages: [
+            "Generated stories from spec matrices; automation for checks",
+          ],
+          outputs: ["Verifiable reference surface for engineering + QA"],
+        },
+      };
+
+      const edges = [
+        {
+          from: "architect",
+          to: "tokens",
+          label: "owns + governs",
+          cls: "contract",
+        },
+        {
+          from: "architect",
+          to: "specs",
+          label: "owns + governs",
+          cls: "contract",
+        },
+
+        {
+          from: "architect",
+          to: "uxScaling",
+          label: "defines systemization rules",
+          cls: "strong",
+        },
+        {
+          from: "uxScaling",
+          to: "dsDesigners",
+          label: "system-ready package + bluelines",
+          cls: "",
+        },
+        {
+          from: "dsDesigners",
+          to: "designEngineers",
+          label: "Figma components + intent",
+          cls: "",
+        },
+
+        {
+          from: "specs",
+          to: "designEngineers",
+          label: "build contract",
+          cls: "contract",
+        },
+        {
+          from: "tokens",
+          to: "designEngineers",
+          label: "token bundles",
+          cls: "contract",
+        },
+        {
+          from: "designEngineers",
+          to: "miloPlatform",
+          label: "implementation + tests",
+          cls: "",
+        },
+        {
+          from: "miloPlatform",
+          to: "miloRuntime",
+          label: "ship + integrate",
+          cls: "ship",
+        },
+
+        {
+          from: "specs",
+          to: "storybook",
+          label: "generate stories/matrix",
+          cls: "strong",
+        },
+        {
+          from: "designEngineers",
+          to: "storybook",
+          label: "maintain + a11y SDK",
+          cls: "strong",
+        },
+        { from: "docsDevEx", to: "docsOut", label: "publish + IA", cls: "" },
+        { from: "specs", to: "docsOut", label: "generate docs", cls: "strong" },
+
+        {
+          from: "specs",
+          to: "authorContract",
+          label: "generate authoring contract",
+          cls: "contract",
+        },
+        {
+          from: "authorContract",
+          to: "authoringSurface",
+          label: "selector schema + presets",
+          cls: "strong",
+        },
+        {
+          from: "miloPlatform",
+          to: "authoringSurface",
+          label: "integrate into authoring tools",
+          cls: "ship",
+        },
+        {
+          from: "authoringSurface",
+          to: "miloRuntime",
+          label: "authored content → runtime",
+          cls: "",
+        },
+
+        {
+          from: "authoringSurface",
+          to: "uxScaling",
+          label: "constraints + content needs",
+          cls: "dashed",
+        },
+        {
+          from: "docsDevEx",
+          to: "uxScaling",
+          label: "doc requirements",
+          cls: "dashed",
+        },
+        {
+          from: "docsDevEx",
+          to: "dsDesigners",
+          label: "author-facing clarity",
+          cls: "dashed",
+        },
+      ];
+
+      const g = new dagreD3.graphlib.Graph({ multigraph: true, compound: true })
+        .setGraph({
+          rankdir: "LR",
+          nodesep: 40,
+          ranksep: 75,
+          marginx: 24,
+          marginy: 22,
+        })
+        .setDefaultEdgeLabel(() => ({}));
+
+      g.setNode("clusterTeam", {
+        label: "Team Roles",
+        clusterLabelPos: "top",
+        padding: 12,
+      });
+      g.setNode("clusterContracts", {
+        label: "System of Record (Versioned Products)",
+        clusterLabelPos: "top",
+        padding: 12,
+      });
+      g.setNode("clusterAuthoring", {
+        label: "Authoring (Consumption Surface + Feedback)",
+        clusterLabelPos: "top",
+        padding: 12,
+      });
+      g.setNode("clusterBuild", {
+        label: "Build + Ship",
+        clusterLabelPos: "top",
+        padding: 12,
+      });
+      g.setNode("clusterOutputs", {
+        label: "Reference + Docs",
+        clusterLabelPos: "top",
+        padding: 12,
+      });
+
+      Object.entries(nodes).forEach(([key, r]) => {
+        const base =
+          "fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.16); stroke-width: 1.3px;";
+        const style =
+          key === "architect"
+            ? base + " stroke: rgba(96,165,250,0.9); stroke-width: 2px;"
+            : base;
+        g.setNode(key, { label: r.title, rx: 12, ry: 12, padding: 14, style });
+      });
+
+      [
+        "architect",
+        "uxScaling",
+        "dsDesigners",
+        "designEngineers",
+        "miloPlatform",
+        "docsDevEx",
+      ].forEach((n) => g.setParent(n, "clusterTeam"));
+      ["tokens", "specs"].forEach((n) => g.setParent(n, "clusterContracts"));
+      ["authorContract", "authoringSurface"].forEach((n) =>
+        g.setParent(n, "clusterAuthoring"),
+      );
+      ["miloRuntime"].forEach((n) => g.setParent(n, "clusterBuild"));
+      ["storybook", "docsOut"].forEach((n) => g.setParent(n, "clusterOutputs"));
+
+      edges.forEach((e, i) => {
+        g.setEdge(
+          e.from,
+          e.to,
+          {
+            label: e.label,
+            class: e.cls || "",
+            arrowhead: "vee",
+            lineInterpolate: "basis",
+          },
+          `e${i}`,
+        );
+      });
+
+      const svg = d3.select("#svg");
+      const inner = d3.select("#g");
+      const render = new dagreD3.render();
+
+      const zoom = d3
+        .zoom()
+        .scaleExtent([0.5, 1.35])
+        .on("zoom", (event) => inner.attr("transform", event.transform));
+      svg.call(zoom);
+
+      render(inner, g);
+
+      function centerView() {
+        const graphWidth = g.graph().width;
+        const svgWidth = svg.node().clientWidth;
+        const scale = 0.92;
+        const tx = Math.max(16, (svgWidth - graphWidth * scale) / 2);
+        const ty = 30;
+        svg
+          .transition()
+          .duration(350)
+          .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+      }
+      centerView();
+
+      const panel = d3.select("#panel");
+      const panelTitle = d3.select("#panelTitle");
+      const panelSubtitle = d3.select("#panelSubtitle");
+
+      function setPanel(key) {
+        const r = nodes[key];
+        if (!r) return;
+        panelTitle.text(r.title.split("\\n")[0]);
+        panelSubtitle.text(
+          "Responsibilities + how AI/MCP/automation is leveraged in this part of the ecosystem.",
+        );
+        panel.html("");
+        panel.append("h3").text(r.title.split("\\n")[0]);
+
+        const pills = panel.append("div").attr("class", "pillRow");
+        (r.pills || []).forEach((p, idx) => {
+          const cls =
+            idx === 0 ? "pill accent" : idx === 1 ? "pill good" : "pill warn";
+          pills.append("span").attr("class", cls).text(p);
+        });
+
+        const s1 = panel.append("div").attr("class", "section");
+        s1.append("h4").text("Owns / Responsibilities");
+        const ul1 = s1.append("ul");
+        (r.owns || []).forEach((x) => ul1.append("li").text(x));
+
+        const s2 = panel.append("div").attr("class", "section");
+        s2.append("h4").text("Leverages AI / MCP / Agentic workflows");
+        const ul2 = s2.append("ul");
+        (r.leverages || []).forEach((x) => ul2.append("li").text(x));
+
+        const s3 = panel.append("div").attr("class", "section");
+        s3.append("h4").text("Outputs / Artifacts");
+        const ul3 = s3.append("ul");
+        (r.outputs || []).forEach((x) => ul3.append("li").text(x));
+      }
+
+      function clearSelection() {
+        inner.selectAll("g.node").classed("selected", false);
+      }
+
+      inner
+        .selectAll("g.node")
+        .style("cursor", "pointer")
+        .on("click", function (event, key) {
+          clearSelection();
+          d3.select(this).classed("selected", true);
+          setPanel(key);
+        });
+
+      inner
+        .selectAll("g.node")
+        .filter((d) => d === "architect")
+        .classed("selected", true);
+      setPanel("architect");
+
+      d3.select("#btnCenter").on("click", centerView);
+      d3.select("#btnReset").on("click", () => {
+        clearSelection();
+        inner
+          .selectAll("g.node")
+          .filter((d) => d === "architect")
+          .classed("selected", true);
+        setPanel("architect");
+        centerView();
+      });
+
+      // Panel toggle
+      const rightPanel = d3.select("#rightPanel");
+      const wrap = d3.select(".wrap");
+      const toggleBtn = d3.select("#togglePanel");
+      
+      function updateToggleButton() {
+        const isCollapsed = rightPanel.classed("collapsed");
+        toggleBtn.text(isCollapsed ? "Show Panel" : "Hide Panel");
+        toggleBtn.attr("title", isCollapsed ? "Show panel" : "Hide panel");
+      }
+      
+      toggleBtn.on("click", () => {
+        const isCollapsed = rightPanel.classed("collapsed");
+        rightPanel.classed("collapsed", !isCollapsed);
+        wrap.classed("right-collapsed", !isCollapsed);
+        updateToggleButton();
+      });
+      
+      // Initialize button text
+      updateToggleButton();
+    </script>
+  </body>
+</html>

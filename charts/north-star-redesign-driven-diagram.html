@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adobe DS North Star — Redesign-driven Flow + Contracts</title>
+
+    <!-- D3 + Dagre-D3 (layout engine) -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre-d3@0.6.4/dist/dagre-d3.min.js"></script>
+
+    <style>
+      :root {
+        --bg: #0b0d12;
+        --panel: #0f1420;
+        --muted: #9aa4b2;
+        --text: #e5e7eb;
+        --stroke: #2b3445;
+        --accent: #60a5fa;
+        --good: #34d399;
+        --warn: #fbbf24;
+      }
+
+      html,
+      body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        max-width: none;
+        box-sizing: border-box;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      .wrap {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        display: grid;
+        grid-template-columns: 1.35fr 0.65fr;
+        gap: 16px;
+        padding: 16px;
+        box-sizing: border-box;
+        margin: 0;
+      }
+      .wrap.right-collapsed {
+        grid-template-columns: 1fr;
+        padding: 0;
+        gap: 0;
+        width: 100vw;
+        max-width: none;
+      }
+
+      .left {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        min-width: 0;
+      }
+      .wrap.right-collapsed .left {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        width: 100vw;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .title {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 320px;
+      }
+      .title h1 {
+        font-size: 14px;
+        margin: 0;
+        letter-spacing: 0.2px;
+      }
+      .title p {
+        font-size: 12px;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .btns {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-left: auto;
+      }
+      button {
+        appearance: none;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: rgba(96, 165, 250, 0.8);
+      }
+
+      .svgWrap {
+        position: absolute;
+        inset: 58px 0 0 0;
+        overflow: auto;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Right panel */
+      .right {
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .rightHeader {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .rightHeaderContent {
+        flex: 1;
+      }
+      .toggleBtn {
+        appearance: none;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .toggleBtn:hover {
+        border-color: rgba(96, 165, 250, 0.8);
+      }
+      .right.collapsed {
+        display: none;
+      }
+      .rightHeader h2 {
+        margin: 0;
+        font-size: 14px;
+      }
+      .rightHeader p {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .card {
+        padding: 14px;
+        overflow: auto;
+      }
+      .card h3 {
+        margin: 0 0 6px;
+        font-size: 16px;
+      }
+      .pillRow {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 8px 0 12px;
+      }
+      .pill {
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--stroke);
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .pill.accent {
+        border-color: rgba(96, 165, 250, 0.6);
+        color: rgba(96, 165, 250, 0.95);
+      }
+      .pill.good {
+        border-color: rgba(52, 211, 153, 0.6);
+        color: rgba(52, 211, 153, 0.95);
+      }
+      .pill.warn {
+        border-color: rgba(251, 191, 36, 0.6);
+        color: rgba(251, 191, 36, 0.95);
+      }
+
+      .section {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px dashed rgba(255, 255, 255, 0.12);
+      }
+      .section h4 {
+        margin: 0 0 8px;
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      ul {
+        margin: 0 0 0 18px;
+        padding: 0;
+        line-height: 1.5;
+        font-size: 13px;
+        color: var(--text);
+      }
+      li {
+        margin: 6px 0;
+      }
+
+      /* Graph styling */
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .node rect {
+        rx: 12px;
+        ry: 12px;
+        fill: rgba(255, 255, 255, 0.03);
+        stroke: rgba(255, 255, 255, 0.16);
+        stroke-width: 1.3px;
+      }
+      .node.selected rect {
+        stroke: rgba(96, 165, 250, 0.95);
+        stroke-width: 2.4px;
+      }
+      .node text {
+        fill: var(--text);
+        font-weight: 650;
+        font-size: 12px;
+      }
+
+      /* Cluster boxes */
+      .cluster rect {
+        fill: rgba(255, 255, 255, 0.02);
+        stroke: rgba(255, 255, 255, 0.12);
+        stroke-width: 1.2px;
+        rx: 14px;
+        ry: 14px;
+      }
+      .cluster text {
+        fill: rgba(229, 231, 235, 0.85);
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 0.02em;
+      }
+
+      .edgePath path {
+        stroke: rgba(255, 255, 255, 0.22);
+        stroke-width: 1.4px;
+        fill: none;
+      }
+      .edgeLabel text {
+        fill: rgba(255, 255, 255, 0.6);
+        font-size: 10px;
+      }
+
+      .dashed path {
+        stroke-dasharray: 6 5;
+        opacity: 0.95;
+      }
+      .strong path {
+        stroke: rgba(96, 165, 250, 0.55);
+        stroke-width: 2px;
+      }
+
+      .legend {
+        position: absolute;
+        right: 12px;
+        bottom: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(6px);
+        font-size: 11px;
+        color: var(--muted);
+        max-width: 560px;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        display: inline-block;
+        margin-right: 6px;
+      }
+      .dot.a {
+        background: rgba(96, 165, 250, 0.8);
+      }
+      .dot.b {
+        background: rgba(255, 255, 255, 0.35);
+      }
+      .dot.c {
+        background: transparent;
+        border: 1px dashed rgba(255, 255, 255, 0.45);
+      }
+
+      @media (max-width: 1100px) {
+        .wrap {
+          grid-template-columns: 1fr;
+        }
+        svg {
+          width: 1600px;
+          height: 980px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="left">
+        <div class="toolbar">
+          <div class="title">
+            <h1>Redesign-driven Flow + System Contracts (North Star Team)</h1>
+            <p>
+              Redesign drives demand; Architect owns contracts; UX Scaling
+              systemizes; DS builds; Eng ships. Click nodes for details.
+            </p>
+          </div>
+          <div class="btns">
+            <button id="btnCenter">Center view</button>
+            <button id="btnReset">Reset selection</button>
+            <button id="togglePanel" class="toggleBtn" title="Toggle panel">Panel</button>
+          </div>
+        </div>
+
+        <div class="svgWrap">
+          <svg id="svg">
+            <g id="g"></g>
+          </svg>
+        </div>
+
+        <div class="legend">
+          <span><span class="dot a"></span>Strong contract / ownership</span>
+          <span><span class="dot b"></span>Flow / collaboration</span>
+          <span><span class="dot c"></span>Dotted = influence/gates</span>
+        </div>
+      </div>
+
+      <div class="right" id="rightPanel">
+        <div class="rightHeader">
+          <div class="rightHeaderContent">
+            <h2 id="panelTitle">Details</h2>
+            <p id="panelSubtitle">Select a node in the diagram.</p>
+          </div>
+        </div>
+        <div class="card" id="panel"></div>
+      </div>
+    </div>
+
+    <script>
+      const nodes = {
+        featureUX: {
+          title: "Feature UX (Redesign Driver)\\nAI: Low",
+          pills: ["Initiative driver", "MVP design", "AI: Low"],
+          owns: [
+            "Creates redesign direction and MVP designs (context-first)",
+            "Defines intent: goals, content model, core states, responsive intent",
+            "Hands off comps + notes; doesn’t own systemization",
+          ],
+          leverages: [
+            "Optional: AI for note drafting/checklists (states/edge cases), not for core design craft",
+            "Mostly human-led: blue-sky + exploration + editorial judgement",
+          ],
+          outputs: [
+            "Stage 1 MVP design package (comps + intent)",
+            "New component needs surfaced by real redesign work",
+          ],
+        },
+
+        architect: {
+          title: "System Architect / Compiler Operator\\nAI: High",
+          pills: ["Contract owner", "Pipelines", "AI: High"],
+          owns: [
+            "Owns system-of-record: Tokens product + Specs product",
+            "Backs redesign into token structure (alignment + gaps + non-negotiables)",
+            "Defines schemas, guardrails, CI gates, release discipline",
+          ],
+          leverages: [
+            "MCP + Cursor/LLMs for spec drafts, token mapping, migration notes (validated)",
+            "Automation for linting/validation, coverage reports, changelogs, artifact generation",
+          ],
+          outputs: [
+            "Token governance + mapping plan",
+            "Spec schema direction + deterministic workflows",
+          ],
+        },
+
+        uxScaling: {
+          title: "Consonant UX Scaling\\nAI: Medium",
+          pills: ["Systemization", "Normalization", "AI: Medium"],
+          owns: [
+            "Audits redesign designs and inventories variants across flows",
+            "Collapses one-offs into intentional axes (size/state/treatment/layout)",
+            "Defines responsive completeness, authoring intent, decision log + rationale",
+            "Produces a system-ready design package (still not yet componentized)",
+          ],
+          leverages: [
+            "AI-assisted discovery: find instances + cluster variants (delta vs noise)",
+            "AI drafts requirements/decision logs/checklists; humans decide scope",
+            "Token gap detection suggestions (semantic/component tokens needed)",
+          ],
+          outputs: [
+            "Stage 2 system-ready design spec package",
+            "Variant axes + constraints + authoring/content rules",
+          ],
+        },
+
+        dsDesigners: {
+          title: "Design System Designers\\nAI: Medium",
+          pills: ["Figma build", "Variables", "AI: Medium"],
+          owns: [
+            "Componentize in Figma (manual today): atoms → molecules → organisms/patterns",
+            "Bind to variables/tokens; enforce naming + variant conventions",
+            "Validate parity to scaled design package + acceptance criteria",
+          ],
+          leverages: [
+            "Light AI: draft docs/usage examples, checklists, parity verification prompts",
+            "MCP can help validate alignment and report drift, but creation is mostly manual today",
+          ],
+          outputs: [
+            "Figma component sets wired to tokens",
+            "Design-side reference for variants/states",
+          ],
+        },
+
+        designEngineers: {
+          title: "Design Engineers (Bridge)\\nAI: High",
+          pills: ["Implementation", "Storybook/tests", "AI: High"],
+          owns: [
+            "Implement from contracts (Specs + tokens) into Milo blocks",
+            "Generate/maintain Storybook references, tests, a11y checks",
+            "Automate variant/state matrix coverage; reduce regressions",
+          ],
+          leverages: [
+            "Heavy AI: scaffold code/stories/tests from specs; accelerate review loops",
+            "MCP pulls design/spec context into Cursor for fast, consistent implementation",
+          ],
+          outputs: [
+            "Milo block implementations aligned to contracts",
+            "Storybook + a11y/test matrix",
+          ],
+        },
+
+        miloPlatform: {
+          title: "Milo / Platform Engineers\\nAI: Medium",
+          pills: ["Runtime", "Integration", "AI: Medium"],
+          owns: [
+            "Own runtime constraints: performance, security, bundling, release mechanics",
+            "Integrate DS outputs into production workflows",
+            "Ensure authoring surfaces work (DA/SharePoint/Sidekick) without regressions",
+          ],
+          leverages: [
+            "Automation for integration/perf checks; AI for migration/review acceleration",
+            "Still deterministic: platform constraints and contracts govern what ships",
+          ],
+          outputs: [
+            "Production-safe deployment + integration pathways",
+            "Reduced platform regressions during C1→C2 coexistence",
+          ],
+        },
+
+        tokens: {
+          title: "Tokens as Product\\nAI: High",
+          pills: ["Primitives→Semantics→Component", "Versioned", "AI: High"],
+          owns: [
+            "Canonical token taxonomy + naming + modes/themes governance",
+            "Exports from Figma → transforms → C2 CSS vars and JSON bundles",
+            "CI validation + releases + migration notes",
+          ],
+          leverages: [
+            "Automation does the heavy lifting: validation, packaging, distribution",
+            "AI assists mapping/renames/migration text (human-approved)",
+          ],
+          outputs: [
+            "Token bundles consumed by Milo + tooling",
+            "A shared design↔dev contract",
+          ],
+        },
+
+        specs: {
+          title: "Specs as Product\\nAI: High",
+          pills: ["YAML/JSON contracts", "Validated", "AI: High"],
+          owns: [
+            "Defines component/block API: anatomy, variants, states, constraints",
+            "Defines token bindings + a11y requirements + acceptance criteria",
+            "Enables deterministic generation for code/docs/authoring metadata",
+          ],
+          leverages: [
+            "AI drafts spec scaffolds; schema validation keeps outputs deterministic",
+            "Automation generates docs, manifests, and checks completeness",
+          ],
+          outputs: [
+            "Build-ready contracts for Milo and future targets",
+            "Reduced drift across design/code/docs",
+          ],
+        },
+
+        authoring: {
+          title: "Authoring Contract\\n(Tag Manifest)\\nAI: Medium",
+          pills: ["Sidekick", "Manifest", "AI: Medium"],
+          owns: [
+            "Generate Tag Manifest from specs (tag → block + axes/values)",
+            "Feed Sidekick Tag Selector/presets to avoid memorization",
+            "Keep legacy tags working via compat mapping",
+          ],
+          leverages: [
+            "Automation generates manifests per release; AI can suggest correct variants",
+            "Improves author UX without forcing authors to learn opaque codes",
+          ],
+          outputs: [
+            "Tag Manifest + improved authoring experience",
+            "Better consistency from authoring → runtime",
+          ],
+        },
+
+        outputs: {
+          title: "Outputs / Consumption\\nAI: Low",
+          pills: ["Milo runtime", "Docs", "Reference", "AI: Low"],
+          owns: [
+            "Milo runtime blocks ship to production",
+            "Docs are published and kept current from contracts",
+            "Reference builds provide clear API + state behavior truth",
+          ],
+          leverages: [
+            "Automation keeps artifacts in sync; AI drafts doc prose (reviewed)",
+            "Outputs are deterministic results of contracts, not AI improvisation",
+          ],
+          outputs: [
+            "Production UI + authoring surfaces",
+            "Always-current docs + reference implementations",
+          ],
+        },
+      };
+
+      const edges = [
+        {
+          from: "featureUX",
+          to: "uxScaling",
+          label: "MVP designs + intent",
+          cls: "",
+        },
+        {
+          from: "featureUX",
+          to: "architect",
+          label: "requirements signal",
+          cls: "dashed",
+        },
+
+        {
+          from: "uxScaling",
+          to: "dsDesigners",
+          label: "system-ready package",
+          cls: "",
+        },
+        {
+          from: "dsDesigners",
+          to: "designEngineers",
+          label: "components + intent",
+          cls: "",
+        },
+        {
+          from: "designEngineers",
+          to: "miloPlatform",
+          label: "implementation + tests",
+          cls: "",
+        },
+
+        {
+          from: "miloPlatform",
+          to: "outputs",
+          label: "ship + integrate",
+          cls: "strong",
+        },
+
+        {
+          from: "architect",
+          to: "tokens",
+          label: "owns token contract",
+          cls: "strong",
+        },
+        {
+          from: "architect",
+          to: "specs",
+          label: "owns spec contract",
+          cls: "strong",
+        },
+
+        {
+          from: "tokens",
+          to: "dsDesigners",
+          label: "variable bindings",
+          cls: "strong",
+        },
+        {
+          from: "tokens",
+          to: "designEngineers",
+          label: "CSS/JSON bundles",
+          cls: "strong",
+        },
+        {
+          from: "specs",
+          to: "uxScaling",
+          label: "templates + checklists",
+          cls: "dashed",
+        },
+        {
+          from: "specs",
+          to: "dsDesigners",
+          label: "variant API + anatomy",
+          cls: "strong",
+        },
+        {
+          from: "specs",
+          to: "designEngineers",
+          label: "build contract",
+          cls: "strong",
+        },
+
+        {
+          from: "specs",
+          to: "authoring",
+          label: "generate tag manifest",
+          cls: "strong",
+        },
+        {
+          from: "authoring",
+          to: "outputs",
+          label: "Sidekick selection",
+          cls: "",
+        },
+      ];
+
+      const g = new dagreD3.graphlib.Graph({ multigraph: true, compound: true })
+        .setGraph({
+          rankdir: "LR",
+          nodesep: 40,
+          ranksep: 70,
+          marginx: 24,
+          marginy: 22,
+        })
+        .setDefaultEdgeLabel(() => ({}));
+
+      // Clusters / lanes
+      g.setNode("clusterDemand", {
+        label: "Demand & Design Intent",
+        clusterLabelPos: "top",
+        padding: 12,
+      });
+      g.setNode("clusterContracts", {
+        label: "System Contracts (System of Record)",
+        clusterLabelPos: "top",
+        padding: 12,
+      });
+      g.setNode("clusterBuild", {
+        label: "Systemization → Build → Ship",
+        clusterLabelPos: "top",
+        padding: 12,
+      });
+      g.setNode("clusterConsume", {
+        label: "Consumption Surfaces",
+        clusterLabelPos: "top",
+        padding: 12,
+      });
+
+      // Nodes
+      Object.entries(nodes).forEach(([key, r]) => {
+        const isPrimary = [
+          "featureUX",
+          "architect",
+          "uxScaling",
+          "dsDesigners",
+          "designEngineers",
+          "miloPlatform",
+        ].includes(key);
+        const styleBase =
+          "fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.16); stroke-width: 1.3px;";
+        const stylePrimary = styleBase + " stroke: rgba(96,165,250,0.55);";
+        const style =
+          key === "architect"
+            ? styleBase + " stroke: rgba(96,165,250,0.9); stroke-width: 2px;"
+            : isPrimary
+              ? stylePrimary
+              : styleBase;
+
+        g.setNode(key, {
+          label: r.title,
+          rx: 12,
+          ry: 12,
+          padding: 14,
+          style,
+        });
+      });
+
+      // Assign nodes to clusters
+      g.setParent("featureUX", "clusterDemand");
+
+      g.setParent("architect", "clusterContracts");
+      g.setParent("tokens", "clusterContracts");
+      g.setParent("specs", "clusterContracts");
+
+      g.setParent("uxScaling", "clusterBuild");
+      g.setParent("dsDesigners", "clusterBuild");
+      g.setParent("designEngineers", "clusterBuild");
+      g.setParent("miloPlatform", "clusterBuild");
+
+      g.setParent("authoring", "clusterConsume");
+      g.setParent("outputs", "clusterConsume");
+
+      // Edges
+      edges.forEach((e, i) => {
+        g.setEdge(
+          e.from,
+          e.to,
+          {
+            label: e.label,
+            class: e.cls || "",
+            arrowhead: "vee",
+            lineInterpolate: "basis",
+          },
+          `e${i}`,
+        );
+      });
+
+      // Render
+      const svg = d3.select("#svg");
+      const inner = d3.select("#g");
+      const render = new dagreD3.render();
+
+      const zoom = d3
+        .zoom()
+        .scaleExtent([0.5, 1.35])
+        .on("zoom", (event) => inner.attr("transform", event.transform));
+      svg.call(zoom);
+
+      render(inner, g);
+
+      function centerView() {
+        const graphWidth = g.graph().width;
+        const svgWidth = svg.node().clientWidth;
+
+        const scale = 0.92;
+        const translateX = Math.max(16, (svgWidth - graphWidth * scale) / 2);
+        const translateY = 30;
+
+        svg
+          .transition()
+          .duration(350)
+          .call(
+            zoom.transform,
+            d3.zoomIdentity.translate(translateX, translateY).scale(scale),
+          );
+      }
+      centerView();
+
+      // Right panel
+      const panel = d3.select("#panel");
+      const panelTitle = d3.select("#panelTitle");
+      const panelSubtitle = d3.select("#panelSubtitle");
+
+      function setPanel(key) {
+        const r = nodes[key];
+        if (!r) return;
+
+        panelTitle.text(r.title.split("\\n")[0]);
+        panelSubtitle.text(
+          "Responsibilities + how AI/MCP/automation is leveraged in this role/product.",
+        );
+
+        panel.html("");
+        panel.append("h3").text(r.title.split("\\n")[0]);
+
+        const pills = panel.append("div").attr("class", "pillRow");
+        (r.pills || []).forEach((p, idx) => {
+          const cls =
+            idx === 0 ? "pill accent" : idx === 1 ? "pill good" : "pill warn";
+          pills.append("span").attr("class", cls).text(p);
+        });
+
+        const s1 = panel.append("div").attr("class", "section");
+        s1.append("h4").text("Owns / Responsibilities");
+        const ul1 = s1.append("ul");
+        (r.owns || []).forEach((x) => ul1.append("li").text(x));
+
+        const s2 = panel.append("div").attr("class", "section");
+        s2.append("h4").text("Leverages AI / MCP / Agentic workflows");
+        const ul2 = s2.append("ul");
+        (r.leverages || []).forEach((x) => ul2.append("li").text(x));
+
+        const s3 = panel.append("div").attr("class", "section");
+        s3.append("h4").text("Key outputs / artifacts");
+        const ul3 = s3.append("ul");
+        (r.outputs || []).forEach((x) => ul3.append("li").text(x));
+      }
+
+      function clearSelection() {
+        inner.selectAll("g.node").classed("selected", false);
+      }
+
+      inner
+        .selectAll("g.node")
+        .style("cursor", "pointer")
+        .on("click", function (event, key) {
+          clearSelection();
+          d3.select(this).classed("selected", true);
+          setPanel(key);
+        });
+
+      // Default selection
+      inner
+        .selectAll("g.node")
+        .filter((d) => d === "featureUX")
+        .classed("selected", true);
+      setPanel("featureUX");
+
+      // Buttons
+      d3.select("#btnCenter").on("click", centerView);
+      d3.select("#btnReset").on("click", () => {
+        clearSelection();
+        inner
+          .selectAll("g.node")
+          .filter((d) => d === "featureUX")
+          .classed("selected", true);
+        setPanel("featureUX");
+        centerView();
+      });
+
+      // Panel toggle
+      const rightPanel = d3.select("#rightPanel");
+      const wrap = d3.select(".wrap");
+      const toggleBtn = d3.select("#togglePanel");
+      
+      function updateToggleButton() {
+        const isCollapsed = rightPanel.classed("collapsed");
+        toggleBtn.text(isCollapsed ? "Show Panel" : "Hide Panel");
+        toggleBtn.attr("title", isCollapsed ? "Show panel" : "Hide panel");
+      }
+      
+      toggleBtn.on("click", () => {
+        const isCollapsed = rightPanel.classed("collapsed");
+        rightPanel.classed("collapsed", !isCollapsed);
+        wrap.classed("right-collapsed", !isCollapsed);
+        updateToggleButton();
+      });
+      
+      // Initialize button text
+      updateToggleButton();
+    </script>
+  </body>
+</html>

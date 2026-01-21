@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Start Here — Consonant 2 Operating Model</title>
+
+    <style>
+      :root {
+        --bg: #0b0d12;
+        --panel: #0f1420;
+        --muted: #9aa4b2;
+        --text: #e5e7eb;
+        --stroke: #2b3445;
+        --accent: #60a5fa;
+        --good: #34d399;
+        --warn: #fbbf24;
+      }
+
+      html,
+      body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 24px;
+      }
+
+      header {
+        margin-bottom: 48px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 36px;
+        font-weight: 700;
+        margin: 0 0 16px;
+        letter-spacing: -0.02em;
+        background: linear-gradient(
+          135deg,
+          var(--accent) 0%,
+          var(--good) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        font-size: 18px;
+        color: var(--muted);
+        margin: 0;
+        font-weight: 400;
+        line-height: 1.6;
+      }
+
+      .intro {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border: 1px solid var(--stroke);
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 40px;
+      }
+
+      .intro p {
+        font-size: 16px;
+        line-height: 1.7;
+        margin: 0 0 20px;
+        color: var(--text);
+      }
+
+      .intro p:last-child {
+        margin-bottom: 0;
+      }
+
+      .section {
+        margin-bottom: 48px;
+      }
+
+      .section-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 24px;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .section-title::before {
+        content: "";
+        width: 4px;
+        height: 24px;
+        background: var(--accent);
+        border-radius: 2px;
+      }
+
+      .path {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border: 1px solid var(--stroke);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+      }
+
+      .path-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .path-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+        color: var(--text);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        background: rgba(96, 165, 250, 0.1);
+        color: var(--accent);
+        border: 1px solid rgba(96, 165, 250, 0.2);
+      }
+
+      .badge.core {
+        background: rgba(52, 211, 153, 0.1);
+        color: var(--good);
+        border-color: rgba(52, 211, 153, 0.2);
+      }
+
+      .badge.appendix {
+        background: rgba(251, 191, 36, 0.1);
+        color: var(--warn);
+        border-color: rgba(251, 191, 36, 0.2);
+      }
+
+      .path-description {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--muted);
+        margin: 0 0 20px;
+      }
+
+      .chart-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .chart-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--stroke);
+        border-radius: 12px;
+        margin-bottom: 12px;
+        transition: all 0.2s ease;
+      }
+
+      .chart-item:hover {
+        border-color: rgba(96, 165, 250, 0.6);
+        transform: translateX(4px);
+      }
+
+      .chart-number {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: rgba(96, 165, 250, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--accent);
+      }
+
+      .chart-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .chart-link {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text);
+        text-decoration: none;
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .chart-link:hover {
+        color: var(--accent);
+      }
+
+      .chart-audience {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 16px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .nav-link {
+        display: inline-block;
+        padding: 12px 24px;
+        background: rgba(96, 165, 250, 0.1);
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        border-radius: 10px;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .nav-link:hover {
+        background: rgba(96, 165, 250, 0.2);
+        border-color: rgba(96, 165, 250, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .nav-link.primary {
+        background: var(--accent);
+        color: var(--bg);
+        border-color: var(--accent);
+      }
+
+      .nav-link.primary:hover {
+        background: rgba(96, 165, 250, 0.9);
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 24px 16px;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+
+        .intro {
+          padding: 24px;
+        }
+
+        .path {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>Start Here</h1>
+        <p class="subtitle">
+          Your guide to the Consonant 2 operating model portal
+        </p>
+      </header>
+
+      <div class="intro">
+        <p>
+          This portal contains 8 interactive diagrams that map out how Consonant
+          2 works: from redesign demand through contracts, systemization, build,
+          ship, and measure. Each diagram is clickable—explore nodes to see
+          detailed responsibilities, tools, and outputs.
+        </p>
+        <p>
+          <strong>Recommended reading order:</strong> Start with the
+          <strong>Redesign-driven Flow</strong> to understand why the system
+          exists, then follow the <strong>C2 Technical Workflow</strong> to see
+          how it runs end-to-end. The <strong>North Star Org</strong> shows who
+          owns what, and the <strong>Token Pipeline</strong> proves we've
+          thought through distribution. <strong>Authoring</strong> addresses
+          real-world publishing friction, and the codegen workflows are optional
+          "future acceleration" views.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Core Charts</h2>
+        <p class="path-description">
+          Essential views for understanding the operating model
+        </p>
+
+        <ol class="chart-list">
+          <li class="chart-item">
+            <div class="chart-number">1</div>
+            <div class="chart-content">
+              <a href="north-star-redesign-driven-diagram.html" class="chart-link"
+                >Redesign-driven Flow + System Contracts</a
+              >
+              <div class="chart-audience">
+                <strong>Audience:</strong> Executives, Product Leads |
+                <strong>Purpose:</strong> Why we need the system
+              </div>
+            </div>
+            <span class="badge core">Core</span>
+          </li>
+
+          <li class="chart-item">
+            <div class="chart-number">2</div>
+            <div class="chart-content">
+              <a href="c2-technical-workflow.html" class="chart-link"
+                >C2 Technical Workflow (end-to-end)</a
+              >
+              <div class="chart-audience">
+                <strong>Audience:</strong> All stakeholders |
+                <strong>Purpose:</strong> How it runs + where contracts/telemetry live
+              </div>
+            </div>
+            <span class="badge core">Core</span>
+          </li>
+
+          <li class="chart-item">
+            <div class="chart-number">3</div>
+            <div class="chart-content">
+              <a href="north-star-diagrams.html" class="chart-link"
+                >North Star — Team Org + Lifecycle</a
+              >
+              <div class="chart-audience">
+                <strong>Audience:</strong> Leadership, Team Leads |
+                <strong>Purpose:</strong> Who owns what + handoffs
+              </div>
+            </div>
+            <span class="badge core">Core</span>
+          </li>
+
+          <li class="chart-item">
+            <div class="chart-number">4</div>
+            <div class="chart-content">
+              <a href="token-pipeline-diagram.html" class="chart-link"
+                >Token Pipeline</a
+              >
+              <div class="chart-audience">
+                <strong>Audience:</strong> Implementers, Platform Engineers |
+                <strong>Purpose:</strong> Proof of distribution/consumption thinking
+              </div>
+            </div>
+            <span class="badge core">Core</span>
+          </li>
+
+          <li class="chart-item">
+            <div class="chart-number">5</div>
+            <div class="chart-content">
+              <a href="north-star-authoring-diagram.html" class="chart-link"
+                >North Star — Authoring</a
+              >
+              <div class="chart-audience">
+                <strong>Audience:</strong> Content Authors, Platform Teams |
+                <strong>Purpose:</strong> Where real-world publishing friction gets solved
+              </div>
+            </div>
+            <span class="badge core">Core</span>
+          </li>
+
+          <li class="chart-item">
+            <div class="chart-number">6</div>
+            <div class="chart-content">
+              <a href="token-release-workflow.html" class="chart-link"
+                >Token Release Workflow — Figma to CDN</a
+              >
+              <div class="chart-audience">
+                <strong>Audience:</strong> Designers, Platform Engineers, DevOps |
+                <strong>Purpose:</strong> Detailed workflow from designer CRUD to CDN consumption
+              </div>
+            </div>
+            <span class="badge core">Core</span>
+          </li>
+
+          <li class="chart-item">
+            <div class="chart-number">7</div>
+            <div class="chart-content">
+              <a href="designers-one-year-from-now.html" class="chart-link"
+                >Designers One Year From Now — North Star Vision</a
+              >
+              <div class="chart-audience">
+                <strong>Audience:</strong> Designers, Leadership, Product |
+                <strong>Purpose:</strong> Future state vision: token-native design, AI-assisted workflows, Design Sandbox
+              </div>
+            </div>
+            <span class="badge core">Core</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Appendix / Future Acceleration</h2>
+        <p class="path-description">
+          Optional views for code generation and AI-assisted workflows
+        </p>
+
+        <ol class="chart-list" start="8">
+          <li class="chart-item">
+            <div class="chart-number">8</div>
+            <div class="chart-content">
+              <a href="frontend-codegen-diagram.html" class="chart-link"
+                >Frontend Code Gen Approach</a
+              >
+              <div class="chart-audience">
+                <strong>Audience:</strong> Engineers, AI Tool Users |
+                <strong>Purpose:</strong> Pattern/codegen via Storybook + MCP + LLM
+              </div>
+            </div>
+            <span class="badge appendix">Optional</span>
+          </li>
+
+          <li class="chart-item">
+            <div class="chart-number">9</div>
+            <div class="chart-content">
+              <a href="cursor-visual-browser-workflow.html" class="chart-link"
+                >Cursor Visual Browser — Component Creation</a
+              >
+              <div class="chart-audience">
+                <strong>Audience:</strong> Designers, Component Builders |
+                <strong>Purpose:</strong> AI-assisted component creation workflow
+              </div>
+            </div>
+            <span class="badge appendix">Optional</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">← Back to Index</a>
+        <a href="north-star-redesign-driven-diagram.html" class="nav-link primary"
+          >Start with Chart 1 →</a
+        >
+      </div>
+    </div>
+  </body>
+</html>
