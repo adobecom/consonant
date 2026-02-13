@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Consonant YAML Plugin</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: 'Adobe Clean', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 16px;
+        background: #0f0f0f;
+        color: #f5f5f5;
+      }
+      body.light {
+        background: #ffffff;
+        color: #1b1b1b;
+      }
+      h1 {
+        font-size: 16px;
+        margin: 0 0 12px;
+      }
+      h2 {
+        font-size: 13px;
+        margin: 16px 0 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      label {
+        display: block;
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+      select,
+      button,
+      textarea,
+      input[type='radio'] {
+        font-family: inherit;
+      }
+      select,
+      button,
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.04);
+        color: inherit;
+        font-size: 13px;
+        padding: 8px;
+        margin-bottom: 12px;
+      }
+      button {
+        cursor: pointer;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      textarea {
+        min-height: 140px;
+        font-family: 'SFMono-Regular', 'IBM Plex Mono', Menlo, monospace;
+      }
+      .radio-group {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+      .radio-group label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        margin: 0;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 12px;
+        font-size: 11px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 6px;
+        padding: 8px;
+      }
+      ul li {
+        margin-bottom: 2px;
+        word-break: break-word;
+      }
+      ul li:last-child {
+        margin-bottom: 0;
+      }
+      #status {
+        font-size: 12px;
+        min-height: 18px;
+      }
+      .error {
+        color: #ffb3b3;
+      }
+      .info {
+        color: #8ecae6;
+      }
+      .success {
+        color: #8af59f;
+      }
+      .stacked-buttons {
+        display: flex;
+        gap: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>YAML → Component (Cupcake)</h1>
+      <section>
+        <h2>Source</h2>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="specSource" value="bundled" checked /> Bundled specs
+          </label>
+          <label>
+            <input type="radio" name="specSource" value="custom" /> Pasted YAML
+          </label>
+        </div>
+      </section>
+      <section data-source="bundled">
+        <label for="specSelect">Available specs</label>
+        <select id="specSelect"></select>
+        <label for="bundledPreview">Bundled spec preview</label>
+        <textarea id="bundledPreview" rows="8" readonly></textarea>
+      </section>
+      <section data-source="custom">
+        <label for="customInput">Paste YAML spec</label>
+        <textarea id="customInput" rows="8" placeholder="Paste YAML here"></textarea>
+        <div class="stacked-buttons">
+          <button id="previewCustomBtn" type="button">Preview YAML</button>
+          <button id="clearCustomBtn" type="button">Clear</button>
+        </div>
+      </section>
+      <section>
+        <label>Tokens referenced</label>
+        <ul id="tokenList"></ul>
+      </section>
+      <section>
+        <label>Validation</label>
+        <ul id="errorList"></ul>
+      </section>
+      <button id="generateBtn">Generate from selection</button>
+      <p id="status" class="info"></p>
+    </main>
+    <script>
+      const $ = selector => document.querySelector(selector);
+      const specSelect = $('#specSelect');
+      const bundledPreview = $('#bundledPreview');
+      const customInput = $('#customInput');
+      const previewCustomBtn = $('#previewCustomBtn');
+      const clearCustomBtn = $('#clearCustomBtn');
+      const tokenList = $('#tokenList');
+      const errorList = $('#errorList');
+      const statusEl = $('#status');
+      const generateBtn = $('#generateBtn');
+      const sourceRadios = document.querySelectorAll('input[name="specSource"]');
+
+      const state = {
+        specs: [],
+        customSummary: null,
+        source: 'bundled'
+      };
+
+      window.addEventListener('message', event => {
+        const message = event.data.pluginMessage;
+        if (!message) return;
+        if (message.type === 'spec-list') {
+          state.specs = message.payload || [];
+          renderSpecs();
+          setStatus(`${state.specs.length} bundled spec${state.specs.length === 1 ? '' : 's'} available`, 'info');
+        }
+        if (message.type === 'generation-complete') {
+          const { name, kind } = message.payload;
+          setStatus(`${kind === 'component-set' ? 'Component set' : 'Component'} “${name}” generated.`, 'success');
+        }
+        if (message.type === 'custom-spec-summary') {
+          state.customSummary = message.payload;
+          if (state.source === 'custom') {
+            updatePreview();
+          }
+        }
+        if (message.type === 'error') {
+          setStatus(message.payload || 'Something went wrong.', 'error');
+        }
+      });
+
+      sourceRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          state.source = radio.value;
+          updatePreview();
+        });
+      });
+
+      specSelect.addEventListener('change', () => {
+        if (state.source === 'bundled') {
+          updatePreview();
+        }
+      });
+
+      previewCustomBtn.addEventListener('click', () => {
+        requestCustomPreview();
+      });
+
+      clearCustomBtn.addEventListener('click', () => {
+        customInput.value = '';
+        state.customSummary = null;
+        updatePreview();
+      });
+
+      generateBtn.addEventListener('click', () => {
+        if (state.source === 'custom') {
+          const source = customInput.value.trim();
+          if (!source) {
+            setStatus('Paste a YAML spec first.', 'error');
+            return;
+          }
+          setStatus('Generating from pasted spec…', 'info');
+          parent.postMessage({ pluginMessage: { type: 'generate-component', payload: { source } } }, '*');
+          return;
+        }
+
+        const specId = specSelect.value;
+        if (!specId) {
+          setStatus('Pick a bundled spec.', 'error');
+          return;
+        }
+        setStatus('Generating from bundled spec…', 'info');
+        parent.postMessage(
+          { pluginMessage: { type: 'generate-component', payload: { specId } } },
+          '*'
+        );
+      });
+
+      function renderSpecs() {
+        specSelect.innerHTML = '';
+        state.specs.forEach((spec, index) => {
+          const option = document.createElement('option');
+          option.value = spec.id;
+          option.textContent = spec.title;
+          specSelect.appendChild(option);
+          if (index === 0) {
+            option.selected = true;
+          }
+        });
+        updatePreview();
+      }
+
+      function updatePreview() {
+        const source = state.source;
+        document.querySelector('[data-source="bundled"]').style.display = source === 'bundled' ? 'block' : 'none';
+        document.querySelector('[data-source="custom"]').style.display = source === 'custom' ? 'block' : 'none';
+
+        const summary = source === 'bundled' ? getBundledSummary() : state.customSummary;
+        if (source === 'bundled') {
+          const active = getBundledSummary();
+          bundledPreview.value = active ? active.source.trim() : '';
+        }
+        if (source === 'custom' && !state.customSummary && customInput.value.trim()) {
+          requestCustomPreview();
+        }
+
+        renderTokens(summary?.tokens || []);
+        renderErrors(summary?.errors || []);
+      }
+
+      function getBundledSummary() {
+        const specId = specSelect.value;
+        return state.specs.find(spec => spec.id === specId);
+      }
+
+      function renderTokens(tokens) {
+        tokenList.innerHTML = '';
+        if (!tokens.length) {
+          const li = document.createElement('li');
+          li.textContent = '—';
+          tokenList.appendChild(li);
+          return;
+        }
+        tokens.forEach(token => {
+          const li = document.createElement('li');
+          li.textContent = token;
+          tokenList.appendChild(li);
+        });
+      }
+
+      function renderErrors(errors) {
+        errorList.innerHTML = '';
+        if (!errors.length) {
+          const li = document.createElement('li');
+          li.textContent = 'Validation passed';
+          errorList.appendChild(li);
+          return;
+        }
+        errors.forEach(error => {
+          const li = document.createElement('li');
+          li.classList.add('error');
+          li.textContent = error;
+          errorList.appendChild(li);
+        });
+      }
+
+      function requestCustomPreview() {
+        const source = customInput.value.trim();
+        if (!source) {
+          setStatus('Paste a YAML spec to preview.', 'error');
+          return;
+        }
+        parent.postMessage({ pluginMessage: { type: 'preview-custom-spec', payload: { source } } }, '*');
+        setStatus('Validating YAML…', 'info');
+      }
+
+      function setStatus(text, tone = 'info') {
+        statusEl.textContent = text;
+        statusEl.className = tone;
+      }
+
+      parent.postMessage({ pluginMessage: { type: 'ui-ready' } }, '*');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,237 @@
+/**
+ * Media Surface Component Styles
+ * Full marquee component with media background
+ * 
+ * Uses S2A design tokens for spacing, colors, and layout
+ */
+
+.c-marquee-media-surface {
+  background-color: #ffffff;
+  display: flex;
+  gap: var(--s2a-spacing-none, 0);
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  padding: var(--s2a-spacing-none, 0);
+  position: relative;
+  border-radius: var(--marquee-radius, 32px);
+  width: var(--default-width, 1440px);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Size: LG */
+.c-marquee-media-surface[data-size="lg"] {
+  height: 940px;
+}
+
+/* Size: MD */
+.c-marquee-media-surface[data-size="md"] {
+  height: 720px;
+}
+
+/* Media container */
+.c-marquee-media-surface__media {
+  position: relative;
+  width: 1440px;
+  max-width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  overflow: hidden; /* Ensure scaled image doesn't overflow */
+}
+
+.c-marquee-media-surface__image {
+  position: absolute;
+  max-width: none;
+  object-fit: cover;
+  object-position: center center; /* Default */
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* Scale image - support multiple scale values */
+/* Using width/height and positioning to scale the image */
+
+/* Scale 1.12 (12% larger) - For bottom-right anchor (0, 0) */
+.c-marquee-media-surface[data-image-scale="1.12"][data-image-position="right-bottom"]
+  .c-marquee-media-surface__image {
+  width: 112% !important;
+  height: 112% !important;
+  left: auto !important;
+  top: auto !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+/* Scale 1.12 (12% larger) - Default center anchor for other positions */
+.c-marquee-media-surface[data-image-scale="1.12"]:not(
+    [data-image-position="right-bottom"]
+  )
+  .c-marquee-media-surface__image {
+  width: 112% !important;
+  height: 112% !important;
+  left: -6% !important;
+  top: -6% !important;
+  right: auto !important;
+  bottom: auto !important;
+}
+
+.c-marquee-media-surface[data-image-scale="1.25"][data-image-position="right-bottom"]
+  .c-marquee-media-surface__image {
+  width: 125% !important;
+  height: 125% !important;
+  left: auto !important;
+  top: auto !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+/* Default center anchor for other positions with 1.25 scale */
+.c-marquee-media-surface[data-image-scale="1.25"]:not(
+    [data-image-position="right-bottom"]
+  )
+  .c-marquee-media-surface__image {
+  width: 125% !important;
+  height: 125% !important;
+  left: -12.5% !important;
+  top: -12.5% !important;
+  right: auto !important;
+  bottom: auto !important;
+}
+
+.c-marquee-media-surface[data-image-scale="1.5"]
+  .c-marquee-media-surface__image {
+  width: 150% !important;
+  height: 150% !important;
+  left: -25% !important;
+  top: -25% !important;
+  right: auto !important;
+  bottom: auto !important;
+}
+
+.c-marquee-media-surface[data-image-scale="2"] .c-marquee-media-surface__image {
+  width: 200% !important;
+  height: 200% !important;
+  left: -50% !important;
+  top: -50% !important;
+  right: auto !important;
+  bottom: auto !important;
+}
+
+/* Image positioning variants - match Figma design cropping */
+.c-marquee-media-surface[data-image-position="center"]
+  .c-marquee-media-surface__image {
+  object-position: center center;
+}
+
+.c-marquee-media-surface[data-image-position="center-bottom"]
+  .c-marquee-media-surface__image {
+  object-position: center bottom;
+}
+
+.c-marquee-media-surface[data-image-position="left-center"]
+  .c-marquee-media-surface__image {
+  object-position: left center;
+}
+
+.c-marquee-media-surface[data-image-position="right-center"]
+  .c-marquee-media-surface__image {
+  object-position: right center;
+}
+
+.c-marquee-media-surface[data-image-position="center-top"]
+  .c-marquee-media-surface__image {
+  object-position: center top;
+}
+
+.c-marquee-media-surface[data-image-position="right-bottom"]
+  .c-marquee-media-surface__image {
+  object-position: right bottom;
+}
+
+/* Percentage-based positioning for fine-tuning */
+.c-marquee-media-surface[data-image-position="center-30"]
+  .c-marquee-media-surface__image {
+  object-position: center 30%;
+}
+
+.c-marquee-media-surface[data-image-position="center-40"]
+  .c-marquee-media-surface__image {
+  object-position: center 40%;
+}
+
+/* Overlay/Scrim */
+.c-marquee-media-surface__overlay {
+  position: absolute;
+  background-color: var(--s2a-color-transparent-black-12, rgba(0, 0, 0, 0.12));
+  inset: 0;
+}
+
+/* Content Layer */
+.c-marquee-media-surface__content-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-2xl, 0px);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Content Container inside media surface - absolutely positioned */
+.c-marquee-media-surface__content-layer .c-marquee-content-container {
+  position: absolute;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Center LG Wide - Positioned at specific coordinates from Figma */
+.c-marquee-media-surface__content-layer--center-lg-wide
+  .c-marquee-content-container {
+  left: 221px;
+  top: 309px;
+  width: 998px;
+  max-width: calc(
+    100% - 442px
+  ); /* Prevent overflow: 221px left + 221px right margin */
+}
+
+/* Center LG MD - Left positioned */
+.c-marquee-media-surface__content-layer--center-lg-md
+  .c-marquee-content-container {
+  left: 80px;
+  top: 370px;
+  width: 512px;
+  max-width: calc(
+    100% - 160px
+  ); /* Prevent overflow: 80px left + 80px right margin */
+}
+
+/* Center MD Wide - Positioned at specific coordinates from Figma */
+.c-marquee-media-surface__content-layer--center-md-wide
+  .c-marquee-content-container {
+  left: 217px;
+  top: 258px;
+  width: 998px;
+  max-width: calc(
+    100% - 434px
+  ); /* Prevent overflow: 217px left + 217px right margin */
+}
+
+/* Left MD MD - Top left positioned */
+.c-marquee-media-surface__content-layer--left-md-md
+  .c-marquee-content-container {
+  left: 80px;
+  top: 140px;
+  width: 512px;
+  max-width: calc(
+    100% - 160px
+  ); /* Prevent overflow: 80px left + 80px right margin */
+}

@@ -1,0 +1,61 @@
+meta:
+  id: button-accent-solid-set
+  title: Accent Button Component Set
+  description: Accent button component set with default and disabled states using semantic tokens.
+  tags:
+    - button
+    - accent
+component:
+  name: C/Button/Accent/Solid
+  frame:
+    width: 320
+    height: 64
+    padding:
+      horizontal: 28
+      vertical: 20
+  layers:
+    - kind: rectangle
+      name: Surface
+      tokens:
+        fill: --s2a-button-color-background-accent-solid-default
+      fallback:
+        fill: '#1473E6'
+      cornerRadius: 999
+    - kind: text
+      name: Label
+      characters: Accent button
+      tokens:
+        fill: --s2a-button-color-label-on-accent
+        typography: --s2a-typography-body-strong
+      fallback:
+        fill: '#FFFFFF'
+        fontFamily: Adobe Clean
+        fontStyle: Bold
+        fontSize: 20
+        letterSpacing: 0
+  variants:
+    name: C/Button/Accent/Solid
+    properties:
+      - name: state
+        values: [default, disabled]
+    nodes:
+      - id: accent-default
+        name: Accent / Default
+        properties:
+          state: default
+      - id: accent-disabled
+        name: Accent / Disabled
+        properties:
+          state: disabled
+        overrides:
+          layers:
+            Surface:
+              tokens:
+                fill: --s2a-button-color-background-accent-solid-disabled
+              fallback:
+                fill: '#D1D1D1'
+            Label:
+              tokens:
+                fill: --s2a-button-color-label-on-accent-disabled
+              fallback:
+                fill: '#6E6E6E'

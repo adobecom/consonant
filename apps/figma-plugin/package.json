@@ -1,0 +1,10 @@
+{
+  "name": "@consonant-2/figma-plugin",
+  "version": "0.0.1",
+  "description": "Figma plugin that generates components from YAML specs",
+  "private": true,
+  "scripts": {
+    "build": "nx build figma-plugin",
+    "package": "nx package figma-plugin"
+  }
+}

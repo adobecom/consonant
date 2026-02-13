@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI UI Prototyping Workflow — Tokens to Story UI</title>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre-d3@0.6.4/dist/dagre-d3.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0d12;
+        --panel: #0f1420;
+        --muted: #9aa4b2;
+        --text: #e5e7eb;
+        --stroke: #2b3445;
+        --accent: #60a5fa;
+        --good: #34d399;
+        --warn: #fbbf24;
+        --tool: #a78bfa;
+      }
+      html,
+      body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        max-width: none;
+        box-sizing: border-box;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      #svg {
+        width: 100%;
+        height: 100%;
+      }
+      .node rect {
+        fill: rgba(255, 255, 255, 0.03);
+        stroke: rgba(255, 255, 255, 0.16);
+        stroke-width: 1.3px;
+        rx: 12px;
+        ry: 12px;
+      }
+      .node text {
+        fill: var(--text);
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .node.token rect {
+        stroke: var(--good);
+        stroke-width: 2px;
+      }
+      .node.tool rect {
+        stroke: var(--tool);
+        stroke-width: 1.5px;
+        fill: rgba(167, 139, 250, 0.08);
+      }
+      .node.output rect {
+        stroke: var(--accent);
+        stroke-width: 2px;
+      }
+      .edgePath path {
+        stroke: var(--accent);
+        stroke-width: 2px;
+        fill: none;
+      }
+      .edgeLabel text {
+        fill: var(--muted);
+        font-size: 11px;
+      }
+      .toolbar {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 10;
+        display: flex;
+        gap: 8px;
+      }
+      button {
+        appearance: none;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <button onclick="centerView()">Center</button>
+      <button onclick="window.print()">Export</button>
+    </div>
+    <svg id="svg">
+      <g id="g"></g>
+    </svg>
+
+    <script>
+      const g = new dagreD3.graphlib.Graph({ multigraph: true })
+        .setGraph({
+          rankdir: "TB",
+          nodesep: 40,
+          ranksep: 60,
+          marginx: 30,
+          marginy: 40,
+        })
+        .setDefaultEdgeLabel(() => ({}));
+
+      // 1. Tokens (Sub-atoms) - START
+      g.setNode("tokens", {
+        label: "1. Sub-Atoms\n(Design Tokens)",
+        class: "token",
+        rx: 12,
+        ry: 12,
+        padding: 16,
+        style: "fill: rgba(52,211,153,0.08); stroke: rgba(52,211,153,0.9); stroke-width: 2px;",
+      });
+
+      // 2. Token Pipeline
+      g.setNode("token-pipeline", {
+        label: "Token Pipeline\nFigma → JSON → CSS",
+        class: "tool",
+        rx: 12,
+        ry: 12,
+        padding: 14,
+        style: "fill: rgba(167,139,250,0.08); stroke: rgba(167,139,250,0.9); stroke-width: 1.5px;",
+      });
+
+      // 3. Figma Build Atoms
+      g.setNode("figma-atoms", {
+        label: "2. Atoms\nBuild in Figma\n(With Variants)",
+        rx: 12,
+        ry: 12,
+        padding: 16,
+      });
+
+      // 4. FigmaLint
+      g.setNode("figmalint", {
+        label: "FigmaLint\n✓ Verify Best Practices\n✓ Set MCP Score",
+        class: "tool",
+        rx: 12,
+        ry: 12,
+        padding: 14,
+        style: "fill: rgba(167,139,250,0.08); stroke: rgba(167,139,250,0.9); stroke-width: 1.5px;",
+      });
+
+      // 5. Molecules
+      g.setNode("molecules", {
+        label: "3. Molecules\nCompose Atoms",
+        rx: 12,
+        ry: 12,
+        padding: 16,
+      });
+
+      // 6. Organisms
+      g.setNode("organisms", {
+        label: "4. Organisms\nCompose Molecules",
+        rx: 12,
+        ry: 12,
+        padding: 16,
+      });
+
+      // 7. Figma MCP
+      g.setNode("figma-mcp", {
+        label: "Figma MCP\nGenerate Components\n(s2a Codebase)",
+        class: "tool",
+        rx: 12,
+        ry: 12,
+        padding: 14,
+        style: "fill: rgba(167,139,250,0.08); stroke: rgba(167,139,250,0.9); stroke-width: 1.5px;",
+      });
+
+      // 8. Claude Code + Cursor
+      g.setNode("claude-cursor", {
+        label: "Claude Code + Cursor\nSetup in Storybook\nGuardrails via Skills",
+        class: "tool",
+        rx: 12,
+        ry: 12,
+        padding: 14,
+        style: "fill: rgba(167,139,250,0.08); stroke: rgba(167,139,250,0.9); stroke-width: 1.5px;",
+      });
+
+      // 9. Storybook
+      g.setNode("storybook", {
+        label: "5. Storybook\nComponent Docs\nDeveloper Handoff",
+        class: "output",
+        rx: 12,
+        ry: 12,
+        padding: 16,
+        style: "fill: rgba(96,165,250,0.08); stroke: rgba(96,165,250,0.9); stroke-width: 2px;",
+      });
+
+      // 10. Story UI
+      g.setNode("storyui", {
+        label: "6. Story UI\nAI Prototyping\nIterate & Refine",
+        class: "output",
+        rx: 12,
+        ry: 12,
+        padding: 16,
+        style: "fill: rgba(96,165,250,0.08); stroke: rgba(96,165,250,0.9); stroke-width: 2px;",
+      });
+
+      // Main flow edges
+      g.setEdge("tokens", "token-pipeline", {
+        label: "Figma Variables",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+      });
+
+      g.setEdge("token-pipeline", "figma-atoms", {
+        label: "Use Tokens",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+      });
+
+      g.setEdge("figma-atoms", "figmalint", {
+        label: "Validate",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+      });
+
+      g.setEdge("figmalint", "molecules", {
+        label: "Build",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+      });
+
+      g.setEdge("molecules", "organisms", {
+        label: "Compose",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+      });
+
+      g.setEdge("organisms", "figma-mcp", {
+        label: "Generate Code",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+      });
+
+      g.setEdge("figma-mcp", "claude-cursor", {
+        label: "Refine & Setup",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+      });
+
+      g.setEdge("claude-cursor", "storybook", {
+        label: "Document",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+      });
+
+      g.setEdge("storybook", "storyui", {
+        label: "Prototype",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+      });
+
+      // Token pipeline feeds into code generation
+      g.setEdge("token-pipeline", "figma-mcp", {
+        label: "Tokens Available",
+        lineInterpolate: "basis",
+        arrowhead: "vee",
+        style: "stroke: rgba(52,211,153,0.6); stroke-dasharray: 5,5;",
+      });
+
+      const svg = d3.select("#svg");
+      const inner = d3.select("#g");
+      const render = new dagreD3.render();
+
+      const zoom = d3
+        .zoom()
+        .scaleExtent([0.4, 2.0])
+        .on("zoom", (event) => inner.attr("transform", event.transform));
+      svg.call(zoom);
+
+      render(inner, g);
+
+      function centerView() {
+        const graphWidth = g.graph().width;
+        const graphHeight = g.graph().height;
+        const svgWidth = svg.node().clientWidth;
+        const svgHeight = svg.node().clientHeight;
+
+        const scaleX = (svgWidth - 60) / graphWidth;
+        const scaleY = (svgHeight - 60) / graphHeight;
+        const scale = Math.min(scaleX, scaleY, 1.0);
+
+        const tx = (svgWidth - graphWidth * scale) / 2;
+        const ty = (svgHeight - graphHeight * scale) / 2;
+
+        svg
+          .transition()
+          .duration(350)
+          .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+      }
+
+      centerView();
+    </script>
+  </body>
+</html>

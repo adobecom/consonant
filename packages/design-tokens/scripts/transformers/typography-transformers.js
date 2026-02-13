@@ -17,22 +17,20 @@ function getTypographyContext(path) {
     "letter-spacing",
   ]);
 
-  if (head !== "typography") {
-    return {
-      scope: undefined,
-      key: undefined,
-      alias: undefined,
-      property: undefined,
-    };
-  }
+  // Handle both "typography.font-size.*" and "font-size.*" paths
+  if (head === "typography") {
+    if (PROPERTY_NAMES.has(first) && second) {
+      const alias = isNumericKey(second) ? undefined : second;
+      return { scope: first, key: second, alias, property: first };
+    }
 
-  if (PROPERTY_NAMES.has(first) && second) {
-    const alias = isNumericKey(second) ? undefined : second;
-    return { scope: first, key: second, alias, property: first };
-  }
-
-  if (!isNumericKey(first) && PROPERTY_NAMES.has(second)) {
-    return { scope: second, key: undefined, alias: first, property: second };
+    if (!isNumericKey(first) && PROPERTY_NAMES.has(second)) {
+      return { scope: second, key: undefined, alias: first, property: second };
+    }
+  } else if (PROPERTY_NAMES.has(head) && first) {
+    // Handle "font-size.*" at root level (semantic tokens)
+    const alias = isNumericKey(first) ? undefined : first;
+    return { scope: head, key: first, alias, property: head };
   }
 
   return {
@@ -229,33 +227,49 @@ function convertNumberTokens(node, path, maps) {
           : toRem(value);
       }
     } else if (scope === "line-height") {
-      const mappedFontPx = maps.lineHeightToFontSize.get(String(value));
-      const aliasFontPx =
-        alias &&
-        maps.aliasPairs.get(alias) &&
-        maps.aliasPairs.get(alias).fontSize;
-      const fallbackFontPx = key
-        ? maps.fontSize.valueByKey.get(key)
-        : undefined;
-      const fontPx = mappedFontPx ?? aliasFontPx ?? fallbackFontPx;
-      const rawRatio = fontPx ? value / fontPx : value / 16;
-      // Round to 6 decimal places for line-height ratios, then strip trailing zeros
-      const roundedRatio = roundTo(rawRatio, 6);
-      const ratio = stripTrailingZeros(roundedRatio, 6);
-
-      if (key && isNumericKey(key)) {
+      // Check if value is already a ratio (typically < 2 for line-height percentages)
+      // Manual overrides use ratios like 0.98, 1.2, etc.
+      if (value < 2 && value > 0) {
+        // Already a ratio - keep as unitless number
+        const roundedRatio = roundTo(value, 6);
+        const ratio = stripTrailingZeros(roundedRatio, 6);
         node.$value = ratio;
       } else {
-        const referenceKey = findNumericKey(maps.lineHeight.keyByValue, value);
-        node.$value = referenceKey
-          ? `{typography.line-height.${referenceKey}}`
-          : ratio;
+        // Pixel value - convert to ratio
+        const mappedFontPx = maps.lineHeightToFontSize.get(String(value));
+        const aliasFontPx =
+          alias &&
+          maps.aliasPairs.get(alias) &&
+          maps.aliasPairs.get(alias).fontSize;
+        const fallbackFontPx = key
+          ? maps.fontSize.valueByKey.get(key)
+          : undefined;
+        const fontPx = mappedFontPx ?? aliasFontPx ?? fallbackFontPx;
+        const rawRatio = fontPx ? value / fontPx : value / 16;
+        // Round to 6 decimal places for line-height ratios, then strip trailing zeros
+        const roundedRatio = roundTo(rawRatio, 6);
+        const ratio = stripTrailingZeros(roundedRatio, 6);
+
+        if (key && isNumericKey(key)) {
+          node.$value = ratio;
+        } else {
+          const referenceKey = findNumericKey(
+            maps.lineHeight.keyByValue,
+            value,
+          );
+          node.$value = referenceKey
+            ? `{typography.line-height.${referenceKey}}`
+            : ratio;
+        }
       }
     } else if (scope === "letter-spacing") {
-      // NOTE: Letter-spacing tokens are currently filtered out due to conversion issues
-      // They are being excluded from the build output until the conversion logic can be fixed
-      // This prevents letter-spacing tokens from appearing in the generated CSS files
-      return; // Skip processing letter-spacing tokens
+      // Convert percentage letter-spacing to em units
+      // Percentage letter-spacing in CSS is relative to font size (like em)
+      // e.g., -3% = -0.03em, 1% = 0.01em
+      const emValue = value / 100;
+      const roundedEm = roundTo(emValue, 4);
+      const emString = stripTrailingZeros(roundedEm, 4);
+      node.$value = `${emString}em`;
     } else if (path[0] === "opacity") {
       node.$value = roundTo(Math.max(0, Math.min(1, value / 100)), 4);
     } else {
@@ -303,4 +317,3 @@ module.exports = {
   ensureLineHeightPrimitives,
   convertNumberTokens,
 };
-

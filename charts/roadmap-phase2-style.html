@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Consonant 2 Guardrail Roadmap</title>
+    <style>
+      :root {
+        --bg: #f5f1f0;
+        --text: #1f1f23;
+        --muted: #585c63;
+        --line: #d6d0cb;
+        --blue: #8fd3ff;
+        --green: #c9f4d3;
+        --purple: #d9d4ff;
+        --peach: #ffdcd0;
+        --yellow: #fff1a8;
+        --pink: #ffc4ec;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Helvetica Neue", "Arial", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .page {
+        max-width: 1280px;
+        margin: 24px auto 60px;
+        padding: 0 24px 60px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ede6e0;
+      }
+      header {
+        padding: 36px 40px 16px;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 600;
+      }
+      header p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .timeline {
+        padding: 20px 40px 40px;
+      }
+      .quarters {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        font-size: 14px;
+        text-align: center;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .quarters span {
+        padding: 6px 0;
+        border-bottom: 3px solid #f1ece6;
+      }
+      .events {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .event {
+        background: #fff7f0;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+        text-align: left;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      .event strong {
+        display: block;
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      .lanes {
+        margin-top: 32px;
+        display: grid;
+        gap: 12px;
+      }
+      .lane {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        column-gap: 12px;
+        align-items: center;
+      }
+      .lane-label {
+        font-weight: 600;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .lane-track {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .lane-cell {
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 12px;
+        line-height: 1.4;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+      .assumptions {
+        margin-top: 36px;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        padding-bottom: 40px;
+      }
+      .notes {
+        border: 1px solid #d9d1cb;
+        border-radius: 12px;
+        padding: 20px;
+        background: #fffaf1;
+      }
+      .notes h3 {
+        margin-top: 0;
+        font-size: 16px;
+      }
+      .notes ul {
+        margin: 0;
+        padding-left: 18px;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .legend {
+        border: 1px solid #d9d1cb;
+        border-radius: 12px;
+        padding: 20px;
+        background: #f4f6ff;
+      }
+      .legend h4 {
+        margin-top: 0;
+        font-size: 14px;
+      }
+      .legend ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .legend li {
+        font-size: 12px;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+      }
+      .swatch {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <h1>Consonant 2 Guardrail Roadmap – Q1 → Q4 2026</h1>
+        <p>
+          We start the redesign intake now (Q1), harden guardrails + atomic kits
+          in Q2, prove Milo production in Q3, and use Q4 for the next agenda.
+        </p>
+      </header>
+      <section class="timeline">
+        <div class="quarters">
+          <span>Q1 2026 (Now)</span>
+          <span>Q2 2026</span>
+          <span>Q3 2026</span>
+          <span>Q4 2026</span>
+        </div>
+        <div class="events">
+          <div class="event" style="background: var(--purple)">
+            <strong>Redesign Intake Sprint</strong>
+            Capture handoff from Elliot's team. Atomic inventory and contracts
+            are built.
+            <ul>
+              <li>Capture handoff from Elliot's team.</li>
+              <li>
+                Catalog everything into foundations → atoms → molecules →
+                organisms.
+              </li>
+              <li>
+                Define component contracts (API, theming, a11y, perf, definition
+                of done per component (YAML + guardrails)).
+              </li>
+              <li>Prioritize the backlog.</li>
+              <li>Figma Component tokenization and figma build.</li>
+            </ul>
+          </div>
+          <div class="event" style="background: var(--yellow)">
+            <strong>Guardrail GA + Atomic Kits</strong>
+            <ul>
+              <li>
+                MCP pulls every detail (states, variants, responsive notes,
+                typography, spacing, interaction annotations).
+              </li>
+
+              <li>Document dependencies + required assets.</li>
+              <li>Flag primitives that need new tokens.</li>
+              <li>
+                Define API/config, theming, a11y, perf, definition of done per
+                component (YAML + guardrails).
+                <strong>This becomes the dev handoff.</strong>
+              </li>
+              <li>
+                Order work bottom-up so molecules reuse approved atoms; feed the
+                queue to Story UI / Claude / Cursor / Codex for upcoming
+                prompts.
+              </li>
+            </ul>
+          </div>
+          <div class="event" style="background: var(--green)">
+            <strong>Milo Production Loop</strong>
+            <ul>
+              <li>Milo consumes tokens from the versioned pipeline.</li>
+              <li>Milo consumes Storybook+YAML as API;</li>
+              <li>Milo builds blocks from the contracts.</li>
+            </ul>
+          </div>
+          <div class="event" style="background: var(--blue)">
+            <strong>Q4 Launchpad</strong>
+            <ul>
+              <li>Workflow is repeatable;</li>
+              <li>Use Q4 for next agenda</li>
+              <li>
+                Deliver continuous spec updates + ideate on C1 sunset plan
+                (`docs/future-notes/consonant1-deprecation.md`).
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="lanes">
+          <div class="lane">
+            <div class="lane-label">Design & Consonant</div>
+            <div class="lane-track">
+              <div class="lane-cell" style="background: var(--purple)">
+                Q1: Run the 8-week intake (inventory → contracts → guardrail
+                build).
+              </div>
+              <div class="lane-cell" style="background: var(--yellow)">
+                Q2: Finalize guardrail docs + FigmaLint presets, publish
+                component atoms + specs.
+              </div>
+              <div class="lane-cell" style="background: var(--green)">
+                Q3: Feed Milo with continuous spec updates + execute C1
+                deprecation plan.
+              </div>
+              <div class="lane-cell" style="background: var(--blue)">
+                Q4: Focus on new agendas (Story UI concepting, designer
+                enablement, next blocks).
+              </div>
+            </div>
+          </div>
+          <div class="lane">
+            <div class="lane-label">Story UI + MCP</div>
+            <div class="lane-track">
+              <div class="lane-cell" style="background: var(--pink)">
+                Q1: Figma MCP capture + Story UI guardrail prompts run for
+                intake.
+              </div>
+              <div class="lane-cell" style="background: var(--pink)">
+                Q2: Prompts + connectors hardened; asset fetching automated.
+              </div>
+              <div class="lane-cell" style="background: var(--pink)">
+                Q3: Auto-regenerate stories when contracts change; enforce
+                guardrail lint in CI.
+              </div>
+              <div class="lane-cell" style="background: var(--pink)">
+                Q4: Story UI becomes experimentation surface (designer
+                enablement, new concepts).
+              </div>
+            </div>
+          </div>
+          <div class="lane">
+            <div class="lane-label">Milo Core + Platform</div>
+            <div class="lane-track">
+              <div class="lane-cell" style="background: var(--peach)">
+                Q1: Validate intake output via `context/milo/` sandbox.
+              </div>
+              <div class="lane-cell" style="background: var(--peach)">
+                Q2: Wire tokens → runtime + telemetry hooks based on guardrail
+                GA.
+              </div>
+              <div class="lane-cell" style="background: var(--peach)">
+                Q3: Test redesigned blocks in Milo QA env + log telemetry for C1
+                usage.
+              </div>
+              <div class="lane-cell" style="background: var(--peach)">
+                Q4: Adopt Storybook + YAML as deployment API; pursue next
+                initiatives / deprecation.
+              </div>
+            </div>
+          </div>
+          <div class="lane">
+            <div class="lane-label">Redesign Intake (8 weeks)</div>
+            <div class="lane-track">
+              <div class="lane-cell" style="background: #ffe0f0">
+                Weeks 0–2: Figma MCP capture + atomic inventory.
+              </div>
+              <div class="lane-cell" style="background: #ffe0f0">
+                Weeks 2–3: Component contracts (API, theming, a11y, perf).
+              </div>
+              <div class="lane-cell" style="background: #ffe0f0">
+                Weeks 4–6: Story UI / Claude / Cursor / Codex guardrail build.
+              </div>
+              <div class="lane-cell" style="background: #ffe0f0">
+                Weeks 7–8: Milo QA + release, feed telemetry to deprecation
+                plan.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="assumptions">
+          <div class="notes">
+            <h3>Assumptions</h3>
+            <ul>
+              <li>
+                Consonant repo remains the canonical source (tokens, guardrails,
+                redesign inventory, Story UI docs).
+              </li>
+              <li>
+                Design system team owns guardrail lint + Story UI prompts in CI.
+              </li>
+              <li>Milo team partners on runtime hooks + telemetry by Q4.</li>
+              <li>
+                Elliot redesign assets delivered as contracts + inventory, not
+                bespoke mocks.
+              </li>
+            </ul>
+            <h3>Risks / Flags</h3>
+            <ul>
+              <li>Redesign scope could demand new tokens mid-quarter.</li>
+              <li>
+                Guardrail CI must block violations or automation loses
+                credibility.
+              </li>
+              <li>
+                Capacity to maintain `story-ui-docs/` while shipping blocks.
+              </li>
+            </ul>
+          </div>
+          <div class="legend">
+            <h4>References</h4>
+            <ul>
+              <li>
+                <span class="swatch" style="background: var(--yellow)"></span>
+                Guardrail workflow – `docs/guardrails/*`
+              </li>
+              <li>
+                <span class="swatch" style="background: var(--green)"></span>
+                Tokens/components – `packages/design-tokens/`,
+                `packages/components/`
+              </li>
+              <li>
+                <span class="swatch" style="background: var(--purple)"></span>
+                Redesign contracts – `docs/north-star/`
+              </li>
+              <li>
+                <span class="swatch" style="background: var(--blue)"></span>
+                Milo loop – `apps/storybook/`, `context/milo/`
+              </li>
+              <li>
+                <span class="swatch" style="background: var(--pink)"></span>
+                Story UI docs – `story-ui-docs/`
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

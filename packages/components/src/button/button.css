@@ -1,0 +1,403 @@
+/**
+ * Button Component Styles
+ * Uses data attributes for variant props
+ * 
+ * Values sourced from Figma Variables via MCP:
+ * - Typography: typography/font-size/2xl, typography/font-weight/bold, typography/line-height/xl
+ * - Spacing: spacing/20, spacing/2xl, spacing/xs
+ * - Border: border/radius/lg, border/width/md
+ * - Colors: button/color/* variables (see individual variant comments)
+ */
+
+.c-button {
+  /* Base styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  /* Primitive: typography/font-family still comes from primitives; waiting on semantic alias */
+  font-family:
+    var(--s2a-typography-font-family-adobe-clean, "Adobe Clean"),
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  /* Primitive: typography/font-weight lacks semantic alias */
+  font-weight: var(--s2a-typography-font-weight-bold, 700);
+  text-align: center;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+  /* Base padding and border radius - will be overridden by size variants */
+  border-radius: var(--s2a-border-radius-lg, 32px);
+  gap: var(--s2a-spacing-none, 0);
+  /* Use box-sizing to ensure padding is included in height calculation */
+  box-sizing: border-box;
+}
+
+/* Size: LG - Figma: spacing/12 (12px vertical), spacing/lg (24px horizontal), typography/font-size/sm (14px), typography/line-height/xs (16px), border/radius/lg (32px) */
+/* Design: 40px total. Used for on-media variants. */
+.c-button[data-size="lg"] {
+  padding: var(--s2a-spacing-sm, 12px) var(--s2a-spacing-lg, 24px);
+  border-radius: var(--s2a-border-radius-lg, 32px);
+  /* Figma: typography/font-size/sm = 14px */
+  font-size: var(--s2a-typography-font-size-sm, 14px);
+}
+
+/* Size: XL - Figma: spacing/12 (12px vertical), spacing/2xl (40px horizontal), typography/font-size/lg (18px), typography/line-height/xl (24px), border/radius/lg (32px) */
+/* Design: 48px total. Line height lives on the label (see .c-button__label) to avoid token unit mismatch. */
+.c-button[data-size="xl"] {
+  padding: var(--s2a-spacing-sm, 12px) var(--s2a-spacing-2xl, 40px);
+  border-radius: var(--s2a-border-radius-lg, 32px);
+  /* Figma: typography/font-size/lg = 18px */
+  font-size: var(--s2a-typography-font-size-lg, 18px);
+}
+
+/* Size: 2xl - Figma: spacing/20 (20px), spacing/2xl (40px), typography/font-size/2xl (22px), border/radius/lg (32px) */
+/* Design: 64px total. With 20px padding per side, we need 24px content height */
+.c-button[data-size="2xl"],
+.c-button {
+  /* Primitive: no semantic token exists for 20px vertical padding */
+  padding: var(--s2a-spacing-20, 20px) var(--s2a-spacing-2xl, 40px);
+  border-radius: var(--s2a-border-radius-lg, 32px);
+  /* Figma: typography/font-size/2xl = 22px */
+  font-size: var(--s2a-typography-font-size-2xl, 22px);
+}
+
+.c-button__label {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+/* Line height varies by size to match Figma design */
+.c-button[data-size="lg"] .c-button__label {
+  /* Figma: typography/line-height/xs = 16px */
+  line-height: var(--s2a-typography-line-height-xs, 16px);
+}
+
+.c-button[data-size="xl"] .c-button__label,
+.c-button[data-size="2xl"] .c-button__label,
+.c-button .c-button__label {
+  /* Explicit 24px line height keeps the total height in sync with Figma (12/20px padding + 24px content). */
+  line-height: var(--s2a-spacing-lg, 24px);
+}
+
+/* Disabled state - applies to all variants */
+.c-button[data-state="disabled"] {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Accent + Solid variants */
+/* Figma: button/color/background/accent/solid-default */
+.c-button[data-kind="accent"][data-background="solid"]:not(
+    [data-state="disabled"]
+  ) {
+  background-color: var(
+    --s2a-button-color-background-accent-solid-default,
+    #3b63fb
+  );
+  /* Figma: color/content/knockout = #ffffff */
+  color: var(--s2a-color-content-knockout, #ffffff);
+}
+
+/* Figma: button/color/background/accent/solid-hover */
+.c-button[data-kind="accent"][data-background="solid"]:not(
+    [data-state="disabled"]
+  ):hover {
+  background-color: var(
+    --s2a-button-color-background-accent-solid-hover,
+    #274dea
+  );
+  color: var(--s2a-color-content-knockout, #ffffff);
+}
+
+/* Figma: color/background/disabled = #f8f8f8, color/content/disabled = #c6c6c6 */
+.c-button[data-kind="accent"][data-background="solid"][data-state="disabled"] {
+  background-color: var(--s2a-color-background-disabled, #f8f8f8);
+  color: var(--s2a-color-content-disabled, #c6c6c6);
+}
+
+/* Primary + Outlined variants */
+/* Figma: button/color/background/primary/outlined-default, button/color/border/primary/outlined-default, color/content/default */
+.c-button[data-kind="primary"][data-background="outlined"]:not(
+    [data-state="disabled"]
+  ) {
+  background-color: var(
+    --s2a-button-color-background-primary-outlined-default,
+    transparent
+  );
+  /* Figma: border/width/md = 2 */
+  border: var(--s2a-border-width-md, 2px) solid
+    var(
+      --s2a-button-color-border-primary-outlined-default,
+      var(--s2a-color-content-default, #292929)
+    );
+  color: var(--s2a-color-content-default, #292929);
+}
+
+/* Adjust padding for outlined variants to account for border */
+/* Size XL: 2px border + 10px padding + 24px content + 10px padding + 2px border = 48px total */
+.c-button[data-kind="primary"][data-background="outlined"][data-size="xl"]:not(
+    [data-state="disabled"]
+  ) {
+  padding-top: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+}
+
+/* Size 2XL: 2px border + 18px padding + 24px content + 18px padding + 2px border = 64px total */
+.c-button[data-kind="primary"][data-background="outlined"][data-size="2xl"]:not(
+    [data-state="disabled"]
+  ),
+.c-button[data-kind="primary"][data-background="outlined"]:not(
+    [data-state="disabled"]
+  ) {
+  /* Primitive: spacing-20 needed again to honor 2XL vertical padding */
+  padding-top: calc(
+    var(--s2a-spacing-20, 20px) - var(--s2a-border-width-md, 2px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-20, 20px) - var(--s2a-border-width-md, 2px)
+  );
+}
+
+/* Figma: button/color/background/primary/outlined-hover, button/color/border/primary/outlined-hover, button/color/content/primary/outlined-hover */
+.c-button[data-kind="primary"][data-background="outlined"]:not(
+    [data-state="disabled"]
+  ):hover {
+  background-color: var(
+    --s2a-button-color-background-primary-outlined-hover,
+    rgba(0, 0, 0, 0.08)
+  );
+  border-color: var(--s2a-button-color-border-primary-outlined-hover, #000000);
+  color: var(--s2a-button-color-content-primary-outlined-hover, #131313);
+}
+
+/* Figma: color/border/disabled = #c6c6c6, color/content/disabled = #c6c6c6 */
+.c-button[data-kind="primary"][data-background="outlined"][data-state="disabled"] {
+  background-color: transparent;
+  border: var(--s2a-border-width-md, 2px) solid
+    var(--s2a-color-border-disabled, #c6c6c6);
+  color: var(--s2a-color-content-disabled, #c6c6c6);
+}
+
+/* Secondary + Solid variants */
+/* Figma: button/color/background/secondary/solid-default */
+.c-button[data-kind="secondary"][data-background="solid"]:not(
+    [data-state="disabled"]
+  ) {
+  background-color: var(
+    --s2a-button-color-background-secondary-solid-default,
+    rgba(0, 0, 0, 0.08)
+  );
+  color: var(--s2a-color-content-default, #292929);
+}
+
+/* Figma: button/color/background/secondary/solid-hover */
+.c-button[data-kind="secondary"][data-background="solid"]:not(
+    [data-state="disabled"]
+  ):hover {
+  background-color: var(
+    --s2a-button-color-background-secondary-solid-hover,
+    rgba(0, 0, 0, 0.12)
+  );
+  color: var(--s2a-color-content-default, #292929);
+}
+
+/* Figma: color/background/disabled = #f8f8f8, color/content/disabled = #c6c6c6 */
+.c-button[data-kind="secondary"][data-background="solid"][data-state="disabled"] {
+  background-color: var(--s2a-color-background-disabled, #f8f8f8);
+  color: var(--s2a-color-content-disabled, #c6c6c6);
+}
+
+/* Secondary + Outlined variants */
+/* Figma: button/color/background/secondary/outlined-default */
+.c-button[data-kind="secondary"][data-background="outlined"]:not(
+    [data-state="disabled"]
+  ) {
+  background-color: var(
+    --s2a-button-color-background-secondary-outlined-default,
+    transparent
+  );
+  border: var(--s2a-border-width-md, 2px) solid
+    var(--s2a-color-content-default, #292929);
+  color: var(--s2a-color-content-default, #292929);
+}
+
+/* Figma: button/color/background/secondary/outlined-hover */
+.c-button[data-kind="secondary"][data-background="outlined"]:not(
+    [data-state="disabled"]
+  ):hover {
+  background-color: var(
+    --s2a-button-color-background-secondary-outlined-hover,
+    rgba(0, 0, 0, 0.08)
+  );
+  border-color: var(--s2a-color-content-default, #292929);
+  color: var(--s2a-color-content-default, #292929);
+}
+
+/* Figma: color/border/disabled = #c6c6c6, color/content/disabled = #c6c6c6 */
+.c-button[data-kind="secondary"][data-background="outlined"][data-state="disabled"] {
+  background-color: transparent;
+  border: var(--s2a-border-width-md, 2px) solid
+    var(--s2a-color-border-disabled, #c6c6c6);
+  color: var(--s2a-color-content-disabled, #c6c6c6);
+}
+
+/* Adjust padding for secondary outlined variants to account for border */
+.c-button[data-kind="secondary"][data-background="outlined"][data-size="lg"]:not(
+    [data-state="disabled"]
+  ) {
+  padding-top: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+}
+
+.c-button[data-kind="secondary"][data-background="outlined"][data-size="xl"]:not(
+    [data-state="disabled"]
+  ) {
+  padding-top: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+}
+
+.c-button[data-kind="secondary"][data-background="outlined"][data-size="2xl"]:not(
+    [data-state="disabled"]
+  ),
+.c-button[data-kind="secondary"][data-background="outlined"]:not(
+    [data-state="disabled"]
+  ) {
+  padding-top: calc(
+    var(--s2a-spacing-20, 20px) - var(--s2a-border-width-md, 2px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-20, 20px) - var(--s2a-border-width-md, 2px)
+  );
+}
+
+.c-button[data-kind="secondary"][data-background="outlined"][data-state="disabled"][data-size="lg"],
+.c-button[data-kind="secondary"][data-background="outlined"][data-state="disabled"][data-size="xl"] {
+  padding-top: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+}
+
+.c-button[data-kind="secondary"][data-background="outlined"][data-state="disabled"][data-size="2xl"],
+.c-button[data-kind="secondary"][data-background="outlined"][data-state="disabled"] {
+  padding-top: calc(
+    var(--s2a-spacing-20, 20px) - var(--s2a-border-width-md, 2px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-20, 20px) - var(--s2a-border-width-md, 2px)
+  );
+}
+
+/* Glass background variant - On Media surface */
+/* Primitive: These tokens don't exist in S2A yet - using fallbacks */
+.c-button[data-background="glass"]:not([data-state="disabled"]) {
+  /* Primitive: backdrop-blur effect token doesn't exist */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* Primary + Solid + On Media */
+.c-button[data-kind="primary"][data-background="solid"][data-surface="on-media"]:not(
+    [data-state="disabled"]
+  ) {
+  background-color: var(
+    --s2a-button-color-background-onmedia-primary-solid-default,
+    #ffffff
+  );
+  color: var(--s2a-color-content-default, #292929);
+}
+
+.c-button[data-kind="primary"][data-background="solid"][data-surface="on-media"]:not(
+    [data-state="disabled"]
+  ):hover {
+  background-color: var(
+    --s2a-button-color-background-onmedia-primary-solid-hover,
+    #f5f5f5
+  );
+  color: var(--s2a-color-content-default, #292929);
+}
+
+/* Secondary + Glass + On Media */
+.c-button[data-kind="secondary"][data-background="glass"][data-surface="on-media"]:not(
+    [data-state="disabled"]
+  ) {
+  /* Primitive: on-media glass background token doesn't exist */
+  background-color: var(
+    --s2a-button-color-background-onmedia-secondary-glass-default,
+    rgba(255, 255, 255, 0.12)
+  );
+  color: var(--s2a-color-content-knockout, #ffffff);
+}
+
+.c-button[data-kind="secondary"][data-background="glass"][data-surface="on-media"]:not(
+    [data-state="disabled"]
+  ):hover {
+  /* Primitive: on-media glass background hover token doesn't exist */
+  background-color: var(
+    --s2a-button-color-background-onmedia-secondary-glass-hover,
+    rgba(255, 255, 255, 0.16)
+  );
+  color: var(--s2a-color-content-knockout, #ffffff);
+}
+
+/* Typography adjustments for glass/secondary on-media */
+.c-button[data-kind="secondary"][data-background="glass"][data-surface="on-media"]
+  .c-button__label,
+.c-button[data-kind="primary"][data-background="solid"][data-surface="on-media"]
+  .c-button__label {
+  /* Figma: typography/letter-spacing/half = 0.5px */
+  letter-spacing: var(--s2a-typography-letter-spacing-half, 0.5px);
+  /* Figma: typography/font-family/adobe-clean-display, typography/font-weight/semibold */
+  font-family:
+    var(
+      --s2a-typography-font-family-adobe-clean-display,
+      "Adobe Clean Display"
+    ),
+    sans-serif;
+  font-weight: var(--s2a-typography-font-weight-semibold, 600);
+}
+
+/* Adjust padding for disabled outlined variants to account for border */
+.c-button[data-kind="primary"][data-background="outlined"][data-state="disabled"][data-size="xl"] {
+  padding-top: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-md, 2px)
+  );
+}
+
+.c-button[data-kind="primary"][data-background="outlined"][data-state="disabled"][data-size="2xl"],
+.c-button[data-kind="primary"][data-background="outlined"][data-state="disabled"] {
+  /* Primitive: spacing-20 needed again to honor 2XL vertical padding */
+  padding-top: calc(
+    var(--s2a-spacing-20, 20px) - var(--s2a-border-width-md, 2px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-20, 20px) - var(--s2a-border-width-md, 2px)
+  );
+}

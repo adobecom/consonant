@@ -1,0 +1,76 @@
+/**
+ * Content Container Component Styles
+ * Sub-component for marquee sections
+ * 
+ * Uses S2A design tokens for spacing and layout
+ */
+
+.c-marquee-content-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-40, 40px);
+  justify-content: center;
+  position: relative;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Alignment: Center */
+.c-marquee-content-container[data-align="center"] {
+  align-items: center;
+}
+
+/* Alignment: Left */
+.c-marquee-content-container[data-align="left"] {
+  align-items: flex-start;
+}
+
+/* Width: Wide (998px) */
+.c-marquee-content-container[data-width="wide"] {
+  width: 998px;
+  max-width: 100%;
+}
+
+/* Width: MD (512px) */
+.c-marquee-content-container[data-width="md"] {
+  width: 512px;
+  max-width: 100%;
+}
+
+/* Top slot (Title + Subhead) */
+.c-marquee-content-container__top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+/* Center alignment - larger gap */
+.c-marquee-content-container[data-align="center"] .c-marquee-content-container__top {
+  gap: var(--s2a-spacing-lg, 24px);
+  align-items: center;
+}
+
+/* Left alignment - smaller gap */
+.c-marquee-content-container[data-align="left"] .c-marquee-content-container__top {
+  gap: var(--s2a-spacing-sm, 12px);
+  align-items: flex-start;
+}
+
+/* Bottom slot (Buttons) */
+.c-marquee-content-container__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-none, 0);
+  align-items: flex-start;
+  position: relative;
+}
+
+/* Actions container */
+.c-marquee-content-container__actions {
+  display: flex;
+  gap: var(--s2a-spacing-xs, 8px);
+  align-items: flex-end;
+  position: relative;
+}

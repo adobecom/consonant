@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Figma → Consonant 2 → Milo</title>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre-d3@0.6.4/dist/dagre-d3.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0d12;
+        --panel: #0f1420;
+        --muted: #9aa4b2;
+        --text: #e5e7eb;
+        --stroke: #2b3445;
+        --accent: #60a5fa;
+        --good: #34d399;
+        --warn: #fbbf24;
+      }
+      html,
+      body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        max-width: none;
+        box-sizing: border-box;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      #svg {
+        width: 100%;
+        height: 100%;
+      }
+      .node rect {
+        fill: rgba(255, 255, 255, 0.03);
+        stroke: rgba(255, 255, 255, 0.16);
+        stroke-width: 1.3px;
+        rx: 12px;
+        ry: 12px;
+      }
+      .node text {
+        fill: var(--text);
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .edgePath path {
+        stroke: var(--accent);
+        stroke-width: 2px;
+        fill: none;
+      }
+      .edgeLabel text {
+        fill: var(--muted);
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <svg id="svg">
+      <g id="g"></g>
+    </svg>
+
+    <script>
+      const g = new dagreD3.graphlib.Graph({ multigraph: true })
+        .setGraph({
+          rankdir: "TB", // Top to bottom - more compact horizontally
+          nodesep: 30, // Horizontal spacing between nodes on same rank
+          ranksep: 50, // Vertical spacing between ranks
+          marginx: 20,
+          marginy: 20,
+        })
+        .setDefaultEdgeLabel(() => ({}));
+
+      const nodes = [
+        {
+          id: "figma",
+          title: "Figma\nDesign + Variables",
+        },
+        {
+          id: "tokens",
+          title: "Consonant 2 Design System\nToken build + packaging",
+        },
+        {
+          id: "atoms",
+          title: "Atoms → Blocks\nSpecs: atoms, molecules, organisms",
+        },
+        {
+          id: "stories",
+          title: "Storybook & Specs\nStories + YAML (a11y, tests)",
+        },
+        {
+          id: "docs",
+          title: "Docs & Story UI\nAI docs, visual prompting, code snippets",
+        },
+        {
+          id: "milo",
+          title: "Milo Blocks\nHTML/CSS/JS with Milo context",
+        },
+      ];
+
+      nodes.forEach((node) => {
+        const base =
+          "fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.16); stroke-width: 1.3px;";
+        const style =
+          node.id === "tokens" || node.id === "milo"
+            ? base + " stroke: rgba(96,165,250,0.9); stroke-width: 2px;"
+            : base;
+        g.setNode(node.id, {
+          label: node.title,
+          rx: 10,
+          ry: 10,
+          padding: 12, // Slightly more padding for vertical layout
+          style: style,
+        });
+      });
+
+      const edges = [
+        { from: "figma", to: "tokens", label: "Figma Variables" },
+        { from: "tokens", to: "atoms", label: "Atomic specs" },
+        // Wrap from top row to bottom row
+        { from: "atoms", to: "stories", label: "Storybook + YAML" },
+        { from: "stories", to: "docs", label: "AI docs + Story UI" },
+        {
+          from: "docs",
+          to: "milo",
+          label: "Generate 80–90% code",
+        },
+      ];
+
+      edges.forEach((e, i) => {
+        g.setEdge(
+          e.from,
+          e.to,
+          {
+            label: e.label,
+            lineInterpolate: "basis",
+            arrowhead: "vee",
+          },
+          `e${i}`,
+        );
+      });
+
+      const svg = d3.select("#svg");
+      const inner = d3.select("#g");
+      const render = new dagreD3.render();
+
+      const zoom = d3
+        .zoom()
+        .scaleExtent([0.5, 1.35])
+        .on("zoom", (event) => inner.attr("transform", event.transform));
+      svg.call(zoom);
+
+      render(inner, g);
+
+      function centerView() {
+        const graphWidth = g.graph().width;
+        const graphHeight = g.graph().height;
+        const svgWidth = svg.node().clientWidth;
+        const svgHeight = svg.node().clientHeight;
+
+        // Calculate scale to fit both width and height with padding
+        const scaleX = (svgWidth - 40) / graphWidth;
+        const scaleY = (svgHeight - 40) / graphHeight;
+        const scale = Math.min(scaleX, scaleY, 1.0); // Don't zoom in, only out
+
+        const tx = (svgWidth - graphWidth * scale) / 2;
+        const ty = (svgHeight - graphHeight * scale) / 2;
+
+        svg
+          .transition()
+          .duration(350)
+          .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+      }
+
+      centerView();
+    </script>
+  </body>
+</html>

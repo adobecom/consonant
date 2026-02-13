@@ -1,0 +1,381 @@
+{
+  "$schema": "https://www.w3.org/community/design-tokens/format/design-tokens.json",
+  "spacing": {
+    "4xl": {
+      "$type": "dimension",
+      "$value": "240px",
+      "$description": "Spacing 4XL - Global spacing scale"
+    },
+    "3xl": {
+      "$type": "dimension",
+      "$value": "160px",
+      "$description": "Spacing 3XL - Global spacing scale"
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": "124px",
+      "$description": "Spacing 2XL - Global spacing scale"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "80px",
+      "$description": "Spacing XL - Global spacing scale"
+    },
+    "l": {
+      "$type": "dimension",
+      "$value": "64px",
+      "$description": "Spacing L - Global spacing scale"
+    },
+    "m": {
+      "$type": "dimension",
+      "$value": "40px",
+      "$description": "Spacing M - Global spacing scale"
+    },
+    "s": {
+      "$type": "dimension",
+      "$value": "32px",
+      "$description": "Spacing S - Global spacing scale"
+    },
+    "xs": {
+      "$type": "dimension",
+      "$value": "24px",
+      "$description": "Spacing XS - Global spacing scale"
+    },
+    "2xs": {
+      "$type": "dimension",
+      "$value": "16px",
+      "$description": "Spacing 2XS - Global spacing scale"
+    },
+    "3xs": {
+      "$type": "dimension",
+      "$value": "12px",
+      "$description": "Spacing 3XS - Global spacing scale"
+    },
+    "4xs": {
+      "$type": "dimension",
+      "$value": "8px",
+      "$description": "Spacing 4XS - Global spacing scale"
+    },
+    "5xs": {
+      "$type": "dimension",
+      "$value": "4px",
+      "$description": "Spacing 5XS - Global spacing scale"
+    }
+  },
+  "typography": {
+    "desktop": {
+      "super": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 900,
+          "fontSize": "96px",
+          "lineHeight": "94%",
+          "letterSpacing": "-4%",
+          "fontStyle": "normal"
+        },
+        "$description": "Super (Special Use Case) - Desktop"
+      },
+      "h1": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 900,
+          "fontSize": "72px",
+          "lineHeight": "96%",
+          "letterSpacing": "-4%",
+          "fontStyle": "normal"
+        },
+        "$description": "H1 · Title 1 - Desktop"
+      },
+      "h2": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 900,
+          "fontSize": "48px",
+          "lineHeight": "100%",
+          "letterSpacing": "-3%",
+          "fontStyle": "normal"
+        },
+        "$description": "H2 · Title 2 - Desktop"
+      },
+      "h3": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 900,
+          "fontSize": "32px",
+          "lineHeight": "100%",
+          "letterSpacing": "-3%",
+          "fontStyle": "normal"
+        },
+        "$description": "H3 · Title 3 - Desktop"
+      },
+      "h4": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 900,
+          "fontSize": "24px",
+          "lineHeight": "100%",
+          "letterSpacing": "-2%",
+          "fontStyle": "normal"
+        },
+        "$description": "H4 · Title 4 - Desktop"
+      },
+      "bodyLarge": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 400,
+          "fontSize": "20px",
+          "lineHeight": "120%",
+          "letterSpacing": "0%",
+          "fontStyle": "normal"
+        },
+        "$description": "P · Body Large - Desktop"
+      },
+      "bodyMedium": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 400,
+          "fontSize": "16px",
+          "lineHeight": "120%",
+          "letterSpacing": "1%",
+          "fontStyle": "normal"
+        },
+        "$description": "P · Body Medium - Desktop"
+      },
+      "bodySmall": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 400,
+          "fontSize": "14px",
+          "lineHeight": "120%",
+          "letterSpacing": "1%",
+          "fontStyle": "normal"
+        },
+        "$description": "P · Body Small - Desktop"
+      },
+      "eyebrow": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 700,
+          "fontSize": "16px",
+          "lineHeight": "120%",
+          "letterSpacing": "0%",
+          "fontStyle": "normal"
+        },
+        "$description": "Eyebrow - Desktop"
+      },
+      "label": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 700,
+          "fontSize": "14px",
+          "lineHeight": "120%",
+          "letterSpacing": "0%",
+          "fontStyle": "normal"
+        },
+        "$description": "Label - Desktop"
+      },
+      "caption": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 700,
+          "fontSize": "12px",
+          "lineHeight": "130%",
+          "letterSpacing": "2%",
+          "fontStyle": "normal"
+        },
+        "$description": "Caption - Desktop"
+      }
+    },
+    "mobile": {
+      "super": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 900,
+          "fontSize": "56px",
+          "lineHeight": "98%",
+          "letterSpacing": "-3%",
+          "fontStyle": "normal"
+        },
+        "$description": "Super (Special Use Case) - Mobile"
+      },
+      "h1": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 800,
+          "fontSize": "40px",
+          "lineHeight": "100%",
+          "letterSpacing": "-3%",
+          "fontStyle": "normal"
+        },
+        "$description": "H1 · Title 1 - Mobile"
+      },
+      "h2": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 900,
+          "fontSize": "32px",
+          "lineHeight": "100%",
+          "letterSpacing": "-3%",
+          "fontStyle": "normal"
+        },
+        "$description": "H2 · Title 2 - Mobile"
+      },
+      "h3": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 900,
+          "fontSize": "24px",
+          "lineHeight": "100%",
+          "letterSpacing": "-2%",
+          "fontStyle": "normal"
+        },
+        "$description": "H3 · Title 3 - Mobile"
+      },
+      "h4": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean Display",
+          "fontWeight": 900,
+          "fontSize": "20px",
+          "lineHeight": "100%",
+          "letterSpacing": "-1%",
+          "fontStyle": "normal"
+        },
+        "$description": "H4 · Title 4 - Mobile"
+      },
+      "bodyLarge": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 400,
+          "fontSize": "20px",
+          "lineHeight": "120%",
+          "letterSpacing": "0%",
+          "fontStyle": "normal"
+        },
+        "$description": "P · Body Large - Mobile"
+      },
+      "bodyMedium": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 400,
+          "fontSize": "16px",
+          "lineHeight": "120%",
+          "letterSpacing": "1%",
+          "fontStyle": "normal"
+        },
+        "$description": "P · Body Medium - Mobile"
+      },
+      "bodySmall": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 400,
+          "fontSize": "14px",
+          "lineHeight": "120%",
+          "letterSpacing": "1%",
+          "fontStyle": "normal"
+        },
+        "$description": "P · Body Small - Mobile"
+      },
+      "eyebrow": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 700,
+          "fontSize": "16px",
+          "lineHeight": "130%",
+          "letterSpacing": "1%",
+          "fontStyle": "normal"
+        },
+        "$description": "Eyebrow - Mobile"
+      },
+      "label": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 700,
+          "fontSize": "14px",
+          "lineHeight": "120%",
+          "letterSpacing": "0%",
+          "fontStyle": "normal"
+        },
+        "$description": "Label - Mobile"
+      },
+      "caption": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Adobe Clean",
+          "fontWeight": 700,
+          "fontSize": "12px",
+          "lineHeight": "130%",
+          "letterSpacing": "2%",
+          "fontStyle": "normal"
+        },
+        "$description": "Caption - Mobile"
+      }
+    }
+  },
+  "grid": {
+    "desktop": {
+      "large": {
+        "$type": "object",
+        "$value": {
+          "breakpoint": "1440px+",
+          "columns": 12,
+          "margin": "8.6%",
+          "gutter": "8px"
+        },
+        "$description": "Grid L · 1440px+"
+      },
+      "medium": {
+        "$type": "object",
+        "$value": {
+          "breakpoint": "1024px - 1440px",
+          "columns": 12,
+          "margin": "8.6%",
+          "gutter": "8px"
+        },
+        "$description": "Grid M · 1024 - 1440px"
+      }
+    },
+    "mobile": {
+      "small": {
+        "$type": "object",
+        "$value": {
+          "breakpoint": "768px - 1023px",
+          "columns": 6,
+          "margin": "24px",
+          "gutter": "8px"
+        },
+        "$description": "Grid S · 768 - 1023px"
+      },
+      "xsmall": {
+        "$type": "object",
+        "$value": {
+          "breakpoint": "320px - 767px",
+          "columns": 6,
+          "margin": "24px",
+          "gutter": "8px"
+        },
+        "$description": "Grid XS · 320 - 767px"
+      }
+    }
+  }
+}

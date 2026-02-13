@@ -1,0 +1,12 @@
+{
+  "name": "Consonant YAML Components",
+  "id": "1359717300259013340",
+  "api": "1.0.0",
+  "editorType": ["figma"],
+  "main": "code.js",
+  "ui": "ui.html",
+  "networkAccess": {
+    "allowedDomains": ["none"],
+    "reasoning": "MVP plugin only reads bundled YAML specs."
+  }
+}

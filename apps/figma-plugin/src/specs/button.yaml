@@ -1,0 +1,35 @@
+meta:
+  id: button-accent-solid-default
+  title: Accent Button · Solid · Default
+  description: Single-state accent button that relies on semantic tokens for surface and label colors.
+  tags:
+    - button
+    - accent
+component:
+  name: C/Button/Accent/Solid/Default
+  frame:
+    width: 320
+    height: 64
+    padding:
+      horizontal: 28
+      vertical: 20
+  layers:
+    - kind: rectangle
+      name: Surface
+      tokens:
+        fill: --s2a-button-color-background-accent-solid-default
+      fallback:
+        fill: '#1473E6'
+      cornerRadius: 999
+    - kind: text
+      name: Label
+      characters: Button label
+      tokens:
+        fill: --s2a-button-color-label-on-accent
+        typography: --s2a-typography-body-strong
+      fallback:
+        fill: '#FFFFFF'
+        fontFamily: Adobe Clean
+        fontStyle: Bold
+        fontSize: 20
+        letterSpacing: 0

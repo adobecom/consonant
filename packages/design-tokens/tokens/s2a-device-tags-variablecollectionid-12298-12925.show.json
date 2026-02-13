@@ -1,0 +1,20 @@
+{
+  "s2a": {
+    "device-tags": {
+      "visible": {
+        "$type": "boolean",
+        "$value": true,
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      }
+    }
+  }
+}

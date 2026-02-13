@@ -11,3 +11,14 @@
 - If the user needs help with an Nx configuration or project graph error, use the `nx_workspace` tool to get any errors
 
 <!-- nx configuration end-->
+
+## Design-System Guardrails
+
+- Before running any MCP codegen (Codex/Claude/Cursor), read the guardrail docs in [`docs/guardrails/`](docs/guardrails/) and paste the "Guardrail reminder" snippet from [`docs/guardrails/no-primitives-in-components.md`](docs/guardrails/no-primitives-in-components.md) into the agent prompt.
+- Reject or fix any generated code that uses primitive tokens without an inline `Primitive:` comment.
+
+## Repository Docs to Reference
+
+- Use the workflow primer in [`docs/workflows/FIGMA_TO_CODE_WORKFLOW.md`](docs/workflows/FIGMA_TO_CODE_WORKFLOW.md) whenever the conversation touches the end-to-end process (Figma → tokens → Storybook → Milo).
+- Pull contextual rules/examples from [`story-ui-docs/`](story-ui-docs/) so Story UI/Codex stay aligned with the existing components/tokens.
+- Strategy/north-star conversations should cite [`docs/north-star/`](docs/north-star/) (e.g., `GOALS_2026.md`, `PRESENTATION_OUTLINE.md`).

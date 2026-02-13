@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Consonant 2 Roadmap Q2 2026 → Q1 2027</title>
+    <style>
+      :root {
+        --bg: #05070d;
+        --panel: #0f1420;
+        --muted: #9aa4b5;
+        --text: #f5f7ff;
+        --accent1: #60a5fa;
+        --accent2: #5ee0c7;
+      }
+      * { box-sizing: border-box; }
+      html,
+      body {
+        margin: 0;
+        height: 100vh;
+        width: 100vw;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        padding: 40px 32px;
+        gap: 24px;
+      }
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 900px;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 600;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        font-size: 13px;
+      }
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 24px;
+        width: 100%;
+      }
+      .milestone {
+        background: var(--panel);
+        border-radius: 20px;
+        padding: 24px;
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        border: 1px solid rgba(94, 224, 199, 0.2);
+        box-shadow: 0 25px 55px rgba(0, 0, 0, 0.55);
+      }
+      .milestone h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .milestone h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      .milestone ul {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--accent2);
+      }
+      .tag::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent2);
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 13px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p>Roadmap</p>
+      <h1>Consonant 2 Guardrail Loop — Q2 2026 → Q1 2027</h1>
+      <div class="tag">Aligned with Elliot redesign checkpoints</div>
+    </header>
+    <section class="timeline">
+      <article class="milestone">
+        <h3>Q2 2026</h3>
+        <h2>Stabilize guardrails</h2>
+        <ul>
+          <li>Ship Story UI prompt + guardrail docs (`docs/guardrails/*`).</li>
+          <li>Block Storybook/CI on a11y + token lint.</li>
+          <li>Prove FIGMA_TO_CODE workflow on hero + lockup blocks.</li>
+        </ul>
+      </article>
+      <article class="milestone">
+        <h3>Q3 2026</h3>
+        <h2>Atomic Consonant</h2>
+        <ul>
+          <li>Versioned token pipeline (`packages/design-tokens/`).</li>
+          <li>Atomize Button, Product Lockup, hero specs (`packages/components/`).</li>
+          <li>Story UI reads `story-ui-docs/` → MCP builds atoms → blocks.</li>
+        </ul>
+      </article>
+      <article class="milestone">
+        <h3>Q4 2026</h3>
+        <h2>Integrate Elliot redesign</h2>
+        <ul>
+          <li>Use contracts to regenerate Figma libs + Storybook stories.</li>
+          <li>Telemetry for variant adoption + drift (`docs/north-star/GOALS_2026.md`).</li>
+          <li>Secure guardrail CI as the default handoff path.</li>
+        </ul>
+      </article>
+      <article class="milestone">
+        <h3>Q1 2027</h3>
+        <h2>Production Milo loop</h2>
+        <ul>
+          <li>Milo engineers consume Storybook + YAML as their API.</li>
+          <li>MCP/Story UI run in CI to scaffold new blocks.</li>
+          <li>Leadership scorecard: consistency, a11y, theming, experimentation.</li>
+        </ul>
+      </article>
+    </section>
+    <footer>
+      <span>Source artifacts: `docs/workflows/`, `docs/guardrails/`, `story-ui-docs/`, `packages/*`, `apps/storybook/`, `context/milo/`.</span>
+      <span>Updated: Jan 30, 2026</span>
+    </footer>
+  </body>
+</html>

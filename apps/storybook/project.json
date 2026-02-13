@@ -7,7 +7,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node apps/storybook/scripts/prepare-story-data.js && storybook dev -p 6006",
+        "command": "node apps/storybook/scripts/prepare-story-data.js && npx --yes storybook dev -p 6006",
         "cwd": "{workspaceRoot}"
       }
     },
@@ -15,7 +15,7 @@
       "executor": "nx:run-commands",
       "dependsOn": ["^build"],
       "options": {
-        "command": "node apps/storybook/scripts/prepare-story-data.js && storybook build",
+        "command": "node apps/storybook/scripts/prepare-story-data.js && npx --yes storybook build",
         "cwd": "{workspaceRoot}",
         "outputs": ["{workspaceRoot}/storybook-static"]
       }

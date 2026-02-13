@@ -118,6 +118,11 @@ export const lineHeights = [
     "number": 16
   },
   {
+    "token": "18",
+    "value": 18,
+    "number": 18
+  },
+  {
     "token": "20",
     "value": 20,
     "number": 20
@@ -196,11 +201,6 @@ export const lineHeights = [
     "token": "95",
     "value": 95,
     "number": 95
-  },
-  {
-    "token": "95",
-    "value": 95,
-    "number": 95
   }
 ];
 export const typographyScale = [
@@ -229,113 +229,113 @@ export const typographyScale = [
     "token": "14",
     "rem": "0.875rem",
     "px": "14px",
-    "lineHeightToken": "20",
-    "lineHeight": 20
+    "lineHeightToken": "18",
+    "lineHeight": 18
   },
   {
     "token": "16",
     "rem": "1rem",
     "px": "16px",
-    "lineHeightToken": "22",
-    "lineHeight": 22
+    "lineHeightToken": "20",
+    "lineHeight": 20
   },
   {
     "token": "18",
     "rem": "1.125rem",
     "px": "18px",
-    "lineHeightToken": "24",
-    "lineHeight": 24
+    "lineHeightToken": "22",
+    "lineHeight": 22
   },
   {
     "token": "20",
     "rem": "1.25rem",
     "px": "20px",
-    "lineHeightToken": "26",
-    "lineHeight": 26
+    "lineHeightToken": "24",
+    "lineHeight": 24
   },
   {
     "token": "22",
     "rem": "1.375rem",
     "px": "22px",
-    "lineHeightToken": "30",
-    "lineHeight": 30
+    "lineHeightToken": "26",
+    "lineHeight": 26
   },
   {
     "token": "25",
     "rem": "1.5625rem",
     "px": "25px",
-    "lineHeightToken": "32",
-    "lineHeight": 32
+    "lineHeightToken": "30",
+    "lineHeight": 30
   },
   {
     "token": "28",
     "rem": "1.75rem",
     "px": "28px",
-    "lineHeightToken": "36",
-    "lineHeight": 36
+    "lineHeightToken": "32",
+    "lineHeight": 32
   },
   {
     "token": "32",
     "rem": "2rem",
     "px": "32px",
-    "lineHeightToken": "42",
-    "lineHeight": 42
+    "lineHeightToken": "36",
+    "lineHeight": 36
   },
   {
     "token": "36",
     "rem": "2.25rem",
     "px": "36px",
-    "lineHeightToken": "46",
-    "lineHeight": 46
+    "lineHeightToken": "42",
+    "lineHeight": 42
   },
   {
     "token": "40",
     "rem": "2.5rem",
     "px": "40px",
-    "lineHeightToken": "52",
-    "lineHeight": 52
+    "lineHeightToken": "46",
+    "lineHeight": 46
   },
   {
     "token": "45",
     "rem": "2.8125rem",
     "px": "45px",
-    "lineHeightToken": "54",
-    "lineHeight": 54
+    "lineHeightToken": "52",
+    "lineHeight": 52
   },
   {
     "token": "48",
     "rem": "3rem",
     "px": "48px",
-    "lineHeightToken": "58",
-    "lineHeight": 58
+    "lineHeightToken": "54",
+    "lineHeight": 54
   },
   {
     "token": "51",
     "rem": "3.1875rem",
     "px": "51px",
-    "lineHeightToken": "66",
-    "lineHeight": 66
+    "lineHeightToken": "58",
+    "lineHeight": 58
   },
   {
     "token": "58",
     "rem": "3.625rem",
     "px": "58px",
-    "lineHeightToken": "74",
-    "lineHeight": 74
+    "lineHeightToken": "66",
+    "lineHeight": 66
   },
   {
     "token": "65",
     "rem": "4.0625rem",
     "px": "65px",
-    "lineHeightToken": "84",
-    "lineHeight": 84
+    "lineHeightToken": "74",
+    "lineHeight": 74
   },
   {
     "token": "73",
     "rem": "4.5625rem",
     "px": "73px",
-    "lineHeightToken": "95",
-    "lineHeight": 95
+    "lineHeightToken": "84",
+    "lineHeight": 84
   },
   {
     "token": "82",

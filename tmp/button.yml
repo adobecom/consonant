@@ -1,0 +1,314 @@
+title: Button
+anatomy:
+  root:
+    type: container
+  Label:
+    type: text
+props:
+  size:
+    type: string
+    default: 2xl
+    enum:
+      - 2xl
+      - xl
+  state:
+    type: string
+    default: default
+    enum:
+      - default
+      - disabled
+      - hover
+  kind:
+    type: string
+    default: accent
+    enum:
+      - accent
+      - primary
+  background:
+    type: string
+    default: solid
+    enum:
+      - solid
+      - outlined
+default:
+  name: size=2xl, state=default, kind=accent, background=solid
+  layout:
+    - root:
+        - Label
+  elements:
+    root:
+      styles:
+        fills: Component/button/color/background/accent/solid-default
+        cornerRadius: Semantic/border/radius/lg
+        minHeight: Semantic/spacing/4xl
+        primaryAxisAlignItems: CENTER
+        counterAxisAlignItems: CENTER
+        layoutMode: HORIZONTAL
+        itemSpacing: Semantic/spacing/xs
+        paddingLeft: Semantic/spacing/2xl
+        paddingRight: Semantic/spacing/2xl
+        paddingTop: Primitives (Core)/spacing/20
+        paddingBottom: Primitives (Core)/spacing/20
+    Label:
+      styles:
+        fills: Semantic (Color)/color/content/knockout
+        layoutSizingHorizontal: HUG
+        layoutSizingVertical: HUG
+        fontSize: Semantic/typography/font-size/2xl
+        fontFamily: Semantic/typography/font-family/default
+        fontWeight: Bold
+        lineHeight: Semantic/typography/line-height/xl
+        textAlignHorizontal: CENTER
+      text: Label
+variants:
+  - name: size=2xl, state=default, kind=accent, background=outlined
+    configuration:
+      background: outlined
+    invalid: true
+  - name: size=2xl, state=default, kind=primary, background=solid
+    configuration:
+      kind: primary
+    invalid: true
+  - name: size=2xl, state=disabled, kind=accent, background=solid
+    configuration:
+      state: disabled
+    elements:
+      root:
+        styles:
+          fills: Semantic (Color)/color/background/disabled
+      Label:
+        styles:
+          fills: Semantic (Color)/color/content/disabled
+  - name: size=2xl, state=hover, kind=accent, background=solid
+    configuration:
+      state: hover
+    elements:
+      root:
+        styles:
+          fills: Component/button/color/background/accent/solid-hover
+          itemSpacing: 10
+  - name: size=xl, state=default, kind=accent, background=solid
+    configuration:
+      size: xl
+    elements:
+      root:
+        styles:
+          minHeight: Semantic/spacing/3xl
+          paddingTop: Primitives (Core)/spacing/12
+          paddingBottom: Primitives (Core)/spacing/12
+      Label:
+        styles:
+          fontSize: Semantic/typography/font-size/lg
+  - name: size=2xl, state=default, kind=primary, background=outlined
+    configuration:
+      kind: primary
+      background: outlined
+    elements:
+      root:
+        styles:
+          fills: Component/button/color/background/primary/outlined-default
+          strokes: Component/button/color/border/primary/outlined-default
+          strokeWeight: Semantic/border/width/md
+      Label:
+        styles:
+          fills: Semantic (Color)/color/content/default
+  - name: size=2xl, state=disabled, kind=accent, background=outlined
+    configuration:
+      state: disabled
+      background: outlined
+    invalid: true
+  - name: size=2xl, state=disabled, kind=primary, background=solid
+    configuration:
+      state: disabled
+      kind: primary
+    invalid: true
+  - name: size=2xl, state=hover, kind=accent, background=outlined
+    configuration:
+      state: hover
+      background: outlined
+    invalid: true
+  - name: size=2xl, state=hover, kind=primary, background=solid
+    configuration:
+      state: hover
+      kind: primary
+    invalid: true
+  - name: size=xl, state=default, kind=accent, background=outlined
+    configuration:
+      size: xl
+      background: outlined
+    invalid: true
+  - name: size=xl, state=default, kind=primary, background=solid
+    configuration:
+      size: xl
+      kind: primary
+    invalid: true
+  - name: size=xl, state=disabled, kind=accent, background=solid
+    configuration:
+      size: xl
+      state: disabled
+    elements:
+      root:
+        styles:
+          fills: Semantic (Color)/color/background/disabled
+          minHeight: Semantic/spacing/3xl
+          paddingTop: Semantic/spacing/sm
+          paddingBottom: Semantic/spacing/sm
+      Label:
+        styles:
+          fills: Semantic (Color)/color/content/disabled
+          fontSize: Semantic/typography/font-size/lg
+  - name: size=xl, state=hover, kind=accent, background=solid
+    configuration:
+      size: xl
+      state: hover
+    elements:
+      root:
+        styles:
+          fills: Component/button/color/background/accent/solid-hover
+          minHeight: Semantic/spacing/3xl
+          paddingTop: Primitives (Core)/spacing/12
+          paddingBottom: Primitives (Core)/spacing/12
+      Label:
+        styles:
+          fontSize: Semantic/typography/font-size/lg
+  - name: size=2xl, state=disabled, kind=primary, background=outlined
+    configuration:
+      state: disabled
+      kind: primary
+      background: outlined
+    elements:
+      root:
+        styles:
+          fills: null
+          strokes: Semantic (Color)/color/border/disabled
+          strokeWeight: Semantic/border/width/md
+          paddingTop: 20
+          paddingBottom: 20
+      Label:
+        styles:
+          fills: Semantic (Color)/color/content/disabled
+  - name: size=2xl, state=hover, kind=primary, background=outlined
+    configuration:
+      state: hover
+      kind: primary
+      background: outlined
+    elements:
+      root:
+        styles:
+          fills: Component/button/color/background/primary/outlined-hover
+          strokes: Component/button/color/border/primary/outlined-hover
+          strokeWeight: Semantic/border/width/md
+      Label:
+        styles:
+          fills: Component/button/color/content/primary/outlined-hover
+  - name: size=xl, state=default, kind=primary, background=outlined
+    configuration:
+      size: xl
+      kind: primary
+      background: outlined
+    elements:
+      root:
+        styles:
+          fills: Component/button/color/background/primary/outlined-default
+          minHeight: Semantic/spacing/3xl
+          strokes: Component/button/color/border/primary/outlined-default
+          strokeWeight: Semantic/border/width/md
+          paddingTop: Semantic/spacing/sm
+          paddingBottom: Semantic/spacing/sm
+      Label:
+        styles:
+          fills: Semantic (Color)/color/content/default
+          fontSize: Semantic/typography/font-size/lg
+  - name: size=xl, state=disabled, kind=accent, background=outlined
+    configuration:
+      size: xl
+      state: disabled
+      background: outlined
+    invalid: true
+  - name: size=xl, state=disabled, kind=primary, background=solid
+    configuration:
+      size: xl
+      state: disabled
+      kind: primary
+    invalid: true
+  - name: size=xl, state=hover, kind=accent, background=outlined
+    configuration:
+      size: xl
+      state: hover
+      background: outlined
+    invalid: true
+  - name: size=xl, state=hover, kind=primary, background=solid
+    configuration:
+      size: xl
+      state: hover
+      kind: primary
+    invalid: true
+  - name: size=xl, state=disabled, kind=primary, background=outlined
+    configuration:
+      size: xl
+      state: disabled
+      kind: primary
+      background: outlined
+    elements:
+      root:
+        styles:
+          fills: null
+          minHeight: Semantic/spacing/3xl
+          strokes: Semantic (Color)/color/border/disabled
+          strokeWeight: Semantic/border/width/md
+          paddingTop: Semantic/spacing/sm
+          paddingBottom: Semantic/spacing/sm
+      Label:
+        styles:
+          fills: Semantic (Color)/color/content/disabled
+          fontSize: Semantic/typography/font-size/lg
+  - name: size=xl, state=hover, kind=primary, background=outlined
+    configuration:
+      size: xl
+      state: hover
+      kind: primary
+      background: outlined
+    elements:
+      root:
+        styles:
+          fills: Component/button/color/background/primary/outlined-hover
+          minHeight: Semantic/spacing/3xl
+          strokes: Component/button/color/border/primary/outlined-hover
+          strokeWeight: Semantic/border/width/md
+          paddingTop: Semantic/spacing/sm
+          paddingBottom: Semantic/spacing/sm
+      Label:
+        styles:
+          fills: Component/button/color/content/primary/outlined-hover
+          fontSize: Semantic/typography/font-size/lg
+metadata:
+  author: Matthew Huntsberry
+  lastUpdated: 2026-02-05T19:15:21.575Z
+  generator:
+    url: https://www.figma.com/community/plugin/1549454283615386215/anova
+    version: 6
+    name: Directed Edges Anova Figma Plugin
+  schema:
+    url: https://github.com/DirectedEdges/anova/blob/main/anova.schema.json
+    version: 0.5.0
+  source:
+    pageId: 18585:993
+    nodeId: 18587:2885
+    nodeType: COMPONENT_SET
+  config:
+    processing:
+      subcomponentNamePattern: "{C} / _  / {S}"
+      variantDepth: 9999
+      details: LAYERED
+    format:
+      output: YAML
+      keys: SAFE
+      layout: LAYOUT
+      variables: NAME_WITH_COLLECTION
+      simplifyVariables: true
+      simplifyStyles: true
+    include:
+      subcomponents: true
+      variantNames: true
+      invalidVariants: true
+      invalidCombinations: false

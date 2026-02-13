@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Consonant Repo → Milo Assets</title>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dagre-d3@0.6.4/dist/dagre-d3.min.js"></script>
+    <style>
+      :root {
+        --bg: #05060a;
+        --panel: #0f1420;
+        --muted: #8b95a7;
+        --text: #f2f5ff;
+        --stroke: #2f394d;
+        --accent: #5ee0c7;
+        --accent-2: #60a5fa;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100vh;
+        width: 100vw;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          "Inter",
+          "SF Pro Display",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+      .node rect {
+        fill: rgba(255, 255, 255, 0.03);
+        stroke: var(--stroke);
+        stroke-width: 1.3px;
+        rx: 14px;
+        ry: 14px;
+        filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
+      }
+      .node text {
+        fill: var(--text);
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .root rect {
+        fill: rgba(96, 165, 250, 0.15);
+        stroke: rgba(96, 165, 250, 0.9);
+      }
+      .edgePath path {
+        stroke: var(--accent);
+        stroke-width: 2px;
+        fill: none;
+      }
+      .edgeLabel text {
+        fill: var(--muted);
+        font-size: 12px;
+      }
+      .subtitle {
+        position: absolute;
+        inset: 20px auto auto 20px;
+        color: var(--muted);
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .title {
+        position: absolute;
+        inset: 42px auto auto 20px;
+        font-size: 26px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="subtitle">Consonant repo artifacts</div>
+    <div class="title">Sources of truth that feed Story UI → Milo</div>
+    <svg id="diagram"><g></g></svg>
+
+    <script>
+      const graph = new dagreD3.graphlib.Graph()
+        .setGraph({ rankdir: "TB", nodesep: 40, ranksep: 80, marginx: 16, marginy: 16 })
+        .setDefaultEdgeLabel(() => ({}));
+
+      const nodes = [
+        { id: "root", label: "Consonant Repo (./)", class: "root" },
+        {
+          id: "workflow",
+          label: "Workflow docs\n`docs/workflows/FIGMA_TO_CODE_WORKFLOW.md`",
+        },
+        {
+          id: "guardrails",
+          label: "Guardrails\n`docs/guardrails/*`",
+        },
+        {
+          id: "story",
+          label: "Story UI context\n`story-ui-docs/`",
+        },
+        {
+          id: "tokens",
+          label: "Design tokens\n`packages/design-tokens/`",
+        },
+        {
+          id: "components",
+          label: "Components\n`packages/components/`",
+        },
+        {
+          id: "storybook",
+          label: "Storybook + tests\n`apps/storybook/`",
+        },
+        {
+          id: "milo",
+          label: "Milo runtime\n`context/milo/`",
+        },
+      ];
+
+      nodes.forEach((node) => {
+        graph.setNode(node.id, {
+          label: node.label,
+          class: node.class,
+          padding: 16,
+        });
+      });
+
+      const edges = [
+        { from: "root", to: "workflow", label: "Process" },
+        { from: "root", to: "guardrails", label: "Rules" },
+        { from: "root", to: "story", label: "AI context" },
+        { from: "root", to: "tokens", label: "Token package" },
+        { from: "root", to: "components", label: "Web components" },
+        { from: "root", to: "storybook", label: "Dev API" },
+        { from: "root", to: "milo", label: "Runtime reference" },
+      ];
+
+      edges.forEach((edge, i) => {
+        graph.setEdge(edge.from, edge.to, {
+          label: edge.label,
+          arrowhead: "vee",
+          curve: d3.curveBasis,
+        });
+      });
+
+      const svg = d3.select("#diagram");
+      const inner = svg.select("g");
+      const render = new dagreD3.render();
+
+      const zoom = d3
+        .zoom()
+        .scaleExtent([0.5, 1.4])
+        .on("zoom", (event) => inner.attr("transform", event.transform));
+
+      svg.call(zoom);
+      render(inner, graph);
+
+      const graphWidth = graph.graph().width;
+      const graphHeight = graph.graph().height;
+      const width = svg.node().clientWidth;
+      const height = svg.node().clientHeight;
+      const scale = Math.min((width - 80) / graphWidth, (height - 80) / graphHeight, 1);
+      const translateX = (width - graphWidth * scale) / 2;
+      const translateY = (height - graphHeight * scale) / 2;
+      svg.call(zoom.transform, d3.zoomIdentity.translate(translateX, translateY).scale(scale));
+    </script>
+  </body>
+</html>

@@ -89,7 +89,10 @@ async function buildFromFigma() {
   const semanticFiles = [];
   const semanticColorFiles = new Map(); // light, dark
   const componentFiles = new Map(); // light, dark (for colors)
+  const componentCoreFiles = [];
   const responsiveFiles = new Map(); // mobile, tablet, desktop, desktop-wide
+  const breakpointFiles = [];
+  const typographyCoreFiles = new Map(); // mobile, desktop, etc.
 
   for (const entry of files) {
     if (!entry || !entry.fileName) {
@@ -125,7 +128,10 @@ async function buildFromFigma() {
         primitivesColorFiles.set(modeSlug, []);
       }
       primitivesColorFiles.get(modeSlug).push(normalizedEntry);
-    } else if (collectionSlug === "semantic") {
+    } else if (
+      collectionSlug === "semantic" ||
+      collectionSlug === "semantic-core"
+    ) {
       semanticFiles.push(normalizedEntry);
     } else if (collectionSlug === "semantic-color") {
       if (!semanticColorFiles.has(modeSlug)) {
@@ -137,11 +143,20 @@ async function buildFromFigma() {
         componentFiles.set(modeSlug, []);
       }
       componentFiles.get(modeSlug).push(normalizedEntry);
+    } else if (collectionSlug === "component-core") {
+      componentCoreFiles.push(normalizedEntry);
     } else if (collectionSlug === "responsive") {
       if (!responsiveFiles.has(modeSlug)) {
         responsiveFiles.set(modeSlug, []);
       }
       responsiveFiles.get(modeSlug).push(normalizedEntry);
+    } else if (collectionSlug === "breakpoints-core") {
+      breakpointFiles.push(normalizedEntry);
+    } else if (collectionSlug === "typography-core") {
+      if (!typographyCoreFiles.has(modeSlug)) {
+        typographyCoreFiles.set(modeSlug, []);
+      }
+      typographyCoreFiles.get(modeSlug).push(normalizedEntry);
     }
   }
 
@@ -158,7 +173,7 @@ async function buildFromFigma() {
   const baseModeSlug = determineBaseSlug(
     primitivesCoreFiles.length > 0
       ? [primitivesCoreFiles[0].mode.slug]
-      : semanticFiles.length > 0
+      : allSemanticFiles.length > 0
         ? [semanticFiles[0].mode.slug]
         : ["mode-1"],
     process.env.FIGMA_BASE_MODE,
@@ -174,24 +189,38 @@ async function buildFromFigma() {
     primitivesCoreFiles.length > 0
       ? await loadTokensForMode(primitivesCoreFiles, true)
       : {};
+
+  // Load color primitives early so they can be used for reference resolution in non-color primitives
+  // (shadow tokens reference color.transparent.black.*)
+  const lightColorPrimitivesForRefs = primitivesColorFiles.has("light")
+    ? await loadTokensForMode(primitivesColorFiles.get("light"))
+    : {};
+
   let primitivesCoreTokens = {};
-  if (primitivesCoreFiles.length > 0) {
+  if (
+    primitivesCoreFiles.length > 0 ||
+    Object.keys(typographyCoreTokensRaw).length > 0
+  ) {
     // Clone and apply conversions for primitives.css output
     primitivesCoreTokens = clone(primitivesCoreTokensRaw);
     applyUnitConversions(primitivesCoreTokens);
-    await buildCssFromTokens(primitivesCoreTokens, {
+
+    // Merge with color primitives for reference resolution (shadow tokens reference color.transparent.black.*)
+    const mergedPrimitivesForBuild = mergeTokenTrees(
+      clone(lightColorPrimitivesForRefs),
+      primitivesCoreTokens,
+    );
+
+    await buildCssFromTokens(mergedPrimitivesForBuild, {
       destination: "tokens.primitives.css",
       selector: ":root",
       filter: (token) => {
         const path = token.path || [];
-        // Only include non-color primitives
+        // Only include non-color primitives (but allow references to color tokens to resolve)
         if (path[0] === "color") {
           return false;
         }
-        // Filter out letter-spacing tokens (they have conversion issues)
-        if (path[0] === "typography" && path[1] === "letter-spacing") {
-          return false;
-        }
+        // Letter-spacing tokens are now supported (converted to em units)
         return true;
       },
     });
@@ -275,19 +304,56 @@ async function buildFromFigma() {
     : {};
 
   // 2a. Semantic (non-color)
-  if (semanticFiles.length > 0) {
+  // Merge component-core and typography-core into semantic files
+  // Load typography-core tokens first (they reference semantic font-size tokens)
+  const typographyCoreTokensRaw =
+    typographyCoreFiles.size > 0
+      ? await Promise.all(
+          Array.from(typographyCoreFiles.entries()).map(
+            async ([mode, files]) => {
+              const tokens = await loadTokensForMode(files, true);
+              return { mode, tokens };
+            },
+          ),
+        ).then((results) => {
+          // Merge all typography-core modes into one object
+          return results.reduce(
+            (acc, { tokens }) => mergeTokenTrees(acc, tokens),
+            {},
+          );
+        })
+      : {};
+
+  const allSemanticFiles = [...semanticFiles, ...componentCoreFiles];
+  if (
+    allSemanticFiles.length > 0 ||
+    Object.keys(typographyCoreTokensRaw).length > 0
+  ) {
     // Load semantic tokens without conversions so they can reference primitives after merging
-    const semanticTokens = await loadTokensForMode(semanticFiles, true);
-    // Merge with raw primitives (before conversion) so semantic tokens can reference primitive pixel values
+    const semanticTokens =
+      allSemanticFiles.length > 0
+        ? await loadTokensForMode(allSemanticFiles, true)
+        : {};
+
+    // Merge typography-core into semantic tokens (typography-core references semantic font-size tokens)
+    const mergedSemanticTokens =
+      Object.keys(typographyCoreTokensRaw).length > 0
+        ? mergeTokenTrees(semanticTokens, typographyCoreTokensRaw)
+        : semanticTokens;
+    // Merge with raw primitives (before conversion) and color primitives so semantic tokens can reference primitive pixel values
+    // Also need color primitives because shadow tokens (in primitives-core) reference color.transparent.black.*
     const mergedSemantic = mergeTokenTrees(
-      clone(primitivesCoreTokensRaw),
-      semanticTokens,
+      mergeTokenTrees(
+        clone(primitivesCoreTokensRaw),
+        clone(lightColorPrimitivesForRefs),
+      ),
+      mergedSemanticTokens,
     );
     // Apply unit conversions after merging so semantic tokens can reference primitives
     applyUnitConversions(mergedSemantic);
     // Track which color tokens are in semantic collection (for excluding from non-color file)
     const semanticColorPaths = new Set();
-    collectColorPaths(semanticTokens, [], semanticColorPaths);
+    collectColorPaths(mergedSemanticTokens, [], semanticColorPaths);
     await buildCssFromTokens(mergedSemantic, {
       destination: "tokens.semantic.css",
       selector: ":root",
@@ -297,10 +363,7 @@ async function buildFromFigma() {
         if (path[0] === "color") {
           return false;
         }
-        // Filter out letter-spacing tokens (they have conversion issues)
-        if (path[0] === "typography" && path[1] === "letter-spacing") {
-          return false;
-        }
+        // Letter-spacing tokens are now supported (converted to em units)
         // Exclude primitives-core paths (border, opacity, shadow, spacing, typography)
         // These are already in tokens.primitives.css
         const primitivesPaths = [
@@ -358,12 +421,14 @@ async function buildFromFigma() {
 
   // 2b. Semantic Color (light)
   // Include color tokens from both semantic collection and semantic-color collection
-  if (semanticColorFiles.has("light") || semanticFiles.length > 0) {
+  if (semanticColorFiles.has("light") || allSemanticFiles.length > 0) {
     const semanticColorLight = semanticColorFiles.has("light")
       ? await loadTokensForMode(semanticColorFiles.get("light"))
       : {};
     const semanticTokens =
-      semanticFiles.length > 0 ? await loadTokensForMode(semanticFiles) : {};
+      allSemanticFiles.length > 0
+        ? await loadTokensForMode(allSemanticFiles)
+        : {};
     // Extract only color tokens from semantic collection
     const semanticColorTokensFromSemantic = {};
     if (semanticTokens && typeof semanticTokens === "object") {
@@ -407,12 +472,14 @@ async function buildFromFigma() {
 
   // 2c. Semantic Color (dark)
   // Include color tokens from both semantic collection and semantic-color collection
-  if (semanticColorFiles.has("dark") || semanticFiles.length > 0) {
+  if (semanticColorFiles.has("dark") || allSemanticFiles.length > 0) {
     const semanticColorDark = semanticColorFiles.has("dark")
       ? await loadTokensForMode(semanticColorFiles.get("dark"))
       : {};
     const semanticTokens =
-      semanticFiles.length > 0 ? await loadTokensForMode(semanticFiles) : {};
+      allSemanticFiles.length > 0
+        ? await loadTokensForMode(allSemanticFiles)
+        : {};
     // Extract only color tokens from semantic collection
     const semanticColorTokensFromSemantic = {};
     if (semanticTokens && typeof semanticTokens === "object") {
@@ -457,19 +524,18 @@ async function buildFromFigma() {
   // ============================================================================
   // 3. COMPONENT
   // ============================================================================
-  // NOTE: Component tokens are currently filtered out per user request.
-  // Component tokens are not being used yet, so they are excluded from the build output.
-  // The build logic is preserved below for future use when component tokens are ready.
 
   // 3a. Component (non-color) - extract from light mode file (non-color tokens are mode-agnostic)
-  /*
   if (componentFiles.has("light")) {
     try {
-      const componentLightTokens = await loadTokensForMode(componentFiles.get("light"));
+      const componentLightTokens = await loadTokensForMode(
+        componentFiles.get("light"),
+      );
       // Merge with primitives and semantic for reference resolution
-      const semanticTokens = semanticFiles.length > 0
-        ? await loadTokensForMode(semanticFiles)
-        : {};
+      const semanticTokens =
+        allSemanticFiles.length > 0
+          ? await loadTokensForMode(allSemanticFiles)
+          : {};
       const mergedComponent = mergeTokenTrees(
         mergeTokenTrees(clone(primitivesCoreTokens), clone(semanticTokens)),
         componentLightTokens,
@@ -484,13 +550,22 @@ async function buildFromFigma() {
             return false;
           }
           // Exclude primitives and semantic tokens (only include component tokens)
-          const primitivesPaths = ["border", "opacity", "shadow", "spacing", "typography"];
+          const primitivesPaths = [
+            "border",
+            "opacity",
+            "shadow",
+            "spacing",
+            "typography",
+          ];
           if (primitivesPaths.includes(path[0])) {
             return false;
           }
           // Check if it's a semantic token (references semantic/primitives)
           const originalValue = token.original?.$value ?? token.value;
-          if (typeof originalValue === "string" && originalValue.startsWith("{")) {
+          if (
+            typeof originalValue === "string" &&
+            originalValue.startsWith("{")
+          ) {
             // It's a reference - check if it references semantic/primitives or is component-specific
             // For now, include all non-color, non-primitive, non-semantic tokens
             return true;
@@ -500,26 +575,32 @@ async function buildFromFigma() {
         },
       });
     } catch (error) {
-      // Error handling code removed - component tokens are filtered out
+      console.warn(
+        `Warning: Failed to build component tokens (non-color): ${error.message}`,
+      );
     }
   }
-  */
 
   // 3b. Component Color (light)
-  /*
   if (componentFiles.has("light")) {
     try {
-      const componentLightTokens = await loadTokensForMode(componentFiles.get("light"));
+      const componentLightTokens = await loadTokensForMode(
+        componentFiles.get("light"),
+      );
       // Merge with all dependencies for reference resolution
-      const semanticTokens = semanticFiles.length > 0
-        ? await loadTokensForMode(semanticFiles)
-        : {};
+      const semanticTokens =
+        allSemanticFiles.length > 0
+          ? await loadTokensForMode(allSemanticFiles)
+          : {};
       const semanticColorLight = semanticColorFiles.has("light")
         ? await loadTokensForMode(semanticColorFiles.get("light"))
         : {};
       const mergedComponentLight = mergeTokenTrees(
         mergeTokenTrees(
-          mergeTokenTrees(clone(primitivesCoreTokens), clone(lightColorPrimitives)),
+          mergeTokenTrees(
+            clone(primitivesCoreTokens),
+            clone(lightColorPrimitives),
+          ),
           mergeTokenTrees(clone(semanticTokens), clone(semanticColorLight)),
         ),
         componentLightTokens,
@@ -535,7 +616,7 @@ async function buildFromFigma() {
       }
       await buildCssFromTokens(mergedComponentLight, {
         destination: "tokens.component.light.css",
-        selector: ":root[data-theme=\"light\"]",
+        selector: ':root[data-theme="light"]',
         filter: (token) => {
           const path = token.path || [];
           // Only include component color tokens (component.*.color.*)
@@ -543,13 +624,22 @@ async function buildFromFigma() {
             return false;
           }
           // Exclude primitive paths (shadow, border, opacity, spacing, typography)
-          const primitivesPaths = ["shadow", "border", "opacity", "spacing", "typography"];
+          const primitivesPaths = [
+            "shadow",
+            "border",
+            "opacity",
+            "spacing",
+            "typography",
+          ];
           if (primitivesPaths.includes(path[0])) {
             return false; // These are primitives, not component tokens
           }
           // Exclude primitive and semantic colors - only include component colors
           const pathStr = path.join(".");
-          if (primitiveColorPaths.has(pathStr) || semanticColorPaths.has(pathStr)) {
+          if (
+            primitiveColorPaths.has(pathStr) ||
+            semanticColorPaths.has(pathStr)
+          ) {
             return false;
           }
           // Component colors should have paths like "button.color.*" or "component.*.color.*"
@@ -557,26 +647,32 @@ async function buildFromFigma() {
         },
       });
     } catch (error) {
-      // Error handling code removed - component tokens are filtered out
+      console.warn(
+        `Warning: Failed to build component tokens (light): ${error.message}`,
+      );
     }
   }
-  */
 
   // 3c. Component Color (dark)
-  /*
   if (componentFiles.has("dark")) {
     try {
-      const componentDarkTokens = await loadTokensForMode(componentFiles.get("dark"));
+      const componentDarkTokens = await loadTokensForMode(
+        componentFiles.get("dark"),
+      );
       // Merge with all dependencies for reference resolution
-      const semanticTokens = semanticFiles.length > 0
-        ? await loadTokensForMode(semanticFiles)
-        : {};
+      const semanticTokens =
+        allSemanticFiles.length > 0
+          ? await loadTokensForMode(allSemanticFiles)
+          : {};
       const semanticColorDark = semanticColorFiles.has("dark")
         ? await loadTokensForMode(semanticColorFiles.get("dark"))
         : {};
       const mergedComponentDark = mergeTokenTrees(
         mergeTokenTrees(
-          mergeTokenTrees(clone(primitivesCoreTokens), clone(darkColorPrimitives)),
+          mergeTokenTrees(
+            clone(primitivesCoreTokens),
+            clone(darkColorPrimitives),
+          ),
           mergeTokenTrees(clone(semanticTokens), clone(semanticColorDark)),
         ),
         componentDarkTokens,
@@ -592,7 +688,7 @@ async function buildFromFigma() {
       }
       await buildCssFromTokens(mergedComponentDark, {
         destination: "tokens.component.dark.css",
-        selector: ":root[data-theme=\"dark\"]",
+        selector: ':root[data-theme="dark"]',
         filter: (token) => {
           const path = token.path || [];
           // Only include component color tokens (component.*.color.*)
@@ -600,13 +696,22 @@ async function buildFromFigma() {
             return false;
           }
           // Exclude primitive paths (shadow, border, opacity, spacing, typography)
-          const primitivesPaths = ["shadow", "border", "opacity", "spacing", "typography"];
+          const primitivesPaths = [
+            "shadow",
+            "border",
+            "opacity",
+            "spacing",
+            "typography",
+          ];
           if (primitivesPaths.includes(path[0])) {
             return false; // These are primitives, not component tokens
           }
           // Exclude primitive and semantic colors - only include component colors
           const pathStr = path.join(".");
-          if (primitiveColorPaths.has(pathStr) || semanticColorPaths.has(pathStr)) {
+          if (
+            primitiveColorPaths.has(pathStr) ||
+            semanticColorPaths.has(pathStr)
+          ) {
             return false;
           }
           // Component colors should have paths like "button.color.*" or "component.*.color.*"
@@ -614,13 +719,42 @@ async function buildFromFigma() {
         },
       });
     } catch (error) {
-      // Error handling code removed - component tokens are filtered out
+      console.warn(
+        `Warning: Failed to build component tokens (dark): ${error.message}`,
+      );
     }
   }
-  */
 
   // ============================================================================
-  // 4. RESPONSIVE
+  // 4. BREAKPOINTS
+  // ============================================================================
+
+  if (breakpointFiles.length > 0) {
+    const breakpointTokens = await loadTokensForMode(breakpointFiles);
+    // Merge with primitives (including color primitives) for reference resolution
+    const mergedBreakpoints = mergeTokenTrees(
+      mergeTokenTrees(clone(primitivesCoreTokens), clone(lightColorPrimitives)),
+      breakpointTokens,
+    );
+    await buildCssFromTokens(mergedBreakpoints, {
+      destination: "tokens.breakpoints.css",
+      selector: ":root",
+      filter: (token) => {
+        const path = token.path || [];
+        // Include breakpoint-related tokens
+        // Breakpoints can be at root level (e.g., "default-width") or under "breakpoint"/"breakpoints"
+        if (path.length === 0) return false;
+        return (
+          path[0] === "breakpoint" ||
+          path[0] === "breakpoints" ||
+          path[0] === "default-width"
+        );
+      },
+    });
+  }
+
+  // ============================================================================
+  // 5. RESPONSIVE
   // ============================================================================
   // NOTE: Responsive tokens are currently filtered out per Milo's request
   // The logic below is kept for future use when responsive tokens are needed again
@@ -629,8 +763,8 @@ async function buildFromFigma() {
   // const allPrimitives = primitivesCoreFiles.length > 0
   //   ? await loadTokensForMode(primitivesCoreFiles)
   //   : {};
-  // const allSemantic = semanticFiles.length > 0
-  //   ? await loadTokensForMode(semanticFiles)
+  // const allSemantic = allSemanticFiles.length > 0
+  //   ? await loadTokensForMode(allSemanticFiles)
   //   : {};
 
   // Build responsive tokens for each breakpoint
@@ -809,8 +943,7 @@ async function minifyAllCssFiles() {
     }
   }
 
-  // Define files in the correct import order (primitives → semantic)
-  // NOTE: Component tokens are currently filtered out - not included in build output
+  // Define files in the correct import order (primitives → semantic → component)
   const cssFiles = [
     "tokens.primitives.css",
     "tokens.primitives.light.css",
@@ -818,10 +951,9 @@ async function minifyAllCssFiles() {
     "tokens.semantic.css",
     "tokens.semantic.light.css",
     "tokens.semantic.dark.css",
-    // Component tokens filtered out per user request - not being used yet
-    // "tokens.component.css",
-    // "tokens.component.light.css",
-    // "tokens.component.dark.css",
+    "tokens.component.css",
+    "tokens.component.light.css",
+    "tokens.component.dark.css",
     // Responsive tokens filtered out per user request
     // "tokens.responsive.mobile.css",
     // "tokens.responsive.tablet.css",
@@ -936,6 +1068,18 @@ async function buildCssFromTokens(
       "css",
       destination,
     );
+
+    // Check if file was created (Style Dictionary may not create a file if no tokens match the filter)
+    try {
+      await fs.access(filePath);
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        console.log(`No tokens for ${destination}. File not created.`);
+        return; // Skip post-processing if file doesn't exist
+      }
+      throw error;
+    }
+
     let css = await fs.readFile(filePath, "utf8");
 
     // Convert full hex colors to shorthand when possible (#ffffff → #fff, #ff0000 → #f00)
@@ -986,6 +1130,26 @@ async function loadTokensForMode(entries, skipConversions = false) {
     }
 
     mergeTokens(aggregate, tokens);
+  }
+
+  // Load manual typography overrides (line-height and letter-spacing percentages)
+  // These are manually maintained and won't be overwritten by Figma sync
+  const manualOverridesPath = path.join(
+    FIGMA_TOKENS_DIR,
+    "manual",
+    "typography-line-height-letter-spacing.json",
+  );
+  try {
+    const manualContents = await fs.readFile(manualOverridesPath, "utf8");
+    const manualTokens = JSON.parse(manualContents);
+    mergeTokens(aggregate, manualTokens);
+  } catch (error) {
+    // Manual overrides file is optional - only warn if it's not a missing file error
+    if (error.code !== "ENOENT") {
+      console.warn(
+        `⚠️  Warning: Could not load manual typography overrides: ${error.message}`,
+      );
+    }
   }
 
   if (!skipConversions) {

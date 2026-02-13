@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Elliot Redesign Inventory Flow</title>
+    <style>
+      :root {
+        --bg: #0c0d12;
+        --panel: #141824;
+        --text: #f7f8ff;
+        --muted: #9aa4b8;
+        --accent: #64d7ff;
+        --accent2: #ff9ec4;
+        --accent3: #8ff5c0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        height: 100vh;
+        width: 100vw;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        padding: 30px 40px 10px;
+      }
+      header h1 {
+        margin: 0 0 6px;
+        font-size: 32px;
+        font-weight: 600;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        font-size: 13px;
+      }
+      main {
+        flex: 1;
+        padding: 10px 40px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 20px;
+      }
+      .card {
+        background: var(--panel);
+        border-radius: 18px;
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 18px 35px rgba(5, 8, 20, 0.55);
+      }
+      .card h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .card span {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-top: 4px;
+        margin-bottom: 10px;
+      }
+      .card p {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+      .card ul {
+        margin: 10px 0 0;
+        padding-left: 16px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      .lane-labels {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .label-pill {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+      }
+      footer {
+        padding: 0 40px 30px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p>Accelerated redesign intake</p>
+      <h1>Elliot handoff → inventory → build plan (8-week target)</h1>
+    </header>
+    <main>
+      <div class="timeline">
+        <article class="card" style="border-color: rgba(100, 215, 255, 0.6);">
+          <h2>Capture handoff</h2>
+          <span>Week 0–1</span>
+          <p>Use <strong>Figma MCP</strong> to ingest files, pulling states, variants, responsive notes, typography, spacing, interaction annotations.</p>
+        </article>
+        <article class="card" style="border-color: rgba(255, 158, 196, 0.6);">
+          <h2>Atomic inventory</h2>
+          <span>Week 0–2</span>
+          <p>Catalog everything into foundations → atoms → molecules → organisms.</p>
+          <ul>
+            <li>Note dependencies + required assets.</li>
+            <li>Flag primitives that need new tokens.</li>
+          </ul>
+        </article>
+        <article class="card" style="border-color: rgba(143, 245, 192, 0.6);">
+          <h2>Component contracts</h2>
+          <span>Week 2–3</span>
+          <p>Define API/config, theming, a11y, perf, definition of done per component (YAML + guardrails).</p>
+        </article>
+        <article class="card" style="border-color: rgba(100, 215, 255, 0.6);">
+          <h2>Prioritize backlog</h2>
+          <span>Week 3–4</span>
+          <p>Order work bottom-up so molecules reuse approved atoms; feed the queue to Story UI / Claude / Cursor / Codex for upcoming prompts.</p>
+        </article>
+        <article class="card" style="border-color: rgba(255, 158, 196, 0.6);">
+          <h2>AI guardrail build</h2>
+          <span>Week 4–7</span>
+          <p>Run <strong>Story UI</strong> + <strong>Claude/Cursor/Codex</strong> with updated docs; generate stories + specs; block primitives via lint + CI.</p>
+        </article>
+        <article class="card" style="border-color: rgba(143, 245, 192, 0.6);">
+          <h2>Milo QA & release</h2>
+          <span>Week 7–8</span>
+          <p>Drop specs into Milo sandboxes, run a11y/visual overlays vs. redesign, ship blocks once parity is proven.</p>
+        </article>
+      </div>
+      <div class="lane-labels">
+        <div class="label-pill">Inventory doc: `/docs/redesign-inventory.md` (placeholder)</div>
+        <div class="label-pill">Atomic tracker: `/story-ui-docs/components/*`</div>
+        <div class="label-pill">Contracts: `/packages/components/* + YAML specs`</div>
+      </div>
+    </main>
+    <footer>
+      Target: capture Elliot's comps in week 0, finish atomized backlog + build plan by week 4, and leverage AI guardrails to ship parity-tested blocks by week 8.
+    </footer>
+  </body>
+</html>

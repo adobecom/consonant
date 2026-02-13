@@ -11,10 +11,26 @@ const config = {
     "@storybook/addon-docs",
     "@storybook/addon-a11y",
     "@storybook/addon-vitest"
+    // Note: @tpitre/story-ui has a broken package (missing .js extension in imports)
+    // Use Story UI via MCP/CLI instead: npm run story-ui:mcp
   ],
   "framework": {
     "name": "@storybook/web-components-vite",
     "options": {}
+  },
+  "features": {
+    "experimentalComponentsManifest": true
+  },
+  "viteFinal": async (config) => {
+    // Story UI: Exclude from dependency optimization to handle CSS imports correctly
+    config.optimizeDeps = {
+      ...config.optimizeDeps,
+      exclude: [
+        ...(config.optimizeDeps?.exclude || []),
+        '@tpitre/story-ui'
+      ]
+    };
+    return config;
   }
 };
 export default config;

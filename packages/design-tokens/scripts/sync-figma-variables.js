@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const fs = require('fs/promises');
-const path = require('path');
+const fs = require("fs/promises");
+const path = require("path");
 
 // Variable collections we want to ignore entirely when exporting.
 const EXCLUDED_COLLECTION_IDS = new Set([
-  'VariableCollectionId:615453529a3e5f28b1a63fa69f5f3131a7400bb8/8335:3614'
+  "VariableCollectionId:615453529a3e5f28b1a63fa69f5f3131a7400bb8/8335:3614",
 ]);
 
 async function main() {
@@ -14,28 +14,38 @@ async function main() {
 
     const token = process.env.FIGMA_REST_API;
     const fileId = process.env.FIGMA_FILE_ID;
-    const apiBase = process.env.FIGMA_API_BASE_URL || 'https://api.figma.com';
+    const branchKey = process.env.FIGMA_BRANCH_KEY; // Optional: branch key to pull from a specific branch
+    const apiBase = process.env.FIGMA_API_BASE_URL || "https://api.figma.com";
 
     if (!token) {
-      throw new Error('Missing FIGMA_REST_API environment variable (Figma personal access token).');
+      throw new Error(
+        "Missing FIGMA_REST_API environment variable (Figma personal access token).",
+      );
     }
 
     if (!fileId) {
-      throw new Error('Missing FIGMA_FILE_ID environment variable (Figma file key).');
+      throw new Error(
+        "Missing FIGMA_FILE_ID environment variable (Figma file key).",
+      );
     }
 
-    const endpoint = new URL(`/v1/files/${fileId}/variables/local`, apiBase);
+    // Use branch key if provided, otherwise use main file key
+    // According to Figma API docs, you can use either main file key or branch key in the endpoint
+    const fileKey = branchKey || fileId;
+    const endpoint = new URL(`/v1/files/${fileKey}/variables/local`, apiBase);
 
     const response = await fetch(endpoint, {
       headers: {
-        'X-Figma-Token': token,
-        'Content-Type': 'application/json'
-      }
+        "X-Figma-Token": token,
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
       const detail = await safeParseJson(response);
-      throw new Error(`Failed to fetch Figma variables (${response.status} ${response.statusText}): ${detail}`);
+      throw new Error(
+        `Failed to fetch Figma variables (${response.status} ${response.statusText}): ${detail}`,
+      );
     }
 
     const payload = await response.json();
@@ -43,44 +53,55 @@ async function main() {
     const collections = normalizeCollections(payload);
 
     if (!variables.length) {
-      console.warn('Warning: no variables returned from Figma. Check that the file contains variables and the token has access.');
+      console.warn(
+        "Warning: no variables returned from Figma. Check that the file contains variables and the token has access.",
+      );
     }
 
     const transformResult = transformVariables({ variables, collections });
 
-    const PACKAGE_DIR = path.join(__dirname, '..');
-    const outputDir = path.join(PACKAGE_DIR, 'tokens');
+    const PACKAGE_DIR = path.join(__dirname, "..");
+    const outputDir = path.join(PACKAGE_DIR, "tokens");
     await fs.mkdir(outputDir, { recursive: true });
     await cleanOutputDirectory(outputDir);
 
     await Promise.all([
       fs.writeFile(
-        path.join(outputDir, 'raw.json'),
-        JSON.stringify(payload, null, 2) + '\n',
-        'utf8'
+        path.join(outputDir, "raw.json"),
+        JSON.stringify(payload, null, 2) + "\n",
+        "utf8",
       ),
       fs.writeFile(
-        path.join(outputDir, 'metadata.json'),
-        JSON.stringify({
-          fileId,
-          apiBase,
-          generatedAt: new Date().toISOString(),
-          files: transformResult.files
-        }, null, 2) + '\n',
-        'utf8'
-      )
+        path.join(outputDir, "metadata.json"),
+        JSON.stringify(
+          {
+            fileId,
+            branchKey: branchKey || null,
+            apiBase,
+            generatedAt: new Date().toISOString(),
+            files: transformResult.files,
+          },
+          null,
+          2,
+        ) + "\n",
+        "utf8",
+      ),
     ]);
 
     for (const [fileName, record] of transformResult.tokenFiles.entries()) {
       const filePath = path.join(outputDir, fileName);
-      await fs.writeFile(filePath, JSON.stringify(record.tokens, null, 2) + '\n', 'utf8');
+      await fs.writeFile(
+        filePath,
+        JSON.stringify(record.tokens, null, 2) + "\n",
+        "utf8",
+      );
     }
 
     console.log(
-      `Synced ${transformResult.variableCount} variables across ${transformResult.modeCount} modes from Figma.`
+      `Synced ${transformResult.variableCount} variables across ${transformResult.modeCount} modes from Figma.`,
     );
   } catch (error) {
-    console.error('Figma variable sync failed.');
+    console.error("Figma variable sync failed.");
     console.error(error);
     process.exitCode = 1;
   }
@@ -91,10 +112,10 @@ async function hydrateEnv() {
     return;
   }
 
-  const envPath = path.join(process.cwd(), '.env');
+  const envPath = path.join(process.cwd(), ".env");
 
   try {
-    const contents = await fs.readFile(envPath, 'utf8');
+    const contents = await fs.readFile(envPath, "utf8");
     const vars = parseEnv(contents);
     for (const [key, value] of Object.entries(vars)) {
       if (process.env[key] === undefined) {
@@ -102,7 +123,7 @@ async function hydrateEnv() {
       }
     }
   } catch (error) {
-    if (error.code !== 'ENOENT') {
+    if (error.code !== "ENOENT") {
       throw error;
     }
   }
@@ -112,10 +133,10 @@ function parseEnv(contents) {
   const vars = {};
   for (const line of contents.split(/\r?\n/)) {
     const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) {
+    if (!trimmed || trimmed.startsWith("#")) {
       continue;
     }
-    const eqIndex = trimmed.indexOf('=');
+    const eqIndex = trimmed.indexOf("=");
     if (eqIndex === -1) {
       continue;
     }
@@ -130,7 +151,10 @@ function parseEnv(contents) {
 }
 
 function stripQuotes(value) {
-  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith('\'') && value.endsWith('\''))) {
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
     return value.slice(1, -1);
   }
   return value;
@@ -141,7 +165,7 @@ async function cleanOutputDirectory(outputDir) {
   try {
     entries = await fs.readdir(outputDir);
   } catch (error) {
-    if (error.code === 'ENOENT') {
+    if (error.code === "ENOENT") {
       return;
     }
     throw error;
@@ -149,19 +173,21 @@ async function cleanOutputDirectory(outputDir) {
 
   await Promise.all(
     entries
-      .filter(name => name.endsWith('.json'))
-      .map(async name => {
+      .filter((name) => name.endsWith(".json"))
+      .map(async (name) => {
         const filePath = path.join(outputDir, name);
-        await fs.rm(filePath, { force: true });
-      })
+        const stat = await fs.stat(filePath);
+        // Only delete JSON files, not directories
+        // This preserves subdirectories like 'manual/' and their contents
+        if (stat.isFile()) {
+          await fs.rm(filePath, { force: true });
+        }
+      }),
   );
 }
 
 function normalizeVariables(payload) {
-  const candidateSets = [
-    payload.variables,
-    payload.meta?.variables
-  ];
+  const candidateSets = [payload.variables, payload.meta?.variables];
 
   for (const candidate of candidateSets) {
     if (!candidate) {
@@ -170,7 +196,7 @@ function normalizeVariables(payload) {
     if (Array.isArray(candidate)) {
       return candidate;
     }
-    if (typeof candidate === 'object') {
+    if (typeof candidate === "object") {
       return Object.values(candidate);
     }
   }
@@ -179,7 +205,10 @@ function normalizeVariables(payload) {
 }
 
 function normalizeCollections(payload) {
-  const sources = [payload.variableCollections, payload.meta?.variableCollections];
+  const sources = [
+    payload.variableCollections,
+    payload.meta?.variableCollections,
+  ];
 
   for (const source of sources) {
     if (!source) {
@@ -188,7 +217,7 @@ function normalizeCollections(payload) {
     if (Array.isArray(source)) {
       return source;
     }
-    if (typeof source === 'object') {
+    if (typeof source === "object") {
       return Object.values(source);
     }
   }
@@ -198,7 +227,9 @@ function normalizeCollections(payload) {
 
 function transformVariables({ variables, collections }) {
   const iterableCollections = Array.isArray(collections)
-    ? collections.filter(collection => !EXCLUDED_COLLECTION_IDS.has(collection.id))
+    ? collections.filter(
+        (collection) => !EXCLUDED_COLLECTION_IDS.has(collection.id),
+      )
     : [];
   const collectionById = new Map();
   const modeInfoById = new Map();
@@ -218,21 +249,21 @@ function transformVariables({ variables, collections }) {
 
     collectionById.set(collection.id, collection);
 
-    const collectionSlug = toSlug(collection.name || 'collection');
-    const collectionIdSlug = toSlug(collection.id || 'collection');
+    const collectionSlug = toSlug(collection.name || "collection");
+    const collectionIdSlug = toSlug(collection.id || "collection");
 
     for (const mode of collection.modes || []) {
-      const modeSlug = toSlug(mode.name || 'default');
+      const modeSlug = toSlug(mode.name || "default");
       const fileName = `${collectionSlug}-${collectionIdSlug}.${modeSlug}.json`;
       const info = {
         collectionId: collection.id,
-        collectionName: collection.name || 'Collection',
+        collectionName: collection.name || "Collection",
         collectionSlug,
         collectionIdSlug,
         modeId: mode.modeId,
-        modeName: mode.name || 'Mode',
+        modeName: mode.name || "Mode",
         modeSlug,
-        fileName
+        fileName,
       };
 
       modeInfoById.set(mode.modeId, info);
@@ -240,7 +271,7 @@ function transformVariables({ variables, collections }) {
       if (!fileRecords.has(fileName)) {
         fileRecords.set(fileName, {
           info,
-          tokens: {}
+          tokens: {},
         });
       }
     }
@@ -251,7 +282,8 @@ function transformVariables({ variables, collections }) {
       continue;
     }
 
-    const collectionId = variable.variableCollectionId || variable.variableCollection;
+    const collectionId =
+      variable.variableCollectionId || variable.variableCollection;
     const collection = collectionById.get(collectionId);
     if (!collection) {
       continue;
@@ -262,7 +294,9 @@ function transformVariables({ variables, collections }) {
 
     const pathSegments = splitVariablePath(variable);
 
-    for (const [modeId, rawValue] of Object.entries(variable.valuesByMode || {})) {
+    for (const [modeId, rawValue] of Object.entries(
+      variable.valuesByMode || {},
+    )) {
       const modeInfo = modeInfoById.get(modeId);
       if (!modeInfo) {
         continue;
@@ -283,39 +317,39 @@ function transformVariables({ variables, collections }) {
     }
   }
 
-  const files = Array.from(fileRecords.values()).map(record => ({
+  const files = Array.from(fileRecords.values()).map((record) => ({
     fileName: record.info.fileName,
     collection: {
       id: record.info.collectionId,
       name: record.info.collectionName,
       slug: record.info.collectionSlug,
-      idSlug: record.info.collectionIdSlug
+      idSlug: record.info.collectionIdSlug,
     },
     mode: {
       id: record.info.modeId,
       name: record.info.modeName,
-      slug: record.info.modeSlug
-    }
+      slug: record.info.modeSlug,
+    },
   }));
 
-  const modeCount = new Set(files.map(file => file.mode.slug)).size;
+  const modeCount = new Set(files.map((file) => file.mode.slug)).size;
 
   return {
     files,
     tokenFiles: fileRecords,
     variableCount: variables.length,
-    modeCount
+    modeCount,
   };
 }
 
 function splitVariablePath(variable) {
-  const segments = (variable.name || '')
-    .split('/')
-    .map(segment => toSlug(segment))
+  const segments = (variable.name || "")
+    .split("/")
+    .map((segment) => toSlug(segment))
     .filter(Boolean);
 
   if (!segments.length) {
-    segments.push(toSlug(variable.id || 'token'));
+    segments.push(toSlug(variable.id || "token"));
   }
 
   return segments;
@@ -325,15 +359,15 @@ function createToken(variable, value) {
   const token = {
     $type: tokenTypeFromVariable(variable),
     $value: value,
-    $description: variable.description || ''
+    $description: variable.description || "",
   };
 
   token.$extensions = {
-    'com.figma': {
+    "com.figma": {
       hiddenFromPublishing: Boolean(variable.hiddenFromPublishing),
       scopes: Array.isArray(variable.scopes) ? variable.scopes : [],
-      codeSyntax: variable.codeSyntax || {}
-    }
+      codeSyntax: variable.codeSyntax || {},
+    },
   };
 
   return token;
@@ -341,16 +375,16 @@ function createToken(variable, value) {
 
 function tokenTypeFromVariable(variable) {
   switch (variable.resolvedType) {
-    case 'BOOLEAN':
-      return 'boolean';
-    case 'COLOR':
-      return 'color';
-    case 'FLOAT':
-      return 'number';
-    case 'STRING':
-      return 'string';
+    case "BOOLEAN":
+      return "boolean";
+    case "COLOR":
+      return "color";
+    case "FLOAT":
+      return "number";
+    case "STRING":
+      return "string";
     default:
-      return 'string';
+      return "string";
   }
 }
 
@@ -359,30 +393,32 @@ function tokenValueFromVariable(variable, rawValue, variablesById) {
     return undefined;
   }
 
-  if (typeof rawValue === 'object' && !Array.isArray(rawValue)) {
-    if (rawValue.type === 'VARIABLE_ALIAS' && rawValue.id) {
+  if (typeof rawValue === "object" && !Array.isArray(rawValue)) {
+    if (rawValue.type === "VARIABLE_ALIAS" && rawValue.id) {
       const target = variablesById.get(rawValue.id);
       if (!target) {
-        console.warn(`Warning: unknown alias target ${rawValue.id} for variable ${variable.name}. Skipping.`);
+        console.warn(
+          `Warning: unknown alias target ${rawValue.id} for variable ${variable.name}. Skipping.`,
+        );
         return undefined;
       }
-      const aliasPath = splitVariablePath(target).join('.');
+      const aliasPath = splitVariablePath(target).join(".");
       return `{${aliasPath}}`;
     }
 
-    if ('r' in rawValue && 'g' in rawValue && 'b' in rawValue) {
+    if ("r" in rawValue && "g" in rawValue && "b" in rawValue) {
       return colorToHex(rawValue);
     }
   }
 
   switch (variable.resolvedType) {
-    case 'COLOR':
+    case "COLOR":
       return colorToHex(rawValue);
-    case 'FLOAT':
-      return typeof rawValue === 'number' ? rawValue : Number(rawValue);
-    case 'STRING':
+    case "FLOAT":
+      return typeof rawValue === "number" ? rawValue : Number(rawValue);
+    case "STRING":
       return String(rawValue);
-    case 'BOOLEAN':
+    case "BOOLEAN":
       return Boolean(rawValue);
     default:
       return rawValue;
@@ -390,7 +426,7 @@ function tokenValueFromVariable(variable, rawValue, variablesById) {
 }
 
 function colorToHex(value) {
-  if (!value || typeof value !== 'object') {
+  if (!value || typeof value !== "object") {
     return undefined;
   }
 
@@ -399,13 +435,13 @@ function colorToHex(value) {
   const b = clampTo255(value.b);
   const a = clampTo255(value.a !== undefined ? value.a : 1);
 
-  const hex = [r, g, b].map(toHex).join('');
-  const alphaHex = a < 255 ? toHex(a) : '';
+  const hex = [r, g, b].map(toHex).join("");
+  const alphaHex = a < 255 ? toHex(a) : "";
   return `#${hex}${alphaHex}`.toUpperCase();
 }
 
 function clampTo255(component) {
-  const number = typeof component === 'number' ? component : Number(component);
+  const number = typeof component === "number" ? component : Number(component);
   if (Number.isNaN(number)) {
     return 0;
   }
@@ -416,7 +452,7 @@ function clampTo255(component) {
 }
 
 function toHex(component) {
-  return component.toString(16).padStart(2, '0');
+  return component.toString(16).padStart(2, "0");
 }
 
 function setTokenAtPath(target, pathSegments, value) {
@@ -429,39 +465,51 @@ function setTokenAtPath(target, pathSegments, value) {
 
   for (let index = 0; index < lastIndex; index += 1) {
     const segment = pathSegments[index];
-    if (!cursor[segment] || typeof cursor[segment] !== 'object' || Array.isArray(cursor[segment])) {
+    if (
+      !cursor[segment] ||
+      typeof cursor[segment] !== "object" ||
+      Array.isArray(cursor[segment])
+    ) {
       cursor[segment] = {};
     }
-    if ('$value' in cursor[segment]) {
-      console.warn(`Warning: token path conflict at ${pathSegments.slice(0, index + 1).join('.')}. Overwriting existing value.`);
+    if ("$value" in cursor[segment]) {
+      console.warn(
+        `Warning: token path conflict at ${pathSegments.slice(0, index + 1).join(".")}. Overwriting existing value.`,
+      );
       cursor[segment] = {};
     }
     cursor = cursor[segment];
   }
 
   const lastSegment = pathSegments[lastIndex];
-  if (cursor[lastSegment] && typeof cursor[lastSegment] === 'object' && '$value' in cursor[lastSegment]) {
-    console.warn(`Warning: duplicate token at ${pathSegments.join('.')}. Overwriting.`);
+  if (
+    cursor[lastSegment] &&
+    typeof cursor[lastSegment] === "object" &&
+    "$value" in cursor[lastSegment]
+  ) {
+    console.warn(
+      `Warning: duplicate token at ${pathSegments.join(".")}. Overwriting.`,
+    );
   }
   cursor[lastSegment] = value;
 }
 
 function toSlug(value) {
-  const normalized = String(value || '')
+  const normalized = String(value || "")
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-+|-+$/g, '');
-  return normalized || 'token';
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return normalized || "token";
 }
 
 async function safeParseJson(response) {
   try {
     const text = await response.text();
-    return text ? JSON.stringify(JSON.parse(text), null, 2) : '<empty body>';
+    return text ? JSON.stringify(JSON.parse(text), null, 2) : "<empty body>";
   } catch (error) {
-    return '<unparseable body>';
+    return "<unparseable body>";
   }
 }
 
