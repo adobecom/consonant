@@ -62,7 +62,7 @@
 ### Card 3.2: Verify Dev Files
 
 **Action:** Check `dist/packages/design-tokens/css/dev/`  
-**Expected:** 6 CSS files (primitives, semantic, light, dark variants)
+**Expected:** 10 CSS files (primitives, semantic, typography, component, each with light/dark variants)
 
 ### Card 3.3: Verify Minified File
 

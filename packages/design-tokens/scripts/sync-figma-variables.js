@@ -228,7 +228,24 @@ function normalizeCollections(payload) {
 function transformVariables({ variables, collections }) {
   const iterableCollections = Array.isArray(collections)
     ? collections.filter(
-        (collection) => !EXCLUDED_COLLECTION_IDS.has(collection.id),
+        (collection) => {
+          // Include collections that match the structure: Category / Subcategory / Attribute
+          // This includes: Semantic, Primitives, Component, Typography, Layout collections
+          // Also include S2A collections
+          const collectionName = (collection.name || "").toLowerCase();
+          const hasSlashStructure = collectionName.includes(" / ");
+          const isS2A = collectionName.includes("s2a") || collectionName.startsWith("s2a");
+          const isTargetCollection = 
+            hasSlashStructure || 
+            isS2A ||
+            collectionName.includes("semantic") ||
+            collectionName.includes("primitives") ||
+            collectionName.includes("component") ||
+            collectionName.includes("typography") ||
+            collectionName.includes("layout") ||
+            collectionName.includes("breakpoint");
+          return isTargetCollection && !EXCLUDED_COLLECTION_IDS.has(collection.id);
+        },
       )
     : [];
   const collectionById = new Map();

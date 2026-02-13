@@ -31,6 +31,15 @@ function getTypographyContext(path) {
     // Handle "font-size.*" at root level (semantic tokens)
     const alias = isNumericKey(first) ? undefined : first;
     return { scope: head, key: first, alias, property: head };
+  } else if (head === "font" && first) {
+    // Handle "font.size.*", "font.line-height.*" and "font.letter-spacing.*" paths (primitives)
+    if (first === "size") {
+      const key = second;
+      return { scope: "font-size", key: second, alias: undefined, property: "font-size" };
+    } else if (first === "line-height" || first === "letter-spacing") {
+      const key = second;
+      return { scope: first, key: second, alias: undefined, property: first };
+    }
   }
 
   return {
@@ -227,15 +236,23 @@ function convertNumberTokens(node, path, maps) {
           : toRem(value);
       }
     } else if (scope === "line-height") {
-      // Check if value is already a ratio (typically < 2 for line-height percentages)
-      // Manual overrides use ratios like 0.98, 1.2, etc.
+      // Line-height primitives from Figma are stored as percentages (e.g., 98 = 98%)
+      // Keep as percentage value with % unit
+      // If value is already a ratio (< 2), convert back to percentage (from manual overrides)
+      // If value is >= 2, treat as percentage and keep as-is
       if (value < 2 && value > 0) {
-        // Already a ratio - keep as unitless number
-        const roundedRatio = roundTo(value, 6);
-        const ratio = stripTrailingZeros(roundedRatio, 6);
-        node.$value = ratio;
+        // Already a ratio - convert back to percentage (from manual overrides)
+        const percentage = value * 100;
+        const roundedPercentage = roundTo(percentage, 2);
+        const percentageString = stripTrailingZeros(roundedPercentage, 2);
+        node.$value = `${percentageString}%`;
+      } else if (value >= 2 && value <= 200) {
+        // Percentage value (e.g., 98 = 98%) - keep as percentage
+        const roundedPercentage = roundTo(value, 2);
+        const percentageString = stripTrailingZeros(roundedPercentage, 2);
+        node.$value = `${percentageString}%`;
       } else {
-        // Pixel value - convert to ratio
+        // Large value - might be pixel value, convert to percentage using font size
         const mappedFontPx = maps.lineHeightToFontSize.get(String(value));
         const aliasFontPx =
           alias &&
@@ -246,12 +263,12 @@ function convertNumberTokens(node, path, maps) {
           : undefined;
         const fontPx = mappedFontPx ?? aliasFontPx ?? fallbackFontPx;
         const rawRatio = fontPx ? value / fontPx : value / 16;
-        // Round to 6 decimal places for line-height ratios, then strip trailing zeros
-        const roundedRatio = roundTo(rawRatio, 6);
-        const ratio = stripTrailingZeros(roundedRatio, 6);
+        const percentage = rawRatio * 100;
+        const roundedPercentage = roundTo(percentage, 2);
+        const percentageString = stripTrailingZeros(roundedPercentage, 2);
 
         if (key && isNumericKey(key)) {
-          node.$value = ratio;
+          node.$value = `${percentageString}%`;
         } else {
           const referenceKey = findNumericKey(
             maps.lineHeight.keyByValue,
@@ -259,17 +276,15 @@ function convertNumberTokens(node, path, maps) {
           );
           node.$value = referenceKey
             ? `{typography.line-height.${referenceKey}}`
-            : ratio;
+            : `${percentageString}%`;
         }
       }
     } else if (scope === "letter-spacing") {
-      // Convert percentage letter-spacing to em units
-      // Percentage letter-spacing in CSS is relative to font size (like em)
-      // e.g., -3% = -0.03em, 1% = 0.01em
-      const emValue = value / 100;
-      const roundedEm = roundTo(emValue, 4);
-      const emString = stripTrailingZeros(roundedEm, 4);
-      node.$value = `${emString}em`;
+      // Letter-spacing primitives from Figma are stored as percentages (e.g., -4 = -4%, 1 = 1%)
+      // Keep as percentage value with % unit
+      const roundedPercentage = roundTo(value, 2);
+      const percentageString = stripTrailingZeros(roundedPercentage, 2);
+      node.$value = `${percentageString}%`;
     } else if (path[0] === "opacity") {
       node.$value = roundTo(Math.max(0, Math.min(1, value / 100)), 4);
     } else {

@@ -1,0 +1,36 @@
+{
+  "marquee-radius": {
+    "$type": "number",
+    "$value": "{border.radius.lg}",
+    "$description": "",
+    "$extensions": {
+      "com.figma": {
+        "hiddenFromPublishing": false,
+        "scopes": [],
+        "codeSyntax": {}
+      }
+    }
+  },
+  "button": {
+    "effect": {
+      "on-media": {
+        "secondary": {
+          "glass": {
+            "background-blur": {
+              "$type": "number",
+              "$value": 10,
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -26,7 +26,8 @@ This repository implements a design token pipeline that:
   - Primitives (Color): color palette values for light/dark modes
   - Semantic: meaning-based tokens that reference primitives
   - Semantic (Color): theme-aware color tokens
-  - Component: UI-specific tokens (currently filtered out from build)
+  - Component: UI-specific tokens (non-color, light/dark color variants)
+  - Typography: Typography scale tokens (font-size, line-height, letter-spacing)
   - Responsive: breakpoint-specific tokens (currently filtered out from build)
 
 ### Outputs
@@ -75,6 +76,10 @@ This repository implements a design token pipeline that:
 │    • tokens.semantic.css                                     │
 │    • tokens.semantic.light.css                               │
 │    • tokens.semantic.dark.css                                │
+│    • tokens.typography.css                                   │
+│    • tokens.component.css                                    │
+│    • tokens.component.light.css                              │
+│    • tokens.component.dark.css                                │
 │  min/                                                         │
 │    • tokens.min.css (consolidated, minified)                │
 └────────────────────┬────────────────────────────────────────┘
@@ -265,7 +270,7 @@ nx sync-figma design-tokens
 1. **Load tokens** from JSON files (by collection and mode)
 2. **Merge tokens** from multiple files (primitives + semantic, etc.)
 3. **Apply unit conversions**:
-   - Typography: font-size (px → rem), line-height (unitless ratios)
+   - Typography: font-size (px → rem), line-height (percentage strings), letter-spacing (percentage strings)
    - Spacing: px → rem conversions
    - See `packages/design-tokens/scripts/transformers/unit-conversions.js`
 4. **Typography transformations**:
@@ -312,7 +317,8 @@ nx build design-tokens
    - Primitives Color (light/dark)
    - Semantic (non-color)
    - Semantic Color (light/dark)
-   - Component (currently filtered out)
+   - Typography (font-size, line-height, letter-spacing)
+   - Component (non-color, light/dark color variants)
    - Responsive (currently filtered out)
 3. Applies unit conversions and transforms
 4. Generates CSS files using Style Dictionary with custom `s2a-` prefix
@@ -330,6 +336,10 @@ nx build design-tokens
 - `tokens.semantic.css`: Non-color semantic tokens
 - `tokens.semantic.light.css`: Semantic colors (light mode)
 - `tokens.semantic.dark.css`: Semantic colors (dark mode)
+- `tokens.typography.css`: Typography scale tokens (font-size, line-height, letter-spacing)
+- `tokens.component.css`: Component non-color tokens
+- `tokens.component.light.css`: Component colors (light mode)
+- `tokens.component.dark.css`: Component colors (dark mode)
 - `tokens.min.css`: Consolidated minified file (all layers)
 
 **CSS Custom Property Naming:**
@@ -346,9 +356,11 @@ nx build design-tokens
 
 **Filtering:**
 
-- Component tokens: Currently filtered out (commented in `build-tokens.js`)
+- Component tokens: Built as separate files (`tokens.component.css`, `tokens.component.light.css`, `tokens.component.dark.css`)
+- Typography tokens: Built as separate file (`tokens.typography.css`)
 - Responsive tokens: Currently filtered out (commented in `build-tokens.js`)
 - Dataviz colors: Filtered out from primitives color files
+- Primitive font-size values: Excluded from semantic.css (only semantic t-shirt sizes included)
 
 ### How to Produce a "Milo-Ready" Consolidated Output
 
@@ -356,7 +368,7 @@ nx build design-tokens
 The build automatically creates a consolidated minified file:
 
 - **Location**: `dist/packages/design-tokens/css/min/tokens.min.css`
-- **Contains**: All token layers in correct order (primitives → semantic)
+- **Contains**: All token layers in correct order (primitives → semantic → typography → component)
 - **Format**: Minified, single file
 
 **Usage in Milo:**
@@ -379,6 +391,10 @@ If Milo needs individual files for debugging:
 @import "s2a-tokens/css/dev/tokens.semantic.css";
 @import "s2a-tokens/css/dev/tokens.semantic.light.css";
 @import "s2a-tokens/css/dev/tokens.semantic.dark.css";
+@import "s2a-tokens/css/dev/tokens.typography.css";
+@import "s2a-tokens/css/dev/tokens.component.css";
+@import "s2a-tokens/css/dev/tokens.component.light.css";
+@import "s2a-tokens/css/dev/tokens.component.dark.css";
 ```
 
 **TODO: Confirm Milo Integration**
@@ -818,7 +834,11 @@ If CI/CD is configured:
 - `css/dev/tokens.semantic.css`: Non-color semantic (uncompressed)
 - `css/dev/tokens.semantic.light.css`: Semantic colors light (uncompressed)
 - `css/dev/tokens.semantic.dark.css`: Semantic colors dark (uncompressed)
-- `css/min/tokens.min.css`: Consolidated minified file (production)
+- `css/dev/tokens.typography.css`: Typography scale tokens (uncompressed)
+- `css/dev/tokens.component.css`: Component non-color tokens (uncompressed)
+- `css/dev/tokens.component.light.css`: Component colors light (uncompressed)
+- `css/dev/tokens.component.dark.css`: Component colors dark (uncompressed)
+- `css/min/tokens.min.css`: Consolidated minified file (production, all 10 files)
 
 **Package Files** (in tarball):
 
