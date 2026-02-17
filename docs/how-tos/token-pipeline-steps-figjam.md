@@ -165,4 +165,3 @@ npm run tokens:clean && npm run tokens:sync && npm run tokens:build
 ---
 
 **End of FigJam Steps**
-

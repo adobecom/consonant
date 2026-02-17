@@ -8,7 +8,7 @@
 - **Package**: `@tpitre/story-ui@^4.12.0`
 - **Config**: `story-ui.config.cjs` (CommonJS) in the repo root
 - **Design System Docs**:
-  - `story-ui-considerations.md`
+  - `docs/guardrails/story-ui-considerations.md`
   - `story-ui-docs/**` (component registry + patterns)
 
 ## Configuration Files
@@ -25,10 +25,10 @@
   - `Button` (`packages/components/src/button/index.js`)
   - `ProductLockup` (`packages/components/src/product-lockup/index.js`)
 - **Docs + guardrails**:
-  - `considerationsPath: ./story-ui-considerations.md`
+  - `considerationsPath: ./docs/guardrails/story-ui-considerations.md`
   - `docsPath: ./story-ui-docs`
 
-### `story-ui-considerations.md`
+### `docs/guardrails/story-ui-considerations.md`
 
 - Design system patterns and conventions
 - Component structure documentation
@@ -116,7 +116,7 @@ Once the MCP server is running, you can ask Codex/Cursor to:
 
 Story UI automatically reads:
 
-- `story-ui-considerations.md` - Your design system guidelines
+- `docs/guardrails/story-ui-considerations.md` - Your design system guidelines
 - `story-ui.config.cjs` - Component paths and framework settings
 - Existing stories - To learn your patterns and conventions
 
@@ -135,7 +135,7 @@ Story UI automatically reads:
 
 ### Story Generation Quality
 
-- Review and update `story-ui-considerations.md` with more specific patterns
+- Review and update `docs/guardrails/story-ui-considerations.md` with more specific patterns
 - Add more example stories for Story UI to learn from
 - Provide detailed prompts with specific requirements
 
@@ -148,7 +148,7 @@ Story UI automatically reads:
    - **For Claude**: Set `ANTHROPIC_API_KEY` in your `.env` file
      - Get your key from: https://console.anthropic.com/
 2. **Test Generation**: Start Storybook and try generating a story
-3. **Refine Guidelines**: Update `story-ui-considerations.md` based on your needs
+3. **Refine Guidelines**: Update `docs/guardrails/story-ui-considerations.md` based on your needs
 4. **Set Up MCP**: Configure MCP server for Codex/Cursor integration if desired
 
 ## Resources

@@ -118,7 +118,7 @@ export default {
   ],
   
   // Considerations file path
-  considerationsPath: './story-ui-considerations.md',
+  considerationsPath: './docs/guardrails/story-ui-considerations.md',
   
   // Documentation path (if supported by Story UI)
   // This directory contains component usage examples and guidelines

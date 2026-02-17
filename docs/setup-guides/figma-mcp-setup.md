@@ -238,7 +238,7 @@ Figma MCP works seamlessly with your token pipeline:
 
 ## Next Steps
 
-- See [FIGMA_TO_CODE_WORKFLOW.md](./FIGMA_TO_CODE_WORKFLOW.md) for the complete workflow
+- See [figma-to-code-workflow.md](../workflows/figma-to-code-workflow.md) for the complete workflow
 - Use Figma MCP to generate component code from designs
 - Extract design tokens and variable definitions
 - Create specs and documentation from Figma components

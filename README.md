@@ -7,7 +7,7 @@ This is an NX monorepo containing:
 
 ## Token Pipeline Runbook
 
-📖 **[Complete Token Pipeline Runbook](docs/RUNBOOK_token-pipeline.md)** - Comprehensive guide for running releases, troubleshooting, and maintaining the token pipeline.
+📖 **[Complete Token Pipeline Runbook](docs/how-tos/runbook-token-pipeline.md)** - Comprehensive guide for running releases, troubleshooting, and maintaining the token pipeline.
 
 📋 **[Quick Reference Steps](docs/FIGJAM_token-pipeline_steps.md)** - FigJam-friendly step cards for quick reference.
 

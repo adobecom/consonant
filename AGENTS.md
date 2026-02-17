@@ -19,6 +19,6 @@
 
 ## Repository Docs to Reference
 
-- Use the workflow primer in [`docs/workflows/FIGMA_TO_CODE_WORKFLOW.md`](docs/workflows/FIGMA_TO_CODE_WORKFLOW.md) whenever the conversation touches the end-to-end process (Figma → tokens → Storybook → Milo).
+- Use the workflow primer in [`docs/workflows/figma-to-code-workflow.md`](docs/workflows/figma-to-code-workflow.md) whenever the conversation touches the end-to-end process (Figma → tokens → Storybook → Milo).
 - Pull contextual rules/examples from [`story-ui-docs/`](story-ui-docs/) so Story UI/Codex stay aligned with the existing components/tokens.
 - Strategy/north-star conversations should cite [`docs/north-star/`](docs/north-star/) (e.g., `GOALS_2026.md`, `PRESENTATION_OUTLINE.md`).

@@ -399,7 +399,7 @@ Once a component exists in `packages/components/src` and is wired to tokens, Sto
 - Configuration lives in `story-ui.config.cjs`; it points to:
   - `componentsPath: ./packages/components/src` (real components)
   - `generatedStoriesPath: ./apps/storybook/stories/generated/`
-  - `considerationsPath: ./story-ui-considerations.md`
+  - `considerationsPath: ../guardrails/story-ui-considerations.md`
   - `docsPath: ./story-ui-docs`
 - The `components` array teaches Story UI which components to reuse (e.g., `Button`, `ProductLockup`) and how to import them.
 
@@ -866,6 +866,6 @@ For a design system with **20 components**:
 ## Resources
 
 - [Design Tokens README](../packages/design-tokens/README.md)
-- [Token Pipeline Runbook](./RUNBOOK_token-pipeline.md)
+- [Token Pipeline Runbook](../how-tos/runbook-token-pipeline.md)
 - [Figma Variables Documentation](https://help.figma.com/hc/en-us/articles/15339657135383)
 - [Storybook Documentation](https://storybook.js.org/docs)
