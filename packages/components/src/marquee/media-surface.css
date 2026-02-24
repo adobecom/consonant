@@ -57,30 +57,29 @@
 /* Scale image - support multiple scale values */
 /* Using width/height and positioning to scale the image */
 
-/* Scale 1.12 (12% larger) - For bottom-right anchor (0, 0) */
+/* For bottom-right anchor (0, 0), position from right and bottom */
 .c-marquee-media-surface[data-image-scale="1.12"][data-image-position="right-bottom"]
   .c-marquee-media-surface__image {
-  width: 112% !important;
-  height: 112% !important;
+  width: 12.5% !important;
+  height: 12.5% !important;
   left: auto !important;
   top: auto !important;
   right: 0 !important;
   bottom: 0 !important;
 }
 
-/* Scale 1.12 (12% larger) - Default center anchor for other positions */
+/* Default center anchor for other positions with 1.25 scale */
 .c-marquee-media-surface[data-image-scale="1.12"]:not(
     [data-image-position="right-bottom"]
   )
   .c-marquee-media-surface__image {
-  width: 112% !important;
-  height: 112% !important;
-  left: -6% !important;
-  top: -6% !important;
+  width: 125% !important;
+  height: 125% !important;
+  left: -12.5% !important;
+  top: -12.5% !important;
   right: auto !important;
   bottom: auto !important;
 }
-
 .c-marquee-media-surface[data-image-scale="1.25"][data-image-position="right-bottom"]
   .c-marquee-media-surface__image {
   width: 125% !important;

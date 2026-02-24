@@ -316,8 +316,8 @@
 /* Primitive: These tokens don't exist in S2A yet - using fallbacks */
 .c-button[data-background="glass"]:not([data-state="disabled"]) {
   /* Primitive: backdrop-blur effect token doesn't exist */
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* Primary + Solid + On Media */
@@ -349,6 +349,18 @@
   background-color: var(
     --s2a-button-color-background-onmedia-secondary-glass-default,
     rgba(255, 255, 255, 0.12)
+  );
+  border: var(--s2a-border-width-sm, 1px) solid
+    var(
+      --s2a-button-color-background-onmedia-secondary-glass-default,
+      rgba(255, 255, 255, 0.12)
+    );
+  /* Keep total height at 40px (12px padding - 1px border each side + 16px line height) */
+  padding-top: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-sm, 1px)
+  );
+  padding-bottom: calc(
+    var(--s2a-spacing-sm, 12px) - var(--s2a-border-width-sm, 1px)
   );
   color: var(--s2a-color-content-knockout, #ffffff);
 }

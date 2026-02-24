@@ -34,8 +34,8 @@ export default defineConfig({
       },
       {
         test: {
-          name: 'design-tokens',
-          include: ['packages/design-tokens/**/*.test.js'],
+          name: 'tokens',
+          include: ['packages/tokens/**/*.test.js'],
           environment: 'node',
           globals: true,
         },

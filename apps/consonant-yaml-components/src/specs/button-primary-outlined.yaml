@@ -1,0 +1,67 @@
+meta:
+  id: button-primary-outlined-set
+  title: Primary Button · Outlined
+  description: Primary outlined button with default and disabled states using semantic tokens.
+  tags:
+    - button
+    - primary
+    - outlined
+component:
+  name: C/Button/Primary/Outlined
+  frame:
+    width: 320
+    height: 64
+    padding:
+      horizontal: 40
+      vertical: 20
+  layers:
+    - kind: rectangle
+      name: Surface
+      tokens:
+        stroke: --s2a-button-color-border-primary-outlined-default
+      fallback:
+        stroke: '#292929'
+        strokeWeight: 2
+      cornerRadius: 999
+    - kind: text
+      name: Label
+      characters: Button label
+      tokens:
+        fill: --s2a-color-content-default
+        typography: --s2a-typography-body-strong
+      fallback:
+        fill: '#292929'
+        fontFamily: Adobe Clean
+        fontStyle: Bold
+        fontSize: 20
+        letterSpacing: 0
+  variants:
+    name: C/Button/Primary/Outlined
+    properties:
+      - name: state
+        values: [default, disabled]
+    nodes:
+      - id: primary-outlined-default
+        name: Primary Outlined / Default
+        properties:
+          state: default
+      - id: primary-outlined-disabled
+        name: Primary Outlined / Disabled
+        properties:
+          state: disabled
+        overrides:
+          layers:
+            Surface:
+              tokens:
+                stroke: --s2a-color-border-disabled
+              fallback:
+                stroke: '#c6c6c6'
+                strokeWeight: 2
+            Label:
+              tokens:
+                fill: --s2a-color-content-disabled
+              fallback:
+                fill: '#c6c6c6'
+                fontFamily: Adobe Clean
+                fontStyle: Bold
+                fontSize: 20

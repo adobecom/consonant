@@ -1,0 +1,66 @@
+meta:
+  id: button-onmedia-secondary-glass-set
+  title: On-Media Secondary Button · Glass
+  description: Secondary glass on-media button (frosted white surface over dark) with default and disabled states.
+  tags:
+    - button
+    - secondary
+    - glass
+    - on-media
+component:
+  name: C/Button/OnMedia/Secondary/Glass
+  frame:
+    width: 320
+    height: 64
+    padding:
+      horizontal: 40
+      vertical: 20
+  layers:
+    - kind: rectangle
+      name: Surface
+      tokens:
+        fill: --s2a-button-color-background-onmedia-secondary-glass-default
+      fallback:
+        fill: '#4D4D4D'
+      cornerRadius: 999
+    - kind: text
+      name: Label
+      characters: Button label
+      tokens:
+        fill: --s2a-color-content-knockout
+        typography: --s2a-typography-body-strong
+      fallback:
+        fill: '#ffffff'
+        fontFamily: Adobe Clean Display
+        fontStyle: SemiBold
+        fontSize: 20
+        letterSpacing: 0
+  variants:
+    name: C/Button/OnMedia/Secondary/Glass
+    properties:
+      - name: state
+        values: [default, disabled]
+    nodes:
+      - id: onmedia-secondary-glass-default
+        name: OnMedia Secondary Glass / Default
+        properties:
+          state: default
+      - id: onmedia-secondary-glass-disabled
+        name: OnMedia Secondary Glass / Disabled
+        properties:
+          state: disabled
+        overrides:
+          layers:
+            Surface:
+              tokens:
+                fill: --s2a-color-background-disabled
+              fallback:
+                fill: '#f8f8f8'
+            Label:
+              tokens:
+                fill: --s2a-color-content-disabled
+              fallback:
+                fill: '#c6c6c6'
+                fontFamily: Adobe Clean Display
+                fontStyle: SemiBold
+                fontSize: 20

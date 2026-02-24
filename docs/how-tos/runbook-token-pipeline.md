@@ -32,8 +32,8 @@ This repository implements a design token pipeline that:
 
 ### Outputs
 
-- **JSON Token Files**: Raw token data in `packages/design-tokens/tokens/` (not published)
-- **CSS Custom Properties**: Generated CSS files in `dist/packages/design-tokens/css/`
+- **JSON Token Files**: Raw token data in `packages/tokens/json/` (not published)
+- **CSS Custom Properties**: Generated CSS files in `dist/packages/tokens/css/`
   - Development files: `css/dev/` (individual, uncompressed)
   - Production file: `css/min/tokens.min.css` (consolidated, minified)
 - **npm Package**: Tarball file `s2a-tokens-<version>.tgz` in repo root
@@ -58,7 +58,7 @@ This repository implements a design token pipeline that:
                      │ (sync-figma-variables.js)
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              packages/design-tokens/tokens/                  │
+│              packages/tokens/json/                  │
 │  • raw.json (full Figma export)                              │
 │  • metadata.json (sync metadata)                             │
 │  • <collection>-<id>.<mode>.json (split by collection/mode) │
@@ -68,7 +68,7 @@ This repository implements a design token pipeline that:
                      │ (build-tokens.js)
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│         dist/packages/design-tokens/css/                    │
+│         dist/packages/tokens/css/                    │
 │  dev/                                                         │
 │    • tokens.primitives.css                                   │
 │    • tokens.primitives.light.css                            │
@@ -95,12 +95,12 @@ This repository implements a design token pipeline that:
 
 ### Key Modules
 
-- **`packages/design-tokens/scripts/sync-figma-variables.js`**: Fetches variables from Figma API, transforms to token JSON files
-- **`packages/design-tokens/scripts/build-tokens.js`**: Main build script using Style Dictionary to generate CSS
-- **`packages/design-tokens/scripts/transformers/`**: Custom transformers for unit conversions, typography, CSS processing
-- **`packages/design-tokens/scripts/utils/`**: Utility functions for token merging, string manipulation, CSS file operations
-- **`packages/design-tokens/scripts/package-tokens.js`**: Validates build output and prepares for packaging
-- **`packages/design-tokens/scripts/version.js`**: Version bumping utility (TODO: wire up as npm script)
+- **`packages/tokens/scripts/sync-figma-variables.js`**: Fetches variables from Figma API, transforms to token JSON files
+- **`packages/tokens/scripts/build-tokens.js`**: Main build script using Style Dictionary to generate CSS
+- **`packages/tokens/scripts/transformers/`**: Custom transformers for unit conversions, typography, CSS processing
+- **`packages/tokens/scripts/utils/`**: Utility functions for token merging, string manipulation, CSS file operations
+- **`packages/tokens/scripts/package-tokens.js`**: Validates build output and prepares for packaging
+- **`packages/tokens/scripts/version.js`**: Version bumping utility (TODO: wire up as npm script)
 
 ---
 
@@ -155,14 +155,14 @@ npm install
 
 ### Key Folders
 
-- **`packages/design-tokens/`**: Main token package
+- **`packages/tokens/`**: Main token package
   - `tokens/`: Raw token JSON files from Figma (not published)
   - `scripts/`: Build, sync, and transform scripts
   - `CHANGELOG.md`: Version history
   - `README.md`: Package documentation
   - `package.json`: Package metadata
 
-- **`dist/packages/design-tokens/`**: Build output directory
+- **`dist/packages/tokens/`**: Build output directory
   - `css/dev/`: Uncompressed CSS files for development
   - `css/min/`: Minified consolidated CSS for production
   - `package.json`: Package manifest (copied during build)
@@ -176,9 +176,9 @@ npm install
 
 - **`package.json`** (root): Root package scripts and dependencies
 - **`nx.json`**: Nx workspace configuration
-- **`packages/design-tokens/project.json`**: Nx project configuration for design-tokens
-- **`packages/design-tokens/tokens/metadata.json`**: Figma sync metadata (file ID, collections, modes)
-- **`packages/design-tokens/tokens/raw.json`**: Full Figma API response (not used in build, for reference)
+- **`packages/tokens/project.json`**: Nx project configuration for tokens
+- **`packages/tokens/json/metadata.json`**: Figma sync metadata (file ID, collections, modes)
+- **`packages/tokens/json/raw.json`**: Full Figma API response (not used in build, for reference)
 
 ---
 
@@ -206,8 +206,8 @@ npm run tokens:package
 
 **Expected Output:**
 
-- Token JSON files in `packages/design-tokens/tokens/`
-- CSS files in `dist/packages/design-tokens/css/dev/` and `css/min/`
+- Token JSON files in `packages/tokens/json/`
+- CSS files in `dist/packages/tokens/css/dev/` and `css/min/`
 - Tarball `s2a-tokens-<version>.tgz` in repo root
 
 ---
@@ -241,7 +241,7 @@ npm run tokens:sync
 **Or via Nx:**
 
 ```bash
-nx sync-figma design-tokens
+nx sync-figma tokens
 ```
 
 **What it does:**
@@ -250,14 +250,14 @@ nx sync-figma design-tokens
 2. Calls Figma REST API: `GET /v1/files/{fileId}/variables/local`
 3. Transforms Figma variables into token JSON files
 4. Splits tokens by collection and mode into separate files
-5. Writes to `packages/design-tokens/tokens/`:
+5. Writes to `packages/tokens/json/`:
    - `raw.json`: Full API response
    - `metadata.json`: Sync metadata (file ID, collections, modes, timestamps)
    - `<collection>-<id>.<mode>.json`: Token files split by collection and mode
 
 **Output Location:**
 
-- `packages/design-tokens/tokens/`
+- `packages/tokens/json/`
 
 **Excluded Collections:**
 
@@ -272,28 +272,28 @@ nx sync-figma design-tokens
 3. **Apply unit conversions**:
    - Typography: font-size (px → rem), line-height (percentage strings), letter-spacing (percentage strings)
    - Spacing: px → rem conversions
-   - See `packages/design-tokens/scripts/transformers/unit-conversions.js`
+   - See `packages/tokens/scripts/transformers/unit-conversions.js`
 4. **Typography transformations**:
    - Font weight: string → numeric (`"Regular"` → `400`)
    - Line height: calculated as unitless ratios based on font-size
-   - See `packages/design-tokens/scripts/transformers/typography-transformers.js`
+   - See `packages/tokens/scripts/transformers/typography-transformers.js`
 5. **CSS post-processing**:
    - Hex color shorthand (`#ffffff` → `#fff`)
    - Modern color syntax (`rgba(r, g, b, a)` → `rgb(r g b / a%)`)
    - Zero unit removal (`0px` → `0`)
-   - See `packages/design-tokens/scripts/transformers/css-processors.js`
+   - See `packages/tokens/scripts/transformers/css-processors.js`
 
 **Where Transforms Are Defined:**
 
-- `packages/design-tokens/scripts/transformers/unit-conversions.js`
-- `packages/design-tokens/scripts/transformers/typography-transformers.js`
-- `packages/design-tokens/scripts/transformers/css-processors.js`
+- `packages/tokens/scripts/transformers/unit-conversions.js`
+- `packages/tokens/scripts/transformers/typography-transformers.js`
+- `packages/tokens/scripts/transformers/css-processors.js`
 
 **How to Add a Transform:**
 
 1. Add transform logic to appropriate transformer file
 2. Call transform function in `build-tokens.js` at the appropriate stage
-3. Update tests in `packages/design-tokens/scripts/__tests__/`
+3. Update tests in `packages/tokens/scripts/__tests__/`
 
 ### How CSS Outputs Are Generated
 
@@ -306,12 +306,12 @@ npm run tokens:build
 **Or via Nx:**
 
 ```bash
-nx build design-tokens
+nx build tokens
 ```
 
 **Build Process:**
 
-1. Reads `packages/design-tokens/tokens/metadata.json` to determine available collections and modes
+1. Reads `packages/tokens/json/metadata.json` to determine available collections and modes
 2. Loads and merges token files by category:
    - Primitives Core (non-color)
    - Primitives Color (light/dark)
@@ -324,7 +324,7 @@ nx build design-tokens
 4. Generates CSS files using Style Dictionary with custom `s2a-` prefix
 5. Post-processes CSS (color shorthand, modern syntax, zero units)
 6. Organizes outputs:
-   - Uncompressed files in `dist/packages/design-tokens/css/` (temporarily)
+   - Uncompressed files in `dist/packages/tokens/css/` (temporarily)
    - Moves uncompressed files to `css/dev/`
    - Creates consolidated minified file in `css/min/tokens.min.css`
 
@@ -367,7 +367,7 @@ nx build design-tokens
 **Production File (Recommended):**
 The build automatically creates a consolidated minified file:
 
-- **Location**: `dist/packages/design-tokens/css/min/tokens.min.css`
+- **Location**: `dist/packages/tokens/css/min/tokens.min.css`
 - **Contains**: All token layers in correct order (primitives → semantic → typography → component)
 - **Format**: Minified, single file
 
@@ -381,7 +381,7 @@ The build automatically creates a consolidated minified file:
 **Development Files (Optional):**
 If Milo needs individual files for debugging:
 
-- Location: `dist/packages/design-tokens/css/dev/`
+- Location: `dist/packages/tokens/css/dev/`
 - Import order (in Milo's stylesheet):
 
 ```css
@@ -415,7 +415,7 @@ If Milo needs individual files for debugging:
 - **Minor** (`0.X.0`): New tokens, new modes, backward compatible additions
 - **Major** (`X.0.0`): Token removals, renames, breaking structural changes
 
-**Current Version:** `0.0.4` (see `packages/design-tokens/package.json`)
+**Current Version:** `0.0.4` (see `packages/tokens/package.json`)
 
 ### How to Generate a New Release Locally
 
@@ -439,21 +439,21 @@ Currently, version bumping must be done manually or via the standalone script:
 
 ```bash
 # Option A: Use the version script directly
-node packages/design-tokens/scripts/version.js patch
+node packages/tokens/scripts/version.js patch
 # or
-node packages/design-tokens/scripts/version.js minor
+node packages/tokens/scripts/version.js minor
 # or
-node packages/design-tokens/scripts/version.js major
+node packages/tokens/scripts/version.js major
 ```
 
 **Or manually edit:**
 
-- `packages/design-tokens/package.json` → `version` field
+- `packages/tokens/package.json` → `version` field
 - `package.json` (root) → `version` field (optional, for consistency)
 
 **Step 4: Update CHANGELOG.md**
 
-- Edit `packages/design-tokens/CHANGELOG.md`
+- Edit `packages/tokens/CHANGELOG.md`
 - Add new version entry with changes
 - Follow format: `[X.Y.Z] - YYYY-MM-DD`
 
@@ -482,7 +482,7 @@ tar -tzf s2a-tokens-<version>.tgz | head -20
 **Step 8: Commit and Tag**
 
 ```bash
-git add packages/design-tokens/package.json package.json packages/design-tokens/CHANGELOG.md
+git add packages/tokens/package.json package.json packages/tokens/CHANGELOG.md
 git commit -m "chore: release s2a-tokens v<version>"
 git tag "s2a-tokens-v<version>"
 ```
@@ -492,7 +492,7 @@ git tag "s2a-tokens-v<version>"
 **Option 1: Publish to npm Registry**
 
 ```bash
-cd dist/packages/design-tokens
+cd dist/packages/tokens
 npm publish
 ```
 
@@ -506,7 +506,7 @@ The tarball `s2a-tokens-<version>.tgz` in the repo root is ready for distributio
 **Option 3: Publish to Internal Registry**
 
 ```bash
-cd dist/packages/design-tokens
+cd dist/packages/tokens
 npm publish --registry=<internal-registry-url>
 ```
 
@@ -567,7 +567,7 @@ document.documentElement.dataset.theme = "dark"; // or "light"
    ```
 2. Publish previous version:
    ```bash
-   cd dist/packages/design-tokens
+   cd dist/packages/tokens
    # Restore previous version in package.json
    npm publish
    ```
@@ -648,7 +648,7 @@ document.documentElement.dataset.theme = "dark"; // or "light"
 
 - Check if collection is excluded (see `EXCLUDED_COLLECTION_IDS`)
 - Verify variable is not marked as "remote" or "deletedButReferenced"
-- Check `packages/design-tokens/tokens/raw.json` to see if variable was fetched
+- Check `packages/tokens/json/raw.json` to see if variable was fetched
 
 ### 4. Transform Failures
 
@@ -658,7 +658,7 @@ document.documentElement.dataset.theme = "dark"; // or "light"
 
 - JSON file may be corrupted
 - Re-run `npm run tokens:sync` to regenerate files
-- Check `packages/design-tokens/tokens/raw.json` for API response issues
+- Check `packages/tokens/json/raw.json` for API response issues
 
 **Error:** CSS generation fails with reference errors
 
@@ -670,20 +670,20 @@ document.documentElement.dataset.theme = "dark"; // or "light"
 
 ### 5. Output Missing/Empty
 
-**Error:** `dist/packages/design-tokens/css/` is empty
+**Error:** `dist/packages/tokens/css/` is empty
 
 **Solution:**
 
 - Run `npm run tokens:build` (not just sync)
 - Check build logs for errors
-- Verify `packages/design-tokens/tokens/metadata.json` exists and contains files
+- Verify `packages/tokens/json/metadata.json` exists and contains files
 
 **Error:** CSS files exist but are empty
 
 **Solution:**
 
 - Check if tokens were filtered out (component tokens, responsive tokens, dataviz colors)
-- Verify token files contain data: `cat packages/design-tokens/tokens/primitives-core-*.json`
+- Verify token files contain data: `cat packages/tokens/json/primitives-core-*.json`
 - Check build logs for filtering messages
 
 ### 6. CI Failures
@@ -699,20 +699,20 @@ If CI/CD is configured:
 
 ### 7. Package Build Fails
 
-**Error:** `dist/packages/design-tokens/css directory not found`
+**Error:** `dist/packages/tokens/css directory not found`
 
 **Solution:**
 
 - Run `npm run tokens:build` before packaging
 - Verify build completed successfully
 
-**Error:** `dist/packages/design-tokens/package.json not found`
+**Error:** `dist/packages/tokens/package.json not found`
 
 **Solution:**
 
 - Build script should copy `package.json` during build
 - Check `build-tokens.js` → `copyPackageJson()` function
-- Manually copy if needed: `cp packages/design-tokens/package.json dist/packages/design-tokens/`
+- Manually copy if needed: `cp packages/tokens/package.json dist/packages/tokens/`
 
 ### 8. Version Bump Issues
 
@@ -720,8 +720,8 @@ If CI/CD is configured:
 
 **Solution:**
 
-- Use direct script: `node packages/design-tokens/scripts/version.js patch`
-- Or manually edit `packages/design-tokens/package.json`
+- Use direct script: `node packages/tokens/scripts/version.js patch`
+- Or manually edit `packages/tokens/package.json`
 
 ### 9. Minification Errors
 
@@ -776,14 +776,14 @@ If CI/CD is configured:
 
 - This runbook (primary documentation)
 - Code comments in key scripts
-- Test coverage (205 tests in `packages/design-tokens/scripts/__tests__/`)
+- Test coverage (205 tests in `packages/tokens/scripts/__tests__/`)
 
 **Onboarding Checklist:**
 
 - [ ] Read this runbook
 - [ ] Set up `.env` file with Figma credentials
 - [ ] Run end-to-end build locally
-- [ ] Review `packages/design-tokens/README.md`
+- [ ] Review `packages/tokens/README.md`
 - [ ] Review test files to understand expected behavior
 - [ ] Practice a version bump and package build
 
@@ -805,28 +805,28 @@ If CI/CD is configured:
 
 | Script           | Command                                                      | Description                                          |
 | ---------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| `tokens:sync`    | `nx sync-figma design-tokens`                                | Pull tokens from Figma                               |
-| `tokens:build`   | `nx build design-tokens`                                     | Build CSS from tokens                                |
-| `tokens:package` | `nx package design-tokens`                                   | Create distributable tarball                         |
-| `tokens:minify`  | `nx minify design-tokens`                                    | Minify CSS files (legacy, minification now in build) |
-| `tokens:clean`   | `nx clean design-tokens`                                     | Clean build output and tokens                        |
-| `tokens:test`    | `nx test design-tokens`                                      | Run tests                                            |
-| `tokens:analyze` | `node packages/design-tokens/scripts/analyze-performance.js` | Analyze performance                                  |
+| `tokens:sync`    | `nx sync-figma tokens`                                | Pull tokens from Figma                               |
+| `tokens:build`   | `nx build tokens`                                     | Build CSS from tokens                                |
+| `tokens:package` | `nx package tokens`                                   | Create distributable tarball                         |
+| `tokens:minify`  | `nx minify tokens`                                    | Minify CSS files (legacy, minification now in build) |
+| `tokens:clean`   | `nx clean tokens`                                     | Clean build output and tokens                        |
+| `tokens:test`    | `nx test tokens`                                      | Run tests                                            |
+| `tokens:analyze` | `node packages/tokens/scripts/analyze-performance.js` | Analyze performance                                  |
 | `version:patch`  | `npm version patch --no-git-tag-version`                     | Bump patch version (root package only)               |
 | `version:minor`  | `npm version minor --no-git-tag-version`                     | Bump minor version (root package only)               |
 | `version:major`  | `npm version major --no-git-tag-version`                     | Bump major version (root package only)               |
 
-**Note:** Version scripts in root `package.json` only affect root package. For design-tokens version, use `node packages/design-tokens/scripts/version.js <patch|minor|major>`.
+**Note:** Version scripts in root `package.json` only affect root package. For tokens version, use `node packages/tokens/scripts/version.js <patch|minor|major>`.
 
 ### Output Artifacts Inventory
 
 **Source Token Files** (not published):
 
-- `packages/design-tokens/tokens/raw.json`: Full Figma API response
-- `packages/design-tokens/tokens/metadata.json`: Sync metadata
-- `packages/design-tokens/tokens/*.json`: Token files by collection/mode
+- `packages/tokens/json/raw.json`: Full Figma API response
+- `packages/tokens/json/metadata.json`: Sync metadata
+- `packages/tokens/json/*.json`: Token files by collection/mode
 
-**Build Output** (`dist/packages/design-tokens/`):
+**Build Output** (`dist/packages/tokens/`):
 
 - `css/dev/tokens.primitives.css`: Non-color primitives (uncompressed)
 - `css/dev/tokens.primitives.light.css`: Color primitives light (uncompressed)
@@ -862,7 +862,7 @@ If CI/CD is configured:
 - [ ] Confirm CI/CD setup (if exists, document workflow)
 - [ ] Document primary/secondary maintainer contacts
 - [ ] Add `.nvmrc` or `.node-version` file for Node version
-- [ ] Verify package name consistency (README mentions `consonant-design-tokens` but package is `s2a-tokens`)
+- [x] Package name is `s2a-tokens` (consistent across README, runbook, and package.json)
 
 ---
 

@@ -15,7 +15,7 @@ const rootPackage = require(path.join(ROOT_DIR, "package.json"));
 
 // Create package.json in build/ directory (required for npm pack)
 const packageJson = {
-  name: "consonant-design-tokens",
+  name: "s2a-tokens",
   version: rootPackage.version || "0.0.1",
   description:
     rootPackage.description || "Design token build output for Consonant.",

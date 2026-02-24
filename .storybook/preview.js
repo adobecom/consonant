@@ -1,21 +1,19 @@
 // Import design tokens CSS files in the correct order
 // 1. Primitives (non-color)
-import "../dist/packages/design-tokens/css/dev/tokens.primitives.css";
+import "../dist/packages/tokens/css/dev/tokens.primitives.css";
 // 2. Primitives (color - light mode)
-import "../dist/packages/design-tokens/css/dev/tokens.primitives.light.css";
-// 3. Primitives (color - dark mode)
-import "../dist/packages/design-tokens/css/dev/tokens.primitives.dark.css";
-// 4. Semantic (non-color)
-import "../dist/packages/design-tokens/css/dev/tokens.semantic.css";
-// 5. Semantic (color - light mode)
-import "../dist/packages/design-tokens/css/dev/tokens.semantic.light.css";
-// 6. Semantic (color - dark mode)
-import "../dist/packages/design-tokens/css/dev/tokens.semantic.dark.css";
-// 7. Component (color - light mode)
-// Note: Component non-color tokens failed to build due to missing references
-import "../dist/packages/design-tokens/css/dev/tokens.component.light.css";
-// 8. Component (color - dark mode)
-import "../dist/packages/design-tokens/css/dev/tokens.component.dark.css";
+import "../dist/packages/tokens/css/dev/tokens.primitives.light.css";
+// 3. Semantic (non-color)
+import "../dist/packages/tokens/css/dev/tokens.semantic.css";
+// 4. Semantic (color - light mode)
+import "../dist/packages/tokens/css/dev/tokens.semantic.light.css";
+// 5. Semantic (color - dark mode)
+import "../dist/packages/tokens/css/dev/tokens.semantic.dark.css";
+// 6. Typography
+import "../dist/packages/tokens/css/dev/tokens.typography.css";
+// 7. Breakpoints
+import "../dist/packages/tokens/css/tokens.breakpoints.css";
+// Note: Component tokens are not yet generated (no component tokens in Figma file)
 
 // Font Loading - Adobe Clean Display via Typekit
 // Using internal Adobe Typekit kit ID (mie2rub)

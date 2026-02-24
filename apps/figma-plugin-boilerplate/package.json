@@ -1,0 +1,10 @@
+{
+  "name": "@s2a/figma-plugin-boilerplate",
+  "version": "0.0.1",
+  "description": "Figma plugin boilerplate template",
+  "private": true,
+  "scripts": {
+    "build": "nx build figma-plugin-boilerplate",
+    "package": "nx package figma-plugin-boilerplate"
+  }
+}

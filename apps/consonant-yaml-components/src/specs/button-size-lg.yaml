@@ -1,0 +1,66 @@
+meta:
+  id: button-size-lg-set
+  title: Accent Button · Solid · Size LG
+  description: Accent solid button at LG size (40px height) with default and disabled states.
+  tags:
+    - button
+    - accent
+    - solid
+    - size-lg
+component:
+  name: C/Button/Accent/Solid/LG
+  frame:
+    width: 200
+    height: 40
+    padding:
+      horizontal: 24
+      vertical: 12
+  layers:
+    - kind: rectangle
+      name: Surface
+      tokens:
+        fill: --s2a-button-color-background-accent-solid-default
+      fallback:
+        fill: '#3b63fb'
+      cornerRadius: 999
+    - kind: text
+      name: Label
+      characters: Button label
+      tokens:
+        fill: --s2a-button-color-label-on-accent
+        typography: --s2a-typography-body-strong
+      fallback:
+        fill: '#ffffff'
+        fontFamily: Adobe Clean
+        fontStyle: Bold
+        fontSize: 14
+        letterSpacing: 0
+  variants:
+    name: C/Button/Accent/Solid/LG
+    properties:
+      - name: state
+        values: [default, disabled]
+    nodes:
+      - id: accent-lg-default
+        name: Accent LG / Default
+        properties:
+          state: default
+      - id: accent-lg-disabled
+        name: Accent LG / Disabled
+        properties:
+          state: disabled
+        overrides:
+          layers:
+            Surface:
+              tokens:
+                fill: --s2a-button-color-background-accent-solid-disabled
+              fallback:
+                fill: '#f8f8f8'
+            Label:
+              tokens:
+                fill: --s2a-button-color-label-on-accent-disabled
+              fallback:
+                fill: '#c6c6c6'
+                fontFamily: Adobe Clean
+                fontStyle: Bold
+                fontSize: 14

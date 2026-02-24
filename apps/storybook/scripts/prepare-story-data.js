@@ -6,7 +6,7 @@ const path = require("path");
 // Dynamically find the primitives-core file since collection IDs can change
 const tokensDir = path.resolve(
   __dirname,
-  "../../../packages/design-tokens/tokens",
+  "../../../packages/tokens/json",
 );
 const metadataPath = path.join(tokensDir, "metadata.json");
 

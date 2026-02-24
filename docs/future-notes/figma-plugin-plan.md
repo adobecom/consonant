@@ -5,7 +5,7 @@ This document outlines how we will introduce a YAML-driven Figma plugin into the
 ## Guiding Principles
 
 - **Stay token-aligned** – the plugin must resolve semantic/component tokens first and only fall back to primitives when explicitly annotated (`Primitive:` comments), mirroring `docs/guardrails/no-primitives-in-components.md`.
-- **Meet Nx expectations** – every deliverable is an Nx project with documented `build`, `serve/watch`, and `package` targets so Story UI and the existing CI can orchestrate it like `design-tokens` and `storybook`.
+- **Meet Nx expectations** – every deliverable is an Nx project with documented `build`, `serve/watch`, and `package` targets so Story UI and the existing CI can orchestrate it like `tokens` and `storybook`.
 - **Specs live as code** – YAML specs should be validated and versioned inside the repo (likely `packages/figma-specs/` eventually) so engineers and designers can review deltas through Git.
 
 ## Stage Breakdown
@@ -19,7 +19,7 @@ This document outlines how we will introduce a YAML-driven Figma plugin into the
 - Support a minimal schema: component name, frame size, and a stack of layers (rectangles + text) with token references for fill, stroke, text style.
 - Ship a simple UI that lets the designer select one of the bundled specs and click “Generate”; no editing yet.
 - Provide validation + logging so invalid specs surface an error in the UI and via `figma.notify`.
-- Document CLI/Nx steps for building (`nx build figma-plugin`) and locally loading the manifest into Figma Desktop.
+- Document CLI/Nx steps for building (`nx build consonant-yaml-components`) and locally loading the manifest into Figma Desktop.
 
 **Exit criteria:** Designers can load the plugin, pick `button.yaml`, and receive a component frame that already uses Consonant tokens for fills/typography.
 
@@ -32,7 +32,7 @@ This document outlines how we will introduce a YAML-driven Figma plugin into the
 - Add the ability to paste in external YAML (textarea upload) or choose from multiple bundled specs so designers aren’t blocked by rebuilds.
 - Introduce schema validation (e.g., JSON Schema compiled at build time) so authors get actionable feedback before Figma node creation.
 - Persist guardrail metadata (list of tokens referenced, primitive fallbacks) and show it in the plugin UI so designers can fix upstream specs.
-- Extend Nx targets with `nx lint figma-plugin` (schema + TypeScript checks) and ensure Storybook docs reference how to use the Cupcake features.
+- Extend Nx targets with `nx lint consonant-yaml-components` (schema + TypeScript checks) and ensure Storybook docs reference how to use the Cupcake features.
 
 **Exit criteria:** Designers can pick a YAML spec that defines variants, click generate, and get a fully wired component set reflecting the schema.
 
@@ -55,7 +55,7 @@ This document outlines how we will introduce a YAML-driven Figma plugin into the
 - Implement bidirectional updates: allow designers to push Figma component metadata (e.g., resolved token IDs, missing aliases) back into the repo via MCP or git patches.
 - Introduce a spec registry service (tiny Node/Nx app) that brokers spec versions, approvals, and notifications when guardrails fail.
 - Add multi-file orchestration so large specs (e.g., hero marquee) can stitch together nested atoms/molecules and share sub-specs.
-- Expand to automated release pipelines: `nx release figma-plugin` packages the plugin, runs integration tests inside Figma Desktop via Playwright automation, and publishes signed bundles to a shared location.
+- Expand to automated release pipelines: `nx release consonant-yaml-components` packages the plugin, runs integration tests inside Figma Desktop via Playwright automation, and publishes signed bundles to a shared location.
 - Provide observability (telemetry events, error tracking) so we can monitor adoption and triage failures.
 
 **Exit criteria:** The YAML → Figma workflow is production-hardened, observable, and embedded in Consonant’s release/approval process.

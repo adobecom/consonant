@@ -639,8 +639,8 @@ packages/components/src/product-lockup/
 
 ### Design Token Pipeline
 
-- `packages/design-tokens/scripts/build-tokens.js` - Build token CSS (CSS custom properties)
-- `packages/design-tokens/scripts/sync-figma-variables.js` - Sync from Figma
+- `packages/tokens/scripts/build-tokens.js` - Build token CSS (CSS custom properties)
+- `packages/tokens/scripts/sync-figma-variables.js` - Sync from Figma
 
 ### Storybook
 
@@ -865,7 +865,7 @@ For a design system with **20 components**:
 
 ## Resources
 
-- [Design Tokens README](../packages/design-tokens/README.md)
+- [Design Tokens README](../packages/tokens/README.md)
 - [Token Pipeline Runbook](../how-tos/runbook-token-pipeline.md)
 - [Figma Variables Documentation](https://help.figma.com/hc/en-us/articles/15339657135383)
 - [Storybook Documentation](https://storybook.js.org/docs)

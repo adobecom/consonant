@@ -38,16 +38,16 @@
 ### Card 2.2: Sync from Figma
 
 **Command:** `npm run tokens:sync`  
-**Expected:** Token JSON files in `packages/design-tokens/tokens/`
+**Expected:** Token JSON files in `packages/tokens/json/`
 
 ### Card 2.3: Verify Sync Output
 
-**Action:** Check `packages/design-tokens/tokens/metadata.json` exists  
+**Action:** Check `packages/tokens/json/metadata.json` exists  
 **Expected:** Metadata file contains file list and sync timestamp
 
 ### Card 2.4: Check Token Files
 
-**Action:** List files: `ls packages/design-tokens/tokens/*.json`  
+**Action:** List files: `ls packages/tokens/json/*.json`  
 **Expected:** Multiple JSON files (one per collection/mode)
 
 ---
@@ -57,16 +57,16 @@
 ### Card 3.1: Run Build
 
 **Command:** `npm run tokens:build`  
-**Expected:** CSS files generated in `dist/packages/design-tokens/css/`
+**Expected:** CSS files generated in `dist/packages/tokens/css/`
 
 ### Card 3.2: Verify Dev Files
 
-**Action:** Check `dist/packages/design-tokens/css/dev/`  
+**Action:** Check `dist/packages/tokens/css/dev/`  
 **Expected:** 10 CSS files (primitives, semantic, typography, component, each with light/dark variants)
 
 ### Card 3.3: Verify Minified File
 
-**Action:** Check `dist/packages/design-tokens/css/min/tokens.min.css`  
+**Action:** Check `dist/packages/tokens/css/min/tokens.min.css`  
 **Expected:** Single consolidated minified CSS file
 
 ### Card 3.4: Inspect CSS Output
@@ -85,12 +85,12 @@
 
 ### Card 4.2: Bump Version
 
-**Command:** `node packages/design-tokens/scripts/version.js patch` (or minor/major)  
-**Expected:** Version updated in `packages/design-tokens/package.json`
+**Command:** `node packages/tokens/scripts/version.js patch` (or minor/major)  
+**Expected:** Version updated in `packages/tokens/package.json`
 
 ### Card 4.3: Update CHANGELOG
 
-**Action:** Edit `packages/design-tokens/CHANGELOG.md` with new version entry  
+**Action:** Edit `packages/tokens/CHANGELOG.md` with new version entry  
 **Expected:** CHANGELOG updated with changes
 
 ### Card 4.4: Package Tarball
@@ -110,7 +110,7 @@
 
 ### Card 4.7: Publish (Optional)
 
-**Command:** `cd dist/packages/design-tokens && npm publish`  
+**Command:** `cd dist/packages/tokens && npm publish`  
 **Expected:** Package published to npm registry
 
 ---
@@ -150,7 +150,7 @@ npm run tokens:sync && npm run tokens:build && npm run tokens:package
 **Version Bump + Release:**
 
 ```bash
-node packages/design-tokens/scripts/version.js patch
+node packages/tokens/scripts/version.js patch
 npm run tokens:build
 npm run tokens:package
 git add . && git commit -m "chore: release v<version>"

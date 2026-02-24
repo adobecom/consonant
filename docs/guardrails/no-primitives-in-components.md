@@ -34,7 +34,7 @@ Guardrail reminder:
 ## Validation Checklist
 
 1. Run `rg "--s2a-" packages/components/<component>` to list all tokens.
-2. Confirm every primitive token either has a `Primitive:` comment or is part of `packages/design-tokens` (which may still use primitives).
+2. Confirm every primitive token either has a `Primitive:` comment or is part of `packages/tokens` (which may still use primitives).
 3. Reject any code review / MCP response that doesn’t call out primitive usages.
 
 ## Next Steps

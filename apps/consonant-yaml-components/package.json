@@ -1,0 +1,10 @@
+{
+  "name": "@s2a/consonant-yaml-components",
+  "version": "0.0.1",
+  "description": "Figma plugin that generates components from YAML specs",
+  "private": true,
+  "scripts": {
+    "build": "nx build consonant-yaml-components",
+    "package": "nx package consonant-yaml-components"
+  }
+}
