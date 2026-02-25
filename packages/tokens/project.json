@@ -25,6 +25,19 @@
         "command": "node packages/tokens/scripts/sync-figma-variables.js"
       }
     },
+    "unhide-figma": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node packages/tokens/scripts/unhide-variables-from-publishing.js"
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node packages/tokens/scripts/publish-tokens.js"
+      }
+    },
     "minify": {
       "executor": "nx:run-commands",
       "options": {
