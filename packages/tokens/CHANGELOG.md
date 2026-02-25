@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.7] - 2025-02-25
+
+### ✨ Improvements
+
+- **Typography & layout sync**: Synced Figma variables; added typography and component token collections. Font sizes are rem-based.
+- **Responsive tokens**: Added tablet breakpoint and responsive typography/layout grid outputs (desktop, tablet, mobile).
+- **Line-height fix**: Resolved missing `line-height.54` token in build output.
+
+### 📦 Publishing & Repo
+
+- **Package rename**: `s2a-tokens` → `@adobecom/s2a-tokens` (GitHub Packages).
+- **Contributing**: Added `docs/contributing.md` and `.github/CODEOWNERS` for Git workflow and ownership.
+- **Releases**: `.gitignore` updated so tarballs in `releases/` can be committed for handoff.
+
+---
+
 ## [0.0.4] - 2025-11-26
 
 ### ✨ Improvements
