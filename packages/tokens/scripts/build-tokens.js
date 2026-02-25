@@ -1074,8 +1074,10 @@ async function buildFromFigma() {
       return true;
     };
 
-    const typographyBaseModes = ["mobile", "desktop"];
+    // Support mobile, tablet, and desktop typography modes.
+    const typographyBaseModes = ["mobile", "tablet", "desktop"];
     const hasMobile = typographyCoreFiles.has("mobile");
+    const hasTablet = typographyCoreFiles.has("tablet");
     const hasDesktop = typographyCoreFiles.has("desktop");
 
     for (const modeName of typographyBaseModes) {
@@ -1091,22 +1093,38 @@ async function buildFromFigma() {
       transformFontSizeReferences(mergedTypographyBeforeConversion);
       applyUnitConversions(mergedTypographyBeforeConversion);
 
+      const isMobile = modeName === "mobile";
+      const isTablet = modeName === "tablet";
       const isDesktop = modeName === "desktop";
-      const destination = isDesktop
-        ? "tokens.typography.desktop.css"
-        : "tokens.typography.css";
+
+      // File destinations per mode
+      const destination = isMobile
+        ? "tokens.typography.css"
+        : isTablet
+          ? "tokens.typography.tablet.css"
+          : "tokens.typography.desktop.css";
+
+      // Media queries per mode:
+      // - mobile: no media query (base)
+      // - tablet: min-width 768px
+      // - desktop: min-width 1024px so it overrides tablet values
+      const mediaQuery = isMobile
+        ? null
+        : isTablet
+          ? "@media (min-width: 768px)"
+          : "@media (min-width: 1024px)";
 
       await buildCssFromTokens(mergedTypographyBeforeConversion, {
         destination,
         selector: ":root",
-        mediaQuery: isDesktop ? "@media (min-width: 768px)" : null,
+        mediaQuery,
         outputReferences: true,
         filter: typographyFilter,
       });
     }
 
-    // Fallback: if no mobile/desktop modes, use single file
-    if (!hasMobile && !hasDesktop) {
+    // Fallback: if no mobile/tablet/desktop modes, use single file
+    if (!hasMobile && !hasTablet && !hasDesktop) {
       const allFiles = Array.from(typographyCoreFiles.values()).flat();
       const typographyTokens = await loadTokensForMode(allFiles, true);
       const mergedTypographyBeforeConversion = mergeTokenTrees(
@@ -1320,6 +1338,7 @@ async function minifyAllCssFiles() {
     "tokens.semantic.light.css",
     "tokens.semantic.dark.css",
     "tokens.typography.css",
+    "tokens.typography.tablet.css",
     "tokens.typography.desktop.css",
     "tokens.component.css",
     "tokens.component.light.css",

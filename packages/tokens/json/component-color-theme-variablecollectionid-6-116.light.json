@@ -1,0 +1,54 @@
+{
+  "button": {
+    "content": {
+      "default": {
+        "$type": "color",
+        "$value": "{color.content.default}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "knockout": {
+        "$type": "color",
+        "$value": "{color.content.knockout}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      }
+    },
+    "background": {
+      "primary": {
+        "solid": {
+          "default": {
+            "$type": "color",
+            "$value": "#FFFFFF",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

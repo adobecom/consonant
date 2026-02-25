@@ -221,7 +221,7 @@
       },
       "lg": {
         "$type": "number",
-        "$value": "{font.size.20}",
+        "$value": "{font.size.18}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -235,7 +235,7 @@
       },
       "xl": {
         "$type": "number",
-        "$value": "{font.size.24}",
+        "$value": "{font.size.20}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -249,7 +249,7 @@
       },
       "2xl": {
         "$type": "number",
-        "$value": "{font.size.32}",
+        "$value": "{font.size.24}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -263,7 +263,7 @@
       },
       "3xl": {
         "$type": "number",
-        "$value": "{font.size.40}",
+        "$value": "{font.size.32}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -277,7 +277,7 @@
       },
       "4xl": {
         "$type": "number",
-        "$value": "{font.size.48}",
+        "$value": "{font.size.40}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -291,7 +291,7 @@
       },
       "5xl": {
         "$type": "number",
-        "$value": "{font.size.56}",
+        "$value": "{font.size.48}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -305,7 +305,7 @@
       },
       "6xl": {
         "$type": "number",
-        "$value": "{font.size.64}",
+        "$value": "{font.size.56}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -319,7 +319,7 @@
       },
       "7xl": {
         "$type": "number",
-        "$value": "{font.size.72}",
+        "$value": "{font.size.64}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -332,6 +332,34 @@
         }
       },
       "8xl": {
+        "$type": "number",
+        "$value": "{font.size.72}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [
+              "FONT_SIZE"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "9xl": {
+        "$type": "number",
+        "$value": "{font.size.80}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [
+              "FONT_SIZE"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "10xl": {
         "$type": "number",
         "$value": "{font.size.96}",
         "$description": "",
@@ -347,9 +375,23 @@
       }
     },
     "line-height": {
-      "xs": {
+      "2xs": {
         "$type": "number",
         "$value": "{font.line-height.16}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [
+              "LINE_HEIGHT"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "xs": {
+        "$type": "number",
+        "$value": "{font.line-height.18}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -433,7 +475,7 @@
       },
       "3xl": {
         "$type": "number",
-        "$value": "{font.line-height.56}",
+        "$value": "{font.line-height.54}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -460,6 +502,20 @@
         }
       },
       "5xl": {
+        "$type": "number",
+        "$value": "{font.line-height.76}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [
+              "LINE_HEIGHT"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "6xl": {
         "$type": "number",
         "$value": "{font.line-height.92}",
         "$description": "",

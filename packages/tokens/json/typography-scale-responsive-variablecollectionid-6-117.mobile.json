@@ -1,20 +1,6 @@
 {
   "typography": {
     "font": {
-      "number": {
-        "$type": "number",
-        "$value": 0,
-        "$description": "",
-        "$extensions": {
-          "com.figma": {
-            "hiddenFromPublishing": false,
-            "scopes": [
-              "ALL_SCOPES"
-            ],
-            "codeSyntax": {}
-          }
-        }
-      },
       "line-height": {
         "super": {
           "$type": "number",
@@ -88,7 +74,7 @@
         },
         "p-lg": {
           "$type": "number",
-          "$value": "{font.line-height.md}",
+          "$value": "{font.line-height.sm}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -116,7 +102,7 @@
         },
         "p-sm": {
           "$type": "number",
-          "$value": "{font.line-height.xs}",
+          "$value": "{font.line-height.2xs}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -158,7 +144,7 @@
         },
         "caption": {
           "$type": "number",
-          "$value": "{font.line-height.xs}",
+          "$value": "{font.line-height.2xs}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -330,7 +316,7 @@
       "size": {
         "super": {
           "$type": "number",
-          "$value": "{font.size.5xl}",
+          "$value": "{font.size.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -344,7 +330,7 @@
         },
         "h1": {
           "$type": "number",
-          "$value": "{font.size.3xl}",
+          "$value": "{font.size.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -358,7 +344,7 @@
         },
         "h2": {
           "$type": "number",
-          "$value": "{font.size.2xl}",
+          "$value": "{font.size.3xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -372,7 +358,7 @@
         },
         "h3": {
           "$type": "number",
-          "$value": "{font.size.xl}",
+          "$value": "{font.size.2xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -386,7 +372,7 @@
         },
         "h4": {
           "$type": "number",
-          "$value": "{font.size.lg}",
+          "$value": "{font.size.xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -400,7 +386,7 @@
         },
         "p-lg": {
           "$type": "number",
-          "$value": "{font.size.lg}",
+          "$value": "{font.size.md}",
           "$description": "",
           "$extensions": {
             "com.figma": {

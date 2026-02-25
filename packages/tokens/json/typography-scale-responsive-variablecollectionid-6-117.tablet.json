@@ -4,7 +4,7 @@
       "line-height": {
         "super": {
           "$type": "number",
-          "$value": "{font.line-height.6xl}",
+          "$value": "{font.line-height.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -18,7 +18,7 @@
         },
         "h1": {
           "$type": "number",
-          "$value": "{font.line-height.5xl}",
+          "$value": "{font.line-height.3xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -32,7 +32,7 @@
         },
         "h2": {
           "$type": "number",
-          "$value": "{font.line-height.3xl}",
+          "$value": "{font.line-height.xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -46,7 +46,7 @@
         },
         "h3": {
           "$type": "number",
-          "$value": "{font.line-height.2xl}",
+          "$value": "{font.line-height.lg}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -60,7 +60,7 @@
         },
         "h4": {
           "$type": "number",
-          "$value": "{font.line-height.md}",
+          "$value": "{font.line-height.sm}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -102,7 +102,7 @@
         },
         "p-sm": {
           "$type": "number",
-          "$value": "{font.line-height.2xs}",
+          "$value": "{font.line-height.xs}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -130,7 +130,7 @@
         },
         "label": {
           "$type": "number",
-          "$value": "{font.line-height.2xs}",
+          "$value": "{font.line-height.xs}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -160,7 +160,7 @@
       "letter-spacing": {
         "super": {
           "$type": "number",
-          "$value": "{font.letter-spacing.xs}",
+          "$value": "{font.letter-spacing.md}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -216,7 +216,7 @@
         },
         "h4": {
           "$type": "number",
-          "$value": "{font.letter-spacing.xl}",
+          "$value": "{font.letter-spacing.2xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -316,7 +316,7 @@
       "size": {
         "super": {
           "$type": "number",
-          "$value": "{font.size.10xl}",
+          "$value": "{font.size.8xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -330,7 +330,7 @@
         },
         "h1": {
           "$type": "number",
-          "$value": "{font.size.9xl}",
+          "$value": "{font.size.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -344,7 +344,7 @@
         },
         "h2": {
           "$type": "number",
-          "$value": "{font.size.6xl}",
+          "$value": "{font.size.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -358,7 +358,7 @@
         },
         "h3": {
           "$type": "number",
-          "$value": "{font.size.5xl}",
+          "$value": "{font.size.3xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -372,7 +372,7 @@
         },
         "h4": {
           "$type": "number",
-          "$value": "{font.size.2xl}",
+          "$value": "{font.size.xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -386,7 +386,7 @@
         },
         "p-lg": {
           "$type": "number",
-          "$value": "{font.size.xl}",
+          "$value": "{font.size.lg}",
           "$description": "",
           "$extensions": {
             "com.figma": {
