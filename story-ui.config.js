@@ -8,6 +8,5 @@ export default {
   defaultAuthor: "Story UI AI",
   importExamples: [
     "import '../../../../packages/components/src/button/index.js';",
-    "import '../../../../packages/components/src/product-lockup/index.js';",
   ],
 };

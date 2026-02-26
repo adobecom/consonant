@@ -1,36 +1,29 @@
-import { html } from 'lit';
-import './button.css';
+import { html } from "lit";
+import "./button.css";
 
 /**
  * Button Component
- * Pure HTML/CSS component using data attributes for variants
- * 
+ * Implements matt-atoms Button from Figma (node 141-53460).
+ * Figma props: Background (solid|outlined), State (default|hover|active|disabled|focus), Size (lg), Intent (primary), Tone (knockout).
+ *
  * @param {Object} args - Component arguments
  * @param {string} args.label - Button label text
- * @param {string} args.size - Button size: "lg" | "xl" | "2xl" (default: "2xl")
- * @param {string} args.state - Button state: "default" | "disabled" | "hover"
- * @param {string} args.kind - Button kind: "accent" | "primary" | "secondary"
- * @param {string} args.background - Background style: "solid" | "outlined" | "glass"
- * @param {string} args.surface - Surface context: "default" | "on-media" (default: "default")
- * @param {Function} args.onClick - Click handler function
+ * @param {string} args.background - "solid" | "outlined"
+ * @param {string} args.state - "default" | "disabled"
+ * @param {Function} args.onClick - Click handler
  */
-export const Button = ({ 
-  label = 'Label', 
-  size = '2xl', 
-  state = 'default', 
-  kind = 'accent', 
-  background = 'solid',
-  surface = 'default',
-  onClick 
-}) => {
+export const Button = ({
+  label = "Label",
+  background = "solid",
+  state = "default",
+  onClick,
+} = {}) => {
   return html`
     <button
       class="c-button"
-      data-size="${size}"
-      data-state="${state}"
-      data-kind="${kind}"
       data-background="${background}"
-      data-surface="${surface}"
+      data-state="${state}"
+      ?disabled=${state === "disabled"}
       @click=${onClick}
       type="button"
     >

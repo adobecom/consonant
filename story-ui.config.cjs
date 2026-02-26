@@ -29,37 +29,20 @@ module.exports = {
       name: 'Button',
       displayName: 'Button',
       importPath: '../../../../packages/components/src/button/index.js',
-      props: ['label', 'size', 'state', 'kind', 'background', 'onClick'],
-      description: 'Button component with variants for size, state, kind, and background style. USE THIS for ALL buttons - never create custom button markup.',
+      props: ['label', 'background', 'state', 'onClick'],
+      description: 'matt-atoms Button (Figma 141-53460). USE THIS for ALL buttons - never create custom button markup.',
       category: 'content',
       examples: [
         "import { Button } from '../../../../packages/components/src/button/index.js';",
-        "// Primary CTA (accent, solid)",
-        "Button({ label: 'Learn more', kind: 'accent', background: 'solid', size: '2xl' })",
-        "// Secondary CTA (primary, outlined)",
-        "Button({ label: 'Get started', kind: 'primary', background: 'outlined', size: '2xl' })",
+        "// Primary CTA (solid)",
+        "Button({ label: 'Learn more', background: 'solid' })",
+        "// Secondary CTA (outlined)",
+        "Button({ label: 'Get started', background: 'outlined' })",
         "// In template:",
-        "${Button({ label: args.buttonLabel, kind: 'accent', background: 'solid', size: '2xl' })}"
+        "${Button({ label: args.buttonLabel, background: 'solid' })}"
       ],
       whenToUse: 'ALL buttons, CTAs, action elements. Never use <button> tags or custom button CSS.',
       doNot: 'Create custom <button> elements, inline button styles, or button CSS classes.'
-    },
-    {
-      name: 'ProductLockup',
-      displayName: 'Product Lockup',
-      importPath: '../../../../packages/components/src/product-lockup/index.js',
-      props: ['productName', 'showName', 'size', 'tileVariant', 'productTile'],
-      description: 'Product lockup component for displaying product icons side-by-side. USE THIS for ALL product icons/logos - never use <img> tags for product icons.',
-      category: 'content',
-      examples: [
-        "import { ProductLockup } from '../../../../packages/components/src/product-lockup/index.js';",
-        "// Single product lockup",
-        "ProductLockup({ productName: 'Adobe', size: '2xl' })",
-        "// Multiple lockups side-by-side",
-        "html`<div style='display: flex; gap: 15px;'>${ProductLockup({ productName: 'Adobe', size: '2xl' })}${ProductLockup({ productName: 'Photoshop', size: '2xl' })}</div>`"
-      ],
-      whenToUse: 'ALL product icons, logos, brand lockups, product tiles.',
-      doNot: 'Use <img> tags for product icons, create custom product tile markup, or inline product logos.'
     }
   ],
   
@@ -113,8 +96,7 @@ export default {
   
   // Import examples for web components
   importExamples: [
-    "import '../../../../packages/components/src/button/button.js'; // For Button component",
-    "import '../../../../packages/components/src/product-lockup/product-lockup.js'; // For ProductLockup component",
+    "import '../../../../packages/components/src/button/index.js'; // For Button component",
   ],
   
   // Considerations file path

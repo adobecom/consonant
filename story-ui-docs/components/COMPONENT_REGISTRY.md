@@ -8,60 +8,27 @@
 **Path**: `packages/components/src/button/`  
 **Import**: `import { Button } from '../../../../packages/components/src/button/index.js';`
 
-**When to use**: ALL buttons, CTAs, action elements, form submissions
+**When to use**: ALL buttons, CTAs, action elements, form submissions. matt-atoms design (Figma 141-53460).
 
 **Props**:
 - `label` (string, required): Button text
-- `size` ('xl' | '2xl', default: '2xl')
-- `state` ('default' | 'disabled', default: 'default')
-- `kind` ('accent' | 'primary', default: 'accent')
 - `background` ('solid' | 'outlined', default: 'solid')
+- `state` ('default' | 'disabled', default: 'default')
 - `onClick` (function, optional)
 
 **Examples**:
 ```javascript
-// Primary CTA
-Button({ label: 'Learn more', kind: 'accent', background: 'solid', size: '2xl' })
+// Primary CTA (solid)
+Button({ label: 'Learn more', background: 'solid' })
 
-// Secondary CTA
-Button({ label: 'Get started', kind: 'primary', background: 'outlined', size: '2xl' })
+// Secondary CTA (outlined)
+Button({ label: 'Get started', background: 'outlined' })
 
 // Disabled button
-Button({ label: 'Submit', state: 'disabled', kind: 'accent', background: 'solid', size: '2xl' })
+Button({ label: 'Submit', state: 'disabled', background: 'solid' })
 ```
 
 **DO NOT**: Create custom `<button>` elements, inline button styles, or button CSS.
-
----
-
-### 2. ProductLockup
-**Path**: `packages/components/src/product-lockup/`  
-**Import**: `import { ProductLockup } from '../../../../packages/components/src/product-lockup/index.js';`
-
-**When to use**: ALL product icons, logos, brand lockups, product tiles
-
-**Props**:
-- `productName` (string, default: 'Adobe'): Product name to display
-- `showName` (boolean, default: true): Whether to show product name text
-- `size` ('xl' | '2xl', default: '2xl'): Lockup size
-- `tileVariant` ('default' | 'experience-cloud', default: 'default'): Tile variant
-- `productTile` (string | HTMLElement, optional): Custom product tile image URL or HTML
-
-**Examples**:
-```javascript
-// Single product lockup
-ProductLockup({ productName: 'Adobe', size: '2xl' })
-
-// Multiple lockups (wrap in flex container)
-html`
-  <div style="display: flex; gap: 15px; align-items: center;">
-    ${ProductLockup({ productName: 'Adobe', size: '2xl' })}
-    ${ProductLockup({ productName: 'Photoshop', size: '2xl' })}
-  </div>
-`
-```
-
-**DO NOT**: Use `<img>` tags for product icons, create custom product tile markup, or inline product logos.
 
 ---
 
@@ -84,7 +51,6 @@ When a new component is added to `packages/components/src/`, it must be:
 ## Common Mistakes to Avoid
 
 ❌ **Creating custom buttons** when `Button` component exists  
-❌ **Using `<img>` for product icons** when `ProductLockup` exists  
 ❌ **Recreating component functionality** "because it's simpler"  
 ❌ **Not checking the registry** before generating code  
 ❌ **Using placeholder components** when real components exist  

@@ -6,6 +6,3 @@
  */
 
 export * from "./button/index.js";
-export * from "./button-v2/index.js";
-export * from "./product-lockup/index.js";
-export * from "./marquee/index.js";

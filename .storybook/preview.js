@@ -16,21 +16,28 @@ import "../dist/packages/tokens/css/tokens.breakpoints.css";
 // Note: Component tokens are not yet generated (no component tokens in Figma file)
 
 // Font Loading - Adobe Clean Display via Typekit
-// Using internal Adobe Typekit kit ID (mie2rub)
-// Load fonts via link tags (can't use import for external CSS)
+// Kit mie2rub provides adobe-clean-display (Typekit uses lowercase with hyphens)
+// Override font tokens to match @font-face names so components render the loaded font
 if (typeof document !== "undefined") {
-  // Load Adobe Clean Display from Typekit
   const typekitLink = document.createElement("link");
   typekitLink.rel = "stylesheet";
   typekitLink.href = "https://use.typekit.net/mie2rub.css";
   document.head.appendChild(typekitLink);
 
-  // Load Inter font from Google Fonts (fallback if Typekit fails)
   const interLink = document.createElement("link");
   interLink.rel = "stylesheet";
   interLink.href =
     "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap";
   document.head.appendChild(interLink);
+
+  const fontOverride = document.createElement("style");
+  fontOverride.textContent = `
+    :root {
+      --s2a-font-family-adobe-clean: "adobe-clean-display", "Adobe Clean", sans-serif;
+      --s2a-font-family-adobe-clean-display: "adobe-clean-display", "Adobe Clean Display", sans-serif;
+    }
+  `;
+  document.head.appendChild(fontOverride);
 }
 
 // Set theme attribute globally so semantic and component color tokens are available
@@ -58,10 +65,13 @@ const preview = {
     },
 
     a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
-      test: "todo",
+      test: "error",
+      options: {
+        runOnly: {
+          type: "tag",
+          values: ["wcag2a", "wcag2aa", "wcag21aa"],
+        },
+      },
     },
   },
   decorators: [

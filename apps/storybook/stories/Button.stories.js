@@ -1,381 +1,126 @@
 import { html } from "lit";
-import { expect, fn } from "storybook/test";
+import { fn } from "storybook/test";
 
 import { Button } from "./Button";
+import buttonCss from "../../../packages/components/src/button/button.css?raw";
 
-const runA11yCheck = async ({ canvasElement }) => {
-  await expect(canvasElement).toBeAccessible();
-};
+// A11y: Chromatic runs built-in axe tests. Addon-a11y + parameters.a11y.test: "error"
+// handle a11y in Vitest. Custom play with toBeAccessible breaks Chromatic (matcher unavailable).
+
+const copyForMiloDescription = `
+## Copy for Milo
+
+Paste the HTML and CSS below into your Milo page or block. Milo uses vanilla HTML/CSS/JS (no build step), so copy-paste is the intended workflow.
+
+### HTML
+
+**Solid button:**
+\`\`\`html
+<button class="c-button" data-background="solid" data-state="default" type="button">
+  <span class="c-button__label">Label</span>
+</button>
+\`\`\`
+
+**Outlined button:**
+\`\`\`html
+<button class="c-button" data-background="outlined" data-state="default" type="button">
+  <span class="c-button__label">Label</span>
+</button>
+\`\`\`
+
+**Disabled:** Add \`data-state="disabled"\` and the \`disabled\` attribute:
+\`\`\`html
+<button class="c-button" data-background="solid" data-state="disabled" type="button" disabled>
+  <span class="c-button__label">Label</span>
+</button>
+\`\`\`
+
+### CSS
+
+Copy the CSS below and include it in your block's stylesheet or page. Uses \`--s2a-*\` design tokens with fallbacks, so it works standalone (or with your token bundle).
+
+\`\`\`css
+${buttonCss}
+\`\`\`
+`;
 
 export default {
   title: "Components/Button",
   tags: ["autodocs"],
   render: (args) => Button(args),
-  argTypes: {
-    label: {
-      control: "text",
-      description: "Button label text",
+  parameters: {
+    docs: {
+      description: {
+        component: copyForMiloDescription,
+      },
     },
-    size: {
+  },
+  argTypes: {
+    label: { control: "text", description: "Button label text" },
+    background: {
       control: { type: "select" },
-      options: ["lg", "xl", "2xl"],
-      description: "Button size variant (LG, XL, 2XL)",
+      options: ["solid", "outlined"],
+      description: "Background: solid (filled) or outlined (border)",
     },
     state: {
       control: { type: "select" },
       options: ["default", "disabled"],
-      description: "Button state (hover is automatic via CSS)",
-    },
-    kind: {
-      control: { type: "select" },
-      options: ["accent", "primary", "secondary"],
-      description: "Button kind variant",
-    },
-    background: {
-      control: { type: "select" },
-      options: ["solid", "outlined", "glass"],
-      description: "Button background style",
-    },
-    surface: {
-      control: { type: "select" },
-      options: ["default", "on-media"],
-      description:
-        "Surface context (default or on-media for buttons over images)",
+      description: "Button state",
     },
   },
   args: {
     onClick: fn(),
     label: "Label",
-    size: "2xl",
-    state: "default",
-    kind: "accent",
-    background: "solid",
-    surface: "default",
-  },
-};
-
-// Accent + Solid variants
-export const AccentSolid = {
-  args: {
-    kind: "accent",
     background: "solid",
     state: "default",
-    label: "Label",
-  },
-  play: runA11yCheck,
-};
-
-export const AccentSolidHover = {
-  args: {
-    kind: "accent",
-    background: "solid",
-    state: "default",
-    label: "Label (hover to see effect)",
   },
 };
 
-export const AccentSolidDisabled = {
-  args: {
-    kind: "accent",
-    background: "solid",
-    state: "disabled",
-    label: "Label",
-  },
+export const Solid = {
+  args: { background: "solid", state: "default", label: "Label" },
 };
 
-// Primary + Outlined variants
-export const PrimaryOutlined = {
-  args: {
-    kind: "primary",
-    background: "outlined",
-    state: "default",
-    label: "Label",
-  },
-  play: runA11yCheck,
+export const SolidDisabled = {
+  args: { background: "solid", state: "disabled", label: "Label" },
 };
 
-export const PrimaryOutlinedHover = {
-  args: {
-    kind: "primary",
-    background: "outlined",
-    state: "default",
-    label: "Label (hover to see effect)",
-  },
+export const Outlined = {
+  args: { background: "outlined", state: "default", label: "Label" },
 };
 
-export const PrimaryOutlinedDisabled = {
-  args: {
-    kind: "primary",
-    background: "outlined",
-    state: "disabled",
-    label: "Label",
-  },
+export const OutlinedDisabled = {
+  args: { background: "outlined", state: "disabled", label: "Label" },
 };
 
-// Secondary variants
-export const SecondarySolid = {
-  args: {
-    kind: "secondary",
-    background: "solid",
-    state: "default",
-    label: "Label",
-  },
-  play: runA11yCheck,
-};
-
-export const SecondarySolidHover = {
-  args: {
-    kind: "secondary",
-    background: "solid",
-    state: "default",
-    label: "Label (hover to see effect)",
-  },
-};
-
-export const SecondarySolidDisabled = {
-  args: {
-    kind: "secondary",
-    background: "solid",
-    state: "disabled",
-    label: "Label",
-  },
-};
-
-export const SecondaryOutlined = {
-  args: {
-    kind: "secondary",
-    background: "outlined",
-    state: "default",
-    label: "Label",
-  },
-  play: runA11yCheck,
-};
-
-export const SecondaryOutlinedHover = {
-  args: {
-    kind: "secondary",
-    background: "outlined",
-    state: "default",
-    label: "Label (hover to see effect)",
-  },
-};
-
-export const SecondaryOutlinedDisabled = {
-  args: {
-    kind: "secondary",
-    background: "outlined",
-    state: "disabled",
-    label: "Label",
-  },
-};
-
-// Glass background variant (on-media)
-export const SecondaryGlassOnMedia = {
-  args: {
-    kind: "secondary",
-    background: "glass",
-    surface: "on-media",
-    state: "default",
-    size: "lg",
-    label: "Label",
-  },
-  play: runA11yCheck,
-  decorators: [
-    (story) => html`
-      <div
-        style="background-color: var(--s2a-color-background-knockout, #202020); padding: var(--s2a-spacing-2xl, 40px); display: flex; align-items: center; justify-content: center; min-height: var(--s2a-layout-sm, 80px);"
-      >
-        ${story()}
-      </div>
-    `,
-  ],
-};
-
-export const PrimarySolidOnMedia = {
-  args: {
-    kind: "primary",
-    background: "solid",
-    surface: "on-media",
-    state: "default",
-    size: "lg",
-    label: "Label",
-  },
-  play: runA11yCheck,
-  decorators: [
-    (story) => html`
-      <div
-        style="background-color: var(--s2a-color-background-knockout, #202020); padding: var(--s2a-spacing-2xl, 40px); display: flex; align-items: center; justify-content: center; min-height: var(--s2a-layout-sm, 80px);"
-      >
-        ${story()}
-      </div>
-    `,
-  ],
-};
-
-// Size variants
-export const SizeLG = {
-  args: {
-    kind: "accent",
-    background: "solid",
-    state: "default",
-    size: "lg",
-    label: "Label",
-  },
-};
-
-export const SizeXL = {
-  args: {
-    kind: "accent",
-    background: "solid",
-    state: "default",
-    size: "xl",
-    label: "Label",
-  },
-};
-
-export const Size2XL = {
-  args: {
-    kind: "accent",
-    background: "solid",
-    state: "default",
-    size: "2xl",
-    label: "Label",
-  },
-};
-
-// All variants showcase
 export const AllVariants = {
   render: () => {
     const variants = [
-      {
-        kind: "accent",
-        background: "solid",
-        state: "default",
-        label: "Accent Solid",
-      },
-      {
-        kind: "accent",
-        background: "solid",
-        state: "disabled",
-        label: "Accent Solid Disabled",
-      },
-      {
-        kind: "primary",
-        background: "outlined",
-        state: "default",
-        label: "Primary Outlined",
-      },
-      {
-        kind: "primary",
-        background: "outlined",
-        state: "disabled",
-        label: "Primary Outlined Disabled",
-      },
-      {
-        kind: "secondary",
-        background: "solid",
-        state: "default",
-        label: "Secondary Solid",
-      },
-      {
-        kind: "secondary",
-        background: "solid",
-        state: "disabled",
-        label: "Secondary Solid Disabled",
-      },
-      {
-        kind: "secondary",
-        background: "outlined",
-        state: "default",
-        label: "Secondary Outlined",
-      },
-      {
-        kind: "secondary",
-        background: "outlined",
-        state: "disabled",
-        label: "Secondary Outlined Disabled",
-      },
+      { background: "solid", state: "default", label: "Solid" },
+      { background: "solid", state: "disabled", label: "Solid Disabled" },
+      { background: "outlined", state: "default", label: "Outlined" },
+      { background: "outlined", state: "disabled", label: "Outlined Disabled" },
     ];
-
     return html`
       <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 20px;">
-        ${variants.map((variant) => Button(variant))}
+        ${variants.map((v) => Button(v))}
       </div>
     `;
   },
 };
 
-// On-media variants showcase
-export const OnMediaVariants = {
-  render: () => {
-    const variants = [
-      {
-        kind: "primary",
-        background: "solid",
-        surface: "on-media",
-        size: "lg",
-        state: "default",
-        label: "Primary Solid",
+/** Focus ring appears when tabbing to the button. Figma 2073-39583 (solid), 2081-222 (outlined). */
+export const FocusStates = {
+  render: () => html`
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 20px;">
+      ${Button({ background: "solid", label: "Solid (tab to focus)" })}
+      ${Button({ background: "outlined", label: "Outlined (tab to focus)" })}
+    </div>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: "Use Tab to focus each button and see the 2px blue focus ring (Figma nodes 2073-39583, 2081-222).",
       },
-      {
-        kind: "secondary",
-        background: "glass",
-        surface: "on-media",
-        size: "lg",
-        state: "default",
-        label: "Secondary Glass",
-      },
-    ];
-
-    return html`
-      <div
-        style="background-color: var(--s2a-color-background-knockout, #202020); padding: var(--s2a-spacing-2xl, 40px); display: flex; flex-wrap: wrap; gap: var(--s2a-spacing-md, 16px); align-items: center; justify-content: center; min-height: var(--s2a-layout-sm, 80px);"
-      >
-        ${variants.map((variant) => Button(variant))}
-      </div>
-    `;
-  },
-};
-
-// All sizes showcase
-export const AllSizes = {
-  render: () => {
-    const sizes = ["lg", "xl", "2xl"];
-    return html`
-      <div
-        style="display: flex; flex-direction: column; gap: 24px; padding: 20px;"
-      >
-        ${sizes.map(
-          (size) => html`
-            <div style="display: flex; align-items: center; gap: 16px;">
-              <span style="min-width: 60px; font-weight: 600;"
-                >${size.toUpperCase()}:</span
-              >
-              ${Button({
-                kind: "accent",
-                background: "solid",
-                state: "default",
-                size,
-                label: "Label",
-              })}
-              ${Button({
-                kind: "primary",
-                background: "outlined",
-                state: "default",
-                size,
-                label: "Label",
-              })}
-              ${Button({
-                kind: "secondary",
-                background: "solid",
-                state: "default",
-                size,
-                label: "Label",
-              })}
-            </div>
-          `,
-        )}
-      </div>
-    `;
+    },
   },
 };

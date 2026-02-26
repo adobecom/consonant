@@ -391,6 +391,15 @@ export const AccentSolid = {
 
 **Note**: Stories use Lit for templating, but components themselves are pure HTML/CSS/JS.
 
+#### Copy for Milo (vanilla HTML/CSS)
+
+Milo uses vanilla HTML/CSS/JS with no build step. To supply components for copy-paste:
+
+1. Add a **Copy for Milo** section to the component's Storybook docs via `parameters.docs.description.component`.
+2. Import the component CSS as raw text: `import buttonCss from '.../button.css?raw'`.
+3. Include the exact HTML structure and full CSS in markdown code blocks so authors can copy-paste into Milo pages or blocks.
+4. See `apps/storybook/stories/Button.stories.js` for the pattern (HTML variants + CSS with `--s2a-*` tokens and fallbacks).
+
 #### 7.2 AI Story Generation (Story UI)
 
 Once a component exists in `packages/components/src` and is wired to tokens, Story UI can generate additional stories.
