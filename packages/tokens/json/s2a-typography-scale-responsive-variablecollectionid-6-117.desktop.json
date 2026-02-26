@@ -4,11 +4,11 @@
       "line-height": {
         "super": {
           "$type": "number",
-          "$value": "{font.line-height.4xl}",
+          "$value": "{font.line-height.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -18,11 +18,11 @@
         },
         "h1": {
           "$type": "number",
-          "$value": "{font.line-height.3xl}",
+          "$value": "{font.line-height.5xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -32,11 +32,11 @@
         },
         "h2": {
           "$type": "number",
-          "$value": "{font.line-height.xl}",
+          "$value": "{font.line-height.3xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -46,11 +46,11 @@
         },
         "h3": {
           "$type": "number",
-          "$value": "{font.line-height.lg}",
+          "$value": "{font.line-height.2xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -60,11 +60,11 @@
         },
         "h4": {
           "$type": "number",
-          "$value": "{font.line-height.sm}",
+          "$value": "{font.line-height.md}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -78,7 +78,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -92,7 +92,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -102,11 +102,11 @@
         },
         "p-sm": {
           "$type": "number",
-          "$value": "{font.line-height.xs}",
+          "$value": "{font.line-height.2xs}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -120,7 +120,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -130,11 +130,11 @@
         },
         "label": {
           "$type": "number",
-          "$value": "{font.line-height.xs}",
+          "$value": "{font.line-height.2xs}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -148,7 +148,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LINE_HEIGHT"
               ],
@@ -160,11 +160,11 @@
       "letter-spacing": {
         "super": {
           "$type": "number",
-          "$value": "{font.letter-spacing.md}",
+          "$value": "{font.letter-spacing.xs}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -178,7 +178,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -192,7 +192,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -206,7 +206,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -216,11 +216,11 @@
         },
         "h4": {
           "$type": "number",
-          "$value": "{font.letter-spacing.2xl}",
+          "$value": "{font.letter-spacing.xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -234,7 +234,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -248,7 +248,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -262,7 +262,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -276,7 +276,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -290,7 +290,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -304,7 +304,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "LETTER_SPACING"
               ],
@@ -316,11 +316,11 @@
       "size": {
         "super": {
           "$type": "number",
-          "$value": "{font.size.8xl}",
+          "$value": "{font.size.10xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -330,11 +330,11 @@
         },
         "h1": {
           "$type": "number",
-          "$value": "{font.size.6xl}",
+          "$value": "{font.size.9xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -344,11 +344,11 @@
         },
         "h2": {
           "$type": "number",
-          "$value": "{font.size.4xl}",
+          "$value": "{font.size.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -358,11 +358,11 @@
         },
         "h3": {
           "$type": "number",
-          "$value": "{font.size.3xl}",
+          "$value": "{font.size.5xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -372,11 +372,11 @@
         },
         "h4": {
           "$type": "number",
-          "$value": "{font.size.xl}",
+          "$value": "{font.size.2xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -386,11 +386,11 @@
         },
         "p-lg": {
           "$type": "number",
-          "$value": "{font.size.lg}",
+          "$value": "{font.size.xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -404,7 +404,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -418,7 +418,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -432,7 +432,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -446,7 +446,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],
@@ -460,7 +460,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "FONT_SIZE"
               ],

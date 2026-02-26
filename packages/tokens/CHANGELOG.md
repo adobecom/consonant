@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.8] - 2025-02-26
+
+### ✨ Improvements
+
+- **Quote font-family values**: Font family token values are now always output with quotes (e.g. `"Adobe Clean"`) to prevent multi-word families being parsed as separate CSS identifiers.
+- **Numeric font-weight values**: Restored numeric font-weight output (100–900) instead of names. Added `font.family.*` and `font.weight.*` path support for primitive typography tokens.
+- **De-duplicate Black weights**: Flattened duplicate font-weight tokens where multiple families map to the same value (e.g. `adobe-clean.black` and `adobe-clean-display.black` both 900). Display black now references the canonical token.
+
+---
+
 ## [0.0.7] - 2025-02-25
 
 ### ✨ Improvements

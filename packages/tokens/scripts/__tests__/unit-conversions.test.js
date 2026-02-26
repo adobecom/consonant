@@ -231,10 +231,11 @@ describe("stripTrailingZeros", () => {
 });
 
 describe("quoteFontFamily", () => {
-  it("returns unquoted strings without spaces", () => {
-    expect(quoteFontFamily("Arial")).toBe("Arial");
-    expect(quoteFontFamily("Helvetica")).toBe("Helvetica");
-    expect(quoteFontFamily("Times")).toBe("Times");
+  it("always quotes font family values (JIRA 2: prevent multi-word parse issues)", () => {
+    expect(quoteFontFamily("Arial")).toBe('"Arial"');
+    expect(quoteFontFamily("Helvetica")).toBe('"Helvetica"');
+    expect(quoteFontFamily("Times")).toBe('"Times"');
+    expect(quoteFontFamily("Adobe Clean")).toBe('"Adobe Clean"');
   });
 
   it("quotes strings with spaces", () => {
@@ -254,8 +255,8 @@ describe("quoteFontFamily", () => {
     expect(quoteFontFamily('Arial "Bold"')).toBe('"Arial \\"Bold\\""');
   });
 
-  it("trims whitespace", () => {
-    expect(quoteFontFamily("  Arial  ")).toBe("Arial");
+  it("trims whitespace and quotes", () => {
+    expect(quoteFontFamily("  Arial  ")).toBe('"Arial"');
     expect(quoteFontFamily("  Times New Roman  ")).toBe('"Times New Roman"');
   });
 
@@ -276,24 +277,22 @@ describe("quoteFontFamily", () => {
     );
   });
 
-  it("handles special characters", () => {
-    expect(quoteFontFamily("Arial-Bold")).toBe("Arial-Bold");
-    expect(quoteFontFamily("Arial_Bold")).toBe("Arial_Bold");
+  it("handles special characters (always quoted)", () => {
+    expect(quoteFontFamily("Arial-Bold")).toBe('"Arial-Bold"');
+    expect(quoteFontFamily("Arial_Bold")).toBe('"Arial_Bold"');
     expect(quoteFontFamily("Arial Bold")).toBe('"Arial Bold"');
   });
 
-  it("handles non-string types", () => {
-    // Function coerces to string using String()
-    expect(quoteFontFamily(null)).toBe("null");
-    expect(quoteFontFamily(undefined)).toBe("undefined");
-    expect(quoteFontFamily(123)).toBe("123");
-    expect(quoteFontFamily(true)).toBe("true");
+  it("handles non-string types (coerced to string, then quoted)", () => {
+    expect(quoteFontFamily(null)).toBe('"null"');
+    expect(quoteFontFamily(undefined)).toBe('"undefined"');
+    expect(quoteFontFamily(123)).toBe('"123"');
+    expect(quoteFontFamily(true)).toBe('"true"');
   });
 
   it("handles objects and arrays", () => {
-    // These will be stringified
-    // "[object Object]" contains a space, so it gets quoted
     expect(quoteFontFamily({})).toBe('"[object Object]"');
+    // String([]) is "" which is treated as empty
     expect(quoteFontFamily([])).toBe("");
   });
 });

@@ -4,6 +4,7 @@ import {
   convertNumberTokens,
   collectTypographyDimensions,
   populateLineHeightFontSizeMap,
+  flattenDuplicateFontWeights,
 } from "../transformers/typography-transformers.js";
 
 describe("getTypographyContext", () => {
@@ -69,6 +70,26 @@ describe("getTypographyContext", () => {
         property: "font-family",
       },
     );
+  });
+
+  it("extracts context from font.family.* path (primitives)", () => {
+    expect(getTypographyContext(["font", "family", "adobe-clean"])).toEqual({
+      scope: "font-family",
+      key: "adobe-clean",
+      alias: undefined,
+      property: "font-family",
+    });
+  });
+
+  it("extracts context from font.weight.* path (primitives)", () => {
+    expect(
+      getTypographyContext(["font", "weight", "adobe-clean", "black"]),
+    ).toEqual({
+      scope: "font-weight",
+      key: "adobe-clean",
+      alias: undefined,
+      property: "font-weight",
+    });
   });
 
   it("extracts context from typography.<alias>.<property> path", () => {
@@ -615,7 +636,7 @@ describe("convertNumberTokens", () => {
     expect(tokens.spacing.large.$value).toBe("24px");
   });
 
-  it("quotes font-family string values", () => {
+  it("quotes font-family string values (JIRA 2: always quote)", () => {
     const maps = {
       fontSize: { valueByKey: new Map(), keyByValue: new Map() },
       lineHeight: { valueByKey: new Map(), keyByValue: new Map() },
@@ -634,7 +655,7 @@ describe("convertNumberTokens", () => {
 
     convertNumberTokens(tokens, [], maps);
 
-    expect(tokens.typography["font-family"].sans.$value).toBe("Arial");
+    expect(tokens.typography["font-family"].sans.$value).toBe('"Arial"');
     expect(tokens.typography["font-family"].serif.$value).toBe(
       '"Times New Roman"',
     );
@@ -667,5 +688,94 @@ describe("convertNumberTokens", () => {
     expect(tokens.typography.body["font-size"].$value).toBe("1rem");
     expect(tokens.typography.body["line-height"].$value).toBe("1.5"); // 24/16
     expect(tokens.spacing.section.padding.$value).toBe("32px");
+  });
+
+  it("converts font.weight primitive tokens to numeric (JIRA 3)", () => {
+    const maps = {
+      fontSize: { valueByKey: new Map(), keyByValue: new Map() },
+      lineHeight: { valueByKey: new Map(), keyByValue: new Map() },
+      aliasPairs: new Map(),
+      lineHeightToFontSize: new Map(),
+    };
+
+    const tokens = {
+      font: {
+        weight: {
+          "adobe-clean": {
+            black: { $value: "Black" },
+            regular: { $value: "Regular" },
+          },
+        },
+      },
+    };
+
+    convertNumberTokens(tokens, [], maps);
+
+    expect(tokens.font.weight["adobe-clean"].black.$value).toBe(900);
+    expect(tokens.font.weight["adobe-clean"].regular.$value).toBe(400);
+  });
+
+  it("leaves references unchanged (font-family, font-weight)", () => {
+    const maps = {
+      fontSize: { valueByKey: new Map(), keyByValue: new Map() },
+      lineHeight: { valueByKey: new Map(), keyByValue: new Map() },
+      aliasPairs: new Map(),
+      lineHeightToFontSize: new Map(),
+    };
+
+    const tokens = {
+      font: {
+        family: {
+          heading: { $value: "{font.family.adobe-clean-display}" },
+        },
+      },
+    };
+
+    convertNumberTokens(tokens, [], maps);
+
+    expect(tokens.font.family.heading.$value).toBe(
+      "{font.family.adobe-clean-display}",
+    );
+  });
+});
+
+describe("flattenDuplicateFontWeights", () => {
+  it("replaces duplicate black weights with reference (JIRA 4)", () => {
+    const tokens = {
+      font: {
+        weight: {
+          "adobe-clean": {
+            black: { $value: "Black" },
+            regular: { $value: "Regular" },
+          },
+          "adobe-clean-display": {
+            black: { $value: "Black" },
+          },
+        },
+      },
+    };
+
+    flattenDuplicateFontWeights(tokens);
+
+    expect(tokens.font.weight["adobe-clean"].black.$value).toBe("Black");
+    expect(tokens.font.weight["adobe-clean-display"].black.$value).toBe(
+      "{font.weight.adobe-clean.black}",
+    );
+  });
+
+  it("does not flatten when only one family has a weight", () => {
+    const tokens = {
+      font: {
+        weight: {
+          "adobe-clean": {
+            black: { $value: "Black" },
+          },
+        },
+      },
+    };
+
+    flattenDuplicateFontWeights(tokens);
+
+    expect(tokens.font.weight["adobe-clean"].black.$value).toBe("Black");
   });
 });

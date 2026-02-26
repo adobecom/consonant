@@ -3,11 +3,11 @@
     "background": {
       "default": {
         "$type": "color",
-        "$value": "{color.gray.25}",
+        "$value": "{color.gray.900}",
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -17,11 +17,11 @@
       },
       "default-hover": {
         "$type": "color",
-        "$value": "{color.gray.25}",
+        "$value": "{color.gray.800}",
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -31,11 +31,11 @@
       },
       "subtle": {
         "$type": "color",
-        "$value": "{color.gray.50}",
+        "$value": "{color.gray.700}",
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -49,7 +49,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -63,7 +63,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -77,7 +77,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -92,7 +92,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "ALL_SCOPES"
               ],
@@ -109,7 +109,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -123,7 +123,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -137,7 +137,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -151,7 +151,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -165,7 +165,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -179,7 +179,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -193,7 +193,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -208,7 +208,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "ALL_SCOPES"
               ],
@@ -221,11 +221,11 @@
     "content": {
       "default": {
         "$type": "color",
-        "$value": "{color.gray.800}",
+        "$value": "{color.gray.25}",
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -235,11 +235,11 @@
       },
       "default-hover": {
         "$type": "color",
-        "$value": "{color.gray.900}",
+        "$value": "{color.gray.75}",
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -249,11 +249,11 @@
       },
       "subtle": {
         "$type": "color",
-        "$value": "{color.gray.700}",
+        "$value": "{color.gray.600}",
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -267,7 +267,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -281,7 +281,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -295,7 +295,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "ALL_SCOPES"
             ],
@@ -310,7 +310,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "ALL_SCOPES"
               ],

@@ -51,10 +51,14 @@ function getTypographyContext(path) {
     const alias = isNumericKey(first) ? undefined : first;
     return { scope: head, key: first, alias, property: head };
   } else if (head === "font" && first) {
-    // Handle "font.size.*", "font.line-height.*" and "font.letter-spacing.*" paths (primitives)
+    // Handle "font.size.*", "font.family.*", "font.weight.*", "font.line-height.*", "font.letter-spacing.*" paths (primitives)
     if (first === "size") {
       const key = second;
       return { scope: "font-size", key: second, alias: undefined, property: "font-size" };
+    } else if (first === "family" && second) {
+      return { scope: "font-family", key: second, alias: undefined, property: "font-family" };
+    } else if (first === "weight" && second) {
+      return { scope: "font-weight", key: second, alias: undefined, property: "font-weight" };
     } else if (first === "line-height" || first === "letter-spacing") {
       const key = second;
       return { scope: first, key: second, alias: undefined, property: first };
@@ -282,11 +286,21 @@ function convertNumberTokens(node, path, maps) {
   }
 
   if ("$value" in node && typeof node.$value === "string") {
+    const value = node.$value;
+    // Skip references (e.g. {font.family.adobe-clean}) - do not quote or convert
+    if (value.startsWith("{") && value.endsWith("}")) {
+      for (const [key, val] of Object.entries(node)) {
+        if (key.startsWith("$")) continue;
+        convertNumberTokens(val, [...path, key], maps);
+      }
+      return;
+    }
+
     const context = getTypographyContext(path);
     const { scope } = context;
 
     if (scope === "font-family") {
-      node.$value = quoteFontFamily(node.$value);
+      node.$value = quoteFontFamily(value);
     } else if (scope === "font-weight") {
       // Convert font-weight string values to numeric CSS values
       const fontWeightMap = {
@@ -296,7 +310,7 @@ function convertNumberTokens(node, path, maps) {
         ExtraBold: 800,
         Black: 900,
       };
-      const numericValue = fontWeightMap[node.$value];
+      const numericValue = fontWeightMap[value];
       if (numericValue !== undefined) {
         node.$value = numericValue;
       }
@@ -313,10 +327,71 @@ function convertNumberTokens(node, path, maps) {
   }
 }
 
+/** Map of font-weight string values to their numeric equivalent for deduplication comparison. */
+const FONT_WEIGHT_TO_NUMERIC = {
+  Regular: 400,
+  Medium: 500,
+  Bold: 700,
+  ExtraBold: 800,
+  Black: 900,
+};
+
+/**
+ * Flattens duplicate font-weight tokens where multiple family-specific tokens
+ * resolve to the same numeric value (e.g. adobe-clean.black and adobe-clean-display.black
+ * both map to 900). Replaces duplicates with references to the canonical token.
+ */
+function flattenDuplicateFontWeights(node, path = []) {
+  if (!node || typeof node !== "object") {
+    return;
+  }
+
+  const font = node.font;
+  if (!font?.weight || typeof font.weight !== "object") {
+    return;
+  }
+
+  const families = Object.keys(font.weight);
+  if (families.length < 2) {
+    return;
+  }
+
+  // Collect all weight entries: { "Black": ["adobe-clean", "adobe-clean-display"], ... }
+  const weightToFamilies = new Map();
+  for (const family of families) {
+    const familyWeights = font.weight[family];
+    if (!familyWeights || typeof familyWeights !== "object") continue;
+    for (const [weightKey, token] of Object.entries(familyWeights)) {
+      if (!token || typeof token !== "object" || !("$value" in token)) continue;
+      const value = token.$value;
+      const strValue = String(value).trim();
+      const numericValue =
+        typeof value === "number" ? value : FONT_WEIGHT_TO_NUMERIC[strValue];
+      if (numericValue == null) continue;
+      const key = `${weightKey}:${numericValue}`;
+      if (!weightToFamilies.has(key)) {
+        weightToFamilies.set(key, []);
+      }
+      weightToFamilies.get(key).push({ family, weightKey, token });
+    }
+  }
+
+  // For each weight value that appears in multiple families, keep the first and reference from the rest
+  for (const [, entries] of weightToFamilies) {
+    if (entries.length < 2) continue;
+    const [canonical, ...duplicates] = entries;
+    const refPath = `font.weight.${canonical.family}.${canonical.weightKey}`;
+    for (const dup of duplicates) {
+      dup.token.$value = `{${refPath}}`;
+    }
+  }
+}
+
 module.exports = {
   getTypographyContext,
   collectTypographyDimensions,
   populateLineHeightFontSizeMap,
   ensureLineHeightPrimitives,
   convertNumberTokens,
+  flattenDuplicateFontWeights,
 };

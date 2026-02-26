@@ -19,6 +19,7 @@ const {
   populateLineHeightFontSizeMap,
   ensureLineHeightPrimitives,
   convertNumberTokens,
+  flattenDuplicateFontWeights,
 } = require("./transformers/typography-transformers");
 const {
   isTokenGroup,
@@ -305,6 +306,9 @@ async function buildFromFigma() {
       clone(primitivesCoreTokensRaw),
     );
     
+    // Flatten duplicate font-weight tokens (e.g. adobe-clean.black and adobe-clean-display.black both 900)
+    flattenDuplicateFontWeights(mergedPrimitivesBeforeConversion);
+
     // Now apply unit conversions to the merged tree
     // This preserves references while converting numeric values
     applyUnitConversions(mergedPrimitivesBeforeConversion);

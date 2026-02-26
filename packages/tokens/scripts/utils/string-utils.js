@@ -37,15 +37,17 @@ function determineBaseSlug(slugs, baseModeEnv = null) {
 function quoteFontFamily(value) {
   const string = String(value).trim();
 
+  if (string === "") {
+    return "";
+  }
+
   if (/^(['"]).*\1$/u.test(string)) {
     return string;
   }
 
-  if (/\s/u.test(string)) {
-    return `"${string.replace(/"/g, '\\"')}"`;
-  }
-
-  return string;
+  // Always quote to prevent multi-word families (e.g. "Adobe Clean") being parsed
+  // as separate identifiers. Single-word families are also quoted for consistency.
+  return `"${string.replace(/"/g, '\\"')}"`;
 }
 
 module.exports = {
