@@ -22,20 +22,37 @@ export default {
     label: { control: "text", description: "Button label text" },
     background: {
       control: { type: "select" },
-      options: ["solid", "outlined"],
-      description: "Background: solid (filled) or outlined (border)",
+      options: ["solid", "outlined", "transparent"],
+      description: "Background variant",
+    },
+    size: {
+      control: { type: "select" },
+      options: ["lg", "md"],
+      description: "Size variant",
     },
     state: {
       control: { type: "select" },
       options: ["default", "disabled"],
       description: "Button state",
     },
+    tone: {
+      control: { type: "select" },
+      options: ["default", "knockout", "inverse"],
+      description: "Tone for use on light/dark backgrounds",
+    },
+    showElementEnd: {
+      control: "boolean",
+      description: "Show CaretDown chevron after label",
+    },
   },
   args: {
     onClick: fn(),
     label: "Label",
     background: "solid",
+    size: "lg",
     state: "default",
+    tone: "default",
+    showElementEnd: false,
   },
 };
 
@@ -55,6 +72,41 @@ export const OutlinedDisabled = {
   args: { background: "outlined", state: "disabled", label: "Label" },
 };
 
+export const Transparent = {
+  args: { background: "transparent", state: "default", label: "Label" },
+};
+
+export const TransparentDisabled = {
+  args: { background: "transparent", state: "disabled", label: "Label" },
+};
+
+export const SizeMd = {
+  args: { background: "solid", size: "md", label: "Medium" },
+};
+
+export const WithChevron = {
+  args: { background: "outlined", showElementEnd: true, label: "Dropdown" },
+};
+
+export const KnockoutOnDark = {
+  render: () => html`
+    <div style="background: #000; padding: 24px; display: flex; flex-wrap: wrap; gap: 16px;">
+      ${Button({ background: "solid", tone: "knockout", label: "Solid" })}
+      ${Button({ background: "outlined", tone: "knockout", label: "Outlined" })}
+      ${Button({ background: "transparent", tone: "knockout", label: "Transparent" })}
+    </div>
+  `,
+};
+
+export const InverseTone = {
+  render: () => html`
+    <div style="background: #333; padding: 24px; display: flex; flex-wrap: wrap; gap: 16px;">
+      ${Button({ background: "solid", tone: "inverse", label: "Solid Inverse" })}
+      ${Button({ background: "outlined", tone: "inverse", label: "Outlined Inverse" })}
+    </div>
+  `,
+};
+
 export const AllVariants = {
   render: () => {
     const variants = [
@@ -62,6 +114,8 @@ export const AllVariants = {
       { background: "solid", state: "disabled", label: "Solid Disabled" },
       { background: "outlined", state: "default", label: "Outlined" },
       { background: "outlined", state: "disabled", label: "Outlined Disabled" },
+      { background: "transparent", state: "default", label: "Transparent" },
+      { background: "transparent", state: "disabled", label: "Transparent Disabled" },
     ];
     return html`
       <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 20px;">
@@ -77,6 +131,7 @@ export const FocusStates = {
     <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 20px;">
       ${Button({ background: "solid", label: "Solid (tab to focus)" })}
       ${Button({ background: "outlined", label: "Outlined (tab to focus)" })}
+      ${Button({ background: "transparent", label: "Transparent (tab to focus)" })}
     </div>
   `,
 };

@@ -1,3 +1,6 @@
+// Phosphor Icons (bold weight for button CaretDown, etc.)
+import "@phosphor-icons/web/bold";
+
 // Import design tokens CSS files in the correct order
 // 1. Primitives (non-color)
 import "../dist/packages/tokens/css/dev/tokens.primitives.css";

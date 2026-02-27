@@ -43,6 +43,23 @@ module.exports = {
       ],
       whenToUse: 'ALL buttons, CTAs, action elements. Never use <button> tags or custom button CSS.',
       doNot: 'Create custom <button> elements, inline button styles, or button CSS classes.'
+    },
+    {
+      name: 'IconButton',
+      displayName: 'IconButton',
+      importPath: '../../../../packages/components/src/icon-button/index.js',
+      props: ['ariaLabel', 'icon', 'background', 'size', 'state', 'tone', 'onClick'],
+      description: 'matt-atoms IconButton (Figma 2142-53869). Icon-only circular button for play/pause, close, etc.',
+      category: 'content',
+      examples: [
+        "import { IconButton } from '../../../../packages/components/src/icon-button/index.js';",
+        "// Pause control",
+        "IconButton({ ariaLabel: 'Pause', icon: 'pause', background: 'solid' })",
+        "// Play button",
+        "IconButton({ ariaLabel: 'Play', icon: 'play', background: 'outlined' })"
+      ],
+      whenToUse: 'Icon-only actions: play/pause, close, menu toggle. Requires Phosphor Icons.',
+      doNot: 'Create custom icon-only buttons when IconButton exists.'
     }
   ],
   
@@ -97,6 +114,7 @@ export default {
   // Import examples for web components
   importExamples: [
     "import '../../../../packages/components/src/button/index.js'; // For Button component",
+    "import '../../../../packages/components/src/icon-button/index.js'; // For IconButton component",
   ],
   
   // Considerations file path
