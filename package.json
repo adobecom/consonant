@@ -57,5 +57,9 @@
     "storybook": "^10.2.0",
     "style-dictionary": "^4.4.0",
     "vitest": "^4.0.3"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.52.5",
+    "@rollup/rollup-linux-x64-gnu": "^4.52.5"
   }
 }
