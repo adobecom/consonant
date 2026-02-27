@@ -2,6 +2,7 @@ import { html } from "lit";
 import { fn } from "storybook/test";
 
 import { Button } from "./Button";
+import buttonCss from "../../../packages/components/src/button/button.css?raw";
 
 // A11y: Chromatic runs built-in axe tests. Addon-a11y + parameters.a11y.test: "error"
 // handle a11y in Vitest. Custom play with toBeAccessible breaks Chromatic (matcher unavailable).
@@ -10,6 +11,13 @@ export default {
   title: "Components/Button",
   tags: ["autodocs"],
   render: (args) => Button(args),
+  parameters: {
+    docs: {
+      description: {
+        component: `\`\`\`css\n${buttonCss}\n\`\`\``,
+      },
+    },
+  },
   argTypes: {
     label: { control: "text", description: "Button label text" },
     background: {
