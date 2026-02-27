@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build tokens
+        run: npm run tokens:build
+
       - name: Build Storybook
         run: npm run storybook:build
 
