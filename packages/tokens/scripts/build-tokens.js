@@ -130,6 +130,7 @@ async function buildFromFigma() {
     if (
       collectionSlug === "primitives-core" ||
       collectionSlug === "primitives-dimension-static" ||
+      collectionSlug === "s2a-primitives-dimension-static" ||
       collectionSlug.startsWith("primitives-dimension")
     ) {
       primitivesCoreFiles.push(normalizedEntry);
@@ -151,6 +152,7 @@ async function buildFromFigma() {
       collectionSlug === "semantic" ||
       collectionSlug === "semantic-core" ||
       collectionSlug === "semantic-dimension-static" ||
+      collectionSlug === "s2a-semantic-dimension-static" ||
       collectionSlug.startsWith("semantic-dimension")
     ) {
       semanticFiles.push(normalizedEntry);
@@ -191,6 +193,7 @@ async function buildFromFigma() {
     else if (
       collectionSlug === "typography-core" ||
       collectionSlug === "typography-scale-responsive" ||
+      collectionSlug === "s2a-typography-scale-responsive" ||
       collectionSlug.startsWith("typography") ||
       collectionSlug === "s2a-typography"
     ) {
