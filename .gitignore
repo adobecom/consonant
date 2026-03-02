@@ -3,7 +3,12 @@ node_modules/
 
 # builds
 build/
-dist/
+dist/*
+!dist/packages/
+dist/packages/*
+!dist/packages/tokens/
+dist/packages/tokens/*
+!dist/packages/tokens/**
 .out/
 .nx/
 
