@@ -4,18 +4,18 @@ import "@phosphor-icons/web/bold";
 // Import design tokens CSS files in the correct order
 // 1. Primitives (non-color)
 import "../dist/packages/tokens/css/dev/tokens.primitives.css";
-// 2. Primitives (color - light mode)
-import "../dist/packages/tokens/css/dev/tokens.primitives.light.css";
-// 3. Semantic (non-color)
+// 2. Semantic (non-color)
 import "../dist/packages/tokens/css/dev/tokens.semantic.css";
-// 4. Semantic (color - light mode)
+// 3. Semantic (color - light mode)
 import "../dist/packages/tokens/css/dev/tokens.semantic.light.css";
-// 5. Semantic (color - dark mode)
+// 4. Semantic (color - dark mode)
 import "../dist/packages/tokens/css/dev/tokens.semantic.dark.css";
-// 6. Typography
-import "../dist/packages/tokens/css/dev/tokens.typography.css";
-// 7. Breakpoints
-import "../dist/packages/tokens/css/tokens.breakpoints.css";
+// 5. Responsive typography + grid (xs → xl)
+import "../dist/packages/tokens/css/dev/tokens.responsive.xs.css";
+import "../dist/packages/tokens/css/dev/tokens.responsive.sm.css";
+import "../dist/packages/tokens/css/dev/tokens.responsive.md.css";
+import "../dist/packages/tokens/css/dev/tokens.responsive.lg.css";
+import "../dist/packages/tokens/css/dev/tokens.responsive.xl.css";
 // Note: Component tokens are not yet generated (no component tokens in Figma file)
 
 // Font Loading - Adobe Clean Display via Typekit

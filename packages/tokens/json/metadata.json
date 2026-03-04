@@ -2,50 +2,8 @@
   "fileId": "eGSyBcD5XdFXR8rJXJmVNY",
   "branchKey": null,
   "apiBase": "https://api.figma.com",
-  "generatedAt": "2026-03-04T02:07:15.599Z",
+  "generatedAt": "2026-03-04T14:32:56.956Z",
   "files": [
-    {
-      "fileName": "s2a-color-variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748.light.json",
-      "collection": {
-        "id": "VariableCollectionId:39add3230a451deae82adc825e88e392c4553aa8/3194:748",
-        "name": "S2A / Color",
-        "slug": "s2a-color",
-        "idSlug": "variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748"
-      },
-      "mode": {
-        "id": "8:11",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "s2a-color-variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:39add3230a451deae82adc825e88e392c4553aa8/3194:748",
-        "name": "S2A / Color",
-        "slug": "s2a-color",
-        "idSlug": "variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748"
-      },
-      "mode": {
-        "id": "8:12",
-        "name": "Dark",
-        "slug": "dark"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-dimension-static-variablecollectionid-1-251.value.json",
-      "collection": {
-        "id": "VariableCollectionId:1:251",
-        "name": "S2A / Semantic / Dimension / Static",
-        "slug": "s2a-semantic-dimension-static",
-        "idSlug": "variablecollectionid-1-251"
-      },
-      "mode": {
-        "id": "1:7",
-        "name": "Value",
-        "slug": "value"
-      }
-    },
     {
       "fileName": "s2a-primitives-dimension-static-variablecollectionid-1-44.mode-1.json",
       "collection": {
@@ -61,31 +19,17 @@
       }
     },
     {
-      "fileName": "s2a-semantic-color-theme-variablecollectionid-6-17.light.json",
+      "fileName": "s2a-primitives-color-theme-variablecollectionid-1-138.light.json",
       "collection": {
-        "id": "VariableCollectionId:6:17",
-        "name": "S2A / Semantic / Color / Theme",
-        "slug": "s2a-semantic-color-theme",
-        "idSlug": "variablecollectionid-6-17"
+        "id": "VariableCollectionId:1:138",
+        "name": "S2A / Primitives / Color / Theme",
+        "slug": "s2a-primitives-color-theme",
+        "idSlug": "variablecollectionid-1-138"
       },
       "mode": {
-        "id": "6:0",
+        "id": "1:6",
         "name": "Light",
         "slug": "light"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-color-theme-variablecollectionid-6-17.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:6:17",
-        "name": "S2A / Semantic / Color / Theme",
-        "slug": "s2a-semantic-color-theme",
-        "idSlug": "variablecollectionid-6-17"
-      },
-      "mode": {
-        "id": "6:1",
-        "name": "Dark",
-        "slug": "dark"
       }
     },
     {
@@ -103,31 +47,17 @@
       }
     },
     {
-      "fileName": "typography-scale-responsive-variablecollectionid-7150e3caf317accff277b63821aba08bb349a5bb-18956-1076.mobile.json",
+      "fileName": "primitives-core-variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74.mode-1.json",
       "collection": {
-        "id": "VariableCollectionId:7150e3caf317accff277b63821aba08bb349a5bb/18956:1076",
-        "name": "Typography / Scale / Responsive",
-        "slug": "typography-scale-responsive",
-        "idSlug": "variablecollectionid-7150e3caf317accff277b63821aba08bb349a5bb-18956-1076"
+        "id": "VariableCollectionId:433e182a0b86bf16dd1ed62dacdbd3d3d2025110/82:74",
+        "name": "Primitives (Core)",
+        "slug": "primitives-core",
+        "idSlug": "variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74"
       },
       "mode": {
-        "id": "18858:4",
-        "name": "mobile",
-        "slug": "mobile"
-      }
-    },
-    {
-      "fileName": "typography-scale-responsive-variablecollectionid-7150e3caf317accff277b63821aba08bb349a5bb-18956-1076.desktop.json",
-      "collection": {
-        "id": "VariableCollectionId:7150e3caf317accff277b63821aba08bb349a5bb/18956:1076",
-        "name": "Typography / Scale / Responsive",
-        "slug": "typography-scale-responsive",
-        "idSlug": "variablecollectionid-7150e3caf317accff277b63821aba08bb349a5bb-18956-1076"
-      },
-      "mode": {
-        "id": "18858:3",
-        "name": "desktop",
-        "slug": "desktop"
+        "id": "1:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
       }
     },
     {
@@ -201,43 +131,15 @@
       }
     },
     {
-      "fileName": "component-color-theme-variablecollectionid-3b87fb254473416667d1f7d8bd081eb1fb38bdda-18943-4013.light.json",
+      "fileName": "semantic-variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142.mode-1.json",
       "collection": {
-        "id": "VariableCollectionId:3b87fb254473416667d1f7d8bd081eb1fb38bdda/18943:4013",
-        "name": "Component / Color / Theme",
-        "slug": "component-color-theme",
-        "idSlug": "variablecollectionid-3b87fb254473416667d1f7d8bd081eb1fb38bdda-18943-4013"
+        "id": "VariableCollectionId:973e742b9219b09ddd242f148a68d0bf608baeeb/4:142",
+        "name": "Semantic",
+        "slug": "semantic",
+        "idSlug": "variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142"
       },
       "mode": {
-        "id": "17135:8",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "component-color-theme-variablecollectionid-3b87fb254473416667d1f7d8bd081eb1fb38bdda-18943-4013.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:3b87fb254473416667d1f7d8bd081eb1fb38bdda/18943:4013",
-        "name": "Component / Color / Theme",
-        "slug": "component-color-theme",
-        "idSlug": "variablecollectionid-3b87fb254473416667d1f7d8bd081eb1fb38bdda-18943-4013"
-      },
-      "mode": {
-        "id": "17627:0",
-        "name": "Dark",
-        "slug": "dark"
-      }
-    },
-    {
-      "fileName": "primitives-core-variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:433e182a0b86bf16dd1ed62dacdbd3d3d2025110/82:74",
-        "name": "Primitives (Core)",
-        "slug": "primitives-core",
-        "idSlug": "variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74"
-      },
-      "mode": {
-        "id": "1:0",
+        "id": "4:0",
         "name": "Mode 1",
         "slug": "mode-1"
       }
@@ -271,31 +173,31 @@
       }
     },
     {
-      "fileName": "semantic-variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142.mode-1.json",
+      "fileName": "typography-scale-responsive-variablecollectionid-7150e3caf317accff277b63821aba08bb349a5bb-18956-1076.mobile.json",
       "collection": {
-        "id": "VariableCollectionId:973e742b9219b09ddd242f148a68d0bf608baeeb/4:142",
-        "name": "Semantic",
-        "slug": "semantic",
-        "idSlug": "variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142"
+        "id": "VariableCollectionId:7150e3caf317accff277b63821aba08bb349a5bb/18956:1076",
+        "name": "Typography / Scale / Responsive",
+        "slug": "typography-scale-responsive",
+        "idSlug": "variablecollectionid-7150e3caf317accff277b63821aba08bb349a5bb-18956-1076"
       },
       "mode": {
-        "id": "4:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
+        "id": "18858:4",
+        "name": "mobile",
+        "slug": "mobile"
       }
     },
     {
-      "fileName": "s-typography-variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627.mode-1.json",
+      "fileName": "typography-scale-responsive-variablecollectionid-7150e3caf317accff277b63821aba08bb349a5bb-18956-1076.desktop.json",
       "collection": {
-        "id": "VariableCollectionId:df621fb21582d7e499c45bf908fe7ea44b7c9c01/27101:21627",
-        "name": "•S Typography",
-        "slug": "s-typography",
-        "idSlug": "variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627"
+        "id": "VariableCollectionId:7150e3caf317accff277b63821aba08bb349a5bb/18956:1076",
+        "name": "Typography / Scale / Responsive",
+        "slug": "typography-scale-responsive",
+        "idSlug": "variablecollectionid-7150e3caf317accff277b63821aba08bb349a5bb-18956-1076"
       },
       "mode": {
-        "id": "19458:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
+        "id": "18858:3",
+        "name": "desktop",
+        "slug": "desktop"
       }
     },
     {
@@ -313,6 +215,104 @@
       }
     },
     {
+      "fileName": "s2a-semantic-color-theme-variablecollectionid-6-17.light.json",
+      "collection": {
+        "id": "VariableCollectionId:6:17",
+        "name": "S2A / Semantic / Color / Theme",
+        "slug": "s2a-semantic-color-theme",
+        "idSlug": "variablecollectionid-6-17"
+      },
+      "mode": {
+        "id": "6:0",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "s2a-semantic-color-theme-variablecollectionid-6-17.dark.json",
+      "collection": {
+        "id": "VariableCollectionId:6:17",
+        "name": "S2A / Semantic / Color / Theme",
+        "slug": "s2a-semantic-color-theme",
+        "idSlug": "variablecollectionid-6-17"
+      },
+      "mode": {
+        "id": "6:1",
+        "name": "Dark",
+        "slug": "dark"
+      }
+    },
+    {
+      "fileName": "component-dimension-responsive-variablecollectionid-dc466e45202f902d5bb2877faec3080b5a29881f-18943-4010.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:dc466e45202f902d5bb2877faec3080b5a29881f/18943:4010",
+        "name": "Component / Dimension / Responsive",
+        "slug": "component-dimension-responsive",
+        "idSlug": "variablecollectionid-dc466e45202f902d5bb2877faec3080b5a29881f-18943-4010"
+      },
+      "mode": {
+        "id": "18795:1",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "s2a-semantic-dimension-static-variablecollectionid-1-251.value.json",
+      "collection": {
+        "id": "VariableCollectionId:1:251",
+        "name": "S2A / Semantic / Dimension / Static",
+        "slug": "s2a-semantic-dimension-static",
+        "idSlug": "variablecollectionid-1-251"
+      },
+      "mode": {
+        "id": "1:7",
+        "name": "Value",
+        "slug": "value"
+      }
+    },
+    {
+      "fileName": "component-color-theme-variablecollectionid-3b87fb254473416667d1f7d8bd081eb1fb38bdda-18943-4013.light.json",
+      "collection": {
+        "id": "VariableCollectionId:3b87fb254473416667d1f7d8bd081eb1fb38bdda/18943:4013",
+        "name": "Component / Color / Theme",
+        "slug": "component-color-theme",
+        "idSlug": "variablecollectionid-3b87fb254473416667d1f7d8bd081eb1fb38bdda-18943-4013"
+      },
+      "mode": {
+        "id": "17135:8",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "component-color-theme-variablecollectionid-3b87fb254473416667d1f7d8bd081eb1fb38bdda-18943-4013.dark.json",
+      "collection": {
+        "id": "VariableCollectionId:3b87fb254473416667d1f7d8bd081eb1fb38bdda/18943:4013",
+        "name": "Component / Color / Theme",
+        "slug": "component-color-theme",
+        "idSlug": "variablecollectionid-3b87fb254473416667d1f7d8bd081eb1fb38bdda-18943-4013"
+      },
+      "mode": {
+        "id": "17627:0",
+        "name": "Dark",
+        "slug": "dark"
+      }
+    },
+    {
+      "fileName": "s-typography-variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:df621fb21582d7e499c45bf908fe7ea44b7c9c01/27101:21627",
+        "name": "•S Typography",
+        "slug": "s-typography",
+        "idSlug": "variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627"
+      },
+      "mode": {
+        "id": "19458:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
       "fileName": "primitives-dimension-static-variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239.mode-1.json",
       "collection": {
         "id": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
@@ -324,62 +324,6 @@
         "id": "16797:0",
         "name": "Mode 1",
         "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "s2a-primitives-color-theme-variablecollectionid-1-138.light.json",
-      "collection": {
-        "id": "VariableCollectionId:1:138",
-        "name": "S2A / Primitives / Color / Theme",
-        "slug": "s2a-primitives-color-theme",
-        "idSlug": "variablecollectionid-1-138"
-      },
-      "mode": {
-        "id": "1:6",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.desktop.json",
-      "collection": {
-        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
-        "name": "Breakpoint",
-        "slug": "breakpoint",
-        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
-      },
-      "mode": {
-        "id": "6664:0",
-        "name": "Desktop",
-        "slug": "desktop"
-      }
-    },
-    {
-      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.mobile.json",
-      "collection": {
-        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
-        "name": "Breakpoint",
-        "slug": "breakpoint",
-        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
-      },
-      "mode": {
-        "id": "6664:1",
-        "name": "Mobile",
-        "slug": "mobile"
-      }
-    },
-    {
-      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.tablet.json",
-      "collection": {
-        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
-        "name": "Breakpoint",
-        "slug": "breakpoint",
-        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
-      },
-      "mode": {
-        "id": "6664:2",
-        "name": "Tablet",
-        "slug": "tablet"
       }
     },
     {
@@ -425,6 +369,20 @@
       }
     },
     {
+      "fileName": "s-typography-variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:dbeda2c7fb4dab171973418e8101f01785b5e6e2/27101:21627",
+        "name": "•S Typography",
+        "slug": "s-typography",
+        "idSlug": "variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627"
+      },
+      "mode": {
+        "id": "19458:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
       "fileName": "breakpoint-variablecollectionid-3801d27a9b915a9f48452248917d68b8a7d273fc-28437-4248.desktop.json",
       "collection": {
         "id": "VariableCollectionId:3801d27a9b915a9f48452248917d68b8a7d273fc/28437:4248",
@@ -467,6 +425,76 @@
       }
     },
     {
+      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.desktop.json",
+      "collection": {
+        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
+        "name": "Breakpoint",
+        "slug": "breakpoint",
+        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
+      },
+      "mode": {
+        "id": "6664:0",
+        "name": "Desktop",
+        "slug": "desktop"
+      }
+    },
+    {
+      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.mobile.json",
+      "collection": {
+        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
+        "name": "Breakpoint",
+        "slug": "breakpoint",
+        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
+      },
+      "mode": {
+        "id": "6664:1",
+        "name": "Mobile",
+        "slug": "mobile"
+      }
+    },
+    {
+      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.tablet.json",
+      "collection": {
+        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
+        "name": "Breakpoint",
+        "slug": "breakpoint",
+        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
+      },
+      "mode": {
+        "id": "6664:2",
+        "name": "Tablet",
+        "slug": "tablet"
+      }
+    },
+    {
+      "fileName": "s2a-color-variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748.light.json",
+      "collection": {
+        "id": "VariableCollectionId:39add3230a451deae82adc825e88e392c4553aa8/3194:748",
+        "name": "S2A / Color",
+        "slug": "s2a-color",
+        "idSlug": "variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748"
+      },
+      "mode": {
+        "id": "8:11",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "s2a-color-variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748.dark.json",
+      "collection": {
+        "id": "VariableCollectionId:39add3230a451deae82adc825e88e392c4553aa8/3194:748",
+        "name": "S2A / Color",
+        "slug": "s2a-color",
+        "idSlug": "variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748"
+      },
+      "mode": {
+        "id": "8:12",
+        "name": "Dark",
+        "slug": "dark"
+      }
+    },
+    {
       "fileName": "typography-variablecollectionid-4eeb7e93d7f0480ae4e35d0d66bb910f119f92f5-3242-6003.modeless.json",
       "collection": {
         "id": "VariableCollectionId:4eeb7e93d7f0480ae4e35d0d66bb910f119f92f5/3242:6003",
@@ -478,34 +506,6 @@
         "id": "3242:3",
         "name": "Modeless",
         "slug": "modeless"
-      }
-    },
-    {
-      "fileName": "s-typography-variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:dbeda2c7fb4dab171973418e8101f01785b5e6e2/27101:21627",
-        "name": "•S Typography",
-        "slug": "s-typography",
-        "idSlug": "variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627"
-      },
-      "mode": {
-        "id": "19458:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "component-dimension-responsive-variablecollectionid-dc466e45202f902d5bb2877faec3080b5a29881f-18943-4010.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:dc466e45202f902d5bb2877faec3080b5a29881f/18943:4010",
-        "name": "Component / Dimension / Responsive",
-        "slug": "component-dimension-responsive",
-        "idSlug": "variablecollectionid-dc466e45202f902d5bb2877faec3080b5a29881f-18943-4010"
-      },
-      "mode": {
-        "id": "18795:1",
-        "name": "Mode 1",
-        "slug": "mode-1"
       }
     }
   ]

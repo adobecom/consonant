@@ -770,9 +770,21 @@ async function buildFromFigma() {
         }
         // Exclude primitive palette under s2a.color (gray, green, blue, etc.) — they live in primitives
         const primitiveColorPaletteKeys = [
-          "gray", "green", "blue", "red", "orange", "yellow", "transparent", "brand", "dataviz",
+          "gray",
+          "green",
+          "blue",
+          "red",
+          "orange",
+          "yellow",
+          "transparent",
+          "brand",
+          "dataviz",
         ];
         if (path[2] && primitiveColorPaletteKeys.includes(String(path[2]))) {
+          return false;
+        }
+        // Temporarily exclude semantic button/iconbutton tokens from semantic output
+        if (path[2] === "button" || path[2] === "iconbutton") {
           return false;
         }
         return true;
@@ -845,9 +857,21 @@ async function buildFromFigma() {
         }
         // Exclude primitive palette under s2a.color (gray, green, blue, etc.) — they live in primitives
         const primitiveColorPaletteKeys = [
-          "gray", "green", "blue", "red", "orange", "yellow", "transparent", "brand", "dataviz",
+          "gray",
+          "green",
+          "blue",
+          "red",
+          "orange",
+          "yellow",
+          "transparent",
+          "brand",
+          "dataviz",
         ];
         if (path[2] && primitiveColorPaletteKeys.includes(String(path[2]))) {
+          return false;
+        }
+        // Temporarily exclude semantic button/iconbutton tokens from semantic output
+        if (path[2] === "button" || path[2] === "iconbutton") {
           return false;
         }
         return true;

@@ -242,6 +242,7 @@ function populateLineHeightFontSizeMap(maps) {
     66: 58, // line-height 66px → font-size 58px
     69: 56, // line-height 69px → font-size 56px
     74: 65, // line-height 74px → font-size 65px
+    76: 64, // line-height 76px → font-size 64px
     84: 73, // line-height 84px → font-size 73px
     92: 72, // line-height 92px → font-size 72px
     95: 82, // line-height 95px → font-size 82px
@@ -327,8 +328,9 @@ function convertNumberTokens(node, path, maps) {
       node.$value = pxToUnitlessLineHeight(value, fontPx);
     } else if (scope === "letter-spacing") {
       // Letter-spacing primitives from Figma are stored as pixels.
-      // Convert to em (relative to 16px base) for proper scaling with font-size.
-      node.$value = pxToEm(value);
+      // Keep them in px so they exactly match Figma dev mode.
+      // Scaling (browser zoom / OS text scaling) will still work correctly.
+      node.$value = toPx(value);
     } else if (path[0] === "opacity") {
       node.$value = roundTo(Math.max(0, Math.min(1, value / 100)), 4);
     } else {

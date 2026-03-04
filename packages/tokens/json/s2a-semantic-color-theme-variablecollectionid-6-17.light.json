@@ -12,7 +12,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-default)"
+              }
             }
           }
         },
@@ -26,7 +28,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-default-hover)"
+              }
             }
           }
         },
@@ -40,7 +44,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-subtle)"
+              }
             }
           }
         },
@@ -54,7 +60,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-brand)"
+              }
             }
           }
         },
@@ -68,7 +76,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-knockout)"
+              }
             }
           }
         },
@@ -82,7 +92,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-inverse)"
+              }
             }
           }
         },
@@ -96,7 +108,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-disabled)"
+              }
             }
           }
         },
@@ -111,7 +125,9 @@
                 "scopes": [
                   "ALL_SCOPES"
                 ],
-                "codeSyntax": {}
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-background-utility-error)"
+                }
               }
             }
           }
@@ -128,7 +144,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-default)"
+              }
             }
           }
         },
@@ -142,7 +160,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-default-hover)"
+              }
             }
           }
         },
@@ -156,7 +176,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-subtle)"
+              }
             }
           }
         },
@@ -170,7 +192,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-strong)"
+              }
             }
           }
         },
@@ -184,7 +208,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-knockout)"
+              }
             }
           }
         },
@@ -198,7 +224,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-inverse)"
+              }
             }
           }
         },
@@ -212,7 +240,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-brand)"
+              }
             }
           }
         },
@@ -226,7 +256,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-disabled)"
+              }
             }
           }
         },
@@ -241,7 +273,9 @@
                 "scopes": [
                   "ALL_SCOPES"
                 ],
-                "codeSyntax": {}
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-border-utility-error)"
+                }
               }
             }
           }
@@ -258,7 +292,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-default)"
+              }
             }
           }
         },
@@ -272,7 +308,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-default-hover)"
+              }
             }
           }
         },
@@ -286,7 +324,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-subtle)"
+              }
             }
           }
         },
@@ -300,7 +340,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-knockout)"
+              }
             }
           }
         },
@@ -314,7 +356,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-inverse)"
+              }
             }
           }
         },
@@ -328,7 +372,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-brand)"
+              }
             }
           }
         },
@@ -342,7 +388,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-disabled)"
+              }
             }
           }
         },
@@ -357,7 +405,121 @@
                 "scopes": [
                   "ALL_SCOPES"
                 ],
-                "codeSyntax": {}
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-content-utility-error)"
+                }
+              }
+            }
+          }
+        },
+        "title": {
+          "$type": "color",
+          "$value": "{s2a.color.content.default}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-title)"
+              }
+            }
+          }
+        },
+        "subheading": {
+          "$type": "color",
+          "$value": "{s2a.color.content.default}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-subheading)"
+              }
+            }
+          }
+        },
+        "body-sublte": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.black.64}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-body-sublte)"
+              }
+            }
+          }
+        },
+        "body-strong": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.900}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-body-strong)"
+              }
+            }
+          }
+        },
+        "eyebrow": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.black.64}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-eyebrow)"
+              }
+            }
+          }
+        },
+        "label": {
+          "$type": "color",
+          "$value": "{s2a.color.content.default}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-label)"
+              }
+            }
+          }
+        },
+        "caption": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.black.64}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-caption)"
               }
             }
           }
@@ -374,7 +536,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-focus-ring-default)"
+              }
             }
           }
         },
@@ -388,7 +552,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-focus-ring-knockout)"
+              }
             }
           }
         }
@@ -407,7 +573,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-solid-default)"
+                    }
                   }
                 }
               },
@@ -421,7 +589,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-solid-hover)"
+                    }
                   }
                 }
               },
@@ -435,7 +605,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-solid-active)"
+                    }
                   }
                 }
               },
@@ -449,7 +621,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-solid-on-dark)"
+                    }
                   }
                 }
               }
@@ -465,7 +639,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-outlined-default)"
+                    }
                   }
                 }
               },
@@ -479,7 +655,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-outlined-hover)"
+                    }
                   }
                 }
               },
@@ -493,7 +671,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-outlined-active)"
+                    }
                   }
                 }
               },
@@ -507,7 +687,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-outlined-on-dark)"
+                    }
                   }
                 }
               },
@@ -521,7 +703,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-outlined-on-dark-hover)"
+                    }
                   }
                 }
               },
@@ -535,7 +719,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-outlined-on-dark-active)"
+                    }
                   }
                 }
               }
@@ -551,7 +737,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-transparent-default)"
+                    }
                   }
                 }
               },
@@ -565,7 +753,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-transparent-hover)"
+                    }
                   }
                 }
               },
@@ -579,7 +769,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-transparent-active)"
+                    }
                   }
                 }
               },
@@ -593,7 +785,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-transparent-on-dark)"
+                    }
                   }
                 }
               },
@@ -607,7 +801,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-transparent-on-dark-hover)"
+                    }
                   }
                 }
               },
@@ -621,7 +817,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-background-primary-transparent-on-dark-active)"
+                    }
                   }
                 }
               }
@@ -641,7 +839,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-border-primary-solid-default)"
+                    }
                   }
                 }
               }
@@ -657,7 +857,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-border-primary-outlined-default)"
+                    }
                   }
                 }
               },
@@ -671,7 +873,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-border-primary-outlined-on-dark)"
+                    }
                   }
                 }
               }
@@ -691,7 +895,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-solid-default)"
+                    }
                   }
                 }
               },
@@ -705,7 +911,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-solid-inverse)"
+                    }
                   }
                 }
               }
@@ -721,7 +929,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-outlined-default)"
+                    }
                   }
                 }
               },
@@ -735,7 +945,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-outlined-knockout)"
+                    }
                   }
                 }
               }
@@ -751,7 +963,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-transparent-default)"
+                    }
                   }
                 }
               },
@@ -765,7 +979,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-transparent-knockout)"
+                    }
                   }
                 }
               }
@@ -787,7 +1003,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-solid-default)"
+                    }
                   }
                 }
               },
@@ -801,7 +1019,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-solid-hover)"
+                    }
                   }
                 }
               },
@@ -815,7 +1035,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-solid-active)"
+                    }
                   }
                 }
               },
@@ -829,7 +1051,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-solid-on-dark)"
+                    }
                   }
                 }
               }
@@ -845,7 +1069,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-default)"
+                    }
                   }
                 }
               },
@@ -859,7 +1085,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-hover)"
+                    }
                   }
                 }
               },
@@ -873,7 +1101,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-active)"
+                    }
                   }
                 }
               },
@@ -887,7 +1117,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-on-dark)"
+                    }
                   }
                 }
               },
@@ -901,7 +1133,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-on-dark-hover)"
+                    }
                   }
                 }
               },
@@ -915,7 +1149,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-on-dark-active)"
+                    }
                   }
                 }
               }
@@ -931,7 +1167,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-default)"
+                    }
                   }
                 }
               },
@@ -945,7 +1183,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-hover)"
+                    }
                   }
                 }
               },
@@ -959,7 +1199,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-active)"
+                    }
                   }
                 }
               },
@@ -973,7 +1215,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-on-dark)"
+                    }
                   }
                 }
               },
@@ -987,7 +1231,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-on-dark-hover)"
+                    }
                   }
                 }
               },
@@ -1001,7 +1247,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-on-dark-active)"
+                    }
                   }
                 }
               }
@@ -1021,7 +1269,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-border-primary-solid-default)"
+                    }
                   }
                 }
               }
@@ -1037,7 +1287,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-border-primary-outlined-default)"
+                    }
                   }
                 }
               },
@@ -1051,7 +1303,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-border-primary-outlined-on-dark)"
+                    }
                   }
                 }
               }
@@ -1071,7 +1325,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-solid-default)"
+                    }
                   }
                 }
               },
@@ -1085,7 +1341,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-solid-inverse)"
+                    }
                   }
                 }
               }
@@ -1101,7 +1359,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-outlined-default)"
+                    }
                   }
                 }
               },
@@ -1115,7 +1375,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-outlined-knockout)"
+                    }
                   }
                 }
               }
@@ -1131,7 +1393,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-transparent-default)"
+                    }
                   }
                 }
               },
@@ -1145,7 +1409,9 @@
                     "scopes": [
                       "ALL_SCOPES"
                     ],
-                    "codeSyntax": {}
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-transparent-knockout)"
+                    }
                   }
                 }
               }
