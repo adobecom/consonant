@@ -199,6 +199,102 @@
               }
             }
           }
+        },
+        "title": {
+          "$type": "string",
+          "$value": "{s2a.font.family.adobe-clean-display}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FONT_FAMILY"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-family-title)"
+              }
+            }
+          }
+        },
+        "subheading": {
+          "$type": "string",
+          "$value": "{s2a.font.family.adobe-clean-display}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FONT_FAMILY"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-family-subheading)"
+              }
+            }
+          }
+        },
+        "body": {
+          "$type": "string",
+          "$value": "{s2a.font.family.adobe-clean}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FONT_FAMILY"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-family-body)"
+              }
+            }
+          }
+        },
+        "label": {
+          "$type": "string",
+          "$value": "{s2a.font.family.adobe-clean}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FONT_FAMILY"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-family-label)"
+              }
+            }
+          }
+        },
+        "eyebrow": {
+          "$type": "string",
+          "$value": "{s2a.font.family.adobe-clean}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FONT_FAMILY"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-family-eyebrow)"
+              }
+            }
+          }
+        },
+        "caption": {
+          "$type": "string",
+          "$value": "{s2a.font.family.adobe-clean}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FONT_FAMILY"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-family-caption)"
+              }
+            }
+          }
         }
       },
       "size": {

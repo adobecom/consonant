@@ -31,6 +31,24 @@ const {
   collectColorPaths,
   extractColorTokens,
 } = require("./utils/token-utils");
+
+/** Remove from the tree any leaf token whose $description contains "DESIGN ONLY". Mutates in place. */
+function removeDesignOnlyTokens(node) {
+  if (!node || typeof node !== "object" || Array.isArray(node)) return;
+  const keysToDelete = [];
+  for (const [key, value] of Object.entries(node)) {
+    if (key.startsWith("$")) continue;
+    if (value && typeof value === "object" && !Array.isArray(value) && "$value" in value) {
+      const desc = value.$description ?? "";
+      if (String(desc).toUpperCase().includes("DESIGN ONLY")) {
+        keysToDelete.push(key);
+      }
+    } else if (value && typeof value === "object" && !Array.isArray(value)) {
+      removeDesignOnlyTokens(value);
+    }
+  }
+  keysToDelete.forEach((k) => delete node[k]);
+}
 const {
   toSlug,
   determineBaseSlug,
@@ -1075,11 +1093,11 @@ async function buildFromFigma() {
         mediaQuery,
         filter: (token) => {
           const path = token.path || [];
-          // Only include S2A responsive tokens: s2a.grid.* and s2a.typography.* (responsive typography)
+          // Only include S2A responsive tokens: s2a.grid.*, s2a.typography.*, s2a.section.*
           if (path[0] !== "s2a") {
             return false;
           }
-          return path[1] === "grid" || path[1] === "typography";
+          return path[1] === "grid" || path[1] === "typography" || path[1] === "section";
         },
       });
     }
@@ -1287,6 +1305,10 @@ async function buildCssFromTokens(
   tokens,
   { destination, selector, filter, mediaQuery, outputReferences = true },
 ) {
+  // Strip DESIGN ONLY tokens from the tree so they never reach CSS (mutate a clone)
+  const tokensForBuild = clone(tokens);
+  removeDesignOnlyTokens(tokensForBuild);
+
   const fileConfig = {
     destination,
     format: "css/variables",
@@ -1297,7 +1319,7 @@ async function buildCssFromTokens(
   };
 
   if (typeof filter === "function") {
-    fileConfig.filter = (token) => filter(token);
+    fileConfig.filter = filter;
   }
 
   // Custom name transform: path to kebab (no extra prefix; Figma tokens already use s2a in path)
@@ -1321,7 +1343,7 @@ async function buildCssFromTokens(
   // Ensure tokens object has the correct structure for Style Dictionary
   // Style Dictionary needs all referenced tokens to be in the tree when it processes references
   const sd = new StyleDictionary({
-    tokens: tokens,
+    tokens: tokensForBuild,
     log: {
       verbosity: process.env.STYLE_DICTIONARY_VERBOSITY || "verbose",
       errors: { brokenReferences: "console" },

@@ -5,6 +5,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.11] - 2026-02-25
+
+### ✨ Improvements
+
+- **Typo fix**: Corrected "sublte" → "subtle" in token names/values.
+- **Section padding tokens**: Added section padding tokens to the build output.
+- **Redundant break removed**: Removed the redundant break (token/breakpoint) from the set.
+
+### 🧹 Build
+
+- **DESIGN ONLY tokens excluded**: Tokens whose Figma description contains "DESIGN ONLY" are now stripped from the token tree before CSS generation, so they no longer appear in any generated CSS custom properties (e.g. `--s2a-grid-container-_padding-inline` removed from responsive files).
+
+---
+
+## [0.0.10] - 2026-03-04
+
+### ✨ Improvements
+
+- **Responsive typography tokens**: Finalized responsive `typography.*` tokens for `xs / sm / md / lg / xl` breakpoints, ensuring each role (super, titles, body, eyebrow, label, caption) keeps its `font-size`, `letter-spacing`, and `line-height` trio in sync.
+- **Line-height mapping fix**: Corrected the mapping for the `76px` line-height primitive so it now produces a sane unitless ratio (`--s2a-font-line-height-76: 1.188`) instead of `4.75`.
+- **Letter-spacing units**: Reverted letter-spacing primitives back to px values that exactly match Figma dev mode, avoiding over-tight text caused by incorrect em conversion.
+
+### 🧼 Token surface cleanup
+
+- **Filter button/iconbutton semantics**: Temporarily removed all semantic `button` and `iconbutton` color tokens from `tokens.semantic.light.css` / `tokens.semantic.dark.css` until the component APIs are finalized.
+- **Blur primitives only in primitives**: Ensured `s2a.blur.*` tokens only appear in `tokens.primitives.css` and are not duplicated in semantic output.
+
+### 🧱 Build & packaging
+
+- **Responsive CSS in package**: Included `tokens.responsive.{xs,sm,md,lg,xl}.css` in the published package and Storybook so consumers can inspect breakpoint-specific grids and typography.
+- **New tarball**: Published `@adobecom/s2a-tokens@0.0.10` and added `releases/adobecom-s2a-tokens-0.0.10.tgz` for handoff.
+
+---
+
+## [0.0.9] - 2026-03-03
+
+### ✨ Improvements
+
+- **Figma sync refresh**: Pulled the latest primitives, semantic, and responsive collections from Figma (including the new *S2A / Responsive / Grid / Typography* collection).
+- **Deterministic build**: Simplified the Style Dictionary pipeline so a clean `json/` + `dist/` followed by `sync-figma` and `build` will always regenerate the same CSS for a given Figma state.
+- **Semantic vs primitives**: Tightened filters so semantic CSS no longer re-emits primitive values (spacing, radii, opacity, typography) or raw color ramps.
+
+### 📐 Naming & structure
+
+- **s2a-prefixed paths only once**: Fixed the custom name transform so tokens derived from `s2a.*` paths no longer get a duplicate `s2a-` prefix in their CSS variable names.
+- **Reference rewrites for dimensions**: Normalized semantic dimension references like `{spacing.96}` / `{border.radius.2}` to `{s2a.spacing.96}` / `{s2a.border.radius.2}` so they resolve correctly during the build.
+
+### 🧱 New output
+
+- **Responsive tokens (beta)**: Introduced the first pass of responsive CSS files:
+  - `tokens.responsive.xs.css`, `tokens.responsive.sm.css`, `tokens.responsive.md.css`, `tokens.responsive.lg.css`, `tokens.responsive.xl.css`
+  - Each file wires `--s2a-typography-*` roles to the appropriate primitive font-size/line-height/letter-spacing tokens for its breakpoint.
+- **Package tarball**: Published `@adobecom/s2a-tokens@0.0.9` and captured `releases/adobecom-s2a-tokens-0.0.9.tgz` as a distributable artifact.
+
+---
+
 ## [0.0.8] - 2025-02-26
 
 ### ✨ Improvements

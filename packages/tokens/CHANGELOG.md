@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.11] - 2026-02-25
+
+### ✨ Improvements
+
+- **Typo fix**: Corrected "sublte" → "subtle" in token names/values.
+- **Section padding tokens**: Included `s2a.section.*` in the responsive build filter so section padding tokens (`--s2a-section-padding-none` through `--s2a-section-padding-xl`) from the S2A / Responsive / Grid / Typography collection now appear in `tokens.responsive.{sm,md,lg,xl}.css`.
+- **Redundant break removed**: Removed the redundant break (token/breakpoint) from the set.
+
+### 🧹 Build
+
+- **DESIGN ONLY tokens excluded**: Tokens whose Figma description contains "DESIGN ONLY" are now stripped from the token tree before CSS generation, so they no longer appear in any generated CSS custom properties (e.g. `--s2a-grid-container-_padding-inline` removed from responsive files).
+
+---
+
 ## [0.0.10] - 2026-03-04
 
 ### ✨ Improvements

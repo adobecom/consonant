@@ -66,6 +66,22 @@
             }
           }
         },
+        "12": {
+          "$type": "number",
+          "$value": 12,
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-border-radius-12)"
+              }
+            }
+          }
+        },
         "16": {
           "$type": "number",
           "$value": 16,
@@ -78,6 +94,22 @@
               ],
               "codeSyntax": {
                 "WEB": "var(--s2a-border-radius-16)"
+              }
+            }
+          }
+        },
+        "24": {
+          "$type": "number",
+          "$value": 24,
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-border-radius-24)"
               }
             }
           }

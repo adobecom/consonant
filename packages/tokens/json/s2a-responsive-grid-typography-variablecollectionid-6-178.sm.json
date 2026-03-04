@@ -2,13 +2,13 @@
   "s2a": {
     "grid": {
       "container": {
-        "max-width": {
+        "_max-width": {
           "$type": "number",
-          "$value": 1023,
-          "$description": "",
+          "$value": 767,
+          "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "WIDTH_HEIGHT"
               ],
@@ -18,13 +18,13 @@
             }
           }
         },
-        "padding-inline": {
+        "_padding-inline": {
           "$type": "number",
           "$value": 85.33000183105469,
-          "$description": "",
+          "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "WIDTH_HEIGHT",
                 "GAP"
@@ -35,30 +35,14 @@
             }
           }
         },
-        "width-percent": {
-          "$type": "number",
-          "$value": 83.4000015258789,
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": true,
-              "scopes": [
-                "WIDTH_HEIGHT"
-              ],
-              "codeSyntax": {
-                "WEB": "var(--s2a-grid-container-width-percent)"
-              }
-            }
-          }
-        },
         "body": {
-          "max-width": {
+          "_max-width": {
             "$type": "number",
             "$value": 794,
-            "$description": "",
+            "$description": "DESIGN ONLY",
             "$extensions": {
               "com.figma": {
-                "hiddenFromPublishing": true,
+                "hiddenFromPublishing": false,
                 "scopes": [
                   "WIDTH_HEIGHT"
                 ],
@@ -70,13 +54,13 @@
           }
         },
         "content": {
-          "max-width": {
+          "_max-width": {
             "$type": "number",
             "$value": 1062,
-            "$description": "",
+            "$description": "DESIGN ONLY",
             "$extensions": {
               "com.figma": {
-                "hiddenFromPublishing": true,
+                "hiddenFromPublishing": false,
                 "scopes": [
                   "WIDTH_HEIGHT"
                 ],
@@ -89,13 +73,13 @@
         }
       },
       "breakpoint": {
-        "max-width": {
+        "_max-width": {
           "$type": "number",
-          "$value": 1023,
-          "$description": "",
+          "$value": 767,
+          "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "WIDTH_HEIGHT"
               ],
@@ -105,13 +89,13 @@
             }
           }
         },
-        "min-width": {
+        "_min-width": {
           "$type": "number",
-          "$value": 768,
-          "$description": "",
+          "$value": 320,
+          "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "WIDTH_HEIGHT"
               ],
@@ -124,7 +108,7 @@
       },
       "gutter": {
         "$type": "number",
-        "$value": 8,
+        "$value": "{s2a.spacing.xs}",
         "$description": "",
         "$extensions": {
           "com.figma": {
@@ -137,13 +121,61 @@
             }
           }
         }
+      },
+      "_columns": {
+        "$type": "number",
+        "$value": 6,
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-grid-columns)"
+            }
+          }
+        }
+      },
+      "element": {
+        "gap": {
+          "sm": {
+            "$type": "number",
+            "$value": "{s2a.spacing.lg}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "lg": {
+            "$type": "number",
+            "$value": "{s2a.spacing.2xl}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          }
+        }
       }
     },
     "typography": {
       "font-size": {
         "super": {
           "$type": "number",
-          "$value": "{s2a.font.size.8xl}",
+          "$value": "{s2a.font.size.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -159,7 +191,7 @@
         },
         "title-1": {
           "$type": "number",
-          "$value": "{s2a.font.size.6xl}",
+          "$value": "{s2a.font.size.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -175,7 +207,7 @@
         },
         "title-2": {
           "$type": "number",
-          "$value": "{s2a.font.size.4xl}",
+          "$value": "{s2a.font.size.3xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -191,7 +223,7 @@
         },
         "title-3": {
           "$type": "number",
-          "$value": "{s2a.font.size.3xl}",
+          "$value": "{s2a.font.size.2xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -223,7 +255,7 @@
         },
         "body-lg": {
           "$type": "number",
-          "$value": "{s2a.font.size.lg}",
+          "$value": "{s2a.font.size.md}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -271,7 +303,7 @@
         },
         "body-xs": {
           "$type": "number",
-          "$value": "{s2a.font.size.sm}",
+          "$value": "{s2a.font.size.xs}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -337,7 +369,7 @@
       "letter-spacing": {
         "super": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.md}",
+          "$value": "{s2a.font.letter-spacing.lg}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -353,7 +385,7 @@
         },
         "title-1": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.lg}",
+          "$value": "{s2a.font.letter-spacing.2xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -369,7 +401,7 @@
         },
         "title-2": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.2xl}",
+          "$value": "{s2a.font.letter-spacing.3xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -385,7 +417,7 @@
         },
         "title-3": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.3xl}",
+          "$value": "{s2a.font.letter-spacing.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -401,7 +433,7 @@
         },
         "title-4": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.4xl}",
+          "$value": "{s2a.font.letter-spacing.5xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -531,7 +563,7 @@
       "line-height": {
         "super": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.4xl}",
+          "$value": "{s2a.font.line-height.3xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -547,7 +579,7 @@
         },
         "title-1": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.3xl}",
+          "$value": "{s2a.font.line-height.xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -563,7 +595,7 @@
         },
         "title-2": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.xl}",
+          "$value": "{s2a.font.line-height.lg}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -579,7 +611,7 @@
         },
         "title-3": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.lg}",
+          "$value": "{s2a.font.line-height.md}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -611,7 +643,7 @@
         },
         "body-lg": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.md}",
+          "$value": "{s2a.font.line-height.sm}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -717,6 +749,118 @@
               ],
               "codeSyntax": {
                 "WEB": "var(--s2a-typography-line-height-caption)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "section": {
+      "padding": {
+        "none": {
+          "$type": "number",
+          "$value": "{s2a.spacing.none}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "WIDTH_HEIGHT",
+                "GAP",
+                "FONT_VARIATIONS"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--section-padding-none)"
+              }
+            }
+          }
+        },
+        "xs": {
+          "$type": "number",
+          "$value": "{s2a.spacing.lg}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "WIDTH_HEIGHT",
+                "GAP",
+                "FONT_VARIATIONS"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--section-padding-xs)"
+              }
+            }
+          }
+        },
+        "sm": {
+          "$type": "number",
+          "$value": "{s2a.spacing.xl}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "WIDTH_HEIGHT",
+                "GAP",
+                "FONT_VARIATIONS"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--section-padding-sm)"
+              }
+            }
+          }
+        },
+        "md": {
+          "$type": "number",
+          "$value": "{s2a.spacing.2xl}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "WIDTH_HEIGHT",
+                "GAP",
+                "FONT_VARIATIONS"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--section-padding-md)"
+              }
+            }
+          }
+        },
+        "lg": {
+          "$type": "number",
+          "$value": "{s2a.spacing.4xl}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "WIDTH_HEIGHT",
+                "GAP",
+                "FONT_VARIATIONS"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--section-padding-lg)"
+              }
+            }
+          }
+        },
+        "xl": {
+          "$type": "number",
+          "$value": "{s2a.layout.sm}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "WIDTH_HEIGHT",
+                "GAP",
+                "FONT_VARIATIONS"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--section-padding-xl)"
               }
             }
           }
