@@ -308,7 +308,21 @@ async function buildFromFigma() {
       clone(lightColorPrimitivesForRefs),
       clone(primitivesCoreTokensRaw),
     );
-    
+
+    // Shadow tokens reference color.transparent.black.*; S2A primitives use s2a.color.transparent.
+    // Alias so refs resolve.
+    if (
+      mergedPrimitivesBeforeConversion.s2a?.color?.transparent &&
+      !mergedPrimitivesBeforeConversion.color?.transparent
+    ) {
+      if (!mergedPrimitivesBeforeConversion.color) {
+        mergedPrimitivesBeforeConversion.color = {};
+      }
+      mergedPrimitivesBeforeConversion.color.transparent = clone(
+        mergedPrimitivesBeforeConversion.s2a.color.transparent,
+      );
+    }
+
     // Flatten duplicate font-weight tokens (e.g. adobe-clean.black and adobe-clean-display.black both 900)
     flattenDuplicateFontWeights(mergedPrimitivesBeforeConversion);
 
@@ -346,12 +360,9 @@ async function buildFromFigma() {
         const path = token.path || [];
         const pathStr = path.join(".");
         // Only include non-color primitives, BUT include colors that are referenced
-        // This ensures Style Dictionary can resolve references
         if (path[0] === "color") {
-          // Include this color if it's referenced by another token
           return referencedColorPaths.has(pathStr);
         }
-        // Letter-spacing tokens are now supported (converted to em units)
         return true;
       },
     });
@@ -531,21 +542,69 @@ async function buildFromFigma() {
       }
     }
     removeShadowsFromTree(mergedSemantic);
-    
+
+    // Rewrite semantic refs that use bare "spacing.*" / "border.*" / "color.*" so they resolve to s2a.*
+    function rewriteSemanticRefsToS2a(obj) {
+      if (!obj || typeof obj !== "object") return;
+      if (Array.isArray(obj)) {
+        obj.forEach(rewriteSemanticRefsToS2a);
+        return;
+      }
+      if ("$value" in obj && typeof obj.$value === "string") {
+        let v = obj.$value;
+        if (v.startsWith("{") && v.endsWith("}")) {
+          const inner = v.slice(1, -1);
+          if (inner.startsWith("spacing.") && !inner.startsWith("s2a.")) {
+            obj.$value = `{s2a.${inner}}`;
+          } else if (inner.startsWith("border.") && !inner.startsWith("s2a.")) {
+            obj.$value = `{s2a.${inner}}`;
+          } else if (inner.startsWith("color.") && !inner.startsWith("s2a.")) {
+            obj.$value = `{s2a.${inner}}`;
+          }
+        }
+        return;
+      }
+      for (const key of Object.keys(obj)) {
+        if (key.startsWith("$")) continue;
+        rewriteSemanticRefsToS2a(obj[key]);
+      }
+    }
+    rewriteSemanticRefsToS2a(mergedSemantic);
+
     await buildCssFromTokens(mergedSemantic, {
       destination: "tokens.semantic.css",
       selector: ":root",
       filter: (token) => {
         const path = token.path || [];
         const pathStr = path.join(".");
-        
+
         // Exclude shadows (they're in primitives.css) - double check even though removed
         if (path[0] === "shadow") {
           return false;
         }
-        
-        // Exclude colors (they go in tokens.semantic.light/dark.css)
-        // Include referenced colors for Style Dictionary resolution
+
+        // Exclude primitive color palette (s2a.color.gray, .green, .blue, etc.) — they live in primitives.css
+        // Only include semantic color groups (s2a.color.background, .content, .border, etc.)
+        const primitiveColorPaletteKeys = [
+          "gray", "green", "blue", "red", "orange", "yellow", "transparent", "brand", "dataviz",
+        ];
+        if (path[0] === "s2a" && path[1] === "color" && path[2]) {
+          if (primitiveColorPaletteKeys.includes(String(path[2]))) {
+            return false;
+          }
+        }
+
+        // Exclude primitive dimension/opacity/font/blur tokens under s2a — they live in primitives.css
+        // Only include semantic aliases (tokens that reference primitives)
+        const s2aPrimitiveTopKeys = ["border", "spacing", "layout", "opacity", "font", "blur"];
+        if (path[0] === "s2a" && s2aPrimitiveTopKeys.includes(path[1])) {
+          const rawValue = token.original?.$value ?? token.value;
+          if (typeof rawValue !== "string" || !rawValue.startsWith("{")) {
+            return false; // primitive value, not a semantic reference
+          }
+        }
+
+        // Exclude top-level color (legacy) except when referenced for resolution
         if (path[0] === "color") {
           return referencedColorPathsSemantic.has(pathStr);
         }
@@ -601,13 +660,14 @@ async function buildFromFigma() {
           return false; // All font.weight in primitives-core are primitives
         }
         
-        // Exclude primitives-core paths (border, opacity, shadow, spacing)
+        // Exclude primitives-core paths (border, opacity, shadow, spacing, blur)
         // These are already in tokens.primitives.css
         const primitivesPaths = [
           "border",
           "opacity",
           "shadow",
           "spacing",
+          "blur",
         ];
         if (primitivesPaths.includes(path[0])) {
           // For typography, check if it's a semantic t-shirt size (not a numeric primitive)
@@ -655,8 +715,7 @@ async function buildFromFigma() {
     });
   }
 
-  // 2b. Semantic Color (light)
-  // Include color tokens from both semantic collection and semantic-color collection
+  // 2b. Semantic Color (light) — from semantic color theme files by mode (e.g. s2a-semantic-color-theme .light.json)
   if (semanticColorFiles.has("light") || allSemanticFiles.length > 0) {
     const semanticColorLight = semanticColorFiles.has("light")
       ? await loadTokensForMode(semanticColorFiles.get("light"))
@@ -665,7 +724,7 @@ async function buildFromFigma() {
       allSemanticFiles.length > 0
         ? await loadTokensForMode(allSemanticFiles)
         : {};
-    // Extract only color tokens from semantic collection
+    // Extract only color tokens from semantic dimension/static (if any)
     const semanticColorTokensFromSemantic = {};
     if (semanticTokens && typeof semanticTokens === "object") {
       extractColorTokens(
@@ -675,16 +734,18 @@ async function buildFromFigma() {
         [],
       );
     }
-    // Merge all semantic color sources
-    const allSemanticColors = mergeTokenTrees(
+    // Merge semantic color theme (light mode) with any semantic color tokens from other collections
+    const allSemanticColorsLight = mergeTokenTrees(
       clone(semanticColorLight),
       semanticColorTokensFromSemantic,
     );
     // Merge with primitives and color primitives for reference resolution
     const mergedSemanticLight = mergeTokenTrees(
       mergeTokenTrees(clone(primitivesCoreTokens), clone(lightColorPrimitives)),
-      allSemanticColors,
+      allSemanticColorsLight,
     );
+    // Rewrite refs on the merged tree so {color.X} resolves to s2a.color.X before SD runs
+    rewriteSemanticRefsToS2a(mergedSemanticLight);
     // Track which color tokens are primitives (for filtering)
     const primitiveColorPaths = new Set();
     if (lightColorPrimitives && typeof lightColorPrimitives === "object") {
@@ -695,19 +756,31 @@ async function buildFromFigma() {
       selector: ':root[data-theme="light"]',
       filter: (token) => {
         const path = token.path || [];
-        // Only include semantic color tokens (not primitive colors)
-        if (path[0] !== "color") {
+        // Exclude tokens whose ref is still unresolved (literal {color.xxx} not {s2a.color.xxx}) — avoids truncated names and broken values
+        const rawValue = token.original?.$value ?? token.value;
+        if (typeof rawValue === "string") {
+          const refMatch = rawValue.trim().match(/^\{([^}]+)\}$/);
+          if (refMatch && !refMatch[1].startsWith("s2a.")) {
+            return false;
+          }
+        }
+        // Only include theme color tokens from mode files: s2a.color.* (not root-level color.*)
+        if (path[0] !== "s2a" || path[1] !== "color") {
           return false;
         }
-        // Exclude primitive color paths - these are in tokens.primitives.light.css
-        const pathStr = path.join(".");
-        return !primitiveColorPaths.has(pathStr);
+        // Exclude primitive palette under s2a.color (gray, green, blue, etc.) — they live in primitives
+        const primitiveColorPaletteKeys = [
+          "gray", "green", "blue", "red", "orange", "yellow", "transparent", "brand", "dataviz",
+        ];
+        if (path[2] && primitiveColorPaletteKeys.includes(String(path[2]))) {
+          return false;
+        }
+        return true;
       },
     });
   }
 
-  // 2c. Semantic Color (dark)
-  // Include color tokens from both semantic collection and semantic-color collection
+  // 2c. Semantic Color (dark) — from semantic color theme files by mode (e.g. s2a-semantic-color-theme .dark.json)
   if (semanticColorFiles.has("dark") || allSemanticFiles.length > 0) {
     const semanticColorDark = semanticColorFiles.has("dark")
       ? await loadTokensForMode(semanticColorFiles.get("dark"))
@@ -716,7 +789,7 @@ async function buildFromFigma() {
       allSemanticFiles.length > 0
         ? await loadTokensForMode(allSemanticFiles)
         : {};
-    // Extract only color tokens from semantic collection
+    // Extract only color tokens from semantic dimension/static (if any)
     const semanticColorTokensFromSemantic = {};
     if (semanticTokens && typeof semanticTokens === "object") {
       extractColorTokens(
@@ -726,14 +799,13 @@ async function buildFromFigma() {
         [],
       );
     }
-    // Merge all semantic color sources
-    const allSemanticColors = mergeTokenTrees(
+    // Merge semantic color theme (dark mode) with any semantic color tokens from other collections
+    const allSemanticColorsDark = mergeTokenTrees(
       clone(semanticColorDark),
       semanticColorTokensFromSemantic,
     );
     // Merge with primitives and color primitives for reference resolution
     // Include light color primitives too (gray colors are typically in light mode)
-    // This ensures semantic colors can reference primitive colors like color.gray.25
     const mergedSemanticDark = mergeTokenTrees(
       mergeTokenTrees(
         mergeTokenTrees(
@@ -742,10 +814,11 @@ async function buildFromFigma() {
         ),
         clone(darkColorPrimitives), // Then dark colors
       ),
-      allSemanticColors,
+      allSemanticColorsDark,
     );
+    // Rewrite refs on the merged tree so {color.X} resolves to s2a.color.X before SD runs
+    rewriteSemanticRefsToS2a(mergedSemanticDark);
     // Track which color tokens are primitives (for filtering)
-    // Need to track both light and dark primitives since we merged both
     const primitiveColorPaths = new Set();
     if (lightColorPrimitives && typeof lightColorPrimitives === "object") {
       collectColorPaths(lightColorPrimitives, [], primitiveColorPaths);
@@ -758,260 +831,32 @@ async function buildFromFigma() {
       selector: ':root[data-theme="dark"]',
       filter: (token) => {
         const path = token.path || [];
-        // Only include semantic color tokens (not primitive colors)
-        if (path[0] !== "color") {
+        // Exclude tokens whose ref is still unresolved (literal {color.xxx} not {s2a.color.xxx}) — avoids truncated names and broken values
+        const rawValue = token.original?.$value ?? token.value;
+        if (typeof rawValue === "string") {
+          const refMatch = rawValue.trim().match(/^\{([^}]+)\}$/);
+          if (refMatch && !refMatch[1].startsWith("s2a.")) {
+            return false;
+          }
+        }
+        // Only include theme color tokens from mode files: s2a.color.* (not root-level color.*)
+        if (path[0] !== "s2a" || path[1] !== "color") {
           return false;
         }
-        // Exclude primitive color paths - these are in tokens.primitives.light/dark.css
-        const pathStr = path.join(".");
-        return !primitiveColorPaths.has(pathStr);
+        // Exclude primitive palette under s2a.color (gray, green, blue, etc.) — they live in primitives
+        const primitiveColorPaletteKeys = [
+          "gray", "green", "blue", "red", "orange", "yellow", "transparent", "brand", "dataviz",
+        ];
+        if (path[2] && primitiveColorPaletteKeys.includes(String(path[2]))) {
+          return false;
+        }
+        return true;
       },
     });
   }
 
   // ============================================================================
-  // 3. COMPONENT
-  // ============================================================================
-
-  // 3a. Component (non-color) - extract from light mode file (non-color tokens are mode-agnostic)
-  if (componentFiles.has("light")) {
-    try {
-      const componentLightTokens = await loadTokensForMode(
-        componentFiles.get("light"),
-      );
-      // Merge with primitives and semantic for reference resolution
-      const semanticTokens =
-        allSemanticFiles.length > 0
-          ? await loadTokensForMode(allSemanticFiles)
-          : {};
-      // Also include semantic colors for reference resolution (component tokens may reference semantic colors)
-      const semanticColorLightForComponent = semanticColorFiles.has("light")
-        ? await loadTokensForMode(semanticColorFiles.get("light"))
-        : {};
-      
-      // Use primitivesCoreTokensRaw for reference resolution (before conversions)
-      // This ensures border.radius.0 references can resolve
-      // Exclude shadows from primitives-core to avoid shadow reference resolution issues
-      const primitivesCoreForComponent = clone(primitivesCoreTokensRaw);
-      if (primitivesCoreForComponent.shadow) {
-        delete primitivesCoreForComponent.shadow;
-      }
-      
-      // Add color primitives for reference resolution (component tokens may reference colors)
-      const lightColorPrimitivesForComponent = primitivesColorFiles.has("light")
-        ? await loadTokensForMode(primitivesColorFiles.get("light"))
-        : {};
-      
-      const mergedComponent = mergeTokenTrees(
-        mergeTokenTrees(
-          mergeTokenTrees(
-            mergeTokenTrees(primitivesCoreForComponent, clone(lightColorPrimitivesForComponent)),
-            clone(semanticTokens)
-          ),
-          clone(semanticColorLightForComponent) // Semantic colors for reference resolution
-        ),
-        componentLightTokens,
-      );
-      await buildCssFromTokens(mergedComponent, {
-        destination: "tokens.component.css",
-        selector: ":root",
-        outputReferences: false, // Disable outputReferences when using filters
-        filter: (token) => {
-          const path = token.path || [];
-          // Component tokens can be at root level (e.g., marquee-radius, button) or under component.*
-          // Check if it's a component token from component-dimension-responsive collection
-          const isComponentToken = path[0] === "component" || 
-            (path.length > 0 && ["marquee-radius", "button"].includes(path[0]));
-          
-          if (!isComponentToken) {
-            return false;
-          }
-          
-          // Exclude color tokens (component.color.* or button.color.*) - they go in component.light/dark.css
-          if (path.includes("color")) {
-            return false;
-          }
-          
-          // Include all other component tokens
-          return true;
-        },
-      });
-    } catch (error) {
-      console.warn(
-        `Warning: Failed to build component tokens (non-color): ${error.message || error}`,
-      );
-      if (error.stack) {
-        console.warn(error.stack);
-      }
-    }
-  }
-
-  // 3b. Component Color (light)
-  if (componentFiles.has("light")) {
-    try {
-      const componentLightTokens = await loadTokensForMode(
-        componentFiles.get("light"),
-      );
-      // Merge with all dependencies for reference resolution
-      const semanticTokens =
-        allSemanticFiles.length > 0
-          ? await loadTokensForMode(allSemanticFiles)
-          : {};
-      const semanticColorLight = semanticColorFiles.has("light")
-        ? await loadTokensForMode(semanticColorFiles.get("light"))
-        : {};
-      // Use primitivesCoreTokensRaw for reference resolution
-      const primitivesCoreForComponentLight = clone(primitivesCoreTokensRaw);
-      if (primitivesCoreForComponentLight.shadow) {
-        delete primitivesCoreForComponentLight.shadow;
-      }
-      
-      const mergedComponentLight = mergeTokenTrees(
-        mergeTokenTrees(
-          mergeTokenTrees(
-            primitivesCoreForComponentLight,
-            clone(lightColorPrimitives),
-          ),
-          mergeTokenTrees(clone(semanticTokens), clone(semanticColorLight)),
-        ),
-        componentLightTokens,
-      );
-      // Track which color tokens are primitives/semantic (for filtering)
-      const primitiveColorPaths = new Set();
-      const semanticColorPaths = new Set();
-      if (lightColorPrimitives && typeof lightColorPrimitives === "object") {
-        collectColorPaths(lightColorPrimitives, [], primitiveColorPaths);
-      }
-      if (semanticColorLight && typeof semanticColorLight === "object") {
-        collectColorPaths(semanticColorLight, [], semanticColorPaths);
-      }
-      await buildCssFromTokens(mergedComponentLight, {
-        destination: "tokens.component.light.css",
-        selector: ':root[data-theme="light"]',
-        filter: (token) => {
-          const path = token.path || [];
-          // Only include component color tokens (component.*.color.*)
-          if (!path.includes("color")) {
-            return false;
-          }
-          // Exclude primitive paths (shadow, border, opacity, spacing, typography)
-          const primitivesPaths = [
-            "shadow",
-            "border",
-            "opacity",
-            "spacing",
-            "typography",
-          ];
-          if (primitivesPaths.includes(path[0])) {
-            return false; // These are primitives, not component tokens
-          }
-          // Exclude primitive and semantic colors - only include component colors
-          const pathStr = path.join(".");
-          if (
-            primitiveColorPaths.has(pathStr) ||
-            semanticColorPaths.has(pathStr)
-          ) {
-            return false;
-          }
-          // Component colors should have paths like "button.color.*" or "component.*.color.*"
-          return path[0] !== "color"; // Component colors are not at the root "color" level
-        },
-      });
-    } catch (error) {
-      console.warn(
-        `Warning: Failed to build component tokens (light): ${error.message}`,
-      );
-    }
-  }
-
-  // 3c. Component Color (dark)
-  if (componentFiles.has("dark")) {
-    try {
-      const componentDarkTokens = await loadTokensForMode(
-        componentFiles.get("dark"),
-      );
-      // Merge with all dependencies for reference resolution
-      const semanticTokens =
-        allSemanticFiles.length > 0
-          ? await loadTokensForMode(allSemanticFiles)
-          : {};
-      const semanticColorDark = semanticColorFiles.has("dark")
-        ? await loadTokensForMode(semanticColorFiles.get("dark"))
-        : {};
-      // Use primitivesCoreTokensRaw for reference resolution
-      const primitivesCoreForComponentDark = clone(primitivesCoreTokensRaw);
-      if (primitivesCoreForComponentDark.shadow) {
-        delete primitivesCoreForComponentDark.shadow;
-      }
-      
-      // Add light color primitives too (gray colors are typically in light mode)
-      const lightColorPrimitivesForComponentDark = primitivesColorFiles.has("light")
-        ? await loadTokensForMode(primitivesColorFiles.get("light"))
-        : {};
-      
-      const mergedComponentDark = mergeTokenTrees(
-        mergeTokenTrees(
-          mergeTokenTrees(
-            mergeTokenTrees(
-              primitivesCoreForComponentDark,
-              clone(lightColorPrimitivesForComponentDark), // Light colors first (has gray colors)
-            ),
-            clone(darkColorPrimitives), // Then dark colors
-          ),
-          mergeTokenTrees(clone(semanticTokens), clone(semanticColorDark)),
-        ),
-        componentDarkTokens,
-      );
-      // Track which color tokens are primitives/semantic (for filtering)
-      const primitiveColorPaths = new Set();
-      const semanticColorPaths = new Set();
-      if (darkColorPrimitives && typeof darkColorPrimitives === "object") {
-        collectColorPaths(darkColorPrimitives, [], primitiveColorPaths);
-      }
-      if (semanticColorDark && typeof semanticColorDark === "object") {
-        collectColorPaths(semanticColorDark, [], semanticColorPaths);
-      }
-      await buildCssFromTokens(mergedComponentDark, {
-        destination: "tokens.component.dark.css",
-        selector: ':root[data-theme="dark"]',
-        filter: (token) => {
-          const path = token.path || [];
-          // Only include component color tokens (component.*.color.*)
-          if (!path.includes("color")) {
-            return false;
-          }
-          // Exclude primitive paths (shadow, border, opacity, spacing, typography)
-          const primitivesPaths = [
-            "shadow",
-            "border",
-            "opacity",
-            "spacing",
-            "typography",
-          ];
-          if (primitivesPaths.includes(path[0])) {
-            return false; // These are primitives, not component tokens
-          }
-          // Exclude primitive and semantic colors - only include component colors
-          const pathStr = path.join(".");
-          if (
-            primitiveColorPaths.has(pathStr) ||
-            semanticColorPaths.has(pathStr)
-          ) {
-            return false;
-          }
-          // Component colors should have paths like "button.color.*" or "component.*.color.*"
-          return path[0] !== "color"; // Component colors are not at the root "color" level
-        },
-      });
-    } catch (error) {
-      console.warn(
-        `Warning: Failed to build component tokens (dark): ${error.message}`,
-      );
-    }
-  }
-
-  // ============================================================================
-  // 4. BREAKPOINTS
+  // 3. BREAKPOINTS (component build removed; theme modes are semantic light/dark)
   // ============================================================================
 
   if (breakpointFiles.length > 0) {
@@ -1149,69 +994,72 @@ async function buildFromFigma() {
     }
   }
 
-  // NOTE: Responsive tokens are currently filtered out per Milo's request
-  // The logic below is kept for future use when responsive tokens are needed again
+  // ============================================================================
+  // 4b. RESPONSIVE (S2A Grid / Typography by breakpoint)
+  // ============================================================================
+  // S2A Responsive collection modes (from Figma): xs → sm → md → lg → xl (order for cascade)
+  const RESPONSIVE_GRID_MODES = [
+    { modeSlug: "xs", shortName: "xs", minWidth: null },
+    { modeSlug: "sm", shortName: "sm", minWidth: 768 },
+    { modeSlug: "md", shortName: "md", minWidth: 1024 },
+    { modeSlug: "lg", shortName: "lg", minWidth: 1280 },
+    { modeSlug: "xl", shortName: "xl", minWidth: 1441 },
+  ];
 
-  // Responsive tokens need all dependencies for reference resolution
-  // const allPrimitives = primitivesCoreFiles.length > 0
-  //   ? await loadTokensForMode(primitivesCoreFiles)
-  //   : {};
-  // const allSemantic = allSemanticFiles.length > 0
-  //   ? await loadTokensForMode(allSemanticFiles)
-  //   : {};
+  if (responsiveFiles.size > 0) {
+    const primitivesForResponsive =
+      primitivesCoreFiles.length > 0
+        ? await loadTokensForMode(primitivesCoreFiles)
+        : {};
+    const semanticForResponsive =
+      allSemanticFiles.length > 0
+        ? await loadTokensForMode(allSemanticFiles)
+        : {};
+    const colorPrimitivesForResponsive = primitivesColorFiles.has("light")
+      ? await loadTokensForMode(primitivesColorFiles.get("light"))
+      : {};
+    const baseForResponsive = mergeTokenTrees(
+      mergeTokenTrees(
+        clone(primitivesForResponsive),
+        clone(colorPrimitivesForResponsive),
+      ),
+      semanticForResponsive,
+    );
+    rewriteSemanticRefsToS2a(baseForResponsive);
 
-  // Build responsive tokens for each breakpoint
-  // const responsiveModes = ["mobile", "tablet", "desktop", "desktop-wide"];
-  // for (const mode of responsiveModes) {
-  //   if (!responsiveFiles.has(mode)) {
-  //     continue;
-  //   }
+    for (const { modeSlug, shortName, minWidth } of RESPONSIVE_GRID_MODES) {
+      if (!responsiveFiles.has(modeSlug)) {
+        continue;
+      }
+      const responsiveTokens = await loadTokensForMode(
+        responsiveFiles.get(modeSlug),
+      );
+      const mergedResponsive = mergeTokenTrees(
+        clone(baseForResponsive),
+        responsiveTokens,
+      );
+      rewriteSemanticRefsToS2a(mergedResponsive);
 
-  //   const responsiveTokens = await loadTokensForMode(responsiveFiles.get(mode));
-  //   // Merge with all dependencies for reference resolution
-  //   const mergedResponsive = mergeTokenTrees(
-  //     mergeTokenTrees(clone(allPrimitives), allSemantic),
-  //     responsiveTokens,
-  //   );
+      const mediaQuery =
+        minWidth != null
+          ? `@media (min-width: ${minWidth}px)`
+          : null;
 
-  //   // Determine selector based on breakpoint
-  //   let selector = ":root";
-  //   let mediaQuery = null;
-  //   if (mode === "tablet") {
-  //     mediaQuery = "@media (min-width: 768px)";
-  //     selector = ":root";
-  //   } else if (mode === "desktop") {
-  //     mediaQuery = "@media (min-width: 1024px)";
-  //     selector = ":root";
-  //   } else if (mode === "desktop-wide") {
-  //     mediaQuery = "@media (min-width: 1440px)";
-  //     selector = ":root";
-  //   }
-  //   // mobile uses default :root (no media query)
-
-  //   await buildCssFromTokens(mergedResponsive, {
-  //     destination: `tokens.responsive.${mode}.css`,
-  //     selector,
-  //     mediaQuery,
-  //     filter: (token) => {
-  //       const path = token.path || [];
-  //       // Only include responsive-specific tokens (typography, container, density, border-radius-action/card)
-  //       // Exclude primitives and semantic tokens that aren't responsive
-  //       const responsivePaths = [
-  //         "typography.heading",
-  //         "typography.title",
-  //         "typography.body",
-  //         "typography.logo",
-  //         "container",
-  //         "density",
-  //         "border-radius-action",
-  //         "border-radius-card",
-  //       ];
-  //       const pathStr = path.join(".");
-  //       return responsivePaths.some((pattern) => pathStr.startsWith(pattern));
-  //     },
-  //   });
-  // }
+      await buildCssFromTokens(mergedResponsive, {
+        destination: `tokens.responsive.${shortName}.css`,
+        selector: ":root",
+        mediaQuery,
+        filter: (token) => {
+          const path = token.path || [];
+          // Only include S2A responsive tokens: s2a.grid.* and s2a.typography.* (responsive typography)
+          if (path[0] !== "s2a") {
+            return false;
+          }
+          return path[1] === "grid" || path[1] === "typography";
+        },
+      });
+    }
+  }
 
   // ============================================================================
   // 5. MINIFY ALL FILES
@@ -1319,6 +1167,17 @@ async function minifyAllCssFiles() {
   await fs.mkdir(devDir, { recursive: true });
   await fs.mkdir(minDir, { recursive: true });
 
+  // Remove obsolete component CSS (component collection removed; theme modes are semantic)
+  for (const obsolete of ["tokens.component.css", "tokens.component.light.css", "tokens.component.dark.css"]) {
+    try {
+      await fs.unlink(path.join(devDir, obsolete));
+    } catch (e) {
+      if (e.code !== "ENOENT") {
+        console.warn(`Warning: failed to remove obsolete ${obsolete}:`, e.message);
+      }
+    }
+  }
+
   // Clean up old individual minified files (keep only consolidated file)
   try {
     const existingFiles = await fs.readdir(minDir);
@@ -1336,7 +1195,7 @@ async function minifyAllCssFiles() {
     }
   }
 
-  // Define files in the correct import order (primitives → semantic → component)
+  // Define files in the correct import order (primitives → semantic; component removed, theme modes are semantic)
   const cssFiles = [
     "tokens.primitives.css",
     "tokens.primitives.light.css",
@@ -1347,14 +1206,11 @@ async function minifyAllCssFiles() {
     "tokens.typography.css",
     "tokens.typography.tablet.css",
     "tokens.typography.desktop.css",
-    "tokens.component.css",
-    "tokens.component.light.css",
-    "tokens.component.dark.css",
-    // Responsive tokens filtered out per user request
-    // "tokens.responsive.mobile.css",
-    // "tokens.responsive.tablet.css",
-    // "tokens.responsive.desktop.css",
-    // "tokens.responsive.desktop-wide.css",
+    "tokens.responsive.xs.css",
+    "tokens.responsive.sm.css",
+    "tokens.responsive.md.css",
+    "tokens.responsive.lg.css",
+    "tokens.responsive.xl.css",
   ];
 
   const cleanCSS = new CleanCSS({
@@ -1420,14 +1276,13 @@ async function buildCssFromTokens(
     fileConfig.filter = (token) => filter(token);
   }
 
-  // Register custom transform with s2a prefix
+  // Custom name transform: path to kebab (no extra prefix; Figma tokens already use s2a in path)
   StyleDictionary.registerTransform({
     name: "name/css-s2a",
     type: "name",
     transform: (token, options) => {
       let path = token.path || [];
       // For typography line-height and letter-spacing, drop "font" from the path
-      // e.g. typography.font.line-height.h1 → s2a-typography-line-height-h1
       if (
         path[0] === "typography" &&
         path[1] === "font" &&
@@ -1435,17 +1290,17 @@ async function buildCssFromTokens(
       ) {
         path = [path[0], path[2], ...path.slice(3)];
       }
-      const kebabName = path.map((p) => String(p).toLowerCase()).join("-");
-      return `s2a-${kebabName}`;
+      return path.map((p) => String(p).toLowerCase()).join("-");
     },
   });
 
   // Ensure tokens object has the correct structure for Style Dictionary
   // Style Dictionary needs all referenced tokens to be in the tree when it processes references
   const sd = new StyleDictionary({
-    tokens: tokens, // Pass tokens directly - Style Dictionary will process all tokens in the tree
+    tokens: tokens,
     log: {
       verbosity: process.env.STYLE_DICTIONARY_VERBOSITY || "verbose",
+      errors: { brokenReferences: "console" },
     },
     platforms: {
       css: {
@@ -1453,7 +1308,7 @@ async function buildCssFromTokens(
         transforms: [
           "attribute/cti",
           "attribute/color",
-          "name/css-s2a", // Override with our custom name transform with prefix
+          "name/css-s2a", // Custom kebab name from path (no extra prefix)
         ],
         buildPath: "dist/packages/tokens/css/",
         files: [fileConfig],

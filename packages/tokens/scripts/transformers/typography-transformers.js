@@ -53,15 +53,67 @@ function getTypographyContext(path) {
   } else if (head === "font" && first) {
     // Handle "font.size.*", "font.family.*", "font.weight.*", "font.line-height.*", "font.letter-spacing.*" paths (primitives)
     if (first === "size") {
-      const key = second;
-      return { scope: "font-size", key: second, alias: undefined, property: "font-size" };
+      return {
+        scope: "font-size",
+        key: second,
+        alias: undefined,
+        property: "font-size",
+      };
     } else if (first === "family" && second) {
-      return { scope: "font-family", key: second, alias: undefined, property: "font-family" };
+      return {
+        scope: "font-family",
+        key: second,
+        alias: undefined,
+        property: "font-family",
+      };
     } else if (first === "weight" && second) {
-      return { scope: "font-weight", key: second, alias: undefined, property: "font-weight" };
+      return {
+        scope: "font-weight",
+        key: second,
+        alias: undefined,
+        property: "font-weight",
+      };
     } else if (first === "line-height" || first === "letter-spacing") {
-      const key = second;
-      return { scope: first, key: second, alias: undefined, property: first };
+      return {
+        scope: first,
+        key: second,
+        alias: undefined,
+        property: first,
+      };
+    }
+  } else if (head === "s2a" && first === "font") {
+    // Handle "s2a.font.*" primitives (size, family, weight, line-height, letter-spacing)
+    const prop = second;
+    const key = path[3];
+
+    if (prop === "size") {
+      return {
+        scope: "font-size",
+        key,
+        alias: undefined,
+        property: "font-size",
+      };
+    } else if (prop === "family" && key) {
+      return {
+        scope: "font-family",
+        key,
+        alias: undefined,
+        property: "font-family",
+      };
+    } else if (prop === "weight" && key) {
+      return {
+        scope: "font-weight",
+        key,
+        alias: undefined,
+        property: "font-weight",
+      };
+    } else if (prop === "line-height" || prop === "letter-spacing") {
+      return {
+        scope: prop,
+        key,
+        alias: undefined,
+        property: prop,
+      };
     }
   }
 
