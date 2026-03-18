@@ -4,14 +4,22 @@
 import { ProductLockup } from '../../../../packages/components/src/product-lockup/index.js';
 
 const lockup = ProductLockup({
-  productName: 'Adobe Creative Cloud',
-  showName: false,
-  size: 'xl',
-  tileVariant: 'default',
+  label: 'Adobe Firefly',
+  app: 'firefly',
+  orientation: 'horizontal',
+  styleVariant: 'label',
+  context: 'on-light',
+  width: 'hug',
+  showIconStart: true,
+  showIconEnd: true,
+  iconSize: 'sm', // optional override (auto picks md/xl based on orientation)
 });
 ```
 
 Guidelines:
-- Always use ProductLockup for hero/product tiles.
-- Pass `tileVariant` instead of injecting custom images.
-- Do not inline logos or recreate tile markup.
+- Use `orientation="vertical"` for stacked tiles (`AppIcon` automatically bumps to 40px) and `orientation="horizontal"` for inline nav.
+- Switch `styleVariant` between `label` (14px) and `eyebrow` (16px tracking) to match the Figma Style control.
+- Use `context="on-dark"` whenever the lockup sits on a dark/knockout surface to flip the typography tokens.
+- Set `width="fill"` when composing inside grid columns so the label truncates properly.
+- Toggle `showIconStart` / `showIconEnd` to match the Figma "Show Icon" / "Show Icon End" controls.
+- Override `iconSize` only when the layout explicitly calls for a different tile size; leave it undefined to follow the orientation defaults (md vs xl).

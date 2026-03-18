@@ -5,6 +5,88 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.12] - 2026-03-18
+
+### 💥 Breaking changes
+
+- **Removed XS responsive file**
+  - `css/dev/tokens.responsive.xs.css` is no longer shipped in `0.0.12`.
+  - If consumers import `@import "…/tokens.responsive.xs.css";` directly, those imports must be removed or updated.
+
+- **Grid + section layout tokens removed**
+  - The following CSS custom properties existed in `0.0.11` and are **gone** in `0.0.12` (they are not re‑emitted under new names):
+    - **Grid/container/spacing**
+      - `--s2a-grid-gutter`
+      - `--s2a-grid-element-gap-sm`
+      - `--s2a-grid-element-gap-lg`
+      - `--s2a-grid-breakpoint-min-width`
+      - `--s2a-grid-breakpoint-max-width`
+      - `--s2a-grid-container-max-width`
+      - `--s2a-grid-container-body-max-width`
+      - `--s2a-grid-container-content-max-width`
+      - `--s2a-grid-container-padding-inline`
+      - `--s2a-grid-container-width-percent`
+    - **Section padding**
+      - `--s2a-section-padding-xs`
+      - `--s2a-section-padding-sm`
+      - `--s2a-section-padding-md`
+      - `--s2a-section-padding-lg`
+      - `--s2a-section-padding-xl`
+      - `--s2a-section-padding-none`
+  - In `0.0.11` these were emitted from `tokens.responsive.{xs,sm,md,lg,xl}.css`. They are no longer present in any layer in `0.0.12`, so any direct usages must be migrated.
+
+- **Line-height primitives reverted from relative to px**
+  - `--s2a-font-line-height-*` primitives changed from unitless ratios back to absolute pixel values:
+    - Example: `--s2a-font-line-height-16` was `1.333` → now `16px`.
+    - Example: `--s2a-font-line-height-69` was `1.232` → now `69px`.
+  - All semantic/responsive line-height aliases (e.g., `--s2a-typography-line-height-body-md`) still point at these primitives, so any `line-height: var(--s2a-…);` usage now resolves to a fixed px length instead of a scaling ratio.
+  - Teams should visually re‑check vertical rhythm where they relied on the old unitless behavior.
+
+### ✨ Improvements
+
+- **Viewport vertical padding tokens**
+  - Introduced new viewport‑scoped section padding tokens:
+    - `--s2a-viewport-vertical-padding-2xs`
+    - `--s2a-viewport-vertical-padding-xs`
+    - `--s2a-viewport-vertical-padding-sm`
+    - `--s2a-viewport-vertical-padding-md`
+    - `--s2a-viewport-vertical-padding-lg`
+    - `--s2a-viewport-vertical-padding-xl`
+    - `--s2a-viewport-vertical-padding-none`
+  - Recommended migration mapping from the removed section padding family:
+    - `--s2a-section-padding-xs` → `--s2a-viewport-vertical-padding-xs`
+    - `--s2a-section-padding-sm` → `--s2a-viewport-vertical-padding-sm`
+    - `--s2a-section-padding-md` → `--s2a-viewport-vertical-padding-md`
+    - `--s2a-section-padding-lg` → `--s2a-viewport-vertical-padding-lg`
+    - `--s2a-section-padding-xl` → `--s2a-viewport-vertical-padding-xl`
+    - `--s2a-section-padding-none` → `--s2a-viewport-vertical-padding-none`
+
+- **Additional primitives + semantics**
+  - Blur primitives:
+    - Added `--s2a-blur-24` and `--s2a-blur-128` to extend the blur scale.
+  - Transparent color ramps:
+    - Added higher‑alpha steps for both black and white:
+      - `--s2a-color-transparent-black-72`
+      - `--s2a-color-transparent-black-80`
+      - `--s2a-color-transparent-black-88`
+      - `--s2a-color-transparent-black-96`
+      - `--s2a-color-transparent-white-72`
+      - `--s2a-color-transparent-white-80`
+      - `--s2a-color-transparent-white-88`
+      - `--s2a-color-transparent-white-96`
+  - Semantic content color:
+    - Added `--s2a-color-content-strong` for stronger text emphasis separate from the default content color.
+
+### 🧹 Build & filtering
+
+- **Responsive CSS surface tightened**
+  - Updated the responsive build filters to:
+    - Exclude semantic layout tokens (`--s2a-layout-*`) from `tokens.responsive.{sm,md,lg,xl}.css` (they continue to live in the semantic layer).
+    - Include only responsive `s2a.viewport.*`, `s2a.layout-guide.*`, `s2a.typography.*`, and container tokens needed at breakpoints.
+  - Reinforced filtering of Figma tokens whose description contains `"DESIGN ONLY"` so they do not appear in the published CSS output.
+
+---
+
 ## [0.0.11] - 2026-02-25
 
 ### ✨ Improvements

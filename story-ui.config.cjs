@@ -60,6 +60,21 @@ module.exports = {
       ],
       whenToUse: 'Icon-only actions: play/pause, close, menu toggle. Requires Phosphor Icons.',
       doNot: 'Create custom icon-only buttons when IconButton exists.'
+    },
+    {
+      name: 'ProductLockup',
+      displayName: 'ProductLockup',
+      importPath: '../../../../packages/components/src/product-lockup/index.js',
+      props: ['label', 'productName', 'app', 'orientation', 'styleVariant', 'context', 'width', 'showIconStart', 'showIconEnd', 'iconSize'],
+      description: 'App icon + product label identifier used across RouterMarquee, hero tiles, footer lists.',
+      category: 'content',
+      examples: [
+        "import { ProductLockup } from '../../../../packages/components/src/product-lockup/index.js';",
+        "ProductLockup({ label: 'Adobe Express', app: 'express' })",
+        "ProductLockup({ label: 'Customer journeys', app: 'experience-platform', orientation: 'vertical', styleVariant: 'eyebrow' })"
+      ],
+      whenToUse: 'Any time a design calls for an Adobe product identifier (icon + label).',
+      doNot: 'Stack <img> + <span> yourself; always call ProductLockup so the CDN icon + tokens stay in sync.'
     }
   ],
   

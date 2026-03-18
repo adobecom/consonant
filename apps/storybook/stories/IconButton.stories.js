@@ -28,7 +28,7 @@ export default {
     },
     size: {
       control: { type: "select" },
-      options: ["lg", "md"],
+      options: ["xs", "md", "lg"],
       description: "Size variant",
     },
     state: {
@@ -95,24 +95,68 @@ export const KnockoutOnDark = {
   `,
 };
 
-export const AllVariants = {
+export const OnLightGrid = {
   render: () => {
-    const variants = [
-      { background: "solid", state: "default" },
-      { background: "solid", state: "disabled" },
-      { background: "outlined", state: "default" },
-      { background: "outlined", state: "disabled" },
-      { background: "transparent", state: "default" },
-      { background: "transparent", state: "disabled" },
-    ];
+    const backgrounds = ["solid", "outlined", "transparent"];
+    const sizes = ["xs", "md", "lg"];
     return html`
-      <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 20px; align-items: center;">
-        ${variants.map((v) =>
-          IconButton({
-            ...v,
-            ariaLabel: "Pause",
-            icon: "pause",
-          }),
+      <div style="display: flex; flex-direction: column; gap: 16px; padding: 20px;">
+        ${sizes.map(
+          (size) => html`
+            <div style="display: flex; gap: 16px; align-items: center;">
+              ${backgrounds.map((background) =>
+                IconButton({
+                  background,
+                  size,
+                  ariaLabel: `Pause (${background}, ${size})`,
+                  icon: "pause",
+                }),
+              )}
+              ${IconButton({
+                background: "solid",
+                size,
+                state: "disabled",
+                ariaLabel: `Pause (disabled, ${size})`,
+                icon: "pause",
+              })}
+            </div>
+          `,
+        )}
+      </div>
+    `;
+  },
+};
+
+export const OnDarkGrid = {
+  render: () => {
+    const backgrounds = ["solid", "outlined", "transparent"];
+    const sizes = ["xs", "md", "lg"];
+    return html`
+      <div
+        style="background: #000; padding: 24px; display: flex; flex-direction: column; gap: 16px;"
+      >
+        ${sizes.map(
+          (size) => html`
+            <div style="display: flex; gap: 16px; align-items: center;">
+              ${backgrounds.map((background) =>
+                IconButton({
+                  background,
+                  size,
+                  tone: "knockout",
+                  ariaLabel: `Pause (${background}, ${size}, on dark)`,
+                  icon: "pause",
+                }),
+              )}
+              ${IconButton({
+                background: "solid",
+                size,
+                tone: "knockout",
+                state: "disabled",
+                ariaLabel: `Pause (disabled, ${size}, on dark)`,
+                icon: "pause",
+              })}
+            </div>
+          `,
         )}
       </div>
     `;

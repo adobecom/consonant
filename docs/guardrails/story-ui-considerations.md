@@ -133,27 +133,37 @@ Button({
 
 **Usage**:
 ```javascript
-// Single product lockup
-ProductLockup({ 
-  productName: 'Adobe', 
-  size: '2xl' 
-})
+// Inline RouterMarquee lockup
+ProductLockup({
+  label: 'Adobe Express',
+  app: 'express',
+  orientation: 'horizontal',
+});
 
-// Multiple lockups side-by-side (wrap in a container)
+// Tile lockup with eyebrow style on a dark surface
 html`
-  <div style="display: flex; gap: 15px;">
-    ${ProductLockup({ productName: 'Adobe', size: '2xl' })}
-    ${ProductLockup({ productName: 'Photoshop', size: '2xl' })}
+  <div style="background: #050505; padding: 24px; width: 220px;">
+    ${ProductLockup({
+      label: 'Customer journeys',
+      app: 'experience-platform',
+      orientation: 'vertical',
+      styleVariant: 'eyebrow',
+      context: 'on-dark',
+      width: 'fill',
+    })}
   </div>
 `
 ```
 
-**Props**:
-- `productName` (string, default: 'Adobe'): Product name to display
-- `showName` (boolean, default: true): Whether to show product name text
-- `size` ('xl' | '2xl', default: '2xl'): Lockup size
-- `tileVariant` ('default' | 'experience-cloud', default: 'default'): Tile variant
-- `productTile` (string | HTMLElement, optional): Custom product tile image URL or HTML
+- `label` / `productName` (string, default: 'Product label') — Product text (visible + accessible).
+- `app` (string, default: 'experience-cloud') — AppIcon slug from the CDN catalog.
+- `orientation` ('horizontal' | 'vertical', default: 'horizontal') — Flex axis (defaults icon size md vs xl).
+- `styleVariant` ('label' | 'eyebrow', default: 'label') — Typography style pulled from Figma variants.
+- `context` ('on-light' | 'on-dark', default: 'on-light') — Swaps between default and knockout content tokens.
+- `width` ('hug' | 'fill', default: 'hug') — `fill` lets the label truncate within a grid column.
+- `showIconStart` (boolean, default: true) — Toggle the leading AppIcon. `showIcon` remains as an alias for legacy code.
+- `showIconEnd` (boolean, default: true) — Toggle the caret (ignored for vertical layouts).
+- `iconSize` ('sm' | 'md' | 'lg' | 'xl', optional) — Override the AppIcon size when the Figma component’s “App Icon Size” prop changes.
 
 **When to use**: ALL product icons, logos, brand lockups. Never use `<img>` tags for product icons.
 

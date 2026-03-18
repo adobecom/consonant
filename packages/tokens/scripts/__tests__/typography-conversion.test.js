@@ -509,13 +509,12 @@ describe("convertNumberTokens", () => {
 
     convertNumberTokens(tokens, [], maps);
 
-    expect(tokens.typography["font-size"].base.$value).toBe(
-      "{typography.font-size.16}",
-    );
+    // font-size values are always converted to rem
+    expect(tokens.typography["font-size"].base.$value).toBe("1rem");
     expect(tokens.typography["font-size"].custom.$value).toBe("1.125rem");
   });
 
-  it("converts line-height numeric keys to ratios", () => {
+  it("converts line-height numeric keys to px", () => {
     const maps = {
       fontSize: {
         valueByKey: new Map([["16", 16]]),
@@ -539,11 +538,10 @@ describe("convertNumberTokens", () => {
 
     convertNumberTokens(tokens, [], maps);
 
-    // 20 / 16 = 1.25
-    expect(tokens.typography["line-height"]["20"].$value).toBe("1.25");
+    expect(tokens.typography["line-height"]["20"].$value).toBe("20px");
   });
 
-  it("converts line-height with fallback to 16px when no font size found", () => {
+  it("converts line-height with fallback to px when no font size found", () => {
     const maps = {
       fontSize: {
         valueByKey: new Map(),
@@ -567,8 +565,7 @@ describe("convertNumberTokens", () => {
 
     convertNumberTokens(tokens, [], maps);
 
-    // 20 / 16 = 1.25 (fallback to 16px)
-    expect(tokens.typography["line-height"]["20"].$value).toBe("1.25");
+    expect(tokens.typography["line-height"]["20"].$value).toBe("20px");
   });
 
   it("converts opacity values from 0-100 to 0-1", () => {
@@ -686,7 +683,7 @@ describe("convertNumberTokens", () => {
     convertNumberTokens(tokens, [], maps);
 
     expect(tokens.typography.body["font-size"].$value).toBe("1rem");
-    expect(tokens.typography.body["line-height"].$value).toBe("1.5"); // 24/16
+    expect(tokens.typography.body["line-height"].$value).toBe("24px");
     expect(tokens.spacing.section.padding.$value).toBe("32px");
   });
 

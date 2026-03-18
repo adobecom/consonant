@@ -19,19 +19,20 @@
   --s2a-color-border-disabled: var(--s2a-color-gray-400);
   --s2a-color-border-utility-error: var(--s2a-color-red-900);
   --s2a-color-content-default: var(--s2a-color-gray-25);
-  --s2a-color-content-subtle: var(--s2a-color-gray-600);
+  --s2a-color-content-subtle: var(--s2a-color-transparent-white-64);
+  --s2a-color-content-strong: var(--s2a-color-gray-600);
   --s2a-color-content-knockout: var(--s2a-color-gray-25);
   --s2a-color-content-inverse: var(--s2a-color-gray-1000);
   --s2a-color-content-brand: var(--s2a-color-brand-adobe-red);
   --s2a-color-content-disabled: var(--s2a-color-gray-400);
   --s2a-color-content-utility-error: var(--s2a-color-red-900);
-  --s2a-color-content-body-subtle: var(--s2a-color-transparent-white-64);
-  --s2a-color-content-body-strong: var(--s2a-color-gray-50);
   --s2a-color-content-eyebrow: var(--s2a-color-transparent-white-48);
-  --s2a-color-content-caption: var(--s2a-color-transparent-white-64);
   --s2a-color-focus-ring-default: var(--s2a-color-blue-500);
   --s2a-color-focus-ring-knockout: var(--s2a-color-gray-25);
   --s2a-color-content-title: var(--s2a-color-content-knockout);
   --s2a-color-content-subheading: var(--s2a-color-content-knockout);
+  --s2a-color-content-body-subtle: var(--s2a-color-content-subtle);
+  --s2a-color-content-body-strong: var(--s2a-color-content-strong);
   --s2a-color-content-label: var(--s2a-color-content-knockout);
+  --s2a-color-content-caption: var(--s2a-color-content-subtle);
 }

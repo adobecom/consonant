@@ -4,14 +4,13 @@
  */
 
 :root {
-  --s2a-grid-container-max-width: 1279px;
-  --s2a-grid-container-padding-inline: 85.33px;
-  --s2a-grid-container-width-percent: 83.4px;
-  --s2a-grid-container-body-max-width: 794px;
-  --s2a-grid-container-content-max-width: 1062px;
-  --s2a-grid-breakpoint-max-width: 1279px;
-  --s2a-grid-breakpoint-min-width: 1024px;
-  --s2a-grid-gutter: 8px;
+  --s2a-viewport-vertical-padding-xl: var(--s2a-layout-xl);
+  --s2a-viewport-vertical-padding-lg: var(--s2a-layout-lg);
+  --s2a-viewport-vertical-padding-md: var(--s2a-layout-sm);
+  --s2a-viewport-vertical-padding-sm: var(--s2a-spacing-4xl);
+  --s2a-viewport-vertical-padding-xs: var(--s2a-spacing-2xl);
+  --s2a-viewport-vertical-padding-2xs: var(--s2a-spacing-xl);
+  --s2a-viewport-vertical-padding-none: var(--s2a-spacing-none);
   --s2a-typography-font-size-super: var(--s2a-font-size-8xl);
   --s2a-typography-font-size-title-1: var(--s2a-font-size-6xl);
   --s2a-typography-font-size-title-2: var(--s2a-font-size-4xl);

@@ -2,7 +2,6 @@ const {
   toPx,
   toRem,
   pxToEm,
-  pxToUnitlessLineHeight,
   roundTo,
   stripTrailingZeros,
 } = require("./unit-conversions");
@@ -314,18 +313,9 @@ function convertNumberTokens(node, path, maps) {
       // mapping is already captured in Figma and we just need usable CSS.
       node.$value = toRem(value);
     } else if (scope === "line-height") {
-      // Line-height primitives from Figma are stored as pixels (Figma variables can't use percentages).
-      // Convert to unitless (ratio) for CSS: unitless = lineHeightPx / fontSizePx
-      const mappedFontPx = maps.lineHeightToFontSize.get(String(value));
-      const aliasFontPx =
-        alias &&
-        maps.aliasPairs.get(alias) &&
-        maps.aliasPairs.get(alias).fontSize;
-      const fallbackFontPx = key
-        ? maps.fontSize.valueByKey.get(key)
-        : undefined;
-      const fontPx = mappedFontPx ?? aliasFontPx ?? fallbackFontPx;
-      node.$value = pxToUnitlessLineHeight(value, fontPx);
+      // Keep primitive line-height values as pixel lengths.
+      // Figma exports the values we want; CSS accepts `line-height: <length>`.
+      node.$value = toPx(value);
     } else if (scope === "letter-spacing") {
       // Letter-spacing primitives from Figma are stored as pixels.
       // Keep them in px so they exactly match Figma dev mode.

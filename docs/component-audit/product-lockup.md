@@ -1,60 +1,107 @@
 ## Component Audit · Product Lockup
 
-This doc captures the product/brand identifier pattern used across cards, navigation, and feature sections. Product Lockup combines an icon/logo with a label in a consistent horizontal layout.
+This doc captures the product/brand identifier pattern used across cards, navigation, and feature sections. Product Lockup combines an app icon tile with a label in a consistent layout.
 
 ---
 
 ## 1. Component Overview
 
-| ID  | Component        | Level    | Semantics (HTML) | Description                                                      |
-| --- | ---------------- | -------- | ---------------- | ---------------------------------------------------------------- |
-| P-1 | Product Lockup   | Molecule | `<div>` / `<span>` | Horizontal layout of product icon + product name label           |
+| ID  | Component        | Level    | Semantics (HTML)   | Description                                                          |
+| --- | ---------------- | -------- | ------------------ | -------------------------------------------------------------------- |
+| P-1 | Product Lockup   | Molecule | `<div>` / `<span>` | Icon tile + product name label in horizontal or vertical orientation |
 
 Notes:
 
 - **Product Lockup** is a reusable identifier pattern for Adobe products (Firefly, Creative Cloud, Acrobat, etc.).
-- The icon/logo is swappable via **instance swap** in Figma (any product icon component).
+- The icon is an **AppIcon** tile loaded from the Adobe CDN — see [App Icons Library doc](./app-icons.md) for the full slug catalog.
 - Used in cards, navigation items, feature lists, and pricing sections.
 
 ---
 
-## 2. Variants by Component
+## 2. Variants
 
 ### 2.1 Product Lockup (P-1)
 
-Source Figma frames: `ProductLockup`, product identifiers in cards and nav items.
+| Axis/Prop       | Values                                    | Notes                                                                 |
+| --------------- | ----------------------------------------- | --------------------------------------------------------------------- |
+| `app`           | any slug from app-icons                   | Maps to an App Icons Library tile via the `AppIcon` component.        |
+| `label`         | `string`                                  | Product text (e.g., "Firefly", "Creative Cloud").                    |
+| `orientation`   | `horizontal`, `vertical`                  | Drives flex axis, icon size, and caret visibility.                    |
+| `styleVariant`  | `label`, `eyebrow`                        | Controls typography (14px vs 16px, tracking, line-height).            |
+| `context`       | `on-light`, `on-dark`                     | Swaps between `contentDefault` and `contentKnockout` token colors.    |
+| `width`         | `hug`, `fill`                             | `fill` lets the label truncate within a parent grid column.          |
+| `showIconStart` | `boolean`                                 | Toggle the leading AppIcon (aliased to `showIcon` for legacy code).   |
+| `showIconEnd`   | `boolean` (horizontal only)               | Toggles the caret arrow at the end of the label row.                  |
+| `iconSize`      | `sm`, `md`, `lg`, `xl` (optional)         | Overrides the AppIcon tile size; default is md (horizontal) / xl (vertical). |
 
-| Axis      | Values                        | Notes                                                                                    |
-| --------- | ----------------------------- | ---------------------------------------------------------------------------------------- |
-| icon      | instance swap                 | Product icon/logo component; swappable via Figma instance swap or React prop.           |
-| iconSize  | `xs`, `sm`, `md`, `lg`        | Icon dimensions; `xs` = 16px, `sm` = 18px, `md` = 24px, `lg` = 32px/40px.              |
-| label     | `string`                      | Product name text (e.g., "Firefly", "Creative Cloud", "Acrobat Studio").                |
-| align     | `start`, `center`, `end`      | Horizontal alignment of icon + label within container.                                   |
-| gap       | `xs`, `sm`, `md`              | Spacing between icon and label; `xs` = 8px, `sm` = 12px, `md` = 16px.                   |
-| variant   | `default`, `compact`, `prominent` | Visual emphasis; `compact` = smaller icon/text, `prominent` = larger/bolder.            |
+**Orientation behavior:**
 
-**Mobile vs Desktop:**
+| Orientation  | Flex direction | Icon size | Container gap | Caret     |
+| ------------ | -------------- | --------- | ------------- | --------- |
+| `horizontal` | row            | `md` 24px | `16px (md)`   | governed by `showIconEnd` (default true) |
+| `vertical`   | column         | `xl` 40px | `12px (sm)`   | hidden regardless of `showIconEnd`      |
 
-- **Mobile**: Often uses `iconSize: sm` or `md`, `gap: xs` or `sm` for tighter layouts.
-- **Desktop**: Can use `iconSize: md` or `lg`, `gap: sm` or `md` for more spacious layouts.
+**Style Variant behavior:**
 
-**Intended usage:**
+| Style      | Font tokens                                        | Notes                                        |
+| ---------- | -------------------------------------------------- | -------------------------------------------- |
+| `label`    | `font-size-sm` (14px), `font-line-height-2xs`      | Uppercased? No — sentence case bold label.   |
+| `eyebrow`  | `font-size-md` (16px), `font-line-height-sm`       | Includes tight tracking (-0.2px primitive).  |
 
-- Card headers, navigation items, feature lists, pricing plan identifiers.
-- Always pairs icon + label horizontally; label should be semantically a `<span>` or text node, not a heading.
-
-**Composition:**
-
-- Product Lockup is often used inside:
-  - **Card / App** headers
-  - **Nav / Text + Chevron** items (as the label portion)
-  - **Feature** sections (as product identifiers)
+Both styles use `font-family-default` + `font-weight-adobe-clean-bold`.
 
 ---
 
-## 3. Open Questions / TODOs
+## 3. Implementation
 
-- Define exact icon size tokens (`xs`, `sm`, `md`, `lg`) as design tokens.
-- Document which product icons are available and their naming conventions.
-- Determine if Product Lockup should support vertical layout (icon above label) or only horizontal.
-- Create a mapping of product names to their canonical icon components.
+### AppIcon integration
+
+Always use the `AppIcon` component — never raw `<img>` tags pointing at the CDN. Orientation automatically picks the correct size, but you can override via the `iconSize` prop when needed:
+
+```js
+import { AppIcon } from "../app-icon/app-icon.js";
+
+// Horizontal — inline nav, RouterMarquee tabs
+AppIcon({ app: "creative-cloud", size: "md" }); // 24px
+
+// Vertical — tile grid, stacked card body
+AppIcon({ app: "creative-cloud", size: "xl" }); // 40px
+```
+
+### Layout integration example
+
+`ProductLockup` is used inside RouterMarquee, hero tiles, inline feature lists, and footer grids. When the shell needs to stretch to a grid column, set `width="fill"` so truncation happens automatically within the container:
+
+```js
+import { ProductLockup } from "../product-lockup/product-lockup.js";
+
+// Horizontal label lockup with caret (default RouterMarquee tab)
+ProductLockup({ label: "Creative Cloud", app: "creative-cloud" });
+
+// Vertical eyebrow lockup for tiles
+ProductLockup({
+  label: "Customer journeys",
+  app: "experience-platform",
+  orientation: "vertical",
+  styleVariant: "eyebrow",
+});
+
+// Full-width inline lockup that truncates within a grid column
+ProductLockup({ label: "PDF and productivity", width: "fill" });
+```
+
+### Accessibility
+
+- Wrap the `AppIcon` in `aria-hidden="true"` whenever the product name is in adjacent live text.
+- The product name label is the accessible name for the lockup — no separate `aria-label` needed on the icon.
+- See [App Icons Library doc](./app-icons.md#accessibility) for full guidance.
+
+When `showIconStart=false`, the label supplies both the visual and accessible name; no extra handling is required.
+
+---
+
+## 4. Figma
+
+- **App tiles:** enable "App Icons Library" in Assets → Libraries, insert `App Tile / {Product} / {Size}`.
+- **Orientation prop:** `ProductLockup` in S2A Foundations exposes `Orientation = horizontal | vertical`. Vertical unlocks the stacked layout with the 40px tile.
+- See [App Icons Library doc](./app-icons.md) for the full catalog and size guidance.

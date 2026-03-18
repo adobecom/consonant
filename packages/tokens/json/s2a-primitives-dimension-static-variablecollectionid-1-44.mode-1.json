@@ -72,7 +72,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "ALL_SCOPES"
               ],
@@ -104,7 +104,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "ALL_SCOPES"
               ],
@@ -1709,6 +1709,22 @@
           }
         }
       },
+      "24": {
+        "$type": "number",
+        "$value": 24,
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-blur-16)"
+            }
+          }
+        }
+      },
       "32": {
         "$type": "number",
         "$value": 32,
@@ -1728,6 +1744,22 @@
       "64": {
         "$type": "number",
         "$value": 64,
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-blur-64)"
+            }
+          }
+        }
+      },
+      "128": {
+        "$type": "number",
+        "$value": 128,
         "$description": "",
         "$extensions": {
           "com.figma": {

@@ -41,6 +41,7 @@ function removeDesignOnlyTokens(node) {
     if (value && typeof value === "object" && !Array.isArray(value) && "$value" in value) {
       const desc = value.$description ?? "";
       if (String(desc).toUpperCase().includes("DESIGN ONLY")) {
+        // Filter out ALL "DESIGN ONLY" tokens from final output.
         keysToDelete.push(key);
       }
     } else if (value && typeof value === "object" && !Array.isArray(value)) {
@@ -1093,11 +1094,20 @@ async function buildFromFigma() {
         mediaQuery,
         filter: (token) => {
           const path = token.path || [];
-          // Only include S2A responsive tokens: s2a.grid.*, s2a.typography.*, s2a.section.*
+          // Only include S2A responsive tokens relevant to layout/typography at breakpoints.
+          // Note: our responsive container grid JSON exports `s2a.viewport` and `s2a.layout-guide`
+          // (including `s2a.layout.*` aliases for vertical padding). These were previously filtered out.
           if (path[0] !== "s2a") {
             return false;
           }
-          return path[1] === "grid" || path[1] === "typography" || path[1] === "section";
+          return (
+            path[1] === "grid" ||
+            path[1] === "containers" ||
+            path[1] === "viewport" ||
+            path[1] === "layout-guide" ||
+            path[1] === "typography" ||
+            path[1] === "section"
+          );
         },
       });
     }

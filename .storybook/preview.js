@@ -36,7 +36,7 @@ if (typeof document !== "undefined") {
   const fontOverride = document.createElement("style");
   fontOverride.textContent = `
     :root {
-      --s2a-font-family-adobe-clean: "adobe-clean-display", "Adobe Clean", sans-serif;
+      --s2a-font-family-adobe-clean: "adobe-clean", "Adobe Clean", sans-serif;
       --s2a-font-family-adobe-clean-display: "adobe-clean-display", "Adobe Clean Display", sans-serif;
     }
   `;

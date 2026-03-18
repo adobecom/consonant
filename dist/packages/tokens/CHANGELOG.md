@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### ✨ Improvements
 
 - **Typo fix**: Corrected "sublte" → "subtle" in token names/values.
-- **Section padding tokens**: Added section padding tokens to the build output.
+- **Section padding tokens**: Included `s2a.section.*` in the responsive build filter so section padding tokens (`--s2a-section-padding-none` through `--s2a-section-padding-xl`) from the S2A / Responsive / Grid / Typography collection now appear in `tokens.responsive.{sm,md,lg,xl}.css`.
 - **Redundant break removed**: Removed the redundant break (token/breakpoint) from the set.
 
 ### 🧹 Build

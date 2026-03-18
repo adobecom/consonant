@@ -1,5 +1,71 @@
 {
   "s2a": {
+    "blur": {
+      "xs": {
+        "$type": "number",
+        "$value": "{s2a.blur.8}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-blur-xs)"
+            }
+          }
+        }
+      },
+      "sm": {
+        "$type": "number",
+        "$value": "{s2a.blur.16}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-blur-sm)"
+            }
+          }
+        }
+      },
+      "md": {
+        "$type": "number",
+        "$value": "{s2a.blur.32}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-blur-md)"
+            }
+          }
+        }
+      },
+      "lg": {
+        "$type": "number",
+        "$value": "{s2a.blur.64}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-blur-lg)"
+            }
+          }
+        }
+      }
+    },
     "border": {
       "radius": {
         "none": {
@@ -1230,72 +1296,6 @@
             ],
             "codeSyntax": {
               "WEB": "var(--s2a-spacing-4xl)"
-            }
-          }
-        }
-      }
-    },
-    "blur": {
-      "xs": {
-        "$type": "number",
-        "$value": "{s2a.blur.8}",
-        "$description": "",
-        "$extensions": {
-          "com.figma": {
-            "hiddenFromPublishing": false,
-            "scopes": [
-              "ALL_SCOPES"
-            ],
-            "codeSyntax": {
-              "WEB": "var(--s2a-blur-xs)"
-            }
-          }
-        }
-      },
-      "sm": {
-        "$type": "number",
-        "$value": "{s2a.blur.16}",
-        "$description": "",
-        "$extensions": {
-          "com.figma": {
-            "hiddenFromPublishing": false,
-            "scopes": [
-              "ALL_SCOPES"
-            ],
-            "codeSyntax": {
-              "WEB": "var(--s2a-blur-sm)"
-            }
-          }
-        }
-      },
-      "md": {
-        "$type": "number",
-        "$value": "{s2a.blur.32}",
-        "$description": "",
-        "$extensions": {
-          "com.figma": {
-            "hiddenFromPublishing": false,
-            "scopes": [
-              "ALL_SCOPES"
-            ],
-            "codeSyntax": {
-              "WEB": "var(--s2a-blur-md)"
-            }
-          }
-        }
-      },
-      "lg": {
-        "$type": "number",
-        "$value": "{s2a.blur.64}",
-        "$description": "",
-        "$extensions": {
-          "com.figma": {
-            "hiddenFromPublishing": false,
-            "scopes": [
-              "ALL_SCOPES"
-            ],
-            "codeSyntax": {
-              "WEB": "var(--s2a-blur-lg)"
             }
           }
         }
