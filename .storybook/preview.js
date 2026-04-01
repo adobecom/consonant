@@ -3,11 +3,6 @@ import "@phosphor-icons/web/bold";
 
 import { withFigmaOverlay, figmaOverlayGlobals } from "./figma-overlay.js";
 
-// Always read fonts relative to the iframe location rather than assuming absolutes.
-// Storybook dev runs at /iframe.html, GitHub Pages serves at /consonant/iframe.html.
-// A simple "fonts/..." relative path works for both cases without extra env plumbing.
-const adobeCleanFontUrl = (filename) => `fonts/${filename}`;
-
 // Import design tokens CSS files in the correct order
 // 1. Primitives (non-color)
 import "../dist/packages/tokens/css/dev/tokens.primitives.css";
@@ -25,48 +20,21 @@ import "../dist/packages/tokens/css/dev/tokens.responsive.xl.css";
 // Note: Component tokens are not yet generated (no component tokens in Figma file)
 
 // Font Loading
-// Adobe Clean is an Adobe-internal typeface (not for external distribution).
-// Download font files from Marketing Hub and place in packages/fonts/:
-//   packages/fonts/AdobeClean-Regular.woff2
-//   packages/fonts/AdobeClean-Bold.woff2
-//   packages/fonts/AdobeCleanDisplay-Black.woff2  (or equivalent)
-// That directory is gitignored — each developer downloads their own copy.
-// Kit mie2rub provides adobe-clean-display as a fallback when local files are absent.
+// Adobe Clean is an Adobe-internal typeface (not for external distribution), so we mirror Milo
+// and load it from the shared Adobe Fonts/Typekit kit (hah7vzn). Local font files are optional
+// now and are no longer referenced by Storybook.
 if (typeof document !== "undefined") {
-  const typekitLink = document.createElement("link");
-  typekitLink.rel = "stylesheet";
-  typekitLink.href = "https://use.typekit.net/mie2rub.css";
-  document.head.appendChild(typekitLink);
+  // Load Milo's Adobe Clean kit so Storybook matches the production typography stack.
+  const adobeCleanKit = document.createElement("link");
+  adobeCleanKit.rel = "stylesheet";
+  adobeCleanKit.href = "https://use.typekit.net/hah7vzn.css";
+  document.head.appendChild(adobeCleanKit);
 
   const interLink = document.createElement("link");
   interLink.rel = "stylesheet";
   interLink.href =
     "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap";
   document.head.appendChild(interLink);
-
-  // Local Adobe Clean @font-face — gitignored, each dev places files in packages/fonts/
-  const fontFace = document.createElement("style");
-  const adobeCleanFaces = [
-    { weight: 300, style: "normal", file: "AdobeClean-Light.otf" },
-    { weight: 300, style: "italic", file: "AdobeClean-LightIt.otf" },
-    { weight: 400, style: "normal", file: "AdobeClean-Regular.otf" },
-    { weight: 400, style: "italic", file: "AdobeClean-It.otf" },
-    { weight: 500, style: "normal", file: "AdobeClean-Medium.otf" },
-    { weight: 700, style: "normal", file: "AdobeClean-Bold.otf" },
-    { weight: 700, style: "italic", file: "AdobeClean-BoldIt.otf" },
-    { weight: 800, style: "normal", file: "AdobeClean-ExtraBold.otf" },
-    { weight: 900, style: "normal", file: "AdobeClean-Black.otf" },
-  ];
-
-  fontFace.textContent = adobeCleanFaces
-    .map(
-      ({ weight, style, file }) =>
-        `@font-face { font-family: "adobe-clean"; font-weight: ${weight}; font-style: ${style}; font-display: swap; src: url("${adobeCleanFontUrl(
-          file,
-        )}") format("opentype"); }`,
-    )
-    .join("\n");
-  document.head.appendChild(fontFace);
 }
 
 // Set theme attribute globally so semantic and component color tokens are available
@@ -119,12 +87,12 @@ const preview = {
       if (typeof document !== "undefined") {
         // Check if Typekit link already exists
         let typekitLink = document.querySelector(
-          'link[href*="use.typekit.net/mie2rub"]',
+          'link[href*="use.typekit.net/hah7vzn"]',
         );
         if (!typekitLink) {
           typekitLink = document.createElement("link");
           typekitLink.rel = "stylesheet";
-          typekitLink.href = "https://use.typekit.net/mie2rub.css";
+          typekitLink.href = "https://use.typekit.net/hah7vzn.css";
           document.head.appendChild(typekitLink);
         }
       }
