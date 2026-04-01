@@ -3,6 +3,11 @@ import "@phosphor-icons/web/bold";
 
 import { withFigmaOverlay, figmaOverlayGlobals } from "./figma-overlay.js";
 
+// Respect Storybook's configured base (needed for GitHub Pages deployments that live
+// under /consonant/ instead of the domain root) when linking to static assets.
+const STORYBOOK_BASE_PATH = (import.meta.env?.BASE_URL ?? "/").replace(/\/$/, "");
+const adobeCleanFontUrl = (filename) => `${STORYBOOK_BASE_PATH}/fonts/${filename}`;
+
 // Import design tokens CSS files in the correct order
 // 1. Primitives (non-color)
 import "../dist/packages/tokens/css/dev/tokens.primitives.css";
@@ -41,17 +46,26 @@ if (typeof document !== "undefined") {
 
   // Local Adobe Clean @font-face — gitignored, each dev places files in packages/fonts/
   const fontFace = document.createElement("style");
-  fontFace.textContent = `
-    @font-face { font-family: "adobe-clean"; font-weight: 300; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Light.otf") format("opentype"); }
-    @font-face { font-family: "adobe-clean"; font-weight: 300; font-style: italic; font-display: swap; src: url("/fonts/AdobeClean-LightIt.otf") format("opentype"); }
-    @font-face { font-family: "adobe-clean"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Regular.otf") format("opentype"); }
-    @font-face { font-family: "adobe-clean"; font-weight: 400; font-style: italic; font-display: swap; src: url("/fonts/AdobeClean-It.otf") format("opentype"); }
-    @font-face { font-family: "adobe-clean"; font-weight: 500; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Medium.otf") format("opentype"); }
-    @font-face { font-family: "adobe-clean"; font-weight: 700; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Bold.otf") format("opentype"); }
-    @font-face { font-family: "adobe-clean"; font-weight: 700; font-style: italic; font-display: swap; src: url("/fonts/AdobeClean-BoldIt.otf") format("opentype"); }
-    @font-face { font-family: "adobe-clean"; font-weight: 800; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-ExtraBold.otf") format("opentype"); }
-    @font-face { font-family: "adobe-clean"; font-weight: 900; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Black.otf") format("opentype"); }
-  `;
+  const adobeCleanFaces = [
+    { weight: 300, style: "normal", file: "AdobeClean-Light.otf" },
+    { weight: 300, style: "italic", file: "AdobeClean-LightIt.otf" },
+    { weight: 400, style: "normal", file: "AdobeClean-Regular.otf" },
+    { weight: 400, style: "italic", file: "AdobeClean-It.otf" },
+    { weight: 500, style: "normal", file: "AdobeClean-Medium.otf" },
+    { weight: 700, style: "normal", file: "AdobeClean-Bold.otf" },
+    { weight: 700, style: "italic", file: "AdobeClean-BoldIt.otf" },
+    { weight: 800, style: "normal", file: "AdobeClean-ExtraBold.otf" },
+    { weight: 900, style: "normal", file: "AdobeClean-Black.otf" },
+  ];
+
+  fontFace.textContent = adobeCleanFaces
+    .map(
+      ({ weight, style, file }) =>
+        `@font-face { font-family: "adobe-clean"; font-weight: ${weight}; font-style: ${style}; font-display: swap; src: url("${adobeCleanFontUrl(
+          file,
+        )}") format("opentype"); }`,
+    )
+    .join("\n");
   document.head.appendChild(fontFace);
 }
 
