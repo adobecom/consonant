@@ -3,10 +3,10 @@ import "@phosphor-icons/web/bold";
 
 import { withFigmaOverlay, figmaOverlayGlobals } from "./figma-overlay.js";
 
-// Respect Storybook's configured base (needed for GitHub Pages deployments that live
-// under /consonant/ instead of the domain root) when linking to static assets.
-const STORYBOOK_BASE_PATH = (import.meta.env?.BASE_URL ?? "/").replace(/\/$/, "");
-const adobeCleanFontUrl = (filename) => `${STORYBOOK_BASE_PATH}/fonts/${filename}`;
+// Always read fonts relative to the iframe location rather than assuming absolutes.
+// Storybook dev runs at /iframe.html, GitHub Pages serves at /consonant/iframe.html.
+// A simple "fonts/..." relative path works for both cases without extra env plumbing.
+const adobeCleanFontUrl = (filename) => `fonts/${filename}`;
 
 // Import design tokens CSS files in the correct order
 // 1. Primitives (non-color)
