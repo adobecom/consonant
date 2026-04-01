@@ -2,62 +2,76 @@
   "fileId": "eGSyBcD5XdFXR8rJXJmVNY",
   "branchKey": "svi0B0G925V2XG0yX0DDaz",
   "apiBase": "https://api.figma.com",
-  "generatedAt": "2026-03-18T16:29:52.985Z",
+  "generatedAt": "2026-03-31T21:14:07.480Z",
   "files": [
     {
-      "fileName": "c1-annotations-variablecollectionid-106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0-42225-1453.hide.json",
+      "fileName": "semantic-color-theme-variablecollectionid-6579f39324020088fbf713bf2d5f721f66137e6a-18943-3973.light.json",
       "collection": {
-        "id": "VariableCollectionId:106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0/42225:1453",
-        "name": "C1 / Annotations",
-        "slug": "c1-annotations",
-        "idSlug": "variablecollectionid-106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0-42225-1453"
+        "id": "VariableCollectionId:6579f39324020088fbf713bf2d5f721f66137e6a/18943:3973",
+        "name": "Semantic / Color / Theme",
+        "slug": "semantic-color-theme",
+        "idSlug": "variablecollectionid-6579f39324020088fbf713bf2d5f721f66137e6a-18943-3973"
       },
       "mode": {
-        "id": "4737:8",
-        "name": "Hide",
-        "slug": "hide"
-      }
-    },
-    {
-      "fileName": "c1-annotations-variablecollectionid-106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0-42225-1453.show-essential.json",
-      "collection": {
-        "id": "VariableCollectionId:106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0/42225:1453",
-        "name": "C1 / Annotations",
-        "slug": "c1-annotations",
-        "idSlug": "variablecollectionid-106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0-42225-1453"
-      },
-      "mode": {
-        "id": "4737:9",
-        "name": "Show Essential",
-        "slug": "show-essential"
-      }
-    },
-    {
-      "fileName": "c1-annotations-variablecollectionid-106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0-42225-1453.show-all.json",
-      "collection": {
-        "id": "VariableCollectionId:106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0/42225:1453",
-        "name": "C1 / Annotations",
-        "slug": "c1-annotations",
-        "idSlug": "variablecollectionid-106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0-42225-1453"
-      },
-      "mode": {
-        "id": "24455:4",
-        "name": "Show All",
-        "slug": "show-all"
-      }
-    },
-    {
-      "fileName": "s2a-primitives-color-theme-variablecollectionid-1-138.light.json",
-      "collection": {
-        "id": "VariableCollectionId:1:138",
-        "name": "S2A / Primitives / Color / Theme",
-        "slug": "s2a-primitives-color-theme",
-        "idSlug": "variablecollectionid-1-138"
-      },
-      "mode": {
-        "id": "1:6",
+        "id": "17135:2",
         "name": "Light",
         "slug": "light"
+      }
+    },
+    {
+      "fileName": "semantic-color-theme-variablecollectionid-6579f39324020088fbf713bf2d5f721f66137e6a-18943-3973.dark.json",
+      "collection": {
+        "id": "VariableCollectionId:6579f39324020088fbf713bf2d5f721f66137e6a/18943:3973",
+        "name": "Semantic / Color / Theme",
+        "slug": "semantic-color-theme",
+        "idSlug": "variablecollectionid-6579f39324020088fbf713bf2d5f721f66137e6a-18943-3973"
+      },
+      "mode": {
+        "id": "17135:3",
+        "name": "Dark",
+        "slug": "dark"
+      }
+    },
+    {
+      "fileName": "primitives-color-theme-variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841.light.json",
+      "collection": {
+        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/18953:841",
+        "name": "Primitives / Color / Theme",
+        "slug": "primitives-color-theme",
+        "idSlug": "variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841"
+      },
+      "mode": {
+        "id": "17135:0",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "primitives-core-variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:433e182a0b86bf16dd1ed62dacdbd3d3d2025110/82:74",
+        "name": "Primitives (Core)",
+        "slug": "primitives-core",
+        "idSlug": "variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74"
+      },
+      "mode": {
+        "id": "1:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "s2a-semantic-dimension-static-variablecollectionid-1-251.value.json",
+      "collection": {
+        "id": "VariableCollectionId:1:251",
+        "name": "S2A / Semantic / Dimension / Static",
+        "slug": "s2a-semantic-dimension-static",
+        "idSlug": "variablecollectionid-1-251"
+      },
+      "mode": {
+        "id": "1:7",
+        "name": "Value",
+        "slug": "value"
       }
     },
     {
@@ -89,115 +103,17 @@
       }
     },
     {
-      "fileName": "s2c-semantic-color-theme-variablecollectionid-c702bde92ef0cb7f7021027e560601c340ac20c1-4501-76.light.json",
+      "fileName": "semantic-variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142.mode-1.json",
       "collection": {
-        "id": "VariableCollectionId:c702bde92ef0cb7f7021027e560601c340ac20c1/4501:76",
-        "name": "S2C / Semantic / Color / Theme",
-        "slug": "s2c-semantic-color-theme",
-        "idSlug": "variablecollectionid-c702bde92ef0cb7f7021027e560601c340ac20c1-4501-76"
+        "id": "VariableCollectionId:973e742b9219b09ddd242f148a68d0bf608baeeb/4:142",
+        "name": "Semantic",
+        "slug": "semantic",
+        "idSlug": "variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142"
       },
       "mode": {
-        "id": "2044:1",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "s2c-semantic-color-theme-variablecollectionid-c702bde92ef0cb7f7021027e560601c340ac20c1-4501-76.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:c702bde92ef0cb7f7021027e560601c340ac20c1/4501:76",
-        "name": "S2C / Semantic / Color / Theme",
-        "slug": "s2c-semantic-color-theme",
-        "idSlug": "variablecollectionid-c702bde92ef0cb7f7021027e560601c340ac20c1-4501-76"
-      },
-      "mode": {
-        "id": "2044:2",
-        "name": "Dark",
-        "slug": "dark"
-      }
-    },
-    {
-      "fileName": "s2a-primitives-dimension-static-variablecollectionid-1-44.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:1:44",
-        "name": "S2A / Primitives / Dimension / Static",
-        "slug": "s2a-primitives-dimension-static",
-        "idSlug": "variablecollectionid-1-44"
-      },
-      "mode": {
-        "id": "1:5",
+        "id": "4:0",
         "name": "Mode 1",
         "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "primitives-color-theme-variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841.light.json",
-      "collection": {
-        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/18953:841",
-        "name": "Primitives / Color / Theme",
-        "slug": "primitives-color-theme",
-        "idSlug": "variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841"
-      },
-      "mode": {
-        "id": "17135:0",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "semantic-dimension-static-variablecollectionid-27a4206887fe2c99a83dde8d9268493c141504fc-18943-3743.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:27a4206887fe2c99a83dde8d9268493c141504fc/18943:3743",
-        "name": "Semantic / Dimension / Static",
-        "slug": "semantic-dimension-static",
-        "idSlug": "variablecollectionid-27a4206887fe2c99a83dde8d9268493c141504fc-18943-3743"
-      },
-      "mode": {
-        "id": "17135:1",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-dimension-static-variablecollectionid-1-251.value.json",
-      "collection": {
-        "id": "VariableCollectionId:1:251",
-        "name": "S2A / Semantic / Dimension / Static",
-        "slug": "s2a-semantic-dimension-static",
-        "idSlug": "variablecollectionid-1-251"
-      },
-      "mode": {
-        "id": "1:7",
-        "name": "Value",
-        "slug": "value"
-      }
-    },
-    {
-      "fileName": "semantic-color-theme-variablecollectionid-6579f39324020088fbf713bf2d5f721f66137e6a-18943-3973.light.json",
-      "collection": {
-        "id": "VariableCollectionId:6579f39324020088fbf713bf2d5f721f66137e6a/18943:3973",
-        "name": "Semantic / Color / Theme",
-        "slug": "semantic-color-theme",
-        "idSlug": "variablecollectionid-6579f39324020088fbf713bf2d5f721f66137e6a-18943-3973"
-      },
-      "mode": {
-        "id": "17135:2",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "semantic-color-theme-variablecollectionid-6579f39324020088fbf713bf2d5f721f66137e6a-18943-3973.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:6579f39324020088fbf713bf2d5f721f66137e6a/18943:3973",
-        "name": "Semantic / Color / Theme",
-        "slug": "semantic-color-theme",
-        "idSlug": "variablecollectionid-6579f39324020088fbf713bf2d5f721f66137e6a-18943-3973"
-      },
-      "mode": {
-        "id": "17135:3",
-        "name": "Dark",
-        "slug": "dark"
       }
     },
     {
@@ -243,43 +159,15 @@
       }
     },
     {
-      "fileName": "c1-gap-carousel-variablecollectionid-20bf5cfa02561b328dbefc3b1643b3a3a1b0e5bc-42194-19.gap-32px.json",
+      "fileName": "semantic-dimension-static-variablecollectionid-27a4206887fe2c99a83dde8d9268493c141504fc-18943-3743.mode-1.json",
       "collection": {
-        "id": "VariableCollectionId:20bf5cfa02561b328dbefc3b1643b3a3a1b0e5bc/42194:19",
-        "name": "C1 / Gap: Carousel",
-        "slug": "c1-gap-carousel",
-        "idSlug": "variablecollectionid-20bf5cfa02561b328dbefc3b1643b3a3a1b0e5bc-42194-19"
+        "id": "VariableCollectionId:27a4206887fe2c99a83dde8d9268493c141504fc/18943:3743",
+        "name": "Semantic / Dimension / Static",
+        "slug": "semantic-dimension-static",
+        "idSlug": "variablecollectionid-27a4206887fe2c99a83dde8d9268493c141504fc-18943-3743"
       },
       "mode": {
-        "id": "42194:0",
-        "name": "Gap: 32px",
-        "slug": "gap-32px"
-      }
-    },
-    {
-      "fileName": "c1-gap-carousel-variablecollectionid-20bf5cfa02561b328dbefc3b1643b3a3a1b0e5bc-42194-19.gap-0px.json",
-      "collection": {
-        "id": "VariableCollectionId:20bf5cfa02561b328dbefc3b1643b3a3a1b0e5bc/42194:19",
-        "name": "C1 / Gap: Carousel",
-        "slug": "c1-gap-carousel",
-        "idSlug": "variablecollectionid-20bf5cfa02561b328dbefc3b1643b3a3a1b0e5bc-42194-19"
-      },
-      "mode": {
-        "id": "42194:1",
-        "name": "Gap: 0px",
-        "slug": "gap-0px"
-      }
-    },
-    {
-      "fileName": "semantic-variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:973e742b9219b09ddd242f148a68d0bf608baeeb/4:142",
-        "name": "Semantic",
-        "slug": "semantic",
-        "idSlug": "variablecollectionid-973e742b9219b09ddd242f148a68d0bf608baeeb-4-142"
-      },
-      "mode": {
-        "id": "4:0",
+        "id": "17135:1",
         "name": "Mode 1",
         "slug": "mode-1"
       }
@@ -299,76 +187,6 @@
       }
     },
     {
-      "fileName": "c1-table-body-variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457.1-column.json",
-      "collection": {
-        "id": "VariableCollectionId:c798e985ecc46c46b4ce52439d51c45bb6108af0/42225:1457",
-        "name": "C1 / Table Body",
-        "slug": "c1-table-body",
-        "idSlug": "variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457"
-      },
-      "mode": {
-        "id": "9620:4",
-        "name": "1 Column",
-        "slug": "1-column"
-      }
-    },
-    {
-      "fileName": "c1-table-body-variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457.2-columns.json",
-      "collection": {
-        "id": "VariableCollectionId:c798e985ecc46c46b4ce52439d51c45bb6108af0/42225:1457",
-        "name": "C1 / Table Body",
-        "slug": "c1-table-body",
-        "idSlug": "variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457"
-      },
-      "mode": {
-        "id": "9620:5",
-        "name": "2 Columns",
-        "slug": "2-columns"
-      }
-    },
-    {
-      "fileName": "c1-table-body-variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457.3-columns.json",
-      "collection": {
-        "id": "VariableCollectionId:c798e985ecc46c46b4ce52439d51c45bb6108af0/42225:1457",
-        "name": "C1 / Table Body",
-        "slug": "c1-table-body",
-        "idSlug": "variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457"
-      },
-      "mode": {
-        "id": "9620:6",
-        "name": "3 Columns",
-        "slug": "3-columns"
-      }
-    },
-    {
-      "fileName": "c1-table-body-variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457.4-columns.json",
-      "collection": {
-        "id": "VariableCollectionId:c798e985ecc46c46b4ce52439d51c45bb6108af0/42225:1457",
-        "name": "C1 / Table Body",
-        "slug": "c1-table-body",
-        "idSlug": "variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457"
-      },
-      "mode": {
-        "id": "9620:7",
-        "name": "4 Columns",
-        "slug": "4-columns"
-      }
-    },
-    {
-      "fileName": "c1-table-body-variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457.5-columns.json",
-      "collection": {
-        "id": "VariableCollectionId:c798e985ecc46c46b4ce52439d51c45bb6108af0/42225:1457",
-        "name": "C1 / Table Body",
-        "slug": "c1-table-body",
-        "idSlug": "variablecollectionid-c798e985ecc46c46b4ce52439d51c45bb6108af0-42225-1457"
-      },
-      "mode": {
-        "id": "9620:8",
-        "name": "5 Columns",
-        "slug": "5-columns"
-      }
-    },
-    {
       "fileName": "typography-variablecollectionid-4eeb7e93d7f0480ae4e35d0d66bb910f119f92f5-3242-6003.modeless.json",
       "collection": {
         "id": "VariableCollectionId:4eeb7e93d7f0480ae4e35d0d66bb910f119f92f5/3242:6003",
@@ -383,17 +201,199 @@
       }
     },
     {
-      "fileName": "c1-table-headers-variablecollectionid-6c8b608034a5063e435d575134b2c315bcdf9953-42225-1469.row-column.json",
+      "fileName": "s2a-responsive-container-grid-variablecollectionid-6-178.xl.json",
       "collection": {
-        "id": "VariableCollectionId:6c8b608034a5063e435d575134b2c315bcdf9953/42225:1469",
-        "name": "C1 / Table Headers",
-        "slug": "c1-table-headers",
-        "idSlug": "variablecollectionid-6c8b608034a5063e435d575134b2c315bcdf9953-42225-1469"
+        "id": "VariableCollectionId:6:178",
+        "name": "S2A / Responsive / Container / Grid",
+        "slug": "s2a-responsive-container-grid",
+        "idSlug": "variablecollectionid-6-178"
       },
       "mode": {
-        "id": "23763:0",
-        "name": "Row + Column",
-        "slug": "row-column"
+        "id": "6:5",
+        "name": "xl",
+        "slug": "xl"
+      }
+    },
+    {
+      "fileName": "s2a-responsive-container-grid-variablecollectionid-6-178.lg.json",
+      "collection": {
+        "id": "VariableCollectionId:6:178",
+        "name": "S2A / Responsive / Container / Grid",
+        "slug": "s2a-responsive-container-grid",
+        "idSlug": "variablecollectionid-6-178"
+      },
+      "mode": {
+        "id": "102:0",
+        "name": "lg",
+        "slug": "lg"
+      }
+    },
+    {
+      "fileName": "s2a-responsive-container-grid-variablecollectionid-6-178.md.json",
+      "collection": {
+        "id": "VariableCollectionId:6:178",
+        "name": "S2A / Responsive / Container / Grid",
+        "slug": "s2a-responsive-container-grid",
+        "idSlug": "variablecollectionid-6-178"
+      },
+      "mode": {
+        "id": "102:1",
+        "name": "md",
+        "slug": "md"
+      }
+    },
+    {
+      "fileName": "s2a-responsive-container-grid-variablecollectionid-6-178.sm.json",
+      "collection": {
+        "id": "VariableCollectionId:6:178",
+        "name": "S2A / Responsive / Container / Grid",
+        "slug": "s2a-responsive-container-grid",
+        "idSlug": "variablecollectionid-6-178"
+      },
+      "mode": {
+        "id": "2297:1",
+        "name": "sm",
+        "slug": "sm"
+      }
+    },
+    {
+      "fileName": "s2a-primitives-color-theme-variablecollectionid-1-138.light.json",
+      "collection": {
+        "id": "VariableCollectionId:1:138",
+        "name": "S2A / Primitives / Color / Theme",
+        "slug": "s2a-primitives-color-theme",
+        "idSlug": "variablecollectionid-1-138"
+      },
+      "mode": {
+        "id": "1:6",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.desktop.json",
+      "collection": {
+        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
+        "name": "Breakpoint",
+        "slug": "breakpoint",
+        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
+      },
+      "mode": {
+        "id": "6664:0",
+        "name": "Desktop",
+        "slug": "desktop"
+      }
+    },
+    {
+      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.mobile.json",
+      "collection": {
+        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
+        "name": "Breakpoint",
+        "slug": "breakpoint",
+        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
+      },
+      "mode": {
+        "id": "6664:1",
+        "name": "Mobile",
+        "slug": "mobile"
+      }
+    },
+    {
+      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.tablet.json",
+      "collection": {
+        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
+        "name": "Breakpoint",
+        "slug": "breakpoint",
+        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
+      },
+      "mode": {
+        "id": "6664:2",
+        "name": "Tablet",
+        "slug": "tablet"
+      }
+    },
+    {
+      "fileName": "s2a-primitives-dimension-static-variablecollectionid-1-44.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:1:44",
+        "name": "S2A / Primitives / Dimension / Static",
+        "slug": "s2a-primitives-dimension-static",
+        "idSlug": "variablecollectionid-1-44"
+      },
+      "mode": {
+        "id": "1:5",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "s-typography-variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:df621fb21582d7e499c45bf908fe7ea44b7c9c01/27101:21627",
+        "name": "•S Typography",
+        "slug": "s-typography",
+        "idSlug": "variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627"
+      },
+      "mode": {
+        "id": "19458:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "s-typography-variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:dbeda2c7fb4dab171973418e8101f01785b5e6e2/27101:21627",
+        "name": "•S Typography",
+        "slug": "s-typography",
+        "idSlug": "variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627"
+      },
+      "mode": {
+        "id": "19458:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "s2a-min-max-variablecollectionid-3364-2800.min.json",
+      "collection": {
+        "id": "VariableCollectionId:3364:2800",
+        "name": "S2A / Min-Max",
+        "slug": "s2a-min-max",
+        "idSlug": "variablecollectionid-3364-2800"
+      },
+      "mode": {
+        "id": "3364:0",
+        "name": "Min",
+        "slug": "min"
+      }
+    },
+    {
+      "fileName": "s2a-min-max-variablecollectionid-3364-2800.max.json",
+      "collection": {
+        "id": "VariableCollectionId:3364:2800",
+        "name": "S2A / Min-Max",
+        "slug": "s2a-min-max",
+        "idSlug": "variablecollectionid-3364-2800"
+      },
+      "mode": {
+        "id": "3364:1",
+        "name": "Max",
+        "slug": "max"
+      }
+    },
+    {
+      "fileName": "s2a-semantic-dimension-static-variablecollectionid-530eb9fc4e9077abe9390613e61263db0c186e91-4458-183.token.json",
+      "collection": {
+        "id": "VariableCollectionId:530eb9fc4e9077abe9390613e61263db0c186e91/4458:183",
+        "name": "S2A / Semantic / Dimension / Static",
+        "slug": "s2a-semantic-dimension-static",
+        "idSlug": "variablecollectionid-530eb9fc4e9077abe9390613e61263db0c186e91-4458-183"
+      },
+      "mode": {
+        "id": "78:0",
+        "name": "Token",
+        "slug": "token"
       }
     },
     {
@@ -492,286 +492,6 @@
         "id": "3441:6",
         "name": "Show Corner Radius",
         "slug": "show-corner-radius"
-      }
-    },
-    {
-      "fileName": "s2a-responsive-container-grid-variablecollectionid-6-178.xl.json",
-      "collection": {
-        "id": "VariableCollectionId:6:178",
-        "name": "S2A / Responsive / Container / Grid",
-        "slug": "s2a-responsive-container-grid",
-        "idSlug": "variablecollectionid-6-178"
-      },
-      "mode": {
-        "id": "6:5",
-        "name": "xl",
-        "slug": "xl"
-      }
-    },
-    {
-      "fileName": "s2a-responsive-container-grid-variablecollectionid-6-178.lg.json",
-      "collection": {
-        "id": "VariableCollectionId:6:178",
-        "name": "S2A / Responsive / Container / Grid",
-        "slug": "s2a-responsive-container-grid",
-        "idSlug": "variablecollectionid-6-178"
-      },
-      "mode": {
-        "id": "102:0",
-        "name": "lg",
-        "slug": "lg"
-      }
-    },
-    {
-      "fileName": "s2a-responsive-container-grid-variablecollectionid-6-178.md.json",
-      "collection": {
-        "id": "VariableCollectionId:6:178",
-        "name": "S2A / Responsive / Container / Grid",
-        "slug": "s2a-responsive-container-grid",
-        "idSlug": "variablecollectionid-6-178"
-      },
-      "mode": {
-        "id": "102:1",
-        "name": "md",
-        "slug": "md"
-      }
-    },
-    {
-      "fileName": "s2a-responsive-container-grid-variablecollectionid-6-178.sm.json",
-      "collection": {
-        "id": "VariableCollectionId:6:178",
-        "name": "S2A / Responsive / Container / Grid",
-        "slug": "s2a-responsive-container-grid",
-        "idSlug": "variablecollectionid-6-178"
-      },
-      "mode": {
-        "id": "2297:1",
-        "name": "sm",
-        "slug": "sm"
-      }
-    },
-    {
-      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.desktop.json",
-      "collection": {
-        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
-        "name": "Breakpoint",
-        "slug": "breakpoint",
-        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
-      },
-      "mode": {
-        "id": "6664:0",
-        "name": "Desktop",
-        "slug": "desktop"
-      }
-    },
-    {
-      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.mobile.json",
-      "collection": {
-        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
-        "name": "Breakpoint",
-        "slug": "breakpoint",
-        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
-      },
-      "mode": {
-        "id": "6664:1",
-        "name": "Mobile",
-        "slug": "mobile"
-      }
-    },
-    {
-      "fileName": "breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143.tablet.json",
-      "collection": {
-        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/20342:1143",
-        "name": "Breakpoint",
-        "slug": "breakpoint",
-        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-20342-1143"
-      },
-      "mode": {
-        "id": "6664:2",
-        "name": "Tablet",
-        "slug": "tablet"
-      }
-    },
-    {
-      "fileName": "s2a-color-variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748.light.json",
-      "collection": {
-        "id": "VariableCollectionId:39add3230a451deae82adc825e88e392c4553aa8/3194:748",
-        "name": "S2A / Color",
-        "slug": "s2a-color",
-        "idSlug": "variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748"
-      },
-      "mode": {
-        "id": "8:11",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "s2a-color-variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:39add3230a451deae82adc825e88e392c4553aa8/3194:748",
-        "name": "S2A / Color",
-        "slug": "s2a-color",
-        "idSlug": "variablecollectionid-39add3230a451deae82adc825e88e392c4553aa8-3194-748"
-      },
-      "mode": {
-        "id": "8:12",
-        "name": "Dark",
-        "slug": "dark"
-      }
-    },
-    {
-      "fileName": "primitives-core-variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:433e182a0b86bf16dd1ed62dacdbd3d3d2025110/82:74",
-        "name": "Primitives (Core)",
-        "slug": "primitives-core",
-        "idSlug": "variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74"
-      },
-      "mode": {
-        "id": "1:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "s-typography-variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:dbeda2c7fb4dab171973418e8101f01785b5e6e2/27101:21627",
-        "name": "•S Typography",
-        "slug": "s-typography",
-        "idSlug": "variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627"
-      },
-      "mode": {
-        "id": "19458:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "c1-breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-42225-1471.desktop.json",
-      "collection": {
-        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/42225:1471",
-        "name": "C1 / Breakpoint",
-        "slug": "c1-breakpoint",
-        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-42225-1471"
-      },
-      "mode": {
-        "id": "6664:0",
-        "name": "Desktop",
-        "slug": "desktop"
-      }
-    },
-    {
-      "fileName": "c1-breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-42225-1471.tablet.json",
-      "collection": {
-        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/42225:1471",
-        "name": "C1 / Breakpoint",
-        "slug": "c1-breakpoint",
-        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-42225-1471"
-      },
-      "mode": {
-        "id": "6664:2",
-        "name": "Tablet",
-        "slug": "tablet"
-      }
-    },
-    {
-      "fileName": "c1-breakpoint-variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-42225-1471.mobile.json",
-      "collection": {
-        "id": "VariableCollectionId:dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233/42225:1471",
-        "name": "C1 / Breakpoint",
-        "slug": "c1-breakpoint",
-        "idSlug": "variablecollectionid-dd645ffd1ff46d0b6e3ee8f9dec5e9b7ea49e233-42225-1471"
-      },
-      "mode": {
-        "id": "6664:1",
-        "name": "Mobile",
-        "slug": "mobile"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-dimension-static-variablecollectionid-530eb9fc4e9077abe9390613e61263db0c186e91-4458-183.token.json",
-      "collection": {
-        "id": "VariableCollectionId:530eb9fc4e9077abe9390613e61263db0c186e91/4458:183",
-        "name": "S2A / Semantic / Dimension / Static",
-        "slug": "s2a-semantic-dimension-static",
-        "idSlug": "variablecollectionid-530eb9fc4e9077abe9390613e61263db0c186e91-4458-183"
-      },
-      "mode": {
-        "id": "78:0",
-        "name": "Token",
-        "slug": "token"
-      }
-    },
-    {
-      "fileName": "c1-gap-cards-columns-variablecollectionid-3a9acc967fe0e4e10d60e4e18a12419ca8262e42-42225-1458.gap-32px.json",
-      "collection": {
-        "id": "VariableCollectionId:3a9acc967fe0e4e10d60e4e18a12419ca8262e42/42225:1458",
-        "name": "C1 / Gap: Cards & Columns",
-        "slug": "c1-gap-cards-columns",
-        "idSlug": "variablecollectionid-3a9acc967fe0e4e10d60e4e18a12419ca8262e42-42225-1458"
-      },
-      "mode": {
-        "id": "23953:5",
-        "name": "Gap: 32px",
-        "slug": "gap-32px"
-      }
-    },
-    {
-      "fileName": "c1-gap-cards-columns-variablecollectionid-3a9acc967fe0e4e10d60e4e18a12419ca8262e42-42225-1458.gap-16px.json",
-      "collection": {
-        "id": "VariableCollectionId:3a9acc967fe0e4e10d60e4e18a12419ca8262e42/42225:1458",
-        "name": "C1 / Gap: Cards & Columns",
-        "slug": "c1-gap-cards-columns",
-        "idSlug": "variablecollectionid-3a9acc967fe0e4e10d60e4e18a12419ca8262e42-42225-1458"
-      },
-      "mode": {
-        "id": "23953:6",
-        "name": "Gap: 16px",
-        "slug": "gap-16px"
-      }
-    },
-    {
-      "fileName": "s-typography-variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:df621fb21582d7e499c45bf908fe7ea44b7c9c01/27101:21627",
-        "name": "•S Typography",
-        "slug": "s-typography",
-        "idSlug": "variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627"
-      },
-      "mode": {
-        "id": "19458:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "s2a-min-max-variablecollectionid-3364-2800.min.json",
-      "collection": {
-        "id": "VariableCollectionId:3364:2800",
-        "name": "S2A / Min-Max",
-        "slug": "s2a-min-max",
-        "idSlug": "variablecollectionid-3364-2800"
-      },
-      "mode": {
-        "id": "3364:0",
-        "name": "Min",
-        "slug": "min"
-      }
-    },
-    {
-      "fileName": "s2a-min-max-variablecollectionid-3364-2800.max.json",
-      "collection": {
-        "id": "VariableCollectionId:3364:2800",
-        "name": "S2A / Min-Max",
-        "slug": "s2a-min-max",
-        "idSlug": "variablecollectionid-3364-2800"
-      },
-      "mode": {
-        "id": "3364:1",
-        "name": "Max",
-        "slug": "max"
       }
     }
   ]

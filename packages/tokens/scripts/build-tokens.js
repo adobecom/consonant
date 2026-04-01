@@ -50,6 +50,28 @@ function removeDesignOnlyTokens(node) {
   }
   keysToDelete.forEach((k) => delete node[k]);
 }
+
+function tagTokens(node, cb) {
+  if (!node || typeof node !== "object" || Array.isArray(node)) {
+    return;
+  }
+
+  for (const value of Object.values(node)) {
+    if (!value || typeof value !== "object") {
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      continue;
+    }
+
+    if ("$value" in value) {
+      cb(value);
+    } else {
+      tagTokens(value, cb);
+    }
+  }
+}
 const {
   toSlug,
   determineBaseSlug,
@@ -213,8 +235,9 @@ async function buildFromFigma() {
       collectionSlug === "typography-core" ||
       collectionSlug === "typography-scale-responsive" ||
       collectionSlug === "s2a-typography-scale-responsive" ||
+      collectionSlug === "s2a-typography" ||
       collectionSlug.startsWith("typography") ||
-      collectionSlug === "s2a-typography"
+      collectionSlug.includes("typography")
     ) {
       if (!typographyCoreFiles.has(modeSlug)) {
         typographyCoreFiles.set(modeSlug, []);
@@ -719,7 +742,16 @@ async function buildFromFigma() {
             }
             return false; // Primitive value
           }
-          // For border, opacity, shadow, spacing - check if it's a reference
+          // For spacing — t-shirt size keys (none, 3xs, 2xs, xs, sm, md, lg, xl, 2xl, etc.) are semantic aliases
+          if (path[0] === "spacing") {
+            const sizeKey = path[1];
+            const isNumericKey = /^\d+$/.test(String(sizeKey));
+            if (!isNumericKey) {
+              return true; // Semantic t-shirt size alias, include it
+            }
+            return false; // Numeric primitive, exclude it
+          }
+          // For border, opacity, shadow - check if it's a reference
           const originalValue = token.original?.$value ?? token.value;
           if (
             typeof originalValue === "string" &&
@@ -1042,8 +1074,7 @@ async function buildFromFigma() {
   // ============================================================================
   // S2A Responsive collection modes (from Figma): xs → sm → md → lg → xl (order for cascade)
   const RESPONSIVE_GRID_MODES = [
-    { modeSlug: "xs", shortName: "xs", minWidth: null },
-    { modeSlug: "sm", shortName: "sm", minWidth: 768 },
+    { modeSlug: "sm", shortName: "sm", minWidth: null },
     { modeSlug: "md", shortName: "md", minWidth: 1024 },
     { modeSlug: "lg", shortName: "lg", minWidth: 1280 },
     { modeSlug: "xl", shortName: "xl", minWidth: 1441 },
@@ -1070,6 +1101,11 @@ async function buildFromFigma() {
     );
     rewriteSemanticRefsToS2a(baseForResponsive);
 
+    const disallowedResponsiveSegments = new Set([
+      "design-guides",
+      "annotations",
+    ]);
+
     for (const { modeSlug, shortName, minWidth } of RESPONSIVE_GRID_MODES) {
       if (!responsiveFiles.has(modeSlug)) {
         continue;
@@ -1077,6 +1113,10 @@ async function buildFromFigma() {
       const responsiveTokens = await loadTokensForMode(
         responsiveFiles.get(modeSlug),
       );
+      tagTokens(responsiveTokens, (token) => {
+        token.$extensions = token.$extensions || {};
+        token.$extensions.__fromResponsiveCollection = true;
+      });
       const mergedResponsive = mergeTokenTrees(
         clone(baseForResponsive),
         responsiveTokens,
@@ -1093,21 +1133,21 @@ async function buildFromFigma() {
         selector: ":root",
         mediaQuery,
         filter: (token) => {
+          const isResponsiveToken = Boolean(
+            token.$extensions?.__fromResponsiveCollection,
+          );
+          if (!isResponsiveToken) {
+            return false;
+          }
           const path = token.path || [];
-          // Only include S2A responsive tokens relevant to layout/typography at breakpoints.
-          // Note: our responsive container grid JSON exports `s2a.viewport` and `s2a.layout-guide`
-          // (including `s2a.layout.*` aliases for vertical padding). These were previously filtered out.
           if (path[0] !== "s2a") {
             return false;
           }
-          return (
-            path[1] === "grid" ||
-            path[1] === "containers" ||
-            path[1] === "viewport" ||
-            path[1] === "layout-guide" ||
-            path[1] === "typography" ||
-            path[1] === "section"
-          );
+          const nextSegment = path[1];
+          if (nextSegment && disallowedResponsiveSegments.has(nextSegment)) {
+            return false;
+          }
+          return true;
         },
       });
     }
@@ -1258,7 +1298,6 @@ async function minifyAllCssFiles() {
     "tokens.typography.css",
     "tokens.typography.tablet.css",
     "tokens.typography.desktop.css",
-    "tokens.responsive.xs.css",
     "tokens.responsive.sm.css",
     "tokens.responsive.md.css",
     "tokens.responsive.lg.css",

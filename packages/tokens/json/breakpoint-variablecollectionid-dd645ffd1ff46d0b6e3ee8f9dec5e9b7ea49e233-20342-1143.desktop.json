@@ -1,1 +1,50 @@
-{}
+{
+  "spacing": {
+    "block": {
+      "section": {
+        "spacer-label-breakpoint": {
+          "$type": "string",
+          "$value": "Desktop",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "spacer-label-xl": {
+          "$type": "string",
+          "$value": "56px",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [],
+              "codeSyntax": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "size": {
+    "inline": {
+      "container": {
+        "$type": "number",
+        "$value": 1200,
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [
+              "WIDTH_HEIGHT"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      }
+    }
+  }
+}

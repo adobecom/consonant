@@ -944,7 +944,7 @@
       "family": {
         "adobe-clean": {
           "$type": "string",
-          "$value": "Adobe Clean",
+          "$value": "adobe-clean",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -960,7 +960,7 @@
         },
         "adobe-clean-display": {
           "$type": "string",
-          "$value": "Adobe Clean Display",
+          "$value": "adobe-clean-display",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1165,6 +1165,20 @@
               "codeSyntax": {
                 "WEB": "var(--s2a-font-letter-spacing-0_24)"
               }
+            }
+          }
+        },
+        "neg-0_16": {
+          "$type": "number",
+          "$value": -0.1599999964237213,
+          "$description": "Letter spacing primitive: -0.16px",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
             }
           }
         }

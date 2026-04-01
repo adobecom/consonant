@@ -6,6 +6,7 @@ const path = require("path");
 // Variable collections we want to ignore entirely when exporting.
 const EXCLUDED_COLLECTION_IDS = new Set([
   "VariableCollectionId:615453529a3e5f28b1a63fa69f5f3131a7400bb8/8335:3614",
+  "VariableCollectionId:106eca121b3bd1c8c1c5b9e8af21db0d45a47eb0/42225:1453",
 ]);
 
 async function main() {
@@ -241,6 +242,16 @@ function transformVariables({ variables, collections }) {
             collectionName.startsWith("c1 / color mode") ||
             collectionName.startsWith("sn / color") ||
             collectionName === "primitives (color)";
+          const isLegacyAnnotationCollection =
+            collectionName.startsWith("c1 /") ||
+            collectionName.includes("annotation");
+          const isExcludedS2AColor =
+            collectionName.startsWith("s2a / color") &&
+            !collectionName.includes("semantic");
+          const isS2cCollection =
+            collectionName.startsWith("s2c") ||
+            collectionName.includes("s2c /") ||
+            collectionName.includes("s2c-");
           const isTargetCollection = 
             hasSlashStructure || 
             isS2A ||
@@ -253,6 +264,9 @@ function transformVariables({ variables, collections }) {
           return (
             isTargetCollection &&
             !isExcludedAdobeColor &&
+            !isExcludedS2AColor &&
+            !isLegacyAnnotationCollection &&
+            !isS2cCollection &&
             !EXCLUDED_COLLECTION_IDS.has(collection.id)
           );
         },
@@ -305,7 +319,7 @@ function transformVariables({ variables, collections }) {
   }
 
   for (const variable of variables) {
-    if (!variable || variable.remote || variable.deletedButReferenced) {
+    if (!variable || variable.deletedButReferenced) {
       continue;
     }
 
@@ -552,4 +566,13 @@ module.exports = {
   hydrateEnv,
 };
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = {
+  main,
+  normalizeVariables,
+  normalizeCollections,
+  transformVariables,
+};

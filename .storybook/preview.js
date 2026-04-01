@@ -10,17 +10,21 @@ import "../dist/packages/tokens/css/dev/tokens.semantic.css";
 import "../dist/packages/tokens/css/dev/tokens.semantic.light.css";
 // 4. Semantic (color - dark mode)
 import "../dist/packages/tokens/css/dev/tokens.semantic.dark.css";
-// 5. Responsive typography + grid (xs → xl)
-import "../dist/packages/tokens/css/dev/tokens.responsive.xs.css";
+// 5. Responsive typography + grid (sm → xl)
 import "../dist/packages/tokens/css/dev/tokens.responsive.sm.css";
 import "../dist/packages/tokens/css/dev/tokens.responsive.md.css";
 import "../dist/packages/tokens/css/dev/tokens.responsive.lg.css";
 import "../dist/packages/tokens/css/dev/tokens.responsive.xl.css";
 // Note: Component tokens are not yet generated (no component tokens in Figma file)
 
-// Font Loading - Adobe Clean Display via Typekit
-// Kit mie2rub provides adobe-clean-display (Typekit uses lowercase with hyphens)
-// Override font tokens to match @font-face names so components render the loaded font
+// Font Loading
+// Adobe Clean is an Adobe-internal typeface (not for external distribution).
+// Download font files from Marketing Hub and place in packages/fonts/:
+//   packages/fonts/AdobeClean-Regular.woff2
+//   packages/fonts/AdobeClean-Bold.woff2
+//   packages/fonts/AdobeCleanDisplay-Black.woff2  (or equivalent)
+// That directory is gitignored — each developer downloads their own copy.
+// Kit mie2rub provides adobe-clean-display as a fallback when local files are absent.
 if (typeof document !== "undefined") {
   const typekitLink = document.createElement("link");
   typekitLink.rel = "stylesheet";
@@ -33,14 +37,25 @@ if (typeof document !== "undefined") {
     "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap";
   document.head.appendChild(interLink);
 
-  const fontOverride = document.createElement("style");
-  fontOverride.textContent = `
-    :root {
-      --s2a-font-family-adobe-clean: "adobe-clean", "Adobe Clean", sans-serif;
-      --s2a-font-family-adobe-clean-display: "adobe-clean-display", "Adobe Clean Display", sans-serif;
+  // Local Adobe Clean @font-face — only active if files exist in packages/fonts/
+  const fontFace = document.createElement("style");
+  fontFace.textContent = `
+    @font-face {
+      font-family: "adobe-clean";
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+      src: url("/fonts/AdobeClean-Regular.otf") format("opentype");
+    }
+    @font-face {
+      font-family: "adobe-clean";
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+      src: url("/fonts/AdobeClean-Bold.otf") format("opentype");
     }
   `;
-  document.head.appendChild(fontOverride);
+  document.head.appendChild(fontFace);
 }
 
 // Set theme attribute globally so semantic and component color tokens are available

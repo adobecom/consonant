@@ -32,14 +32,14 @@ Notes:
 | `width`         | `hug`, `fill`                             | `fill` lets the label truncate within a parent grid column.          |
 | `showIconStart` | `boolean`                                 | Toggle the leading AppIcon (aliased to `showIcon` for legacy code).   |
 | `showIconEnd`   | `boolean` (horizontal only)               | Toggles the caret arrow at the end of the label row.                  |
-| `iconSize`      | `sm`, `md`, `lg`, `xl` (optional)         | Overrides the AppIcon tile size; default is md (horizontal) / xl (vertical). |
+| `iconSize`      | `xs`, `sm`, `md`, `lg` (optional)         | Overrides the AppIcon tile size; matt-atoms defaults to md (24px) regardless of orientation. |
 
 **Orientation behavior:**
 
 | Orientation  | Flex direction | Icon size | Container gap | Caret     |
 | ------------ | -------------- | --------- | ------------- | --------- |
 | `horizontal` | row            | `md` 24px | `16px (md)`   | governed by `showIconEnd` (default true) |
-| `vertical`   | column         | `xl` 40px | `12px (sm)`   | hidden regardless of `showIconEnd`      |
+| `vertical`   | column         | `md` 24px | `12px (sm)`   | hidden regardless of `showIconEnd`      |
 
 **Style Variant behavior:**
 
@@ -65,7 +65,7 @@ import { AppIcon } from "../app-icon/app-icon.js";
 AppIcon({ app: "creative-cloud", size: "md" }); // 24px
 
 // Vertical — tile grid, stacked card body
-AppIcon({ app: "creative-cloud", size: "xl" }); // 40px
+AppIcon({ app: "creative-cloud", size: "md" }); // 24px
 ```
 
 ### Layout integration example
@@ -96,6 +96,12 @@ ProductLockup({ label: "PDF and productivity", width: "fill" });
 - The product name label is the accessible name for the lockup — no separate `aria-label` needed on the icon.
 - See [App Icons Library doc](./app-icons.md#accessibility) for full guidance.
 
+Interaction + caret rules:
+
+- **Wrap the lockup in a semantic element** (`<a>` for navigation, `<button>` for in-page actions). ProductLockup itself is purely visual and does not emit focus styles.
+- **Caret visibility signals interactivity.** Leave the caret on when the wrapper is clickable and toggle `showIconEnd=false` for decorative/static use.
+- The wrapper owns the focus ring — use the standard `s2a/color/focus-ring/default` treatment described in `docs/design-system/tokens`.
+
 When `showIconStart=false`, the label supplies both the visual and accessible name; no extra handling is required.
 
 ---
@@ -103,5 +109,5 @@ When `showIconStart=false`, the label supplies both the visual and accessible na
 ## 4. Figma
 
 - **App tiles:** enable "App Icons Library" in Assets → Libraries, insert `App Tile / {Product} / {Size}`.
-- **Orientation prop:** `ProductLockup` in S2A Foundations exposes `Orientation = horizontal | vertical`. Vertical unlocks the stacked layout with the 40px tile.
+- **Orientation prop:** `ProductLockup` in matt-atoms exposes `Orientation = horizontal | vertical`. Vertical reflows the layout (icon above text) while keeping the default 24px tile unless you override `iconSize`.
 - See [App Icons Library doc](./app-icons.md) for the full catalog and size guidance.

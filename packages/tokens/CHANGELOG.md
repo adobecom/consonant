@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.13] - 2026-03-26
+
+### 💥 Breaking changes
+
+- **External collections excluded by default**
+  - The sync step now drops every `c1/*`, `annotation`, and `s2c/*` collection before generating JSON. Palette-only primitives such as `--s2a-color-content-subdued-default` and annotation visibility tokens are **removed** from the package. If you depended on these non-system tokens, migrate to the sanctioned S2A semantics (e.g., `--s2a-color-content-default`).
+
+### ✨ Improvements
+
+- **RouterCard layout tokens shipped**
+  - The following system tokens now appear in each responsive CSS file so Router Card implementations can stay aligned with matt-atoms:
+    - `--s2a-router-card-width-resting`
+    - `--s2a-router-card-width-expanded`
+    - `--s2a-router-card-width-min`
+    - `--s2a-router-card-width-max`
+    - `--s2a-router-card-height-max`
+    - `--s2a-router-card-media-height`
+    - `--s2a-router-card-padding`
+    - `--s2a-router-card-gap`
+
+- **Responsive output mirrors the collection exactly**
+  - `tokens.responsive.{sm,md,lg,xl}.css` now emit only the tokens defined in the Responsive collection (viewport padding, router cards, typography, etc.). All semantic/primitive references stay as `var(--s2a-…)`, so importing a responsive layer no longer redefines the global primitive set.
+  - The responsive build step no longer relies on a hardcoded whitelist. Any `s2a/...` token in the Responsive collection (except "design-guide" paths) is shipped automatically, so future scale tokens land without build changes.
+
+### 🧹 Build & filtering
+
+- **Source tagging inside Style Dictionary**
+  - Tokens coming from the Responsive collection are tagged before merging with base primitives so the CSS filter can include only those tagged nodes. This keeps the output minimal while still allowing references to resolve against the primitive/semantic tree.
+
+---
+
 ## [0.0.12] - 2026-03-18
 
 ### 💥 Breaking changes

@@ -24,6 +24,16 @@ yarn-error.log*
 # tests/coverage
 coverage/
 
+# local MCP config (contains machine-specific paths)
+.mcp.json
+
+# Adobe Clean font files — Adobe-internal only, not for distribution
+# Download from Marketing Hub and place in packages/fonts/
+packages/fonts/*.woff2
+packages/fonts/*.woff
+packages/fonts/*.ttf
+packages/fonts/*.otf
+
 # misc
 .DS_Store
 *.tgz
@@ -32,3 +42,20 @@ coverage/
 
 *storybook.log
 storybook-static
+
+docs/case-study/*
+
+# Internal scratch / working files — not for public distribution
+tmp/
+JIRA-tickets-outline.md
+screenshots/
+
+# MCP server apps — not yet open-sourced; deploy separately
+apps/figma-console-mcp/
+apps/s2a-ds-mcp/
+
+# AI tool workflow configs — machine/user-specific, not for contributors
+.claude/
+.codex/
+.cursor/
+.playwright-mcp/

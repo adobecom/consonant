@@ -29,7 +29,7 @@ module.exports = {
       name: 'Button',
       displayName: 'Button',
       importPath: '../../../../packages/components/src/button/index.js',
-      props: ['label', 'background', 'state', 'onClick'],
+      props: ['label', 'intent', 'context', 'background', 'size', 'state', 'showIconStart', 'showIconEnd', 'onClick'],
       description: 'matt-atoms Button (Figma 141-53460). USE THIS for ALL buttons - never create custom button markup.',
       category: 'content',
       examples: [
@@ -38,6 +38,8 @@ module.exports = {
         "Button({ label: 'Learn more', background: 'solid' })",
         "// Secondary CTA (outlined)",
         "Button({ label: 'Get started', background: 'outlined' })",
+        "// Accent CTA",
+        "Button({ label: 'Start trial', intent: 'accent', background: 'solid' })",
         "// In template:",
         "${Button({ label: args.buttonLabel, background: 'solid' })}"
       ],
@@ -48,7 +50,7 @@ module.exports = {
       name: 'IconButton',
       displayName: 'IconButton',
       importPath: '../../../../packages/components/src/icon-button/index.js',
-      props: ['ariaLabel', 'icon', 'background', 'size', 'state', 'tone', 'onClick'],
+      props: ['ariaLabel', 'icon', 'intent', 'context', 'background', 'size', 'state', 'onClick'],
       description: 'matt-atoms IconButton (Figma 2142-53869). Icon-only circular button for play/pause, close, etc.',
       category: 'content',
       examples: [
@@ -75,6 +77,41 @@ module.exports = {
       ],
       whenToUse: 'Any time a design calls for an Adobe product identifier (icon + label).',
       doNot: 'Stack <img> + <span> yourself; always call ProductLockup so the CDN icon + tokens stay in sync.'
+    },
+    {
+      name: 'RouterCard',
+      displayName: 'RouterCard',
+      importPath: '../../../../packages/components/src/router-card/index.js',
+      props: [
+        'label',
+        'app',
+        'product',
+        'title',
+        'body',
+        'state',
+        'mediaSrc',
+        'mediaTemplate',
+        'mediaAspect',
+        'mediaOverlay',
+        'bodyTemplate',
+        'children',
+        'showCaret',
+        'actionTemplate',
+        'actionLabel',
+        'href',
+        'ariaLabel',
+        'onClick',
+        'tag'
+      ],
+      description: 'Router hero card (matt-atoms node 4006-461133). Includes ProductLockup header, media slot, and glassmorphic surface states.',
+      category: 'content',
+      examples: [
+        "import { RouterCard } from '../../../../packages/components/src/router-card/index.js';",
+        "RouterCard({ label: 'Creativity and design', app: 'experience-cloud', title: 'Adobe Express', mediaSrc: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80' })",
+        "RouterCard({ state: 'expanded', showCaret: false, actionTemplate: IconButton({ ariaLabel: 'Open router', icon: customIcon, size: 'md', background: 'outlined', context: 'on-dark' }) })"
+      ],
+      whenToUse: 'Hero router cards and media-forward router states (resting, expanded, mobile).',
+      doNot: 'Hand-roll hero tiles with custom glassmorphism or ad-hoc ProductLockup markup.'
     }
   ],
   

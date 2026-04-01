@@ -3,6 +3,8 @@
  */
 
 :root {
+  --color-transparent-black-12: rgb(0 0 0 / 12%);
+  --color-transparent-black-16: rgb(0 0 0 / 16%);
   --s2a-color-gray-25: #fff;
   --s2a-color-gray-50: #f8f8f8;
   --s2a-color-gray-75: #f3f3f3;
@@ -181,8 +183,8 @@
   --s2a-spacing-124: 124px;
   --s2a-spacing-160: 160px;
   --s2a-spacing-240: 240px;
-  --s2a-font-family-adobe-clean: "Adobe Clean";
-  --s2a-font-family-adobe-clean-display: "Adobe Clean Display";
+  --s2a-font-family-adobe-clean: "adobe-clean";
+  --s2a-font-family-adobe-clean-display: "adobe-clean-display";
   --s2a-font-letter-spacing-0: 0;
   --s2a-font-letter-spacing-neg-3_84: -3.84px;
   --s2a-font-letter-spacing-neg-3_2: -3.2px;
@@ -195,6 +197,7 @@
   --s2a-font-letter-spacing-neg-0_2: -0.2px;
   --s2a-font-letter-spacing-0_16: 0.16px;
   --s2a-font-letter-spacing-0_24: 0.24px;
+  --s2a-font-letter-spacing-neg-0_16: -0.16px; /** Letter spacing primitive: -0.16px */
   --s2a-font-line-height-16: 16px;
   --s2a-font-line-height-18: 18px;
   --s2a-font-line-height-20: 20px;
@@ -232,10 +235,48 @@
   --s2a-blur-32: 32px;
   --s2a-blur-64: 64px;
   --s2a-blur-128: 128px;
-  --color-transparent-black-12: rgb(0 0 0 / 12%);
-  --color-transparent-black-16: rgb(0 0 0 / 16%);
+  --border-radius-2: 2px;
+  --border-radius-4: 4px;
+  --border-radius-8: 8px;
+  --border-radius-16: 16px;
+  --border-radius-32: 32px;
+  --spacing-0: 0;
+  --spacing-2: 2px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --shadow-level-1-x: 0;
+  --shadow-level-1-y: 1px;
+  --shadow-level-1-blur: 6px;
+  --shadow-level-1-spread: 0;
+  --shadow-level-2-x: 0;
+  --shadow-level-2-y: 2px;
+  --shadow-level-2-blur: 8px;
+  --shadow-level-3-x: 0;
+  --shadow-level-3-y: 4px;
+  --shadow-level-3-blur: 12px;
+  --shadow-level-4-x: 0;
+  --shadow-level-4-y: 6px;
+  --shadow-level-4-blur: 16px;
+  --font-family-adobe-clean: "Adobe Clean";
+  --font-family-adobe-clean-display: "Adobe Clean Display";
+  --font-weight-adobe-clean-bold: 700;
+  --font-weight-adobe-clean-regular: 400;
+  --font-weight-adobe-clean-display-black: 900;
   --s2a-shadow-level-1-color: var(--color-transparent-black-12);
   --s2a-shadow-level-2-color: var(--color-transparent-black-16);
   --s2a-shadow-level-3-color: var(--color-transparent-black-16);
   --s2a-shadow-level-4-color: var(--color-transparent-black-16);
+  --shadow-level-1-color: var(--color-transparent-black-12);
+  --shadow-level-2-color: var(--color-transparent-black-16);
+  --shadow-level-3-color: var(--color-transparent-black-16);
+  --shadow-level-4-color: var(--color-transparent-black-16);
 }

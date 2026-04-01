@@ -12,14 +12,14 @@ const lockup = ProductLockup({
   width: 'hug',
   showIconStart: true,
   showIconEnd: true,
-  iconSize: 'sm', // optional override (auto picks md/xl based on orientation)
+  iconSize: 'sm', // optional override (auto keeps md unless you opt into other sizes)
 });
 ```
 
 Guidelines:
-- Use `orientation="vertical"` for stacked tiles (`AppIcon` automatically bumps to 40px) and `orientation="horizontal"` for inline nav.
+- Use `orientation="vertical"` for stacked tiles (icon remains 24px per matt-atoms) and `orientation="horizontal"` for inline nav.
 - Switch `styleVariant` between `label` (14px) and `eyebrow` (16px tracking) to match the Figma Style control.
 - Use `context="on-dark"` whenever the lockup sits on a dark/knockout surface to flip the typography tokens.
 - Set `width="fill"` when composing inside grid columns so the label truncates properly.
 - Toggle `showIconStart` / `showIconEnd` to match the Figma "Show Icon" / "Show Icon End" controls.
-- Override `iconSize` only when the layout explicitly calls for a different tile size; leave it undefined to follow the orientation defaults (md vs xl).
+- Override `iconSize` only when the layout explicitly calls for a different tile size; leave it undefined to follow the matt-atoms defaults (md for both orientations).

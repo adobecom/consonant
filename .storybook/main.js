@@ -2,6 +2,7 @@
 
 /** @type { import('@storybook/web-components-vite').StorybookConfig } */
 const config = {
+  staticDirs: [{ from: "../packages/fonts", to: "/fonts" }],
   "stories": [
     "../apps/storybook/stories/**/*.mdx",
     "../apps/storybook/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)"

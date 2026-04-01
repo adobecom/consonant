@@ -27,7 +27,8 @@
     "story-ui:mcp": "story-ui mcp",
     "dev": "concurrently -n \"storybook,story-ui-http,story-ui-mcp\" -c \"blue,green,yellow\" \"npm run storybook\" \"npm run story-ui\" \"npm run story-ui:mcp\"",
     "dev:mcp": "concurrently -n \"storybook,story-ui-mcp\" -c \"blue,yellow\" \"npm run storybook\" \"npm run story-ui:mcp\"",
-    "claude": "node scripts/claude.js"
+    "claude": "node scripts/claude.js",
+    "icons:fetch": "node scripts/fetch-spectrum-icons.js"
   },
   "keywords": [],
   "author": "",

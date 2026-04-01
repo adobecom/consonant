@@ -137,6 +137,8 @@ Guardrail reminder:
 - Highlight any primitive usages in your explanation so I can replace them later.
 ```
 
+**Figma Console MCP (Codex)**: Long `figma_execute` sessions + `figma_capture_screenshot` in the **same** thread often exceed context because screenshots embed PNG bytes in the transcript. Use the **two-phase** workflow in [`codex-figma-console-context.md`](./codex-figma-console-context.md).
+
 **Examples**:
 
 - _Codex_: "Run `mcp_Figma_get_design_context` for node 18587:2885 using the guardrail reminder above."

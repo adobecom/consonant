@@ -11,13 +11,13 @@ const primaryCta = Button({
 });
 ```
 
-**Props**: `label`, `background` (solid | outlined | transparent), `size` (lg | md), `state` (default | disabled), `tone` (default | knockout | inverse), `showElementEnd` (boolean).
+**Props**: `label`, `intent` (primary | accent), `background` (solid | outlined | transparent), `context` (on-light | on-dark), `size` (md | xs), `state` (default | hover | active | focus | disabled), `showIconStart`, `showIconEnd`, `iconStart`, `iconEnd`, `onClick`.
 
-**Note**: When using `showElementEnd: true`, load Phosphor Icons bold: `import '@phosphor-icons/web/bold'` (or add the stylesheet to your page).
+**Note**: Icon slots accept either a Lit template (preferred) or a legacy Phosphor icon name. Import Spectrum 2 icons via `@spectrum-web-components/icons-workflow` (or run `npm run icons:fetch Download Folder`) and pass the rendered template into `iconStart` / `iconEnd`.
 
 Rules:
 - Never hand-roll `<button>` markup.
-- Use `background='solid'` for primary CTAs.
-- Use `background='outlined'` for secondary CTAs.
-- Use `background='transparent'` for tertiary/ghost actions.
-- Use `tone='knockout'` for buttons on dark backgrounds.
+- `intent="primary"` + `background="solid"` is the default CTA; `intent="accent"` exposes the blue hero CTA.
+- Use `context="on-dark"` when the button sits on a dark background (focus ring + color inversion handled automatically).
+- `background="outlined"` is used for secondary CTAs; `background="transparent"` is reserved for tertiary/ghost actions.
+- Prefer `size="xs"` only for dense layouts (toolbars, cards); default to `size="md"` everywhere else.

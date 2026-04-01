@@ -1,0 +1,212 @@
+import { html } from "lit";
+import { fn } from "storybook/test";
+
+import { RouterCard } from "./RouterCard";
+import { Media } from "../../../packages/components/src/media/media.js";
+import { IconButton } from "./IconButton";
+import routerCardCss from "../../../packages/components/src/router-card/router-card.css?raw";
+
+import "@spectrum-web-components/icons-workflow/icons/sp-icon-more.js";
+import "@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-right.js";
+
+const MEDIA_SAMPLE =
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
+
+// Figma reference image (node 4192:30683) — expires ~7 days from export
+const MEDIA_MOBILE =
+  "https://www.figma.com/api/mcp/asset/10228c1c-8d4f-42dc-93df-6ed860f219d1";
+
+const actionIconOnDark = html`<sp-icon-more aria-hidden="true" style="width:16px;height:16px"></sp-icon-more>`;
+
+const routerCardWithAction = (state = "expanded") =>
+  IconButton({
+    ariaLabel: "Open router context",
+    icon: actionIconOnDark,
+    size: "md",
+    background: "outlined",
+    context: state === "resting" ? "on-light" : "on-dark",
+  });
+
+export default {
+  title: "Components/RouterCard",
+  tags: ["autodocs"],
+  render: (args) => RouterCard(args),
+  parameters: {
+    docs: {
+      description: {
+        component: `
+<style>
+.doc-pattern { border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; margin: 12px 0; background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,248,248,0.9)); }
+.doc-collapse summary { list-style: none; cursor: pointer; padding: 18px 24px; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+.doc-collapse summary::-webkit-details-marker { display: none; }
+.doc-collapse summary span { color: #555; font-size: 13px; font-weight: 600; }
+.doc-collapse[open] summary { border-bottom: 1px solid rgba(0,0,0,0.08); }
+.doc-body { padding: 20px 24px 24px; }
+.doc-body p { margin: 0 0 12px; font-size: 14px; color: #333; }
+.doc-body code { font-weight: 600; }
+</style>
+<p>Media-forward tile used in Router hero carousels. Mirrors matt-atoms component set (<a href="https://www.figma.com/design/svi0B0G925V2XG0yX0DDaz/matt-atoms?node-id=4006-461133" target="_blank" rel="noreferrer">node 4006-461133</a>).</p>
+
+<details class="doc-pattern doc-collapse">
+  <summary>Preferred · Data-attribute markup <span>Recommended</span></summary>
+  <div class="doc-body">
+    <p>Map <code>State</code>, media ratio, and copy treatments with <code>data-state</code>, <code>data-media-aspect</code>, and the data attributes on <code>.c-media</code> + <code>.c-rich-content</code>. The card itself can be a <code>&lt;button&gt;</code>, <code>&lt;a&gt;</code>, or <code>&lt;article&gt;</code> depending on routing semantics.</p>
+
+\`\`\`html
+<article class="c-router-card" data-state="resting" data-media-aspect="3:4">
+  <header class="c-router-card__header">
+    <span class="c-product-lockup" data-orientation="horizontal" data-style="label" data-context="on-light" data-width="fill">
+      <span class="c-product-lockup__icon" aria-hidden="true">…</span>
+      <span class="c-product-lockup__label">Creativity and design</span>
+    </span>
+    <span class="c-router-card__action c-router-card__action--caret" aria-hidden="true">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 3 7 6l-3 3" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+  </header>
+  <div class="c-router-card__media">
+    <figure class="c-media" data-aspect="3:4" data-fit="cover" data-position="center">
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" alt="" loading="lazy" decoding="async" />
+      <span class="c-media__overlay" aria-hidden="true"></span>
+    </figure>
+  </div>
+  <div class="c-router-card__body">
+    <div class="c-router-card__body-content">
+      <p class="c-router-card__title">Adobe Express</p>
+      <p class="c-router-card__body-text">Create standout content with quick actions and guided templates.</p>
+    </div>
+  </div>
+</article>
+\`\`\`
+  </div>
+</details>
+
+<details class="doc-pattern doc-collapse">
+  <summary>Alternative · Utility / BEM classes <span>Class-based</span></summary>
+  <div class="doc-body">
+    <p>When data attributes aren’t available, alias the same variant axes with modifier classes.</p>
+
+\`\`\`html
+<a class="c-router-card c-router-card--expanded c-router-card--aspect-16x9" href="#">
+  …
+</a>
+\`\`\`
+
+\`\`\`css
+.c-router-card--expanded { background-color: var(--s2a-color-background-knockout); color: var(--s2a-color-content-knockout); }
+.c-router-card--aspect-16x9 .c-media { aspect-ratio: 16 / 9; }
+\`\`\`
+  </div>
+</details>
+
+<details class="doc-pattern doc-collapse">
+  <summary>Full CSS reference <span>Source of truth</span></summary>
+  <div class="doc-body">
+\`\`\`css
+${routerCardCss}
+\`\`\`
+  </div>
+</details>
+        `,
+      },
+    },
+  },
+  argTypes: {
+    label: { control: "text", description: "Product Lockup label" },
+    app: { control: "text", description: "App slug passed to ProductLockup" },
+    title: { control: "text", description: "Card title — styled as eyebrow (s2a/typography/eyebrow)" },
+    body: { control: "text", description: "Body copy — styled as body-md (s2a/typography/body-md)" },
+    state: {
+      control: { type: "select" },
+      options: ["resting", "expanded", "mobile"],
+      description: "Matches the Figma State property (node 4006-461133)",
+    },
+    mediaSrc: { control: "text", description: "Image URL — fills the card full-bleed" },
+    mediaAspect: {
+      control: { type: "select" },
+      options: ["3:4", "4:3", "16:9", "1:1"],
+      description: "Aspect ratio token applied to the Media component",
+    },
+    mediaOverlay: { control: "boolean", description: "Toggle the scrim gradient overlay" },
+    showCaret: { control: "boolean", description: "Toggle the caret icon in the header" },
+    href: { control: "text", description: "Makes the card an <a> element" },
+    ariaLabel: { control: "text", description: "Accessible label for link/button semantics" },
+    onClick: { action: "clicked" },
+  },
+  args: {
+    label: "Creativity and design",
+    app: "creative-cloud",
+    title: "Adobe Express",
+    body: "Create standout content with quick actions and guided templates.",
+    state: "resting",
+    mediaSrc: MEDIA_SAMPLE,
+    mediaAspect: "3:4",
+    mediaOverlay: true,
+    onClick: fn(),
+  },
+};
+
+export const Resting = {};
+
+export const Expanded = {
+  args: {
+    state: "expanded",
+    title: "Photoshop + Lightroom",
+    body: "Pro photography tools and new Firefly-powered workflows across surfaces.",
+    showCaret: false,
+  },
+};
+
+export const Mobile = {
+  render: (args) =>
+    RouterCard({
+      ...args,
+      mediaTemplate: Media({
+        src: MEDIA_MOBILE,
+        alt: "",
+        aspectRatio: "3:4",
+        overlay: false,
+      }),
+    }),
+  args: {
+    state: "mobile",
+    label: "Creativity and design",
+    app: "creative-cloud",
+    title: "Create at the highest level.",
+    body: "Do it all with industry-leading apps for design, photo, video, and creative AI.",
+    showCaret: false,
+  },
+};
+
+export const WithActionButton = {
+  args: {
+    state: "expanded",
+    showCaret: false,
+    actionTemplate: routerCardWithAction("expanded"),
+    actionLabel: "Open router context",
+  },
+};
+
+export const CustomMediaSlot = {
+  render: (args) =>
+    RouterCard({
+      ...args,
+      state: "expanded",
+      showCaret: false,
+      mediaTemplate: html`
+        <picture>
+          <source srcset="https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=1600&q=80" media="(min-width: 600px)" />
+          <img src="https://images.unsplash.com/photo-1470104240373-bc1812eddc9f?auto=format&fit=crop&w=900&q=80" alt="Abstract gradients" loading="lazy" decoding="async" />
+        </picture>
+      `,
+      mediaOverlay: true,
+    }),
+};
+
+export const OverlayScrim = {
+  args: {
+    state: "resting",
+    mediaOverlay: true,
+  },
+};

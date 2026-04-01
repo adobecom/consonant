@@ -1515,7 +1515,7 @@
         "primary": {
           "$type": "color",
           "$value": "#FF9CF4",
-          "$description": "Primary annotation color",
+          "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
               "hiddenFromPublishing": false,
@@ -1529,7 +1529,7 @@
         "primary-alt": {
           "$type": "color",
           "$value": "#FFD7FA",
-          "$description": "Alt primary annotation color",
+          "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
               "hiddenFromPublishing": false,
@@ -1544,7 +1544,7 @@
           "alt-text": {
             "$type": "color",
             "$value": "#2C14294D",
-            "$description": "Alt text background bar color",
+            "$description": "DESIGN ONLY",
             "$extensions": {
               "com.figma": {
                 "hiddenFromPublishing": true,
@@ -1559,7 +1559,7 @@
           "primary": {
             "$type": "color",
             "$value": "#FF9CF426",
-            "$description": "Spacer background",
+            "$description": "DESIGN ONLY",
             "$extensions": {
               "com.figma": {
                 "hiddenFromPublishing": true,
@@ -1575,7 +1575,7 @@
           "primary-no-opacity": {
             "$type": "color",
             "$value": "#FF9CF400",
-            "$description": "Spacer opacity set to zero. It can take up space, but not be visible.",
+            "$description": "DESIGN ONLY",
             "$extensions": {
               "com.figma": {
                 "hiddenFromPublishing": true,

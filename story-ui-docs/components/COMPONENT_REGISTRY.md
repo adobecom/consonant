@@ -12,11 +12,13 @@
 
 **Props**:
 - `label` (string, required): Button text
+- `intent` ('primary' | 'accent', default: 'primary')
+- `context` ('on-light' | 'on-dark', default: 'on-light')
 - `background` ('solid' | 'outlined' | 'transparent', default: 'solid')
-- `size` ('lg' | 'md', default: 'lg')
-- `state` ('default' | 'disabled', default: 'default')
-- `tone` ('default' | 'knockout' | 'inverse', default: 'default')
-- `showElementEnd` (boolean, default: false): Show CaretDown chevron
+- `size` ('md' | 'xs', default: 'md')
+- `state` ('default' | 'hover' | 'active' | 'focus' | 'disabled', default: 'default')
+- `showIconStart` / `showIconEnd` (boolean): Toggle icon slots
+- `iconStart` / `iconEnd` (function or TemplateResult): Custom icons
 - `onClick` (function, optional)
 
 **Examples**:
@@ -30,11 +32,14 @@ Button({ label: 'Get started', background: 'outlined' })
 // Tertiary (transparent)
 Button({ label: 'Learn more', background: 'transparent' })
 
-// On dark background (knockout tone)
-Button({ label: 'Sign up', background: 'outlined', tone: 'knockout' })
+// On dark background (context)
+Button({ label: 'Sign up', background: 'outlined', context: 'on-dark' })
+
+// Accent CTA
+Button({ label: 'Get started', intent: 'accent', background: 'solid' })
 
 // With dropdown chevron
-Button({ label: 'Menu', background: 'outlined', showElementEnd: true })
+Button({ label: 'Menu', background: 'outlined', showIconEnd: true })
 
 // Disabled button
 Button({ label: 'Submit', state: 'disabled', background: 'solid' })
@@ -52,25 +57,33 @@ Button({ label: 'Submit', state: 'disabled', background: 'solid' })
 
 **Props**:
 - `ariaLabel` (string, required): Accessible label
-- `icon` (string, default: 'pause'): Phosphor icon name (e.g. pause, play, x)
+- `icon` (string or TemplateResult, default: 'pause'): Legacy Phosphor name or a Lit template (e.g. `<sp-icon-play>`)
+- `context` ('on-light' | 'on-dark', default: 'on-light')
 - `background` ('solid' | 'outlined' | 'transparent', default: 'solid')
-- `size` ('lg' | 'md', default: 'lg')
-- `state` ('default' | 'disabled', default: 'default')
-- `tone` ('default' | 'knockout', default: 'default')
+- `size` ('md' | 'lg', default: 'lg')
+- `state` ('default' | 'hover' | 'active' | 'focus' | 'disabled', default: 'default')
 - `onClick` (function, optional)
 
-**Note**: Pause icon is from Figma. Other icons use Phosphor — load `@phosphor-icons/web/bold` for play, x, etc.
+**Note**: Preferred icon source is Spectrum 2 (Workflow) icons. Run `npm run icons:fetch Play Pause Close` to download SVGs into `packages/components/src/icon-button/assets/`, or import `@spectrum-web-components/icons-workflow` directly in stories.
 
 **Examples**:
 ```javascript
+import { html } from 'lit';
+import '@spectrum-web-components/icons-workflow/icons/sp-icon-close.js';
+
+const closeIconTemplate = html`<sp-icon-close aria-hidden="true" style="width:16px;height:16px"></sp-icon-close>`;
+
 // Pause button (solid)
 IconButton({ ariaLabel: 'Pause', icon: 'pause', background: 'solid' })
 
 // Play button (outlined)
 IconButton({ ariaLabel: 'Play', icon: 'play', background: 'outlined' })
 
-// On dark background (knockout tone)
-IconButton({ ariaLabel: 'Pause', icon: 'pause', tone: 'knockout' })
+// On dark background
+IconButton({ ariaLabel: 'Pause', icon: 'pause', context: 'on-dark' })
+
+// Compact icon on dark surface with Spectrum icon
+IconButton({ ariaLabel: 'Close dialog', icon: closeIconTemplate, background: 'transparent', context: 'on-dark', size: 'md' })
 ```
 
 **DO NOT**: Create custom icon-only buttons; use IconButton for play/pause, close, menu toggles, etc.
@@ -86,13 +99,13 @@ IconButton({ ariaLabel: 'Pause', icon: 'pause', tone: 'knockout' })
 **Props**:
 - `label` / `productName` (string, default: 'Product label') — product text
 - `app` (string, default: 'experience-cloud') — AppIcon slug
-- `orientation` ('horizontal' | 'vertical', default: 'horizontal') — Also controls default icon size (md vs xl).
+- `orientation` ('horizontal' | 'vertical', default: 'horizontal') — Controls layout axis (both orientations default to `size="md"`).
 - `styleVariant` ('label' | 'eyebrow', default: 'label')
 - `context` ('on-light' | 'on-dark', default: 'on-light')
 - `width` ('hug' | 'fill', default: 'hug')
 - `showIconStart` (boolean, default: true) — Toggle the leading AppIcon. Aliased to `showIcon` for legacy code.
 - `showIconEnd` (boolean, default: true — caret hidden automatically for vertical)
-- `iconSize` ('sm' | 'md' | 'lg' | 'xl', optional) — Override the AppIcon size when a design calls for a different tile dimension.
+- `iconSize` ('xs' | 'sm' | 'md' | 'lg', optional) — Override the AppIcon size when a design calls for a different tile dimension.
 
 **Examples**:
 ```javascript
@@ -130,7 +143,7 @@ ProductLockup({ label: 'Workflow automation', width: 'fill' });
 - `width` ('hug' | 'fill', default: 'fill')
 - `showIconStart` (boolean, default: true)
 - `showIconEnd` (boolean, default: true)
-- `iconSize` ('auto' | 'sm' | 'md' | 'lg' | 'xl', default: 'auto')
+- `iconSize` ('auto' | 'xs' | 'sm' | 'md' | 'lg', default: 'auto')
 - `active` (boolean, default: false)
 - `showProgress` (boolean, default: true)
 - `progress` ('0' | '25' | '50' | '75' | '100', default: '50')
@@ -149,6 +162,55 @@ RouterMarqueeItem({
 ```
 
 **DO NOT**: Compose custom router tiles with ad-hoc markup. Use this component so Body/ProductLockup + progress tokens stay in sync with matt-atoms.
+
+---
+
+### 5. RouterCard
+**Path**: `packages/components/src/router-card/`  
+**Import**: `import { RouterCard } from '../../../../packages/components/src/router-card/index.js';`
+
+**When to use**: Media-forward tiles in router hero bands. Matches matt-atoms `.RouterCard` (node 4006-461133) with `resting`, `expanded`, and `mobile` axes.
+
+**Props**:
+- `label` (string, default: 'Creativity and design')
+- `app` (string, default: 'experience-cloud')
+- `product` (object, optional) — override `ProductLockup` props (context, width, etc.)
+- `title` (string, default: 'Card title')
+- `body` (string)
+- `state` ('resting' | 'expanded' | 'mobile', default: 'resting')
+- `mediaSrc` (string) or `mediaTemplate` (TemplateResult)
+- `mediaAspect` ('3:4' | '4:3' | '16:9' | '1:1', default: '3:4')
+- `mediaOverlay` (boolean | TemplateResult)
+- `bodyTemplate` (TemplateResult, optional)
+- `children` (TemplateResult, optional)
+- `showCaret` (boolean, default mirrors Figma: true for resting)
+- `actionTemplate` (TemplateResult, optional) + `actionLabel`
+- `href`, `ariaLabel`, `onClick`, `tag`
+
+**Examples**:
+```javascript
+RouterCard({
+  label: 'Creativity and design',
+  app: 'experience-cloud',
+  title: 'Adobe Express',
+  body: 'Create standout content with quick actions and guided templates.',
+  mediaSrc: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+});
+
+RouterCard({
+  state: 'expanded',
+  showCaret: false,
+  actionTemplate: IconButton({
+    ariaLabel: 'Open router',
+    icon: html`<sp-icon-more aria-hidden="true"></sp-icon-more>`,
+    size: 'md',
+    background: 'outlined',
+    context: 'on-dark',
+  }),
+});
+```
+
+**DO NOT**: Hand-roll hero cards with bespoke glassmorphism. Use RouterCard so ProductLockup, imagery, and typography tokens stay aligned.
 
 ---
 
