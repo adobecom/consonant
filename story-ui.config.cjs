@@ -79,9 +79,9 @@ module.exports = {
       doNot: 'Stack <img> + <span> yourself; always call ProductLockup so the CDN icon + tokens stay in sync.'
     },
     {
-      name: 'RouterCard',
-      displayName: 'RouterCard',
-      importPath: '../../../../packages/components/src/router-card/index.js',
+      name: 'ElasticCard',
+      displayName: 'ElasticCard',
+      importPath: '../../../../packages/components/src/elastic-card/index.js',
       props: [
         'label',
         'app',
@@ -103,14 +103,14 @@ module.exports = {
         'onClick',
         'tag'
       ],
-      description: 'Router hero card (matt-atoms node 4006-461133). Includes ProductLockup header, media slot, and glassmorphic surface states.',
+      description: 'Elastic hero card (matt-atoms node 4006-461133). Includes ProductLockup header, media slot, and glassmorphic surface states.',
       category: 'content',
       examples: [
-        "import { RouterCard } from '../../../../packages/components/src/router-card/index.js';",
-        "RouterCard({ label: 'Creativity and design', app: 'experience-cloud', title: 'Adobe Express', mediaSrc: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80' })",
-        "RouterCard({ state: 'expanded', showCaret: false, actionTemplate: IconButton({ ariaLabel: 'Open router', icon: customIcon, size: 'md', background: 'outlined', context: 'on-dark' }) })"
+        "import { ElasticCard } from '../../../../packages/components/src/elastic-card/index.js';",
+        "ElasticCard({ label: 'Creativity and design', app: 'experience-cloud', title: 'Adobe Express', mediaSrc: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80' })",
+        "ElasticCard({ state: 'expanded', showCaret: false, actionTemplate: IconButton({ ariaLabel: 'Open router', icon: customIcon, size: 'md', background: 'outlined', context: 'on-dark' }) })"
       ],
-      whenToUse: 'Hero router cards and media-forward router states (resting, expanded, mobile).',
+      whenToUse: 'Hero elastic cards and media-forward router states (resting, expanded, mobile).',
       doNot: 'Hand-roll hero tiles with custom glassmorphism or ad-hoc ProductLockup markup.'
     }
   ],

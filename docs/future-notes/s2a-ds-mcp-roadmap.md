@@ -177,7 +177,7 @@ Output: { aliases, count }
 Full schema — props, variants, CSS tokens used, Figma node ID.
 
 ```
-Input:  { name: string }  e.g. "RouterCard" or "router-card"
+Input:  { name: string }  e.g. "ElasticCard" or "elastic-card"
 
 Output: {
   name, cssClass, figmaNodeId, figmaFileKey,

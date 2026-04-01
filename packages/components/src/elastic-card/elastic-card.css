@@ -1,24 +1,24 @@
-/* RouterCard — implements .RouterCard (Figma node 4006:461133)
+/* ElasticCard — implements .ElasticCard (Figma node 4006:461133)
  *
  * Structure (three zones, all full-width; media is full-bleed with border-radius-md in resting):
- *   .c-router-card__header   → horizontal: ProductLockup + action icon
- *   .c-router-card__media    → full-bleed image (fills remaining height)
- *   .c-router-card__body     → padding all sides; vertical (resting) or horizontal (expanded/mobile)
+ *   .c-elastic-card__header   → horizontal: ProductLockup + action icon
+ *   .c-elastic-card__media    → full-bleed image (fills remaining height)
+ *   .c-elastic-card__body     → padding all sides; vertical (resting) or horizontal (expanded/mobile)
  *
  * Sizing tokens come from the responsive CSS pipeline:
- *   tokens.responsive.lg.css  → --s2a-router-card-width-resting: 294px / height-max: 576px / padding: 24px
- *   tokens.responsive.md.css  → --s2a-router-card-width-resting: 243px / height-max: 510px / padding: 16px
+ *   tokens.responsive.lg.css  → --s2a-elastic-card-width-resting: 294px / height-max: 576px / padding: 24px
+ *   tokens.responsive.md.css  → --s2a-elastic-card-width-resting: 243px / height-max: 510px / padding: 16px
  */
 
 /* ─── Root ─────────────────────────────────────────────────────────────────── */
-.c-router-card {
+.c-elastic-card {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 
   /* Dimensions from responsive token pipeline */
-  inline-size: var(--s2a-router-card-width-resting, 294px);
-  block-size: var(--s2a-router-card-height-max, 576px);
+  inline-size: var(--s2a-elastic-card-width-resting, 294px);
+  block-size: var(--s2a-elastic-card-height-max, 576px);
 
   /* Style */
   border-radius: var(--s2a-border-radius-md, 16px);
@@ -41,56 +41,56 @@
     color 200ms ease;
 }
 
-.c-router-card:is(a, button) {
+.c-elastic-card:is(a, button) {
   cursor: pointer;
 }
 
 /* ─── Hover state — resting card expands to inverse (same visuals as expanded state) ── */
-.c-router-card[data-state="resting"]:hover {
-  inline-size: var(--s2a-router-card-width-expanded, 496px);
+.c-elastic-card[data-state="resting"]:hover {
+  inline-size: var(--s2a-elastic-card-width-expanded, 496px);
   background-color: var(--s2a-color-background-inverse);
   color: var(--s2a-color-content-knockout);
 }
 
-.c-router-card[data-state="resting"]:hover .c-router-card__body {
+.c-elastic-card[data-state="resting"]:hover .c-elastic-card__body {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
 
-.c-router-card[data-state="resting"]:hover .c-router-card__body-content {
+.c-elastic-card[data-state="resting"]:hover .c-elastic-card__body-content {
   gap: var(--s2a-spacing-2xs, 4px);
 }
 
-.c-router-card[data-state="resting"]:hover .c-router-card__body-action {
+.c-elastic-card[data-state="resting"]:hover .c-elastic-card__body-action {
   display: flex;
 }
 
 /* ProductLockup sets its own color explicitly — override it on hover */
-.c-router-card[data-state="resting"]:hover .c-product-lockup {
+.c-elastic-card[data-state="resting"]:hover .c-product-lockup {
   color: var(--s2a-color-content-knockout, #ffffff);
 }
 
-.c-router-card:focus-visible {
+.c-elastic-card:focus-visible {
   outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
   outline-offset: 2px;
 }
 
 /* ─── Header zone ──────────────────────────────────────────────────────────── */
 /* Horizontal: ProductLockup on the left, action icon on the right.
-   Padding: responsive (24px desktop / 16px tablet-down) via --s2a-router-card-padding.
+   Padding: responsive (24px desktop / 16px tablet-down) via --s2a-elastic-card-padding.
    Gap: s2a/spacing/md = 16px (fixed across breakpoints). */
-.c-router-card__header {
+.c-elastic-card__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  padding: var(--s2a-router-card-padding, 24px);
+  padding: var(--s2a-elastic-card-padding, 24px);
   flex-shrink: 0;
 }
 
 /* ─── Action ───────────────────────────────────────────────────────────────── */
-.c-router-card__action {
+.c-elastic-card__action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -98,19 +98,19 @@
   color: inherit;
 }
 
-.c-router-card__action--caret {
+.c-elastic-card__action--caret {
   border-radius: 999px;
   padding: var(--s2a-spacing-2xs, 4px);
 }
 
-.c-router-card__action--caret svg {
+.c-elastic-card__action--caret svg {
   display: block;
   inline-size: 6px;
   block-size: 10px;
 }
 
 /* CTA puck — white 24×24 pill (blur/md = 32px), dark chevron inside */
-.c-router-card__action--button {
+.c-elastic-card__action--button {
   width: 24px;
   height: 24px;
   padding: 0;
@@ -123,7 +123,7 @@
   flex-shrink: 0;
 }
 
-.c-router-card__action--button svg {
+.c-elastic-card__action--button svg {
   display: block;
   inline-size: 10px;
   block-size: 10px;
@@ -133,14 +133,14 @@
 /* flex: 1 1 0 fills all remaining height.
    Block container (not flex) so <figure> is block-level and naturally full-width.
    height: 100% on inner .c-media fills the zone height. */
-.c-router-card__media {
+.c-elastic-card__media {
   flex: 1 1 0;
   min-block-size: 0;
   overflow: hidden;
 }
 
 /* Block-level figure fills zone naturally — no margin, no aspect-ratio constraint. */
-.c-router-card__media .c-media {
+.c-elastic-card__media .c-media {
   display: block;
   width: 100%;
   height: 100%;
@@ -152,17 +152,17 @@
 
 
 /* Mobile: 4px inline inset + border-radius-12 primitive (12px) */
-.c-router-card[data-state="mobile"] .c-router-card__media {
+.c-elastic-card[data-state="mobile"] .c-elastic-card__media {
   padding-inline: var(--s2a-spacing-2xs, 4px);
 }
 
-.c-router-card[data-state="mobile"] .c-router-card__media .c-media {
+.c-elastic-card[data-state="mobile"] .c-elastic-card__media .c-media {
   border-radius: var(--s2a-border-radius-12, 12px);
 }
 
 /* Mobile: match Figma image treatment — 169% height, -9% top offset (from design node 4274:30919) */
-.c-router-card[data-state="mobile"] .c-router-card__media .c-media img,
-.c-router-card[data-state="mobile"] .c-router-card__media .c-media picture > img {
+.c-elastic-card[data-state="mobile"] .c-elastic-card__media .c-media img,
+.c-elastic-card[data-state="mobile"] .c-elastic-card__media .c-media picture > img {
   position: absolute;
   width: 100%;
   height: 169.06%;
@@ -172,7 +172,7 @@
   object-position: center;
 }
 
-.c-router-card__media-placeholder {
+.c-elastic-card__media-placeholder {
   display: block;
   width: 100%;
   height: 100%;
@@ -184,18 +184,18 @@
 }
 
 /* ─── Body zone ────────────────────────────────────────────────────────────── */
-/* Padding all four sides from --s2a-router-card-padding (responsive).
+/* Padding all four sides from --s2a-elastic-card-padding (responsive).
    Default direction: vertical (resting state).
    Gap between card-title and card-body: 2px (s2a/spacing/3xs). */
-.c-router-card__body {
+.c-elastic-card__body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: var(--s2a-router-card-padding, 24px);
+  padding: var(--s2a-elastic-card-padding, 24px);
   flex-shrink: 0;
 }
 
-.c-router-card__body-content {
+.c-elastic-card__body-content {
   display: flex;
   flex-direction: column;
   gap: var(--s2a-spacing-3xs, 2px);
@@ -203,14 +203,14 @@
   min-inline-size: 0;
 }
 
-.c-router-card__body-action {
+.c-elastic-card__body-action {
   display: none;
   flex-shrink: 0;
   align-items: center;
 }
 
 /* ─── Body text ─────────────────────────────────────────────────────────────── */
-.c-router-card__title {
+.c-elastic-card__title {
   margin: 0;
   font-family: var(--s2a-font-family-eyebrow, "Adobe Clean");
   font-size: var(--s2a-typography-font-size-eyebrow, 16px);
@@ -220,7 +220,7 @@
   color: var(--s2a-color-content-default, #050505);
 }
 
-.c-router-card__body-text {
+.c-elastic-card__body-text {
   margin: 0;
   font-family: var(--s2a-font-family-body, "Adobe Clean");
   font-size: var(--s2a-typography-font-size-body-md, 16px);
@@ -236,81 +236,81 @@
 }
 
 /* Expanded / mobile: knockout colors (dark surface) */
-.c-router-card[data-state="expanded"] .c-router-card__title,
-.c-router-card[data-state="mobile"] .c-router-card__title {
+.c-elastic-card[data-state="expanded"] .c-elastic-card__title,
+.c-elastic-card[data-state="mobile"] .c-elastic-card__title {
   color: var(--s2a-color-content-knockout, #ffffff);
 }
 
-.c-router-card[data-state="expanded"] .c-router-card__body-text,
-.c-router-card[data-state="mobile"] .c-router-card__body-text {
+.c-elastic-card[data-state="expanded"] .c-elastic-card__body-text,
+.c-elastic-card[data-state="mobile"] .c-elastic-card__body-text {
   color: var(--s2a-color-transparent-white-64, rgba(255, 255, 255, 0.64));
 }
 
 /* Hover on resting: knockout colors (dark surface) */
-.c-router-card[data-state="resting"]:hover .c-router-card__title {
+.c-elastic-card[data-state="resting"]:hover .c-elastic-card__title {
   color: var(--s2a-color-content-knockout, #ffffff);
 }
 
-.c-router-card[data-state="resting"]:hover .c-router-card__body-text {
+.c-elastic-card[data-state="resting"]:hover .c-elastic-card__body-text {
   color: var(--s2a-color-transparent-white-64, rgba(255, 255, 255, 0.64));
 }
 
 /* ─── State: expanded ──────────────────────────────────────────────────────── */
 /* Wider card, dark background (s2a/color/background/inverse),
    bottom zone switches to horizontal layout (text-content left, CTA puck right). */
-.c-router-card[data-state="expanded"] {
-  inline-size: var(--s2a-router-card-width-expanded, 496px);
+.c-elastic-card[data-state="expanded"] {
+  inline-size: var(--s2a-elastic-card-width-expanded, 496px);
   background-color: var(--s2a-color-background-inverse);
   color: var(--s2a-color-content-knockout);
 }
 
 /* Body becomes horizontal: text-content on left, CTA puck on right */
-.c-router-card[data-state="expanded"] .c-router-card__body {
+.c-elastic-card[data-state="expanded"] .c-elastic-card__body {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
 
 /* Expanded text-content gap is 4px (s2a/spacing/2xs) vs 2px for resting */
-.c-router-card[data-state="expanded"] .c-router-card__body-content {
+.c-elastic-card[data-state="expanded"] .c-elastic-card__body-content {
   gap: var(--s2a-spacing-2xs, 4px);
 }
 
-.c-router-card[data-state="expanded"] .c-router-card__body-action {
+.c-elastic-card[data-state="expanded"] .c-elastic-card__body-action {
   display: flex;
 }
 
 /* Resting caret disappears on the expanded state */
-.c-router-card[data-state="expanded"] .c-router-card__action--caret {
+.c-elastic-card[data-state="expanded"] .c-elastic-card__action--caret {
   display: none;
 }
 
 /* ─── State: mobile ────────────────────────────────────────────────────────── */
 /* Fixed 360px width. Dark background. CTA puck is in the header.
    Body is horizontal layout (mirrors expanded pattern but CTA is in header). */
-.c-router-card[data-state="mobile"] {
+.c-elastic-card[data-state="mobile"] {
   inline-size: min(360px, 100%);
   block-size: 464px;
   background-color: var(--s2a-color-background-inverse);
   color: var(--s2a-color-content-knockout);
 }
 
-.c-router-card[data-state="mobile"] .c-router-card__body {
+.c-elastic-card[data-state="mobile"] .c-elastic-card__body {
   flex-direction: row;
   align-items: center;
 }
 
-.c-router-card[data-state="mobile"] .c-router-card__body-content {
+.c-elastic-card[data-state="mobile"] .c-elastic-card__body-content {
   gap: var(--s2a-spacing-2xs, 4px);
 }
 
 /* ─── Resting: scrim overlay hidden, reveals on interaction ────────────────── */
-.c-router-card[data-state="resting"] .c-media__overlay {
+.c-elastic-card[data-state="resting"] .c-media__overlay {
   opacity: 0;
   transition: opacity 200ms ease;
 }
 
-.c-router-card[data-state="resting"]:is(:hover, :focus-visible)
+.c-elastic-card[data-state="resting"]:is(:hover, :focus-visible)
   .c-media__overlay {
   opacity: 1;
 }

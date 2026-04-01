@@ -3,7 +3,7 @@
   "slug": "product-lockup",
   "cssClass": "c-product-lockup",
   "storybookId": "product-lockup",
-  "description": "Adobe product identity unit: app icon + product name label + optional caret. Used in RouterCard headers, RouterMarqueeItem, and anywhere a product name with icon is needed.",
+  "description": "Adobe product identity unit: app icon + product name label + optional caret. Used in ElasticCard headers, RouterMarqueeItem, and anywhere a product name with icon is needed.",
   "composedOf": ["AppIcon"],
   "variants": {
     "orientation": ["horizontal", "vertical"],

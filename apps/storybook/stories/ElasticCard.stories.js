@@ -1,10 +1,10 @@
 import { html } from "lit";
 import { fn } from "storybook/test";
 
-import { RouterCard } from "./RouterCard";
+import { ElasticCard } from "./ElasticCard";
 import { Media } from "../../../packages/components/src/media/media.js";
 import { IconButton } from "./IconButton";
-import routerCardCss from "../../../packages/components/src/router-card/router-card.css?raw";
+import elasticCardCss from "../../../packages/components/src/elastic-card/elastic-card.css?raw";
 
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-more.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-right.js";
@@ -18,7 +18,7 @@ const MEDIA_MOBILE =
 
 const actionIconOnDark = html`<sp-icon-more aria-hidden="true" style="width:16px;height:16px"></sp-icon-more>`;
 
-const routerCardWithAction = (state = "expanded") =>
+const elasticCardWithAction = (state = "expanded") =>
   IconButton({
     ariaLabel: "Open router context",
     icon: actionIconOnDark,
@@ -28,9 +28,9 @@ const routerCardWithAction = (state = "expanded") =>
   });
 
 export default {
-  title: "Components/RouterCard",
+  title: "Components/ElasticCard",
   tags: ["autodocs"],
-  render: (args) => RouterCard(args),
+  render: (args) => ElasticCard(args),
   parameters: {
     docs: {
       description: {
@@ -53,28 +53,28 @@ export default {
     <p>Map <code>State</code>, media ratio, and copy treatments with <code>data-state</code>, <code>data-media-aspect</code>, and the data attributes on <code>.c-media</code> + <code>.c-rich-content</code>. The card itself can be a <code>&lt;button&gt;</code>, <code>&lt;a&gt;</code>, or <code>&lt;article&gt;</code> depending on routing semantics.</p>
 
 \`\`\`html
-<article class="c-router-card" data-state="resting" data-media-aspect="3:4">
-  <header class="c-router-card__header">
+<article class="c-elastic-card" data-state="resting" data-media-aspect="3:4">
+  <header class="c-elastic-card__header">
     <span class="c-product-lockup" data-orientation="horizontal" data-style="label" data-context="on-light" data-width="fill">
       <span class="c-product-lockup__icon" aria-hidden="true">…</span>
       <span class="c-product-lockup__label">Creativity and design</span>
     </span>
-    <span class="c-router-card__action c-router-card__action--caret" aria-hidden="true">
+    <span class="c-elastic-card__action c-elastic-card__action--caret" aria-hidden="true">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4 3 7 6l-3 3" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </span>
   </header>
-  <div class="c-router-card__media">
+  <div class="c-elastic-card__media">
     <figure class="c-media" data-aspect="3:4" data-fit="cover" data-position="center">
       <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" alt="" loading="lazy" decoding="async" />
       <span class="c-media__overlay" aria-hidden="true"></span>
     </figure>
   </div>
-  <div class="c-router-card__body">
-    <div class="c-router-card__body-content">
-      <p class="c-router-card__title">Adobe Express</p>
-      <p class="c-router-card__body-text">Create standout content with quick actions and guided templates.</p>
+  <div class="c-elastic-card__body">
+    <div class="c-elastic-card__body-content">
+      <p class="c-elastic-card__title">Adobe Express</p>
+      <p class="c-elastic-card__body-text">Create standout content with quick actions and guided templates.</p>
     </div>
   </div>
 </article>
@@ -85,17 +85,17 @@ export default {
 <details class="doc-pattern doc-collapse">
   <summary>Alternative · Utility / BEM classes <span>Class-based</span></summary>
   <div class="doc-body">
-    <p>When data attributes aren’t available, alias the same variant axes with modifier classes.</p>
+    <p>When data attributes aren't available, alias the same variant axes with modifier classes.</p>
 
 \`\`\`html
-<a class="c-router-card c-router-card--expanded c-router-card--aspect-16x9" href="#">
+<a class="c-elastic-card c-elastic-card--expanded c-elastic-card--aspect-16x9" href="#">
   …
 </a>
 \`\`\`
 
 \`\`\`css
-.c-router-card--expanded { background-color: var(--s2a-color-background-knockout); color: var(--s2a-color-content-knockout); }
-.c-router-card--aspect-16x9 .c-media { aspect-ratio: 16 / 9; }
+.c-elastic-card--expanded { background-color: var(--s2a-color-background-knockout); color: var(--s2a-color-content-knockout); }
+.c-elastic-card--aspect-16x9 .c-media { aspect-ratio: 16 / 9; }
 \`\`\`
   </div>
 </details>
@@ -104,7 +104,7 @@ export default {
   <summary>Full CSS reference <span>Source of truth</span></summary>
   <div class="doc-body">
 \`\`\`css
-${routerCardCss}
+${elasticCardCss}
 \`\`\`
   </div>
 </details>
@@ -160,7 +160,7 @@ export const Expanded = {
 
 export const Mobile = {
   render: (args) =>
-    RouterCard({
+    ElasticCard({
       ...args,
       mediaTemplate: Media({
         src: MEDIA_MOBILE,
@@ -183,14 +183,14 @@ export const WithActionButton = {
   args: {
     state: "expanded",
     showCaret: false,
-    actionTemplate: routerCardWithAction("expanded"),
+    actionTemplate: elasticCardWithAction("expanded"),
     actionLabel: "Open router context",
   },
 };
 
 export const CustomMediaSlot = {
   render: (args) =>
-    RouterCard({
+    ElasticCard({
       ...args,
       state: "expanded",
       showCaret: false,

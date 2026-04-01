@@ -3,7 +3,7 @@
   "slug": "media",
   "cssClass": "c-media",
   "storybookId": "media",
-  "description": "Constrained image or video with aspect ratio, size, object-fit, and optional gradient overlay. Used inside RouterCard and MediaCard.",
+  "description": "Constrained image or video with aspect ratio, size, object-fit, and optional gradient overlay. Used inside ElasticCard and MediaCard.",
   "variants": {
     "aspectRatio": ["16:9", "4:3", "1:1", "3:2", "3:4", "21:9"],
     "size": ["xs", "sm", "md", "lg", "xl", "full"],

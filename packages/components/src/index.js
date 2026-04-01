@@ -14,4 +14,4 @@ export * from "./product-lockup/index.js";
 export * from "./media/index.js";
 export * from "./rich-content/index.js";
 export * from "./router-marquee-item/index.js";
-export * from "./router-card/index.js";
+export * from "./elastic-card/index.js";

@@ -1,8 +1,8 @@
 {
-  "name": "RouterCard",
-  "slug": "router-card",
-  "cssClass": "c-router-card",
-  "storybookId": "router-card",
+  "name": "ElasticCard",
+  "slug": "elastic-card",
+  "cssClass": "c-elastic-card",
+  "storybookId": "elastic-card",
   "description": "Navigation card with three states: resting (compact, on-light header), expanded (full-bleed media, on-dark overlay), and mobile (stacked layout with CTA puck). Composes ProductLockup and Media.",
   "composedOf": ["ProductLockup", "Media"],
   "variants": {

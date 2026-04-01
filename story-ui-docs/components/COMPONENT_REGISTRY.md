@@ -165,11 +165,11 @@ RouterMarqueeItem({
 
 ---
 
-### 5. RouterCard
-**Path**: `packages/components/src/router-card/`  
-**Import**: `import { RouterCard } from '../../../../packages/components/src/router-card/index.js';`
+### 5. ElasticCard
+**Path**: `packages/components/src/elastic-card/`
+**Import**: `import { ElasticCard } from '../../../../packages/components/src/elastic-card/index.js';`
 
-**When to use**: Media-forward tiles in router hero bands. Matches matt-atoms `.RouterCard` (node 4006-461133) with `resting`, `expanded`, and `mobile` axes.
+**When to use**: Media-forward tiles in router hero bands. Matches matt-atoms `.ElasticCard` (node 4006-461133) with `resting`, `expanded`, and `mobile` axes.
 
 **Props**:
 - `label` (string, default: 'Creativity and design')
@@ -189,7 +189,7 @@ RouterMarqueeItem({
 
 **Examples**:
 ```javascript
-RouterCard({
+ElasticCard({
   label: 'Creativity and design',
   app: 'experience-cloud',
   title: 'Adobe Express',
@@ -197,7 +197,7 @@ RouterCard({
   mediaSrc: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
 });
 
-RouterCard({
+ElasticCard({
   state: 'expanded',
   showCaret: false,
   actionTemplate: IconButton({
@@ -210,7 +210,7 @@ RouterCard({
 });
 ```
 
-**DO NOT**: Hand-roll hero cards with bespoke glassmorphism. Use RouterCard so ProductLockup, imagery, and typography tokens stay aligned.
+**DO NOT**: Hand-roll hero cards with bespoke glassmorphism. Use ElasticCard so ProductLockup, imagery, and typography tokens stay aligned.
 
 ---
 
