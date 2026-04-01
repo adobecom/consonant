@@ -1,6 +1,8 @@
 // Phosphor Icons (bold weight for button CaretDown, etc.)
 import "@phosphor-icons/web/bold";
 
+import { withFigmaOverlay, figmaOverlayGlobals } from "./figma-overlay.js";
+
 // Import design tokens CSS files in the correct order
 // 1. Primitives (non-color)
 import "../dist/packages/tokens/css/dev/tokens.primitives.css";
@@ -37,23 +39,18 @@ if (typeof document !== "undefined") {
     "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap";
   document.head.appendChild(interLink);
 
-  // Local Adobe Clean @font-face — only active if files exist in packages/fonts/
+  // Local Adobe Clean @font-face — gitignored, each dev places files in packages/fonts/
   const fontFace = document.createElement("style");
   fontFace.textContent = `
-    @font-face {
-      font-family: "adobe-clean";
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-      src: url("/fonts/AdobeClean-Regular.otf") format("opentype");
-    }
-    @font-face {
-      font-family: "adobe-clean";
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-      src: url("/fonts/AdobeClean-Bold.otf") format("opentype");
-    }
+    @font-face { font-family: "adobe-clean"; font-weight: 300; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Light.otf") format("opentype"); }
+    @font-face { font-family: "adobe-clean"; font-weight: 300; font-style: italic; font-display: swap; src: url("/fonts/AdobeClean-LightIt.otf") format("opentype"); }
+    @font-face { font-family: "adobe-clean"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Regular.otf") format("opentype"); }
+    @font-face { font-family: "adobe-clean"; font-weight: 400; font-style: italic; font-display: swap; src: url("/fonts/AdobeClean-It.otf") format("opentype"); }
+    @font-face { font-family: "adobe-clean"; font-weight: 500; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Medium.otf") format("opentype"); }
+    @font-face { font-family: "adobe-clean"; font-weight: 700; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Bold.otf") format("opentype"); }
+    @font-face { font-family: "adobe-clean"; font-weight: 700; font-style: italic; font-display: swap; src: url("/fonts/AdobeClean-BoldIt.otf") format("opentype"); }
+    @font-face { font-family: "adobe-clean"; font-weight: 800; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-ExtraBold.otf") format("opentype"); }
+    @font-face { font-family: "adobe-clean"; font-weight: 900; font-style: normal; font-display: swap; src: url("/fonts/AdobeClean-Black.otf") format("opentype"); }
   `;
   document.head.appendChild(fontFace);
 }
@@ -74,6 +71,7 @@ if (typeof window !== "undefined") {
 
 /** @type { import('@storybook/web-components-vite').Preview } */
 const preview = {
+  globalTypes: figmaOverlayGlobals,
   parameters: {
     controls: {
       matchers: {
@@ -93,6 +91,7 @@ const preview = {
     },
   },
   decorators: [
+    withFigmaOverlay,
     (story) => {
       // Set the theme attribute so semantic and component color tokens are available
       // Semantic tokens: --s2a-color-content-knockout, etc.

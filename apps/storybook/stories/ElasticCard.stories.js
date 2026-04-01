@@ -177,6 +177,12 @@ export const Mobile = {
     body: "Do it all with industry-leading apps for design, photo, video, and creative AI.",
     showCaret: false,
   },
+  parameters: {
+    figma: {
+      fileKey: "svi0B0G925V2XG0yX0DDaz",
+      nodeId: "4274:30919",
+    },
+  },
 };
 
 export const WithActionButton = {
