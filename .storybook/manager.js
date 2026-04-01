@@ -8,7 +8,7 @@
 
 import React, { useCallback } from "react";
 import { addons, types, useGlobals } from "storybook/manager-api";
-import { IconButton } from "storybook/components";
+import { IconButton } from "storybook/internal/components";
 
 const ADDON_ID = "figma-overlay";
 const TOOL_ID = `${ADDON_ID}/tool`;
