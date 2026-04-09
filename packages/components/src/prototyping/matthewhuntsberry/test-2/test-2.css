@@ -1,0 +1,16 @@
+/* Test2 — Prototype
+   Designer: matthewhuntsberry
+   Use semantic tokens only — never hardcode values.
+   Token reference: packages/tokens/css/ */
+
+.test-2 {
+  display: flex;
+  align-items: center;
+  padding: var(--s2a-spacing-md);
+  background: var(--s2a-color-background-default);
+  color: var(--s2a-color-content-default);
+}
+
+.test-2__label {
+  font: var(--s2a-typography-body-lg);
+}
