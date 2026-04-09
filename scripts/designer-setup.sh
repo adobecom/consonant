@@ -18,7 +18,7 @@ hi "======================================"
 echo ""
 
 REPO_URL="https://github.com/adobecom/consonant.git"
-INSTALL_DIR="$HOME/consonant"
+INSTALL_DIR="$HOME/Desktop/prototyping/consonant"
 
 # ── 1. Homebrew ───────────────────────────────────────────────────────────────
 if ! command -v brew &>/dev/null; then
@@ -98,6 +98,7 @@ fi
 ok "Git identity: $(git config --global user.name) <$(git config --global user.email)>"
 
 # ── 7. Clone or update repo ──────────────────────────────────────────────────
+mkdir -p "$HOME/Desktop/prototyping"
 if [[ -d "$INSTALL_DIR/.git" ]]; then
   ok "Repo already at $INSTALL_DIR — pulling latest"
   git -C "$INSTALL_DIR" checkout main --quiet
@@ -192,7 +193,7 @@ if ! command -v claude &>/dev/null || ! claude whoami &>/dev/null 2>&1; then
 fi
 
 echo "  To start working:"
-echo "    1. Open terminal and run:  claude $INSTALL_DIR"
+echo "    1. Open terminal and run:  claude ~/Desktop/prototyping/consonant"
 echo "    2. Type:  /start-feature \"describe what you're building\""
 echo ""
 echo "  Cursor is also installed — open it from Applications or Spotlight."
