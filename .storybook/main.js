@@ -9,11 +9,11 @@ const config = {
   ],
   "addons": [
     "@chromatic-com/storybook",
-    "@storybook/addon-docs",
     "@storybook/addon-a11y",
     "@storybook/addon-vitest"
     // Note: @tpitre/story-ui has a broken package (missing .js extension in imports)
     // Use Story UI via MCP/CLI instead: npm run story-ui:mcp
+    // Note: @storybook/addon-docs is built into core in Storybook 10 — do not add here
   ],
   "framework": {
     "name": "@storybook/web-components-vite",
