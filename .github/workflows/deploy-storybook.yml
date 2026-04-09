@@ -32,6 +32,9 @@ jobs:
       - name: Build Storybook
         run: npm run storybook:build
 
+      - name: Disable Jekyll (allow _-prefixed assets to be served)
+        run: touch storybook-static/.nojekyll
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
