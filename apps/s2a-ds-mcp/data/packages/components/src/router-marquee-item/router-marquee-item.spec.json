@@ -1,0 +1,53 @@
+{
+  "name": "RouterMarqueeItem",
+  "slug": "router-marquee-item",
+  "cssClass": "c-router-marquee-item",
+  "storybookId": "router-marquee-item",
+  "description": "Navigation strip item combining a ProductLockup with optional ProgressBar. Used in a horizontal marquee row. Supports vertical (stacked) and horizontal (side-by-side) orientations.",
+  "composedOf": ["ProductLockup", "ProgressBar"],
+  "variants": {
+    "orientation": ["vertical", "horizontal"],
+    "styleVariant": ["label", "eyebrow"],
+    "context": ["on-light", "on-dark"],
+    "width": ["fill", "hug"],
+    "active": ["true", "false"]
+  },
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"PDF and productivity\"" },
+    { "name": "app", "type": "string", "defaultValue": "\"acrobat-pro\"" },
+    { "name": "orientation", "type": "string", "defaultValue": "\"vertical\"", "enum": ["vertical", "horizontal"] },
+    { "name": "styleVariant", "type": "string", "defaultValue": "\"label\"", "enum": ["label", "eyebrow"] },
+    { "name": "context", "type": "string", "defaultValue": "\"on-light\"", "enum": ["on-light", "on-dark"] },
+    { "name": "width", "type": "string", "defaultValue": "\"fill\"", "enum": ["fill", "hug"] },
+    { "name": "showIconStart", "type": "boolean", "defaultValue": "true" },
+    { "name": "showIconEnd", "type": "boolean", "defaultValue": "true" },
+    { "name": "iconSize", "type": "string", "defaultValue": "\"auto\"" },
+    { "name": "active", "type": "boolean", "defaultValue": "false", "description": "Marks this item as the currently active selection" },
+    { "name": "showProgress", "type": "boolean", "defaultValue": "true" },
+    { "name": "progress", "type": "string | number", "defaultValue": "\"50\"", "description": "0–100" },
+    { "name": "body", "type": "TemplateResult", "description": "Custom body — replaces the default ProductLockup" },
+    { "name": "children", "type": "TemplateResult" },
+    { "name": "href", "type": "string", "description": "Makes root element an <a> tag" },
+    { "name": "ariaLabel", "type": "string" },
+    { "name": "onClick", "type": "function" }
+  ],
+  "tokenBindings": {
+    "color:on-light": "--s2a-color-content-default",
+    "color:on-dark": "--s2a-color-content-knockout",
+    "background-color:active:on-light": "--s2a-color-background-subtle",
+    "border-radius": "--s2a-border-radius-md",
+    "padding": "--s2a-spacing-sm"
+  },
+  "a11y": {
+    "wcag": ["1.4.3", "2.1.1", "2.4.4", "4.1.2"],
+    "keyboard": [
+      { "key": "Enter", "action": "Activates the item link/button" },
+      { "key": "Tab", "action": "Moves focus to next item" }
+    ],
+    "notes": [
+      "Root element resolves to <a>, <button>, or <div> based on href/onClick.",
+      "Active state should be reflected with aria-pressed (button) or aria-current='page' (link).",
+      "ProgressBar should include aria-label describing what progress represents."
+    ]
+  }
+}

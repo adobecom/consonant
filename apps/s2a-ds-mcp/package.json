@@ -1,0 +1,27 @@
+{
+  "name": "@adobecom/s2a-ds-mcp",
+  "version": "0.1.0",
+  "description": "S2A Design System MCP — queryable design tokens, components, and validation for AI agents and IDEs",
+  "type": "module",
+  "main": "dist/local.js",
+  "bin": {
+    "s2a-ds-mcp": "./dist/local.js"
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "dev": "tsx src/local.ts",
+    "build": "tsc -p tsconfig.local.json",
+    "type-check": "tsc --noEmit",
+    "copy-data": "node scripts/copy-data.mjs",
+    "build:vercel": "node scripts/copy-data.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.3.0"
+  }
+}

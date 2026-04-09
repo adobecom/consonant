@@ -35,6 +35,8 @@ jobs:
       - name: Build Storybook
         if: github.event.action != 'closed'
         run: npm run storybook:build
+        env:
+          STORYBOOK_BASE_PATH: /consonant/pr-preview/pr-${{ github.event.pull_request.number }}/
 
       - name: Deploy PR preview
         uses: rossjrw/pr-preview-action@v1

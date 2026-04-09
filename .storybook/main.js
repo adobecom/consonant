@@ -25,7 +25,7 @@ const config = {
   "viteFinal": async (config) => {
     // GitHub Pages: project site is served at /consonant/, so assets must use that base
     if (process.env.GITHUB_PAGES === "true") {
-      config.base = "/consonant/";
+      config.base = process.env.STORYBOOK_BASE_PATH || "/consonant/";
     }
     // Story UI: Exclude from dependency optimization to handle CSS imports correctly
     config.optimizeDeps = {

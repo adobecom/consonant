@@ -1,0 +1,36 @@
+---
+description: Extract a component spec.json from any Figma node — component set, single variant, or full frame/section layout. Invoke when user provides a Figma URL and asks to extract a spec, generate spec.json, or capture component API.
+globs:
+alwaysApply: false
+---
+
+# Spec From Figma
+
+Extract a `spec.json` from a Figma node. If the component already exists in the repo, produce a variant diff instead.
+
+## Extraction steps
+1. Call `get_design_context` with the node ID and file key
+2. Walk COMPONENT_SET properties → map to `variants`, `booleans`, `instanceSwaps`, `text`
+3. Extract token bindings from fills, strokes, spacing → `tokenBindings`
+4. Map to spec.json schema (see `packages/components/src/*/spec.json` for examples)
+
+## spec.json shape
+```json
+{
+  "name": "ComponentName",
+  "description": "What it does and when to use it",
+  "variants": { "State": ["Default","Hover"], "Size": ["Md","Sm"] },
+  "booleans": { "Show Icon Start": false },
+  "instanceSwaps": { "Icon": "icon-placeholder" },
+  "text": { "Label": "Label" },
+  "tokenBindings": {}
+}
+```
+
+## Diff mode
+If `packages/components/src/<component>/spec.json` already exists, output only what changed:
+- Added properties
+- Removed properties
+- Changed defaults or options
+
+Flag any unresolved variable IDs: `⚠ unresolved: VariableID:X:Y`

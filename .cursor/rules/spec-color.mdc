@@ -1,0 +1,154 @@
+---
+description: Generate a Color spec frame for a Figma component — maps fills and strokes to S2A design tokens. Invoke when user provides a Figma URL and asks for a color spec, token annotation, or fill annotation.
+globs:
+alwaysApply: false
+---
+
+# Spec Skill: Color
+
+Generate a color/token annotation spec frame for a given component node.
+
+## When to use
+User provides a Figma node URL and asks for:
+- "color spec", "token spec", "fill annotation"
+- "what tokens does this use", "annotate colors"
+
+## Steps
+
+### 1. Read the component
+Use `figma_get_component_details` with the node ID.
+Use `figma_get_token_values` or `figma_get_variables` to get the available S2A token set.
+
+For each node in the component, collect:
+- Fill colors (SOLID fills → hex + bound variable name if any)
+- Stroke colors
+- Opacity values
+- Bound variable names (these are the S2A tokens)
+
+### 2. Take a before screenshot
+
+### 3. Build the color spec frame via figma_execute
+
+```js
+const target = figma.currentPage.findOne(n => n.id === 'NODE_ID_HERE');
+if (!target) { figma.notify('Node not found'); return; }
+
+await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+
+const spec = figma.createFrame();
+spec.name = `${target.name} — Color Spec`;
+spec.x = target.x + target.width + 80;
+spec.y = target.y;
+spec.resize(600, 100);
+spec.fills = [{ type: 'SOLID', color: { r: 0.97, g: 0.97, b: 0.97 } }];
+spec.layoutMode = 'VERTICAL';
+spec.itemSpacing = 16;
+spec.paddingTop = 32;
+spec.paddingRight = 32;
+spec.paddingBottom = 32;
+spec.paddingLeft = 32;
+spec.primaryAxisSizingMode = 'AUTO';
+spec.counterAxisSizingMode = 'FIXED';
+
+function addLabel(parent, text, size = 12, bold = false, color = { r: 0.1, g: 0.1, b: 0.1 }) {
+  const t = figma.createText();
+  t.characters = text;
+  t.fontSize = size;
+  t.fontName = { family: 'Inter', style: bold ? 'Bold' : 'Regular' };
+  t.fills = [{ type: 'SOLID', color }];
+  parent.appendChild(t);
+  return t;
+}
+
+function addDivider(parent) {
+  const d = figma.createRectangle();
+  d.resize(536, 1);
+  d.fills = [{ type: 'SOLID', color: { r: 0.85, g: 0.85, b: 0.85 } }];
+  parent.appendChild(d);
+}
+
+function rgbToHex(r, g, b) {
+  return '#' + [r, g, b].map(v => Math.round(v * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+
+addLabel(spec, target.name, 20, true);
+addLabel(spec, 'Color Spec', 12, false, { r: 0.5, g: 0.5, b: 0.5 });
+addDivider(spec);
+addLabel(spec, 'COLOR TOKENS', 10, true, { r: 0.4, g: 0.4, b: 0.4 });
+
+// Walk all nodes and collect fills/strokes
+const colorEntries = [];
+
+function collectColors(node) {
+  const entry = { name: node.name, fills: [], strokes: [] };
+
+  if ('fills' in node && Array.isArray(node.fills)) {
+    for (const fill of node.fills) {
+      if (fill.type === 'SOLID') {
+        const hex = rgbToHex(fill.color.r, fill.color.g, fill.color.b);
+        const boundVar = node.boundVariables?.fills?.[0]?.id ?? null;
+        entry.fills.push({ hex, token: boundVar });
+      }
+    }
+  }
+
+  if ('strokes' in node && Array.isArray(node.strokes)) {
+    for (const stroke of node.strokes) {
+      if (stroke.type === 'SOLID') {
+        const hex = rgbToHex(stroke.color.r, stroke.color.g, stroke.color.b);
+        entry.strokes.push({ hex });
+      }
+    }
+  }
+
+  if (entry.fills.length || entry.strokes.length) colorEntries.push(entry);
+  if ('children' in node) node.children.forEach(collectColors);
+}
+
+collectColors(target);
+
+if (colorEntries.length === 0) {
+  addLabel(spec, 'No solid fills or strokes found.', 11, false, { r: 0.6, g: 0.6, b: 0.6 });
+} else {
+  for (const entry of colorEntries) {
+    const row = figma.createFrame();
+    row.layoutMode = 'HORIZONTAL';
+    row.itemSpacing = 12;
+    row.fills = [];
+    row.primaryAxisSizingMode = 'AUTO';
+    row.counterAxisSizingMode = 'AUTO';
+    row.counterAxisAlignItems = 'CENTER';
+
+    for (const fill of entry.fills) {
+      const swatch = figma.createRectangle();
+      swatch.resize(16, 16);
+      swatch.cornerRadius = 4;
+      swatch.fills = [{ type: 'SOLID', color: {
+        r: parseInt(fill.hex.slice(1,3),16)/255,
+        g: parseInt(fill.hex.slice(3,5),16)/255,
+        b: parseInt(fill.hex.slice(5,7),16)/255
+      }}];
+      row.appendChild(swatch);
+
+      const label = figma.createText();
+      label.characters = `${entry.name}: ${fill.hex}${fill.token ? ` (${fill.token})` : ''}`;
+      label.fontSize = 11;
+      label.fontName = { family: 'Inter', style: 'Regular' };
+      label.fills = [{ type: 'SOLID', color: { r: 0.1, g: 0.1, b: 0.1 } }];
+      row.appendChild(label);
+    }
+
+    spec.appendChild(row);
+  }
+}
+
+figma.notify(`✅ Color spec created for ${target.name}`);
+figma.viewport.scrollAndZoomIntoView([spec]);
+```
+
+### 4. Screenshot and validate
+Take an after screenshot. Check swatches and labels are visible.
+
+### 5. Report back
+Return screenshots + a list of all color tokens found.

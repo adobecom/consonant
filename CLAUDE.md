@@ -1,6 +1,69 @@
 # S2A Design System — Claude Code Rules
 
-These rules apply to every conversation in this project. They are non-negotiable and override any default behavior.
+This is the S2A design system for Adobe — a monorepo containing components, tokens, Storybook, and MCP servers. Claude Code is the primary tool for both **designers building features** and **engineers authoring components in Figma**.
+
+---
+
+## Designer quick start
+
+If you just ran the setup script and are new here, this is all you need:
+
+```
+/start-feature "describe what you're building"
+```
+
+That creates a branch, opens a draft PR, and gives you a live Storybook preview URL. Then just describe what you want to build in plain language and Claude will handle the rest.
+
+**Live Storybook:**
+- Main: `https://adobecom.github.io/consonant`
+- Your PR preview: `https://adobecom.github.io/consonant/pr-preview/pr-<number>/` (posted automatically as a PR comment once CI runs)
+
+**MCP servers available (configured by setup script):**
+- `figma-dev-mode-mcp-server` — reads your open Figma file directly
+- `figma-console` — executes code in Figma, takes screenshots, reads variables
+- `s2a-ds` — looks up design tokens, component specs, and validates CSS
+
+---
+
+## Repo structure
+
+```
+packages/
+  components/     ← component source (JS + CSS + spec.json)
+  tokens/         ← token pipeline (Figma → JSON → CSS)
+  fonts/          ← Adobe Clean (not committed — Adobe-internal only)
+apps/
+  storybook/      ← stories and docs
+  s2a-ds-mcp/     ← S2A design system MCP server
+context/
+  milo/           ← git submodule — adobecom/milo (reference only)
+docs/             ← workflows, guardrails, audits, how-tos
+.claude/commands/ ← slash commands (shared with team)
+.codex/skills/    ← Codex skills (shared with team)
+.cursor/rules/    ← Cursor rules (shared with team)
+```
+
+---
+
+## Commands and skills reference
+
+| Command | What it does | When to use |
+|---|---|---|
+| `/start-feature "name"` | Creates branch, draft PR, posts preview URL | Starting any new piece of work |
+| `/component-authoring` | Full Figma component build reference | Authoring a new component set in Figma |
+| `/component-docs` | Generates in-Figma doc sheet (Anatomy, Properties, a11y, Usage) | Documenting a component in Figma |
+| `/spec` | Generates full design spec suite in Figma | Annotating a component for engineering handoff |
+| `/spec-from-figma` | Extracts `spec.json` from a Figma node | Capturing a component's API from Figma |
+| `/s2a-component-audit` | Audits a Figma component page for normalization issues | QA before publishing a component |
+
+---
+
+## Token system
+
+- Semantic tokens are in `packages/tokens/json/` and compiled to `dist/packages/tokens/css/dev/`
+- **Never use primitive tokens in components** — always alias through semantic tokens
+- Component-specific tokens live in `VariableCollectionId:6:178` (S2A / Responsive / Container / Grid), with per-breakpoint mode aliases: `xl`, `lg`, `md`, `sm`
+- Raw token IDs are in `packages/tokens/json/raw.json`
 
 ---
 
@@ -108,15 +171,6 @@ const [vBgDefault, vContentTitle, vBorderSubtle] = await Promise.all([
 
 ---
 
-## Token system
-
-- Semantic tokens are in `packages/tokens/json/` and compiled to `dist/packages/tokens/css/dev/`
-- Never use primitive tokens directly in components — always alias through semantic tokens
-- Component-specific tokens live in `VariableCollectionId:6:178` (S2A / Responsive / Container / Grid), with per-breakpoint mode aliases: `xl`, `lg`, `md`, `sm`
-- Raw token IDs are in `packages/tokens/json/raw.json`
-
----
-
 ## In-Figma documentation voice
 
 Write like an educator explaining to someone new. Say what something does and why it matters, then give the technical detail.
@@ -133,16 +187,3 @@ Write like an educator explaining to someone new. Say what something does and wh
 - Never call `figma_take_screenshot` or `figma_capture_screenshot` on a PAGE node — always target a specific FRAME
 - Use `scale: 1` or `scale: 2` on small frames only
 - If context is large (many prior figma_execute turns), prefer `figma_get_status` (text) over screenshots
-
----
-
-## Skill and command references
-
-| What | Where |
-|---|---|
-| Component authoring (full reference) | `/component-authoring` (`.claude/commands/component-authoring.md`) |
-| Component docs generation | `/component-docs` (`.claude/commands/component-docs.md`) |
-| Spec generation | `/spec` (`.claude/commands/spec.md`) |
-| figma_execute safe patterns | `.codex/skills/figma-console-safe-execution.skill.md` |
-| Figma plugin gotchas | `docs/workflows/figma-plugin-patterns.md` |
-| End-to-end workflow | `docs/workflows/ai-assisted-design-system-workflow.md` |

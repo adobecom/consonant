@@ -1,0 +1,132 @@
+---
+description: Generate a Structure spec frame for a Figma component — anatomy, spacing, sizing, and layer hierarchy. Invoke when user provides a Figma URL and asks for a structure spec, anatomy spec, or spacing annotation.
+globs:
+alwaysApply: false
+---
+
+# Spec Skill: Structure
+
+Generate a structure/anatomy spec frame directly in Figma for a given component node.
+
+## When to use
+User provides a Figma node URL (contains `node-id=`) and asks for:
+- "structure spec", "anatomy spec", "spacing spec", "layout spec"
+- "annotate this component", "spec this out"
+
+## Steps
+
+### 1. Read the component
+Use `figma_get_component_details` with the node ID extracted from the URL.
+If that fails, use `figma_get_file_data` to find the node.
+
+Extract:
+- Component name
+- Layer hierarchy (children, their types and names)
+- Width / height
+- Padding values (paddingTop, paddingRight, paddingBottom, paddingLeft)
+- Gap (itemSpacing)
+- Layout mode (HORIZONTAL / VERTICAL / NONE)
+- Fill/stroke colors (reference token names if available)
+
+### 2. Take a before screenshot
+Use `figma_take_screenshot` to capture the current state.
+
+### 3. Build the spec frame via figma_execute
+
+Run this pattern in `figma_execute`:
+
+```js
+// Find the target node
+const target = figma.currentPage.findOne(n => n.id === 'NODE_ID_HERE');
+if (!target) { figma.notify('Node not found'); return; }
+
+// Create spec frame next to the component
+const spec = figma.createFrame();
+spec.name = `${target.name} — Structure Spec`;
+spec.x = target.x + target.width + 80;
+spec.y = target.y;
+spec.resize(600, 800);
+spec.fills = [{ type: 'SOLID', color: { r: 0.97, g: 0.97, b: 0.97 } }];
+spec.layoutMode = 'VERTICAL';
+spec.itemSpacing = 24;
+spec.paddingTop = 32;
+spec.paddingRight = 32;
+spec.paddingBottom = 32;
+spec.paddingLeft = 32;
+spec.primaryAxisSizingMode = 'AUTO';
+spec.counterAxisSizingMode = 'FIXED';
+
+// Helper: add a label
+function addLabel(parent, text, size = 12, bold = false, color = { r: 0.1, g: 0.1, b: 0.1 }) {
+  const t = figma.createText();
+  t.characters = text;
+  t.fontSize = size;
+  t.fontName = { family: 'Inter', style: bold ? 'Bold' : 'Regular' };
+  t.fills = [{ type: 'SOLID', color }];
+  parent.appendChild(t);
+  return t;
+}
+
+// Helper: add a divider
+function addDivider(parent) {
+  const d = figma.createRectangle();
+  d.resize(536, 1);
+  d.fills = [{ type: 'SOLID', color: { r: 0.85, g: 0.85, b: 0.85 } }];
+  parent.appendChild(d);
+}
+
+// Title
+await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+
+addLabel(spec, target.name, 20, true);
+addLabel(spec, 'Structure Spec', 12, false, { r: 0.5, g: 0.5, b: 0.5 });
+addDivider(spec);
+
+// Dimensions
+addLabel(spec, 'DIMENSIONS', 10, true, { r: 0.4, g: 0.4, b: 0.4 });
+addLabel(spec, `Width: ${Math.round(target.width)}px  ·  Height: ${Math.round(target.height)}px`);
+
+// Layout
+if (target.layoutMode && target.layoutMode !== 'NONE') {
+  addDivider(spec);
+  addLabel(spec, 'LAYOUT', 10, true, { r: 0.4, g: 0.4, b: 0.4 });
+  addLabel(spec, `Direction: ${target.layoutMode}`);
+  addLabel(spec, `Gap: ${target.itemSpacing ?? 0}px`);
+  addLabel(spec, `Padding: ${target.paddingTop ?? 0}px ${target.paddingRight ?? 0}px ${target.paddingBottom ?? 0}px ${target.paddingLeft ?? 0}px`);
+}
+
+// Layer anatomy
+addDivider(spec);
+addLabel(spec, 'ANATOMY', 10, true, { r: 0.4, g: 0.4, b: 0.4 });
+
+function walkLayers(node, depth = 0) {
+  const indent = '  '.repeat(depth);
+  const typeTag = `[${node.type}]`;
+  addLabel(spec, `${indent}${typeTag} ${node.name}`, 11);
+  if ('children' in node && depth < 3) {
+    for (const child of node.children) walkLayers(child, depth + 1);
+  }
+}
+walkLayers(target);
+
+figma.notify(`✅ Structure spec created for ${target.name}`);
+figma.viewport.scrollAndZoomIntoView([spec]);
+```
+
+### 4. Take an after screenshot
+Use `figma_take_screenshot` to capture the spec frame.
+
+### 5. Validate
+Check that:
+- Spec frame appears next to the component
+- Dimensions, layout, and anatomy sections are populated
+- Text is readable
+
+If anything looks wrong, use `figma_execute` to fix and re-screenshot (max 2 iterations).
+
+### 6. Report back
+Return:
+- Before/after screenshots
+- Summary of what was annotated (dimensions, layout values, layer count)
+- Any missing data (e.g. node not using auto-layout)

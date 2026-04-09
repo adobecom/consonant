@@ -1,0 +1,42 @@
+---
+description: Author S2A component sets in Figma via figma-console MCP — enforces property panel order, layer naming conventions, variant structure, and token binding standards. Invoke when user asks to build, create, or author a Figma component.
+globs:
+alwaysApply: false
+---
+
+# S2A Component Authoring
+
+Full reference for building S2A component sets in Figma via `figma_execute`.
+
+## Property panel order (non-negotiable)
+1. Variants — State, Size, Style, Context, Orientation, Breakpoint
+2. Booleans — show/hide toggles only
+3. Instance Swaps — icon, media, lockup
+4. Text — every designer-editable text node
+5. Nested props — exposed sub-component properties (last)
+
+## Property naming
+- Property names: Title Case (`State`, `Show Icon Start`, `Label`)
+- Variant values: lowercase-kebab (`default`, `hover`, `on-light`, `sm`, `md`)
+
+## Layer naming
+```
+ComponentName                    ← COMPONENT_SET
+  └─ State=Default, Size=Md      ← COMPONENT
+       ├─ .root                  ← outermost frame
+       │    ├─ .icon-start
+       │    ├─ .label
+       │    └─ .icon-end
+       └─ [focus ring]           ← visual-only layers
+```
+
+## figma_execute mandatory patterns
+1. Search for existing library components before building from scratch
+2. Get text style IDs via `figma.getLocalTextStylesAsync()` before any text node
+3. Load fonts at top of every script touching text nodes
+4. Prefetch all variables with `Promise.all` — never `await` inside loops
+5. Use `figma.variables.getVariableByIdAsync` (async)
+6. Use `await figma.setCurrentPageAsync(page)` — not `figma.currentPage = page`
+7. Set `layoutSizingHorizontal = 'FILL'` only after `appendChild`
+8. Call `createInstance()` on a COMPONENT variant — never on a COMPONENT_SET
+9. Place all components inside a named Section — never floating on canvas

@@ -1,0 +1,151 @@
+{
+  "s2a": {
+    "_design-guides": {
+      "visibility": {
+        "all": {
+          "$type": "boolean",
+          "$value": true,
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "spacers": {
+          "$type": "boolean",
+          "$value": true,
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "text": {
+          "$type": "boolean",
+          "$value": false,
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "instance-swaps": {
+          "$type": "boolean",
+          "$value": false,
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "layout": {
+          "$type": "boolean",
+          "$value": false,
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "radii": {
+          "$type": "boolean",
+          "$value": false,
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "spacer-background": {
+        "$type": "color",
+        "$value": "{s2a._system.design-guides.background.primary}",
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "EFFECT_COLOR"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "spacer-stroke": {
+        "$type": "color",
+        "$value": "#FF0AE380",
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "STROKE_COLOR"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "spacer-content": {
+        "$type": "color",
+        "$value": "#FF0AE3",
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "using-opacity": {
+        "$type": "number",
+        "$value": 100,
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "TEXT_CONTENT",
+              "OPACITY"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      }
+    }
+  }
+}
