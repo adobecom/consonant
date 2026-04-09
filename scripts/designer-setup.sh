@@ -179,6 +179,52 @@ EOF
 fi
 ok "MCP servers configured"
 
+# ── 10a. Write .claude/settings.local.json ───────────────────────────────────
+# This file is gitignored but required for Claude Code to enable MCP servers
+# and load project skills (.claude/commands/) in a fresh session.
+CLAUDE_LOCAL_SETTINGS="$INSTALL_DIR/.claude/settings.local.json"
+if [[ ! -f "$CLAUDE_LOCAL_SETTINGS" ]]; then
+  cat > "$CLAUDE_LOCAL_SETTINGS" <<'EOF'
+{
+  "enableAllProjectMcpServers": true,
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(gh:*)",
+      "Bash(npm:*)",
+      "Bash(node:*)",
+      "Bash(npx:*)",
+      "Bash(curl:*)",
+      "Bash(open:*)",
+      "Bash(lsof:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(ls:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:adobecom.github.io)",
+      "WebFetch(domain:localhost)",
+      "mcp__figma-console__figma_execute",
+      "mcp__figma-console__figma_get_status",
+      "mcp__figma-console__figma_take_screenshot",
+      "mcp__figma-console__figma_search_components",
+      "mcp__figma-console__figma_get_styles",
+      "mcp__figma__get_design_context",
+      "mcp__s2a-ds__get_component",
+      "mcp__s2a-ds__list_components",
+      "mcp__s2a-ds__search_tokens",
+      "mcp__s2a-ds__resolve_token",
+      "mcp__s2a-ds__validate_css",
+      "mcp__s2a-ds__get_token_collection"
+    ]
+  }
+}
+EOF
+  ok "Claude Code session settings written"
+else
+  ok "Claude Code session settings already exist — skipping"
+fi
+
 # ── 11. GitHub auth ──────────────────────────────────────────────────────────
 echo ""
 if gh auth status &>/dev/null; then
