@@ -114,6 +114,18 @@ cd "$INSTALL_DIR"
 npm install --silent
 ok "Dependencies installed"
 
+# ── 8a. Copy Figma Desktop Bridge plugin to stable location ──────────────────
+FIGMA_PLUGIN_SRC="$INSTALL_DIR/node_modules/figma-console-mcp/plugin"
+FIGMA_PLUGIN_DEST="$HOME/.figma-console-mcp/plugin"
+
+if [[ -d "$FIGMA_PLUGIN_SRC" ]]; then
+  mkdir -p "$HOME/.figma-console-mcp"
+  cp -r "$FIGMA_PLUGIN_SRC" "$HOME/.figma-console-mcp/"
+  ok "Figma Desktop Bridge plugin ready at ~/.figma-console-mcp/plugin/"
+else
+  warn "figma-console-mcp plugin not found in node_modules — Figma bridge will need manual setup"
+fi
+
 # ── 9. Build s2a-ds MCP server if present ───────────────────────────────────
 S2A_MCP_DIR="$INSTALL_DIR/apps/s2a-ds-mcp"
 S2A_MCP_DIST="$S2A_MCP_DIR/dist/local.js"
@@ -192,6 +204,12 @@ if ! command -v claude &>/dev/null || ! claude whoami &>/dev/null 2>&1; then
   echo ""
 fi
 
+echo "  One-time Figma setup (do this now):"
+echo "    1. Open Figma Desktop"
+echo "    2. Go to Plugins → Development → Import plugin from manifest..."
+echo "    3. Select:  ~/.figma-console-mcp/plugin/manifest.json"
+echo "    4. The plugin will appear as 'Figma Desktop Bridge' — click Run when you need it"
+echo ""
 echo "  To start working:"
 echo "    1. Open terminal and run:  claude ~/Desktop/prototyping/consonant"
 echo "    2. Type:  /start-feature \"describe what you're building\""
