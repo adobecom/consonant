@@ -55,7 +55,13 @@ apps/figma-console-mcp/
 apps/s2a-ds-mcp/
 
 # AI tool workflow configs — machine/user-specific, not for contributors
-.claude/
+# .claude/commands/ is tracked so slash commands are shared with the team
+.claude/settings.json
+.claude/settings.local.json
+.claude/memory/
+.codex/
+.cursor/
+.playwright-mcp/
 .codex/
 .cursor/
 .playwright-mcp/
