@@ -1,0 +1,37 @@
+---
+description: Guardrails for reliable Figma Console MCP execution
+alwaysApply: true
+---
+
+# Figma Console Execution Guardrails
+
+Use these rules whenever running `figma_console` tools.
+
+- Use `figma_search_components` at the start of each session; never trust stale node ids.
+- Keep each `figma_execute` focused (one logical block at a time, e.g. one table or one section).
+- Use practical timeouts:
+  - small edits: `2000-3000ms`
+  - multi-node creation / text + variables: `5000-10000ms`
+  - avoid `1000ms` unless truly trivial
+- For auto-layout sizing, set `layoutSizingHorizontal = "FILL"` only after the node is appended to an auto-layout parent.
+- Load fonts before writing text or setting text styles.
+- On failure, do not re-run identical code repeatedly. Patch once, then retry.
+- Retry limit: at most 1 retry per unique error after a code change.
+- Never paste full terminal transcripts or image payloads back into chat.
+- If reporting an error, include only:
+  - tool name
+  - error message
+  - a minimal relevant code snippet (about 10-30 lines)
+- Screenshot workflow (Codex / long sessions):
+  1. **Do all** `figma_execute` work first in one thread **without** `figma_capture_screenshot`.
+  2. **Start a new chat** for captures only; pass sheet **FRAME** node ids (never PAGE), `scale: 1`, **one screenshot per turn** max.
+  3. If context errors persist, export PNGs from Figma instead of MCP (`docs/case-study/screenshot-guide.md`).
+  4. Summarize in text only; never paste image bytes or base64 into replies.
+
+## Safe ordering pattern
+
+1. create parent auto-layout frame
+2. append child
+3. apply `FILL` sizing
+4. apply style / variable bindings
+5. run screenshot validation

@@ -1,0 +1,32 @@
+---
+description: Audit S2A Figma component pages for normalization — property order, casing, layer naming, documentation completeness, and unused properties. Invoke when user asks to audit, review, or check a Figma component page.
+globs:
+alwaysApply: false
+---
+
+# S2A Component Audit
+
+Audit an S2A Figma component page for normalization issues. Flag, do not fix.
+
+## What to audit
+
+**Property panel order** — must be: Variants → Booleans → Instance Swaps → Text → Nested props
+
+**Variant value casing** — all values must be lowercase-kebab: `default`, `hover`, `on-light`, `sm`, `md`
+
+**Layer naming** — no unnamed layers (`Frame 1`, `Group 47`, `Rectangle 3`). Root frame must be `.root`. Optional elements dot-prefixed kebab-case.
+
+**Token binding** — no hex values, no raw px in fills/strokes. Every fill must reference an S2A variable.
+
+**Documentation completeness** — check if a doc sheet exists. Flag if missing.
+
+**Unused properties** — flag any boolean or instance swap that is never toggled across variants.
+
+## Output format
+Return a markdown table per component set:
+| Issue | Property/Layer | Current | Expected | Severity |
+```
+High   = blocks engineering handoff
+Medium = naming/casing inconsistency
+Low    = documentation gap
+```

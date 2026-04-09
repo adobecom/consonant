@@ -1,0 +1,109 @@
+---
+description: Generate a full S2A design spec suite for a Figma component using the figma-console MCP. Invoke when user pastes a Figma URL and asks for a spec, "spec this", "generate spec", or "annotate this component".
+globs:
+alwaysApply: false
+---
+
+# Spec Generator — figma-console MCP
+
+When the user provides a Figma URL, use the figma-console MCP tools to generate spec frames directly in their Figma file. Do NOT produce text templates — call the MCP tools.
+
+## Prerequisites check
+First call `figma_get_status`. If not connected, tell the user:
+> Open Figma Desktop → Plugins → Development → figma-desktop-bridge → Run
+
+## Step 1 — Find the node
+
+Extract node ID from URL: `node-id=3271-2266` → `3271:2266`
+
+Call `figma_execute`:
+```js
+await figma.loadAllPagesAsync();
+const targetPage = figma.root.children.find(p => p.findOne(n => n.id === 'NODE_ID'));
+await figma.setCurrentPageAsync(targetPage);
+const target = figma.currentPage.findOne(n => n.id === 'NODE_ID');
+return { name: target.name, type: target.type, childCount: 'children' in target ? target.children.length : 0, x: target.x, y: target.y, width: target.width, height: target.height };
+```
+
+## Step 2 — Structure Spec
+
+Call `figma_execute` with this code (replace NODE_ID):
+```js
+await figma.loadAllPagesAsync();
+const targetPage = figma.root.children.find(p => p.findOne(n => n.id === 'NODE_ID'));
+await figma.setCurrentPageAsync(targetPage);
+const target = figma.currentPage.findOne(n => n.id === 'NODE_ID');
+await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+const existing = figma.currentPage.findOne(n => n.name === `${target.name} — Structure Spec`);
+if (existing) existing.remove();
+const spec = figma.createFrame();
+spec.name = `${target.name} — Structure Spec`;
+spec.x = target.x + target.width + 80; spec.y = target.y;
+spec.resize(640, 100);
+spec.fills = [{ type: 'SOLID', color: { r: 0.97, g: 0.97, b: 0.97 } }];
+spec.layoutMode = 'VERTICAL'; spec.itemSpacing = 20;
+spec.paddingTop = 32; spec.paddingRight = 32; spec.paddingBottom = 32; spec.paddingLeft = 32;
+spec.primaryAxisSizingMode = 'AUTO'; spec.counterAxisSizingMode = 'FIXED';
+function addLabel(parent, text, size=12, bold=false, color={r:0.1,g:0.1,b:0.1}) {
+  const t = figma.createText(); t.characters = String(text); t.fontSize = size;
+  t.fontName = { family: 'Inter', style: bold ? 'Bold' : 'Regular' };
+  t.fills = [{ type: 'SOLID', color }]; parent.appendChild(t); return t;
+}
+function addDivider(parent) {
+  const d = figma.createRectangle(); d.resize(576, 1);
+  d.fills = [{ type: 'SOLID', color: { r: 0.85, g: 0.85, b: 0.85 } }]; parent.appendChild(d);
+}
+addLabel(spec, target.name, 22, true);
+addLabel(spec, 'Structure Spec · S2A Design System', 12, false, { r: 0.5, g: 0.5, b: 0.5 });
+addLabel(spec, `Type: ${target.type}  ·  Children: ${'children' in target ? target.children.length : 0}`, 11, false, { r: 0.5, g: 0.5, b: 0.5 });
+addDivider(spec);
+addLabel(spec, 'DIMENSIONS', 10, true, { r: 0.35, g: 0.35, b: 0.35 });
+addLabel(spec, `Width: ${Math.round(target.width)}px  ·  Height: ${Math.round(target.height)}px`);
+if ('children' in target && target.type === 'COMPONENT_SET') {
+  addDivider(spec);
+  addLabel(spec, 'VARIANTS', 10, true, { r: 0.35, g: 0.35, b: 0.35 });
+  for (const v of target.children) {
+    const props = v.variantProperties ? Object.entries(v.variantProperties).map(([k,val])=>`${k}: ${val}`).join(' · ') : '';
+    addLabel(spec, `• ${v.name}${props ? '  —  '+props : ''}`, 11);
+  }
+}
+const first = 'children' in target ? target.children[0] : target;
+addDivider(spec);
+addLabel(spec, `ANATOMY  (${first.name})`, 10, true, { r: 0.35, g: 0.35, b: 0.35 });
+if ('layoutMode' in first && first.layoutMode !== 'NONE') {
+  addLabel(spec, `Layout: ${first.layoutMode}  ·  Gap: ${first.itemSpacing ?? 0}px`);
+  addLabel(spec, `Padding: T${first.paddingTop??0} R${first.paddingRight??0} B${first.paddingBottom??0} L${first.paddingLeft??0}`);
+}
+addLabel(spec, `Size: ${Math.round(first.width)} × ${Math.round(first.height)}px`);
+function walkLayers(node, depth=0) {
+  if (depth > 3) return;
+  addLabel(spec, `${'  '.repeat(depth)}[${node.type}] ${node.name}`, 11);
+  if ('children' in node) node.children.forEach(c => walkLayers(c, depth+1));
+}
+walkLayers(first);
+figma.viewport.scrollAndZoomIntoView([spec, target]);
+figma.notify('✅ Structure spec created!');
+return { specId: spec.id };
+```
+
+After running, call `figma_take_screenshot` with the returned specId.
+
+## Step 3 — Color Spec
+
+Call `figma_execute` to collect all fills/gradients and resolve token names with `figma.variables.getVariableByIdAsync`. Place below structure spec. Screenshot result.
+
+## Step 4 — API Spec
+
+Call `figma_execute` to read `target.componentPropertyDefinitions` for real prop names, types, defaults, and variant options. Place below color spec. Screenshot result.
+
+## Step 5 — Spec Index
+
+Call `figma_execute` to create a blue index frame above all three specs with component name, date, spec list, and key findings. Screenshot result.
+
+## Critical rules
+- ALWAYS use `figma.setCurrentPageAsync` — never `figma.currentPage =`
+- ALWAYS use `figma.variables.getVariableByIdAsync` — never the sync version
+- NEVER modify the original component node
+- All spec frames are idempotent — remove existing before recreating
+- Show screenshots inline after each step so user can see progress

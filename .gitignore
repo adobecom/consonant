@@ -49,16 +49,12 @@ docs/case-study/*
 tmp/
 JIRA-tickets-outline.md
 screenshots/
+charts/
 
-
-# AI tool workflow configs — machine/user-specific, not for contributors
-# .claude/commands/ is tracked so slash commands are shared with the team
+# AI tool workflow configs — skills and commands are tracked; machine-specific files are not
 .claude/settings.json
 .claude/settings.local.json
 .claude/memory/
-.codex/
-.cursor/
-.playwright-mcp/
-.codex/
-.cursor/
+.codex/rules/
+.cursor/settings.json
 .playwright-mcp/

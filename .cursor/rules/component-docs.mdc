@@ -1,0 +1,31 @@
+---
+description: Generate a full S2A component documentation suite in Figma — Anatomy, Properties, Layout & Spacing, Accessibility, and Usage. Invoke when user asks to document a component, generate docs, or create a spec sheet in Figma.
+globs:
+alwaysApply: false
+---
+
+# Component Docs Generator
+
+Build the S2A in-Figma tech spec kit using `.sheet frame` surfaces, `.step` bullets, live component instances, and S2A design tokens throughout.
+
+## Doc sheet sections (in order)
+1. **Anatomy** — labeled callout canvas with black 20px badge circles, blue leader lines
+2. **Properties** — table of all component properties with type, default, description
+3. **Layout & Spacing** — token-annotated spacing diagram
+4. **Accessibility** — WCAG 2.2 AA criteria with SC codes and plain-language summaries
+5. **Usage** — do/don't examples with real component instances
+
+## Surface tokens
+- Sheet background: `s2a/color/background/subtle` (`VariableID:6:47`)
+- Cards/rows: `s2a/color/background/default` (`VariableID:6:49`)
+- Dividers: `s2a/color/border/subtle` (`VariableID:6:22`)
+
+## Voice and tone
+Write like an educator explaining to someone new. Say what something does and why it matters before the technical detail. No Figma API jargon (`INSTANCE_SWAP`, `primaryAxisSizingMode`). Keep token names and CSS property names exact.
+
+## Anatomy callout style
+- Black 20px badge circles (not blue)
+- No stroke on cards — fills only
+- State labels as text above cards ("Default state")
+- Legend as vertical list: badge + stacked title/description
+- Blue leader lines at 0.7 opacity, 1.5px weight
