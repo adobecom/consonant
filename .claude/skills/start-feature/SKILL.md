@@ -124,7 +124,22 @@ git commit -m "feat: add <feature-slug> prototype scaffold"
 git push
 ```
 
-### 5. Start Storybook and open the browser
+### 5. Open a draft pull request
+
+```bash
+gh pr create --title "feat: <feature-slug> prototype" --draft --body "## Prototype: <feature-name>
+
+Scaffold created via \`/start-feature\`.
+
+**Story:** \`Prototyping/<GH_USER>/<FeatureName>\`
+**Preview:** Will be posted automatically once CI runs.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)"
+```
+
+Store the returned PR URL and extract the PR number for the summary.
+
+### 6. Start Storybook and open the browser
 
 Check if Storybook is already running on port 6006. If not, start it:
 
@@ -146,7 +161,7 @@ open "http://localhost:6006/?path=/story/prototyping-<gh_user>-<feature-slug>--d
 
 (Story ID format: title segments lowercased and hyphenated, `--` before the story name.)
 
-### 6. Tell the designer
+### 7. Tell the designer
 
 Give them one clean message — no terminal output, no git details:
 
@@ -160,7 +175,10 @@ Your prototype lives at:
 The story is at:
 `apps/storybook/stories/prototyping/<GH_USER>/<feature-slug>.stories.js`
 
-Once CI runs, a shareable preview will also appear at:
+Your draft PR is open at:
+`<PR URL>`
+
+Once CI runs, a shareable preview will also be posted there at:
 `https://adobecom.github.io/consonant/pr-preview/pr-<number>/`
 
 **What should this component look like?** Describe it — layout, states, interactions, anything — and I'll build it out.
