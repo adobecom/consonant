@@ -24,6 +24,7 @@ Example: "nav card hover state" → `feat/nav-card-hover-state`
 
 ```bash
 git checkout -b <branch-name>
+git commit --allow-empty -m "feat: start <branch-name>"
 git push -u origin <branch-name>
 ```
 
