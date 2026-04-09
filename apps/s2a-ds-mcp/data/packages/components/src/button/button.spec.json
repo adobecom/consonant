@@ -1,0 +1,82 @@
+{
+  "name": "Button",
+  "slug": "button",
+  "figmaNodeId": "141-53460",
+  "cssClass": "c-button",
+  "storybookId": "button",
+  "description": "Primary action trigger. Supports solid, outlined, and transparent backgrounds across on-light and on-dark contexts. Use accent intent for blue CTA on light surfaces only.",
+  "variants": {
+    "background": ["solid", "outlined", "transparent"],
+    "intent": ["primary", "accent"],
+    "context": ["on-light", "on-dark"],
+    "size": ["md", "xs"],
+    "state": ["default", "hover", "active", "focus", "disabled"]
+  },
+  "forbiddenCombinations": [
+    { "intent": "accent", "context": "on-dark" }
+  ],
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"Label\"", "description": "Visible button text" },
+    { "name": "background", "type": "string", "defaultValue": "\"solid\"", "enum": ["solid", "outlined", "transparent"], "description": "Fill style" },
+    { "name": "intent", "type": "string", "enum": ["primary", "accent"], "description": "Color intent. accent = blue, on-light only" },
+    { "name": "context", "type": "string", "enum": ["on-light", "on-dark"], "description": "Surface context. Inferred from tone if omitted." },
+    { "name": "size", "type": "string", "defaultValue": "\"md\"", "enum": ["md", "xs"] },
+    { "name": "state", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "hover", "active", "focus", "disabled"], "description": "Forces a visual state for testing/docs" },
+    { "name": "tone", "type": "string", "enum": ["default", "knockout", "inverse"], "deprecated": true, "deprecatedReason": "Use context instead. knockout/inverse → on-dark" },
+    { "name": "showIconStart", "type": "boolean", "defaultValue": "false" },
+    { "name": "showIconEnd", "type": "boolean", "defaultValue": "false" },
+    { "name": "iconStart", "type": "TemplateResult | function" },
+    { "name": "iconEnd", "type": "TemplateResult | function" },
+    { "name": "showElementEnd", "type": "boolean", "description": "Overrides showIconEnd when set" },
+    { "name": "onClick", "type": "function" }
+  ],
+  "tokenBindings": {
+    "background-color:primary+solid+on-light+default": "--s2a-color-background-knockout",
+    "background-color:primary+solid+on-light+hover": "--s2a-color-gray-900",
+    "background-color:primary+solid+on-light+active": "--s2a-color-gray-800",
+    "background-color:primary+solid+on-dark+default": "--s2a-color-background-default",
+    "background-color:primary+solid+on-dark+hover": "--s2a-color-background-subtle",
+    "background-color:primary+solid+on-dark+active": "--s2a-color-gray-200",
+    "background-color:accent+solid+default": "--s2a-color-blue-900",
+    "background-color:accent+solid+hover": "--s2a-color-blue-1000",
+    "background-color:accent+solid+active": "--s2a-color-blue-1100",
+    "background-color:primary+outlined+on-light+hover": "--s2a-color-transparent-black-08",
+    "background-color:primary+outlined+on-light+active": "--s2a-color-transparent-black-12",
+    "background-color:primary+outlined+on-dark+hover": "--s2a-color-transparent-white-08",
+    "background-color:primary+outlined+on-dark+active": "--s2a-color-transparent-white-12",
+    "color:primary+solid+on-light": "--s2a-color-content-knockout",
+    "color:primary+solid+on-dark": "--s2a-color-content-default",
+    "color:primary+outlined+on-light": "--s2a-color-content-default",
+    "color:primary+outlined+on-dark": "--s2a-color-content-knockout",
+    "color:primary+transparent+on-light": "--s2a-color-content-default",
+    "color:primary+transparent+on-dark": "--s2a-color-content-knockout",
+    "opacity:disabled": "--s2a-opacity-disabled",
+    "border-radius": "--s2a-border-radius-round",
+    "border-width": "--s2a-border-width-sm",
+    "padding-y:md": "--s2a-spacing-sm",
+    "padding-x:md": "--s2a-spacing-lg",
+    "padding-y:xs": "--s2a-spacing-2xs",
+    "padding-x:xs": "--s2a-spacing-sm",
+    "gap:md": "--s2a-spacing-xs",
+    "gap:xs": "--s2a-spacing-2xs",
+    "font-family": "--s2a-font-family-default",
+    "font-weight": "--s2a-font-weight-adobe-clean-bold",
+    "font-size:md": "--s2a-font-size-sm",
+    "font-size:xs": "--s2a-font-size-xs",
+    "line-height": "--s2a-font-line-height-2xs"
+  },
+  "a11y": {
+    "role": "button",
+    "wcag": ["1.4.3", "2.1.1", "2.4.7"],
+    "keyboard": [
+      { "key": "Enter", "action": "Activates the button" },
+      { "key": "Space", "action": "Activates the button" },
+      { "key": "Tab", "action": "Moves focus to the button" }
+    ],
+    "notes": [
+      "Always provide a visible label. Icon-only buttons should use aria-label.",
+      "Disabled state uses opacity — do not remove from tab order via tabindex=-1 unless hiding entirely.",
+      "Focus ring uses double-ring pattern: inner matches surface, outer is --s2a-color-focus-ring-default."
+    ]
+  }
+}

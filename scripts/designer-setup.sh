@@ -115,6 +115,8 @@ fi
 # ── 8. Write .mcp.json ───────────────────────────────────────────────────────
 log "Configuring MCP servers..."
 
+FIGMA_CONSOLE_MCP="$INSTALL_DIR/node_modules/figma-console-mcp/dist/local.js"
+
 if [[ -f "$S2A_MCP_DIST" ]]; then
   cat > "$INSTALL_DIR/.mcp.json" <<EOF
 {
@@ -122,6 +124,10 @@ if [[ -f "$S2A_MCP_DIST" ]]; then
     "figma-dev-mode-mcp-server": {
       "type": "sse",
       "url": "http://127.0.0.1:3845/sse"
+    },
+    "figma-console": {
+      "command": "node",
+      "args": ["$FIGMA_CONSOLE_MCP"]
     },
     "s2a-ds": {
       "command": "node",
@@ -140,6 +146,10 @@ else
     "figma-dev-mode-mcp-server": {
       "type": "sse",
       "url": "http://127.0.0.1:3845/sse"
+    },
+    "figma-console": {
+      "command": "node",
+      "args": ["$FIGMA_CONSOLE_MCP"]
     }
   }
 }
