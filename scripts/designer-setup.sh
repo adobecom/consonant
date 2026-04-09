@@ -99,15 +99,14 @@ ok "Dependencies installed"
 S2A_MCP_DIR="$INSTALL_DIR/apps/s2a-ds-mcp"
 S2A_MCP_DIST="$S2A_MCP_DIR/dist/local.js"
 
-if [[ -d "$S2A_MCP_DIR" ]] && [[ ! -f "$S2A_MCP_DIST" ]]; then
+if [[ -d "$S2A_MCP_DIR" ]]; then
   log "Building s2a-ds MCP server..."
   cd "$S2A_MCP_DIR"
   npm install --silent
+  npm run copy-data --silent
   npm run build --silent
   cd "$INSTALL_DIR"
   ok "s2a-ds MCP server built"
-elif [[ -f "$S2A_MCP_DIST" ]]; then
-  ok "s2a-ds MCP server ready"
 else
   warn "s2a-ds MCP server not found — you can still use Claude, just without design token lookups"
 fi
