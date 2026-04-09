@@ -120,10 +120,6 @@ if [[ -f "$S2A_MCP_DIST" ]]; then
   cat > "$INSTALL_DIR/.mcp.json" <<EOF
 {
   "mcpServers": {
-    "figma-dev-mode-mcp-server": {
-      "type": "sse",
-      "url": "http://127.0.0.1:3845/sse"
-    },
     "figma-console": {
       "command": "node",
       "args": ["$FIGMA_CONSOLE_MCP"]
@@ -142,10 +138,6 @@ else
   cat > "$INSTALL_DIR/.mcp.json" <<EOF
 {
   "mcpServers": {
-    "figma-dev-mode-mcp-server": {
-      "type": "sse",
-      "url": "http://127.0.0.1:3845/sse"
-    },
     "figma-console": {
       "command": "node",
       "args": ["$FIGMA_CONSOLE_MCP"]
