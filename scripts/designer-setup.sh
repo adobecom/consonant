@@ -67,19 +67,37 @@ else
   ok "GitHub CLI already installed ($(gh --version | head -1))"
 fi
 
-# ── 4. Git identity ──────────────────────────────────────────────────────────
+# ── 4. Claude Code CLI ───────────────────────────────────────────────────────
+if ! command -v claude &>/dev/null; then
+  log "Installing Claude Code..."
+  npm install -g @anthropic-ai/claude-code --silent
+  ok "Claude Code installed"
+else
+  ok "Claude Code already installed ($(claude --version 2>/dev/null || echo 'version unknown'))"
+fi
+
+# ── 5. Cursor ────────────────────────────────────────────────────────────────
+if [[ ! -d "/Applications/Cursor.app" ]]; then
+  log "Installing Cursor..."
+  brew install --cask cursor --quiet
+  ok "Cursor installed"
+else
+  ok "Cursor already installed"
+fi
+
+# ── 6. Git identity ──────────────────────────────────────────────────────────
 if [[ -z "$(git config --global user.name)" ]]; then
   echo ""
   read -rp "Your full name (for git commits): " GIT_NAME
   git config --global user.name "$GIT_NAME"
 fi
 if [[ -z "$(git config --global user.email)" ]]; then
-  read -rp "Your Adobe email: " GIT_EMAIL
+  read -rp "Your email (Adobe or personal — whichever matches your GitHub account): " GIT_EMAIL
   git config --global user.email "$GIT_EMAIL"
 fi
 ok "Git identity: $(git config --global user.name) <$(git config --global user.email)>"
 
-# ── 5. Clone or update repo ──────────────────────────────────────────────────
+# ── 7. Clone or update repo ──────────────────────────────────────────────────
 if [[ -d "$INSTALL_DIR/.git" ]]; then
   ok "Repo already at $INSTALL_DIR — pulling latest"
   git -C "$INSTALL_DIR" checkout main --quiet
@@ -89,13 +107,13 @@ else
   git clone "$REPO_URL" "$INSTALL_DIR" --quiet
 fi
 
-# ── 6. Install npm dependencies ──────────────────────────────────────────────
+# ── 8. Install npm dependencies ──────────────────────────────────────────────
 log "Installing dependencies (this takes a minute)..."
 cd "$INSTALL_DIR"
 npm install --silent
 ok "Dependencies installed"
 
-# ── 7. Build s2a-ds MCP server if present ───────────────────────────────────
+# ── 9. Build s2a-ds MCP server if present ───────────────────────────────────
 S2A_MCP_DIR="$INSTALL_DIR/apps/s2a-ds-mcp"
 S2A_MCP_DIST="$S2A_MCP_DIR/dist/local.js"
 
@@ -111,7 +129,7 @@ else
   warn "s2a-ds MCP server not found — you can still use Claude, just without design token lookups"
 fi
 
-# ── 8. Write .mcp.json ───────────────────────────────────────────────────────
+# ── 10. Write .mcp.json ──────────────────────────────────────────────────────
 log "Configuring MCP servers..."
 
 FIGMA_CONSOLE_MCP="$INSTALL_DIR/node_modules/figma-console-mcp/dist/local.js"
@@ -148,7 +166,7 @@ EOF
 fi
 ok "MCP servers configured"
 
-# ── 9. GitHub auth ───────────────────────────────────────────────────────────
+# ── 11. GitHub auth ──────────────────────────────────────────────────────────
 echo ""
 if gh auth status &>/dev/null; then
   ok "Already logged in to GitHub as $(gh api user --jq .login)"
@@ -164,7 +182,19 @@ echo -e "${GREEN}You're all set!${NC}"
 echo ""
 echo "  Project is at: $INSTALL_DIR"
 echo ""
+
+# Remind about Adobe-provisioned tools if not already active
+if ! command -v claude &>/dev/null || ! claude whoami &>/dev/null 2>&1; then
+  echo -e "  ${YELLOW}Before you can use Claude Code:${NC}"
+  echo "    → Request access at go/claude (Adobe internal)"
+  echo "    → Then run: claude login"
+  echo ""
+fi
+
 echo "  To start working:"
 echo "    1. Open terminal and run:  claude $INSTALL_DIR"
 echo "    2. Type:  /start-feature \"describe what you're building\""
+echo ""
+echo "  Cursor is also installed — open it from Applications or Spotlight."
+echo "  Free tier works fine to start. Pro available via go/cursor (Adobe internal)."
 echo ""
