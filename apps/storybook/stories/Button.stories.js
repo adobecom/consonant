@@ -272,16 +272,6 @@ export const IconSlots = {
   `,
 };
 
-export const OnDark = {
-  render: () => html`
-    <div style="background: #050505; padding: 24px; border-radius: 24px; display: flex; gap: 16px; flex-wrap: wrap;">
-      ${Button({ label: "Get started", intent: "accent", background: "solid", context: "on-dark" })}
-      ${Button({ label: "Learn more", background: "outlined", context: "on-dark" })}
-      ${Button({ label: "Dismiss", background: "transparent", context: "on-dark" })}
-    </div>
-  `,
-};
-
 export const ForcedStates = {
   render: () => {
     const states = ["default", "hover", "active", "focus", "disabled"];
