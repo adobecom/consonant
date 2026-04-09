@@ -1,0 +1,158 @@
+{
+    "name": "NavCardMenuItem",
+    "slug": "nav-card-menu-item",
+    "figmaNodeId": "1662:17482",
+    "cssClass": "c-nav-card-menu-item",
+    "storybookId": "nav-card-menu-item",
+    "description": "GNAV navigation column (aka Nav List Container). Title 4 heading + list of text links + the shared NavCardButton CTA. Mirrors the Navigation \u2014 A.com artboard (node 3872:5474) and snaps everything back to the S2A spacing/typography tokens.",
+    "composedOf": [
+        {
+            "component": "Link",
+            "slot": "nav-items",
+            "status": "pending",
+            "config": {
+                "kind": "text",
+                "context": "on-light",
+                "emphasis": "default",
+                "state": "{{ item.state || \"default\" }}",
+                "label": "{{ item.label }}",
+                "href": "{{ item.href }}",
+                "showIconEnd": "{{ item.showIconEnd || false }}"
+            },
+            "note": "Each nav card menu item row is a matt-atoms Link/Text instance (node 3624:58143) with Default \u2192 Hover underline animation. Once the Link atom exists in code, reuse it here so underline, focus ring, and typography tokens stay centralized."
+        },
+        {
+            "component": "NavCardButton",
+            "slot": "cta",
+            "status": "active",
+            "config": {
+                "label": "{{ ctaLabel }}",
+                "href": "{{ ctaHref }}"
+            },
+            "note": "NavCardButton is the shared pill CTA used across all GNAV cards/menu items."
+        }
+    ],
+    "variants": {
+        "state": [
+            "default"
+        ]
+    },
+    "props": [
+        {
+            "name": "title",
+            "type": "string",
+            "defaultValue": "\"Browse\"",
+            "description": "Title 4 heading that names the menu column (e.g. \"Creative Cloud\")."
+        },
+        {
+            "name": "items",
+            "type": "Array<{ label: string; href: string; state?: string; showIconEnd?: boolean }>",
+            "description": "Ordered nav entries rendered as Link/Text atoms. Limit to 6 items to keep within the 288px column height from Figma."
+        },
+        {
+            "name": "ctaLabel",
+            "type": "string",
+            "defaultValue": "\"Explore\"",
+            "description": "Label for the pill CTA button placed below the links."
+        },
+        {
+            "name": "ctaHref",
+            "type": "string",
+            "defaultValue": "\"\"",
+            "description": "Destination for the CTA button. When omitted the button renders as <button> for local behavior."
+        }
+    ],
+    "tokenBindings": {
+        "container.background": "--s2a-color-background-default",
+        "container.border-radius": "--s2a-border-radius-16",
+        "container.padding-inline": "--s2a-spacing-lg",
+        "container.padding-block": "--s2a-spacing-lg",
+        "container.stack-gap": "--s2a-spacing-sm",
+        "heading.gap": "--s2a-spacing-xs",
+        "heading.typography.font-family": "--s2a-font-family-adobe-clean-display",
+        "heading.typography.font-weight": "--s2a-font-weight-adobe-clean-display-black",
+        "heading.typography.font-size": "--s2a-typography-font-size-title-4",
+        "heading.typography.line-height": "--s2a-typography-line-height-title-4",
+        "heading.typography.letter-spacing": "--s2a-typography-letter-spacing-title-4",
+        "heading.typography.color": "--s2a-color-content-default",
+        "list.row-gap": "--s2a-spacing-xs",
+        "nav-item.padding-block": "--s2a-spacing-xs",
+        "nav-item.gap": "--s2a-spacing-xs",
+        "nav-item.typography.font-family": "--s2a-font-family-adobe-clean",
+        "nav-item.typography.font-weight": "--s2a-font-weight-adobe-clean-regular",
+        "nav-item.typography.font-size": "--s2a-typography-font-size-body-sm",
+        "nav-item.typography.line-height": "--s2a-typography-line-height-body-sm",
+        "nav-item.typography.letter-spacing": "--s2a-typography-letter-spacing-body-sm",
+        "nav-item.typography.color": "--s2a-color-content-default",
+        "cta.block.padding-inline": "--s2a-spacing-lg",
+        "cta.block.padding-block": "--s2a-spacing-lg",
+        "cta.block.gap": "--s2a-spacing-xs"
+    },
+    "tokenFlags": [
+        {
+            "severity": "warning",
+            "issue": "non-s2a-token",
+            "location": "Card border radius",
+            "figmaValue": "Nav file token \"2 XS\" (16px)",
+            "suggestedToken": "--s2a-border-radius-16",
+            "note": "Navigation file still references its local \"2 XS\" token. We map it to the S2A primitive to stay on-grid."
+        },
+        {
+            "severity": "warning",
+            "issue": "non-s2a-token",
+            "location": "Card padding",
+            "figmaValue": "s2c/spacing/lg (24px)",
+            "suggestedToken": "--s2a-spacing-lg",
+            "note": "Both padding + heading spacing still point to the Navigation (s2c) spacing collection. Implementation should use the S2A spacing tokens."
+        },
+        {
+            "severity": "warning",
+            "issue": "non-s2a-token",
+            "location": "Nav row padding",
+            "figmaValue": "s2c/spacing/sm (12px) top/bottom",
+            "suggestedToken": "--s2a-spacing-sm or --s2a-spacing-xs depending on final alignment",
+            "note": "Figma instance references s2c spacing for nav link padding. We snap to --s2a-spacing-xs (8px) so the card keeps the same rhythm as other GNAV surfaces."
+        },
+        {
+            "severity": "info",
+            "issue": "hardcoded-value",
+            "location": "Nav row + icon spacing",
+            "figmaValue": "Figma shows 7px row spacing and icon gap",
+            "suggestedToken": "--s2a-spacing-xs (8px)",
+            "note": "Implementation standardizes both the row stack gap and label\u27f7chevron gap to the 8px semantic spacing token to stay on the 4px grid."
+        }
+    ],
+    "layerNames": {
+        ".root": "Rounded white card wrapper (342\u00d7353) with 24px padding in the redesign shell",
+        ".heading": "Auto-layout column with the Title 4 text node",
+        ".title": "Title 4 text layer bound to Adobe Clean Display Black 24/24",
+        ".list": "Stack of nav card link rows (Link/Text atoms)",
+        ".item": "Individual Link instance with underline hover",
+        ".cta-stack": "Bottom padding block that nests the Nav Button",
+        ".cta": "Outlined pill button reused from NavCard"
+    },
+    "dimensions": {
+        "width": "NavCardShell locks to 340px with a 240px min (no max)",
+        "height": "353px per Figma sample (list grows with additional items)",
+        "note": "Shell abstraction keeps CTA spacing identical to the promo card. Width + padding are centralized in NavCardShell; this spec focuses on the heading/list stack tokens."
+    },
+    "a11y": {
+        "role": "navigation",
+        "wcag": [
+            "1.4.3",
+            "2.1.1",
+            "2.4.3",
+            "2.4.7"
+        ],
+        "keyboard": [
+            "Tab cycles through each Link item in order, bottom CTA button last",
+            "Enter/Space activates whichever link/button currently holds focus",
+            "Arrow navigation is not provided \u2014 list relies on standard tab order"
+        ],
+        "notes": [
+            "Ensure each nav item label is meaningful on its own or add visually hidden context (e.g. \"Creative Cloud \u2013 Photography\").",
+            "If the card title should be announced for the CTA, expose it via aria-labelledby on the list container and button.",
+            "Maintain 4.5:1 contrast for nav item text (Adobe Clean 14/18) against background-default."
+        ]
+    }
+}

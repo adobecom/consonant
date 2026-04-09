@@ -1,0 +1,114 @@
+{
+  "name": "NavCardPattern",
+  "slug": "nav-card-pattern",
+  "figmaNodeId": "4632:95161",
+  "cssClass": "c-nav-card (promo) / c-nav-card-menu-item (menu)",
+  "storybookId": "nav-card-pattern",
+  "description": "Facade component that exposes both GNAV Nav Card patterns — promotional content and menu column — behind a single API. Uses NavCardShell for the shared frame and swaps in the promo/text or nav menu composition based on the pattern prop. Figma references the `Navigation / Nav Card Patterns` section, which now contains the standalone `Nav Card Promo` and `Nav Card Menu` component sets.",
+  "composedOf": [
+    {
+      "component": "NavCard",
+      "slot": "pattern=promo",
+      "status": "active",
+      "config": "Passes through all promo props (eyebrow, title, body, link CTA, CTA button)."
+    },
+    {
+      "component": "NavCardMenuItem",
+      "slot": "pattern=menu",
+      "status": "active",
+      "config": "Uses title + menuItems + CTA button props to render the nav list container pattern."
+    }
+  ],
+  "variants": {
+    "pattern": ["promo", "menu"],
+    "state": ["default", "hover"]
+  },
+  "props": [
+    {
+      "name": "pattern",
+      "type": "\"promo\" | \"menu\"",
+      "defaultValue": "\"promo\"",
+      "description": "Selects which GNAV pattern to render from the combined component set."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Shared Title 4 heading. In promo mode it’s the hero title; in menu mode it labels the nav column."
+    },
+    {
+      "name": "eyebrow",
+      "type": "string",
+      "description": "Promo-only eyebrow text displayed above the title. Ignored for the menu pattern."
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "description": "Promo-only supporting body copy."
+    },
+    {
+      "name": "ctaLinkLabel",
+      "type": "string",
+      "description": "Promo-only text link label inside the card body."
+    },
+    {
+      "name": "ctaLinkHref",
+      "type": "string",
+      "description": "Promo-only link destination for the inline CTA."
+    },
+    {
+      "name": "ctaButtonLabel",
+      "type": "string",
+      "defaultValue": "\"Explore\"",
+      "description": "Label for the pill CTA in both patterns."
+    },
+    {
+      "name": "ctaButtonHref",
+      "type": "string",
+      "description": "Destination for the pill CTA in both patterns."
+    },
+    {
+      "name": "menuItems",
+      "type": "Array<{ label: string; href: string; state?: \"default\" | \"hover\" | \"active\"; showIconEnd?: boolean }>",
+      "description": "Menu-only data for the stacked Link/Text atoms. Each entry maps to the nav list item pattern (default hover underline)."
+    }
+  ],
+  "tokenBindings": {
+    "shell.width": "340px fixed width via NavCardShell",
+    "shell.min-width": "240px (Primitive: nav column minimum)",
+    "shell.padding": "--s2a-spacing-lg",
+    "shell.border-radius": "--s2a-border-radius-12 (promo) / --s2a-border-radius-16 (menu)",
+    "shell.background.default": "--s2a-color-background-default",
+    "shell.background.hover": "--s2a-color-background-knockout (promo only)",
+    "cta.button": "Delegates to NavCardButton token bindings",
+    "menu.link.typography": "--s2a-typography-body-sm",
+    "promo.typography.title": "--s2a-typography-title-4"
+  },
+  "tokenFlags": [
+    {
+      "severity": "warning",
+      "issue": "primitive-value",
+      "location": "shell.min-width",
+      "figmaValue": "240px",
+      "suggestedToken": "Primitive clamp until semantic nav column min exists",
+      "note": "Nav column minimum is dictated by GNAV layout. Documented with Primitive comment in NavCardShell."
+    }
+  ],
+  "layerNames": {
+    ".promo": "NavCard promo composition (eyebrow, body, link, CTA)",
+    ".menu": "NavCardMenuItem composition (title, list, CTA)"
+  },
+  "dimensions": {
+    "width": "340px (Nav shell) with 240px min",
+    "height": "Auto — promo text or menu list drives height",
+    "note": "Both patterns share the same padding, CTA region, and CTA tokens so they present consistently in the GNAV flyout."
+  },
+  "a11y": {
+    "role": "article | navigation (depends on pattern)",
+    "wcag": ["1.4.3", "2.1.1", "2.4.3", "2.4.7"],
+    "notes": [
+      "Promo pattern follows the NavCard a11y contract (article region with link + button).",
+      "Menu pattern exposes stacked nav links inside a navigation region; ensure list order matches keyboard order."
+    ]
+  }
+}

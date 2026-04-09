@@ -1,0 +1,19 @@
+{
+  "name": "@adobecom/s2a-animation",
+  "version": "0.0.1",
+  "description": "CSS scroll-driven animations and parallax effects for S2A. Requires @adobecom/s2a-tokens.",
+  "license": "ISC",
+  "main": "src/index.js",
+  "style": "src/animation.css",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./css/animation.css": "./src/animation.css",
+    "./package.json": "./package.json"
+  },
+  "files": ["src/**/*"],
+  "keywords": ["animation", "parallax", "scroll", "motion", "css", "s2a", "consonant"],
+  "peerDependencies": {
+    "@adobecom/s2a-tokens": ">=0.0.1"
+  }
+}

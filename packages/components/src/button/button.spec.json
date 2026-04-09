@@ -28,6 +28,7 @@
     { "name": "iconStart", "type": "TemplateResult | function" },
     { "name": "iconEnd", "type": "TemplateResult | function" },
     { "name": "showElementEnd", "type": "boolean", "description": "Overrides showIconEnd when set" },
+    { "name": "href", "type": "string", "description": "When provided, renders as <a> instead of <button>. Use for navigation CTAs." },
     { "name": "onClick", "type": "function" }
   ],
   "tokenBindings": {

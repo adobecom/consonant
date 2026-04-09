@@ -1,8 +1,19 @@
 {
-  "name": "s2a-grid",
+  "name": "@adobecom/s2a-grid",
   "version": "0.0.1",
-  "description": "Grid layout utilities for Consonant design system",
+  "description": "CSS grid system for S2A. Requires @adobecom/s2a-tokens.",
+  "license": "ISC",
   "main": "src/index.js",
+  "style": "src/grid.css",
   "type": "module",
-  "files": ["src/**/*"]
+  "exports": {
+    ".": "./src/index.js",
+    "./css/grid.css": "./src/grid.css",
+    "./package.json": "./package.json"
+  },
+  "files": ["src/**/*"],
+  "keywords": ["grid", "layout", "css", "s2a", "consonant"],
+  "peerDependencies": {
+    "@adobecom/s2a-tokens": ">=0.0.1"
+  }
 }

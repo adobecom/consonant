@@ -1,0 +1,154 @@
+{
+  "name": "NavCard",
+  "slug": "nav-card",
+  "figmaNodeId": "4600:21172",
+  "cssClass": "c-nav-card",
+  "storybookId": "nav-card",
+  "description": "A promotional card used in Global Navigation to highlight an audience segment or product category — contains an eyebrow, title, body copy, text CTA link, and a full-width pill button.",
+  "composedOf": [
+    {
+      "component": "NavCardButton",
+      "slot": "cta-button",
+      "status": "active",
+      "config": {
+        "label": "{{ ctaButtonLabel }}",
+        "href": "{{ ctaButtonHref }}"
+      },
+      "note": "NavCardButton is a standalone GNAV CTA that follows the Nav Button component set tokens (default / hover / active)."
+    },
+    {
+      "component": "Link",
+      "slot": "cta-link",
+      "status": "pending",
+      "config": {
+        "label": "{{ ctaLinkLabel }}",
+        "href": "{{ ctaLinkHref }}",
+        "iconEnd": "chevron-right",
+        "context": "inherits from card hover state"
+      },
+      "note": "Link component does not exist yet. Currently using a plain <a> with inline chevron SVG as a placeholder. Replace once Link is built."
+    }
+  ],
+  "variants": {
+    "state": ["default", "hover"]
+  },
+  "forbiddenCombinations": [],
+  "props": [
+    {
+      "name": "eyebrow",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Audience segment or category label displayed above the title."
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Primary heading for the card."
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Supporting body copy below the title."
+    },
+    {
+      "name": "ctaLinkLabel",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Label for the inline text link CTA (e.g. 'See plans')."
+    },
+    {
+      "name": "ctaLinkHref",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "URL for the inline text link CTA."
+    },
+    {
+      "name": "ctaButtonLabel",
+      "type": "string",
+      "defaultValue": "\"Explore\"",
+      "description": "Label for the full-width pill button CTA."
+    },
+    {
+      "name": "ctaButtonHref",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "URL for the full-width pill button CTA."
+    },
+    {
+      "name": "interactive",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "When false, suppresses the card-level hover state (no dark flip) via pointer-events: none on the card root. Interactive children (button, cta-link) retain pointer-events: auto and remain clickable."
+    }
+  ],
+  "tokenBindings": {
+    "background-color:default": "--s2a-color-background-default",
+    "background-color:hover": "--s2a-color-background-knockout",
+    "padding": "--s2a-spacing-lg",
+    "border-radius": "--s2a-border-radius-12",
+    "gap:.content": "--s2a-spacing-xs",
+    "gap:.body-area": "--s2a-spacing-md",
+    "color.eyebrow:default": "--s2a-color-transparent-black-64",
+    "color.eyebrow:hover": "--s2a-color-transparent-white-64",
+    "color.title:default": "--s2a-color-content-default",
+    "color.title:hover": "--s2a-color-content-knockout",
+    "color.body:default": "--s2a-color-transparent-black-64",
+    "color.body:hover": "--s2a-color-transparent-white-64",
+    "color.cta-link:default": "--s2a-color-content-default",
+    "color.cta-link:hover": "--s2a-color-content-knockout",
+    "font-size.eyebrow": "--s2a-typography-font-size-label",
+    "line-height.eyebrow": "--s2a-typography-line-height-label",
+    "letter-spacing.eyebrow": "--s2a-typography-letter-spacing-label",
+    "font-size.title": "--s2a-typography-font-size-title-4",
+    "line-height.title": "--s2a-typography-line-height-title-4",
+    "letter-spacing.title": "--s2a-typography-letter-spacing-title-4",
+    "font-size.body": "--s2a-typography-font-size-body-sm",
+    "line-height.body": "--s2a-typography-line-height-body-sm",
+    "letter-spacing.body": "--s2a-typography-letter-spacing-body-sm",
+    "border-color.cta-button:default": "--s2a-color-content-default",
+    "border-color.cta-button:hover": "--s2a-color-transparent-white-00",
+    "background-color.cta-button:default": "--s2a-color-background-default",
+    "background-color.cta-button:hover": "--s2a-color-background-default",
+    "color.cta-button:default": "--s2a-color-content-default",
+    "color.cta-button:hover": "--s2a-color-content-default",
+    "border-radius.cta-button": "--s2a-border-radius-round",
+    "padding-inline.cta-button": "--s2a-spacing-lg",
+    "padding-block.cta-button": "--s2a-spacing-sm",
+    "backdrop-filter.cta-button": "blur(18.75px)"
+  },
+  "tokenFlags": [],
+  "layerNames": {
+    ".root": "Outermost card frame — background, padding, border-radius",
+    ".eyebrow": "Audience/category label text node — maps to eyebrow prop",
+    ".content": "Flex column wrapper: title + body + cta-link stack",
+    ".title": "Primary heading — maps to title prop",
+    ".body-area": "Body copy + cta-link column",
+    ".body": "Body copy text node — maps to body prop",
+    ".cta-link": "Text link with trailing chevron icon",
+    ".cta-link__label": "Link text — maps to ctaLinkLabel prop",
+    ".cta-link__icon": "Chevron icon (vector asset)",
+    ".cta-button": "Full-width pill button at card bottom",
+    ".cta-button__label": "Button label — maps to ctaButtonLabel prop"
+  },
+  "dimensions": {
+    "width": "NavCardShell clamps width to 340px with a 240px min (no max)",
+    "height": "Auto — text stack grows while CTA block stays pinned to 40px",
+    "note": "Shell abstraction keeps both GNAV patterns in sync. Width + padding come from the shared shell tokens; content just swaps between text and menu variants."
+  },
+  "a11y": {
+    "role": "article",
+    "wcag": ["1.4.3", "2.1.1", "2.4.7"],
+    "keyboard": [
+      "Tab → .cta-link — follows ctaLinkHref",
+      "Tab → .cta-button — follows ctaButtonHref",
+      "Enter on either interactive element activates the link"
+    ],
+    "notes": [
+      "1.4.3: Verify --s2a-color-transparent-black-64 (rgba 0,0,0,0.64) against --s2a-color-background-default and --s2a-color-transparent-white-64 against --s2a-color-background-knockout at 4.5:1 for 14px text.",
+      "The eyebrow is presentational context — it does not need to be the accessible name. The title should anchor the card's accessible identity.",
+      "Both CTAs must have distinct accessible labels. If ctaLinkLabel and ctaButtonLabel are generic ('See plans' / 'Explore'), pair them with a visually-hidden reference to the card title for screen reader context."
+    ]
+  }
+}

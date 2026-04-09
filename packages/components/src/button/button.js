@@ -47,6 +47,7 @@ export const Button = ({
   iconStart,
   iconEnd,
   showElementEnd,
+  href,
   onClick,
 } = {}) => {
   const resolvedIntent = normalizeIntent(intent);
@@ -55,6 +56,41 @@ export const Button = ({
   const finalShowIconEnd = typeof showElementEnd === "boolean" ? showElementEnd : showIconEnd;
   const forceState = state && state !== "default" ? state : null;
   const isDisabled = state === "disabled";
+
+  // Lit 3+: dynamic tag names (<${tag}>) are not allowed with standard `html`.
+  // Use separate static <a> / <button> templates instead of lit/static-html.
+  const content = html`
+    ${showIconStart
+      ? html`<span class="c-button__icon c-button__icon--start" aria-hidden="true">
+          ${resolveIcon(iconStart) ?? nothing}
+        </span>`
+      : nothing}
+    <span class="c-button__label">${label}</span>
+    ${finalShowIconEnd
+      ? html`<span class="c-button__icon c-button__icon--end" aria-hidden="true">
+          ${resolveIcon(iconEnd) ?? CaretDownIcon()}
+        </span>`
+      : nothing}
+  `;
+
+  if (href) {
+    return html`
+      <a
+        class="c-button"
+        data-background=${background}
+        data-intent=${resolvedIntent}
+        data-context=${resolvedContext}
+        data-size=${resolvedSize}
+        data-force-state=${forceState ?? nothing}
+        data-has-icon-start=${showIconStart ? "true" : "false"}
+        data-has-icon-end=${finalShowIconEnd ? "true" : "false"}
+        href=${href}
+        @click=${onClick}
+      >
+        ${content}
+      </a>
+    `;
+  }
 
   return html`
     <button
@@ -67,20 +103,10 @@ export const Button = ({
       data-has-icon-start=${showIconStart ? "true" : "false"}
       data-has-icon-end=${finalShowIconEnd ? "true" : "false"}
       ?disabled=${isDisabled}
-      @click=${onClick}
       type="button"
+      @click=${onClick}
     >
-      ${showIconStart
-        ? html`<span class="c-button__icon c-button__icon--start" aria-hidden="true">
-            ${resolveIcon(iconStart) ?? nothing}
-          </span>`
-        : nothing}
-      <span class="c-button__label">${label}</span>
-      ${finalShowIconEnd
-        ? html`<span class="c-button__icon c-button__icon--end" aria-hidden="true">
-            ${resolveIcon(iconEnd) ?? CaretDownIcon()}
-          </span>`
-        : nothing}
+      ${content}
     </button>
   `;
 };

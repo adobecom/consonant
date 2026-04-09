@@ -1,0 +1,75 @@
+{
+  "name": "NavCardButton",
+  "slug": "nav-card-button",
+  "figmaNodeId": "1638:17245",
+  "cssClass": "c-nav-card-button",
+  "storybookId": "nav-card-button",
+  "description": "Outlined pill CTA specific to the GNAV Nav Card. Token bindings come directly from the Nav Button component set (default / hover / active) so this stays in sync with the redesign spec.",
+  "composedOf": [],
+  "variants": {
+    "state": ["default", "hover", "active", "focus", "disabled"],
+    "context": ["on-light"]
+  },
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"Explore\"", "description": "Visible CTA text" },
+    { "name": "href", "type": "string", "defaultValue": "\"\"", "description": "When provided, renders as <a>. Otherwise renders as <button>." }
+  ],
+  "tokenBindings": {
+    "padding-inline": "--s2a-spacing-lg",
+    "padding-block": "--s2a-spacing-sm",
+    "gap": "--s2a-spacing-xs",
+    "border-width": "--s2a-border-width-sm",
+    "border-radius": "--s2a-border-radius-round",
+    "border-color.default": "--s2a-color-content-default",
+    "border-color.hover": "--s2a-color-background-knockout",
+    "border-color.active": "--s2a-color-transparent-white-00",
+    "font-family": "--s2a-font-family-adobe-clean",
+    "font-weight": "--s2a-font-weight-adobe-clean-bold",
+    "font-size": "--s2a-typography-font-size-label",
+    "line-height": "--s2a-font-line-height-2xs",
+    "letter-spacing": "--s2a-typography-letter-spacing-label",
+    "color.default": "--s2a-color-content-default",
+    "color.hover": "--s2a-color-content-knockout",
+    "color.active": "--s2a-color-content-default",
+    "background-color.default": "--s2a-color-background-default",
+    "background-color.hover": "--s2a-color-background-knockout",
+    "background-color.active": "--s2a-color-background-default",
+    "width": "100%",
+    "min-height": "calc((var(--s2a-spacing-sm) - var(--s2a-border-width-sm)) * 2 + (var(--s2a-font-line-height-2xs) * var(--s2a-typography-font-size-label)) + (var(--s2a-border-width-sm) * 2))",
+    "focus-ring-color": "--s2a-color-focus-ring-default",
+    "focus-ring-offset": "2px",
+    "backdrop-filter": "blur(18.75px)"
+  },
+  "tokenFlags": [
+    {
+      "severity": "warning",
+      "issue": "primitive-value",
+      "location": "backdrop-filter",
+      "figmaValue": "blur(18.75px)",
+      "suggestedToken": "Document with Primitive comment until blur tokens exist",
+      "note": "Matches Nav Card spec. Implementation must include `/* Primitive: nav button glass blur */`." 
+    }
+  ],
+  "layerNames": {
+    ".root": "Outlined pill button (100% width of the nav card)",
+    ".label": "Center-aligned CTA text"
+  },
+  "dimensions": {
+    "width": "Fills parent (NavCardShell clamps to 340px with a 240px min)",
+    "height": "40px (derived from sm padding, border width, and 2xs line-height)",
+    "note": "Padding-block removes the stroke thickness before applying \nvar(--s2a-spacing-sm) so the total block-size matches the 40px spec. The explicit min-height mirrors the same math to avoid 42px rendering in Storybook."
+  },
+  "a11y": {
+    "role": "button (or link when href)",
+    "wcag": ["1.4.3", "2.1.1", "2.4.7"],
+    "keyboard": [
+      "Tab focuses the CTA after the text links",
+      "Space/Enter activates when rendered as <button>",
+      "Enter triggers navigation when rendered as <a>"
+    ],
+    "notes": [
+      "Ensure focus ring remains visible against both on-light and on-dark containers.",
+      "If multiple Nav Cards contain identical CTA labels, provide aria-label/context so screen readers can distinguish them."
+    ]
+  }
+}
