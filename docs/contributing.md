@@ -1,5 +1,23 @@
 # Contributing to Consonant
 
+## First time setup
+
+Clone with submodules initialized in one shot:
+
+```bash
+git clone --recurse-submodules https://github.com/adobecom/consonant.git
+```
+
+If you already cloned without that flag, run this once from the repo root:
+
+```bash
+git submodule update --init
+```
+
+You should see `context/milo/` populate with files. If it's still empty after that, check that you have access to the milo repo on GitHub.
+
+---
+
 ## Git Workflow
 
 ### Pull latest main

@@ -538,7 +538,8 @@ function parseDeclarations(css: string): Decl[] {
         const prop = m[1].toLowerCase();
         const val = m[2].trim();
         if (!prop.startsWith("@") && !prop.includes(" ")) {
-          decls.push({ line: lineAt(bodyOffset + offset), selector, property: prop, value: val });
+          const propOffset = chunk.search(/[\w-]/);
+          decls.push({ line: lineAt(bodyOffset + offset + Math.max(0, propOffset)), selector, property: prop, value: val });
         }
       }
       offset += chunk.length + 1;

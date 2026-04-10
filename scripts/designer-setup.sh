@@ -105,8 +105,13 @@ if [[ -d "$INSTALL_DIR/.git" ]]; then
   git -C "$INSTALL_DIR" pull --ff-only --quiet
 else
   log "Cloning consonant to $INSTALL_DIR..."
-  git clone "$REPO_URL" "$INSTALL_DIR" --quiet
+  git clone --recurse-submodules "$REPO_URL" "$INSTALL_DIR" --quiet
 fi
+
+# ── 7a. Initialize submodules (in case they weren't cloned with --recurse) ───
+log "Initializing submodules (context/milo)..."
+git -C "$INSTALL_DIR" submodule update --init --quiet
+ok "Submodules ready"
 
 # ── 8. Install npm dependencies ──────────────────────────────────────────────
 log "Installing dependencies (this takes a minute)..."
