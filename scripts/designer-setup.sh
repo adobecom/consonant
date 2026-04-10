@@ -264,10 +264,23 @@ echo "         ~/.figma-console-mcp/plugin/manifest.json"
 echo "    5. Click Open"
 echo "    6. The plugin will appear as 'Figma Desktop Bridge' — click Run when you need it"
 echo ""
-echo "  To start working:"
-echo "    1. Open terminal and run:  claude ~/Desktop/prototyping/consonant"
-echo "    2. Type:  /start-feature \"describe what you're building\""
+echo "  Opening Cursor and Storybook for you now..."
 echo ""
-echo "  Cursor is also installed — open it from Applications or Spotlight."
-echo "  Free tier works fine to start. Pro available via go/cursor (Adobe internal)."
+
+# Open Cursor with the project
+open -a Cursor "$INSTALL_DIR" 2>/dev/null || warn "Couldn't open Cursor automatically — open it from Applications or Spotlight"
+
+# Start Storybook in a new Terminal window
+osascript -e "tell application \"Terminal\" to do script \"cd '$INSTALL_DIR' && npm run storybook\"" 2>/dev/null \
+  || warn "Couldn't open Terminal automatically — run: cd $INSTALL_DIR && npm run storybook"
+
+echo "  Storybook will be at:  http://localhost:6006  (give it ~30 seconds to start)"
+echo ""
+echo "  When you're ready to build something:"
+echo "    1. Switch to the Cursor window that just opened"
+echo "    2. Open Claude Code inside Cursor (or run: claude ~/Desktop/prototyping/consonant)"
+echo "    3. Type:  /start-feature \"describe what you're building\""
+echo ""
+echo "  Pro tip: Storybook auto-reloads as you make changes — leave it open."
+echo "  Cursor Pro available via go/cursor (Adobe internal)."
 echo ""
