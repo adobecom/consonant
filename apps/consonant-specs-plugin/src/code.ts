@@ -2,7 +2,7 @@ import { getTokenVersion, getTokenCount, loadLibraryTokens, forceMatch } from '.
 import { getNodeProperties } from './annotations';
 import { specIt } from './spec-it';
 import { runS2AAudit, runFullAlign, runTextColorsAlign } from './s2a-audit';
-import { localize, TranslationProvider } from './localize';
+import { localize, collectSourceText, TranslationProvider } from './localize';
 import { generateBlueline, generateBluelinePanels, placeCategoryBadge } from './a11y-blueline';
 
 // Expose for eval/EXECUTE_CODE access
@@ -480,6 +480,26 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       });
       break;
     }
+    case 'annotate-audit-issues': {
+      const issues: Array<{ nodeId: string; nodeName: string; property: string; value: string }> = msg.issues || [];
+      if (issues.length === 0) { figma.notify('No issues to annotate'); break; }
+      let annotated = 0;
+      for (const issue of issues) {
+        try {
+          const node = await figma.getNodeByIdAsync(issue.nodeId);
+          if (!node) continue;
+          (node as any).annotations = [{
+            labelMarkdown: `**${issue.property}**: ${issue.value} — no S2A token`,
+            properties: [],
+          }];
+          annotated++;
+        } catch (e) {
+          console.warn(`Annotation failed on "${issue.nodeName}":`, e);
+        }
+      }
+      figma.notify(`Annotated ${annotated} of ${issues.length} issues`);
+      break;
+    }
     case 'full-align-s2a': {
       const sel = figma.currentPage.selection;
       if (sel.length === 0) { figma.notify('Select a node first'); break; }
@@ -583,7 +603,7 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       try {
         const result = await forceMatch(sel[0], categories);
         figma.notify(`Matched ${result.applied} properties to closest S2A tokens`);
-        figma.ui.postMessage({ type: 'match-result', message: `Done: ${result.applied} matched, ${result.skipped} skipped` });
+        figma.ui.postMessage({ type: 'match-result', message: `Done: ${result.applied} matched, ${result.skipped} skipped`, issues: result.issues });
       } catch (e: any) {
         figma.notify(`Match failed: ${e.message}`, { error: true });
         figma.ui.postMessage({ type: 'match-result', message: `Error: ${e.message}` });
@@ -699,6 +719,31 @@ case 'localize': {
       const sel = figma.currentPage.selection;
       if (sel.length === 0) { figma.notify('Select a frame first'); break; }
       const provider = (typeof msg.provider === 'string' ? msg.provider : 'mymemory') as TranslationProvider;
+      const languages = Array.isArray(msg.languages) ? (msg.languages as string[]) : [];
+      const applyRtl = Boolean(msg.applyRtl);
+      if (languages.length === 0) {
+        figma.ui.postMessage({ type: 'localize-status', message: 'Select at least one language.' });
+        break;
+      }
+
+      // Bridge provider — collect text and send to UI for prompt generation
+      if (provider === 'bridge') {
+        const sourceTexts = collectSourceText(sel[0]);
+        if (sourceTexts.length === 0) {
+          figma.ui.postMessage({ type: 'localize-status', message: 'No text found in selection.' });
+          break;
+        }
+        figma.ui.postMessage({
+          type: 'localize-bridge-prompt',
+          frameName: sel[0].name,
+          frameId: sel[0].id,
+          languages,
+          applyRtl,
+          sourceTexts,
+        });
+        break;
+      }
+
       const needsKey = ['deepl', 'google', 'azure', 'anthropic'].includes(provider);
       let apiKey = '';
       if (needsKey) {
@@ -707,12 +752,6 @@ case 'localize': {
           figma.ui.postMessage({ type: 'localize-status', message: `Add your ${provider} API key first.` });
           break;
         }
-      }
-      const languages = Array.isArray(msg.languages) ? (msg.languages as string[]) : [];
-      const applyRtl = Boolean(msg.applyRtl);
-      if (languages.length === 0) {
-        figma.ui.postMessage({ type: 'localize-status', message: 'Select at least one language.' });
-        break;
       }
       try {
         const result = await localize(sel[0], languages, applyRtl, provider, apiKey);
