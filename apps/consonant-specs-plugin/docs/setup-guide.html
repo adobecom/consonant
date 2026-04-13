@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consonant Tools — Setup Guide</title>
+<style>
+  :root {
+    --bg: #fff;
+    --text: #1a1a1a;
+    --text-secondary: #555;
+    --border: #e5e5e5;
+    --accent: #1473E6;
+    --purple: #7c3aed;
+    --code-bg: #f5f5f5;
+    --card-bg: #fafafa;
+    --green: #16a34a;
+    --orange: #ea580c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a;
+      --text: #e5e5e5;
+      --text-secondary: #999;
+      --border: #333;
+      --code-bg: #252525;
+      --card-bg: #222;
+    }
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overflow-y: scroll; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 48px 80px;
+    min-height: 100vh;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 40px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p, li { font-size: 14px; margin-bottom: 8px; }
+  ul, ol { padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; }
+  strong { font-weight: 600; }
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  pre {
+    background: var(--code-bg);
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    max-width: 100%;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  pre code {
+    background: none;
+    padding: 0;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  code {
+    word-break: break-word;
+  }
+  .step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .step-card h2 {
+    margin-top: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .step-number {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .badge-required { background: #fde8e8; color: #dc2626; }
+  .badge-optional { background: #e8f5e9; color: var(--green); }
+  .badge-ai { background: #f3e8ff; color: var(--purple); }
+  .callout {
+    background: var(--card-bg);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+  .callout-warn {
+    border-left-color: var(--orange);
+  }
+  .troubleshoot dt {
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  .troubleshoot dd {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-left: 0;
+    margin-bottom: 8px;
+  }
+  .flow {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .flow-step {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .flow-arrow { color: var(--text-secondary); font-size: 16px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+</style>
+</head>
+<body>
+
+<h1>Consonant Tools</h1>
+<p class="subtitle">Setup guide for the Figma plugin, AI bridge, and accessibility blueline generator.</p>
+
+<h2>Prerequisites</h2>
+<ul>
+  <li><strong>Figma Desktop</strong> <span class="badge badge-required">required</span> — the browser version doesn't support plugin bridges</li>
+  <li><strong>Node.js v18+</strong> <span class="badge badge-required">required</span> — <a href="https://nodejs.org">nodejs.org</a></li>
+  <li><strong>Claude Code CLI</strong> <span class="badge badge-ai">AI fill</span> — only needed for AI-assisted features
+    <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+    Sign in with your Claude account (<code>claude login</code>). Works with any Claude Pro or Max plan.
+  </li>
+</ul>
+
+<hr>
+
+<h2>Setup Options</h2>
+<p>Choose the path that fits your comfort level:</p>
+<div style="display:flex;gap:12px;margin-bottom:24px;">
+  <button id="toggleA" onclick="showSetup('a')" style="flex:1;background:var(--card-bg);border:2px solid var(--accent);border-radius:10px;padding:16px;text-align:center;cursor:pointer;font-family:inherit;">
+    <div style="font-weight:600;margin-bottom:4px;">Option A: Manual</div>
+    <div style="font-size:12px;color:var(--text-secondary);">Run each step yourself in Terminal</div>
+  </button>
+  <button id="toggleB" onclick="showSetup('b')" style="flex:1;background:var(--card-bg);border:2px solid var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;font-family:inherit;">
+    <div style="font-weight:600;margin-bottom:4px;">Option B: Quick Setup</div>
+    <div style="font-size:12px;color:var(--text-secondary);">Let Claude do it for you</div>
+    <div style="font-size:11px;color:var(--accent);margin-top:4px;">Recommended for non-technical users</div>
+  </button>
+</div>
+
+<div id="setupB" style="display:none;">
+  <div class="step-card" style="border-color:var(--accent);background:linear-gradient(135deg, var(--card-bg), var(--bg));">
+    <h2 style="margin-top:0;border:none;padding:0;">Quick Setup</h2>
+    <p>If you're not comfortable in Terminal, Claude can handle the entire installation for you. Just three things to do first:</p>
+    <ol>
+      <li>Install <strong>Node.js</strong> from <a href="https://nodejs.org">nodejs.org</a> (click the big green button, run the installer)</li>
+      <li>Install <strong>Claude Code</strong> — open Terminal and paste:
+        <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+      </li>
+      <li>Sign in — in the same Terminal, run:
+        <pre><code>claude login</code></pre>
+      </li>
+    </ol>
+    <p>Then open Claude Code and type:</p>
+    <pre><code>claude</code></pre>
+    <p>Once Claude starts, type this command:</p>
+    <pre style="background:var(--accent);color:#fff;font-weight:600;"><code style="background:none;color:#fff;">/project:setup</code></pre>
+    <p style="font-size:12px;color:var(--text-secondary);margin-top:8px;">Claude will clone the repo, install dependencies, build the plugin, and install the bridge — then tell you what to do in Figma.</p>
+  </div>
+</div>
+
+<div id="setupA">
+  <div class="step-card">
+    <h2><span class="step-number">1</span> Clone the repo</h2>
+    <pre><code>git clone https://github.com/spicyxshrimp/consonant-figma-plugin.git
+cd consonant-figma-plugin</code></pre>
+  </div>
+
+  <div class="step-card">
+    <h2><span class="step-number">2</span> Install and build</h2>
+    <pre><code>npm install
+npm run build</code></pre>
+    <p>For live rebuilds while developing:</p>
+    <pre><code>npm run watch</code></pre>
+  </div>
+
+  <div class="step-card">
+    <h2><span class="step-number">3</span> Load the plugin in Figma</h2>
+    <ol>
+      <li>Open <strong>Figma Desktop</strong></li>
+      <li>Go to <strong>Plugins &gt; Development &gt; Import plugin from manifest...</strong></li>
+      <li>Select the <code>manifest.json</code> file from the cloned repo</li>
+      <li>The plugin appears as <strong>"Consonant Tools"</strong> in your plugin menu</li>
+    </ol>
+    <div class="callout">You only need to import once. After that, the plugin persists across all files and sessions.</div>
+  </div>
+
+  <div class="step-card">
+    <h2><span class="step-number">4</span> Install the figma-console bridge <span class="badge badge-ai">AI fill</span></h2>
+    <p>The bridge lets Claude Code read and write to your Figma file.</p>
+    <pre><code>npm install -g figma-console-mcp</code></pre>
+    <p>The repo's <code>.mcp.json</code> already references it, so Claude Code will auto-start it when you open a session in this directory.</p>
+  </div>
+
+  <div class="step-card">
+    <h2><span class="step-number">5</span> Connect the bridge <span class="badge badge-ai">AI fill</span></h2>
+    <ol>
+      <li>Open a Figma file and run the <strong>Consonant Tools</strong> plugin</li>
+      <li>Go to the <strong>Bridge</strong> tab in the plugin</li>
+      <li>Click <strong>Connect</strong></li>
+      <li>The status should change to <span style="color:var(--green);font-weight:600;">Connected</span> with a green dot</li>
+    </ol>
+    <div class="callout">The bridge stays connected as long as the plugin window is open. You can switch between tabs without disconnecting.</div>
+  </div>
+
+  <div class="step-card">
+    <h2><span class="step-number">6</span> Start Claude Code <span class="badge badge-ai">AI fill</span></h2>
+    <pre><code>cd consonant-figma-plugin
+claude</code></pre>
+    <p>Claude Code will detect the <code>.mcp.json</code> and start the figma-console MCP server automatically.</p>
+  </div>
+</div>
+
+<script>
+function showSetup(option) {
+  var a = document.getElementById('setupA');
+  var b = document.getElementById('setupB');
+  var btnA = document.getElementById('toggleA');
+  var btnB = document.getElementById('toggleB');
+  if (option === 'a') {
+    a.style.display = '';
+    b.style.display = 'none';
+    btnA.style.borderColor = 'var(--accent)';
+    btnB.style.borderColor = 'var(--border)';
+  } else {
+    a.style.display = 'none';
+    b.style.display = '';
+    btnA.style.borderColor = 'var(--border)';
+    btnB.style.borderColor = 'var(--accent)';
+  }
+}
+</script>
+
+<hr>
+
+<h2>Using the A11y Blueline</h2>
+
+<div class="flow">
+  <span class="flow-step">Select a frame</span>
+  <span class="flow-arrow">&rarr;</span>
+  <span class="flow-step">A11y tab</span>
+  <span class="flow-arrow">&rarr;</span>
+  <span class="flow-step">Check options</span>
+  <span class="flow-arrow">&rarr;</span>
+  <span class="flow-step">Generate Blueline</span>
+  <span class="flow-arrow">&rarr;</span>
+  <span class="flow-step">Copy instruction</span>
+  <span class="flow-arrow">&rarr;</span>
+  <span class="flow-step">Paste in Claude Code</span>
+</div>
+
+<h3>What you can check</h3>
+<table style="width:100%;table-layout:fixed;font-size:13px;border-collapse:collapse;margin-bottom:16px;">
+  <tr style="border-bottom:1px solid var(--border);">
+    <td style="padding:6px 8px;"><strong>Plugin</strong> (no bridge needed)</td>
+    <td style="padding:6px 8px;">Focus Indicators, Focus Order</td>
+  </tr>
+  <tr style="border-bottom:1px solid var(--border);">
+    <td style="padding:6px 8px;"><strong style="color:var(--purple);">AI-assisted</strong> (bridge required)</td>
+    <td style="padding:6px 8px;">Heading Hierarchy, Landmarks, Accessible Names, Alt-Text, ARIA Roles, Keyboard Patterns, DOM Strategy, Auto-Rotation</td>
+  </tr>
+  <tr>
+    <td style="padding:6px 8px;"><strong style="color:var(--purple);">Accessibility Notes</strong> (bridge required)</td>
+    <td style="padding:6px 8px;">VoiceOver, TalkBack, Narrator, React Native, TV Note, General Note</td>
+  </tr>
+</table>
+
+<h3>Two modes</h3>
+<ul>
+  <li><strong>Generate Blueline</strong> — Focus sidebar + cards below the design. Good for a compact overview.</li>
+  <li><strong>Generate Blueline with Sections</strong> — One Figma Section per category, each with its own design clone. Good for detailed per-category review.</li>
+</ul>
+
+<h3>AI Fill</h3>
+<p>After generating the scaffolding, the plugin shows an instruction with a <strong>Copy</strong> button. Click it, then paste into your Claude Code session. Claude will:</p>
+<ol>
+  <li>Screenshot the design</li>
+  <li>Read the Figma layer tree</li>
+  <li>Fill each card with design-specific accessibility specs</li>
+</ol>
+
+<div class="callout callout-warn">AI fill generates a strong first draft (~70% accuracy). A human accessibility engineer should review and refine — especially keyboard interaction models, screen reader announcement strings, and platform-specific behavior.</div>
+
+<hr>
+
+<h2>Team Setup</h2>
+<p>Every team member runs their own instance. There's no shared server or conflict.</p>
+<ul>
+  <li>Their own Figma Desktop with the plugin loaded</li>
+  <li>Their own Claude Code session signed into their own Claude account</li>
+  <li>The bridge connects locally (<code>localhost</code>) — no ports shared between users</li>
+</ul>
+
+<hr>
+
+<h2>Troubleshooting</h2>
+<dl class="troubleshoot">
+  <dt>Bridge won't connect</dt>
+  <dd>Make sure you're using Figma Desktop (not browser). Check that <code>figma-console-mcp</code> is installed: <code>which figma-console-mcp</code>. The plugin window must be open and visible.</dd>
+
+  <dt>AI-assisted checkboxes are grayed out</dt>
+  <dd>Connect the bridge first (Bridge tab &gt; Connect). The checkboxes enable once connected.</dd>
+
+  <dt><code>/project:fill-blueline</code> shows "Unknown skill"</dt>
+  <dd>Start Claude Code from inside the <code>consonant-figma-plugin</code> directory. The command file at <code>.claude/commands/fill-blueline.md</code> is loaded at session start — restart if you added it mid-session.</dd>
+
+  <dt>Focus indicators on wrong elements</dt>
+  <dd>Detection uses Figma layer names ("Button", "Logo", "Carousel"). Rename layers in Figma for better accuracy.</dd>
+
+  <dt>Cards still showing "Awaiting AI fill..."</dt>
+  <dd>The scaffolding was created but AI fill hasn't run. Copy the instruction from the plugin and paste it into Claude Code.</dd>
+</dl>
+
+<hr>
+<p style="color:var(--text-secondary);font-size:12px;margin-top:24px;text-align:center;">Consonant Tools &mdash; Built for the A11y team</p>
+
+</body>
+</html>
