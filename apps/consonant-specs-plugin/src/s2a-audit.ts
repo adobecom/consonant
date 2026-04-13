@@ -1,5 +1,5 @@
 import { getNodeFills, getNodeStrokes, getTextProps, getCornerRadius, figmaColorToHex } from './utils';
-import { matchColor, matchSpacing, matchRadius, matchTypography, matchDimension, applyColorStyle, applyStrokeColorStyle, applyTextStyle, setResponsiveMode, isLoaded, loadLibraryTokens } from './tokens';
+import { matchColor, matchSpacing, matchRadius, matchTypography, matchTypographyStrict, matchDimension, applyColorStyle, applyStrokeColorStyle, applyTextStyle, setResponsiveMode, isLoaded, loadLibraryTokens } from './tokens';
 
 // ── Types ──
 
@@ -56,16 +56,23 @@ function auditNode(node: SceneNode, issues: AuditIssue[], counters: { total: num
     }
   }
 
-  // Typography
+  // Typography — strict match: family + size + weight must all match an S2A text style
   const text = getTextProps(node);
   if (text) {
     counters.total++;
-    const familyToken = matchTypography(text.fontFamily);
-    const sizeToken = matchTypography(`${text.fontSize}`);
-    if (familyToken || sizeToken) {
+    const fontStyle = node.type === 'TEXT' && (node as TextNode).fontName !== figma.mixed
+      ? ((node as TextNode).fontName as FontName).style
+      : '';
+    const result = matchTypographyStrict(text.fontFamily, text.fontSize, fontStyle);
+    if (result.matched) {
       counters.matched++;
     } else {
-      issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: 'Typography', value: `${text.fontFamily} ${text.fontSize}px`, suggestion: null });
+      const mismatches: string[] = [];
+      if (!result.familyOk) mismatches.push(`family "${text.fontFamily}"`);
+      if (!result.sizeOk) mismatches.push(`size ${text.fontSize}px`);
+      if (!result.styleOk) mismatches.push(`weight "${fontStyle}"`);
+      const detail = mismatches.length > 0 ? ` (no S2A match for ${mismatches.join(', ')})` : '';
+      issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: 'Typography', value: `${text.fontFamily} ${fontStyle} ${text.fontSize}px${detail}`, suggestion: null });
     }
   }
 
@@ -96,6 +103,8 @@ function auditNode(node: SceneNode, issues: AuditIssue[], counters: { total: num
 function auditRecursive(node: SceneNode, issues: AuditIssue[], counters: { total: number; matched: number }): void {
   if ('visible' in node && !node.visible) return;
   auditNode(node, issues, counters);
+  // Don't descend into instance children — they're controlled by the component
+  if (node.type === 'INSTANCE') return;
   if ('children' in node) {
     for (const child of (node as any).children) {
       auditRecursive(child, issues, counters);
@@ -292,6 +301,8 @@ async function alignNode(node: SceneNode, textOnly: boolean, result: { aligned: 
 async function alignRecursive(node: SceneNode, textOnly: boolean, result: { aligned: number; scanned: number; unmatched: AuditIssue[] }): Promise<void> {
   if ('visible' in node && !node.visible) return;
   await alignNode(node, textOnly, result);
+  // Don't descend into instance children — they're controlled by the component
+  if (node.type === 'INSTANCE') return;
   if ('children' in node) {
     for (const child of (node as any).children) {
       await alignRecursive(child, textOnly, result);

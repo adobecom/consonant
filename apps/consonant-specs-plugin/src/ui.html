@@ -43,7 +43,11 @@
         <div id="matchContent">
           <p class="placeholder" id="matchPlaceholder">Select a frame to force match</p>
           <div id="matchControls" style="display:none;">
-            <p style="color:var(--text-secondary);margin-bottom:12px;">Force match the selection to the closest S2A token values. Check the categories you want to match.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <p style="color:var(--text-secondary);margin-bottom:0;">Force match to closest S2A tokens.</p>
+              <button id="matchCheckAll" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+            </div>
+            <div style="margin-bottom:12px;"></div>
 
             <div class="match-checklist">
               <label class="match-option"><input type="checkbox" id="matchTypography"> Typography</label>
@@ -145,6 +149,7 @@
             <div id="localizeMain">
               <div class="section-title">Translation Provider</div>
               <select id="providerSelect" style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--border,#e5e5e5);border-radius:4px;font-size:12px;margin-bottom:12px;">
+                <option value="bridge">Claude via Bridge (no key)</option>
                 <option value="mymemory">MyMemory (free, no key)</option>
                 <option value="lingva">Lingva (free, no key)</option>
                 <option value="deepl">DeepL Free (key required)</option>
@@ -160,7 +165,10 @@
                   <button class="btn btn-secondary" id="clearKeyBtn" style="flex:1;">Clear</button>
                 </div>
               </div>
-              <div class="section-title">Languages</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div class="section-title">Languages</div>
+                <button id="locCheckAll" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+              </div>
               <div class="match-checklist">
                 <label class="match-option"><input type="checkbox" id="locDe"> German <span style="color:var(--text-tertiary,#999);font-size:11px;">— long-word wrapping, 1.5× text</span></label>
                 <label class="match-option"><input type="checkbox" id="locZh"> Chinese <span style="color:var(--text-tertiary,#999);font-size:11px;">— short sentences</span></label>
