@@ -1,0 +1,960 @@
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+interface PropertyEntry {
+  name: string;
+  value: string;
+  token: string | null;
+  colorSwatch?: string;
+}
+
+const tabs = document.querySelectorAll<HTMLButtonElement>('.tab');
+const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
+
+tabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.tab;
+    tabs.forEach((t) => t.classList.remove('active'));
+    panels.forEach((p) => p.classList.remove('active'));
+    tab.classList.add('active');
+    const panel = document.querySelector(`[data-panel="${target}"]`);
+    if (panel) panel.classList.add('active');
+  });
+});
+
+let currentSelection: { count: number; hasAutoLayout: boolean } = { count: 0, hasAutoLayout: false };
+
+function updateAlignControls() {
+  const placeholder = document.getElementById('alignPlaceholder') as HTMLElement;
+  const controls = document.getElementById('alignControls') as HTMLElement;
+
+  if (currentSelection.count === 0) {
+    placeholder.style.display = 'block';
+    controls.style.display = 'none';
+    return;
+  }
+
+  placeholder.style.display = 'none';
+  controls.style.display = 'block';
+}
+
+function updateDesignControls() {
+  const placeholder = document.getElementById('designPlaceholder') as HTMLElement;
+  const controls = document.getElementById('designControls') as HTMLElement;
+
+  if (currentSelection.count === 0) {
+    placeholder.style.display = 'block';
+    controls.style.display = 'none';
+    return;
+  }
+
+  placeholder.style.display = 'none';
+  controls.style.display = 'block';
+}
+
+function updateMatchControls() {
+  const placeholder = document.getElementById('matchPlaceholder') as HTMLElement;
+  const controls = document.getElementById('matchControls') as HTMLElement;
+
+  if (currentSelection.count === 0) {
+    placeholder.style.display = 'block';
+    controls.style.display = 'none';
+    return;
+  }
+
+  placeholder.style.display = 'none';
+  controls.style.display = 'block';
+}
+
+function updateLocalizeControls() {
+  const placeholder = document.getElementById('localizePlaceholder') as HTMLElement;
+  const controls = document.getElementById('localizeControls') as HTMLElement;
+  if (currentSelection.count === 0) {
+    placeholder.style.display = 'block';
+    controls.style.display = 'none';
+    return;
+  }
+  placeholder.style.display = 'none';
+  controls.style.display = 'block';
+}
+
+function updateSpecsControls() {
+  const placeholder = document.getElementById('specsPlaceholder') as HTMLElement;
+  const controls = document.getElementById('specsControls') as HTMLElement;
+
+  if (currentSelection.count === 0) {
+    placeholder.style.display = 'block';
+    controls.style.display = 'none';
+    return;
+  }
+
+  placeholder.style.display = 'none';
+  controls.style.display = 'block';
+}
+
+function updateSelectionInfo(data: { name: string; type: string; width: number; height: number } | null) {
+  const el = document.getElementById('selectionInfo');
+  if (!el) return;
+  if (!data) {
+    el.innerHTML = '<span class="selection-label">No selection</span>';
+    return;
+  }
+  el.innerHTML = `<span class="selection-label"><strong>${esc(data.name)}</strong> (${esc(data.type)}) &mdash; ${Math.round(data.width)} &times; ${Math.round(data.height)}</span>`;
+}
+
+function updateTokenStatus(count: number, version: string) {
+  const el = document.getElementById('footer');
+  if (!el) return;
+  el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span>`;
+}
+
+function postToPlugin(type: string, payload?: Record<string, unknown>) {
+  parent.postMessage({ pluginMessage: { type, ...payload } }, '*');
+}
+
+window.addEventListener('message', (event) => {
+  const msg = event.data.pluginMessage;
+  if (!msg) return;
+
+  switch (msg.type) {
+    case 'selection-changed':
+      updateSelectionInfo(msg.selection);
+      currentSelection = { count: msg.count, hasAutoLayout: msg.hasAutoLayout };
+      updateAlignControls();
+      updateMatchControls();
+      updateDesignControls();
+      updateSpecsControls();
+      updateLocalizeControls();
+      updateA11yControls();
+      break;
+    case 'api-key-state':
+      updateApiKeyUi(msg.hasKey as boolean, msg.masked as string | undefined);
+      break;
+    case 'localize-status':
+      updateLocalizeStatus(msg.message as string);
+      break;
+    case 'token-status':
+      updateTokenStatus(msg.count, msg.version);
+      break;
+    case 'node-properties':
+      renderPropertyList(msg.properties as PropertyEntry[]);
+      break;
+    case 'spec-it-status':
+      updateSpecStatus(msg.message as string);
+      break;
+    case 's2a-audit-result':
+      renderAuditResult(msg as any);
+      break;
+    case 's2a-align-result':
+      renderAlignResult(msg as any);
+      break;
+    case 'match-result':
+      updateMatchStatus(msg.message);
+      break;
+    case 'grid-result':
+      updateGridStatus(msg.message);
+      break;
+    case 'a11y-status':
+      updateA11yStatus(msg.message as string);
+      break;
+    case 'a11y-tier2-request':
+      showAiFillInstruction(msg.mode as string, msg.sections as string[], msg.frameName as string);
+      break;
+    // Unified bridge command result from code.ts
+    case 'bridge:command-result': {
+      const pending = bridgePendingRequests.get(msg.requestId as string);
+      if (pending) {
+        clearTimeout(pending.timeoutId);
+        bridgePendingRequests.delete(msg.requestId as string);
+        if (msg.success) {
+          const result: Record<string, unknown> = { ...msg };
+          delete result.type;
+          delete result.requestId;
+          pending.resolve(result);
+        } else {
+          pending.resolve({ success: false, error: msg.error || 'Unknown error' });
+        }
+      }
+      break;
+    }
+    // Variables data from code.ts (auto-sync)
+    case 'bridge:variables-data': {
+      if (bridgeWs && bridgeWs.readyState === 1) {
+        try { bridgeWs.send(JSON.stringify({ type: 'VARIABLES_DATA', data: msg.data })); } catch {}
+      }
+      break;
+    }
+    // Event forwarding to WebSocket
+    case 'bridge:selection-changed': {
+      if (bridgeWs && bridgeWs.readyState === 1) {
+        try { bridgeWs.send(JSON.stringify({ type: 'SELECTION_CHANGE', data: { selection: msg.selection } })); } catch {}
+      }
+      break;
+    }
+    case 'bridge:page-changed': {
+      if (bridgeWs && bridgeWs.readyState === 1) {
+        try { bridgeWs.send(JSON.stringify({ type: 'PAGE_CHANGE', data: msg.page })); } catch {}
+      }
+      break;
+    }
+  }
+});
+
+function navigateToNode(nodeId: string) {
+  postToPlugin('navigate-to-node', { nodeId });
+}
+
+function renderAuditResult(result: { matched: number; total: number; issues: Array<{ nodeId: string; nodeName: string; property: string; value: string }> }) {
+  const list = document.getElementById('propertyList');
+  if (!list) return;
+
+  const pct = result.total > 0 ? Math.round((result.matched / result.total) * 100) : 0;
+  const color = pct >= 80 ? 'var(--success)' : pct >= 50 ? 'var(--warning)' : '#e34850';
+
+  let html = `<div style="padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--border)">
+    <strong style="font-size:13px;color:${color}">${pct}% S2A compliant</strong>
+    <span style="color:var(--text-secondary);font-size:10px;display:block">${result.matched}/${result.total} properties matched — ${result.issues.length} issues</span>
+  </div>`;
+
+  if (result.issues.length > 0) {
+    html += '<div class="section-title" style="margin-top:8px">Issues (click to navigate)</div>';
+    html += result.issues.map(issue =>
+      `<div class="property-row" data-node-id="${esc(issue.nodeId)}" style="cursor:pointer">
+        <span class="property-name">${esc(issue.nodeName)}</span>
+        <span class="property-value">${esc(issue.property)}: ${esc(issue.value)}</span>
+        <span class="token-badge token-badge-miss">No token</span>
+      </div>`
+    ).join('');
+  }
+
+  list.innerHTML = html;
+
+  list.querySelectorAll('.property-row[data-node-id]').forEach((row) => {
+    row.addEventListener('click', () => {
+      const nodeId = (row as HTMLElement).dataset.nodeId;
+      if (nodeId) navigateToNode(nodeId);
+    });
+  });
+}
+
+function renderAlignResult(result: { aligned: number; scanned: number; mode: string; unmatched: Array<{ nodeId: string; nodeName: string; property: string; value: string }> }) {
+  const list = document.getElementById('propertyList');
+  if (!list) return;
+
+  let html = `<div style="padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--border)">
+    <strong style="font-size:13px;color:var(--success)">${result.aligned} bound to S2A</strong>
+    <span style="color:var(--text-secondary);font-size:10px;display:block">${result.scanned} nodes scanned — mode: ${esc(result.mode)}</span>
+  </div>`;
+
+  if (result.unmatched.length > 0) {
+    html += '<div class="section-title" style="margin-top:8px">Not Found in S2A (click to navigate)</div>';
+    html += result.unmatched.map(item =>
+      `<div class="property-row" data-node-id="${esc(item.nodeId)}" style="cursor:pointer">
+        <span class="property-name">${esc(item.nodeName)}</span>
+        <span class="property-value">${esc(item.property)}: ${esc(item.value)}</span>
+        <span class="token-badge token-badge-miss">No match</span>
+      </div>`
+    ).join('');
+  } else {
+    html += '<div style="padding:12px 0;color:var(--success);text-align:center">All properties matched S2A tokens</div>';
+  }
+
+  list.innerHTML = html;
+
+  list.querySelectorAll('.property-row[data-node-id]').forEach((row) => {
+    row.addEventListener('click', () => {
+      const nodeId = (row as HTMLElement).dataset.nodeId;
+      if (nodeId) navigateToNode(nodeId);
+    });
+  });
+}
+
+// Align tab — property inspection
+function renderPropertyList(properties: PropertyEntry[]) {
+  const list = document.getElementById('propertyList');
+  if (!list || properties.length === 0) return;
+
+  list.innerHTML = properties.map((prop) => {
+    const swatch = prop.colorSwatch
+      ? `<span class="color-swatch" style="background:${prop.colorSwatch}"></span>`
+      : '';
+    const badge = prop.token
+      ? `<span class="token-badge token-badge-match">${esc(prop.token)}</span>`
+      : `<span class="token-badge token-badge-miss">No token</span>`;
+    const copyValue = prop.token ? `var(${prop.token})` : prop.value;
+
+    return `<div class="property-row" data-copy="${esc(copyValue)}" title="Click to copy">
+      <span class="property-name">${esc(prop.name)}</span>
+      <span class="property-value">${swatch}${esc(prop.value)}</span>
+      ${badge}
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.property-row').forEach((row) => {
+    row.addEventListener('click', () => {
+      const value = (row as HTMLElement).dataset.copy || '';
+      navigator.clipboard.writeText(value);
+    });
+  });
+}
+
+// Align tab — action buttons
+document.getElementById('s2aAuditBtn')?.addEventListener('click', () => postToPlugin('s2a-audit'));
+document.getElementById('fullAlignBtn')?.addEventListener('click', () => postToPlugin('full-align-s2a'));
+document.getElementById('textColorsAlignBtn')?.addEventListener('click', () => postToPlugin('text-colors-align'));
+
+// Design tab
+document.getElementById('gridBtn')?.addEventListener('click', () => {
+  postToPlugin('apply-grid');
+  updateGridStatus('Applying grid...');
+});
+
+document.getElementById('gridXlBtn')?.addEventListener('click', () => {
+  postToPlugin('apply-grid-xl');
+  updateGridStatus('Applying XL grid...');
+});
+
+document.getElementById('clearGridBtn')?.addEventListener('click', () => {
+  postToPlugin('clear-grids');
+  updateGridStatus('Clearing grids...');
+});
+
+function updateGridStatus(message: string) {
+  const el = document.getElementById('gridStatus');
+  if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+}
+
+// Match tab
+document.getElementById('matchBtn')?.addEventListener('click', () => {
+  const categories: string[] = [];
+  if ((document.getElementById('matchTypography') as HTMLInputElement).checked) categories.push('typography');
+  if ((document.getElementById('matchFillColors') as HTMLInputElement).checked) categories.push('fillColors');
+  if ((document.getElementById('matchStrokeColors') as HTMLInputElement).checked) categories.push('strokeColors');
+  if ((document.getElementById('matchBorderRadius') as HTMLInputElement).checked) categories.push('borderRadius');
+  if ((document.getElementById('matchBorderWidth') as HTMLInputElement).checked) categories.push('borderWidth');
+  if ((document.getElementById('matchSpacing') as HTMLInputElement).checked) categories.push('spacing');
+  if ((document.getElementById('matchOpacity') as HTMLInputElement).checked) categories.push('opacity');
+  if ((document.getElementById('matchDropShadow') as HTMLInputElement).checked) categories.push('dropShadow');
+  if ((document.getElementById('matchBlur') as HTMLInputElement).checked) categories.push('blur');
+
+  if (categories.length === 0) return;
+  postToPlugin('force-match', { categories });
+  updateMatchStatus('Matching...');
+});
+
+function updateMatchStatus(message: string) {
+  const el = document.getElementById('matchStatus');
+  if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+}
+
+// Specs tab
+document.getElementById('fullSpecsBtn')?.addEventListener('click', () => {
+  postToPlugin('spec-it', { sections: ['anatomy', 'layout', 'typography', 'components'] });
+  updateSpecStatus('Generating full specs...');
+});
+
+document.getElementById('specItBtn')?.addEventListener('click', () => {
+  const sections: string[] = [];
+  if ((document.getElementById('specAnatomy') as HTMLInputElement)?.checked) sections.push('anatomy');
+  if ((document.getElementById('specCardGaps') as HTMLInputElement)?.checked) sections.push('cardGaps');
+  if ((document.getElementById('specSpacingGeneral') as HTMLInputElement)?.checked) sections.push('spacingGeneral');
+  if ((document.getElementById('specSpacing') as HTMLInputElement)?.checked) sections.push('spacing');
+  if ((document.getElementById('specColors') as HTMLInputElement)?.checked) sections.push('colors');
+  if ((document.getElementById('specTextProps') as HTMLInputElement)?.checked) sections.push('textProperties');
+  if (sections.length === 0) {
+    updateSpecStatus('Select at least one section.');
+    return;
+  }
+  postToPlugin('spec-it', { sections });
+  updateSpecStatus('Generating spec...');
+});
+
+function updateSpecStatus(message: string) {
+  const el = document.getElementById('specStatus');
+  if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+}
+
+// Localize tab
+const KEYED_PROVIDERS = new Set(['deepl', 'google', 'azure', 'anthropic']);
+
+const providerSelect = document.getElementById('providerSelect') as HTMLSelectElement | null;
+const apiKeySection = document.getElementById('apiKeySection') as HTMLElement | null;
+
+function syncKeySection() {
+  const provider = providerSelect?.value || 'mymemory';
+  if (apiKeySection) apiKeySection.style.display = KEYED_PROVIDERS.has(provider) ? 'block' : 'none';
+  postToPlugin('get-api-key', { provider });
+}
+
+providerSelect?.addEventListener('change', syncKeySection);
+syncKeySection();
+
+const locAr = document.getElementById('locAr') as HTMLInputElement | null;
+const locRtl = document.getElementById('locRtl') as HTMLInputElement | null;
+locAr?.addEventListener('change', () => {
+  if (locAr.checked && locRtl && !locRtl.checked) locRtl.checked = true;
+});
+
+document.getElementById('localizeBtn')?.addEventListener('click', () => {
+  const languages: string[] = [];
+  if ((document.getElementById('locDe') as HTMLInputElement).checked) languages.push('de');
+  if ((document.getElementById('locZh') as HTMLInputElement).checked) languages.push('zh');
+  if ((document.getElementById('locTh') as HTMLInputElement).checked) languages.push('th');
+  if ((document.getElementById('locAr') as HTMLInputElement).checked) languages.push('ar');
+  if (languages.length === 0) {
+    updateLocalizeStatus('Select at least one language.');
+    return;
+  }
+  const provider = providerSelect?.value || 'mymemory';
+  const applyRtl = (document.getElementById('locRtl') as HTMLInputElement).checked;
+  postToPlugin('localize', { languages, applyRtl, provider });
+  updateLocalizeStatus('Localizing — this may take a moment...');
+});
+
+document.getElementById('saveKeyBtn')?.addEventListener('click', () => {
+  const input = document.getElementById('apiKeyInput') as HTMLInputElement;
+  const key = input.value.trim();
+  if (!key) return;
+  const provider = providerSelect?.value || '';
+  postToPlugin('save-api-key', { key, provider });
+  input.value = '';
+});
+
+document.getElementById('clearKeyBtn')?.addEventListener('click', () => {
+  const provider = providerSelect?.value || '';
+  postToPlugin('clear-api-key', { provider });
+});
+
+function updateLocalizeStatus(message: string) {
+  const el = document.getElementById('localizeStatus');
+  if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+}
+
+function updateApiKeyUi(hasKey: boolean, masked?: string) {
+  const status = document.getElementById('apiKeyStatus') as HTMLElement;
+  if (status) status.textContent = hasKey ? `Saved: ${masked || '••••'}` : 'No key saved.';
+}
+
+// A11y tab — controls visibility
+function updateA11yControls() {
+  const placeholder = document.getElementById('a11yPlaceholder') as HTMLElement;
+  const controls = document.getElementById('a11yControls') as HTMLElement;
+  if (currentSelection.count === 0) {
+    placeholder.style.display = 'block';
+    controls.style.display = 'none';
+    return;
+  }
+  placeholder.style.display = 'none';
+  controls.style.display = 'block';
+}
+
+function updateA11yTier2State() {
+  const badge = document.getElementById('a11yTier2Badge') as HTMLElement;
+  const items = document.querySelectorAll('.a11y-tier2-item');
+  const checkboxes = document.querySelectorAll('.a11y-tier2-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+  if (bridgeConnected) {
+    badge.textContent = '\u2713 bridge connected';
+    badge.classList.add('connected');
+    items.forEach(el => el.classList.add('enabled'));
+    checkboxes.forEach(cb => cb.disabled = false);
+  } else {
+    badge.textContent = 'connect bridge';
+    badge.classList.remove('connected');
+    items.forEach(el => el.classList.remove('enabled'));
+    checkboxes.forEach(cb => { cb.disabled = true; cb.checked = false; });
+  }
+}
+
+function updateA11yStatus(message: string) {
+  const el = document.getElementById('a11yStatus');
+  if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+}
+
+function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string) {
+  let cmd: string;
+  if (mode === 'sections') {
+    cmd = 'Use /project:fill-blueline to fill the blueline section instruction cards on the current Figma page via the bridge.';
+  } else {
+    const categoryList = sections && sections.length > 0 ? sections.join(', ') : 'all categories';
+    const frame = frameName ? ` for "${frameName}"` : '';
+    cmd = `Use /project:fill-blueline to fill ONLY these blueline categories${frame}: ${categoryList}. Do not fill cards from other categories or previous generations.`;
+  }
+  const el = document.getElementById('a11yStatus');
+  if (el) {
+    el.innerHTML = `
+      <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
+        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Scaffolding done &#x2714;</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">To fill AI sections, paste this in Claude Code:</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <code id="fillCmdText" style="flex:1;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
+          <button class="btn btn-secondary" id="copyFillCmd" style="padding:4px 8px;font-size:10px;white-space:nowrap;">Copy</button>
+        </div>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
+      </div>`;
+    document.getElementById('copyFillCmd')?.addEventListener('click', () => {
+      const ta = document.createElement('textarea');
+      ta.value = cmd;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      const btn = document.getElementById('copyFillCmd');
+      if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); }
+    });
+  }
+}
+
+// Check All / Uncheck All toggle
+// Note: autoRotation and autoRotationSimplified are mutually exclusive.
+// Check All picks regular Auto-Rotation and leaves Simplified unchecked.
+document.getElementById('a11yCheckAll')?.addEventListener('click', () => {
+  const allIds = ['a11yFocusIndicators', 'a11yFocusOrder', 'a11yHeadings', 'a11yLandmarks', 'a11yNames', 'a11yAltText', 'a11yAria', 'a11yKeyboard', 'a11yDom', 'a11yAutoRotation', 'a11yVoiceover', 'a11yTalkback', 'a11yNarrator', 'a11yReactNative', 'a11yTvNote', 'a11yGeneralNote'];
+  const boxes = allIds.map(id => document.getElementById(id) as HTMLInputElement).filter(Boolean);
+  const enabledBoxes = boxes.filter(cb => !cb.disabled);
+  const allChecked = enabledBoxes.every(cb => cb.checked);
+  enabledBoxes.forEach(cb => { cb.checked = !allChecked; });
+  // Always clear the Simplified checkbox on check-all (mutually exclusive with Auto-Rotation)
+  const simplified = document.getElementById('a11ySimplified') as HTMLInputElement;
+  if (simplified && !simplified.disabled) simplified.checked = false;
+  const btn = document.getElementById('a11yCheckAll');
+  if (btn) btn.textContent = allChecked ? 'Check All' : 'Uncheck All';
+});
+
+// Auto-Rotation / Auto-Rotation Simplified mutual exclusivity
+// When Simplified is checked, uncheck Auto-Rotation and all Accessibility Notes
+// (simplified mode is the minimal version without platform notes).
+const NOTE_IDS = ['a11yVoiceover', 'a11yTalkback', 'a11yNarrator', 'a11yReactNative', 'a11yTvNote', 'a11yGeneralNote'];
+document.getElementById('a11ySimplified')?.addEventListener('change', () => {
+  const simplified = document.getElementById('a11ySimplified') as HTMLInputElement;
+  if (!simplified?.checked) return;
+  const regular = document.getElementById('a11yAutoRotation') as HTMLInputElement;
+  if (regular) regular.checked = false;
+  NOTE_IDS.forEach(id => {
+    const cb = document.getElementById(id) as HTMLInputElement;
+    if (cb) cb.checked = false;
+  });
+});
+// Auto-Rotation acts as parent toggle for all Accessibility Notes
+document.getElementById('a11yAutoRotation')?.addEventListener('change', () => {
+  const simplified = document.getElementById('a11ySimplified') as HTMLInputElement;
+  const regular = document.getElementById('a11yAutoRotation') as HTMLInputElement;
+  if (regular?.checked) {
+    // Check Auto-Rotation: uncheck Simplified, check all notes
+    if (simplified) simplified.checked = false;
+    NOTE_IDS.forEach(id => {
+      const cb = document.getElementById(id) as HTMLInputElement;
+      if (cb && !cb.disabled) cb.checked = true;
+    });
+  } else {
+    // Uncheck Auto-Rotation: uncheck all notes
+    NOTE_IDS.forEach(id => {
+      const cb = document.getElementById(id) as HTMLInputElement;
+      if (cb) cb.checked = false;
+    });
+  }
+});
+// Checking any individual note: auto-check Auto-Rotation parent, uncheck Simplified
+// Unchecking all notes: auto-uncheck Auto-Rotation
+NOTE_IDS.forEach(id => {
+  document.getElementById(id)?.addEventListener('change', () => {
+    const cb = document.getElementById(id) as HTMLInputElement;
+    const simplified = document.getElementById('a11ySimplified') as HTMLInputElement;
+    const regular = document.getElementById('a11yAutoRotation') as HTMLInputElement;
+    if (cb?.checked) {
+      if (simplified) simplified.checked = false;
+      if (regular && !regular.disabled) regular.checked = true;
+    } else {
+      // If no notes are checked, uncheck Auto-Rotation
+      const anyNoteChecked = NOTE_IDS.some(nid => {
+        const ncb = document.getElementById(nid) as HTMLInputElement;
+        return ncb?.checked;
+      });
+      if (!anyNoteChecked && regular) regular.checked = false;
+    }
+  });
+});
+
+// Accessibility Notes accordion toggle
+document.getElementById('a11yNotesToggle')?.addEventListener('click', () => {
+  const list = document.getElementById('a11yScreenReaderList') as HTMLElement;
+  const arrow = document.getElementById('a11yNotesArrow') as HTMLElement;
+  if (!list) return;
+  const collapsed = list.style.display === 'none';
+  list.style.display = collapsed ? '' : 'none';
+  if (arrow) arrow.style.transform = collapsed ? '' : 'rotate(-90deg)';
+});
+
+// Generate Blueline button
+document.getElementById('generateBluelineBtn')?.addEventListener('click', () => {
+  const tier1: string[] = [];
+  const tier2: string[] = [];
+  if ((document.getElementById('a11yFocusIndicators') as HTMLInputElement)?.checked) tier1.push('focusIndicators');
+  if ((document.getElementById('a11yFocusOrder') as HTMLInputElement)?.checked) tier1.push('focusOrder');
+  if ((document.getElementById('a11yHeadings') as HTMLInputElement)?.checked) tier2.push('headings');
+  if ((document.getElementById('a11yLandmarks') as HTMLInputElement)?.checked) tier2.push('landmarks');
+  if ((document.getElementById('a11yNames') as HTMLInputElement)?.checked) tier2.push('names');
+  if ((document.getElementById('a11yAltText') as HTMLInputElement)?.checked) tier2.push('altText');
+  if ((document.getElementById('a11yAria') as HTMLInputElement)?.checked) tier2.push('aria');
+  if ((document.getElementById('a11yKeyboard') as HTMLInputElement)?.checked) tier2.push('keyboard');
+  if ((document.getElementById('a11yDom') as HTMLInputElement)?.checked) tier2.push('dom');
+  const simplified = (document.getElementById('a11ySimplified') as HTMLInputElement)?.checked;
+  if (simplified) {
+    tier2.push('autoRotationSimplified');
+  } else if ((document.getElementById('a11yAutoRotation') as HTMLInputElement)?.checked) {
+    tier2.push('autoRotation');
+  }
+  if ((document.getElementById('a11yVoiceover') as HTMLInputElement)?.checked) tier2.push('voiceover');
+  if ((document.getElementById('a11yTalkback') as HTMLInputElement)?.checked) tier2.push('talkback');
+  if ((document.getElementById('a11yNarrator') as HTMLInputElement)?.checked) tier2.push('narrator');
+  if ((document.getElementById('a11yReactNative') as HTMLInputElement)?.checked) tier2.push('reactNative');
+  if ((document.getElementById('a11yTvNote') as HTMLInputElement)?.checked) tier2.push('tvNote');
+  if ((document.getElementById('a11yGeneralNote') as HTMLInputElement)?.checked) tier2.push('generalNote');
+
+  if (tier1.length === 0 && tier2.length === 0) {
+    updateA11yStatus('Select at least one option.');
+    return;
+  }
+
+  postToPlugin('generate-blueline', { tier1, tier2, grouped: !simplified });
+  updateA11yStatus('Generating blueline...');
+});
+
+// Generate Blueline with Panels — one Section per a11y category, each with cloned design
+document.getElementById('generateBluelinePanelsBtn')?.addEventListener('click', () => {
+  const tier1 = ['focusIndicators', 'focusOrder'];
+  const tier2 = ['headings', 'landmarks', 'names', 'altText', 'aria', 'keyboard', 'dom', 'autoRotation', 'screenReader'];
+  postToPlugin('generate-blueline-panels', { tier1, tier2 });
+  updateA11yStatus('Generating panels...');
+});
+
+// Bridge tab — WebSocket connection to figma-console MCP
+let bridgeConnected = false;
+let bridgeWs: WebSocket | null = null;
+let bridgeWsPort: number | null = null;
+let bridgeKeepaliveTimer: ReturnType<typeof setInterval> | null = null;
+let bridgeReconnectTimer: ReturnType<typeof setTimeout> | null = null;
+let bridgeReconnectAttempts = 0;
+let bridgeUserDisconnected = false; // true when user clicks Disconnect
+const BRIDGE_MAX_RECONNECT = 20;
+const BRIDGE_RECONNECT_BASE_MS = 2000;
+
+// Pending request infrastructure for code.ts round-trips
+const bridgePendingRequests = new Map<string, { resolve: (v: any) => void; reject: (e: Error) => void; timeoutId: ReturnType<typeof setTimeout> }>();
+let bridgeRequestCounter = 0;
+
+function sendBridgeCommand(method: string, params: Record<string, unknown>, timeoutMs = 15000): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const requestId = method.toLowerCase() + '_' + (++bridgeRequestCounter) + '_' + Date.now();
+    const timeoutId = setTimeout(() => {
+      if (bridgePendingRequests.has(requestId)) {
+        bridgePendingRequests.delete(requestId);
+        reject(new Error(method + ' timed out after ' + timeoutMs + 'ms'));
+      }
+    }, timeoutMs);
+    bridgePendingRequests.set(requestId, { resolve, reject, timeoutId });
+    postToPlugin('bridge:command', { requestId, method, params });
+  });
+}
+
+// SET_IMAGE_FILL needs special handling: decode base64 in browser context (atob available here)
+function handleSetImageFill(params: any): Promise<any> {
+  const binaryStr = atob(params.imageData);
+  const bytes = new Uint8Array(binaryStr.length);
+  for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+  return sendBridgeCommand('SET_IMAGE_FILL', {
+    nodeIds: Array.isArray(params.nodeIds) ? params.nodeIds : (params.nodeId ? [params.nodeId] : []),
+    imageBytes: Array.from(bytes),
+    scaleMode: params.scaleMode || 'FILL',
+  }, 60000);
+}
+
+// Generic method forwarder — most methods just pass through to code.ts
+// Only special cases get custom timeouts or param transformations
+const BRIDGE_METHOD_TIMEOUTS: Record<string, number> = {
+  'EXECUTE_CODE': 7000,
+  'CAPTURE_SCREENSHOT': 30000,
+  'GET_LOCAL_COMPONENTS': 300000,
+  'REFRESH_VARIABLES': 300000,
+  'GET_VARIABLES_DATA': 300000,
+  'LINT_DESIGN': 120000,
+  'AUDIT_COMPONENT_ACCESSIBILITY': 120000,
+  'SET_IMAGE_FILL': 60000,
+  'INSTANTIATE_COMPONENT': 30000,
+};
+
+function bridgeHandleMethod(method: string, params: any): Promise<any> {
+  // Special case: SET_IMAGE_FILL needs base64 decode in browser
+  if (method === 'SET_IMAGE_FILL') return handleSetImageFill(params);
+  // Special case: EXECUTE_CODE timeout based on params
+  if (method === 'EXECUTE_CODE') {
+    const timeout = (params.timeout || 5000) + 2000;
+    return sendBridgeCommand(method, params, timeout);
+  }
+  const timeout = BRIDGE_METHOD_TIMEOUTS[method] || 15000;
+  return sendBridgeCommand(method, params, timeout);
+}
+
+function updateBridgeUi() {
+  const disconnected = document.getElementById('bridgeDisconnected') as HTMLElement;
+  const connected = document.getElementById('bridgeConnected') as HTMLElement;
+  if (bridgeConnected) {
+    disconnected.style.display = 'none';
+    connected.style.display = 'block';
+  } else {
+    disconnected.style.display = 'block';
+    connected.style.display = 'none';
+  }
+  updateA11yTier2State();
+}
+
+function appendBridgeLog(message: string) {
+  const log = document.getElementById('bridgeLog');
+  if (!log) return;
+  const line = document.createElement('div');
+  line.textContent = `\u2713 ${message}`;
+  log.appendChild(line);
+  // Keep log from growing unbounded
+  while (log.children.length > 80) log.removeChild(log.firstChild!);
+  log.scrollTop = log.scrollHeight;
+}
+
+function bridgeStartKeepalive() {
+  bridgeStopKeepalive();
+  bridgeKeepaliveTimer = setInterval(() => {
+    if (bridgeWs && bridgeWs.readyState === 1) {
+      try { bridgeWs.send(JSON.stringify({ type: 'PING' })); } catch {}
+    }
+  }, 15000);
+}
+
+function bridgeStopKeepalive() {
+  if (bridgeKeepaliveTimer) { clearInterval(bridgeKeepaliveTimer); bridgeKeepaliveTimer = null; }
+}
+
+function bridgeConnect() {
+  bridgeUserDisconnected = false;
+  if (bridgeReconnectTimer) { clearTimeout(bridgeReconnectTimer); bridgeReconnectTimer = null; }
+
+  const btn = document.getElementById('bridgeConnectBtn') as HTMLButtonElement;
+  if (btn) { btn.textContent = 'Connecting...'; btn.disabled = true; }
+
+  const WS_PORTS = [9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+  let found = false;
+  let pending = WS_PORTS.length;
+
+  WS_PORTS.forEach((port) => {
+    if (found) return;
+    try {
+      const testWs = new WebSocket('ws://localhost:' + port);
+      const timeout = setTimeout(() => { if (testWs.readyState !== 1) testWs.close(); }, 3000);
+
+      testWs.onopen = () => {
+        clearTimeout(timeout);
+        if (found) { testWs.close(); return; }
+        found = true;
+        bridgeWs = testWs;
+        bridgeWsPort = port;
+        bridgeConnected = true;
+        bridgeReconnectAttempts = 0;
+        updateBridgeUi();
+        appendBridgeLog('WebSocket connected (port ' + port + ')');
+        attachBridgeWsHandlers(testWs, port);
+        initBridgeConnection(testWs);
+        bridgeStartKeepalive();
+      };
+
+      testWs.onerror = () => {
+        clearTimeout(timeout);
+        pending--;
+        if (pending <= 0 && !found) bridgeConnectFailed();
+      };
+
+      testWs.onclose = () => {
+        clearTimeout(timeout);
+        if (!found) {
+          pending--;
+          if (pending <= 0) bridgeConnectFailed();
+        }
+      };
+    } catch {
+      pending--;
+      if (pending <= 0 && !found) bridgeConnectFailed();
+    }
+  });
+}
+
+function bridgeConnectFailed() {
+  const btn = document.getElementById('bridgeConnectBtn') as HTMLButtonElement;
+  if (btn) { btn.textContent = 'Connect'; btn.disabled = false; }
+  const info = document.querySelector('#bridgeDisconnected p:last-child') as HTMLElement;
+  if (info) {
+    info.textContent = 'No figma-console MCP server found — start Claude Code first';
+    info.style.color = '#e34850';
+  }
+}
+
+function bridgeScheduleReconnect(port: number) {
+  if (bridgeUserDisconnected) return;
+  if (bridgeReconnectAttempts >= BRIDGE_MAX_RECONNECT) {
+    appendBridgeLog('Max reconnect attempts reached');
+    return;
+  }
+  bridgeReconnectAttempts++;
+  const delay = Math.min(BRIDGE_RECONNECT_BASE_MS * Math.pow(1.5, bridgeReconnectAttempts - 1), 30000);
+  appendBridgeLog('Reconnecting in ' + Math.round(delay / 1000) + 's (attempt ' + bridgeReconnectAttempts + ')...');
+
+  bridgeReconnectTimer = setTimeout(() => {
+    if (bridgeUserDisconnected) return;
+    // Try the last known port first, then fall back to full scan
+    if (port) {
+      bridgeReconnectToPort(port);
+    } else {
+      bridgeConnect();
+    }
+  }, delay);
+}
+
+function bridgeReconnectToPort(port: number) {
+  try {
+    const testWs = new WebSocket('ws://localhost:' + port);
+    const timeout = setTimeout(() => { if (testWs.readyState !== 1) testWs.close(); }, 3000);
+
+    testWs.onopen = () => {
+      clearTimeout(timeout);
+      bridgeWs = testWs;
+      bridgeWsPort = port;
+      bridgeConnected = true;
+      bridgeReconnectAttempts = 0;
+      updateBridgeUi();
+      appendBridgeLog('Reconnected (port ' + port + ')');
+      attachBridgeWsHandlers(testWs, port);
+      initBridgeConnection(testWs);
+      bridgeStartKeepalive();
+    };
+
+    testWs.onerror = () => {
+      clearTimeout(timeout);
+    };
+
+    testWs.onclose = () => {
+      clearTimeout(timeout);
+      // Port-specific reconnect failed, try full scan
+      if (!bridgeConnected && !bridgeUserDisconnected) {
+        bridgeConnect();
+      }
+    };
+  } catch {
+    if (!bridgeUserDisconnected) bridgeConnect();
+  }
+}
+
+function initBridgeConnection(ws: WebSocket) {
+  // Send FILE_INFO to the server after GET_FILE_INFO from code.ts
+  // fileKey is REQUIRED by the server — without it, the client stays "pending" and gets dropped after 30s
+  sendBridgeCommand('GET_FILE_INFO', {}).then((result) => {
+    if (ws.readyState !== 1 || !result || result.success === false) return;
+    const info = result.fileInfo || result;
+    // Fallback if fileKey is still null
+    if (!info.fileKey) {
+      info.fileKey = 'local-' + Date.now();
+    }
+    info.pluginVersion = '1.0.0';
+    ws.send(JSON.stringify({ type: 'FILE_INFO', data: info }));
+    appendBridgeLog('File info sent: ' + (info.fileName || 'unknown') + ' (key: ' + (info.fileKey || '?') + ')');
+  }).catch(() => {});
+
+  // Auto-sync variables on connection
+  sendBridgeCommand('REFRESH_VARIABLES', {}, 30000).then((result) => {
+    if (ws.readyState !== 1 || !result || result.success === false) return;
+    ws.send(JSON.stringify({ type: 'VARIABLES_DATA', data: result.data }));
+    appendBridgeLog('Variables synced: ' + ((result.data?.variables?.length) || 0) + ' vars');
+  }).catch(() => {});
+}
+
+function attachBridgeWsHandlers(ws: WebSocket, port: number) {
+  ws.onmessage = (event) => {
+    try {
+      const message = JSON.parse(event.data);
+
+      // Handle server identity
+      if (message.type === 'SERVER_HELLO' && message.data) {
+        appendBridgeLog('Server v' + (message.data.serverVersion || '?') + ' on port ' + port);
+        return;
+      }
+
+      // Ignore pong or other non-command messages
+      if (!message.id || !message.method) return;
+
+      appendBridgeLog('\u2190 ' + message.method);
+
+      Promise.resolve(bridgeHandleMethod(message.method, message.params || {}))
+        .then((result) => {
+          if (ws.readyState === 1) {
+            ws.send(JSON.stringify({ id: message.id, result }));
+            appendBridgeLog('\u2192 ' + message.method + ' OK');
+          }
+        })
+        .catch((err) => {
+          if (ws.readyState === 1) {
+            ws.send(JSON.stringify({ id: message.id, error: err.message || String(err) }));
+            appendBridgeLog('\u2192 ' + message.method + ' ERR: ' + err.message);
+          }
+        });
+    } catch {
+      // ignore malformed messages
+    }
+  };
+
+  ws.onclose = (event) => {
+    bridgeStopKeepalive();
+    bridgeWs = null;
+    bridgeConnected = false;
+    updateBridgeUi();
+
+    const wasReplaced = event.code === 1000 && (
+      event.reason === 'Replaced by new connection' ||
+      event.reason === 'Replaced by same file reconnection'
+    );
+
+    if (wasReplaced) {
+      appendBridgeLog('Replaced by newer connection — stopping');
+      return;
+    }
+
+    appendBridgeLog('Disconnected (code ' + event.code + ')');
+
+    if (!bridgeUserDisconnected) {
+      bridgeScheduleReconnect(port);
+    }
+  };
+
+  ws.onerror = () => {
+    // onclose fires after onerror
+  };
+}
+
+function bridgeDisconnect() {
+  bridgeUserDisconnected = true;
+  bridgeStopKeepalive();
+  if (bridgeReconnectTimer) { clearTimeout(bridgeReconnectTimer); bridgeReconnectTimer = null; }
+  if (bridgeWs) {
+    try { bridgeWs.close(); } catch {}
+    bridgeWs = null;
+    bridgeWsPort = null;
+  }
+  bridgeConnected = false;
+  bridgeReconnectAttempts = 0;
+  updateBridgeUi();
+  const btn = document.getElementById('bridgeConnectBtn') as HTMLButtonElement;
+  if (btn) { btn.textContent = 'Connect'; btn.disabled = false; }
+  const info = document.querySelector('#bridgeDisconnected p:last-child') as HTMLElement;
+  if (info) { info.textContent = 'Connection persists across all tabs'; info.style.color = ''; }
+}
+
+document.getElementById('bridgeConnectBtn')?.addEventListener('click', () => bridgeConnect());
+document.getElementById('bridgeDisconnectBtn')?.addEventListener('click', () => bridgeDisconnect());
+
+postToPlugin('ui-ready');
