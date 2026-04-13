@@ -1,10 +1,10 @@
-# S2A Component Authoring
+# JSON to Figma
 
-Full reference for building S2A component sets in Figma via `figma_execute`. Run this command at the start of any component build session.
+Build or update a Figma component set from a `spec.json` via `figma_execute`. Run this command at the start of any component build session.
 
 ## Usage
 ```
-/component-authoring <component-name> [figma-url]
+/json-to-figma <component-name> [figma-url]
 ```
 
 ---

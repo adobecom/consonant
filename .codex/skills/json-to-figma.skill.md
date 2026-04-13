@@ -1,7 +1,7 @@
 ---
-skill: spec-to-figma
+skill: json-to-figma
 description: Build or update a Figma component set from a spec.json — enforces property panel order, layer naming conventions, variant structure, and token binding standards.
-command: /spec-to-figma <component-name> [figma-url]
+command: /json-to-figma <component-name> [figma-url]
 ---
 
 ## Why this skill exists

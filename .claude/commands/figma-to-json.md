@@ -1,11 +1,11 @@
-# Spec From Figma
+# Figma to JSON
 
 Extract a component spec from any Figma node — a component set, a single variant, or a full frame/section — and produce a `spec.json` file (or a variant diff if the component already exists).
 
 ## Usage
 
 ```
-/spec-from-figma <figma-url>
+/figma-to-json <figma-url>
 ```
 
 The URL can point to:

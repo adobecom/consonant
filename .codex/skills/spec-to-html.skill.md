@@ -9,7 +9,7 @@ command: /spec-to-html <slug | path-to-spec.json>
 S2A components are built as Lit function components with data-attribute-driven variants and CSS custom property–based component tokens. Writing these by hand is slow and error-prone. This skill generates the three source files (`{slug}.js`, `{slug}.css`, `index.js`) directly from a `spec.json`, enforces the token/fallback pattern, and runs `audit_css` before writing.
 
 **See also:**
-- `/figma-to-spec` — extract spec.json from Figma first
+- `/figma-to-json` — extract spec.json from Figma first
 - `/audit-tokens <file.css>` — re-audit CSS token usage after edits
 
 ---

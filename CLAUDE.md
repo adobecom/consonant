@@ -50,10 +50,10 @@ docs/             ← workflows, guardrails, audits, how-tos
 | Command | What it does | When to use |
 |---|---|---|
 | `/start-feature "name"` | Creates branch, draft PR, posts preview URL | Starting any new piece of work |
-| `/figma-to-spec` | Extracts `spec.json` from a Figma node | Capturing a component's API from Figma |
-| `/spec-to-figma` | Builds or updates a Figma component from `spec.json` | Authoring or syncing a component set in Figma |
+| `/figma-to-json` | Extracts `spec.json` from a Figma node | Capturing a component's API from Figma |
+| `/json-to-figma` | Builds or updates a Figma component from `spec.json` | Authoring or syncing a component set in Figma |
 | `/spec-to-html` | Generates `{slug}.js` + `{slug}.css` + `index.js` from `spec.json` | Building the component implementation from a finalized spec |
-| `/spec-to-annotations` | Generates full design annotation suite in Figma | Annotating a component for engineering handoff |
+| `/spec-to-doc` | Generates full design annotation suite in Figma | Annotating a component for engineering handoff |
 | `/component-docs` | Generates in-Figma doc sheet (Anatomy, Properties, a11y, Usage) | Documenting a component in Figma |
 | `/audit-spec <name\|--all>` | Audits `spec.json` for prop naming, variant conventions, a11y, and token binding quality — benchmarked against industry standards | QA a spec before engineering handoff, or auditing the full library |
 | `/audit-figma [page\|all]` | Audits a Figma component page for normalization issues | QA before publishing a component |

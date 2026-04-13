@@ -1,5 +1,5 @@
 ---
-name: figma-to-spec
+name: figma-to-json
 description: Extract a component spec.json from any Figma node — component set, single variant, or full frame/section layout. Produces spec.json or a variant diff if the component already exists.
 type: workflow
 triggers:
