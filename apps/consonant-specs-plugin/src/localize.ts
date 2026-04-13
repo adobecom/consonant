@@ -1,23 +1,23 @@
 // ── Localize: translate text in cloned frames via multiple translation backends ──
 
-export type TranslationProvider = 'mymemory' | 'lingva' | 'deepl' | 'google' | 'azure' | 'anthropic';
+export type TranslationProvider = 'mymemory' | 'lingva' | 'deepl' | 'google' | 'azure' | 'anthropic' | 'bridge';
 
 const LANG_META: Record<string, { name: string; fallbackFont: string | null; codes: Record<TranslationProvider, string> }> = {
   de: {
     name: 'German', fallbackFont: null, // Latin — original font works fine
-    codes: { mymemory: 'de', lingva: 'de', deepl: 'DE', google: 'de', azure: 'de', anthropic: 'German' },
+    codes: { mymemory: 'de', lingva: 'de', deepl: 'DE', google: 'de', azure: 'de', anthropic: 'German', bridge: 'German' },
   },
   zh: {
     name: 'Chinese', fallbackFont: 'Noto Sans SC',
-    codes: { mymemory: 'zh-CN', lingva: 'zh', deepl: 'ZH', google: 'zh-CN', azure: 'zh-Hans', anthropic: 'Simplified Chinese' },
+    codes: { mymemory: 'zh-CN', lingva: 'zh', deepl: 'ZH', google: 'zh-CN', azure: 'zh-Hans', anthropic: 'Simplified Chinese', bridge: 'Simplified Chinese' },
   },
   th: {
     name: 'Thai', fallbackFont: 'Noto Sans Thai',
-    codes: { mymemory: 'th', lingva: 'th', deepl: 'TH', google: 'th', azure: 'th', anthropic: 'Thai' },
+    codes: { mymemory: 'th', lingva: 'th', deepl: 'TH', google: 'th', azure: 'th', anthropic: 'Thai', bridge: 'Thai' },
   },
   ar: {
     name: 'Arabic', fallbackFont: 'Noto Sans Arabic',
-    codes: { mymemory: 'ar', lingva: 'ar', deepl: 'AR', google: 'ar', azure: 'ar', anthropic: 'Arabic' },
+    codes: { mymemory: 'ar', lingva: 'ar', deepl: 'AR', google: 'ar', azure: 'ar', anthropic: 'Arabic', bridge: 'Arabic' },
   },
 };
 
@@ -28,6 +28,7 @@ export const PROVIDERS: { id: TranslationProvider; label: string; needsKey: bool
   { id: 'google', label: 'Google Cloud (key required)', needsKey: true },
   { id: 'azure', label: 'Microsoft Azure (key required)', needsKey: true },
   { id: 'anthropic', label: 'Anthropic Claude (key required)', needsKey: true },
+  { id: 'bridge', label: 'Claude via Bridge (no key)', needsKey: false },
 ];
 
 // ── Helpers ──
@@ -264,6 +265,14 @@ async function rewriteTextNodes(
       node.characters = translated;
     } catch (_) {}
   }
+}
+
+// ── Bridge: collect text for external translation ──
+
+export function collectSourceText(node: SceneNode): { nodeId: string; text: string }[] {
+  const textNodes: TextNode[] = [];
+  collectTextNodes(node, textNodes);
+  return textNodes.map(n => ({ nodeId: n.id, text: norm(n.characters) }));
 }
 
 // ── Main entry point ──
