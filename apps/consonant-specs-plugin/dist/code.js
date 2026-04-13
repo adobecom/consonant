@@ -19,7 +19,7 @@ var __spreadValues = (a, b) => {
 };
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 
-// apps/consonant-specs-plugin/src/utils.ts
+// src/utils.ts
 function rgbToHex(r, g, b) {
   const toHex = (n) => {
     const val = Math.round(n * 255);
@@ -127,7 +127,7 @@ function getEffects(node) {
   });
 }
 
-// apps/consonant-specs-plugin/src/tokens.ts
+// src/tokens.ts
 var TEXT_STYLE_KEYS = {
   "super": "564079c9833ea03f5c5f8d7b759b17ee39778812",
   "title-1": "2ca3a4b582cbdeeac82b0dba6fc0657c4785ba5d",
@@ -258,6 +258,23 @@ function matchTypography(value) {
     if (`${ts.fontSize}` === value) return ts.name;
   }
   return null;
+}
+function matchTypographyStrict(fontFamily, fontSize, fontStyle) {
+  const famLower = fontFamily.toLowerCase();
+  const styleLower = fontStyle.toLowerCase();
+  for (const ts of textStyleMap) {
+    const fam = ts.fontFamily.toLowerCase() === famLower;
+    const size = ts.fontSize === fontSize;
+    const style = ts.fontStyle.toLowerCase() === styleLower;
+    if (fam && size && style) return { name: ts.name, matched: true, familyOk: true, sizeOk: true, styleOk: true };
+  }
+  let familyOk = false, sizeOk = false, styleOk = false;
+  for (const ts of textStyleMap) {
+    if (ts.fontFamily.toLowerCase() === famLower) familyOk = true;
+    if (ts.fontSize === fontSize) sizeOk = true;
+    if (ts.fontStyle.toLowerCase() === styleLower) styleOk = true;
+  }
+  return { name: "", matched: false, familyOk, sizeOk, styleOk };
 }
 var NAME_SPACING = /spacing|layout|gap|margin|padding/i;
 var NAME_RADIUS = /radius|corner|border[\-\/]radius/i;
@@ -551,12 +568,24 @@ async function forceMatchNode(node, categories, result2) {
     const textNode = node;
     if (textNode.fontName !== figma.mixed && typeof textNode.fontSize === "number") {
       const fn = textNode.fontName;
+      const before = `${fn.family} ${fn.style} ${textNode.fontSize}px`;
       const closest = findClosestTextStyle(fn.family, fn.style, textNode.fontSize);
       if (closest) {
+        const exact = closest.fontFamily === fn.family && closest.fontStyle === fn.style && closest.fontSize === textNode.fontSize;
         try {
           await figma.loadFontAsync({ family: closest.fontFamily, style: closest.fontStyle });
           textNode.textStyleId = closest.styleId;
           result2.applied++;
+          if (!exact) {
+            result2.issues.push({
+              nodeName: node.name,
+              nodeId: node.id,
+              property: "Typography",
+              before,
+              after: `${closest.fontFamily} ${closest.fontStyle} ${closest.fontSize}px`,
+              exact: false
+            });
+          }
         } catch (_) {
           result2.skipped++;
         }
@@ -569,12 +598,23 @@ async function forceMatchNode(node, categories, result2) {
       const solid = fills[0];
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = (_a = solid.opacity) != null ? _a : 1;
+      const exactToken = matchColor(hex);
       const closest = findClosestColor(hex, opacity);
       if (closest) {
         try {
           const newFill = figma.variables.setBoundVariableForPaint(solid, "color", closest.variable);
           node.fills = [newFill, ...fills.slice(1)];
           result2.applied++;
+          if (!exactToken) {
+            result2.issues.push({
+              nodeName: node.name,
+              nodeId: node.id,
+              property: "Fill Color",
+              before: hex.toUpperCase(),
+              after: closest.name,
+              exact: false
+            });
+          }
         } catch (_) {
           result2.skipped++;
         }
@@ -587,12 +627,23 @@ async function forceMatchNode(node, categories, result2) {
       const solid = strokes[0];
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = (_b = solid.opacity) != null ? _b : 1;
+      const exactToken = matchColor(hex);
       const closest = findClosestColor(hex, opacity);
       if (closest) {
         try {
           const newStroke = figma.variables.setBoundVariableForPaint(solid, "color", closest.variable);
           node.strokes = [newStroke, ...strokes.slice(1)];
           result2.applied++;
+          if (!exactToken) {
+            result2.issues.push({
+              nodeName: node.name,
+              nodeId: node.id,
+              property: "Stroke Color",
+              before: hex.toUpperCase(),
+              after: closest.name,
+              exact: false
+            });
+          }
         } catch (_) {
           result2.skipped++;
         }
@@ -668,12 +719,12 @@ async function forceMatch(node, categories) {
   if ("layoutMode" in node) {
     await setResponsiveMode(node);
   }
-  const result2 = { applied: 0, skipped: 0 };
+  const result2 = { applied: 0, skipped: 0, issues: [] };
   await forceMatchRecursive(node, new Set(categories), result2);
   return result2;
 }
 
-// apps/consonant-specs-plugin/src/annotations.ts
+// src/annotations.ts
 function collectProperties(node) {
   const props = [];
   props.push({
@@ -732,7 +783,7 @@ function getNodeProperties(node) {
   return collectProperties(node);
 }
 
-// apps/consonant-specs-plugin/src/spec-anatomy.ts
+// src/spec-anatomy.ts
 var MARKER_COLOR = { r: 0.09, g: 0.6, b: 0.97 };
 var DOT_SIZE = 24;
 var DOT_FONT_SIZE = 12;
@@ -749,7 +800,7 @@ var EXHIBIT_GAP = 64;
 var CONTENT_RAIL_WIDTH = 500;
 var BLACK = { r: 0, g: 0, b: 0 };
 var TITLE_COLOR = { r: 1, g: 1, b: 1 };
-function collectSignificantNodes(node, entries, seen, depth = 0) {
+async function collectSignificantNodes(node, entries, seen, depth = 0) {
   var _a, _b;
   if (depth > 0) {
     let key = `${node.name}::${node.type}`;
@@ -763,7 +814,7 @@ function collectSignificantNodes(node, entries, seen, depth = 0) {
       if ("opacity" in node && node.opacity === 0) return;
       if (node.type === "TEXT") {
         isSignificant = true;
-      } else if ((node.type === "FRAME" || node.type === "COMPONENT") && isCallToAction(node)) {
+      } else if ((node.type === "FRAME" || node.type === "COMPONENT") && await isCallToAction(node)) {
         isSignificant = true;
       } else if (node.type === "INSTANCE") {
         const w = (_a = node.width) != null ? _a : 0;
@@ -792,7 +843,7 @@ function collectSignificantNodes(node, entries, seen, depth = 0) {
     for (const child of node.children) {
       if ("visible" in child && !child.visible) continue;
       if ("opacity" in child && child.opacity === 0) continue;
-      collectSignificantNodes(child, entries, seen, depth + 1);
+      await collectSignificantNodes(child, entries, seen, depth + 1);
     }
   }
 }
@@ -845,8 +896,8 @@ function addPropRow(parent, label, value, options) {
   parent.appendChild(row);
 }
 var CTA_NAME_PATTERNS = /\b(cta|call[\s\-_]?to[\s\-_]?action|button|btn|link|action)\b/i;
-function isCallToAction(node) {
-  var _a, _b, _c, _d, _e;
+async function isCallToAction(node) {
+  var _a, _b, _c;
   if (CTA_NAME_PATTERNS.test(node.name)) return true;
   let p = node.parent;
   for (let i = 0; i < 3 && p; i++) {
@@ -854,8 +905,9 @@ function isCallToAction(node) {
     p = p.parent;
   }
   if (node.type === "INSTANCE") {
-    const mainName = ((_a = node.mainComponent) == null ? void 0 : _a.name) || "";
-    const parentName = ((_c = (_b = node.mainComponent) == null ? void 0 : _b.parent) == null ? void 0 : _c.name) || "";
+    const mc = await node.getMainComponentAsync();
+    const mainName = (mc == null ? void 0 : mc.name) || "";
+    const parentName = ((_a = mc == null ? void 0 : mc.parent) == null ? void 0 : _a.name) || "";
     if (CTA_NAME_PATTERNS.test(mainName) || CTA_NAME_PATTERNS.test(parentName)) return true;
   }
   if (node.type === "TEXT") {
@@ -869,7 +921,7 @@ function isCallToAction(node) {
         for (const sib of parent.children) {
           if (sib === t) continue;
           if (sib.type === "VECTOR" || sib.type === "INSTANCE" || sib.type === "BOOLEAN_OPERATION") {
-            if (((_d = sib.width) != null ? _d : 0) <= 40 && ((_e = sib.height) != null ? _e : 0) <= 40) return true;
+            if (((_b = sib.width) != null ? _b : 0) <= 40 && ((_c = sib.height) != null ? _c : 0) <= 40) return true;
           }
         }
       }
@@ -887,13 +939,13 @@ function findFirstTextChild(node) {
   }
   return null;
 }
-function addCtaProperties(node, content) {
-  var _a;
+async function addCtaProperties(node, content) {
   const label = findFirstTextChild(node);
   if (label) {
     addPropRow(content, "Label:", `"${label.characters}"`, { bold: true });
   }
-  const mainName = (_a = node.mainComponent) == null ? void 0 : _a.name;
+  const mc = await node.getMainComponentAsync();
+  const mainName = mc == null ? void 0 : mc.name;
   if (mainName) {
     addPropRow(content, "Component:", mainName);
   }
@@ -961,8 +1013,8 @@ function addCtaProperties(node, content) {
   }
 }
 async function buildPropertiesForNode(node, content) {
-  if ((node.type === "FRAME" || node.type === "COMPONENT") && isCallToAction(node)) {
-    addCtaProperties(node, content);
+  if ((node.type === "FRAME" || node.type === "COMPONENT") && await isCallToAction(node)) {
+    await addCtaProperties(node, content);
     return;
   }
   switch (node.type) {
@@ -1016,7 +1068,7 @@ async function buildPropertiesForNode(node, content) {
       addPropRow(attrs, "Line height", "", { tokenPill: tokenLabel || `${text.lineHeight}` });
       addPropRow(attrs, "Letter spacing", "", { tokenPill: tokenLabel || `${text.letterSpacing}` });
       content.appendChild(attrs);
-      if (isCallToAction(node)) {
+      if (await isCallToAction(node)) {
         addPropRow(content, "Role:", "Call to action", { bold: true });
         const parent = node.parent;
         if (parent && parent.type === "FRAME") {
@@ -1060,8 +1112,8 @@ async function buildPropertiesForNode(node, content) {
       } catch (_) {
       }
       content.appendChild(thumb);
-      if (isCallToAction(node)) {
-        addCtaProperties(node, content);
+      if (await isCallToAction(node)) {
+        await addCtaProperties(node, content);
       }
       return;
     }
@@ -1237,9 +1289,13 @@ async function generateAnatomySection(sourceNode) {
   artworkContainer.resize(clone.width + 80, clone.height + 80);
   const rawEntries = [];
   const seen = /* @__PURE__ */ new Set();
-  collectSignificantNodes(sourceNode, rawEntries, seen);
+  await collectSignificantNodes(sourceNode, rawEntries, seen);
   const byY = (a, b) => a.node.absoluteTransform[1][2] - b.node.absoluteTransform[1][2];
-  const textEntries = rawEntries.filter((e) => e.type === "TEXT" && !isCallToAction(e.node)).sort(byY);
+  const ctaFlags = /* @__PURE__ */ new Map();
+  for (const e of rawEntries) {
+    ctaFlags.set(e.node, await isCallToAction(e.node));
+  }
+  const textEntries = rawEntries.filter((e) => e.type === "TEXT" && !ctaFlags.get(e.node)).sort(byY);
   const ctaSeen = /* @__PURE__ */ new Set();
   const ctaSignature = (n) => {
     var _a, _b;
@@ -1251,7 +1307,7 @@ async function generateAnatomySection(sourceNode) {
     const colorHex = (_b = (_a = fills[0]) == null ? void 0 : _a.hex) != null ? _b : "";
     return `${tp.fontFamily}|${tp.fontWeight}|${tp.fontSize}|${label.textDecoration}|${colorHex}`;
   };
-  const ctaEntries = rawEntries.filter((e) => isCallToAction(e.node)).sort(byY).filter((e) => {
+  const ctaEntries = rawEntries.filter((e) => ctaFlags.get(e.node)).sort(byY).filter((e) => {
     const sig = ctaSignature(e.node);
     if (!sig) return true;
     if (ctaSeen.has(sig)) return false;
@@ -1259,7 +1315,7 @@ async function generateAnatomySection(sourceNode) {
     return true;
   });
   const textNames = new Set(textEntries.map((e) => e.name));
-  const instanceEntries = rawEntries.filter((e) => e.type === "INSTANCE" && !isCallToAction(e.node)).filter((e) => {
+  const instanceEntries = rawEntries.filter((e) => e.type === "INSTANCE" && !ctaFlags.get(e.node)).filter((e) => {
     if ("children" in e.node) {
       const children = e.node.children;
       const hasAnnotatedTextChild = children.some(
@@ -1360,7 +1416,7 @@ async function generateAnatomySection(sourceNode) {
   return section;
 }
 
-// apps/consonant-specs-plugin/src/spec-layout.ts
+// src/spec-layout.ts
 function removeOverlays(node, overlayName) {
   if (!("children" in node)) return;
   const toRemove = node.children.filter((c) => c.name === overlayName);
@@ -1983,7 +2039,7 @@ async function generateLayoutSection(sourceNode) {
   return section;
 }
 
-// apps/consonant-specs-plugin/src/spec-typography.ts
+// src/spec-typography.ts
 function collectTextStyles(node, styles) {
   const text = getTextProps(node);
   if (text) {
@@ -2124,7 +2180,7 @@ async function generateTypographySection(sourceNode) {
   return section;
 }
 
-// apps/consonant-specs-plugin/src/spec-components.ts
+// src/spec-components.ts
 var BADGE_COLOR = { r: 0.91, g: 0.48, b: 0.18 };
 var PROP_LABEL_COLOR = { r: 0.45, g: 0.45, b: 0.45 };
 var PROP_VALUE_COLOR = { r: 0.15, g: 0.15, b: 0.15 };
@@ -2319,7 +2375,7 @@ async function generateComponentDetailsSection(sourceNode) {
   return section;
 }
 
-// apps/consonant-specs-plugin/src/spec-colors.ts
+// src/spec-colors.ts
 async function generateColorAnnotations(node, yOffset = 0) {
   const clone = node.clone();
   const sourceX = node.absoluteTransform[0][2];
@@ -2441,7 +2497,7 @@ async function generateColorAnnotations(node, yOffset = 0) {
   return clone.height + 40;
 }
 
-// apps/consonant-specs-plugin/src/spec-text-properties.ts
+// src/spec-text-properties.ts
 async function generateTextPropertyAnnotations(node, yOffset = 0) {
   const clone = node.clone();
   const sourceX = node.absoluteTransform[0][2];
@@ -2494,7 +2550,7 @@ async function generateTextPropertyAnnotations(node, yOffset = 0) {
   return clone.height + 40;
 }
 
-// apps/consonant-specs-plugin/src/spec-spacing-general.ts
+// src/spec-spacing-general.ts
 var BLUE_OVERLAY = { r: 0.05, g: 0.41, b: 0.83, a: 0.2 };
 var ORANGE_BADGE = { r: 0.93, g: 0.55, b: 0.15 };
 var MAGENTA_BADGE = { r: 0.78, g: 0.18, b: 0.53 };
@@ -2631,7 +2687,7 @@ function addBand(parent, x, y, w, h, value, position, frameWidth) {
   }
 }
 
-// apps/consonant-specs-plugin/src/spec-card-gaps.ts
+// src/spec-card-gaps.ts
 var BLUE_OVERLAY2 = { r: 0.05, g: 0.41, b: 0.83, a: 0.2 };
 var ORANGE_BADGE2 = { r: 0.93, g: 0.55, b: 0.15 };
 var MAGENTA_BADGE2 = { r: 0.78, g: 0.18, b: 0.53 };
@@ -2797,7 +2853,7 @@ function addBand2(parent, x, y, w, h, value, position) {
   badge.y = y + h / 2 - badge.height / 2;
 }
 
-// apps/consonant-specs-plugin/src/spec-it.ts
+// src/spec-it.ts
 async function specIt(node, sections = ["anatomy", "layout", "typography", "components"]) {
   const enabled = new Set(sections);
   let cloneYOffset = 0;
@@ -2858,7 +2914,7 @@ async function specIt(node, sections = ["anatomy", "layout", "typography", "comp
   figma.ui.postMessage({ type: "spec-it-status", message: "Spec complete!" });
 }
 
-// apps/consonant-specs-plugin/src/s2a-audit.ts
+// src/s2a-audit.ts
 function auditNode(node, issues, counters) {
   const fills = getNodeFills(node);
   for (const fill of fills) {
@@ -2893,12 +2949,17 @@ function auditNode(node, issues, counters) {
   const text = getTextProps(node);
   if (text) {
     counters.total++;
-    const familyToken = matchTypography(text.fontFamily);
-    const sizeToken = matchTypography(`${text.fontSize}`);
-    if (familyToken || sizeToken) {
+    const fontStyle = node.type === "TEXT" && node.fontName !== figma.mixed ? node.fontName.style : "";
+    const result2 = matchTypographyStrict(text.fontFamily, text.fontSize, fontStyle);
+    if (result2.matched) {
       counters.matched++;
     } else {
-      issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: "Typography", value: `${text.fontFamily} ${text.fontSize}px`, suggestion: null });
+      const mismatches = [];
+      if (!result2.familyOk) mismatches.push(`family "${text.fontFamily}"`);
+      if (!result2.sizeOk) mismatches.push(`size ${text.fontSize}px`);
+      if (!result2.styleOk) mismatches.push(`weight "${fontStyle}"`);
+      const detail = mismatches.length > 0 ? ` (no S2A match for ${mismatches.join(", ")})` : "";
+      issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: "Typography", value: `${text.fontFamily} ${fontStyle} ${text.fontSize}px${detail}`, suggestion: null });
     }
   }
   if ("layoutMode" in node && node.layoutMode !== "NONE") {
@@ -3140,7 +3201,7 @@ async function runTextColorsAlign(node) {
   return __spreadProps(__spreadValues({}, result2), { mode });
 }
 
-// apps/consonant-specs-plugin/src/localize.ts
+// src/localize.ts
 var LANG_META = {
   de: {
     name: "German",
@@ -3467,7 +3528,7 @@ async function localize(node, languages, applyRtl, provider, apiKey) {
   return { created, errors };
 }
 
-// apps/consonant-specs-plugin/src/spec-focus-indicators.ts
+// src/spec-focus-indicators.ts
 var FOCUS_COLOR = { r: 0.08, g: 0.45, b: 0.9 };
 var FOCUS_STROKE = 2;
 var FOCUS_PAD = 4;
@@ -3605,7 +3666,7 @@ async function generateFocusIndicators(node) {
   figma.notify(`${filtered.length} focus indicators added.`);
 }
 
-// apps/consonant-specs-plugin/src/a11y-focus-order.ts
+// src/a11y-focus-order.ts
 function detectFocusOrder(root) {
   const focusable = collectFocusableElements(root);
   if (focusable.length === 0) return [];
@@ -3634,7 +3695,7 @@ function detectFocusOrder(root) {
   }));
 }
 
-// apps/consonant-specs-plugin/src/a11y-blueline.ts
+// src/a11y-blueline.ts
 var SIDEBAR_WIDTH = 320;
 var SIDEBAR_PAD = 16;
 var SECTION_GAP = 24;
@@ -4337,7 +4398,7 @@ async function placeCategoryBadge(targetNodeId, index, categoryKey) {
   return { badgeId: badge.id };
 }
 
-// apps/consonant-specs-plugin/src/code.ts
+// src/code.ts
 globalThis.__generateBlueline = generateBlueline;
 globalThis.__generateBluelinePanels = generateBluelinePanels;
 globalThis.__placeCategoryBadge = placeCategoryBadge;
@@ -4902,6 +4963,29 @@ figma.ui.onmessage = async (msg) => {
       });
       break;
     }
+    case "annotate-audit-issues": {
+      const issues = msg.issues || [];
+      if (issues.length === 0) {
+        figma.notify("No issues to annotate");
+        break;
+      }
+      let annotated = 0;
+      for (const issue of issues) {
+        try {
+          const node = await figma.getNodeByIdAsync(issue.nodeId);
+          if (!node) continue;
+          node.annotations = [{
+            labelMarkdown: `**${issue.property}**: ${issue.value} \u2014 no S2A token`,
+            properties: []
+          }];
+          annotated++;
+        } catch (e) {
+          console.warn(`Annotation failed on "${issue.nodeName}":`, e);
+        }
+      }
+      figma.notify(`Annotated ${annotated} of ${issues.length} issues`);
+      break;
+    }
     case "full-align-s2a": {
       const sel = figma.currentPage.selection;
       if (sel.length === 0) {
@@ -5035,7 +5119,7 @@ figma.ui.onmessage = async (msg) => {
       try {
         const result2 = await forceMatch(sel[0], categories);
         figma.notify(`Matched ${result2.applied} properties to closest S2A tokens`);
-        figma.ui.postMessage({ type: "match-result", message: `Done: ${result2.applied} matched, ${result2.skipped} skipped` });
+        figma.ui.postMessage({ type: "match-result", message: `Done: ${result2.applied} matched, ${result2.skipped} skipped`, issues: result2.issues });
       } catch (e) {
         figma.notify(`Match failed: ${e.message}`, { error: true });
         figma.ui.postMessage({ type: "match-result", message: `Error: ${e.message}` });

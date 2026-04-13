@@ -67,24 +67,22 @@ export async function loadLibraryTokens(): Promise<void> {
       tokenCount = 0;
       loaded = false;
 
-      // ── Import text styles by known keys — all in parallel ──
-      const styleEntries = Object.entries(TEXT_STYLE_KEYS);
-      const styleResults = await Promise.allSettled(
-        styleEntries.map(([, key]) => figma.importStyleByKeyAsync(key))
-      );
-      for (let i = 0; i < styleEntries.length; i++) {
-        const res = styleResults[i];
-        if (res.status !== 'fulfilled') continue;
-        const style = res.value;
-        if (style.type === 'TEXT') {
-          const ts = style as TextStyle;
-          textStyleMap.push({
-            name: `s2a/typography/${styleEntries[i][0]}`,
-            styleId: ts.id,
-            fontFamily: ts.fontName.family,
-            fontStyle: ts.fontName.style,
-            fontSize: ts.fontSize,
-          });
+      // ── Import text styles by known keys ──
+      for (const [name, key] of Object.entries(TEXT_STYLE_KEYS)) {
+        try {
+          const style = await figma.importStyleByKeyAsync(key);
+          if (style.type === 'TEXT') {
+            const ts = style as TextStyle;
+            textStyleMap.push({
+              name: `s2a/typography/${name}`,
+              styleId: ts.id,
+              fontFamily: ts.fontName.family,
+              fontStyle: ts.fontName.style,
+              fontSize: ts.fontSize,
+            });
+          }
+        } catch (e) {
+          // Style might not be available
         }
       }
 
@@ -100,65 +98,45 @@ export async function loadLibraryTokens(): Promise<void> {
         for (const collection of s2aCollections) {
           try {
             const libVars = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(collection.key);
+            for (const v of libVars) {
+              try {
+                const imported = await figma.variables.importVariableByKeyAsync(v.key);
+                const modeId = Object.keys(imported.valuesByMode)[0];
+                let value = imported.valuesByMode[modeId];
 
-            // Import all variables in this collection in parallel
-            const importResults = await Promise.allSettled(
-              libVars.map(v => figma.variables.importVariableByKeyAsync(v.key))
-            );
-
-            // Resolve the collection's defaultModeId once, using the first successful import.
-            // Object.keys ordering is not guaranteed — defaultModeId ensures we always read
-            // the correct (default/light) mode, not whichever mode V8 happens to enumerate first.
-            let defaultModeId: string | null = null;
-            for (const r of importResults) {
-              if (r.status === 'fulfilled') {
-                try {
-                  const coll = await figma.variables.getVariableCollectionByIdAsync(r.value.variableCollectionId);
-                  if (coll) defaultModeId = coll.defaultModeId;
-                } catch (_) {}
-                break;
-              }
-            }
-
-            for (const result of importResults) {
-              if (result.status !== 'fulfilled') continue;
-              const imported = result.value;
-              const modeId = defaultModeId ?? Object.keys(imported.valuesByMode)[0];
-              let value = imported.valuesByMode[modeId];
-
-              // Resolve aliases — inherently sequential (each step depends on the previous),
-              // bounded to depth 5 to prevent infinite loops in circular references.
-              let depth = 0;
-              while (value && typeof value === 'object' && 'type' in value && (value as any).type === 'VARIABLE_ALIAS' && depth < 5) {
-                try {
-                  const alias = await figma.variables.getVariableByIdAsync((value as any).id);
-                  if (alias) {
-                    value = alias.valuesByMode[defaultModeId ?? Object.keys(alias.valuesByMode)[0]];
-                  } else break;
-                } catch (_) { break; }
-                depth++;
-              }
-
-              if (imported.resolvedType === 'COLOR') {
-                if (value && typeof value === 'object' && 'r' in value) {
-                  const color = value as RGBA;
-                  colorVarMap.push({
-                    name: imported.name,
-                    variable: imported,
-                    hex: rgbToHex(color.r, color.g, color.b),
-                    opacity: 'a' in color ? color.a : 1,
-                  });
+                // Resolve aliases
+                let depth = 0;
+                while (value && typeof value === 'object' && 'type' in value && (value as any).type === 'VARIABLE_ALIAS' && depth < 5) {
+                  try {
+                    const alias = await figma.variables.getVariableByIdAsync((value as any).id);
+                    if (alias) {
+                      value = alias.valuesByMode[Object.keys(alias.valuesByMode)[0]];
+                    } else break;
+                  } catch (_) { break; }
+                  depth++;
                 }
-              } else if (imported.resolvedType === 'FLOAT') {
-                if (typeof value === 'number') {
-                  dimensionVarMap.push({
-                    name: imported.name,
-                    variable: imported,
-                    value: value,
-                    scopes: imported.scopes,
-                  });
+
+                if (imported.resolvedType === 'COLOR') {
+                  if (value && typeof value === 'object' && 'r' in value) {
+                    const color = value as RGBA;
+                    colorVarMap.push({
+                      name: imported.name,
+                      variable: imported,
+                      hex: rgbToHex(color.r, color.g, color.b),
+                      opacity: 'a' in color ? color.a : 1,
+                    });
+                  }
+                } else if (imported.resolvedType === 'FLOAT') {
+                  if (typeof value === 'number') {
+                    dimensionVarMap.push({
+                      name: imported.name,
+                      variable: imported,
+                      value: value,
+                      scopes: imported.scopes,
+                    });
+                  }
                 }
-              }
+              } catch (_) {}
             }
           } catch (_) {}
         }
@@ -211,6 +189,29 @@ export function matchTypography(value: string): string | null {
     if (`${ts.fontSize}` === value) return ts.name;
   }
   return null;
+}
+
+/** Strict typography match — requires family, size, AND style (weight) to all match an S2A text style. */
+export function matchTypographyStrict(
+  fontFamily: string, fontSize: number, fontStyle: string,
+): { name: string; matched: boolean; familyOk: boolean; sizeOk: boolean; styleOk: boolean } {
+  const famLower = fontFamily.toLowerCase();
+  const styleLower = fontStyle.toLowerCase();
+  // Find best match: exact family+size+style first, then partial matches
+  for (const ts of textStyleMap) {
+    const fam = ts.fontFamily.toLowerCase() === famLower;
+    const size = ts.fontSize === fontSize;
+    const style = ts.fontStyle.toLowerCase() === styleLower;
+    if (fam && size && style) return { name: ts.name, matched: true, familyOk: true, sizeOk: true, styleOk: true };
+  }
+  // No exact match — report which parts match any S2A style
+  let familyOk = false, sizeOk = false, styleOk = false;
+  for (const ts of textStyleMap) {
+    if (ts.fontFamily.toLowerCase() === famLower) familyOk = true;
+    if (ts.fontSize === fontSize) sizeOk = true;
+    if (ts.fontStyle.toLowerCase() === styleLower) styleOk = true;
+  }
+  return { name: '', matched: false, familyOk, sizeOk, styleOk };
 }
 
 // Name-based filters to ensure tokens route to the right category.
@@ -577,22 +578,40 @@ function findClosestTextStyle(family: string, style: string, size: number): Load
   return best;
 }
 
+interface MatchIssue {
+  nodeName: string;
+  nodeId: string;
+  property: string;
+  before: string;
+  after: string;
+  exact: boolean;
+}
+
 async function forceMatchNode(
   node: SceneNode,
   categories: Set<string>,
-  result: { applied: number; skipped: number },
+  result: { applied: number; skipped: number; issues: MatchIssue[] },
 ): Promise<void> {
   // Typography
   if (categories.has('typography') && node.type === 'TEXT') {
     const textNode = node as TextNode;
     if (textNode.fontName !== figma.mixed && typeof textNode.fontSize === 'number') {
       const fn = textNode.fontName as FontName;
+      const before = `${fn.family} ${fn.style} ${textNode.fontSize}px`;
       const closest = findClosestTextStyle(fn.family, fn.style, textNode.fontSize as number);
       if (closest) {
+        const exact = closest.fontFamily === fn.family && closest.fontStyle === fn.style && closest.fontSize === textNode.fontSize;
         try {
           await figma.loadFontAsync({ family: closest.fontFamily, style: closest.fontStyle });
           textNode.textStyleId = closest.styleId;
           result.applied++;
+          if (!exact) {
+            result.issues.push({
+              nodeName: node.name, nodeId: node.id, property: 'Typography',
+              before, after: `${closest.fontFamily} ${closest.fontStyle} ${closest.fontSize}px`,
+              exact: false,
+            });
+          }
         } catch (_) { result.skipped++; }
       }
     }
@@ -605,12 +624,20 @@ async function forceMatchNode(
       const solid = fills[0] as SolidPaint;
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = solid.opacity ?? 1;
+      const exactToken = matchColor(hex);
       const closest = findClosestColor(hex, opacity);
       if (closest) {
         try {
           const newFill = figma.variables.setBoundVariableForPaint(solid, 'color', closest.variable);
           (node as any).fills = [newFill, ...fills.slice(1)];
           result.applied++;
+          if (!exactToken) {
+            result.issues.push({
+              nodeName: node.name, nodeId: node.id, property: 'Fill Color',
+              before: hex.toUpperCase(), after: closest.name,
+              exact: false,
+            });
+          }
         } catch (_) { result.skipped++; }
       }
     }
@@ -623,12 +650,20 @@ async function forceMatchNode(
       const solid = strokes[0] as SolidPaint;
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = solid.opacity ?? 1;
+      const exactToken = matchColor(hex);
       const closest = findClosestColor(hex, opacity);
       if (closest) {
         try {
           const newStroke = figma.variables.setBoundVariableForPaint(solid, 'color', closest.variable);
           (node as any).strokes = [newStroke, ...strokes.slice(1)];
           result.applied++;
+          if (!exactToken) {
+            result.issues.push({
+              nodeName: node.name, nodeId: node.id, property: 'Stroke Color',
+              before: hex.toUpperCase(), after: closest.name,
+              exact: false,
+            });
+          }
         } catch (_) { result.skipped++; }
       }
     }
@@ -698,10 +733,12 @@ async function forceMatchNode(
 async function forceMatchRecursive(
   node: SceneNode,
   categories: Set<string>,
-  result: { applied: number; skipped: number },
+  result: { applied: number; skipped: number; issues: MatchIssue[] },
 ): Promise<void> {
   if ('visible' in node && !node.visible) return;
   await forceMatchNode(node, categories, result);
+  // Don't descend into instance children — they're controlled by the component
+  if (node.type === 'INSTANCE') return;
   if ('children' in node) {
     for (const child of (node as any).children) {
       await forceMatchRecursive(child, categories, result);
@@ -712,13 +749,13 @@ async function forceMatchRecursive(
 export async function forceMatch(
   node: SceneNode,
   categories: string[],
-): Promise<{ applied: number; skipped: number }> {
+): Promise<{ applied: number; skipped: number; issues: MatchIssue[] }> {
   // Set responsive mode first
   if ('layoutMode' in node) {
     await setResponsiveMode(node as FrameNode);
   }
 
-  const result = { applied: 0, skipped: 0 };
+  const result = { applied: 0, skipped: 0, issues: [] as MatchIssue[] };
   await forceMatchRecursive(node, new Set(categories), result);
   return result;
 }
