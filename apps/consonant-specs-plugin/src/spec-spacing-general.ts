@@ -153,24 +153,15 @@ function addBand(
   text.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
   badge.appendChild(text);
 
+  // Capture badge dimensions before appending to parent — AUTO sizing is finalised
+  // once children are in the badge frame. Reading width/height after parent.appendChild
+  // risks getting a stale pre-layout value of 0.
+  const badgeW = badge.width;
+  const badgeH = badge.height;
+
   parent.appendChild(badge);
 
   // Position the badge centered on the band
-  if (position === 'top' || position === 'bottom' || position === 'gap') {
-    if (w > h) {
-      // Horizontal band — center badge horizontally
-      badge.x = x + w / 2 - badge.width / 2;
-      badge.y = y + h / 2 - badge.height / 2;
-    } else {
-      // Vertical band — center badge vertically
-      badge.x = x + w / 2 - badge.width / 2;
-      badge.y = y + h / 2 - badge.height / 2;
-    }
-  } else if (position === 'left') {
-    badge.x = x + w / 2 - badge.width / 2;
-    badge.y = y + h / 2 - badge.height / 2;
-  } else if (position === 'right') {
-    badge.x = x + w / 2 - badge.width / 2;
-    badge.y = y + h / 2 - badge.height / 2;
-  }
+  badge.x = x + w / 2 - badgeW / 2;
+  badge.y = y + h / 2 - badgeH / 2;
 }
