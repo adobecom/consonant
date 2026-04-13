@@ -147,6 +147,15 @@ else
   warn "s2a-ds MCP server not found — you can still use Claude, just without design token lookups"
 fi
 
+# ── 9a. Verify design-systems knowledge base (HTTP MCP) ─────────────────────
+log "Connecting to design-systems knowledge base (WCAG, ARIA, W3C standards)..."
+if curl -sf --max-time 8 "https://design-systems-mcp.southleft.com/mcp" > /dev/null 2>&1; then
+  ok "Design systems knowledge base reachable — WCAG, ARIA, and industry pattern lookups enabled"
+else
+  warn "Design systems knowledge base unreachable right now — it will be configured but may not respond until your network allows it"
+  warn "Source: https://github.com/southleft/design-systems-mcp"
+fi
+
 # ── 10. Write .mcp.json ──────────────────────────────────────────────────────
 log "Configuring MCP servers..."
 
@@ -166,6 +175,10 @@ if [[ -f "$S2A_MCP_DIST" ]]; then
       "env": {
         "DS_ROOT": "$INSTALL_DIR"
       }
+    },
+    "design-systems": {
+      "type": "http",
+      "url": "https://design-systems-mcp.southleft.com/mcp"
     }
   }
 }
@@ -177,12 +190,16 @@ else
     "figma-console": {
       "command": "node",
       "args": ["$FIGMA_CONSOLE_MCP"]
+    },
+    "design-systems": {
+      "type": "http",
+      "url": "https://design-systems-mcp.southleft.com/mcp"
     }
   }
 }
 EOF
 fi
-ok "MCP servers configured"
+ok "MCP servers configured (figma-console + s2a-ds + design-systems knowledge base)"
 
 # ── 10a. Write .claude/settings.local.json ───────────────────────────────────
 # This file is gitignored but required for Claude Code to enable MCP servers
@@ -216,11 +233,23 @@ if [[ ! -f "$CLAUDE_LOCAL_SETTINGS" ]]; then
       "mcp__figma-console__figma_get_styles",
       "mcp__figma__get_design_context",
       "mcp__s2a-ds__get_component",
+      "mcp__s2a-ds__get_component_spec",
+      "mcp__s2a-ds__get_component_tokens",
       "mcp__s2a-ds__list_components",
+      "mcp__s2a-ds__list_spec_coverage",
+      "mcp__s2a-ds__find_component_for_use_case",
       "mcp__s2a-ds__search_tokens",
       "mcp__s2a-ds__resolve_token",
+      "mcp__s2a-ds__check_token_exists",
       "mcp__s2a-ds__validate_css",
-      "mcp__s2a-ds__get_token_collection"
+      "mcp__s2a-ds__audit_css",
+      "mcp__s2a-ds__validate_spec",
+      "mcp__s2a-ds__validate_component_usage",
+      "mcp__s2a-ds__get_token_collection",
+      "mcp__design-systems__search_design_knowledge",
+      "mcp__design-systems__search_chunks",
+      "mcp__design-systems__browse_by_category",
+      "mcp__design-systems__get_all_tags"
     ]
   }
 }

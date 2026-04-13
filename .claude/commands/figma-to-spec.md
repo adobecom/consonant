@@ -144,29 +144,50 @@ return {
 
 ---
 
-## Phase 3 — Cross-reference the S2A component library
+## Phase 3 — Cross-reference the S2A component library + external standards
 
-After extraction, use the S2A MCP server to check what already exists:
+Run these in parallel:
+
+**S2A library (internal):**
+```
+list_components                                  → full component inventory
+find_component_for_use_case "{description}"      → ranked match by use-case
+```
+
+**Design systems knowledge base (external):**
+```
+search_design_knowledge "{component type}"       → W3C, WCAG, ARIA, industry patterns
+browse_by_category "components"                  → browse known component patterns
+```
+
+Use the knowledge base results to inform the `a11y` section (correct ARIA role, WCAG SC codes, keyboard interaction pattern) and to validate naming/structure decisions against industry standards. Always run both — internal tells you what exists in S2A, external tells you what the standards say it should be.
+
+If `find_component_for_use_case` returns a confident match, also run:
 
 ```
-list_components           → full component inventory
-find_component_for_use_case "{component name or description}"
-get_component "{name}"    → if it might already exist
+get_component_spec "{name}"     → full spec: variants, props, tokenBindings, a11y
+get_component_tokens "{name}"   → all tokens with resolved values across modes
+validate_spec "{name}"          → drift report: spec vs live source files
 ```
+
+Use `validate_spec` results as **best-practice context** — surface any existing drift to the user before proposing changes. This prevents compounding spec debt.
 
 **Decision matrix:**
 
 | Situation | Action |
 |---|---|
 | COMPONENT_SET node, no match in library | Create new `spec.json` |
-| COMPONENT_SET node, matches existing by name/use | Generate a **variant diff** — list props/tokens that differ |
+| COMPONENT_SET node, matches existing by name/use | Run `get_component_spec` + `validate_spec`, then generate a **variant diff** |
 | FRAME/SECTION, children are mostly instances | List which components are used, note any gaps |
 | FRAME/SECTION, contains plain frames with repeating patterns | Propose each pattern as a new component or variant |
-| Single COMPONENT variant, parent set exists in library | Flag the specific variant and diff it against the spec |
+| Single COMPONENT variant, parent set exists in library | Run `validate_spec`, diff the specific variant against the spec |
+| User wants a best-practice audit of an existing component | Run `get_component_spec` + `get_component_tokens` + `validate_spec`, surface all drift |
 
 ---
 
-## Phase 4 — Resolve tokens
+## Phase 4 — Resolve tokens + audit
+
+**Step 4a — Token name conversion**
 
 For each bound variable ID found in Phase 2, map to S2A semantic token name:
 - Variable name format from Figma: `s2a/color/background/default` → CSS: `--s2a-color-background-default`
@@ -182,6 +203,18 @@ Figma variable name → CSS custom property
 "s2a/border/radius/sm"          →  "--s2a-border-radius-sm"
 ```
 (Replace `/` with `-`, prepend `--`)
+
+**Step 4b — CSS audit gate (required before writing)**
+
+Once all tokens are resolved, build a draft CSS block from the bindings and run:
+
+```
+audit_css "{draft CSS}"  componentName: "{slug}"
+```
+
+- Fix any violations before writing `spec.json` or CSS files
+- Never use primitive tokens (`--s2a-spacing-16`, `--s2a-color-gray-500`) — resolve to semantic aliases
+- If `audit_css` returns violations, surface them to the user and resolve before proceeding
 
 ---
 
@@ -262,11 +295,25 @@ For each plain frame or repeating pattern in a section:
 
 ---
 
+## Phase 6 — Validate after writing
+
+After writing `spec.json`, immediately run:
+
+```
+validate_spec "{slug}"
+```
+
+Surface any drift (missing props, unmatched token bindings, absent Figma node ID). If drift is found, fix it before telling the user the spec is complete.
+
+---
+
 ## Rules
 
 - Never modify existing source files without confirmation
 - Never invent token bindings — only include what's actually bound in Figma
 - Never use primitive tokens (`--s2a-spacing-16`, `--s2a-spacing-32`) — resolve to semantic
+- Always run `audit_css` on the draft CSS before writing — catch violations before they land in the spec
+- Always run `validate_spec` after writing — confirm no drift between spec and source
 - If a token isn't in the S2A system, flag it explicitly: `⚠ unresolved: VariableID:X:Y`
 - Always cross-check with `list_components` before declaring something "new"
 - The `figmaNodeId` in the spec is always the COMPONENT_SET ID, never a variant ID

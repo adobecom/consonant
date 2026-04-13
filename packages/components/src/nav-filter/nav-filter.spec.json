@@ -1,0 +1,94 @@
+{
+  "name": "NavFilter",
+  "slug": "nav-filter",
+  "figmaNodeId": "4726:4096",
+  "cssClass": "c-nav-filter",
+  "storybookId": "nav-filter",
+  "description": "A pill-shaped filter tab used in global navigation to switch between content categories. Fixed 40px height, auto width (hugs label). Always rendered inside a NavFilterGroup (role=tablist). Three distinct visual states: light-gray pill (default), solid-black pill with white text (active), dark-gray pill with white text (hover).",
+  "composedOf": [],
+  "variants": {
+    "state": ["default", "active", "hover"]
+  },
+  "forbiddenCombinations": [],
+  "layout": {
+    "height": "40px",
+    "heightSizing": "fixed",
+    "width": "auto",
+    "paddingTop": "var(--s2a-spacing-md)",
+    "paddingBottom": "var(--s2a-spacing-md)",
+    "paddingLeft": "var(--s2a-spacing-lg)",
+    "paddingRight": "var(--s2a-spacing-lg)",
+    "borderRadius": "75px",
+    "borderRadiusNote": "Full pill — hardcoded in source, no token bound. Requires a full-pill radius token in S2A (e.g. --s2a-border-radius-full).",
+    "direction": "horizontal",
+    "alignItems": "center"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"Filter\"",
+      "description": "Visible label text for the filter tab."
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Marks this tab as the currently selected filter. Sets aria-selected and applies the active visual style (solid black pill, white text)."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Prevents interaction. Use when a filter category has no results."
+    },
+    {
+      "name": "onClick",
+      "type": "function",
+      "description": "Called when the filter tab is activated."
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "enum": ["default", "active", "hover"],
+      "description": "Forces a visual state. For testing and documentation only — use active prop for programmatic selection."
+    }
+  ],
+  "tokenBindings": {
+    "background-color:default": "--s2a-color-transparent-black-04",
+    "background-color:active": "--s2a-color-icon-button-background-primary-solid-default",
+    "background-color:hover": "--s2a-color-transparent-black-48",
+    "color:default": "--s2a-color-content-default",
+    "color:active": "--s2a-color-background-default",
+    "color:hover": "--s2a-color-background-default",
+    "padding-top": "--s2a-spacing-md",
+    "padding-bottom": "--s2a-spacing-md",
+    "padding-left": "--s2a-spacing-lg",
+    "padding-right": "--s2a-spacing-lg",
+    "font-size": "--s2a-typography-font-size-label",
+    "line-height": "--s2a-typography-line-height-label",
+    "letter-spacing": "--s2a-typography-letter-spacing-label"
+  },
+  "tokenFlags": {
+    "⚠ background-color:default": "s2a/color/transparent/black/04 is not in the S2A semantic token index. Primitive transparent token — needs a semantic alias (e.g. --s2a-color-surface-overlay-subtle) before shipping.",
+    "⚠ background-color:active": "s2a/color/IconButton/background/primary/solid/default is an IconButton component token being borrowed. NavFilter should have its own --s2a-color-nav-filter-background-active token.",
+    "⚠ background-color:hover": "s2a/color/transparent/black/48 is not in the S2A semantic token index. Primitive transparent token — needs a semantic alias (e.g. --s2a-color-surface-overlay-strong).",
+    "⚠ Figma property name": "Source component uses 'Property 1' instead of 'State'. Rename in Figma's Properties panel before publishing."
+  },
+  "a11y": {
+    "role": "tab",
+    "wcag": ["1.4.3", "2.1.1", "2.4.7", "4.1.2"],
+    "keyboard": [
+      { "key": "Enter", "action": "Activates the filter tab" },
+      { "key": "Space", "action": "Activates the filter tab" },
+      { "key": "ArrowRight", "action": "Moves focus to the next filter tab" },
+      { "key": "ArrowLeft", "action": "Moves focus to the previous filter tab" }
+    ],
+    "notes": [
+      "Must be rendered inside a container with role=tablist (e.g. NavFilterGroup).",
+      "Active state is communicated via aria-selected=true. Do not use aria-pressed.",
+      "Disabled tabs should remain focusable (do not set tabindex=-1) so keyboard users can discover them."
+    ]
+  }
+}

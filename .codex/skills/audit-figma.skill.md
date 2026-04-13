@@ -1,7 +1,7 @@
 ---
-skill: s2a-component-audit
-description: Audit S2A Figma component pages for normalization — property order, casing, layer naming, documentation completeness, and unused properties. Flags issues without making changes.
-command: /s2a-audit [page-name | all]
+skill: audit-figma
+description: Audit Figma component pages for normalization — property order, casing, layer naming, documentation completeness, and unused properties. Flags issues without making changes.
+command: /audit-figma [page-name | all]
 ---
 
 ## Why this skill exists
