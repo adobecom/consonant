@@ -1,0 +1,53 @@
+---
+description: Extract a component spec.json from any Figma node — component set, single variant, or full frame/section layout. Invoke when user provides a Figma URL and asks to extract a spec, generate spec.json, or capture component API.
+globs:
+alwaysApply: false
+---
+
+# Spec From Figma
+
+Extract a `spec.json` from a Figma node. If the component already exists in the repo, produce a variant diff instead.
+
+## Extraction steps
+1. Locate node via figma_execute, determine type (COMPONENT_SET / FRAME / COMPONENT)
+2. Walk COMPONENT_SET properties → map to `variants`, `props`, `tokenBindings`
+3. Extract token bindings from fills, strokes, spacing → CSS custom property names
+4. Cross-reference with s2a-ds MCP:
+   - `list_components` + `find_component_for_use_case` → is this new or existing?
+   - If match: `get_component_spec` + `get_component_tokens` + `validate_spec` → best-practice audit context
+5. Build draft CSS, run `audit_css` → fix all violations before writing
+6. Write `spec.json` to `packages/components/src/{slug}/{slug}.spec.json`
+7. Run `validate_spec "{slug}"` → surface and fix any drift
+
+## spec.json shape
+```json
+{
+  "name": "ComponentName",
+  "slug": "component-name",
+  "figmaNodeId": "XXXX:YYYY",
+  "cssClass": "c-component-name",
+  "storybookId": "component-name",
+  "description": "One sentence. What it is and where it's used.",
+  "composedOf": [],
+  "variants": { "state": ["default", "hover"] },
+  "forbiddenCombinations": [],
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"Label\"", "description": "..." }
+  ],
+  "tokenBindings": { "color:default": "--s2a-color-content-default" },
+  "a11y": { "role": "button", "wcag": ["1.4.3"], "keyboard": [], "notes": [] }
+}
+```
+
+## Diff mode
+If component exists in library: run `get_component_spec` to pull current spec, diff against Figma data, output only what changed:
+- New variant axes or values
+- New/changed token bindings
+- Props to add or update
+
+## Audit mode
+If user wants a best-practice audit of an existing component:
+Run `get_component_spec` + `get_component_tokens` + `validate_spec` → surface all drift between spec, source, and Figma.
+
+Flag any unresolved variable IDs: `⚠ unresolved: VariableID:X:Y`
+Never use primitive tokens in tokenBindings — always resolve to semantic aliases.

@@ -1,7 +1,7 @@
 ---
-skill: s2a-component-authoring
-description: Author S2A component sets in Figma via figma-console MCP — enforces property panel order, layer naming conventions, variant structure, and token binding standards.
-command: /s2a-component <component-name> [figma-url]
+skill: json-to-figma
+description: Build or update a Figma component set from a spec.json — enforces property panel order, layer naming conventions, variant structure, and token binding standards.
+command: /json-to-figma <component-name> [figma-url]
 ---
 
 ## Why this skill exists

@@ -1,0 +1,55 @@
+/* ─── Component tokens ──────────────────────────────────────────────────────── */
+.c-nav-filter {
+  --c-nav-filter-bg:    var(--s2a-color-transparent-black-04, rgba(0, 0, 0, 0.04));
+  --c-nav-filter-color: var(--s2a-color-content-default, #000000);
+}
+
+.c-nav-filter:is([aria-selected="true"], [data-force-state="active"]) {
+  /* ⚠ borrowing --s2a-color-background-knockout until a NavFilter-specific active token ships */
+  --c-nav-filter-bg:    var(--s2a-color-background-knockout, #000000);
+  --c-nav-filter-color: var(--s2a-color-background-default, #ffffff);
+}
+
+.c-nav-filter:not([aria-selected="true"]):not([data-force-state="active"]):is(:hover, [data-force-state="hover"]) {
+  --c-nav-filter-bg:    var(--s2a-color-transparent-black-48, rgba(0, 0, 0, 0.48));
+  --c-nav-filter-color: var(--s2a-color-background-default, #ffffff);
+}
+
+/* ─── Root ──────────────────────────────────────────────────────────────────── */
+.c-nav-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--s2a-spacing-2xl, 40px);
+  padding: var(--s2a-spacing-md, 16px) var(--s2a-spacing-lg, 24px);
+  border: none;
+  border-radius: var(--s2a-border-radius-round, 999px);
+  background-color: var(--c-nav-filter-bg);
+  color: var(--c-nav-filter-color);
+  font-family: var(--s2a-font-family-default, "adobe-clean", "Adobe Clean", sans-serif);
+  font-weight: var(--s2a-font-weight-adobe-clean-bold, 700);
+  font-size: var(--s2a-typography-font-size-label, 14px);
+  line-height: var(--s2a-typography-line-height-label, 1.142857);
+  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
+  white-space: nowrap;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* ─── Disabled ──────────────────────────────────────────────────────────────── */
+/* Uses aria-disabled (not native disabled) so the tab stays keyboard-focusable per APG */
+.c-nav-filter[aria-disabled="true"],
+.c-nav-filter[data-force-state="disabled"] {
+  opacity: var(--s2a-opacity-disabled, 0.48);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Focus ──────────────────────────────────────────────────────────────────── */
+.c-nav-filter:is(:focus-visible, [data-force-state="focus"]) {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--s2a-spacing-3xs, 2px) var(--s2a-color-background-default, #ffffff),
+    0 0 0 var(--s2a-spacing-2xs, 4px) var(--s2a-color-focus-ring-default, #1473e6);
+}

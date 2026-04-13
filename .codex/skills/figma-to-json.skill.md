@@ -1,5 +1,5 @@
 ---
-name: spec-from-figma
+name: figma-to-json
 description: Extract a component spec.json from any Figma node — component set, single variant, or full frame/section layout. Produces spec.json or a variant diff if the component already exists.
 type: workflow
 triggers:
@@ -104,14 +104,29 @@ return {
 
 ---
 
-## Step 4 — Cross-reference S2A library
+## Step 4 — Cross-reference S2A library + external standards
 
-Use MCP tools:
+Run all in parallel:
+
+**S2A library (internal):**
 ```
 list_components
 find_component_for_use_case "{component name}"
-get_component "{name}"
-check_token_exists "{token-name}"
+```
+
+**Design systems knowledge base (external):**
+```
+search_design_knowledge "{component type}"   → WCAG, ARIA, W3C, industry patterns
+browse_by_category "components"              → browse known patterns
+```
+
+Use knowledge base results to inform the `a11y` block — correct ARIA role, WCAG SC codes, keyboard behavior. Always run both MCP servers.
+
+If a confident S2A match is found, also run:
+```
+get_component_spec "{name}"     → full spec for diffing
+get_component_tokens "{name}"   → all resolved token values
+validate_spec "{name}"          → surface any existing drift before proposing changes
 ```
 
 **Decision logic:**
@@ -119,14 +134,16 @@ check_token_exists "{token-name}"
 | Situation | Action |
 |---|---|
 | No match in library | Write new `spec.json` |
-| Name/use-case match | Generate variant diff table |
+| Name/use-case match | Run `get_component_spec` + `validate_spec`, generate variant diff table |
 | Frame — children are instances | List which components are used, identify gaps |
 | Frame — plain frames with patterns | Propose each as a new component, ask before writing |
+| User wants best-practice audit | Run `get_component_spec` + `get_component_tokens` + `validate_spec`, surface all drift |
 
 ---
 
-## Step 5 — Token name conversion
+## Step 5 — Token name conversion + audit
 
+**5a — Convert names:**
 Figma variable name → CSS custom property:
 ```
 "s2a/color/background/default"  →  "--s2a-color-background-default"
@@ -144,6 +161,14 @@ Rule: replace all `/` with `-`, prepend `--`
 - 40px → `--s2a-spacing-2xl`
 - 48px → `--s2a-spacing-3xl`
 - 64px → `--s2a-spacing-4xl`
+
+**5b — CSS audit gate (required before writing):**
+
+Build a draft CSS block from resolved bindings and run:
+```
+audit_css "{draft CSS}"  componentName: "{slug}"
+```
+Fix all violations before proceeding. Never write a spec or CSS file that fails `audit_css`.
 
 ---
 
@@ -226,11 +251,23 @@ When the component exists, output this instead of a new spec:
 
 ---
 
+## Step 7 — Validate after writing
+
+After writing `spec.json`, run:
+```
+validate_spec "{slug}"
+```
+Fix any reported drift before telling the user the spec is complete.
+
+---
+
 ## Non-negotiable rules
 
 - Never modify existing spec files without user confirmation
 - Never invent token bindings — only bound variables from Figma
 - Never use primitive tokens in tokenBindings — always semantic
+- Always run `audit_css` on the draft CSS before writing
+- Always run `validate_spec` after writing
 - Always run `list_components` before declaring something new
 - `figmaNodeId` is always the COMPONENT_SET, never a variant
 - After writing spec.json, remind: run `/spec <figma-url>` to generate Figma spec frames
