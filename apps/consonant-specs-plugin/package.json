@@ -1,0 +1,17 @@
+{
+  "name": "@s2a/consonant-specs-plugin",
+  "version": "0.1.0",
+  "description": "Figma plugin for measurements, annotations, and developer handoff with S2A token integration",
+  "private": true,
+  "scripts": {
+    "build": "nx build consonant-specs-plugin",
+    "watch": "node esbuild.config.mjs --watch",
+    "package": "nx package consonant-specs-plugin",
+    "sync-tokens": "bash scripts/sync-tokens.sh"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.100.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.0"
+  }
+}

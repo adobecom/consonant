@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- INLINE_CSS -->
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1 class="header-title">Consonant Tools</h1>
+    </header>
+
+    <div class="selection-info" id="selectionInfo">
+      <span class="selection-label">No selection</span>
+    </div>
+
+    <nav class="tab-bar">
+      <button class="tab active" data-tab="align">Align</button>
+      <button class="tab" data-tab="match">Match</button>
+      <button class="tab" data-tab="design">Grids</button>
+      <button class="tab" data-tab="specs">Specs</button>
+      <button class="tab" data-tab="a11y">A11y</button>
+      <button class="tab" data-tab="localize">Localize</button>
+      <button class="tab" data-tab="bridge">Bridge</button>
+    </nav>
+
+    <div class="tab-content" id="tabContent">
+      <div class="tab-panel active" data-panel="align">
+        <div id="alignContent">
+          <p class="placeholder" id="alignPlaceholder">Select a node to inspect</p>
+          <div id="alignControls" style="display:none;">
+            <div id="propertyList"></div>
+            <div style="margin-top:16px;">
+              <div class="section-title">Token Alignment</div>
+              <button class="btn btn-secondary" id="s2aAuditBtn">S2A Audit</button>
+              <button class="btn btn-secondary" id="textColorsAlignBtn">Align (Text and Colors)</button>
+              <button class="btn" id="fullAlignBtn">Full Align S2A</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="match">
+        <div id="matchContent">
+          <p class="placeholder" id="matchPlaceholder">Select a frame to force match</p>
+          <div id="matchControls" style="display:none;">
+            <p style="color:var(--text-secondary);margin-bottom:12px;">Force match the selection to the closest S2A token values. Check the categories you want to match.</p>
+
+            <div class="match-checklist">
+              <label class="match-option"><input type="checkbox" id="matchTypography"> Typography</label>
+              <label class="match-option"><input type="checkbox" id="matchFillColors"> Fill Colors</label>
+              <label class="match-option"><input type="checkbox" id="matchStrokeColors"> Stroke Colors</label>
+              <label class="match-option"><input type="checkbox" id="matchBorderRadius"> Border Radius</label>
+              <label class="match-option"><input type="checkbox" id="matchBorderWidth"> Border Width</label>
+              <label class="match-option"><input type="checkbox" id="matchSpacing"> Spacing (Padding / Gap)</label>
+              <label class="match-option"><input type="checkbox" id="matchOpacity"> Opacity</label>
+              <label class="match-option"><input type="checkbox" id="matchDropShadow"> Drop Shadow</label>
+              <label class="match-option"><input type="checkbox" id="matchBlur"> Blur</label>
+            </div>
+
+            <button class="btn" id="matchBtn" style="margin-top:12px;">Match</button>
+            <div id="matchStatus" style="margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="design">
+        <div id="designContent">
+          <p class="placeholder" id="designPlaceholder">Select a frame to apply grid</p>
+          <div id="designControls" style="display:none;">
+            <div class="section-title">Layout Grids</div>
+            <p style="color:var(--text-secondary);margin-bottom:12px;">Add responsive layout grid overlays to the selected frame. Does not modify existing design content.</p>
+            <button class="btn" id="gridBtn">Grid (Responsive)</button>
+            <button class="btn btn-secondary" id="gridXlBtn">Grid XL (1920px centered)</button>
+            <button class="btn btn-secondary" id="clearGridBtn" style="margin-top:8px;">Clear Grids</button>
+            <div id="gridStatus" style="margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="specs">
+        <div id="specsContent">
+          <p class="placeholder" id="specsPlaceholder">Select a frame to spec</p>
+          <div id="specsControls" style="display:none;">
+            <div class="match-checklist">
+              <label class="match-option"><input type="checkbox" id="specAnatomy"> Anatomy</label>
+              <label class="match-option"><input type="checkbox" id="specSpacingGeneral"> Spacing Root Level</label>
+              <label class="match-option"><input type="checkbox" id="specCardGaps"> Spacing In Between (direct placement)</label>
+              <label class="match-option"><input type="checkbox" id="specSpacing"> Spacing Detailed (direct placement)</label>
+              <label class="match-option"><input type="checkbox" id="specColors"> Colors</label>
+              <label class="match-option"><input type="checkbox" id="specTextProps"> Text Properties</label>
+            </div>
+            <button class="btn" id="specItBtn" style="margin-top:12px;">Spec It</button>
+            <p style="color:var(--text-secondary);margin-top:24px;margin-bottom:12px;display:none;">Generates a full specification next to the selected frame — anatomy callouts, layout & spacing with redlines, typography data, component details, and S2A token references.</p>
+            <button class="btn" id="fullSpecsBtn" style="display:none;">Full Specs</button>
+            <div id="specStatus" style="margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="a11y">
+        <div id="a11yContent">
+          <p class="placeholder" id="a11yPlaceholder">Select a frame to analyze</p>
+          <div id="a11yControls" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div class="section-title" style="color:var(--accent,#1473E6);">Plugin</div>
+              <button id="a11yCheckAll" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+            </div>
+            <div class="match-checklist">
+              <label class="match-option"><input type="checkbox" id="a11yFocusIndicators"> Focus Indicators</label>
+              <label class="match-option"><input type="checkbox" id="a11yFocusOrder"> Focus Order</label>
+            </div>
+            <div class="a11y-tier2-header" id="a11yTier2Header">
+              <span class="section-title" style="color:#7c3aed;">AI-assisted</span>
+              <span class="a11y-tier2-badge" id="a11yTier2Badge">connect bridge</span>
+            </div>
+            <div class="match-checklist" id="a11yTier2List">
+              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yHeadings" disabled> Heading Hierarchy</label>
+              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yLandmarks" disabled> Landmarks</label>
+              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yNames" disabled> Accessible Names</label>
+              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yAltText" disabled> Alt-Text</label>
+              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yAria" disabled> ARIA Roles &amp; Attributes</label>
+              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yKeyboard" disabled> Keyboard Patterns</label>
+              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yDom" disabled> DOM Strategy</label>
+              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11ySimplified" disabled> Auto-Rotation Simplified</label>
+              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yAutoRotation" disabled> Auto-Rotation</label>
+            </div>
+            <div id="a11yNotesAccordion" style="margin-top:4px;margin-left:8px;border-left:2px solid var(--border,#e5e5e5);padding-left:8px;">
+              <div id="a11yNotesToggle" style="color:var(--text-secondary,#666);font-size:11px;margin-bottom:4px;cursor:pointer;user-select:none;"><span id="a11yNotesArrow" style="display:inline-block;transition:transform 0.15s;">&#9660;</span> Accessibility Notes</div>
+              <div class="match-checklist" id="a11yScreenReaderList">
+                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yVoiceover" disabled> VoiceOver</label>
+                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yTalkback" disabled> TalkBack</label>
+                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yNarrator" disabled> Narrator</label>
+                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yReactNative" disabled> React Native</label>
+                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yTvNote" disabled> TV Note</label>
+                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yGeneralNote" disabled> General Note</label>
+              </div>
+            </div>
+            <button class="btn" id="generateBluelineBtn" style="margin-top:12px;">Generate Blueline</button>
+            <button class="btn btn-secondary" id="generateBluelinePanelsBtn" style="margin-top:8px;">Generate Blueline with Sections</button>
+            <div id="a11yStatus" style="margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="localize">
+        <div id="localizeContent">
+          <p class="placeholder" id="localizePlaceholder">Select a frame to localize</p>
+          <div id="localizeControls" style="display:none;">
+            <div id="localizeMain">
+              <div class="section-title">Translation Provider</div>
+              <select id="providerSelect" style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--border,#e5e5e5);border-radius:4px;font-size:12px;margin-bottom:12px;">
+                <option value="mymemory">MyMemory (free, no key)</option>
+                <option value="lingva">Lingva (free, no key)</option>
+                <option value="deepl">DeepL Free (key required)</option>
+                <option value="google">Google Cloud (key required)</option>
+                <option value="azure">Microsoft Azure (key required)</option>
+                <option value="anthropic">Anthropic Claude (key required)</option>
+              </select>
+              <div id="apiKeySection" style="display:none;margin-bottom:12px;">
+                <input type="password" id="apiKeyInput" placeholder="API key..." style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--border,#e5e5e5);border-radius:4px;font-family:monospace;font-size:11px;" />
+                <div id="apiKeyStatus" style="color:var(--text-secondary);font-size:11px;margin-top:4px;"></div>
+                <div style="display:flex;gap:8px;margin-top:6px;">
+                  <button class="btn btn-secondary" id="saveKeyBtn" style="flex:1;">Save Key</button>
+                  <button class="btn btn-secondary" id="clearKeyBtn" style="flex:1;">Clear</button>
+                </div>
+              </div>
+              <div class="section-title">Languages</div>
+              <div class="match-checklist">
+                <label class="match-option"><input type="checkbox" id="locDe"> German <span style="color:var(--text-tertiary,#999);font-size:11px;">— long-word wrapping, 1.5× text</span></label>
+                <label class="match-option"><input type="checkbox" id="locZh"> Chinese <span style="color:var(--text-tertiary,#999);font-size:11px;">— short sentences</span></label>
+                <label class="match-option"><input type="checkbox" id="locTh"> Thai <span style="color:var(--text-tertiary,#999);font-size:11px;">— extra line-height for ligatures</span></label>
+                <label class="match-option"><input type="checkbox" id="locAr"> Arabic <span style="color:var(--text-tertiary,#999);font-size:11px;">— RTL</span></label>
+              </div>
+              <div class="match-checklist" style="margin-top:8px;">
+                <label class="match-option"><input type="checkbox" id="locRtl"> Apply RTL layout</label>
+              </div>
+              <button class="btn" id="localizeBtn" style="margin-top:12px;">Localize Selection</button>
+              <div id="localizeStatus" style="margin-top:12px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="bridge">
+        <div id="bridgeContent">
+          <div id="bridgeDisconnected">
+            <div style="text-align:center;padding:24px 16px;">
+              <div style="font-size:24px;margin-bottom:8px;">&#x1f50c;</div>
+              <div style="font-weight:600;margin-bottom:4px;">MCP Bridge</div>
+              <p style="color:var(--text-secondary);font-size:11px;margin-bottom:16px;">Connect to figma-console MCP for Claude Code design integration</p>
+              <button class="btn" id="bridgeConnectBtn">Connect</button>
+              <p style="color:var(--text-tertiary,#999);font-size:10px;margin-top:8px;">Connection persists across all tabs</p>
+            </div>
+          </div>
+          <div id="bridgeConnected" style="display:none;">
+            <div style="text-align:center;padding:16px;">
+              <div class="bridge-status-pill">
+                <span class="bridge-dot"></span>
+                <span>Connected</span>
+              </div>
+              <p style="color:var(--text-secondary);font-size:11px;margin:8px 0;">Claude Code can read and write to this file</p>
+              <button class="btn btn-secondary" id="bridgeDisconnectBtn">Disconnect</button>
+            </div>
+            <div id="bridgeLog" class="bridge-log"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer" id="footer">
+      <span class="token-status">Tokens: not loaded</span>
+    </footer>
+  </div>
+  <!-- INLINE_JS -->
+</body>
+</html>
