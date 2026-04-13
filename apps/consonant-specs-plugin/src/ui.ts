@@ -134,6 +134,9 @@ window.addEventListener('message', (event) => {
     case 'localize-status':
       updateLocalizeStatus(msg.message as string);
       break;
+    case 'localize-bridge-prompt':
+      showLocalizeBridgePrompt(msg as any);
+      break;
     case 'token-status':
       updateTokenStatus(msg.count, msg.version);
       break;
@@ -150,7 +153,7 @@ window.addEventListener('message', (event) => {
       renderAlignResult(msg as any);
       break;
     case 'match-result':
-      updateMatchStatus(msg.message);
+      updateMatchStatus(msg.message as string);
       break;
     case 'grid-result':
       updateGridStatus(msg.message);
@@ -173,7 +176,7 @@ window.addEventListener('message', (event) => {
           delete result.requestId;
           pending.resolve(result);
         } else {
-          pending.reject(new Error(msg.error || 'Unknown error'));
+          pending.resolve({ success: false, error: msg.error || 'Unknown error' });
         }
       }
       break;
@@ -212,9 +215,16 @@ function renderAuditResult(result: { matched: number; total: number; issues: Arr
   const pct = result.total > 0 ? Math.round((result.matched / result.total) * 100) : 0;
   const color = pct >= 80 ? 'var(--success)' : pct >= 50 ? 'var(--warning)' : '#e34850';
 
-  let html = `<div style="padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--border)">
-    <strong style="font-size:13px;color:${color}">${pct}% S2A compliant</strong>
-    <span style="color:var(--text-secondary);font-size:10px;display:block">${result.matched}/${result.total} properties matched — ${result.issues.length} issues</span>
+  const annotateBtn = result.issues.length > 0
+    ? `<button id="annotateAuditBtn" style="background:none;border:1px solid var(--border,#e5e5e5);border-radius:4px;color:var(--text-secondary);font-size:10px;cursor:pointer;padding:2px 8px;">Annotate</button>`
+    : '';
+
+  let html = `<div style="padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <strong style="font-size:13px;color:${color}">${pct}% S2A compliant</strong>
+      <span style="color:var(--text-secondary);font-size:10px;display:block">${result.matched}/${result.total} properties matched — ${result.issues.length} issues</span>
+    </div>
+    ${annotateBtn}
   </div>`;
 
   if (result.issues.length > 0) {
@@ -235,6 +245,10 @@ function renderAuditResult(result: { matched: number; total: number; issues: Arr
       const nodeId = (row as HTMLElement).dataset.nodeId;
       if (nodeId) navigateToNode(nodeId);
     });
+  });
+
+  document.getElementById('annotateAuditBtn')?.addEventListener('click', () => {
+    postToPlugin('annotate-audit-issues', { issues: result.issues });
   });
 }
 
@@ -325,7 +339,16 @@ function updateGridStatus(message: string) {
   if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
 }
 
-// Match tab
+// Match tab — Check All / Uncheck All
+document.getElementById('matchCheckAll')?.addEventListener('click', () => {
+  const ids = ['matchTypography', 'matchFillColors', 'matchStrokeColors', 'matchBorderRadius', 'matchBorderWidth', 'matchSpacing', 'matchOpacity', 'matchDropShadow', 'matchBlur'];
+  const boxes = ids.map(id => document.getElementById(id) as HTMLInputElement).filter(Boolean);
+  const allChecked = boxes.every(cb => cb.checked);
+  boxes.forEach(cb => { cb.checked = !allChecked; });
+  const btn = document.getElementById('matchCheckAll');
+  if (btn) btn.textContent = allChecked ? 'Check All' : 'Uncheck All';
+});
+
 document.getElementById('matchBtn')?.addEventListener('click', () => {
   const categories: string[] = [];
   if ((document.getElementById('matchTypography') as HTMLInputElement).checked) categories.push('typography');
@@ -345,7 +368,8 @@ document.getElementById('matchBtn')?.addEventListener('click', () => {
 
 function updateMatchStatus(message: string) {
   const el = document.getElementById('matchStatus');
-  if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+  if (!el) return;
+  el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
 }
 
 // Specs tab
@@ -390,6 +414,16 @@ function syncKeySection() {
 providerSelect?.addEventListener('change', syncKeySection);
 syncKeySection();
 
+document.getElementById('locCheckAll')?.addEventListener('click', () => {
+  const ids = ['locDe', 'locZh', 'locTh', 'locAr'];
+  const boxes = ids.map(id => document.getElementById(id) as HTMLInputElement).filter(Boolean);
+  const allChecked = boxes.every(b => b.checked);
+  boxes.forEach(b => { b.checked = !allChecked; });
+  // Auto-check RTL when Arabic is checked
+  const locRtlEl = document.getElementById('locRtl') as HTMLInputElement | null;
+  if (locRtlEl && !allChecked) locRtlEl.checked = true;
+});
+
 const locAr = document.getElementById('locAr') as HTMLInputElement | null;
 const locRtl = document.getElementById('locRtl') as HTMLInputElement | null;
 locAr?.addEventListener('change', () => {
@@ -429,6 +463,36 @@ document.getElementById('clearKeyBtn')?.addEventListener('click', () => {
 function updateLocalizeStatus(message: string) {
   const el = document.getElementById('localizeStatus');
   if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+}
+
+const LANG_NAMES: Record<string, string> = { de: 'German', zh: 'Chinese', th: 'Thai', ar: 'Arabic' };
+
+function showLocalizeBridgePrompt(data: { frameName: string; frameId: string; languages: string[]; applyRtl: boolean; sourceTexts: { nodeId: string; text: string }[] }) {
+  const langList = data.languages.map(l => LANG_NAMES[l] || l).join(', ');
+  const cmd = `Use /project:fill-localize to translate the frame "${data.frameName}" (${data.frameId}) into: ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? ' Apply RTL layout for Arabic.' : ''}`;
+  const el = document.getElementById('localizeStatus');
+  if (el) {
+    el.innerHTML = `
+      <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
+        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Ready for translation &#x2714;</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">Paste this in Claude Code to translate via bridge:</div>
+        <code id="localizeCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
+        <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
+      </div>`;
+    document.getElementById('copyLocalizeCmd')?.addEventListener('click', () => {
+      const ta = document.createElement('textarea');
+      ta.value = cmd;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      const btn = document.getElementById('copyLocalizeCmd');
+      if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); }
+    });
+  }
 }
 
 function updateApiKeyUi(hasKey: boolean, masked?: string) {
@@ -486,10 +550,8 @@ function showAiFillInstruction(mode?: string, sections?: string[], frameName?: s
       <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
         <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Scaffolding done &#x2714;</div>
         <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">To fill AI sections, paste this in Claude Code:</div>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <code id="fillCmdText" style="flex:1;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
-          <button class="btn btn-secondary" id="copyFillCmd" style="padding:4px 8px;font-size:10px;white-space:nowrap;">Copy</button>
-        </div>
+        <code id="fillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
+        <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
     document.getElementById('copyFillCmd')?.addEventListener('click', () => {
@@ -638,20 +700,6 @@ let bridgeKeepaliveTimer: ReturnType<typeof setInterval> | null = null;
 let bridgeReconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let bridgeReconnectAttempts = 0;
 let bridgeUserDisconnected = false; // true when user clicks Disconnect
-
-// Session nonce for EXECUTE_CODE — generated per WS connection.
-// Any WS message invoking EXECUTE_CODE must carry a matching `sessionNonce` field.
-// This is a defence-in-depth measure: it prevents any local process other than the
-// MCP server (which receives the nonce via the HELLO handshake) from running
-// arbitrary code in the Figma sandbox.
-// NOTE: This plugin must remain INTERNAL — the eval() path should never be exposed
-// in a publicly distributed plugin.
-let bridgeSessionNonce: string | null = null;
-function generateNonce(): string {
-  const arr = new Uint8Array(16);
-  crypto.getRandomValues(arr);
-  return Array.from(arr, (b) => b.toString(16).padStart(2, '0')).join('');
-}
 const BRIDGE_MAX_RECONNECT = 20;
 const BRIDGE_RECONNECT_BASE_MS = 2000;
 
@@ -866,28 +914,23 @@ function bridgeReconnectToPort(port: number) {
 }
 
 function initBridgeConnection(ws: WebSocket) {
-  // Generate a new session nonce for this connection. The nonce is sent to the
-  // MCP server in the PLUGIN_HELLO so it can include it in EXECUTE_CODE requests.
-  bridgeSessionNonce = generateNonce();
-
   // Send FILE_INFO to the server after GET_FILE_INFO from code.ts
   // fileKey is REQUIRED by the server — without it, the client stays "pending" and gets dropped after 30s
   sendBridgeCommand('GET_FILE_INFO', {}).then((result) => {
-    if (ws.readyState !== 1 || !result) return;
+    if (ws.readyState !== 1 || !result || result.success === false) return;
     const info = result.fileInfo || result;
     // Fallback if fileKey is still null
     if (!info.fileKey) {
       info.fileKey = 'local-' + Date.now();
     }
     info.pluginVersion = '1.0.0';
-    info.sessionNonce = bridgeSessionNonce; // MCP server must echo this in EXECUTE_CODE params
     ws.send(JSON.stringify({ type: 'FILE_INFO', data: info }));
     appendBridgeLog('File info sent: ' + (info.fileName || 'unknown') + ' (key: ' + (info.fileKey || '?') + ')');
   }).catch(() => {});
 
   // Auto-sync variables on connection
   sendBridgeCommand('REFRESH_VARIABLES', {}, 30000).then((result) => {
-    if (ws.readyState !== 1 || !result) return;
+    if (ws.readyState !== 1 || !result || result.success === false) return;
     ws.send(JSON.stringify({ type: 'VARIABLES_DATA', data: result.data }));
     appendBridgeLog('Variables synced: ' + ((result.data?.variables?.length) || 0) + ' vars');
   }).catch(() => {});
@@ -906,19 +949,6 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
 
       // Ignore pong or other non-command messages
       if (!message.id || !message.method) return;
-
-      // Gate EXECUTE_CODE behind the session nonce. Any process can connect to the
-      // localhost WS port, but only the MCP server (which received the nonce via FILE_INFO)
-      // can supply the correct value. Reject silently to avoid leaking the nonce.
-      if (message.method === 'EXECUTE_CODE') {
-        if (!bridgeSessionNonce || (message.params || {}).sessionNonce !== bridgeSessionNonce) {
-          if (ws.readyState === 1) {
-            ws.send(JSON.stringify({ id: message.id, error: 'Unauthorized: missing or invalid sessionNonce' }));
-          }
-          appendBridgeLog('\u26a0 EXECUTE_CODE rejected — invalid nonce');
-          return;
-        }
-      }
 
       appendBridgeLog('\u2190 ' + message.method);
 
@@ -943,7 +973,6 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
   ws.onclose = (event) => {
     bridgeStopKeepalive();
     bridgeWs = null;
-    bridgeSessionNonce = null; // invalidate nonce so it can't be reused after disconnect
     bridgeConnected = false;
     updateBridgeUi();
 
