@@ -1,0 +1,34 @@
+{
+  "name": "Consonant Tools",
+  "id": "consonant-specs-internal",
+  "api": "1.0.0",
+  "editorType": ["figma"],
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
+  "enablePrivatePluginApi": true,
+  "permissions": ["teamlibrary"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": [
+      "https://api.anthropic.com",
+      "https://api.mymemory.translated.net",
+      "https://lingva.ml",
+      "https://lingva.thedaviddelta.com",
+      "https://api-free.deepl.com",
+      "https://translation.googleapis.com",
+      "https://api.cognitive.microsofttranslator.com",
+      "http://localhost:9300",
+      "ws://localhost:9223",
+      "ws://localhost:9224",
+      "ws://localhost:9225",
+      "ws://localhost:9226",
+      "ws://localhost:9227",
+      "ws://localhost:9228",
+      "ws://localhost:9229",
+      "ws://localhost:9230",
+      "ws://localhost:9231",
+      "ws://localhost:9232"
+    ],
+    "reasoning": "Localize tab calls translation APIs. Bridge tab connects to consonant-mcp HTTP on port 9300. WebSocket ports 9223-9232 connect to figma-console MCP for Claude Code integration."
+  }
+}
