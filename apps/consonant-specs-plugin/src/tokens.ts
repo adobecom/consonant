@@ -191,6 +191,29 @@ export function matchTypography(value: string): string | null {
   return null;
 }
 
+/** Strict typography match — requires family, size, AND style (weight) to all match an S2A text style. */
+export function matchTypographyStrict(
+  fontFamily: string, fontSize: number, fontStyle: string,
+): { name: string; matched: boolean; familyOk: boolean; sizeOk: boolean; styleOk: boolean } {
+  const famLower = fontFamily.toLowerCase();
+  const styleLower = fontStyle.toLowerCase();
+  // Find best match: exact family+size+style first, then partial matches
+  for (const ts of textStyleMap) {
+    const fam = ts.fontFamily.toLowerCase() === famLower;
+    const size = ts.fontSize === fontSize;
+    const style = ts.fontStyle.toLowerCase() === styleLower;
+    if (fam && size && style) return { name: ts.name, matched: true, familyOk: true, sizeOk: true, styleOk: true };
+  }
+  // No exact match — report which parts match any S2A style
+  let familyOk = false, sizeOk = false, styleOk = false;
+  for (const ts of textStyleMap) {
+    if (ts.fontFamily.toLowerCase() === famLower) familyOk = true;
+    if (ts.fontSize === fontSize) sizeOk = true;
+    if (ts.fontStyle.toLowerCase() === styleLower) styleOk = true;
+  }
+  return { name: '', matched: false, familyOk, sizeOk, styleOk };
+}
+
 // Name-based filters to ensure tokens route to the right category.
 // S2A names follow patterns like s2a/spacing/*, s2a/border/radius/*, s2a/blur/*.
 const NAME_SPACING = /spacing|layout|gap|margin|padding/i;
@@ -555,22 +578,40 @@ function findClosestTextStyle(family: string, style: string, size: number): Load
   return best;
 }
 
+interface MatchIssue {
+  nodeName: string;
+  nodeId: string;
+  property: string;
+  before: string;
+  after: string;
+  exact: boolean;
+}
+
 async function forceMatchNode(
   node: SceneNode,
   categories: Set<string>,
-  result: { applied: number; skipped: number },
+  result: { applied: number; skipped: number; issues: MatchIssue[] },
 ): Promise<void> {
   // Typography
   if (categories.has('typography') && node.type === 'TEXT') {
     const textNode = node as TextNode;
     if (textNode.fontName !== figma.mixed && typeof textNode.fontSize === 'number') {
       const fn = textNode.fontName as FontName;
+      const before = `${fn.family} ${fn.style} ${textNode.fontSize}px`;
       const closest = findClosestTextStyle(fn.family, fn.style, textNode.fontSize as number);
       if (closest) {
+        const exact = closest.fontFamily === fn.family && closest.fontStyle === fn.style && closest.fontSize === textNode.fontSize;
         try {
           await figma.loadFontAsync({ family: closest.fontFamily, style: closest.fontStyle });
           textNode.textStyleId = closest.styleId;
           result.applied++;
+          if (!exact) {
+            result.issues.push({
+              nodeName: node.name, nodeId: node.id, property: 'Typography',
+              before, after: `${closest.fontFamily} ${closest.fontStyle} ${closest.fontSize}px`,
+              exact: false,
+            });
+          }
         } catch (_) { result.skipped++; }
       }
     }
@@ -583,12 +624,20 @@ async function forceMatchNode(
       const solid = fills[0] as SolidPaint;
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = solid.opacity ?? 1;
+      const exactToken = matchColor(hex);
       const closest = findClosestColor(hex, opacity);
       if (closest) {
         try {
           const newFill = figma.variables.setBoundVariableForPaint(solid, 'color', closest.variable);
           (node as any).fills = [newFill, ...fills.slice(1)];
           result.applied++;
+          if (!exactToken) {
+            result.issues.push({
+              nodeName: node.name, nodeId: node.id, property: 'Fill Color',
+              before: hex.toUpperCase(), after: closest.name,
+              exact: false,
+            });
+          }
         } catch (_) { result.skipped++; }
       }
     }
@@ -601,12 +650,20 @@ async function forceMatchNode(
       const solid = strokes[0] as SolidPaint;
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = solid.opacity ?? 1;
+      const exactToken = matchColor(hex);
       const closest = findClosestColor(hex, opacity);
       if (closest) {
         try {
           const newStroke = figma.variables.setBoundVariableForPaint(solid, 'color', closest.variable);
           (node as any).strokes = [newStroke, ...strokes.slice(1)];
           result.applied++;
+          if (!exactToken) {
+            result.issues.push({
+              nodeName: node.name, nodeId: node.id, property: 'Stroke Color',
+              before: hex.toUpperCase(), after: closest.name,
+              exact: false,
+            });
+          }
         } catch (_) { result.skipped++; }
       }
     }
@@ -676,10 +733,12 @@ async function forceMatchNode(
 async function forceMatchRecursive(
   node: SceneNode,
   categories: Set<string>,
-  result: { applied: number; skipped: number },
+  result: { applied: number; skipped: number; issues: MatchIssue[] },
 ): Promise<void> {
   if ('visible' in node && !node.visible) return;
   await forceMatchNode(node, categories, result);
+  // Don't descend into instance children — they're controlled by the component
+  if (node.type === 'INSTANCE') return;
   if ('children' in node) {
     for (const child of (node as any).children) {
       await forceMatchRecursive(child, categories, result);
@@ -690,13 +749,13 @@ async function forceMatchRecursive(
 export async function forceMatch(
   node: SceneNode,
   categories: string[],
-): Promise<{ applied: number; skipped: number }> {
+): Promise<{ applied: number; skipped: number; issues: MatchIssue[] }> {
   // Set responsive mode first
   if ('layoutMode' in node) {
     await setResponsiveMode(node as FrameNode);
   }
 
-  const result = { applied: 0, skipped: 0 };
+  const result = { applied: 0, skipped: 0, issues: [] as MatchIssue[] };
   await forceMatchRecursive(node, new Set(categories), result);
   return result;
 }

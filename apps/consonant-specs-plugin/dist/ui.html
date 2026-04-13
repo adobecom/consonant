@@ -300,7 +300,11 @@ body {
         <div id="matchContent">
           <p class="placeholder" id="matchPlaceholder">Select a frame to force match</p>
           <div id="matchControls" style="display:none;">
-            <p style="color:var(--text-secondary);margin-bottom:12px;">Force match the selection to the closest S2A token values. Check the categories you want to match.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <p style="color:var(--text-secondary);margin-bottom:0;">Force match to closest S2A tokens.</p>
+              <button id="matchCheckAll" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+            </div>
+            <div style="margin-bottom:12px;"></div>
 
             <div class="match-checklist">
               <label class="match-option"><input type="checkbox" id="matchTypography"> Typography</label>
@@ -482,7 +486,7 @@ body {
     return a;
   };
 
-  // apps/consonant-specs-plugin/src/ui.ts
+  // src/ui.ts
   function esc(s) {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
@@ -607,7 +611,7 @@ body {
         renderAlignResult(msg);
         break;
       case "match-result":
-        updateMatchStatus(msg.message);
+        updateMatchStatus(msg.message, msg.issues);
         break;
       case "grid-result":
         updateGridStatus(msg.message);
@@ -670,13 +674,18 @@ body {
     postToPlugin("navigate-to-node", { nodeId });
   }
   function renderAuditResult(result) {
+    var _a22;
     const list = document.getElementById("propertyList");
     if (!list) return;
     const pct = result.total > 0 ? Math.round(result.matched / result.total * 100) : 0;
     const color = pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "#e34850";
-    let html = `<div style="padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--border)">
-    <strong style="font-size:13px;color:${color}">${pct}% S2A compliant</strong>
-    <span style="color:var(--text-secondary);font-size:10px;display:block">${result.matched}/${result.total} properties matched \u2014 ${result.issues.length} issues</span>
+    const annotateBtn = result.issues.length > 0 ? `<button id="annotateAuditBtn" style="background:none;border:1px solid var(--border,#e5e5e5);border-radius:4px;color:var(--text-secondary);font-size:10px;cursor:pointer;padding:2px 8px;">Annotate</button>` : "";
+    let html = `<div style="padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <strong style="font-size:13px;color:${color}">${pct}% S2A compliant</strong>
+      <span style="color:var(--text-secondary);font-size:10px;display:block">${result.matched}/${result.total} properties matched \u2014 ${result.issues.length} issues</span>
+    </div>
+    ${annotateBtn}
   </div>`;
     if (result.issues.length > 0) {
       html += '<div class="section-title" style="margin-top:8px">Issues (click to navigate)</div>';
@@ -694,6 +703,9 @@ body {
         const nodeId = row.dataset.nodeId;
         if (nodeId) navigateToNode(nodeId);
       });
+    });
+    (_a22 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a22.addEventListener("click", () => {
+      postToPlugin("annotate-audit-issues", { issues: result.issues });
     });
   }
   function renderAlignResult(result) {
@@ -769,7 +781,18 @@ body {
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
   var _a7;
-  (_a7 = document.getElementById("matchBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
+  (_a7 = document.getElementById("matchCheckAll")) == null ? void 0 : _a7.addEventListener("click", () => {
+    const ids = ["matchTypography", "matchFillColors", "matchStrokeColors", "matchBorderRadius", "matchBorderWidth", "matchSpacing", "matchOpacity", "matchDropShadow", "matchBlur"];
+    const boxes = ids.map((id) => document.getElementById(id)).filter(Boolean);
+    const allChecked = boxes.every((cb) => cb.checked);
+    boxes.forEach((cb) => {
+      cb.checked = !allChecked;
+    });
+    const btn = document.getElementById("matchCheckAll");
+    if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
+  });
+  var _a8;
+  (_a8 = document.getElementById("matchBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
     const categories = [];
     if (document.getElementById("matchTypography").checked) categories.push("typography");
     if (document.getElementById("matchFillColors").checked) categories.push("fillColors");
@@ -784,20 +807,33 @@ body {
     postToPlugin("force-match", { categories });
     updateMatchStatus("Matching...");
   });
-  function updateMatchStatus(message) {
+  function updateMatchStatus(message, issues) {
     const el = document.getElementById("matchStatus");
-    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+    if (!el) return;
+    let html = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+    if (issues && issues.length > 0) {
+      html += `<div style="margin-top:8px;padding:8px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid #ea580c;max-height:200px;overflow-y:auto;">`;
+      html += `<div style="font-weight:600;font-size:11px;color:#ea580c;margin-bottom:6px;">${issues.length} approximate match${issues.length > 1 ? "es" : ""} (not exact 1:1)</div>`;
+      for (const issue of issues) {
+        html += `<div style="font-size:10px;color:var(--text-secondary);padding:3px 0;border-bottom:1px solid var(--border,#e5e5e5);">`;
+        html += `<span style="font-weight:600;">${esc(issue.nodeName)}</span> \xB7 ${esc(issue.property)}<br>`;
+        html += `<span style="color:#999;">${esc(issue.before)}</span> \u2192 <span style="color:var(--accent,#1473E6);">${esc(issue.after)}</span>`;
+        html += `</div>`;
+      }
+      html += `</div>`;
+    }
+    el.innerHTML = html;
   }
-  var _a8;
-  (_a8 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+  var _a9;
+  (_a9 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
     postToPlugin("spec-it", { sections: ["anatomy", "layout", "typography", "components"] });
     updateSpecStatus("Generating full specs...");
   });
-  var _a9;
-  (_a9 = document.getElementById("specItBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
-    var _a21, _b, _c, _d, _e, _f;
+  var _a10;
+  (_a10 = document.getElementById("specItBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
+    var _a22, _b, _c, _d, _e, _f;
     const sections = [];
-    if ((_a21 = document.getElementById("specAnatomy")) == null ? void 0 : _a21.checked) sections.push("anatomy");
+    if ((_a22 = document.getElementById("specAnatomy")) == null ? void 0 : _a22.checked) sections.push("anatomy");
     if ((_b = document.getElementById("specCardGaps")) == null ? void 0 : _b.checked) sections.push("cardGaps");
     if ((_c = document.getElementById("specSpacingGeneral")) == null ? void 0 : _c.checked) sections.push("spacingGeneral");
     if ((_d = document.getElementById("specSpacing")) == null ? void 0 : _d.checked) sections.push("spacing");
@@ -829,8 +865,8 @@ body {
   locAr == null ? void 0 : locAr.addEventListener("change", () => {
     if (locAr.checked && locRtl && !locRtl.checked) locRtl.checked = true;
   });
-  var _a10;
-  (_a10 = document.getElementById("localizeBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
+  var _a11;
+  (_a11 = document.getElementById("localizeBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
     const languages = [];
     if (document.getElementById("locDe").checked) languages.push("de");
     if (document.getElementById("locZh").checked) languages.push("zh");
@@ -845,8 +881,8 @@ body {
     postToPlugin("localize", { languages, applyRtl, provider });
     updateLocalizeStatus("Localizing \u2014 this may take a moment...");
   });
-  var _a11;
-  (_a11 = document.getElementById("saveKeyBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
+  var _a12;
+  (_a12 = document.getElementById("saveKeyBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
     const input = document.getElementById("apiKeyInput");
     const key = input.value.trim();
     if (!key) return;
@@ -854,8 +890,8 @@ body {
     postToPlugin("save-api-key", { key, provider });
     input.value = "";
   });
-  var _a12;
-  (_a12 = document.getElementById("clearKeyBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
+  var _a13;
+  (_a13 = document.getElementById("clearKeyBtn")) == null ? void 0 : _a13.addEventListener("click", () => {
     const provider = (providerSelect == null ? void 0 : providerSelect.value) || "";
     postToPlugin("clear-api-key", { provider });
   });
@@ -902,7 +938,7 @@ body {
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
   function showAiFillInstruction(mode, sections, frameName) {
-    var _a21;
+    var _a22;
     let cmd;
     if (mode === "sections") {
       cmd = "Use /project:fill-blueline to fill the blueline section instruction cards on the current Figma page via the bridge.";
@@ -923,7 +959,7 @@ body {
         </div>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a21 = document.getElementById("copyFillCmd")) == null ? void 0 : _a21.addEventListener("click", () => {
+      (_a22 = document.getElementById("copyFillCmd")) == null ? void 0 : _a22.addEventListener("click", () => {
         const ta = document.createElement("textarea");
         ta.value = cmd;
         ta.style.position = "fixed";
@@ -942,8 +978,8 @@ body {
       });
     }
   }
-  var _a13;
-  (_a13 = document.getElementById("a11yCheckAll")) == null ? void 0 : _a13.addEventListener("click", () => {
+  var _a14;
+  (_a14 = document.getElementById("a11yCheckAll")) == null ? void 0 : _a14.addEventListener("click", () => {
     const allIds = ["a11yFocusIndicators", "a11yFocusOrder", "a11yHeadings", "a11yLandmarks", "a11yNames", "a11yAltText", "a11yAria", "a11yKeyboard", "a11yDom", "a11yAutoRotation", "a11yVoiceover", "a11yTalkback", "a11yNarrator", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
     const boxes = allIds.map((id) => document.getElementById(id)).filter(Boolean);
     const enabledBoxes = boxes.filter((cb) => !cb.disabled);
@@ -957,8 +993,8 @@ body {
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
   var NOTE_IDS = ["a11yVoiceover", "a11yTalkback", "a11yNarrator", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
-  var _a14;
-  (_a14 = document.getElementById("a11ySimplified")) == null ? void 0 : _a14.addEventListener("change", () => {
+  var _a15;
+  (_a15 = document.getElementById("a11ySimplified")) == null ? void 0 : _a15.addEventListener("change", () => {
     const simplified = document.getElementById("a11ySimplified");
     if (!(simplified == null ? void 0 : simplified.checked)) return;
     const regular = document.getElementById("a11yAutoRotation");
@@ -968,8 +1004,8 @@ body {
       if (cb) cb.checked = false;
     });
   });
-  var _a15;
-  (_a15 = document.getElementById("a11yAutoRotation")) == null ? void 0 : _a15.addEventListener("change", () => {
+  var _a16;
+  (_a16 = document.getElementById("a11yAutoRotation")) == null ? void 0 : _a16.addEventListener("change", () => {
     const simplified = document.getElementById("a11ySimplified");
     const regular = document.getElementById("a11yAutoRotation");
     if (regular == null ? void 0 : regular.checked) {
@@ -986,8 +1022,8 @@ body {
     }
   });
   NOTE_IDS.forEach((id) => {
-    var _a21;
-    (_a21 = document.getElementById(id)) == null ? void 0 : _a21.addEventListener("change", () => {
+    var _a22;
+    (_a22 = document.getElementById(id)) == null ? void 0 : _a22.addEventListener("change", () => {
       const cb = document.getElementById(id);
       const simplified = document.getElementById("a11ySimplified");
       const regular = document.getElementById("a11yAutoRotation");
@@ -1003,8 +1039,8 @@ body {
       }
     });
   });
-  var _a16;
-  (_a16 = document.getElementById("a11yNotesToggle")) == null ? void 0 : _a16.addEventListener("click", () => {
+  var _a17;
+  (_a17 = document.getElementById("a11yNotesToggle")) == null ? void 0 : _a17.addEventListener("click", () => {
     const list = document.getElementById("a11yScreenReaderList");
     const arrow = document.getElementById("a11yNotesArrow");
     if (!list) return;
@@ -1012,12 +1048,12 @@ body {
     list.style.display = collapsed ? "" : "none";
     if (arrow) arrow.style.transform = collapsed ? "" : "rotate(-90deg)";
   });
-  var _a17;
-  (_a17 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a17.addEventListener("click", () => {
-    var _a21, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
+  var _a18;
+  (_a18 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a18.addEventListener("click", () => {
+    var _a22, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const tier1 = [];
     const tier2 = [];
-    if ((_a21 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a21.checked) tier1.push("focusIndicators");
+    if ((_a22 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a22.checked) tier1.push("focusIndicators");
     if ((_b = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b.checked) tier1.push("focusOrder");
     if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) tier2.push("headings");
     if ((_d = document.getElementById("a11yLandmarks")) == null ? void 0 : _d.checked) tier2.push("landmarks");
@@ -1045,8 +1081,8 @@ body {
     postToPlugin("generate-blueline", { tier1, tier2, grouped: !simplified });
     updateA11yStatus("Generating blueline...");
   });
-  var _a18;
-  (_a18 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a18.addEventListener("click", () => {
+  var _a19;
+  (_a19 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a19.addEventListener("click", () => {
     const tier1 = ["focusIndicators", "focusOrder"];
     const tier2 = ["headings", "landmarks", "names", "altText", "aria", "keyboard", "dom", "autoRotation", "screenReader"];
     postToPlugin("generate-blueline-panels", { tier1, tier2 });
@@ -1274,10 +1310,10 @@ body {
     }).catch(() => {
     });
     sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
-      var _a21, _b;
+      var _a22, _b;
       if (ws.readyState !== 1 || !result || result.success === false) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
-      appendBridgeLog("Variables synced: " + (((_b = (_a21 = result.data) == null ? void 0 : _a21.variables) == null ? void 0 : _b.length) || 0) + " vars");
+      appendBridgeLog("Variables synced: " + (((_b = (_a22 = result.data) == null ? void 0 : _a22.variables) == null ? void 0 : _b.length) || 0) + " vars");
     }).catch(() => {
     });
   }
@@ -1352,10 +1388,10 @@ body {
       info.style.color = "";
     }
   }
-  var _a19;
-  (_a19 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a19.addEventListener("click", () => bridgeConnect());
   var _a20;
-  (_a20 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a20.addEventListener("click", () => bridgeDisconnect());
+  (_a20 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a20.addEventListener("click", () => bridgeConnect());
+  var _a21;
+  (_a21 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a21.addEventListener("click", () => bridgeDisconnect());
   postToPlugin("ui-ready");
 })();
 </script>

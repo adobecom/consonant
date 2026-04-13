@@ -39,7 +39,7 @@ interface AnatomyEntry {
 
 // ─── Element Collection (deduplicated) ────────────────────────────────────────
 
-function collectSignificantNodes(node: SceneNode, entries: AnatomyEntry[], seen: Set<string>, depth: number = 0): void {
+async function collectSignificantNodes(node: SceneNode, entries: AnatomyEntry[], seen: Set<string>, depth: number = 0): Promise<void> {
   if (depth > 0) {
     // For text nodes, include fontSize in the dedup key so same-named nodes
     // with different styles (e.g. "Type" as eyebrow vs heading) each get annotated
@@ -59,7 +59,7 @@ function collectSignificantNodes(node: SceneNode, entries: AnatomyEntry[], seen:
 
       if (node.type === 'TEXT') {
         isSignificant = true;
-      } else if ((node.type === 'FRAME' || node.type === 'COMPONENT') && isCallToAction(node)) {
+      } else if ((node.type === 'FRAME' || node.type === 'COMPONENT') && await isCallToAction(node)) {
         // Named button/CTA frames (e.g. "Button", "CTA / Primary")
         isSignificant = true;
       } else if (node.type === 'INSTANCE') {
@@ -97,7 +97,7 @@ function collectSignificantNodes(node: SceneNode, entries: AnatomyEntry[], seen:
       if ('visible' in child && !(child as any).visible) continue;
       // Skip fully transparent nodes
       if ('opacity' in child && (child as any).opacity === 0) continue;
-      collectSignificantNodes(child, entries, seen, depth + 1);
+      await collectSignificantNodes(child, entries, seen, depth + 1);
     }
   }
 }
@@ -181,7 +181,7 @@ function addPropRow(parent: FrameNode, label: string, value: string, options?: {
 
 const CTA_NAME_PATTERNS = /\b(cta|call[\s\-_]?to[\s\-_]?action|button|btn|link|action)\b/i;
 
-function isCallToAction(node: SceneNode): boolean {
+async function isCallToAction(node: SceneNode): Promise<boolean> {
   if (CTA_NAME_PATTERNS.test(node.name)) return true;
 
   // Walk up 3 parents checking name
@@ -192,8 +192,9 @@ function isCallToAction(node: SceneNode): boolean {
   }
 
   if (node.type === 'INSTANCE') {
-    const mainName = (node as InstanceNode).mainComponent?.name || '';
-    const parentName = (node as InstanceNode).mainComponent?.parent?.name || '';
+    const mc = await (node as InstanceNode).getMainComponentAsync();
+    const mainName = mc?.name || '';
+    const parentName = mc?.parent?.name || '';
     if (CTA_NAME_PATTERNS.test(mainName) || CTA_NAME_PATTERNS.test(parentName)) return true;
   }
 
@@ -237,7 +238,7 @@ function findFirstTextChild(node: SceneNode): TextNode | null {
   return null;
 }
 
-function addCtaProperties(node: InstanceNode, content: FrameNode): void {
+async function addCtaProperties(node: InstanceNode, content: FrameNode): Promise<void> {
   // Label
   const label = findFirstTextChild(node);
   if (label) {
@@ -245,7 +246,8 @@ function addCtaProperties(node: InstanceNode, content: FrameNode): void {
   }
 
   // Variant / component name
-  const mainName = node.mainComponent?.name;
+  const mc = await node.getMainComponentAsync();
+  const mainName = mc?.name;
   if (mainName) {
     addPropRow(content, 'Component:', mainName);
   }
@@ -331,8 +333,8 @@ function addCtaProperties(node: InstanceNode, content: FrameNode): void {
 
 async function buildPropertiesForNode(node: SceneNode, content: FrameNode): Promise<void> {
   // CTA frames/components route to dedicated handler (before type switch)
-  if ((node.type === 'FRAME' || node.type === 'COMPONENT') && isCallToAction(node)) {
-    addCtaProperties(node as any, content);
+  if ((node.type === 'FRAME' || node.type === 'COMPONENT') && await isCallToAction(node)) {
+    await addCtaProperties(node as any, content);
     return;
   }
 
@@ -404,7 +406,7 @@ async function buildPropertiesForNode(node: SceneNode, content: FrameNode): Prom
       content.appendChild(attrs);
 
       // If this text is a CTA, append CTA-specific info (parent button bg, etc.)
-      if (isCallToAction(node)) {
+      if (await isCallToAction(node)) {
         addPropRow(content, 'Role:', 'Call to action', { bold: true });
         const parent = node.parent;
         if (parent && parent.type === 'FRAME') {
@@ -455,8 +457,8 @@ async function buildPropertiesForNode(node: SceneNode, content: FrameNode): Prom
       content.appendChild(thumb);
 
       // CTA detection: buttons, links, call-to-action components
-      if (isCallToAction(node)) {
-        addCtaProperties(node as InstanceNode, content);
+      if (await isCallToAction(node)) {
+        await addCtaProperties(node as InstanceNode, content);
       }
       return;
     }
@@ -685,13 +687,18 @@ export async function generateAnatomySection(sourceNode: SceneNode): Promise<Fra
   // Collect elements and add markers to artwork
   const rawEntries: AnatomyEntry[] = [];
   const seen = new Set<string>();
-  collectSignificantNodes(sourceNode, rawEntries, seen);
+  await collectSignificantNodes(sourceNode, rawEntries, seen);
 
   // Sort: plain text first, then CTAs, then instances/media (each by Y position)
   const byY = (a: AnatomyEntry, b: AnatomyEntry) =>
     a.node.absoluteTransform[1][2] - b.node.absoluteTransform[1][2];
+  // Pre-compute CTA status for each entry (async)
+  const ctaFlags = new Map<SceneNode, boolean>();
+  for (const e of rawEntries) {
+    ctaFlags.set(e.node, await isCallToAction(e.node));
+  }
   const textEntries = rawEntries
-    .filter(e => e.type === 'TEXT' && !isCallToAction(e.node))
+    .filter(e => e.type === 'TEXT' && !ctaFlags.get(e.node))
     .sort(byY);
   // CTAs — dedupe by the label's font styling signature.
   // Works for TEXT CTAs and for FRAME/COMPONENT/INSTANCE CTAs (using their inner text).
@@ -707,7 +714,7 @@ export async function generateAnatomySection(sourceNode: SceneNode): Promise<Fra
     return `${tp.fontFamily}|${tp.fontWeight}|${tp.fontSize}|${label.textDecoration}|${colorHex}`;
   };
   const ctaEntries = rawEntries
-    .filter(e => isCallToAction(e.node))
+    .filter(e => ctaFlags.get(e.node))
     .sort(byY)
     .filter(e => {
       const sig = ctaSignature(e.node);
@@ -719,7 +726,7 @@ export async function generateAnatomySection(sourceNode: SceneNode): Promise<Fra
   // Collect names of text nodes already in entries, so we can skip wrapper instances
   const textNames = new Set(textEntries.map(e => e.name));
   const instanceEntries = rawEntries
-    .filter(e => e.type === 'INSTANCE' && !isCallToAction(e.node))
+    .filter(e => e.type === 'INSTANCE' && !ctaFlags.get(e.node))
     .filter(e => {
       // Skip instances that are just wrappers around already-annotated text children
       if ('children' in e.node) {
