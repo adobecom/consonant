@@ -657,6 +657,7 @@ async function forceMatchNode(node, categories, result2) {
 async function forceMatchRecursive(node, categories, result2) {
   if ("visible" in node && !node.visible) return;
   await forceMatchNode(node, categories, result2);
+  if (node.type === "INSTANCE") return;
   if ("children" in node) {
     for (const child of node.children) {
       await forceMatchRecursive(child, categories, result2);
@@ -2328,62 +2329,104 @@ async function generateColorAnnotations(node, yOffset = 0) {
   clone.y = sourceY + node.height + 40 + yOffset;
   let count = 0;
   const seen = /* @__PURE__ */ new Set();
-  function shouldSkip(n) {
+  function shouldSkipEntirely(n) {
     const skipTypes = /* @__PURE__ */ new Set(["VECTOR", "BOOLEAN_OPERATION", "STAR", "LINE", "POLYGON", "ELLIPSE"]);
     if (skipTypes.has(n.type)) return true;
-    if ("fills" in n) {
-      const fills = n.fills;
-      if (Array.isArray(fills) && fills.some((f) => f.type === "IMAGE")) return true;
-    }
     const hasChildren = "children" in n && n.children.length > 0;
     if (n.type !== "TEXT" && !hasChildren && (n.width < 24 || n.height < 24)) return true;
     return false;
   }
-  async function walk(n, isRoot = false) {
-    if ("visible" in n && !n.visible) return;
-    if (shouldSkip(n)) return;
-    const properties = [];
-    const label = isRoot ? "Background" : n.name;
+  function hasImageFill(n) {
     if ("fills" in n) {
       const fills = n.fills;
-      if (Array.isArray(fills) && fills.some((f) => f.type === "SOLID" && f.visible !== false)) {
-        properties.push({ type: "fills" });
+      if (Array.isArray(fills) && fills.some((f) => f.type === "IMAGE")) return true;
+    }
+    return false;
+  }
+  function visualKey(n, properties) {
+    var _a;
+    const parts = [n.type, properties.map((p) => p.type).join(",")];
+    if ("fills" in n) {
+      const fills = n.fills;
+      if (Array.isArray(fills)) {
+        const solid = fills.find((f) => f.type === "SOLID" && f.visible !== false);
+        if (solid) {
+          const c = solid.color;
+          parts.push(`f:${Math.round(c.r * 255)},${Math.round(c.g * 255)},${Math.round(c.b * 255)},${((_a = solid.opacity) != null ? _a : 1).toFixed(2)}`);
+        }
       }
     }
     if ("strokes" in n) {
       const strokes = n.strokes;
-      if (Array.isArray(strokes) && strokes.some((f) => f.type === "SOLID" && f.visible !== false)) {
-        properties.push({ type: "strokes" });
+      if (Array.isArray(strokes)) {
+        const solid = strokes.find((f) => f.type === "SOLID" && f.visible !== false);
+        if (solid) {
+          const c = solid.color;
+          parts.push(`s:${Math.round(c.r * 255)},${Math.round(c.g * 255)},${Math.round(c.b * 255)}`);
+        }
       }
     }
     if (n.type === "TEXT") {
-      const textNode = n;
-      const hasStyle = textNode.textStyleId && textNode.textStyleId !== "" && textNode.textStyleId !== figma.mixed;
-      properties.push({ type: hasStyle ? "textStyleId" : "fontFamily" });
-    }
-    if ("effects" in n) {
-      const effects = n.effects;
-      if (Array.isArray(effects) && effects.length > 0 && effects.some((e) => e.visible !== false)) {
-        properties.push({ type: "effects" });
+      const tn = n;
+      const fn = tn.fontName;
+      if (fn !== figma.mixed) {
+        parts.push(`t:${fn.family}/${fn.style}`);
       }
+      const fs = tn.fontSize;
+      parts.push(`fs:${fs !== figma.mixed ? fs : 0}`);
     }
-    if (properties.length > 0) {
-      let extra = "";
+    const area = n.width * n.height;
+    const sizeCat = area < 2e3 ? "S" : area < 2e4 ? "M" : "L";
+    parts.push(`sz:${sizeCat}`);
+    if ("cornerRadius" in n) {
+      const cr = n.cornerRadius;
+      if (cr !== figma.mixed && cr > 0) parts.push(`r:${cr}`);
+    }
+    return parts.join("|");
+  }
+  async function walk(n, isRoot = false) {
+    if ("visible" in n && !n.visible) return;
+    if (shouldSkipEntirely(n)) return;
+    const skipAnnotation = hasImageFill(n);
+    if (!skipAnnotation) {
+      const properties = [];
+      const label = isRoot ? "Background" : n.name;
+      if ("fills" in n) {
+        const fills = n.fills;
+        if (Array.isArray(fills) && fills.some((f) => f.type === "SOLID" && f.visible !== false)) {
+          properties.push({ type: "fills" });
+        }
+      }
+      if ("strokes" in n) {
+        const strokes = n.strokes;
+        if (Array.isArray(strokes) && strokes.some((f) => f.type === "SOLID" && f.visible !== false)) {
+          properties.push({ type: "strokes" });
+        }
+      }
       if (n.type === "TEXT") {
-        const fontSize = n.fontSize;
-        extra = `:${fontSize !== figma.mixed ? fontSize : 0}`;
+        const textNode = n;
+        const hasStyle = textNode.textStyleId && textNode.textStyleId !== "" && textNode.textStyleId !== figma.mixed;
+        properties.push({ type: hasStyle ? "textStyleId" : "fontFamily" });
       }
-      const key = `${label}:${properties.map((p) => p.type).join(",")}${extra}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        try {
-          n.annotations = [{
-            labelMarkdown: `**${label}**`,
-            properties
-          }];
-          count++;
-        } catch (e) {
-          console.warn(`Annotation failed on "${label}":`, e);
+      if ("effects" in n) {
+        const effects = n.effects;
+        if (Array.isArray(effects) && effects.length > 0 && effects.some((e) => e.visible !== false)) {
+          properties.push({ type: "effects" });
+        }
+      }
+      if (properties.length > 0) {
+        const key = visualKey(n, properties);
+        if (!seen.has(key)) {
+          seen.add(key);
+          try {
+            n.annotations = [{
+              labelMarkdown: `**${label}**`,
+              properties
+            }];
+            count++;
+          } catch (e) {
+            console.warn(`Annotation failed on "${label}":`, e);
+          }
         }
       }
     }
@@ -2883,6 +2926,7 @@ function auditNode(node, issues, counters) {
 function auditRecursive(node, issues, counters) {
   if ("visible" in node && !node.visible) return;
   auditNode(node, issues, counters);
+  if (node.type === "INSTANCE") return;
   if ("children" in node) {
     for (const child of node.children) {
       auditRecursive(child, issues, counters);
@@ -3068,6 +3112,7 @@ async function alignNode(node, textOnly, result2) {
 async function alignRecursive(node, textOnly, result2) {
   if ("visible" in node && !node.visible) return;
   await alignNode(node, textOnly, result2);
+  if (node.type === "INSTANCE") return;
   if ("children" in node) {
     for (const child of node.children) {
       await alignRecursive(child, textOnly, result2);
@@ -3101,22 +3146,22 @@ var LANG_META = {
     name: "German",
     fallbackFont: null,
     // Latin — original font works fine
-    codes: { mymemory: "de", lingva: "de", deepl: "DE", google: "de", azure: "de", anthropic: "German" }
+    codes: { mymemory: "de", lingva: "de", deepl: "DE", google: "de", azure: "de", anthropic: "German", bridge: "German" }
   },
   zh: {
     name: "Chinese",
     fallbackFont: "Noto Sans SC",
-    codes: { mymemory: "zh-CN", lingva: "zh", deepl: "ZH", google: "zh-CN", azure: "zh-Hans", anthropic: "Simplified Chinese" }
+    codes: { mymemory: "zh-CN", lingva: "zh", deepl: "ZH", google: "zh-CN", azure: "zh-Hans", anthropic: "Simplified Chinese", bridge: "Simplified Chinese" }
   },
   th: {
     name: "Thai",
     fallbackFont: "Noto Sans Thai",
-    codes: { mymemory: "th", lingva: "th", deepl: "TH", google: "th", azure: "th", anthropic: "Thai" }
+    codes: { mymemory: "th", lingva: "th", deepl: "TH", google: "th", azure: "th", anthropic: "Thai", bridge: "Thai" }
   },
   ar: {
     name: "Arabic",
     fallbackFont: "Noto Sans Arabic",
-    codes: { mymemory: "ar", lingva: "ar", deepl: "AR", google: "ar", azure: "ar", anthropic: "Arabic" }
+    codes: { mymemory: "ar", lingva: "ar", deepl: "AR", google: "ar", azure: "ar", anthropic: "Arabic", bridge: "Arabic" }
   }
 };
 function norm(s) {
@@ -3354,6 +3399,11 @@ async function rewriteTextNodes(nodes, translations, fallbackFontFamily) {
     } catch (_) {
     }
   }
+}
+function collectSourceText(node) {
+  const textNodes = [];
+  collectTextNodes(node, textNodes);
+  return textNodes.map((n) => ({ nodeId: n.id, text: norm(n.characters) }));
 }
 async function localize(node, languages, applyRtl, provider, apiKey) {
   const errors = [];
@@ -5111,6 +5161,28 @@ figma.ui.onmessage = async (msg) => {
         break;
       }
       const provider = typeof msg.provider === "string" ? msg.provider : "mymemory";
+      const languages = Array.isArray(msg.languages) ? msg.languages : [];
+      const applyRtl = Boolean(msg.applyRtl);
+      if (languages.length === 0) {
+        figma.ui.postMessage({ type: "localize-status", message: "Select at least one language." });
+        break;
+      }
+      if (provider === "bridge") {
+        const sourceTexts = collectSourceText(sel[0]);
+        if (sourceTexts.length === 0) {
+          figma.ui.postMessage({ type: "localize-status", message: "No text found in selection." });
+          break;
+        }
+        figma.ui.postMessage({
+          type: "localize-bridge-prompt",
+          frameName: sel[0].name,
+          frameId: sel[0].id,
+          languages,
+          applyRtl,
+          sourceTexts
+        });
+        break;
+      }
       const needsKey = ["deepl", "google", "azure", "anthropic"].includes(provider);
       let apiKey = "";
       if (needsKey) {
@@ -5119,12 +5191,6 @@ figma.ui.onmessage = async (msg) => {
           figma.ui.postMessage({ type: "localize-status", message: `Add your ${provider} API key first.` });
           break;
         }
-      }
-      const languages = Array.isArray(msg.languages) ? msg.languages : [];
-      const applyRtl = Boolean(msg.applyRtl);
-      if (languages.length === 0) {
-        figma.ui.postMessage({ type: "localize-status", message: "Select at least one language." });
-        break;
       }
       try {
         const result2 = await localize(sel[0], languages, applyRtl, provider, apiKey);
