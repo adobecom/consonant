@@ -1,23 +1,23 @@
 // ── Localize: translate text in cloned frames via multiple translation backends ──
 
-export type TranslationProvider = 'mymemory' | 'lingva' | 'deepl' | 'google' | 'azure' | 'anthropic' | 'bridge';
+export type TranslationProvider = 'mymemory' | 'lingva' | 'deepl' | 'google' | 'azure' | 'anthropic';
 
 const LANG_META: Record<string, { name: string; fallbackFont: string | null; codes: Record<TranslationProvider, string> }> = {
   de: {
     name: 'German', fallbackFont: null, // Latin — original font works fine
-    codes: { mymemory: 'de', lingva: 'de', deepl: 'DE', google: 'de', azure: 'de', anthropic: 'German', bridge: 'German' },
+    codes: { mymemory: 'de', lingva: 'de', deepl: 'DE', google: 'de', azure: 'de', anthropic: 'German' },
   },
   zh: {
     name: 'Chinese', fallbackFont: 'Noto Sans SC',
-    codes: { mymemory: 'zh-CN', lingva: 'zh', deepl: 'ZH', google: 'zh-CN', azure: 'zh-Hans', anthropic: 'Simplified Chinese', bridge: 'Simplified Chinese' },
+    codes: { mymemory: 'zh-CN', lingva: 'zh', deepl: 'ZH', google: 'zh-CN', azure: 'zh-Hans', anthropic: 'Simplified Chinese' },
   },
   th: {
     name: 'Thai', fallbackFont: 'Noto Sans Thai',
-    codes: { mymemory: 'th', lingva: 'th', deepl: 'TH', google: 'th', azure: 'th', anthropic: 'Thai', bridge: 'Thai' },
+    codes: { mymemory: 'th', lingva: 'th', deepl: 'TH', google: 'th', azure: 'th', anthropic: 'Thai' },
   },
   ar: {
     name: 'Arabic', fallbackFont: 'Noto Sans Arabic',
-    codes: { mymemory: 'ar', lingva: 'ar', deepl: 'AR', google: 'ar', azure: 'ar', anthropic: 'Arabic', bridge: 'Arabic' },
+    codes: { mymemory: 'ar', lingva: 'ar', deepl: 'AR', google: 'ar', azure: 'ar', anthropic: 'Arabic' },
   },
 };
 
@@ -28,7 +28,6 @@ export const PROVIDERS: { id: TranslationProvider; label: string; needsKey: bool
   { id: 'google', label: 'Google Cloud (key required)', needsKey: true },
   { id: 'azure', label: 'Microsoft Azure (key required)', needsKey: true },
   { id: 'anthropic', label: 'Anthropic Claude (key required)', needsKey: true },
-  { id: 'bridge', label: 'Claude via Bridge (no key)', needsKey: false },
 ];
 
 // ── Helpers ──
@@ -62,40 +61,35 @@ function collectFonts(nodes: TextNode[]): FontName[] {
 }
 
 async function loadFonts(fonts: FontName[]): Promise<void> {
-  for (const f of fonts) { try { await figma.loadFontAsync(f); } catch (_) {} }
+  await Promise.all(fonts.map((f) => figma.loadFontAsync(f).catch(() => {})));
 }
 
 // ── Translation backends ──
 
 async function translateMyMemory(strings: string[], langCode: string): Promise<string[]> {
-  const results: string[] = [];
-  for (const s of strings) {
+  return Promise.all(strings.map(async (s) => {
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(s)}&langpair=en|${langCode}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`MyMemory error ${res.status}`);
     const data = await res.json();
-    results.push(data?.responseData?.translatedText || s);
-  }
-  return results;
+    return data?.responseData?.translatedText || s;
+  }));
 }
 
 async function translateLingva(strings: string[], langCode: string): Promise<string[]> {
   const instances = ['lingva.ml', 'lingva.thedaviddelta.com'];
-  const results: string[] = [];
-  for (const s of strings) {
-    let translated: string | null = null;
+  return Promise.all(strings.map(async (s) => {
     for (const host of instances) {
       try {
         const url = `https://${host}/api/v1/en/${langCode}/${encodeURIComponent(s)}`;
         const res = await fetch(url);
         if (!res.ok) continue;
         const data = await res.json();
-        if (data?.translation) { translated = data.translation; break; }
+        if (data?.translation) return data.translation;
       } catch (_) {}
     }
-    results.push(translated || s);
-  }
-  return results;
+    return s;
+  }));
 }
 
 async function translateDeepL(strings: string[], langCode: string, apiKey: string): Promise<string[]> {
@@ -265,14 +259,6 @@ async function rewriteTextNodes(
       node.characters = translated;
     } catch (_) {}
   }
-}
-
-// ── Bridge: collect text for external translation ──
-
-export function collectSourceText(node: SceneNode): { nodeId: string; text: string }[] {
-  const textNodes: TextNode[] = [];
-  collectTextNodes(node, textNodes);
-  return textNodes.map(n => ({ nodeId: n.id, text: norm(n.characters) }));
 }
 
 // ── Main entry point ──
