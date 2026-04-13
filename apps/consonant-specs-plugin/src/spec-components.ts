@@ -131,15 +131,14 @@ async function buildInstanceCard(entry: InstanceEntry, parent: FrameNode): Promi
       addPropRow(card, 'Available variants:', display);
     }
 
-    // Overrides — fetch all override nodes in parallel
+    // Overrides
     const overrides = node.overrides;
     if (overrides && overrides.length > 0) {
-      const overrideNodes = await Promise.all(overrides.map(o => figma.getNodeByIdAsync(o.id)));
-      for (let i = 0; i < overrides.length; i++) {
-        const overriddenNode = overrideNodes[i];
+      for (const override of overrides) {
+        const overriddenNode = await figma.getNodeByIdAsync(override.id);
         if (!overriddenNode) continue;
 
-        for (const field of overrides[i].overriddenFields) {
+        for (const field of override.overriddenFields) {
           if (field === 'characters' && overriddenNode.type === 'TEXT') {
             addPropRow(card, `Override (${overriddenNode.name}):`, `text = "${overriddenNode.characters}"`);
           } else if (field === 'fills' && 'fills' in overriddenNode) {
@@ -218,7 +217,7 @@ export async function generateComponentDetailsSection(sourceNode: SceneNode): Pr
   title.fontName = { family: 'Inter', style: 'Bold' };
   title.fontSize = 24;
   title.characters = 'Component Details';
-  title.fills = [{ type: 'SOLID', color: { r: 0.1, g: 0.1, b: 0.1 } }];
+  title.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
   section.appendChild(title);
 
   // Container
