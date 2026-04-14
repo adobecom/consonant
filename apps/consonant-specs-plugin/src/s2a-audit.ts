@@ -1,5 +1,5 @@
 import { getNodeFills, getNodeStrokes, getTextProps, getCornerRadius, figmaColorToHex } from './utils';
-import { matchColor, matchSpacing, matchRadius, matchTypography, matchTypographyStrict, matchDimension, applyColorStyle, applyStrokeColorStyle, applyTextStyle, setResponsiveMode, isLoaded, loadLibraryTokens } from './tokens';
+import { matchColor, matchSpacing, matchRadius, matchTypography, matchTypographyStrict, matchDimension, applyColorStyle, applyStrokeColorStyle, applyTextStyle, setResponsiveMode, isLoaded, loadLibraryTokens, detectNodeColorRole } from './tokens';
 
 // ── Types ──
 
@@ -21,11 +21,12 @@ interface AuditResult {
 // ── Scan a single node for token compliance ──
 
 function auditNode(node: SceneNode, issues: AuditIssue[], counters: { total: number; matched: number }): void {
-  // Colors
+  // Colors — pass semantic role so content/background/border tokens match correctly
+  const fillRole = detectNodeColorRole(node, 'fill');
   const fills = getNodeFills(node);
   for (const fill of fills) {
     counters.total++;
-    const token = matchColor(fill.hex);
+    const token = matchColor(fill.hex, fillRole);
     if (token) {
       counters.matched++;
     } else {
@@ -36,7 +37,7 @@ function auditNode(node: SceneNode, issues: AuditIssue[], counters: { total: num
   const strokes = getNodeStrokes(node);
   for (const stroke of strokes) {
     counters.total++;
-    const token = matchColor(stroke.hex);
+    const token = matchColor(stroke.hex, 'border');
     if (token) {
       counters.matched++;
     } else {
@@ -164,7 +165,8 @@ async function alignNode(node: SceneNode, textOnly: boolean, result: { aligned: 
       const solid = fills[0] as SolidPaint;
       const hex = figmaColorToHex(solid.color);
       const fillOpacity = solid.opacity ?? 1;
-      const token = matchColor(hex);
+      const alignFillRole = detectNodeColorRole(node, 'fill');
+      const token = matchColor(hex, alignFillRole);
       if (token) {
         const success = await applyColorStyle(node, hex, fillOpacity);
         if (success) result.aligned++;
@@ -190,7 +192,7 @@ async function alignNode(node: SceneNode, textOnly: boolean, result: { aligned: 
       const solid = strokes[0] as SolidPaint;
       const hex = figmaColorToHex(solid.color);
       const strokeOpacity = solid.opacity ?? 1;
-      const token = matchColor(hex);
+      const token = matchColor(hex, 'border');
       if (token) {
         const success = await applyStrokeColorStyle(node, hex, strokeOpacity);
         if (success) {

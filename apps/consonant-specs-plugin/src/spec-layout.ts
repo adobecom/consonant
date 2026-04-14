@@ -1,5 +1,5 @@
 import { getAutoLayoutProps, getNodeFills } from './utils';
-import { matchSpacing, matchColor } from './tokens';
+import { matchSpacing, matchColor, detectNodeColorRole } from './tokens';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -295,7 +295,7 @@ function renderPropertyPanel(entry: LayoutEntry): FrameNode {
   const fills = getNodeFills(node);
   if (fills.length > 0) {
     const fill = fills[0];
-    const token = matchColor(fill.hex);
+    const token = matchColor(fill.hex, detectNodeColorRole(node, 'fill'));
     if (token) {
       addPropertyRow(panel, 'Fill variable', token);
     }
