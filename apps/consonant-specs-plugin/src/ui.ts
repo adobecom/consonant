@@ -176,7 +176,7 @@ window.addEventListener('message', (event) => {
           delete result.requestId;
           pending.resolve(result);
         } else {
-          pending.resolve({ success: false, error: msg.error || 'Unknown error' });
+          pending.reject(new Error(msg.error || 'Unknown error'));
         }
       }
       break;
@@ -700,6 +700,20 @@ let bridgeKeepaliveTimer: ReturnType<typeof setInterval> | null = null;
 let bridgeReconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let bridgeReconnectAttempts = 0;
 let bridgeUserDisconnected = false; // true when user clicks Disconnect
+
+// Session nonce for EXECUTE_CODE — generated per WS connection.
+// Any WS message invoking EXECUTE_CODE must carry a matching `sessionNonce` field.
+// This is a defence-in-depth measure: it prevents any local process other than the
+// MCP server (which receives the nonce via the HELLO handshake) from running
+// arbitrary code in the Figma sandbox.
+// NOTE: This plugin must remain INTERNAL — the eval() path should never be exposed
+// in a publicly distributed plugin.
+let bridgeSessionNonce: string | null = null;
+function generateNonce(): string {
+  const arr = new Uint8Array(16);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, (b) => b.toString(16).padStart(2, '0')).join('');
+}
 const BRIDGE_MAX_RECONNECT = 20;
 const BRIDGE_RECONNECT_BASE_MS = 2000;
 
@@ -914,23 +928,28 @@ function bridgeReconnectToPort(port: number) {
 }
 
 function initBridgeConnection(ws: WebSocket) {
+  // Generate a new session nonce for this connection. The nonce is sent to the
+  // MCP server in the PLUGIN_HELLO so it can include it in EXECUTE_CODE requests.
+  bridgeSessionNonce = generateNonce();
+
   // Send FILE_INFO to the server after GET_FILE_INFO from code.ts
   // fileKey is REQUIRED by the server — without it, the client stays "pending" and gets dropped after 30s
   sendBridgeCommand('GET_FILE_INFO', {}).then((result) => {
-    if (ws.readyState !== 1 || !result || result.success === false) return;
+    if (ws.readyState !== 1 || !result) return;
     const info = result.fileInfo || result;
     // Fallback if fileKey is still null
     if (!info.fileKey) {
       info.fileKey = 'local-' + Date.now();
     }
     info.pluginVersion = '1.0.0';
+    info.sessionNonce = bridgeSessionNonce; // MCP server must echo this in EXECUTE_CODE params
     ws.send(JSON.stringify({ type: 'FILE_INFO', data: info }));
     appendBridgeLog('File info sent: ' + (info.fileName || 'unknown') + ' (key: ' + (info.fileKey || '?') + ')');
   }).catch(() => {});
 
   // Auto-sync variables on connection
   sendBridgeCommand('REFRESH_VARIABLES', {}, 30000).then((result) => {
-    if (ws.readyState !== 1 || !result || result.success === false) return;
+    if (ws.readyState !== 1 || !result) return;
     ws.send(JSON.stringify({ type: 'VARIABLES_DATA', data: result.data }));
     appendBridgeLog('Variables synced: ' + ((result.data?.variables?.length) || 0) + ' vars');
   }).catch(() => {});
@@ -949,6 +968,19 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
 
       // Ignore pong or other non-command messages
       if (!message.id || !message.method) return;
+
+      // Gate EXECUTE_CODE behind the session nonce. Any process can connect to the
+      // localhost WS port, but only the MCP server (which received the nonce via FILE_INFO)
+      // can supply the correct value. Reject silently to avoid leaking the nonce.
+      if (message.method === 'EXECUTE_CODE') {
+        if (!bridgeSessionNonce || (message.params || {}).sessionNonce !== bridgeSessionNonce) {
+          if (ws.readyState === 1) {
+            ws.send(JSON.stringify({ id: message.id, error: 'Unauthorized: missing or invalid sessionNonce' }));
+          }
+          appendBridgeLog('\u26a0 EXECUTE_CODE rejected — invalid nonce');
+          return;
+        }
+      }
 
       appendBridgeLog('\u2190 ' + message.method);
 
@@ -973,6 +1005,7 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
   ws.onclose = (event) => {
     bridgeStopKeepalive();
     bridgeWs = null;
+    bridgeSessionNonce = null; // invalidate nonce so it can't be reused after disconnect
     bridgeConnected = false;
     updateBridgeUi();
 
