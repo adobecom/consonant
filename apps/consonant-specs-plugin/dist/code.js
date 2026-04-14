@@ -3550,14 +3550,93 @@ function isLeafInteractive(node) {
     "sign-in",
     "application",
     "carousel",
-    "arrow",
-    "chevron"
+    "link",
+    "tab",
+    "dropdown",
+    "select",
+    "checkbox",
+    "switch",
+    "accordion",
+    "slider",
+    "menu-item"
   ];
   if (keywords.some((k) => name.includes(k)) && node.width <= 300 && node.height <= 100) {
     return true;
   }
-  if (name === "logo" && node.width >= 20 && node.width <= 200 && node.height <= 80) {
-    return true;
+  if ((name.includes("arrow") || name.includes("chevron")) && node.width <= 300 && node.height <= 100) {
+    if (!hasInteractiveAncestor(node)) return true;
+    return false;
+  }
+  if (isNavLogo(node)) return true;
+  return false;
+}
+function isNavLogo(node) {
+  if (node.width < 16 || node.width > 200 || node.height < 10 || node.height > 80) return false;
+  const name = node.name.toLowerCase();
+  if (name.includes("logo") || name.includes("brand") || name === "home" || name.includes("home-link") || name.includes("homelink")) {
+    return hasNavAncestor(node);
+  }
+  if (node.type === "VECTOR" || node.type === "INSTANCE" || node.type === "GROUP") {
+    if (!hasNavAncestor(node)) return false;
+    const parent = node.parent;
+    if (!parent || !("children" in parent)) return false;
+    const visibleChildren = parent.children.filter((c) => c.visible);
+    if (visibleChildren.length > 0 && visibleChildren[0].id === node.id) return true;
+  }
+  return false;
+}
+function hasInteractiveAncestor(node) {
+  const interactiveKeywords = ["button", "cta", "link", "tab", "menu-item"];
+  let parent = node.parent;
+  for (let i = 0; i < 4 && parent && parent.type !== "PAGE"; i++) {
+    const pName = parent.name.toLowerCase();
+    if (interactiveKeywords.some((k) => pName.includes(k))) return true;
+    parent = parent.parent;
+  }
+  return false;
+}
+function isTextLink(node) {
+  if (node.type !== "TEXT") return false;
+  const textNode = node;
+  const text = textNode.characters.toLowerCase();
+  const linkPhrases = [
+    "learn more",
+    "see all",
+    "view all",
+    "read more",
+    "see details",
+    "view details",
+    "get started",
+    "try now",
+    "try free",
+    "start free",
+    "explore ",
+    "discover ",
+    "shop now",
+    "buy now",
+    "sign up",
+    "log in"
+  ];
+  const hasLinkText = linkPhrases.some((p) => text.includes(p));
+  let hasUnderline = false;
+  if (textNode.textDecoration !== figma.mixed) {
+    hasUnderline = textNode.textDecoration === "UNDERLINE";
+  }
+  let hasBlueFill = false;
+  if ("fills" in textNode) {
+    const fills = textNode.fills;
+    if (Array.isArray(fills) && fills.length > 0) {
+      const f = fills[0];
+      if (f.type === "SOLID" && f.visible !== false) {
+        const { r, g, b } = f.color;
+        hasBlueFill = b > 0.5 && b > r * 1.3 && b > g * 1.3;
+      }
+    }
+  }
+  if (hasUnderline) return true;
+  if (hasLinkText && hasBlueFill) return true;
+  if (hasLinkText && textNode.fontSize !== figma.mixed && textNode.fontSize <= 16) {
+    if (textNode.characters.length < 60) return true;
   }
   return false;
 }
@@ -3568,12 +3647,51 @@ function isCardOrTile(node) {
   }
   return false;
 }
+function hasNavAncestor(node) {
+  var _a;
+  const navKeywords = ["nav", "menu", "tab", "bar", "header", "toolbar"];
+  let parent = node.parent;
+  for (let i = 0; i < 3 && parent && parent.type !== "PAGE"; i++) {
+    const pName = ((_a = parent.name) == null ? void 0 : _a.toLowerCase()) || "";
+    if (navKeywords.some((k) => pName.includes(k))) return true;
+    parent = parent.parent;
+  }
+  return false;
+}
+function hasInteractiveChildren(node) {
+  if (!("children" in node)) return false;
+  const interactiveKeywords = ["button", "cta", "sign in", "sign-in", "search", "input"];
+  for (const child of node.children) {
+    const name = child.name.toLowerCase();
+    if (interactiveKeywords.some((k) => name.includes(k))) return true;
+    if ("children" in child) {
+      for (const grandchild of child.children) {
+        const gcName = grandchild.name.toLowerCase();
+        if (interactiveKeywords.some((k) => gcName.includes(k))) return true;
+      }
+    }
+  }
+  return false;
+}
 function isNavItem(node) {
-  var _a, _b;
+  if (!hasNavAncestor(node)) return false;
+  if (hasInteractiveChildren(node)) return false;
   const name = node.name.toLowerCase();
-  if (!/^item[\s_-]*\d/.test(name)) return false;
-  const parentName = ((_b = (_a = node.parent) == null ? void 0 : _a.name) == null ? void 0 : _b.toLowerCase()) || "";
-  return parentName.includes("nav") || parentName.includes("menu") || parentName.includes("tab") || parentName.includes("bar");
+  if (/^item[\s_-]*\d/.test(name)) return true;
+  const parent = node.parent;
+  if (!parent || parent.type === "PAGE") return false;
+  if (!("layoutMode" in parent)) return false;
+  const container = parent;
+  if (container.layoutMode !== "HORIZONTAL") return false;
+  const siblings = container.children.filter(
+    (c) => c.visible && c.width >= MIN_SIZE && c.height >= MIN_SIZE
+  );
+  if (siblings.length < 3) return false;
+  const heights = [...siblings.map((s) => s.height)].sort((a, b) => a - b);
+  const medianH = heights[Math.floor(heights.length / 2)];
+  if (Math.abs(node.height - medianH) > medianH * 0.5) return false;
+  if (node.width > 300 || node.height > 80) return false;
+  return true;
 }
 function isPaginationGroup(node) {
   const name = node.name.toLowerCase();
@@ -3615,6 +3733,10 @@ function collectFocusable(node, results, depth = 0) {
       continue;
     }
     if (isPaginationGroup(child)) {
+      results.push(child);
+      continue;
+    }
+    if (isTextLink(child)) {
       results.push(child);
       continue;
     }
@@ -3670,29 +3792,54 @@ async function generateFocusIndicators(node) {
 function detectFocusOrder(root) {
   const focusable = collectFocusableElements(root);
   if (focusable.length === 0) return [];
-  const withPos = focusable.map((node) => {
+  const focusableIds = new Set(focusable.map((n) => n.id));
+  const ordered = [];
+  walkLayoutOrder(root, focusableIds, ordered);
+  return ordered.map((node, i) => {
     const abs = node.absoluteBoundingBox;
     return {
+      index: i + 1,
       node,
       name: node.name,
       x: abs ? abs.x : 0,
       y: abs ? abs.y : 0
     };
   });
-  const ROW_TOLERANCE = 20;
-  withPos.sort((a, b) => {
-    if (Math.abs(a.y - b.y) <= ROW_TOLERANCE) {
-      return a.x - b.x;
+}
+function walkLayoutOrder(node, focusableIds, result2) {
+  if (focusableIds.has(node.id)) {
+    result2.push(node);
+    return;
+  }
+  if (!("children" in node)) return;
+  const container = node;
+  const children = container.children.filter((c) => c.visible);
+  if (children.length === 0) return;
+  let orderedChildren;
+  if ("layoutMode" in container && container.layoutMode !== "NONE") {
+    orderedChildren = [...children];
+    if ("itemReverseZIndex" in container && container.itemReverseZIndex === true) {
+      orderedChildren.reverse();
     }
-    return a.y - b.y;
-  });
-  return withPos.map((entry, i) => ({
-    index: i + 1,
-    node: entry.node,
-    name: entry.name,
-    x: entry.x,
-    y: entry.y
-  }));
+  } else {
+    orderedChildren = [...children].sort((a, b) => {
+      const aAbs = a.absoluteBoundingBox;
+      const bAbs = b.absoluteBoundingBox;
+      if (!aAbs || !bAbs) return 0;
+      const aCenterY = aAbs.y + aAbs.height / 2;
+      const bCenterY = bAbs.y + bAbs.height / 2;
+      const aCenterX = aAbs.x + aAbs.width / 2;
+      const bCenterX = bAbs.x + bAbs.width / 2;
+      const rowThreshold = Math.min(aAbs.height, bAbs.height) * 0.5;
+      if (Math.abs(aCenterY - bCenterY) <= rowThreshold) {
+        return aCenterX - bCenterX;
+      }
+      return aCenterY - bCenterY;
+    });
+  }
+  for (const child of orderedChildren) {
+    walkLayoutOrder(child, focusableIds, result2);
+  }
 }
 
 // src/a11y-blueline.ts
