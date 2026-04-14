@@ -67,22 +67,24 @@ export async function loadLibraryTokens(): Promise<void> {
       tokenCount = 0;
       loaded = false;
 
-      // ── Import text styles by known keys ──
-      for (const [name, key] of Object.entries(TEXT_STYLE_KEYS)) {
-        try {
-          const style = await figma.importStyleByKeyAsync(key);
-          if (style.type === 'TEXT') {
-            const ts = style as TextStyle;
-            textStyleMap.push({
-              name: `s2a/typography/${name}`,
-              styleId: ts.id,
-              fontFamily: ts.fontName.family,
-              fontStyle: ts.fontName.style,
-              fontSize: ts.fontSize,
-            });
-          }
-        } catch (e) {
-          // Style might not be available
+      // ── Import text styles by known keys — all in parallel ──
+      const styleEntries = Object.entries(TEXT_STYLE_KEYS);
+      const styleResults = await Promise.allSettled(
+        styleEntries.map(([, key]) => figma.importStyleByKeyAsync(key))
+      );
+      for (let i = 0; i < styleEntries.length; i++) {
+        const res = styleResults[i];
+        if (res.status !== 'fulfilled') continue;
+        const style = res.value;
+        if (style.type === 'TEXT') {
+          const ts = style as TextStyle;
+          textStyleMap.push({
+            name: `s2a/typography/${styleEntries[i][0]}`,
+            styleId: ts.id,
+            fontFamily: ts.fontName.family,
+            fontStyle: ts.fontName.style,
+            fontSize: ts.fontSize,
+          });
         }
       }
 
@@ -98,45 +100,65 @@ export async function loadLibraryTokens(): Promise<void> {
         for (const collection of s2aCollections) {
           try {
             const libVars = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(collection.key);
-            for (const v of libVars) {
-              try {
-                const imported = await figma.variables.importVariableByKeyAsync(v.key);
-                const modeId = Object.keys(imported.valuesByMode)[0];
-                let value = imported.valuesByMode[modeId];
 
-                // Resolve aliases
-                let depth = 0;
-                while (value && typeof value === 'object' && 'type' in value && (value as any).type === 'VARIABLE_ALIAS' && depth < 5) {
-                  try {
-                    const alias = await figma.variables.getVariableByIdAsync((value as any).id);
-                    if (alias) {
-                      value = alias.valuesByMode[Object.keys(alias.valuesByMode)[0]];
-                    } else break;
-                  } catch (_) { break; }
-                  depth++;
-                }
+            // Import all variables in this collection in parallel
+            const importResults = await Promise.allSettled(
+              libVars.map(v => figma.variables.importVariableByKeyAsync(v.key))
+            );
 
-                if (imported.resolvedType === 'COLOR') {
-                  if (value && typeof value === 'object' && 'r' in value) {
-                    const color = value as RGBA;
-                    colorVarMap.push({
-                      name: imported.name,
-                      variable: imported,
-                      hex: rgbToHex(color.r, color.g, color.b),
-                      opacity: 'a' in color ? color.a : 1,
-                    });
-                  }
-                } else if (imported.resolvedType === 'FLOAT') {
-                  if (typeof value === 'number') {
-                    dimensionVarMap.push({
-                      name: imported.name,
-                      variable: imported,
-                      value: value,
-                      scopes: imported.scopes,
-                    });
-                  }
+            // Resolve the collection's defaultModeId once, using the first successful import.
+            // Object.keys ordering is not guaranteed — defaultModeId ensures we always read
+            // the correct (default/light) mode, not whichever mode V8 happens to enumerate first.
+            let defaultModeId: string | null = null;
+            for (const r of importResults) {
+              if (r.status === 'fulfilled') {
+                try {
+                  const coll = await figma.variables.getVariableCollectionByIdAsync(r.value.variableCollectionId);
+                  if (coll) defaultModeId = coll.defaultModeId;
+                } catch (_) {}
+                break;
+              }
+            }
+
+            for (const result of importResults) {
+              if (result.status !== 'fulfilled') continue;
+              const imported = result.value;
+              const modeId = defaultModeId ?? Object.keys(imported.valuesByMode)[0];
+              let value = imported.valuesByMode[modeId];
+
+              // Resolve aliases — inherently sequential (each step depends on the previous),
+              // bounded to depth 5 to prevent infinite loops in circular references.
+              let depth = 0;
+              while (value && typeof value === 'object' && 'type' in value && (value as any).type === 'VARIABLE_ALIAS' && depth < 5) {
+                try {
+                  const alias = await figma.variables.getVariableByIdAsync((value as any).id);
+                  if (alias) {
+                    value = alias.valuesByMode[defaultModeId ?? Object.keys(alias.valuesByMode)[0]];
+                  } else break;
+                } catch (_) { break; }
+                depth++;
+              }
+
+              if (imported.resolvedType === 'COLOR') {
+                if (value && typeof value === 'object' && 'r' in value) {
+                  const color = value as RGBA;
+                  colorVarMap.push({
+                    name: imported.name,
+                    variable: imported,
+                    hex: rgbToHex(color.r, color.g, color.b),
+                    opacity: 'a' in color ? color.a : 1,
+                  });
                 }
-              } catch (_) {}
+              } else if (imported.resolvedType === 'FLOAT') {
+                if (typeof value === 'number') {
+                  dimensionVarMap.push({
+                    name: imported.name,
+                    variable: imported,
+                    value: value,
+                    scopes: imported.scopes,
+                  });
+                }
+              }
             }
           } catch (_) {}
         }

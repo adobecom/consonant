@@ -62,40 +62,35 @@ function collectFonts(nodes: TextNode[]): FontName[] {
 }
 
 async function loadFonts(fonts: FontName[]): Promise<void> {
-  for (const f of fonts) { try { await figma.loadFontAsync(f); } catch (_) {} }
+  await Promise.all(fonts.map((f) => figma.loadFontAsync(f).catch(() => {})));
 }
 
 // ── Translation backends ──
 
 async function translateMyMemory(strings: string[], langCode: string): Promise<string[]> {
-  const results: string[] = [];
-  for (const s of strings) {
+  return Promise.all(strings.map(async (s) => {
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(s)}&langpair=en|${langCode}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`MyMemory error ${res.status}`);
     const data = await res.json();
-    results.push(data?.responseData?.translatedText || s);
-  }
-  return results;
+    return data?.responseData?.translatedText || s;
+  }));
 }
 
 async function translateLingva(strings: string[], langCode: string): Promise<string[]> {
   const instances = ['lingva.ml', 'lingva.thedaviddelta.com'];
-  const results: string[] = [];
-  for (const s of strings) {
-    let translated: string | null = null;
+  return Promise.all(strings.map(async (s) => {
     for (const host of instances) {
       try {
         const url = `https://${host}/api/v1/en/${langCode}/${encodeURIComponent(s)}`;
         const res = await fetch(url);
         if (!res.ok) continue;
         const data = await res.json();
-        if (data?.translation) { translated = data.translation; break; }
+        if (data?.translation) return data.translation;
       } catch (_) {}
     }
-    results.push(translated || s);
-  }
-  return results;
+    return s;
+  }));
 }
 
 async function translateDeepL(strings: string[], langCode: string, apiKey: string): Promise<string[]> {
