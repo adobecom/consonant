@@ -1,5 +1,5 @@
 import { figmaColorToHex, getNodeFills } from './utils';
-import { matchColor } from './tokens';
+import { matchColor, detectNodeColorRole } from './tokens';
 
 const BADGE_COLOR: RGB = { r: 0.91, g: 0.48, b: 0.18 };
 const PROP_LABEL_COLOR: RGB = { r: 0.45, g: 0.45, b: 0.45 };
@@ -145,7 +145,7 @@ async function buildInstanceCard(entry: InstanceEntry, parent: FrameNode): Promi
           } else if (field === 'fills' && 'fills' in overriddenNode) {
             const fills = getNodeFills(overriddenNode);
             for (const fill of fills) {
-              const token = matchColor(fill.hex);
+              const token = matchColor(fill.hex, detectNodeColorRole(overriddenNode, 'fill'));
               addPropRow(
                 card,
                 `Override (${overriddenNode.name}):`,

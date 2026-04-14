@@ -1,5 +1,5 @@
 import { figmaColorToHex, getNodeFills, getNodeStrokes, getTextProps, getCornerRadius, getEffects, getAutoLayoutProps } from './utils';
-import { matchColor, matchTypography, matchRadius } from './tokens';
+import { matchColor, matchTypography, matchRadius, detectNodeColorRole } from './tokens';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -258,8 +258,9 @@ async function addCtaProperties(node: InstanceNode, content: FrameNode): Promise
 
   // Background fill
   const fills = getNodeFills(node);
+  const anatFillRole = detectNodeColorRole(node, 'fill');
   for (const fill of fills) {
-    const colorToken = matchColor(fill.hex);
+    const colorToken = matchColor(fill.hex, anatFillRole);
     if (colorToken) {
       addPropRow(content, 'Background:', '', { tokenPill: colorToken });
     } else {
@@ -270,7 +271,7 @@ async function addCtaProperties(node: InstanceNode, content: FrameNode): Promise
   // Border
   const strokes = getNodeStrokes(node);
   for (const stroke of strokes) {
-    const strokeToken = matchColor(stroke.hex);
+    const strokeToken = matchColor(stroke.hex, 'border');
     if (strokeToken) {
       addPropRow(content, 'Border color:', '', { tokenPill: strokeToken });
     } else {
@@ -312,7 +313,7 @@ async function addCtaProperties(node: InstanceNode, content: FrameNode): Promise
       addPropRow(content, 'Font size:', `${tp.fontSize}`);
       const labelFills = getNodeFills(label);
       for (const f of labelFills) {
-        const tok = matchColor(f.hex);
+        const tok = matchColor(f.hex, 'content');
         if (tok) {
           addPropRow(content, 'Text color:', '', { tokenPill: tok });
         } else {
@@ -412,7 +413,7 @@ async function buildPropertiesForNode(node: SceneNode, content: FrameNode): Prom
         if (parent && parent.type === 'FRAME') {
           const parentFills = getNodeFills(parent as any);
           for (const f of parentFills) {
-            const tok = matchColor(f.hex);
+            const tok = matchColor(f.hex, 'background');
             if (tok) addPropRow(content, 'Button bg:', '', { tokenPill: tok });
             else addPropRow(content, 'Button bg:', f.hex.toUpperCase());
           }
@@ -492,8 +493,9 @@ async function buildPropertiesForNode(node: SceneNode, content: FrameNode): Prom
       if (node.height > 0) addPropRow(content, 'Height:', `${Math.round(node.height)}`);
 
       const fills = getNodeFills(node);
+      const defaultFillRole = detectNodeColorRole(node, 'fill');
       for (const fill of fills) {
-        const colorToken = matchColor(fill.hex);
+        const colorToken = matchColor(fill.hex, defaultFillRole);
         if (colorToken) {
           addPropRow(content, 'Background color:', '', { tokenPill: colorToken });
         } else {
