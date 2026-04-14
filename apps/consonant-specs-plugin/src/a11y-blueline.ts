@@ -200,10 +200,10 @@ async function loadFonts() {
   await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
   await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
   await figma.loadFontAsync({ family: 'Inter', style: 'Medium' });
-  await figma.loadFontAsync({ family: 'Inter', style: 'Semi Bold' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'SemiBold' });
 }
 
-function createText(content: string, size: number, weight: 'Regular' | 'Bold' | 'Medium' = 'Regular', color?: RGB): TextNode {
+function createText(content: string, size: number, weight: 'Regular' | 'Bold' | 'Medium' | 'SemiBold' = 'Regular', color?: RGB): TextNode {
   const text = figma.createText();
   text.fontName = { family: 'Inter', style: weight };
   text.fontSize = size;
@@ -355,7 +355,7 @@ function createNumberedBadge(index: number, categoryKey?: string): FrameNode {
   badge.paddingRight = 8;
   badge.itemSpacing = 4;
 
-  const text = createText(`${index}`, 12, 'Semi Bold', textColor);
+  const text = createText(`${index}`, 12, 'SemiBold', textColor);
   badge.appendChild(text);
 
   // Add category icon if available
@@ -498,7 +498,7 @@ function createGroupedCard(groupTitle: string, keys: string[]): FrameNode {
       headerRow.appendChild(iconBadge);
     }
 
-    const labelText = createText(title, 13, 'Semi Bold', TEXT_PRIMARY);
+    const labelText = createText(title, 13, 'SemiBold', TEXT_PRIMARY);
     headerRow.appendChild(labelText);
     section.appendChild(headerRow);
 
@@ -557,7 +557,7 @@ export async function generateBlueline(
     sidebar.strokeAlign = 'INSIDE';
     sidebar.cornerRadius = 8;
 
-    const headerText = createText('Accessibility Annotations', 15, 'Semi Bold', TEXT_PRIMARY);
+    const headerText = createText('Accessibility Annotations', 15, 'SemiBold', TEXT_PRIMARY);
     headerText.opacity = 0.95;
     sidebar.appendChild(headerText);
 

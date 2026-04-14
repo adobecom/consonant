@@ -70,9 +70,10 @@ function createTableHeader(parent: FrameNode): void {
     cell.fontSize = ROW_FONT_SIZE;
     cell.characters = columns[i];
     cell.fills = [{ type: 'SOLID', color: LABEL_COLOR }];
-    cell.resize(widths[i], cell.height);
     cell.textAutoResize = 'HEIGHT';
     row.appendChild(cell);
+    cell.layoutSizingHorizontal = 'FIXED';
+    cell.resize(widths[i], cell.height);
   }
 
   parent.appendChild(row);
@@ -110,9 +111,10 @@ function createTableRow(entry: TypographyEntry, parent: FrameNode): void {
     cell.fontSize = ROW_FONT_SIZE;
     cell.characters = values[i];
     cell.fills = [{ type: 'SOLID', color: i === 5 && entry.token ? TOKEN_COLOR : VALUE_COLOR }];
-    cell.resize(widths[i], cell.height);
     cell.textAutoResize = 'HEIGHT';
     row.appendChild(cell);
+    cell.layoutSizingHorizontal = 'FIXED';
+    cell.resize(widths[i], cell.height);
   }
 
   // Row divider
@@ -145,7 +147,7 @@ export async function generateTypographySection(sourceNode: SceneNode): Promise<
   title.fontName = { family: 'Inter', style: 'Bold' };
   title.fontSize = 24;
   title.characters = 'Typography';
-  title.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+  title.fills = [{ type: 'SOLID', color: { r: 0.1, g: 0.1, b: 0.1 } }];
   section.appendChild(title);
 
   // Table container
