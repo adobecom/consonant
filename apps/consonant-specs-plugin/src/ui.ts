@@ -400,7 +400,7 @@ function updateSpecStatus(message: string) {
 }
 
 // Localize tab
-const KEYED_PROVIDERS = new Set(['deepl', 'google', 'azure', 'anthropic']);
+const KEYED_PROVIDERS = new Set(['deepl', 'google', 'azure']);
 
 const providerSelect = document.getElementById('providerSelect') as HTMLSelectElement | null;
 const apiKeySection = document.getElementById('apiKeySection') as HTMLElement | null;
