@@ -1,5 +1,5 @@
 import { getNodeFills, getNodeStrokes, getTextProps, getCornerRadius, getEffects } from './utils';
-import { matchColor, matchRadius, matchTypography } from './tokens';
+import { matchColor, matchRadius, matchTypography, detectNodeColorRole } from './tokens';
 
 interface PropertyEntry {
   name: string;
@@ -18,11 +18,12 @@ function collectProperties(node: SceneNode): PropertyEntry[] {
   });
 
   const fills = getNodeFills(node);
+  const annotFillRole = detectNodeColorRole(node, 'fill');
   for (const fill of fills) {
     props.push({
       name: 'Fill',
       value: fill.hex.toUpperCase(),
-      token: matchColor(fill.hex),
+      token: matchColor(fill.hex, annotFillRole),
       colorSwatch: fill.hex,
     });
   }
@@ -32,7 +33,7 @@ function collectProperties(node: SceneNode): PropertyEntry[] {
     props.push({
       name: 'Stroke',
       value: `${stroke.hex.toUpperCase()} / ${stroke.weight}px`,
-      token: matchColor(stroke.hex),
+      token: matchColor(stroke.hex, 'border'),
       colorSwatch: stroke.hex,
     });
   }

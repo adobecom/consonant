@@ -30,11 +30,38 @@ interface LoadedTextStyle {
   fontSize: number;
 }
 
+type ColorSemanticRole = 'background' | 'content' | 'border' | null;
+
 interface LoadedColorVar {
   name: string;
   variable: Variable;
   hex: string;
   opacity: number;
+  semanticRole: ColorSemanticRole;
+}
+
+/** Parse semantic role from S2A token name path */
+function parseSemanticRole(name: string): ColorSemanticRole {
+  const lower = name.toLowerCase();
+  // Match paths like s2a/color/background/..., s2a/color/button/background/..., s2a/color/IconButton/background/...
+  if (/\bbackground\b/.test(lower)) return 'background';
+  if (/\bcontent\b/.test(lower)) return 'content';
+  if (/\bborder\b/.test(lower)) return 'border';
+  return null;
+}
+
+/**
+ * Determine what semantic color role a node property expects.
+ * - TEXT node fills → 'content' (foreground text color)
+ * - Any node strokes → 'border'
+ * - Non-text fills → 'background'
+ */
+export type ColorPropertyRole = 'background' | 'content' | 'border';
+
+export function detectNodeColorRole(node: SceneNode, property: 'fill' | 'stroke'): ColorPropertyRole {
+  if (property === 'stroke') return 'border';
+  if (node.type === 'TEXT') return 'content';
+  return 'background';
 }
 
 interface LoadedDimensionVar {
@@ -147,6 +174,7 @@ export async function loadLibraryTokens(): Promise<void> {
                     variable: imported,
                     hex: rgbToHex(color.r, color.g, color.b),
                     opacity: 'a' in color ? color.a : 1,
+                    semanticRole: parseSemanticRole(imported.name),
                   });
                 }
               } else if (imported.resolvedType === 'FLOAT') {
@@ -190,15 +218,28 @@ export function isLoaded(): boolean {
 
 // ── Matching ──
 
-export function matchColor(hex: string): string | null {
+/**
+ * Match a hex color to an S2A token name.
+ * Priority: 1) semantic token matching the node's role, 2) any semantic token, 3) primitive token.
+ * When role is provided, tokens whose semanticRole matches are strongly preferred.
+ */
+export function matchColor(hex: string, role?: ColorPropertyRole): string | null {
   const normalized = hex.toLowerCase();
-  // Prefer semantic (loaded last, so later entries win)
-  for (let i = colorVarMap.length - 1; i >= 0; i--) {
-    if (colorVarMap[i].hex.toLowerCase() === normalized) {
-      return colorVarMap[i].name;
-    }
+  const matches = colorVarMap.filter(cv => cv.hex.toLowerCase() === normalized);
+  if (matches.length === 0) return null;
+
+  if (role) {
+    // 1) Semantic token matching the requested role
+    const roleMatch = matches.find(cv => cv.semanticRole === role);
+    if (roleMatch) return roleMatch.name;
   }
-  return null;
+
+  // 2) Any semantic token (has a role)
+  const anySemantic = matches.find(cv => cv.semanticRole !== null);
+  if (anySemantic) return anySemantic.name;
+
+  // 3) Primitive fallback
+  return matches[0].name;
 }
 
 // TODO: The single-string API is ambiguous — a value like "16" could be a font size
@@ -320,11 +361,21 @@ export async function applyColorStyle(node: SceneNode, hex: string, fillOpacity:
   // Save for revert
   const savedFills = liveFills.map((f: any) => ({...f}));
 
-  for (const cv of colorVarMap) {
-    // Must match BOTH hex AND opacity exactly
-    if (cv.hex.toLowerCase() !== normalized) continue;
-    if (Math.abs(cv.opacity - fillOpacity) > 0.01) continue;
+  // Filter candidates that match hex + opacity
+  const candidates = colorVarMap.filter(cv =>
+    cv.hex.toLowerCase() === normalized && Math.abs(cv.opacity - fillOpacity) <= 0.01
+  );
+  if (candidates.length === 0) return false;
 
+  // Sort by semantic priority: role-matching first, then any semantic, then primitive
+  const role = detectNodeColorRole(node, 'fill');
+  candidates.sort((a, b) => {
+    const aScore = a.semanticRole === role ? 0 : a.semanticRole !== null ? 1 : 2;
+    const bScore = b.semanticRole === role ? 0 : b.semanticRole !== null ? 1 : 2;
+    return aScore - bScore;
+  });
+
+  for (const cv of candidates) {
     try {
       const newFill = figma.variables.setBoundVariableForPaint(originalFill, 'color', cv.variable);
       (node as any).fills = [newFill, ...liveFills.slice(1)];
@@ -365,10 +416,20 @@ export async function applyStrokeColorStyle(node: SceneNode, hex: string, stroke
   // Save for revert
   const savedStrokes = liveStrokes.map((s: any) => ({...s}));
 
-  for (const cv of colorVarMap) {
-    if (cv.hex.toLowerCase() !== normalized) continue;
-    if (Math.abs(cv.opacity - strokeOpacity) > 0.01) continue;
+  // Filter candidates that match hex + opacity
+  const candidates = colorVarMap.filter(cv =>
+    cv.hex.toLowerCase() === normalized && Math.abs(cv.opacity - strokeOpacity) <= 0.01
+  );
+  if (candidates.length === 0) return false;
 
+  // Sort by semantic priority: border tokens first, then any semantic, then primitive
+  candidates.sort((a, b) => {
+    const aScore = a.semanticRole === 'border' ? 0 : a.semanticRole !== null ? 1 : 2;
+    const bScore = b.semanticRole === 'border' ? 0 : b.semanticRole !== null ? 1 : 2;
+    return aScore - bScore;
+  });
+
+  for (const cv of candidates) {
     try {
       const newStroke = figma.variables.setBoundVariableForPaint(originalStroke, 'color', cv.variable);
       (node as any).strokes = [newStroke, ...liveStrokes.slice(1)];
@@ -527,18 +588,39 @@ function colorDistance(hex1: string, hex2: string): number {
   return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
 }
 
-function findClosestColor(hex: string, fillOpacity: number): LoadedColorVar | null {
-  let best: LoadedColorVar | null = null;
-  let bestDist = Infinity;
-  for (const cv of colorVarMap) {
-    if (Math.abs(cv.opacity - fillOpacity) > 0.05) continue;
-    const dist = colorDistance(hex, cv.hex);
-    if (dist < bestDist) {
-      bestDist = dist;
-      best = cv;
+/**
+ * Find closest S2A color token by RGB distance.
+ * Priority: 1) semantic token matching the node's role, 2) any semantic token, 3) primitive.
+ * Within each tier, picks the closest by color distance.
+ */
+function findClosestColor(hex: string, fillOpacity: number, role?: ColorPropertyRole): LoadedColorVar | null {
+  const opacityMatches = colorVarMap.filter(cv => Math.abs(cv.opacity - fillOpacity) <= 0.05);
+  if (opacityMatches.length === 0) return null;
+
+  function bestInList(list: LoadedColorVar[]): LoadedColorVar | null {
+    let best: LoadedColorVar | null = null;
+    let bestDist = Infinity;
+    for (const cv of list) {
+      const dist = colorDistance(hex, cv.hex);
+      if (dist < bestDist) { bestDist = dist; best = cv; }
     }
+    return best;
   }
-  return best;
+
+  if (role) {
+    // 1) Semantic token matching the requested role
+    const roleMatches = opacityMatches.filter(cv => cv.semanticRole === role);
+    const roleBest = bestInList(roleMatches);
+    if (roleBest) return roleBest;
+  }
+
+  // 2) Any semantic token
+  const semanticMatches = opacityMatches.filter(cv => cv.semanticRole !== null);
+  const semanticBest = bestInList(semanticMatches);
+  if (semanticBest) return semanticBest;
+
+  // 3) Primitive fallback
+  return bestInList(opacityMatches);
 }
 
 function findClosestDimension(value: number, scope: string): LoadedDimensionVar | null {
@@ -646,8 +728,9 @@ async function forceMatchNode(
       const solid = fills[0] as SolidPaint;
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = solid.opacity ?? 1;
-      const exactToken = matchColor(hex);
-      const closest = findClosestColor(hex, opacity);
+      const fillRole = detectNodeColorRole(node, 'fill');
+      const exactToken = matchColor(hex, fillRole);
+      const closest = findClosestColor(hex, opacity, fillRole);
       if (closest) {
         try {
           const newFill = figma.variables.setBoundVariableForPaint(solid, 'color', closest.variable);
@@ -672,8 +755,8 @@ async function forceMatchNode(
       const solid = strokes[0] as SolidPaint;
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = solid.opacity ?? 1;
-      const exactToken = matchColor(hex);
-      const closest = findClosestColor(hex, opacity);
+      const exactToken = matchColor(hex, 'border');
+      const closest = findClosestColor(hex, opacity, 'border');
       if (closest) {
         try {
           const newStroke = figma.variables.setBoundVariableForPaint(solid, 'color', closest.variable);
