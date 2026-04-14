@@ -1,4 +1,16 @@
 {
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Users/mhuntsberry/Desktop/consonant-2 && git fetch origin --quiet 2>/dev/null; BEHIND=$(git rev-list HEAD..origin/main --count 2>/dev/null || echo 0); if [ \"$BEHIND\" -gt \"0\" ] 2>/dev/null; then echo \"Your branch is $BEHIND commit(s) behind main — type /sync to get latest before you start.\"; fi"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Bash(git:*)",
