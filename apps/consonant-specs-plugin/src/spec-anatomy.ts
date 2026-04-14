@@ -26,7 +26,7 @@ const EXHIBIT_GAP = 64;
 const CONTENT_RAIL_WIDTH = 500;
 
 const BLACK: RGB = { r: 0, g: 0, b: 0 };
-const TITLE_COLOR: RGB = { r: 1, g: 1, b: 1 };
+const TITLE_COLOR: RGB = { r: 0.1, g: 0.1, b: 0.1 };
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
 

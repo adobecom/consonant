@@ -40,7 +40,10 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
     // ── Code execution ──
     case 'EXECUTE_CODE': {
       const code = params.code as string;
-      const timeout = (params.timeout as number) || 5000;
+      if (typeof code !== 'string') throw new Error('EXECUTE_CODE: params.code must be a string');
+      // 64KB cap — sufficient for any legitimate MCP script, blocks payload-stuffing abuse
+      if (code.length > 65536) throw new Error('EXECUTE_CODE: code exceeds 64KB limit');
+      const timeout = Math.min((params.timeout as number) || 5000, 30000); // hard cap at 30s
       const wrappedCode = '(async function() {\n' + code + '\n})()';
       const timeoutPromise = new Promise((_r, reject) => { setTimeout(() => reject(new Error('Execution timed out after ' + timeout + 'ms')), timeout); });
       let codePromise: any;
@@ -359,7 +362,10 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
       return { node: { id: textNode.id, name: textNode.name, characters: textNode.characters } };
     }
     case 'SET_IMAGE_FILL': {
-      const bytes = new Uint8Array(params.imageBytes);
+      if (!Array.isArray(params.imageBytes)) throw new Error('SET_IMAGE_FILL: imageBytes must be an array');
+      const MAX_IMAGE_BYTES = 52_428_800; // 50MB
+      if (params.imageBytes.length > MAX_IMAGE_BYTES) throw new Error(`SET_IMAGE_FILL: imageBytes exceeds ${MAX_IMAGE_BYTES / 1_048_576}MB limit`);
+      const bytes = new Uint8Array(params.imageBytes as number[]);
       const image = figma.createImage(bytes);
       const fill = { type: 'IMAGE' as const, scaleMode: (params.scaleMode || 'FILL') as 'FILL' | 'FIT' | 'CROP' | 'TILE', imageHash: image.hash };
       const nodeIds: string[] = params.nodeIds || (params.nodeId ? [params.nodeId] : []);
