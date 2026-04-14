@@ -1,23 +1,23 @@
 // ── Localize: translate text in cloned frames via multiple translation backends ──
 
-export type TranslationProvider = 'mymemory' | 'lingva' | 'deepl' | 'google' | 'azure' | 'anthropic' | 'bridge';
+export type TranslationProvider = 'mymemory' | 'lingva' | 'deepl' | 'google' | 'azure' | 'bridge';
 
 const LANG_META: Record<string, { name: string; fallbackFont: string | null; codes: Record<TranslationProvider, string> }> = {
   de: {
     name: 'German', fallbackFont: null, // Latin — original font works fine
-    codes: { mymemory: 'de', lingva: 'de', deepl: 'DE', google: 'de', azure: 'de', anthropic: 'German', bridge: 'German' },
+    codes: { mymemory: 'de', lingva: 'de', deepl: 'DE', google: 'de', azure: 'de', bridge: 'German' },
   },
   zh: {
     name: 'Chinese', fallbackFont: 'Noto Sans SC',
-    codes: { mymemory: 'zh-CN', lingva: 'zh', deepl: 'ZH', google: 'zh-CN', azure: 'zh-Hans', anthropic: 'Simplified Chinese', bridge: 'Simplified Chinese' },
+    codes: { mymemory: 'zh-CN', lingva: 'zh', deepl: 'ZH', google: 'zh-CN', azure: 'zh-Hans', bridge: 'Simplified Chinese' },
   },
   th: {
     name: 'Thai', fallbackFont: 'Noto Sans Thai',
-    codes: { mymemory: 'th', lingva: 'th', deepl: 'TH', google: 'th', azure: 'th', anthropic: 'Thai', bridge: 'Thai' },
+    codes: { mymemory: 'th', lingva: 'th', deepl: 'TH', google: 'th', azure: 'th', bridge: 'Thai' },
   },
   ar: {
     name: 'Arabic', fallbackFont: 'Noto Sans Arabic',
-    codes: { mymemory: 'ar', lingva: 'ar', deepl: 'AR', google: 'ar', azure: 'ar', anthropic: 'Arabic', bridge: 'Arabic' },
+    codes: { mymemory: 'ar', lingva: 'ar', deepl: 'AR', google: 'ar', azure: 'ar', bridge: 'Arabic' },
   },
 };
 
@@ -27,7 +27,6 @@ export const PROVIDERS: { id: TranslationProvider; label: string; needsKey: bool
   { id: 'deepl', label: 'DeepL Free (key required)', needsKey: true },
   { id: 'google', label: 'Google Cloud (key required)', needsKey: true },
   { id: 'azure', label: 'Microsoft Azure (key required)', needsKey: true },
-  { id: 'anthropic', label: 'Anthropic Claude (key required)', needsKey: true },
   { id: 'bridge', label: 'Claude via Bridge (no key)', needsKey: false },
 ];
 
@@ -141,47 +140,6 @@ async function translateAzure(strings: string[], langCode: string, apiKey: strin
   return (data as Array<{ translations: Array<{ text: string }> }>).map((t) => t.translations[0].text);
 }
 
-async function translateClaude(strings: string[], langName: string, apiKey: string): Promise<string[]> {
-  const system =
-    'You are a UI localization expert. Translate the given English UI strings to ' + langName +
-    '. Preserve tone. Keep button labels concise. Do NOT translate brand names, ' +
-    'proper nouns, or placeholders like {username}, {count}, %s, {{var}}. ' +
-    'Return ONLY a JSON array of translated strings, same length and order as input. No prose, no markdown.';
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 4096,
-      system,
-      messages: [{ role: 'user', content: JSON.stringify(strings) }],
-    }),
-  });
-
-  if (!res.ok) {
-    let msg = `API error ${res.status}`;
-    try { const b = await res.json(); if (b?.error?.message) msg = b.error.message; } catch (_) {}
-    throw new Error(msg);
-  }
-
-  const data = await res.json();
-  const content = data?.content?.[0]?.text;
-  if (typeof content !== 'string') throw new Error('Unexpected API response');
-  let cleaned = content.trim();
-  if (cleaned.startsWith('```')) cleaned = cleaned.replace(/^```(?:json)?/i, '').replace(/```$/, '').trim();
-  const parsed = JSON.parse(cleaned);
-  if (!Array.isArray(parsed) || parsed.length !== strings.length) {
-    throw new Error(`Translation count mismatch: expected ${strings.length}, got ${Array.isArray(parsed) ? parsed.length : 'N/A'}`);
-  }
-  return parsed.map((s) => String(s));
-}
-
 // ── Dispatcher ──
 
 async function translateStrings(
@@ -197,7 +155,6 @@ async function translateStrings(
     case 'deepl': return translateDeepL(strings, langCode, apiKey);
     case 'google': return translateGoogle(strings, langCode, apiKey);
     case 'azure': return translateAzure(strings, langCode, apiKey);
-    case 'anthropic': return translateClaude(strings, langName, apiKey);
   }
 }
 

@@ -688,13 +688,13 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       break;
     }
     case 'get-api-key': {
-      const provider = typeof msg.provider === 'string' ? msg.provider : 'anthropic';
+      const provider = typeof msg.provider === 'string' ? msg.provider : 'mymemory';
       await postApiKeyState(provider);
       break;
     }
     case 'save-api-key': {
       const key = typeof msg.key === 'string' ? msg.key.trim() : '';
-      const provider = typeof msg.provider === 'string' ? msg.provider : 'anthropic';
+      const provider = typeof msg.provider === 'string' ? msg.provider : 'mymemory';
       if (!key) { figma.notify('Empty API key', { error: true }); break; }
       await figma.clientStorage.setAsync(apiKeyStorageKey(provider), key);
       await postApiKeyState(provider);
@@ -702,7 +702,7 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       break;
     }
     case 'clear-api-key': {
-      const provider = typeof msg.provider === 'string' ? msg.provider : 'anthropic';
+      const provider = typeof msg.provider === 'string' ? msg.provider : 'mymemory';
       await figma.clientStorage.deleteAsync(apiKeyStorageKey(provider));
       await postApiKeyState(provider);
       figma.notify('API key cleared');
@@ -750,7 +750,7 @@ case 'localize': {
         break;
       }
 
-      const needsKey = ['deepl', 'google', 'azure', 'anthropic'].includes(provider);
+      const needsKey = ['deepl', 'google', 'azure'].includes(provider);
       let apiKey = '';
       if (needsKey) {
         apiKey = await figma.clientStorage.getAsync(apiKeyStorageKey(provider)) || '';
