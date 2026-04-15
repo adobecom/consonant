@@ -28,51 +28,77 @@ Fill AI-assisted sections of a blueline accessibility annotation in Figma.
 For each section that needs filling, analyze the design and generate content.
 
 Reference docs for accuracy:
-- `skills/accessibility/wcag-patterns.md` — ARIA roles and keyboard patterns
-- `skills/accessibility/carousel-a11y.md` — carousel-specific rules
-- `skills/accessibility/landmarks-guide.md` — landmark mapping
+- `skills/accessibility/wcag-patterns.md` — ARIA roles, keyboard, and focus contracts for 18 component types
+- `skills/accessibility/accessible-names.md` — naming strategies by element type, alt-text rules, context harvesting
+- `skills/accessibility/heading-hierarchy.md` — heading detection heuristics, text style mapping, common mistakes
+- `skills/accessibility/contrast-and-color.md` — contrast ratios, color-only communication, target sizes, reduced motion
+- `skills/accessibility/screen-reader-notes.md` — VoiceOver, TalkBack, Narrator, React Native, TV platform behaviors
+- `skills/accessibility/carousel-a11y.md` — carousel-specific auto-rotation, DOM strategy, timing rules
+- `skills/accessibility/landmarks-guide.md` — visual section to landmark role mapping
 
 #### Heading Hierarchy
-- Analyze all TEXT nodes by fontSize, fontWeight, and visual position
-- Determine H1-H6 structure considering: logo as potential H1, eyebrow vs heading distinction
-- Output: heading level tag + first ~50 chars of text content
+- Reference: `heading-hierarchy.md` for detection heuristics and rules
+- Analyze all TEXT nodes by fontSize, fontWeight, text style, and visual position
+- Use the text style mapping table to infer heading levels (Adobe Clean Display Black → H1/H2, etc.)
+- Apply the rules: one H1 per page, never skip levels, logo is NOT H1, eyebrow is NOT a heading
+- Card titles are usually one level below the section heading above them
+- Output: indented heading tree with level tag + first ~50 chars of text content
 
 #### Landmarks
+- Reference: `landmarks-guide.md` for visual-to-landmark mappings
 - Map top-level visual sections to ARIA landmark roles
-- Common mappings: navigation → nav, header area → banner, footer → contentinfo, main content → main, named sections → region
-- Include aria-label and aria-roledescription where needed
+- Include aria-label when multiple landmarks of the same type exist
+- Don't over-landmark: not every frame needs a role
 
 #### Accessible Names
-- For each focusable element, provide a context-aware accessible name
-- Go beyond visible text: "Learn more" → "Learn more about {context}"
-- Provide reusable patterns, not just one-off values
+- Reference: `accessible-names.md` for naming strategies and context harvesting
+- For each focusable element, determine the best naming source (visible text, aria-labelledby, aria-label)
+- For vague links ("Learn more", "See all"): harvest context from the nearest heading or eyebrow
+- For icon-only buttons: describe the action, not the icon — "{verb} {object}"
+- Provide reusable patterns, not one-off values: "Learn more about + {card title}"
 
 #### Alt-Text
+- Reference: `accessible-names.md` (Alt-Text section) for rules
 - Identify IMAGE fills on rectangles/frames
 - Use `figma_take_screenshot` on individual image nodes to see content
-- Write descriptive alt-text or mark as decorative
+- Informative images: describe what the image shows in 1-2 sentences
+- Decorative images: mark as `alt=""`
+- Functional images (icons in buttons): describe the function, not the appearance
+- Background images with text overlay: background is decorative, text is the content
 
 #### ARIA Roles & Attributes
-- Identify UI component patterns (tablist, carousel, dialog, menu, etc.)
-- Assign roles, aria-* attributes, and state management following WAI-ARIA APG
-- Include tabindex management for composite widgets
+- Reference: `wcag-patterns.md` for complete ARIA contracts per component type
+- Identify the component pattern (tabs, carousel, dialog, menu, accordion, combobox, etc.)
+- Look up the exact roles, states, and properties from the pattern reference
+- Include tabindex management strategy (roving tabindex vs standard vs focus trap)
+- Note the accessible name strategy for that component type
 
 #### Keyboard Patterns
-- For each identified component pattern, specify keyboard behavior
-- Follow WAI-ARIA Authoring Practices Guide patterns exactly
-- Include: arrow keys, Home/End, Tab, Enter/Space, Escape as applicable
+- Reference: `wcag-patterns.md` for complete keyboard contracts per component type
+- Look up the exact keyboard interaction for the identified component pattern
+- List every key and what it does — don't summarize, be specific
+- Include the focus model (roving tabindex, focus trap, standard)
+- Note the selection model where applicable (selection follows focus vs manual activation)
 
 #### DOM Strategy
-- Only generate if dynamic components detected (carousel, tabs, accordion, etc.)
-- Recommend DOM structure: all panels present vs lazy load, inert/aria-hidden usage
+- Reference: `wcag-patterns.md` (DOM strategy notes per component type) and `carousel-a11y.md`
+- Only generate if dynamic components detected (carousel, tabs, accordion, dialog, etc.)
+- Specify: panels in DOM vs lazy-loaded, show/hide method, inert/aria-hidden usage
+- For modals: note that content behind dialog needs `inert`
 
 #### Auto-Rotation
+- Reference: `carousel-a11y.md` for complete rules
 - Only generate if carousel/slideshow detected
 - Specify: prefers-reduced-motion handling, interval, pause triggers (focus, hover), resume rules, manual stop behavior
 
 #### Screen Reader Notes
-- Only generate if platform-specific behavior differs from standard ARIA
-- Cover: VoiceOver (iOS/macOS), TalkBack (Android), Narrator (Windows)
+- Reference: `screen-reader-notes.md` for platform-specific behaviors
+- Only generate if the component has behavior that differs across platforms
+- Standard ARIA patterns (buttons, links, headings) work consistently — no platform note needed
+- Focus on: carousels (swipe conflicts), custom actions, grouped elements, announcement order differences
+- VoiceOver: announces Name → Role → State
+- TalkBack: announces Role → Name → State
+- Narrator: heading navigation via H key is heavily used, heading hierarchy must be complete
 
 ### Phase 3 — Write to Canvas
 
