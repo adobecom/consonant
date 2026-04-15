@@ -3857,6 +3857,7 @@ var MAX_IMAGE_NODES = 20;
 var MAX_ICON_FRAMES = 20;
 var MAX_PAIRED_STACKS = 10;
 var MAX_OVERLAYS = 10;
+var MAX_FOCUSABLE = 50;
 function isVisible(node) {
   return node.visible !== false;
 }
@@ -3884,6 +3885,7 @@ function collectTextNodes2(node, results, depth) {
   if (!isVisible(node)) return;
   if (node.type === "TEXT") {
     const textNode = node;
+    if (textNode.characters.length === 0) return;
     const chars = textNode.characters.slice(0, 80);
     let fontSize = 0;
     if (textNode.fontSize !== figma.mixed) {
@@ -4135,7 +4137,7 @@ function collectOverlays(node, results, depth) {
     const container = node;
     const parentBounds = getAbsBounds(node);
     const parentArea = parentBounds.width * parentBounds.height;
-    if (parentArea > 0) {
+    if (parentArea > 0 && depth > 0) {
       for (const child of container.children) {
         if (!isVisible(child)) continue;
         const childBounds = getAbsBounds(child);
@@ -4212,7 +4214,7 @@ function runStructuralScan(node) {
     iconFrames: iconFrames.slice(0, MAX_ICON_FRAMES),
     pairedStacks: pairedStacks.slice(0, MAX_PAIRED_STACKS),
     overlays: overlays.slice(0, MAX_OVERLAYS),
-    focusableElements
+    focusableElements: focusableElements.slice(0, MAX_FOCUSABLE)
   };
 }
 
@@ -4405,12 +4407,17 @@ async function loadFonts2() {
 async function embedStructuralScan(node, parent) {
   const scan = runStructuralScan(node);
   const json = JSON.stringify(scan);
-  const existing = parent.findOne((n) => n.name === ".structural-scan" && n.type === "TEXT");
-  if (existing) existing.remove();
+  for (const child of parent.children) {
+    if (child.name === ".structural-scan" && child.type === "TEXT") {
+      child.remove();
+      break;
+    }
+  }
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
   const scanNode = figma.createText();
   scanNode.name = ".structural-scan";
-  scanNode.characters = json;
   scanNode.fontSize = 1;
+  scanNode.characters = json;
   scanNode.opacity = 0;
   scanNode.locked = true;
   parent.appendChild(scanNode);

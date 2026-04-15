@@ -105,6 +105,7 @@ const MAX_IMAGE_NODES = 20;
 const MAX_ICON_FRAMES = 20;
 const MAX_PAIRED_STACKS = 10;
 const MAX_OVERLAYS = 10;
+const MAX_FOCUSABLE = 50;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -146,6 +147,7 @@ function collectTextNodes(node: SceneNode, results: ScanTextNode[], depth: numbe
 
   if (node.type === 'TEXT') {
     const textNode = node as TextNode;
+    if (textNode.characters.length === 0) return; // empty text node — skip
     const chars = textNode.characters.slice(0, 80);
 
     // fontSize — handle mixed
@@ -489,7 +491,8 @@ function collectOverlays(node: SceneNode, results: ScanOverlay[], depth: number)
     const parentBounds = getAbsBounds(node);
     const parentArea = parentBounds.width * parentBounds.height;
 
-    if (parentArea > 0) {
+    // Skip root level — top-level children covering the page frame are normal layout, not overlays
+    if (parentArea > 0 && depth > 0) {
       for (const child of container.children) {
         if (!isVisible(child)) continue;
         const childBounds = getAbsBounds(child);
@@ -586,6 +589,6 @@ export function runStructuralScan(node: SceneNode): StructuralScan {
     iconFrames: iconFrames.slice(0, MAX_ICON_FRAMES),
     pairedStacks: pairedStacks.slice(0, MAX_PAIRED_STACKS),
     overlays: overlays.slice(0, MAX_OVERLAYS),
-    focusableElements,
+    focusableElements: focusableElements.slice(0, MAX_FOCUSABLE),
   };
 }
