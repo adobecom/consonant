@@ -1,6 +1,6 @@
 {
   "name": "consonant-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,11 +9,12 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "express": "^4.21.0"
+    "ws": "^8.20.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0",
     "@types/node": "^22.0.0",
+    "@types/ws": "^8.18.1",
     "typescript": "^5.7.0"
   }
 }

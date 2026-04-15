@@ -663,6 +663,7 @@
   var bridgeReconnectAttempts = 0;
   var bridgeUserDisconnected = false;
   var bridgeSessionNonce = null;
+  var bridgeNonceSent = false;
   function generateNonce() {
     const arr = new Uint8Array(16);
     crypto.getRandomValues(arr);
@@ -764,7 +765,7 @@
       btn.textContent = "Connecting...";
       btn.disabled = true;
     }
-    const WS_PORTS = [9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+    const WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
     let found = false;
     let pending = WS_PORTS.length;
     WS_PORTS.forEach((port) => {
@@ -871,7 +872,9 @@
     }
   }
   function initBridgeConnection(ws) {
-    bridgeSessionNonce = generateNonce();
+    const nonce = generateNonce();
+    bridgeSessionNonce = null;
+    bridgeNonceSent = false;
     sendBridgeCommand("GET_FILE_INFO", {}).then((result) => {
       if (ws.readyState !== 1 || !result) return;
       const info = result.fileInfo || result;
@@ -879,8 +882,10 @@
         info.fileKey = "local-" + Date.now();
       }
       info.pluginVersion = "1.0.0";
-      info.sessionNonce = bridgeSessionNonce;
+      info.sessionNonce = nonce;
       ws.send(JSON.stringify({ type: "FILE_INFO", data: info }));
+      bridgeSessionNonce = nonce;
+      bridgeNonceSent = true;
       appendBridgeLog("File info sent: " + (info.fileName || "unknown") + " (key: " + (info.fileKey || "?") + ")");
     }).catch(() => {
     });
@@ -901,7 +906,7 @@
           return;
         }
         if (!message.id || !message.method) return;
-        if (message.method === "EXECUTE_CODE") {
+        if (message.method === "EXECUTE_CODE" && bridgeNonceSent) {
           if (!bridgeSessionNonce || (message.params || {}).sessionNonce !== bridgeSessionNonce) {
             if (ws.readyState === 1) {
               ws.send(JSON.stringify({ id: message.id, error: "Unauthorized: missing or invalid sessionNonce" }));
@@ -929,6 +934,7 @@
       bridgeStopKeepalive();
       bridgeWs = null;
       bridgeSessionNonce = null;
+      bridgeNonceSent = false;
       bridgeConnected = false;
       updateBridgeUi();
       const wasReplaced = event.code === 1e3 && (event.reason === "Replaced by new connection" || event.reason === "Replaced by same file reconnection");
