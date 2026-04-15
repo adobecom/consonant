@@ -15,6 +15,27 @@ Fill AI-assisted sections of a blueline accessibility annotation in Figma.
 
 ## Execution Flow
 
+### Phase 0 — Read Structural Scan
+
+Before gathering visual context, check if the plugin embedded structural analysis data:
+
+1. Via `figma_execute`, search the current page for a text node named `.structural-scan`
+   ```js
+   const scanNode = figma.currentPage.findOne(n => n.name === '.structural-scan' && n.type === 'TEXT');
+   if (scanNode) return scanNode.characters;
+   ```
+2. If found, parse the JSON. This contains:
+   - `textNodes` — every text element sorted by font size (heading candidates)
+   - `repeatingGroups` — containers with 3+ same-sized children (tabs, nav, pagination, card grids)
+   - `imageNodes` — elements with image fills, flagged as full-bleed (decorative) or content
+   - `iconFrames` — small frames with vector/icon but no text (need aria-label)
+   - `pairedStacks` — alternating short/tall children in vertical stacks (accordion candidates)
+   - `overlays` — large frames covering 70%+ of parent, possibly with scrim (modal candidates)
+   - `focusableElements` — the Tier 1 detection results for cross-reference
+3. If not found, proceed with screenshot-only analysis (same as before — no regression).
+
+Use the scan data alongside screenshots throughout Phase 2. The scan gives you structural certainty; the screenshot gives you visual context. Together they are more accurate than either alone.
+
 ### Phase 1 — Gather Context
 
 1. Take a screenshot of the target design frame with `figma_take_screenshot`
@@ -38,8 +59,8 @@ Reference docs for accuracy:
 
 #### Heading Hierarchy
 - Reference: `heading-hierarchy.md` for detection heuristics and rules
-- Analyze all TEXT nodes by fontSize, fontWeight, text style, and visual position
-- Use the text style mapping table to infer heading levels (Adobe Clean Display Black → H1/H2, etc.)
+- **If scan data exists:** Check the `textNodes` list — already sorted by font size descending. The largest text is your H1 candidate. Use `fontFamily` to distinguish headings (Adobe Clean Display = heading) from body text (Adobe Clean Regular = not a heading). Use `depth` to understand nesting — deeper nodes are more likely lower heading levels.
+- **Always cross-reference with the screenshot** — a large decorative text element is not necessarily a heading
 - Apply the rules: one H1 per page, never skip levels, logo is NOT H1, eyebrow is NOT a heading
 - Card titles are usually one level below the section heading above them
 - Output: indented heading tree with level tag + first ~50 chars of text content
@@ -52,39 +73,42 @@ Reference docs for accuracy:
 
 #### Accessible Names
 - Reference: `accessible-names.md` for naming strategies and context harvesting
-- For each focusable element, determine the best naming source (visible text, aria-labelledby, aria-label)
-- For vague links ("Learn more", "See all"): harvest context from the nearest heading or eyebrow
-- For icon-only buttons: describe the action, not the icon — "{verb} {object}"
+- **If scan data exists:** Check `iconFrames` for entries where `hasTextChild: false` — these are icon-only buttons that need `aria-label`. Describe the action, not the icon — "{verb} {object}"
+- Check `focusableElements` and cross-reference with `textNodes` — elements near vague text ("Learn more", "See all") need contextual names
+- For vague links: harvest context from the nearest heading in `textNodes`
 - Provide reusable patterns, not one-off values: "Learn more about + {card title}"
 
 #### Alt-Text
 - Reference: `accessible-names.md` (Alt-Text section) for rules
-- Identify IMAGE fills on rectangles/frames
-- Use `figma_take_screenshot` on individual image nodes to see content
-- Informative images: describe what the image shows in 1-2 sentences
-- Decorative images: mark as `alt=""`
+- **If scan data exists:** Check `imageNodes`:
+  - `isFullBleed: true` → likely decorative background, recommend `alt=""`
+  - `isFullBleed: false` → likely content image, needs descriptive alt text
+  - `hasTextSibling: true` → likely hero image with text overlay — background is decorative, text is the content
+- Use `figma_take_screenshot` on content images (not full-bleed) to write descriptions
 - Functional images (icons in buttons): describe the function, not the appearance
-- Background images with text overlay: background is decorative, text is the content
 
 #### ARIA Roles & Attributes
 - Reference: `wcag-patterns.md` for complete ARIA contracts per component type
-- Identify the component pattern (tabs, carousel, dialog, menu, accordion, combobox, etc.)
-- Look up the exact roles, states, and properties from the pattern reference
+- **If scan data exists:** Check `repeatingGroups` to identify component patterns:
+  - Horizontal group of 3-5 same-sized elements with `hasDistinctChild: true` → likely tabs
+  - Horizontal group of small elements (< 20px) → likely pagination dots
+  - Large group of tall elements each containing image + text → likely card grid
+  - Check `overlays` for modals/dialogs — `coversPercentOfParent > 70` with `hasSemiTransparentSibling: true`
+  - Check `pairedStacks` for accordions — `pairCount >= 2`
+- Look up the exact roles, states, and properties from the matching pattern in `wcag-patterns.md`
 - Include tabindex management strategy (roving tabindex vs standard vs focus trap)
-- Note the accessible name strategy for that component type
 
 #### Keyboard Patterns
 - Reference: `wcag-patterns.md` for complete keyboard contracts per component type
-- Look up the exact keyboard interaction for the identified component pattern
+- **If scan data exists:** Use the same pattern identification from ARIA Roles above, then look up the keyboard contract for that pattern in `wcag-patterns.md`
 - List every key and what it does — don't summarize, be specific
 - Include the focus model (roving tabindex, focus trap, standard)
-- Note the selection model where applicable (selection follows focus vs manual activation)
 
 #### DOM Strategy
 - Reference: `wcag-patterns.md` (DOM strategy notes per component type) and `carousel-a11y.md`
-- Only generate if dynamic components detected (carousel, tabs, accordion, dialog, etc.)
+- Only generate if dynamic components detected
+- **If scan data exists:** Check `overlays` for modals (need `inert` on background). Check `repeatingGroups` for carousel-like patterns (wide container with few large children). Check `pairedStacks` for accordions (panels can be hidden or removed from DOM).
 - Specify: panels in DOM vs lazy-loaded, show/hide method, inert/aria-hidden usage
-- For modals: note that content behind dialog needs `inert`
 
 #### Auto-Rotation
 - Reference: `carousel-a11y.md` for complete rules
@@ -93,9 +117,9 @@ Reference docs for accuracy:
 
 #### Screen Reader Notes
 - Reference: `screen-reader-notes.md` for platform-specific behaviors
-- Only generate if the component has behavior that differs across platforms
+- Only generate if the design contains complex patterns
+- **If scan data exists:** Check for `overlays` (modals need focus trap notes for all platforms), `repeatingGroups` matching carousel patterns (swipe gesture conflicts on iOS/Android)
 - Standard ARIA patterns (buttons, links, headings) work consistently — no platform note needed
-- Focus on: carousels (swipe conflicts), custom actions, grouped elements, announcement order differences
 - VoiceOver: announces Name → Role → State
 - TalkBack: announces Role → Name → State
 - Narrator: heading navigation via H key is heavily used, heading hierarchy must be complete
