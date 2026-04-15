@@ -198,11 +198,21 @@ const PANEL_DESCRIPTIONS: Record<string, string> = {
   generalNote: 'General accessibility notes that apply across all platforms. Live regions, announcements, and cross-platform behavior.',
 };
 
+const loadedFonts = new Set<string>();
+
 async function loadFonts() {
+  // Regular is required — everything else is best-effort
   await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
-  await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
-  await figma.loadFontAsync({ family: 'Inter', style: 'Medium' });
-  await figma.loadFontAsync({ family: 'Inter', style: 'Semi Bold' });
+  loadedFonts.add('Regular');
+
+  for (const style of ['Bold', 'Medium', 'Semi Bold'] as const) {
+    try {
+      await figma.loadFontAsync({ family: 'Inter', style });
+      loadedFonts.add(style);
+    } catch {
+      // Font not available — createText will fall back to Regular
+    }
+  }
 }
 
 async function embedStructuralScan(node: SceneNode, parent: BaseNode & ChildrenMixin): Promise<void> {
@@ -230,7 +240,8 @@ async function embedStructuralScan(node: SceneNode, parent: BaseNode & ChildrenM
 
 function createText(content: string, size: number, weight: 'Regular' | 'Bold' | 'Medium' | 'Semi Bold' = 'Regular', color?: RGB): TextNode {
   const text = figma.createText();
-  text.fontName = { family: 'Inter', style: weight };
+  const style = loadedFonts.has(weight) ? weight : 'Regular';
+  text.fontName = { family: 'Inter', style };
   text.fontSize = size;
   text.characters = content;
   if (color) text.fills = [{ type: 'SOLID', color }];

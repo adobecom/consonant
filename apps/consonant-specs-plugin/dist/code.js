@@ -4398,11 +4398,17 @@ var PANEL_DESCRIPTIONS = {
   tvNote: "TV platform accessibility: D-pad navigation, focus management, spatial navigation order, and remote control interactions.",
   generalNote: "General accessibility notes that apply across all platforms. Live regions, announcements, and cross-platform behavior."
 };
+var loadedFonts = /* @__PURE__ */ new Set();
 async function loadFonts2() {
   await figma.loadFontAsync({ family: "Inter", style: "Regular" });
-  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
-  await figma.loadFontAsync({ family: "Inter", style: "Medium" });
-  await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
+  loadedFonts.add("Regular");
+  for (const style of ["Bold", "Medium", "Semi Bold"]) {
+    try {
+      await figma.loadFontAsync({ family: "Inter", style });
+      loadedFonts.add(style);
+    } catch (e) {
+    }
+  }
 }
 async function embedStructuralScan(node, parent) {
   const scan = runStructuralScan(node);
@@ -4424,7 +4430,8 @@ async function embedStructuralScan(node, parent) {
 }
 function createText(content, size, weight = "Regular", color) {
   const text = figma.createText();
-  text.fontName = { family: "Inter", style: weight };
+  const style = loadedFonts.has(weight) ? weight : "Regular";
+  text.fontName = { family: "Inter", style };
   text.fontSize = size;
   text.characters = content;
   if (color) text.fills = [{ type: "SOLID", color }];
