@@ -2,6 +2,23 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+async function copyToClipboard(text: string): Promise<boolean> {
+  // navigator.clipboard is unavailable in Figma plugin iframes — use textarea fallback
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
 interface PropertyEntry {
   name: string;
   value: string;
@@ -309,7 +326,7 @@ function renderPropertyList(properties: PropertyEntry[]) {
   list.querySelectorAll('.property-row').forEach((row) => {
     row.addEventListener('click', () => {
       const value = (row as HTMLElement).dataset.copy || '';
-      navigator.clipboard.writeText(value);
+      copyToClipboard(value);
     });
   });
 }
@@ -482,7 +499,7 @@ function showLocalizeBridgePrompt(data: { frameName: string; frameId: string; la
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
     document.getElementById('copyLocalizeCmd')?.addEventListener('click', async () => {
-      await navigator.clipboard.writeText(cmd);
+      await copyToClipboard(cmd);
       const btn = document.getElementById('copyLocalizeCmd');
       if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); }
     });
@@ -549,7 +566,7 @@ function showAiFillInstruction(mode?: string, sections?: string[], frameName?: s
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
     document.getElementById('copyFillCmd')?.addEventListener('click', async () => {
-      await navigator.clipboard.writeText(cmd);
+      await copyToClipboard(cmd);
       const btn = document.getElementById('copyFillCmd');
       if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); }
     });
