@@ -142,6 +142,18 @@ var TEXT_STYLE_KEYS = {
   "label": "536bbf234b1a0a717cffe0e3c578fb0052669086",
   "caption": "e572ca6995cb534da839d4c8bef75ec523efeb6f"
 };
+function parseSemanticRole(name) {
+  const lower = name.toLowerCase();
+  if (/\bbackground\b/.test(lower)) return "background";
+  if (/\bcontent\b/.test(lower)) return "content";
+  if (/\bborder\b/.test(lower)) return "border";
+  return null;
+}
+function detectNodeColorRole(node, property) {
+  if (property === "stroke") return "border";
+  if (node.type === "TEXT") return "content";
+  return "background";
+}
 var textStyleMap = [];
 var colorVarMap = [];
 var dimensionVarMap = [];
@@ -157,20 +169,23 @@ async function loadLibraryTokens() {
       dimensionVarMap = [];
       tokenCount = 0;
       loaded = false;
-      for (const [name, key] of Object.entries(TEXT_STYLE_KEYS)) {
-        try {
-          const style = await figma.importStyleByKeyAsync(key);
-          if (style.type === "TEXT") {
-            const ts = style;
-            textStyleMap.push({
-              name: `s2a/typography/${name}`,
-              styleId: ts.id,
-              fontFamily: ts.fontName.family,
-              fontStyle: ts.fontName.style,
-              fontSize: ts.fontSize
-            });
-          }
-        } catch (e) {
+      const styleEntries = Object.entries(TEXT_STYLE_KEYS);
+      const styleResults = await Promise.allSettled(
+        styleEntries.map(([, key]) => figma.importStyleByKeyAsync(key))
+      );
+      for (let i = 0; i < styleEntries.length; i++) {
+        const res = styleResults[i];
+        if (res.status !== "fulfilled") continue;
+        const style = res.value;
+        if (style.type === "TEXT") {
+          const ts = style;
+          textStyleMap.push({
+            name: `s2a/typography/${styleEntries[i][0]}`,
+            styleId: ts.id,
+            fontFamily: ts.fontName.family,
+            fontStyle: ts.fontName.style,
+            fontSize: ts.fontSize
+          });
         }
       }
       const S2A_LIBRARY_NAME = /s2a|spectrum 2/i;
@@ -180,44 +195,57 @@ async function loadLibraryTokens() {
         for (const collection of s2aCollections) {
           try {
             const libVars = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(collection.key);
-            for (const v of libVars) {
-              try {
-                const imported = await figma.variables.importVariableByKeyAsync(v.key);
-                const modeId = Object.keys(imported.valuesByMode)[0];
-                let value = imported.valuesByMode[modeId];
-                let depth = 0;
-                while (value && typeof value === "object" && "type" in value && value.type === "VARIABLE_ALIAS" && depth < 5) {
-                  try {
-                    const alias = await figma.variables.getVariableByIdAsync(value.id);
-                    if (alias) {
-                      value = alias.valuesByMode[Object.keys(alias.valuesByMode)[0]];
-                    } else break;
-                  } catch (_) {
-                    break;
-                  }
-                  depth++;
+            const importResults = await Promise.allSettled(
+              libVars.map((v) => figma.variables.importVariableByKeyAsync(v.key))
+            );
+            let defaultModeId = null;
+            for (const r of importResults) {
+              if (r.status === "fulfilled") {
+                try {
+                  const coll = await figma.variables.getVariableCollectionByIdAsync(r.value.variableCollectionId);
+                  if (coll) defaultModeId = coll.defaultModeId;
+                } catch (_) {
                 }
-                if (imported.resolvedType === "COLOR") {
-                  if (value && typeof value === "object" && "r" in value) {
-                    const color = value;
-                    colorVarMap.push({
-                      name: imported.name,
-                      variable: imported,
-                      hex: rgbToHex(color.r, color.g, color.b),
-                      opacity: "a" in color ? color.a : 1
-                    });
-                  }
-                } else if (imported.resolvedType === "FLOAT") {
-                  if (typeof value === "number") {
-                    dimensionVarMap.push({
-                      name: imported.name,
-                      variable: imported,
-                      value,
-                      scopes: imported.scopes
-                    });
-                  }
+                break;
+              }
+            }
+            for (const result2 of importResults) {
+              if (result2.status !== "fulfilled") continue;
+              const imported = result2.value;
+              const modeId = defaultModeId != null ? defaultModeId : Object.keys(imported.valuesByMode)[0];
+              let value = imported.valuesByMode[modeId];
+              let depth = 0;
+              while (value && typeof value === "object" && "type" in value && value.type === "VARIABLE_ALIAS" && depth < 5) {
+                try {
+                  const alias = await figma.variables.getVariableByIdAsync(value.id);
+                  if (alias) {
+                    value = alias.valuesByMode[defaultModeId != null ? defaultModeId : Object.keys(alias.valuesByMode)[0]];
+                  } else break;
+                } catch (_) {
+                  break;
                 }
-              } catch (_) {
+                depth++;
+              }
+              if (imported.resolvedType === "COLOR") {
+                if (value && typeof value === "object" && "r" in value) {
+                  const color = value;
+                  colorVarMap.push({
+                    name: imported.name,
+                    variable: imported,
+                    hex: rgbToHex(color.r, color.g, color.b),
+                    opacity: "a" in color ? color.a : 1,
+                    semanticRole: parseSemanticRole(imported.name)
+                  });
+                }
+              } else if (imported.resolvedType === "FLOAT") {
+                if (typeof value === "number") {
+                  dimensionVarMap.push({
+                    name: imported.name,
+                    variable: imported,
+                    value,
+                    scopes: imported.scopes
+                  });
+                }
               }
             }
           } catch (_) {
@@ -242,14 +270,17 @@ function getTokenCount() {
 function isLoaded() {
   return loaded;
 }
-function matchColor(hex) {
+function matchColor(hex, role) {
   const normalized = hex.toLowerCase();
-  for (let i = colorVarMap.length - 1; i >= 0; i--) {
-    if (colorVarMap[i].hex.toLowerCase() === normalized) {
-      return colorVarMap[i].name;
-    }
+  const matches = colorVarMap.filter((cv) => cv.hex.toLowerCase() === normalized);
+  if (matches.length === 0) return null;
+  if (role) {
+    const roleMatch = matches.find((cv) => cv.semanticRole === role);
+    if (roleMatch) return roleMatch.name;
   }
-  return null;
+  const anySemantic = matches.find((cv) => cv.semanticRole !== null);
+  if (anySemantic) return anySemantic.name;
+  return matches[0].name;
 }
 function matchTypography(value) {
   const normalized = value.toLowerCase();
@@ -335,9 +366,17 @@ async function applyColorStyle(node, hex, fillOpacity) {
   const origHex = rgbToHex(originalFill.color.r, originalFill.color.g, originalFill.color.b).toLowerCase();
   const origOpacity = (_a = originalFill.opacity) != null ? _a : 1;
   const savedFills = liveFills.map((f) => __spreadValues({}, f));
-  for (const cv of colorVarMap) {
-    if (cv.hex.toLowerCase() !== normalized) continue;
-    if (Math.abs(cv.opacity - fillOpacity) > 0.01) continue;
+  const candidates = colorVarMap.filter(
+    (cv) => cv.hex.toLowerCase() === normalized && Math.abs(cv.opacity - fillOpacity) <= 0.01
+  );
+  if (candidates.length === 0) return false;
+  const role = detectNodeColorRole(node, "fill");
+  candidates.sort((a, b) => {
+    const aScore = a.semanticRole === role ? 0 : a.semanticRole !== null ? 1 : 2;
+    const bScore = b.semanticRole === role ? 0 : b.semanticRole !== null ? 1 : 2;
+    return aScore - bScore;
+  });
+  for (const cv of candidates) {
     try {
       const newFill = figma.variables.setBoundVariableForPaint(originalFill, "color", cv.variable);
       node.fills = [newFill, ...liveFills.slice(1)];
@@ -371,9 +410,16 @@ async function applyStrokeColorStyle(node, hex, strokeOpacity) {
   const origHex = rgbToHex(originalStroke.color.r, originalStroke.color.g, originalStroke.color.b).toLowerCase();
   const origOpacity = (_a = originalStroke.opacity) != null ? _a : 1;
   const savedStrokes = liveStrokes.map((s) => __spreadValues({}, s));
-  for (const cv of colorVarMap) {
-    if (cv.hex.toLowerCase() !== normalized) continue;
-    if (Math.abs(cv.opacity - strokeOpacity) > 0.01) continue;
+  const candidates = colorVarMap.filter(
+    (cv) => cv.hex.toLowerCase() === normalized && Math.abs(cv.opacity - strokeOpacity) <= 0.01
+  );
+  if (candidates.length === 0) return false;
+  candidates.sort((a, b) => {
+    const aScore = a.semanticRole === "border" ? 0 : a.semanticRole !== null ? 1 : 2;
+    const bScore = b.semanticRole === "border" ? 0 : b.semanticRole !== null ? 1 : 2;
+    return aScore - bScore;
+  });
+  for (const cv of candidates) {
     try {
       const newStroke = figma.variables.setBoundVariableForPaint(originalStroke, "color", cv.variable);
       node.strokes = [newStroke, ...liveStrokes.slice(1)];
@@ -497,18 +543,30 @@ function colorDistance(hex1, hex2) {
   const [r2, g2, b2] = parse(hex2.toLowerCase());
   return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
 }
-function findClosestColor(hex, fillOpacity) {
-  let best = null;
-  let bestDist = Infinity;
-  for (const cv of colorVarMap) {
-    if (Math.abs(cv.opacity - fillOpacity) > 0.05) continue;
-    const dist = colorDistance(hex, cv.hex);
-    if (dist < bestDist) {
-      bestDist = dist;
-      best = cv;
+function findClosestColor(hex, fillOpacity, role) {
+  const opacityMatches = colorVarMap.filter((cv) => Math.abs(cv.opacity - fillOpacity) <= 0.05);
+  if (opacityMatches.length === 0) return null;
+  function bestInList(list) {
+    let best = null;
+    let bestDist = Infinity;
+    for (const cv of list) {
+      const dist = colorDistance(hex, cv.hex);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = cv;
+      }
     }
+    return best;
   }
-  return best;
+  if (role) {
+    const roleMatches = opacityMatches.filter((cv) => cv.semanticRole === role);
+    const roleBest = bestInList(roleMatches);
+    if (roleBest) return roleBest;
+  }
+  const semanticMatches = opacityMatches.filter((cv) => cv.semanticRole !== null);
+  const semanticBest = bestInList(semanticMatches);
+  if (semanticBest) return semanticBest;
+  return bestInList(opacityMatches);
 }
 function findClosestDimension(value, scope) {
   const nameFilter = scope === "GAP" ? NAME_SPACING : scope === "CORNER_RADIUS" ? NAME_RADIUS : null;
@@ -598,8 +656,9 @@ async function forceMatchNode(node, categories, result2) {
       const solid = fills[0];
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = (_a = solid.opacity) != null ? _a : 1;
-      const exactToken = matchColor(hex);
-      const closest = findClosestColor(hex, opacity);
+      const fillRole = detectNodeColorRole(node, "fill");
+      const exactToken = matchColor(hex, fillRole);
+      const closest = findClosestColor(hex, opacity, fillRole);
       if (closest) {
         try {
           const newFill = figma.variables.setBoundVariableForPaint(solid, "color", closest.variable);
@@ -627,8 +686,8 @@ async function forceMatchNode(node, categories, result2) {
       const solid = strokes[0];
       const hex = rgbToHex(solid.color.r, solid.color.g, solid.color.b);
       const opacity = (_b = solid.opacity) != null ? _b : 1;
-      const exactToken = matchColor(hex);
-      const closest = findClosestColor(hex, opacity);
+      const exactToken = matchColor(hex, "border");
+      const closest = findClosestColor(hex, opacity, "border");
       if (closest) {
         try {
           const newStroke = figma.variables.setBoundVariableForPaint(solid, "color", closest.variable);
@@ -733,11 +792,12 @@ function collectProperties(node) {
     token: null
   });
   const fills = getNodeFills(node);
+  const annotFillRole = detectNodeColorRole(node, "fill");
   for (const fill of fills) {
     props.push({
       name: "Fill",
       value: fill.hex.toUpperCase(),
-      token: matchColor(fill.hex),
+      token: matchColor(fill.hex, annotFillRole),
       colorSwatch: fill.hex
     });
   }
@@ -746,7 +806,7 @@ function collectProperties(node) {
     props.push({
       name: "Stroke",
       value: `${stroke.hex.toUpperCase()} / ${stroke.weight}px`,
-      token: matchColor(stroke.hex),
+      token: matchColor(stroke.hex, "border"),
       colorSwatch: stroke.hex
     });
   }
@@ -799,7 +859,7 @@ var SECTION_TITLE_SIZE = 48;
 var EXHIBIT_GAP = 64;
 var CONTENT_RAIL_WIDTH = 500;
 var BLACK = { r: 0, g: 0, b: 0 };
-var TITLE_COLOR = { r: 1, g: 1, b: 1 };
+var TITLE_COLOR = { r: 0.1, g: 0.1, b: 0.1 };
 async function collectSignificantNodes(node, entries, seen, depth = 0) {
   var _a, _b;
   if (depth > 0) {
@@ -952,8 +1012,9 @@ async function addCtaProperties(node, content) {
   addPropRow(content, "Width:", `${Math.round(node.width)}`);
   addPropRow(content, "Height:", `${Math.round(node.height)}`);
   const fills = getNodeFills(node);
+  const anatFillRole = detectNodeColorRole(node, "fill");
   for (const fill of fills) {
-    const colorToken = matchColor(fill.hex);
+    const colorToken = matchColor(fill.hex, anatFillRole);
     if (colorToken) {
       addPropRow(content, "Background:", "", { tokenPill: colorToken });
     } else {
@@ -962,7 +1023,7 @@ async function addCtaProperties(node, content) {
   }
   const strokes = getNodeStrokes(node);
   for (const stroke of strokes) {
-    const strokeToken = matchColor(stroke.hex);
+    const strokeToken = matchColor(stroke.hex, "border");
     if (strokeToken) {
       addPropRow(content, "Border color:", "", { tokenPill: strokeToken });
     } else {
@@ -998,7 +1059,7 @@ async function addCtaProperties(node, content) {
       addPropRow(content, "Font size:", `${tp.fontSize}`);
       const labelFills = getNodeFills(label);
       for (const f of labelFills) {
-        const tok = matchColor(f.hex);
+        const tok = matchColor(f.hex, "content");
         if (tok) {
           addPropRow(content, "Text color:", "", { tokenPill: tok });
         } else {
@@ -1074,7 +1135,7 @@ async function buildPropertiesForNode(node, content) {
         if (parent && parent.type === "FRAME") {
           const parentFills = getNodeFills(parent);
           for (const f of parentFills) {
-            const tok = matchColor(f.hex);
+            const tok = matchColor(f.hex, "background");
             if (tok) addPropRow(content, "Button bg:", "", { tokenPill: tok });
             else addPropRow(content, "Button bg:", f.hex.toUpperCase());
           }
@@ -1142,8 +1203,9 @@ async function buildPropertiesForNode(node, content) {
       if (node.width > 0) addPropRow(content, "Width:", `${Math.round(node.width)}`);
       if (node.height > 0) addPropRow(content, "Height:", `${Math.round(node.height)}`);
       const fills = getNodeFills(node);
+      const defaultFillRole = detectNodeColorRole(node, "fill");
       for (const fill of fills) {
-        const colorToken = matchColor(fill.hex);
+        const colorToken = matchColor(fill.hex, defaultFillRole);
         if (colorToken) {
           addPropRow(content, "Background color:", "", { tokenPill: colorToken });
         } else {
@@ -1625,7 +1687,7 @@ function renderPropertyPanel(entry) {
   const fills = getNodeFills(node);
   if (fills.length > 0) {
     const fill = fills[0];
-    const token = matchColor(fill.hex);
+    const token = matchColor(fill.hex, detectNodeColorRole(node, "fill"));
     if (token) {
       addPropertyRow(panel, "Fill variable", token);
     }
@@ -2094,9 +2156,10 @@ function createTableHeader(parent) {
     cell.fontSize = ROW_FONT_SIZE;
     cell.characters = columns[i];
     cell.fills = [{ type: "SOLID", color: LABEL_COLOR }];
-    cell.resize(widths[i], cell.height);
     cell.textAutoResize = "HEIGHT";
     row.appendChild(cell);
+    cell.layoutSizingHorizontal = "FIXED";
+    cell.resize(widths[i], cell.height);
   }
   parent.appendChild(row);
 }
@@ -2130,9 +2193,10 @@ function createTableRow(entry, parent) {
     cell.fontSize = ROW_FONT_SIZE;
     cell.characters = values[i];
     cell.fills = [{ type: "SOLID", color: i === 5 && entry.token ? TOKEN_COLOR : VALUE_COLOR }];
-    cell.resize(widths[i], cell.height);
     cell.textAutoResize = "HEIGHT";
     row.appendChild(cell);
+    cell.layoutSizingHorizontal = "FIXED";
+    cell.resize(widths[i], cell.height);
   }
   const div = figma.createRectangle();
   div.name = "row-divider";
@@ -2157,7 +2221,7 @@ async function generateTypographySection(sourceNode) {
   title.fontName = { family: "Inter", style: "Bold" };
   title.fontSize = 24;
   title.characters = "Typography";
-  title.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
+  title.fills = [{ type: "SOLID", color: { r: 0.1, g: 0.1, b: 0.1 } }];
   section.appendChild(title);
   const table = figma.createFrame();
   table.name = "typography-table";
@@ -2284,16 +2348,17 @@ async function buildInstanceCard(entry, parent) {
     }
     const overrides = node.overrides;
     if (overrides && overrides.length > 0) {
-      for (const override of overrides) {
-        const overriddenNode = await figma.getNodeByIdAsync(override.id);
+      const overrideNodes = await Promise.all(overrides.map((o) => figma.getNodeByIdAsync(o.id)));
+      for (let i = 0; i < overrides.length; i++) {
+        const overriddenNode = overrideNodes[i];
         if (!overriddenNode) continue;
-        for (const field of override.overriddenFields) {
+        for (const field of overrides[i].overriddenFields) {
           if (field === "characters" && overriddenNode.type === "TEXT") {
             addPropRow2(card, `Override (${overriddenNode.name}):`, `text = "${overriddenNode.characters}"`);
           } else if (field === "fills" && "fills" in overriddenNode) {
             const fills = getNodeFills(overriddenNode);
             for (const fill of fills) {
-              const token = matchColor(fill.hex);
+              const token = matchColor(fill.hex, detectNodeColorRole(overriddenNode, "fill"));
               addPropRow2(
                 card,
                 `Override (${overriddenNode.name}):`,
@@ -2354,7 +2419,7 @@ async function generateComponentDetailsSection(sourceNode) {
   title.fontName = { family: "Inter", style: "Bold" };
   title.fontSize = 24;
   title.characters = "Component Details";
-  title.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
+  title.fills = [{ type: "SOLID", color: { r: 0.1, g: 0.1, b: 0.1 } }];
   section.appendChild(title);
   const container = figma.createFrame();
   container.name = "components-container";
@@ -2669,22 +2734,11 @@ function addBand(parent, x, y, w, h, value, position, frameWidth) {
   text.characters = labelText;
   text.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
   badge.appendChild(text);
+  const badgeW = badge.width;
+  const badgeH = badge.height;
   parent.appendChild(badge);
-  if (position === "top" || position === "bottom" || position === "gap") {
-    if (w > h) {
-      badge.x = x + w / 2 - badge.width / 2;
-      badge.y = y + h / 2 - badge.height / 2;
-    } else {
-      badge.x = x + w / 2 - badge.width / 2;
-      badge.y = y + h / 2 - badge.height / 2;
-    }
-  } else if (position === "left") {
-    badge.x = x + w / 2 - badge.width / 2;
-    badge.y = y + h / 2 - badge.height / 2;
-  } else if (position === "right") {
-    badge.x = x + w / 2 - badge.width / 2;
-    badge.y = y + h / 2 - badge.height / 2;
-  }
+  badge.x = x + w / 2 - badgeW / 2;
+  badge.y = y + h / 2 - badgeH / 2;
 }
 
 // src/spec-card-gaps.ts
@@ -2848,9 +2902,11 @@ function addBand2(parent, x, y, w, h, value, position) {
   text.characters = labelText;
   text.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
   badge.appendChild(text);
+  const badgeW = badge.width;
+  const badgeH = badge.height;
   parent.appendChild(badge);
-  badge.x = x + w / 2 - badge.width / 2;
-  badge.y = y + h / 2 - badge.height / 2;
+  badge.x = x + w / 2 - badgeW / 2;
+  badge.y = y + h / 2 - badgeH / 2;
 }
 
 // src/spec-it.ts
@@ -2916,10 +2972,11 @@ async function specIt(node, sections = ["anatomy", "layout", "typography", "comp
 
 // src/s2a-audit.ts
 function auditNode(node, issues, counters) {
+  const fillRole = detectNodeColorRole(node, "fill");
   const fills = getNodeFills(node);
   for (const fill of fills) {
     counters.total++;
-    const token = matchColor(fill.hex);
+    const token = matchColor(fill.hex, fillRole);
     if (token) {
       counters.matched++;
     } else {
@@ -2929,7 +2986,7 @@ function auditNode(node, issues, counters) {
   const strokes = getNodeStrokes(node);
   for (const stroke of strokes) {
     counters.total++;
-    const token = matchColor(stroke.hex);
+    const token = matchColor(stroke.hex, "border");
     if (token) {
       counters.matched++;
     } else {
@@ -3032,7 +3089,8 @@ async function alignNode(node, textOnly, result2) {
       const solid = fills[0];
       const hex = figmaColorToHex(solid.color);
       const fillOpacity = (_a = solid.opacity) != null ? _a : 1;
-      const token = matchColor(hex);
+      const alignFillRole = detectNodeColorRole(node, "fill");
+      const token = matchColor(hex, alignFillRole);
       if (token) {
         const success = await applyColorStyle(node, hex, fillOpacity);
         if (success) result2.aligned++;
@@ -3056,7 +3114,7 @@ async function alignNode(node, textOnly, result2) {
       const solid = strokes[0];
       const hex = figmaColorToHex(solid.color);
       const strokeOpacity = (_b = solid.opacity) != null ? _b : 1;
-      const token = matchColor(hex);
+      const token = matchColor(hex, "border");
       if (token) {
         const success = await applyStrokeColorStyle(node, hex, strokeOpacity);
         if (success) {
@@ -3207,22 +3265,22 @@ var LANG_META = {
     name: "German",
     fallbackFont: null,
     // Latin — original font works fine
-    codes: { mymemory: "de", lingva: "de", deepl: "DE", google: "de", azure: "de", anthropic: "German", bridge: "German" }
+    codes: { mymemory: "de", lingva: "de", deepl: "DE", google: "de", azure: "de", bridge: "German" }
   },
   zh: {
     name: "Chinese",
     fallbackFont: "Noto Sans SC",
-    codes: { mymemory: "zh-CN", lingva: "zh", deepl: "ZH", google: "zh-CN", azure: "zh-Hans", anthropic: "Simplified Chinese", bridge: "Simplified Chinese" }
+    codes: { mymemory: "zh-CN", lingva: "zh", deepl: "ZH", google: "zh-CN", azure: "zh-Hans", bridge: "Simplified Chinese" }
   },
   th: {
     name: "Thai",
     fallbackFont: "Noto Sans Thai",
-    codes: { mymemory: "th", lingva: "th", deepl: "TH", google: "th", azure: "th", anthropic: "Thai", bridge: "Thai" }
+    codes: { mymemory: "th", lingva: "th", deepl: "TH", google: "th", azure: "th", bridge: "Thai" }
   },
   ar: {
     name: "Arabic",
     fallbackFont: "Noto Sans Arabic",
-    codes: { mymemory: "ar", lingva: "ar", deepl: "AR", google: "ar", azure: "ar", anthropic: "Arabic", bridge: "Arabic" }
+    codes: { mymemory: "ar", lingva: "ar", deepl: "AR", google: "ar", azure: "ar", bridge: "Arabic" }
   }
 };
 function norm(s) {
@@ -3252,46 +3310,34 @@ function collectFonts(nodes) {
   return fonts;
 }
 async function loadFonts(fonts) {
-  for (const f of fonts) {
-    try {
-      await figma.loadFontAsync(f);
-    } catch (_) {
-    }
-  }
+  await Promise.all(fonts.map((f) => figma.loadFontAsync(f).catch(() => {
+  })));
 }
 async function translateMyMemory(strings, langCode) {
-  var _a;
-  const results = [];
-  for (const s of strings) {
+  return Promise.all(strings.map(async (s) => {
+    var _a;
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(s)}&langpair=en|${langCode}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`MyMemory error ${res.status}`);
     const data = await res.json();
-    results.push(((_a = data == null ? void 0 : data.responseData) == null ? void 0 : _a.translatedText) || s);
-  }
-  return results;
+    return ((_a = data == null ? void 0 : data.responseData) == null ? void 0 : _a.translatedText) || s;
+  }));
 }
 async function translateLingva(strings, langCode) {
   const instances = ["lingva.ml", "lingva.thedaviddelta.com"];
-  const results = [];
-  for (const s of strings) {
-    let translated = null;
+  return Promise.all(strings.map(async (s) => {
     for (const host of instances) {
       try {
         const url = `https://${host}/api/v1/en/${langCode}/${encodeURIComponent(s)}`;
         const res = await fetch(url);
         if (!res.ok) continue;
         const data = await res.json();
-        if (data == null ? void 0 : data.translation) {
-          translated = data.translation;
-          break;
-        }
+        if (data == null ? void 0 : data.translation) return data.translation;
       } catch (_) {
       }
     }
-    results.push(translated || s);
-  }
-  return results;
+    return s;
+  }));
 }
 async function translateDeepL(strings, langCode, apiKey) {
   const res = await fetch("https://api-free.deepl.com/v2/translate", {
@@ -3352,44 +3398,6 @@ async function translateAzure(strings, langCode, apiKey) {
   const data = await res.json();
   return data.map((t) => t.translations[0].text);
 }
-async function translateClaude(strings, langName, apiKey) {
-  var _a, _b, _c;
-  const system = "You are a UI localization expert. Translate the given English UI strings to " + langName + ". Preserve tone. Keep button labels concise. Do NOT translate brand names, proper nouns, or placeholders like {username}, {count}, %s, {{var}}. Return ONLY a JSON array of translated strings, same length and order as input. No prose, no markdown.";
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 4096,
-      system,
-      messages: [{ role: "user", content: JSON.stringify(strings) }]
-    })
-  });
-  if (!res.ok) {
-    let msg = `API error ${res.status}`;
-    try {
-      const b = await res.json();
-      if ((_a = b == null ? void 0 : b.error) == null ? void 0 : _a.message) msg = b.error.message;
-    } catch (_) {
-    }
-    throw new Error(msg);
-  }
-  const data = await res.json();
-  const content = (_c = (_b = data == null ? void 0 : data.content) == null ? void 0 : _b[0]) == null ? void 0 : _c.text;
-  if (typeof content !== "string") throw new Error("Unexpected API response");
-  let cleaned = content.trim();
-  if (cleaned.startsWith("```")) cleaned = cleaned.replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
-  const parsed = JSON.parse(cleaned);
-  if (!Array.isArray(parsed) || parsed.length !== strings.length) {
-    throw new Error(`Translation count mismatch: expected ${strings.length}, got ${Array.isArray(parsed) ? parsed.length : "N/A"}`);
-  }
-  return parsed.map((s) => String(s));
-}
 async function translateStrings(provider, strings, langCode, langName, apiKey) {
   switch (provider) {
     case "mymemory":
@@ -3402,8 +3410,6 @@ async function translateStrings(provider, strings, langCode, langName, apiKey) {
       return translateGoogle(strings, langCode, apiKey);
     case "azure":
       return translateAzure(strings, langCode, apiKey);
-    case "anthropic":
-      return translateClaude(strings, langName, apiKey);
   }
 }
 function applyRTL(node) {
@@ -3783,6 +3789,7 @@ async function generateFocusIndicators(node) {
     rect.strokeWeight = FOCUS_STROKE;
     rect.strokeAlign = "CENTER";
     rect.cornerRadius = getCornerRadius2(el);
+    rect.layoutPositioning = "ABSOLUTE";
     parent.appendChild(rect);
   }
   figma.notify(`${filtered.length} focus indicators added.`);
@@ -4026,7 +4033,7 @@ async function loadFonts2() {
   await figma.loadFontAsync({ family: "Inter", style: "Regular" });
   await figma.loadFontAsync({ family: "Inter", style: "Bold" });
   await figma.loadFontAsync({ family: "Inter", style: "Medium" });
-  await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
+  await figma.loadFontAsync({ family: "Inter", style: "SemiBold" });
 }
 function createText(content, size, weight = "Regular", color) {
   const text = figma.createText();
@@ -4156,7 +4163,7 @@ function createNumberedBadge(index, categoryKey) {
   badge.paddingLeft = 8;
   badge.paddingRight = 8;
   badge.itemSpacing = 4;
-  const text = createText(`${index}`, 12, "Semi Bold", textColor);
+  const text = createText(`${index}`, 12, "SemiBold", textColor);
   badge.appendChild(text);
   if (categoryKey) {
     const icon = createCategoryIcon(categoryKey, textColor);
@@ -4275,7 +4282,7 @@ function createGroupedCard(groupTitle, keys) {
       if (icon) iconBadge.appendChild(icon);
       headerRow.appendChild(iconBadge);
     }
-    const labelText = createText(title, 13, "Semi Bold", TEXT_PRIMARY);
+    const labelText = createText(title, 13, "SemiBold", TEXT_PRIMARY);
     headerRow.appendChild(labelText);
     section.appendChild(headerRow);
     const placeholder = createText("Awaiting AI fill...", 11, "Regular", TEXT_PRIMARY);
@@ -4315,7 +4322,7 @@ async function generateBlueline(node, tier1, tier2, options) {
     sidebar.strokeWeight = 1;
     sidebar.strokeAlign = "INSIDE";
     sidebar.cornerRadius = 8;
-    const headerText = createText("Accessibility Annotations", 15, "Semi Bold", TEXT_PRIMARY);
+    const headerText = createText("Accessibility Annotations", 15, "SemiBold", TEXT_PRIMARY);
     headerText.opacity = 0.95;
     sidebar.appendChild(headerText);
     const focusSection = createFocusOrderSection(focusEntries);
@@ -4583,7 +4590,9 @@ async function handleBridgeMethod(method, params) {
     // ── Code execution ──
     case "EXECUTE_CODE": {
       const code = params.code;
-      const timeout = params.timeout || 5e3;
+      if (typeof code !== "string") throw new Error("EXECUTE_CODE: params.code must be a string");
+      if (code.length > 65536) throw new Error("EXECUTE_CODE: code exceeds 64KB limit");
+      const timeout = Math.min(params.timeout || 5e3, 3e4);
       const wrappedCode = "(async function() {\n" + code + "\n})()";
       const timeoutPromise = new Promise((_r, reject) => {
         setTimeout(() => reject(new Error("Execution timed out after " + timeout + "ms")), timeout);
@@ -4967,11 +4976,14 @@ async function handleBridgeMethod(method, params) {
       const fontName = textNode.fontName;
       if (fontName !== figma.mixed) await figma.loadFontAsync(fontName);
       else await figma.loadFontAsync({ family: "Inter", style: "Regular" });
-      textNode.characters = params.text;
       if (params.fontSize) textNode.fontSize = params.fontSize;
+      textNode.characters = params.text;
       return { node: { id: textNode.id, name: textNode.name, characters: textNode.characters } };
     }
     case "SET_IMAGE_FILL": {
+      if (!Array.isArray(params.imageBytes)) throw new Error("SET_IMAGE_FILL: imageBytes must be an array");
+      const MAX_IMAGE_BYTES = 52428800;
+      if (params.imageBytes.length > MAX_IMAGE_BYTES) throw new Error(`SET_IMAGE_FILL: imageBytes exceeds ${MAX_IMAGE_BYTES / 1048576}MB limit`);
       const bytes = new Uint8Array(params.imageBytes);
       const image = figma.createImage(bytes);
       const fill = { type: "IMAGE", scaleMode: params.scaleMode || "FILL", imageHash: image.hash };
@@ -5349,13 +5361,13 @@ figma.ui.onmessage = async (msg) => {
       break;
     }
     case "get-api-key": {
-      const provider = typeof msg.provider === "string" ? msg.provider : "anthropic";
+      const provider = typeof msg.provider === "string" ? msg.provider : "mymemory";
       await postApiKeyState(provider);
       break;
     }
     case "save-api-key": {
       const key = typeof msg.key === "string" ? msg.key.trim() : "";
-      const provider = typeof msg.provider === "string" ? msg.provider : "anthropic";
+      const provider = typeof msg.provider === "string" ? msg.provider : "mymemory";
       if (!key) {
         figma.notify("Empty API key", { error: true });
         break;
@@ -5366,7 +5378,7 @@ figma.ui.onmessage = async (msg) => {
       break;
     }
     case "clear-api-key": {
-      const provider = typeof msg.provider === "string" ? msg.provider : "anthropic";
+      const provider = typeof msg.provider === "string" ? msg.provider : "mymemory";
       await figma.clientStorage.deleteAsync(apiKeyStorageKey(provider));
       await postApiKeyState(provider);
       figma.notify("API key cleared");
@@ -5414,7 +5426,7 @@ figma.ui.onmessage = async (msg) => {
         });
         break;
       }
-      const needsKey = ["deepl", "google", "azure", "anthropic"].includes(provider);
+      const needsKey = ["deepl", "google", "azure"].includes(provider);
       let apiKey = "";
       if (needsKey) {
         apiKey = await figma.clientStorage.getAsync(apiKeyStorageKey(provider)) || "";
