@@ -2453,11 +2453,11 @@ async function generateColorAnnotations(node, yOffset = 0) {
   function shouldSkipEntirely(n) {
     const skipTypes = /* @__PURE__ */ new Set(["VECTOR", "BOOLEAN_OPERATION", "STAR", "LINE", "POLYGON", "ELLIPSE"]);
     if (skipTypes.has(n.type)) return true;
-    const hasChildren = "children" in n && n.children.length > 0;
-    if (n.type !== "TEXT" && !hasChildren && (n.width < 24 || n.height < 24)) return true;
+    const hasChildren2 = "children" in n && n.children.length > 0;
+    if (n.type !== "TEXT" && !hasChildren2 && (n.width < 24 || n.height < 24)) return true;
     return false;
   }
-  function hasImageFill(n) {
+  function hasImageFill2(n) {
     if ("fills" in n) {
       const fills = n.fills;
       if (Array.isArray(fills) && fills.some((f) => f.type === "IMAGE")) return true;
@@ -2508,7 +2508,7 @@ async function generateColorAnnotations(node, yOffset = 0) {
   async function walk(n, isRoot = false) {
     if ("visible" in n && !n.visible) return;
     if (shouldSkipEntirely(n)) return;
-    const skipAnnotation = hasImageFill(n);
+    const skipAnnotation = hasImageFill2(n);
     if (!skipAnnotation) {
       const properties = [];
       const label = isRoot ? "Background" : n.name;
@@ -3849,6 +3849,373 @@ function walkLayoutOrder(node, focusableIds, result2) {
   }
 }
 
+// src/a11y-structural-scan.ts
+var MAX_DEPTH2 = 10;
+var MAX_TEXT_NODES = 30;
+var MAX_REPEATING_GROUPS = 20;
+var MAX_IMAGE_NODES = 20;
+var MAX_ICON_FRAMES = 20;
+var MAX_PAIRED_STACKS = 10;
+var MAX_OVERLAYS = 10;
+function isVisible(node) {
+  return node.visible !== false;
+}
+function hasChildren(node) {
+  return "children" in node && Array.isArray(node.children);
+}
+function getAbsBounds(node) {
+  const abs = node.absoluteBoundingBox;
+  if (abs) return { x: abs.x, y: abs.y, width: abs.width, height: abs.height };
+  return { x: 0, y: 0, width: 0, height: 0 };
+}
+function firstSolidFillColor(node) {
+  if (!("fills" in node)) return void 0;
+  const fills = node.fills;
+  if (fills === figma.mixed || !Array.isArray(fills)) return void 0;
+  for (const fill of fills) {
+    if (fill.type === "SOLID" && fill.visible !== false) {
+      return { r: fill.color.r, g: fill.color.g, b: fill.color.b };
+    }
+  }
+  return void 0;
+}
+function collectTextNodes2(node, results, depth) {
+  if (depth > MAX_DEPTH2 || results.length >= MAX_TEXT_NODES) return;
+  if (!isVisible(node)) return;
+  if (node.type === "TEXT") {
+    const textNode = node;
+    const chars = textNode.characters.slice(0, 80);
+    let fontSize = 0;
+    if (textNode.fontSize !== figma.mixed) {
+      fontSize = textNode.fontSize;
+    } else {
+      fontSize = textNode.getRangeFontSize(0, 1);
+      if (fontSize === figma.mixed) fontSize = 0;
+    }
+    let fontWeight = "Regular";
+    let fontFamily = "Unknown";
+    const fn = textNode.fontName;
+    if (fn !== figma.mixed) {
+      fontWeight = fn.style;
+      fontFamily = fn.family;
+    } else {
+      const rangeFn = textNode.getRangeFontName(0, 1);
+      if (rangeFn !== figma.mixed) {
+        fontWeight = rangeFn.style;
+        fontFamily = rangeFn.family;
+      }
+    }
+    let hasUnderline = false;
+    const dec = textNode.textDecoration;
+    if (dec !== figma.mixed) {
+      hasUnderline = dec === "UNDERLINE";
+    }
+    const fillColor = firstSolidFillColor(textNode);
+    const bounds = getAbsBounds(textNode);
+    const parentName = textNode.parent ? textNode.parent.name : "";
+    results.push({
+      characters: chars,
+      fontSize,
+      fontWeight,
+      fontFamily,
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.width,
+      height: bounds.height,
+      hasUnderline,
+      fillColor,
+      parentName,
+      depth
+    });
+    return;
+  }
+  if (hasChildren(node)) {
+    for (const child of node.children) {
+      if (results.length >= MAX_TEXT_NODES) break;
+      collectTextNodes2(child, results, depth + 1);
+    }
+  }
+}
+function colorsMatch(a, b) {
+  return Math.abs(a.r - b.r) < 0.02 && Math.abs(a.g - b.g) < 0.02 && Math.abs(a.b - b.b) < 0.02;
+}
+function hasDistinctFill(children) {
+  const fills = [];
+  for (const child of children) {
+    const c = firstSolidFillColor(child);
+    fills.push(c != null ? c : null);
+  }
+  const validFills = fills.filter((f) => f !== null);
+  if (validFills.length < 2) return false;
+  let distinctCount = 0;
+  for (let i = 0; i < validFills.length; i++) {
+    let matchCount = 0;
+    for (let j = 0; j < validFills.length; j++) {
+      if (i !== j && colorsMatch(validFills[i], validFills[j])) matchCount++;
+    }
+    if (matchCount === 0) distinctCount++;
+  }
+  return distinctCount === 1;
+}
+function collectRepeatingGroups(node, results, depth) {
+  if (depth > MAX_DEPTH2 || results.length >= MAX_REPEATING_GROUPS) return;
+  if (!isVisible(node)) return;
+  if (hasChildren(node)) {
+    const container = node;
+    const visibleChildren = container.children.filter(isVisible);
+    if (visibleChildren.length >= 3) {
+      const widths = visibleChildren.map((c) => {
+        const b = getAbsBounds(c);
+        return b.width;
+      });
+      const heights = visibleChildren.map((c) => {
+        const b = getAbsBounds(c);
+        return b.height;
+      });
+      const avgW = widths.reduce((a, b) => a + b, 0) / widths.length;
+      const avgH = heights.reduce((a, b) => a + b, 0) / heights.length;
+      const wVariance = avgW > 0 ? Math.sqrt(widths.reduce((sum, w) => sum + (w - avgW) ** 2, 0) / widths.length) / avgW : 0;
+      const hVariance = avgH > 0 ? Math.sqrt(heights.reduce((sum, h) => sum + (h - avgH) ** 2, 0) / heights.length) / avgH : 0;
+      const combinedVariance = (wVariance + hVariance) / 2;
+      if (combinedVariance < 0.3) {
+        const bounds = getAbsBounds(node);
+        const layoutMode = "layoutMode" in container && (container.layoutMode === "HORIZONTAL" || container.layoutMode === "VERTICAL") ? container.layoutMode : "NONE";
+        results.push({
+          containerNodeId: node.id,
+          containerName: node.name,
+          layoutMode,
+          childCount: visibleChildren.length,
+          childAvgWidth: Math.round(avgW),
+          childAvgHeight: Math.round(avgH),
+          childSizeVariance: Math.round(combinedVariance * 1e3) / 1e3,
+          hasDistinctChild: hasDistinctFill(visibleChildren),
+          x: bounds.x,
+          y: bounds.y,
+          width: bounds.width,
+          height: bounds.height
+        });
+      }
+    }
+    for (const child of container.children) {
+      if (results.length >= MAX_REPEATING_GROUPS) break;
+      collectRepeatingGroups(child, results, depth + 1);
+    }
+  }
+}
+function hasImageFill(node) {
+  if (!("fills" in node)) return false;
+  const fills = node.fills;
+  if (fills === figma.mixed || !Array.isArray(fills)) return false;
+  return fills.some((f) => f.type === "IMAGE" && f.visible !== false);
+}
+function collectImageNodes(node, results, depth) {
+  if (depth > MAX_DEPTH2 || results.length >= MAX_IMAGE_NODES) return;
+  if (!isVisible(node)) return;
+  if (hasImageFill(node)) {
+    const bounds = getAbsBounds(node);
+    const parent = node.parent;
+    let isFullBleed = false;
+    if (parent && "absoluteBoundingBox" in parent) {
+      const parentBounds = parent.absoluteBoundingBox;
+      if (parentBounds && parentBounds.width > 0 && parentBounds.height > 0) {
+        const parentArea = parentBounds.width * parentBounds.height;
+        const nodeArea = bounds.width * bounds.height;
+        isFullBleed = nodeArea / parentArea > 0.9;
+      }
+    }
+    let hasTextSibling = false;
+    if (parent && "children" in parent) {
+      hasTextSibling = parent.children.some(
+        (sibling) => sibling.id !== node.id && sibling.type === "TEXT" && isVisible(sibling)
+      );
+    }
+    results.push({
+      nodeId: node.id,
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.width,
+      height: bounds.height,
+      isFullBleed,
+      hasTextSibling,
+      parentName: parent ? parent.name : ""
+    });
+  }
+  if (hasChildren(node)) {
+    for (const child of node.children) {
+      if (results.length >= MAX_IMAGE_NODES) break;
+      collectImageNodes(child, results, depth + 1);
+    }
+  }
+}
+function collectIconFrames(node, results, depth) {
+  if (depth > MAX_DEPTH2 || results.length >= MAX_ICON_FRAMES) return;
+  if (!isVisible(node)) return;
+  if (hasChildren(node)) {
+    const container = node;
+    const bounds = getAbsBounds(node);
+    const size = Math.max(bounds.width, bounds.height);
+    const minSize = Math.min(bounds.width, bounds.height);
+    if (minSize >= 8 && size <= 48) {
+      let hasVectorChild = false;
+      let hasTextChild = false;
+      for (const child of container.children) {
+        if (child.type === "VECTOR" || child.type === "BOOLEAN_OPERATION" || child.type === "LINE" || child.type === "STAR" || child.type === "ELLIPSE" || child.type === "POLYGON") {
+          hasVectorChild = true;
+        }
+        if (child.type === "INSTANCE") {
+          hasVectorChild = true;
+        }
+        if (child.type === "TEXT") {
+          hasTextChild = true;
+        }
+      }
+      if (hasVectorChild) {
+        results.push({
+          nodeId: node.id,
+          x: bounds.x,
+          y: bounds.y,
+          width: bounds.width,
+          height: bounds.height,
+          hasVectorChild,
+          hasTextChild,
+          parentName: node.parent ? node.parent.name : ""
+        });
+        return;
+      }
+    }
+    for (const child of container.children) {
+      if (results.length >= MAX_ICON_FRAMES) break;
+      collectIconFrames(child, results, depth + 1);
+    }
+  }
+}
+function collectPairedStacks(node, results, depth) {
+  if (depth > MAX_DEPTH2 || results.length >= MAX_PAIRED_STACKS) return;
+  if (!isVisible(node)) return;
+  if (hasChildren(node)) {
+    const container = node;
+    if ("layoutMode" in container && container.layoutMode === "VERTICAL") {
+      const visibleChildren = container.children.filter(isVisible);
+      if (visibleChildren.length >= 4 && visibleChildren.length % 2 === 0) {
+        const heights = visibleChildren.map((c) => getAbsBounds(c).height);
+        const headerHeights = [];
+        const contentHeights = [];
+        for (let i = 0; i < heights.length; i++) {
+          if (i % 2 === 0) headerHeights.push(heights[i]);
+          else contentHeights.push(heights[i]);
+        }
+        const headerAvg = headerHeights.reduce((a, b) => a + b, 0) / headerHeights.length;
+        const contentAvg = contentHeights.reduce((a, b) => a + b, 0) / contentHeights.length;
+        if (headerAvg > 0 && contentAvg > 0 && headerAvg < contentAvg) {
+          const headerVariance = headerAvg > 0 ? Math.sqrt(headerHeights.reduce((sum, h) => sum + (h - headerAvg) ** 2, 0) / headerHeights.length) / headerAvg : 0;
+          if (headerVariance < 0.3) {
+            const bounds = getAbsBounds(node);
+            results.push({
+              containerNodeId: node.id,
+              containerName: node.name,
+              pairCount: visibleChildren.length / 2,
+              headerAvgHeight: Math.round(headerAvg),
+              contentAvgHeight: Math.round(contentAvg),
+              x: bounds.x,
+              y: bounds.y
+            });
+          }
+        }
+      }
+    }
+    for (const child of container.children) {
+      collectPairedStacks(child, results, depth + 1);
+    }
+  }
+}
+function collectOverlays(node, results, depth) {
+  if (depth > MAX_DEPTH2 || results.length >= MAX_OVERLAYS) return;
+  if (!isVisible(node)) return;
+  if (hasChildren(node)) {
+    const container = node;
+    const parentBounds = getAbsBounds(node);
+    const parentArea = parentBounds.width * parentBounds.height;
+    if (parentArea > 0) {
+      for (const child of container.children) {
+        if (!isVisible(child)) continue;
+        const childBounds = getAbsBounds(child);
+        const childArea = childBounds.width * childBounds.height;
+        const coverPercent = childArea / parentArea;
+        if (coverPercent > 0.7) {
+          let hasSemiTransparentSibling = false;
+          for (const sibling of container.children) {
+            if (sibling.id === child.id) continue;
+            if (!isVisible(sibling)) continue;
+            if ("opacity" in sibling && sibling.opacity < 0.8) {
+              hasSemiTransparentSibling = true;
+              break;
+            }
+            if ("fills" in sibling) {
+              const fills = sibling.fills;
+              if (fills !== figma.mixed && Array.isArray(fills)) {
+                for (const fill of fills) {
+                  if (fill.type === "SOLID" && fill.visible !== false && fill.opacity !== void 0 && fill.opacity < 0.8) {
+                    hasSemiTransparentSibling = true;
+                    break;
+                  }
+                }
+              }
+            }
+            if (hasSemiTransparentSibling) break;
+          }
+          results.push({
+            nodeId: child.id,
+            nodeName: child.name,
+            width: childBounds.width,
+            height: childBounds.height,
+            coversPercentOfParent: Math.round(coverPercent * 100) / 100,
+            hasSemiTransparentSibling
+          });
+        }
+      }
+    }
+    for (const child of container.children) {
+      collectOverlays(child, results, depth + 1);
+    }
+  }
+}
+function runStructuralScan(node) {
+  const textNodes = [];
+  const repeatingGroups = [];
+  const imageNodes = [];
+  const iconFrames = [];
+  const pairedStacks = [];
+  const overlays = [];
+  collectTextNodes2(node, textNodes, 0);
+  collectRepeatingGroups(node, repeatingGroups, 0);
+  collectImageNodes(node, imageNodes, 0);
+  collectIconFrames(node, iconFrames, 0);
+  collectPairedStacks(node, pairedStacks, 0);
+  collectOverlays(node, overlays, 0);
+  const rawFocusable = collectFocusableElements(node);
+  const focusableElements = rawFocusable.map((n) => {
+    const bounds = getAbsBounds(n);
+    return {
+      nodeId: n.id,
+      name: n.name,
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.width,
+      height: bounds.height
+    };
+  });
+  textNodes.sort((a, b) => b.fontSize - a.fontSize);
+  return {
+    textNodes: textNodes.slice(0, MAX_TEXT_NODES),
+    repeatingGroups: repeatingGroups.slice(0, MAX_REPEATING_GROUPS),
+    imageNodes: imageNodes.slice(0, MAX_IMAGE_NODES),
+    iconFrames: iconFrames.slice(0, MAX_ICON_FRAMES),
+    pairedStacks: pairedStacks.slice(0, MAX_PAIRED_STACKS),
+    overlays: overlays.slice(0, MAX_OVERLAYS),
+    focusableElements
+  };
+}
+
 // src/a11y-blueline.ts
 var SIDEBAR_WIDTH = 320;
 var SIDEBAR_PAD = 16;
@@ -4034,6 +4401,19 @@ async function loadFonts2() {
   await figma.loadFontAsync({ family: "Inter", style: "Bold" });
   await figma.loadFontAsync({ family: "Inter", style: "Medium" });
   await figma.loadFontAsync({ family: "Inter", style: "SemiBold" });
+}
+async function embedStructuralScan(node, parent) {
+  const scan = runStructuralScan(node);
+  const json = JSON.stringify(scan);
+  const existing = parent.findOne((n) => n.name === ".structural-scan" && n.type === "TEXT");
+  if (existing) existing.remove();
+  const scanNode = figma.createText();
+  scanNode.name = ".structural-scan";
+  scanNode.characters = json;
+  scanNode.fontSize = 1;
+  scanNode.opacity = 0;
+  scanNode.locked = true;
+  parent.appendChild(scanNode);
 }
 function createText(content, size, weight = "Regular", color) {
   const text = figma.createText();
@@ -4397,6 +4777,8 @@ async function generateBlueline(node, tier1, tier2, options) {
       page.appendChild(cardsContainer);
     }
   }
+  figma.ui.postMessage({ type: "a11y-status", message: "Running structural scan..." });
+  await embedStructuralScan(node, page);
   const viewNodes = [node];
   if (sidebar) viewNodes.push(sidebar);
   figma.viewport.scrollAndZoomIntoView(viewNodes);
@@ -4518,6 +4900,8 @@ async function generateBluelinePanels(node, tier1, tier2) {
     firstSection.push(section);
     panelX += sectionW + PANEL_GAP;
   }
+  figma.ui.postMessage({ type: "a11y-status", message: "Running structural scan..." });
+  await embedStructuralScan(node, page);
   figma.viewport.scrollAndZoomIntoView(firstSection);
   return { frameId: node.id, tier2Sections: tier2 };
 }
@@ -4556,6 +4940,7 @@ async function placeCategoryBadge(targetNodeId, index, categoryKey) {
 globalThis.__generateBlueline = generateBlueline;
 globalThis.__generateBluelinePanels = generateBluelinePanels;
 globalThis.__placeCategoryBadge = placeCategoryBadge;
+globalThis.__runStructuralScan = runStructuralScan;
 function hexToFigmaRGB(hex) {
   hex = hex.replace(/^#/, "");
   if (!/^[0-9A-Fa-f]+$/.test(hex)) throw new Error('Invalid hex color: "' + hex + '"');
