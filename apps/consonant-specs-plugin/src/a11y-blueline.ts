@@ -1,6 +1,7 @@
 // Waiver: annotation text uses manual fontName — these are spec overlays, not themed UI
 import { generateFocusIndicators, collectFocusableElements } from './spec-focus-indicators';
 import { detectFocusOrder, FocusOrderEntry } from './a11y-focus-order';
+import { runStructuralScan } from './a11y-structural-scan';
 
 const SIDEBAR_WIDTH = 320;
 const SIDEBAR_PAD = 16;
@@ -202,6 +203,23 @@ async function loadFonts() {
   await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
   await figma.loadFontAsync({ family: 'Inter', style: 'Medium' });
   await figma.loadFontAsync({ family: 'Inter', style: 'SemiBold' });
+}
+
+async function embedStructuralScan(node: SceneNode, parent: BaseNode & ChildrenMixin): Promise<void> {
+  const scan = runStructuralScan(node);
+  const json = JSON.stringify(scan);
+
+  // Remove any existing scan node
+  const existing = parent.findOne(n => n.name === '.structural-scan' && n.type === 'TEXT');
+  if (existing) existing.remove();
+
+  const scanNode = figma.createText();
+  scanNode.name = '.structural-scan';
+  scanNode.characters = json;
+  scanNode.fontSize = 1;
+  scanNode.opacity = 0;
+  scanNode.locked = true;
+  parent.appendChild(scanNode);
 }
 
 function createText(content: string, size: number, weight: 'Regular' | 'Bold' | 'Medium' | 'SemiBold' = 'Regular', color?: RGB): TextNode {
@@ -650,6 +668,10 @@ export async function generateBlueline(
     }
   }
 
+  // Embed structural scan data for Claude
+  figma.ui.postMessage({ type: 'a11y-status', message: 'Running structural scan...' });
+  await embedStructuralScan(node, page);
+
   // Zoom to show the annotation area
   const viewNodes: SceneNode[] = [node];
   if (sidebar) viewNodes.push(sidebar);
@@ -814,6 +836,10 @@ export async function generateBluelinePanels(
 
     panelX += sectionW + PANEL_GAP;
   }
+
+  // Embed structural scan data for Claude
+  figma.ui.postMessage({ type: 'a11y-status', message: 'Running structural scan...' });
+  await embedStructuralScan(node, page);
 
   // Zoom to show all panels
   figma.viewport.scrollAndZoomIntoView(firstSection);
