@@ -1,3 +1,4 @@
+// Waiver: annotation text uses manual fontName — these are spec overlays, not themed UI
 import { getTextProps } from './utils';
 import { matchTypography } from './tokens';
 

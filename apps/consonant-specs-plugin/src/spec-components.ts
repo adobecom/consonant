@@ -1,3 +1,4 @@
+// Waiver: annotation text uses manual fontName — these are spec overlays, not themed UI
 import { figmaColorToHex, getNodeFills } from './utils';
 import { matchColor, detectNodeColorRole } from './tokens';
 

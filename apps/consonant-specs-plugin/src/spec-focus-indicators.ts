@@ -331,6 +331,7 @@ export async function generateFocusIndicators(node: SceneNode): Promise<void> {
     rect.strokeWeight = FOCUS_STROKE;
     rect.strokeAlign = 'CENTER';
     rect.cornerRadius = getCornerRadius(el);
+    rect.layoutPositioning = 'ABSOLUTE';
     parent.appendChild(rect);
   }
 

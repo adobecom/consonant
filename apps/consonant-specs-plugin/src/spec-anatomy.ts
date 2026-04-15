@@ -1,6 +1,7 @@
 import { figmaColorToHex, getNodeFills, getNodeStrokes, getTextProps, getCornerRadius, getEffects, getAutoLayoutProps } from './utils';
 import { matchColor, matchTypography, matchRadius, detectNodeColorRole } from './tokens';
 
+// Waiver: annotation text uses manual fontName — these are spec overlays, not themed UI
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const MARKER_COLOR: RGB = { r: 0.09, g: 0.60, b: 0.97 };    // #1899F9 blue
