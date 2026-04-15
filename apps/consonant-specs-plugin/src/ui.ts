@@ -110,7 +110,7 @@ function updateTokenStatus(count: number, version: string) {
 }
 
 function postToPlugin(type: string, payload?: Record<string, unknown>) {
-  parent.postMessage({ pluginMessage: { type, ...payload } }, '*');
+  parent.postMessage({ pluginMessage: { type, ...payload } }, 'https://www.figma.com');
 }
 
 window.addEventListener('message', (event) => {
@@ -290,8 +290,9 @@ function renderPropertyList(properties: PropertyEntry[]) {
   if (!list || properties.length === 0) return;
 
   list.innerHTML = properties.map((prop) => {
-    const swatch = prop.colorSwatch
-      ? `<span class="color-swatch" style="background:${prop.colorSwatch}"></span>`
+    const safeColor = prop.colorSwatch && CSS.supports('color', prop.colorSwatch) ? prop.colorSwatch : '';
+    const swatch = safeColor
+      ? `<span class="color-swatch" style="background:${safeColor}"></span>`
       : '';
     const badge = prop.token
       ? `<span class="token-badge token-badge-match">${esc(prop.token)}</span>`
@@ -480,15 +481,8 @@ function showLocalizeBridgePrompt(data: { frameName: string; frameId: string; la
         <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-    document.getElementById('copyLocalizeCmd')?.addEventListener('click', () => {
-      const ta = document.createElement('textarea');
-      ta.value = cmd;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
+    document.getElementById('copyLocalizeCmd')?.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(cmd);
       const btn = document.getElementById('copyLocalizeCmd');
       if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); }
     });
@@ -554,15 +548,8 @@ function showAiFillInstruction(mode?: string, sections?: string[], frameName?: s
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-    document.getElementById('copyFillCmd')?.addEventListener('click', () => {
-      const ta = document.createElement('textarea');
-      ta.value = cmd;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
+    document.getElementById('copyFillCmd')?.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(cmd);
       const btn = document.getElementById('copyFillCmd');
       if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); }
     });
