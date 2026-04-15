@@ -3789,8 +3789,10 @@ async function generateFocusIndicators(node) {
     rect.strokeWeight = FOCUS_STROKE;
     rect.strokeAlign = "CENTER";
     rect.cornerRadius = getCornerRadius2(el);
-    rect.layoutPositioning = "ABSOLUTE";
     parent.appendChild(rect);
+    if ("layoutMode" in parent && parent.layoutMode !== "NONE") {
+      rect.layoutPositioning = "ABSOLUTE";
+    }
   }
   figma.notify(`${filtered.length} focus indicators added.`);
 }

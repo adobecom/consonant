@@ -331,8 +331,11 @@ export async function generateFocusIndicators(node: SceneNode): Promise<void> {
     rect.strokeWeight = FOCUS_STROKE;
     rect.strokeAlign = 'CENTER';
     rect.cornerRadius = getCornerRadius(el);
-    rect.layoutPositioning = 'ABSOLUTE';
     parent.appendChild(rect);
+    // Only set absolute positioning if the parent has auto-layout
+    if ('layoutMode' in parent && (parent as FrameNode).layoutMode !== 'NONE') {
+      rect.layoutPositioning = 'ABSOLUTE';
+    }
   }
 
   figma.notify(`${filtered.length} focus indicators added.`);
