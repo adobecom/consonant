@@ -5726,7 +5726,7 @@ figma.ui.onmessage = async (msg) => {
         }
         figma.notify(`Blueline created for "${sel[0].name}"`);
       } catch (e) {
-        const errorMsg = e instanceof Error ? e.message : "Unknown error";
+        const errorMsg = e instanceof Error ? e.message : String(e);
         figma.ui.postMessage({ type: "a11y-status", message: `Error: ${errorMsg}` });
         figma.notify(`Blueline failed: ${errorMsg}`, { error: true });
       }
