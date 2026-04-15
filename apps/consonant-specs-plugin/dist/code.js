@@ -4402,7 +4402,7 @@ async function loadFonts2() {
   await figma.loadFontAsync({ family: "Inter", style: "Regular" });
   await figma.loadFontAsync({ family: "Inter", style: "Bold" });
   await figma.loadFontAsync({ family: "Inter", style: "Medium" });
-  await figma.loadFontAsync({ family: "Inter", style: "SemiBold" });
+  await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
 }
 async function embedStructuralScan(node, parent) {
   const scan = runStructuralScan(node);
@@ -4550,7 +4550,7 @@ function createNumberedBadge(index, categoryKey) {
   badge.paddingLeft = 8;
   badge.paddingRight = 8;
   badge.itemSpacing = 4;
-  const text = createText(`${index}`, 12, "SemiBold", textColor);
+  const text = createText(`${index}`, 12, "Semi Bold", textColor);
   badge.appendChild(text);
   if (categoryKey) {
     const icon = createCategoryIcon(categoryKey, textColor);
@@ -4669,7 +4669,7 @@ function createGroupedCard(groupTitle, keys) {
       if (icon) iconBadge.appendChild(icon);
       headerRow.appendChild(iconBadge);
     }
-    const labelText = createText(title, 13, "SemiBold", TEXT_PRIMARY);
+    const labelText = createText(title, 13, "Semi Bold", TEXT_PRIMARY);
     headerRow.appendChild(labelText);
     section.appendChild(headerRow);
     const placeholder = createText("Awaiting AI fill...", 11, "Regular", TEXT_PRIMARY);
@@ -4709,7 +4709,7 @@ async function generateBlueline(node, tier1, tier2, options) {
     sidebar.strokeWeight = 1;
     sidebar.strokeAlign = "INSIDE";
     sidebar.cornerRadius = 8;
-    const headerText = createText("Accessibility Annotations", 15, "SemiBold", TEXT_PRIMARY);
+    const headerText = createText("Accessibility Annotations", 15, "Semi Bold", TEXT_PRIMARY);
     headerText.opacity = 0.95;
     sidebar.appendChild(headerText);
     const focusSection = createFocusOrderSection(focusEntries);
