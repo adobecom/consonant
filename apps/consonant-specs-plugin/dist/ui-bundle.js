@@ -21,6 +21,21 @@
   function esc(s) {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
+  async function copyToClipboard(text) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
   var tabs = document.querySelectorAll(".tab");
   var panels = document.querySelectorAll(".tab-panel");
   tabs.forEach((tab) => {
@@ -286,7 +301,7 @@
     list.querySelectorAll(".property-row").forEach((row) => {
       row.addEventListener("click", () => {
         const value = row.dataset.copy || "";
-        navigator.clipboard.writeText(value);
+        copyToClipboard(value);
       });
     });
   }
@@ -449,7 +464,7 @@
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
       (_a23 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a23.addEventListener("click", async () => {
-        await navigator.clipboard.writeText(cmd);
+        await copyToClipboard(cmd);
         const btn = document.getElementById("copyLocalizeCmd");
         if (btn) {
           btn.textContent = "Copied!";
@@ -519,7 +534,7 @@
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
       (_a23 = document.getElementById("copyFillCmd")) == null ? void 0 : _a23.addEventListener("click", async () => {
-        await navigator.clipboard.writeText(cmd);
+        await copyToClipboard(cmd);
         const btn = document.getElementById("copyFillCmd");
         if (btn) {
           btn.textContent = "Copied!";
