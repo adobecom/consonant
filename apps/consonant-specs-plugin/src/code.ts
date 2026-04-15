@@ -4,11 +4,13 @@ import { specIt } from './spec-it';
 import { runS2AAudit, runFullAlign, runTextColorsAlign } from './s2a-audit';
 import { localize, collectSourceText, TranslationProvider } from './localize';
 import { generateBlueline, generateBluelinePanels, placeCategoryBadge } from './a11y-blueline';
+import { runStructuralScan } from './a11y-structural-scan';
 
 // Expose for eval/EXECUTE_CODE access
 (globalThis as any).__generateBlueline = generateBlueline;
 (globalThis as any).__generateBluelinePanels = generateBluelinePanels;
 (globalThis as any).__placeCategoryBadge = placeCategoryBadge;
+(globalThis as any).__runStructuralScan = runStructuralScan;
 
 // ── Bridge method helpers ─────────────────────────────────────────────────
 
