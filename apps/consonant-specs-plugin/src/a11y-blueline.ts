@@ -209,14 +209,20 @@ async function embedStructuralScan(node: SceneNode, parent: BaseNode & ChildrenM
   const scan = runStructuralScan(node);
   const json = JSON.stringify(scan);
 
-  // Remove any existing scan node
-  const existing = parent.findOne(n => n.name === '.structural-scan' && n.type === 'TEXT');
-  if (existing) existing.remove();
+  // Remove any existing scan node (direct children only — avoid expensive deep tree walk)
+  for (const child of parent.children) {
+    if (child.name === '.structural-scan' && child.type === 'TEXT') {
+      child.remove();
+      break;
+    }
+  }
 
+  // Font must be loaded before setting characters on a TextNode
+  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
   const scanNode = figma.createText();
   scanNode.name = '.structural-scan';
-  scanNode.characters = json;
   scanNode.fontSize = 1;
+  scanNode.characters = json;
   scanNode.opacity = 0;
   scanNode.locked = true;
   parent.appendChild(scanNode);
