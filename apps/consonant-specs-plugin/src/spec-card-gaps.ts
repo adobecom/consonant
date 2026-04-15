@@ -1,3 +1,4 @@
+// Waiver: annotation text uses manual fontName — these are spec overlays, not themed UI
 import { matchSpacing } from './tokens';
 
 const BLUE_OVERLAY: RGBA = { r: 0.05, g: 0.41, b: 0.83, a: 0.20 };

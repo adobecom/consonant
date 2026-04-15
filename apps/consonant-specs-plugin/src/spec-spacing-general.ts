@@ -1,3 +1,4 @@
+// Waiver: annotation text uses manual fontName — these are spec overlays, not themed UI
 import { matchSpacing } from './tokens';
 
 // Colors matching user preferences

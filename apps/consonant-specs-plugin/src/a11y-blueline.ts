@@ -1,3 +1,4 @@
+// Waiver: annotation text uses manual fontName — these are spec overlays, not themed UI
 import { generateFocusIndicators, collectFocusableElements } from './spec-focus-indicators';
 import { detectFocusOrder, FocusOrderEntry } from './a11y-focus-order';
 
