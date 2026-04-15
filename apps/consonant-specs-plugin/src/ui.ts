@@ -712,7 +712,13 @@ let bridgeUserDisconnected = false; // true when user clicks Disconnect
 // arbitrary code in the Figma sandbox.
 // NOTE: This plugin must remain INTERNAL — the eval() path should never be exposed
 // in a publicly distributed plugin.
+//
+// bridgeSessionNonce is null until FILE_INFO is sent to the server. During this
+// window EXECUTE_CODE is allowed without nonce validation — the server can't
+// echo a nonce it hasn't received yet. Once FILE_INFO is sent the nonce is
+// enforced for all subsequent requests.
 let bridgeSessionNonce: string | null = null;
+let bridgeNonceSent = false;
 function generateNonce(): string {
   const arr = new Uint8Array(16);
   crypto.getRandomValues(arr);
@@ -821,7 +827,7 @@ function bridgeConnect() {
   const btn = document.getElementById('bridgeConnectBtn') as HTMLButtonElement;
   if (btn) { btn.textContent = 'Connecting...'; btn.disabled = true; }
 
-  const WS_PORTS = [9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+  const WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
   let found = false;
   let pending = WS_PORTS.length;
 
@@ -932,9 +938,11 @@ function bridgeReconnectToPort(port: number) {
 }
 
 function initBridgeConnection(ws: WebSocket) {
-  // Generate a new session nonce for this connection. The nonce is sent to the
-  // MCP server in the PLUGIN_HELLO so it can include it in EXECUTE_CODE requests.
-  bridgeSessionNonce = generateNonce();
+  // Generate a new session nonce for this connection. The nonce is NOT enforced
+  // until FILE_INFO has been sent to the server (bridgeNonceSent flag).
+  const nonce = generateNonce();
+  bridgeSessionNonce = null; // clear until FILE_INFO is sent
+  bridgeNonceSent = false;
 
   // Send FILE_INFO to the server after GET_FILE_INFO from code.ts
   // fileKey is REQUIRED by the server — without it, the client stays "pending" and gets dropped after 30s
@@ -946,8 +954,11 @@ function initBridgeConnection(ws: WebSocket) {
       info.fileKey = 'local-' + Date.now();
     }
     info.pluginVersion = '1.0.0';
-    info.sessionNonce = bridgeSessionNonce; // MCP server must echo this in EXECUTE_CODE params
+    info.sessionNonce = nonce; // MCP server must echo this in EXECUTE_CODE params
     ws.send(JSON.stringify({ type: 'FILE_INFO', data: info }));
+    // Now activate nonce enforcement — the server has the nonce
+    bridgeSessionNonce = nonce;
+    bridgeNonceSent = true;
     appendBridgeLog('File info sent: ' + (info.fileName || 'unknown') + ' (key: ' + (info.fileKey || '?') + ')');
   }).catch(() => {});
 
@@ -975,8 +986,10 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
 
       // Gate EXECUTE_CODE behind the session nonce. Any process can connect to the
       // localhost WS port, but only the MCP server (which received the nonce via FILE_INFO)
-      // can supply the correct value. Reject silently to avoid leaking the nonce.
-      if (message.method === 'EXECUTE_CODE') {
+      // can supply the correct value.
+      // Before FILE_INFO is sent (bridgeNonceSent === false), we allow commands through
+      // because the server can't echo a nonce it hasn't received yet.
+      if (message.method === 'EXECUTE_CODE' && bridgeNonceSent) {
         if (!bridgeSessionNonce || (message.params || {}).sessionNonce !== bridgeSessionNonce) {
           if (ws.readyState === 1) {
             ws.send(JSON.stringify({ id: message.id, error: 'Unauthorized: missing or invalid sessionNonce' }));
@@ -1010,6 +1023,7 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
     bridgeStopKeepalive();
     bridgeWs = null;
     bridgeSessionNonce = null; // invalidate nonce so it can't be reused after disconnect
+    bridgeNonceSent = false;
     bridgeConnected = false;
     updateBridgeUi();
 

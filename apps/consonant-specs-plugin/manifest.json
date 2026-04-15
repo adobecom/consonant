@@ -18,6 +18,9 @@
       "https://translation.googleapis.com",
       "https://api.cognitive.microsofttranslator.com",
       "http://localhost:9300",
+      "ws://localhost:9220",
+      "ws://localhost:9221",
+      "ws://localhost:9222",
       "ws://localhost:9223",
       "ws://localhost:9224",
       "ws://localhost:9225",
@@ -29,6 +32,6 @@
       "ws://localhost:9231",
       "ws://localhost:9232"
     ],
-    "reasoning": "Localize tab calls translation APIs. Bridge tab connects to consonant-mcp HTTP on port 9300. WebSocket ports 9223-9232 connect to figma-console MCP for Claude Code integration."
+    "reasoning": "Localize tab calls translation APIs. Bridge tab connects to consonant-mcp HTTP on port 9300. WebSocket ports 9220-9222 connect to consonant-mcp, 9223-9232 to figma-console MCP (fallback)."
   }
 }
