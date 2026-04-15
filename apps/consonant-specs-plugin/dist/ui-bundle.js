@@ -104,7 +104,7 @@
     el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span>`;
   }
   function postToPlugin(type, payload) {
-    parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "*");
+    parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
   }
   window.addEventListener("message", (event) => {
     const msg = event.data.pluginMessage;
@@ -168,7 +168,7 @@
             delete result.requestId;
             pending.resolve(result);
           } else {
-            pending.resolve({ success: false, error: msg.error || "Unknown error" });
+            pending.reject(new Error(msg.error || "Unknown error"));
           }
         }
         break;
@@ -273,7 +273,8 @@
     const list = document.getElementById("propertyList");
     if (!list || properties.length === 0) return;
     list.innerHTML = properties.map((prop) => {
-      const swatch = prop.colorSwatch ? `<span class="color-swatch" style="background:${prop.colorSwatch}"></span>` : "";
+      const safeColor = prop.colorSwatch && CSS.supports("color", prop.colorSwatch) ? prop.colorSwatch : "";
+      const swatch = safeColor ? `<span class="color-swatch" style="background:${safeColor}"></span>` : "";
       const badge = prop.token ? `<span class="token-badge token-badge-match">${esc(prop.token)}</span>` : `<span class="token-badge token-badge-miss">No token</span>`;
       const copyValue = prop.token ? `var(${prop.token})` : prop.value;
       return `<div class="property-row" data-copy="${esc(copyValue)}" title="Click to copy">
@@ -372,7 +373,7 @@
     const el = document.getElementById("specStatus");
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
-  var KEYED_PROVIDERS = /* @__PURE__ */ new Set(["deepl", "google", "azure", "anthropic"]);
+  var KEYED_PROVIDERS = /* @__PURE__ */ new Set(["deepl", "google", "azure"]);
   var providerSelect = document.getElementById("providerSelect");
   var apiKeySection = document.getElementById("apiKeySection");
   function syncKeySection() {
@@ -447,15 +448,8 @@
         <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a23 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a23.addEventListener("click", () => {
-        const ta = document.createElement("textarea");
-        ta.value = cmd;
-        ta.style.position = "fixed";
-        ta.style.opacity = "0";
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
+      (_a23 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a23.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(cmd);
         const btn = document.getElementById("copyLocalizeCmd");
         if (btn) {
           btn.textContent = "Copied!";
@@ -524,15 +518,8 @@
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a23 = document.getElementById("copyFillCmd")) == null ? void 0 : _a23.addEventListener("click", () => {
-        const ta = document.createElement("textarea");
-        ta.value = cmd;
-        ta.style.position = "fixed";
-        ta.style.opacity = "0";
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
+      (_a23 = document.getElementById("copyFillCmd")) == null ? void 0 : _a23.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(cmd);
         const btn = document.getElementById("copyFillCmd");
         if (btn) {
           btn.textContent = "Copied!";
@@ -660,6 +647,12 @@
   var bridgeReconnectTimer = null;
   var bridgeReconnectAttempts = 0;
   var bridgeUserDisconnected = false;
+  var bridgeSessionNonce = null;
+  function generateNonce() {
+    const arr = new Uint8Array(16);
+    crypto.getRandomValues(arr);
+    return Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("");
+  }
   var BRIDGE_MAX_RECONNECT = 20;
   var BRIDGE_RECONNECT_BASE_MS = 2e3;
   var bridgePendingRequests = /* @__PURE__ */ new Map();
@@ -863,20 +856,22 @@
     }
   }
   function initBridgeConnection(ws) {
+    bridgeSessionNonce = generateNonce();
     sendBridgeCommand("GET_FILE_INFO", {}).then((result) => {
-      if (ws.readyState !== 1 || !result || result.success === false) return;
+      if (ws.readyState !== 1 || !result) return;
       const info = result.fileInfo || result;
       if (!info.fileKey) {
         info.fileKey = "local-" + Date.now();
       }
       info.pluginVersion = "1.0.0";
+      info.sessionNonce = bridgeSessionNonce;
       ws.send(JSON.stringify({ type: "FILE_INFO", data: info }));
       appendBridgeLog("File info sent: " + (info.fileName || "unknown") + " (key: " + (info.fileKey || "?") + ")");
     }).catch(() => {
     });
     sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
       var _a23, _b;
-      if (ws.readyState !== 1 || !result || result.success === false) return;
+      if (ws.readyState !== 1 || !result) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
       appendBridgeLog("Variables synced: " + (((_b = (_a23 = result.data) == null ? void 0 : _a23.variables) == null ? void 0 : _b.length) || 0) + " vars");
     }).catch(() => {
@@ -891,6 +886,15 @@
           return;
         }
         if (!message.id || !message.method) return;
+        if (message.method === "EXECUTE_CODE") {
+          if (!bridgeSessionNonce || (message.params || {}).sessionNonce !== bridgeSessionNonce) {
+            if (ws.readyState === 1) {
+              ws.send(JSON.stringify({ id: message.id, error: "Unauthorized: missing or invalid sessionNonce" }));
+            }
+            appendBridgeLog("\u26A0 EXECUTE_CODE rejected \u2014 invalid nonce");
+            return;
+          }
+        }
         appendBridgeLog("\u2190 " + message.method);
         Promise.resolve(bridgeHandleMethod(message.method, message.params || {})).then((result) => {
           if (ws.readyState === 1) {
@@ -909,6 +913,7 @@
     ws.onclose = (event) => {
       bridgeStopKeepalive();
       bridgeWs = null;
+      bridgeSessionNonce = null;
       bridgeConnected = false;
       updateBridgeUi();
       const wasReplaced = event.code === 1e3 && (event.reason === "Replaced by new connection" || event.reason === "Replaced by same file reconnection");
