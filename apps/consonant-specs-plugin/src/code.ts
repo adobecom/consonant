@@ -357,8 +357,8 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
       const fontName = textNode.fontName;
       if (fontName !== figma.mixed) await figma.loadFontAsync(fontName);
       else await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
-      textNode.characters = params.text;
       if (params.fontSize) textNode.fontSize = params.fontSize;
+      textNode.characters = params.text;
       return { node: { id: textNode.id, name: textNode.name, characters: textNode.characters } };
     }
     case 'SET_IMAGE_FILL': {
