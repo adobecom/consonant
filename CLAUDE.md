@@ -25,6 +25,24 @@ That creates a branch, opens a draft PR, and gives you a live Storybook preview 
 
 ---
 
+## Designer daily workflow
+
+**Starting a session (or after a break):**
+Type `/sync` first — pulls any team changes so you're not working on stale code.
+
+**Saving your work:**
+Type `/push "what you did"` — stages your files, commits, and pushes to GitHub. Your PR preview will refresh automatically.
+
+**Still in the same session after a long stretch?**
+If you've been building for a while and haven't pushed yet, just type `/push`. You don't need to restart the session — it works anytime.
+
+**Quick reference:**
+- `/sync` — pull latest before you build
+- `/push "description"` — save and send to GitHub
+- `/start-feature "name"` — only needed when starting brand new work
+
+---
+
 ## Repo structure
 
 ```
