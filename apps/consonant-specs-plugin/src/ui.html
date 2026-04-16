@@ -102,42 +102,56 @@
         <div id="a11yContent">
           <p class="placeholder" id="a11yPlaceholder">Select a frame to analyze</p>
           <div id="a11yControls" style="display:none;">
+
+            <!-- Plugin-generated (always available) -->
+            <div class="section-title" style="margin-bottom:2px;">Plugin-generated</div>
+            <div class="match-checklist" id="a11yPluginList">
+              <label class="match-option"><input type="checkbox" id="a11yPluginFocusIndicators"> Focus Indicators</label>
+              <label class="match-option"><input type="checkbox" id="a11yPluginFocusOrder"> Focus Order</label>
+            </div>
+
+            <hr class="a11y-divider">
+
+            <!-- AI-assisted (bridge-gated) -->
             <div style="display:flex;justify-content:space-between;align-items:center;">
-              <div class="section-title" style="color:var(--accent,#1473E6);">Plugin</div>
-              <button id="a11yCheckAll" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+              <span class="section-title" style="color:#7c3aed;margin-bottom:0;">AI-assisted</span>
+              <span class="a11y-badge" id="a11yBridgeBadge">connect bridge</span>
             </div>
-            <div class="match-checklist">
-              <label class="match-option"><input type="checkbox" id="a11yFocusIndicators"> Focus Indicators</label>
-              <label class="match-option"><input type="checkbox" id="a11yFocusOrder"> Focus Order</label>
+            <div style="display:flex;justify-content:flex-end;">
+              <button id="a11yCheckAllAi" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
             </div>
-            <div class="a11y-tier2-header" id="a11yTier2Header">
-              <span class="section-title" style="color:#7c3aed;">AI-assisted</span>
-              <span class="a11y-tier2-badge" id="a11yTier2Badge">connect bridge</span>
+            <div class="match-checklist" id="a11yItemList">
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusIndicators" disabled> Focus Indicators (AI)</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusOrder" disabled> Focus Order (AI)</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yHeadings" disabled> Heading Hierarchy</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yLandmarksNav" disabled> Landmarks &amp; Navigation</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yNamesAlt" disabled> Names &amp; Alt-Text</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yColorContrast" disabled> Color Contrast</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yAriaKeyboard" disabled> ARIA &amp; Keyboard</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yTargetSize" disabled> Target Size</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yPageSetup" disabled> Page Setup</label>
             </div>
-            <div class="match-checklist" id="a11yTier2List">
-              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yHeadings" disabled> Heading Hierarchy</label>
-              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yLandmarks" disabled> Landmarks</label>
-              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yNames" disabled> Accessible Names</label>
-              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yAltText" disabled> Alt-Text</label>
-              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yAria" disabled> ARIA Roles &amp; Attributes</label>
-              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yKeyboard" disabled> Keyboard Patterns</label>
-              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yDom" disabled> DOM Strategy</label>
-              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11ySimplified" disabled> Auto-Rotation Simplified</label>
-              <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yAutoRotation" disabled> Auto-Rotation</label>
+
+            <!-- Accessibility Notes (bridge-gated) -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+              <span class="section-title" style="margin-bottom:0;">Accessibility Notes</span>
+              <button id="a11yCheckAllNotes" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
             </div>
-            <div id="a11yNotesAccordion" style="margin-top:4px;margin-left:8px;border-left:2px solid var(--border,#e5e5e5);padding-left:8px;">
-              <div id="a11yNotesToggle" style="color:var(--text-secondary,#666);font-size:11px;margin-bottom:4px;cursor:pointer;user-select:none;"><span id="a11yNotesArrow" style="display:inline-block;transition:transform 0.15s;">&#9660;</span> Accessibility Notes</div>
-              <div class="match-checklist" id="a11yScreenReaderList">
-                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yVoiceover" disabled> VoiceOver</label>
-                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yTalkback" disabled> TalkBack</label>
-                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yNarrator" disabled> Narrator</label>
-                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yReactNative" disabled> React Native</label>
-                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yTvNote" disabled> TV Note</label>
-                <label class="match-option a11y-tier2-item"><input type="checkbox" id="a11yGeneralNote" disabled> General Note</label>
-              </div>
+            <div class="match-checklist" id="a11yConditionalList">
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yForms" disabled> Forms</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yCarousel" disabled> Carousel</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yDom" disabled> DOM Strategy</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yMotionMedia" disabled> Motion &amp; Media</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yScreenReader" disabled> Screen Reader Notes</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yReactNative" disabled> React Native</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yTvNote" disabled> TV Note</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yGeneralNote" disabled> General Note</label>
             </div>
+
             <button class="btn" id="generateBluelineBtn" style="margin-top:12px;">Generate Blueline</button>
-            <button class="btn btn-secondary" id="generateBluelinePanelsBtn" style="margin-top:8px;">Generate Blueline with Sections</button>
+            <button class="btn btn-secondary" id="generateBluelinePlainBtn" style="margin-top:4px;">Generate Blueline (Plain Language)</button>
+            <button class="btn" id="generateBluelinePanelsBtn" style="margin-top:4px;">Generate Blueline Panels</button>
+            <button class="btn btn-secondary" id="copyFillCmdBtn" style="margin-top:4px;">Copy Fill Command</button>
             <div id="a11yStatus" style="margin-top:12px;"></div>
           </div>
         </div>
