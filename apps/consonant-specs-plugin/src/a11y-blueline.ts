@@ -16,7 +16,7 @@ const PANEL_PAD = 80;
 const BADGE_COLOR = { r: 0.145, g: 0.494, b: 0.333 }; // #257E55 green
 const NAVY_COLOR = { r: 0.063, g: 0.157, b: 0.294 }; // #10284B dark navy
 const LANDMARK_BG = { r: 0.753, g: 0.898, b: 0.875 }; // #C0E5DF light green
-const TIER2_COLOR = { r: 0.49, g: 0.23, b: 0.93 }; // #7c3aed purple
+const AI_COLOR = { r: 0.49, g: 0.23, b: 0.93 }; // #7c3aed purple
 const TEXT_PRIMARY = { r: 0, g: 0, b: 0 };  // light theme
 const TEXT_WHITE = { r: 0.989, g: 0.989, b: 0.989 };
 const TEXT_SECONDARY_OPACITY = 0.7;
@@ -24,6 +24,26 @@ const BORDER_COLOR = { r: 0, g: 0, b: 0 };
 const BORDER_OPACITY = 0.1;
 const BG_COLOR = { r: 0.989, g: 0.989, b: 0.989 }; // #fcfcfc near-white
 const STROKE_COLOR = { r: 0.89, g: 0.89, b: 0.89 }; // #e3e3e3
+
+// Category overlay colors for panels mode (12% opacity fill, 50% opacity stroke)
+const OVERLAY_COLORS: Record<string, { r: number; g: number; b: number }> = {
+  landmarks: { r: 0.145, g: 0.388, b: 0.921 },
+  ariaRoles: { r: 0.486, g: 0.228, b: 0.929 },
+  aria: { r: 0.486, g: 0.228, b: 0.929 },
+  domStrategy: { r: 0.278, g: 0.333, b: 0.412 },
+  dom: { r: 0.278, g: 0.333, b: 0.412 },
+  headings: { r: 0.855, g: 0.424, b: 0.106 },
+  names: { r: 0.063, g: 0.157, b: 0.294 },
+  accessibleNames: { r: 0.063, g: 0.157, b: 0.294 },
+  altText: { r: 0.608, g: 0.212, b: 0.208 },
+  keyboard: { r: 0.176, g: 0.541, b: 0.431 },
+  keyboardPatterns: { r: 0.176, g: 0.541, b: 0.431 },
+  colorContrast: { r: 0.729, g: 0.192, b: 0.482 },
+  forms: { r: 0.467, g: 0.533, b: 0.176 },
+  targetSize: { r: 0.776, g: 0.608, b: 0.118 },
+};
+
+const PANEL_COLS = 3;
 
 // ---------- Category badge config (matching human reference) ----------
 
@@ -36,6 +56,14 @@ interface CategoryBadgeConfig {
 }
 
 const CATEGORY_BADGE: Record<string, CategoryBadgeConfig> = {
+  // Focus Indicators — navy pill + focus ring icon
+  focusIndicators: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 6 1 C 3.24 1 1 3.24 1 6 C 1 8.76 3.24 11 6 11 C 8.76 11 11 8.76 11 6 C 11 3.24 8.76 1 6 1 Z M 6 3 C 4.34 3 3 4.34 3 6 C 3 7.66 4.34 9 6 9 C 7.66 9 9 7.66 9 6 C 9 4.34 7.66 3 6 3 Z',
+    iconStroke: true,
+  },
   // Focus Order — green circle
   focusOrder: {
     color: BADGE_COLOR,
@@ -43,6 +71,13 @@ const CATEGORY_BADGE: Record<string, CategoryBadgeConfig> = {
     cornerRadius: 16,
   },
   // Accessible Names — navy pill + headphone icon
+  accessibleNames: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 1.3 4.55 L 1.3 4.39 C 1.3 2.965 2.41 1.3 4.01 1.3 C 5.61 1.3 6.72 2.965 6.72 4.39 L 6.72 4.55 M 4.01 9.72 L 4.01 10.11 C 4.01 10.39 4.19 10.7 4.55 10.7 L 5.35 10.7 C 6.35 10.7 7.16 9.89 7.16 8.89 M 0.975 4.55 L 1.6 4.55 L 1.6 8.17 L 0.975 8.17 C 0.64 8.17 0.37 7.9 0.37 7.57 L 0.37 5.15 C 0.37 4.82 0.64 4.55 0.975 4.55 Z M 6.4 4.55 L 7.03 4.55 C 7.36 4.55 7.63 4.82 7.63 5.15 L 7.63 7.57 C 7.63 7.9 7.36 8.17 7.03 8.17 L 6.4 8.17 L 6.4 4.55 Z',
+    iconStroke: true,
+  },
   names: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -51,6 +86,13 @@ const CATEGORY_BADGE: Record<string, CategoryBadgeConfig> = {
     iconStroke: true,
   },
   // ARIA Roles — navy pill + </> code icon
+  ariaRoles: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 4.66 10.4 L 7.26 0 M 9.86 2.6 L 10.98 3.82 C 11.3 4.14 11.3 4.66 10.98 4.98 L 9.86 6.2 M 2.06 6.2 L 0.94 4.98 C 0.62 4.66 0.62 4.14 0.94 3.82 L 2.06 2.6',
+    iconStroke: true,
+  },
   aria: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -59,6 +101,13 @@ const CATEGORY_BADGE: Record<string, CategoryBadgeConfig> = {
     iconStroke: true,
   },
   // Heading Hierarchy — navy pill + H icon
+  headingHierarchy: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 1.5 1 L 1.5 11 M 10.5 1 L 10.5 11 M 1.5 6 L 10.5 6',
+    iconStroke: true,
+  },
   headings: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -81,6 +130,13 @@ const CATEGORY_BADGE: Record<string, CategoryBadgeConfig> = {
     iconStroke: true,
   },
   // Keyboard Patterns — navy pill + keyboard icon
+  keyboardPatterns: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 1 0 L 11 0 C 11.55 0 12 0.45 12 1 L 12 7.5 C 12 8.05 11.55 8.5 11 8.5 L 1 8.5 C 0.45 8.5 0 8.05 0 7.5 L 0 1 C 0 0.45 0.45 0 1 0 Z M 3 6.5 L 9 6.5 M 2.5 2 L 2.5 2 M 5 2 L 5 2 M 7 2 L 7 2 M 9.5 2 L 9.5 2 M 2.5 4.25 L 2.5 4.25 M 5 4.25 L 5 4.25 M 7 4.25 L 7 4.25 M 9.5 4.25 L 9.5 4.25',
+    iconStroke: true,
+  },
   keyboard: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -89,6 +145,13 @@ const CATEGORY_BADGE: Record<string, CategoryBadgeConfig> = {
     iconStroke: true,
   },
   // DOM Strategy — navy pill + tree/structure icon
+  domStrategy: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 6 0 L 6 4 M 6 4 L 2 7 M 6 4 L 10 7 M 2 7 L 2 10 M 10 7 L 10 10',
+    iconStroke: true,
+  },
   dom: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -109,6 +172,86 @@ const CATEGORY_BADGE: Record<string, CategoryBadgeConfig> = {
     textColor: TEXT_WHITE,
     cornerRadius: 6,
     iconPath: 'M 10.5 3 C 9.5 1.2 7.4 0 5.5 0 C 2.5 0 0 2.7 0 6 C 0 9.3 2.5 11 5.5 11 C 8 11 10 9.3 10.5 7 M 10.5 0 L 10.5 3 L 7.5 3',
+    iconStroke: true,
+  },
+  // Color Contrast — navy pill + eye icon
+  colorContrast: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 0 6 C 0 6 2.5 1 6 1 C 9.5 1 12 6 12 6 C 12 6 9.5 11 6 11 C 2.5 11 0 6 0 6 Z M 6 4 C 7.1 4 8 4.9 8 6 C 8 7.1 7.1 8 6 8 C 4.9 8 4 7.1 4 6 C 4 4.9 4.9 4 6 4 Z',
+    iconStroke: true,
+  },
+  // Forms — navy pill + form icon
+  forms: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 1 0 L 11 0 C 11.55 0 12 0.45 12 1 L 12 11 C 12 11.55 11.55 12 11 12 L 1 12 C 0.45 12 0 11.55 0 11 L 0 1 C 0 0.45 0.45 0 1 0 Z M 3 3 L 9 3 M 3 6 L 9 6 M 3 9 L 6 9',
+    iconStroke: true,
+  },
+  // Target Size — navy pill + target icon
+  targetSize: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 6 1 C 3.24 1 1 3.24 1 6 C 1 8.76 3.24 11 6 11 C 8.76 11 11 8.76 11 6 C 11 3.24 8.76 1 6 1 Z M 6 3.5 C 4.62 3.5 3.5 4.62 3.5 6 C 3.5 7.38 4.62 8.5 6 8.5 C 7.38 8.5 8.5 7.38 8.5 6 C 8.5 4.62 7.38 3.5 6 3.5 Z M 6 5 C 5.45 5 5 5.45 5 6 C 5 6.55 5.45 7 6 7 C 6.55 7 7 6.55 7 6 C 7 5.45 6.55 5 6 5 Z',
+    iconStroke: true,
+  },
+  // Reflow & Text Spacing — navy pill + responsive icon
+  reflow: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 0 2 L 8 2 C 8.55 2 9 2.45 9 3 L 9 9 C 9 9.55 8.55 10 8 10 L 0 10 L 0 2 Z M 9 5 L 12 5 L 12 12 L 4 12 L 4 10',
+    iconStroke: true,
+  },
+  // Language — navy pill + globe icon
+  language: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 6 0 C 2.69 0 0 2.69 0 6 C 0 9.31 2.69 12 6 12 C 9.31 12 12 9.31 12 6 C 12 2.69 9.31 0 6 0 Z M 0 6 L 12 6 M 6 0 C 4 2.5 4 9.5 6 12 M 6 0 C 8 2.5 8 9.5 6 12',
+    iconStroke: true,
+  },
+  // Time-Based Media — navy pill + play icon
+  media: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 6 0 C 2.69 0 0 2.69 0 6 C 0 9.31 2.69 12 6 12 C 9.31 12 12 9.31 12 6 C 12 2.69 9.31 0 6 0 Z M 4.5 3.5 L 9 6 L 4.5 8.5 L 4.5 3.5 Z',
+    iconStroke: true,
+  },
+  // Skip Navigation — navy pill + skip icon
+  skipNav: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 1 6 L 8 6 M 8 6 L 5 3 M 8 6 L 5 9 M 11 2 L 11 10',
+    iconStroke: true,
+  },
+  // Page Title — navy pill + title icon
+  pageTitle: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 2 2 L 10 2 M 6 2 L 6 10 M 4 10 L 8 10',
+    iconStroke: true,
+  },
+  // Reduced Motion — navy pill + motion icon
+  reducedMotion: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 1 6 C 2 3 4 1 6 1 C 8 1 10 3 11 6 C 10 9 8 11 6 11 C 4 11 2 9 1 6 Z M 0 0 L 12 12',
+    iconStroke: true,
+  },
+  // Consistent Navigation — navy pill + nav icon
+  consistentNav: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: 'M 0 2 L 12 2 M 0 6 L 12 6 M 0 10 L 8 10',
     iconStroke: true,
   },
   // General Note — navy pill + document icon
@@ -161,16 +304,33 @@ const CATEGORY_BADGE: Record<string, CategoryBadgeConfig> = {
   },
 };
 
-const TIER2_SECTIONS: Record<string, string> = {
+const CARD_SECTIONS: Record<string, string> = {
+  focusIndicators: 'Focus Indicators',
+  focusOrder: 'Focus Order',
   headings: 'Heading Hierarchy',
+  headingHierarchy: 'Heading Hierarchy',
   landmarks: 'Landmarks',
   names: 'Accessible Names',
+  accessibleNames: 'Accessible Names',
   altText: 'Alt-Text',
   aria: 'ARIA Roles & Attributes',
+  ariaRoles: 'ARIA Roles & Attributes',
   keyboard: 'Keyboard Patterns',
+  keyboardPatterns: 'Keyboard Patterns',
   dom: 'DOM Strategy',
-  autoRotationSimplified: 'Auto-Rotation',
-  autoRotation: 'Auto-Rotation',
+  domStrategy: 'DOM Strategy',
+  colorContrast: 'Color Contrast',
+  forms: 'Forms',
+  targetSize: 'Target Size',
+  reflow: 'Reflow & Text Spacing',
+  language: 'Language',
+  media: 'Time-Based Media',
+  skipNav: 'Skip Navigation',
+  pageTitle: 'Page Title',
+  reducedMotion: 'Reduced Motion',
+  consistentNav: 'Consistent Navigation',
+  autoRotationSimplified: 'Carousel (Simplified)',
+  autoRotation: 'Carousel',
   voiceover: 'VoiceOver',
   talkback: 'TalkBack',
   narrator: 'Narrator',
@@ -189,13 +349,30 @@ const PANEL_DESCRIPTIONS: Record<string, string> = {
   aria: 'ARIA roles, states, and properties that communicate widget behavior to assistive technology. Use native HTML semantics first; add ARIA only when HTML falls short.',
   keyboard: 'Expected keyboard interactions for custom widgets. Standard patterns: Tab to navigate between widgets, arrow keys within composite widgets, Enter/Space to activate.',
   dom: 'How the visual design maps to DOM structure. Reading order, semantic elements, skip links, and whether content is hidden vs removed from the DOM.',
-  autoRotation: 'Auto-advancing content (carousels, slideshows) must be pausable (WCAG 2.2.2). Define timing, pause triggers, resume behavior, and reduced-motion handling.',
+  autoRotation: 'Carousel accessibility: auto-rotation timing, pause triggers, resume behavior, slide ARIA roles, pagination keyboard patterns, and DOM strategy for inactive slides.',
+  colorContrast: 'Text contrast (4.5:1 normal, 3:1 large per WCAG 1.4.3), non-text contrast (3:1 for UI components per WCAG 1.4.11), and focus indicator contrast (3:1 per WCAG 2.4.11).',
+  forms: 'Form accessibility: visible labels (3.3.2), error identification (3.3.1), error suggestions (3.3.3), required field indicators, autocomplete attributes (1.3.5), and input grouping.',
+  targetSize: 'Minimum interactive target sizes: 24x24 CSS pixels for desktop (WCAG 2.5.8). Touch targets should be 44x44px. Small targets can pass with 24px clear spacing.',
+  reflow: 'Content must reflow without horizontal scrolling at 320px width (WCAG 1.4.10). Text spacing overrides must not cause content loss (WCAG 1.4.12). Text resizable to 200% (WCAG 1.4.4).',
+  language: 'Page language declaration via html lang attribute (WCAG 3.1.1). Foreign-language text within the page must be wrapped with lang attribute (WCAG 3.1.2).',
+  media: 'Captions for prerecorded video (WCAG 1.2.2), transcripts for audio-only content (WCAG 1.2.1), audio descriptions for visual-only video content (WCAG 1.2.5). No auto-playing audio.',
+  skipNav: 'Skip navigation links to bypass repeated content blocks (WCAG 2.4.1). First focusable element on the page, hidden until focused, jumps to main content.',
+  pageTitle: 'Descriptive page title in <title> element (WCAG 2.4.2). Format: Specific → General. Must update on SPA route changes. Unique across all pages.',
+  reducedMotion: 'Non-essential animations must be disabled when prefers-reduced-motion: reduce is active (WCAG 2.3.3). No content flashing more than 3 times/second (WCAG 2.3.1).',
+  consistentNav: 'Navigation mechanisms must appear in the same relative order across pages (WCAG 3.2.3). Same function must have same label across the site (WCAG 3.2.4).',
   voiceover: 'VoiceOver-specific behavior on iOS and macOS. Rotor actions, swipe gestures, announcement order, and any platform quirks.',
   talkback: 'TalkBack-specific behavior on Android. Touch exploration, gesture navigation, and any platform-specific announcements.',
   narrator: 'Narrator-specific behavior on Windows. Scan mode interactions, landmark navigation, and any platform quirks.',
   reactNative: 'React Native accessibility props: accessibilityLabel, accessibilityRole, accessibilityState, accessibilityActions, and platform bridging notes.',
   tvNote: 'TV platform accessibility: D-pad navigation, focus management, spatial navigation order, and remote control interactions.',
   generalNote: 'General accessibility notes that apply across all platforms. Live regions, announcements, and cross-platform behavior.',
+  // Aliases — point to same descriptions as canonical keys
+  headingHierarchy: 'The heading level structure (H1–H6) of the page. A correct hierarchy helps screen reader users navigate by section. There should be exactly one H1 per page.',
+  accessibleNames: 'For sections or items that need a clear identifier, and either lack one, or whose meaning is not sufficiently explicit.\nExample: "Learn more" buttons, headerless accordion lists, icon-only controls.',
+  ariaRoles: 'ARIA roles, states, and properties that communicate widget behavior to assistive technology. Use native HTML semantics first; add ARIA only when HTML falls short.',
+  keyboardPatterns: 'Expected keyboard interactions for custom widgets. Standard patterns: Tab to navigate between widgets, arrow keys within composite widgets, Enter/Space to activate.',
+  domStrategy: 'How the visual design maps to DOM structure. Reading order, semantic elements, skip links, and whether content is hidden vs removed from the DOM.',
+  autoRotationSimplified: 'Carousel accessibility (simplified): auto-rotation timing, pause triggers, resume behavior, slide ARIA roles, pagination keyboard patterns.',
 };
 
 const loadedFonts = new Set<string>();
@@ -248,7 +425,7 @@ function createText(content: string, size: number, weight: 'Regular' | 'Bold' | 
   return text;
 }
 
-function createSectionFrame(title: string, isTier2: boolean): FrameNode {
+function createSectionFrame(title: string): FrameNode {
   const section = figma.createFrame();
   section.name = title;
   section.layoutMode = 'VERTICAL';
@@ -269,67 +446,16 @@ function createSectionFrame(title: string, isTier2: boolean): FrameNode {
   headerFrame.paddingBottom = 8;
   headerFrame.fills = [];
 
-  const titleText = createText(title, 15, 'Bold', isTier2 ? TIER2_COLOR : TEXT_PRIMARY);
-  titleText.opacity = isTier2 ? 1 : 0.95;
+  const titleText = createText(title, 15, 'Bold', AI_COLOR);
   headerFrame.appendChild(titleText);
 
-  if (isTier2) {
-    const aiTag = createText('AI', 10, 'Medium', TIER2_COLOR);
-    headerFrame.appendChild(aiTag);
-  }
+  const aiTag = createText('AI', 10, 'Medium', AI_COLOR);
+  headerFrame.appendChild(aiTag);
 
   section.appendChild(headerFrame);
   return section;
 }
 
-function createFocusOrderSection(entries: FocusOrderEntry[]): FrameNode {
-  const section = createSectionFrame('Focus Order', false);
-
-  for (const entry of entries) {
-    const row = figma.createFrame();
-    row.name = `${entry.name} (ID: ${entry.node.id})`;
-    row.layoutMode = 'VERTICAL';
-    row.counterAxisSizingMode = 'FIXED';
-    row.resize(SIDEBAR_WIDTH - SIDEBAR_PAD * 2, 48);
-    row.primaryAxisSizingMode = 'AUTO';
-    row.clipsContent = false;
-    row.itemSpacing = 8;
-    row.paddingTop = 12;
-    row.paddingBottom = 12;
-    row.fills = [];
-    // Bottom border separator
-    row.strokes = [{ type: 'SOLID', color: BORDER_COLOR, opacity: BORDER_OPACITY } as any];
-    row.strokeWeight = 1;
-    row.strokeAlign = 'INSIDE';
-    row.strokeTopWeight = 0;
-    row.strokeRightWeight = 0;
-    row.strokeBottomWeight = 1;
-    row.strokeLeftWeight = 0;
-
-    // Badge + name row
-    const infoRow = figma.createFrame();
-    infoRow.name = 'Focus Order Info';
-    infoRow.layoutMode = 'HORIZONTAL';
-    infoRow.primaryAxisSizingMode = 'AUTO';
-    infoRow.counterAxisSizingMode = 'AUTO';
-    infoRow.counterAxisAlignItems = 'CENTER';
-    infoRow.itemSpacing = 8;
-    infoRow.fills = [];
-
-    const badgeBg = createNumberedBadge(entry.index, 'focusOrder');
-    badgeBg.strokes = []; // no white outline in sidebar
-    badgeBg.strokeWeight = 0;
-
-    const label = createText(entry.name, 13, 'Regular', TEXT_PRIMARY);
-    label.opacity = 0.95;
-    infoRow.appendChild(badgeBg);
-    infoRow.appendChild(label);
-    row.appendChild(infoRow);
-    section.appendChild(row);
-  }
-
-  return section;
-}
 
 function createCategoryIcon(categoryKey: string, color: RGB): FrameNode | null {
   const config = CATEGORY_BADGE[categoryKey];
@@ -403,8 +529,8 @@ function createNumberedBadge(index: number, categoryKey?: string): FrameNode {
   return badge;
 }
 
-function createDetailCard(sectionKey: string, isTier2: boolean): FrameNode {
-  const title = TIER2_SECTIONS[sectionKey] || sectionKey;
+function createDetailCard(sectionKey: string): FrameNode {
+  const title = CARD_SECTIONS[sectionKey] || sectionKey;
   const config = CATEGORY_BADGE[sectionKey];
   const card = figma.createFrame();
   card.name = title;
@@ -470,9 +596,7 @@ function createGroupedCard(groupTitle: string, keys: string[]): FrameNode {
   const card = figma.createFrame();
   card.name = groupTitle;
   card.layoutMode = 'VERTICAL';
-  card.counterAxisSizingMode = 'FIXED';
   card.primaryAxisSizingMode = 'AUTO';
-  card.layoutAlign = 'STRETCH';
   card.clipsContent = false;
   card.paddingTop = 16;
   card.paddingBottom = 16;
@@ -486,13 +610,13 @@ function createGroupedCard(groupTitle: string, keys: string[]): FrameNode {
   card.cornerRadius = 8;
 
   // Card title
-  const titleColor = groupTitle === 'Accessibility Notes' ? NAVY_COLOR : TIER2_COLOR;
+  const titleColor = groupTitle === 'Accessibility Notes' ? NAVY_COLOR : AI_COLOR;
   const titleText = createText(groupTitle, 15, 'Bold', titleColor);
   card.appendChild(titleText);
 
   // One sub-section per category
   for (const key of keys) {
-    const title = TIER2_SECTIONS[key] || key;
+    const title = CARD_SECTIONS[key] || key;
     const config = CATEGORY_BADGE[key];
 
     const section = figma.createFrame();
@@ -550,10 +674,9 @@ function createGroupedCard(groupTitle: string, keys: string[]): FrameNode {
 
 export async function generateBlueline(
   node: SceneNode,
-  tier1: string[],
-  tier2: string[],
+  categories: string[],
   options?: { grouped?: boolean },
-): Promise<{ frameId: string; tier2Sections: string[] }> {
+): Promise<{ frameId: string; sections: string[] }> {
   await loadFonts();
 
   const sourceAbs = node.absoluteBoundingBox;
@@ -561,80 +684,34 @@ export async function generateBlueline(
 
   const page = figma.currentPage;
 
+  // Clean up previous blueline output before generating new annotations
+  const oldAnnotations = page.children.filter(n =>
+    n.name === 'Accessibility Annotations' ||
+    n.name === 'Blueline Cards' ||
+    n.name === 'Tier 2 Cards' ||
+    n.name === 'Focus Rectangle' ||
+    n.name === '.structural-scan' ||
+    (n.name === 'Badge' && n.type === 'FRAME' && n.width < 40)
+  );
+  for (const n of oldAnnotations) n.remove();
+
   // Use absolute coordinates — place everything directly on the page
   const sourceX = sourceAbs.x;
   const sourceY = sourceAbs.y;
 
-  // --- Focus Order detection (Tier 1) ---
-  let focusEntries: FocusOrderEntry[] = [];
-  if (tier1.includes('focusOrder')) {
-    focusEntries = detectFocusOrder(node);
-  }
+  // All categories are AI-driven — the scaffold creates empty cards; Claude fills everything via bridge.
+  const cardKeys = categories;
 
-  // --- Sidebar: Focus Order only (compact, left of frame) ---
-  let sidebar: FrameNode | null = null;
-
-  if (focusEntries.length > 0) {
-    sidebar = figma.createFrame();
-    sidebar.name = 'Accessibility Annotations';
-    sidebar.resize(SIDEBAR_WIDTH, 100);
-    sidebar.layoutMode = 'VERTICAL';
-    sidebar.counterAxisSizingMode = 'FIXED';
-    sidebar.primaryAxisSizingMode = 'AUTO';
-    sidebar.clipsContent = false;
-    sidebar.paddingTop = SIDEBAR_PAD;
-    sidebar.paddingBottom = SIDEBAR_PAD;
-    sidebar.paddingLeft = SIDEBAR_PAD;
-    sidebar.paddingRight = SIDEBAR_PAD;
-    sidebar.itemSpacing = SECTION_GAP;
-    sidebar.fills = [{ type: 'SOLID', color: BG_COLOR }];
-    sidebar.strokes = [{ type: 'SOLID', color: STROKE_COLOR }];
-    sidebar.strokeWeight = 1;
-    sidebar.strokeAlign = 'INSIDE';
-    sidebar.cornerRadius = 8;
-
-    const headerText = createText('Accessibility Annotations', 15, 'Semi Bold', TEXT_PRIMARY);
-    headerText.opacity = 0.95;
-    sidebar.appendChild(headerText);
-
-    const focusSection = createFocusOrderSection(focusEntries);
-    sidebar.appendChild(focusSection);
-
-    sidebar.x = sourceX - SIDEBAR_WIDTH - 40;
-    sidebar.y = sourceY;
-    page.appendChild(sidebar);
-  }
-
-  // --- Focus Indicators (Tier 1) — blue rectangles on the design ---
-  if (tier1.includes('focusIndicators')) {
-    figma.ui.postMessage({ type: 'a11y-status', message: 'Adding focus indicators...' });
-    await generateFocusIndicators(node);
-  }
-
-  // --- Numbered badges on the design (Tier 1 Focus Order) ---
-  if (focusEntries.length > 0) {
-    figma.ui.postMessage({ type: 'a11y-status', message: 'Adding focus order badges...' });
-    for (const entry of focusEntries) {
-      const abs = entry.node.absoluteBoundingBox;
-      if (!abs) continue;
-      const badge = createNumberedBadge(entry.index, 'focusOrder');
-      badge.x = abs.x - 4;
-      badge.y = abs.y - BADGE_HEIGHT - 2;
-      page.appendChild(badge);
-    }
-  }
-
-  // --- Tier 2 detail cards (below the design frame) ---
-  if (tier2.length > 0) {
-    const grouped = options?.grouped !== false; // default to grouped
+  if (cardKeys.length > 0) {
+    const grouped = options?.grouped === true; // default to individual cards
     const NOTE_KEYS = new Set(['voiceover', 'talkback', 'narrator', 'reactNative', 'tvNote', 'generalNote']);
-    const coreKeys = tier2.filter(k => !NOTE_KEYS.has(k));
-    const noteKeys = tier2.filter(k => NOTE_KEYS.has(k));
+    const coreKeys = cardKeys.filter(k => !NOTE_KEYS.has(k));
+    const noteKeys = cardKeys.filter(k => NOTE_KEYS.has(k));
 
     if (grouped) {
       // Grouped mode: one card per group with category sub-sections inside
       const outerContainer = figma.createFrame();
-      outerContainer.name = 'Tier 2 Cards';
+      outerContainer.name = 'Blueline Cards';
       outerContainer.layoutMode = 'HORIZONTAL';
       outerContainer.layoutWrap = 'WRAP';
       outerContainer.counterAxisSizingMode = 'AUTO';
@@ -648,11 +725,13 @@ export async function generateBlueline(
       if (coreKeys.length > 0) {
         const coreCard = createGroupedCard('AI-assisted', coreKeys);
         outerContainer.appendChild(coreCard);
+        coreCard.layoutSizingHorizontal = 'FILL';
       }
 
       if (noteKeys.length > 0) {
         const notesCard = createGroupedCard('Accessibility Notes', noteKeys);
         outerContainer.appendChild(notesCard);
+        notesCard.layoutSizingHorizontal = 'FILL';
       }
 
       outerContainer.x = sourceX;
@@ -661,7 +740,7 @@ export async function generateBlueline(
     } else {
       // Classic mode: individual card per category in a wrap layout
       const cardsContainer = figma.createFrame();
-      cardsContainer.name = 'Tier 2 Cards';
+      cardsContainer.name = 'Blueline Cards';
       cardsContainer.layoutMode = 'HORIZONTAL';
       cardsContainer.layoutWrap = 'WRAP';
       cardsContainer.counterAxisSizingMode = 'AUTO';
@@ -674,8 +753,8 @@ export async function generateBlueline(
       cardsContainer.fills = [];
       cardsContainer.clipsContent = false;
 
-      for (const key of tier2) {
-        const card = createDetailCard(key, true);
+      for (const key of cardKeys) {
+        const card = createDetailCard(key);
         cardsContainer.appendChild(card);
       }
 
@@ -690,11 +769,9 @@ export async function generateBlueline(
   await embedStructuralScan(node, page);
 
   // Zoom to show the annotation area
-  const viewNodes: SceneNode[] = [node];
-  if (sidebar) viewNodes.push(sidebar);
-  figma.viewport.scrollAndZoomIntoView(viewNodes);
+  figma.viewport.scrollAndZoomIntoView([node]);
 
-  return { frameId: node.id, tier2Sections: tier2 };
+  return { frameId: node.id, sections: categories };
 }
 
 // ---------------------------------------------------------------------------
@@ -769,9 +846,8 @@ function createInstructionsCard(title: string, description: string, categoryKey?
 
 export async function generateBluelinePanels(
   node: SceneNode,
-  tier1: string[],
-  tier2: string[],
-): Promise<{ frameId: string; tier2Sections: string[] }> {
+  categories: string[],
+): Promise<{ frameId: string; sections: string[]; sectionIds: string[] }> {
   await loadFonts();
 
   const sourceAbs = node.absoluteBoundingBox;
@@ -779,56 +855,46 @@ export async function generateBluelinePanels(
 
   const page = figma.currentPage;
 
-  // Collect all panel keys in order
-  const allPanels: string[] = [];
-  if (tier1.includes('focusIndicators')) allPanels.push('focusIndicators');
-  if (tier1.includes('focusOrder')) allPanels.push('focusOrder');
-  for (const key of tier2) allPanels.push(key);
-
+  const allPanels: string[] = [...categories];
   if (allPanels.length === 0) throw new Error('Select at least one option');
 
   // Detect focus order once (reused across panels)
   let focusEntries: FocusOrderEntry[] = [];
-  if (tier1.includes('focusOrder')) {
+  if (categories.includes('focusOrder')) {
     focusEntries = detectFocusOrder(node);
   }
 
-  // Starting position — place panels to the right of the source frame
-  let panelX = sourceAbs.x + sourceAbs.width + 200;
-  const panelY = sourceAbs.y;
-  const firstSection: SceneNode[] = [];
+  // 3-column grid layout
+  const startX = sourceAbs.x + sourceAbs.width + 200;
+  const startY = sourceAbs.y;
+  const sectionW = sourceAbs.width + PANEL_PAD * 2;
+  const allSections: SceneNode[] = [];
+  const sectionIds: string[] = [];
+
+  // Track row heights for grid positioning
+  let col = 0;
+  let rowY = startY;
+  let rowMaxH = 0;
 
   for (const key of allPanels) {
-    const title = TIER2_SECTIONS[key] || (key === 'focusIndicators' ? 'Focus Indicators' : key === 'focusOrder' ? 'Focus Order' : key);
-    const description = PANEL_DESCRIPTIONS[key] || '';
+    const title = CARD_SECTIONS[key] || key;
 
     // Create Figma Section
     const section = figma.createSection();
     section.name = `A11y ${title}`;
-    section.x = panelX;
-    section.y = panelY;
 
-    // Instructions card (left side of section)
-    const instructions = createInstructionsCard(title, description, key);
-    instructions.x = PANEL_PAD;
-    instructions.y = PANEL_PAD;
-    section.appendChild(instructions);
-
-    // Clone the design frame (right of instructions card)
+    // Clone the design frame
     const clone = node.clone();
     clone.name = node.name;
-    const cloneX = PANEL_PAD + CARD_WIDTH + 40; // card + gap
-    const cloneY = PANEL_PAD;
-    clone.x = cloneX;
-    clone.y = cloneY;
+    clone.x = PANEL_PAD;
+    clone.y = PANEL_PAD;
     section.appendChild(clone);
 
-    // Apply tier 1 annotations to the clone within this section
+    // Apply visual annotations to the clone within this section
     if (key === 'focusIndicators') {
       await generateFocusIndicators(clone);
     }
     if (key === 'focusOrder' && focusEntries.length > 0) {
-      // Re-detect on the clone (positions differ from original)
       const cloneEntries = detectFocusOrder(clone);
       const secAbs = section.absoluteBoundingBox;
       const offX = secAbs ? secAbs.x : 0;
@@ -843,15 +909,43 @@ export async function generateBluelinePanels(
       }
     }
 
-    // Resize section to fit content
-    const sectionW = cloneX + sourceAbs.width + PANEL_PAD;
-    const sectionH = Math.max(instructions.height, sourceAbs.height) + PANEL_PAD * 2;
+    // WCAG footer placeholder (filled later by RENDER_BLUELINE_PANELS)
+    const footer = figma.createFrame();
+    footer.name = 'WCAG Footer';
+    footer.layoutMode = 'VERTICAL';
+    footer.primaryAxisSizingMode = 'AUTO';
+    footer.counterAxisSizingMode = 'FIXED';
+    footer.resize(sourceAbs.width, 10);
+    footer.fills = [];
+    footer.paddingTop = 12;
+    footer.paddingBottom = 12;
+    footer.paddingLeft = 16;
+    footer.paddingRight = 16;
+    footer.itemSpacing = 4;
+    footer.x = PANEL_PAD;
+    footer.y = PANEL_PAD + sourceAbs.height + 20;
+    section.appendChild(footer);
+
+    // Resize section to fit clone + footer space
+    const sectionH = PANEL_PAD + sourceAbs.height + 20 + 60 + PANEL_PAD;
     section.resizeWithoutConstraints(sectionW, sectionH);
 
-    page.appendChild(section);
-    firstSection.push(section);
+    // Position in 3-column grid
+    const panelX = startX + col * (sectionW + PANEL_GAP);
+    section.x = panelX;
+    section.y = rowY;
 
-    panelX += sectionW + PANEL_GAP;
+    page.appendChild(section);
+    allSections.push(section);
+    sectionIds.push(section.id);
+
+    if (sectionH > rowMaxH) rowMaxH = sectionH;
+    col++;
+    if (col >= PANEL_COLS) {
+      col = 0;
+      rowY += rowMaxH + PANEL_GAP;
+      rowMaxH = 0;
+    }
   }
 
   // Embed structural scan data for Claude
@@ -859,9 +953,9 @@ export async function generateBluelinePanels(
   await embedStructuralScan(node, page);
 
   // Zoom to show all panels
-  figma.viewport.scrollAndZoomIntoView(firstSection);
+  figma.viewport.scrollAndZoomIntoView(allSections);
 
-  return { frameId: node.id, tier2Sections: tier2 };
+  return { frameId: node.id, sections: categories, sectionIds };
 }
 
 // ---------------------------------------------------------------------------
