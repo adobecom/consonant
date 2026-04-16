@@ -8,6 +8,17 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 
+// ── Input sanitisation for code interpolation ──────────────────────────────
+/** Validate a Figma node ID — only alphanumerics, colons, semicolons, hyphens. */
+function assertNodeId(id: string): string {
+  if (!/^[A-Za-z0-9:;\-]+$/.test(id)) throw new Error(`Invalid node ID: ${id}`);
+  return id;
+}
+/** Escape a string for safe interpolation into a JS single-quoted string literal. */
+function escapeJsString(s: string): string {
+  return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+}
+
 // ── Preload accessibility knowledge files at startup ────────────────────────
 // Read once, embed in figma_get_blueline_data responses so agents never need
 // additional file reads.
@@ -1201,8 +1212,14 @@ server.tool(
     scaleMode: z.enum(['FILL', 'FIT', 'CROP', 'TILE']).optional().describe('Image scale mode (default FILL)'),
   },
   async (params) => {
-    // SET_IMAGE_FILL needs base64 decode — the plugin UI handles this via bridgeHandleMethod
-    const result = await sendCommand('SET_IMAGE_FILL', params, 60000);
+    // Convert base64 to byte array — code.ts expects imageBytes as number[]
+    const imageBytes = Array.from(Buffer.from(params.imageData, 'base64'));
+    const result = await sendCommand('SET_IMAGE_FILL', {
+      imageBytes,
+      nodeId: params.nodeId,
+      nodeIds: params.nodeIds,
+      scaleMode: params.scaleMode,
+    }, 60000);
     return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
   }
 );
@@ -1306,8 +1323,8 @@ server.tool(
   async ({ nodeId }) => {
     const result = await sendCommand('EXECUTE_CODE', {
       code: `
-        const node = await figma.getNodeByIdAsync('${nodeId}');
-        if (!node) throw new Error('Node not found: ${nodeId}');
+        const node = await figma.getNodeByIdAsync('${assertNodeId(nodeId)}');
+        if (!node) throw new Error('Node not found: ${assertNodeId(nodeId)}');
         if ('type' in node && node.type === 'PAGE') {
           await figma.setCurrentPageAsync(node);
         } else {
@@ -1331,7 +1348,7 @@ server.tool(
     const maxDepth = depth || 3;
     const result = await sendCommand('EXECUTE_CODE', {
       code: `
-        const root = ${nodeId ? `await figma.getNodeByIdAsync('${nodeId}')` : 'figma.currentPage'};
+        const root = ${nodeId ? `await figma.getNodeByIdAsync('${assertNodeId(nodeId)}')` : 'figma.currentPage'};
         if (!root) throw new Error('Node not found');
         function walk(n, d) {
           const info = { id: n.id, name: n.name, type: n.type };
@@ -1361,7 +1378,7 @@ server.tool(
   async ({ nodeId }) => {
     const result = await sendCommand('EXECUTE_CODE', {
       code: `
-        const node = await figma.getNodeByIdAsync('${nodeId}');
+        const node = await figma.getNodeByIdAsync('${assertNodeId(nodeId)}');
         if (!node) throw new Error('Node not found');
         const annotations = node.annotations || [];
         return { annotations, count: annotations.length };
@@ -1381,7 +1398,7 @@ server.tool(
   async ({ nodeId, annotations }) => {
     const result = await sendCommand('EXECUTE_CODE', {
       code: `
-        const node = await figma.getNodeByIdAsync('${nodeId}');
+        const node = await figma.getNodeByIdAsync('${assertNodeId(nodeId)}');
         if (!node) throw new Error('Node not found');
         node.annotations = ${JSON.stringify(annotations)};
         return { set: true, count: node.annotations.length };
@@ -1403,7 +1420,7 @@ server.tool(
   async ({ query, includeVariants }) => {
     const result = await sendCommand('EXECUTE_CODE', {
       code: `
-        const q = '${query}'.toLowerCase();
+        const q = '${escapeJsString(query)}'.toLowerCase();
         const results = [];
         function search(n) {
           if (results.length >= 50) return;
@@ -1423,8 +1440,8 @@ server.tool(
           }
           if ('children' in n) { for (const c of n.children) { try { search(c); } catch {} } }
         }
+        await figma.loadAllPagesAsync();
         for (const page of figma.root.children) {
-          await figma.setCurrentPageAsync(page);
           for (const child of page.children) search(child);
         }
         return { components: results, total: results.length };
@@ -1443,7 +1460,7 @@ server.tool(
   async ({ nodeId }) => {
     const result = await sendCommand('EXECUTE_CODE', {
       code: `
-        const node = await figma.getNodeByIdAsync('${nodeId}');
+        const node = await figma.getNodeByIdAsync('${assertNodeId(nodeId)}');
         if (!node) throw new Error('Node not found');
         if (node.type !== 'COMPONENT_SET') throw new Error('Not a COMPONENT_SET');
         const props = node.componentPropertyDefinitions;

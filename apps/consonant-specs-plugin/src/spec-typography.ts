@@ -130,6 +130,9 @@ function createTableRow(entry: TypographyEntry, parent: FrameNode): void {
 }
 
 export async function generateTypographySection(sourceNode: SceneNode): Promise<FrameNode | null> {
+  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+
   const styles = new Map<string, TypographyEntry>();
   collectTextStyles(sourceNode, styles);
 
