@@ -3,6 +3,59 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod';
 import { WebSocketServer, WebSocket } from 'ws';
 import { createServer } from 'http';
+import { readFileSync } from 'fs';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { spawn } from 'child_process';
+
+// ── Preload accessibility knowledge files at startup ────────────────────────
+// Read once, embed in figma_get_blueline_data responses so agents never need
+// additional file reads.
+const __dirname_mcp = dirname(fileURLToPath(import.meta.url));
+const skillsDir = resolve(__dirname_mcp, '..', '..', 'skills', 'accessibility');
+
+function loadKnowledge(filename: string): string {
+  try {
+    return readFileSync(resolve(skillsDir, filename), 'utf-8');
+  } catch {
+    return `[File not found: ${filename}]`;
+  }
+}
+
+// Cache file reads — several keys share the same source file
+const _accessibleNames = loadKnowledge('accessible-names.md');
+const _wcagPatterns = loadKnowledge('wcag-patterns.md');
+const _carousel = loadKnowledge('carousel-a11y.md');
+const _screenReader = loadKnowledge('screen-reader-notes.md');
+
+const KNOWLEDGE: Record<string, string> = {
+  headingHierarchy: loadKnowledge('heading-hierarchy.md'),
+  landmarks: loadKnowledge('landmarks-guide.md'),
+  accessibleNames: _accessibleNames,
+  altText: _accessibleNames,
+  ariaRoles: _wcagPatterns,
+  keyboardPatterns: _wcagPatterns,
+  domStrategy: [_wcagPatterns, _carousel].join('\n\n---\n\n'),
+  colorContrast: loadKnowledge('color-contrast.md'),
+  forms: loadKnowledge('forms-a11y.md'),
+  targetSize: loadKnowledge('target-size.md'),
+  reflow: loadKnowledge('reflow-text-spacing.md'),
+  language: loadKnowledge('language.md'),
+  media: loadKnowledge('time-based-media.md'),
+  skipNav: loadKnowledge('skip-navigation.md'),
+  pageTitle: loadKnowledge('page-title.md'),
+  reducedMotion: loadKnowledge('reduced-motion.md'),
+  consistentNav: loadKnowledge('consistent-navigation.md'),
+  autoRotation: _carousel,
+  screenReaderNotes: _screenReader,
+  focusIndicators: loadKnowledge('focus-indicators.md'),
+  focusOrder: loadKnowledge('focus-order.md'),
+  reactNative: _screenReader,
+  tvNote: _screenReader,
+  generalNote: _screenReader,
+};
+
+// log happens after log() is defined — see below
 
 // ── WebSocket Bridge Server ─────────────────────────────────────────────────
 // Runs a WS server that the consonant-specs-plugin (Figma Desktop) connects to.
@@ -78,6 +131,12 @@ function startWsServer(): Promise<number> {
 
             // VARIABLES_DATA — auto-sync from plugin, store if needed
             if (msg.type === 'VARIABLES_DATA') return;
+
+            // Auto-fill request from plugin UI
+            if (msg.type === 'START_AUTO_FILL' && msg.data) {
+              handleAutoFill(msg.data, socket);
+              return;
+            }
 
             // Response to a pending request
             if (msg.id && pendingRequests.has(msg.id)) {
@@ -183,6 +242,211 @@ async function sendCommand(
   });
 }
 
+// ── Auto-fill via claude -p ─────────────────────────────────────────────────
+
+let autoFillRunning = false;
+
+async function handleAutoFill(
+  data: { plainLanguage?: boolean },
+  socket: WebSocket,
+) {
+  if (autoFillRunning) {
+    socket.send(JSON.stringify({ type: 'AUTO_FILL_FAILED', data: { error: 'Auto-fill already in progress' } }));
+    return;
+  }
+
+  autoFillRunning = true;
+  const plainLanguage = !!data.plainLanguage;
+
+  try {
+    // 1. Get blueline data from plugin
+    log('Auto-fill: fetching blueline data...');
+    const blData = await sendCommand('GET_BLUELINE_DATA', { plainLanguage }, 15000);
+    const scan = (blData as any)?.structuralScan || {};
+    const cards: Array<{ name: string; nodeId: string; categoryKey: string }> = (blData as any)?.bluelineCards || [];
+    const focusOrder = (blData as any)?.focusOrder || [];
+    const targetFrameId = (blData as any)?.targetFrameId;
+
+    if (cards.length === 0) {
+      socket.send(JSON.stringify({ type: 'AUTO_FILL_FAILED', data: { error: 'No blueline cards found. Generate scaffold first.' } }));
+      autoFillRunning = false;
+      return;
+    }
+
+    // 2. Build agent groups (same logic as figma_get_blueline_data tool)
+    const agentGroups = [
+      { name: 'Structure', cardKeys: ['headingHierarchy'], knowledgeKeys: ['headingHierarchy'] },
+      { name: 'Landmarks & Navigation', cardKeys: ['landmarks', 'skipNav', 'consistentNav'], knowledgeKeys: ['landmarks', 'skipNav', 'consistentNav'] },
+      { name: 'Names & Images', cardKeys: ['accessibleNames', 'altText'], knowledgeKeys: ['accessibleNames', 'altText'] },
+      { name: 'Interactive Patterns', cardKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'], knowledgeKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'] },
+      { name: 'Visual', cardKeys: ['colorContrast', 'targetSize'], knowledgeKeys: ['colorContrast', 'targetSize'] },
+      { name: 'Page Setup', cardKeys: ['pageTitle', 'language'], knowledgeKeys: ['pageTitle', 'language'] },
+      { name: 'Responsive & Forms', cardKeys: ['reflow', 'forms'], knowledgeKeys: ['reflow', 'forms'] },
+      { name: 'Motion & Media', cardKeys: ['reducedMotion', 'media', 'autoRotation'], knowledgeKeys: ['reducedMotion', 'media', 'autoRotation'] },
+      { name: 'Focus', cardKeys: ['focusIndicators', 'focusOrder'], knowledgeKeys: ['focusIndicators', 'focusOrder'] },
+      { name: 'Screen Reader & Platform Notes', cardKeys: ['voiceover', 'talkback', 'narrator', 'reactNative', 'tvNote', 'generalNote'], knowledgeKeys: ['screenReaderNotes', 'reactNative', 'tvNote', 'generalNote'] },
+    ];
+
+    const activeCardKeys = new Set<string>(cards.map(c => c.categoryKey));
+    const activeGroups = agentGroups.filter(g => g.cardKeys.some(k => activeCardKeys.has(k)));
+
+    // 3. Gather all relevant knowledge
+    const knowledgeContent: Record<string, string> = {};
+    for (const group of activeGroups) {
+      for (const key of group.knowledgeKeys) {
+        if (KNOWLEDGE[key] && !knowledgeContent[key]) {
+          knowledgeContent[key] = KNOWLEDGE[key];
+        }
+      }
+    }
+
+    // 4. Build prompt
+    const langNote = plainLanguage
+      ? '\n\nUse plain language: lead with questions like "What headings does this use?", explain WHY before giving technical detail, include "Why this matters" sections.'
+      : '';
+
+    const prompt = `You are an accessibility spec writer producing concise blueline annotation cards for a Figma design. Write like a spec — short, scannable, no prose.
+
+## Structural Scan
+${JSON.stringify(scan, null, 2)}
+
+## Cards to Fill
+${cards.map(c => `- ${c.categoryKey} (cardId: ${c.nodeId})`).join('\n')}
+
+## Focus Order Data
+${JSON.stringify(focusOrder, null, 2)}
+
+## Knowledge Reference
+${Object.entries(knowledgeContent).map(([key, content]) => `### ${key}\n${content}`).join('\n\n---\n\n')}
+
+## Instructions
+For each card category listed above, produce accessibility annotation content.${langNote}
+
+STYLE — match this example EXACTLY:
+
+Example landmarks card:
+{"title": "banner", "desc": "top navigation bar (Adobe logo + nav links + Sign In)"}
+{"title": "main", "desc": "hero content area (heading, body text, CTAs)"}
+{"title": "navigation", "desc": "primary nav links (Products, Use Cases, Solutions, Learn & Support, Plans)"}
+{"title": "region", "desc": "product router card carousel (5 category cards + play/pause)"}
+
+Example accessible names card:
+{"title": "Adobe logo", "desc": "aria-label=\"Adobe Home\""}
+{"title": "Play/Pause button", "desc": "aria-label=\"Pause auto-rotation\" (toggles to \"Play auto-rotation\")"}
+{"title": "Each product card", "desc": "accessible name from visible text (e.g. \"Creativity and design\")"}
+
+RULES:
+- Title: short element/region name (1-5 words)
+- Desc: parenthetical summary or attr shorthand. ONE line. Under 80 chars.
+- 4-8 items per card max
+- Notes: 1-2 WCAG refs, terse (e.g. "WCAG 1.3.1 — exactly one H1 per page. No skipped levels.")
+- Warnings: only real issues, 1 line (e.g. "Missing H2 for product router section")
+- NO full sentences. NO explanations. NO paragraphs. Just specs.
+
+Each card needs:
+- items: array of {title, desc} pairs
+- notes: array of WCAG refs (short)
+- warnings: array of issues (short)
+
+For focusOrder: also produce a "focusOrder" array of {nodeId, name} from the Focus Order Data above, representing the correct tab order. Use the nodeIds exactly as given.
+
+Output ONLY valid JSON — no markdown, no explanation:
+{
+  "cards": {
+    "<categoryKey>": {
+      "items": [{"title": "...", "desc": "..."}],
+      "notes": ["..."],
+      "warnings": ["..."]
+    }
+  },
+  "focusOrder": [{"nodeId": "...", "name": "..."}]
+}`;
+
+    // 5. Notify UI — started
+    socket.send(JSON.stringify({ type: 'AUTO_FILL_STARTED' }));
+    log(`Auto-fill: spawning claude -p (${cards.length} cards, ${Object.keys(knowledgeContent).length} knowledge files)...`);
+
+    // 6. Spawn claude -p
+    const proc = spawn('claude', ['-p', '--model', 'sonnet', '--output-format', 'json'], {
+      cwd: '/tmp', // No .mcp.json here — prevents MCP server port conflicts
+      env: { ...process.env },
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
+
+    let stdout = '';
+    let stderr = '';
+    proc.stdout.on('data', (chunk: Buffer) => { stdout += chunk.toString(); });
+    proc.stderr.on('data', (chunk: Buffer) => { stderr += chunk.toString(); });
+
+    // Write prompt to stdin
+    proc.stdin.write(prompt);
+    proc.stdin.end();
+
+    proc.on('close', async (code) => {
+      try {
+        if (code !== 0) {
+          log(`Auto-fill: claude -p exited with code ${code}. stderr: ${stderr.slice(0, 500)}`);
+          socket.send(JSON.stringify({ type: 'AUTO_FILL_FAILED', data: { error: `claude -p exited with code ${code}` } }));
+          return;
+        }
+
+        // 7. Parse output — claude --output-format json wraps in {"type":"result","result":"..."}
+        log(`Auto-fill: parsing output (${stdout.length} bytes)...`);
+        let fillData: any;
+        try {
+          const parsed = JSON.parse(stdout);
+          // --output-format json returns { result: "..." } — the result is the text content
+          const resultText = typeof parsed.result === 'string' ? parsed.result : stdout;
+          // Extract JSON from the result text (may have markdown fences)
+          const jsonMatch = resultText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            fillData = JSON.parse(jsonMatch[0]);
+          } else {
+            throw new Error('No JSON object found in output');
+          }
+        } catch (parseErr: any) {
+          log(`Auto-fill: parse error — ${parseErr.message}. Raw output: ${stdout.slice(0, 1000)}`);
+          socket.send(JSON.stringify({ type: 'AUTO_FILL_FAILED', data: { error: 'Failed to parse AI output' } }));
+          return;
+        }
+
+        // 8. Render into Figma
+        log('Auto-fill: rendering blueline...');
+        const renderResult = await sendCommand('RENDER_BLUELINE', {
+          nodeId: targetFrameId,
+          cards: fillData.cards || {},
+          focusOrder: fillData.focusOrder,
+        }, 60000);
+
+        log('Auto-fill: complete!');
+        socket.send(JSON.stringify({
+          type: 'AUTO_FILL_COMPLETE',
+          data: {
+            filledCards: Object.keys(fillData.cards || {}),
+            renderResult,
+          },
+        }));
+      } catch (err: any) {
+        log(`Auto-fill: render error — ${err.message}`);
+        socket.send(JSON.stringify({ type: 'AUTO_FILL_FAILED', data: { error: err.message } }));
+      } finally {
+        autoFillRunning = false;
+      }
+    });
+
+    proc.on('error', (err) => {
+      log(`Auto-fill: spawn error — ${err.message}`);
+      socket.send(JSON.stringify({ type: 'AUTO_FILL_FAILED', data: { error: `Failed to spawn claude: ${err.message}` } }));
+      autoFillRunning = false;
+    });
+
+  } catch (err: any) {
+    log(`Auto-fill: error — ${err.message}`);
+    socket.send(JSON.stringify({ type: 'AUTO_FILL_FAILED', data: { error: err.message } }));
+    autoFillRunning = false;
+  }
+}
+
 // ── MCP Server ──────────────────────────────────────────────────────────────
 
 const server = new McpServer({
@@ -266,14 +530,252 @@ server.tool(
 
 server.tool(
   'figma_generate_blueline',
-  'Generate accessibility blueline annotations on the selected node.',
+  'Generate accessibility blueline scaffolding on the selected node. After scaffolding completes, call figma_get_blueline_data — it returns structural data AND all expert knowledge preloaded. Dispatch parallel agents using the embedded knowledge (no file reads needed), then call figma_render_blueline with all card JSON.',
   {
     nodeId: z.string().optional().describe('Node ID to annotate. Uses current selection if omitted.'),
-    tier1: z.array(z.string()).optional().describe('Tier 1 annotation categories'),
-    tier2: z.array(z.string()).optional().describe('Tier 2 annotation categories'),
+    categories: z.array(z.string()).optional().describe('Annotation categories to scaffold (e.g. headingHierarchy, landmarks, focusOrder)'),
   },
-  async ({ nodeId, tier1, tier2 }) => {
-    const result = await sendCommand('GENERATE_BLUELINE', { nodeId, tier1, tier2 }, 120000);
+  async ({ nodeId, categories }) => {
+    const result = await sendCommand('GENERATE_BLUELINE', { nodeId, categories }, 120000);
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  'figma_get_blueline_data',
+  'Get blueline state + preloaded expert knowledge for AI fill. Returns structural scan, focus order, card info, orchestration instructions, AND full knowledge file contents for every category — agents can start immediately with zero file reads.',
+  {
+    plainLanguage: z.boolean().optional().describe('Whether to use plain language style for fills (default false)'),
+  },
+  async ({ plainLanguage }) => {
+    // First get blueline data (includes targetFrameId for screenshot)
+    const result = await sendCommand('GET_BLUELINE_DATA', { plainLanguage: !!plainLanguage }, 15000);
+
+    // Take screenshot of the target design frame (not the whole page)
+    const targetFrameId = (result as any)?.targetFrameId || undefined;
+    const screenshot = await sendCommand('CAPTURE_SCREENSHOT', { nodeId: targetFrameId, scale: 0.5 }, 15000).catch(() => null);
+
+    // Agent groups — batch related categories to reduce agent count from 19 to 9
+    // Each group lists which scan fields the agent needs (trim everything else)
+    const agentGroups = [
+      {
+        name: 'Structure',
+        cardKeys: ['headingHierarchy'],
+        scanFields: ['textNodes'],
+        knowledgeKeys: ['headingHierarchy'],
+      },
+      {
+        name: 'Landmarks & Navigation',
+        cardKeys: ['landmarks', 'skipNav', 'consistentNav'],
+        scanFields: ['textNodes', 'repeatingGroups', 'focusableElements'],
+        knowledgeKeys: ['landmarks', 'skipNav', 'consistentNav'],
+      },
+      {
+        name: 'Names & Images',
+        cardKeys: ['accessibleNames', 'altText'],
+        scanFields: ['textNodes', 'iconFrames', 'imageNodes', 'focusableElements'],
+        knowledgeKeys: ['accessibleNames', 'altText'],
+      },
+      {
+        name: 'Interactive Patterns',
+        cardKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'],
+        scanFields: ['repeatingGroups', 'overlays', 'pairedStacks', 'focusableElements'],
+        knowledgeKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'],
+      },
+      {
+        name: 'Visual',
+        cardKeys: ['colorContrast', 'targetSize'],
+        scanFields: ['textNodes', 'focusableElements', 'iconFrames'],
+        knowledgeKeys: ['colorContrast', 'targetSize'],
+      },
+      {
+        name: 'Page Setup',
+        cardKeys: ['pageTitle', 'language'],
+        scanFields: ['textNodes'],
+        knowledgeKeys: ['pageTitle', 'language'],
+      },
+      {
+        name: 'Responsive & Forms',
+        cardKeys: ['reflow', 'forms'],
+        scanFields: ['textNodes', 'focusableElements', 'repeatingGroups'],
+        knowledgeKeys: ['reflow', 'forms'],
+      },
+      {
+        name: 'Motion & Media',
+        cardKeys: ['reducedMotion', 'media', 'autoRotation'],
+        scanFields: ['repeatingGroups', 'overlays', 'imageNodes'],
+        knowledgeKeys: ['reducedMotion', 'media', 'autoRotation'],
+      },
+      {
+        name: 'Focus',
+        cardKeys: ['focusIndicators', 'focusOrder'],
+        scanFields: ['focusableElements'],
+        knowledgeKeys: ['focusIndicators', 'focusOrder'],
+      },
+      {
+        name: 'Screen Reader & Platform Notes',
+        cardKeys: ['voiceover', 'talkback', 'narrator', 'reactNative', 'tvNote', 'generalNote'],
+        scanFields: ['repeatingGroups', 'overlays', 'pairedStacks', 'focusableElements'],
+        knowledgeKeys: ['screenReaderNotes', 'reactNative', 'tvNote', 'generalNote'],
+      },
+    ];
+
+    // Build scan summary — tells Claude which scan fields have data
+    const scan = (result as any)?.structuralScan || {};
+    const scanSummary: Record<string, number> = {};
+    for (const field of ['textNodes', 'repeatingGroups', 'imageNodes', 'iconFrames', 'pairedStacks', 'overlays', 'focusableElements']) {
+      const val = scan[field];
+      scanSummary[field] = Array.isArray(val) ? val.length : 0;
+    }
+
+    // Filter agent groups: only include groups whose cards exist in this blueline
+    const bluelineCards = (result as any)?.bluelineCards || [];
+    const activeCardKeys = new Set<string>(bluelineCards.map((c: any) => c.categoryKey));
+
+    const filteredGroups = agentGroups
+      .map(g => {
+        const activeKeys = g.cardKeys.filter(k => activeCardKeys.has(k));
+        if (activeKeys.length === 0) return null;
+        return { ...g, cardKeys: activeKeys, knowledgeKeys: activeKeys.map(k => g.knowledgeKeys.includes(k) ? k : g.knowledgeKeys[0]).filter((v, i, a) => a.indexOf(v) === i) };
+      })
+      .filter(Boolean);
+
+    // Conditional skip: if ALL scanFields for a group are empty, mark it skippable
+    // (agents still spawn but return items:[] — this hint lets Claude skip the spawn entirely)
+    const skippableGroups: string[] = [];
+    for (const g of filteredGroups) {
+      if (!g) continue;
+      // Groups that always need analysis (they use screenshot + general knowledge, not just scan data)
+      const ALWAYS_RUN = new Set(['Structure', 'Landmarks & Navigation', 'Visual', 'Page Setup', 'Focus', 'Names & Images']);
+      if (ALWAYS_RUN.has(g.name)) continue;
+      const allEmpty = g.scanFields.every(f => scanSummary[f] === 0);
+      if (allEmpty) skippableGroups.push(g.name);
+    }
+
+    // Orchestration instructions
+    const instructions = {
+      workflow: 'For each agent group: call figma_get_knowledge with the group knowledgeKeys, then dispatch the agent with the knowledge + trimmed scan data. Dispatch all agents in parallel. Then call figma_render_blueline once with all card data.',
+      agentArchitecture: 'Each agent group has: cardKeys (cards to fill), scanFields (which structural scan fields to include in its prompt), knowledgeKeys (which knowledge to fetch via figma_get_knowledge). Trim the structural scan to only the listed scanFields before passing to the agent. Each agent returns JSON for ALL its cardKeys.',
+      critical: 'Fetch knowledge via figma_get_knowledge BEFORE dispatching agents. Each agent prompt MUST include the FULL CONTENT returned. Do NOT summarize. Do NOT use general knowledge.',
+      skipHint: skippableGroups.length > 0
+        ? `These agent groups have NO scan data and can be SKIPPED (do not spawn an agent — return items:[] for their cardKeys directly): ${skippableGroups.join(', ')}. This saves time. Still render their cards with empty items so the blueline is complete.`
+        : 'All agent groups have scan data — dispatch all of them.',
+      scanSummary,
+      agentGroups: filteredGroups,
+    };
+
+    // Knowledge is NOT embedded here — it's too large and causes truncation.
+    // Use figma_get_knowledge to fetch knowledge per agent group before dispatching.
+    const availableKnowledge = Object.keys(KNOWLEDGE);
+
+    // Build response — include screenshot as base64 image if captured
+    const responseData = { ...result, instructions, availableKnowledge };
+    const content: any[] = [{ type: 'text', text: JSON.stringify(responseData, null, 2) }];
+    if (screenshot?.image?.base64) {
+      content.push({
+        type: 'image',
+        data: screenshot.image.base64,
+        mimeType: screenshot.image.format === 'JPG' ? 'image/jpeg' : 'image/png',
+      });
+    }
+
+    return { content };
+  }
+);
+
+server.tool(
+  'figma_get_knowledge',
+  'Get preloaded accessibility knowledge for specific categories. Call this once per agent group before dispatching — pass the knowledgeKeys from the agent group definition. Returns full knowledge content for each key.',
+  {
+    keys: z.array(z.string()).describe('Knowledge keys to fetch (from agentGroup.knowledgeKeys)'),
+  },
+  async ({ keys }) => {
+    const result: Record<string, string> = {};
+    for (const key of keys) {
+      if (KNOWLEDGE[key]) {
+        result[key] = KNOWLEDGE[key];
+      }
+    }
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  'figma_create_focus_annotations',
+  'Create focus order sidebar, numbered badges, and focus indicator rectangles on the design. Provide the correct focus order with accessible names — the tool handles all visual creation in one fast call.',
+  {
+    nodeId: z.string().optional().describe('Target frame node ID. Uses current selection if omitted.'),
+    focusOrder: z.array(z.object({
+      nodeId: z.string().describe('Node ID of the interactive element'),
+      name: z.string().describe('Accessible name for this element (e.g. "Learn more", "Adobe Home", "Products")'),
+    })).describe('Ordered array of interactive elements in correct tab/reading order'),
+  },
+  async ({ nodeId, focusOrder }) => {
+    const result = await sendCommand('CREATE_FOCUS_ANNOTATIONS', { nodeId, focusOrder }, 30000);
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  'figma_fill_card',
+  'Fill a blueline card with structured content. Items render as bold title + gray description pairs separated by dividers. Notes render in blue, warnings in orange.',
+  {
+    cardId: z.string().describe('Node ID of the blueline card to fill'),
+    items: z.array(z.object({
+      title: z.string().describe('Bold black title (e.g. element name, concept)'),
+      desc: z.string().describe('Gray description text below the title'),
+    })).describe('Content items — each renders as title/description pair with dividers between'),
+    notes: z.array(z.string()).optional().describe('WCAG reference notes (rendered in blue, 10px)'),
+    warnings: z.array(z.string()).optional().describe('Warnings and issues (rendered in orange semi-bold, 10px)'),
+  },
+  async ({ cardId, items, notes, warnings }) => {
+    const result = await sendCommand('FILL_CARD', { cardId, items, notes, warnings }, 15000);
+    return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  'figma_render_blueline',
+  'Render all blueline content in one call. In flat mode (default): fills all cards and optionally creates focus annotations. In panels mode: places native Figma annotations and region overlays on cloned designs.',
+  {
+    mode: z.enum(['flat', 'panels']).default('flat').describe('Rendering mode: "flat" fills card frames (default), "panels" places native annotations on cloned designs'),
+    nodeId: z.string().optional().describe('Target frame node ID (for focus annotations in flat mode). Uses current selection if omitted.'),
+    cards: z.record(z.string(), z.object({
+      items: z.array(z.object({
+        title: z.string().describe('Bold black title'),
+        desc: z.string().describe('Gray description text'),
+        nodeId: z.string().nullable().optional().describe('(panels mode) Node ID of the element this item refers to in the original design. Null for abstract/page-level items.'),
+        annotationType: z.enum(['element', 'region', 'none']).optional().describe('(panels mode) How to visualize: "element" = native annotation on node, "region" = colored overlay + annotation, "none" = WCAG footer only'),
+      })),
+      notes: z.array(z.string()).optional().describe('WCAG notes (blue)'),
+      warnings: z.array(z.string()).optional().describe('Warnings (orange)'),
+    })).describe('Map of category key → card content. Keys match card names (e.g. "headingHierarchy", "landmarks", "altText")'),
+    focusOrder: z.array(z.object({
+      nodeId: z.string().describe('Node ID of the interactive element'),
+      name: z.string().describe('Accessible name for this element'),
+    })).optional().describe('Focus order entries — creates sidebar, badges, and focus rectangles (flat mode only)'),
+  },
+  async ({ mode, nodeId, cards, focusOrder }) => {
+    if (mode === 'panels') {
+      // Transform cards into panels format for RENDER_BLUELINE_PANELS
+      const panels: Record<string, { items: Array<{ title: string; desc: string; nodeId: string | null; annotationType: 'element' | 'region' | 'none' }>; notes: string[]; warnings: string[] }> = {};
+      for (const [key, data] of Object.entries(cards)) {
+        panels[key] = {
+          items: data.items.map(item => ({
+            title: item.title,
+            desc: item.desc,
+            nodeId: item.nodeId ?? null,
+            annotationType: item.annotationType ?? 'none',
+          })),
+          notes: data.notes || [],
+          warnings: data.warnings || [],
+        };
+      }
+      const result = await sendCommand('RENDER_BLUELINE_PANELS', { panels }, 60000);
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+    }
+    // Default: flat mode
+    const result = await sendCommand('RENDER_BLUELINE', { nodeId, cards, focusOrder }, 60000);
     return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
   }
 );
