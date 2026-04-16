@@ -1373,7 +1373,8 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
           visible: true,
           color: { r: 0x12 / 255, g: 0x5E / 255, b: 0xDE / 255, a: 0.1 },
         };
-        frame.layoutGrids = [...frame.layoutGrids, grid] as ReadonlyArray<LayoutGrid>;
+        const existing = frame.layoutGrids.filter((g: LayoutGrid) => g.pattern !== 'COLUMNS');
+        frame.layoutGrids = [...existing, grid] as ReadonlyArray<LayoutGrid>;
         const mode = isMobile ? '6-col mobile' : '12-col desktop';
         figma.notify(`Grid applied: ${mode}`);
         figma.ui.postMessage({ type: 'grid-result', message: `Applied ${mode} grid (${Math.round(width)}px)` });
@@ -1405,7 +1406,8 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
           visible: true,
           color: { r: 0x12 / 255, g: 0x5E / 255, b: 0xDE / 255, a: 0.1 },
         };
-        frame.layoutGrids = [...frame.layoutGrids, grid] as ReadonlyArray<LayoutGrid>;
+        const existingXl = frame.layoutGrids.filter((g: LayoutGrid) => g.pattern !== 'COLUMNS');
+        frame.layoutGrids = [...existingXl, grid] as ReadonlyArray<LayoutGrid>;
         figma.notify('XL grid applied: 1920px centered');
         figma.ui.postMessage({ type: 'grid-result', message: `Applied XL grid (1920px centered, margin: ${margin}px)` });
       } catch (e: any) {
