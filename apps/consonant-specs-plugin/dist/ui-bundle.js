@@ -168,8 +168,16 @@
       case "a11y-status":
         updateA11yStatus(msg.message);
         break;
-      case "a11y-tier2-request":
-        showAiFillInstruction(msg.mode, msg.sections, msg.frameName);
+      case "a11y-fill-request":
+        if (autoFillMode === "auto") {
+          sendAutoFillRequest(!!msg.plainLanguage);
+        } else {
+          showAiFillInstruction(msg.mode, msg.sections, msg.frameName, msg.plainLanguage);
+        }
+        autoFillMode = null;
+        break;
+      case "a11y-panels-fill-request":
+        showPanelsFillInstruction(msg.sections, msg.frameName, msg.sectionIds);
         break;
       // Unified bridge command result from code.ts
       case "bridge:command-result": {
@@ -490,10 +498,14 @@
     placeholder.style.display = "none";
     controls.style.display = "block";
   }
-  function updateA11yTier2State() {
-    const badge = document.getElementById("a11yTier2Badge");
-    const items = document.querySelectorAll(".a11y-tier2-item");
-    const checkboxes = document.querySelectorAll('.a11y-tier2-item input[type="checkbox"]');
+  function updateA11yBridgeState() {
+    const badge = document.getElementById("a11yBridgeBadge");
+    const items = document.querySelectorAll(".a11y-item");
+    const checkboxes = document.querySelectorAll('.a11y-item input[type="checkbox"]');
+    const genBtn = document.getElementById("generateBluelineBtn");
+    const plainBtn = document.getElementById("generateBluelinePlainBtn");
+    if (genBtn) genBtn.disabled = false;
+    if (plainBtn) plainBtn.disabled = false;
     if (bridgeConnected) {
       badge.textContent = "\u2713 bridge connected";
       badge.classList.add("connected");
@@ -513,15 +525,86 @@
     const el = document.getElementById("a11yStatus");
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
-  function showAiFillInstruction(mode, sections, frameName) {
+  var autoFillTimer = null;
+  var autoFillStartTime = 0;
+  var autoFillMode = null;
+  function startAutoFillTimer() {
+    autoFillStartTime = Date.now();
+    const el = document.getElementById("a11yStatus");
+    if (!el) return;
+    updateAutoFillTimerDisplay(el);
+    autoFillTimer = setInterval(() => updateAutoFillTimerDisplay(el), 1e3);
+  }
+  function updateAutoFillTimerDisplay(el) {
+    const elapsed = Math.floor((Date.now() - autoFillStartTime) / 1e3);
+    const min = Math.floor(elapsed / 60);
+    const sec = elapsed % 60;
+    const timeStr = `${min}:${sec.toString().padStart(2, "0")}`;
+    el.innerHTML = `
+    <div class="autofill-progress">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="autofill-pulse"></span>
+        <span style="font-weight:600;font-size:11px;">Auto-filling...</span>
+        <span class="autofill-timer">${timeStr}</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:4px;">Claude is analyzing and filling cards</div>
+    </div>`;
+  }
+  function stopAutoFillTimer(message, success) {
+    if (autoFillTimer) {
+      clearInterval(autoFillTimer);
+      autoFillTimer = null;
+    }
+    const elapsed = Math.floor((Date.now() - autoFillStartTime) / 1e3);
+    const min = Math.floor(elapsed / 60);
+    const sec = elapsed % 60;
+    const timeStr = `${min}:${sec.toString().padStart(2, "0")}`;
+    const el = document.getElementById("a11yStatus");
+    if (el) {
+      const color = success ? "var(--success,#2d9d78)" : "var(--warning,#e68619)";
+      const icon = success ? "\u2714" : "\u2718";
+      el.innerHTML = `
+      <div class="autofill-progress" style="border-left-color:${color};">
+        <div style="font-weight:600;font-size:11px;color:${color};">${icon} ${esc(message)}</div>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:2px;">Completed in ${timeStr}</div>
+      </div>`;
+    }
+  }
+  function sendAutoFillRequest(plainLanguage) {
+    if (!bridgeConnected || !bridgeWs) {
+      updateA11yStatus("Connect Bridge first for auto-fill.");
+      return;
+    }
+    bridgeWs.send(JSON.stringify({ type: "START_AUTO_FILL", data: { plainLanguage } }));
+    startAutoFillTimer();
+  }
+  function handleAutoFillMessage(msg) {
+    var _a23, _b;
+    if (msg.type === "AUTO_FILL_STARTED") {
+      return;
+    }
+    if (msg.type === "AUTO_FILL_COMPLETE") {
+      const filled = ((_a23 = msg.data) == null ? void 0 : _a23.filledCards) || [];
+      stopAutoFillTimer(`Filled ${filled.length} cards`, true);
+      return;
+    }
+    if (msg.type === "AUTO_FILL_FAILED") {
+      const error = ((_b = msg.data) == null ? void 0 : _b.error) || "Unknown error";
+      stopAutoFillTimer(error, false);
+      return;
+    }
+  }
+  function showAiFillInstruction(mode, sections, frameName, plainLanguage) {
     var _a23;
     let cmd;
+    const langNote = plainLanguage ? ' Use plain language: lead with questions like "What headings does this use?", explain WHY before giving technical detail, include "Why this matters" sections.' : "";
+    const agentNote = " Call figma_get_blueline_data first \u2014 it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.";
     if (mode === "sections") {
-      cmd = "Use /project:fill-blueline to fill the blueline section instruction cards on the current Figma page via the bridge.";
+      cmd = `Fill the blueline cards on the current Figma page.${agentNote}${langNote}`;
     } else {
       const categoryList = sections && sections.length > 0 ? sections.join(", ") : "all categories";
       const frame = frameName ? ` for "${frameName}"` : "";
-      cmd = `Use /project:fill-blueline to fill ONLY these blueline categories${frame}: ${categoryList}. Do not fill cards from other categories or previous generations.`;
+      cmd = `Fill ONLY these blueline categories${frame}: ${categoryList}.${agentNote} Do not fill cards from other categories or previous generations.${langNote}`;
     }
     const el = document.getElementById("a11yStatus");
     if (el) {
@@ -545,116 +628,155 @@
       });
     }
   }
+  function showPanelsFillInstruction(sections, frameName, sectionIds) {
+    var _a23;
+    const sectionList = sections.join(", ");
+    const cmd = `Fill the blueline panels on the current Figma page for "${frameName}". Categories: ${sectionList}.
+
+Call figma_get_blueline_data first \u2014 it returns structural data (including nodeIds for all elements) and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge.
+
+Dispatch parallel agents. IMPORTANT: Each agent must return items with these additional fields:
+- nodeId (string|null): the node ID from the structural scan that this item refers to. Null if no element match.
+- annotationType ("element"|"region"|"none"): "element" for specific UI elements (buttons, links, inputs), "region" for area-level concepts (landmarks, sections), "none" for abstract/page-level items.
+
+Then call figma_render_blueline with mode: "panels" and all item JSON. The panels have already been scaffolded with cloned designs \u2014 the render call will place native Figma annotations on the clones.`;
+    const el = document.getElementById("a11yStatus");
+    if (el) {
+      el.innerHTML = `
+      <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
+        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Panels scaffolded &#x2714;</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">To fill annotations, paste this in your current Claude session:</div>
+        <code id="panelsFillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;white-space:pre-wrap;">${esc(cmd)}</code>
+        <button class="btn btn-secondary" id="copyPanelsFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Paste into your current Claude Code session (Bridge must be connected)</div>
+      </div>`;
+      (_a23 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a23.addEventListener("click", async () => {
+        await copyToClipboard(cmd);
+        const btn = document.getElementById("copyPanelsFillCmd");
+        if (btn) {
+          btn.textContent = "Copied!";
+          setTimeout(() => {
+            btn.textContent = "Copy";
+          }, 1500);
+        }
+      });
+    }
+  }
   var _a15;
-  (_a15 = document.getElementById("a11yCheckAll")) == null ? void 0 : _a15.addEventListener("click", () => {
-    const allIds = ["a11yFocusIndicators", "a11yFocusOrder", "a11yHeadings", "a11yLandmarks", "a11yNames", "a11yAltText", "a11yAria", "a11yKeyboard", "a11yDom", "a11yAutoRotation", "a11yVoiceover", "a11yTalkback", "a11yNarrator", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
-    const boxes = allIds.map((id) => document.getElementById(id)).filter(Boolean);
-    const enabledBoxes = boxes.filter((cb) => !cb.disabled);
-    const allChecked = enabledBoxes.every((cb) => cb.checked);
-    enabledBoxes.forEach((cb) => {
+  (_a15 = document.getElementById("a11yCheckAllAi")) == null ? void 0 : _a15.addEventListener("click", () => {
+    if (!bridgeConnected) return;
+    const aiIds = ["a11yFocusIndicators", "a11yFocusOrder", "a11yHeadings", "a11yLandmarksNav", "a11yNamesAlt", "a11yColorContrast", "a11yAriaKeyboard", "a11yTargetSize", "a11yPageSetup"];
+    const boxes = aiIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const allChecked = boxes.every((cb) => cb.checked);
+    boxes.forEach((cb) => {
       cb.checked = !allChecked;
     });
-    const simplified = document.getElementById("a11ySimplified");
-    if (simplified && !simplified.disabled) simplified.checked = false;
-    const btn = document.getElementById("a11yCheckAll");
+    const btn = document.getElementById("a11yCheckAllAi");
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
-  var NOTE_IDS = ["a11yVoiceover", "a11yTalkback", "a11yNarrator", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
   var _a16;
-  (_a16 = document.getElementById("a11ySimplified")) == null ? void 0 : _a16.addEventListener("change", () => {
-    const simplified = document.getElementById("a11ySimplified");
-    if (!(simplified == null ? void 0 : simplified.checked)) return;
-    const regular = document.getElementById("a11yAutoRotation");
-    if (regular) regular.checked = false;
-    NOTE_IDS.forEach((id) => {
-      const cb = document.getElementById(id);
-      if (cb) cb.checked = false;
+  (_a16 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a16.addEventListener("click", () => {
+    if (!bridgeConnected) return;
+    const noteIds = ["a11yForms", "a11yCarousel", "a11yDom", "a11yMotionMedia", "a11yScreenReader", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
+    const boxes = noteIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const allChecked = boxes.every((cb) => cb.checked);
+    boxes.forEach((cb) => {
+      cb.checked = !allChecked;
     });
+    const btn = document.getElementById("a11yCheckAllNotes");
+    if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
-  var _a17;
-  (_a17 = document.getElementById("a11yAutoRotation")) == null ? void 0 : _a17.addEventListener("change", () => {
-    const simplified = document.getElementById("a11ySimplified");
-    const regular = document.getElementById("a11yAutoRotation");
-    if (regular == null ? void 0 : regular.checked) {
-      if (simplified) simplified.checked = false;
-      NOTE_IDS.forEach((id) => {
-        const cb = document.getElementById(id);
-        if (cb && !cb.disabled) cb.checked = true;
-      });
-    } else {
-      NOTE_IDS.forEach((id) => {
-        const cb = document.getElementById(id);
-        if (cb) cb.checked = false;
-      });
-    }
-  });
-  NOTE_IDS.forEach((id) => {
-    var _a23;
-    (_a23 = document.getElementById(id)) == null ? void 0 : _a23.addEventListener("change", () => {
-      const cb = document.getElementById(id);
-      const simplified = document.getElementById("a11ySimplified");
-      const regular = document.getElementById("a11yAutoRotation");
-      if (cb == null ? void 0 : cb.checked) {
-        if (simplified) simplified.checked = false;
-        if (regular && !regular.disabled) regular.checked = true;
-      } else {
-        const anyNoteChecked = NOTE_IDS.some((nid) => {
-          const ncb = document.getElementById(nid);
-          return ncb == null ? void 0 : ncb.checked;
-        });
-        if (!anyNoteChecked && regular) regular.checked = false;
-      }
-    });
-  });
-  var _a18;
-  (_a18 = document.getElementById("a11yNotesToggle")) == null ? void 0 : _a18.addEventListener("click", () => {
-    const list = document.getElementById("a11yScreenReaderList");
-    const arrow = document.getElementById("a11yNotesArrow");
-    if (!list) return;
-    const collapsed = list.style.display === "none";
-    list.style.display = collapsed ? "" : "none";
-    if (arrow) arrow.style.transform = collapsed ? "" : "rotate(-90deg)";
-  });
-  var _a19;
-  (_a19 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a19.addEventListener("click", () => {
+  function getCheckedA11yCategories() {
     var _a23, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
-    const tier1 = [];
-    const tier2 = [];
-    if ((_a23 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a23.checked) tier1.push("focusIndicators");
-    if ((_b = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b.checked) tier1.push("focusOrder");
-    if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) tier2.push("headings");
-    if ((_d = document.getElementById("a11yLandmarks")) == null ? void 0 : _d.checked) tier2.push("landmarks");
-    if ((_e = document.getElementById("a11yNames")) == null ? void 0 : _e.checked) tier2.push("names");
-    if ((_f = document.getElementById("a11yAltText")) == null ? void 0 : _f.checked) tier2.push("altText");
-    if ((_g = document.getElementById("a11yAria")) == null ? void 0 : _g.checked) tier2.push("aria");
-    if ((_h = document.getElementById("a11yKeyboard")) == null ? void 0 : _h.checked) tier2.push("keyboard");
-    if ((_i = document.getElementById("a11yDom")) == null ? void 0 : _i.checked) tier2.push("dom");
-    const simplified = (_j = document.getElementById("a11ySimplified")) == null ? void 0 : _j.checked;
-    if (simplified) {
-      tier2.push("autoRotationSimplified");
-    } else if ((_k = document.getElementById("a11yAutoRotation")) == null ? void 0 : _k.checked) {
-      tier2.push("autoRotation");
+    const categories = [];
+    if ((_a23 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a23.checked) categories.push("focusIndicators");
+    if ((_b = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b.checked) categories.push("focusOrder");
+    if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) categories.push("headings");
+    if ((_d = document.getElementById("a11yLandmarksNav")) == null ? void 0 : _d.checked) {
+      categories.push("landmarks", "skipNav", "consistentNav");
     }
-    if ((_l = document.getElementById("a11yVoiceover")) == null ? void 0 : _l.checked) tier2.push("voiceover");
-    if ((_m = document.getElementById("a11yTalkback")) == null ? void 0 : _m.checked) tier2.push("talkback");
-    if ((_n = document.getElementById("a11yNarrator")) == null ? void 0 : _n.checked) tier2.push("narrator");
-    if ((_o = document.getElementById("a11yReactNative")) == null ? void 0 : _o.checked) tier2.push("reactNative");
-    if ((_p = document.getElementById("a11yTvNote")) == null ? void 0 : _p.checked) tier2.push("tvNote");
-    if ((_q = document.getElementById("a11yGeneralNote")) == null ? void 0 : _q.checked) tier2.push("generalNote");
-    if (tier1.length === 0 && tier2.length === 0) {
+    if ((_e = document.getElementById("a11yNamesAlt")) == null ? void 0 : _e.checked) {
+      categories.push("names", "altText");
+    }
+    if ((_f = document.getElementById("a11yColorContrast")) == null ? void 0 : _f.checked) categories.push("colorContrast");
+    if ((_g = document.getElementById("a11yAriaKeyboard")) == null ? void 0 : _g.checked) {
+      categories.push("aria", "keyboard");
+    }
+    if ((_h = document.getElementById("a11yTargetSize")) == null ? void 0 : _h.checked) categories.push("targetSize");
+    if ((_i = document.getElementById("a11yPageSetup")) == null ? void 0 : _i.checked) {
+      categories.push("pageTitle", "language");
+    }
+    if ((_j = document.getElementById("a11yForms")) == null ? void 0 : _j.checked) categories.push("forms");
+    if ((_k = document.getElementById("a11yCarousel")) == null ? void 0 : _k.checked) categories.push("autoRotation");
+    if ((_l = document.getElementById("a11yDom")) == null ? void 0 : _l.checked) categories.push("dom");
+    if ((_m = document.getElementById("a11yMotionMedia")) == null ? void 0 : _m.checked) {
+      categories.push("reducedMotion", "media", "reflow");
+    }
+    if ((_n = document.getElementById("a11yScreenReader")) == null ? void 0 : _n.checked) {
+      categories.push("voiceover", "talkback", "narrator");
+    }
+    if ((_o = document.getElementById("a11yReactNative")) == null ? void 0 : _o.checked) categories.push("reactNative");
+    if ((_p = document.getElementById("a11yTvNote")) == null ? void 0 : _p.checked) categories.push("tvNote");
+    if ((_q = document.getElementById("a11yGeneralNote")) == null ? void 0 : _q.checked) categories.push("generalNote");
+    return categories;
+  }
+  function getCheckedPluginAnnotations() {
+    var _a23, _b;
+    const annotations = [];
+    if ((_a23 = document.getElementById("a11yPluginFocusIndicators")) == null ? void 0 : _a23.checked) annotations.push("focusIndicators");
+    if ((_b = document.getElementById("a11yPluginFocusOrder")) == null ? void 0 : _b.checked) annotations.push("focusOrder");
+    return annotations;
+  }
+  function triggerBlueline(mode) {
+    const pluginAnnotations = getCheckedPluginAnnotations();
+    const categories = getCheckedA11yCategories();
+    if (pluginAnnotations.length === 0 && categories.length === 0) {
       updateA11yStatus("Select at least one option.");
       return;
     }
-    postToPlugin("generate-blueline", { tier1, tier2, grouped: !simplified });
-    updateA11yStatus("Generating blueline...");
-  });
+    if (pluginAnnotations.length > 0) {
+      postToPlugin("generate-plugin-annotations", { annotations: pluginAnnotations });
+    }
+    if (categories.length > 0) {
+      if (!bridgeConnected) {
+        updateA11yStatus("Connect Bridge for AI-assisted categories.");
+        return;
+      }
+      const plainLanguage = mode === "auto-plain";
+      autoFillMode = mode === "copy" ? "copy" : "auto";
+      postToPlugin("generate-blueline", { categories, plainLanguage, autoFill: mode !== "copy" });
+    } else if (pluginAnnotations.length > 0) {
+      updateA11yStatus("Generating annotations...");
+    }
+  }
+  var _a17;
+  (_a17 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a17.addEventListener("click", () => triggerBlueline("auto"));
+  var _a18;
+  (_a18 = document.getElementById("generateBluelinePlainBtn")) == null ? void 0 : _a18.addEventListener("click", () => triggerBlueline("auto-plain"));
+  var _a19;
+  (_a19 = document.getElementById("copyFillCmdBtn")) == null ? void 0 : _a19.addEventListener("click", () => triggerBlueline("copy"));
+  function triggerBluelinePanels() {
+    const pluginAnnotations = getCheckedPluginAnnotations();
+    const categories = getCheckedA11yCategories();
+    if (pluginAnnotations.length === 0 && categories.length === 0) {
+      updateA11yStatus("Select at least one option.");
+      return;
+    }
+    if (pluginAnnotations.length > 0) {
+      postToPlugin("generate-plugin-annotations", { annotations: pluginAnnotations });
+    }
+    if (categories.length > 0) {
+      if (!bridgeConnected) {
+        updateA11yStatus("Connect Bridge for AI-assisted categories.");
+        return;
+      }
+      postToPlugin("generate-blueline-panels", { categories });
+    } else if (pluginAnnotations.length > 0) {
+      updateA11yStatus("Generating annotations...");
+    }
+  }
   var _a20;
-  (_a20 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a20.addEventListener("click", () => {
-    const tier1 = ["focusIndicators", "focusOrder"];
-    const tier2 = ["headings", "landmarks", "names", "altText", "aria", "keyboard", "dom", "autoRotation", "screenReader"];
-    postToPlugin("generate-blueline-panels", { tier1, tier2 });
-    updateA11yStatus("Generating panels...");
-  });
+  (_a20 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a20.addEventListener("click", () => triggerBluelinePanels());
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
@@ -726,7 +848,7 @@
       disconnected.style.display = "block";
       connected.style.display = "none";
     }
-    updateA11yTier2State();
+    updateA11yBridgeState();
   }
   function appendBridgeLog(message) {
     const log = document.getElementById("bridgeLog");
@@ -903,6 +1025,10 @@
         const message = JSON.parse(event.data);
         if (message.type === "SERVER_HELLO" && message.data) {
           appendBridgeLog("Server v" + (message.data.serverVersion || "?") + " on port " + port);
+          return;
+        }
+        if (message.type === "AUTO_FILL_STARTED" || message.type === "AUTO_FILL_COMPLETE" || message.type === "AUTO_FILL_FAILED") {
+          handleAutoFillMessage(message);
           return;
         }
         if (!message.id || !message.method) return;
