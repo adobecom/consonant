@@ -201,3 +201,35 @@ Only generate this card when the design targets a TV platform (tvOS, Android TV,
 - Long text input should offer voice dictation
 - Select/OK button activates the focused element
 - Back button returns to previous screen (not a browser back)
+
+---
+
+## General Accessibility Notes
+
+Cross-platform behavior and patterns that apply regardless of screen reader or platform.
+
+### Live regions
+- `aria-live="polite"` — status updates, search result counts, toast notifications
+- `aria-live="assertive"` — error messages, urgent alerts, form validation errors
+- `role="status"` — loading indicators, progress updates (implicit `aria-live="polite"`)
+- `role="alert"` — error dialogs, time-sensitive warnings (implicit `aria-live="assertive"`)
+- The live region container must exist in the DOM BEFORE content is injected — adding `aria-live` to a newly created element won't trigger an announcement
+- `aria-atomic="true"` — entire region content is announced on any change (use for status messages where full context matters)
+
+### Focus management
+- After dynamic content insertion: if content appears after the trigger, focus stays on trigger; if before, move focus to new content
+- After page/view transitions (SPA): move focus to the main heading (H1) or a skip target, announce the change
+- After removing content (item deleted, accordion closed): move focus to the next item, previous item, or container — never let it reset to `<body>`
+- Scrollable containers should be focusable (`tabindex="0"`) so keyboard users can scroll with arrow keys
+
+### Announcements
+- Use `aria-live` regions for dynamic status changes
+- Use `role="alert"` for errors and urgent messages
+- For one-off announcements (e.g., "Item deleted"), inject text into a pre-existing live region
+- Avoid excessive announcements — too many interruptions degrade the experience
+
+### Common cross-platform patterns
+- Group related elements (e.g., card with image + title + description) so screen readers announce them as one unit
+- Ensure reading order matches visual order — CSS reordering (flexbox `order`, grid placement) can break this
+- Hidden content: use `aria-hidden="true"` for decorative elements, `display: none` or `hidden` attribute for content removed from the accessibility tree
+- `inert` attribute: disables all interaction and accessibility for a subtree (use for background content when a modal is open)
