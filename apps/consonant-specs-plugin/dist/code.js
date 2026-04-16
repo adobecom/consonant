@@ -6361,7 +6361,8 @@ figma.ui.onmessage = async (msg) => {
           visible: true,
           color: { r: 18 / 255, g: 94 / 255, b: 222 / 255, a: 0.1 }
         };
-        frame.layoutGrids = [...frame.layoutGrids, grid];
+        const existing = frame.layoutGrids.filter((g) => g.pattern !== "COLUMNS");
+        frame.layoutGrids = [...existing, grid];
         const mode = isMobile ? "6-col mobile" : "12-col desktop";
         figma.notify(`Grid applied: ${mode}`);
         figma.ui.postMessage({ type: "grid-result", message: `Applied ${mode} grid (${Math.round(width)}px)` });
@@ -6399,7 +6400,8 @@ figma.ui.onmessage = async (msg) => {
           visible: true,
           color: { r: 18 / 255, g: 94 / 255, b: 222 / 255, a: 0.1 }
         };
-        frame.layoutGrids = [...frame.layoutGrids, grid];
+        const existingXl = frame.layoutGrids.filter((g) => g.pattern !== "COLUMNS");
+        frame.layoutGrids = [...existingXl, grid];
         figma.notify("XL grid applied: 1920px centered");
         figma.ui.postMessage({ type: "grid-result", message: `Applied XL grid (1920px centered, margin: ${margin}px)` });
       } catch (e) {
