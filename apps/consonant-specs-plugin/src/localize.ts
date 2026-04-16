@@ -242,54 +242,79 @@ export async function localize(
   if (!('clone' in node)) throw new Error('Selected node cannot be cloned.');
 
   const GAP = 40;
-  let cursorX = (node as any).x + node.width + GAP;
+  const baseX = (node as any).x + node.width + GAP;
   const baseY = (node as any).y;
   const parent = node.parent;
   if (!parent || !('appendChild' in parent)) throw new Error('Selected node has no parent container.');
 
-  for (const code of languages) {
-    const meta = LANG_META[code];
-    if (!meta) { errors.push(`Unknown language: ${code}`); continue; }
+  // Collect source text once (shared across all languages)
+  const sourceTextNodes: TextNode[] = [];
+  collectTextNodes(node, sourceTextNodes);
+  const originals = sourceTextNodes.map((n) => norm(n.characters));
 
-    figma.ui.postMessage({ type: 'localize-status', message: `Collecting source text for ${meta.name}...` });
+  // Pre-validate languages and compute positions
+  const validLangs = languages
+    .map((code, i) => {
+      const meta = LANG_META[code];
+      if (!meta) { errors.push(`Unknown language: ${code}`); return null; }
+      if (provider === 'deepl' && code === 'th') { errors.push('Thai: DeepL does not support Thai — skipping'); return null; }
+      return { code, meta, x: baseX + i * (node.width + GAP) };
+    })
+    .filter(Boolean) as Array<{ code: string; meta: typeof LANG_META[string]; x: number }>;
 
+  // Clone all frames first (Figma API must be sequential for DOM mutations)
+  const clones: Array<{ code: string; meta: typeof LANG_META[string]; clone: SceneNode; textNodes: TextNode[] }> = [];
+  for (const lang of validLangs) {
     const clone = (node as any).clone() as SceneNode;
-    clone.name = `[${code}] ${node.name}`;
+    clone.name = `[${lang.code}] ${node.name}`;
     (parent as any).appendChild(clone);
-    (clone as any).x = cursorX;
+    (clone as any).x = lang.x;
     (clone as any).y = baseY;
-    cursorX += clone.width + GAP;
 
     const textNodes: TextNode[] = [];
     collectTextNodes(clone, textNodes);
-    if (textNodes.length === 0) { created++; continue; }
+    clones.push({ code: lang.code, meta: lang.meta, clone, textNodes });
+  }
 
-    const originals = textNodes.map((n) => norm(n.characters));
-    const sourceFonts = collectFonts(textNodes);
-    await loadFonts(sourceFonts);
+  // Translate all languages in parallel (API calls are independent)
+  figma.ui.postMessage({ type: 'localize-status', message: `Translating ${originals.length} strings to ${validLangs.length} languages in parallel...` });
 
-    try {
-      figma.ui.postMessage({ type: 'localize-status', message: `Translating ${originals.length} strings to ${meta.name}...` });
+  const translationResults = await Promise.allSettled(
+    clones.map(async ({ code, meta, textNodes: cloneTextNodes }) => {
+      if (cloneTextNodes.length === 0) return { code, translations: [] as string[] };
       const langCode = meta.codes[provider];
-      if (provider === 'deepl' && code === 'th') {
-        errors.push('Thai: DeepL does not support Thai — skipping');
-        created++;
-        continue;
-      }
       const translations = await translateStrings(provider, originals, langCode, meta.name, apiKey);
+      return { code, translations };
+    })
+  );
 
-      await rewriteTextNodes(textNodes, translations, meta.fallbackFont);
+  // Apply translations and font swaps (must be sequential — Figma font loading)
+  for (let i = 0; i < clones.length; i++) {
+    const { code, meta, clone, textNodes: cloneTextNodes } = clones[i];
+    const result2 = translationResults[i];
 
-      if (code === 'ar' && applyRtl) applyRTL(clone);
-      created++;
-    } catch (e: any) {
-      const errMsg = e.message || String(e);
+    if (result2.status === 'rejected') {
+      const errMsg = result2.reason?.message || String(result2.reason);
       errors.push(`${meta.name}: ${errMsg}`);
       if (errMsg.includes('credit') || errMsg.includes('API error') || errMsg.includes('authentication') ||
           errMsg.includes('invalid') || errMsg.includes('rate') || errMsg.includes('quota') || errMsg.includes('key')) {
         try { clone.remove(); } catch (_) {}
         break;
       }
+      continue;
+    }
+
+    const { translations } = result2.value;
+    if (cloneTextNodes.length === 0 || translations.length === 0) { created++; continue; }
+
+    try {
+      const sourceFonts = collectFonts(cloneTextNodes);
+      await loadFonts(sourceFonts);
+      await rewriteTextNodes(cloneTextNodes, translations, meta.fallbackFont);
+      if (code === 'ar' && applyRtl) applyRTL(clone);
+      created++;
+    } catch (e: any) {
+      errors.push(`${meta.name}: ${e.message || String(e)}`);
     }
   }
 
