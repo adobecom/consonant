@@ -203,6 +203,10 @@ async function buildInstanceCard(entry: InstanceEntry, parent: FrameNode): Promi
 }
 
 export async function generateComponentDetailsSection(sourceNode: SceneNode): Promise<FrameNode | null> {
+  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'Medium' });
+
   const instances = collectInstances(sourceNode, 0);
   if (instances.length === 0) return null;
 

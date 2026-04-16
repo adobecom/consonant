@@ -1424,8 +1424,6 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         };
         testWs.onerror = () => {
           clearTimeout(timeout);
-          pending--;
-          if (pending <= 0 && !found) bridgeConnectFailed();
         };
         testWs.onclose = () => {
           clearTimeout(timeout);
@@ -1570,6 +1568,12 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       bridgeSessionNonce = null;
       bridgeNonceSent = false;
       bridgeConnected = false;
+      for (const [id, pending] of bridgePendingRequests) {
+        clearTimeout(pending.timeoutId);
+        pending.reject(new Error("Bridge disconnected"));
+      }
+      bridgePendingRequests.clear();
+      if (autoFillTimer) stopAutoFillTimer("Bridge disconnected", false);
       updateBridgeUi();
       const wasReplaced = event.code === 1e3 && (event.reason === "Replaced by new connection" || event.reason === "Replaced by same file reconnection");
       if (wasReplaced) {

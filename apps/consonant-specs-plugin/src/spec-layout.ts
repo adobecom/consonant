@@ -775,6 +775,10 @@ function drawSpacingOnlyMeasurements(
 // ─── Spacing-only section: single panel, padding + gaps only ─────────────────
 
 export async function generateSpacingSection(sourceNode: SceneNode): Promise<void> {
+  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'Medium' });
+
   if (!('children' in sourceNode) || sourceNode.children.length === 0) return;
 
   // Remove any existing overlays first
@@ -786,6 +790,7 @@ export async function generateSpacingSection(sourceNode: SceneNode): Promise<voi
   overlay.resize(sourceNode.width, sourceNode.height);
   overlay.fills = [];
   overlay.clipsContent = false;
+  const savedClipsContent = 'clipsContent' in sourceNode ? (sourceNode as FrameNode).clipsContent : undefined;
   if ('clipsContent' in sourceNode) (sourceNode as FrameNode).clipsContent = false;
   (sourceNode as FrameNode).appendChild(overlay);
   if ('layoutMode' in sourceNode && (sourceNode as FrameNode).layoutMode !== 'NONE') {
@@ -819,9 +824,16 @@ export async function generateSpacingSection(sourceNode: SceneNode): Promise<voi
     }
   }
   drawChildSpacing(sourceNode);
+
+  // Restore original clipsContent — don't permanently mutate the user's design
+  if (savedClipsContent !== undefined) (sourceNode as FrameNode).clipsContent = savedClipsContent;
 }
 
 export async function generateLayoutSection(sourceNode: SceneNode): Promise<FrameNode | null> {
+  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'Medium' });
+
   const entries: LayoutEntry[] = [];
   collectLayoutEntries(sourceNode, entries);
 
