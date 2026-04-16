@@ -212,11 +212,30 @@ function isNavItem(node: SceneNode): boolean {
  * Treated as a single tab stop (roving tabindex within).
  */
 function isPaginationGroup(node: SceneNode): boolean {
-  const name = node.name.toLowerCase();
-  if (!(name.includes('pagination') || name.includes('indicator') || name.includes('dots'))) return false;
   if (!('children' in node)) return false;
-  if (node.width < 20 || node.height < 6) return false;
-  return true;
+  const container = node as FrameNode;
+  if (container.children.length < 2) return false;
+
+  // Strategy 1: name-based — common pagination wrapper names
+  const name = node.name.toLowerCase();
+  const nameMatch = name.includes('pagination') || name.includes('indicator') ||
+    name.includes('dots') || (name.includes('carousel') && name.includes('nav'));
+  if (nameMatch && node.width >= 20 && node.height >= 6) return true;
+
+  // Strategy 2: structural — group of 3+ small, same-sized children in a row
+  // (carousel dots are typically 6-14px circles in a horizontal frame)
+  const visibleChildren = container.children.filter(c => c.visible);
+  if (visibleChildren.length >= 3) {
+    const first = visibleChildren[0];
+    const isSmallUniform = first.width <= 16 && first.height <= 16 &&
+      visibleChildren.every(c =>
+        Math.abs(c.width - first.width) <= 2 &&
+        Math.abs(c.height - first.height) <= 2
+      );
+    if (isSmallUniform) return true;
+  }
+
+  return false;
 }
 
 function getCornerRadius(node: SceneNode): number {
@@ -244,6 +263,7 @@ function collectFocusable(node: SceneNode, results: SceneNode[], depth = 0): voi
 
   for (const child of container.children) {
     if (!child.visible) continue;
+    if ('opacity' in child && (child as any).opacity === 0) continue;
     if (child.width < MIN_SIZE || child.height < MIN_SIZE) continue;
 
     if (isLeafInteractive(child)) {

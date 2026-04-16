@@ -219,7 +219,13 @@ async function loadLibraryTokens() {
                 try {
                   const alias = await figma.variables.getVariableByIdAsync(value.id);
                   if (alias) {
-                    value = alias.valuesByMode[defaultModeId != null ? defaultModeId : Object.keys(alias.valuesByMode)[0]];
+                    let aliasModeId;
+                    try {
+                      const aliasColl = await figma.variables.getVariableCollectionByIdAsync(alias.variableCollectionId);
+                      aliasModeId = aliasColl == null ? void 0 : aliasColl.defaultModeId;
+                    } catch (_) {
+                    }
+                    value = alias.valuesByMode[aliasModeId != null ? aliasModeId : Object.keys(alias.valuesByMode)[0]];
                   } else break;
                 } catch (_) {
                   break;
@@ -3473,50 +3479,55 @@ function collectSourceText(node) {
   return textNodes.map((n) => ({ nodeId: n.id, text: norm(n.characters) }));
 }
 async function localize(node, languages, applyRtl, provider, apiKey) {
+  var _a;
   const errors = [];
   let created = 0;
   if (!("clone" in node)) throw new Error("Selected node cannot be cloned.");
   const GAP = 40;
-  let cursorX = node.x + node.width + GAP;
+  const baseX = node.x + node.width + GAP;
   const baseY = node.y;
   const parent = node.parent;
   if (!parent || !("appendChild" in parent)) throw new Error("Selected node has no parent container.");
-  for (const code2 of languages) {
+  const sourceTextNodes = [];
+  collectTextNodes(node, sourceTextNodes);
+  const originals = sourceTextNodes.map((n) => norm(n.characters));
+  const validLangs = languages.map((code2, i) => {
     const meta = LANG_META[code2];
     if (!meta) {
       errors.push(`Unknown language: ${code2}`);
-      continue;
+      return null;
     }
-    figma.ui.postMessage({ type: "localize-status", message: `Collecting source text for ${meta.name}...` });
+    if (provider === "deepl" && code2 === "th") {
+      errors.push("Thai: DeepL does not support Thai \u2014 skipping");
+      return null;
+    }
+    return { code: code2, meta, x: baseX + i * (node.width + GAP) };
+  }).filter(Boolean);
+  const clones = [];
+  for (const lang of validLangs) {
     const clone = node.clone();
-    clone.name = `[${code2}] ${node.name}`;
+    clone.name = `[${lang.code}] ${node.name}`;
     parent.appendChild(clone);
-    clone.x = cursorX;
+    clone.x = lang.x;
     clone.y = baseY;
-    cursorX += clone.width + GAP;
     const textNodes = [];
     collectTextNodes(clone, textNodes);
-    if (textNodes.length === 0) {
-      created++;
-      continue;
-    }
-    const originals = textNodes.map((n) => norm(n.characters));
-    const sourceFonts = collectFonts(textNodes);
-    await loadFonts(sourceFonts);
-    try {
-      figma.ui.postMessage({ type: "localize-status", message: `Translating ${originals.length} strings to ${meta.name}...` });
+    clones.push({ code: lang.code, meta: lang.meta, clone, textNodes });
+  }
+  figma.ui.postMessage({ type: "localize-status", message: `Translating ${originals.length} strings to ${validLangs.length} languages in parallel...` });
+  const translationResults = await Promise.allSettled(
+    clones.map(async ({ code: code2, meta, textNodes: cloneTextNodes }) => {
+      if (cloneTextNodes.length === 0) return { code: code2, translations: [] };
       const langCode = meta.codes[provider];
-      if (provider === "deepl" && code2 === "th") {
-        errors.push("Thai: DeepL does not support Thai \u2014 skipping");
-        created++;
-        continue;
-      }
       const translations = await translateStrings(provider, originals, langCode, meta.name, apiKey);
-      await rewriteTextNodes(textNodes, translations, meta.fallbackFont);
-      if (code2 === "ar" && applyRtl) applyRTL(clone);
-      created++;
-    } catch (e) {
-      const errMsg = e.message || String(e);
+      return { code: code2, translations };
+    })
+  );
+  for (let i = 0; i < clones.length; i++) {
+    const { code: code2, meta, clone, textNodes: cloneTextNodes } = clones[i];
+    const result2 = translationResults[i];
+    if (result2.status === "rejected") {
+      const errMsg = ((_a = result2.reason) == null ? void 0 : _a.message) || String(result2.reason);
       errors.push(`${meta.name}: ${errMsg}`);
       if (errMsg.includes("credit") || errMsg.includes("API error") || errMsg.includes("authentication") || errMsg.includes("invalid") || errMsg.includes("rate") || errMsg.includes("quota") || errMsg.includes("key")) {
         try {
@@ -3525,6 +3536,21 @@ async function localize(node, languages, applyRtl, provider, apiKey) {
         }
         break;
       }
+      continue;
+    }
+    const { translations } = result2.value;
+    if (cloneTextNodes.length === 0 || translations.length === 0) {
+      created++;
+      continue;
+    }
+    try {
+      const sourceFonts = collectFonts(cloneTextNodes);
+      await loadFonts(sourceFonts);
+      await rewriteTextNodes(cloneTextNodes, translations, meta.fallbackFont);
+      if (code2 === "ar" && applyRtl) applyRTL(clone);
+      created++;
+    } catch (e) {
+      errors.push(`${meta.name}: ${e.message || String(e)}`);
     }
   }
   try {
@@ -3700,11 +3726,21 @@ function isNavItem(node) {
   return true;
 }
 function isPaginationGroup(node) {
-  const name = node.name.toLowerCase();
-  if (!(name.includes("pagination") || name.includes("indicator") || name.includes("dots"))) return false;
   if (!("children" in node)) return false;
-  if (node.width < 20 || node.height < 6) return false;
-  return true;
+  const container = node;
+  if (container.children.length < 2) return false;
+  const name = node.name.toLowerCase();
+  const nameMatch = name.includes("pagination") || name.includes("indicator") || name.includes("dots") || name.includes("carousel") && name.includes("nav");
+  if (nameMatch && node.width >= 20 && node.height >= 6) return true;
+  const visibleChildren = container.children.filter((c) => c.visible);
+  if (visibleChildren.length >= 3) {
+    const first = visibleChildren[0];
+    const isSmallUniform = first.width <= 16 && first.height <= 16 && visibleChildren.every(
+      (c) => Math.abs(c.width - first.width) <= 2 && Math.abs(c.height - first.height) <= 2
+    );
+    if (isSmallUniform) return true;
+  }
+  return false;
 }
 function getCornerRadius2(node) {
   if ("cornerRadius" in node) {
@@ -3725,6 +3761,7 @@ function collectFocusable(node, results, depth = 0) {
   const container = node;
   for (const child of container.children) {
     if (!child.visible) continue;
+    if ("opacity" in child && child.opacity === 0) continue;
     if (child.width < MIN_SIZE || child.height < MIN_SIZE) continue;
     if (isLeafInteractive(child)) {
       results.push(child);
@@ -4221,9 +4258,6 @@ function runStructuralScan(node) {
 }
 
 // src/a11y-blueline.ts
-var SIDEBAR_WIDTH = 320;
-var SIDEBAR_PAD = 16;
-var SECTION_GAP = 24;
 var CARD_WIDTH = 400;
 var CARD_GAP2 = 16;
 var CARDS_TOP_MARGIN = 40;
@@ -4233,14 +4267,21 @@ var PANEL_PAD = 80;
 var BADGE_COLOR2 = { r: 0.145, g: 0.494, b: 0.333 };
 var NAVY_COLOR = { r: 0.063, g: 0.157, b: 0.294 };
 var LANDMARK_BG = { r: 0.753, g: 0.898, b: 0.875 };
-var TIER2_COLOR = { r: 0.49, g: 0.23, b: 0.93 };
+var AI_COLOR = { r: 0.49, g: 0.23, b: 0.93 };
 var TEXT_PRIMARY = { r: 0, g: 0, b: 0 };
 var TEXT_WHITE = { r: 0.989, g: 0.989, b: 0.989 };
-var BORDER_COLOR = { r: 0, g: 0, b: 0 };
-var BORDER_OPACITY = 0.1;
 var BG_COLOR = { r: 0.989, g: 0.989, b: 0.989 };
 var STROKE_COLOR = { r: 0.89, g: 0.89, b: 0.89 };
+var PANEL_COLS = 3;
 var CATEGORY_BADGE = {
+  // Focus Indicators — navy pill + focus ring icon
+  focusIndicators: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 6 1 C 3.24 1 1 3.24 1 6 C 1 8.76 3.24 11 6 11 C 8.76 11 11 8.76 11 6 C 11 3.24 8.76 1 6 1 Z M 6 3 C 4.34 3 3 4.34 3 6 C 3 7.66 4.34 9 6 9 C 7.66 9 9 7.66 9 6 C 9 4.34 7.66 3 6 3 Z",
+    iconStroke: true
+  },
   // Focus Order — green circle
   focusOrder: {
     color: BADGE_COLOR2,
@@ -4248,6 +4289,13 @@ var CATEGORY_BADGE = {
     cornerRadius: 16
   },
   // Accessible Names — navy pill + headphone icon
+  accessibleNames: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 1.3 4.55 L 1.3 4.39 C 1.3 2.965 2.41 1.3 4.01 1.3 C 5.61 1.3 6.72 2.965 6.72 4.39 L 6.72 4.55 M 4.01 9.72 L 4.01 10.11 C 4.01 10.39 4.19 10.7 4.55 10.7 L 5.35 10.7 C 6.35 10.7 7.16 9.89 7.16 8.89 M 0.975 4.55 L 1.6 4.55 L 1.6 8.17 L 0.975 8.17 C 0.64 8.17 0.37 7.9 0.37 7.57 L 0.37 5.15 C 0.37 4.82 0.64 4.55 0.975 4.55 Z M 6.4 4.55 L 7.03 4.55 C 7.36 4.55 7.63 4.82 7.63 5.15 L 7.63 7.57 C 7.63 7.9 7.36 8.17 7.03 8.17 L 6.4 8.17 L 6.4 4.55 Z",
+    iconStroke: true
+  },
   names: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -4256,6 +4304,13 @@ var CATEGORY_BADGE = {
     iconStroke: true
   },
   // ARIA Roles — navy pill + </> code icon
+  ariaRoles: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 4.66 10.4 L 7.26 0 M 9.86 2.6 L 10.98 3.82 C 11.3 4.14 11.3 4.66 10.98 4.98 L 9.86 6.2 M 2.06 6.2 L 0.94 4.98 C 0.62 4.66 0.62 4.14 0.94 3.82 L 2.06 2.6",
+    iconStroke: true
+  },
   aria: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -4264,6 +4319,13 @@ var CATEGORY_BADGE = {
     iconStroke: true
   },
   // Heading Hierarchy — navy pill + H icon
+  headingHierarchy: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 1.5 1 L 1.5 11 M 10.5 1 L 10.5 11 M 1.5 6 L 10.5 6",
+    iconStroke: true
+  },
   headings: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -4286,6 +4348,13 @@ var CATEGORY_BADGE = {
     iconStroke: true
   },
   // Keyboard Patterns — navy pill + keyboard icon
+  keyboardPatterns: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 1 0 L 11 0 C 11.55 0 12 0.45 12 1 L 12 7.5 C 12 8.05 11.55 8.5 11 8.5 L 1 8.5 C 0.45 8.5 0 8.05 0 7.5 L 0 1 C 0 0.45 0.45 0 1 0 Z M 3 6.5 L 9 6.5 M 2.5 2 L 2.5 2 M 5 2 L 5 2 M 7 2 L 7 2 M 9.5 2 L 9.5 2 M 2.5 4.25 L 2.5 4.25 M 5 4.25 L 5 4.25 M 7 4.25 L 7 4.25 M 9.5 4.25 L 9.5 4.25",
+    iconStroke: true
+  },
   keyboard: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -4294,6 +4363,13 @@ var CATEGORY_BADGE = {
     iconStroke: true
   },
   // DOM Strategy — navy pill + tree/structure icon
+  domStrategy: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 6 0 L 6 4 M 6 4 L 2 7 M 6 4 L 10 7 M 2 7 L 2 10 M 10 7 L 10 10",
+    iconStroke: true
+  },
   dom: {
     color: NAVY_COLOR,
     textColor: TEXT_WHITE,
@@ -4314,6 +4390,86 @@ var CATEGORY_BADGE = {
     textColor: TEXT_WHITE,
     cornerRadius: 6,
     iconPath: "M 10.5 3 C 9.5 1.2 7.4 0 5.5 0 C 2.5 0 0 2.7 0 6 C 0 9.3 2.5 11 5.5 11 C 8 11 10 9.3 10.5 7 M 10.5 0 L 10.5 3 L 7.5 3",
+    iconStroke: true
+  },
+  // Color Contrast — navy pill + eye icon
+  colorContrast: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 0 6 C 0 6 2.5 1 6 1 C 9.5 1 12 6 12 6 C 12 6 9.5 11 6 11 C 2.5 11 0 6 0 6 Z M 6 4 C 7.1 4 8 4.9 8 6 C 8 7.1 7.1 8 6 8 C 4.9 8 4 7.1 4 6 C 4 4.9 4.9 4 6 4 Z",
+    iconStroke: true
+  },
+  // Forms — navy pill + form icon
+  forms: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 1 0 L 11 0 C 11.55 0 12 0.45 12 1 L 12 11 C 12 11.55 11.55 12 11 12 L 1 12 C 0.45 12 0 11.55 0 11 L 0 1 C 0 0.45 0.45 0 1 0 Z M 3 3 L 9 3 M 3 6 L 9 6 M 3 9 L 6 9",
+    iconStroke: true
+  },
+  // Target Size — navy pill + target icon
+  targetSize: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 6 1 C 3.24 1 1 3.24 1 6 C 1 8.76 3.24 11 6 11 C 8.76 11 11 8.76 11 6 C 11 3.24 8.76 1 6 1 Z M 6 3.5 C 4.62 3.5 3.5 4.62 3.5 6 C 3.5 7.38 4.62 8.5 6 8.5 C 7.38 8.5 8.5 7.38 8.5 6 C 8.5 4.62 7.38 3.5 6 3.5 Z M 6 5 C 5.45 5 5 5.45 5 6 C 5 6.55 5.45 7 6 7 C 6.55 7 7 6.55 7 6 C 7 5.45 6.55 5 6 5 Z",
+    iconStroke: true
+  },
+  // Reflow & Text Spacing — navy pill + responsive icon
+  reflow: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 0 2 L 8 2 C 8.55 2 9 2.45 9 3 L 9 9 C 9 9.55 8.55 10 8 10 L 0 10 L 0 2 Z M 9 5 L 12 5 L 12 12 L 4 12 L 4 10",
+    iconStroke: true
+  },
+  // Language — navy pill + globe icon
+  language: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 6 0 C 2.69 0 0 2.69 0 6 C 0 9.31 2.69 12 6 12 C 9.31 12 12 9.31 12 6 C 12 2.69 9.31 0 6 0 Z M 0 6 L 12 6 M 6 0 C 4 2.5 4 9.5 6 12 M 6 0 C 8 2.5 8 9.5 6 12",
+    iconStroke: true
+  },
+  // Time-Based Media — navy pill + play icon
+  media: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 6 0 C 2.69 0 0 2.69 0 6 C 0 9.31 2.69 12 6 12 C 9.31 12 12 9.31 12 6 C 12 2.69 9.31 0 6 0 Z M 4.5 3.5 L 9 6 L 4.5 8.5 L 4.5 3.5 Z",
+    iconStroke: true
+  },
+  // Skip Navigation — navy pill + skip icon
+  skipNav: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 1 6 L 8 6 M 8 6 L 5 3 M 8 6 L 5 9 M 11 2 L 11 10",
+    iconStroke: true
+  },
+  // Page Title — navy pill + title icon
+  pageTitle: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 2 2 L 10 2 M 6 2 L 6 10 M 4 10 L 8 10",
+    iconStroke: true
+  },
+  // Reduced Motion — navy pill + motion icon
+  reducedMotion: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 1 6 C 2 3 4 1 6 1 C 8 1 10 3 11 6 C 10 9 8 11 6 11 C 4 11 2 9 1 6 Z M 0 0 L 12 12",
+    iconStroke: true
+  },
+  // Consistent Navigation — navy pill + nav icon
+  consistentNav: {
+    color: NAVY_COLOR,
+    textColor: TEXT_WHITE,
+    cornerRadius: 6,
+    iconPath: "M 0 2 L 12 2 M 0 6 L 12 6 M 0 10 L 8 10",
     iconStroke: true
   },
   // General Note — navy pill + document icon
@@ -4365,40 +4521,39 @@ var CATEGORY_BADGE = {
     iconStroke: true
   }
 };
-var TIER2_SECTIONS = {
+var CARD_SECTIONS = {
+  focusIndicators: "Focus Indicators",
+  focusOrder: "Focus Order",
   headings: "Heading Hierarchy",
+  headingHierarchy: "Heading Hierarchy",
   landmarks: "Landmarks",
   names: "Accessible Names",
+  accessibleNames: "Accessible Names",
   altText: "Alt-Text",
   aria: "ARIA Roles & Attributes",
+  ariaRoles: "ARIA Roles & Attributes",
   keyboard: "Keyboard Patterns",
+  keyboardPatterns: "Keyboard Patterns",
   dom: "DOM Strategy",
-  autoRotationSimplified: "Auto-Rotation",
-  autoRotation: "Auto-Rotation",
+  domStrategy: "DOM Strategy",
+  colorContrast: "Color Contrast",
+  forms: "Forms",
+  targetSize: "Target Size",
+  reflow: "Reflow & Text Spacing",
+  language: "Language",
+  media: "Time-Based Media",
+  skipNav: "Skip Navigation",
+  pageTitle: "Page Title",
+  reducedMotion: "Reduced Motion",
+  consistentNav: "Consistent Navigation",
+  autoRotationSimplified: "Carousel (Simplified)",
+  autoRotation: "Carousel",
   voiceover: "VoiceOver",
   talkback: "TalkBack",
   narrator: "Narrator",
   reactNative: "React Native",
   tvNote: "TV Note",
   generalNote: "General Note"
-};
-var PANEL_DESCRIPTIONS = {
-  focusIndicators: "Visual representation of the browser focus ring on interactive elements. Every focusable element must have a visible focus indicator that meets WCAG 2.4.7.",
-  focusOrder: "The sequential order in which interactive elements receive keyboard focus. Must follow a logical reading order (WCAG 2.4.3). Annotate any elements that skip, are removed, or have custom tabindex.",
-  headings: "The heading level structure (H1\u2013H6) of the page. A correct hierarchy helps screen reader users navigate by section. There should be exactly one H1 per page.",
-  landmarks: "ARIA landmark regions (banner, main, navigation, region, etc.) that allow screen reader users to jump between major page areas.",
-  names: 'For sections or items that need a clear identifier, and either lack one, or whose meaning is not sufficiently explicit.\nExample: "Learn more" buttons, headerless accordion lists, icon-only controls.',
-  altText: 'Alternative text for images and media. Decorative images get alt="". Meaningful images get concise descriptions. Complex images may need long descriptions.',
-  aria: "ARIA roles, states, and properties that communicate widget behavior to assistive technology. Use native HTML semantics first; add ARIA only when HTML falls short.",
-  keyboard: "Expected keyboard interactions for custom widgets. Standard patterns: Tab to navigate between widgets, arrow keys within composite widgets, Enter/Space to activate.",
-  dom: "How the visual design maps to DOM structure. Reading order, semantic elements, skip links, and whether content is hidden vs removed from the DOM.",
-  autoRotation: "Auto-advancing content (carousels, slideshows) must be pausable (WCAG 2.2.2). Define timing, pause triggers, resume behavior, and reduced-motion handling.",
-  voiceover: "VoiceOver-specific behavior on iOS and macOS. Rotor actions, swipe gestures, announcement order, and any platform quirks.",
-  talkback: "TalkBack-specific behavior on Android. Touch exploration, gesture navigation, and any platform-specific announcements.",
-  narrator: "Narrator-specific behavior on Windows. Scan mode interactions, landmark navigation, and any platform quirks.",
-  reactNative: "React Native accessibility props: accessibilityLabel, accessibilityRole, accessibilityState, accessibilityActions, and platform bridging notes.",
-  tvNote: "TV platform accessibility: D-pad navigation, focus management, spatial navigation order, and remote control interactions.",
-  generalNote: "General accessibility notes that apply across all platforms. Live regions, announcements, and cross-platform behavior."
 };
 var loadedFonts = /* @__PURE__ */ new Set();
 async function loadFonts2() {
@@ -4438,75 +4593,6 @@ function createText(content, size, weight = "Regular", color) {
   text.characters = content;
   if (color) text.fills = [{ type: "SOLID", color }];
   return text;
-}
-function createSectionFrame(title, isTier2) {
-  const section = figma.createFrame();
-  section.name = title;
-  section.layoutMode = "VERTICAL";
-  section.counterAxisSizingMode = "FIXED";
-  section.resize(SIDEBAR_WIDTH - SIDEBAR_PAD * 2, 40);
-  section.primaryAxisSizingMode = "AUTO";
-  section.clipsContent = false;
-  section.itemSpacing = 8;
-  section.fills = [];
-  const headerFrame = figma.createFrame();
-  headerFrame.name = "Section Header";
-  headerFrame.layoutMode = "HORIZONTAL";
-  headerFrame.primaryAxisSizingMode = "AUTO";
-  headerFrame.counterAxisSizingMode = "AUTO";
-  headerFrame.itemSpacing = 6;
-  headerFrame.paddingBottom = 8;
-  headerFrame.fills = [];
-  const titleText = createText(title, 15, "Bold", isTier2 ? TIER2_COLOR : TEXT_PRIMARY);
-  titleText.opacity = isTier2 ? 1 : 0.95;
-  headerFrame.appendChild(titleText);
-  if (isTier2) {
-    const aiTag = createText("AI", 10, "Medium", TIER2_COLOR);
-    headerFrame.appendChild(aiTag);
-  }
-  section.appendChild(headerFrame);
-  return section;
-}
-function createFocusOrderSection(entries) {
-  const section = createSectionFrame("Focus Order", false);
-  for (const entry of entries) {
-    const row = figma.createFrame();
-    row.name = `${entry.name} (ID: ${entry.node.id})`;
-    row.layoutMode = "VERTICAL";
-    row.counterAxisSizingMode = "FIXED";
-    row.resize(SIDEBAR_WIDTH - SIDEBAR_PAD * 2, 48);
-    row.primaryAxisSizingMode = "AUTO";
-    row.clipsContent = false;
-    row.itemSpacing = 8;
-    row.paddingTop = 12;
-    row.paddingBottom = 12;
-    row.fills = [];
-    row.strokes = [{ type: "SOLID", color: BORDER_COLOR, opacity: BORDER_OPACITY }];
-    row.strokeWeight = 1;
-    row.strokeAlign = "INSIDE";
-    row.strokeTopWeight = 0;
-    row.strokeRightWeight = 0;
-    row.strokeBottomWeight = 1;
-    row.strokeLeftWeight = 0;
-    const infoRow = figma.createFrame();
-    infoRow.name = "Focus Order Info";
-    infoRow.layoutMode = "HORIZONTAL";
-    infoRow.primaryAxisSizingMode = "AUTO";
-    infoRow.counterAxisSizingMode = "AUTO";
-    infoRow.counterAxisAlignItems = "CENTER";
-    infoRow.itemSpacing = 8;
-    infoRow.fills = [];
-    const badgeBg = createNumberedBadge(entry.index, "focusOrder");
-    badgeBg.strokes = [];
-    badgeBg.strokeWeight = 0;
-    const label = createText(entry.name, 13, "Regular", TEXT_PRIMARY);
-    label.opacity = 0.95;
-    infoRow.appendChild(badgeBg);
-    infoRow.appendChild(label);
-    row.appendChild(infoRow);
-    section.appendChild(row);
-  }
-  return section;
 }
 function createCategoryIcon(categoryKey, color) {
   const config = CATEGORY_BADGE[categoryKey];
@@ -4567,8 +4653,8 @@ function createNumberedBadge(index, categoryKey) {
   }
   return badge;
 }
-function createDetailCard(sectionKey, isTier2) {
-  const title = TIER2_SECTIONS[sectionKey] || sectionKey;
+function createDetailCard(sectionKey) {
+  const title = CARD_SECTIONS[sectionKey] || sectionKey;
   const config = CATEGORY_BADGE[sectionKey];
   const card = figma.createFrame();
   card.name = title;
@@ -4624,9 +4710,7 @@ function createGroupedCard(groupTitle, keys) {
   const card = figma.createFrame();
   card.name = groupTitle;
   card.layoutMode = "VERTICAL";
-  card.counterAxisSizingMode = "FIXED";
   card.primaryAxisSizingMode = "AUTO";
-  card.layoutAlign = "STRETCH";
   card.clipsContent = false;
   card.paddingTop = 16;
   card.paddingBottom = 16;
@@ -4638,11 +4722,11 @@ function createGroupedCard(groupTitle, keys) {
   card.strokeWeight = 1;
   card.strokeAlign = "INSIDE";
   card.cornerRadius = 8;
-  const titleColor = groupTitle === "Accessibility Notes" ? NAVY_COLOR : TIER2_COLOR;
+  const titleColor = groupTitle === "Accessibility Notes" ? NAVY_COLOR : AI_COLOR;
   const titleText = createText(groupTitle, 15, "Bold", titleColor);
   card.appendChild(titleText);
   for (const key of keys) {
-    const title = TIER2_SECTIONS[key] || key;
+    const title = CARD_SECTIONS[key] || key;
     const config = CATEGORY_BADGE[key];
     const section = figma.createFrame();
     section.name = title;
@@ -4688,68 +4772,26 @@ function createGroupedCard(groupTitle, keys) {
   }
   return card;
 }
-async function generateBlueline(node, tier1, tier2, options) {
+async function generateBlueline(node, categories, options) {
   await loadFonts2();
   const sourceAbs = node.absoluteBoundingBox;
   if (!sourceAbs) throw new Error("Node has no bounding box");
   const page = figma.currentPage;
+  const oldAnnotations = page.children.filter(
+    (n) => n.name === "Accessibility Annotations" || n.name === "Blueline Cards" || n.name === "Tier 2 Cards" || n.name === "Focus Rectangle" || n.name === ".structural-scan" || n.name === "Badge" && n.type === "FRAME" && n.width < 40
+  );
+  for (const n of oldAnnotations) n.remove();
   const sourceX = sourceAbs.x;
   const sourceY = sourceAbs.y;
-  let focusEntries = [];
-  if (tier1.includes("focusOrder")) {
-    focusEntries = detectFocusOrder(node);
-  }
-  let sidebar = null;
-  if (focusEntries.length > 0) {
-    sidebar = figma.createFrame();
-    sidebar.name = "Accessibility Annotations";
-    sidebar.resize(SIDEBAR_WIDTH, 100);
-    sidebar.layoutMode = "VERTICAL";
-    sidebar.counterAxisSizingMode = "FIXED";
-    sidebar.primaryAxisSizingMode = "AUTO";
-    sidebar.clipsContent = false;
-    sidebar.paddingTop = SIDEBAR_PAD;
-    sidebar.paddingBottom = SIDEBAR_PAD;
-    sidebar.paddingLeft = SIDEBAR_PAD;
-    sidebar.paddingRight = SIDEBAR_PAD;
-    sidebar.itemSpacing = SECTION_GAP;
-    sidebar.fills = [{ type: "SOLID", color: BG_COLOR }];
-    sidebar.strokes = [{ type: "SOLID", color: STROKE_COLOR }];
-    sidebar.strokeWeight = 1;
-    sidebar.strokeAlign = "INSIDE";
-    sidebar.cornerRadius = 8;
-    const headerText = createText("Accessibility Annotations", 15, "Semi Bold", TEXT_PRIMARY);
-    headerText.opacity = 0.95;
-    sidebar.appendChild(headerText);
-    const focusSection = createFocusOrderSection(focusEntries);
-    sidebar.appendChild(focusSection);
-    sidebar.x = sourceX - SIDEBAR_WIDTH - 40;
-    sidebar.y = sourceY;
-    page.appendChild(sidebar);
-  }
-  if (tier1.includes("focusIndicators")) {
-    figma.ui.postMessage({ type: "a11y-status", message: "Adding focus indicators..." });
-    await generateFocusIndicators(node);
-  }
-  if (focusEntries.length > 0) {
-    figma.ui.postMessage({ type: "a11y-status", message: "Adding focus order badges..." });
-    for (const entry of focusEntries) {
-      const abs = entry.node.absoluteBoundingBox;
-      if (!abs) continue;
-      const badge = createNumberedBadge(entry.index, "focusOrder");
-      badge.x = abs.x - 4;
-      badge.y = abs.y - BADGE_HEIGHT - 2;
-      page.appendChild(badge);
-    }
-  }
-  if (tier2.length > 0) {
-    const grouped = (options == null ? void 0 : options.grouped) !== false;
+  const cardKeys = categories;
+  if (cardKeys.length > 0) {
+    const grouped = (options == null ? void 0 : options.grouped) === true;
     const NOTE_KEYS = /* @__PURE__ */ new Set(["voiceover", "talkback", "narrator", "reactNative", "tvNote", "generalNote"]);
-    const coreKeys = tier2.filter((k) => !NOTE_KEYS.has(k));
-    const noteKeys = tier2.filter((k) => NOTE_KEYS.has(k));
+    const coreKeys = cardKeys.filter((k) => !NOTE_KEYS.has(k));
+    const noteKeys = cardKeys.filter((k) => NOTE_KEYS.has(k));
     if (grouped) {
       const outerContainer = figma.createFrame();
-      outerContainer.name = "Tier 2 Cards";
+      outerContainer.name = "Blueline Cards";
       outerContainer.layoutMode = "HORIZONTAL";
       outerContainer.layoutWrap = "WRAP";
       outerContainer.counterAxisSizingMode = "AUTO";
@@ -4762,17 +4804,19 @@ async function generateBlueline(node, tier1, tier2, options) {
       if (coreKeys.length > 0) {
         const coreCard = createGroupedCard("AI-assisted", coreKeys);
         outerContainer.appendChild(coreCard);
+        coreCard.layoutSizingHorizontal = "FILL";
       }
       if (noteKeys.length > 0) {
         const notesCard = createGroupedCard("Accessibility Notes", noteKeys);
         outerContainer.appendChild(notesCard);
+        notesCard.layoutSizingHorizontal = "FILL";
       }
       outerContainer.x = sourceX;
       outerContainer.y = sourceY + sourceAbs.height + CARDS_TOP_MARGIN;
       page.appendChild(outerContainer);
     } else {
       const cardsContainer = figma.createFrame();
-      cardsContainer.name = "Tier 2 Cards";
+      cardsContainer.name = "Blueline Cards";
       cardsContainer.layoutMode = "HORIZONTAL";
       cardsContainer.layoutWrap = "WRAP";
       cardsContainer.counterAxisSizingMode = "AUTO";
@@ -4784,8 +4828,8 @@ async function generateBlueline(node, tier1, tier2, options) {
       cardsContainer.counterAxisSpacing = CARD_GAP2;
       cardsContainer.fills = [];
       cardsContainer.clipsContent = false;
-      for (const key of tier2) {
-        const card = createDetailCard(key, true);
+      for (const key of cardKeys) {
+        const card = createDetailCard(key);
         cardsContainer.appendChild(card);
       }
       cardsContainer.x = sourceX;
@@ -4795,102 +4839,36 @@ async function generateBlueline(node, tier1, tier2, options) {
   }
   figma.ui.postMessage({ type: "a11y-status", message: "Running structural scan..." });
   await embedStructuralScan(node, page);
-  const viewNodes = [node];
-  if (sidebar) viewNodes.push(sidebar);
-  figma.viewport.scrollAndZoomIntoView(viewNodes);
-  return { frameId: node.id, tier2Sections: tier2 };
+  figma.viewport.scrollAndZoomIntoView([node]);
+  return { frameId: node.id, sections: categories };
 }
-function createInstructionsCard(title, description, categoryKey) {
-  const config = categoryKey ? CATEGORY_BADGE[categoryKey] : void 0;
-  const card = figma.createFrame();
-  card.name = "Instructions";
-  card.resize(CARD_WIDTH, 100);
-  card.layoutMode = "VERTICAL";
-  card.counterAxisSizingMode = "FIXED";
-  card.primaryAxisSizingMode = "AUTO";
-  card.clipsContent = false;
-  card.paddingTop = 24;
-  card.paddingBottom = 24;
-  card.paddingLeft = 24;
-  card.paddingRight = 24;
-  card.itemSpacing = 12;
-  card.fills = [{ type: "SOLID", color: BG_COLOR }];
-  card.strokes = [{ type: "SOLID", color: STROKE_COLOR }];
-  card.strokeWeight = 1;
-  card.strokeAlign = "INSIDE";
-  card.cornerRadius = 8;
-  const headerFrame = figma.createFrame();
-  headerFrame.name = "Card Header";
-  headerFrame.layoutMode = "HORIZONTAL";
-  headerFrame.primaryAxisSizingMode = "AUTO";
-  headerFrame.counterAxisSizingMode = "AUTO";
-  headerFrame.counterAxisAlignItems = "CENTER";
-  headerFrame.itemSpacing = 10;
-  headerFrame.fills = [];
-  const titleText = createText(title, 28, "Bold", TEXT_PRIMARY);
-  headerFrame.appendChild(titleText);
-  if (config == null ? void 0 : config.iconPath) {
-    const iconBadge = figma.createFrame();
-    iconBadge.name = "Category Icon";
-    iconBadge.resize(28, 28);
-    iconBadge.cornerRadius = 6;
-    iconBadge.fills = [{ type: "SOLID", color: config.color }];
-    iconBadge.layoutMode = "HORIZONTAL";
-    iconBadge.primaryAxisAlignItems = "CENTER";
-    iconBadge.counterAxisAlignItems = "CENTER";
-    iconBadge.paddingLeft = 6;
-    iconBadge.paddingRight = 6;
-    iconBadge.paddingTop = 6;
-    iconBadge.paddingBottom = 6;
-    const icon = createCategoryIcon(categoryKey, config.textColor);
-    if (icon) {
-      icon.resize(16, 16);
-      iconBadge.appendChild(icon);
-    }
-    headerFrame.appendChild(iconBadge);
-  }
-  card.appendChild(headerFrame);
-  const descText = createText(description, 14, "Regular", TEXT_PRIMARY);
-  descText.opacity = 0.7;
-  descText.textAutoResize = "HEIGHT";
-  descText.resize(CARD_WIDTH - 48, descText.height);
-  card.appendChild(descText);
-  return card;
-}
-async function generateBluelinePanels(node, tier1, tier2) {
+async function generateBluelinePanels(node, categories) {
   await loadFonts2();
   const sourceAbs = node.absoluteBoundingBox;
   if (!sourceAbs) throw new Error("Node has no bounding box");
   const page = figma.currentPage;
-  const allPanels = [];
-  if (tier1.includes("focusIndicators")) allPanels.push("focusIndicators");
-  if (tier1.includes("focusOrder")) allPanels.push("focusOrder");
-  for (const key of tier2) allPanels.push(key);
+  const allPanels = [...categories];
   if (allPanels.length === 0) throw new Error("Select at least one option");
   let focusEntries = [];
-  if (tier1.includes("focusOrder")) {
+  if (categories.includes("focusOrder")) {
     focusEntries = detectFocusOrder(node);
   }
-  let panelX = sourceAbs.x + sourceAbs.width + 200;
-  const panelY = sourceAbs.y;
-  const firstSection = [];
+  const startX = sourceAbs.x + sourceAbs.width + 200;
+  const startY = sourceAbs.y;
+  const sectionW = sourceAbs.width + PANEL_PAD * 2;
+  const allSections = [];
+  const sectionIds = [];
+  let col = 0;
+  let rowY = startY;
+  let rowMaxH = 0;
   for (const key of allPanels) {
-    const title = TIER2_SECTIONS[key] || (key === "focusIndicators" ? "Focus Indicators" : key === "focusOrder" ? "Focus Order" : key);
-    const description = PANEL_DESCRIPTIONS[key] || "";
+    const title = CARD_SECTIONS[key] || key;
     const section = figma.createSection();
     section.name = `A11y ${title}`;
-    section.x = panelX;
-    section.y = panelY;
-    const instructions = createInstructionsCard(title, description, key);
-    instructions.x = PANEL_PAD;
-    instructions.y = PANEL_PAD;
-    section.appendChild(instructions);
     const clone = node.clone();
     clone.name = node.name;
-    const cloneX = PANEL_PAD + CARD_WIDTH + 40;
-    const cloneY = PANEL_PAD;
-    clone.x = cloneX;
-    clone.y = cloneY;
+    clone.x = PANEL_PAD;
+    clone.y = PANEL_PAD;
     section.appendChild(clone);
     if (key === "focusIndicators") {
       await generateFocusIndicators(clone);
@@ -4909,17 +4887,41 @@ async function generateBluelinePanels(node, tier1, tier2) {
         section.appendChild(badge);
       }
     }
-    const sectionW = cloneX + sourceAbs.width + PANEL_PAD;
-    const sectionH = Math.max(instructions.height, sourceAbs.height) + PANEL_PAD * 2;
+    const footer = figma.createFrame();
+    footer.name = "WCAG Footer";
+    footer.layoutMode = "VERTICAL";
+    footer.primaryAxisSizingMode = "AUTO";
+    footer.counterAxisSizingMode = "FIXED";
+    footer.resize(sourceAbs.width, 10);
+    footer.fills = [];
+    footer.paddingTop = 12;
+    footer.paddingBottom = 12;
+    footer.paddingLeft = 16;
+    footer.paddingRight = 16;
+    footer.itemSpacing = 4;
+    footer.x = PANEL_PAD;
+    footer.y = PANEL_PAD + sourceAbs.height + 20;
+    section.appendChild(footer);
+    const sectionH = PANEL_PAD + sourceAbs.height + 20 + 60 + PANEL_PAD;
     section.resizeWithoutConstraints(sectionW, sectionH);
+    const panelX = startX + col * (sectionW + PANEL_GAP);
+    section.x = panelX;
+    section.y = rowY;
     page.appendChild(section);
-    firstSection.push(section);
-    panelX += sectionW + PANEL_GAP;
+    allSections.push(section);
+    sectionIds.push(section.id);
+    if (sectionH > rowMaxH) rowMaxH = sectionH;
+    col++;
+    if (col >= PANEL_COLS) {
+      col = 0;
+      rowY += rowMaxH + PANEL_GAP;
+      rowMaxH = 0;
+    }
   }
   figma.ui.postMessage({ type: "a11y-status", message: "Running structural scan..." });
   await embedStructuralScan(node, page);
-  figma.viewport.scrollAndZoomIntoView(firstSection);
-  return { frameId: node.id, tier2Sections: tier2 };
+  figma.viewport.scrollAndZoomIntoView(allSections);
+  return { frameId: node.id, sections: categories, sectionIds };
 }
 async function placeCategoryBadge(targetNodeId, index, categoryKey) {
   await loadFonts2();
@@ -5034,9 +5036,8 @@ async function handleBridgeMethod(method, params) {
       const nodeId = params.nodeId;
       const sel = nodeId ? [await figma.getNodeByIdAsync(nodeId)] : figma.currentPage.selection;
       if (!sel || sel.length === 0 || !sel[0]) throw new Error("Select a frame or provide nodeId");
-      const tier1 = Array.isArray(params.tier1) ? params.tier1 : [];
-      const tier2 = Array.isArray(params.tier2) ? params.tier2 : [];
-      const result2 = await generateBlueline(sel[0], tier1, tier2);
+      const categories = Array.isArray(params.categories) ? params.categories : [];
+      const result2 = await generateBlueline(sel[0], categories);
       return result2;
     }
     // ── File info ──
@@ -5466,6 +5467,725 @@ async function handleBridgeMethod(method, params) {
       a11yWalk2(rootNode, 0);
       return { data: { issues, totalIssues: issues.length, nodeId: rootNode.id, nodeName: rootNode.name } };
     }
+    // ── Blueline data retrieval (for AI review + fill) ──
+    case "GET_BLUELINE_DATA": {
+      const page = figma.currentPage;
+      const scanNode = page.findOne((n) => n.name === ".structural-scan" && n.type === "TEXT");
+      const structuralScan = scanNode ? scanNode.characters : null;
+      const sidebars = page.findAll((n) => n.name === "Accessibility Annotations" && n.type === "FRAME");
+      const sidebar = sidebars[sidebars.length - 1];
+      const focusOrder = [];
+      if (sidebar && "children" in sidebar) {
+        let idx = 0;
+        const walk = (node) => {
+          if (node.name === "Focus Order Info" && "children" in node) {
+            idx++;
+            const parentRow = node.parent;
+            let elemName = "";
+            let nodeId;
+            if (parentRow && parentRow.type !== "PAGE" && parentRow.type !== "DOCUMENT") {
+              const rowName = parentRow.name;
+              const idMatch = rowName.match(/^(.+?)\s*\(ID:\s*([^)]+)\)$/);
+              if (idMatch) {
+                elemName = idMatch[1].trim();
+                nodeId = idMatch[2].trim();
+              } else {
+                elemName = rowName;
+              }
+            }
+            if (!elemName) {
+              const frame = node;
+              const textChild = frame.findOne((c) => c.type === "TEXT" && c.name !== "Badge");
+              elemName = (textChild == null ? void 0 : textChild.characters) || `Element ${idx}`;
+            }
+            focusOrder.push(__spreadValues({ index: idx, name: elemName }, nodeId ? { nodeId } : {}));
+          }
+          if ("children" in node) {
+            for (const child of node.children) walk(child);
+          }
+        };
+        walk(sidebar);
+      }
+      const focusRects = page.findAll((n) => {
+        var _a;
+        return n.name === "Focus Rectangle" && ((_a = n.parent) == null ? void 0 : _a.type) === "PAGE";
+      });
+      const focusIndicators = focusRects.map((r) => ({
+        x: Math.round(r.x),
+        y: Math.round(r.y),
+        width: Math.round(r.width),
+        height: Math.round(r.height)
+      }));
+      const NAME_TO_KEY = {
+        "Focus Indicators": "focusIndicators",
+        "Focus Order": "focusOrder",
+        "Heading Hierarchy": "headingHierarchy",
+        "Landmarks": "landmarks",
+        "Skip Navigation": "skipNav",
+        "Consistent Navigation": "consistentNav",
+        "Accessible Names": "accessibleNames",
+        "Alt-Text": "altText",
+        "Color Contrast": "colorContrast",
+        "ARIA Roles & Attributes": "ariaRoles",
+        "Keyboard Patterns": "keyboardPatterns",
+        "Target Size": "targetSize",
+        "Page Title": "pageTitle",
+        "Language": "language",
+        "Forms": "forms",
+        "Carousel": "autoRotation",
+        "DOM Strategy": "domStrategy",
+        "Reduced Motion": "reducedMotion",
+        "Time-Based Media": "media",
+        "Reflow & Text Spacing": "reflow",
+        "VoiceOver": "voiceover",
+        "TalkBack": "talkback",
+        "Narrator": "narrator",
+        "React Native": "reactNative",
+        "TV Note": "tvNote",
+        "General Note": "generalNote"
+      };
+      const cardContainers = page.findAll((n) => n.name === "Blueline Cards" || n.name === "Tier 2 Cards");
+      const cardContainer = cardContainers[cardContainers.length - 1];
+      const bluelineCards = [];
+      if (cardContainer && "children" in cardContainer) {
+        for (const child of cardContainer.children) {
+          if (child.type !== "FRAME" || !("children" in child)) continue;
+          const childFrame = child;
+          const isCard = childFrame.children.some((c) => c.name === "Card Header");
+          if (isCard) {
+            const hasPlaceholder = childFrame.findOne(
+              (c) => c.type === "TEXT" && c.characters.includes("Awaiting AI fill")
+            );
+            bluelineCards.push({ id: child.id, name: child.name, categoryKey: NAME_TO_KEY[child.name] || child.name, filled: !hasPlaceholder, container: cardContainer.name });
+          } else {
+            for (const grandchild of childFrame.children) {
+              if (grandchild.type !== "FRAME") continue;
+              const hasPlaceholder = "children" in grandchild && grandchild.findOne(
+                (c) => c.type === "TEXT" && c.characters.includes("Awaiting AI fill")
+              );
+              bluelineCards.push({ id: grandchild.id, name: grandchild.name, categoryKey: NAME_TO_KEY[grandchild.name] || grandchild.name, filled: !hasPlaceholder, container: child.name });
+            }
+          }
+        }
+      }
+      let targetFrameId = null;
+      const annoSidebars = page.findAll((n) => n.name === "Accessibility Annotations" && n.type === "FRAME");
+      if (annoSidebars.length > 0) {
+        const sidebar2 = annoSidebars[annoSidebars.length - 1];
+        const allTopFrames = page.children.filter((n) => n.type === "FRAME" && n.name !== "Accessibility Annotations" && !n.name.includes("Blueline Cards") && !n.name.includes("Tier 2") && n.id !== sidebar2.id);
+        if (allTopFrames.length > 0) {
+          let closest = allTopFrames[0];
+          let closestDist = Infinity;
+          for (const f of allTopFrames) {
+            const dist = Math.abs(f.x + f.width - sidebar2.x);
+            if (dist < closestDist) {
+              closestDist = dist;
+              closest = f;
+            }
+          }
+          targetFrameId = closest.id;
+        }
+      }
+      return {
+        structuralScan: structuralScan ? JSON.parse(structuralScan) : null,
+        focusOrder,
+        focusIndicators,
+        bluelineCards,
+        targetFrameId,
+        plainLanguage: !!params.plainLanguage
+      };
+    }
+    // ── Fill a blueline card with structured content ──
+    case "FILL_CARD":
+    case "FILL_TIER2_CARD": {
+      let addDiv2 = function() {
+        const d = figma.createRectangle();
+        d.name = "Divider";
+        d.resize(W, 1);
+        d.fills = [{ type: "SOLID", color: DIV_C }];
+        content.appendChild(d);
+        d.layoutSizingHorizontal = "FILL";
+        d.layoutSizingVertical = "FIXED";
+      }, wrapText2 = function(textNode, padTop, padBot, name) {
+        const f = figma.createFrame();
+        f.name = name;
+        f.layoutMode = "VERTICAL";
+        f.primaryAxisSizingMode = "AUTO";
+        f.counterAxisSizingMode = "FIXED";
+        f.resize(W, 10);
+        f.fills = [];
+        f.paddingTop = padTop;
+        f.paddingBottom = padBot;
+        f.appendChild(textNode);
+        textNode.layoutSizingHorizontal = "FILL";
+        content.appendChild(f);
+        f.layoutSizingHorizontal = "FILL";
+        f.layoutSizingVertical = "HUG";
+      };
+      var addDiv = addDiv2, wrapText = wrapText2;
+      const cardId = params.cardId;
+      const items = params.items;
+      const notes = params.notes;
+      const warnings = params.warnings;
+      const sections = params.sections;
+      if (!cardId) throw new Error("cardId is required");
+      await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+      await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
+      const card = await figma.getNodeByIdAsync(cardId);
+      if (!card || !("children" in card)) throw new Error("Card not found: " + cardId);
+      for (const child of [...card.children]) {
+        if (child.type === "TEXT" && child.characters.includes("Awaiting AI fill")) child.remove();
+        if (child.type === "FRAME" && child.name === "Content") child.remove();
+      }
+      const W = card.width - (card.paddingLeft || 16) - (card.paddingRight || 16);
+      const BLACK2 = { r: 0, g: 0, b: 0 };
+      const GRAY2 = { r: 0.45, g: 0.45, b: 0.45 };
+      const BLUE = { r: 0.2, g: 0.4, b: 0.7 };
+      const ORANGE = { r: 0.8, g: 0.35, b: 0 };
+      const DIV_C = { r: 0.9, g: 0.9, b: 0.9 };
+      const content = figma.createFrame();
+      content.name = "Content";
+      content.layoutMode = "VERTICAL";
+      content.primaryAxisSizingMode = "AUTO";
+      content.counterAxisSizingMode = "FIXED";
+      content.resize(W, 10);
+      content.fills = [];
+      content.itemSpacing = 0;
+      if (items && items.length > 0) {
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = "HEIGHT";
+          let chars = item.title;
+          if (item.desc) chars += "\n" + item.desc;
+          t.characters = chars;
+          t.setRangeFontName(0, item.title.length, { family: "Inter", style: "Semi Bold" });
+          t.setRangeFontSize(0, item.title.length, 11);
+          t.setRangeFills(0, item.title.length, [{ type: "SOLID", color: BLACK2 }]);
+          if (item.desc) {
+            const ds = item.title.length + 1;
+            t.setRangeFontName(ds, chars.length, { family: "Inter", style: "Regular" });
+            t.setRangeFontSize(ds, chars.length, 10);
+            t.setRangeFills(ds, chars.length, [{ type: "SOLID", color: GRAY2 }]);
+          }
+          wrapText2(t, 8, 8, item.title.substring(0, 30));
+          if (i < items.length - 1) addDiv2();
+        }
+      } else if (sections) {
+        for (let i = 0; i < sections.length; i++) {
+          const s = sections[i];
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = "HEIGHT";
+          t.characters = s.text;
+          if (s.type === "heading") {
+            t.fontName = { family: "Inter", style: "Semi Bold" };
+            t.fontSize = 11;
+            t.fills = [{ type: "SOLID", color: BLACK2 }];
+          } else {
+            t.fontName = { family: "Inter", style: "Regular" };
+            t.fontSize = 10;
+            t.fills = [{ type: "SOLID", color: GRAY2 }];
+          }
+          wrapText2(t, 8, 8, s.text.substring(0, 30));
+          if (i < sections.length - 1) addDiv2();
+        }
+      }
+      if (notes) {
+        for (const note of notes) {
+          addDiv2();
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = "HEIGHT";
+          t.characters = note;
+          t.fontName = { family: "Inter", style: "Regular" };
+          t.fontSize = 10;
+          t.fills = [{ type: "SOLID", color: BLUE }];
+          wrapText2(t, 8, 4, "WCAG Note");
+        }
+      }
+      if (warnings) {
+        for (const warn of warnings) {
+          addDiv2();
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = "HEIGHT";
+          t.characters = warn;
+          t.fontName = { family: "Inter", style: "Semi Bold" };
+          t.fontSize = 10;
+          t.fills = [{ type: "SOLID", color: ORANGE }];
+          wrapText2(t, 6, 4, "Warning");
+        }
+      }
+      card.appendChild(content);
+      content.layoutSizingHorizontal = "FILL";
+      content.layoutSizingVertical = "HUG";
+      return { filled: true, cardId, itemCount: (items || []).length, noteCount: (notes || []).length, warningCount: (warnings || []).length };
+    }
+    // ── Render all blueline content in one call ──
+    case "RENDER_BLUELINE": {
+      const cards = params.cards;
+      const focusOrderData = params.focusOrder;
+      const nodeId = params.nodeId;
+      if (!cards || Object.keys(cards).length === 0) throw new Error("cards object is required");
+      await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+      await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
+      await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+      const page = figma.currentPage;
+      const containers = page.findAll((n) => n.name === "Blueline Cards" || n.name === "Tier 2 Cards");
+      const container = containers[containers.length - 1];
+      if (!container || !("children" in container)) throw new Error("Blueline Cards container not found");
+      const filledCards = [];
+      const W_CARD = 400;
+      const W_CONTENT = W_CARD - 32;
+      const BLACK2 = { r: 0, g: 0, b: 0 };
+      const GRAY2 = { r: 0.45, g: 0.45, b: 0.45 };
+      const BLUE = { r: 0.2, g: 0.4, b: 0.7 };
+      const ORANGE = { r: 0.8, g: 0.35, b: 0 };
+      const DIV_C = { r: 0.9, g: 0.9, b: 0.9 };
+      const KEY_ALIASES = {
+        autoRotation: ["carousel"],
+        screenReaderNotes: ["voiceover", "talkback", "narrator"],
+        accessibleNames: ["accessiblenames"],
+        ariaRoles: ["ariarolesattributes", "ariaroles"]
+      };
+      const allCardFrames = [];
+      for (const child of container.children) {
+        if (child.type === "FRAME" && "children" in child) {
+          const isCard = child.children.some((c) => c.name === "Card Header");
+          if (isCard) {
+            allCardFrames.push(child);
+          } else {
+            for (const grandchild of child.children) {
+              if (grandchild.type === "FRAME") allCardFrames.push(grandchild);
+            }
+          }
+        }
+      }
+      for (const [key, data] of Object.entries(cards)) {
+        let addDivider2 = function(parent) {
+          const d = figma.createRectangle();
+          d.name = "Divider";
+          d.resize(W, 1);
+          d.fills = [{ type: "SOLID", color: DIV_C }];
+          parent.appendChild(d);
+          d.layoutSizingHorizontal = "FILL";
+          d.layoutSizingVertical = "FIXED";
+        }, wrapInFrame2 = function(textNode, padTop, padBot, name, parent) {
+          const f = figma.createFrame();
+          f.name = name;
+          f.layoutMode = "VERTICAL";
+          f.primaryAxisSizingMode = "AUTO";
+          f.counterAxisSizingMode = "FIXED";
+          f.resize(W, 10);
+          f.fills = [];
+          f.paddingTop = padTop;
+          f.paddingBottom = padBot;
+          f.appendChild(textNode);
+          textNode.layoutSizingHorizontal = "FILL";
+          parent.appendChild(f);
+          f.layoutSizingHorizontal = "FILL";
+          f.layoutSizingVertical = "HUG";
+        };
+        var addDivider = addDivider2, wrapInFrame = wrapInFrame2;
+        const keyNorm = key.toLowerCase().replace(/[^a-z]/g, "");
+        const aliases = KEY_ALIASES[key] || [];
+        const card = allCardFrames.find((c) => {
+          const cardName = c.name.toLowerCase().replace(/[^a-z]/g, "");
+          if (cardName.includes(keyNorm) || keyNorm.includes(cardName)) return true;
+          return aliases.some((a) => cardName.includes(a) || a.includes(cardName));
+        }) || null;
+        if (!card) continue;
+        for (const child of [...card.children]) {
+          if (child.type === "TEXT" && child.characters.includes("Awaiting AI fill")) child.remove();
+          if (child.type === "FRAME" && child.name === "Content") child.remove();
+        }
+        const W = card.width - (card.paddingLeft || 16) - (card.paddingRight || 16);
+        const contentFrame = figma.createFrame();
+        contentFrame.name = "Content";
+        contentFrame.layoutMode = "VERTICAL";
+        contentFrame.primaryAxisSizingMode = "AUTO";
+        contentFrame.counterAxisSizingMode = "FIXED";
+        contentFrame.resize(W, 10);
+        contentFrame.fills = [];
+        contentFrame.itemSpacing = 0;
+        for (let i = 0; i < data.items.length; i++) {
+          const item = data.items[i];
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = "HEIGHT";
+          let chars = item.title;
+          if (item.desc) chars += "\n" + item.desc;
+          t.characters = chars;
+          t.setRangeFontName(0, item.title.length, { family: "Inter", style: "Semi Bold" });
+          t.setRangeFontSize(0, item.title.length, 11);
+          t.setRangeFills(0, item.title.length, [{ type: "SOLID", color: BLACK2 }]);
+          if (item.desc) {
+            const ds = item.title.length + 1;
+            t.setRangeFontName(ds, chars.length, { family: "Inter", style: "Regular" });
+            t.setRangeFontSize(ds, chars.length, 10);
+            t.setRangeFills(ds, chars.length, [{ type: "SOLID", color: GRAY2 }]);
+          }
+          wrapInFrame2(t, 8, 8, item.title.substring(0, 30), contentFrame);
+          if (i < data.items.length - 1) addDivider2(contentFrame);
+        }
+        for (const note of data.notes || []) {
+          addDivider2(contentFrame);
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = "HEIGHT";
+          t.characters = note;
+          t.fontName = { family: "Inter", style: "Regular" };
+          t.fontSize = 10;
+          t.fills = [{ type: "SOLID", color: BLUE }];
+          wrapInFrame2(t, 8, 4, "WCAG Note", contentFrame);
+        }
+        for (const warn of data.warnings || []) {
+          addDivider2(contentFrame);
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = "HEIGHT";
+          t.characters = warn;
+          t.fontName = { family: "Inter", style: "Semi Bold" };
+          t.fontSize = 10;
+          t.fills = [{ type: "SOLID", color: ORANGE }];
+          wrapInFrame2(t, 6, 4, "Warning", contentFrame);
+        }
+        card.appendChild(contentFrame);
+        contentFrame.layoutSizingHorizontal = "FILL";
+        contentFrame.layoutSizingVertical = "HUG";
+        filledCards.push(card.name);
+      }
+      let focusResult = null;
+      if (focusOrderData && focusOrderData.length > 0) {
+        focusResult = await handleBridgeMethod("CREATE_FOCUS_ANNOTATIONS", {
+          nodeId,
+          focusOrder: focusOrderData
+        });
+      }
+      return {
+        rendered: true,
+        filledCards,
+        focusAnnotations: focusResult ? { created: true, entryCount: focusResult.entryCount } : null
+      };
+    }
+    // ── Render blueline panels — native annotations + region overlays ──
+    case "RENDER_BLUELINE_PANELS": {
+      const panelsData = params.panels;
+      if (!panelsData || Object.keys(panelsData).length === 0) throw new Error("panels object is required");
+      await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+      await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
+      await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+      const page = figma.currentPage;
+      const OVERLAY_COLORS = {
+        landmarks: { r: 0.145, g: 0.388, b: 0.921 },
+        ariaRoles: { r: 0.486, g: 0.228, b: 0.929 },
+        aria: { r: 0.486, g: 0.228, b: 0.929 },
+        domStrategy: { r: 0.278, g: 0.333, b: 0.412 },
+        dom: { r: 0.278, g: 0.333, b: 0.412 },
+        headings: { r: 0.855, g: 0.424, b: 0.106 },
+        names: { r: 0.063, g: 0.157, b: 0.294 },
+        accessibleNames: { r: 0.063, g: 0.157, b: 0.294 },
+        altText: { r: 0.608, g: 0.212, b: 0.208 },
+        keyboard: { r: 0.176, g: 0.541, b: 0.431 },
+        keyboardPatterns: { r: 0.176, g: 0.541, b: 0.431 },
+        colorContrast: { r: 0.729, g: 0.192, b: 0.482 },
+        forms: { r: 0.467, g: 0.533, b: 0.176 },
+        targetSize: { r: 0.776, g: 0.608, b: 0.118 }
+      };
+      const SECTIONS_MAP = {
+        focusIndicators: "Focus Indicators",
+        focusOrder: "Focus Order",
+        headings: "Heading Hierarchy",
+        headingHierarchy: "Heading Hierarchy",
+        landmarks: "Landmarks",
+        names: "Accessible Names",
+        accessibleNames: "Accessible Names",
+        altText: "Alt-Text",
+        aria: "ARIA Roles & Attributes",
+        ariaRoles: "ARIA Roles & Attributes",
+        keyboard: "Keyboard Patterns",
+        keyboardPatterns: "Keyboard Patterns",
+        dom: "DOM Strategy",
+        domStrategy: "DOM Strategy",
+        colorContrast: "Color Contrast",
+        forms: "Forms",
+        targetSize: "Target Size",
+        reflow: "Reflow & Text Spacing",
+        language: "Language",
+        media: "Time-Based Media",
+        skipNav: "Skip Navigation",
+        pageTitle: "Page Title",
+        reducedMotion: "Reduced Motion",
+        consistentNav: "Consistent Navigation",
+        autoRotation: "Carousel"
+      };
+      const filledPanels = [];
+      for (const [key, data] of Object.entries(panelsData)) {
+        let collectNodes2 = function(n) {
+          cloneNodesFlat.push(n);
+          if ("children" in n) {
+            for (const child of n.children) collectNodes2(child);
+          }
+        };
+        var collectNodes = collectNodes2;
+        const title = SECTIONS_MAP[key] || key;
+        const sectionName = `A11y ${title}`;
+        const section = page.findOne((n) => n.type === "SECTION" && n.name === sectionName);
+        if (!section) continue;
+        const clone = section.children.find(
+          (c) => c.type === "FRAME" && c.name !== "WCAG Footer"
+        );
+        if (!clone) continue;
+        const cloneNodesFlat = [];
+        collectNodes2(clone);
+        for (const item of data.items) {
+          if (item.annotationType === "none" || !item.nodeId) continue;
+          const originalNode = await figma.getNodeByIdAsync(item.nodeId);
+          if (!originalNode) continue;
+          const targetNode = cloneNodesFlat.find((n) => n.name === originalNode.name);
+          if (!targetNode) continue;
+          if (item.annotationType === "element") {
+            try {
+              targetNode.annotations = [{
+                labelMarkdown: `**${item.title}**
+${item.desc}`
+              }];
+            } catch (e) {
+              console.warn(`Annotation failed on "${item.title}":`, e);
+            }
+          } else if (item.annotationType === "region") {
+            const abs = targetNode.absoluteBoundingBox;
+            const secAbs = section.absoluteBoundingBox;
+            if (!abs || !secAbs) continue;
+            const overlayColor = OVERLAY_COLORS[key] || { r: 0.145, g: 0.388, b: 0.921 };
+            const overlay = figma.createRectangle();
+            overlay.name = `Overlay: ${item.title}`;
+            overlay.resize(abs.width, abs.height);
+            overlay.x = abs.x - secAbs.x;
+            overlay.y = abs.y - secAbs.y;
+            overlay.fills = [{ type: "SOLID", color: overlayColor, opacity: 0.12 }];
+            overlay.strokes = [{ type: "SOLID", color: overlayColor, opacity: 0.5 }];
+            overlay.strokeWeight = 2;
+            section.appendChild(overlay);
+            try {
+              overlay.annotations = [{
+                labelMarkdown: `**${item.title}**
+${item.desc}`
+              }];
+            } catch (e) {
+              console.warn(`Overlay annotation failed on "${item.title}":`, e);
+            }
+          }
+        }
+        const footer = section.findOne((n) => n.name === "WCAG Footer");
+        if (footer && data.notes && data.notes.length > 0) {
+          for (const note of data.notes) {
+            const t = figma.createText();
+            t.characters = note;
+            t.fontName = { family: "Inter", style: "Regular" };
+            t.fontSize = 10;
+            t.fills = [{ type: "SOLID", color: { r: 0.2, g: 0.4, b: 0.7 } }];
+            t.textAutoResize = "HEIGHT";
+            t.resize(footer.width - 32, t.height);
+            footer.appendChild(t);
+            t.layoutSizingHorizontal = "FILL";
+          }
+        }
+        if (footer && data.warnings && data.warnings.length > 0) {
+          for (const warn of data.warnings) {
+            const t = figma.createText();
+            t.characters = warn;
+            t.fontName = { family: "Inter", style: "Semi Bold" };
+            t.fontSize = 10;
+            t.fills = [{ type: "SOLID", color: { r: 0.8, g: 0.35, b: 0 } }];
+            t.textAutoResize = "HEIGHT";
+            t.resize(footer.width - 32, t.height);
+            footer.appendChild(t);
+            t.layoutSizingHorizontal = "FILL";
+          }
+        }
+        filledPanels.push(sectionName);
+      }
+      return { rendered: true, filledPanels };
+    }
+    // ── Create focus order sidebar + badges + focus indicator rectangles ──
+    case "CREATE_FOCUS_ANNOTATIONS": {
+      const nodeId = params.nodeId;
+      const entries = params.focusOrder;
+      if (!entries || entries.length === 0) throw new Error("focusOrder array is required");
+      await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+      await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
+      await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+      const page = figma.currentPage;
+      const targetNode = nodeId ? await figma.getNodeByIdAsync(nodeId) : figma.currentPage.selection[0];
+      if (!targetNode) throw new Error("Target node not found");
+      const targetAbs = targetNode.absoluteBoundingBox;
+      if (!targetAbs) throw new Error("Target node has no bounding box");
+      const oldNodes = [];
+      for (const child of page.children) {
+        if (child.name === "Accessibility Annotations" || child.name === "Badge" || child.name === "Focus Rectangle") {
+          oldNodes.push(child);
+        }
+      }
+      for (const n of oldNodes) n.remove();
+      const entryNodes = await Promise.all(
+        entries.map((e) => figma.getNodeByIdAsync(e.nodeId))
+      );
+      const resolved = [];
+      for (let i = 0; i < entries.length; i++) {
+        const n = entryNodes[i];
+        if (!n) continue;
+        const abs = n.absoluteBoundingBox;
+        if (!abs) continue;
+        let r = 0;
+        if ("cornerRadius" in n) {
+          const cr = n.cornerRadius;
+          r = typeof cr === "number" && cr !== figma.mixed ? cr : 0;
+        }
+        if (Math.abs(abs.width - abs.height) < 2 && abs.width < 50) {
+          r = Math.max(r, Math.round(abs.width / 2));
+        }
+        resolved.push({
+          name: entries[i].name,
+          id: entries[i].nodeId,
+          x: abs.x,
+          y: abs.y,
+          w: abs.width,
+          h: abs.height,
+          r
+        });
+      }
+      const BADGE_COLOR3 = { r: 0.188, g: 0.514, b: 0.322 };
+      const BADGE_TEXT_C = { r: 1, g: 1, b: 1 };
+      const FOCUS_BLUE = { r: 0.08, g: 0.45, b: 0.9 };
+      const BG = { r: 1, g: 1, b: 1 };
+      const STROKE = { r: 0.9, g: 0.9, b: 0.9 };
+      const TEXT_P = { r: 0.12, g: 0.13, b: 0.18 };
+      const BSIZE = 22;
+      const sidebar = figma.createFrame();
+      sidebar.name = "Accessibility Annotations";
+      sidebar.resize(320, 100);
+      sidebar.layoutMode = "VERTICAL";
+      sidebar.counterAxisSizingMode = "FIXED";
+      sidebar.primaryAxisSizingMode = "AUTO";
+      sidebar.clipsContent = false;
+      sidebar.paddingTop = 20;
+      sidebar.paddingBottom = 20;
+      sidebar.paddingLeft = 20;
+      sidebar.paddingRight = 20;
+      sidebar.itemSpacing = 8;
+      sidebar.fills = [{ type: "SOLID", color: BG }];
+      sidebar.strokes = [{ type: "SOLID", color: STROKE }];
+      sidebar.strokeWeight = 1;
+      sidebar.strokeAlign = "INSIDE";
+      sidebar.cornerRadius = 8;
+      const hdr = figma.createText();
+      hdr.characters = "Accessibility Annotations";
+      hdr.fontSize = 15;
+      hdr.fontName = { family: "Inter", style: "Semi Bold" };
+      hdr.fills = [{ type: "SOLID", color: TEXT_P }];
+      sidebar.appendChild(hdr);
+      const secTitle = figma.createText();
+      secTitle.characters = "Focus Order";
+      secTitle.fontSize = 13;
+      secTitle.fontName = { family: "Inter", style: "Bold" };
+      secTitle.fills = [{ type: "SOLID", color: TEXT_P }];
+      sidebar.appendChild(secTitle);
+      for (let i = 0; i < resolved.length; i++) {
+        const e = resolved[i];
+        const row = figma.createFrame();
+        row.name = `${e.name} (ID: ${e.id})`;
+        row.layoutMode = "HORIZONTAL";
+        row.counterAxisSizingMode = "AUTO";
+        row.primaryAxisSizingMode = "AUTO";
+        row.itemSpacing = 10;
+        row.counterAxisAlignItems = "CENTER";
+        row.fills = [];
+        const badge = figma.createFrame();
+        badge.name = "Badge";
+        badge.resize(BSIZE, BSIZE);
+        badge.layoutMode = "NONE";
+        badge.cornerRadius = BSIZE / 2;
+        badge.fills = [{ type: "SOLID", color: BADGE_COLOR3 }];
+        const bNum = figma.createText();
+        bNum.characters = String(i + 1);
+        bNum.fontSize = 10;
+        bNum.fontName = { family: "Inter", style: "Bold" };
+        bNum.fills = [{ type: "SOLID", color: BADGE_TEXT_C }];
+        bNum.textAlignHorizontal = "CENTER";
+        badge.appendChild(bNum);
+        bNum.x = (BSIZE - bNum.width) / 2;
+        bNum.y = (BSIZE - bNum.height) / 2;
+        row.appendChild(badge);
+        const info = figma.createFrame();
+        info.name = "Focus Order Info";
+        info.resize(1, 1);
+        info.fills = [];
+        info.visible = false;
+        row.appendChild(info);
+        const label = figma.createText();
+        label.characters = e.name;
+        label.fontSize = 12;
+        label.fontName = { family: "Inter", style: "Regular" };
+        label.fills = [{ type: "SOLID", color: TEXT_P }];
+        row.appendChild(label);
+        sidebar.appendChild(row);
+        if (i < resolved.length - 1) {
+          const div = figma.createFrame();
+          div.name = "Divider";
+          div.resize(280, 1);
+          div.fills = [{ type: "SOLID", color: STROKE }];
+          sidebar.appendChild(div);
+          div.layoutSizingHorizontal = "FILL";
+        }
+      }
+      sidebar.x = targetAbs.x - 360;
+      sidebar.y = targetAbs.y;
+      page.appendChild(sidebar);
+      for (let j = 0; j < resolved.length; j++) {
+        const e = resolved[j];
+        const b = figma.createFrame();
+        b.name = "Badge";
+        b.resize(BSIZE, BSIZE);
+        b.layoutMode = "NONE";
+        b.cornerRadius = BSIZE / 2;
+        b.fills = [{ type: "SOLID", color: BADGE_COLOR3 }];
+        const num = figma.createText();
+        num.characters = String(j + 1);
+        num.fontSize = 10;
+        num.fontName = { family: "Inter", style: "Bold" };
+        num.fills = [{ type: "SOLID", color: BADGE_TEXT_C }];
+        num.textAlignHorizontal = "CENTER";
+        b.appendChild(num);
+        num.x = (BSIZE - num.width) / 2;
+        num.y = (BSIZE - num.height) / 2;
+        b.x = e.x - 4;
+        b.y = e.y - BSIZE - 2;
+        page.appendChild(b);
+      }
+      const pad = 3;
+      for (let k = 0; k < resolved.length; k++) {
+        const f = resolved[k];
+        const rect = figma.createRectangle();
+        rect.name = "Focus Rectangle";
+        rect.x = f.x - pad;
+        rect.y = f.y - pad;
+        rect.resize(f.w + pad * 2, f.h + pad * 2);
+        rect.fills = [];
+        rect.strokes = [{ type: "SOLID", color: FOCUS_BLUE }];
+        rect.strokeWeight = 2;
+        rect.cornerRadius = f.r > 0 ? f.r + pad : 2;
+        page.appendChild(rect);
+      }
+      return {
+        created: true,
+        sidebarId: sidebar.id,
+        entryCount: resolved.length,
+        entries: resolved.map((e, i) => ({ index: i + 1, name: e.name, nodeId: e.id }))
+      };
+    }
     default:
       throw new Error("Unknown bridge method: " + method);
   }
@@ -5711,6 +6431,40 @@ figma.ui.onmessage = async (msg) => {
       }
       break;
     }
+    case "generate-plugin-annotations": {
+      const sel = figma.currentPage.selection;
+      if (sel.length === 0) {
+        figma.notify("Select a frame first");
+        break;
+      }
+      const annotations = Array.isArray(msg.annotations) ? msg.annotations : [];
+      try {
+        const target = sel[0];
+        let count = 0;
+        if (annotations.includes("focusIndicators")) {
+          await generateFocusIndicators(target);
+          count++;
+        }
+        if (annotations.includes("focusOrder")) {
+          const focusable = collectFocusableElements(target);
+          if (focusable.length > 0) {
+            await handleBridgeMethod("CREATE_FOCUS_ANNOTATIONS", {
+              nodeId: target.id,
+              focusOrder: focusable.map((n, i) => ({ nodeId: n.id, name: n.name || `Element ${i + 1}` }))
+            });
+            count++;
+          } else {
+            figma.notify("No focusable elements found for focus order.");
+          }
+        }
+        figma.ui.postMessage({ type: "a11y-status", message: count > 0 ? "Annotations created." : "Nothing to generate." });
+      } catch (e) {
+        const errorMsg = e instanceof Error ? e.message : String(e);
+        figma.ui.postMessage({ type: "a11y-status", message: `Error: ${errorMsg}` });
+        figma.notify(`Annotation failed: ${errorMsg}`, { error: true });
+      }
+      break;
+    }
     case "generate-blueline": {
       const sel = figma.currentPage.selection;
       if (sel.length === 0) {
@@ -5718,22 +6472,20 @@ figma.ui.onmessage = async (msg) => {
         break;
       }
       try {
-        const tier1 = Array.isArray(msg.tier1) ? msg.tier1 : [];
-        const tier2 = Array.isArray(msg.tier2) ? msg.tier2 : [];
-        figma.ui.postMessage({ type: "a11y-status", message: "Generating blueline..." });
-        const grouped = msg.grouped !== false;
-        const result2 = await generateBlueline(sel[0], tier1, tier2, { grouped });
-        if (tier2.length > 0) {
-          figma.ui.postMessage({
-            type: "a11y-tier2-request",
-            frameId: result2.frameId,
-            sections: result2.tier2Sections,
-            frameName: sel[0].name
-          });
-        } else {
-          figma.ui.postMessage({ type: "a11y-status", message: "Blueline generated!" });
-        }
-        figma.notify(`Blueline created for "${sel[0].name}"`);
+        const categories = Array.isArray(msg.categories) ? msg.categories : [];
+        figma.ui.postMessage({ type: "a11y-status", message: "Creating blueline scaffold..." });
+        const grouped = msg.grouped === true;
+        const plainLanguage = msg.plainLanguage === true;
+        const result2 = await generateBlueline(sel[0], categories, { grouped });
+        figma.ui.postMessage({
+          type: "a11y-fill-request",
+          mode: "sections",
+          frameId: result2.frameId,
+          sections: result2.sections,
+          frameName: sel[0].name,
+          plainLanguage
+        });
+        figma.notify(`Blueline scaffold created for "${sel[0].name}"`);
       } catch (e) {
         const errorMsg = e instanceof Error ? e.message : String(e);
         figma.ui.postMessage({ type: "a11y-status", message: `Error: ${errorMsg}` });
@@ -5748,14 +6500,18 @@ figma.ui.onmessage = async (msg) => {
         break;
       }
       try {
-        const tier1 = Array.isArray(msg.tier1) ? msg.tier1 : [];
-        const tier2 = Array.isArray(msg.tier2) ? msg.tier2 : [];
-        figma.ui.postMessage({ type: "a11y-status", message: "Generating panels..." });
-        const result2 = await generateBluelinePanels(sel[0], tier1, tier2);
-        figma.ui.postMessage({ type: "a11y-tier2-request", mode: "sections" });
+        const categories = Array.isArray(msg.categories) ? msg.categories : [];
+        figma.ui.postMessage({ type: "a11y-status", message: "Creating blueline panels..." });
+        const result2 = await generateBluelinePanels(sel[0], categories);
+        figma.ui.postMessage({
+          type: "a11y-panels-fill-request",
+          sections: result2.sections,
+          frameName: sel[0].name,
+          sectionIds: result2.sectionIds
+        });
         figma.notify(`Blueline panels created for "${sel[0].name}"`);
       } catch (e) {
-        const errorMsg = e instanceof Error ? e.message : "Unknown error";
+        const errorMsg = e instanceof Error ? e.message : String(e);
         figma.ui.postMessage({ type: "a11y-status", message: `Error: ${errorMsg}` });
         figma.notify(`Panels failed: ${errorMsg}`, { error: true });
       }

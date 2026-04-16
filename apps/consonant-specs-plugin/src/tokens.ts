@@ -160,7 +160,13 @@ export async function loadLibraryTokens(): Promise<void> {
                 try {
                   const alias = await figma.variables.getVariableByIdAsync((value as any).id);
                   if (alias) {
-                    value = alias.valuesByMode[defaultModeId ?? Object.keys(alias.valuesByMode)[0]];
+                    // Use the alias's own default mode — cross-collection aliases have different mode IDs
+                    let aliasModeId: string | undefined;
+                    try {
+                      const aliasColl = await figma.variables.getVariableCollectionByIdAsync(alias.variableCollectionId);
+                      aliasModeId = aliasColl?.defaultModeId;
+                    } catch (_) {}
+                    value = alias.valuesByMode[aliasModeId ?? Object.keys(alias.valuesByMode)[0]];
                   } else break;
                 } catch (_) { break; }
                 depth++;
