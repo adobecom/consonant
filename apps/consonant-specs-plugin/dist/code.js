@@ -254,10 +254,12 @@ async function loadLibraryTokens() {
                 }
               }
             }
-          } catch (_) {
+          } catch (e) {
+            console.error(`[tokens] Failed to load collection "${collection.name}":`, e);
           }
         }
-      } catch (_) {
+      } catch (e) {
+        console.error("[tokens] Failed to discover S2A library collections:", e);
       }
       tokenCount = textStyleMap.length + colorVarMap.length + dimensionVarMap.length;
       loaded = true;
@@ -1321,6 +1323,8 @@ function createMarkerDot(index, x, y, parent) {
   parent.appendChild(dot);
 }
 async function generateAnatomySection(sourceNode) {
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
   const section = figma.createFrame();
   section.name = "Anatomy";
   section.layoutMode = "VERTICAL";
@@ -2041,6 +2045,9 @@ function drawSpacingOnlyMeasurements(artworkFrame, exhibitedNode, sourceNode, sc
   }
 }
 async function generateSpacingSection(sourceNode) {
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+  await figma.loadFontAsync({ family: "Inter", style: "Medium" });
   if (!("children" in sourceNode) || sourceNode.children.length === 0) return;
   removeOverlays(sourceNode, "spacing-detailed-overlay");
   const overlay = figma.createFrame();
@@ -2048,6 +2055,7 @@ async function generateSpacingSection(sourceNode) {
   overlay.resize(sourceNode.width, sourceNode.height);
   overlay.fills = [];
   overlay.clipsContent = false;
+  const savedClipsContent = "clipsContent" in sourceNode ? sourceNode.clipsContent : void 0;
   if ("clipsContent" in sourceNode) sourceNode.clipsContent = false;
   sourceNode.appendChild(overlay);
   if ("layoutMode" in sourceNode && sourceNode.layoutMode !== "NONE") {
@@ -2076,8 +2084,12 @@ async function generateSpacingSection(sourceNode) {
     }
   }
   drawChildSpacing(sourceNode);
+  if (savedClipsContent !== void 0) sourceNode.clipsContent = savedClipsContent;
 }
 async function generateLayoutSection(sourceNode) {
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+  await figma.loadFontAsync({ family: "Inter", style: "Medium" });
   const entries = [];
   collectLayoutEntries(sourceNode, entries);
   if (entries.length === 0) return null;
@@ -2213,6 +2225,8 @@ function createTableRow(entry, parent) {
   parent.appendChild(div);
 }
 async function generateTypographySection(sourceNode) {
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
   const styles = /* @__PURE__ */ new Map();
   collectTextStyles(sourceNode, styles);
   if (styles.size === 0) return null;
@@ -2412,6 +2426,9 @@ async function buildInstanceCard(entry, parent) {
   }
 }
 async function generateComponentDetailsSection(sourceNode) {
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+  await figma.loadFontAsync({ family: "Inter", style: "Medium" });
   const instances = collectInstances(sourceNode, 0);
   if (instances.length === 0) return null;
   const section = figma.createFrame();
@@ -2762,6 +2779,7 @@ async function generateCardGaps(node) {
   overlay.resize(node.width, node.height);
   overlay.fills = [];
   overlay.clipsContent = false;
+  const savedClipsContent = "clipsContent" in node ? node.clipsContent : void 0;
   if ("clipsContent" in node) node.clipsContent = false;
   node.appendChild(overlay);
   if ("layoutMode" in node && node.layoutMode !== "NONE") {
@@ -2775,6 +2793,7 @@ async function generateCardGaps(node) {
   if (cards.length < 2) {
     figma.ui.postMessage({ type: "spec-it-status", message: "No card gaps found." });
     overlay.remove();
+    if (savedClipsContent !== void 0) node.clipsContent = savedClipsContent;
     return;
   }
   cards.sort((a, b) => a.y - b.y || a.x - b.x);
@@ -2811,6 +2830,7 @@ async function generateCardGaps(node) {
     }
   }
   figma.ui.postMessage({ type: "spec-it-status", message: `Found ${cards.length} cards, ${rows.length} rows` });
+  if (savedClipsContent !== void 0) node.clipsContent = savedClipsContent;
 }
 function findCardGroups(n, root, cards) {
   if (!("children" in n)) return;
@@ -4858,70 +4878,83 @@ async function generateBluelinePanels(node, categories) {
   const sectionW = sourceAbs.width + PANEL_PAD * 2;
   const allSections = [];
   const sectionIds = [];
-  let col = 0;
-  let rowY = startY;
-  let rowMaxH = 0;
-  for (const key of allPanels) {
-    const title = CARD_SECTIONS[key] || key;
-    const section = figma.createSection();
-    section.name = `A11y ${title}`;
-    const clone = node.clone();
-    clone.name = node.name;
-    clone.x = PANEL_PAD;
-    clone.y = PANEL_PAD;
-    section.appendChild(clone);
-    if (key === "focusIndicators") {
-      await generateFocusIndicators(clone);
-    }
-    if (key === "focusOrder" && focusEntries.length > 0) {
-      const cloneEntries = detectFocusOrder(clone);
-      const secAbs = section.absoluteBoundingBox;
-      const offX = secAbs ? secAbs.x : 0;
-      const offY = secAbs ? secAbs.y : 0;
-      for (const entry of cloneEntries) {
-        const abs = entry.node.absoluteBoundingBox;
-        if (!abs) continue;
-        const badge = createNumberedBadge(entry.index, "focusOrder");
-        badge.x = abs.x - 4 - offX;
-        badge.y = abs.y - BADGE_HEIGHT - 2 - offY;
-        section.appendChild(badge);
+  try {
+    return await _generateBluelinePanelsInner();
+  } catch (e) {
+    for (const section of allSections) {
+      try {
+        section.remove();
+      } catch (_) {
       }
     }
-    const footer = figma.createFrame();
-    footer.name = "WCAG Footer";
-    footer.layoutMode = "VERTICAL";
-    footer.primaryAxisSizingMode = "AUTO";
-    footer.counterAxisSizingMode = "FIXED";
-    footer.resize(sourceAbs.width, 10);
-    footer.fills = [];
-    footer.paddingTop = 12;
-    footer.paddingBottom = 12;
-    footer.paddingLeft = 16;
-    footer.paddingRight = 16;
-    footer.itemSpacing = 4;
-    footer.x = PANEL_PAD;
-    footer.y = PANEL_PAD + sourceAbs.height + 20;
-    section.appendChild(footer);
-    const sectionH = PANEL_PAD + sourceAbs.height + 20 + 60 + PANEL_PAD;
-    section.resizeWithoutConstraints(sectionW, sectionH);
-    const panelX = startX + col * (sectionW + PANEL_GAP);
-    section.x = panelX;
-    section.y = rowY;
-    page.appendChild(section);
-    allSections.push(section);
-    sectionIds.push(section.id);
-    if (sectionH > rowMaxH) rowMaxH = sectionH;
-    col++;
-    if (col >= PANEL_COLS) {
-      col = 0;
-      rowY += rowMaxH + PANEL_GAP;
-      rowMaxH = 0;
-    }
+    throw e;
   }
-  figma.ui.postMessage({ type: "a11y-status", message: "Running structural scan..." });
-  await embedStructuralScan(node, page);
-  figma.viewport.scrollAndZoomIntoView(allSections);
-  return { frameId: node.id, sections: categories, sectionIds };
+  async function _generateBluelinePanelsInner() {
+    let col = 0;
+    let rowY = startY;
+    let rowMaxH = 0;
+    for (const key of allPanels) {
+      const title = CARD_SECTIONS[key] || key;
+      const section = figma.createSection();
+      section.name = `A11y ${title}`;
+      const clone = node.clone();
+      clone.name = node.name;
+      clone.x = PANEL_PAD;
+      clone.y = PANEL_PAD;
+      section.appendChild(clone);
+      if (key === "focusIndicators") {
+        await generateFocusIndicators(clone);
+      }
+      if (key === "focusOrder" && focusEntries.length > 0) {
+        const cloneEntries = detectFocusOrder(clone);
+        const secAbs = section.absoluteBoundingBox;
+        const offX = secAbs ? secAbs.x : 0;
+        const offY = secAbs ? secAbs.y : 0;
+        for (const entry of cloneEntries) {
+          const abs = entry.node.absoluteBoundingBox;
+          if (!abs) continue;
+          const badge = createNumberedBadge(entry.index, "focusOrder");
+          badge.x = abs.x - 4 - offX;
+          badge.y = abs.y - BADGE_HEIGHT - 2 - offY;
+          section.appendChild(badge);
+        }
+      }
+      const footer = figma.createFrame();
+      footer.name = "WCAG Footer";
+      footer.layoutMode = "VERTICAL";
+      footer.primaryAxisSizingMode = "AUTO";
+      footer.counterAxisSizingMode = "FIXED";
+      footer.resize(sourceAbs.width, 10);
+      footer.fills = [];
+      footer.paddingTop = 12;
+      footer.paddingBottom = 12;
+      footer.paddingLeft = 16;
+      footer.paddingRight = 16;
+      footer.itemSpacing = 4;
+      footer.x = PANEL_PAD;
+      footer.y = PANEL_PAD + sourceAbs.height + 20;
+      section.appendChild(footer);
+      const sectionH = PANEL_PAD + sourceAbs.height + 20 + 60 + PANEL_PAD;
+      section.resizeWithoutConstraints(sectionW, sectionH);
+      const panelX = startX + col * (sectionW + PANEL_GAP);
+      section.x = panelX;
+      section.y = rowY;
+      page.appendChild(section);
+      allSections.push(section);
+      sectionIds.push(section.id);
+      if (sectionH > rowMaxH) rowMaxH = sectionH;
+      col++;
+      if (col >= PANEL_COLS) {
+        col = 0;
+        rowY += rowMaxH + PANEL_GAP;
+        rowMaxH = 0;
+      }
+    }
+    figma.ui.postMessage({ type: "a11y-status", message: "Running structural scan..." });
+    await embedStructuralScan(node, page);
+    figma.viewport.scrollAndZoomIntoView(allSections);
+    return { frameId: node.id, sections: categories, sectionIds };
+  }
 }
 async function placeCategoryBadge(targetNodeId, index, categoryKey) {
   await loadFonts2();
@@ -5587,7 +5620,13 @@ async function handleBridgeMethod(method, params) {
         }
       }
       return {
-        structuralScan: structuralScan ? JSON.parse(structuralScan) : null,
+        structuralScan: structuralScan ? (() => {
+          try {
+            return JSON.parse(structuralScan);
+          } catch (e) {
+            return null;
+          }
+        })() : null,
         focusOrder,
         focusIndicators,
         bluelineCards,

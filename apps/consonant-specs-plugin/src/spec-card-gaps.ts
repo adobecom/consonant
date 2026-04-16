@@ -34,6 +34,7 @@ export async function generateCardGaps(node: SceneNode): Promise<void> {
   overlay.resize(node.width, node.height);
   overlay.fills = [];
   overlay.clipsContent = false;
+  const savedClipsContent = 'clipsContent' in node ? (node as FrameNode).clipsContent : undefined;
   if ('clipsContent' in node) (node as FrameNode).clipsContent = false;
   (node as FrameNode).appendChild(overlay);
   if ('layoutMode' in node && (node as FrameNode).layoutMode !== 'NONE') {
@@ -50,6 +51,7 @@ export async function generateCardGaps(node: SceneNode): Promise<void> {
   if (cards.length < 2) {
     figma.ui.postMessage({ type: 'spec-it-status', message: 'No card gaps found.' });
     overlay.remove();
+    if (savedClipsContent !== undefined) (node as FrameNode).clipsContent = savedClipsContent;
     return;
   }
 
@@ -93,6 +95,9 @@ export async function generateCardGaps(node: SceneNode): Promise<void> {
   }
 
   figma.ui.postMessage({ type: 'spec-it-status', message: `Found ${cards.length} cards, ${rows.length} rows` });
+
+  // Restore original clipsContent — don't permanently mutate the user's design
+  if (savedClipsContent !== undefined) (node as FrameNode).clipsContent = savedClipsContent;
 }
 
 /**
