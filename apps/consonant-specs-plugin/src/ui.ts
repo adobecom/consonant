@@ -178,8 +178,16 @@ window.addEventListener('message', (event) => {
     case 'a11y-status':
       updateA11yStatus(msg.message as string);
       break;
-    case 'a11y-tier2-request':
-      showAiFillInstruction(msg.mode as string, msg.sections as string[], msg.frameName as string);
+    case 'a11y-fill-request':
+      if (autoFillMode === 'auto') {
+        sendAutoFillRequest(!!msg.plainLanguage);
+      } else {
+        showAiFillInstruction(msg.mode as string, msg.sections as string[], msg.frameName as string, msg.plainLanguage as boolean);
+      }
+      autoFillMode = null;
+      break;
+    case 'a11y-panels-fill-request':
+      showPanelsFillInstruction(msg.sections as string[], msg.frameName as string, msg.sectionIds as string[]);
       break;
     // Unified bridge command result from code.ts
     case 'bridge:command-result': {
@@ -524,10 +532,15 @@ function updateA11yControls() {
   controls.style.display = 'block';
 }
 
-function updateA11yTier2State() {
-  const badge = document.getElementById('a11yTier2Badge') as HTMLElement;
-  const items = document.querySelectorAll('.a11y-tier2-item');
-  const checkboxes = document.querySelectorAll('.a11y-tier2-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+function updateA11yBridgeState() {
+  const badge = document.getElementById('a11yBridgeBadge') as HTMLElement;
+  const items = document.querySelectorAll('.a11y-item');
+  const checkboxes = document.querySelectorAll('.a11y-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+  const genBtn = document.getElementById('generateBluelineBtn') as HTMLButtonElement;
+  const plainBtn = document.getElementById('generateBluelinePlainBtn') as HTMLButtonElement;
+  // Generate buttons are always enabled (plugin-generated doesn't need bridge)
+  if (genBtn) genBtn.disabled = false;
+  if (plainBtn) plainBtn.disabled = false;
   if (bridgeConnected) {
     badge.textContent = '\u2713 bridge connected';
     badge.classList.add('connected');
@@ -546,14 +559,89 @@ function updateA11yStatus(message: string) {
   if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
 }
 
-function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string) {
+// ── Auto-fill timer ──
+let autoFillTimer: ReturnType<typeof setInterval> | null = null;
+let autoFillStartTime = 0;
+let autoFillMode: 'auto' | 'copy' | null = null;
+
+function startAutoFillTimer() {
+  autoFillStartTime = Date.now();
+  const el = document.getElementById('a11yStatus');
+  if (!el) return;
+  updateAutoFillTimerDisplay(el);
+  autoFillTimer = setInterval(() => updateAutoFillTimerDisplay(el), 1000);
+}
+
+function updateAutoFillTimerDisplay(el: HTMLElement) {
+  const elapsed = Math.floor((Date.now() - autoFillStartTime) / 1000);
+  const min = Math.floor(elapsed / 60);
+  const sec = elapsed % 60;
+  const timeStr = `${min}:${sec.toString().padStart(2, '0')}`;
+  el.innerHTML = `
+    <div class="autofill-progress">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="autofill-pulse"></span>
+        <span style="font-weight:600;font-size:11px;">Auto-filling...</span>
+        <span class="autofill-timer">${timeStr}</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:4px;">Claude is analyzing and filling cards</div>
+    </div>`;
+}
+
+function stopAutoFillTimer(message: string, success: boolean) {
+  if (autoFillTimer) { clearInterval(autoFillTimer); autoFillTimer = null; }
+  const elapsed = Math.floor((Date.now() - autoFillStartTime) / 1000);
+  const min = Math.floor(elapsed / 60);
+  const sec = elapsed % 60;
+  const timeStr = `${min}:${sec.toString().padStart(2, '0')}`;
+  const el = document.getElementById('a11yStatus');
+  if (el) {
+    const color = success ? 'var(--success,#2d9d78)' : 'var(--warning,#e68619)';
+    const icon = success ? '\u2714' : '\u2718';
+    el.innerHTML = `
+      <div class="autofill-progress" style="border-left-color:${color};">
+        <div style="font-weight:600;font-size:11px;color:${color};">${icon} ${esc(message)}</div>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:2px;">Completed in ${timeStr}</div>
+      </div>`;
+  }
+}
+
+function sendAutoFillRequest(plainLanguage: boolean) {
+  if (!bridgeConnected || !bridgeWs) {
+    updateA11yStatus('Connect Bridge first for auto-fill.');
+    return;
+  }
+  bridgeWs.send(JSON.stringify({ type: 'START_AUTO_FILL', data: { plainLanguage } }));
+  startAutoFillTimer();
+}
+
+function handleAutoFillMessage(msg: any) {
+  if (msg.type === 'AUTO_FILL_STARTED') {
+    // Timer already started by sendAutoFillRequest
+    return;
+  }
+  if (msg.type === 'AUTO_FILL_COMPLETE') {
+    const filled = (msg.data?.filledCards || []) as string[];
+    stopAutoFillTimer(`Filled ${filled.length} cards`, true);
+    return;
+  }
+  if (msg.type === 'AUTO_FILL_FAILED') {
+    const error = (msg.data?.error || 'Unknown error') as string;
+    stopAutoFillTimer(error, false);
+    return;
+  }
+}
+
+function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string, plainLanguage?: boolean) {
   let cmd: string;
+  const langNote = plainLanguage ? ' Use plain language: lead with questions like "What headings does this use?", explain WHY before giving technical detail, include "Why this matters" sections.' : '';
+  const agentNote = ' Call figma_get_blueline_data first — it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.';
   if (mode === 'sections') {
-    cmd = 'Use /project:fill-blueline to fill the blueline section instruction cards on the current Figma page via the bridge.';
+    cmd = `Fill the blueline cards on the current Figma page.${agentNote}${langNote}`;
   } else {
     const categoryList = sections && sections.length > 0 ? sections.join(', ') : 'all categories';
     const frame = frameName ? ` for "${frameName}"` : '';
-    cmd = `Use /project:fill-blueline to fill ONLY these blueline categories${frame}: ${categoryList}. Do not fill cards from other categories or previous generations.`;
+    cmd = `Fill ONLY these blueline categories${frame}: ${categoryList}.${agentNote} Do not fill cards from other categories or previous generations.${langNote}`;
   }
   const el = document.getElementById('a11yStatus');
   if (el) {
@@ -573,128 +661,146 @@ function showAiFillInstruction(mode?: string, sections?: string[], frameName?: s
   }
 }
 
-// Check All / Uncheck All toggle
-// Note: autoRotation and autoRotationSimplified are mutually exclusive.
-// Check All picks regular Auto-Rotation and leaves Simplified unchecked.
-document.getElementById('a11yCheckAll')?.addEventListener('click', () => {
-  const allIds = ['a11yFocusIndicators', 'a11yFocusOrder', 'a11yHeadings', 'a11yLandmarks', 'a11yNames', 'a11yAltText', 'a11yAria', 'a11yKeyboard', 'a11yDom', 'a11yAutoRotation', 'a11yVoiceover', 'a11yTalkback', 'a11yNarrator', 'a11yReactNative', 'a11yTvNote', 'a11yGeneralNote'];
-  const boxes = allIds.map(id => document.getElementById(id) as HTMLInputElement).filter(Boolean);
-  const enabledBoxes = boxes.filter(cb => !cb.disabled);
-  const allChecked = enabledBoxes.every(cb => cb.checked);
-  enabledBoxes.forEach(cb => { cb.checked = !allChecked; });
-  // Always clear the Simplified checkbox on check-all (mutually exclusive with Auto-Rotation)
-  const simplified = document.getElementById('a11ySimplified') as HTMLInputElement;
-  if (simplified && !simplified.disabled) simplified.checked = false;
-  const btn = document.getElementById('a11yCheckAll');
+function showPanelsFillInstruction(sections: string[], frameName: string, sectionIds: string[]) {
+  const sectionList = sections.join(', ');
+  const cmd = `Fill the blueline panels on the current Figma page for "${frameName}". Categories: ${sectionList}.\n\nCall figma_get_blueline_data first — it returns structural data (including nodeIds for all elements) and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge.\n\nDispatch parallel agents. IMPORTANT: Each agent must return items with these additional fields:\n- nodeId (string|null): the node ID from the structural scan that this item refers to. Null if no element match.\n- annotationType ("element"|"region"|"none"): "element" for specific UI elements (buttons, links, inputs), "region" for area-level concepts (landmarks, sections), "none" for abstract/page-level items.\n\nThen call figma_render_blueline with mode: "panels" and all item JSON. The panels have already been scaffolded with cloned designs — the render call will place native Figma annotations on the clones.`;
+  const el = document.getElementById('a11yStatus');
+  if (el) {
+    el.innerHTML = `
+      <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
+        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Panels scaffolded &#x2714;</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">To fill annotations, paste this in your current Claude session:</div>
+        <code id="panelsFillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;white-space:pre-wrap;">${esc(cmd)}</code>
+        <button class="btn btn-secondary" id="copyPanelsFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Paste into your current Claude Code session (Bridge must be connected)</div>
+      </div>`;
+    document.getElementById('copyPanelsFillCmd')?.addEventListener('click', async () => {
+      await copyToClipboard(cmd);
+      const btn = document.getElementById('copyPanelsFillCmd');
+      if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); }
+    });
+  }
+}
+
+// Check All / Uncheck All — AI-assisted section
+document.getElementById('a11yCheckAllAi')?.addEventListener('click', () => {
+  if (!bridgeConnected) return;
+  const aiIds = ['a11yFocusIndicators', 'a11yFocusOrder', 'a11yHeadings', 'a11yLandmarksNav', 'a11yNamesAlt', 'a11yColorContrast', 'a11yAriaKeyboard', 'a11yTargetSize', 'a11yPageSetup'];
+  const boxes = aiIds.map(id => document.getElementById(id) as HTMLInputElement).filter(Boolean);
+  const allChecked = boxes.every(cb => cb.checked);
+  boxes.forEach(cb => { cb.checked = !allChecked; });
+  const btn = document.getElementById('a11yCheckAllAi');
   if (btn) btn.textContent = allChecked ? 'Check All' : 'Uncheck All';
 });
 
-// Auto-Rotation / Auto-Rotation Simplified mutual exclusivity
-// When Simplified is checked, uncheck Auto-Rotation and all Accessibility Notes
-// (simplified mode is the minimal version without platform notes).
-const NOTE_IDS = ['a11yVoiceover', 'a11yTalkback', 'a11yNarrator', 'a11yReactNative', 'a11yTvNote', 'a11yGeneralNote'];
-document.getElementById('a11ySimplified')?.addEventListener('change', () => {
-  const simplified = document.getElementById('a11ySimplified') as HTMLInputElement;
-  if (!simplified?.checked) return;
-  const regular = document.getElementById('a11yAutoRotation') as HTMLInputElement;
-  if (regular) regular.checked = false;
-  NOTE_IDS.forEach(id => {
-    const cb = document.getElementById(id) as HTMLInputElement;
-    if (cb) cb.checked = false;
-  });
+// Check All / Uncheck All — Accessibility Notes section
+document.getElementById('a11yCheckAllNotes')?.addEventListener('click', () => {
+  if (!bridgeConnected) return;
+  const noteIds = ['a11yForms', 'a11yCarousel', 'a11yDom', 'a11yMotionMedia', 'a11yScreenReader', 'a11yReactNative', 'a11yTvNote', 'a11yGeneralNote'];
+  const boxes = noteIds.map(id => document.getElementById(id) as HTMLInputElement).filter(Boolean);
+  const allChecked = boxes.every(cb => cb.checked);
+  boxes.forEach(cb => { cb.checked = !allChecked; });
+  const btn = document.getElementById('a11yCheckAllNotes');
+  if (btn) btn.textContent = allChecked ? 'Check All' : 'Uncheck All';
 });
-// Auto-Rotation acts as parent toggle for all Accessibility Notes
-document.getElementById('a11yAutoRotation')?.addEventListener('change', () => {
-  const simplified = document.getElementById('a11ySimplified') as HTMLInputElement;
-  const regular = document.getElementById('a11yAutoRotation') as HTMLInputElement;
-  if (regular?.checked) {
-    // Check Auto-Rotation: uncheck Simplified, check all notes
-    if (simplified) simplified.checked = false;
-    NOTE_IDS.forEach(id => {
-      const cb = document.getElementById(id) as HTMLInputElement;
-      if (cb && !cb.disabled) cb.checked = true;
-    });
-  } else {
-    // Uncheck Auto-Rotation: uncheck all notes
-    NOTE_IDS.forEach(id => {
-      const cb = document.getElementById(id) as HTMLInputElement;
-      if (cb) cb.checked = false;
-    });
+
+// Collect checked a11y categories
+function getCheckedA11yCategories(): string[] {
+  const categories: string[] = [];
+  // Core
+  if ((document.getElementById('a11yFocusIndicators') as HTMLInputElement)?.checked) categories.push('focusIndicators');
+  if ((document.getElementById('a11yFocusOrder') as HTMLInputElement)?.checked) categories.push('focusOrder');
+  if ((document.getElementById('a11yHeadings') as HTMLInputElement)?.checked) categories.push('headings');
+  if ((document.getElementById('a11yLandmarksNav') as HTMLInputElement)?.checked) {
+    categories.push('landmarks', 'skipNav', 'consistentNav');
   }
-});
-// Checking any individual note: auto-check Auto-Rotation parent, uncheck Simplified
-// Unchecking all notes: auto-uncheck Auto-Rotation
-NOTE_IDS.forEach(id => {
-  document.getElementById(id)?.addEventListener('change', () => {
-    const cb = document.getElementById(id) as HTMLInputElement;
-    const simplified = document.getElementById('a11ySimplified') as HTMLInputElement;
-    const regular = document.getElementById('a11yAutoRotation') as HTMLInputElement;
-    if (cb?.checked) {
-      if (simplified) simplified.checked = false;
-      if (regular && !regular.disabled) regular.checked = true;
-    } else {
-      // If no notes are checked, uncheck Auto-Rotation
-      const anyNoteChecked = NOTE_IDS.some(nid => {
-        const ncb = document.getElementById(nid) as HTMLInputElement;
-        return ncb?.checked;
-      });
-      if (!anyNoteChecked && regular) regular.checked = false;
-    }
-  });
-});
-
-// Accessibility Notes accordion toggle
-document.getElementById('a11yNotesToggle')?.addEventListener('click', () => {
-  const list = document.getElementById('a11yScreenReaderList') as HTMLElement;
-  const arrow = document.getElementById('a11yNotesArrow') as HTMLElement;
-  if (!list) return;
-  const collapsed = list.style.display === 'none';
-  list.style.display = collapsed ? '' : 'none';
-  if (arrow) arrow.style.transform = collapsed ? '' : 'rotate(-90deg)';
-});
-
-// Generate Blueline button
-document.getElementById('generateBluelineBtn')?.addEventListener('click', () => {
-  const tier1: string[] = [];
-  const tier2: string[] = [];
-  if ((document.getElementById('a11yFocusIndicators') as HTMLInputElement)?.checked) tier1.push('focusIndicators');
-  if ((document.getElementById('a11yFocusOrder') as HTMLInputElement)?.checked) tier1.push('focusOrder');
-  if ((document.getElementById('a11yHeadings') as HTMLInputElement)?.checked) tier2.push('headings');
-  if ((document.getElementById('a11yLandmarks') as HTMLInputElement)?.checked) tier2.push('landmarks');
-  if ((document.getElementById('a11yNames') as HTMLInputElement)?.checked) tier2.push('names');
-  if ((document.getElementById('a11yAltText') as HTMLInputElement)?.checked) tier2.push('altText');
-  if ((document.getElementById('a11yAria') as HTMLInputElement)?.checked) tier2.push('aria');
-  if ((document.getElementById('a11yKeyboard') as HTMLInputElement)?.checked) tier2.push('keyboard');
-  if ((document.getElementById('a11yDom') as HTMLInputElement)?.checked) tier2.push('dom');
-  const simplified = (document.getElementById('a11ySimplified') as HTMLInputElement)?.checked;
-  if (simplified) {
-    tier2.push('autoRotationSimplified');
-  } else if ((document.getElementById('a11yAutoRotation') as HTMLInputElement)?.checked) {
-    tier2.push('autoRotation');
+  if ((document.getElementById('a11yNamesAlt') as HTMLInputElement)?.checked) {
+    categories.push('names', 'altText');
   }
-  if ((document.getElementById('a11yVoiceover') as HTMLInputElement)?.checked) tier2.push('voiceover');
-  if ((document.getElementById('a11yTalkback') as HTMLInputElement)?.checked) tier2.push('talkback');
-  if ((document.getElementById('a11yNarrator') as HTMLInputElement)?.checked) tier2.push('narrator');
-  if ((document.getElementById('a11yReactNative') as HTMLInputElement)?.checked) tier2.push('reactNative');
-  if ((document.getElementById('a11yTvNote') as HTMLInputElement)?.checked) tier2.push('tvNote');
-  if ((document.getElementById('a11yGeneralNote') as HTMLInputElement)?.checked) tier2.push('generalNote');
+  if ((document.getElementById('a11yColorContrast') as HTMLInputElement)?.checked) categories.push('colorContrast');
+  if ((document.getElementById('a11yAriaKeyboard') as HTMLInputElement)?.checked) {
+    categories.push('aria', 'keyboard');
+  }
+  if ((document.getElementById('a11yTargetSize') as HTMLInputElement)?.checked) categories.push('targetSize');
+  if ((document.getElementById('a11yPageSetup') as HTMLInputElement)?.checked) {
+    categories.push('pageTitle', 'language');
+  }
+  // Conditional
+  if ((document.getElementById('a11yForms') as HTMLInputElement)?.checked) categories.push('forms');
+  if ((document.getElementById('a11yCarousel') as HTMLInputElement)?.checked) categories.push('autoRotation');
+  if ((document.getElementById('a11yDom') as HTMLInputElement)?.checked) categories.push('dom');
+  if ((document.getElementById('a11yMotionMedia') as HTMLInputElement)?.checked) {
+    categories.push('reducedMotion', 'media', 'reflow');
+  }
+  if ((document.getElementById('a11yScreenReader') as HTMLInputElement)?.checked) {
+    categories.push('voiceover', 'talkback', 'narrator');
+  }
+  if ((document.getElementById('a11yReactNative') as HTMLInputElement)?.checked) categories.push('reactNative');
+  if ((document.getElementById('a11yTvNote') as HTMLInputElement)?.checked) categories.push('tvNote');
+  if ((document.getElementById('a11yGeneralNote') as HTMLInputElement)?.checked) categories.push('generalNote');
+  return categories;
+}
 
-  if (tier1.length === 0 && tier2.length === 0) {
+// Collect checked plugin-generated annotations
+function getCheckedPluginAnnotations(): string[] {
+  const annotations: string[] = [];
+  if ((document.getElementById('a11yPluginFocusIndicators') as HTMLInputElement)?.checked) annotations.push('focusIndicators');
+  if ((document.getElementById('a11yPluginFocusOrder') as HTMLInputElement)?.checked) annotations.push('focusOrder');
+  return annotations;
+}
+
+// Shared logic for all three buttons
+function triggerBlueline(mode: 'auto' | 'auto-plain' | 'copy') {
+  const pluginAnnotations = getCheckedPluginAnnotations();
+  const categories = getCheckedA11yCategories();
+  if (pluginAnnotations.length === 0 && categories.length === 0) {
     updateA11yStatus('Select at least one option.');
     return;
   }
+  // Run plugin-generated annotations (always, no bridge needed)
+  if (pluginAnnotations.length > 0) {
+    postToPlugin('generate-plugin-annotations', { annotations: pluginAnnotations });
+  }
+  // Run AI-assisted categories
+  if (categories.length > 0) {
+    if (!bridgeConnected) { updateA11yStatus('Connect Bridge for AI-assisted categories.'); return; }
+    const plainLanguage = mode === 'auto-plain';
+    autoFillMode = mode === 'copy' ? 'copy' : 'auto';
+    postToPlugin('generate-blueline', { categories, plainLanguage, autoFill: mode !== 'copy' });
+  } else if (pluginAnnotations.length > 0) {
+    updateA11yStatus('Generating annotations...');
+  }
+}
 
-  postToPlugin('generate-blueline', { tier1, tier2, grouped: !simplified });
-  updateA11yStatus('Generating blueline...');
-});
+// Generate Blueline — scaffold + auto-fill
+document.getElementById('generateBluelineBtn')?.addEventListener('click', () => triggerBlueline('auto'));
 
-// Generate Blueline with Panels — one Section per a11y category, each with cloned design
-document.getElementById('generateBluelinePanelsBtn')?.addEventListener('click', () => {
-  const tier1 = ['focusIndicators', 'focusOrder'];
-  const tier2 = ['headings', 'landmarks', 'names', 'altText', 'aria', 'keyboard', 'dom', 'autoRotation', 'screenReader'];
-  postToPlugin('generate-blueline-panels', { tier1, tier2 });
-  updateA11yStatus('Generating panels...');
-});
+// Generate Blueline (Plain Language) — scaffold + auto-fill plain language
+document.getElementById('generateBluelinePlainBtn')?.addEventListener('click', () => triggerBlueline('auto-plain'));
+
+// Copy Fill Command — scaffold + show copy-paste prompt
+document.getElementById('copyFillCmdBtn')?.addEventListener('click', () => triggerBlueline('copy'));
+
+function triggerBluelinePanels() {
+  const pluginAnnotations = getCheckedPluginAnnotations();
+  const categories = getCheckedA11yCategories();
+  if (pluginAnnotations.length === 0 && categories.length === 0) {
+    updateA11yStatus('Select at least one option.');
+    return;
+  }
+  if (pluginAnnotations.length > 0) {
+    postToPlugin('generate-plugin-annotations', { annotations: pluginAnnotations });
+  }
+  if (categories.length > 0) {
+    if (!bridgeConnected) { updateA11yStatus('Connect Bridge for AI-assisted categories.'); return; }
+    postToPlugin('generate-blueline-panels', { categories });
+  } else if (pluginAnnotations.length > 0) {
+    updateA11yStatus('Generating annotations...');
+  }
+}
+
+document.getElementById('generateBluelinePanelsBtn')?.addEventListener('click', () => triggerBluelinePanels());
+
 
 // Bridge tab — WebSocket connection to figma-console MCP
 let bridgeConnected = false;
@@ -793,7 +899,7 @@ function updateBridgeUi() {
     disconnected.style.display = 'block';
     connected.style.display = 'none';
   }
-  updateA11yTier2State();
+  updateA11yBridgeState();
 }
 
 function appendBridgeLog(message: string) {
@@ -978,6 +1084,12 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
       // Handle server identity
       if (message.type === 'SERVER_HELLO' && message.data) {
         appendBridgeLog('Server v' + (message.data.serverVersion || '?') + ' on port ' + port);
+        return;
+      }
+
+      // Handle auto-fill status messages from MCP server
+      if (message.type === 'AUTO_FILL_STARTED' || message.type === 'AUTO_FILL_COMPLETE' || message.type === 'AUTO_FILL_FAILED') {
+        handleAutoFillMessage(message);
         return;
       }
 
