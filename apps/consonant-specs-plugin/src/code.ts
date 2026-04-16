@@ -5,6 +5,7 @@ import { runS2AAudit, runFullAlign, runTextColorsAlign } from './s2a-audit';
 import { localize, collectSourceText, TranslationProvider } from './localize';
 import { generateBlueline, generateBluelinePanels, placeCategoryBadge } from './a11y-blueline';
 import { runStructuralScan } from './a11y-structural-scan';
+import { generateFocusIndicators, collectFocusableElements } from './spec-focus-indicators';
 
 // Expose for eval/EXECUTE_CODE access
 (globalThis as any).__generateBlueline = generateBlueline;
@@ -76,9 +77,8 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
       const nodeId = params.nodeId as string | undefined;
       const sel = nodeId ? [await figma.getNodeByIdAsync(nodeId)] : figma.currentPage.selection;
       if (!sel || sel.length === 0 || !sel[0]) throw new Error('Select a frame or provide nodeId');
-      const tier1 = Array.isArray(params.tier1) ? (params.tier1 as string[]) : [];
-      const tier2 = Array.isArray(params.tier2) ? (params.tier2 as string[]) : [];
-      const result = await generateBlueline(sel[0] as SceneNode, tier1, tier2);
+      const categories = Array.isArray(params.categories) ? (params.categories as string[]) : [];
+      const result = await generateBlueline(sel[0] as SceneNode, categories);
       return result;
     }
 
@@ -429,6 +429,827 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
       return { data: { issues, totalIssues: issues.length, nodeId: rootNode.id, nodeName: rootNode.name } };
     }
 
+    // ── Blueline data retrieval (for AI review + fill) ──
+    case 'GET_BLUELINE_DATA': {
+      const page = figma.currentPage;
+      // Structural scan
+      const scanNode = page.findOne(n => n.name === '.structural-scan' && n.type === 'TEXT') as TextNode | null;
+      const structuralScan = scanNode ? scanNode.characters : null;
+
+      // Focus order sidebar
+      const sidebars = page.findAll(n => n.name === 'Accessibility Annotations' && n.type === 'FRAME');
+      const sidebar = sidebars[sidebars.length - 1] as FrameNode | null;
+      const focusOrder: { index: number; name: string; nodeId?: string }[] = [];
+      if (sidebar && 'children' in sidebar) {
+        let idx = 0;
+        const walk = (node: SceneNode) => {
+          if (node.name === 'Focus Order Info' && 'children' in node) {
+            idx++;
+            // Element name is in the parent row, e.g. "CTA - Secondary (ID: 103:13426)"
+            const parentRow = node.parent;
+            let elemName = '';
+            let nodeId: string | undefined;
+            if (parentRow && parentRow.type !== 'PAGE' && parentRow.type !== 'DOCUMENT') {
+              const rowName = parentRow.name;
+              const idMatch = rowName.match(/^(.+?)\s*\(ID:\s*([^)]+)\)$/);
+              if (idMatch) {
+                elemName = idMatch[1].trim();
+                nodeId = idMatch[2].trim();
+              } else {
+                elemName = rowName;
+              }
+            }
+            if (!elemName) {
+              const frame = node as FrameNode;
+              const textChild = frame.findOne(c => c.type === 'TEXT' && c.name !== 'Badge') as TextNode | null;
+              elemName = textChild?.characters || `Element ${idx}`;
+            }
+            focusOrder.push({ index: idx, name: elemName, ...(nodeId ? { nodeId } : {}) });
+          }
+          if ('children' in node) {
+            for (const child of (node as FrameNode).children) walk(child);
+          }
+        };
+        walk(sidebar);
+      }
+
+      // Focus rectangles
+      const focusRects = page.findAll(n => n.name === 'Focus Rectangle' && n.parent?.type === 'PAGE');
+      const focusIndicators = focusRects.map(r => ({
+        x: Math.round(r.x), y: Math.round(r.y),
+        width: Math.round(r.width), height: Math.round(r.height),
+      }));
+
+      // Blueline cards — flat list of all card frames with category keys
+      // Display name → category key mapping
+      const NAME_TO_KEY: Record<string, string> = {
+        'Focus Indicators': 'focusIndicators',
+        'Focus Order': 'focusOrder',
+        'Heading Hierarchy': 'headingHierarchy',
+        'Landmarks': 'landmarks',
+        'Skip Navigation': 'skipNav',
+        'Consistent Navigation': 'consistentNav',
+        'Accessible Names': 'accessibleNames',
+        'Alt-Text': 'altText',
+        'Color Contrast': 'colorContrast',
+        'ARIA Roles & Attributes': 'ariaRoles',
+        'Keyboard Patterns': 'keyboardPatterns',
+        'Target Size': 'targetSize',
+        'Page Title': 'pageTitle',
+        'Language': 'language',
+        'Forms': 'forms',
+        'Carousel': 'autoRotation',
+        'DOM Strategy': 'domStrategy',
+        'Reduced Motion': 'reducedMotion',
+        'Time-Based Media': 'media',
+        'Reflow & Text Spacing': 'reflow',
+        'VoiceOver': 'voiceover',
+        'TalkBack': 'talkback',
+        'Narrator': 'narrator',
+        'React Native': 'reactNative',
+        'TV Note': 'tvNote',
+        'General Note': 'generalNote',
+      };
+
+      const cardContainers = page.findAll(n => n.name === 'Blueline Cards' || n.name === 'Tier 2 Cards');
+      const cardContainer = cardContainers[cardContainers.length - 1] as FrameNode | null;
+      const bluelineCards: { id: string; name: string; categoryKey: string; filled: boolean; container: string }[] = [];
+      if (cardContainer && 'children' in cardContainer) {
+        for (const child of cardContainer.children) {
+          if (child.type !== 'FRAME' || !('children' in child)) continue;
+          const childFrame = child as FrameNode;
+          // Check if this is a card itself (has Card Header) or a sub-container
+          const isCard = childFrame.children.some(c => c.name === 'Card Header');
+          if (isCard) {
+            const hasPlaceholder = childFrame.findOne(
+              c => c.type === 'TEXT' && (c as TextNode).characters.includes('Awaiting AI fill')
+            );
+            bluelineCards.push({ id: child.id, name: child.name, categoryKey: NAME_TO_KEY[child.name] || child.name, filled: !hasPlaceholder, container: cardContainer.name });
+          } else {
+            // Sub-container — scan its children
+            for (const grandchild of childFrame.children) {
+              if (grandchild.type !== 'FRAME') continue;
+              const hasPlaceholder = ('children' in grandchild) && (grandchild as FrameNode).findOne(
+                c => c.type === 'TEXT' && (c as TextNode).characters.includes('Awaiting AI fill')
+              );
+              bluelineCards.push({ id: grandchild.id, name: grandchild.name, categoryKey: NAME_TO_KEY[grandchild.name] || grandchild.name, filled: !hasPlaceholder, container: child.name });
+            }
+          }
+        }
+      }
+
+      // Find the target design frame (for screenshot reference)
+      let targetFrameId: string | null = null;
+      const annoSidebars = page.findAll(n => n.name === 'Accessibility Annotations' && n.type === 'FRAME');
+      if (annoSidebars.length > 0) {
+        // The annotation sidebar is placed next to the target frame — find sibling frame
+        const sidebar = annoSidebars[annoSidebars.length - 1];
+        // Look for the design frame near the sidebar (by proximity)
+        const allTopFrames = page.children.filter(n => n.type === 'FRAME' && n.name !== 'Accessibility Annotations' && !n.name.includes('Blueline Cards') && !n.name.includes('Tier 2') && n.id !== sidebar.id);
+        if (allTopFrames.length > 0) {
+          // Find the closest frame to the left of the sidebar
+          let closest = allTopFrames[0];
+          let closestDist = Infinity;
+          for (const f of allTopFrames) {
+            const dist = Math.abs(f.x + f.width - sidebar.x);
+            if (dist < closestDist) { closestDist = dist; closest = f; }
+          }
+          targetFrameId = closest.id;
+        }
+      }
+
+      return {
+        structuralScan: structuralScan ? JSON.parse(structuralScan) : null,
+        focusOrder,
+        focusIndicators,
+        bluelineCards,
+        targetFrameId,
+        plainLanguage: !!params.plainLanguage,
+      };
+    }
+
+    // ── Fill a blueline card with structured content ──
+    case 'FILL_CARD':
+    case 'FILL_TIER2_CARD': {
+      const cardId = params.cardId as string;
+      const items = params.items as Array<{ title: string; desc: string }> | undefined;
+      const notes = params.notes as string[] | undefined;
+      const warnings = params.warnings as string[] | undefined;
+      // Backwards compat: accept old sections format
+      const sections = params.sections as Array<{ type: string; text: string }> | undefined;
+      if (!cardId) throw new Error('cardId is required');
+
+      await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+      await figma.loadFontAsync({ family: 'Inter', style: 'Semi Bold' });
+
+      const card = await figma.getNodeByIdAsync(cardId) as FrameNode | null;
+      if (!card || !('children' in card)) throw new Error('Card not found: ' + cardId);
+
+      // Remove placeholder text and any existing Content frame
+      for (const child of [...card.children]) {
+        if (child.type === 'TEXT' && (child as TextNode).characters.includes('Awaiting AI fill')) child.remove();
+        if (child.type === 'FRAME' && child.name === 'Content') child.remove();
+      }
+
+      const W = card.width - (card.paddingLeft || 16) - (card.paddingRight || 16);
+      const BLACK: RGB = { r: 0, g: 0, b: 0 };
+      const GRAY: RGB = { r: 0.45, g: 0.45, b: 0.45 };
+      const BLUE: RGB = { r: 0.2, g: 0.4, b: 0.7 };
+      const ORANGE: RGB = { r: 0.8, g: 0.35, b: 0 };
+      const DIV_C: RGB = { r: 0.9, g: 0.9, b: 0.9 };
+
+      const content = figma.createFrame();
+      content.name = 'Content';
+      content.layoutMode = 'VERTICAL';
+      content.primaryAxisSizingMode = 'AUTO';
+      content.counterAxisSizingMode = 'FIXED';
+      content.resize(W, 10);
+      content.fills = [];
+      content.itemSpacing = 0;
+
+      function addDiv() {
+        const d = figma.createRectangle();
+        d.name = 'Divider';
+        d.resize(W, 1);
+        d.fills = [{ type: 'SOLID', color: DIV_C }];
+        content.appendChild(d);
+        d.layoutSizingHorizontal = 'FILL';
+        d.layoutSizingVertical = 'FIXED';
+      }
+
+      function wrapText(textNode: TextNode, padTop: number, padBot: number, name: string) {
+        const f = figma.createFrame();
+        f.name = name;
+        f.layoutMode = 'VERTICAL';
+        f.primaryAxisSizingMode = 'AUTO';
+        f.counterAxisSizingMode = 'FIXED';
+        f.resize(W, 10);
+        f.fills = [];
+        f.paddingTop = padTop;
+        f.paddingBottom = padBot;
+        f.appendChild(textNode);
+        textNode.layoutSizingHorizontal = 'FILL';
+        content.appendChild(f);
+        f.layoutSizingHorizontal = 'FILL';
+        f.layoutSizingVertical = 'HUG';
+      }
+
+      // If new structured format provided
+      if (items && items.length > 0) {
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = 'HEIGHT';
+          let chars = item.title;
+          if (item.desc) chars += '\n' + item.desc;
+          t.characters = chars;
+          t.setRangeFontName(0, item.title.length, { family: 'Inter', style: 'Semi Bold' });
+          t.setRangeFontSize(0, item.title.length, 11);
+          t.setRangeFills(0, item.title.length, [{ type: 'SOLID', color: BLACK }]);
+          if (item.desc) {
+            const ds = item.title.length + 1;
+            t.setRangeFontName(ds, chars.length, { family: 'Inter', style: 'Regular' });
+            t.setRangeFontSize(ds, chars.length, 10);
+            t.setRangeFills(ds, chars.length, [{ type: 'SOLID', color: GRAY }]);
+          }
+          wrapText(t, 8, 8, item.title.substring(0, 30));
+          if (i < items.length - 1) addDiv();
+        }
+      } else if (sections) {
+        // Legacy sections format fallback — convert to items
+        for (let i = 0; i < sections.length; i++) {
+          const s = sections[i];
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = 'HEIGHT';
+          t.characters = s.text;
+          if (s.type === 'heading') {
+            t.fontName = { family: 'Inter', style: 'Semi Bold' };
+            t.fontSize = 11;
+            t.fills = [{ type: 'SOLID', color: BLACK }];
+          } else {
+            t.fontName = { family: 'Inter', style: 'Regular' };
+            t.fontSize = 10;
+            t.fills = [{ type: 'SOLID', color: GRAY }];
+          }
+          wrapText(t, 8, 8, s.text.substring(0, 30));
+          if (i < sections.length - 1) addDiv();
+        }
+      }
+
+      // WCAG notes (blue)
+      if (notes) {
+        for (const note of notes) {
+          addDiv();
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = 'HEIGHT';
+          t.characters = note;
+          t.fontName = { family: 'Inter', style: 'Regular' };
+          t.fontSize = 10;
+          t.fills = [{ type: 'SOLID', color: BLUE }];
+          wrapText(t, 8, 4, 'WCAG Note');
+        }
+      }
+
+      // Warnings (orange)
+      if (warnings) {
+        for (const warn of warnings) {
+          addDiv();
+          const t = figma.createText();
+          t.resize(W, 10);
+          t.textAutoResize = 'HEIGHT';
+          t.characters = warn;
+          t.fontName = { family: 'Inter', style: 'Semi Bold' };
+          t.fontSize = 10;
+          t.fills = [{ type: 'SOLID', color: ORANGE }];
+          wrapText(t, 6, 4, 'Warning');
+        }
+      }
+
+      card.appendChild(content);
+      content.layoutSizingHorizontal = 'FILL';
+      content.layoutSizingVertical = 'HUG';
+
+      return { filled: true, cardId, itemCount: (items || []).length, noteCount: (notes || []).length, warningCount: (warnings || []).length };
+    }
+
+    // ── Render all blueline content in one call ──
+    case 'RENDER_BLUELINE': {
+      const cards = params.cards as Record<string, { items: Array<{ title: string; desc: string }>; notes: string[]; warnings: string[] }>;
+      const focusOrderData = params.focusOrder as Array<{ nodeId: string; name: string }> | undefined;
+      const nodeId = params.nodeId as string | undefined;
+      if (!cards || Object.keys(cards).length === 0) throw new Error('cards object is required');
+
+      await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+      await figma.loadFontAsync({ family: 'Inter', style: 'Semi Bold' });
+      await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+
+      const page = figma.currentPage;
+
+      // Find the Blueline Cards container
+      const containers = page.findAll(n => n.name === 'Blueline Cards' || n.name === 'Tier 2 Cards');
+      const container = containers[containers.length - 1] as FrameNode | null;
+      if (!container || !('children' in container)) throw new Error('Blueline Cards container not found');
+
+      const filledCards: string[] = [];
+      const W_CARD = 400;
+      const W_CONTENT = W_CARD - 32; // 16px padding each side
+      const BLACK: RGB = { r: 0, g: 0, b: 0 };
+      const GRAY: RGB = { r: 0.45, g: 0.45, b: 0.45 };
+      const BLUE: RGB = { r: 0.2, g: 0.4, b: 0.7 };
+      const ORANGE: RGB = { r: 0.8, g: 0.35, b: 0 };
+      const DIV_C: RGB = { r: 0.9, g: 0.9, b: 0.9 };
+
+      // Explicit key→display name aliases for names that don't fuzzy-match
+      const KEY_ALIASES: Record<string, string[]> = {
+        autoRotation: ['carousel'],
+        screenReaderNotes: ['voiceover', 'talkback', 'narrator'],
+        accessibleNames: ['accessiblenames'],
+        ariaRoles: ['ariarolesattributes', 'ariaroles'],
+      };
+
+      // Collect ALL card frames (search nested sub-containers too)
+      const allCardFrames: FrameNode[] = [];
+      for (const child of container.children) {
+        if (child.type === 'FRAME' && 'children' in child) {
+          // Check if this is a card itself (has Card Header) or a sub-container
+          const isCard = (child as FrameNode).children.some(c => c.name === 'Card Header');
+          if (isCard) {
+            allCardFrames.push(child as FrameNode);
+          } else {
+            // Sub-container (e.g., "AI-assisted", "Accessibility Notes") — search its children
+            for (const grandchild of (child as FrameNode).children) {
+              if (grandchild.type === 'FRAME') allCardFrames.push(grandchild as FrameNode);
+            }
+          }
+        }
+      }
+
+      // Fill each card by matching category key to card name
+      for (const [key, data] of Object.entries(cards)) {
+        const keyNorm = key.toLowerCase().replace(/[^a-z]/g, '');
+        const aliases = KEY_ALIASES[key] || [];
+
+        // Find matching card in all collected frames
+        const card = allCardFrames.find(c => {
+          const cardName = c.name.toLowerCase().replace(/[^a-z]/g, '');
+          // Check direct fuzzy match
+          if (cardName.includes(keyNorm) || keyNorm.includes(cardName)) return true;
+          // Check aliases
+          return aliases.some(a => cardName.includes(a) || a.includes(cardName));
+        }) || null;
+
+        if (!card) continue;
+
+        // Remove placeholder and existing content
+        for (const child of [...card.children]) {
+          if (child.type === 'TEXT' && (child as TextNode).characters.includes('Awaiting AI fill')) child.remove();
+          if (child.type === 'FRAME' && child.name === 'Content') child.remove();
+        }
+
+        const W = card.width - (card.paddingLeft || 16) - (card.paddingRight || 16);
+        const contentFrame = figma.createFrame();
+        contentFrame.name = 'Content';
+        contentFrame.layoutMode = 'VERTICAL';
+        contentFrame.primaryAxisSizingMode = 'AUTO';
+        contentFrame.counterAxisSizingMode = 'FIXED';
+        contentFrame.resize(W, 10);
+        contentFrame.fills = [];
+        contentFrame.itemSpacing = 0;
+
+        function addDivider(parent: FrameNode) {
+          const d = figma.createRectangle();
+          d.name = 'Divider'; d.resize(W, 1);
+          d.fills = [{ type: 'SOLID', color: DIV_C }];
+          parent.appendChild(d);
+          d.layoutSizingHorizontal = 'FILL';
+          d.layoutSizingVertical = 'FIXED';
+        }
+
+        function wrapInFrame(textNode: TextNode, padTop: number, padBot: number, name: string, parent: FrameNode) {
+          const f = figma.createFrame();
+          f.name = name;
+          f.layoutMode = 'VERTICAL';
+          f.primaryAxisSizingMode = 'AUTO';
+          f.counterAxisSizingMode = 'FIXED';
+          f.resize(W, 10); f.fills = [];
+          f.paddingTop = padTop; f.paddingBottom = padBot;
+          f.appendChild(textNode);
+          textNode.layoutSizingHorizontal = 'FILL';
+          parent.appendChild(f);
+          f.layoutSizingHorizontal = 'FILL';
+          f.layoutSizingVertical = 'HUG';
+        }
+
+        // Items
+        for (let i = 0; i < data.items.length; i++) {
+          const item = data.items[i];
+          const t = figma.createText();
+          t.resize(W, 10); t.textAutoResize = 'HEIGHT';
+          let chars = item.title;
+          if (item.desc) chars += '\n' + item.desc;
+          t.characters = chars;
+          t.setRangeFontName(0, item.title.length, { family: 'Inter', style: 'Semi Bold' });
+          t.setRangeFontSize(0, item.title.length, 11);
+          t.setRangeFills(0, item.title.length, [{ type: 'SOLID', color: BLACK }]);
+          if (item.desc) {
+            const ds = item.title.length + 1;
+            t.setRangeFontName(ds, chars.length, { family: 'Inter', style: 'Regular' });
+            t.setRangeFontSize(ds, chars.length, 10);
+            t.setRangeFills(ds, chars.length, [{ type: 'SOLID', color: GRAY }]);
+          }
+          wrapInFrame(t, 8, 8, item.title.substring(0, 30), contentFrame);
+          if (i < data.items.length - 1) addDivider(contentFrame);
+        }
+
+        // Notes
+        for (const note of (data.notes || [])) {
+          addDivider(contentFrame);
+          const t = figma.createText();
+          t.resize(W, 10); t.textAutoResize = 'HEIGHT';
+          t.characters = note;
+          t.fontName = { family: 'Inter', style: 'Regular' };
+          t.fontSize = 10;
+          t.fills = [{ type: 'SOLID', color: BLUE }];
+          wrapInFrame(t, 8, 4, 'WCAG Note', contentFrame);
+        }
+
+        // Warnings
+        for (const warn of (data.warnings || [])) {
+          addDivider(contentFrame);
+          const t = figma.createText();
+          t.resize(W, 10); t.textAutoResize = 'HEIGHT';
+          t.characters = warn;
+          t.fontName = { family: 'Inter', style: 'Semi Bold' };
+          t.fontSize = 10;
+          t.fills = [{ type: 'SOLID', color: ORANGE }];
+          wrapInFrame(t, 6, 4, 'Warning', contentFrame);
+        }
+
+        card.appendChild(contentFrame);
+        contentFrame.layoutSizingHorizontal = 'FILL';
+        contentFrame.layoutSizingVertical = 'HUG';
+        filledCards.push(card.name);
+      }
+
+      // Create focus annotations if provided
+      let focusResult: Record<string, unknown> | null = null;
+      if (focusOrderData && focusOrderData.length > 0) {
+        focusResult = await handleBridgeMethod('CREATE_FOCUS_ANNOTATIONS', {
+          nodeId,
+          focusOrder: focusOrderData,
+        });
+      }
+
+      return {
+        rendered: true,
+        filledCards,
+        focusAnnotations: focusResult ? { created: true, entryCount: (focusResult as any).entryCount } : null,
+      };
+    }
+
+    // ── Render blueline panels — native annotations + region overlays ──
+    case 'RENDER_BLUELINE_PANELS': {
+      const panelsData = params.panels as Record<string, {
+        items: Array<{ title: string; desc: string; nodeId: string | null; annotationType: 'element' | 'region' | 'none' }>;
+        notes: string[];
+        warnings: string[];
+      }>;
+      if (!panelsData || Object.keys(panelsData).length === 0) throw new Error('panels object is required');
+
+      await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+      await figma.loadFontAsync({ family: 'Inter', style: 'Semi Bold' });
+      await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+
+      const page = figma.currentPage;
+
+      // Category overlay colors (12% opacity fill, 50% opacity stroke)
+      const OVERLAY_COLORS: Record<string, { r: number; g: number; b: number }> = {
+        landmarks: { r: 0.145, g: 0.388, b: 0.921 },
+        ariaRoles: { r: 0.486, g: 0.228, b: 0.929 },
+        aria: { r: 0.486, g: 0.228, b: 0.929 },
+        domStrategy: { r: 0.278, g: 0.333, b: 0.412 },
+        dom: { r: 0.278, g: 0.333, b: 0.412 },
+        headings: { r: 0.855, g: 0.424, b: 0.106 },
+        names: { r: 0.063, g: 0.157, b: 0.294 },
+        accessibleNames: { r: 0.063, g: 0.157, b: 0.294 },
+        altText: { r: 0.608, g: 0.212, b: 0.208 },
+        keyboard: { r: 0.176, g: 0.541, b: 0.431 },
+        keyboardPatterns: { r: 0.176, g: 0.541, b: 0.431 },
+        colorContrast: { r: 0.729, g: 0.192, b: 0.482 },
+        forms: { r: 0.467, g: 0.533, b: 0.176 },
+        targetSize: { r: 0.776, g: 0.608, b: 0.118 },
+      };
+
+      const SECTIONS_MAP: Record<string, string> = {
+        focusIndicators: 'Focus Indicators', focusOrder: 'Focus Order',
+        headings: 'Heading Hierarchy', headingHierarchy: 'Heading Hierarchy',
+        landmarks: 'Landmarks', names: 'Accessible Names', accessibleNames: 'Accessible Names',
+        altText: 'Alt-Text', aria: 'ARIA Roles & Attributes', ariaRoles: 'ARIA Roles & Attributes',
+        keyboard: 'Keyboard Patterns', keyboardPatterns: 'Keyboard Patterns',
+        dom: 'DOM Strategy', domStrategy: 'DOM Strategy', colorContrast: 'Color Contrast',
+        forms: 'Forms', targetSize: 'Target Size', reflow: 'Reflow & Text Spacing',
+        language: 'Language', media: 'Time-Based Media', skipNav: 'Skip Navigation',
+        pageTitle: 'Page Title', reducedMotion: 'Reduced Motion',
+        consistentNav: 'Consistent Navigation', autoRotation: 'Carousel',
+      };
+
+      const filledPanels: string[] = [];
+
+      for (const [key, data] of Object.entries(panelsData)) {
+        const title = SECTIONS_MAP[key] || key;
+        const sectionName = `A11y ${title}`;
+
+        // Find the Section on the current page
+        const section = page.findOne(n => n.type === 'SECTION' && n.name === sectionName) as SectionNode | null;
+        if (!section) continue;
+
+        // Find the cloned design frame inside the section (first non-footer frame)
+        const clone = section.children.find(
+          c => c.type === 'FRAME' && c.name !== 'WCAG Footer'
+        ) as FrameNode | null;
+        if (!clone) continue;
+
+        // Collect all nodes in the clone subtree by name for matching
+        const cloneNodesFlat: SceneNode[] = [];
+        function collectNodes(n: SceneNode) {
+          cloneNodesFlat.push(n);
+          if ('children' in n) {
+            for (const child of (n as FrameNode).children) collectNodes(child);
+          }
+        }
+        collectNodes(clone);
+
+        // For each item, place annotation or overlay
+        for (const item of data.items) {
+          if (item.annotationType === 'none' || !item.nodeId) continue;
+
+          // Find the original node to get its name, then find by name in clone
+          const originalNode = await figma.getNodeByIdAsync(item.nodeId);
+          if (!originalNode) continue;
+
+          // Find matching node in clone by name
+          const targetNode = cloneNodesFlat.find(n => n.name === originalNode.name);
+          if (!targetNode) continue;
+
+          if (item.annotationType === 'element') {
+            // Native Figma annotation on the clone node
+            try {
+              (targetNode as any).annotations = [{
+                labelMarkdown: `**${item.title}**\n${item.desc}`,
+              }];
+            } catch (e) {
+              console.warn(`Annotation failed on "${item.title}":`, e);
+            }
+          } else if (item.annotationType === 'region') {
+            // Semi-transparent overlay rectangle + annotation on the overlay
+            const abs = targetNode.absoluteBoundingBox;
+            const secAbs = section.absoluteBoundingBox;
+            if (!abs || !secAbs) continue;
+
+            const overlayColor = OVERLAY_COLORS[key] || { r: 0.145, g: 0.388, b: 0.921 };
+            const overlay = figma.createRectangle();
+            overlay.name = `Overlay: ${item.title}`;
+            overlay.resize(abs.width, abs.height);
+            overlay.x = abs.x - secAbs.x;
+            overlay.y = abs.y - secAbs.y;
+            overlay.fills = [{ type: 'SOLID', color: overlayColor, opacity: 0.12 }];
+            overlay.strokes = [{ type: 'SOLID', color: overlayColor, opacity: 0.5 }];
+            overlay.strokeWeight = 2;
+            section.appendChild(overlay);
+
+            // Pin annotation on the overlay
+            try {
+              (overlay as any).annotations = [{
+                labelMarkdown: `**${item.title}**\n${item.desc}`,
+              }];
+            } catch (e) {
+              console.warn(`Overlay annotation failed on "${item.title}":`, e);
+            }
+          }
+        }
+
+        // Fill WCAG footer with notes
+        const footer = section.findOne(n => n.name === 'WCAG Footer') as FrameNode | null;
+        if (footer && data.notes && data.notes.length > 0) {
+          for (const note of data.notes) {
+            const t = figma.createText();
+            t.characters = note;
+            t.fontName = { family: 'Inter', style: 'Regular' };
+            t.fontSize = 10;
+            t.fills = [{ type: 'SOLID', color: { r: 0.2, g: 0.4, b: 0.7 } }];
+            t.textAutoResize = 'HEIGHT';
+            t.resize(footer.width - 32, t.height);
+            footer.appendChild(t);
+            t.layoutSizingHorizontal = 'FILL';
+          }
+        }
+
+        // Add warnings to footer
+        if (footer && data.warnings && data.warnings.length > 0) {
+          for (const warn of data.warnings) {
+            const t = figma.createText();
+            t.characters = warn;
+            t.fontName = { family: 'Inter', style: 'Semi Bold' };
+            t.fontSize = 10;
+            t.fills = [{ type: 'SOLID', color: { r: 0.8, g: 0.35, b: 0 } }];
+            t.textAutoResize = 'HEIGHT';
+            t.resize(footer.width - 32, t.height);
+            footer.appendChild(t);
+            t.layoutSizingHorizontal = 'FILL';
+          }
+        }
+
+        filledPanels.push(sectionName);
+      }
+
+      return { rendered: true, filledPanels };
+    }
+
+    // ── Create focus order sidebar + badges + focus indicator rectangles ──
+    case 'CREATE_FOCUS_ANNOTATIONS': {
+      const nodeId = params.nodeId as string | undefined;
+      const entries = params.focusOrder as Array<{
+        nodeId: string;
+        name: string;
+      }>;
+      if (!entries || entries.length === 0) throw new Error('focusOrder array is required');
+
+      await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+      await figma.loadFontAsync({ family: 'Inter', style: 'Semi Bold' });
+      await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+
+      const page = figma.currentPage;
+      const targetNode = nodeId
+        ? await figma.getNodeByIdAsync(nodeId)
+        : figma.currentPage.selection[0];
+      if (!targetNode) throw new Error('Target node not found');
+      const targetAbs = (targetNode as SceneNode).absoluteBoundingBox;
+      if (!targetAbs) throw new Error('Target node has no bounding box');
+
+      // Clean up previous annotations
+      const oldNodes: SceneNode[] = [];
+      for (const child of page.children) {
+        if (child.name === 'Accessibility Annotations' ||
+            child.name === 'Badge' ||
+            child.name === 'Focus Rectangle') {
+          oldNodes.push(child);
+        }
+      }
+      for (const n of oldNodes) n.remove();
+
+      // Resolve all entry nodes and get their bounds + corner radii
+      const entryNodes = await Promise.all(
+        entries.map(e => figma.getNodeByIdAsync(e.nodeId))
+      );
+      const resolved: Array<{
+        name: string; id: string;
+        x: number; y: number; w: number; h: number; r: number;
+      }> = [];
+      for (let i = 0; i < entries.length; i++) {
+        const n = entryNodes[i] as SceneNode | null;
+        if (!n) continue;
+        const abs = n.absoluteBoundingBox;
+        if (!abs) continue;
+        let r = 0;
+        if ('cornerRadius' in n) {
+          const cr = (n as any).cornerRadius;
+          r = (typeof cr === 'number' && cr !== figma.mixed) ? cr : 0;
+        }
+        // Circular elements: use half size as radius
+        if (Math.abs(abs.width - abs.height) < 2 && abs.width < 50) {
+          r = Math.max(r, Math.round(abs.width / 2));
+        }
+        resolved.push({
+          name: entries[i].name, id: entries[i].nodeId,
+          x: abs.x, y: abs.y, w: abs.width, h: abs.height, r,
+        });
+      }
+
+      const BADGE_COLOR = { r: 0.188, g: 0.514, b: 0.322 };
+      const BADGE_TEXT_C = { r: 1, g: 1, b: 1 };
+      const FOCUS_BLUE = { r: 0.08, g: 0.45, b: 0.9 };
+      const BG = { r: 1, g: 1, b: 1 };
+      const STROKE = { r: 0.9, g: 0.9, b: 0.9 };
+      const TEXT_P = { r: 0.12, g: 0.13, b: 0.18 };
+      const BSIZE = 22;
+
+      // ── Sidebar ──
+      const sidebar = figma.createFrame();
+      sidebar.name = 'Accessibility Annotations';
+      sidebar.resize(320, 100);
+      sidebar.layoutMode = 'VERTICAL';
+      sidebar.counterAxisSizingMode = 'FIXED';
+      sidebar.primaryAxisSizingMode = 'AUTO';
+      sidebar.clipsContent = false;
+      sidebar.paddingTop = 20; sidebar.paddingBottom = 20;
+      sidebar.paddingLeft = 20; sidebar.paddingRight = 20;
+      sidebar.itemSpacing = 8;
+      sidebar.fills = [{ type: 'SOLID', color: BG }];
+      sidebar.strokes = [{ type: 'SOLID', color: STROKE }];
+      sidebar.strokeWeight = 1; sidebar.strokeAlign = 'INSIDE';
+      sidebar.cornerRadius = 8;
+
+      const hdr = figma.createText();
+      hdr.characters = 'Accessibility Annotations';
+      hdr.fontSize = 15;
+      hdr.fontName = { family: 'Inter', style: 'Semi Bold' };
+      hdr.fills = [{ type: 'SOLID', color: TEXT_P }];
+      sidebar.appendChild(hdr);
+
+      const secTitle = figma.createText();
+      secTitle.characters = 'Focus Order';
+      secTitle.fontSize = 13;
+      secTitle.fontName = { family: 'Inter', style: 'Bold' };
+      secTitle.fills = [{ type: 'SOLID', color: TEXT_P }];
+      sidebar.appendChild(secTitle);
+
+      for (let i = 0; i < resolved.length; i++) {
+        const e = resolved[i];
+        const row = figma.createFrame();
+        row.name = `${e.name} (ID: ${e.id})`;
+        row.layoutMode = 'HORIZONTAL';
+        row.counterAxisSizingMode = 'AUTO';
+        row.primaryAxisSizingMode = 'AUTO';
+        row.itemSpacing = 10;
+        row.counterAxisAlignItems = 'CENTER';
+        row.fills = [];
+
+        // Circular badge
+        const badge = figma.createFrame();
+        badge.name = 'Badge';
+        badge.resize(BSIZE, BSIZE);
+        badge.layoutMode = 'NONE';
+        badge.cornerRadius = BSIZE / 2;
+        badge.fills = [{ type: 'SOLID', color: BADGE_COLOR }];
+        const bNum = figma.createText();
+        bNum.characters = String(i + 1);
+        bNum.fontSize = 10;
+        bNum.fontName = { family: 'Inter', style: 'Bold' };
+        bNum.fills = [{ type: 'SOLID', color: BADGE_TEXT_C }];
+        bNum.textAlignHorizontal = 'CENTER';
+        badge.appendChild(bNum);
+        bNum.x = (BSIZE - bNum.width) / 2;
+        bNum.y = (BSIZE - bNum.height) / 2;
+        row.appendChild(badge);
+
+        // Hidden info node for GET_BLUELINE_DATA parsing
+        const info = figma.createFrame();
+        info.name = 'Focus Order Info';
+        info.resize(1, 1); info.fills = []; info.visible = false;
+        row.appendChild(info);
+
+        const label = figma.createText();
+        label.characters = e.name;
+        label.fontSize = 12;
+        label.fontName = { family: 'Inter', style: 'Regular' };
+        label.fills = [{ type: 'SOLID', color: TEXT_P }];
+        row.appendChild(label);
+
+        sidebar.appendChild(row);
+        if (i < resolved.length - 1) {
+          const div = figma.createFrame();
+          div.name = 'Divider';
+          div.resize(280, 1);
+          div.fills = [{ type: 'SOLID', color: STROKE }];
+          sidebar.appendChild(div);
+          div.layoutSizingHorizontal = 'FILL';
+        }
+      }
+
+      sidebar.x = targetAbs.x - 360;
+      sidebar.y = targetAbs.y;
+      page.appendChild(sidebar);
+
+      // ── Badges on design ──
+      for (let j = 0; j < resolved.length; j++) {
+        const e = resolved[j];
+        const b = figma.createFrame();
+        b.name = 'Badge';
+        b.resize(BSIZE, BSIZE);
+        b.layoutMode = 'NONE';
+        b.cornerRadius = BSIZE / 2;
+        b.fills = [{ type: 'SOLID', color: BADGE_COLOR }];
+        const num = figma.createText();
+        num.characters = String(j + 1);
+        num.fontSize = 10;
+        num.fontName = { family: 'Inter', style: 'Bold' };
+        num.fills = [{ type: 'SOLID', color: BADGE_TEXT_C }];
+        num.textAlignHorizontal = 'CENTER';
+        b.appendChild(num);
+        num.x = (BSIZE - num.width) / 2;
+        num.y = (BSIZE - num.height) / 2;
+        b.x = e.x - 4;
+        b.y = e.y - BSIZE - 2;
+        page.appendChild(b);
+      }
+
+      // ── Focus indicator rectangles (shape-matched) ──
+      const pad = 3;
+      for (let k = 0; k < resolved.length; k++) {
+        const f = resolved[k];
+        const rect = figma.createRectangle();
+        rect.name = 'Focus Rectangle';
+        rect.x = f.x - pad;
+        rect.y = f.y - pad;
+        rect.resize(f.w + pad * 2, f.h + pad * 2);
+        rect.fills = [];
+        rect.strokes = [{ type: 'SOLID', color: FOCUS_BLUE }];
+        rect.strokeWeight = 2;
+        rect.cornerRadius = f.r > 0 ? f.r + pad : 2;
+        page.appendChild(rect);
+      }
+
+      return {
+        created: true,
+        sidebarId: sidebar.id,
+        entryCount: resolved.length,
+        entries: resolved.map((e, i) => ({ index: i + 1, name: e.name, nodeId: e.id })),
+      };
+    }
+
     default:
       throw new Error('Unknown bridge method: ' + method);
   }
@@ -643,28 +1464,57 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       }
       break;
     }
+    case 'generate-plugin-annotations': {
+      const sel = figma.currentPage.selection;
+      if (sel.length === 0) { figma.notify('Select a frame first'); break; }
+      const annotations = Array.isArray(msg.annotations) ? (msg.annotations as string[]) : [];
+      try {
+        const target = sel[0];
+        let count = 0;
+        if (annotations.includes('focusIndicators')) {
+          await generateFocusIndicators(target);
+          count++;
+        }
+        if (annotations.includes('focusOrder')) {
+          const focusable = collectFocusableElements(target);
+          if (focusable.length > 0) {
+            await handleBridgeMethod('CREATE_FOCUS_ANNOTATIONS', {
+              nodeId: target.id,
+              focusOrder: focusable.map((n, i) => ({ nodeId: n.id, name: n.name || `Element ${i + 1}` })),
+            });
+            count++;
+          } else {
+            figma.notify('No focusable elements found for focus order.');
+          }
+        }
+        figma.ui.postMessage({ type: 'a11y-status', message: count > 0 ? 'Annotations created.' : 'Nothing to generate.' });
+      } catch (e) {
+        const errorMsg = e instanceof Error ? e.message : String(e);
+        figma.ui.postMessage({ type: 'a11y-status', message: `Error: ${errorMsg}` });
+        figma.notify(`Annotation failed: ${errorMsg}`, { error: true });
+      }
+      break;
+    }
     case 'generate-blueline': {
       const sel = figma.currentPage.selection;
       if (sel.length === 0) { figma.notify('Select a frame first'); break; }
       try {
-        const tier1 = Array.isArray(msg.tier1) ? (msg.tier1 as string[]) : [];
-        const tier2 = Array.isArray(msg.tier2) ? (msg.tier2 as string[]) : [];
-        figma.ui.postMessage({ type: 'a11y-status', message: 'Generating blueline...' });
-        const grouped = msg.grouped !== false; // default true
-        const result = await generateBlueline(sel[0], tier1, tier2, { grouped });
+        const categories = Array.isArray(msg.categories) ? (msg.categories as string[]) : [];
+        figma.ui.postMessage({ type: 'a11y-status', message: 'Creating blueline scaffold...' });
+        const grouped = msg.grouped === true;
+        const plainLanguage = msg.plainLanguage === true;
+        const result = await generateBlueline(sel[0], categories, { grouped });
 
-        if (tier2.length > 0) {
-          // Try to notify consonant-mcp — the UI handler will show status or fallback
-          figma.ui.postMessage({
-            type: 'a11y-tier2-request',
-            frameId: result.frameId,
-            sections: result.tier2Sections,
-            frameName: sel[0].name,
-          });
-        } else {
-          figma.ui.postMessage({ type: 'a11y-status', message: 'Blueline generated!' });
-        }
-        figma.notify(`Blueline created for "${sel[0].name}"`);
+        // Always trigger AI fill via bridge
+        figma.ui.postMessage({
+          type: 'a11y-fill-request',
+          mode: 'sections',
+          frameId: result.frameId,
+          sections: result.sections,
+          frameName: sel[0].name,
+          plainLanguage,
+        });
+        figma.notify(`Blueline scaffold created for "${sel[0].name}"`);
       } catch (e) {
         const errorMsg = e instanceof Error ? e.message : String(e);
         figma.ui.postMessage({ type: 'a11y-status', message: `Error: ${errorMsg}` });
@@ -676,14 +1526,20 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       const sel = figma.currentPage.selection;
       if (sel.length === 0) { figma.notify('Select a frame first'); break; }
       try {
-        const tier1 = Array.isArray(msg.tier1) ? (msg.tier1 as string[]) : [];
-        const tier2 = Array.isArray(msg.tier2) ? (msg.tier2 as string[]) : [];
-        figma.ui.postMessage({ type: 'a11y-status', message: 'Generating panels...' });
-        const result = await generateBluelinePanels(sel[0], tier1, tier2);
-        figma.ui.postMessage({ type: 'a11y-tier2-request', mode: 'sections' });
+        const categories = Array.isArray(msg.categories) ? (msg.categories as string[]) : [];
+        figma.ui.postMessage({ type: 'a11y-status', message: 'Creating blueline panels...' });
+        const result = await generateBluelinePanels(sel[0], categories);
+
+        // Panels always use copy-prompt flow
+        figma.ui.postMessage({
+          type: 'a11y-panels-fill-request',
+          sections: result.sections,
+          frameName: sel[0].name,
+          sectionIds: result.sectionIds,
+        });
         figma.notify(`Blueline panels created for "${sel[0].name}"`);
       } catch (e) {
-        const errorMsg = e instanceof Error ? e.message : 'Unknown error';
+        const errorMsg = e instanceof Error ? e.message : String(e);
         figma.ui.postMessage({ type: 'a11y-status', message: `Error: ${errorMsg}` });
         figma.notify(`Panels failed: ${errorMsg}`, { error: true });
       }
