@@ -645,6 +645,10 @@ function createMarkerLine(x1: number, y1: number, x2: number, y2: number, parent
 // ─── Section Generator ────────────────────────────────────────────────────────
 
 export async function generateAnatomySection(sourceNode: SceneNode): Promise<FrameNode> {
+  // Ensure fonts are loaded (idempotent — cached after first call)
+  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+
   const section = figma.createFrame();
   section.name = 'Anatomy';
   section.layoutMode = 'VERTICAL';

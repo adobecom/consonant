@@ -960,8 +960,8 @@ function bridgeConnect() {
 
       testWs.onerror = () => {
         clearTimeout(timeout);
-        pending--;
-        if (pending <= 0 && !found) bridgeConnectFailed();
+        // Don't decrement here — onclose always fires after onerror,
+        // so we count completions in onclose only to avoid double-decrement.
       };
 
       testWs.onclose = () => {
@@ -1137,6 +1137,17 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
     bridgeSessionNonce = null; // invalidate nonce so it can't be reused after disconnect
     bridgeNonceSent = false;
     bridgeConnected = false;
+
+    // Drain pending bridge promises so callers aren't stuck forever
+    for (const [id, pending] of bridgePendingRequests) {
+      clearTimeout(pending.timeoutId);
+      pending.reject(new Error('Bridge disconnected'));
+    }
+    bridgePendingRequests.clear();
+
+    // Stop auto-fill timer if running
+    if (autoFillTimer) stopAutoFillTimer('Bridge disconnected', false);
+
     updateBridgeUi();
 
     const wasReplaced = event.code === 1000 && (

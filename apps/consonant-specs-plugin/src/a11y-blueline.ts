@@ -871,6 +871,19 @@ export async function generateBluelinePanels(
   const allSections: SceneNode[] = [];
   const sectionIds: string[] = [];
 
+  // Wrap in try/catch to clean up orphaned sections on failure
+  try {
+    return await _generateBluelinePanelsInner();
+  } catch (e) {
+    // Remove any sections created before the failure
+    for (const section of allSections) {
+      try { section.remove(); } catch (_) {}
+    }
+    throw e;
+  }
+
+  async function _generateBluelinePanelsInner() {
+
   // Track row heights for grid positioning
   let col = 0;
   let rowY = startY;
@@ -956,6 +969,7 @@ export async function generateBluelinePanels(
   figma.viewport.scrollAndZoomIntoView(allSections);
 
   return { frameId: node.id, sections: categories, sectionIds };
+  } // end _generateBluelinePanelsInner
 }
 
 // ---------------------------------------------------------------------------

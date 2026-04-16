@@ -194,9 +194,13 @@ export async function loadLibraryTokens(): Promise<void> {
                 }
               }
             }
-          } catch (_) {}
+          } catch (e) {
+            console.error(`[tokens] Failed to load collection "${collection.name}":`, e);
+          }
         }
-      } catch (_) {}
+      } catch (e) {
+        console.error('[tokens] Failed to discover S2A library collections:', e);
+      }
 
       tokenCount = textStyleMap.length + colorVarMap.length + dimensionVarMap.length;
       loaded = true;

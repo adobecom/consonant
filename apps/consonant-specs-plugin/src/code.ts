@@ -559,7 +559,7 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
       }
 
       return {
-        structuralScan: structuralScan ? JSON.parse(structuralScan) : null,
+        structuralScan: structuralScan ? (() => { try { return JSON.parse(structuralScan); } catch { return null; } })() : null,
         focusOrder,
         focusIndicators,
         bluelineCards,
