@@ -1,5 +1,5 @@
 import { figmaColorToHex, getNodeFills, getNodeStrokes, getTextProps, getCornerRadius, getEffects, getAutoLayoutProps } from './utils';
-import { matchColor, matchTypography, matchRadius, detectNodeColorRole } from './tokens';
+import { matchColor, matchS2ATextStyle, matchRadius, detectNodeColorRole } from './tokens';
 
 // Waiver: annotation text uses manual fontName — these are spec overlays, not themed UI
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -392,7 +392,7 @@ async function buildPropertiesForNode(node: SceneNode, content: FrameNode): Prom
       attrs.itemSpacing = ROW_GAP;
 
       // Always show full typography — Text style (if token), then all font props
-      const token = matchTypography(`${text.fontSize}`);
+      const token = matchS2ATextStyle(node);
       // Extract the last segment of the token path for display (e.g. "body-md" from "s2a/typography/body-md")
       const tokenLabel = token ? token.split('/').pop()! : null;
 
