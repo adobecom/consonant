@@ -511,7 +511,7 @@ export async function applyTextStyle(node: TextNode): Promise<boolean> {
     if (ts.fontFamily !== family || ts.fontStyle !== style || ts.fontSize !== fontSize) continue;
 
     try {
-      node.textStyleId = ts.styleId;
+      await node.setTextStyleIdAsync(ts.styleId);
 
       // VERIFY: check ALL visual text properties match original
       const newFontName = node.fontName;
@@ -560,7 +560,7 @@ export async function applyTextStyle(node: TextNode): Promise<boolean> {
       }
 
       // Something changed — revert completely
-      node.textStyleId = '';
+      await node.setTextStyleIdAsync('');
       await figma.loadFontAsync(origFontName);
       node.fontName = origFontName;
       node.fontSize = origFontSize;
@@ -568,7 +568,7 @@ export async function applyTextStyle(node: TextNode): Promise<boolean> {
       if (origLetterSpacing !== figma.mixed) node.letterSpacing = origLetterSpacing as LetterSpacing;
     } catch (_) {
       try {
-        node.textStyleId = '';
+        await node.setTextStyleIdAsync('');
         await figma.loadFontAsync(origFontName);
         node.fontName = origFontName;
         node.fontSize = origFontSize;
@@ -746,7 +746,7 @@ async function forceMatchNode(
         try {
           await figma.loadFontAsync(fn);
           await figma.loadFontAsync({ family: closest.fontFamily, style: closest.fontStyle });
-          textNode.textStyleId = closest.styleId;
+          await textNode.setTextStyleIdAsync(closest.styleId);
           result.applied++;
           if (!exact) {
             result.issues.push({
