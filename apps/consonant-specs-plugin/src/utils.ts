@@ -83,6 +83,7 @@ export function getTextProps(node: SceneNode): {
   fontFamily: string;
   fontSize: number;
   fontWeight: number;
+  fontStyle: string;
   lineHeight: string;
   letterSpacing: string;
 } | null {
@@ -99,6 +100,7 @@ export function getTextProps(node: SceneNode): {
     fontFamily: font.family,
     fontSize: size,
     fontWeight: getFontWeight(font.style),
+    fontStyle: font.style,
     lineHeight: lh.unit === 'AUTO' ? 'auto' : lh.unit === 'PIXELS' ? `${lh.value}px` : `${lh.value}%`,
     letterSpacing: ls.unit === 'PIXELS' ? `${ls.value}px` : `${ls.value}%`,
   };
