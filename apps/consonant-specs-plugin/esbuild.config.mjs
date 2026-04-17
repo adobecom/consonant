@@ -1,7 +1,27 @@
 import { build, context } from 'esbuild';
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 
 const isWatch = process.argv.includes('--watch');
+
+function loadEnv() {
+  const env = {};
+  const envPath = '.env';
+  if (existsSync(envPath)) {
+    for (const line of readFileSync(envPath, 'utf8').split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const eq = trimmed.indexOf('=');
+      if (eq === -1) continue;
+      env[trimmed.slice(0, eq).trim()] = trimmed.slice(eq + 1).trim();
+    }
+  }
+  return env;
+}
+
+const env = loadEnv();
+const featureDefines = {
+  'FEATURE_A11Y': env.FEATURE_A11Y === 'true' ? 'true' : 'false',
+};
 
 const codeConfig = {
   entryPoints: ['src/code.ts'],
@@ -19,6 +39,7 @@ const uiConfig = {
   format: 'iife',
   target: 'es2017',
   sourcemap: false,
+  define: featureDefines,
 };
 
 function buildUiHtml() {

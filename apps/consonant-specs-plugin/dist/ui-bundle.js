@@ -36,6 +36,12 @@
       return false;
     }
   }
+  var a11yTab = document.querySelector('.tab[data-tab="a11y"]');
+  var a11yPanel = document.querySelector('.tab-panel[data-panel="a11y"]');
+  if (true) {
+    a11yTab == null ? void 0 : a11yTab.remove();
+    a11yPanel == null ? void 0 : a11yPanel.remove();
+  }
   var tabs = document.querySelectorAll(".tab");
   var panels = document.querySelectorAll(".tab-panel");
   tabs.forEach((tab) => {
@@ -49,60 +55,12 @@
     });
   });
   var currentSelection = { count: 0, hasAutoLayout: false };
-  function updateAlignControls() {
-    const placeholder = document.getElementById("alignPlaceholder");
-    const controls = document.getElementById("alignControls");
-    if (currentSelection.count === 0) {
-      placeholder.style.display = "block";
-      controls.style.display = "none";
-      return;
-    }
-    placeholder.style.display = "none";
-    controls.style.display = "block";
-  }
-  function updateDesignControls() {
-    const placeholder = document.getElementById("designPlaceholder");
-    const controls = document.getElementById("designControls");
-    if (currentSelection.count === 0) {
-      placeholder.style.display = "block";
-      controls.style.display = "none";
-      return;
-    }
-    placeholder.style.display = "none";
-    controls.style.display = "block";
-  }
-  function updateMatchControls() {
-    const placeholder = document.getElementById("matchPlaceholder");
-    const controls = document.getElementById("matchControls");
-    if (currentSelection.count === 0) {
-      placeholder.style.display = "block";
-      controls.style.display = "none";
-      return;
-    }
-    placeholder.style.display = "none";
-    controls.style.display = "block";
-  }
-  function updateLocalizeControls() {
-    const placeholder = document.getElementById("localizePlaceholder");
-    const controls = document.getElementById("localizeControls");
-    if (currentSelection.count === 0) {
-      placeholder.style.display = "block";
-      controls.style.display = "none";
-      return;
-    }
-    placeholder.style.display = "none";
-    controls.style.display = "block";
-  }
-  function updateSpecsControls() {
-    const placeholder = document.getElementById("specsPlaceholder");
-    const controls = document.getElementById("specsControls");
-    if (currentSelection.count === 0) {
-      placeholder.style.display = "block";
-      controls.style.display = "none";
-      return;
-    }
-    placeholder.style.display = "none";
-    controls.style.display = "block";
+  function updateTabControls(prefix) {
+    const placeholder = document.getElementById(`${prefix}Placeholder`);
+    const controls = document.getElementById(`${prefix}Controls`);
+    const empty = currentSelection.count === 0;
+    placeholder.style.display = empty ? "block" : "none";
+    controls.style.display = empty ? "none" : "block";
   }
   function updateSelectionInfo(data) {
     const el = document.getElementById("selectionInfo");
@@ -128,11 +86,11 @@
       case "selection-changed":
         updateSelectionInfo(msg.selection);
         currentSelection = { count: msg.count, hasAutoLayout: msg.hasAutoLayout };
-        updateAlignControls();
-        updateMatchControls();
-        updateDesignControls();
-        updateSpecsControls();
-        updateLocalizeControls();
+        updateTabControls("align");
+        updateTabControls("match");
+        updateTabControls("design");
+        updateTabControls("specs");
+        updateTabControls("localize");
         updateA11yControls();
         break;
       case "api-key-state":
@@ -645,54 +603,31 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     if ((_q = document.getElementById("a11yGeneralNote")) == null ? void 0 : _q.checked) categories.push("generalNote");
     return categories;
   }
-  function getCheckedPluginAnnotations() {
-    var _a21, _b;
-    const annotations = [];
-    if ((_a21 = document.getElementById("a11yPluginFocusIndicators")) == null ? void 0 : _a21.checked) annotations.push("focusIndicators");
-    if ((_b = document.getElementById("a11yPluginFocusOrder")) == null ? void 0 : _b.checked) annotations.push("focusOrder");
-    return annotations;
-  }
   function triggerBlueline() {
-    const pluginAnnotations = getCheckedPluginAnnotations();
     const categories = getCheckedA11yCategories();
-    if (pluginAnnotations.length === 0 && categories.length === 0) {
+    if (categories.length === 0) {
       updateA11yStatus("Select at least one option.");
       return;
     }
-    if (pluginAnnotations.length > 0) {
-      postToPlugin("generate-plugin-annotations", { annotations: pluginAnnotations });
+    if (!bridgeConnected) {
+      updateA11yStatus("Connect Bridge for AI-assisted categories.");
+      return;
     }
-    if (categories.length > 0) {
-      if (!bridgeConnected) {
-        updateA11yStatus("Connect Bridge for AI-assisted categories.");
-        return;
-      }
-      postToPlugin("generate-blueline", { categories });
-    } else if (pluginAnnotations.length > 0) {
-      updateA11yStatus("Generating annotations...");
-    }
+    postToPlugin("generate-blueline", { categories });
   }
   var _a17;
   (_a17 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a17.addEventListener("click", () => triggerBlueline());
   function triggerBluelinePanels() {
-    const pluginAnnotations = getCheckedPluginAnnotations();
     const categories = getCheckedA11yCategories();
-    if (pluginAnnotations.length === 0 && categories.length === 0) {
+    if (categories.length === 0) {
       updateA11yStatus("Select at least one option.");
       return;
     }
-    if (pluginAnnotations.length > 0) {
-      postToPlugin("generate-plugin-annotations", { annotations: pluginAnnotations });
+    if (!bridgeConnected) {
+      updateA11yStatus("Connect Bridge for AI-assisted categories.");
+      return;
     }
-    if (categories.length > 0) {
-      if (!bridgeConnected) {
-        updateA11yStatus("Connect Bridge for AI-assisted categories.");
-        return;
-      }
-      postToPlugin("generate-blueline-panels", { categories });
-    } else if (pluginAnnotations.length > 0) {
-      updateA11yStatus("Generating annotations...");
-    }
+    postToPlugin("generate-blueline-panels", { categories });
   }
   var _a18;
   (_a18 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a18.addEventListener("click", () => triggerBluelinePanels());

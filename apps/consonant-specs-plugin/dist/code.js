@@ -3497,7 +3497,7 @@ async function translateAzure(strings, langCode, apiKey) {
   const data = await res.json();
   return data.map((t) => t.translations[0].text);
 }
-async function translateStrings(provider, strings, langCode, langName, apiKey) {
+async function translateStrings(provider, strings, langCode, apiKey) {
   switch (provider) {
     case "mymemory":
       return translateMyMemory(strings, langCode);
@@ -3612,7 +3612,7 @@ async function localize(node, languages, applyRtl, provider, apiKey) {
     clones.map(async ({ code: code2, meta, textNodes: cloneTextNodes }) => {
       if (cloneTextNodes.length === 0) return { code: code2, translations: [] };
       const langCode = meta.codes[provider];
-      const translations = await translateStrings(provider, originals, langCode, meta.name, apiKey);
+      const translations = await translateStrings(provider, originals, langCode, apiKey);
       return { code: code2, translations };
     })
   );
