@@ -1,6 +1,6 @@
 // Waiver: annotation text uses manual fontName — these are spec overlays, not themed UI
 import { getTextProps } from './utils';
-import { matchTypography } from './tokens';
+import { matchS2ATextStyle } from './tokens';
 
 interface TypographyEntry {
   fontFamily: string;
@@ -28,7 +28,7 @@ function collectTextStyles(node: SceneNode, styles: Map<string, TypographyEntry>
         fontWeight: text.fontWeight,
         lineHeight: text.lineHeight,
         letterSpacing: text.letterSpacing,
-        token: matchTypography(text.fontFamily) || matchTypography(`${text.fontSize}`),
+        token: matchS2ATextStyle(node),
         usedBy: [node.name],
       });
     }
