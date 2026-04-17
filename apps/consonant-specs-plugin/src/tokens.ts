@@ -299,6 +299,13 @@ export function matchTypographyStrict(
 export function matchS2ATextStyle(node: SceneNode): string | null {
   if (node.type !== 'TEXT') return null;
   const textNode = node as TextNode;
+
+  const styleId = textNode.textStyleId;
+  if (styleId && styleId !== '' && styleId !== figma.mixed) {
+    const s2a = lookupTextStyleById(styleId as string);
+    return s2a ? s2a.name : null;
+  }
+
   if (textNode.fontName === figma.mixed || textNode.fontSize === figma.mixed) return null;
   const font = textNode.fontName as FontName;
   const size = textNode.fontSize as number;
