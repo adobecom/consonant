@@ -628,37 +628,46 @@ function colorDistance(hex1: string, hex2: string): number {
 
 /**
  * Find closest S2A color token by RGB distance.
- * Priority: 1) semantic token matching the node's role, 2) any semantic token, 3) primitive.
- * Within each tier, picks the closest by color distance.
+ * Semantic tokens are preferred when equally close or closer. Primitives
+ * win when they are a significantly better color match.
  */
 function findClosestColor(hex: string, fillOpacity: number, role?: ColorPropertyRole): LoadedColorVar | null {
   const opacityMatches = colorVarMap.filter(cv => Math.abs(cv.opacity - fillOpacity) <= 0.05);
   if (opacityMatches.length === 0) return null;
 
-  function bestInList(list: LoadedColorVar[]): LoadedColorVar | null {
+  function bestInList(list: LoadedColorVar[]): { token: LoadedColorVar; dist: number } | null {
     let best: LoadedColorVar | null = null;
     let bestDist = Infinity;
     for (const cv of list) {
       const dist = colorDistance(hex, cv.hex);
       if (dist < bestDist) { bestDist = dist; best = cv; }
     }
-    return best;
+    return best ? { token: best, dist: bestDist } : null;
   }
 
-  if (role) {
-    // 1) Semantic token matching the requested role
-    const roleMatches = opacityMatches.filter(cv => cv.semanticRole === role);
-    const roleBest = bestInList(roleMatches);
-    if (roleBest) return roleBest;
-  }
+  // Find best in each tier
+  const roleBest = role
+    ? bestInList(opacityMatches.filter(cv => cv.semanticRole === role))
+    : null;
+  const semanticBest = bestInList(opacityMatches.filter(cv => cv.semanticRole !== null));
+  const primitiveBest = bestInList(opacityMatches.filter(cv => cv.semanticRole === null));
 
-  // 2) Any semantic token
-  const semanticMatches = opacityMatches.filter(cv => cv.semanticRole !== null);
-  const semanticBest = bestInList(semanticMatches);
-  if (semanticBest) return semanticBest;
+  // Collect all candidates
+  const candidates = [roleBest, semanticBest, primitiveBest].filter(Boolean) as { token: LoadedColorVar; dist: number }[];
+  if (candidates.length === 0) return null;
 
-  // 3) Primitive fallback
-  return bestInList(opacityMatches);
+  // Semantic wins when equally close or closer; primitive wins when significantly closer
+  candidates.sort((a, b) => {
+    if (Math.abs(a.dist - b.dist) < 1) {
+      // Within ~1 unit of distance: prefer semantic > role-matched
+      const aSemantic = a.token.semanticRole !== null ? 1 : 0;
+      const bSemantic = b.token.semanticRole !== null ? 1 : 0;
+      return bSemantic - aSemantic;
+    }
+    return a.dist - b.dist;
+  });
+
+  return candidates[0].token;
 }
 
 function findClosestDimension(value: number, scope: string): LoadedDimensionVar | null {
