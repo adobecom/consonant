@@ -19,6 +19,32 @@ function escapeJsString(s: string): string {
   return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r');
 }
 
+const AGENT_GROUPS = [
+  { name: 'Structure', cardKeys: ['headingHierarchy'], knowledgeKeys: ['headingHierarchy'] },
+  { name: 'Landmarks & Navigation', cardKeys: ['landmarks', 'skipNav', 'consistentNav'], knowledgeKeys: ['landmarks', 'skipNav', 'consistentNav'] },
+  { name: 'Names & Images', cardKeys: ['accessibleNames', 'altText'], knowledgeKeys: ['accessibleNames', 'altText'] },
+  { name: 'Interactive Patterns', cardKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'], knowledgeKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'] },
+  { name: 'Visual', cardKeys: ['colorContrast', 'targetSize'], knowledgeKeys: ['colorContrast', 'targetSize'] },
+  { name: 'Page Setup', cardKeys: ['pageTitle', 'language'], knowledgeKeys: ['pageTitle', 'language'] },
+  { name: 'Responsive & Forms', cardKeys: ['reflow', 'forms'], knowledgeKeys: ['reflow', 'forms'] },
+  { name: 'Motion & Media', cardKeys: ['reducedMotion', 'media', 'autoRotation'], knowledgeKeys: ['reducedMotion', 'media', 'autoRotation'] },
+  { name: 'Focus', cardKeys: ['focusIndicators', 'focusOrder'], knowledgeKeys: ['focusIndicators', 'focusOrder'] },
+  { name: 'Screen Reader & Platform Notes', cardKeys: ['voiceover', 'talkback', 'narrator', 'reactNative', 'tvNote', 'generalNote'], knowledgeKeys: ['screenReaderNotes', 'reactNative', 'tvNote', 'generalNote'] },
+] as const;
+
+const SCAN_FIELDS_BY_GROUP: Record<string, string[]> = {
+  'Structure': ['textNodes'],
+  'Landmarks & Navigation': ['textNodes', 'repeatingGroups', 'focusableElements'],
+  'Names & Images': ['textNodes', 'iconFrames', 'imageNodes', 'focusableElements'],
+  'Interactive Patterns': ['repeatingGroups', 'overlays', 'pairedStacks', 'focusableElements'],
+  'Visual': ['textNodes', 'focusableElements', 'iconFrames'],
+  'Page Setup': ['textNodes'],
+  'Responsive & Forms': ['textNodes', 'focusableElements', 'repeatingGroups'],
+  'Motion & Media': ['repeatingGroups', 'overlays', 'imageNodes'],
+  'Focus': ['focusableElements'],
+  'Screen Reader & Platform Notes': ['repeatingGroups', 'overlays', 'pairedStacks', 'focusableElements'],
+};
+
 // ── Preload accessibility knowledge files at startup ────────────────────────
 // Read once, embed in figma_get_blueline_data responses so agents never need
 // additional file reads.
@@ -258,7 +284,7 @@ async function sendCommand(
 let autoFillRunning = false;
 
 async function handleAutoFill(
-  data: { plainLanguage?: boolean },
+  _data: Record<string, unknown>,
   socket: WebSocket,
 ) {
   if (autoFillRunning) {
@@ -267,12 +293,11 @@ async function handleAutoFill(
   }
 
   autoFillRunning = true;
-  const plainLanguage = !!data.plainLanguage;
 
   try {
     // 1. Get blueline data from plugin
     log('Auto-fill: fetching blueline data...');
-    const blData = await sendCommand('GET_BLUELINE_DATA', { plainLanguage }, 15000);
+    const blData = await sendCommand('GET_BLUELINE_DATA', {}, 15000);
     const scan = (blData as any)?.structuralScan || {};
     const cards: Array<{ name: string; nodeId: string; categoryKey: string }> = (blData as any)?.bluelineCards || [];
     const focusOrder = (blData as any)?.focusOrder || [];
@@ -284,22 +309,8 @@ async function handleAutoFill(
       return;
     }
 
-    // 2. Build agent groups (same logic as figma_get_blueline_data tool)
-    const agentGroups = [
-      { name: 'Structure', cardKeys: ['headingHierarchy'], knowledgeKeys: ['headingHierarchy'] },
-      { name: 'Landmarks & Navigation', cardKeys: ['landmarks', 'skipNav', 'consistentNav'], knowledgeKeys: ['landmarks', 'skipNav', 'consistentNav'] },
-      { name: 'Names & Images', cardKeys: ['accessibleNames', 'altText'], knowledgeKeys: ['accessibleNames', 'altText'] },
-      { name: 'Interactive Patterns', cardKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'], knowledgeKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'] },
-      { name: 'Visual', cardKeys: ['colorContrast', 'targetSize'], knowledgeKeys: ['colorContrast', 'targetSize'] },
-      { name: 'Page Setup', cardKeys: ['pageTitle', 'language'], knowledgeKeys: ['pageTitle', 'language'] },
-      { name: 'Responsive & Forms', cardKeys: ['reflow', 'forms'], knowledgeKeys: ['reflow', 'forms'] },
-      { name: 'Motion & Media', cardKeys: ['reducedMotion', 'media', 'autoRotation'], knowledgeKeys: ['reducedMotion', 'media', 'autoRotation'] },
-      { name: 'Focus', cardKeys: ['focusIndicators', 'focusOrder'], knowledgeKeys: ['focusIndicators', 'focusOrder'] },
-      { name: 'Screen Reader & Platform Notes', cardKeys: ['voiceover', 'talkback', 'narrator', 'reactNative', 'tvNote', 'generalNote'], knowledgeKeys: ['screenReaderNotes', 'reactNative', 'tvNote', 'generalNote'] },
-    ];
-
     const activeCardKeys = new Set<string>(cards.map(c => c.categoryKey));
-    const activeGroups = agentGroups.filter(g => g.cardKeys.some(k => activeCardKeys.has(k)));
+    const activeGroups = AGENT_GROUPS.filter(g => g.cardKeys.some(k => activeCardKeys.has(k)));
 
     // 3. Gather all relevant knowledge
     const knowledgeContent: Record<string, string> = {};
@@ -312,10 +323,6 @@ async function handleAutoFill(
     }
 
     // 4. Build prompt
-    const langNote = plainLanguage
-      ? '\n\nUse plain language: lead with questions like "What headings does this use?", explain WHY before giving technical detail, include "Why this matters" sections.'
-      : '';
-
     const prompt = `You are an accessibility spec writer producing concise blueline annotation cards for a Figma design. Write like a spec — short, scannable, no prose.
 
 ## Structural Scan
@@ -331,7 +338,7 @@ ${JSON.stringify(focusOrder, null, 2)}
 ${Object.entries(knowledgeContent).map(([key, content]) => `### ${key}\n${content}`).join('\n\n---\n\n')}
 
 ## Instructions
-For each card category listed above, produce accessibility annotation content.${langNote}
+For each card category listed above, produce accessibility annotation content.
 
 STYLE — match this example EXACTLY:
 
@@ -556,80 +563,18 @@ server.tool(
   'figma_get_blueline_data',
   'Get blueline state + preloaded expert knowledge for AI fill. Returns structural scan, focus order, card info, orchestration instructions, AND full knowledge file contents for every category — agents can start immediately with zero file reads.',
   {
-    plainLanguage: z.boolean().optional().describe('Whether to use plain language style for fills (default false)'),
   },
-  async ({ plainLanguage }) => {
-    // First get blueline data (includes targetFrameId for screenshot)
-    const result = await sendCommand('GET_BLUELINE_DATA', { plainLanguage: !!plainLanguage }, 15000);
+  async () => {
+    const result = await sendCommand('GET_BLUELINE_DATA', {}, 15000);
 
     // Take screenshot of the target design frame (not the whole page)
     const targetFrameId = (result as any)?.targetFrameId || undefined;
     const screenshot = await sendCommand('CAPTURE_SCREENSHOT', { nodeId: targetFrameId, scale: 0.5 }, 15000).catch(() => null);
 
-    // Agent groups — batch related categories to reduce agent count from 19 to 9
-    // Each group lists which scan fields the agent needs (trim everything else)
-    const agentGroups = [
-      {
-        name: 'Structure',
-        cardKeys: ['headingHierarchy'],
-        scanFields: ['textNodes'],
-        knowledgeKeys: ['headingHierarchy'],
-      },
-      {
-        name: 'Landmarks & Navigation',
-        cardKeys: ['landmarks', 'skipNav', 'consistentNav'],
-        scanFields: ['textNodes', 'repeatingGroups', 'focusableElements'],
-        knowledgeKeys: ['landmarks', 'skipNav', 'consistentNav'],
-      },
-      {
-        name: 'Names & Images',
-        cardKeys: ['accessibleNames', 'altText'],
-        scanFields: ['textNodes', 'iconFrames', 'imageNodes', 'focusableElements'],
-        knowledgeKeys: ['accessibleNames', 'altText'],
-      },
-      {
-        name: 'Interactive Patterns',
-        cardKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'],
-        scanFields: ['repeatingGroups', 'overlays', 'pairedStacks', 'focusableElements'],
-        knowledgeKeys: ['ariaRoles', 'keyboardPatterns', 'domStrategy'],
-      },
-      {
-        name: 'Visual',
-        cardKeys: ['colorContrast', 'targetSize'],
-        scanFields: ['textNodes', 'focusableElements', 'iconFrames'],
-        knowledgeKeys: ['colorContrast', 'targetSize'],
-      },
-      {
-        name: 'Page Setup',
-        cardKeys: ['pageTitle', 'language'],
-        scanFields: ['textNodes'],
-        knowledgeKeys: ['pageTitle', 'language'],
-      },
-      {
-        name: 'Responsive & Forms',
-        cardKeys: ['reflow', 'forms'],
-        scanFields: ['textNodes', 'focusableElements', 'repeatingGroups'],
-        knowledgeKeys: ['reflow', 'forms'],
-      },
-      {
-        name: 'Motion & Media',
-        cardKeys: ['reducedMotion', 'media', 'autoRotation'],
-        scanFields: ['repeatingGroups', 'overlays', 'imageNodes'],
-        knowledgeKeys: ['reducedMotion', 'media', 'autoRotation'],
-      },
-      {
-        name: 'Focus',
-        cardKeys: ['focusIndicators', 'focusOrder'],
-        scanFields: ['focusableElements'],
-        knowledgeKeys: ['focusIndicators', 'focusOrder'],
-      },
-      {
-        name: 'Screen Reader & Platform Notes',
-        cardKeys: ['voiceover', 'talkback', 'narrator', 'reactNative', 'tvNote', 'generalNote'],
-        scanFields: ['repeatingGroups', 'overlays', 'pairedStacks', 'focusableElements'],
-        knowledgeKeys: ['screenReaderNotes', 'reactNative', 'tvNote', 'generalNote'],
-      },
-    ];
+    const agentGroups = AGENT_GROUPS.map(g => ({
+      ...g,
+      scanFields: SCAN_FIELDS_BY_GROUP[g.name] || [],
+    }));
 
     // Build scan summary — tells Claude which scan fields have data
     const scan = (result as any)?.structuralScan || {};

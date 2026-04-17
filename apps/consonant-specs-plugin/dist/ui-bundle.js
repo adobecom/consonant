@@ -169,12 +169,7 @@
         updateA11yStatus(msg.message);
         break;
       case "a11y-fill-request":
-        if (autoFillMode === "auto") {
-          sendAutoFillRequest(!!msg.plainLanguage);
-        } else {
-          showAiFillInstruction(msg.mode, msg.sections, msg.frameName, msg.plainLanguage);
-        }
-        autoFillMode = null;
+        showAiFillInstruction(msg.mode, msg.sections, msg.frameName);
         break;
       case "a11y-panels-fill-request":
         showPanelsFillInstruction(msg.sections, msg.frameName, msg.sectionIds);
@@ -231,7 +226,7 @@
     postToPlugin("navigate-to-node", { nodeId });
   }
   function renderAuditResult(result) {
-    var _a23;
+    var _a21;
     const list = document.getElementById("propertyList");
     if (!list) return;
     const pct = result.total > 0 ? Math.round(result.matched / result.total * 100) : 0;
@@ -261,7 +256,7 @@
         if (nodeId) navigateToNode(nodeId);
       });
     });
-    (_a23 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a23.addEventListener("click", () => {
+    (_a21 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a21.addEventListener("click", () => {
       postToPlugin("annotate-audit-issues", { issues: result.issues });
     });
   }
@@ -377,9 +372,9 @@
   });
   var _a10;
   (_a10 = document.getElementById("specItBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
-    var _a23, _b, _c, _d, _e, _f;
+    var _a21, _b, _c, _d, _e, _f;
     const sections = [];
-    if ((_a23 = document.getElementById("specAnatomy")) == null ? void 0 : _a23.checked) sections.push("anatomy");
+    if ((_a21 = document.getElementById("specAnatomy")) == null ? void 0 : _a21.checked) sections.push("anatomy");
     if ((_b = document.getElementById("specCardGaps")) == null ? void 0 : _b.checked) sections.push("cardGaps");
     if ((_c = document.getElementById("specSpacingGeneral")) == null ? void 0 : _c.checked) sections.push("spacingGeneral");
     if ((_d = document.getElementById("specSpacing")) == null ? void 0 : _d.checked) sections.push("spacing");
@@ -458,9 +453,11 @@
   }
   var LANG_NAMES = { de: "German", zh: "Chinese", th: "Thai", ar: "Arabic" };
   function showLocalizeBridgePrompt(data) {
-    var _a23;
+    var _a21;
     const langList = data.languages.map((l) => LANG_NAMES[l] || l).join(", ");
-    const cmd = `Use /project:fill-localize to translate the frame "${data.frameName}" (${data.frameId}) into: ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? " Apply RTL layout for Arabic." : ""}`;
+    const cmd = `Translate the frame "${data.frameName}" (${data.frameId}) into ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? " Apply RTL layout for Arabic." : ""}
+
+Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with a [${data.languages.join("/")}] prefix, 3) load fonts, 4) apply translations to the cloned text nodes.`;
     const el = document.getElementById("localizeStatus");
     if (el) {
       el.innerHTML = `
@@ -471,7 +468,7 @@
         <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a23 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a23.addEventListener("click", async () => {
+      (_a21 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a21.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyLocalizeCmd");
         if (btn) {
@@ -503,9 +500,7 @@
     const items = document.querySelectorAll(".a11y-item");
     const checkboxes = document.querySelectorAll('.a11y-item input[type="checkbox"]');
     const genBtn = document.getElementById("generateBluelineBtn");
-    const plainBtn = document.getElementById("generateBluelinePlainBtn");
     if (genBtn) genBtn.disabled = false;
-    if (plainBtn) plainBtn.disabled = false;
     if (bridgeConnected) {
       badge.textContent = "\u2713 bridge connected";
       badge.classList.add("connected");
@@ -525,86 +520,16 @@
     const el = document.getElementById("a11yStatus");
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
-  var autoFillTimer = null;
-  var autoFillStartTime = 0;
-  var autoFillMode = null;
-  function startAutoFillTimer() {
-    autoFillStartTime = Date.now();
-    const el = document.getElementById("a11yStatus");
-    if (!el) return;
-    updateAutoFillTimerDisplay(el);
-    autoFillTimer = setInterval(() => updateAutoFillTimerDisplay(el), 1e3);
-  }
-  function updateAutoFillTimerDisplay(el) {
-    const elapsed = Math.floor((Date.now() - autoFillStartTime) / 1e3);
-    const min = Math.floor(elapsed / 60);
-    const sec = elapsed % 60;
-    const timeStr = `${min}:${sec.toString().padStart(2, "0")}`;
-    el.innerHTML = `
-    <div class="autofill-progress">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="autofill-pulse"></span>
-        <span style="font-weight:600;font-size:11px;">Auto-filling...</span>
-        <span class="autofill-timer">${timeStr}</span>
-      </div>
-      <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:4px;">Claude is analyzing and filling cards</div>
-    </div>`;
-  }
-  function stopAutoFillTimer(message, success) {
-    if (autoFillTimer) {
-      clearInterval(autoFillTimer);
-      autoFillTimer = null;
-    }
-    const elapsed = Math.floor((Date.now() - autoFillStartTime) / 1e3);
-    const min = Math.floor(elapsed / 60);
-    const sec = elapsed % 60;
-    const timeStr = `${min}:${sec.toString().padStart(2, "0")}`;
-    const el = document.getElementById("a11yStatus");
-    if (el) {
-      const color = success ? "var(--success,#2d9d78)" : "var(--warning,#e68619)";
-      const icon = success ? "\u2714" : "\u2718";
-      el.innerHTML = `
-      <div class="autofill-progress" style="border-left-color:${color};">
-        <div style="font-weight:600;font-size:11px;color:${color};">${icon} ${esc(message)}</div>
-        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:2px;">Completed in ${timeStr}</div>
-      </div>`;
-    }
-  }
-  function sendAutoFillRequest(plainLanguage) {
-    if (!bridgeConnected || !bridgeWs) {
-      updateA11yStatus("Connect Bridge first for auto-fill.");
-      return;
-    }
-    bridgeWs.send(JSON.stringify({ type: "START_AUTO_FILL", data: { plainLanguage } }));
-    startAutoFillTimer();
-  }
-  function handleAutoFillMessage(msg) {
-    var _a23, _b;
-    if (msg.type === "AUTO_FILL_STARTED") {
-      return;
-    }
-    if (msg.type === "AUTO_FILL_COMPLETE") {
-      const filled = ((_a23 = msg.data) == null ? void 0 : _a23.filledCards) || [];
-      stopAutoFillTimer(`Filled ${filled.length} cards`, true);
-      return;
-    }
-    if (msg.type === "AUTO_FILL_FAILED") {
-      const error = ((_b = msg.data) == null ? void 0 : _b.error) || "Unknown error";
-      stopAutoFillTimer(error, false);
-      return;
-    }
-  }
-  function showAiFillInstruction(mode, sections, frameName, plainLanguage) {
-    var _a23;
+  function showAiFillInstruction(mode, sections, frameName) {
+    var _a21;
     let cmd;
-    const langNote = plainLanguage ? ' Use plain language: lead with questions like "What headings does this use?", explain WHY before giving technical detail, include "Why this matters" sections.' : "";
     const agentNote = " Call figma_get_blueline_data first \u2014 it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.";
     if (mode === "sections") {
-      cmd = `Fill the blueline cards on the current Figma page.${agentNote}${langNote}`;
+      cmd = `Fill the blueline cards on the current Figma page.${agentNote}`;
     } else {
       const categoryList = sections && sections.length > 0 ? sections.join(", ") : "all categories";
       const frame = frameName ? ` for "${frameName}"` : "";
-      cmd = `Fill ONLY these blueline categories${frame}: ${categoryList}.${agentNote} Do not fill cards from other categories or previous generations.${langNote}`;
+      cmd = `Fill ONLY these blueline categories${frame}: ${categoryList}.${agentNote} Do not fill cards from other categories or previous generations.`;
     }
     const el = document.getElementById("a11yStatus");
     if (el) {
@@ -616,7 +541,7 @@
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a23 = document.getElementById("copyFillCmd")) == null ? void 0 : _a23.addEventListener("click", async () => {
+      (_a21 = document.getElementById("copyFillCmd")) == null ? void 0 : _a21.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyFillCmd");
         if (btn) {
@@ -629,7 +554,7 @@
     }
   }
   function showPanelsFillInstruction(sections, frameName, sectionIds) {
-    var _a23;
+    var _a21;
     const sectionList = sections.join(", ");
     const cmd = `Fill the blueline panels on the current Figma page for "${frameName}". Categories: ${sectionList}.
 
@@ -650,7 +575,7 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         <button class="btn btn-secondary" id="copyPanelsFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Paste into your current Claude Code session (Bridge must be connected)</div>
       </div>`;
-      (_a23 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a23.addEventListener("click", async () => {
+      (_a21 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a21.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyPanelsFillCmd");
         if (btn) {
@@ -687,9 +612,9 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
   function getCheckedA11yCategories() {
-    var _a23, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
+    var _a21, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const categories = [];
-    if ((_a23 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a23.checked) categories.push("focusIndicators");
+    if ((_a21 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a21.checked) categories.push("focusIndicators");
     if ((_b = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b.checked) categories.push("focusOrder");
     if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) categories.push("headings");
     if ((_d = document.getElementById("a11yLandmarksNav")) == null ? void 0 : _d.checked) {
@@ -721,13 +646,13 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     return categories;
   }
   function getCheckedPluginAnnotations() {
-    var _a23, _b;
+    var _a21, _b;
     const annotations = [];
-    if ((_a23 = document.getElementById("a11yPluginFocusIndicators")) == null ? void 0 : _a23.checked) annotations.push("focusIndicators");
+    if ((_a21 = document.getElementById("a11yPluginFocusIndicators")) == null ? void 0 : _a21.checked) annotations.push("focusIndicators");
     if ((_b = document.getElementById("a11yPluginFocusOrder")) == null ? void 0 : _b.checked) annotations.push("focusOrder");
     return annotations;
   }
-  function triggerBlueline(mode) {
+  function triggerBlueline() {
     const pluginAnnotations = getCheckedPluginAnnotations();
     const categories = getCheckedA11yCategories();
     if (pluginAnnotations.length === 0 && categories.length === 0) {
@@ -742,19 +667,13 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         updateA11yStatus("Connect Bridge for AI-assisted categories.");
         return;
       }
-      const plainLanguage = mode === "auto-plain";
-      autoFillMode = mode === "copy" ? "copy" : "auto";
-      postToPlugin("generate-blueline", { categories, plainLanguage, autoFill: mode !== "copy" });
+      postToPlugin("generate-blueline", { categories });
     } else if (pluginAnnotations.length > 0) {
       updateA11yStatus("Generating annotations...");
     }
   }
   var _a17;
-  (_a17 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a17.addEventListener("click", () => triggerBlueline("auto"));
-  var _a18;
-  (_a18 = document.getElementById("generateBluelinePlainBtn")) == null ? void 0 : _a18.addEventListener("click", () => triggerBlueline("auto-plain"));
-  var _a19;
-  (_a19 = document.getElementById("copyFillCmdBtn")) == null ? void 0 : _a19.addEventListener("click", () => triggerBlueline("copy"));
+  (_a17 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a17.addEventListener("click", () => triggerBlueline());
   function triggerBluelinePanels() {
     const pluginAnnotations = getCheckedPluginAnnotations();
     const categories = getCheckedA11yCategories();
@@ -775,8 +694,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       updateA11yStatus("Generating annotations...");
     }
   }
-  var _a20;
-  (_a20 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a20.addEventListener("click", () => triggerBluelinePanels());
+  var _a18;
+  (_a18 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a18.addEventListener("click", () => triggerBluelinePanels());
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
@@ -1010,10 +929,10 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }).catch(() => {
     });
     sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
-      var _a23, _b;
+      var _a21, _b;
       if (ws.readyState !== 1 || !result) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
-      appendBridgeLog("Variables synced: " + (((_b = (_a23 = result.data) == null ? void 0 : _a23.variables) == null ? void 0 : _b.length) || 0) + " vars");
+      appendBridgeLog("Variables synced: " + (((_b = (_a21 = result.data) == null ? void 0 : _a21.variables) == null ? void 0 : _b.length) || 0) + " vars");
     }).catch(() => {
     });
   }
@@ -1023,10 +942,6 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         const message = JSON.parse(event.data);
         if (message.type === "SERVER_HELLO" && message.data) {
           appendBridgeLog("Server v" + (message.data.serverVersion || "?") + " on port " + port);
-          return;
-        }
-        if (message.type === "AUTO_FILL_STARTED" || message.type === "AUTO_FILL_COMPLETE" || message.type === "AUTO_FILL_FAILED") {
-          handleAutoFillMessage(message);
           return;
         }
         if (!message.id || !message.method) return;
@@ -1065,7 +980,6 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         pending.reject(new Error("Bridge disconnected"));
       }
       bridgePendingRequests.clear();
-      if (autoFillTimer) stopAutoFillTimer("Bridge disconnected", false);
       updateBridgeUi();
       const wasReplaced = event.code === 1e3 && (event.reason === "Replaced by new connection" || event.reason === "Replaced by same file reconnection");
       if (wasReplaced) {
@@ -1109,9 +1023,9 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       info.style.color = "";
     }
   }
-  var _a21;
-  (_a21 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a21.addEventListener("click", () => bridgeConnect());
-  var _a22;
-  (_a22 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a22.addEventListener("click", () => bridgeDisconnect());
+  var _a19;
+  (_a19 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a19.addEventListener("click", () => bridgeConnect());
+  var _a20;
+  (_a20 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a20.addEventListener("click", () => bridgeDisconnect());
   postToPlugin("ui-ready");
 })();
