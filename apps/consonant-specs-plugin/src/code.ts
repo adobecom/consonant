@@ -13,6 +13,13 @@ import { generateFocusIndicators, collectFocusableElements } from './spec-focus-
 (globalThis as any).__placeCategoryBadge = placeCategoryBadge;
 (globalThis as any).__runStructuralScan = runStructuralScan;
 
+// ── Card color constants ─────────────────────────────────────────────────
+const CARD_BLACK: RGB = { r: 0, g: 0, b: 0 };
+const CARD_GRAY: RGB = { r: 0.45, g: 0.45, b: 0.45 };
+const CARD_BLUE: RGB = { r: 0.2, g: 0.4, b: 0.7 };
+const CARD_ORANGE: RGB = { r: 0.8, g: 0.35, b: 0 };
+const CARD_DIV: RGB = { r: 0.9, g: 0.9, b: 0.9 };
+
 // ── Bridge method helpers ─────────────────────────────────────────────────
 
 function hexToFigmaRGB(hex: string): { r: number; g: number; b: number; a: number } {
@@ -564,7 +571,6 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
         focusIndicators,
         bluelineCards,
         targetFrameId,
-        plainLanguage: !!params.plainLanguage,
       };
     }
 
@@ -592,11 +598,11 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
       }
 
       const W = card.width - (card.paddingLeft || 16) - (card.paddingRight || 16);
-      const BLACK: RGB = { r: 0, g: 0, b: 0 };
-      const GRAY: RGB = { r: 0.45, g: 0.45, b: 0.45 };
-      const BLUE: RGB = { r: 0.2, g: 0.4, b: 0.7 };
-      const ORANGE: RGB = { r: 0.8, g: 0.35, b: 0 };
-      const DIV_C: RGB = { r: 0.9, g: 0.9, b: 0.9 };
+      const BLACK = CARD_BLACK;
+      const GRAY = CARD_GRAY;
+      const BLUE = CARD_BLUE;
+      const ORANGE = CARD_ORANGE;
+      const DIV_C = CARD_DIV;
 
       const content = figma.createFrame();
       content.name = 'Content';
@@ -736,11 +742,11 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
       const filledCards: string[] = [];
       const W_CARD = 400;
       const W_CONTENT = W_CARD - 32; // 16px padding each side
-      const BLACK: RGB = { r: 0, g: 0, b: 0 };
-      const GRAY: RGB = { r: 0.45, g: 0.45, b: 0.45 };
-      const BLUE: RGB = { r: 0.2, g: 0.4, b: 0.7 };
-      const ORANGE: RGB = { r: 0.8, g: 0.35, b: 0 };
-      const DIV_C: RGB = { r: 0.9, g: 0.9, b: 0.9 };
+      const BLACK = CARD_BLACK;
+      const GRAY = CARD_GRAY;
+      const BLUE = CARD_BLUE;
+      const ORANGE = CARD_ORANGE;
+      const DIV_C = CARD_DIV;
 
       // Explicit key→display name aliases for names that don't fuzzy-match
       const KEY_ALIASES: Record<string, string[]> = {
@@ -1504,17 +1510,14 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         const categories = Array.isArray(msg.categories) ? (msg.categories as string[]) : [];
         figma.ui.postMessage({ type: 'a11y-status', message: 'Creating blueline scaffold...' });
         const grouped = msg.grouped === true;
-        const plainLanguage = msg.plainLanguage === true;
         const result = await generateBlueline(sel[0], categories, { grouped });
 
-        // Always trigger AI fill via bridge
         figma.ui.postMessage({
           type: 'a11y-fill-request',
           mode: 'sections',
           frameId: result.frameId,
           sections: result.sections,
           frameName: sel[0].name,
-          plainLanguage,
         });
         figma.notify(`Blueline scaffold created for "${sel[0].name}"`);
       } catch (e) {
@@ -1532,7 +1535,6 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         figma.ui.postMessage({ type: 'a11y-status', message: 'Creating blueline panels...' });
         const result = await generateBluelinePanels(sel[0], categories);
 
-        // Panels always use copy-prompt flow
         figma.ui.postMessage({
           type: 'a11y-panels-fill-request',
           sections: result.sections,

@@ -254,26 +254,3 @@ body {
   border-top: 1px solid var(--border);
   margin: 12px 0;
 }
-.autofill-progress {
-  padding: 10px;
-  background: var(--bg-secondary);
-  border-radius: 6px;
-  border-left: 3px solid var(--accent);
-}
-.autofill-timer {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 600;
-}
-.autofill-pulse {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}

@@ -340,6 +340,11 @@ function matchTypographyStrict(fontFamily, fontSize, fontStyle) {
 function matchS2ATextStyle(node) {
   if (node.type !== "TEXT") return null;
   const textNode = node;
+  const styleId = textNode.textStyleId;
+  if (styleId && styleId !== "" && styleId !== figma.mixed) {
+    const s2a = lookupTextStyleById(styleId);
+    return s2a ? s2a.name : null;
+  }
   if (textNode.fontName === figma.mixed || textNode.fontSize === figma.mixed) return null;
   const font = textNode.fontName;
   const size = textNode.fontSize;
@@ -495,7 +500,7 @@ async function applyTextStyle(node) {
   for (const ts of textStyleMap) {
     if (ts.fontFamily !== family || ts.fontStyle !== style || ts.fontSize !== fontSize) continue;
     try {
-      node.textStyleId = ts.styleId;
+      await node.setTextStyleIdAsync(ts.styleId);
       const newFontName = node.fontName;
       const newFontSize = node.fontSize;
       const newLineHeight = node.lineHeight;
@@ -532,7 +537,7 @@ async function applyTextStyle(node) {
       if (identical) {
         return true;
       }
-      node.textStyleId = "";
+      await node.setTextStyleIdAsync("");
       await figma.loadFontAsync(origFontName);
       node.fontName = origFontName;
       node.fontSize = origFontSize;
@@ -540,7 +545,7 @@ async function applyTextStyle(node) {
       if (origLetterSpacing !== figma.mixed) node.letterSpacing = origLetterSpacing;
     } catch (_) {
       try {
-        node.textStyleId = "";
+        await node.setTextStyleIdAsync("");
         await figma.loadFontAsync(origFontName);
         node.fontName = origFontName;
         node.fontSize = origFontSize;
@@ -596,17 +601,22 @@ function findClosestColor(hex, fillOpacity, role) {
         best = cv;
       }
     }
-    return best;
+    return best ? { token: best, dist: bestDist } : null;
   }
-  if (role) {
-    const roleMatches = opacityMatches.filter((cv) => cv.semanticRole === role);
-    const roleBest = bestInList(roleMatches);
-    if (roleBest) return roleBest;
-  }
-  const semanticMatches = opacityMatches.filter((cv) => cv.semanticRole !== null);
-  const semanticBest = bestInList(semanticMatches);
-  if (semanticBest) return semanticBest;
-  return bestInList(opacityMatches);
+  const roleBest = role ? bestInList(opacityMatches.filter((cv) => cv.semanticRole === role)) : null;
+  const semanticBest = bestInList(opacityMatches.filter((cv) => cv.semanticRole !== null));
+  const primitiveBest = bestInList(opacityMatches.filter((cv) => cv.semanticRole === null));
+  const candidates = [roleBest, semanticBest, primitiveBest].filter(Boolean);
+  if (candidates.length === 0) return null;
+  candidates.sort((a, b) => {
+    if (Math.abs(a.dist - b.dist) < 1) {
+      const aSemantic = a.token.semanticRole !== null ? 1 : 0;
+      const bSemantic = b.token.semanticRole !== null ? 1 : 0;
+      return bSemantic - aSemantic;
+    }
+    return a.dist - b.dist;
+  });
+  return candidates[0].token;
 }
 function findClosestDimension(value, scope) {
   const nameFilter = scope === "GAP" ? NAME_SPACING : scope === "CORNER_RADIUS" ? NAME_RADIUS : null;
@@ -671,8 +681,9 @@ async function forceMatchNode(node, categories, result2) {
       if (closest) {
         const exact = closest.fontFamily === fn.family && closest.fontStyle === fn.style && closest.fontSize === textNode.fontSize;
         try {
+          await figma.loadFontAsync(fn);
           await figma.loadFontAsync({ family: closest.fontFamily, style: closest.fontStyle });
-          textNode.textStyleId = closest.styleId;
+          await textNode.setTextStyleIdAsync(closest.styleId);
           result2.applied++;
           if (!exact) {
             result2.issues.push({
@@ -684,7 +695,8 @@ async function forceMatchNode(node, categories, result2) {
               exact: false
             });
           }
-        } catch (_) {
+        } catch (e) {
+          console.warn(`forceMatch typography failed on "${node.name}":`, e);
           result2.skipped++;
         }
       }
@@ -3075,16 +3087,35 @@ function auditNode(node, issues, counters) {
   if (text) {
     counters.total++;
     const fontStyle = node.type === "TEXT" && node.fontName !== figma.mixed ? node.fontName.style : "";
-    const result2 = matchTypographyStrict(text.fontFamily, text.fontSize, fontStyle);
-    if (result2.matched) {
+    let isS2A = false;
+    let boundToNonS2A = false;
+    if (node.type === "TEXT") {
+      const styleId = node.textStyleId;
+      if (styleId && styleId !== "" && styleId !== figma.mixed) {
+        const s2aStyle = lookupTextStyleById(styleId);
+        isS2A = !!s2aStyle;
+        boundToNonS2A = !s2aStyle;
+      }
+    }
+    if (!isS2A && !boundToNonS2A) {
+      const result2 = matchTypographyStrict(text.fontFamily, text.fontSize, fontStyle);
+      isS2A = result2.matched;
+    }
+    if (isS2A) {
       counters.matched++;
     } else {
-      const mismatches = [];
-      if (!result2.familyOk) mismatches.push(`family "${text.fontFamily}"`);
-      if (!result2.sizeOk) mismatches.push(`size ${text.fontSize}px`);
-      if (!result2.styleOk) mismatches.push(`weight "${fontStyle}"`);
-      const detail = mismatches.length > 0 ? ` (no S2A match for ${mismatches.join(", ")})` : "";
-      issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: "Typography", value: `${text.fontFamily} ${fontStyle} ${text.fontSize}px${detail}`, suggestion: null });
+      const detail = boundToNonS2A ? " (bound to non-S2A text style)" : "";
+      if (!detail) {
+        const result2 = matchTypographyStrict(text.fontFamily, text.fontSize, fontStyle);
+        const mismatches = [];
+        if (!result2.familyOk) mismatches.push(`family "${text.fontFamily}"`);
+        if (!result2.sizeOk) mismatches.push(`size ${text.fontSize}px`);
+        if (!result2.styleOk) mismatches.push(`weight "${fontStyle}"`);
+        const mismatchDetail = mismatches.length > 0 ? ` (no S2A match for ${mismatches.join(", ")})` : "";
+        issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: "Typography", value: `${text.fontFamily} ${fontStyle} ${text.fontSize}px${mismatchDetail}`, suggestion: null });
+      } else {
+        issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: "Typography", value: `${text.fontFamily} ${fontStyle} ${text.fontSize}px${detail}`, suggestion: null });
+      }
     }
   }
   if ("layoutMode" in node && node.layoutMode !== "NONE") {
@@ -5034,6 +5065,11 @@ globalThis.__generateBlueline = generateBlueline;
 globalThis.__generateBluelinePanels = generateBluelinePanels;
 globalThis.__placeCategoryBadge = placeCategoryBadge;
 globalThis.__runStructuralScan = runStructuralScan;
+var CARD_BLACK = { r: 0, g: 0, b: 0 };
+var CARD_GRAY = { r: 0.45, g: 0.45, b: 0.45 };
+var CARD_BLUE = { r: 0.2, g: 0.4, b: 0.7 };
+var CARD_ORANGE = { r: 0.8, g: 0.35, b: 0 };
+var CARD_DIV = { r: 0.9, g: 0.9, b: 0.9 };
 function hexToFigmaRGB(hex) {
   hex = hex.replace(/^#/, "");
   if (!/^[0-9A-Fa-f]+$/.test(hex)) throw new Error('Invalid hex color: "' + hex + '"');
@@ -5672,8 +5708,7 @@ async function handleBridgeMethod(method, params) {
         focusOrder,
         focusIndicators,
         bluelineCards,
-        targetFrameId,
-        plainLanguage: !!params.plainLanguage
+        targetFrameId
       };
     }
     // ── Fill a blueline card with structured content ──
@@ -5719,11 +5754,11 @@ async function handleBridgeMethod(method, params) {
         if (child.type === "FRAME" && child.name === "Content") child.remove();
       }
       const W = card.width - (card.paddingLeft || 16) - (card.paddingRight || 16);
-      const BLACK2 = { r: 0, g: 0, b: 0 };
-      const GRAY2 = { r: 0.45, g: 0.45, b: 0.45 };
-      const BLUE = { r: 0.2, g: 0.4, b: 0.7 };
-      const ORANGE = { r: 0.8, g: 0.35, b: 0 };
-      const DIV_C = { r: 0.9, g: 0.9, b: 0.9 };
+      const BLACK2 = CARD_BLACK;
+      const GRAY2 = CARD_GRAY;
+      const BLUE = CARD_BLUE;
+      const ORANGE = CARD_ORANGE;
+      const DIV_C = CARD_DIV;
       const content = figma.createFrame();
       content.name = "Content";
       content.layoutMode = "VERTICAL";
@@ -5820,11 +5855,11 @@ async function handleBridgeMethod(method, params) {
       const filledCards = [];
       const W_CARD = 400;
       const W_CONTENT = W_CARD - 32;
-      const BLACK2 = { r: 0, g: 0, b: 0 };
-      const GRAY2 = { r: 0.45, g: 0.45, b: 0.45 };
-      const BLUE = { r: 0.2, g: 0.4, b: 0.7 };
-      const ORANGE = { r: 0.8, g: 0.35, b: 0 };
-      const DIV_C = { r: 0.9, g: 0.9, b: 0.9 };
+      const BLACK2 = CARD_BLACK;
+      const GRAY2 = CARD_GRAY;
+      const BLUE = CARD_BLUE;
+      const ORANGE = CARD_ORANGE;
+      const DIV_C = CARD_DIV;
       const KEY_ALIASES = {
         autoRotation: ["carousel"],
         screenReaderNotes: ["voiceover", "talkback", "narrator"],
@@ -6558,15 +6593,13 @@ figma.ui.onmessage = async (msg) => {
         const categories = Array.isArray(msg.categories) ? msg.categories : [];
         figma.ui.postMessage({ type: "a11y-status", message: "Creating blueline scaffold..." });
         const grouped = msg.grouped === true;
-        const plainLanguage = msg.plainLanguage === true;
         const result2 = await generateBlueline(sel[0], categories, { grouped });
         figma.ui.postMessage({
           type: "a11y-fill-request",
           mode: "sections",
           frameId: result2.frameId,
           sections: result2.sections,
-          frameName: sel[0].name,
-          plainLanguage
+          frameName: sel[0].name
         });
         figma.notify(`Blueline scaffold created for "${sel[0].name}"`);
       } catch (e) {

@@ -179,12 +179,7 @@ window.addEventListener('message', (event) => {
       updateA11yStatus(msg.message as string);
       break;
     case 'a11y-fill-request':
-      if (autoFillMode === 'auto') {
-        sendAutoFillRequest(!!msg.plainLanguage);
-      } else {
-        showAiFillInstruction(msg.mode as string, msg.sections as string[], msg.frameName as string, msg.plainLanguage as boolean);
-      }
-      autoFillMode = null;
+      showAiFillInstruction(msg.mode as string, msg.sections as string[], msg.frameName as string);
       break;
     case 'a11y-panels-fill-request':
       showPanelsFillInstruction(msg.sections as string[], msg.frameName as string, msg.sectionIds as string[]);
@@ -495,7 +490,7 @@ const LANG_NAMES: Record<string, string> = { de: 'German', zh: 'Chinese', th: 'T
 
 function showLocalizeBridgePrompt(data: { frameName: string; frameId: string; languages: string[]; applyRtl: boolean; sourceTexts: { nodeId: string; text: string }[] }) {
   const langList = data.languages.map(l => LANG_NAMES[l] || l).join(', ');
-  const cmd = `Use /project:fill-localize to translate the frame "${data.frameName}" (${data.frameId}) into: ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? ' Apply RTL layout for Arabic.' : ''}`;
+  const cmd = `Translate the frame "${data.frameName}" (${data.frameId}) into ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? ' Apply RTL layout for Arabic.' : ''}\n\nUse figma_execute to: 1) get text nodes from the frame, 2) clone the frame with a [${data.languages.join('/')}] prefix, 3) load fonts, 4) apply translations to the cloned text nodes.`;
   const el = document.getElementById('localizeStatus');
   if (el) {
     el.innerHTML = `
@@ -537,10 +532,8 @@ function updateA11yBridgeState() {
   const items = document.querySelectorAll('.a11y-item');
   const checkboxes = document.querySelectorAll('.a11y-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
   const genBtn = document.getElementById('generateBluelineBtn') as HTMLButtonElement;
-  const plainBtn = document.getElementById('generateBluelinePlainBtn') as HTMLButtonElement;
   // Generate buttons are always enabled (plugin-generated doesn't need bridge)
   if (genBtn) genBtn.disabled = false;
-  if (plainBtn) plainBtn.disabled = false;
   if (bridgeConnected) {
     badge.textContent = '\u2713 bridge connected';
     badge.classList.add('connected');
@@ -559,89 +552,15 @@ function updateA11yStatus(message: string) {
   if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
 }
 
-// ── Auto-fill timer ──
-let autoFillTimer: ReturnType<typeof setInterval> | null = null;
-let autoFillStartTime = 0;
-let autoFillMode: 'auto' | 'copy' | null = null;
-
-function startAutoFillTimer() {
-  autoFillStartTime = Date.now();
-  const el = document.getElementById('a11yStatus');
-  if (!el) return;
-  updateAutoFillTimerDisplay(el);
-  autoFillTimer = setInterval(() => updateAutoFillTimerDisplay(el), 1000);
-}
-
-function updateAutoFillTimerDisplay(el: HTMLElement) {
-  const elapsed = Math.floor((Date.now() - autoFillStartTime) / 1000);
-  const min = Math.floor(elapsed / 60);
-  const sec = elapsed % 60;
-  const timeStr = `${min}:${sec.toString().padStart(2, '0')}`;
-  el.innerHTML = `
-    <div class="autofill-progress">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="autofill-pulse"></span>
-        <span style="font-weight:600;font-size:11px;">Auto-filling...</span>
-        <span class="autofill-timer">${timeStr}</span>
-      </div>
-      <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:4px;">Claude is analyzing and filling cards</div>
-    </div>`;
-}
-
-function stopAutoFillTimer(message: string, success: boolean) {
-  if (autoFillTimer) { clearInterval(autoFillTimer); autoFillTimer = null; }
-  const elapsed = Math.floor((Date.now() - autoFillStartTime) / 1000);
-  const min = Math.floor(elapsed / 60);
-  const sec = elapsed % 60;
-  const timeStr = `${min}:${sec.toString().padStart(2, '0')}`;
-  const el = document.getElementById('a11yStatus');
-  if (el) {
-    const color = success ? 'var(--success,#2d9d78)' : 'var(--warning,#e68619)';
-    const icon = success ? '\u2714' : '\u2718';
-    el.innerHTML = `
-      <div class="autofill-progress" style="border-left-color:${color};">
-        <div style="font-weight:600;font-size:11px;color:${color};">${icon} ${esc(message)}</div>
-        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:2px;">Completed in ${timeStr}</div>
-      </div>`;
-  }
-}
-
-function sendAutoFillRequest(plainLanguage: boolean) {
-  if (!bridgeConnected || !bridgeWs) {
-    updateA11yStatus('Connect Bridge first for auto-fill.');
-    return;
-  }
-  bridgeWs.send(JSON.stringify({ type: 'START_AUTO_FILL', data: { plainLanguage } }));
-  startAutoFillTimer();
-}
-
-function handleAutoFillMessage(msg: any) {
-  if (msg.type === 'AUTO_FILL_STARTED') {
-    // Timer already started by sendAutoFillRequest
-    return;
-  }
-  if (msg.type === 'AUTO_FILL_COMPLETE') {
-    const filled = (msg.data?.filledCards || []) as string[];
-    stopAutoFillTimer(`Filled ${filled.length} cards`, true);
-    return;
-  }
-  if (msg.type === 'AUTO_FILL_FAILED') {
-    const error = (msg.data?.error || 'Unknown error') as string;
-    stopAutoFillTimer(error, false);
-    return;
-  }
-}
-
-function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string, plainLanguage?: boolean) {
+function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string) {
   let cmd: string;
-  const langNote = plainLanguage ? ' Use plain language: lead with questions like "What headings does this use?", explain WHY before giving technical detail, include "Why this matters" sections.' : '';
   const agentNote = ' Call figma_get_blueline_data first — it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.';
   if (mode === 'sections') {
-    cmd = `Fill the blueline cards on the current Figma page.${agentNote}${langNote}`;
+    cmd = `Fill the blueline cards on the current Figma page.${agentNote}`;
   } else {
     const categoryList = sections && sections.length > 0 ? sections.join(', ') : 'all categories';
     const frame = frameName ? ` for "${frameName}"` : '';
-    cmd = `Fill ONLY these blueline categories${frame}: ${categoryList}.${agentNote} Do not fill cards from other categories or previous generations.${langNote}`;
+    cmd = `Fill ONLY these blueline categories${frame}: ${categoryList}.${agentNote} Do not fill cards from other categories or previous generations.`;
   }
   const el = document.getElementById('a11yStatus');
   if (el) {
@@ -749,37 +668,27 @@ function getCheckedPluginAnnotations(): string[] {
   return annotations;
 }
 
-// Shared logic for all three buttons
-function triggerBlueline(mode: 'auto' | 'auto-plain' | 'copy') {
+function triggerBlueline() {
   const pluginAnnotations = getCheckedPluginAnnotations();
   const categories = getCheckedA11yCategories();
   if (pluginAnnotations.length === 0 && categories.length === 0) {
     updateA11yStatus('Select at least one option.');
     return;
   }
-  // Run plugin-generated annotations (always, no bridge needed)
   if (pluginAnnotations.length > 0) {
     postToPlugin('generate-plugin-annotations', { annotations: pluginAnnotations });
   }
-  // Run AI-assisted categories
   if (categories.length > 0) {
     if (!bridgeConnected) { updateA11yStatus('Connect Bridge for AI-assisted categories.'); return; }
-    const plainLanguage = mode === 'auto-plain';
-    autoFillMode = mode === 'copy' ? 'copy' : 'auto';
-    postToPlugin('generate-blueline', { categories, plainLanguage, autoFill: mode !== 'copy' });
+    postToPlugin('generate-blueline', { categories });
   } else if (pluginAnnotations.length > 0) {
     updateA11yStatus('Generating annotations...');
   }
 }
 
-// Generate Blueline — scaffold + auto-fill
-document.getElementById('generateBluelineBtn')?.addEventListener('click', () => triggerBlueline('auto'));
+document.getElementById('generateBluelineBtn')?.addEventListener('click', () => triggerBlueline());
 
-// Generate Blueline (Plain Language) — scaffold + auto-fill plain language
-document.getElementById('generateBluelinePlainBtn')?.addEventListener('click', () => triggerBlueline('auto-plain'));
 
-// Copy Fill Command — scaffold + show copy-paste prompt
-document.getElementById('copyFillCmdBtn')?.addEventListener('click', () => triggerBlueline('copy'));
 
 function triggerBluelinePanels() {
   const pluginAnnotations = getCheckedPluginAnnotations();
@@ -1087,11 +996,6 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
         return;
       }
 
-      // Handle auto-fill status messages from MCP server
-      if (message.type === 'AUTO_FILL_STARTED' || message.type === 'AUTO_FILL_COMPLETE' || message.type === 'AUTO_FILL_FAILED') {
-        handleAutoFillMessage(message);
-        return;
-      }
 
       // Ignore pong or other non-command messages
       if (!message.id || !message.method) return;
@@ -1146,8 +1050,6 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
     bridgePendingRequests.clear();
 
     // Stop auto-fill timer if running
-    if (autoFillTimer) stopAutoFillTimer('Bridge disconnected', false);
-
     updateBridgeUi();
 
     const wasReplaced = event.code === 1000 && (
