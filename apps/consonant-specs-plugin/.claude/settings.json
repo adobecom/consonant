@@ -1,0 +1,20 @@
+{
+  "enabledPlugins": {
+    "debugger@awesome-claude-code-plugins": true,
+    "dimensional-analysis@trailofbits": true
+  },
+  "extraKnownMarketplaces": {
+    "awesome-claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "ccplugins/awesome-claude-code-plugins"
+      }
+    },
+    "trailofbits": {
+      "source": {
+        "source": "github",
+        "repo": "trailofbits/skills"
+      }
+    }
+  }
+}
