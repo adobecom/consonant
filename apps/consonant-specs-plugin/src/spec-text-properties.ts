@@ -1,7 +1,9 @@
+import { lookupTextStyleById } from './tokens';
+
 /**
  * Clone the node, place it to the right, and add text property annotations.
- * If a text node has an S2A text style bound, only show textStyleId (the token).
- * If no S2A token, show individual properties so the values are visible.
+ * If a text node has an S2A text style bound, show the S2A token name and pin textStyleId.
+ * If non-S2A style or no style, show individual font properties.
  * Deduplicates by node name — each unique text role annotated once.
  */
 export async function generateTextPropertyAnnotations(node: SceneNode, yOffset = 0): Promise<number> {
@@ -16,37 +18,44 @@ export async function generateTextPropertyAnnotations(node: SceneNode, yOffset =
   let count = 0;
   const seen = new Set<string>();
 
-  function hasTextStyle(n: TextNode): boolean {
-    const styleId = n.textStyleId;
-    return !!styleId && styleId !== '' && styleId !== figma.mixed;
-  }
-
   async function walk(n: SceneNode): Promise<void> {
     if ('visible' in n && !n.visible) return;
 
     if (n.type === 'TEXT') {
       const textNode = n as TextNode;
       const label = n.name;
-      // Dedup by name + fontSize so same-named nodes with different styles each get annotated
       const fontSize = textNode.fontSize !== figma.mixed ? textNode.fontSize : 0;
       const key = `${label}:${fontSize}`;
       if (!seen.has(key)) {
         seen.add(key);
-        const properties = hasTextStyle(textNode)
-          ? [{ type: 'fontFamily' }]
-          : [
-              { type: 'fontFamily' },
-              { type: 'fontSize' },
-              { type: 'fontWeight' },
-              { type: 'fontStyle' },
-              { type: 'lineHeight' },
-              { type: 'letterSpacing' },
-            ];
         try {
-          (n as any).annotations = [{
-            labelMarkdown: `**${label}**`,
-            properties,
-          }];
+          const styleId = textNode.textStyleId;
+          const hasStyle = !!styleId && styleId !== '' && styleId !== figma.mixed;
+          const s2aStyle = hasStyle ? lookupTextStyleById(styleId as string) : null;
+
+          if (s2aStyle) {
+            const tokenName = s2aStyle.name.replace('s2a/typography/', '');
+            const size = textNode.fontSize !== figma.mixed ? textNode.fontSize : '?';
+            const lh = textNode.lineHeight !== figma.mixed && typeof textNode.lineHeight === 'object'
+              ? (textNode.lineHeight as any).unit === 'PIXELS' ? `${(textNode.lineHeight as any).value}` : `${(textNode.lineHeight as any).value}%`
+              : 'auto';
+            (n as any).annotations = [{
+              labelMarkdown: `**${label}**\n${tokenName} ${size}/${lh}`,
+              properties: [{ type: 'textStyleId' }],
+            }];
+          } else {
+            (n as any).annotations = [{
+              labelMarkdown: `**${label}**`,
+              properties: [
+                { type: 'fontFamily' },
+                { type: 'fontSize' },
+                { type: 'fontWeight' },
+                { type: 'fontStyle' },
+                { type: 'lineHeight' },
+                { type: 'letterSpacing' },
+              ],
+            }];
+          }
           count++;
         } catch (e) {
           console.warn(`Text annotation failed on "${label}":`, e);
