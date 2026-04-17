@@ -1,5 +1,5 @@
 import { getNodeFills, getNodeStrokes, getTextProps, getCornerRadius, figmaColorToHex } from './utils';
-import { matchColor, matchSpacing, matchRadius, matchTypographyStrict, matchDimension, applyColorStyle, applyStrokeColorStyle, applyTextStyle, setResponsiveMode, isLoaded, loadLibraryTokens, detectNodeColorRole } from './tokens';
+import { matchColor, matchSpacing, matchRadius, matchTypographyStrict, matchDimension, applyColorStyle, applyStrokeColorStyle, applyTextStyle, setResponsiveMode, isLoaded, loadLibraryTokens, detectNodeColorRole, lookupTextStyleById } from './tokens';
 
 // ── Types ──
 
@@ -57,23 +57,46 @@ function auditNode(node: SceneNode, issues: AuditIssue[], counters: { total: num
     }
   }
 
-  // Typography — strict match: family + size + weight must all match an S2A text style
+  // Typography — check bound textStyleId is from S2A; fall back to property match for unbound text
   const text = getTextProps(node);
   if (text) {
     counters.total++;
     const fontStyle = node.type === 'TEXT' && (node as TextNode).fontName !== figma.mixed
       ? ((node as TextNode).fontName as FontName).style
       : '';
-    const result = matchTypographyStrict(text.fontFamily, text.fontSize, fontStyle);
-    if (result.matched) {
+
+    let isS2A = false;
+    let boundToNonS2A = false;
+
+    if (node.type === 'TEXT') {
+      const styleId = (node as TextNode).textStyleId;
+      if (styleId && styleId !== '' && styleId !== figma.mixed) {
+        const s2aStyle = lookupTextStyleById(styleId as string);
+        isS2A = !!s2aStyle;
+        boundToNonS2A = !s2aStyle;
+      }
+    }
+
+    if (!isS2A && !boundToNonS2A) {
+      const result = matchTypographyStrict(text.fontFamily, text.fontSize, fontStyle);
+      isS2A = result.matched;
+    }
+
+    if (isS2A) {
       counters.matched++;
     } else {
-      const mismatches: string[] = [];
-      if (!result.familyOk) mismatches.push(`family "${text.fontFamily}"`);
-      if (!result.sizeOk) mismatches.push(`size ${text.fontSize}px`);
-      if (!result.styleOk) mismatches.push(`weight "${fontStyle}"`);
-      const detail = mismatches.length > 0 ? ` (no S2A match for ${mismatches.join(', ')})` : '';
-      issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: 'Typography', value: `${text.fontFamily} ${fontStyle} ${text.fontSize}px${detail}`, suggestion: null });
+      const detail = boundToNonS2A ? ' (bound to non-S2A text style)' : '';
+      if (!detail) {
+        const result = matchTypographyStrict(text.fontFamily, text.fontSize, fontStyle);
+        const mismatches: string[] = [];
+        if (!result.familyOk) mismatches.push(`family "${text.fontFamily}"`);
+        if (!result.sizeOk) mismatches.push(`size ${text.fontSize}px`);
+        if (!result.styleOk) mismatches.push(`weight "${fontStyle}"`);
+        const mismatchDetail = mismatches.length > 0 ? ` (no S2A match for ${mismatches.join(', ')})` : '';
+        issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: 'Typography', value: `${text.fontFamily} ${fontStyle} ${text.fontSize}px${mismatchDetail}`, suggestion: null });
+      } else {
+        issues.push({ nodeId: node.id, nodeName: node.name, nodeType: node.type, property: 'Typography', value: `${text.fontFamily} ${fontStyle} ${text.fontSize}px${detail}`, suggestion: null });
+      }
     }
   }
 
