@@ -42,72 +42,12 @@ tabs.forEach((tab) => {
 
 let currentSelection: { count: number; hasAutoLayout: boolean } = { count: 0, hasAutoLayout: false };
 
-function updateAlignControls() {
-  const placeholder = document.getElementById('alignPlaceholder') as HTMLElement;
-  const controls = document.getElementById('alignControls') as HTMLElement;
-
-  if (currentSelection.count === 0) {
-    placeholder.style.display = 'block';
-    controls.style.display = 'none';
-    return;
-  }
-
-  placeholder.style.display = 'none';
-  controls.style.display = 'block';
-}
-
-function updateDesignControls() {
-  const placeholder = document.getElementById('designPlaceholder') as HTMLElement;
-  const controls = document.getElementById('designControls') as HTMLElement;
-
-  if (currentSelection.count === 0) {
-    placeholder.style.display = 'block';
-    controls.style.display = 'none';
-    return;
-  }
-
-  placeholder.style.display = 'none';
-  controls.style.display = 'block';
-}
-
-function updateMatchControls() {
-  const placeholder = document.getElementById('matchPlaceholder') as HTMLElement;
-  const controls = document.getElementById('matchControls') as HTMLElement;
-
-  if (currentSelection.count === 0) {
-    placeholder.style.display = 'block';
-    controls.style.display = 'none';
-    return;
-  }
-
-  placeholder.style.display = 'none';
-  controls.style.display = 'block';
-}
-
-function updateLocalizeControls() {
-  const placeholder = document.getElementById('localizePlaceholder') as HTMLElement;
-  const controls = document.getElementById('localizeControls') as HTMLElement;
-  if (currentSelection.count === 0) {
-    placeholder.style.display = 'block';
-    controls.style.display = 'none';
-    return;
-  }
-  placeholder.style.display = 'none';
-  controls.style.display = 'block';
-}
-
-function updateSpecsControls() {
-  const placeholder = document.getElementById('specsPlaceholder') as HTMLElement;
-  const controls = document.getElementById('specsControls') as HTMLElement;
-
-  if (currentSelection.count === 0) {
-    placeholder.style.display = 'block';
-    controls.style.display = 'none';
-    return;
-  }
-
-  placeholder.style.display = 'none';
-  controls.style.display = 'block';
+function updateTabControls(prefix: string) {
+  const placeholder = document.getElementById(`${prefix}Placeholder`) as HTMLElement;
+  const controls = document.getElementById(`${prefix}Controls`) as HTMLElement;
+  const empty = currentSelection.count === 0;
+  placeholder.style.display = empty ? 'block' : 'none';
+  controls.style.display = empty ? 'none' : 'block';
 }
 
 function updateSelectionInfo(data: { name: string; type: string; width: number; height: number } | null) {
@@ -138,11 +78,11 @@ window.addEventListener('message', (event) => {
     case 'selection-changed':
       updateSelectionInfo(msg.selection);
       currentSelection = { count: msg.count, hasAutoLayout: msg.hasAutoLayout };
-      updateAlignControls();
-      updateMatchControls();
-      updateDesignControls();
-      updateSpecsControls();
-      updateLocalizeControls();
+      updateTabControls('align');
+      updateTabControls('match');
+      updateTabControls('design');
+      updateTabControls('specs');
+      updateTabControls('localize');
       updateA11yControls();
       break;
     case 'api-key-state':

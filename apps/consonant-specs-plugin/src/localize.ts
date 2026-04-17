@@ -146,7 +146,6 @@ async function translateStrings(
   provider: TranslationProvider,
   strings: string[],
   langCode: string,
-  langName: string,
   apiKey: string,
 ): Promise<string[]> {
   switch (provider) {
@@ -283,7 +282,7 @@ export async function localize(
     clones.map(async ({ code, meta, textNodes: cloneTextNodes }) => {
       if (cloneTextNodes.length === 0) return { code, translations: [] as string[] };
       const langCode = meta.codes[provider];
-      const translations = await translateStrings(provider, originals, langCode, meta.name, apiKey);
+      const translations = await translateStrings(provider, originals, langCode, apiKey);
       return { code, translations };
     })
   );
