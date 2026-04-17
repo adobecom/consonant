@@ -744,6 +744,7 @@ async function forceMatchNode(
       if (closest) {
         const exact = closest.fontFamily === fn.family && closest.fontStyle === fn.style && closest.fontSize === textNode.fontSize;
         try {
+          await figma.loadFontAsync(fn);
           await figma.loadFontAsync({ family: closest.fontFamily, style: closest.fontStyle });
           textNode.textStyleId = closest.styleId;
           result.applied++;
@@ -754,7 +755,10 @@ async function forceMatchNode(
               exact: false,
             });
           }
-        } catch (_) { result.skipped++; }
+        } catch (e) {
+          console.warn(`forceMatch typography failed on "${node.name}":`, e);
+          result.skipped++;
+        }
       }
     }
   }
