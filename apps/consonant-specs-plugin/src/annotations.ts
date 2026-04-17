@@ -1,5 +1,5 @@
 import { getNodeFills, getNodeStrokes, getTextProps, getCornerRadius, getEffects } from './utils';
-import { matchColor, matchRadius, matchTypography, detectNodeColorRole } from './tokens';
+import { matchColor, matchRadius, matchS2ATextStyle, detectNodeColorRole } from './tokens';
 
 interface PropertyEntry {
   name: string;
@@ -57,11 +57,12 @@ function collectProperties(node: SceneNode): PropertyEntry[] {
 
   const text = getTextProps(node);
   if (text) {
-    props.push({ name: 'Font', value: text.fontFamily, token: matchTypography(text.fontFamily) });
-    props.push({ name: 'Size', value: `${text.fontSize}px`, token: matchTypography(`${text.fontSize}`) });
-    props.push({ name: 'Weight', value: `${text.fontWeight}`, token: matchTypography(`${text.fontWeight}`) });
-    props.push({ name: 'Line Height', value: text.lineHeight, token: null });
-    props.push({ name: 'Letter Spacing', value: text.letterSpacing, token: null });
+    const s2aToken = matchS2ATextStyle(node);
+    props.push({ name: 'Font', value: text.fontFamily, token: s2aToken });
+    props.push({ name: 'Size', value: `${text.fontSize}px`, token: s2aToken });
+    props.push({ name: 'Weight', value: `${text.fontWeight}`, token: s2aToken });
+    props.push({ name: 'Line Height', value: text.lineHeight, token: s2aToken });
+    props.push({ name: 'Letter Spacing', value: text.letterSpacing, token: s2aToken });
   }
 
   const effects = getEffects(node);
