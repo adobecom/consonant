@@ -73,6 +73,7 @@ function getTextProps(node) {
     fontFamily: font.family,
     fontSize: size,
     fontWeight: getFontWeight(font.style),
+    fontStyle: font.style,
     lineHeight: lh.unit === "AUTO" ? "auto" : lh.unit === "PIXELS" ? `${lh.value}px` : `${lh.value}%`,
     letterSpacing: ls.unit === "PIXELS" ? `${ls.value}px` : `${ls.value}%`
   };
@@ -188,10 +189,31 @@ async function loadLibraryTokens() {
           });
         }
       }
-      const S2A_LIBRARY_NAME = /s2a|spectrum 2/i;
+      const S2A_COLLECTION_KEYS = /* @__PURE__ */ new Set([
+        "0eea5cc0320ff548eeb8c5bf34f6ede103b0df06",
+        // Primitives / Dimension / Static
+        "23dfb9688d347020258cb5a8b587fd4c5c7287bc",
+        // Primitives / Color / Theme
+        "6c6b35ec4a5a89cf0598ba78e6c7482370d719ad",
+        // Semantic / Dimension / Static
+        "3659e0dcd09c2dca905bb94def94c5029e4d83ac",
+        // Semantic / Color / Theme
+        "ce424e312b8d55fff344955c7626321200e2bd3f",
+        // Responsive / Container / Grid
+        "d5b5966991929840c34a545607368bdf53922716",
+        // Min-Max
+        "385ccb572e36d571d2cf40d8310b862762468728"
+        // Design Guides
+      ]);
       try {
         const allCollections = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
-        const s2aCollections = allCollections.filter((c) => S2A_LIBRARY_NAME.test(c.libraryName) || S2A_LIBRARY_NAME.test(c.name));
+        let s2aCollections = allCollections.filter((c) => c.libraryName === "S2A / Foundations");
+        if (s2aCollections.length === 0) {
+          s2aCollections = allCollections.filter((c) => S2A_COLLECTION_KEYS.has(c.key));
+        }
+        if (s2aCollections.length === 0) {
+          s2aCollections = allCollections.filter((c) => c.name.startsWith("S2A / ") && !allCollections.some((o) => o !== c && o.libraryName !== c.libraryName && o.name === c.name));
+        }
         for (const collection of s2aCollections) {
           try {
             const libVars = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(collection.key);
@@ -269,6 +291,14 @@ async function loadLibraryTokens() {
   })();
   return loadingPromise;
 }
+function lookupTextStyleById(styleId) {
+  const extractKey = (id) => id.replace(/^S:/, "").split(",")[0];
+  const targetKey = extractKey(styleId);
+  for (const ts of textStyleMap) {
+    if (extractKey(ts.styleId) === targetKey) return ts;
+  }
+  return null;
+}
 function getTokenVersion() {
   return "S2A / Foundations";
 }
@@ -290,14 +320,6 @@ function matchColor(hex, role) {
   if (anySemantic) return anySemantic.name;
   return matches[0].name;
 }
-function matchTypography(value) {
-  const normalized = value.toLowerCase();
-  for (const ts of textStyleMap) {
-    if (ts.fontFamily.toLowerCase() === normalized) return ts.name;
-    if (`${ts.fontSize}` === value) return ts.name;
-  }
-  return null;
-}
 function matchTypographyStrict(fontFamily, fontSize, fontStyle) {
   const famLower = fontFamily.toLowerCase();
   const styleLower = fontStyle.toLowerCase();
@@ -314,6 +336,15 @@ function matchTypographyStrict(fontFamily, fontSize, fontStyle) {
     if (ts.fontStyle.toLowerCase() === styleLower) styleOk = true;
   }
   return { name: "", matched: false, familyOk, sizeOk, styleOk };
+}
+function matchS2ATextStyle(node) {
+  if (node.type !== "TEXT") return null;
+  const textNode = node;
+  if (textNode.fontName === figma.mixed || textNode.fontSize === figma.mixed) return null;
+  const font = textNode.fontName;
+  const size = textNode.fontSize;
+  const result2 = matchTypographyStrict(font.family, size, font.style);
+  return result2.matched ? result2.name : null;
 }
 var NAME_SPACING = /spacing|layout|gap|margin|padding/i;
 var NAME_RADIUS = /radius|corner|border[\-\/]radius/i;
@@ -530,7 +561,8 @@ async function setResponsiveMode(node) {
   else modeName = "sm";
   try {
     const collections = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
-    const responsiveCol = collections.find((c) => /responsive/i.test(c.name) && /s2a|spectrum 2/i.test(c.libraryName));
+    const RESPONSIVE_KEY = "ce424e312b8d55fff344955c7626321200e2bd3f";
+    const responsiveCol = collections.find((c) => c.libraryName === "S2A / Foundations" && /responsive/i.test(c.name)) || collections.find((c) => c.key === RESPONSIVE_KEY) || collections.find((c) => c.name === "S2A / Responsive / Container / Grid");
     if (!responsiveCol) return `mode not set (collection not found)`;
     const libVars = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(responsiveCol.key);
     if (libVars.length === 0) return `mode not set (no vars)`;
@@ -835,11 +867,12 @@ function collectProperties(node) {
   }
   const text = getTextProps(node);
   if (text) {
-    props.push({ name: "Font", value: text.fontFamily, token: matchTypography(text.fontFamily) });
-    props.push({ name: "Size", value: `${text.fontSize}px`, token: matchTypography(`${text.fontSize}`) });
-    props.push({ name: "Weight", value: `${text.fontWeight}`, token: matchTypography(`${text.fontWeight}`) });
-    props.push({ name: "Line Height", value: text.lineHeight, token: null });
-    props.push({ name: "Letter Spacing", value: text.letterSpacing, token: null });
+    const s2aToken = matchS2ATextStyle(node);
+    props.push({ name: "Font", value: text.fontFamily, token: s2aToken });
+    props.push({ name: "Size", value: `${text.fontSize}px`, token: s2aToken });
+    props.push({ name: "Weight", value: `${text.fontWeight}`, token: s2aToken });
+    props.push({ name: "Line Height", value: text.lineHeight, token: s2aToken });
+    props.push({ name: "Letter Spacing", value: text.letterSpacing, token: s2aToken });
   }
   const effects = getEffects(node);
   for (const effect of effects) {
@@ -1126,7 +1159,7 @@ async function buildPropertiesForNode(node, content) {
       attrs.counterAxisSizingMode = "AUTO";
       attrs.fills = [];
       attrs.itemSpacing = ROW_GAP;
-      const token = matchTypography(`${text.fontSize}`);
+      const token = matchS2ATextStyle(node);
       const tokenLabel = token ? token.split("/").pop() : null;
       if (token) {
         addPropRow(attrs, "Text style", "", { tokenPill: token });
@@ -2136,7 +2169,7 @@ function collectTextStyles(node, styles) {
         fontWeight: text.fontWeight,
         lineHeight: text.lineHeight,
         letterSpacing: text.letterSpacing,
-        token: matchTypography(text.fontFamily) || matchTypography(`${text.fontSize}`),
+        token: matchS2ATextStyle(node),
         usedBy: [node.name]
       });
     }
@@ -2595,10 +2628,6 @@ async function generateTextPropertyAnnotations(node, yOffset = 0) {
   clone.y = sourceY + node.height + 40 + yOffset;
   let count = 0;
   const seen = /* @__PURE__ */ new Set();
-  function hasTextStyle(n) {
-    const styleId = n.textStyleId;
-    return !!styleId && styleId !== "" && styleId !== figma.mixed;
-  }
   async function walk(n) {
     if ("visible" in n && !n.visible) return;
     if (n.type === "TEXT") {
@@ -2608,19 +2637,32 @@ async function generateTextPropertyAnnotations(node, yOffset = 0) {
       const key = `${label}:${fontSize}`;
       if (!seen.has(key)) {
         seen.add(key);
-        const properties = hasTextStyle(textNode) ? [{ type: "fontFamily" }] : [
-          { type: "fontFamily" },
-          { type: "fontSize" },
-          { type: "fontWeight" },
-          { type: "fontStyle" },
-          { type: "lineHeight" },
-          { type: "letterSpacing" }
-        ];
         try {
-          n.annotations = [{
-            labelMarkdown: `**${label}**`,
-            properties
-          }];
+          const styleId = textNode.textStyleId;
+          const hasStyle = !!styleId && styleId !== "" && styleId !== figma.mixed;
+          const s2aStyle = hasStyle ? lookupTextStyleById(styleId) : null;
+          if (s2aStyle) {
+            const tokenName = s2aStyle.name.replace("s2a/typography/", "");
+            const size = textNode.fontSize !== figma.mixed ? textNode.fontSize : "?";
+            const lh = textNode.lineHeight !== figma.mixed && typeof textNode.lineHeight === "object" ? textNode.lineHeight.unit === "PIXELS" ? `${textNode.lineHeight.value}` : `${textNode.lineHeight.value}%` : "auto";
+            n.annotations = [{
+              labelMarkdown: `**${label}**
+${tokenName} ${size}/${lh}`,
+              properties: [{ type: "textStyleId" }]
+            }];
+          } else {
+            n.annotations = [{
+              labelMarkdown: `**${label}**`,
+              properties: [
+                { type: "fontFamily" },
+                { type: "fontSize" },
+                { type: "fontWeight" },
+                { type: "fontStyle" },
+                { type: "lineHeight" },
+                { type: "letterSpacing" }
+              ]
+            }];
+          }
           count++;
         } catch (e) {
           console.warn(`Text annotation failed on "${label}":`, e);

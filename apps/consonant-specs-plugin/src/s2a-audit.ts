@@ -1,5 +1,5 @@
 import { getNodeFills, getNodeStrokes, getTextProps, getCornerRadius, figmaColorToHex } from './utils';
-import { matchColor, matchSpacing, matchRadius, matchTypography, matchTypographyStrict, matchDimension, applyColorStyle, applyStrokeColorStyle, applyTextStyle, setResponsiveMode, isLoaded, loadLibraryTokens, detectNodeColorRole } from './tokens';
+import { matchColor, matchSpacing, matchRadius, matchTypographyStrict, matchDimension, applyColorStyle, applyStrokeColorStyle, applyTextStyle, setResponsiveMode, isLoaded, loadLibraryTokens, detectNodeColorRole } from './tokens';
 
 // ── Types ──
 
