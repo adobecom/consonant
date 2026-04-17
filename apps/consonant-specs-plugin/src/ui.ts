@@ -26,6 +26,15 @@ interface PropertyEntry {
   colorSwatch?: string;
 }
 
+declare const FEATURE_A11Y: boolean;
+
+const a11yTab = document.querySelector<HTMLButtonElement>('.tab[data-tab="a11y"]');
+const a11yPanel = document.querySelector<HTMLElement>('.tab-panel[data-panel="a11y"]');
+if (!FEATURE_A11Y) {
+  a11yTab?.remove();
+  a11yPanel?.remove();
+}
+
 const tabs = document.querySelectorAll<HTMLButtonElement>('.tab');
 const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
 
@@ -600,52 +609,26 @@ function getCheckedA11yCategories(): string[] {
   return categories;
 }
 
-// Collect checked plugin-generated annotations
-function getCheckedPluginAnnotations(): string[] {
-  const annotations: string[] = [];
-  if ((document.getElementById('a11yPluginFocusIndicators') as HTMLInputElement)?.checked) annotations.push('focusIndicators');
-  if ((document.getElementById('a11yPluginFocusOrder') as HTMLInputElement)?.checked) annotations.push('focusOrder');
-  return annotations;
-}
-
 function triggerBlueline() {
-  const pluginAnnotations = getCheckedPluginAnnotations();
   const categories = getCheckedA11yCategories();
-  if (pluginAnnotations.length === 0 && categories.length === 0) {
+  if (categories.length === 0) {
     updateA11yStatus('Select at least one option.');
     return;
   }
-  if (pluginAnnotations.length > 0) {
-    postToPlugin('generate-plugin-annotations', { annotations: pluginAnnotations });
-  }
-  if (categories.length > 0) {
-    if (!bridgeConnected) { updateA11yStatus('Connect Bridge for AI-assisted categories.'); return; }
-    postToPlugin('generate-blueline', { categories });
-  } else if (pluginAnnotations.length > 0) {
-    updateA11yStatus('Generating annotations...');
-  }
+  if (!bridgeConnected) { updateA11yStatus('Connect Bridge for AI-assisted categories.'); return; }
+  postToPlugin('generate-blueline', { categories });
 }
 
 document.getElementById('generateBluelineBtn')?.addEventListener('click', () => triggerBlueline());
 
-
-
 function triggerBluelinePanels() {
-  const pluginAnnotations = getCheckedPluginAnnotations();
   const categories = getCheckedA11yCategories();
-  if (pluginAnnotations.length === 0 && categories.length === 0) {
+  if (categories.length === 0) {
     updateA11yStatus('Select at least one option.');
     return;
   }
-  if (pluginAnnotations.length > 0) {
-    postToPlugin('generate-plugin-annotations', { annotations: pluginAnnotations });
-  }
-  if (categories.length > 0) {
-    if (!bridgeConnected) { updateA11yStatus('Connect Bridge for AI-assisted categories.'); return; }
-    postToPlugin('generate-blueline-panels', { categories });
-  } else if (pluginAnnotations.length > 0) {
-    updateA11yStatus('Generating annotations...');
-  }
+  if (!bridgeConnected) { updateA11yStatus('Connect Bridge for AI-assisted categories.'); return; }
+  postToPlugin('generate-blueline-panels', { categories });
 }
 
 document.getElementById('generateBluelinePanelsBtn')?.addEventListener('click', () => triggerBluelinePanels());
