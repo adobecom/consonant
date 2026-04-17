@@ -226,6 +226,15 @@ export async function loadLibraryTokens(): Promise<void> {
 
 // ── Public getters ──
 
+export function lookupTextStyleById(styleId: string): LoadedTextStyle | null {
+  const extractKey = (id: string) => id.replace(/^S:/, '').split(',')[0];
+  const targetKey = extractKey(styleId);
+  for (const ts of textStyleMap) {
+    if (extractKey(ts.styleId) === targetKey) return ts;
+  }
+  return null;
+}
+
 export function getTokenVersion(): string {
   return 'S2A / Foundations';
 }
@@ -297,6 +306,16 @@ export function matchTypographyStrict(
     if (ts.fontStyle.toLowerCase() === styleLower) styleOk = true;
   }
   return { name: '', matched: false, familyOk, sizeOk, styleOk };
+}
+
+export function matchS2ATextStyle(node: SceneNode): string | null {
+  if (node.type !== 'TEXT') return null;
+  const textNode = node as TextNode;
+  if (textNode.fontName === figma.mixed || textNode.fontSize === figma.mixed) return null;
+  const font = textNode.fontName as FontName;
+  const size = textNode.fontSize as number;
+  const result = matchTypographyStrict(font.family, size, font.style);
+  return result.matched ? result.name : null;
 }
 
 // Name-based filters to ensure tokens route to the right category.
