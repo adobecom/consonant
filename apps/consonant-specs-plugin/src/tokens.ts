@@ -115,14 +115,26 @@ export async function loadLibraryTokens(): Promise<void> {
         }
       }
 
-      // ── Import S2A variables by library name (resilient to republishes) ──
-      // Strict match: only collections from libraries whose libraryName matches S2A / Spectrum 2.
-      // Variables are routed by resolvedType (COLOR → colorVarMap, FLOAT → dimensionVarMap),
-      // so no hardcoded collection keys are required.
-      const S2A_LIBRARY_NAME = /s2a|spectrum 2/i;
+      // ── Import S2A variables from the S2A / Foundations library ──
+      // Fallback chain: library name → known collection keys → collection name prefix
+      const S2A_COLLECTION_KEYS = new Set([
+        '0eea5cc0320ff548eeb8c5bf34f6ede103b0df06', // Primitives / Dimension / Static
+        '23dfb9688d347020258cb5a8b587fd4c5c7287bc', // Primitives / Color / Theme
+        '6c6b35ec4a5a89cf0598ba78e6c7482370d719ad', // Semantic / Dimension / Static
+        '3659e0dcd09c2dca905bb94def94c5029e4d83ac', // Semantic / Color / Theme
+        'ce424e312b8d55fff344955c7626321200e2bd3f', // Responsive / Container / Grid
+        'd5b5966991929840c34a545607368bdf53922716', // Min-Max
+        '385ccb572e36d571d2cf40d8310b862762468728', // Design Guides
+      ]);
       try {
         const allCollections = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
-        const s2aCollections = allCollections.filter(c => S2A_LIBRARY_NAME.test(c.libraryName) || S2A_LIBRARY_NAME.test(c.name));
+        let s2aCollections = allCollections.filter(c => c.libraryName === 'S2A / Foundations');
+        if (s2aCollections.length === 0) {
+          s2aCollections = allCollections.filter(c => S2A_COLLECTION_KEYS.has(c.key));
+        }
+        if (s2aCollections.length === 0) {
+          s2aCollections = allCollections.filter(c => c.name.startsWith('S2A / ') && !allCollections.some(o => o !== c && o.libraryName !== c.libraryName && o.name === c.name));
+        }
 
         for (const collection of s2aCollections) {
           try {
@@ -567,8 +579,10 @@ export async function setResponsiveMode(node: FrameNode): Promise<string> {
 
   try {
     const collections = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
-    // Match responsive collection by name (survives library republishes)
-    const responsiveCol = collections.find(c => /responsive/i.test(c.name) && /s2a|spectrum 2/i.test(c.libraryName));
+    const RESPONSIVE_KEY = 'ce424e312b8d55fff344955c7626321200e2bd3f';
+    const responsiveCol = collections.find(c => c.libraryName === 'S2A / Foundations' && /responsive/i.test(c.name))
+      || collections.find(c => c.key === RESPONSIVE_KEY)
+      || collections.find(c => c.name === 'S2A / Responsive / Container / Grid');
     if (!responsiveCol) return `mode not set (collection not found)`;
 
     const libVars = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(responsiveCol.key);
