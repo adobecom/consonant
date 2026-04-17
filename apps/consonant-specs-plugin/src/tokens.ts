@@ -273,18 +273,6 @@ export function matchColor(hex: string, role?: ColorPropertyRole): string | null
   return matches[0].name;
 }
 
-// TODO: The single-string API is ambiguous — a value like "16" could be a font size
-// or a family name. Future refactor should accept structured input
-// (e.g. { family, style, size }) to eliminate guessing.
-export function matchTypography(value: string): string | null {
-  const normalized = value.toLowerCase();
-  for (const ts of textStyleMap) {
-    if (ts.fontFamily.toLowerCase() === normalized) return ts.name;
-    if (`${ts.fontSize}` === value) return ts.name;
-  }
-  return null;
-}
-
 /** Strict typography match — requires family, size, AND style (weight) to all match an S2A text style. */
 export function matchTypographyStrict(
   fontFamily: string, fontSize: number, fontStyle: string,
