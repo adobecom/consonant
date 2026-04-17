@@ -484,13 +484,11 @@ function updateA11yBridgeState() {
   // Generate buttons are always enabled (plugin-generated doesn't need bridge)
   if (genBtn) genBtn.disabled = false;
   if (bridgeConnected) {
-    badge.textContent = '\u2713 bridge connected';
-    badge.classList.add('connected');
+    if (badge) { badge.textContent = '\u2713 bridge connected'; badge.classList.add('connected'); }
     items.forEach(el => el.classList.add('enabled'));
     checkboxes.forEach(cb => cb.disabled = false);
   } else {
-    badge.textContent = 'connect bridge';
-    badge.classList.remove('connected');
+    if (badge) { badge.textContent = 'connect bridge'; badge.classList.remove('connected'); }
     items.forEach(el => el.classList.remove('enabled'));
     checkboxes.forEach(cb => { cb.disabled = true; cb.checked = false; });
   }
