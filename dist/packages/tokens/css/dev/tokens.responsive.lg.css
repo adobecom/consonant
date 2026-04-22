@@ -4,25 +4,9 @@
  */
 
 :root {
-  --s2a-layout-rich-media-content-_max-width: 667px;
   --s2a-layout-rich-media-content-measure-narrow: 512px;
   --s2a-layout-rich-media-content-measure-wide: 1480px;
   --s2a-layout-rich-media-content-measure-none: 1480px;
-  --s2a-viewport-side-margins-_margin-reflow: 120px;
-  --s2a-viewport-side-margins-_margin-hd-reflow-hd: 120px;
-  --s2a-viewport-side-margins-_margin-offset-reflow: 120px;
-  --s2a-viewport-_visibility-xl: false;
-  --s2a-viewport-_visibility-xl-lg: true;
-  --s2a-viewport-_visibility-xl-md: true;
-  --s2a-viewport-_visibility-lg: true;
-  --s2a-viewport-_visibility-lg-md: true;
-  --s2a-viewport-_visibility-lg-sm: true;
-  --s2a-viewport-_visibility-md: false;
-  --s2a-viewport-_visibility-md-sm: false;
-  --s2a-viewport-_visibility-sm: false;
-  --s2a-_id: lg;
-  --s2a-_label: LG;
-  --s2a-_breakpoint: Desktop LG;
   --s2a-router-card-width-resting: 294px;
   --s2a-router-card-width-expanded: 496px;
   --s2a-router-card-width-min: 243px;
