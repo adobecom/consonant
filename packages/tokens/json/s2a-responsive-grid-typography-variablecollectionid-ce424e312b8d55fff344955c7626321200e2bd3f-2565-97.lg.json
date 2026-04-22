@@ -4,7 +4,7 @@
       "standard": {
         "_static": {
           "$type": "number",
-          "$value": 1440,
+          "$value": 1068,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -36,7 +36,7 @@
         },
         "_grid-container-min-width": {
           "$type": "number",
-          "$value": 1200,
+          "$value": 842,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -54,7 +54,7 @@
       "hd": {
         "_static": {
           "$type": "number",
-          "$value": 1602,
+          "$value": 1068,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -70,7 +70,7 @@
         },
         "_grid-container-max-width": {
           "$type": "number",
-          "$value": 1920,
+          "$value": 1602,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -86,7 +86,7 @@
         },
         "_grid-container-min-width": {
           "$type": "number",
-          "$value": 1200,
+          "$value": 842,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -104,7 +104,7 @@
       "hero-offset": {
         "_static": {
           "$type": "number",
-          "$value": 1602,
+          "$value": 1152,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -120,7 +120,7 @@
         },
         "_grid-container-max-width": {
           "$type": "number",
-          "$value": 1920,
+          "$value": 1602,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -136,7 +136,7 @@
         },
         "_grid-container-min-width": {
           "$type": "number",
-          "$value": 1200,
+          "$value": 1152,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -156,7 +156,7 @@
       "side-margins": {
         "_margin-reflow": {
           "$type": "number",
-          "$value": 120,
+          "$value": "{margins._gutter-reflow-lg-mm}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -174,7 +174,7 @@
         },
         "_margin-hd-reflow-hd": {
           "$type": "number",
-          "$value": 120,
+          "$value": "{margins._gutter-hd-reflow-lg-mm}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -192,7 +192,7 @@
         },
         "_margin-offset-reflow": {
           "$type": "number",
-          "$value": 120,
+          "$value": "{s2a.spacing.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -325,7 +325,7 @@
       },
       "_static": {
         "$type": "number",
-        "$value": 1920,
+        "$value": 1280,
         "$description": "DESIGN ONLY",
         "$extensions": {
           "com.figma": {
@@ -388,7 +388,7 @@
         },
         "xl-lg": {
           "$type": "boolean",
-          "$value": true,
+          "$value": false,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -416,7 +416,7 @@
         },
         "lg": {
           "$type": "boolean",
-          "$value": true,
+          "$value": false,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -458,7 +458,7 @@
         },
         "md": {
           "$type": "boolean",
-          "$value": false,
+          "$value": true,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -472,7 +472,7 @@
         },
         "md-sm": {
           "$type": "boolean",
-          "$value": false,
+          "$value": true,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -538,7 +538,7 @@
       "font-size": {
         "super": {
           "$type": "number",
-          "$value": "{s2a.font.size.11xl}",
+          "$value": "{s2a.font.size.9xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -554,7 +554,7 @@
         },
         "title-1": {
           "$type": "number",
-          "$value": "{s2a.font.size.10xl}",
+          "$value": "{s2a.font.size.7xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -570,7 +570,7 @@
         },
         "title-2": {
           "$type": "number",
-          "$value": "{s2a.font.size.7xl}",
+          "$value": "{s2a.font.size.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -586,7 +586,7 @@
         },
         "title-3": {
           "$type": "number",
-          "$value": "{s2a.font.size.6xl}",
+          "$value": "{s2a.font.size.3xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -602,7 +602,7 @@
         },
         "title-4": {
           "$type": "number",
-          "$value": "{s2a.font.size.4xl}",
+          "$value": "{s2a.font.size.2xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -616,7 +616,7 @@
         },
         "title-5": {
           "$type": "number",
-          "$value": "{s2a.font.size.2xl}",
+          "$value": "{s2a.font.size.xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -632,7 +632,7 @@
         },
         "title-6": {
           "$type": "number",
-          "$value": "{s2a.font.size.lg}",
+          "$value": "{s2a.font.size.md}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -646,7 +646,7 @@
         },
         "body-lg": {
           "$type": "number",
-          "$value": "{s2a.font.size.xl}",
+          "$value": "{s2a.font.size.lg}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -760,7 +760,7 @@
       "letter-spacing": {
         "super": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.xs}",
+          "$value": "{s2a.font.letter-spacing.md}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -792,7 +792,7 @@
         },
         "title-2": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.lg}",
+          "$value": "{s2a.font.letter-spacing.xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -808,7 +808,7 @@
         },
         "title-3": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.xl}",
+          "$value": "{s2a.font.letter-spacing.5xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -824,7 +824,7 @@
         },
         "title-4": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.3xl}",
+          "$value": "{s2a.font.letter-spacing.5xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -838,7 +838,7 @@
         },
         "title-5": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.4xl}",
+          "$value": "{s2a.font.letter-spacing.5xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -982,7 +982,7 @@
       "line-height": {
         "super": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.6xl}",
+          "$value": "{s2a.font.line-height.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -998,7 +998,7 @@
         },
         "title-1": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.5xl}",
+          "$value": "{s2a.font.line-height.3xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1014,7 +1014,7 @@
         },
         "title-2": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.3xl}",
+          "$value": "{s2a.font.line-height.2xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1030,7 +1030,7 @@
         },
         "title-3": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.2xl}",
+          "$value": "{s2a.font.line-height.lg}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1046,7 +1046,7 @@
         },
         "title-4": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.xl}",
+          "$value": "{s2a.font.line-height.md}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1060,7 +1060,7 @@
         },
         "title-5": {
           "$type": "number",
-          "$value": "{s2a.font.line-height.md}",
+          "$value": "{s2a.font.line-height.sm}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1204,7 +1204,7 @@
     },
     "_id": {
       "$type": "string",
-      "$value": "lg",
+      "$value": "md",
       "$description": "",
       "$extensions": {
         "com.figma": {
@@ -1218,7 +1218,7 @@
     },
     "_label": {
       "$type": "string",
-      "$value": "LG",
+      "$value": "MD",
       "$description": "",
       "$extensions": {
         "com.figma": {
@@ -1232,7 +1232,7 @@
     },
     "_breakpoint": {
       "$type": "string",
-      "$value": "Desktop LG",
+      "$value": "Desktop MD",
       "$description": "",
       "$extensions": {
         "com.figma": {
@@ -1249,7 +1249,7 @@
         "content": {
           "_max-width": {
             "$type": "number",
-            "$value": 667,
+            "$value": 652,
             "$description": "",
             "$extensions": {
               "com.figma": {
@@ -1278,7 +1278,7 @@
             },
             "wide": {
               "$type": "number",
-              "$value": 1480,
+              "$value": 1192,
               "$description": "",
               "$extensions": {
                 "com.figma": {
@@ -1292,7 +1292,7 @@
             },
             "none": {
               "$type": "number",
-              "$value": 1480,
+              "$value": 1192,
               "$description": "",
               "$extensions": {
                 "com.figma": {

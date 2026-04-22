@@ -54,7 +54,7 @@
       "hd": {
         "_static": {
           "$type": "number",
-          "$value": 1602,
+          "$value": 1920,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -104,7 +104,7 @@
       "hero-offset": {
         "_static": {
           "$type": "number",
-          "$value": 1602,
+          "$value": 1920,
           "$description": "DESIGN ONLY",
           "$extensions": {
             "com.figma": {
@@ -325,7 +325,7 @@
       },
       "_static": {
         "$type": "number",
-        "$value": 1920,
+        "$value": 2560,
         "$description": "DESIGN ONLY",
         "$extensions": {
           "com.figma": {
@@ -341,7 +341,7 @@
       },
       "_max-width": {
         "$type": "number",
-        "$value": 1920,
+        "$value": 2560,
         "$description": "DESIGN ONLY",
         "$extensions": {
           "com.figma": {
@@ -357,7 +357,7 @@
       },
       "_min-width": {
         "$type": "number",
-        "$value": 1280,
+        "$value": 1440,
         "$description": "DESIGN ONLY",
         "$extensions": {
           "com.figma": {
@@ -374,7 +374,7 @@
       "_visibility": {
         "xl": {
           "$type": "boolean",
-          "$value": false,
+          "$value": true,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -416,7 +416,7 @@
         },
         "lg": {
           "$type": "boolean",
-          "$value": true,
+          "$value": false,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -430,7 +430,7 @@
         },
         "lg-md": {
           "$type": "boolean",
-          "$value": true,
+          "$value": false,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -444,7 +444,7 @@
         },
         "lg-sm": {
           "$type": "boolean",
-          "$value": true,
+          "$value": false,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1204,7 +1204,7 @@
     },
     "_id": {
       "$type": "string",
-      "$value": "lg",
+      "$value": "xl",
       "$description": "",
       "$extensions": {
         "com.figma": {
@@ -1218,7 +1218,7 @@
     },
     "_label": {
       "$type": "string",
-      "$value": "LG",
+      "$value": "XL",
       "$description": "",
       "$extensions": {
         "com.figma": {
@@ -1232,7 +1232,7 @@
     },
     "_breakpoint": {
       "$type": "string",
-      "$value": "Desktop LG",
+      "$value": "Desktop XL",
       "$description": "",
       "$extensions": {
         "com.figma": {
