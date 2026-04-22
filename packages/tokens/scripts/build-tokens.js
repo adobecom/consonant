@@ -245,6 +245,8 @@ async function buildFromFigma() {
       componentCoreFiles.push(normalizedEntry);
     }
     // 7. Typography / Scale / Responsive → typography-core
+    // Exception: responsive typography with breakpoint modes (sm/md/lg/xl) → responsiveFiles
+    // so they merge into tokens.responsive.*.css alongside the grid/container tokens.
     else if (
       collectionSlug === "typography-core" ||
       collectionSlug === "typography-scale-responsive" ||
@@ -253,10 +255,18 @@ async function buildFromFigma() {
       collectionSlug.startsWith("typography") ||
       collectionSlug.includes("typography")
     ) {
-      if (!typographyCoreFiles.has(modeSlug)) {
-        typographyCoreFiles.set(modeSlug, []);
+      const responsiveBreakpoints = new Set(["sm", "md", "lg", "xl"]);
+      if (collectionSlug.includes("responsive") && responsiveBreakpoints.has(modeSlug)) {
+        if (!responsiveFiles.has(modeSlug)) {
+          responsiveFiles.set(modeSlug, []);
+        }
+        responsiveFiles.get(modeSlug).push(normalizedEntry);
+      } else {
+        if (!typographyCoreFiles.has(modeSlug)) {
+          typographyCoreFiles.set(modeSlug, []);
+        }
+        typographyCoreFiles.get(modeSlug).push(normalizedEntry);
       }
-      typographyCoreFiles.get(modeSlug).push(normalizedEntry);
     }
     // 8. Layout / Breakpoints / Static → breakpoints-core
     else if (
