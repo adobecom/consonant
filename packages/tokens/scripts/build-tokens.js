@@ -92,6 +92,9 @@ const {
   extractBaseVariables,
   filterResponsiveCssLines,
   sortResponsiveCssVars,
+  sortPrimitiveCssVars,
+  sortSemanticCssVars,
+  sortSemanticThemeCssVars,
 } = require("./utils/css-file-utils");
 
 const PACKAGE_DIR = path.join(__dirname, "..");
@@ -1343,9 +1346,18 @@ async function minifyAllCssFiles() {
       // Collect minified content for consolidation
       allCssContent.push(minified.styles);
 
-      // For responsive files, sort and group variables before moving to dev/
+      // Sort and group variables before moving to dev/
+      let sorted = css;
       if (file.startsWith("tokens.responsive.")) {
-        const sorted = sortResponsiveCssVars(css);
+        sorted = sortResponsiveCssVars(css);
+      } else if (file === "tokens.primitives.css" || file === "tokens.primitives.light.css" || file === "tokens.primitives.dark.css") {
+        sorted = sortPrimitiveCssVars(css);
+      } else if (file === "tokens.semantic.css") {
+        sorted = sortSemanticCssVars(css);
+      } else if (file === "tokens.semantic.light.css" || file === "tokens.semantic.dark.css") {
+        sorted = sortSemanticThemeCssVars(css);
+      }
+      if (sorted !== css) {
         await fs.writeFile(devPath, sorted, "utf8");
         await fs.unlink(filePath);
       } else {

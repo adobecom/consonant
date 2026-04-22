@@ -125,110 +125,213 @@ function filterResponsiveCssLines(lines) {
   return filtered;
 }
 
+// ─── Sort helpers ────────────────────────────────────────────────────────────
+
+function varName(line) {
+  return (line.match(/^(\s*)(--[\w-]+)/) ?? [])[2] ?? "";
+}
+
+// Extract trailing integer and sort numerically (e.g. gray-100 < gray-200 < gray-1000)
+function numericSuffixSort(a, b) {
+  const n = (s) => parseInt((s.match(/(\d+)$/) ?? [])[1] ?? "0", 10);
+  return n(a) - n(b) || a.localeCompare(b);
+}
+
+// T-shirt size order: 2xs → xs → sm → sm-md → md → lg → xl → 2xl … 11xl
+const TSHIRT = ["2xs","xs","sm","sm-md","md","lg","xl","2xl","3xl","4xl","5xl","6xl","7xl","8xl","9xl","10xl","11xl"];
+function tshirtSort(a, b) {
+  function idx(name) {
+    for (let i = TSHIRT.length - 1; i >= 0; i--) {
+      if (new RegExp(`[-/]${TSHIRT[i]}([-/]|$)`).test(name)) return i;
+    }
+    return 999;
+  }
+  return idx(a) - idx(b) || a.localeCompare(b);
+}
+
+// Semantic font-weight sort by numeric weight value
+const WEIGHT_VALUES = { regular: 400, medium: 500, bold: 700, extrabold: 800, black: 900 };
+function fontWeightSort(a, b) {
+  function wt(name) {
+    for (const [k, v] of Object.entries(WEIGHT_VALUES)) if (name.includes(k)) return v;
+    return 0;
+  }
+  // display-black (900) goes after adobe-clean-black (900)
+  if (wt(a) !== wt(b)) return wt(a) - wt(b);
+  return (a.includes("display") ? 1 : 0) - (b.includes("display") ? 1 : 0);
+}
+
+// Letter-spacing primitive sort: parse encoded value (neg-3_84 → -3.84, 0_16 → 0.16)
+function letterSpacingPrimSort(a, b) {
+  function parse(name) {
+    const m = name.match(/letter-spacing-(.+)$/);
+    if (!m) return 0;
+    const raw = m[1];
+    if (raw === "0") return 0;
+    if (raw.startsWith("neg-")) return -parseFloat(raw.slice(4).replace("_", "."));
+    return parseFloat(raw.replace("_", "."));
+  }
+  return parse(a) - parse(b);
+}
+
+// Shadow sort: by level number, then x → y → blur → spread → color
+const SHADOW_PROPS = ["x", "y", "blur", "spread", "color"];
+function shadowSort(a, b) {
+  const lvl = (s) => parseInt((s.match(/level-(\d+)/) ?? [])[1] ?? "0", 10);
+  if (lvl(a) !== lvl(b)) return lvl(a) - lvl(b);
+  const pi = (s) => { const i = SHADOW_PROPS.findIndex((p) => s.endsWith("-" + p)); return i === -1 ? 999 : i; };
+  return pi(a) - pi(b);
+}
+
+// Typography role sort: super → title-1…6 → body-lg/md/sm/xs → eyebrow → label → caption
+const ROLE_RANK = ["super","title-1","title-2","title-3","title-4","title-5","title-6","body-lg","body-md","body-sm","body-xs","eyebrow","label","caption"];
+function roleSort(a, b) {
+  function idx(name) {
+    const r = ROLE_RANK.find((r) => new RegExp(`[-/]${r}([-/]|$)`).test(name));
+    return r ? ROLE_RANK.indexOf(r) : 999;
+  }
+  return idx(a) - idx(b) || a.localeCompare(b);
+}
+
+// Component property sort: width → height → min → max → padding → gap → border-radius
+const PROP_RANK = ["width","height","min","max","padding","gap","border-radius"];
+function propSort(a, b) {
+  function idx(name) {
+    const p = PROP_RANK.find((p) => name.includes(p));
+    return p ? PROP_RANK.indexOf(p) : 999;
+  }
+  return idx(a) - idx(b) || a.localeCompare(b);
+}
+
+// Section padding size sort: xl → lg → md → sm → xs → 2xs → none
+const PADDING_SIZE = ["xl","lg","md","sm","xs","2xs","none"];
+function paddingSizeSort(a, b) {
+  function idx(name) {
+    const s = PADDING_SIZE.find((s) => new RegExp(`[-/]${s}([-/]|$)`).test(name));
+    return s ? PADDING_SIZE.indexOf(s) : 999;
+  }
+  return idx(a) - idx(b) || a.localeCompare(b);
+}
+
+// ─── Core engine ─────────────────────────────────────────────────────────────
+
 /**
- * Sort and group CSS custom property declarations in responsive files.
- * Groups by token namespace, sorts within each group by role/size/property,
- * and inserts section comments for readability.
+ * Sort and group CSS custom property declarations.
+ * sections: [{ label, match (regex on decl), sort (fn(nameA, nameB) → number) }]
+ * The last section should use a catch-all regex as match for "Other".
  */
-function sortResponsiveCssVars(cssContent) {
-  // Canonical section order — defines both grouping and output sequence
-  const SECTIONS = [
-    { key: "viewport",                match: /^--s2a-viewport-/,                  label: "Viewport & Section Padding" },
-    { key: "layout",                  match: /^--s2a-layout-/,                    label: "Layout" },
-    { key: "router-card",             match: /^--s2a-router-card-/,               label: "Router Card" },
-    { key: "elastic-card",            match: /^--s2a-elastic-card-/,              label: "Elastic Card" },
-    { key: "app-card",                match: /^--s2a-app-card-/,                  label: "App Card" },
-    { key: "product-lockup",          match: /^--s2a-product-lockup-/,            label: "Product Lockup" },
-    { key: "typography-font-size",    match: /^--s2a-typography-font-size-/,      label: "Typography / Font Size" },
-    { key: "typography-letter-spacing", match: /^--s2a-typography-letter-spacing-/, label: "Typography / Letter Spacing" },
-    { key: "typography-line-height",  match: /^--s2a-typography-line-height-/,   label: "Typography / Line Height" },
-    { key: "other",                   match: /.*/,                                label: "Other" },
-  ];
-
-  // Role rank: super → titles → body → utility
-  const ROLE_RANK = [
-    "super",
-    "title-1", "title-2", "title-3", "title-4", "title-5", "title-6",
-    "body-lg", "body-md", "body-sm", "body-xs",
-    "eyebrow", "label", "caption",
-  ];
-
-  // Size rank: largest → smallest
-  const SIZE_RANK = ["xl", "lg", "md", "sm", "xs", "2xs", "3xs", "none"];
-
-  // Property rank within component token groups
-  const PROP_RANK = ["width", "height", "min", "max", "padding", "gap", "border-radius"];
-
-  function rankOf(list, name) {
-    const match = list.find((r) => new RegExp(`[-/]${r}([-/]|$)`).test(name));
-    return match ? list.indexOf(match) : 999;
-  }
-
-  function sortVars(vars, sectionKey) {
-    return [...vars].sort((a, b) => {
-      const nameA = (a.match(/^(--[\w-]+)/) ?? [])[1] ?? "";
-      const nameB = (b.match(/^(--[\w-]+)/) ?? [])[1] ?? "";
-      if (sectionKey.startsWith("typography")) {
-        return rankOf(ROLE_RANK, nameA) - rankOf(ROLE_RANK, nameB) || nameA.localeCompare(nameB);
-      }
-      if (sectionKey === "viewport") {
-        return rankOf(SIZE_RANK, nameA) - rankOf(SIZE_RANK, nameB) || nameA.localeCompare(nameB);
-      }
-      if (["router-card", "elastic-card", "app-card", "product-lockup"].includes(sectionKey)) {
-        return rankOf(PROP_RANK, nameA) - rankOf(PROP_RANK, nameB) || nameA.localeCompare(nameB);
-      }
-      return nameA.localeCompare(nameB);
-    });
-  }
-
+function sortCssVars(cssContent, sections) {
   const lines = cssContent.split(/\r?\n/);
+  const varLines = lines.filter((l) => { const t = l.trim(); return t.startsWith("--") && t.includes(":"); });
 
-  // Separate variable lines from structural lines (media query, :root, comments, braces)
-  const varLines = lines.filter((l) => {
-    const t = l.trim();
-    return t.startsWith("--") && t.includes(":");
-  });
-
-  // Bucket each variable into a section
-  const buckets = Object.fromEntries(SECTIONS.map((s) => [s.key, []]));
+  // Bucket
+  const buckets = Object.fromEntries(sections.map((s) => [s.label, []]));
   for (const line of varLines) {
     const decl = line.trim();
-    const section = SECTIONS.find((s) => s.key !== "other" && s.match.test(decl)) ?? SECTIONS.find((s) => s.key === "other");
-    buckets[section.key].push(line);
+    const sec = sections.find((s) => s.match.test(decl)) ?? sections[sections.length - 1];
+    buckets[sec.label].push(line);
   }
 
-  // Build the sorted, commented variable block
+  // Sort and build block
   const sortedBlock = [];
-  for (const section of SECTIONS) {
-    const vars = buckets[section.key];
+  for (const sec of sections) {
+    const vars = buckets[sec.label];
     if (vars.length === 0) continue;
     if (sortedBlock.length > 0) sortedBlock.push("");
-    sortedBlock.push(`  /* ${section.label} */`);
-    sortVars(vars, section.key).forEach((v) => sortedBlock.push(v));
+    sortedBlock.push(`  /* ${sec.label} */`);
+    const sorted = sec.sort ? [...vars].sort((a, b) => sec.sort(varName(a), varName(b))) : vars;
+    sorted.forEach((v) => sortedBlock.push(v));
   }
 
-  // Reconstruct the full CSS, replacing variable lines with the sorted block
+  // Reconstruct: keep structural lines, replace var block in-place
   const result = [];
   let inserted = false;
   for (const line of lines) {
     const t = line.trim();
     if (t.startsWith("--") && t.includes(":")) {
-      if (!inserted) {
-        sortedBlock.forEach((v) => result.push(v));
-        inserted = true;
-      }
-      continue; // skip original (unsorted) var lines
+      if (!inserted) { sortedBlock.forEach((v) => result.push(v)); inserted = true; }
+      continue;
     }
     result.push(line);
   }
-
   return result.join("\n");
 }
+
+// ─── Per-file section configs ─────────────────────────────────────────────────
+
+const PRIMITIVES_SECTIONS = [
+  { label: "Color / Neutrals",          match: /^--s2a-color-gray-/,              sort: numericSuffixSort },
+  { label: "Color / Green",             match: /^--s2a-color-green-/,             sort: numericSuffixSort },
+  { label: "Color / Blue",              match: /^--s2a-color-blue-/,              sort: numericSuffixSort },
+  { label: "Color / Red",               match: /^--s2a-color-red-/,               sort: numericSuffixSort },
+  { label: "Color / Orange",            match: /^--s2a-color-orange-/,            sort: numericSuffixSort },
+  { label: "Color / Yellow",            match: /^--s2a-color-yellow-/,            sort: numericSuffixSort },
+  { label: "Color / Transparent",       match: /^--s2a-color-transparent-/,       sort: numericSuffixSort },
+  { label: "Color / Brand",             match: /^--s2a-color-brand-/,             sort: (a, b) => a.localeCompare(b) },
+  { label: "Border Radius",             match: /^--s2a-border-radius-/,           sort: numericSuffixSort },
+  { label: "Border Width",              match: /^--s2a-border-width-/,            sort: numericSuffixSort },
+  { label: "Opacity",                   match: /^--s2a-opacity-/,                 sort: numericSuffixSort },
+  { label: "Shadow",                    match: /^--s2a-shadow-/,                  sort: shadowSort },
+  { label: "Spacing",                   match: /^--s2a-spacing-/,                 sort: numericSuffixSort },
+  { label: "Font Family",               match: /^--s2a-font-family-/,             sort: (a, b) => a.localeCompare(b) },
+  { label: "Font Letter Spacing",       match: /^--s2a-font-letter-spacing-/,     sort: letterSpacingPrimSort },
+  { label: "Font Line Height",          match: /^--s2a-font-line-height-/,        sort: numericSuffixSort },
+  { label: "Font Size",                 match: /^--s2a-font-size-/,               sort: numericSuffixSort },
+  { label: "Font Weight",               match: /^--s2a-font-weight-/,             sort: fontWeightSort },
+  { label: "Blur",                      match: /^--s2a-blur-/,                    sort: numericSuffixSort },
+  { label: "Other",                     match: /.*/,                              sort: (a, b) => a.localeCompare(b) },
+];
+
+const SEMANTIC_SECTIONS = [
+  { label: "Border Radius",             match: /^--s2a-border-radius-/,           sort: tshirtSort },
+  { label: "Border Width",              match: /^--s2a-border-width-/,            sort: tshirtSort },
+  { label: "Opacity",                   match: /^--s2a-opacity-/,                 sort: (a, b) => a.localeCompare(b) },
+  { label: "Spacing",                   match: /^--s2a-spacing-/,                 sort: tshirtSort },
+  { label: "Font Family",               match: /^--s2a-font-family-/,             sort: (a, b) => a.localeCompare(b) },
+  { label: "Font Letter Spacing",       match: /^--s2a-font-letter-spacing-/,     sort: tshirtSort },
+  { label: "Font Line Height",          match: /^--s2a-font-line-height-/,        sort: tshirtSort },
+  { label: "Font Size",                 match: /^--s2a-font-size-/,               sort: tshirtSort },
+  { label: "Font Weight",               match: /^--s2a-font-weight-/,             sort: fontWeightSort },
+  { label: "Blur",                      match: /^--s2a-blur-/,                    sort: tshirtSort },
+  { label: "Layout",                    match: /^--s2a-layout-/,                  sort: tshirtSort },
+  { label: "Other",                     match: /.*/,                              sort: (a, b) => a.localeCompare(b) },
+];
+
+const SEMANTIC_THEME_SECTIONS = [
+  { label: "Color / Background",        match: /^--s2a-color-background-/,        sort: (a, b) => a.localeCompare(b) },
+  { label: "Color / Border",            match: /^--s2a-color-border-/,            sort: (a, b) => a.localeCompare(b) },
+  { label: "Color / Content",           match: /^--s2a-color-content-/,           sort: (a, b) => a.localeCompare(b) },
+  { label: "Color / Focus Ring",        match: /^--s2a-color-focus-ring-/,        sort: (a, b) => a.localeCompare(b) },
+  { label: "Other",                     match: /.*/,                              sort: (a, b) => a.localeCompare(b) },
+];
+
+const RESPONSIVE_SECTIONS = [
+  { label: "Viewport & Section Padding", match: /^--s2a-viewport-/,              sort: paddingSizeSort },
+  { label: "Layout",                     match: /^--s2a-layout-/,                sort: (a, b) => a.localeCompare(b) },
+  { label: "Router Card",                match: /^--s2a-router-card-/,           sort: propSort },
+  { label: "Elastic Card",               match: /^--s2a-elastic-card-/,          sort: propSort },
+  { label: "App Card",                   match: /^--s2a-app-card-/,              sort: propSort },
+  { label: "Product Lockup",             match: /^--s2a-product-lockup-/,        sort: propSort },
+  { label: "Typography / Font Size",     match: /^--s2a-typography-font-size-/,  sort: roleSort },
+  { label: "Typography / Letter Spacing",match: /^--s2a-typography-letter-spacing-/, sort: roleSort },
+  { label: "Typography / Line Height",   match: /^--s2a-typography-line-height-/,sort: roleSort },
+  { label: "Other",                      match: /.*/,                            sort: (a, b) => a.localeCompare(b) },
+];
+
+// Public convenience wrappers
+function sortResponsiveCssVars(css)     { return sortCssVars(css, RESPONSIVE_SECTIONS); }
+function sortPrimitiveCssVars(css)      { return sortCssVars(css, PRIMITIVES_SECTIONS); }
+function sortSemanticCssVars(css)       { return sortCssVars(css, SEMANTIC_SECTIONS); }
+function sortSemanticThemeCssVars(css)  { return sortCssVars(css, SEMANTIC_THEME_SECTIONS); }
 
 module.exports = {
   filterCssDuplicates,
   extractBaseVariables,
   filterResponsiveCssLines,
+  sortCssVars,
   sortResponsiveCssVars,
+  sortPrimitiveCssVars,
+  sortSemanticCssVars,
+  sortSemanticThemeCssVars,
 };
 
