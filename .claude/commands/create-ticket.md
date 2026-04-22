@@ -37,12 +37,12 @@ For `eng` tickets, skip this step entirely — leave the ticket unassigned so it
 - `project`: `{ "key": "MWPW" }`
 - `issuetype`: `{ "id": "7" }` (Story)
 - `customfield_12900`: `{ "id": "185404" }` (Team = Consonant — required)
-- `customfield_11800`: `"MWPW-167460"` (Epic Link — site redesign epic — required for board visibility)
+- `customfield_11800`: `"MWPW-188889"` (Epic Link — [C2] Foundations - Taxonomy | Atomic & Block Library — required for board visibility)
 - `assignee`: `{ "name": "<username from step 1>" }` (design only — omit for eng)
 - `priority`: `{ "name": "Normal" }`
 
 **Additional fields for `eng` tickets only:**
-- `labels`: `["needs-prioritization", "eng", "eng-review", "c2-site-redesign-2026"]`
+- `labels`: `["needs-prioritization", "eng", "eng-review", "c2-site-redesign-2026", "c2-wave1"]`
 
 ---
 
