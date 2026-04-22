@@ -13,9 +13,9 @@ Parse the type keyword first, then the description. If no type is given, make a 
 
 ---
 
-## Step 1 — Find the current user's Jira username
+## Step 1 — Find the current user's Jira username (design tickets only)
 
-Search for a recent issue to get the current user's username:
+For `design` tickets, look up the current user to set as assignee:
 
 Use corp-jira `search_jira_issues` with:
 ```
@@ -25,7 +25,9 @@ fields: ["assignee"]
 minimizeOutput: false
 ```
 
-Pull `assignee.name` from the result. Use that as the assignee for the new ticket. If this fails, skip the assignee field and note it in the output.
+Pull `assignee.name` from the result. If this fails, skip the assignee field and note it in the output.
+
+For `eng` tickets, skip this step entirely — leave the ticket unassigned so it lands in the backlog for the team to claim.
 
 ---
 
@@ -35,8 +37,12 @@ Pull `assignee.name` from the result. Use that as the assignee for the new ticke
 - `project`: `{ "key": "MWPW" }`
 - `issuetype`: `{ "id": "7" }` (Story)
 - `customfield_12900`: `{ "id": "185404" }` (Team = Consonant — required)
-- `assignee`: `{ "name": "<username from step 1>" }`
+- `customfield_11800`: `"MWPW-167460"` (Epic Link — site redesign epic — required for board visibility)
+- `assignee`: `{ "name": "<username from step 1>" }` (design only — omit for eng)
 - `priority`: `{ "name": "Normal" }`
+
+**Additional fields for `eng` tickets only:**
+- `labels`: `["needs-prioritization", "eng", "eng-review", "c2-site-redesign-2026"]`
 
 ---
 

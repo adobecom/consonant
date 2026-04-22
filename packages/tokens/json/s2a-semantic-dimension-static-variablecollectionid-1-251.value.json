@@ -478,6 +478,18 @@
         },
         "4xl": {
           "$type": "number",
+          "$value": "{s2a.font.size.36}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "5xl": {
+          "$type": "number",
           "$value": "{s2a.font.size.40}",
           "$description": "",
           "$extensions": {
@@ -492,7 +504,7 @@
             }
           }
         },
-        "5xl": {
+        "6xl": {
           "$type": "number",
           "$value": "{s2a.font.size.48}",
           "$description": "",
@@ -508,7 +520,7 @@
             }
           }
         },
-        "6xl": {
+        "7xl": {
           "$type": "number",
           "$value": "{s2a.font.size.56}",
           "$description": "",
@@ -524,7 +536,7 @@
             }
           }
         },
-        "7xl": {
+        "8xl": {
           "$type": "number",
           "$value": "{s2a.font.size.64}",
           "$description": "",
@@ -540,7 +552,7 @@
             }
           }
         },
-        "8xl": {
+        "9xl": {
           "$type": "number",
           "$value": "{s2a.font.size.72}",
           "$description": "",
@@ -556,7 +568,7 @@
             }
           }
         },
-        "9xl": {
+        "10xl": {
           "$type": "number",
           "$value": "{s2a.font.size.80}",
           "$description": "",
@@ -572,7 +584,7 @@
             }
           }
         },
-        "10xl": {
+        "11xl": {
           "$type": "number",
           "$value": "{s2a.font.size.96}",
           "$description": "",
@@ -765,6 +777,20 @@
               }
             }
           }
+        },
+        "sm-md": {
+          "$type": "number",
+          "$value": "{s2a.font.line-height.21}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
         }
       },
       "letter-spacing": {
@@ -866,6 +892,20 @@
         },
         "3xl": {
           "$type": "number",
+          "$value": "{s2a.font.letter-spacing.neg-1}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "4xl": {
+          "$type": "number",
           "$value": "{s2a.font.letter-spacing.neg-0_96}",
           "$description": "",
           "$extensions": {
@@ -880,7 +920,7 @@
             }
           }
         },
-        "4xl": {
+        "5xl": {
           "$type": "number",
           "$value": "{s2a.font.letter-spacing.neg-0_48}",
           "$description": "",
@@ -896,7 +936,7 @@
             }
           }
         },
-        "5xl": {
+        "6xl": {
           "$type": "number",
           "$value": "{s2a.font.letter-spacing.neg-0_2}",
           "$description": "",
@@ -912,7 +952,7 @@
             }
           }
         },
-        "6xl": {
+        "7xl": {
           "$type": "number",
           "$value": "{s2a.font.letter-spacing.0}",
           "$description": "",
@@ -928,7 +968,7 @@
             }
           }
         },
-        "7xl": {
+        "10xl": {
           "$type": "number",
           "$value": "{s2a.font.letter-spacing.0_16}",
           "$description": "",
@@ -944,7 +984,7 @@
             }
           }
         },
-        "8xl": {
+        "11xl": {
           "$type": "number",
           "$value": "{s2a.font.letter-spacing.0_24}",
           "$description": "",
@@ -957,6 +997,106 @@
               "codeSyntax": {
                 "WEB": "var(--s2a-font-letter-spacing-8xl)"
               }
+            }
+          }
+        },
+        "8xl": {
+          "$type": "number",
+          "$value": "{s2a.font.letter-spacing.0_12}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "9xl": {
+          "$type": "number",
+          "$value": "{s2a.font.letter-spacing.0_14}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "weight": {
+        "title": {
+          "$type": "string",
+          "$value": "{s2a.font.weight.adobe-clean-display.black}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "body": {
+          "$type": "string",
+          "$value": "{s2a.font.weight.adobe-clean.regular}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "eyebrow": {
+          "$type": "string",
+          "$value": "{s2a.font.weight.adobe-clean.bold}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "label": {
+          "$type": "string",
+          "$value": "{s2a.font.weight.adobe-clean.bold}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "caption": {
+          "$type": "string",
+          "$value": "{s2a.font.weight.adobe-clean.bold}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
             }
           }
         }

@@ -32,16 +32,26 @@ const {
   extractColorTokens,
 } = require("./utils/token-utils");
 
-/** Remove from the tree any leaf token whose $description contains "DESIGN ONLY". Mutates in place. */
+/**
+ * Remove design-only tokens from the tree. Mutates in place.
+ * Excludes tokens where:
+ *   - $description contains "DESIGN ONLY" (explicit Figma flag), or
+ *   - the key starts with "_" (S2A convention for private/design-only variables,
+ *     e.g. _visibility, _margin-reflow, _id, _label, _breakpoint)
+ */
 function removeDesignOnlyTokens(node) {
   if (!node || typeof node !== "object" || Array.isArray(node)) return;
   const keysToDelete = [];
   for (const [key, value] of Object.entries(node)) {
     if (key.startsWith("$")) continue;
+    // Underscore-prefixed keys are private/design-only — remove entire subtree
+    if (key.startsWith("_")) {
+      keysToDelete.push(key);
+      continue;
+    }
     if (value && typeof value === "object" && !Array.isArray(value) && "$value" in value) {
       const desc = value.$description ?? "";
       if (String(desc).toUpperCase().includes("DESIGN ONLY")) {
-        // Filter out ALL "DESIGN ONLY" tokens from final output.
         keysToDelete.push(key);
       }
     } else if (value && typeof value === "object" && !Array.isArray(value)) {
@@ -395,17 +405,33 @@ async function buildFromFigma() {
     }
     collectReferences(mergedPrimitivesForBuild);
 
+    // Rewrite shadow color refs from {color.transparent.*} → {s2a.color.transparent.*}
+    // so shadow tokens resolve to --s2a-color-transparent-* variables
+    function rewritePrimitiveColorRefs(obj) {
+      if (!obj || typeof obj !== "object") return;
+      if (Array.isArray(obj)) { obj.forEach(rewritePrimitiveColorRefs); return; }
+      if ("$value" in obj && typeof obj.$value === "string") {
+        const v = obj.$value;
+        if (v.startsWith("{color.") && !v.startsWith("{s2a.")) {
+          obj.$value = `{s2a.${v.slice(1)}`;
+        }
+        return;
+      }
+      for (const key of Object.keys(obj)) {
+        if (!key.startsWith("$")) rewritePrimitiveColorRefs(obj[key]);
+      }
+    }
+    rewritePrimitiveColorRefs(mergedPrimitivesForBuild);
+
     await buildCssFromTokens(mergedPrimitivesForBuild, {
       destination: "tokens.primitives.css",
       selector: ":root",
       filter: (token) => {
         const path = token.path || [];
-        const pathStr = path.join(".");
-        // Only include non-color primitives, BUT include colors that are referenced
-        if (path[0] === "color") {
-          return referencedColorPaths.has(pathStr);
-        }
-        return true;
+        // Only emit tokens that carry the s2a. prefix — legacy bare-path duplicates
+        // (border.*, spacing.*, font.*, shadow.*, color.*) are excluded here;
+        // their s2a.* counterparts are already emitted correctly.
+        return path[0] === "s2a";
       },
     });
   }
@@ -429,14 +455,9 @@ async function buildFromFigma() {
       selector: ':root[data-theme="light"]',
       filter: (token) => {
         const path = token.path || [];
-        // Only include color primitives, but exclude dataviz colors
-        if (path[0] !== "color") {
-          return false;
-        }
-        // Filter out dataviz colors
-        if (path[1] === "dataviz") {
-          return false;
-        }
+        // Only emit s2a.color.* — exclude legacy bare color.* duplicates and dataviz
+        if (path[0] !== "s2a" || path[1] !== "color") return false;
+        if (path[2] === "dataviz") return false;
         return true;
       },
     });
@@ -470,14 +491,9 @@ async function buildFromFigma() {
       selector: ':root[data-theme="dark"]',
       filter: (token) => {
         const path = token.path || [];
-        // Only include color primitives, but exclude dataviz colors
-        if (path[0] !== "color") {
-          return false;
-        }
-        // Filter out dataviz colors
-        if (path[1] === "dataviz") {
-          return false;
-        }
+        // Only emit s2a.color.* — exclude legacy bare color.* duplicates and dataviz
+        if (path[0] !== "s2a" || path[1] !== "color") return false;
+        if (path[2] === "dataviz") return false;
         return true;
       },
     });
@@ -620,10 +636,9 @@ async function buildFromFigma() {
         const path = token.path || [];
         const pathStr = path.join(".");
 
-        // Exclude shadows (they're in primitives.css) - double check even though removed
-        if (path[0] === "shadow") {
-          return false;
-        }
+        // Exclude shadows and bare-path color aliases (only s2a.* tokens belong here)
+        if (path[0] === "shadow") return false;
+        if (path[0] === "color") return false;
 
         // Exclude primitive color palette (s2a.color.gray, .green, .blue, etc.) — they live in primitives.css
         // Only include semantic color groups (s2a.color.background, .content, .border, etc.)

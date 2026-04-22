@@ -4,12 +4,12 @@
  */
 
 :root {
-  --s2a-router-card-width-resting: 294px;
-  --s2a-router-card-width-expanded: 496px;
-  --s2a-router-card-width-min: 243px;
-  --s2a-router-card-width-max: 496px;
-  --s2a-router-card-height-max: 576px;
-  --s2a-router-card-media-height: 394px;
+  --s2a-elastic-card-width-resting: 294px;
+  --s2a-elastic-card-width-expanded: 496px;
+  --s2a-elastic-card-width-min: 243px;
+  --s2a-elastic-card-width-max: 496px;
+  --s2a-elastic-card-height-max: 576px;
+  --s2a-elastic-card-media-height: 394px;
   --s2a-viewport-vertical-padding-lg: var(--s2a-layout-xl);
   --s2a-viewport-vertical-padding-md: var(--s2a-layout-lg);
   --s2a-viewport-vertical-padding-sm: var(--s2a-layout-sm);
@@ -17,8 +17,8 @@
   --s2a-viewport-vertical-padding-2xs: var(--s2a-spacing-xl);
   --s2a-viewport-vertical-padding-none: var(--s2a-spacing-none);
   --s2a-typography-letter-spacing-eyebrow: var(--s2a-font-letter-spacing-neg-0_16);
-  --s2a-router-card-padding: var(--s2a-spacing-24);
-  --s2a-router-card-gap: var(--s2a-spacing-8);
+  --s2a-elastic-card-padding: var(--s2a-spacing-24);
+  --s2a-elastic-card-gap: var(--s2a-spacing-8);
   --s2a-product-lockup-gap-block-start: var(--s2a-spacing-16);
   --s2a-product-lockup-gap-block: var(--s2a-spacing-sm);
   --s2a-product-lockup-gap-inline-start: var(--s2a-spacing-16);

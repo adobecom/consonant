@@ -5,17 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.13] - 2026-03-26
+## [0.0.13] - 2026-04-22
 
 ### 💥 Breaking changes
+
+- **Letter-spacing semantic ramp restructured**
+  - Three new stops inserted; existing stops `3xl`–`8xl` renumbered to `4xl`–`11xl`. Any downstream CSS hardcoding the old semantic names will resolve to different values:
+
+  | Old name | New name | Value |
+  |---|---|---|
+  | *(new)* | `--s2a-font-letter-spacing-3xl` | `-1px` |
+  | `--s2a-font-letter-spacing-3xl` | `--s2a-font-letter-spacing-4xl` | `-0.96px` |
+  | `--s2a-font-letter-spacing-4xl` | `--s2a-font-letter-spacing-5xl` | `-0.48px` |
+  | `--s2a-font-letter-spacing-5xl` | `--s2a-font-letter-spacing-6xl` | `-0.2px` |
+  | `--s2a-font-letter-spacing-6xl` | `--s2a-font-letter-spacing-7xl` | `0` |
+  | `--s2a-font-letter-spacing-7xl` | `--s2a-font-letter-spacing-10xl` | `+0.16px` |
+  | `--s2a-font-letter-spacing-8xl` | `--s2a-font-letter-spacing-11xl` | `+0.24px` |
+  | *(new)* | `--s2a-font-letter-spacing-8xl` | `+0.12px` |
+  | *(new)* | `--s2a-font-letter-spacing-9xl` | `+0.14px` |
+
+  Stops `xs`–`2xl` are unchanged.
 
 - **External collections excluded by default**
   - The sync step now drops every `c1/*`, `annotation`, and `s2c/*` collection before generating JSON. Palette-only primitives such as `--s2a-color-content-subdued-default` and annotation visibility tokens are **removed** from the package. If you depended on these non-system tokens, migrate to the sanctioned S2A semantics (e.g., `--s2a-color-content-default`).
 
+- **All CSS output now requires `--s2a-` prefix**
+  - Legacy unprefixed duplicates (`--border-radius-*`, `--spacing-*`, `--color-transparent-*`, `--font-family-*`, `--shadow-level-*`) have been removed from all output files. Only `--s2a-*` custom properties are emitted. Shadow color references now correctly point to `--s2a-color-transparent-black-*`.
+
 ### ✨ Improvements
 
+- **New line-height stop: `sm-md`**
+  - `--s2a-font-line-height-sm-md: 21px` added between `sm` (20px) and `md` (24px).
+
 - **RouterCard layout tokens shipped**
-  - The following system tokens now appear in each responsive CSS file so Router Card implementations can stay aligned with matt-atoms:
+  - The following system tokens now appear in each responsive CSS file:
     - `--s2a-router-card-width-resting`
     - `--s2a-router-card-width-expanded`
     - `--s2a-router-card-width-min`
@@ -26,13 +49,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `--s2a-router-card-gap`
 
 - **Responsive output mirrors the collection exactly**
-  - `tokens.responsive.{sm,md,lg,xl}.css` now emit only the tokens defined in the Responsive collection (viewport padding, router cards, typography, etc.). All semantic/primitive references stay as `var(--s2a-…)`, so importing a responsive layer no longer redefines the global primitive set.
-  - The responsive build step no longer relies on a hardcoded whitelist. Any `s2a/...` token in the Responsive collection (except "design-guide" paths) is shipped automatically, so future scale tokens land without build changes.
+  - `tokens.responsive.{sm,md,lg,xl}.css` now emit only the tokens defined in the Responsive collection. All references stay as `var(--s2a-…)`.
 
 ### 🧹 Build & filtering
 
+- **Prefix enforcement in all CSS output**
+  - Primitives, light/dark color, and semantic filters now exclusively emit `path[0] === "s2a"` tokens. Legacy bare-path duplicates from non-S2A Figma collections are silently dropped.
+
+- **Shadow color references fixed**
+  - Shadow `$value` references are rewritten from `{color.transparent.*}` to `{s2a.color.transparent.*}` before Style Dictionary runs, so `--s2a-shadow-level-*-color` variables correctly resolve to `--s2a-color-transparent-black-*`.
+
 - **Source tagging inside Style Dictionary**
-  - Tokens coming from the Responsive collection are tagged before merging with base primitives so the CSS filter can include only those tagged nodes. This keeps the output minimal while still allowing references to resolve against the primitive/semantic tree.
+  - Tokens from the Responsive collection are tagged before merging with base primitives so the CSS filter can include only those tagged nodes.
 
 ---
 

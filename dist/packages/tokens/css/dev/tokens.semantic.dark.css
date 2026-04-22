@@ -31,8 +31,8 @@
   --s2a-color-focus-ring-knockout: var(--s2a-color-gray-25);
   --s2a-color-content-title: var(--s2a-color-content-knockout);
   --s2a-color-content-subheading: var(--s2a-color-content-knockout);
-  --s2a-color-content-body-subtle: var(--s2a-color-content-subtle);
-  --s2a-color-content-body-strong: var(--s2a-color-content-strong);
+  --s2a-color-content-body-subtle: var(--s2a-color-content-subtle); /** text subtle */
+  --s2a-color-content-body-strong: var(--s2a-color-content-strong); /** This is for text */
   --s2a-color-content-label: var(--s2a-color-content-knockout);
   --s2a-color-content-caption: var(--s2a-color-content-subtle);
 }

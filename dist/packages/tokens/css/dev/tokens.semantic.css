@@ -3,8 +3,6 @@
  */
 
 :root {
-  --color-transparent-black-12: rgb(0 0 0 / 12%);
-  --color-transparent-black-16: rgb(0 0 0 / 16%);
   --s2a-border-radius-none: var(--s2a-border-radius-0);
   --s2a-border-radius-2xs: var(--s2a-border-radius-2);
   --s2a-border-radius-xs: var(--s2a-border-radius-4);
@@ -36,12 +34,15 @@
   --s2a-font-letter-spacing-lg: var(--s2a-font-letter-spacing-neg-1_68);
   --s2a-font-letter-spacing-xl: var(--s2a-font-letter-spacing-neg-1_44);
   --s2a-font-letter-spacing-2xl: var(--s2a-font-letter-spacing-neg-1_2);
-  --s2a-font-letter-spacing-3xl: var(--s2a-font-letter-spacing-neg-0_96);
-  --s2a-font-letter-spacing-4xl: var(--s2a-font-letter-spacing-neg-0_48);
-  --s2a-font-letter-spacing-5xl: var(--s2a-font-letter-spacing-neg-0_2);
-  --s2a-font-letter-spacing-6xl: var(--s2a-font-letter-spacing-0);
-  --s2a-font-letter-spacing-7xl: var(--s2a-font-letter-spacing-0_16);
-  --s2a-font-letter-spacing-8xl: var(--s2a-font-letter-spacing-0_24);
+  --s2a-font-letter-spacing-3xl: var(--s2a-font-letter-spacing-neg-1);
+  --s2a-font-letter-spacing-4xl: var(--s2a-font-letter-spacing-neg-0_96);
+  --s2a-font-letter-spacing-5xl: var(--s2a-font-letter-spacing-neg-0_48);
+  --s2a-font-letter-spacing-6xl: var(--s2a-font-letter-spacing-neg-0_2);
+  --s2a-font-letter-spacing-7xl: var(--s2a-font-letter-spacing-0);
+  --s2a-font-letter-spacing-10xl: var(--s2a-font-letter-spacing-0_16);
+  --s2a-font-letter-spacing-11xl: var(--s2a-font-letter-spacing-0_24);
+  --s2a-font-letter-spacing-8xl: var(--s2a-font-letter-spacing-0_12);
+  --s2a-font-letter-spacing-9xl: var(--s2a-font-letter-spacing-0_14);
   --s2a-font-line-height-2xs: var(--s2a-font-line-height-16);
   --s2a-font-line-height-xs: var(--s2a-font-line-height-18);
   --s2a-font-line-height-sm: var(--s2a-font-line-height-20);
@@ -53,6 +54,7 @@
   --s2a-font-line-height-4xl: var(--s2a-font-line-height-69);
   --s2a-font-line-height-5xl: var(--s2a-font-line-height-76);
   --s2a-font-line-height-6xl: var(--s2a-font-line-height-92);
+  --s2a-font-line-height-sm-md: var(--s2a-font-line-height-21);
   --s2a-font-size-xs: var(--s2a-font-size-12);
   --s2a-font-size-sm: var(--s2a-font-size-14);
   --s2a-font-size-md: var(--s2a-font-size-16);
@@ -60,13 +62,19 @@
   --s2a-font-size-xl: var(--s2a-font-size-20);
   --s2a-font-size-2xl: var(--s2a-font-size-24);
   --s2a-font-size-3xl: var(--s2a-font-size-32);
-  --s2a-font-size-4xl: var(--s2a-font-size-40);
-  --s2a-font-size-5xl: var(--s2a-font-size-48);
-  --s2a-font-size-6xl: var(--s2a-font-size-56);
-  --s2a-font-size-7xl: var(--s2a-font-size-64);
-  --s2a-font-size-8xl: var(--s2a-font-size-72);
-  --s2a-font-size-9xl: var(--s2a-font-size-80);
-  --s2a-font-size-10xl: var(--s2a-font-size-96);
+  --s2a-font-size-4xl: var(--s2a-font-size-36);
+  --s2a-font-size-5xl: var(--s2a-font-size-40);
+  --s2a-font-size-6xl: var(--s2a-font-size-48);
+  --s2a-font-size-7xl: var(--s2a-font-size-56);
+  --s2a-font-size-8xl: var(--s2a-font-size-64);
+  --s2a-font-size-9xl: var(--s2a-font-size-72);
+  --s2a-font-size-10xl: var(--s2a-font-size-80);
+  --s2a-font-size-11xl: var(--s2a-font-size-96);
+  --s2a-font-weight-title: var(--s2a-font-weight-adobe-clean-display-black);
+  --s2a-font-weight-body: var(--s2a-font-weight-adobe-clean-regular);
+  --s2a-font-weight-eyebrow: var(--s2a-font-weight-adobe-clean-bold);
+  --s2a-font-weight-label: var(--s2a-font-weight-adobe-clean-bold);
+  --s2a-font-weight-caption: var(--s2a-font-weight-adobe-clean-bold);
   --s2a-blur-xs: var(--s2a-blur-8);
   --s2a-blur-sm: var(--s2a-blur-16);
   --s2a-blur-md: var(--s2a-blur-32);
