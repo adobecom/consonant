@@ -91,6 +91,7 @@ const {
   filterCssDuplicates,
   extractBaseVariables,
   filterResponsiveCssLines,
+  sortResponsiveCssVars,
 } = require("./utils/css-file-utils");
 
 const PACKAGE_DIR = path.join(__dirname, "..");
@@ -1342,8 +1343,14 @@ async function minifyAllCssFiles() {
       // Collect minified content for consolidation
       allCssContent.push(minified.styles);
 
-      // Move uncompressed version to dev folder (for development inspection)
-      await fs.rename(filePath, devPath);
+      // For responsive files, sort and group variables before moving to dev/
+      if (file.startsWith("tokens.responsive.")) {
+        const sorted = sortResponsiveCssVars(css);
+        await fs.writeFile(devPath, sorted, "utf8");
+        await fs.unlink(filePath);
+      } else {
+        await fs.rename(filePath, devPath);
+      }
 
       console.log(`✓ Processed ${file} and moved to dev/ (development)`);
     } catch (error) {
@@ -1623,8 +1630,9 @@ async function filterResponsiveCss(inputPath, outputPath) {
   const css = await fs.readFile(inputPath, "utf8");
   const lines = css.split(/\r?\n/);
   const filtered = filterResponsiveCssLines(lines);
+  const sorted = sortResponsiveCssVars(filtered.join("\n"));
 
-  await fs.writeFile(outputPath, filtered.join("\n"), "utf8");
+  await fs.writeFile(outputPath, sorted, "utf8");
   await fs.unlink(inputPath); // Remove temp file
 }
 
