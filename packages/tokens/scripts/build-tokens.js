@@ -91,6 +91,10 @@ const {
   filterCssDuplicates,
   extractBaseVariables,
   filterResponsiveCssLines,
+  sortResponsiveCssVars,
+  sortPrimitiveCssVars,
+  sortSemanticCssVars,
+  sortSemanticThemeCssVars,
 } = require("./utils/css-file-utils");
 
 const PACKAGE_DIR = path.join(__dirname, "..");
@@ -241,6 +245,8 @@ async function buildFromFigma() {
       componentCoreFiles.push(normalizedEntry);
     }
     // 7. Typography / Scale / Responsive → typography-core
+    // Exception: responsive typography with breakpoint modes (sm/md/lg/xl) → responsiveFiles
+    // so they merge into tokens.responsive.*.css alongside the grid/container tokens.
     else if (
       collectionSlug === "typography-core" ||
       collectionSlug === "typography-scale-responsive" ||
@@ -249,10 +255,18 @@ async function buildFromFigma() {
       collectionSlug.startsWith("typography") ||
       collectionSlug.includes("typography")
     ) {
-      if (!typographyCoreFiles.has(modeSlug)) {
-        typographyCoreFiles.set(modeSlug, []);
+      const responsiveBreakpoints = new Set(["sm", "md", "lg", "xl"]);
+      if (collectionSlug.includes("responsive") && responsiveBreakpoints.has(modeSlug)) {
+        if (!responsiveFiles.has(modeSlug)) {
+          responsiveFiles.set(modeSlug, []);
+        }
+        responsiveFiles.get(modeSlug).push(normalizedEntry);
+      } else {
+        if (!typographyCoreFiles.has(modeSlug)) {
+          typographyCoreFiles.set(modeSlug, []);
+        }
+        typographyCoreFiles.get(modeSlug).push(normalizedEntry);
       }
-      typographyCoreFiles.get(modeSlug).push(normalizedEntry);
     }
     // 8. Layout / Breakpoints / Static → breakpoints-core
     else if (
@@ -1342,8 +1356,23 @@ async function minifyAllCssFiles() {
       // Collect minified content for consolidation
       allCssContent.push(minified.styles);
 
-      // Move uncompressed version to dev folder (for development inspection)
-      await fs.rename(filePath, devPath);
+      // Sort and group variables before moving to dev/
+      let sorted = css;
+      if (file.startsWith("tokens.responsive.")) {
+        sorted = sortResponsiveCssVars(css);
+      } else if (file === "tokens.primitives.css" || file === "tokens.primitives.light.css" || file === "tokens.primitives.dark.css") {
+        sorted = sortPrimitiveCssVars(css);
+      } else if (file === "tokens.semantic.css") {
+        sorted = sortSemanticCssVars(css);
+      } else if (file === "tokens.semantic.light.css" || file === "tokens.semantic.dark.css") {
+        sorted = sortSemanticThemeCssVars(css);
+      }
+      if (sorted !== css) {
+        await fs.writeFile(devPath, sorted, "utf8");
+        await fs.unlink(filePath);
+      } else {
+        await fs.rename(filePath, devPath);
+      }
 
       console.log(`✓ Processed ${file} and moved to dev/ (development)`);
     } catch (error) {
@@ -1623,8 +1652,9 @@ async function filterResponsiveCss(inputPath, outputPath) {
   const css = await fs.readFile(inputPath, "utf8");
   const lines = css.split(/\r?\n/);
   const filtered = filterResponsiveCssLines(lines);
+  const sorted = sortResponsiveCssVars(filtered.join("\n"));
 
-  await fs.writeFile(outputPath, filtered.join("\n"), "utf8");
+  await fs.writeFile(outputPath, sorted, "utf8");
   await fs.unlink(inputPath); // Remove temp file
 }
 
