@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consonant Tools Plugin — Installation Guide</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #f5f5f5;
+      padding: 40px 20px 60px;
+    }
+
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 40px 48px 36px;
+    }
+
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .header-subtitle {
+      font-size: 15px;
+      color: #aaa;
+    }
+
+    /* Content */
+    .content {
+      padding: 40px 48px;
+    }
+
+    /* Intro */
+    .intro {
+      margin-bottom: 36px;
+    }
+
+    /* Callouts */
+    .callout {
+      border-left: 4px solid #f5a623;
+      background: #fff8e6;
+      border-radius: 0 6px 6px 0;
+      padding: 14px 16px;
+      margin: 16px 0;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .callout.info {
+      border-left-color: #2196f3;
+      background: #e8f4fd;
+    }
+
+    .callout.success {
+      border-left-color: #4caf50;
+      background: #e8f5e9;
+    }
+
+    .callout strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .callout strong { color: #b45309; }
+    .callout.info strong { color: #1565c0; }
+    .callout.success strong { color: #2e7d32; }
+
+    /* Sections */
+    .section {
+      margin-bottom: 44px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .step-circle {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: -0.01em;
+    }
+
+    .section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1a1a1a;
+    }
+
+    /* Prerequisites table */
+    .prereq-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .prereq-table thead tr {
+      background: #f0f0f0;
+    }
+
+    .prereq-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .prereq-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #ebebeb;
+      vertical-align: top;
+    }
+
+    .prereq-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .prereq-table .req-name {
+      font-weight: 600;
+      width: 180px;
+    }
+
+    .prereq-table a {
+      color: #2196f3;
+      text-decoration: none;
+    }
+
+    .prereq-table a:hover {
+      text-decoration: underline;
+    }
+
+    /* Code blocks */
+    .code-block {
+      background: #1a1a1a;
+      color: #e0e0e0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin: 14px 0;
+      font-family: 'SF Mono', 'Fira Code', Menlo, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+      word-break: normal;
+    }
+
+    /* Inline code */
+    code {
+      font-family: 'SF Mono', 'Fira Code', Menlo, monospace;
+      font-size: 12.5px;
+      background: #f0f0f0;
+      border-radius: 3px;
+      padding: 2px 5px;
+      color: #c7254e;
+    }
+
+    /* Sub-steps */
+    .sub-step {
+      margin: 18px 0;
+      padding-left: 16px;
+      border-left: 2px solid #e8e8e8;
+    }
+
+    .sub-step-label {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    /* Numbered list */
+    .step-list {
+      list-style: none;
+      counter-reset: step-counter;
+      margin: 8px 0;
+    }
+
+    .step-list li {
+      counter-increment: step-counter;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      line-height: 1.55;
+      align-items: flex-start;
+    }
+
+    .step-list li::before {
+      content: counter(step-counter);
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #e8e8e8;
+      color: #444;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    /* Menu path */
+    .menu-path {
+      display: inline-block;
+      background: #f3f3f3;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-weight: 500;
+      font-size: 13.5px;
+      color: #222;
+    }
+
+    /* Tip */
+    .tip {
+      font-size: 13.5px;
+      color: #555;
+      margin-top: 12px;
+      line-height: 1.55;
+    }
+
+    .tip::before {
+      content: "Tip: ";
+      font-weight: 600;
+      color: #333;
+    }
+
+    /* Divider */
+    hr {
+      border: none;
+      border-top: 1px solid #ebebeb;
+      margin: 36px 0;
+    }
+
+    /* Body text helper */
+    .body-text {
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 14px;
+    }
+
+    /* Footer */
+    .footer {
+      background: #f5f5f5;
+      border-top: 1px solid #e8e8e8;
+      padding: 20px 48px;
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-eyebrow">Adobe S2A Design System</div>
+      <h1>Consonant Tools Plugin</h1>
+      <div class="header-subtitle">Installation guide for designers</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- Intro -->
+      <div class="intro">
+        <div class="callout info">
+          <strong>What is this plugin?</strong>
+          The Consonant Tools plugin connects Figma to the S2A design system. It lets Claude Code read your open Figma file, run design scripts, and produce annotated component specs — all from a chat session. Once installed, you won't need to touch it again.
+        </div>
+
+        <div class="callout success">
+          <strong>Fastest option — let Claude do it for you</strong>
+          <ol style="margin:8px 0 0 18px;padding:0;font-size:14px;line-height:1.6;">
+            <li>Open <strong>Terminal</strong> (press <strong>Cmd + Space</strong>, type <strong>Terminal</strong>, press Enter)</li>
+            <li>Type <code>bash </code> (with a space after it) — but don't press Enter yet</li>
+            <li>Open the folder you extracted and <strong>drag the <code>install.sh</code> file into the Terminal window</strong> — this pastes the file path automatically</li>
+            <li>Press <strong>Enter</strong></li>
+            <li>Open Claude Code and type <code>/setup-consonant-plugin</code></li>
+          </ol>
+          <p style="margin-top:10px;">Claude will download the files, build everything, and guide you through loading the plugin in Figma (that one step has to be done by hand — Claude will tell you exactly what to click). The rest of this guide is for manual installation or troubleshooting.</p>
+        </div>
+      </div>
+
+      <!-- Section 1: Prerequisites -->
+      <div class="section">
+        <div class="section-header">
+          <div class="step-circle">1</div>
+          <h2>Prerequisites</h2>
+        </div>
+
+        <p class="body-text">Make sure you have both tools installed before continuing.</p>
+
+        <table class="prereq-table">
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Requirement</th>
+              <th>Where to get it</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="req-name">Figma Desktop</td>
+              <td>Desktop app only — the browser version does not support plugins in development mode</td>
+              <td><a href="https://www.figma.com/downloads/" target="_blank">figma.com/downloads</a></td>
+            </tr>
+            <tr>
+              <td class="req-name">Node.js</td>
+              <td>A behind-the-scenes tool that the plugin needs to run. You won't interact with it directly.</td>
+              <td><a href="https://nodejs.org/" target="_blank">nodejs.org</a> &rarr; click the big green &ldquo;Download&rdquo; button, open the file, and follow the installer</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout info" style="margin-top:16px;">
+          <strong>How to open Terminal</strong>
+          Press <strong>Cmd + Space</strong> to open Spotlight, type <strong>Terminal</strong>, and press Return. All commands in this guide are run inside Terminal.
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- Section 2: Download -->
+      <div class="section">
+        <div class="section-header">
+          <div class="step-circle">2</div>
+          <h2>Download the plugin files</h2>
+        </div>
+
+        <p class="body-text">Run this single command in Terminal. It downloads the repo ZIP, extracts it, and places the files at <code>~/Desktop/consonant</code>.</p>
+
+        <div class="code-block">curl -L https://github.com/adobecom/consonant/archive/refs/heads/main.zip -o /tmp/consonant.zip \
+  &amp;&amp; unzip -q /tmp/consonant.zip -d /tmp/consonant-extract \
+  &amp;&amp; mv /tmp/consonant-extract/consonant-main ~/Desktop/consonant \
+  &amp;&amp; rm -f /tmp/consonant.zip \
+  &amp;&amp; rm -rf /tmp/consonant-extract \
+  &amp;&amp; echo "Done! Files are at ~/Desktop/consonant"</div>
+
+        <div class="callout">
+          <strong>Want a different install location?</strong>
+          Replace every <code>~/Desktop/consonant</code> in this guide with your preferred path (for example <code>~/Projects/consonant</code>). Make sure to use the same path consistently across all steps.
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- Section 3: Build -->
+      <div class="section">
+        <div class="section-header">
+          <div class="step-circle">3</div>
+          <h2>Build the plugin</h2>
+        </div>
+
+        <p class="body-text">Run two build commands in order — one for the plugin UI and one for its MCP server.</p>
+
+        <div class="callout">
+          <strong>This might take a minute</strong>
+          Each command will scroll through installation and build output. That is normal. Wait for Terminal to show a prompt again (a <code>$</code> or <code>%</code> character) before running the next command.
+        </div>
+
+        <div class="sub-step">
+          <div class="sub-step-label">Step 3a &mdash; Build the plugin UI</div>
+          <div class="code-block">cd ~/Desktop/consonant/apps/consonant-specs-plugin &amp;&amp; npm install &amp;&amp; node esbuild.config.mjs</div>
+        </div>
+
+        <div class="sub-step">
+          <div class="sub-step-label">Step 3b &mdash; Build the specs MCP server</div>
+          <div class="code-block">cd ~/Desktop/consonant/apps/consonant-specs-plugin/mcp &amp;&amp; npm install &amp;&amp; npm run build</div>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <!-- Section 4: Load plugins in Figma -->
+      <div class="section">
+        <div class="section-header">
+          <div class="step-circle">4</div>
+          <h2>Load the plugins in Figma</h2>
+        </div>
+
+        <p class="body-text">Import the Consonant Tools plugin into Figma — this only needs to be done once.</p>
+
+        <ol class="step-list">
+          <li>Open <strong>Figma Desktop</strong> (not the browser version).</li>
+          <li>Open any Figma file.</li>
+          <li>In the top menu go to <span class="menu-path">Plugins</span> &rarr; <span class="menu-path">Development</span> &rarr; <span class="menu-path">Import plugin from manifest&hellip;</span></li>
+          <li>Navigate to <span class="menu-path">Desktop</span> &rarr; <span class="menu-path">consonant</span> &rarr; <span class="menu-path">apps</span> &rarr; <span class="menu-path">consonant-specs-plugin</span></li>
+          <li>Select <code>manifest.json</code> and click <strong>Open</strong>.</li>
+        </ol>
+
+        <p class="body-text" style="margin-top:14px;">The plugin should now appear under <span class="menu-path">Plugins</span> &rarr; <span class="menu-path">Development</span>.</p>
+
+        <p class="tip">To open the plugin folder in Finder, run this in Terminal:<br>
+          <code style="margin-top:6px;display:inline-block;">open ~/Desktop/consonant/apps/consonant-specs-plugin</code>
+        </p>
+      </div>
+
+      <hr>
+
+      <!-- Section 5: Verify -->
+      <div class="section">
+        <div class="section-header">
+          <div class="step-circle">5</div>
+          <h2>Verify it works</h2>
+        </div>
+
+        <p class="body-text">Two quick checks to confirm everything is wired up correctly.</p>
+
+        <div class="sub-step">
+          <div class="sub-step-label">Check 5a &mdash; Plugin UI loads</div>
+          <p class="body-text" style="margin-top:6px;">In Figma, go to <span class="menu-path">Plugins</span> &rarr; <span class="menu-path">Development</span> &rarr; <span class="menu-path">Consonant Tools</span>. The plugin panel should open and show several tabs (Specs, Bridge, and others).</p>
+          <div class="callout success">
+            <strong>What success looks like</strong>
+            The plugin panel opens without error and the tab bar is visible at the top.
+          </div>
+        </div>
+
+        <div class="sub-step">
+          <div class="sub-step-label">Check 5b &mdash; Bridge connection</div>
+          <p class="body-text" style="margin-top:6px;">Start the bridge server in a new Terminal window:</p>
+          <div class="code-block">cd ~/Desktop/consonant/apps/consonant-specs-plugin/mcp &amp;&amp; node dist/index.js</div>
+          <p class="body-text" style="margin-top:10px;">Then in Figma:</p>
+          <ol class="step-list">
+            <li>Run <strong>Consonant Tools</strong> (<span class="menu-path">Plugins</span> &rarr; <span class="menu-path">Development</span> &rarr; <span class="menu-path">Consonant Tools</span>).</li>
+            <li>Click the <strong>Bridge</strong> tab and click <strong>Connect</strong>.</li>
+          </ol>
+          <div class="callout success">
+            <strong>What success looks like</strong>
+            The Bridge tab shows "Connected" and the status dot is green.
+          </div>
+        </div>
+
+        <div class="sub-step">
+          <div class="sub-step-label">Check 5c &mdash; Claude can read your Figma file</div>
+          <p class="body-text" style="margin-top:6px;">With the bridge connected, open Claude Code and ask it to read your file. Try typing something like:</p>
+          <div class="code-block">Can you see my Figma file? What's in it?</div>
+          <p class="body-text" style="margin-top:10px;">Claude should respond with your file name, page names, and be able to take a screenshot of what you're looking at in Figma.</p>
+          <div class="callout success">
+            <strong>What success looks like</strong>
+            Claude describes your open Figma file by name and shows you a screenshot. This means the full connection &mdash; from Claude Code through the bridge to Figma &mdash; is working.
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- Section 6: Updating -->
+      <div class="section">
+        <div class="section-header">
+          <div class="step-circle">6</div>
+          <h2>Updating the plugin</h2>
+        </div>
+
+        <p class="body-text">When a new version is released, update by repeating the steps above from Step 2. The manifest path in Figma stays the same — you will not need to re-import it.</p>
+
+        <div class="callout info">
+          <strong>Easier option</strong>
+          Inside a Claude Code session, run <code>/setup-consonant-plugin</code>. The skill will pull the latest version, rebuild the plugin and MCP server, and confirm success automatically.
+        </div>
+      </div>
+
+    </div><!-- /content -->
+
+    <!-- Footer -->
+    <div class="footer">
+      Consonant Tools &mdash; S2A Design System &middot; Adobe
+    </div>
+
+  </div><!-- /page -->
+</body>
+</html>

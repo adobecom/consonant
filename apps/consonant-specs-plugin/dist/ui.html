@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>:root {
+  --bg: var(--figma-color-bg, #fff);
+  --bg-secondary: var(--figma-color-bg-secondary, #f5f5f5);
+  --text: var(--figma-color-text, #333);
+  --text-secondary: var(--figma-color-text-secondary, #666);
+  --border: var(--figma-color-border, #e0e0e0);
+  --accent: #1473E6;
+  --success: #2d9d78;
+  --warning: #e68619;
+  --font: Inter, system-ui, -apple-system, sans-serif;
+  --font-mono: 'SF Mono', SFMono-Regular, Menlo, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.4;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.selection-info {
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  flex: 1;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-content { flex: 1; overflow-y: auto; }
+
+.tab-panel { display: none; padding: 12px; }
+.tab-panel.active { display: block; }
+
+.placeholder {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 24px 0;
+}
+
+.footer {
+  padding: 6px 12px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn:hover { opacity: 0.9; }
+.btn:disabled { opacity: 0.4; cursor: default; }
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.match-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.match-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.match-option:hover {
+  background: var(--bg-secondary);
+}
+
+.match-option input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.section-title {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.property-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.property-row:hover { background: var(--bg-secondary); }
+
+.property-name { font-weight: 500; }
+
+.property-value {
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.token-badge {
+  display: inline-block;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.token-badge-match { background: #e6f4ea; color: var(--success); }
+.token-badge-miss { background: #fef3e0; color: var(--warning); }
+
+.color-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.scan-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+}
+
+.measure-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+/* Bridge tab */
+.bridge-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(0,180,0,0.1);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #16a34a;
+}
+.bridge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16a34a;
+}
+.bridge-log {
+  margin: 12px 16px;
+  padding: 10px;
+  background: var(--bg-secondary, #f5f5f5);
+  border-radius: 6px;
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* A11y tab */
+.a11y-badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--bg-secondary, #f0f0f0);
+  color: var(--text-tertiary, #999);
+}
+.a11y-badge.connected {
+  background: rgba(0,180,0,0.1);
+  color: #16a34a;
+}
+.a11y-item {
+  opacity: 0.4;
+}
+.a11y-item.enabled {
+  opacity: 1;
+}
+.a11y-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+}
+</style>
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1 class="header-title">Consonant Tools</h1>
+    </header>
+
+    <div class="selection-info" id="selectionInfo">
+      <span class="selection-label">No selection</span>
+    </div>
+
+    <nav class="tab-bar">
+      <button class="tab active" data-tab="align">Align</button>
+      <button class="tab" data-tab="match">Match</button>
+      <button class="tab" data-tab="design">Grids</button>
+      <button class="tab" data-tab="specs">Specs</button>
+      <button class="tab" data-tab="a11y">A11y</button>
+      <button class="tab" data-tab="localize">Localize</button>
+      <button class="tab" data-tab="bridge">Bridge</button>
+    </nav>
+
+    <div class="tab-content" id="tabContent">
+      <div class="tab-panel active" data-panel="align">
+        <div id="alignContent">
+          <p class="placeholder" id="alignPlaceholder">Select a node to inspect</p>
+          <div id="alignControls" style="display:none;">
+            <div id="propertyList"></div>
+            <div style="margin-top:16px;">
+              <div class="section-title">Token Alignment</div>
+              <label class="match-option" style="margin-bottom:8px;"><input type="checkbox" id="skipSizingCheck"> Do not apply sizing variables</label>
+              <button class="btn btn-secondary" id="s2aAuditBtn">S2A Audit</button>
+              <button class="btn btn-secondary" id="textColorsAlignBtn">Align (Text and Colors)</button>
+              <button class="btn btn-secondary" id="spacingAlignBtn">Spacing Align</button>
+              <button class="btn" id="fullAlignBtn">Full Align S2A</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="match">
+        <div id="matchContent">
+          <p class="placeholder" id="matchPlaceholder">Select a frame to force match</p>
+          <div id="matchControls" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <p style="color:var(--text-secondary);margin-bottom:0;">Force match to closest S2A tokens.</p>
+              <button id="matchCheckAll" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+            </div>
+            <div style="margin-bottom:12px;"></div>
+
+            <div class="match-checklist">
+              <label class="match-option"><input type="checkbox" id="matchTypography"> Typography</label>
+              <label class="match-option"><input type="checkbox" id="matchFillColors"> Fill Colors</label>
+              <label class="match-option"><input type="checkbox" id="matchStrokeColors"> Stroke Colors</label>
+              <label class="match-option"><input type="checkbox" id="matchBorderRadius"> Border Radius</label>
+              <label class="match-option"><input type="checkbox" id="matchBorderWidth"> Border Width</label>
+              <label class="match-option"><input type="checkbox" id="matchSpacing"> Spacing (Padding / Gap)</label>
+              <label class="match-option"><input type="checkbox" id="matchOpacity"> Opacity</label>
+              <label class="match-option"><input type="checkbox" id="matchDropShadow"> Drop Shadow</label>
+              <label class="match-option"><input type="checkbox" id="matchBlur"> Blur</label>
+            </div>
+
+            <button class="btn" id="matchBtn" style="margin-top:12px;">Match</button>
+            <div style="margin-top:8px;padding:8px 10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border:1px solid var(--border,#e5e5e5);">
+              <label class="match-option" style="margin:0;"><input type="checkbox" id="matchSkipSizingCheck"> Do not apply sizing variables</label>
+            </div>
+            <div id="matchStatus" style="margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="design">
+        <div id="designContent">
+          <p class="placeholder" id="designPlaceholder">Select a frame to apply grid</p>
+          <div id="designControls" style="display:none;">
+            <div class="section-title">Layout Grids</div>
+            <p style="color:var(--text-secondary);margin-bottom:12px;">Add responsive layout grid overlays to the selected frame. Does not modify existing design content.</p>
+            <button class="btn" id="gridBtn">Grid (Responsive)</button>
+            <button class="btn btn-secondary" id="gridXlBtn">Grid XL (1920px centered)</button>
+            <button class="btn btn-secondary" id="gridMargin24Btn">24px Margin</button>
+            <button class="btn btn-secondary" id="gridMargin16Btn">16px Margin</button>
+            <button class="btn btn-secondary" id="clearGridBtn" style="margin-top:8px;">Clear Grids</button>
+            <div id="gridStatus" style="margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="specs">
+        <div id="specsContent">
+          <p class="placeholder" id="specsPlaceholder">Select a frame to spec</p>
+          <div id="specsControls" style="display:none;">
+            <div class="match-checklist">
+              <label class="match-option"><input type="checkbox" id="specAnatomyAnnotation"> Anatomy (figma annotation)</label>
+              <label class="match-option"><input type="checkbox" id="specAnatomy"> Anatomy</label>
+              <label class="match-option"><input type="checkbox" id="specSpacingGeneral"> Spacing Root Level</label>
+              <label class="match-option"><input type="checkbox" id="specCardGaps"> Spacing In Between (direct placement)</label>
+              <label class="match-option"><input type="checkbox" id="specSpacing"> Spacing Detailed (direct placement)</label>
+              <label class="match-option"><input type="checkbox" id="specColors"> Colors</label>
+              <label class="match-option"><input type="checkbox" id="specTextProps"> Text Properties</label>
+            </div>
+            <button class="btn" id="specItBtn" style="margin-top:12px;">Spec It</button>
+            <button class="btn btn-secondary" id="clearAnnotationsBtn" style="margin-top:8px;">Clear Annotations</button>
+            <p style="color:var(--text-secondary);margin-top:24px;margin-bottom:12px;display:none;">Generates a full specification next to the selected frame — anatomy callouts, layout & spacing with redlines, typography data, component details, and S2A token references.</p>
+            <button class="btn" id="fullSpecsBtn" style="display:none;">Full Specs</button>
+            <div id="specStatus" style="margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="a11y">
+        <div id="a11yContent">
+          <p class="placeholder" id="a11yPlaceholder">Select a frame to analyze</p>
+          <div id="a11yControls" style="display:none;">
+
+            <!-- AI-assisted (bridge-gated) -->
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="section-title" style="color:#7c3aed;margin-bottom:0;">AI-assisted</span>
+              <span class="a11y-badge" id="a11yBridgeBadge">connect bridge</span>
+            </div>
+            <div style="display:flex;justify-content:flex-end;">
+              <button id="a11yCheckAllAi" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+            </div>
+            <div class="match-checklist" id="a11yItemList">
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusIndicators" disabled> Focus Indicators (AI)</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusOrder" disabled> Focus Order (AI)</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yHeadings" disabled> Heading Hierarchy</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yLandmarksNav" disabled> Landmarks &amp; Navigation</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yNamesAlt" disabled> Names &amp; Alt-Text</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yColorContrast" disabled> Color Contrast</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yAriaKeyboard" disabled> ARIA &amp; Keyboard</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yTargetSize" disabled> Target Size</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yPageSetup" disabled> Page Setup</label>
+            </div>
+
+            <!-- Accessibility Notes (bridge-gated) -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+              <span class="section-title" style="margin-bottom:0;">Accessibility Notes</span>
+              <button id="a11yCheckAllNotes" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+            </div>
+            <div class="match-checklist" id="a11yConditionalList">
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yForms" disabled> Forms</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yCarousel" disabled> Carousel</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yDom" disabled> DOM Strategy</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yMotionMedia" disabled> Motion &amp; Media</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yScreenReader" disabled> Screen Reader Notes</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yReactNative" disabled> React Native</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yTvNote" disabled> TV Note</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yGeneralNote" disabled> General Note</label>
+            </div>
+
+            <button class="btn" id="generateBluelineBtn" style="margin-top:12px;">Generate Blueline</button>
+            <button class="btn btn-secondary" id="generateBluelinePanelsBtn" style="margin-top:4px;">Generate Blueline Panels</button>
+            <div id="a11yStatus" style="margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="localize">
+        <div id="localizeContent">
+          <p class="placeholder" id="localizePlaceholder">Select a frame to localize</p>
+          <div id="localizeControls" style="display:none;">
+            <div id="localizeMain">
+              <div class="section-title">Translation Provider</div>
+              <select id="providerSelect" style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--border,#e5e5e5);border-radius:4px;font-size:12px;margin-bottom:12px;">
+                <option value="bridge">Claude via Bridge (no key)</option>
+                <option value="mymemory">MyMemory (free, no key)</option>
+                <option value="lingva">Lingva (free, no key)</option>
+                <option value="deepl">DeepL Free (key required)</option>
+                <option value="google">Google Cloud (key required)</option>
+                <option value="azure">Microsoft Azure (key required)</option>
+              </select>
+              <div id="apiKeySection" style="display:none;margin-bottom:12px;">
+                <input type="password" id="apiKeyInput" placeholder="API key..." style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--border,#e5e5e5);border-radius:4px;font-family:monospace;font-size:11px;" />
+                <div id="apiKeyStatus" style="color:var(--text-secondary);font-size:11px;margin-top:4px;"></div>
+                <div style="display:flex;gap:8px;margin-top:6px;">
+                  <button class="btn btn-secondary" id="saveKeyBtn" style="flex:1;">Save Key</button>
+                  <button class="btn btn-secondary" id="clearKeyBtn" style="flex:1;">Clear</button>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div class="section-title">Languages</div>
+                <button id="locCheckAll" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+              </div>
+              <div class="match-checklist">
+                <label class="match-option"><input type="checkbox" id="locDe"> German <span style="color:var(--text-tertiary,#999);font-size:11px;">— long-word wrapping, 1.5× text</span></label>
+                <label class="match-option"><input type="checkbox" id="locZh"> Chinese <span style="color:var(--text-tertiary,#999);font-size:11px;">— short sentences</span></label>
+                <label class="match-option"><input type="checkbox" id="locTh"> Thai <span style="color:var(--text-tertiary,#999);font-size:11px;">— extra line-height for ligatures</span></label>
+                <label class="match-option"><input type="checkbox" id="locAr"> Arabic <span style="color:var(--text-tertiary,#999);font-size:11px;">— RTL</span></label>
+              </div>
+              <div class="match-checklist" style="margin-top:8px;">
+                <label class="match-option"><input type="checkbox" id="locRtl"> Apply RTL layout</label>
+              </div>
+              <button class="btn" id="localizeBtn" style="margin-top:12px;">Localize Selection</button>
+              <div id="localizeStatus" style="margin-top:12px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="bridge">
+        <div id="bridgeContent">
+          <div id="bridgeDisconnected">
+            <div style="text-align:center;padding:24px 16px;">
+              <div style="font-size:24px;margin-bottom:8px;">&#x1f50c;</div>
+              <div style="font-weight:600;margin-bottom:4px;">MCP Bridge</div>
+              <p style="color:var(--text-secondary);font-size:11px;margin-bottom:16px;">Connect to figma-console MCP for Claude Code design integration</p>
+              <button class="btn" id="bridgeConnectBtn">Connect</button>
+              <p style="color:var(--text-tertiary,#999);font-size:10px;margin-top:8px;">Connection persists across all tabs</p>
+            </div>
+          </div>
+          <div id="bridgeConnected" style="display:none;">
+            <div style="text-align:center;padding:16px;">
+              <div class="bridge-status-pill">
+                <span class="bridge-dot"></span>
+                <span>Connected</span>
+              </div>
+              <p style="color:var(--text-secondary);font-size:11px;margin:8px 0;">Claude Code can read and write to this file</p>
+              <button class="btn btn-secondary" id="bridgeDisconnectBtn">Disconnect</button>
+            </div>
+            <div id="bridgeLog" class="bridge-log"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer" id="footer">
+      <span class="token-status">Tokens: not loaded</span>
+    </footer>
+  </div>
+  <script>"use strict";
+(() => {
+  var __defProp = Object.defineProperty;
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  var __spreadValues = (a, b) => {
+    for (var prop in b || (b = {}))
+      if (__hasOwnProp.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    if (__getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(b)) {
+        if (__propIsEnum.call(b, prop))
+          __defNormalProp(a, prop, b[prop]);
+      }
+    return a;
+  };
+
+  // src/ui.ts
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  async function copyToClipboard(text) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
+  var a11yTab = document.querySelector('.tab[data-tab="a11y"]');
+  var a11yPanel = document.querySelector('.tab-panel[data-panel="a11y"]');
+  if (true) {
+    a11yTab == null ? void 0 : a11yTab.remove();
+    a11yPanel == null ? void 0 : a11yPanel.remove();
+  }
+  var tabs = document.querySelectorAll(".tab");
+  var panels = document.querySelectorAll(".tab-panel");
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.tab;
+      tabs.forEach((t) => t.classList.remove("active"));
+      panels.forEach((p) => p.classList.remove("active"));
+      tab.classList.add("active");
+      const panel = document.querySelector(`[data-panel="${target}"]`);
+      if (panel) panel.classList.add("active");
+    });
+  });
+  var currentSelection = { count: 0, hasAutoLayout: false };
+  function updateTabControls(prefix) {
+    const placeholder = document.getElementById(`${prefix}Placeholder`);
+    const controls = document.getElementById(`${prefix}Controls`);
+    const empty = currentSelection.count === 0;
+    placeholder.style.display = empty ? "block" : "none";
+    controls.style.display = empty ? "none" : "block";
+  }
+  function updateSelectionInfo(data) {
+    const el = document.getElementById("selectionInfo");
+    if (!el) return;
+    if (!data) {
+      el.innerHTML = '<span class="selection-label">No selection</span>';
+      return;
+    }
+    el.innerHTML = `<span class="selection-label"><strong>${esc(data.name)}</strong> (${esc(data.type)}) &mdash; ${Math.round(data.width)} &times; ${Math.round(data.height)}</span>`;
+  }
+  function updateTokenStatus(count, version) {
+    const el = document.getElementById("footer");
+    if (!el) return;
+    el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span>`;
+  }
+  function postToPlugin(type, payload) {
+    parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
+  }
+  window.addEventListener("message", (event) => {
+    const msg = event.data.pluginMessage;
+    if (!msg) return;
+    switch (msg.type) {
+      case "selection-changed":
+        updateSelectionInfo(msg.selection);
+        currentSelection = { count: msg.count, hasAutoLayout: msg.hasAutoLayout };
+        updateTabControls("align");
+        updateTabControls("match");
+        updateTabControls("design");
+        updateTabControls("specs");
+        updateTabControls("localize");
+        updateA11yControls();
+        break;
+      case "api-key-state":
+        updateApiKeyUi(msg.hasKey, msg.masked);
+        break;
+      case "localize-status":
+        updateLocalizeStatus(msg.message);
+        break;
+      case "localize-bridge-prompt":
+        showLocalizeBridgePrompt(msg);
+        break;
+      case "token-status":
+        updateTokenStatus(msg.count, msg.version);
+        break;
+      case "node-properties":
+        renderPropertyList(msg.properties);
+        break;
+      case "spec-it-status":
+        updateSpecStatus(msg.message);
+        break;
+      case "s2a-audit-result":
+        renderAuditResult(msg);
+        break;
+      case "s2a-align-result":
+        renderAlignResult(msg);
+        break;
+      case "match-result":
+        updateMatchStatus(msg.message);
+        break;
+      case "grid-result":
+        updateGridStatus(msg.message);
+        break;
+      case "a11y-status":
+        updateA11yStatus(msg.message);
+        break;
+      case "a11y-fill-request":
+        showAiFillInstruction(msg.mode, msg.sections, msg.frameName);
+        break;
+      case "a11y-panels-fill-request":
+        showPanelsFillInstruction(msg.sections, msg.frameName, msg.sectionIds);
+        break;
+      // Unified bridge command result from code.ts
+      case "bridge:command-result": {
+        const pending = bridgePendingRequests.get(msg.requestId);
+        if (pending) {
+          clearTimeout(pending.timeoutId);
+          bridgePendingRequests.delete(msg.requestId);
+          if (msg.success) {
+            const result = __spreadValues({}, msg);
+            delete result.type;
+            delete result.requestId;
+            pending.resolve(result);
+          } else {
+            pending.reject(new Error(msg.error || "Unknown error"));
+          }
+        }
+        break;
+      }
+      // Variables data from code.ts (auto-sync)
+      case "bridge:variables-data": {
+        if (bridgeWs && bridgeWs.readyState === 1) {
+          try {
+            bridgeWs.send(JSON.stringify({ type: "VARIABLES_DATA", data: msg.data }));
+          } catch (e) {
+          }
+        }
+        break;
+      }
+      // Event forwarding to WebSocket
+      case "bridge:selection-changed": {
+        if (bridgeWs && bridgeWs.readyState === 1) {
+          try {
+            bridgeWs.send(JSON.stringify({ type: "SELECTION_CHANGE", data: { selection: msg.selection } }));
+          } catch (e) {
+          }
+        }
+        break;
+      }
+      case "bridge:page-changed": {
+        if (bridgeWs && bridgeWs.readyState === 1) {
+          try {
+            bridgeWs.send(JSON.stringify({ type: "PAGE_CHANGE", data: msg.page }));
+          } catch (e) {
+          }
+        }
+        break;
+      }
+    }
+  });
+  function navigateToNode(nodeId) {
+    postToPlugin("navigate-to-node", { nodeId });
+  }
+  function renderAuditResult(result) {
+    var _a25;
+    const list = document.getElementById("propertyList");
+    if (!list) return;
+    const pct = result.total > 0 ? Math.round(result.matched / result.total * 100) : 0;
+    const color = pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "#e34850";
+    const annotateBtn = result.issues.length > 0 ? `<button id="annotateAuditBtn" style="background:none;border:1px solid var(--border,#e5e5e5);border-radius:4px;color:var(--text-secondary);font-size:10px;cursor:pointer;padding:2px 8px;">Annotate</button>` : "";
+    let html = `<div style="padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <strong style="font-size:13px;color:${color}">${pct}% S2A compliant</strong>
+      <span style="color:var(--text-secondary);font-size:10px;display:block">${result.matched}/${result.total} properties matched \u2014 ${result.issues.length} issues</span>
+    </div>
+    ${annotateBtn}
+  </div>`;
+    if (result.issues.length > 0) {
+      html += '<div class="section-title" style="margin-top:8px">Issues (click to navigate)</div>';
+      html += result.issues.map(
+        (issue) => `<div class="property-row" data-node-id="${esc(issue.nodeId)}" style="cursor:pointer">
+        <span class="property-name">${esc(issue.nodeName)}</span>
+        <span class="property-value">${esc(issue.property)}: ${esc(issue.value)}</span>
+        <span class="token-badge token-badge-miss">No token</span>
+      </div>`
+      ).join("");
+    }
+    list.innerHTML = html;
+    list.querySelectorAll(".property-row[data-node-id]").forEach((row) => {
+      row.addEventListener("click", () => {
+        const nodeId = row.dataset.nodeId;
+        if (nodeId) navigateToNode(nodeId);
+      });
+    });
+    (_a25 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a25.addEventListener("click", () => {
+      postToPlugin("annotate-audit-issues", { issues: result.issues });
+    });
+  }
+  function renderAlignResult(result) {
+    const list = document.getElementById("propertyList");
+    if (!list) return;
+    let html = `<div style="padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--border)">
+    <strong style="font-size:13px;color:var(--success)">${result.aligned} bound to S2A</strong>
+    <span style="color:var(--text-secondary);font-size:10px;display:block">${result.scanned} nodes scanned \u2014 mode: ${esc(result.mode)}</span>
+  </div>`;
+    if (result.unmatched.length > 0) {
+      html += '<div class="section-title" style="margin-top:8px">Not Found in S2A (click to navigate)</div>';
+      html += result.unmatched.map(
+        (item) => `<div class="property-row" data-node-id="${esc(item.nodeId)}" style="cursor:pointer">
+        <span class="property-name">${esc(item.nodeName)}</span>
+        <span class="property-value">${esc(item.property)}: ${esc(item.value)}</span>
+        <span class="token-badge token-badge-miss">No match</span>
+      </div>`
+      ).join("");
+    } else {
+      html += '<div style="padding:12px 0;color:var(--success);text-align:center">All properties matched S2A tokens</div>';
+    }
+    list.innerHTML = html;
+    list.querySelectorAll(".property-row[data-node-id]").forEach((row) => {
+      row.addEventListener("click", () => {
+        const nodeId = row.dataset.nodeId;
+        if (nodeId) navigateToNode(nodeId);
+      });
+    });
+  }
+  function renderPropertyList(properties) {
+    const list = document.getElementById("propertyList");
+    if (!list || properties.length === 0) return;
+    list.innerHTML = properties.map((prop) => {
+      const safeColor = prop.colorSwatch && CSS.supports("color", prop.colorSwatch) ? prop.colorSwatch : "";
+      const swatch = safeColor ? `<span class="color-swatch" style="background:${safeColor}"></span>` : "";
+      const badge = prop.token ? `<span class="token-badge token-badge-match">${esc(prop.token)}</span>` : `<span class="token-badge token-badge-miss">No token</span>`;
+      const copyValue = prop.token ? `var(${prop.token})` : prop.value;
+      return `<div class="property-row" data-copy="${esc(copyValue)}" title="Click to copy">
+      <span class="property-name">${esc(prop.name)}</span>
+      <span class="property-value">${swatch}${esc(prop.value)}</span>
+      ${badge}
+    </div>`;
+    }).join("");
+    list.querySelectorAll(".property-row").forEach((row) => {
+      row.addEventListener("click", () => {
+        const value = row.dataset.copy || "";
+        copyToClipboard(value);
+      });
+    });
+  }
+  function getSkipSizing() {
+    var _a25, _b;
+    return (_b = (_a25 = document.getElementById("skipSizingCheck")) == null ? void 0 : _a25.checked) != null ? _b : false;
+  }
+  var _a;
+  (_a = document.getElementById("s2aAuditBtn")) == null ? void 0 : _a.addEventListener("click", () => postToPlugin("s2a-audit"));
+  var _a2;
+  (_a2 = document.getElementById("fullAlignBtn")) == null ? void 0 : _a2.addEventListener("click", () => postToPlugin("full-align-s2a", { skipSizing: getSkipSizing() }));
+  var _a3;
+  (_a3 = document.getElementById("textColorsAlignBtn")) == null ? void 0 : _a3.addEventListener("click", () => postToPlugin("text-colors-align", { skipSizing: getSkipSizing() }));
+  var _a4;
+  (_a4 = document.getElementById("spacingAlignBtn")) == null ? void 0 : _a4.addEventListener("click", () => postToPlugin("spacing-align", { skipSizing: getSkipSizing() }));
+  var _a5;
+  (_a5 = document.getElementById("gridBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
+    postToPlugin("apply-grid");
+    updateGridStatus("Applying grid...");
+  });
+  var _a6;
+  (_a6 = document.getElementById("gridXlBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
+    postToPlugin("apply-grid-xl");
+    updateGridStatus("Applying XL grid...");
+  });
+  var _a7;
+  (_a7 = document.getElementById("gridMargin24Btn")) == null ? void 0 : _a7.addEventListener("click", () => {
+    postToPlugin("apply-grid-margin-24");
+    updateGridStatus("Applying 24px margin...");
+  });
+  var _a8;
+  (_a8 = document.getElementById("gridMargin16Btn")) == null ? void 0 : _a8.addEventListener("click", () => {
+    postToPlugin("apply-grid-margin-16");
+    updateGridStatus("Applying 16px margin...");
+  });
+  var _a9;
+  (_a9 = document.getElementById("clearGridBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
+    postToPlugin("clear-grids");
+    updateGridStatus("Clearing grids...");
+  });
+  function updateGridStatus(message) {
+    const el = document.getElementById("gridStatus");
+    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+  }
+  var _a10;
+  (_a10 = document.getElementById("matchCheckAll")) == null ? void 0 : _a10.addEventListener("click", () => {
+    const ids = ["matchTypography", "matchFillColors", "matchStrokeColors", "matchBorderRadius", "matchBorderWidth", "matchSpacing", "matchOpacity", "matchDropShadow", "matchBlur"];
+    const boxes = ids.map((id) => document.getElementById(id)).filter(Boolean);
+    const allChecked = boxes.every((cb) => cb.checked);
+    boxes.forEach((cb) => {
+      cb.checked = !allChecked;
+    });
+    const btn = document.getElementById("matchCheckAll");
+    if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
+  });
+  var _a11;
+  (_a11 = document.getElementById("matchBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
+    var _a25, _b;
+    const categories = [];
+    if (document.getElementById("matchTypography").checked) categories.push("typography");
+    if (document.getElementById("matchFillColors").checked) categories.push("fillColors");
+    if (document.getElementById("matchStrokeColors").checked) categories.push("strokeColors");
+    if (document.getElementById("matchBorderRadius").checked) categories.push("borderRadius");
+    if (document.getElementById("matchBorderWidth").checked) categories.push("borderWidth");
+    if (document.getElementById("matchSpacing").checked) categories.push("spacing");
+    if (document.getElementById("matchOpacity").checked) categories.push("opacity");
+    if (document.getElementById("matchDropShadow").checked) categories.push("dropShadow");
+    if (document.getElementById("matchBlur").checked) categories.push("blur");
+    if (categories.length === 0) return;
+    const matchSkipSizing = (_b = (_a25 = document.getElementById("matchSkipSizingCheck")) == null ? void 0 : _a25.checked) != null ? _b : false;
+    postToPlugin("force-match", { categories, skipSizing: matchSkipSizing });
+    updateMatchStatus("Matching...");
+  });
+  function updateMatchStatus(message) {
+    const el = document.getElementById("matchStatus");
+    if (!el) return;
+    el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+  }
+  var _a12;
+  (_a12 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
+    postToPlugin("spec-it", { sections: ["anatomy", "layout", "typography", "components"] });
+    updateSpecStatus("Generating full specs...");
+  });
+  var _a13;
+  (_a13 = document.getElementById("specItBtn")) == null ? void 0 : _a13.addEventListener("click", () => {
+    var _a25, _b, _c, _d, _e, _f, _g;
+    const sections = [];
+    if ((_a25 = document.getElementById("specAnatomyAnnotation")) == null ? void 0 : _a25.checked) sections.push("anatomyAnnotation");
+    if ((_b = document.getElementById("specAnatomy")) == null ? void 0 : _b.checked) sections.push("anatomy");
+    if ((_c = document.getElementById("specCardGaps")) == null ? void 0 : _c.checked) sections.push("cardGaps");
+    if ((_d = document.getElementById("specSpacingGeneral")) == null ? void 0 : _d.checked) sections.push("spacingGeneral");
+    if ((_e = document.getElementById("specSpacing")) == null ? void 0 : _e.checked) sections.push("spacing");
+    if ((_f = document.getElementById("specColors")) == null ? void 0 : _f.checked) sections.push("colors");
+    if ((_g = document.getElementById("specTextProps")) == null ? void 0 : _g.checked) sections.push("textProperties");
+    if (sections.length === 0) {
+      updateSpecStatus("Select at least one section.");
+      return;
+    }
+    postToPlugin("spec-it", { sections });
+    updateSpecStatus("Generating spec...");
+  });
+  var _a14;
+  (_a14 = document.getElementById("clearAnnotationsBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
+    postToPlugin("clear-annotations", {});
+    updateSpecStatus("Clearing annotations...");
+  });
+  function updateSpecStatus(message) {
+    const el = document.getElementById("specStatus");
+    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+  }
+  var KEYED_PROVIDERS = /* @__PURE__ */ new Set(["deepl", "google", "azure"]);
+  var providerSelect = document.getElementById("providerSelect");
+  var apiKeySection = document.getElementById("apiKeySection");
+  function syncKeySection() {
+    const provider = (providerSelect == null ? void 0 : providerSelect.value) || "mymemory";
+    if (apiKeySection) apiKeySection.style.display = KEYED_PROVIDERS.has(provider) ? "block" : "none";
+    postToPlugin("get-api-key", { provider });
+  }
+  providerSelect == null ? void 0 : providerSelect.addEventListener("change", syncKeySection);
+  syncKeySection();
+  var _a15;
+  (_a15 = document.getElementById("locCheckAll")) == null ? void 0 : _a15.addEventListener("click", () => {
+    const ids = ["locDe", "locZh", "locTh", "locAr"];
+    const boxes = ids.map((id) => document.getElementById(id)).filter(Boolean);
+    const allChecked = boxes.every((b) => b.checked);
+    boxes.forEach((b) => {
+      b.checked = !allChecked;
+    });
+    const locRtlEl = document.getElementById("locRtl");
+    if (locRtlEl && !allChecked) locRtlEl.checked = true;
+  });
+  var locAr = document.getElementById("locAr");
+  var locRtl = document.getElementById("locRtl");
+  locAr == null ? void 0 : locAr.addEventListener("change", () => {
+    if (locAr.checked && locRtl && !locRtl.checked) locRtl.checked = true;
+  });
+  var _a16;
+  (_a16 = document.getElementById("localizeBtn")) == null ? void 0 : _a16.addEventListener("click", () => {
+    const languages = [];
+    if (document.getElementById("locDe").checked) languages.push("de");
+    if (document.getElementById("locZh").checked) languages.push("zh");
+    if (document.getElementById("locTh").checked) languages.push("th");
+    if (document.getElementById("locAr").checked) languages.push("ar");
+    if (languages.length === 0) {
+      updateLocalizeStatus("Select at least one language.");
+      return;
+    }
+    const provider = (providerSelect == null ? void 0 : providerSelect.value) || "mymemory";
+    const applyRtl = document.getElementById("locRtl").checked;
+    postToPlugin("localize", { languages, applyRtl, provider });
+    updateLocalizeStatus("Localizing \u2014 this may take a moment...");
+  });
+  var _a17;
+  (_a17 = document.getElementById("saveKeyBtn")) == null ? void 0 : _a17.addEventListener("click", () => {
+    const input = document.getElementById("apiKeyInput");
+    const key = input.value.trim();
+    if (!key) return;
+    const provider = (providerSelect == null ? void 0 : providerSelect.value) || "";
+    postToPlugin("save-api-key", { key, provider });
+    input.value = "";
+  });
+  var _a18;
+  (_a18 = document.getElementById("clearKeyBtn")) == null ? void 0 : _a18.addEventListener("click", () => {
+    const provider = (providerSelect == null ? void 0 : providerSelect.value) || "";
+    postToPlugin("clear-api-key", { provider });
+  });
+  function updateLocalizeStatus(message) {
+    const el = document.getElementById("localizeStatus");
+    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+  }
+  var LANG_NAMES = { de: "German", zh: "Chinese", th: "Thai", ar: "Arabic" };
+  function showLocalizeBridgePrompt(data) {
+    var _a25;
+    const langList = data.languages.map((l) => LANG_NAMES[l] || l).join(", ");
+    const cmd = `Translate the frame "${data.frameName}" (${data.frameId}) into ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? " Apply RTL layout for Arabic." : ""}
+
+Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with a [${data.languages.join("/")}] prefix, 3) load fonts, 4) apply translations to the cloned text nodes.`;
+    const el = document.getElementById("localizeStatus");
+    if (el) {
+      el.innerHTML = `
+      <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
+        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Ready for translation &#x2714;</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">Paste this in Claude Code to translate via bridge:</div>
+        <code id="localizeCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
+        <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
+      </div>`;
+      (_a25 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a25.addEventListener("click", async () => {
+        await copyToClipboard(cmd);
+        const btn = document.getElementById("copyLocalizeCmd");
+        if (btn) {
+          btn.textContent = "Copied!";
+          setTimeout(() => {
+            btn.textContent = "Copy";
+          }, 1500);
+        }
+      });
+    }
+  }
+  function updateApiKeyUi(hasKey, masked) {
+    const status = document.getElementById("apiKeyStatus");
+    if (status) status.textContent = hasKey ? `Saved: ${masked || "\u2022\u2022\u2022\u2022"}` : "No key saved.";
+  }
+  function updateA11yControls() {
+    const placeholder = document.getElementById("a11yPlaceholder");
+    const controls = document.getElementById("a11yControls");
+    if (currentSelection.count === 0) {
+      placeholder.style.display = "block";
+      controls.style.display = "none";
+      return;
+    }
+    placeholder.style.display = "none";
+    controls.style.display = "block";
+  }
+  function updateA11yBridgeState() {
+    const badge = document.getElementById("a11yBridgeBadge");
+    const items = document.querySelectorAll(".a11y-item");
+    const checkboxes = document.querySelectorAll('.a11y-item input[type="checkbox"]');
+    const genBtn = document.getElementById("generateBluelineBtn");
+    if (genBtn) genBtn.disabled = false;
+    if (bridgeConnected) {
+      if (badge) {
+        badge.textContent = "\u2713 bridge connected";
+        badge.classList.add("connected");
+      }
+      items.forEach((el) => el.classList.add("enabled"));
+      checkboxes.forEach((cb) => cb.disabled = false);
+    } else {
+      if (badge) {
+        badge.textContent = "connect bridge";
+        badge.classList.remove("connected");
+      }
+      items.forEach((el) => el.classList.remove("enabled"));
+      checkboxes.forEach((cb) => {
+        cb.disabled = true;
+        cb.checked = false;
+      });
+    }
+  }
+  function updateA11yStatus(message) {
+    const el = document.getElementById("a11yStatus");
+    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+  }
+  function showAiFillInstruction(mode, sections, frameName) {
+    var _a25;
+    let cmd;
+    const agentNote = " Call figma_get_blueline_data first \u2014 it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.";
+    if (mode === "sections") {
+      cmd = `Fill the blueline cards on the current Figma page.${agentNote}`;
+    } else {
+      const categoryList = sections && sections.length > 0 ? sections.join(", ") : "all categories";
+      const frame = frameName ? ` for "${frameName}"` : "";
+      cmd = `Fill ONLY these blueline categories${frame}: ${categoryList}.${agentNote} Do not fill cards from other categories or previous generations.`;
+    }
+    const el = document.getElementById("a11yStatus");
+    if (el) {
+      el.innerHTML = `
+      <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
+        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Scaffolding done &#x2714;</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">To fill AI sections, paste this in Claude Code:</div>
+        <code id="fillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
+        <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
+      </div>`;
+      (_a25 = document.getElementById("copyFillCmd")) == null ? void 0 : _a25.addEventListener("click", async () => {
+        await copyToClipboard(cmd);
+        const btn = document.getElementById("copyFillCmd");
+        if (btn) {
+          btn.textContent = "Copied!";
+          setTimeout(() => {
+            btn.textContent = "Copy";
+          }, 1500);
+        }
+      });
+    }
+  }
+  function showPanelsFillInstruction(sections, frameName, sectionIds) {
+    var _a25;
+    const sectionList = sections.join(", ");
+    const cmd = `Fill the blueline panels on the current Figma page for "${frameName}". Categories: ${sectionList}.
+
+Call figma_get_blueline_data first \u2014 it returns structural data (including nodeIds for all elements) and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge.
+
+Dispatch parallel agents. IMPORTANT: Each agent must return items with these additional fields:
+- nodeId (string|null): the node ID from the structural scan that this item refers to. Null if no element match.
+- annotationType ("element"|"region"|"none"): "element" for specific UI elements (buttons, links, inputs), "region" for area-level concepts (landmarks, sections), "none" for abstract/page-level items.
+
+Then call figma_render_blueline with mode: "panels" and all item JSON. The panels have already been scaffolded with cloned designs \u2014 the render call will place native Figma annotations on the clones.`;
+    const el = document.getElementById("a11yStatus");
+    if (el) {
+      el.innerHTML = `
+      <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
+        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Panels scaffolded &#x2714;</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">To fill annotations, paste this in your current Claude session:</div>
+        <code id="panelsFillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;white-space:pre-wrap;">${esc(cmd)}</code>
+        <button class="btn btn-secondary" id="copyPanelsFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Paste into your current Claude Code session (Bridge must be connected)</div>
+      </div>`;
+      (_a25 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a25.addEventListener("click", async () => {
+        await copyToClipboard(cmd);
+        const btn = document.getElementById("copyPanelsFillCmd");
+        if (btn) {
+          btn.textContent = "Copied!";
+          setTimeout(() => {
+            btn.textContent = "Copy";
+          }, 1500);
+        }
+      });
+    }
+  }
+  var _a19;
+  (_a19 = document.getElementById("a11yCheckAllAi")) == null ? void 0 : _a19.addEventListener("click", () => {
+    if (!bridgeConnected) return;
+    const aiIds = ["a11yFocusIndicators", "a11yFocusOrder", "a11yHeadings", "a11yLandmarksNav", "a11yNamesAlt", "a11yColorContrast", "a11yAriaKeyboard", "a11yTargetSize", "a11yPageSetup"];
+    const boxes = aiIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const allChecked = boxes.every((cb) => cb.checked);
+    boxes.forEach((cb) => {
+      cb.checked = !allChecked;
+    });
+    const btn = document.getElementById("a11yCheckAllAi");
+    if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
+  });
+  var _a20;
+  (_a20 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a20.addEventListener("click", () => {
+    if (!bridgeConnected) return;
+    const noteIds = ["a11yForms", "a11yCarousel", "a11yDom", "a11yMotionMedia", "a11yScreenReader", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
+    const boxes = noteIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const allChecked = boxes.every((cb) => cb.checked);
+    boxes.forEach((cb) => {
+      cb.checked = !allChecked;
+    });
+    const btn = document.getElementById("a11yCheckAllNotes");
+    if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
+  });
+  function getCheckedA11yCategories() {
+    var _a25, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
+    const categories = [];
+    if ((_a25 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a25.checked) categories.push("focusIndicators");
+    if ((_b = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b.checked) categories.push("focusOrder");
+    if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) categories.push("headings");
+    if ((_d = document.getElementById("a11yLandmarksNav")) == null ? void 0 : _d.checked) {
+      categories.push("landmarks", "skipNav", "consistentNav");
+    }
+    if ((_e = document.getElementById("a11yNamesAlt")) == null ? void 0 : _e.checked) {
+      categories.push("names", "altText");
+    }
+    if ((_f = document.getElementById("a11yColorContrast")) == null ? void 0 : _f.checked) categories.push("colorContrast");
+    if ((_g = document.getElementById("a11yAriaKeyboard")) == null ? void 0 : _g.checked) {
+      categories.push("aria", "keyboard");
+    }
+    if ((_h = document.getElementById("a11yTargetSize")) == null ? void 0 : _h.checked) categories.push("targetSize");
+    if ((_i = document.getElementById("a11yPageSetup")) == null ? void 0 : _i.checked) {
+      categories.push("pageTitle", "language");
+    }
+    if ((_j = document.getElementById("a11yForms")) == null ? void 0 : _j.checked) categories.push("forms");
+    if ((_k = document.getElementById("a11yCarousel")) == null ? void 0 : _k.checked) categories.push("autoRotation");
+    if ((_l = document.getElementById("a11yDom")) == null ? void 0 : _l.checked) categories.push("dom");
+    if ((_m = document.getElementById("a11yMotionMedia")) == null ? void 0 : _m.checked) {
+      categories.push("reducedMotion", "media", "reflow");
+    }
+    if ((_n = document.getElementById("a11yScreenReader")) == null ? void 0 : _n.checked) {
+      categories.push("voiceover", "talkback", "narrator");
+    }
+    if ((_o = document.getElementById("a11yReactNative")) == null ? void 0 : _o.checked) categories.push("reactNative");
+    if ((_p = document.getElementById("a11yTvNote")) == null ? void 0 : _p.checked) categories.push("tvNote");
+    if ((_q = document.getElementById("a11yGeneralNote")) == null ? void 0 : _q.checked) categories.push("generalNote");
+    return categories;
+  }
+  function triggerBlueline() {
+    const categories = getCheckedA11yCategories();
+    if (categories.length === 0) {
+      updateA11yStatus("Select at least one option.");
+      return;
+    }
+    if (!bridgeConnected) {
+      updateA11yStatus("Connect Bridge for AI-assisted categories.");
+      return;
+    }
+    postToPlugin("generate-blueline", { categories });
+  }
+  var _a21;
+  (_a21 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a21.addEventListener("click", () => triggerBlueline());
+  function triggerBluelinePanels() {
+    const categories = getCheckedA11yCategories();
+    if (categories.length === 0) {
+      updateA11yStatus("Select at least one option.");
+      return;
+    }
+    if (!bridgeConnected) {
+      updateA11yStatus("Connect Bridge for AI-assisted categories.");
+      return;
+    }
+    postToPlugin("generate-blueline-panels", { categories });
+  }
+  var _a22;
+  (_a22 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a22.addEventListener("click", () => triggerBluelinePanels());
+  var bridgeConnected = false;
+  var bridgeWs = null;
+  var bridgeWsPort = null;
+  var bridgeKeepaliveTimer = null;
+  var bridgeReconnectTimer = null;
+  var bridgeReconnectAttempts = 0;
+  var bridgeUserDisconnected = false;
+  var bridgeSessionNonce = null;
+  var bridgeNonceSent = false;
+  function generateNonce() {
+    const arr = new Uint8Array(16);
+    crypto.getRandomValues(arr);
+    return Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("");
+  }
+  var BRIDGE_MAX_RECONNECT = 20;
+  var BRIDGE_RECONNECT_BASE_MS = 2e3;
+  var bridgePendingRequests = /* @__PURE__ */ new Map();
+  var bridgeRequestCounter = 0;
+  function sendBridgeCommand(method, params, timeoutMs = 15e3) {
+    return new Promise((resolve, reject) => {
+      const requestId = method.toLowerCase() + "_" + ++bridgeRequestCounter + "_" + Date.now();
+      const timeoutId = setTimeout(() => {
+        if (bridgePendingRequests.has(requestId)) {
+          bridgePendingRequests.delete(requestId);
+          reject(new Error(method + " timed out after " + timeoutMs + "ms"));
+        }
+      }, timeoutMs);
+      bridgePendingRequests.set(requestId, { resolve, reject, timeoutId });
+      postToPlugin("bridge:command", { requestId, method, params });
+    });
+  }
+  function handleSetImageFill(params) {
+    const binaryStr = atob(params.imageData);
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+    return sendBridgeCommand("SET_IMAGE_FILL", {
+      nodeIds: Array.isArray(params.nodeIds) ? params.nodeIds : params.nodeId ? [params.nodeId] : [],
+      imageBytes: Array.from(bytes),
+      scaleMode: params.scaleMode || "FILL"
+    }, 6e4);
+  }
+  var BRIDGE_METHOD_TIMEOUTS = {
+    "EXECUTE_CODE": 7e3,
+    "CAPTURE_SCREENSHOT": 3e4,
+    "GET_LOCAL_COMPONENTS": 3e5,
+    "REFRESH_VARIABLES": 3e5,
+    "GET_VARIABLES_DATA": 3e5,
+    "LINT_DESIGN": 12e4,
+    "AUDIT_COMPONENT_ACCESSIBILITY": 12e4,
+    "SET_IMAGE_FILL": 6e4,
+    "INSTANTIATE_COMPONENT": 3e4
+  };
+  function bridgeHandleMethod(method, params) {
+    if (method === "SET_IMAGE_FILL") return handleSetImageFill(params);
+    if (method === "EXECUTE_CODE") {
+      const timeout2 = (params.timeout || 5e3) + 2e3;
+      return sendBridgeCommand(method, params, timeout2);
+    }
+    const timeout = BRIDGE_METHOD_TIMEOUTS[method] || 15e3;
+    return sendBridgeCommand(method, params, timeout);
+  }
+  function updateBridgeUi() {
+    const disconnected = document.getElementById("bridgeDisconnected");
+    const connected = document.getElementById("bridgeConnected");
+    if (bridgeConnected) {
+      disconnected.style.display = "none";
+      connected.style.display = "block";
+    } else {
+      disconnected.style.display = "block";
+      connected.style.display = "none";
+    }
+    updateA11yBridgeState();
+  }
+  function appendBridgeLog(message) {
+    const log = document.getElementById("bridgeLog");
+    if (!log) return;
+    const line = document.createElement("div");
+    line.textContent = `\u2713 ${message}`;
+    log.appendChild(line);
+    while (log.children.length > 80) log.removeChild(log.firstChild);
+    log.scrollTop = log.scrollHeight;
+  }
+  function bridgeStartKeepalive() {
+    bridgeStopKeepalive();
+    bridgeKeepaliveTimer = setInterval(() => {
+      if (bridgeWs && bridgeWs.readyState === 1) {
+        try {
+          bridgeWs.send(JSON.stringify({ type: "PING" }));
+        } catch (e) {
+        }
+      }
+    }, 15e3);
+  }
+  function bridgeStopKeepalive() {
+    if (bridgeKeepaliveTimer) {
+      clearInterval(bridgeKeepaliveTimer);
+      bridgeKeepaliveTimer = null;
+    }
+  }
+  function bridgeConnect() {
+    bridgeUserDisconnected = false;
+    if (bridgeReconnectTimer) {
+      clearTimeout(bridgeReconnectTimer);
+      bridgeReconnectTimer = null;
+    }
+    const btn = document.getElementById("bridgeConnectBtn");
+    if (btn) {
+      btn.textContent = "Connecting...";
+      btn.disabled = true;
+    }
+    const WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+    let found = false;
+    let pending = WS_PORTS.length;
+    WS_PORTS.forEach((port) => {
+      if (found) return;
+      try {
+        const testWs = new WebSocket("ws://localhost:" + port);
+        const timeout = setTimeout(() => {
+          if (testWs.readyState !== 1) testWs.close();
+        }, 3e3);
+        testWs.onopen = () => {
+          clearTimeout(timeout);
+          if (found) {
+            testWs.close();
+            return;
+          }
+          found = true;
+          bridgeWs = testWs;
+          bridgeWsPort = port;
+          bridgeConnected = true;
+          bridgeReconnectAttempts = 0;
+          updateBridgeUi();
+          appendBridgeLog("WebSocket connected (port " + port + ")");
+          attachBridgeWsHandlers(testWs, port);
+          initBridgeConnection(testWs);
+          bridgeStartKeepalive();
+        };
+        testWs.onerror = () => {
+          clearTimeout(timeout);
+        };
+        testWs.onclose = () => {
+          clearTimeout(timeout);
+          if (!found) {
+            pending--;
+            if (pending <= 0) bridgeConnectFailed();
+          }
+        };
+      } catch (e) {
+        pending--;
+        if (pending <= 0 && !found) bridgeConnectFailed();
+      }
+    });
+  }
+  function bridgeConnectFailed() {
+    const btn = document.getElementById("bridgeConnectBtn");
+    if (btn) {
+      btn.textContent = "Connect";
+      btn.disabled = false;
+    }
+    const info = document.querySelector("#bridgeDisconnected p:last-child");
+    if (info) {
+      info.textContent = "No figma-console MCP server found \u2014 start Claude Code first";
+      info.style.color = "#e34850";
+    }
+  }
+  function bridgeScheduleReconnect(port) {
+    if (bridgeUserDisconnected) return;
+    if (bridgeReconnectAttempts >= BRIDGE_MAX_RECONNECT) {
+      appendBridgeLog("Max reconnect attempts reached");
+      return;
+    }
+    bridgeReconnectAttempts++;
+    const delay = Math.min(BRIDGE_RECONNECT_BASE_MS * Math.pow(1.5, bridgeReconnectAttempts - 1), 3e4);
+    appendBridgeLog("Reconnecting in " + Math.round(delay / 1e3) + "s (attempt " + bridgeReconnectAttempts + ")...");
+    bridgeReconnectTimer = setTimeout(() => {
+      if (bridgeUserDisconnected) return;
+      if (port) {
+        bridgeReconnectToPort(port);
+      } else {
+        bridgeConnect();
+      }
+    }, delay);
+  }
+  function bridgeReconnectToPort(port) {
+    try {
+      const testWs = new WebSocket("ws://localhost:" + port);
+      const timeout = setTimeout(() => {
+        if (testWs.readyState !== 1) testWs.close();
+      }, 3e3);
+      testWs.onopen = () => {
+        clearTimeout(timeout);
+        bridgeWs = testWs;
+        bridgeWsPort = port;
+        bridgeConnected = true;
+        bridgeReconnectAttempts = 0;
+        updateBridgeUi();
+        appendBridgeLog("Reconnected (port " + port + ")");
+        attachBridgeWsHandlers(testWs, port);
+        initBridgeConnection(testWs);
+        bridgeStartKeepalive();
+      };
+      testWs.onerror = () => {
+        clearTimeout(timeout);
+      };
+      testWs.onclose = () => {
+        clearTimeout(timeout);
+        if (!bridgeConnected && !bridgeUserDisconnected) {
+          bridgeConnect();
+        }
+      };
+    } catch (e) {
+      if (!bridgeUserDisconnected) bridgeConnect();
+    }
+  }
+  function initBridgeConnection(ws) {
+    const nonce = generateNonce();
+    bridgeSessionNonce = null;
+    bridgeNonceSent = false;
+    sendBridgeCommand("GET_FILE_INFO", {}).then((result) => {
+      if (ws.readyState !== 1 || !result) return;
+      const info = result.fileInfo || result;
+      if (!info.fileKey) {
+        info.fileKey = "local-" + Date.now();
+      }
+      info.pluginVersion = "1.0.0";
+      info.sessionNonce = nonce;
+      ws.send(JSON.stringify({ type: "FILE_INFO", data: info }));
+      bridgeSessionNonce = nonce;
+      bridgeNonceSent = true;
+      appendBridgeLog("File info sent: " + (info.fileName || "unknown") + " (key: " + (info.fileKey || "?") + ")");
+    }).catch(() => {
+    });
+    sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
+      var _a25, _b;
+      if (ws.readyState !== 1 || !result) return;
+      ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
+      appendBridgeLog("Variables synced: " + (((_b = (_a25 = result.data) == null ? void 0 : _a25.variables) == null ? void 0 : _b.length) || 0) + " vars");
+    }).catch(() => {
+    });
+  }
+  function attachBridgeWsHandlers(ws, port) {
+    ws.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data);
+        if (message.type === "SERVER_HELLO" && message.data) {
+          appendBridgeLog("Server v" + (message.data.serverVersion || "?") + " on port " + port);
+          return;
+        }
+        if (!message.id || !message.method) return;
+        if (message.method === "EXECUTE_CODE" && bridgeNonceSent) {
+          if (!bridgeSessionNonce || (message.params || {}).sessionNonce !== bridgeSessionNonce) {
+            if (ws.readyState === 1) {
+              ws.send(JSON.stringify({ id: message.id, error: "Unauthorized: missing or invalid sessionNonce" }));
+            }
+            appendBridgeLog("\u26A0 EXECUTE_CODE rejected \u2014 invalid nonce");
+            return;
+          }
+        }
+        appendBridgeLog("\u2190 " + message.method);
+        Promise.resolve(bridgeHandleMethod(message.method, message.params || {})).then((result) => {
+          if (ws.readyState === 1) {
+            ws.send(JSON.stringify({ id: message.id, result }));
+            appendBridgeLog("\u2192 " + message.method + " OK");
+          }
+        }).catch((err) => {
+          if (ws.readyState === 1) {
+            ws.send(JSON.stringify({ id: message.id, error: err.message || String(err) }));
+            appendBridgeLog("\u2192 " + message.method + " ERR: " + err.message);
+          }
+        });
+      } catch (e) {
+      }
+    };
+    ws.onclose = (event) => {
+      bridgeStopKeepalive();
+      bridgeWs = null;
+      bridgeSessionNonce = null;
+      bridgeNonceSent = false;
+      bridgeConnected = false;
+      for (const [id, pending] of bridgePendingRequests) {
+        clearTimeout(pending.timeoutId);
+        pending.reject(new Error("Bridge disconnected"));
+      }
+      bridgePendingRequests.clear();
+      updateBridgeUi();
+      const wasReplaced = event.code === 1e3 && (event.reason === "Replaced by new connection" || event.reason === "Replaced by same file reconnection");
+      if (wasReplaced) {
+        appendBridgeLog("Replaced by newer connection \u2014 stopping");
+        return;
+      }
+      appendBridgeLog("Disconnected (code " + event.code + ")");
+      if (!bridgeUserDisconnected) {
+        bridgeScheduleReconnect(port);
+      }
+    };
+    ws.onerror = () => {
+    };
+  }
+  function bridgeDisconnect() {
+    bridgeUserDisconnected = true;
+    bridgeStopKeepalive();
+    if (bridgeReconnectTimer) {
+      clearTimeout(bridgeReconnectTimer);
+      bridgeReconnectTimer = null;
+    }
+    if (bridgeWs) {
+      try {
+        bridgeWs.close();
+      } catch (e) {
+      }
+      bridgeWs = null;
+      bridgeWsPort = null;
+    }
+    bridgeConnected = false;
+    bridgeReconnectAttempts = 0;
+    updateBridgeUi();
+    const btn = document.getElementById("bridgeConnectBtn");
+    if (btn) {
+      btn.textContent = "Connect";
+      btn.disabled = false;
+    }
+    const info = document.querySelector("#bridgeDisconnected p:last-child");
+    if (info) {
+      info.textContent = "Connection persists across all tabs";
+      info.style.color = "";
+    }
+  }
+  var _a23;
+  (_a23 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a23.addEventListener("click", () => bridgeConnect());
+  var _a24;
+  (_a24 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a24.addEventListener("click", () => bridgeDisconnect());
+  postToPlugin("ui-ready");
+})();
+</script>
+</body>
+</html>

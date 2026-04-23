@@ -1,0 +1,157 @@
+<h2>Blueline Panels: 3 Approaches</h2>
+<p class="subtitle">Each approach shows how a single panel (e.g., Landmarks) would look with the cloned design + annotations</p>
+
+<div class="cards">
+
+  <!-- Approach A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f9fa;padding:20px;">
+      <div style="display:flex;gap:16px;font-family:system-ui;font-size:12px;">
+        <!-- Instructions card -->
+        <div style="width:200px;background:white;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.1);flex-shrink:0;">
+          <div style="font-weight:700;font-size:14px;margin-bottom:8px;">Landmarks</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="background:#2563eb;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">1</span>
+                <span style="font-weight:600;">banner</span>
+              </div>
+              <div style="color:#666;font-size:10px;margin-left:24px;">role=banner &mdash; site header</div>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="background:#2563eb;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">2</span>
+                <span style="font-weight:600;">main</span>
+              </div>
+              <div style="color:#666;font-size:10px;margin-left:24px;">role=main &mdash; hero + router</div>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-weight:600;color:#888;">Page language</span>
+              </div>
+              <div style="color:#666;font-size:10px;">html lang="en" (no badge)</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding-top:8px;border-top:1px solid #e5e7eb;color:#2563eb;font-size:10px;">SC 1.3.6 Identify Purpose</div>
+        </div>
+        <!-- Cloned design -->
+        <div style="flex:1;position:relative;background:#1a1a2e;border-radius:8px;overflow:hidden;min-height:180px;">
+          <!-- Header area with overlay -->
+          <div style="position:absolute;top:0;left:0;right:0;height:36px;background:rgba(37,99,235,0.15);border:2px solid rgba(37,99,235,0.6);">
+            <span style="position:absolute;top:-10px;left:8px;background:#2563eb;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">1</span>
+          </div>
+          <!-- Main area with overlay -->
+          <div style="position:absolute;top:40px;left:0;right:0;bottom:0;background:rgba(37,99,235,0.08);border:2px dashed rgba(37,99,235,0.4);">
+            <span style="position:absolute;top:-10px;left:8px;background:#2563eb;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">2</span>
+          </div>
+          <!-- Fake design content -->
+          <div style="position:absolute;top:8px;left:12px;color:white;font-size:8px;opacity:0.7;">Adobe Logo &bull; Nav</div>
+          <div style="position:absolute;top:60px;left:24px;color:white;font-weight:700;font-size:16px;">Get documents<br>done. Faster.</div>
+          <div style="position:absolute;top:110px;left:24px;color:white;font-size:8px;opacity:0.7;">Body text here...</div>
+          <div style="position:absolute;bottom:30px;left:24px;display:flex;gap:8px;">
+            <div style="background:#fff;color:#000;padding:3px 10px;border-radius:12px;font-size:8px;">Learn more</div>
+            <div style="background:#333;color:#fff;padding:3px 10px;border-radius:12px;font-size:8px;">Explore plans</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A: Extend existing generateBluelinePanels</h3>
+      <p>Build on the PR19 function that already creates Sections with clones. Add overlay + badge logic for all categories. Fix grid layout.</p>
+      <div class="pros-cons" style="margin-top:12px;">
+        <div class="pros"><h4>Pros</h4><ul><li>Existing tested code</li><li>Minimal new files</li><li>Already handles focusOrder badges</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>a11y-blueline.ts grows larger</li><li>One function does cloning + badges + overlays</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approach B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f9fa;padding:20px;">
+      <div style="display:flex;gap:16px;font-family:system-ui;font-size:12px;">
+        <!-- Same visual but with "new file" label -->
+        <div style="width:200px;background:white;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.1);flex-shrink:0;">
+          <div style="font-weight:700;font-size:14px;margin-bottom:4px;">Landmarks</div>
+          <div style="font-size:9px;color:#7c3aed;margin-bottom:8px;font-weight:600;">a11y-panels.ts (new file)</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="background:#2563eb;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">1</span>
+                <span style="font-weight:600;">banner</span>
+              </div>
+              <div style="color:#666;font-size:10px;margin-left:24px;">role=banner &mdash; site header</div>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="background:#2563eb;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">2</span>
+                <span style="font-weight:600;">main</span>
+              </div>
+              <div style="color:#666;font-size:10px;margin-left:24px;">role=main &mdash; hero + router</div>
+            </div>
+          </div>
+        </div>
+        <!-- Cloned design (same visual) -->
+        <div style="flex:1;position:relative;background:#1a1a2e;border-radius:8px;overflow:hidden;min-height:180px;">
+          <div style="position:absolute;top:0;left:0;right:0;height:36px;background:rgba(37,99,235,0.15);border:2px solid rgba(37,99,235,0.6);">
+            <span style="position:absolute;top:-10px;left:8px;background:#2563eb;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">1</span>
+          </div>
+          <div style="position:absolute;top:40px;left:0;right:0;bottom:0;background:rgba(37,99,235,0.08);border:2px dashed rgba(37,99,235,0.4);">
+            <span style="position:absolute;top:-10px;left:8px;background:#2563eb;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">2</span>
+          </div>
+          <div style="position:absolute;top:8px;left:12px;color:white;font-size:8px;opacity:0.7;">Adobe Logo &bull; Nav</div>
+          <div style="position:absolute;top:60px;left:24px;color:white;font-weight:700;font-size:16px;">Get documents<br>done. Faster.</div>
+          <div style="position:absolute;top:110px;left:24px;color:white;font-size:8px;opacity:0.7;">Body text here...</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B: New panel renderer (separate file)</h3>
+      <p>Create a11y-panels.ts that handles panel generation, cloning, and badge/overlay placement. Imports badge helpers from a11y-blueline.ts but owns the panel logic.</p>
+      <div class="pros-cons" style="margin-top:12px;">
+        <div class="pros"><h4>Pros</h4><ul><li>Clean separation of concerns</li><li>a11y-blueline.ts stays focused on cards</li><li>Easier to maintain independently</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>More files to manage</li><li>Some duplication of constants/types</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approach C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f9fa;padding:20px;">
+      <div style="font-family:system-ui;font-size:12px;">
+        <!-- Two step flow -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <div style="background:white;border-radius:8px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.1);text-align:center;width:120px;">
+            <div style="font-weight:700;font-size:11px;">Step 1</div>
+            <div style="font-size:9px;color:#666;">Generate flat cards</div>
+            <div style="display:flex;gap:4px;margin-top:8px;justify-content:center;">
+              <div style="width:24px;height:30px;background:#e5e7eb;border-radius:3px;"></div>
+              <div style="width:24px;height:30px;background:#e5e7eb;border-radius:3px;"></div>
+              <div style="width:24px;height:30px;background:#e5e7eb;border-radius:3px;"></div>
+            </div>
+          </div>
+          <div style="font-size:20px;color:#999;">&rarr;</div>
+          <div style="background:white;border-radius:8px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.1);text-align:center;width:120px;">
+            <div style="font-weight:700;font-size:11px;">Step 2</div>
+            <div style="font-size:9px;color:#666;">Explode into panels</div>
+            <div style="display:flex;gap:4px;margin-top:8px;justify-content:center;">
+              <div style="width:40px;height:30px;background:#dbeafe;border-radius:3px;border:1px solid #93c5fd;"></div>
+              <div style="width:40px;height:30px;background:#dbeafe;border-radius:3px;border:1px solid #93c5fd;"></div>
+            </div>
+          </div>
+        </div>
+        <div style="color:#666;font-size:10px;text-align:center;">Cards first, then optionally expand to panels with clones + badges</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C: Two-pass &mdash; flat cards first, then explode</h3>
+      <p>Keep current flat card flow. Add a second "Explode to Panels" button that takes filled cards and expands each into a Section with a cloned design + annotations.</p>
+      <div class="pros-cons" style="margin-top:12px;">
+        <div class="pros"><h4>Pros</h4><ul><li>Flat cards still work independently</li><li>Panels are an optional upgrade</li><li>User can preview content before committing to heavy clones</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Two steps for panels mode</li><li>More complex data flow</li><li>Agent nodeId data needed upfront either way</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:24px;">My recommendation: <strong>A</strong> &mdash; the panel infrastructure already exists and works. We're adding overlay + badge logic and fixing grid layout. Click your preference.</p>

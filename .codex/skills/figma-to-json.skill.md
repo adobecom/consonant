@@ -46,31 +46,107 @@ const node = await figma.getNodeByIdAsync('NODE_ID');
 
 const propDefs = node.componentPropertyDefinitions;
 
+// Helper: resolve a bound variable ref to its token name
+async function resolveVar(ref) {
+  if (!ref) return null;
+  const id = Array.isArray(ref) ? ref[0]?.id : ref?.id;
+  if (!id) return null;
+  const v = await figma.variables.getVariableByIdAsync(id);
+  return v?.name ?? null;
+}
+
+// Per-variant structured extraction — layout, tokens mapped to CSS props, text nodes, child frames
 const variantData = await Promise.all(node.children.map(async (variant) => {
-  const allBoundIds = [];
-  variant.findAll(() => true).forEach(n => {
-    const bv = n.boundVariables ?? {};
-    Object.values(bv).forEach(b => {
-      if (Array.isArray(b)) b.forEach(x => x?.id && allBoundIds.push(x.id));
-      else if (b?.id) allBoundIds.push(b.id);
-    });
-  });
-  const uniqueIds = [...new Set(allBoundIds)];
-  const resolved = await Promise.all(uniqueIds.map(async id => {
-    const v = await figma.variables.getVariableByIdAsync(id);
-    return v ? { id, name: v.name } : null;
+  const bv = variant.boundVariables ?? {};
+
+  // Exact layout dimensions and properties
+  const layout = {
+    width: Math.round(variant.width),
+    height: Math.round(variant.height),
+    layoutMode: variant.layoutMode,
+    primaryAxisSizingMode: variant.primaryAxisSizingMode,
+    counterAxisSizingMode: variant.counterAxisSizingMode,
+    primaryAxisAlignItems: variant.primaryAxisAlignItems,
+    counterAxisAlignItems: variant.counterAxisAlignItems,
+    paddingTop: variant.paddingTop,
+    paddingBottom: variant.paddingBottom,
+    paddingLeft: variant.paddingLeft,
+    paddingRight: variant.paddingRight,
+    itemSpacing: variant.itemSpacing,
+    cornerRadius: variant.cornerRadius,
+  };
+
+  // Resolve root-level token bindings in parallel — CSS prop → token name
+  const [bgToken, ptToken, pbToken, plToken, prToken, gapToken, radiusToken] = await Promise.all([
+    resolveVar(bv.fills),
+    resolveVar(bv.paddingTop),
+    resolveVar(bv.paddingBottom),
+    resolveVar(bv.paddingLeft),
+    resolveVar(bv.paddingRight),
+    resolveVar(bv.itemSpacing),
+    resolveVar(bv.topLeftRadius),
+  ]);
+
+  const tokens = {};
+  if (bgToken)     tokens['background-color'] = bgToken;
+  if (ptToken)     tokens['padding-top']       = ptToken;
+  if (pbToken)     tokens['padding-bottom']     = pbToken;
+  if (plToken)     tokens['padding-left']       = plToken;
+  if (prToken)     tokens['padding-right']      = prToken;
+  if (gapToken)    tokens['gap']                = gapToken;
+  if (radiusToken) tokens['border-radius']      = radiusToken;
+
+  // Text nodes — style name + color token per node per variant
+  const textNodeEls = variant.findAll(n => n.type === 'TEXT');
+  const textNodes = await Promise.all(textNodeEls.map(async n => {
+    const colorRef = (n.boundVariables?.fills ?? [])[0];
+    const [style, colorVar] = await Promise.all([
+      n.textStyleId ? figma.getStyleByIdAsync(n.textStyleId) : null,
+      colorRef?.id ? figma.variables.getVariableByIdAsync(colorRef.id) : null,
+    ]);
+    return {
+      name: n.name,
+      style: style?.name ?? null,
+      colorToken: colorVar?.name ?? null,
+      layoutSizingH: n.layoutSizingHorizontal,
+      layoutSizingV: n.layoutSizingVertical,
+    };
   }));
-  return { name: variant.name, boundTokens: resolved.filter(Boolean) };
+
+  // Direct child frames — how the layout is structured internally
+  const childFrames = variant.children
+    .filter(c => ['FRAME', 'GROUP'].includes(c.type))
+    .map(c => ({
+      name: c.name,
+      w: Math.round(c.width),
+      h: Math.round(c.height),
+      layoutMode: c.layoutMode,
+      primaryAxisAlignItems: c.primaryAxisAlignItems,
+      primaryAxisSizingMode: c.primaryAxisSizingMode,
+      counterAxisSizingMode: c.counterAxisSizingMode,
+      layoutSizingH: c.layoutSizingHorizontal,
+      layoutSizingV: c.layoutSizingVertical,
+      itemSpacing: c.itemSpacing,
+    }));
+
+  return { name: variant.name, layout, tokens, textNodes, childFrames };
 }));
 
-const textNodes = node.findAll(n => n.type === 'TEXT');
-const textStyleIds = [...new Set(textNodes.map(n => n.textStyleId).filter(Boolean))];
-const textStyles = await Promise.all(textStyleIds.map(async id => {
-  const s = await figma.getStyleByIdAsync(id);
-  return s ? { id, name: s.name } : null;
-}));
+// Full layer tree for first variant — names, types, key layout props
+const layerTree = {
+  variant: node.children[0]?.name,
+  layers: node.children[0]?.findAll(() => true).slice(0, 50).map(n => ({
+    name: n.name,
+    type: n.type,
+    layoutMode: n.layoutMode,
+    layoutSizingH: n.layoutSizingHorizontal,
+    layoutSizingV: n.layoutSizingVertical,
+    w: Math.round(n.width),
+    h: Math.round(n.height),
+  })),
+};
 
-return { id: node.id, name: node.name, propDefs, variantData, textStyles: textStyles.filter(Boolean) };
+return { id: node.id, name: node.name, propDefs, variantData, layerTree };
 ```
 
 ---

@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "consonant-specs": {
+      "command": "node",
+      "args": ["/Users/taehoc/Desktop/Taeho/consonant/apps/consonant-specs-plugin/mcp/dist/index.js"]
+    },
+    "figma-console": {
+      "command": "node",
+      "args": ["/Users/taehoc/Desktop/Taeho/consonant/node_modules/figma-console-mcp/dist/local.js"]
+    },
+    "s2a-ds": {
+      "command": "node",
+      "args": ["/Users/taehoc/Desktop/Taeho/consonant/apps/s2a-ds-mcp/dist/local.js"],
+      "env": {
+        "DS_ROOT": "/Users/taehoc/Desktop/Taeho/consonant"
+      }
+    },
+    "corp-jira": {
+      "command": "node",
+      "args": ["/Users/mhuntsberry/adobe-mcp-servers/src/corp-jira/dist/index.js"],
+      "env": {
+        "JIRA_API_BASE_URL": "https://jira.corp.adobe.com/rest/api/2"
+      }
+    }
+  }
+}

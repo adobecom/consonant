@@ -24,8 +24,6 @@ yarn-error.log*
 # tests/coverage
 coverage/
 
-# local MCP config (contains machine-specific paths)
-.mcp.json
 
 # Adobe Clean font files — Adobe-internal only, not for distribution
 # Download from Marketing Hub and place in packages/fonts/
@@ -50,6 +48,7 @@ tmp/
 JIRA-tickets-outline.md
 screenshots/
 charts/
+jira-tickets/
 
 # AI tool workflow configs — skills and commands are tracked; machine-specific files are not
 .claude/settings.local.json

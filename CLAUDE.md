@@ -19,9 +19,12 @@ That creates a branch, opens a draft PR, and gives you a live Storybook preview 
 - Your PR preview: `https://adobecom.github.io/consonant/pr-preview/pr-<number>/` (posted automatically as a PR comment once CI runs)
 
 **MCP servers available (configured by setup script):**
+- `consonant-specs` — reads and writes to Figma through the Consonant Tools bridge. **Use this by default** when the Consonant Tools plugin is running.
+- `figma-console` — executes code in Figma, takes screenshots, reads variables. Requires the Figma Desktop Bridge plugin (separate from Consonant Tools).
 - `figma-dev-mode-mcp-server` — reads your open Figma file directly
-- `figma-console` — executes code in Figma, takes screenshots, reads variables
 - `s2a-ds` — looks up design tokens, component specs, and validates CSS
+
+**Important: Figma only runs one plugin at a time.** You cannot run Consonant Tools and Figma Desktop Bridge simultaneously. When the Consonant Tools plugin is connected, always use `consonant-specs` MCP tools (`mcp__consonant-specs__figma_*`) — not `figma-console` tools.
 
 ---
 
