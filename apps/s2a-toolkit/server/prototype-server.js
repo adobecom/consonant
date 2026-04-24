@@ -223,27 +223,35 @@ function generatePrototype({ selection, prompt, branchOverride }) {
   // Ensure remote refs are fresh
   git(["fetch", "origin", "main"]);
 
-  // Create an isolated worktree — main working dir branch never changes
-  const worktreeDir = path.join(os.tmpdir(), `s2a-worktree-${slug}-${Date.now()}`);
-  const localExists  = git(["branch", "--list", branch]).stdout.length > 0;
-  const remoteExists = git(["branch", "-r", "--list", `origin/${branch}`]).stdout.length > 0;
+  // Determine whether to use a worktree or work in REPO_ROOT directly.
+  // A branch already checked out in REPO_ROOT cannot have a second worktree.
+  const currentBranch = git(["branch", "--show-current"]).stdout;
+  const localExists   = git(["branch", "--list", branch]).stdout.length > 0;
+  const remoteExists  = git(["branch", "-r", "--list", `origin/${branch}`]).stdout.length > 0;
+  const isCurrentBranch = currentBranch === branch;
 
-  let wtResult;
-  if (localExists) {
-    wtResult = git(["worktree", "add", worktreeDir, branch]);
-  } else if (remoteExists) {
-    wtResult = git(["worktree", "add", "--track", "-b", branch, worktreeDir, `origin/${branch}`]);
-  } else {
-    wtResult = git(["worktree", "add", "-b", branch, worktreeDir, "origin/main"]);
+  const worktreeDir = isCurrentBranch
+    ? null
+    : path.join(os.tmpdir(), `s2a-worktree-${slug}-${Date.now()}`);
+
+  if (!isCurrentBranch) {
+    let wtResult;
+    if (localExists) {
+      wtResult = git(["worktree", "add", worktreeDir, branch]);
+    } else if (remoteExists) {
+      wtResult = git(["worktree", "add", "--track", "-b", branch, worktreeDir, `origin/${branch}`]);
+    } else {
+      wtResult = git(["worktree", "add", "-b", branch, worktreeDir, "origin/main"]);
+    }
+    if (!wtResult.ok) throw new Error("Worktree setup failed: " + wtResult.stderr);
   }
 
-  if (!wtResult.ok) throw new Error("Worktree setup failed: " + wtResult.stderr);
-
-  const wgit = makeWorktreeGit(worktreeDir);
+  const baseDir = worktreeDir || REPO_ROOT;
+  const wgit = worktreeDir ? makeWorktreeGit(worktreeDir) : git;
 
   try {
-    // Write story inside the worktree
-    const storyDir = path.join(worktreeDir, STORIES_REL);
+    // Write story inside the worktree (or REPO_ROOT if branch is already current)
+    const storyDir = path.join(baseDir, STORIES_REL);
     const absPath  = path.join(storyDir, fileName);
     fs.mkdirSync(storyDir, { recursive: true });
     const content = generateStoryFile({ selection, prompt, frameName, componentName: pascal, slug });
@@ -289,7 +297,7 @@ function generatePrototype({ selection, prompt, branchOverride }) {
 
     return { storyFile: relPath, branchName: branch, prUrl, checks };
   } finally {
-    git(["worktree", "remove", "--force", worktreeDir]);
+    if (worktreeDir) git(["worktree", "remove", "--force", worktreeDir]);
   }
 }
 

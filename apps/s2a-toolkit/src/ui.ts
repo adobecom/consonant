@@ -598,10 +598,14 @@ window.addEventListener('message', (event) => {
 
 const serverDot         = document.getElementById('serverDot') as HTMLElement;
 const serverStatusLabel = document.getElementById('serverStatusLabel') as HTMLElement;
+const serverStartBtn    = document.getElementById('serverStartBtn') as HTMLButtonElement;
+
+const START_CMD = 'launchctl start com.s2a.prototype-server';
 
 async function checkServerHealth() {
   serverStatusLabel.textContent = 'Checking…';
   serverDot.classList.remove('on');
+  serverStartBtn.style.display = 'none';
   try {
     const ctrl = new AbortController();
     const tid = setTimeout(() => ctrl.abort(), 3000);
@@ -612,12 +616,25 @@ async function checkServerHealth() {
       serverDot.classList.add('on');
       serverStatusLabel.textContent = 'Servers ready';
     } else {
-      serverStatusLabel.textContent = 'Server error — check logs';
+      serverStatusLabel.textContent = 'Server error';
+      serverStartBtn.style.display = 'inline-flex';
     }
   } catch {
-    serverStatusLabel.textContent = 'Offline — log in to start servers';
+    serverStatusLabel.textContent = 'Server offline';
+    serverStartBtn.style.display = 'inline-flex';
   }
 }
+
+serverStartBtn?.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(START_CMD);
+    serverStartBtn.textContent = 'Copied!';
+    setTimeout(() => { serverStartBtn.textContent = 'Start ↗'; }, 2000);
+  } catch {
+    // clipboard blocked — show inline
+    serverStatusLabel.textContent = START_CMD;
+  }
+});
 
 document.getElementById('serverRefreshBtn')?.addEventListener('click', checkServerHealth);
 

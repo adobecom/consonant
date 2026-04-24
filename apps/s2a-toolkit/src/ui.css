@@ -596,6 +596,21 @@ body {
 }
 .server-refresh:hover { color: var(--text-1); }
 
+.server-start-btn {
+  display: none;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-size: 10px;
+  font-family: inherit;
+  color: var(--text-2);
+  cursor: pointer;
+  margin-left: auto;
+}
+.server-start-btn:hover { background: var(--bg-hover); color: var(--text-1); }
+
 /* ── Story embed (inline Storybook iframe) ───────────────────────────────── */
 
 .story-embed {
