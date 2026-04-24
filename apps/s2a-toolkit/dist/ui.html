@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #fafaf8;
+  --bg-card:   #f4f3f0;
+  --bg-hover:  #eeecea;
+  --border:    #e2e0dc;
+  --text-1:    #1c1b19;
+  --text-2:    #6b6864;
+  --text-3:    #a8a49f;
+  --green:     #2d7a52;
+  --green-bg:  rgba(45,122,82,0.08);
+  --accent:    #1c1b19;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-1);
+  background: var(--bg);
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-btn {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-2);
+  font-size: 12px;
+  padding: 0;
+  line-height: 1;
+}
+.back-btn:hover { color: var(--text-1); }
+.back-btn svg { flex-shrink: 0; }
+.back-btn.visible { display: flex; }
+
+.header-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-3);
+  padding: 3px;
+  border-radius: 4px;
+  line-height: 1;
+}
+.icon-btn:hover { color: var(--text-1); background: var(--bg-hover); }
+
+/* Bridge pill */
+.bridge-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 10px;
+  color: var(--text-2);
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.bridge-pill:hover { background: var(--bg-hover); }
+.bridge-pill.connected {
+  background: var(--green-bg);
+  border-color: rgba(45,122,82,0.25);
+  color: var(--green);
+}
+
+.bridge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-3);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.bridge-dot.on { background: var(--green); }
+
+/* ── Scroll content ─────────────────────────────────────────────────────── */
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ── Home — tool list ───────────────────────────────────────────────────── */
+
+.home { padding: 16px 14px; }
+
+.category {
+  margin-bottom: 20px;
+}
+.category:last-child { margin-bottom: 0; }
+
+.category-label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  margin-bottom: 6px;
+  padding: 0 2px;
+}
+
+.tool-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+  margin-bottom: 6px;
+  gap: 12px;
+}
+.tool-card:last-child { margin-bottom: 0; }
+.tool-card:hover { background: var(--bg-hover); }
+
+.tool-card-body { flex: 1; min-width: 0; }
+.tool-card-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-1);
+  display: block;
+}
+.tool-card-desc {
+  font-size: 11px;
+  color: var(--text-2);
+  display: block;
+  margin-top: 1px;
+}
+.tool-card-meta {
+  font-size: 10px;
+  color: var(--text-3);
+  display: block;
+  margin-top: 3px;
+}
+
+.tool-card-chevron {
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+
+/* ── Tool panels ────────────────────────────────────────────────────────── */
+
+.panel { display: none; padding: 16px 14px; }
+.panel.active { display: block; }
+
+.section-label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  margin-bottom: 8px;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: var(--text-1);
+  color: var(--bg);
+  transition: opacity 0.15s;
+  font-family: inherit;
+}
+.btn:hover:not(:disabled) { opacity: 0.82; }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-1);
+  border-color: var(--border);
+}
+.btn-ghost:hover:not(:disabled) { background: var(--bg-hover); opacity: 1; }
+
+.btn-row { display: flex; gap: 8px; margin-top: 12px; }
+.btn-row .btn { flex: 1; }
+
+/* ── Status ─────────────────────────────────────────────────────────────── */
+
+.status {
+  font-size: 11px;
+  color: var(--text-2);
+  margin-top: 8px;
+  min-height: 16px;
+}
+.status.ok { color: var(--green); }
+.status.err { color: #b94040; }
+
+/* ── Variables panel ─────────────────────────────────────────────────────── */
+
+.collection-list { margin-bottom: 4px; }
+
+.collection-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
+}
+.collection-row:last-child { border-bottom: none; }
+
+.collection-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-1);
+  font-size: 12px;
+}
+
+.collection-count {
+  font-size: 10px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 24px 0;
+  color: var(--text-3);
+  font-size: 11px;
+}
+
+/* ── Select panel ────────────────────────────────────────────────────────── */
+
+.set-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: 'Menlo', monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.axis-group { margin-bottom: 12px; }
+.axis-group:last-of-type { margin-bottom: 0; }
+
+.axis-label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  margin-bottom: 5px;
+}
+
+.axis-values { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.chip {
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-size: 11px;
+  color: var(--text-2);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.1s;
+  font-family: inherit;
+}
+.chip:hover { background: var(--bg-hover); }
+.chip.on {
+  background: var(--text-1);
+  border-color: var(--text-1);
+  color: var(--bg);
+}
+
+/* ── Settings panel ──────────────────────────────────────────────────────── */
+
+.settings-hint {
+  font-size: 11px;
+  color: var(--text-2);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.settings-hint a { color: var(--text-1); }
+.settings-hint code {
+  font-family: 'Menlo', monospace;
+  font-size: 10px;
+  background: var(--bg-card);
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
+.form-field { margin-bottom: 10px; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.form-row .form-field { margin-bottom: 0; }
+
+.form-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+  margin-bottom: 4px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  font-size: 12px;
+  color: var(--text-1);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus { border-color: var(--text-2); background: var(--bg); }
+.form-input::placeholder { color: var(--text-3); }
+
+/* ── Bridge popover ──────────────────────────────────────────────────────── */
+
+.bridge-popover {
+  display: none;
+  position: absolute;
+  top: 40px;
+  right: 14px;
+  width: 220px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  padding: 14px;
+  z-index: 100;
+}
+.bridge-popover.open { display: block; }
+
+.bridge-popover-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.bridge-popover-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-1);
+}
+.bridge-popover-sub {
+  font-size: 10px;
+  color: var(--text-2);
+  margin-bottom: 10px;
+}
+
+/* ── Prototype panel ─────────────────────────────────────────────────────── */
+
+.proto-selection {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  min-height: 40px;
+}
+
+.proto-selection-empty {
+  font-size: 11px;
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+.proto-selection-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.proto-frame-icon {
+  font-size: 14px;
+  color: var(--text-2);
+  flex-shrink: 0;
+}
+
+.proto-frame-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.proto-frame-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proto-frame-type {
+  font-size: 10px;
+  color: var(--text-2);
+}
+
+.proto-prompt {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--text-1);
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.5;
+}
+.proto-prompt::placeholder { color: var(--text-2); }
+.proto-prompt:focus { outline: none; border-color: var(--accent); }
+
+.proto-steps {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.proto-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-2);
+}
+
+.proto-step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.proto-step[data-state="active"] .proto-step-dot {
+  background: var(--accent);
+  animation: pulse 1s ease-in-out infinite;
+}
+.proto-step[data-state="active"] { color: var(--text-1); }
+
+.proto-step[data-state="done"] .proto-step-dot { background: #3c8a47; }
+.proto-step[data-state="done"] { color: var(--text-1); }
+
+.proto-step[data-state="error"] .proto-step-dot { background: #c44; }
+.proto-step[data-state="error"] { color: var(--text-1); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.proto-output {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.proto-output-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.proto-output-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.proto-output-link {
+  font-size: 11px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.proto-output-link:hover { text-decoration: underline; }
+
+</style>
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Header ────────────────────────────────────────────────────── -->
+    <header class="header">
+      <div class="header-left">
+        <button class="back-btn" id="backBtn" aria-label="Back to home">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <span class="header-title" id="headerTitle">S2A Toolkit</span>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" id="settingsBtn" aria-label="GitHub settings">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="bridge-pill" id="bridgePill" aria-label="Bridge connection">
+          <span class="bridge-dot" id="bridgeDot"></span>
+          <span id="bridgePillLabel">Connect</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Bridge popover -->
+    <div class="bridge-popover" id="bridgePopover">
+      <div class="bridge-popover-status">
+        <span class="bridge-dot" id="popoverDot"></span>
+        <span class="bridge-popover-label" id="popoverLabel">Not connected</span>
+      </div>
+      <p class="bridge-popover-sub" id="popoverSub">Start Claude Code, then connect.</p>
+      <button class="btn" id="bridgeToggleBtn" style="width:100%;">Connect</button>
+    </div>
+
+    <!-- ── Content ───────────────────────────────────────────────────── -->
+    <div class="content">
+
+      <!-- Home -->
+      <div class="home" id="homeView">
+        <div class="category">
+          <div class="category-label">Tokens</div>
+          <button class="tool-card" data-tool="variables">
+            <div class="tool-card-body">
+              <span class="tool-card-name">Variables</span>
+              <span class="tool-card-desc">Export &amp; sync to token pipeline</span>
+              <span class="tool-card-meta" id="varMeta">—</span>
+            </div>
+            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="category">
+          <div class="category-label">Components</div>
+          <button class="tool-card" data-tool="select">
+            <div class="tool-card-body">
+              <span class="tool-card-name">Select Variants</span>
+              <span class="tool-card-desc">Filter a component set by axis</span>
+              <span class="tool-card-meta" id="selectMeta">Select a component set</span>
+            </div>
+            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="category">
+          <div class="category-label">Prototypes</div>
+          <button class="tool-card" data-tool="prototype">
+            <div class="tool-card-body">
+              <span class="tool-card-name">Generate Prototype</span>
+              <span class="tool-card-desc">Figma frame → Storybook story + PR</span>
+              <span class="tool-card-meta" id="protoMeta">Select a frame to start</span>
+            </div>
+            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Variables panel -->
+      <div class="panel" id="variablesPanel">
+        <div class="section-label">Collections</div>
+        <div class="collection-list" id="varCollections">
+          <div class="empty-state">Click Refresh to load</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="varRefreshBtn">Refresh</button>
+          <button class="btn btn-ghost" id="varExportLocalBtn" disabled>Export Local</button>
+          <button class="btn" id="varExportGithubBtn" disabled>↑ GitHub</button>
+        </div>
+        <div class="status" id="varStatus"></div>
+      </div>
+
+      <!-- Select panel -->
+      <div class="panel" id="selectPanel">
+        <div class="empty-state" id="selectEmpty">Select a component set on the canvas</div>
+        <div id="selectBody" style="display:none;">
+          <div class="set-name" id="selectSetName"></div>
+          <div id="selectAxes"></div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="selectAllBtn">All</button>
+            <button class="btn btn-ghost" id="selectNoneBtn">None</button>
+            <button class="btn" id="selectApplyBtn" style="flex:2;">Select</button>
+          </div>
+          <div class="status" id="selectStatus"></div>
+        </div>
+      </div>
+
+      <!-- Prototype panel -->
+      <div class="panel" id="protoPanel">
+
+        <div class="section-label">Selection</div>
+        <div class="proto-selection" id="protoSelection">
+          <div class="proto-selection-empty" id="protoSelectionEmpty">
+            Select a frame on the canvas to get started
+          </div>
+          <div class="proto-selection-info" id="protoSelectionInfo" style="display:none;">
+            <span class="proto-frame-icon">▣</span>
+            <div class="proto-frame-meta">
+              <span class="proto-frame-name" id="protoFrameName">—</span>
+              <span class="proto-frame-type" id="protoFrameType">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:12px;">What should this prototype demonstrate?</div>
+        <textarea
+          class="proto-prompt"
+          id="protoPrompt"
+          placeholder="e.g. On mobile, stack cards vertically. CTA slides in after headline. Hover reveals secondary link."
+          rows="4"
+        ></textarea>
+
+        <div class="btn-row" style="margin-top:8px;">
+          <button class="btn" id="protoGenerateBtn" disabled style="flex:1;">Generate Prototype</button>
+        </div>
+
+        <div class="proto-steps" id="protoSteps" style="display:none;">
+          <div class="proto-step" id="protoStep0" data-state="idle">
+            <span class="proto-step-dot"></span>
+            <span class="proto-step-label">Reading selection</span>
+          </div>
+          <div class="proto-step" id="protoStep1" data-state="idle">
+            <span class="proto-step-dot"></span>
+            <span class="proto-step-label">Generating story</span>
+          </div>
+          <div class="proto-step" id="protoStep2" data-state="idle">
+            <span class="proto-step-dot"></span>
+            <span class="proto-step-label">Running checks</span>
+          </div>
+          <div class="proto-step" id="protoStep3" data-state="idle">
+            <span class="proto-step-dot"></span>
+            <span class="proto-step-label">Creating PR</span>
+          </div>
+        </div>
+
+        <div class="proto-output" id="protoOutput" style="display:none;">
+          <div class="proto-output-row" id="protoOutputPreview" style="display:none;">
+            <span class="proto-output-label">Preview</span>
+            <a class="proto-output-link" id="protoPreviewLink" href="#" target="_blank">Open Storybook</a>
+          </div>
+          <div class="proto-output-row" id="protoOutputPR" style="display:none;">
+            <span class="proto-output-label">PR</span>
+            <a class="proto-output-link" id="protoPRLink" href="#" target="_blank">Open PR</a>
+          </div>
+        </div>
+
+        <div class="status" id="protoStatus"></div>
+      </div>
+
+      <!-- Settings panel -->
+      <div class="panel" id="settingsPanel">
+        <div class="section-label">GitHub Export</div>
+        <p class="settings-hint">Tokens will be committed directly to your repo. Requires a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> scope.</p>
+        <div class="form-field">
+          <label class="form-label" for="ghToken">Personal Access Token</label>
+          <input class="form-input" type="password" id="ghToken" placeholder="ghp_…" autocomplete="off" />
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="ghOwner">Owner</label>
+            <input class="form-input" type="text" id="ghOwner" placeholder="adobecom" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="ghRepo">Repo</label>
+            <input class="form-input" type="text" id="ghRepo" placeholder="consonant-2" />
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="ghBranch">Branch</label>
+          <input class="form-input" type="text" id="ghBranch" placeholder="main" />
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="ghFilePath">File path in repo</label>
+          <input class="form-input" type="text" id="ghFilePath" placeholder="packages/toolkit-tokens/json/figma-export.json" />
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="saveSettingsBtn">Save</button>
+        </div>
+        <div class="status" id="settingsStatus"></div>
+      </div>
+
+    </div>
+  </div>
+  <script>"use strict";
+(() => {
+  var __defProp = Object.defineProperty;
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  var __spreadValues = (a, b) => {
+    for (var prop in b || (b = {}))
+      if (__hasOwnProp.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    if (__getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(b)) {
+        if (__propIsEnum.call(b, prop))
+          __defNormalProp(a, prop, b[prop]);
+      }
+    return a;
+  };
+
+  // src/ui.ts
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function postToPlugin(type, payload) {
+    parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
+  }
+  var homeView = document.getElementById("homeView");
+  var variablesPanel = document.getElementById("variablesPanel");
+  var selectPanel = document.getElementById("selectPanel");
+  var settingsPanel = document.getElementById("settingsPanel");
+  var protoPanel = document.getElementById("protoPanel");
+  var headerTitle = document.getElementById("headerTitle");
+  var backBtn = document.getElementById("backBtn");
+  var settingsBtn = document.getElementById("settingsBtn");
+  var views = {
+    home: { el: homeView, title: "S2A Toolkit" },
+    variables: { el: variablesPanel, title: "Variables" },
+    select: { el: selectPanel, title: "Select Variants" },
+    settings: { el: settingsPanel, title: "GitHub Settings" },
+    prototype: { el: protoPanel, title: "Generate Prototype" }
+  };
+  var currentView = "home";
+  function navigateTo(view) {
+    currentView = view;
+    Object.entries(views).forEach(([key, v]) => {
+      v.el.style.display = key === view ? "block" : "none";
+    });
+    headerTitle.textContent = views[view].title;
+    backBtn.classList.toggle("visible", view !== "home");
+    settingsBtn.style.display = view === "settings" ? "none" : "flex";
+  }
+  backBtn.addEventListener("click", () => navigateTo("home"));
+  settingsBtn.addEventListener("click", () => {
+    postToPlugin("get-settings");
+    navigateTo("settings");
+  });
+  document.querySelectorAll(".tool-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const tool = card.dataset.tool;
+      if (tool) navigateTo(tool);
+    });
+  });
+  navigateTo("home");
+  var bridgeConnected = false;
+  var bridgeWs = null;
+  var bridgeWsPort = null;
+  var bridgeKeepaliveTimer = null;
+  var bridgeReconnectTimer = null;
+  var bridgeReconnectAttempts = 0;
+  var bridgeUserDisconnected = false;
+  var BRIDGE_MAX_RECONNECT = 20;
+  var BRIDGE_RECONNECT_BASE_MS = 2e3;
+  var WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+  var pendingRequests = /* @__PURE__ */ new Map();
+  var requestCounter = 0;
+  function sendBridgeCommand(method, params = {}, timeoutMs = 15e3) {
+    return new Promise((resolve, reject) => {
+      const requestId = method.toLowerCase() + "_" + ++requestCounter + "_" + Date.now();
+      const timeoutId = setTimeout(() => {
+        if (pendingRequests.has(requestId)) {
+          pendingRequests.delete(requestId);
+          reject(new Error(method + " timed out after " + timeoutMs + "ms"));
+        }
+      }, timeoutMs);
+      pendingRequests.set(requestId, { resolve, reject, timeoutId });
+      postToPlugin("bridge:command", { requestId, method, params });
+    });
+  }
+  var bridgePill = document.getElementById("bridgePill");
+  var bridgeDot = document.getElementById("bridgeDot");
+  var bridgePillLabel = document.getElementById("bridgePillLabel");
+  var bridgePopover = document.getElementById("bridgePopover");
+  var popoverDot = document.getElementById("popoverDot");
+  var popoverLabel = document.getElementById("popoverLabel");
+  var popoverSub = document.getElementById("popoverSub");
+  var bridgeToggleBtn = document.getElementById("bridgeToggleBtn");
+  var popoverOpen = false;
+  bridgePill.addEventListener("click", (e) => {
+    e.stopPropagation();
+    popoverOpen = !popoverOpen;
+    bridgePopover.classList.toggle("open", popoverOpen);
+  });
+  document.addEventListener("click", () => {
+    if (popoverOpen) {
+      popoverOpen = false;
+      bridgePopover.classList.remove("open");
+    }
+  });
+  bridgePopover.addEventListener("click", (e) => e.stopPropagation());
+  bridgeToggleBtn.addEventListener("click", () => {
+    if (bridgeConnected) bridgeDisconnect();
+    else bridgeConnect();
+  });
+  function updateBridgeUi() {
+    if (bridgeConnected) {
+      bridgeDot.classList.add("on");
+      bridgePill.classList.add("connected");
+      bridgePillLabel.textContent = "Claude Code";
+      popoverDot.classList.add("on");
+      popoverLabel.textContent = "Connected";
+      popoverSub.textContent = "Variables auto-sync on connect.";
+      bridgeToggleBtn.textContent = "Disconnect";
+      bridgeToggleBtn.className = "btn btn-ghost";
+    } else {
+      bridgeDot.classList.remove("on");
+      bridgePill.classList.remove("connected");
+      bridgePillLabel.textContent = "Connect";
+      popoverDot.classList.remove("on");
+      popoverLabel.textContent = "Not connected";
+      popoverSub.textContent = "Start Claude Code, then connect.";
+      bridgeToggleBtn.textContent = "Connect";
+      bridgeToggleBtn.className = "btn";
+    }
+  }
+  function bridgeStartKeepalive() {
+    if (bridgeKeepaliveTimer) clearInterval(bridgeKeepaliveTimer);
+    bridgeKeepaliveTimer = setInterval(() => {
+      if ((bridgeWs == null ? void 0 : bridgeWs.readyState) === 1) try {
+        bridgeWs.send(JSON.stringify({ type: "PING" }));
+      } catch (e) {
+      }
+    }, 15e3);
+  }
+  function bridgeStopKeepalive() {
+    if (bridgeKeepaliveTimer) {
+      clearInterval(bridgeKeepaliveTimer);
+      bridgeKeepaliveTimer = null;
+    }
+  }
+  function initBridgeConnection(ws) {
+    sendBridgeCommand("GET_FILE_INFO", {}).then((result) => {
+      if (ws.readyState !== 1 || !result) return;
+      const info = result.fileInfo || result;
+      if (!info.fileKey) info.fileKey = "local-" + Date.now();
+      info.pluginVersion = "0.1.0";
+      ws.send(JSON.stringify({ type: "FILE_INFO", data: info }));
+    }).catch(() => {
+    });
+    sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
+      if (ws.readyState !== 1 || !(result == null ? void 0 : result.data)) return;
+      ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
+      renderVariables(result.data);
+      setVarMeta(result.data.variables.length + " variables");
+    }).catch(() => {
+    });
+  }
+  function attachWsHandlers(ws, port) {
+    ws.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        if (!msg.id || !msg.method) return;
+        sendBridgeCommand(msg.method, msg.params || {}, 15e3).then((result) => {
+          if (ws.readyState === 1) ws.send(JSON.stringify({ id: msg.id, result }));
+        }).catch((err) => {
+          if (ws.readyState === 1) ws.send(JSON.stringify({ id: msg.id, error: err.message }));
+        });
+      } catch (e) {
+      }
+    };
+    ws.onclose = () => {
+      bridgeStopKeepalive();
+      bridgeWs = null;
+      bridgeConnected = false;
+      for (const [, p] of pendingRequests) {
+        clearTimeout(p.timeoutId);
+        p.reject(new Error("Bridge disconnected"));
+      }
+      pendingRequests.clear();
+      updateBridgeUi();
+      if (!bridgeUserDisconnected) scheduleReconnect(port);
+    };
+    ws.onerror = () => {
+    };
+  }
+  function scheduleReconnect(port) {
+    if (bridgeUserDisconnected || bridgeReconnectAttempts >= BRIDGE_MAX_RECONNECT) return;
+    bridgeReconnectAttempts++;
+    const delay = Math.min(BRIDGE_RECONNECT_BASE_MS * Math.pow(1.5, bridgeReconnectAttempts - 1), 3e4);
+    bridgeReconnectTimer = setTimeout(() => {
+      if (!bridgeUserDisconnected) reconnectToPort(port);
+    }, delay);
+  }
+  function reconnectToPort(port) {
+    try {
+      const ws = new WebSocket("ws://localhost:" + port);
+      const t = setTimeout(() => {
+        if (ws.readyState !== 1) ws.close();
+      }, 3e3);
+      ws.onopen = () => {
+        clearTimeout(t);
+        bridgeWs = ws;
+        bridgeWsPort = port;
+        bridgeConnected = true;
+        bridgeReconnectAttempts = 0;
+        updateBridgeUi();
+        attachWsHandlers(ws, port);
+        initBridgeConnection(ws);
+        bridgeStartKeepalive();
+      };
+      ws.onerror = () => {
+        clearTimeout(t);
+      };
+      ws.onclose = () => {
+        clearTimeout(t);
+        if (!bridgeConnected && !bridgeUserDisconnected) bridgeConnect();
+      };
+    } catch (e) {
+      if (!bridgeUserDisconnected) bridgeConnect();
+    }
+  }
+  function bridgeConnect() {
+    bridgeUserDisconnected = false;
+    if (bridgeReconnectTimer) {
+      clearTimeout(bridgeReconnectTimer);
+      bridgeReconnectTimer = null;
+    }
+    bridgeToggleBtn.textContent = "Connecting\u2026";
+    bridgeToggleBtn.disabled = true;
+    let found = false;
+    let pending = WS_PORTS.length;
+    WS_PORTS.forEach((port) => {
+      if (found) return;
+      try {
+        const ws = new WebSocket("ws://localhost:" + port);
+        const t = setTimeout(() => {
+          if (ws.readyState !== 1) ws.close();
+        }, 3e3);
+        ws.onopen = () => {
+          clearTimeout(t);
+          if (found) {
+            ws.close();
+            return;
+          }
+          found = true;
+          bridgeWs = ws;
+          bridgeWsPort = port;
+          bridgeConnected = true;
+          bridgeReconnectAttempts = 0;
+          updateBridgeUi();
+          bridgeToggleBtn.disabled = false;
+          attachWsHandlers(ws, port);
+          initBridgeConnection(ws);
+          bridgeStartKeepalive();
+        };
+        ws.onerror = () => {
+          clearTimeout(t);
+        };
+        ws.onclose = () => {
+          clearTimeout(t);
+          if (!found) {
+            pending--;
+            if (pending <= 0) connectFailed();
+          }
+        };
+      } catch (e) {
+        pending--;
+        if (pending <= 0 && !found) connectFailed();
+      }
+    });
+  }
+  function connectFailed() {
+    bridgeToggleBtn.textContent = "Connect";
+    bridgeToggleBtn.disabled = false;
+    popoverSub.textContent = "No MCP server found \u2014 start Claude Code first.";
+  }
+  function bridgeDisconnect() {
+    bridgeUserDisconnected = true;
+    bridgeStopKeepalive();
+    if (bridgeReconnectTimer) {
+      clearTimeout(bridgeReconnectTimer);
+      bridgeReconnectTimer = null;
+    }
+    try {
+      bridgeWs == null ? void 0 : bridgeWs.close();
+    } catch (e) {
+    }
+    bridgeWs = null;
+    bridgeWsPort = null;
+    bridgeConnected = false;
+    bridgeReconnectAttempts = 0;
+    updateBridgeUi();
+  }
+  var variablesCache = null;
+  function setVarMeta(text) {
+    const el = document.getElementById("varMeta");
+    if (el) el.textContent = text;
+  }
+  function setVarStatus(msg, type = "") {
+    const el = document.getElementById("varStatus");
+    el.textContent = msg;
+    el.className = "status" + (type ? " " + type : "");
+  }
+  function updateExportButtons() {
+    const localBtn = document.getElementById("varExportLocalBtn");
+    const githubBtn = document.getElementById("varExportGithubBtn");
+    const hasVars = !!variablesCache;
+    const hasGhSettings = !!((githubSettings == null ? void 0 : githubSettings.token) && (githubSettings == null ? void 0 : githubSettings.owner) && (githubSettings == null ? void 0 : githubSettings.repo));
+    if (localBtn) localBtn.disabled = !hasVars;
+    if (githubBtn) githubBtn.disabled = !hasVars || !hasGhSettings;
+  }
+  function renderVariables(data) {
+    variablesCache = data;
+    const el = document.getElementById("varCollections");
+    if (!el) return;
+    if (data.variableCollections.length === 0) {
+      el.innerHTML = '<div class="empty-state">No collections found</div>';
+      return;
+    }
+    const byCol = {};
+    for (const v of data.variables) byCol[v.variableCollectionId] = (byCol[v.variableCollectionId] || 0) + 1;
+    el.innerHTML = '<div class="collection-list">' + data.variableCollections.map(
+      (c) => `<div class="collection-row">
+      <span class="collection-name">${esc(c.name)}</span>
+      <span class="collection-count">${byCol[c.id] || 0}</span>
+    </div>`
+    ).join("") + "</div>";
+    setVarMeta(data.variables.length + " variables");
+    updateExportButtons();
+  }
+  var _a;
+  (_a = document.getElementById("varRefreshBtn")) == null ? void 0 : _a.addEventListener("click", async () => {
+    const btn = document.getElementById("varRefreshBtn");
+    btn.textContent = "Refreshing\u2026";
+    btn.disabled = true;
+    setVarStatus("Loading\u2026");
+    try {
+      const result = await sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4);
+      if (result == null ? void 0 : result.data) {
+        renderVariables(result.data);
+        setVarStatus(result.data.variables.length + " variables loaded", "ok");
+      } else setVarStatus("No data returned", "err");
+    } catch (e) {
+      setVarStatus(e.message || "Error", "err");
+    } finally {
+      btn.textContent = "Refresh";
+      btn.disabled = false;
+    }
+  });
+  var _a2;
+  (_a2 = document.getElementById("varExportLocalBtn")) == null ? void 0 : _a2.addEventListener("click", () => {
+    if (!variablesCache) {
+      setVarStatus("No variables \u2014 hit Refresh first", "err");
+      return;
+    }
+    const btn = document.getElementById("varExportLocalBtn");
+    btn.textContent = "Exporting\u2026";
+    btn.disabled = true;
+    setVarStatus("Sending to dev-server\u2026");
+    fetch("http://localhost:9300/export", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(variablesCache)
+    }).then((r) => r.json()).then((data) => {
+      if (data.ok) setVarStatus(`\u2713 ${data.variables} vars \u2192 dist/css/`, "ok");
+      else setVarStatus("\u274C " + (data.error || "Build failed"), "err");
+    }).catch(() => setVarStatus("\u274C Dev server not running \u2014 run: npm run dev-server", "err")).finally(() => {
+      btn.textContent = "Export Local";
+      updateExportButtons();
+    });
+  });
+  var _a3;
+  (_a3 = document.getElementById("varExportGithubBtn")) == null ? void 0 : _a3.addEventListener("click", async () => {
+    if (!variablesCache || !(githubSettings == null ? void 0 : githubSettings.token)) return;
+    const btn = document.getElementById("varExportGithubBtn");
+    btn.textContent = "Pushing\u2026";
+    btn.disabled = true;
+    setVarStatus("Pushing to GitHub\u2026");
+    try {
+      await pushToGitHub(variablesCache, githubSettings);
+      setVarStatus("\u2713 Committed to " + githubSettings.repo + " / " + githubSettings.branch, "ok");
+    } catch (e) {
+      setVarStatus("\u274C " + (e.message || "GitHub push failed"), "err");
+    } finally {
+      btn.textContent = "\u2191 GitHub";
+      updateExportButtons();
+    }
+  });
+  var githubSettings = null;
+  async function pushToGitHub(data, settings) {
+    const { token, owner, repo, branch, filePath } = settings;
+    const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+    const headers = {
+      Authorization: `token ${token}`,
+      Accept: "application/vnd.github.v3+json",
+      "Content-Type": "application/json"
+    };
+    let sha;
+    const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
+    if (getRes.ok) {
+      sha = (await getRes.json()).sha;
+    } else if (getRes.status !== 404) {
+      throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
+    }
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    const body = {
+      message: "chore: sync tokens from Figma",
+      content,
+      branch
+    };
+    if (sha) body.sha = sha;
+    const putRes = await fetch(apiBase, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(body)
+    });
+    if (!putRes.ok) {
+      throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
+    }
+  }
+  function setSettingsStatus(msg, type = "") {
+    const el = document.getElementById("settingsStatus");
+    el.textContent = msg;
+    el.className = "status" + (type ? " " + type : "");
+  }
+  function applySettings(settings) {
+    githubSettings = settings;
+    if (!settings) return;
+    document.getElementById("ghToken").value = settings.token || "";
+    document.getElementById("ghOwner").value = settings.owner || "";
+    document.getElementById("ghRepo").value = settings.repo || "";
+    document.getElementById("ghBranch").value = settings.branch || "main";
+    document.getElementById("ghFilePath").value = settings.filePath || "packages/toolkit-tokens/json/figma-export.json";
+    updateExportButtons();
+  }
+  var _a4;
+  (_a4 = document.getElementById("saveSettingsBtn")) == null ? void 0 : _a4.addEventListener("click", () => {
+    const settings = {
+      token: document.getElementById("ghToken").value.trim(),
+      owner: document.getElementById("ghOwner").value.trim(),
+      repo: document.getElementById("ghRepo").value.trim(),
+      branch: document.getElementById("ghBranch").value.trim() || "main",
+      filePath: document.getElementById("ghFilePath").value.trim() || "packages/toolkit-tokens/json/figma-export.json"
+    };
+    if (!settings.token || !settings.owner || !settings.repo) {
+      setSettingsStatus("Token, owner, and repo are required", "err");
+      return;
+    }
+    postToPlugin("save-settings", { settings });
+  });
+  var selectSetId = null;
+  function setSelectMeta(text) {
+    const el = document.getElementById("selectMeta");
+    if (el) el.textContent = text;
+  }
+  function renderAxes(setId, setName, axes) {
+    selectSetId = setId;
+    const empty = document.getElementById("selectEmpty");
+    const body = document.getElementById("selectBody");
+    const nameEl = document.getElementById("selectSetName");
+    const axesEl = document.getElementById("selectAxes");
+    const status = document.getElementById("selectStatus");
+    empty.style.display = "none";
+    body.style.display = "block";
+    nameEl.textContent = setName;
+    if (status) status.textContent = "";
+    const variantAxes = axes.filter((a) => a.type === "VARIANT");
+    setSelectMeta(setName);
+    if (variantAxes.length === 0) {
+      axesEl.innerHTML = '<div class="empty-state">No variant axes found</div>';
+      return;
+    }
+    axesEl.innerHTML = variantAxes.map((axis) => {
+      const chips = (axis.variantOptions || []).map(
+        (v) => `<button class="chip on" data-axis="${esc(axis.name)}" data-value="${esc(v)}">${esc(v)}</button>`
+      ).join("");
+      return `<div class="axis-group">
+      <div class="axis-label">${esc(axis.name)}</div>
+      <div class="axis-values">${chips}</div>
+    </div>`;
+    }).join("");
+    axesEl.querySelectorAll(".chip").forEach((chip) => {
+      chip.addEventListener("click", () => chip.classList.toggle("on"));
+    });
+  }
+  function clearSelect() {
+    selectSetId = null;
+    const empty = document.getElementById("selectEmpty");
+    const body = document.getElementById("selectBody");
+    empty.style.display = "block";
+    body.style.display = "none";
+    setSelectMeta("Select a component set");
+  }
+  var _a5;
+  (_a5 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
+    if (!selectSetId) return;
+    const filter = {};
+    document.querySelectorAll(".chip.on").forEach((chip) => {
+      const axis = chip.dataset.axis;
+      if (!filter[axis]) filter[axis] = [];
+      filter[axis].push(chip.dataset.value);
+    });
+    postToPlugin("select:apply-filter", { setId: selectSetId, filter });
+  });
+  var _a6;
+  (_a6 = document.getElementById("selectAllBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
+    document.querySelectorAll(".chip").forEach((c) => c.classList.add("on"));
+  });
+  var _a7;
+  (_a7 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
+    document.querySelectorAll(".chip").forEach((c) => c.classList.remove("on"));
+  });
+  window.addEventListener("message", (event) => {
+    const msg = event.data.pluginMessage;
+    if (!msg) return;
+    switch (msg.type) {
+      case "bridge:command-result": {
+        const p = pendingRequests.get(msg.requestId);
+        if (p) {
+          clearTimeout(p.timeoutId);
+          pendingRequests.delete(msg.requestId);
+          if (msg.success) {
+            const result = __spreadValues({}, msg);
+            delete result.type;
+            delete result.requestId;
+            p.resolve(result);
+          } else {
+            p.reject(new Error(msg.error || "Unknown error"));
+          }
+        }
+        break;
+      }
+      case "settings-loaded": {
+        applySettings(msg.settings);
+        break;
+      }
+      case "settings-saved": {
+        if (msg.success) {
+          githubSettings = {
+            token: document.getElementById("ghToken").value.trim(),
+            owner: document.getElementById("ghOwner").value.trim(),
+            repo: document.getElementById("ghRepo").value.trim(),
+            branch: document.getElementById("ghBranch").value.trim() || "main",
+            filePath: document.getElementById("ghFilePath").value.trim() || "packages/toolkit-tokens/json/figma-export.json"
+          };
+          setSettingsStatus("Saved", "ok");
+          updateExportButtons();
+        } else {
+          setSettingsStatus("Save failed: " + msg.error, "err");
+        }
+        break;
+      }
+      case "select:axes": {
+        if (msg.setId) renderAxes(msg.setId, msg.setName, msg.axes);
+        else clearSelect();
+        break;
+      }
+      case "select:result": {
+        const el = document.getElementById("selectStatus");
+        if (el) {
+          el.textContent = msg.message;
+          el.className = "status ok";
+        }
+        break;
+      }
+      case "selection-changed": {
+        if (msg.nodeId) {
+          updateProtoSelection({
+            id: msg.nodeId,
+            name: msg.nodeName,
+            nodeType: msg.nodeType,
+            width: msg.width,
+            height: msg.height
+          });
+        } else {
+          updateProtoSelection(null);
+        }
+        break;
+      }
+    }
+  });
+  var protoSelection = null;
+  function setProtoMeta(text) {
+    const el = document.getElementById("protoMeta");
+    if (el) el.textContent = text;
+  }
+  function setProtoStatus(msg, type = "") {
+    const el = document.getElementById("protoStatus");
+    el.textContent = msg;
+    el.className = "status" + (type ? " " + type : "");
+  }
+  function updateProtoSelection(sel) {
+    protoSelection = sel;
+    const empty = document.getElementById("protoSelectionEmpty");
+    const info = document.getElementById("protoSelectionInfo");
+    const nameEl = document.getElementById("protoFrameName");
+    const typeEl = document.getElementById("protoFrameType");
+    const genBtn = document.getElementById("protoGenerateBtn");
+    if (sel) {
+      empty.style.display = "none";
+      info.style.display = "flex";
+      nameEl.textContent = sel.name;
+      typeEl.textContent = sel.nodeType + (sel.width ? ` \xB7 ${sel.width}\xD7${sel.height}` : "");
+      genBtn.disabled = false;
+      setProtoMeta(sel.name);
+    } else {
+      empty.style.display = "block";
+      info.style.display = "none";
+      genBtn.disabled = true;
+      setProtoMeta("Select a frame to start");
+    }
+  }
+  function setProtoStep(index, state, label) {
+    const step = document.getElementById("protoStep" + index);
+    if (!step) return;
+    step.dataset.state = state;
+    if (label) {
+      const lbl = step.querySelector(".proto-step-label");
+      if (lbl) lbl.textContent = label;
+    }
+  }
+  function resetProtoSteps() {
+    [0, 1, 2, 3].forEach((i) => setProtoStep(i, "idle"));
+    const steps = document.getElementById("protoSteps");
+    const output = document.getElementById("protoOutput");
+    steps.style.display = "none";
+    output.style.display = "none";
+    setProtoStatus("");
+  }
+  var _a8;
+  (_a8 = document.getElementById("protoGenerateBtn")) == null ? void 0 : _a8.addEventListener("click", async () => {
+    var _a9, _b;
+    if (!protoSelection) return;
+    const prompt = document.getElementById("protoPrompt").value.trim();
+    const genBtn = document.getElementById("protoGenerateBtn");
+    const steps = document.getElementById("protoSteps");
+    genBtn.disabled = true;
+    genBtn.textContent = "Generating\u2026";
+    resetProtoSteps();
+    steps.style.display = "flex";
+    setProtoStatus("");
+    setProtoStep(0, "active");
+    let selectionData;
+    try {
+      const result = await sendBridgeCommand("GET_SELECTION_DATA", {}, 1e4);
+      selectionData = result.selectionData;
+      setProtoStep(0, "done");
+    } catch (e) {
+      setProtoStep(0, "error", "Reading selection \u2014 failed");
+      setProtoStatus("Could not read selection: " + (e.message || "unknown error"), "err");
+      genBtn.disabled = false;
+      genBtn.textContent = "Generate Prototype";
+      return;
+    }
+    setProtoStep(1, "active");
+    try {
+      const res = await fetch("http://localhost:9400/prototype/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selection: selectionData, prompt })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      setProtoStep(1, "done");
+      setProtoStep(2, ((_a9 = data.checks) == null ? void 0 : _a9.lint) && ((_b = data.checks) == null ? void 0 : _b.typecheck) ? "done" : "error");
+      setProtoStep(3, data.prUrl ? "done" : "idle");
+      const output = document.getElementById("protoOutput");
+      const prRow = document.getElementById("protoOutputPR");
+      const prevRow = document.getElementById("protoOutputPreview");
+      const prLink = document.getElementById("protoPRLink");
+      const prevLink = document.getElementById("protoPreviewLink");
+      output.style.display = "flex";
+      if (data.prUrl) {
+        prRow.style.display = "flex";
+        prLink.href = data.prUrl;
+      }
+      if (data.previewUrl) {
+        prevRow.style.display = "flex";
+        prevLink.href = data.previewUrl;
+      }
+      const fileName = data.storyFile ? data.storyFile.split("/").pop() : "story";
+      setProtoStatus("\u2713 " + fileName + " created", "ok");
+    } catch (e) {
+      const msg = e.message || "Unknown error";
+      if (msg.includes("fetch") || msg.includes("NetworkError") || msg.includes("Failed to fetch")) {
+        setProtoStep(1, "error", "Generating story \u2014 server not running");
+        setProtoStatus("\u274C Prototype server not running \u2014 run: npm run prototype-server", "err");
+      } else {
+        setProtoStep(1, "error");
+        setProtoStatus("\u274C " + msg, "err");
+      }
+    } finally {
+      genBtn.disabled = false;
+      genBtn.textContent = "Generate Prototype";
+    }
+  });
+  postToPlugin("ui-ready");
+  postToPlugin("get-settings");
+})();
+</script>
+</body>
+</html>

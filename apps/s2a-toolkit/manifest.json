@@ -1,0 +1,31 @@
+{
+  "name": "S2A Toolkit",
+  "id": "s2a-toolkit-internal",
+  "api": "1.0.0",
+  "editorType": ["figma"],
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
+  "enablePrivatePluginApi": true,
+  "permissions": ["teamlibrary"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": [
+      "http://localhost:9300",
+      "https://api.github.com",
+      "ws://localhost:9220",
+      "ws://localhost:9221",
+      "ws://localhost:9222",
+      "ws://localhost:9223",
+      "ws://localhost:9224",
+      "ws://localhost:9225",
+      "ws://localhost:9226",
+      "ws://localhost:9227",
+      "ws://localhost:9228",
+      "ws://localhost:9229",
+      "ws://localhost:9230",
+      "ws://localhost:9231",
+      "ws://localhost:9232"
+    ],
+    "reasoning": "Bridge tab connects to figma-console MCP over WebSocket (ports 9220–9232) for Claude Code integration."
+  }
+}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- INLINE_CSS -->
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Header ────────────────────────────────────────────────────── -->
+    <header class="header">
+      <div class="header-left">
+        <button class="back-btn" id="backBtn" aria-label="Back to home">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <span class="header-title" id="headerTitle">S2A Toolkit</span>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" id="settingsBtn" aria-label="GitHub settings">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="bridge-pill" id="bridgePill" aria-label="Bridge connection">
+          <span class="bridge-dot" id="bridgeDot"></span>
+          <span id="bridgePillLabel">Connect</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Bridge popover -->
+    <div class="bridge-popover" id="bridgePopover">
+      <div class="bridge-popover-status">
+        <span class="bridge-dot" id="popoverDot"></span>
+        <span class="bridge-popover-label" id="popoverLabel">Not connected</span>
+      </div>
+      <p class="bridge-popover-sub" id="popoverSub">Start Claude Code, then connect.</p>
+      <button class="btn" id="bridgeToggleBtn" style="width:100%;">Connect</button>
+    </div>
+
+    <!-- ── Content ───────────────────────────────────────────────────── -->
+    <div class="content">
+
+      <!-- Home -->
+      <div class="home" id="homeView">
+        <div class="category">
+          <div class="category-label">Tokens</div>
+          <button class="tool-card" data-tool="variables">
+            <div class="tool-card-body">
+              <span class="tool-card-name">Variables</span>
+              <span class="tool-card-desc">Export &amp; sync to token pipeline</span>
+              <span class="tool-card-meta" id="varMeta">—</span>
+            </div>
+            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="category">
+          <div class="category-label">Components</div>
+          <button class="tool-card" data-tool="select">
+            <div class="tool-card-body">
+              <span class="tool-card-name">Select Variants</span>
+              <span class="tool-card-desc">Filter a component set by axis</span>
+              <span class="tool-card-meta" id="selectMeta">Select a component set</span>
+            </div>
+            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="category">
+          <div class="category-label">Prototypes</div>
+          <button class="tool-card" data-tool="prototype">
+            <div class="tool-card-body">
+              <span class="tool-card-name">Generate Prototype</span>
+              <span class="tool-card-desc">Figma frame → Storybook story + PR</span>
+              <span class="tool-card-meta" id="protoMeta">Select a frame to start</span>
+            </div>
+            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Variables panel -->
+      <div class="panel" id="variablesPanel">
+        <div class="section-label">Collections</div>
+        <div class="collection-list" id="varCollections">
+          <div class="empty-state">Click Refresh to load</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="varRefreshBtn">Refresh</button>
+          <button class="btn btn-ghost" id="varExportLocalBtn" disabled>Export Local</button>
+          <button class="btn" id="varExportGithubBtn" disabled>↑ GitHub</button>
+        </div>
+        <div class="status" id="varStatus"></div>
+      </div>
+
+      <!-- Select panel -->
+      <div class="panel" id="selectPanel">
+        <div class="empty-state" id="selectEmpty">Select a component set on the canvas</div>
+        <div id="selectBody" style="display:none;">
+          <div class="set-name" id="selectSetName"></div>
+          <div id="selectAxes"></div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="selectAllBtn">All</button>
+            <button class="btn btn-ghost" id="selectNoneBtn">None</button>
+            <button class="btn" id="selectApplyBtn" style="flex:2;">Select</button>
+          </div>
+          <div class="status" id="selectStatus"></div>
+        </div>
+      </div>
+
+      <!-- Prototype panel -->
+      <div class="panel" id="protoPanel">
+
+        <div class="section-label">Selection</div>
+        <div class="proto-selection" id="protoSelection">
+          <div class="proto-selection-empty" id="protoSelectionEmpty">
+            Select a frame on the canvas to get started
+          </div>
+          <div class="proto-selection-info" id="protoSelectionInfo" style="display:none;">
+            <span class="proto-frame-icon">▣</span>
+            <div class="proto-frame-meta">
+              <span class="proto-frame-name" id="protoFrameName">—</span>
+              <span class="proto-frame-type" id="protoFrameType">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:12px;">What should this prototype demonstrate?</div>
+        <textarea
+          class="proto-prompt"
+          id="protoPrompt"
+          placeholder="e.g. On mobile, stack cards vertically. CTA slides in after headline. Hover reveals secondary link."
+          rows="4"
+        ></textarea>
+
+        <div class="btn-row" style="margin-top:8px;">
+          <button class="btn" id="protoGenerateBtn" disabled style="flex:1;">Generate Prototype</button>
+        </div>
+
+        <div class="proto-steps" id="protoSteps" style="display:none;">
+          <div class="proto-step" id="protoStep0" data-state="idle">
+            <span class="proto-step-dot"></span>
+            <span class="proto-step-label">Reading selection</span>
+          </div>
+          <div class="proto-step" id="protoStep1" data-state="idle">
+            <span class="proto-step-dot"></span>
+            <span class="proto-step-label">Generating story</span>
+          </div>
+          <div class="proto-step" id="protoStep2" data-state="idle">
+            <span class="proto-step-dot"></span>
+            <span class="proto-step-label">Running checks</span>
+          </div>
+          <div class="proto-step" id="protoStep3" data-state="idle">
+            <span class="proto-step-dot"></span>
+            <span class="proto-step-label">Creating PR</span>
+          </div>
+        </div>
+
+        <div class="proto-output" id="protoOutput" style="display:none;">
+          <div class="proto-output-row" id="protoOutputPreview" style="display:none;">
+            <span class="proto-output-label">Preview</span>
+            <a class="proto-output-link" id="protoPreviewLink" href="#" target="_blank">Open Storybook</a>
+          </div>
+          <div class="proto-output-row" id="protoOutputPR" style="display:none;">
+            <span class="proto-output-label">PR</span>
+            <a class="proto-output-link" id="protoPRLink" href="#" target="_blank">Open PR</a>
+          </div>
+        </div>
+
+        <div class="status" id="protoStatus"></div>
+      </div>
+
+      <!-- Settings panel -->
+      <div class="panel" id="settingsPanel">
+        <div class="section-label">GitHub Export</div>
+        <p class="settings-hint">Tokens will be committed directly to your repo. Requires a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> scope.</p>
+        <div class="form-field">
+          <label class="form-label" for="ghToken">Personal Access Token</label>
+          <input class="form-input" type="password" id="ghToken" placeholder="ghp_…" autocomplete="off" />
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="ghOwner">Owner</label>
+            <input class="form-input" type="text" id="ghOwner" placeholder="adobecom" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="ghRepo">Repo</label>
+            <input class="form-input" type="text" id="ghRepo" placeholder="consonant-2" />
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="ghBranch">Branch</label>
+          <input class="form-input" type="text" id="ghBranch" placeholder="main" />
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="ghFilePath">File path in repo</label>
+          <input class="form-input" type="text" id="ghFilePath" placeholder="packages/toolkit-tokens/json/figma-export.json" />
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="saveSettingsBtn">Save</button>
+        </div>
+        <div class="status" id="settingsStatus"></div>
+      </div>
+
+    </div>
+  </div>
+  <!-- INLINE_JS -->
+</body>
+</html>

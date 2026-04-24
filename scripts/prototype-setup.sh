@@ -13,8 +13,8 @@ warn() { echo -e "${YELLOW}!${NC} $1"; }
 hi()   { echo -e "${BOLD}$1${NC}"; }
 
 echo ""
-hi "S2A Design System — Designer Setup"
-hi "======================================"
+hi "S2A Design System — Prototype Setup (Test Build)"
+hi "=================================================="
 echo ""
 
 REPO_URL="https://github.com/adobecom/consonant.git"
@@ -118,6 +118,19 @@ log "Installing dependencies (this takes a minute)..."
 cd "$INSTALL_DIR"
 npm install --silent
 ok "Dependencies installed"
+
+# ── 8b. Build S2A Toolkit plugin ─────────────────────────────────────────────
+TOOLKIT_DIR="$INSTALL_DIR/apps/s2a-toolkit"
+if [[ -d "$TOOLKIT_DIR" ]]; then
+  log "Building S2A Toolkit plugin..."
+  cd "$TOOLKIT_DIR"
+  npm install --silent
+  npm run build --silent
+  cd "$INSTALL_DIR"
+  ok "S2A Toolkit plugin built — load it in Figma from $TOOLKIT_DIR/dist/"
+else
+  warn "S2A Toolkit not found at $TOOLKIT_DIR — skipping plugin build"
+fi
 
 # ── 8a. Copy Figma Desktop Bridge plugin to stable location ──────────────────
 FIGMA_PLUGIN_SRC="$INSTALL_DIR/node_modules/figma-console-mcp/plugin"
@@ -285,36 +298,52 @@ if ! command -v claude &>/dev/null || ! claude whoami &>/dev/null 2>&1; then
 fi
 
 echo "  One-time Figma setup (do this now):"
+echo ""
+echo "  Plugin 1 — Figma Desktop Bridge (for Claude Code):"
 echo "    1. Open Figma Desktop"
-echo "    2. Go to Plugins → Development → Import plugin from manifest..."
-echo "    3. In the file picker, press Cmd+Shift+G to open 'Go to folder'"
-echo "    4. Paste this path and press Enter:"
+echo "    2. Plugins → Development → Import plugin from manifest..."
+echo "    3. Press Cmd+Shift+G, paste this path, press Return:"
 echo "         ~/.figma-console-mcp/plugin/manifest.json"
-echo "    5. Click Open"
-echo "    6. The plugin will appear as 'Figma Desktop Bridge' — click Run when you need it"
+echo "    4. Click Open — plugin appears as 'Figma Desktop Bridge'"
+echo ""
+echo "  Plugin 2 — S2A Toolkit (for prototype generation):"
+echo "    1. Plugins → Development → Import plugin from manifest..."
+echo "    2. Press Cmd+Shift+G, paste this path, press Return:"
+echo "         $INSTALL_DIR/apps/s2a-toolkit/dist/manifest.json"
+echo "    3. Click Open — plugin appears as 'S2A Toolkit'"
 echo ""
 echo "  Opening Cursor and Storybook for you now..."
 echo ""
 
-# Drop start.command on the Desktop for day 2+ sessions
-cp "$INSTALL_DIR/scripts/start.command" "$HOME/Desktop/Start S2A Session.command" 2>/dev/null \
-  && ok "Added 'Start S2A Session' shortcut to your Desktop — double-click it next time" \
-  || warn "Couldn't copy start shortcut — you can find it at $INSTALL_DIR/scripts/start.command"
+# Drop start-prototype.command on the Desktop
+cp "$INSTALL_DIR/scripts/start-prototype.command" "$HOME/Desktop/Start Prototype Session.command" 2>/dev/null \
+  && ok "Added 'Start Prototype Session' shortcut to your Desktop — double-click it each session" \
+  || warn "Couldn't copy shortcut — find it at $INSTALL_DIR/scripts/start-prototype.command"
 
 # Open Cursor with the project
 open -a Cursor "$INSTALL_DIR" 2>/dev/null || warn "Couldn't open Cursor automatically — open it from Applications or Spotlight"
 
 # Start Storybook in a new Terminal window
 osascript -e "tell application \"Terminal\" to do script \"cd '$INSTALL_DIR' && npm run storybook\"" 2>/dev/null \
-  || warn "Couldn't open Terminal automatically — run: cd $INSTALL_DIR && npm run storybook"
+  || warn "Couldn't open Terminal — run manually: cd $INSTALL_DIR && npm run storybook"
 
-echo "  Storybook will be at:  http://localhost:6006  (give it ~30 seconds to start)"
+# Start prototype server in a new Terminal window
+osascript -e "tell application \"Terminal\" to do script \"cd '$INSTALL_DIR' && npm run prototype-server\"" 2>/dev/null \
+  || warn "Couldn't open Terminal — run manually: cd $INSTALL_DIR && npm run prototype-server"
+
+echo "  Storybook:        http://localhost:6006  (~30s to start)"
+echo "  Prototype server: http://localhost:9400"
 echo ""
-echo "  When you're ready to build something:"
-echo "    1. Switch to the Cursor window that just opened"
-echo "    2. Open Claude Code inside Cursor (or run: claude ~/Desktop/prototyping/consonant)"
-echo "    3. Type:  /start-feature \"describe what you're building\""
+echo "  To test the prototype workflow:"
+echo "    1. Open Figma Desktop and load your working file"
+echo "    2. Plugins → Development → S2A Toolkit → Run"
+echo "    3. Select any frame on the canvas"
+echo "    4. Click the Prototype tab in the plugin"
+echo "    5. Describe what the prototype should demonstrate"
+echo "    6. Click Generate Prototype"
 echo ""
-echo "  Pro tip: Storybook auto-reloads as you make changes — leave it open."
-echo "  Cursor Pro available via go/cursor (Adobe internal)."
+echo "  The plugin will create a branch, write a Storybook story, open a draft PR,"
+echo "  and return the preview link — all without touching Git manually."
+echo ""
+echo "  Pro tip: Double-click 'Start Prototype Session' on your Desktop to restart everything."
 echo ""
