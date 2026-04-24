@@ -96,6 +96,32 @@ function detectComponents(selection) {
   return { detected, unmapped: [...new Set(unmapped)].slice(0, 8) };
 }
 
+function buildPreviewHtml({ detected, unmapped, frameName }) {
+  const components = detected.length
+    ? detected.map(d => `  ${d.render(d.node)}`).join("\n")
+    : `  <p style="color:#aaa;font-size:12px;margin:0;">No components auto-mapped from "<em>${frameName}</em>"</p>`;
+  const badge = unmapped.length
+    ? `<div style="font-size:10px;color:#aaa;margin-top:12px;">⚠ Unmapped layers: ${unmapped.join(", ")}</div>`
+    : "";
+  return `<!DOCTYPE html><html><head><meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,sans-serif;background:#1c1b19;min-height:100vh;padding:24px;color:#fff}
+  .c-button{display:inline-flex;align-items:center;padding:8px 20px;border-radius:6px;border:none;background:#fff;color:#1c1b19;font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+  .c-button--primary{background:#1473e6;color:#fff}
+  .c-heading{font-size:24px;font-weight:700;margin-bottom:8px}
+  .c-body{font-size:16px;color:rgba(255,255,255,0.8)}
+  .c-media{border-radius:8px;background:#2c2b29;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:12px}
+  .c-elastic-card,.c-nav-card,.c-product-lockup{background:#2c2b29;border-radius:12px;padding:16px;color:#fff}
+</style>
+</head><body>
+<div style="display:flex;flex-direction:column;gap:12px;">
+${components}
+</div>
+${badge}
+</body></html>`;
+}
+
 function generateStoryFile({ selection, prompt, frameName, componentName, slug }) {
   const { detected, unmapped } = detectComponents(selection);
   const date = new Date().toISOString().split("T")[0];
@@ -250,6 +276,8 @@ function generatePrototype({ selection, prompt, branchOverride }) {
   const wgit = worktreeDir ? makeWorktreeGit(worktreeDir) : git;
 
   try {
+    const { detected, unmapped } = detectComponents(selection);
+    const previewHtml = buildPreviewHtml({ detected, unmapped, frameName });
     const content = generateStoryFile({ selection, prompt, frameName, componentName: pascal, slug });
 
     // Always write to STORIES_OUT in the current checkout so Storybook hot-reloads it
@@ -305,7 +333,7 @@ function generatePrototype({ selection, prompt, branchOverride }) {
       if (!prUrl) console.warn("[proto]  PR creation failed:", pr.stderr);
     }
 
-    return { storyFile: relPath, branchName: branch, prUrl, checks };
+    return { storyFile: relPath, branchName: branch, prUrl, checks, previewHtml };
   } finally {
     if (worktreeDir) git(["worktree", "remove", "--force", worktreeDir]);
   }

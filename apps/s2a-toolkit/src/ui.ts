@@ -709,10 +709,9 @@ function resetProtoSteps() {
   const storyIframe = document.getElementById('storyIframe') as HTMLIFrameElement;
   steps.style.display = 'none';
   storyEmbed.style.display = 'none';
+  storyIframe.srcdoc = '';
   storyIframe.src = 'about:blank';
   storyIframe.style.display = 'none';
-  const storyLoading = document.getElementById('storyLoading') as HTMLElement;
-  if (storyLoading) storyLoading.style.display = 'none';
   postToPlugin('resize-for-view', { width: 520, height: 680 });
   setProtoStatus('');
 }
@@ -781,7 +780,7 @@ document.getElementById('protoGenerateBtn')?.addEventListener('click', async () 
       storyFile?: string;
       branchName?: string;
       prUrl?: string;
-      previewUrl?: string;
+      previewHtml?: string;
       checks?: { lint?: boolean; typecheck?: boolean; storybook?: boolean };
     };
 
@@ -804,20 +803,14 @@ document.getElementById('protoGenerateBtn')?.addEventListener('click', async () 
       storyOpenBtn.href = storyUrl;
       if (data.prUrl) storyPRBtn.href = data.prUrl;
 
-      // Show embed area with loading state while Storybook recompiles
-      const storyLoading = document.getElementById('storyLoading') as HTMLElement;
-      storyLoading.style.display = 'flex';
-      storyIframe.style.display = 'none';
-      storyIframe.src = 'about:blank';
       storyEmbed.style.display = 'block';
-      postToPlugin('resize-for-view', { width: 520, height: 900 });
-      setProtoStatus('⏳ Waiting for Storybook to compile…');
-
-      // Poll index.json until the story appears, then load the iframe
-      await waitForStory(storyId);
-      storyLoading.style.display = 'none';
       storyIframe.style.display = 'block';
-      storyIframe.src = storyUrl;
+      if (data.previewHtml) {
+        storyIframe.srcdoc = data.previewHtml;
+      } else {
+        storyIframe.src = storyUrl;
+      }
+      postToPlugin('resize-for-view', { width: 520, height: 900 });
       setProtoStatus('✓ ' + (data.storyFile.split('/').pop() || 'story') + ' ready', 'ok');
     }
 
