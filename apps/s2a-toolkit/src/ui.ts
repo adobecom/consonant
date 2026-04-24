@@ -686,8 +686,28 @@ function resetProtoSteps() {
   steps.style.display = 'none';
   storyEmbed.style.display = 'none';
   storyIframe.src = 'about:blank';
+  storyIframe.style.display = 'none';
+  const storyLoading = document.getElementById('storyLoading') as HTMLElement;
+  if (storyLoading) storyLoading.style.display = 'none';
   postToPlugin('resize-for-view', { width: 520, height: 680 });
   setProtoStatus('');
+}
+
+async function waitForStory(storyId: string, maxAttempts = 20, intervalMs = 2000): Promise<void> {
+  for (let i = 0; i < maxAttempts; i++) {
+    await new Promise<void>(r => setTimeout(r, intervalMs));
+    try {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 2000);
+      const res = await fetch('http://localhost:6006/index.json', { signal: ctrl.signal });
+      clearTimeout(tid);
+      if (res.ok) {
+        const json = await res.json() as { entries?: Record<string, unknown>; stories?: Record<string, unknown> };
+        if (json.entries?.[storyId] || json.stories?.[storyId]) return;
+      }
+    } catch {}
+  }
+  // Timed out — load anyway so the user sees something
 }
 
 document.getElementById('protoGenerateBtn')?.addEventListener('click', async () => {
@@ -756,13 +776,27 @@ document.getElementById('protoGenerateBtn')?.addEventListener('click', async () 
       const storyUrl = 'http://localhost:6006/?path=/story/' + storyId;
       storyOpenBtn.href = storyUrl;
       if (data.prUrl) storyPRBtn.href = data.prUrl;
-      storyIframe.src = storyUrl;
+
+      // Show embed area with loading state while Storybook recompiles
+      const storyLoading = document.getElementById('storyLoading') as HTMLElement;
+      storyLoading.style.display = 'flex';
+      storyIframe.style.display = 'none';
+      storyIframe.src = 'about:blank';
       storyEmbed.style.display = 'block';
       postToPlugin('resize-for-view', { width: 520, height: 900 });
+      setProtoStatus('⏳ Waiting for Storybook to compile…');
+
+      // Poll index.json until the story appears, then load the iframe
+      await waitForStory(storyId);
+      storyLoading.style.display = 'none';
+      storyIframe.style.display = 'block';
+      storyIframe.src = storyUrl;
+      setProtoStatus('✓ ' + (data.storyFile.split('/').pop() || 'story') + ' ready', 'ok');
     }
 
-    const fileName = data.storyFile ? data.storyFile.split('/').pop() : 'story';
-    setProtoStatus('✓ ' + fileName + ' created', 'ok');
+    if (!data.storyFile) {
+      setProtoStatus('✓ Done', 'ok');
+    }
 
   } catch (e: any) {
     const msg = e.message || 'Unknown error';
