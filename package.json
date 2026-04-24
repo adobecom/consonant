@@ -27,6 +27,7 @@
     "story-ui:mcp": "node --env-file=.env node_modules/@tpitre/story-ui/dist/cli/index.js mcp",
     "dev": "concurrently -n \"storybook,story-ui\" -c \"blue,green\" \"npm run storybook\" \"npm run story-ui\"",
     "dev:mcp": "concurrently -n \"storybook,story-ui-mcp\" -c \"blue,yellow\" \"npm run storybook\" \"npm run story-ui:mcp\"",
+    "postinstall": "node scripts/patch-story-ui.js",
     "icons:fetch": "node scripts/fetch-spectrum-icons.js",
     "prototype-server": "node apps/s2a-toolkit/server/prototype-server.js"
   },

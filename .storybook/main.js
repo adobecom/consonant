@@ -11,9 +11,8 @@ const config = {
     "@chromatic-com/storybook",
     "@storybook/addon-docs",
     "@storybook/addon-a11y",
-    "@storybook/addon-vitest"
-    // Note: @tpitre/story-ui has a broken package (missing .js extension in imports)
-    // Use Story UI via MCP/CLI instead: npm run story-ui:mcp
+    "@storybook/addon-vitest",
+    "@tpitre/story-ui"
   ],
   "framework": {
     "name": "@storybook/web-components-vite",
