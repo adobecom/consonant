@@ -242,26 +242,39 @@ function generatePrototype({ selection, prompt }) {
   const checks    = { lint: lint.status === 0, typecheck: typecheck.status === 0 };
   console.log(`[proto]  lint=${checks.lint} typecheck=${checks.typecheck}`);
 
-  // Commit
+  // Commit — only if there are staged changes (re-generating same frame skips this)
   git(["add", absPath]);
-  const msg = `feat(prototype): generate ${frameName} from Figma\n\nSource: ${selection.fileName || "Figma"}\nFrame: ${frameName}`;
-  const commit = git(["commit", "-m", msg]);
-  if (!commit.ok) throw new Error("Commit failed: " + commit.stderr);
+  const staged = git(["diff", "--cached", "--name-only"]);
+  const hasChanges = staged.stdout.trim().length > 0;
+
+  if (hasChanges) {
+    const msg = `feat(prototype): generate ${frameName} from Figma\n\nSource: ${selection.fileName || "Figma"}\nFrame: ${frameName}`;
+    const commit = git(["commit", "-m", msg]);
+    if (!commit.ok) throw new Error("Commit failed: " + (commit.stderr || commit.stdout));
+  } else {
+    console.log(`[proto]  no changes to commit — story unchanged, skipping commit`);
+  }
 
   // Push
   const push = git(["push", "-u", "origin", branch]);
   if (!push.ok) throw new Error("Push failed: " + push.stderr);
 
-  // PR
-  const prBody = buildPRBody({ frameName, selection, prompt, storyFileRelative: relPath, checks, branchName: branch });
-  const pr = spawnSync(
-    "gh",
-    ["pr", "create", "--title", `prototype: ${frameName}`, "--body", prBody, "--draft", "--label", "prototype"],
-    { cwd: REPO_ROOT, encoding: "utf8", timeout: 30000 }
-  );
+  // PR — create if none exists for this branch, otherwise fetch existing URL
+  const existingPR = spawnSync("gh", ["pr", "view", branch, "--json", "url", "--jq", ".url"],
+    { cwd: REPO_ROOT, encoding: "utf8", timeout: 15000 });
 
-  const prUrl = pr.status === 0 ? pr.stdout.trim() : null;
-  if (!prUrl) console.warn("[proto]  PR creation failed:", pr.stderr);
+  let prUrl = existingPR.status === 0 ? existingPR.stdout.trim() : null;
+
+  if (!prUrl) {
+    const prBody = buildPRBody({ frameName, selection, prompt, storyFileRelative: relPath, checks, branchName: branch });
+    const pr = spawnSync(
+      "gh",
+      ["pr", "create", "--title", `prototype: ${frameName}`, "--body", prBody, "--draft", "--label", "prototype"],
+      { cwd: REPO_ROOT, encoding: "utf8", timeout: 30000 }
+    );
+    prUrl = pr.status === 0 ? pr.stdout.trim() : null;
+    if (!prUrl) console.warn("[proto]  PR creation failed:", pr.stderr);
+  }
 
   return { storyFile: relPath, branchName: branch, prUrl, checks };
 }
