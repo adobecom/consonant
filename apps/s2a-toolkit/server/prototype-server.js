@@ -288,6 +288,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (req.method === "GET" && req.url === "/open-cursor") {
+    spawnSync("open", ["-a", "Cursor", REPO_ROOT]);
+    res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true, path: REPO_ROOT }));
+    return;
+  }
+
   if (req.method === "GET" && req.url === "/health") {
     res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
     res.end(JSON.stringify({ ok: true, port: PORT, version: "0.1.0" }));

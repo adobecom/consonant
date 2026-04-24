@@ -666,3 +666,27 @@ body {
   display: block;
   background: #fff;
 }
+
+/* ── Quick actions (home footer) ─────────────────────────────────────────── */
+
+.quick-actions {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.quick-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-size: 11px;
+  font-family: inherit;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.quick-action-btn:hover { background: var(--bg-hover); color: var(--text-1); }

@@ -813,5 +813,16 @@ document.getElementById('protoGenerateBtn')?.addEventListener('click', async () 
   }
 });
 
+// ── Open in Cursor ────────────────────────────────────────────────────────────
+
+document.getElementById('openCursorBtn')?.addEventListener('click', async () => {
+  try {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 3000);
+    await fetch('http://localhost:9400/open-cursor', { signal: ctrl.signal });
+    clearTimeout(tid);
+  } catch {}
+});
+
 postToPlugin('ui-ready');
 postToPlugin('get-settings');

@@ -672,7 +672,7 @@
     setProtoStatus("");
   }
   async function waitForStory(storyId, maxAttempts = 20, intervalMs = 2e3) {
-    var _a10, _b;
+    var _a11, _b;
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise((r) => setTimeout(r, intervalMs));
       try {
@@ -682,7 +682,7 @@
         clearTimeout(tid);
         if (res.ok) {
           const json = await res.json();
-          if (((_a10 = json.entries) == null ? void 0 : _a10[storyId]) || ((_b = json.stories) == null ? void 0 : _b[storyId])) return;
+          if (((_a11 = json.entries) == null ? void 0 : _a11[storyId]) || ((_b = json.stories) == null ? void 0 : _b[storyId])) return;
         }
       } catch (e) {
       }
@@ -690,7 +690,7 @@
   }
   var _a9;
   (_a9 = document.getElementById("protoGenerateBtn")) == null ? void 0 : _a9.addEventListener("click", async () => {
-    var _a10, _b;
+    var _a11, _b;
     if (!protoSelection) return;
     const prompt = document.getElementById("protoPrompt").value.trim();
     const genBtn = document.getElementById("protoGenerateBtn");
@@ -726,7 +726,7 @@
       }
       const data = await res.json();
       setProtoStep(1, "done");
-      setProtoStep(2, ((_a10 = data.checks) == null ? void 0 : _a10.lint) && ((_b = data.checks) == null ? void 0 : _b.typecheck) ? "done" : "error");
+      setProtoStep(2, ((_a11 = data.checks) == null ? void 0 : _a11.lint) && ((_b = data.checks) == null ? void 0 : _b.typecheck) ? "done" : "error");
       setProtoStep(3, data.prUrl ? "done" : "idle");
       const storyEmbed = document.getElementById("storyEmbed");
       const storyIframe = document.getElementById("storyIframe");
@@ -766,6 +766,16 @@
     } finally {
       genBtn.disabled = false;
       genBtn.textContent = "Generate Prototype";
+    }
+  });
+  var _a10;
+  (_a10 = document.getElementById("openCursorBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
+    try {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 3e3);
+      await fetch("http://localhost:9400/open-cursor", { signal: ctrl.signal });
+      clearTimeout(tid);
+    } catch (e) {
     }
   });
   postToPlugin("ui-ready");
