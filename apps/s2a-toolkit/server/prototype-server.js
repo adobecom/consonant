@@ -250,12 +250,22 @@ function generatePrototype({ selection, prompt, branchOverride }) {
   const wgit = worktreeDir ? makeWorktreeGit(worktreeDir) : git;
 
   try {
-    // Write story inside the worktree (or REPO_ROOT if branch is already current)
+    const content = generateStoryFile({ selection, prompt, frameName, componentName: pascal, slug });
+
+    // Always write to STORIES_OUT in the current checkout so Storybook hot-reloads it
+    const liveStoryDir = path.join(REPO_ROOT, STORIES_REL);
+    const liveAbsPath  = path.join(liveStoryDir, fileName);
+    fs.mkdirSync(liveStoryDir, { recursive: true });
+    fs.writeFileSync(liveAbsPath, content, "utf8");
+    console.log(`[proto]  wrote ${relPath} to live checkout (Storybook preview)`);
+
+    // Also write to the worktree (or same dir if on that branch) for git commit
     const storyDir = path.join(baseDir, STORIES_REL);
     const absPath  = path.join(storyDir, fileName);
-    fs.mkdirSync(storyDir, { recursive: true });
-    const content = generateStoryFile({ selection, prompt, frameName, componentName: pascal, slug });
-    fs.writeFileSync(absPath, content, "utf8");
+    if (baseDir !== REPO_ROOT) {
+      fs.mkdirSync(storyDir, { recursive: true });
+      fs.writeFileSync(absPath, content, "utf8");
+    }
     console.log(`[proto]  wrote ${relPath}  (branch: ${branch})`);
 
     // Checks (non-blocking)
