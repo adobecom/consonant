@@ -638,6 +638,7 @@ body {
   font-weight: 500;
 }
 .embed-link:hover { text-decoration: underline; }
+.embed-link-btn { background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
 
 .story-loading {
   display: flex;
@@ -855,14 +856,6 @@ body {
           </button>
         </div>
 
-        <div class="quick-actions">
-          <button class="quick-action-btn" id="openCursorBtn">
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-              <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Open in Cursor
-          </button>
-        </div>
       </div>
 
       <!-- Variables panel -->
@@ -967,6 +960,7 @@ body {
             <div class="story-embed-links">
               <a class="embed-link" id="storyOpenBtn" href="#" target="_blank">Open ↗</a>
               <a class="embed-link" id="storyPRBtn" href="#" target="_blank">PR ↗</a>
+              <button class="embed-link embed-link-btn" id="openCursorBtn">Cursor ↗</button>
             </div>
           </div>
           <div class="story-loading" id="storyLoading">Storybook compiling…</div>

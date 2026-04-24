@@ -634,6 +634,7 @@ body {
   font-weight: 500;
 }
 .embed-link:hover { text-decoration: underline; }
+.embed-link-btn { background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
 
 .story-loading {
   display: flex;
