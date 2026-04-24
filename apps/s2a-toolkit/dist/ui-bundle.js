@@ -48,6 +48,12 @@
     headerTitle.textContent = views[view].title;
     backBtn.classList.toggle("visible", view !== "home");
     settingsBtn.style.display = view === "settings" ? "none" : "flex";
+    if (view === "prototype") {
+      postToPlugin("resize-for-view", { width: 520, height: 680 });
+      checkServerHealth();
+    } else {
+      postToPlugin("resize-for-view", { width: 320, height: 480 });
+    }
   }
   backBtn.addEventListener("click", () => navigateTo("home"));
   settingsBtn.addEventListener("click", () => {
@@ -588,6 +594,29 @@
       }
     }
   });
+  var serverDot = document.getElementById("serverDot");
+  var serverStatusLabel = document.getElementById("serverStatusLabel");
+  async function checkServerHealth() {
+    serverStatusLabel.textContent = "Checking\u2026";
+    serverDot.classList.remove("on");
+    try {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 3e3);
+      const res = await fetch("http://localhost:9400/health", { signal: ctrl.signal });
+      clearTimeout(tid);
+      const data = await res.json();
+      if (data.ok) {
+        serverDot.classList.add("on");
+        serverStatusLabel.textContent = "Servers ready";
+      } else {
+        serverStatusLabel.textContent = "Server error \u2014 check logs";
+      }
+    } catch (e) {
+      serverStatusLabel.textContent = "Offline \u2014 log in to start servers";
+    }
+  }
+  var _a8;
+  (_a8 = document.getElementById("serverRefreshBtn")) == null ? void 0 : _a8.addEventListener("click", checkServerHealth);
   var protoSelection = null;
   function setProtoMeta(text) {
     const el = document.getElementById("protoMeta");
@@ -631,14 +660,17 @@
   function resetProtoSteps() {
     [0, 1, 2, 3].forEach((i) => setProtoStep(i, "idle"));
     const steps = document.getElementById("protoSteps");
-    const output = document.getElementById("protoOutput");
+    const storyEmbed = document.getElementById("storyEmbed");
+    const storyIframe = document.getElementById("storyIframe");
     steps.style.display = "none";
-    output.style.display = "none";
+    storyEmbed.style.display = "none";
+    storyIframe.src = "about:blank";
+    postToPlugin("resize-for-view", { width: 520, height: 680 });
     setProtoStatus("");
   }
-  var _a8;
-  (_a8 = document.getElementById("protoGenerateBtn")) == null ? void 0 : _a8.addEventListener("click", async () => {
-    var _a9, _b;
+  var _a9;
+  (_a9 = document.getElementById("protoGenerateBtn")) == null ? void 0 : _a9.addEventListener("click", async () => {
+    var _a10, _b;
     if (!protoSelection) return;
     const prompt = document.getElementById("protoPrompt").value.trim();
     const genBtn = document.getElementById("protoGenerateBtn");
@@ -674,21 +706,21 @@
       }
       const data = await res.json();
       setProtoStep(1, "done");
-      setProtoStep(2, ((_a9 = data.checks) == null ? void 0 : _a9.lint) && ((_b = data.checks) == null ? void 0 : _b.typecheck) ? "done" : "error");
+      setProtoStep(2, ((_a10 = data.checks) == null ? void 0 : _a10.lint) && ((_b = data.checks) == null ? void 0 : _b.typecheck) ? "done" : "error");
       setProtoStep(3, data.prUrl ? "done" : "idle");
-      const output = document.getElementById("protoOutput");
-      const prRow = document.getElementById("protoOutputPR");
-      const prevRow = document.getElementById("protoOutputPreview");
-      const prLink = document.getElementById("protoPRLink");
-      const prevLink = document.getElementById("protoPreviewLink");
-      output.style.display = "flex";
-      if (data.prUrl) {
-        prRow.style.display = "flex";
-        prLink.href = data.prUrl;
-      }
-      if (data.previewUrl) {
-        prevRow.style.display = "flex";
-        prevLink.href = data.previewUrl;
+      const storyEmbed = document.getElementById("storyEmbed");
+      const storyIframe = document.getElementById("storyIframe");
+      const storyOpenBtn = document.getElementById("storyOpenBtn");
+      const storyPRBtn = document.getElementById("storyPRBtn");
+      if (data.storyFile) {
+        const componentName = (data.storyFile.split("/").pop() || "").replace(".stories.js", "");
+        const storyId = "prototypes-generated-" + componentName.toLowerCase() + "--default";
+        const storyUrl = "http://localhost:6006/?path=/story/" + storyId;
+        storyOpenBtn.href = storyUrl;
+        if (data.prUrl) storyPRBtn.href = data.prUrl;
+        storyIframe.src = storyUrl;
+        storyEmbed.style.display = "block";
+        postToPlugin("resize-for-view", { width: 520, height: 900 });
       }
       const fileName = data.storyFile ? data.storyFile.split("/").pop() : "story";
       setProtoStatus("\u2713 " + fileName + " created", "ok");

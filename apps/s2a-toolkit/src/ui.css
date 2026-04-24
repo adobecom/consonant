@@ -558,3 +558,87 @@ body {
 }
 .proto-output-link:hover { text-decoration: underline; }
 
+/* ── Server status ───────────────────────────────────────────────────────── */
+
+.server-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: var(--text-2);
+}
+
+.server-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-3);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.server-dot.on { background: #22c55e; }
+
+.server-label { flex: 1; }
+
+.server-refresh {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-2);
+  padding: 0 2px;
+  font-size: 13px;
+  line-height: 1;
+  border-radius: 3px;
+}
+.server-refresh:hover { color: var(--text-1); }
+
+/* ── Story embed (inline Storybook iframe) ───────────────────────────────── */
+
+.story-embed {
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.story-embed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+}
+
+.story-embed-title {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.story-embed-links {
+  display: flex;
+  gap: 10px;
+}
+
+.embed-link {
+  font-size: 11px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.embed-link:hover { text-decoration: underline; }
+
+.story-iframe {
+  width: 100%;
+  height: 480px;
+  border: none;
+  display: block;
+  background: #fff;
+}

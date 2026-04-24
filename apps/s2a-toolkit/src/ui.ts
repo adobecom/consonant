@@ -39,6 +39,13 @@ function navigateTo(view: View) {
   headerTitle.textContent = views[view].title;
   backBtn.classList.toggle('visible', view !== 'home');
   settingsBtn.style.display = view === 'settings' ? 'none' : 'flex';
+
+  if (view === 'prototype') {
+    postToPlugin('resize-for-view', { width: 520, height: 680 });
+    checkServerHealth();
+  } else {
+    postToPlugin('resize-for-view', { width: 320, height: 480 });
+  }
 }
 
 backBtn.addEventListener('click', () => navigateTo('home'));
@@ -586,6 +593,33 @@ window.addEventListener('message', (event) => {
   }
 });
 
+// ── Server health ─────────────────────────────────────────────────────────────
+
+const serverDot         = document.getElementById('serverDot') as HTMLElement;
+const serverStatusLabel = document.getElementById('serverStatusLabel') as HTMLElement;
+
+async function checkServerHealth() {
+  serverStatusLabel.textContent = 'Checking…';
+  serverDot.classList.remove('on');
+  try {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 3000);
+    const res = await fetch('http://localhost:9400/health', { signal: ctrl.signal });
+    clearTimeout(tid);
+    const data = await res.json() as { ok?: boolean };
+    if (data.ok) {
+      serverDot.classList.add('on');
+      serverStatusLabel.textContent = 'Servers ready';
+    } else {
+      serverStatusLabel.textContent = 'Server error — check logs';
+    }
+  } catch {
+    serverStatusLabel.textContent = 'Offline — log in to start servers';
+  }
+}
+
+document.getElementById('serverRefreshBtn')?.addEventListener('click', checkServerHealth);
+
 // ── Prototype ─────────────────────────────────────────────────────────────────
 
 interface ProtoSelection {
@@ -646,10 +680,13 @@ function setProtoStep(index: number, state: StepState, label?: string) {
 
 function resetProtoSteps() {
   [0, 1, 2, 3].forEach(i => setProtoStep(i, 'idle'));
-  const steps  = document.getElementById('protoSteps') as HTMLElement;
-  const output = document.getElementById('protoOutput') as HTMLElement;
+  const steps      = document.getElementById('protoSteps') as HTMLElement;
+  const storyEmbed = document.getElementById('storyEmbed') as HTMLElement;
+  const storyIframe = document.getElementById('storyIframe') as HTMLIFrameElement;
   steps.style.display = 'none';
-  output.style.display = 'none';
+  storyEmbed.style.display = 'none';
+  storyIframe.src = 'about:blank';
+  postToPlugin('resize-for-view', { width: 520, height: 680 });
   setProtoStatus('');
 }
 
@@ -707,16 +744,22 @@ document.getElementById('protoGenerateBtn')?.addEventListener('click', async () 
     setProtoStep(2, data.checks?.lint && data.checks?.typecheck ? 'done' : 'error');
     setProtoStep(3, data.prUrl ? 'done' : 'idle');
 
-    // Show output
-    const output   = document.getElementById('protoOutput') as HTMLElement;
-    const prRow    = document.getElementById('protoOutputPR') as HTMLElement;
-    const prevRow  = document.getElementById('protoOutputPreview') as HTMLElement;
-    const prLink   = document.getElementById('protoPRLink') as HTMLAnchorElement;
-    const prevLink = document.getElementById('protoPreviewLink') as HTMLAnchorElement;
+    // Show inline Storybook preview
+    const storyEmbed  = document.getElementById('storyEmbed') as HTMLElement;
+    const storyIframe = document.getElementById('storyIframe') as HTMLIFrameElement;
+    const storyOpenBtn = document.getElementById('storyOpenBtn') as HTMLAnchorElement;
+    const storyPRBtn   = document.getElementById('storyPRBtn') as HTMLAnchorElement;
 
-    output.style.display = 'flex';
-    if (data.prUrl) { prRow.style.display = 'flex'; prLink.href = data.prUrl; }
-    if (data.previewUrl) { prevRow.style.display = 'flex'; prevLink.href = data.previewUrl; }
+    if (data.storyFile) {
+      const componentName = (data.storyFile.split('/').pop() || '').replace('.stories.js', '');
+      const storyId  = 'prototypes-generated-' + componentName.toLowerCase() + '--default';
+      const storyUrl = 'http://localhost:6006/?path=/story/' + storyId;
+      storyOpenBtn.href = storyUrl;
+      if (data.prUrl) storyPRBtn.href = data.prUrl;
+      storyIframe.src = storyUrl;
+      storyEmbed.style.display = 'block';
+      postToPlugin('resize-for-view', { width: 520, height: 900 });
+    }
 
     const fileName = data.storyFile ? data.storyFile.split('/').pop() : 'story';
     setProtoStatus('✓ ' + fileName + ' created', 'ok');

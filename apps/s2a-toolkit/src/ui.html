@@ -121,6 +121,13 @@
       <!-- Prototype panel -->
       <div class="panel" id="protoPanel">
 
+        <!-- Server status -->
+        <div class="server-status" id="serverStatus">
+          <div class="server-dot" id="serverDot"></div>
+          <span class="server-label" id="serverStatusLabel">Checking servers…</span>
+          <button class="server-refresh" id="serverRefreshBtn" title="Recheck">↺</button>
+        </div>
+
         <div class="section-label">Selection</div>
         <div class="proto-selection" id="protoSelection">
           <div class="proto-selection-empty" id="protoSelectionEmpty">
@@ -166,15 +173,16 @@
           </div>
         </div>
 
-        <div class="proto-output" id="protoOutput" style="display:none;">
-          <div class="proto-output-row" id="protoOutputPreview" style="display:none;">
-            <span class="proto-output-label">Preview</span>
-            <a class="proto-output-link" id="protoPreviewLink" href="#" target="_blank">Open Storybook</a>
+        <!-- Inline Storybook preview — shown after generation -->
+        <div class="story-embed" id="storyEmbed" style="display:none;">
+          <div class="story-embed-header">
+            <span class="story-embed-title">Preview</span>
+            <div class="story-embed-links">
+              <a class="embed-link" id="storyOpenBtn" href="#" target="_blank">Open ↗</a>
+              <a class="embed-link" id="storyPRBtn" href="#" target="_blank">PR ↗</a>
+            </div>
           </div>
-          <div class="proto-output-row" id="protoOutputPR" style="display:none;">
-            <span class="proto-output-label">PR</span>
-            <a class="proto-output-link" id="protoPRLink" href="#" target="_blank">Open PR</a>
-          </div>
+          <iframe class="story-iframe" id="storyIframe" src="about:blank" frameborder="0"></iframe>
         </div>
 
         <div class="status" id="protoStatus"></div>

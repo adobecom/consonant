@@ -10,7 +10,9 @@
   "documentAccess": "dynamic-page",
   "networkAccess": {
     "allowedDomains": [
+      "http://localhost:6006",
       "http://localhost:9300",
+      "http://localhost:9400",
       "https://api.github.com",
       "ws://localhost:9220",
       "ws://localhost:9221",

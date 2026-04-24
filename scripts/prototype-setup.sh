@@ -46,6 +46,7 @@ log "Setting up Node 20..."
 nvm install 20 --silent
 nvm use 20 --silent
 ok "Node $(node -v)"
+NODE_BIN_DIR="$(node -e 'process.stdout.write(require("path").dirname(process.execPath))')"
 
 # Persist nvm to shell profile
 PROFILE="$HOME/.zshrc"
@@ -315,35 +316,109 @@ echo ""
 echo "  Opening Cursor and Storybook for you now..."
 echo ""
 
-# Drop start-prototype.command on the Desktop
-cp "$INSTALL_DIR/scripts/start-prototype.command" "$HOME/Desktop/Start Prototype Session.command" 2>/dev/null \
-  && ok "Added 'Start Prototype Session' shortcut to your Desktop — double-click it each session" \
-  || warn "Couldn't copy shortcut — find it at $INSTALL_DIR/scripts/start-prototype.command"
+# ── 12. Write launcher scripts + launchd agents ──────────────────────────────
+log "Setting up background services (Storybook + prototype server)..."
+
+mkdir -p "$HOME/.s2a"
+
+cat > "$HOME/.s2a/start-storybook.sh" <<SCRIPT
+#!/usr/bin/env bash
+export NVM_DIR="\$HOME/.nvm"
+[[ -s "\$NVM_DIR/nvm.sh" ]] && . "\$NVM_DIR/nvm.sh"
+[[ -s "\$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]] && . "\$(brew --prefix nvm)/nvm.sh"
+export PATH="${NODE_BIN_DIR}:\$PATH"
+cd "$INSTALL_DIR"
+exec npm run storybook
+SCRIPT
+chmod +x "$HOME/.s2a/start-storybook.sh"
+
+cat > "$HOME/.s2a/start-proto-server.sh" <<SCRIPT
+#!/usr/bin/env bash
+export NVM_DIR="\$HOME/.nvm"
+[[ -s "\$NVM_DIR/nvm.sh" ]] && . "\$NVM_DIR/nvm.sh"
+[[ -s "\$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]] && . "\$(brew --prefix nvm)/nvm.sh"
+export PATH="${NODE_BIN_DIR}:\$PATH"
+exec node "$INSTALL_DIR/apps/s2a-toolkit/server/prototype-server.js"
+SCRIPT
+chmod +x "$HOME/.s2a/start-proto-server.sh"
+
+mkdir -p "$HOME/Library/LaunchAgents"
+
+cat > "$HOME/Library/LaunchAgents/com.s2a.storybook.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.s2a.storybook</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>$HOME/.s2a/start-storybook.sh</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/tmp/s2a-storybook.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/s2a-storybook.log</string>
+</dict>
+</plist>
+PLIST
+
+cat > "$HOME/Library/LaunchAgents/com.s2a.prototype-server.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.s2a.prototype-server</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>$HOME/.s2a/start-proto-server.sh</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/tmp/s2a-proto-server.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/s2a-proto-server.log</string>
+</dict>
+</plist>
+PLIST
+
+# Load (or reload) the agents
+launchctl unload "$HOME/Library/LaunchAgents/com.s2a.storybook.plist"       2>/dev/null || true
+launchctl unload "$HOME/Library/LaunchAgents/com.s2a.prototype-server.plist" 2>/dev/null || true
+launchctl load   "$HOME/Library/LaunchAgents/com.s2a.storybook.plist"
+launchctl load   "$HOME/Library/LaunchAgents/com.s2a.prototype-server.plist"
+ok "Background services registered — Storybook + prototype server start automatically at login"
 
 # Open Cursor with the project
 open -a Cursor "$INSTALL_DIR" 2>/dev/null || warn "Couldn't open Cursor automatically — open it from Applications or Spotlight"
 
-# Start Storybook in a new Terminal window
-osascript -e "tell application \"Terminal\" to do script \"cd '$INSTALL_DIR' && npm run storybook\"" 2>/dev/null \
-  || warn "Couldn't open Terminal — run manually: cd $INSTALL_DIR && npm run storybook"
-
-# Start prototype server in a new Terminal window
-osascript -e "tell application \"Terminal\" to do script \"cd '$INSTALL_DIR' && npm run prototype-server\"" 2>/dev/null \
-  || warn "Couldn't open Terminal — run manually: cd $INSTALL_DIR && npm run prototype-server"
-
-echo "  Storybook:        http://localhost:6006  (~30s to start)"
-echo "  Prototype server: http://localhost:9400"
+echo "  Storybook:        http://localhost:6006  (starting in background, ~30s)"
+echo "  Prototype server: http://localhost:9400  (starting in background)"
 echo ""
-echo "  To test the prototype workflow:"
+echo "  Daily workflow (no launcher needed — services start automatically at login):"
 echo "    1. Open Figma Desktop and load your working file"
 echo "    2. Plugins → Development → S2A Toolkit → Run"
-echo "    3. Select any frame on the canvas"
-echo "    4. Click the Prototype tab in the plugin"
+echo "    3. Click the Prototype tab — 'Servers ready' appears when Storybook is up"
+echo "    4. Select any frame on the canvas"
 echo "    5. Describe what the prototype should demonstrate"
-echo "    6. Click Generate Prototype"
+echo "    6. Click Generate — the story preview loads right inside the plugin"
 echo ""
-echo "  The plugin will create a branch, write a Storybook story, open a draft PR,"
-echo "  and return the preview link — all without touching Git manually."
-echo ""
-echo "  Pro tip: Double-click 'Start Prototype Session' on your Desktop to restart everything."
+echo "  Logs: tail -f /tmp/s2a-storybook.log"
+echo "        tail -f /tmp/s2a-proto-server.log"
 echo ""

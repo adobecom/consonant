@@ -227,6 +227,13 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       break;
     }
 
+    case 'resize-for-view': {
+      const w = (msg.width as number) || 320;
+      const h = (msg.height as number) || 480;
+      figma.ui.resize(w, h);
+      break;
+    }
+
     case 'bridge:command': {
       const requestId = msg.requestId as string;
       const method = msg.method as string;
