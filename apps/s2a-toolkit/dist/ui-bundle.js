@@ -51,6 +51,7 @@
     if (view === "prototype") {
       postToPlugin("resize-for-view", { width: 520, height: 680 });
       checkServerHealth();
+      loadProtoBranches();
     } else {
       postToPlugin("resize-for-view", { width: 320, height: 480 });
     }
@@ -641,6 +642,11 @@
       typeEl.textContent = sel.nodeType + (sel.width ? ` \xB7 ${sel.width}\xD7${sel.height}` : "");
       genBtn.disabled = false;
       setProtoMeta(sel.name);
+      const bi = document.getElementById("branchInput");
+      if (bi && (!bi.value || bi.dataset.autoFilled === "true")) {
+        bi.value = autoBranchName(sel.name);
+        bi.dataset.autoFilled = "true";
+      }
     } else {
       empty.style.display = "block";
       info.style.display = "none";
@@ -672,7 +678,7 @@
     setProtoStatus("");
   }
   async function waitForStory(storyId, maxAttempts = 20, intervalMs = 2e3) {
-    var _a10, _b;
+    var _a11, _b;
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise((r) => setTimeout(r, intervalMs));
       try {
@@ -682,7 +688,7 @@
         clearTimeout(tid);
         if (res.ok) {
           const json = await res.json();
-          if (((_a10 = json.entries) == null ? void 0 : _a10[storyId]) || ((_b = json.stories) == null ? void 0 : _b[storyId])) return;
+          if (((_a11 = json.entries) == null ? void 0 : _a11[storyId]) || ((_b = json.stories) == null ? void 0 : _b[storyId])) return;
         }
       } catch (e) {
       }
@@ -690,9 +696,10 @@
   }
   var _a9;
   (_a9 = document.getElementById("protoGenerateBtn")) == null ? void 0 : _a9.addEventListener("click", async () => {
-    var _a10, _b;
+    var _a11, _b;
     if (!protoSelection) return;
     const prompt = document.getElementById("protoPrompt").value.trim();
+    const branch = document.getElementById("branchInput").value.trim() || void 0;
     const genBtn = document.getElementById("protoGenerateBtn");
     const steps = document.getElementById("protoSteps");
     genBtn.disabled = true;
@@ -718,7 +725,7 @@
       const res = await fetch("http://localhost:9400/prototype/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selection: selectionData, prompt })
+        body: JSON.stringify({ selection: selectionData, prompt, branch })
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
@@ -726,8 +733,9 @@
       }
       const data = await res.json();
       setProtoStep(1, "done");
-      setProtoStep(2, ((_a10 = data.checks) == null ? void 0 : _a10.lint) && ((_b = data.checks) == null ? void 0 : _b.typecheck) ? "done" : "error");
+      setProtoStep(2, ((_a11 = data.checks) == null ? void 0 : _a11.lint) && ((_b = data.checks) == null ? void 0 : _b.typecheck) ? "done" : "error");
       setProtoStep(3, data.prUrl ? "done" : "idle");
+      loadProtoBranches();
       const storyEmbed = document.getElementById("storyEmbed");
       const storyIframe = document.getElementById("storyIframe");
       const storyOpenBtn = document.getElementById("storyOpenBtn");
@@ -766,6 +774,77 @@
     } finally {
       genBtn.disabled = false;
       genBtn.textContent = "Generate Prototype";
+    }
+  });
+  var branchInput = document.getElementById("branchInput");
+  var branchPickBtn = document.getElementById("branchPickBtn");
+  var branchDropdown = document.getElementById("branchDropdown");
+  var branchDropdownOpen = false;
+  var cachedProtoBranches = [];
+  function autoBranchName(frameName) {
+    const slug = frameName.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "-").toLowerCase();
+    const date = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+    return `figma-prototype/${slug}-${date}`;
+  }
+  function closeBranchDropdown() {
+    branchDropdownOpen = false;
+    branchDropdown == null ? void 0 : branchDropdown.classList.remove("open");
+  }
+  async function loadProtoBranches() {
+    try {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 4e3);
+      const res = await fetch("http://localhost:9400/git/branches", { signal: ctrl.signal });
+      clearTimeout(tid);
+      if (!res.ok) return;
+      const data = await res.json();
+      cachedProtoBranches = data.prototypeBranches || [];
+    } catch (e) {
+    }
+  }
+  function renderBranchDropdown(branches) {
+    if (!branchDropdown) return;
+    if (branches.length === 0) {
+      branchDropdown.innerHTML = '<div class="branch-dropdown-empty">No existing branches yet</div>';
+      return;
+    }
+    branchDropdown.innerHTML = branches.map((b) => {
+      const label = b.replace("figma-prototype/", "");
+      return `<button class="branch-dropdown-item" data-branch="${b}">${label}</button>`;
+    }).join("");
+    branchDropdown.querySelectorAll(".branch-dropdown-item").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (branchInput) {
+          branchInput.value = btn.dataset.branch;
+          branchInput.dataset.autoFilled = "false";
+        }
+        closeBranchDropdown();
+      });
+    });
+  }
+  branchInput == null ? void 0 : branchInput.addEventListener("input", () => {
+    branchInput.dataset.autoFilled = "false";
+  });
+  branchPickBtn == null ? void 0 : branchPickBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    branchDropdownOpen = !branchDropdownOpen;
+    if (branchDropdownOpen) {
+      renderBranchDropdown(cachedProtoBranches);
+      branchDropdown == null ? void 0 : branchDropdown.classList.add("open");
+    } else closeBranchDropdown();
+  });
+  document.addEventListener("click", () => {
+    if (branchDropdownOpen) closeBranchDropdown();
+  });
+  branchDropdown == null ? void 0 : branchDropdown.addEventListener("click", (e) => e.stopPropagation());
+  var _a10;
+  (_a10 = document.getElementById("openCursorBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
+    try {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 3e3);
+      await fetch("http://localhost:9400/open-cursor", { signal: ctrl.signal });
+      clearTimeout(tid);
+    } catch (e) {
     }
   });
   postToPlugin("ui-ready");
