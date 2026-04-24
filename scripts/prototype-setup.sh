@@ -13,8 +13,8 @@ warn() { echo -e "${YELLOW}!${NC} $1"; }
 hi()   { echo -e "${BOLD}$1${NC}"; }
 
 echo ""
-hi "S2A Design System — Designer Setup"
-hi "======================================"
+hi "S2A Design System — Prototype Setup (Test Build)"
+hi "=================================================="
 echo ""
 
 REPO_URL="https://github.com/adobecom/consonant.git"
@@ -46,6 +46,7 @@ log "Setting up Node 20..."
 nvm install 20 --silent
 nvm use 20 --silent
 ok "Node $(node -v)"
+NODE_BIN_DIR="$(node -e 'process.stdout.write(require("path").dirname(process.execPath))')"
 
 # Persist nvm to shell profile
 PROFILE="$HOME/.zshrc"
@@ -118,6 +119,19 @@ log "Installing dependencies (this takes a minute)..."
 cd "$INSTALL_DIR"
 npm install --silent
 ok "Dependencies installed"
+
+# ── 8b. Build S2A Toolkit plugin ─────────────────────────────────────────────
+TOOLKIT_DIR="$INSTALL_DIR/apps/s2a-toolkit"
+if [[ -d "$TOOLKIT_DIR" ]]; then
+  log "Building S2A Toolkit plugin..."
+  cd "$TOOLKIT_DIR"
+  npm install --silent
+  npm run build --silent
+  cd "$INSTALL_DIR"
+  ok "S2A Toolkit plugin built — load it in Figma from $TOOLKIT_DIR/dist/"
+else
+  warn "S2A Toolkit not found at $TOOLKIT_DIR — skipping plugin build"
+fi
 
 # ── 8a. Copy Figma Desktop Bridge plugin to stable location ──────────────────
 FIGMA_PLUGIN_SRC="$INSTALL_DIR/node_modules/figma-console-mcp/plugin"
@@ -285,36 +299,126 @@ if ! command -v claude &>/dev/null || ! claude whoami &>/dev/null 2>&1; then
 fi
 
 echo "  One-time Figma setup (do this now):"
+echo ""
+echo "  Plugin 1 — Figma Desktop Bridge (for Claude Code):"
 echo "    1. Open Figma Desktop"
-echo "    2. Go to Plugins → Development → Import plugin from manifest..."
-echo "    3. In the file picker, press Cmd+Shift+G to open 'Go to folder'"
-echo "    4. Paste this path and press Enter:"
+echo "    2. Plugins → Development → Import plugin from manifest..."
+echo "    3. Press Cmd+Shift+G, paste this path, press Return:"
 echo "         ~/.figma-console-mcp/plugin/manifest.json"
-echo "    5. Click Open"
-echo "    6. The plugin will appear as 'Figma Desktop Bridge' — click Run when you need it"
+echo "    4. Click Open — plugin appears as 'Figma Desktop Bridge'"
+echo ""
+echo "  Plugin 2 — S2A Toolkit (for prototype generation):"
+echo "    1. Plugins → Development → Import plugin from manifest..."
+echo "    2. Press Cmd+Shift+G, paste this path, press Return:"
+echo "         $INSTALL_DIR/apps/s2a-toolkit/dist/manifest.json"
+echo "    3. Click Open — plugin appears as 'S2A Toolkit'"
 echo ""
 echo "  Opening Cursor and Storybook for you now..."
 echo ""
 
-# Drop start.command on the Desktop for day 2+ sessions
-cp "$INSTALL_DIR/scripts/start.command" "$HOME/Desktop/Start S2A Session.command" 2>/dev/null \
-  && ok "Added 'Start S2A Session' shortcut to your Desktop — double-click it next time" \
-  || warn "Couldn't copy start shortcut — you can find it at $INSTALL_DIR/scripts/start.command"
+# ── 12. Write launcher scripts + launchd agents ──────────────────────────────
+log "Setting up background services (Storybook + prototype server)..."
+
+mkdir -p "$HOME/.s2a"
+
+cat > "$HOME/.s2a/start-storybook.sh" <<SCRIPT
+#!/usr/bin/env bash
+export NVM_DIR="\$HOME/.nvm"
+[[ -s "\$NVM_DIR/nvm.sh" ]] && . "\$NVM_DIR/nvm.sh"
+[[ -s "\$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]] && . "\$(brew --prefix nvm)/nvm.sh"
+export PATH="${NODE_BIN_DIR}:\$PATH"
+cd "$INSTALL_DIR"
+exec npm run storybook
+SCRIPT
+chmod +x "$HOME/.s2a/start-storybook.sh"
+
+cat > "$HOME/.s2a/start-proto-server.sh" <<SCRIPT
+#!/usr/bin/env bash
+export NVM_DIR="\$HOME/.nvm"
+[[ -s "\$NVM_DIR/nvm.sh" ]] && . "\$NVM_DIR/nvm.sh"
+[[ -s "\$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]] && . "\$(brew --prefix nvm)/nvm.sh"
+export PATH="${NODE_BIN_DIR}:\$PATH"
+exec node "$INSTALL_DIR/apps/s2a-toolkit/server/prototype-server.js"
+SCRIPT
+chmod +x "$HOME/.s2a/start-proto-server.sh"
+
+mkdir -p "$HOME/Library/LaunchAgents"
+
+cat > "$HOME/Library/LaunchAgents/com.s2a.storybook.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.s2a.storybook</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>$HOME/.s2a/start-storybook.sh</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/tmp/s2a-storybook.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/s2a-storybook.log</string>
+</dict>
+</plist>
+PLIST
+
+cat > "$HOME/Library/LaunchAgents/com.s2a.prototype-server.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.s2a.prototype-server</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>$HOME/.s2a/start-proto-server.sh</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/tmp/s2a-proto-server.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/s2a-proto-server.log</string>
+</dict>
+</plist>
+PLIST
+
+# Load (or reload) the agents
+launchctl unload "$HOME/Library/LaunchAgents/com.s2a.storybook.plist"       2>/dev/null || true
+launchctl unload "$HOME/Library/LaunchAgents/com.s2a.prototype-server.plist" 2>/dev/null || true
+launchctl load   "$HOME/Library/LaunchAgents/com.s2a.storybook.plist"
+launchctl load   "$HOME/Library/LaunchAgents/com.s2a.prototype-server.plist"
+ok "Background services registered — Storybook + prototype server start automatically at login"
 
 # Open Cursor with the project
 open -a Cursor "$INSTALL_DIR" 2>/dev/null || warn "Couldn't open Cursor automatically — open it from Applications or Spotlight"
 
-# Start Storybook in a new Terminal window
-osascript -e "tell application \"Terminal\" to do script \"cd '$INSTALL_DIR' && npm run storybook\"" 2>/dev/null \
-  || warn "Couldn't open Terminal automatically — run: cd $INSTALL_DIR && npm run storybook"
-
-echo "  Storybook will be at:  http://localhost:6006  (give it ~30 seconds to start)"
+echo "  Storybook:        http://localhost:6006  (starting in background, ~30s)"
+echo "  Prototype server: http://localhost:9400  (starting in background)"
 echo ""
-echo "  When you're ready to build something:"
-echo "    1. Switch to the Cursor window that just opened"
-echo "    2. Open Claude Code inside Cursor (or run: claude ~/Desktop/prototyping/consonant)"
-echo "    3. Type:  /start-feature \"describe what you're building\""
+echo "  Daily workflow (no launcher needed — services start automatically at login):"
+echo "    1. Open Figma Desktop and load your working file"
+echo "    2. Plugins → Development → S2A Toolkit → Run"
+echo "    3. Click the Prototype tab — 'Servers ready' appears when Storybook is up"
+echo "    4. Select any frame on the canvas"
+echo "    5. Describe what the prototype should demonstrate"
+echo "    6. Click Generate — the story preview loads right inside the plugin"
 echo ""
-echo "  Pro tip: Storybook auto-reloads as you make changes — leave it open."
-echo "  Cursor Pro available via go/cursor (Adobe internal)."
+echo "  Logs: tail -f /tmp/s2a-storybook.log"
+echo "        tail -f /tmp/s2a-proto-server.log"
 echo ""

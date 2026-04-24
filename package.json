@@ -27,7 +27,8 @@
     "story-ui:mcp": "story-ui mcp",
     "dev": "concurrently -n \"storybook,story-ui-http,story-ui-mcp\" -c \"blue,green,yellow\" \"npm run storybook\" \"npm run story-ui\" \"npm run story-ui:mcp\"",
     "dev:mcp": "concurrently -n \"storybook,story-ui-mcp\" -c \"blue,yellow\" \"npm run storybook\" \"npm run story-ui:mcp\"",
-    "icons:fetch": "node scripts/fetch-spectrum-icons.js"
+    "icons:fetch": "node scripts/fetch-spectrum-icons.js",
+    "prototype-server": "node apps/s2a-toolkit/server/prototype-server.js"
   },
   "keywords": [],
   "author": "",
