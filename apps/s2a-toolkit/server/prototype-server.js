@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 "use strict";
 
-const http       = require("http");
-const fs         = require("fs");
-const path       = require("path");
+const http          = require("http");
+const fs            = require("fs");
+const path          = require("path");
+const os            = require("os");
 const { spawnSync } = require("child_process");
 
-const PORT       = 9400;
-const REPO_ROOT  = path.resolve(__dirname, "..", "..", "..");
-const STORIES_OUT = path.join(REPO_ROOT, "apps", "storybook", "stories", "generated");
+const PORT      = 9400;
+const REPO_ROOT = path.resolve(__dirname, "..", "..", "..");
+const STORIES_REL = path.join("apps", "storybook", "stories", "generated");
 
 const CORS = {
   "Access-Control-Allow-Origin":  "*",
@@ -17,7 +18,6 @@ const CORS = {
 };
 
 // ── Component registry ────────────────────────────────────────────────────────
-// Maps Figma layer name patterns → S2A component usage in Lit HTML
 
 const REGISTRY = [
   {
@@ -80,44 +80,34 @@ function toPascal(name) {
 function detectComponents(selection) {
   const detected = [];
   const unmapped = [];
-
   const candidates = [
     ...(selection.children || []),
     ...(selection.children || []).flatMap(c => c.children || []),
   ];
-
   for (const node of candidates) {
     if (!node.name) continue;
     const match = REGISTRY.find(r => r.pattern.test(node.name));
     if (match) {
-      if (!detected.find(d => d.name === match.name)) {
-        detected.push({ ...match, node });
-      }
+      if (!detected.find(d => d.name === match.name)) detected.push({ ...match, node });
     } else if (!["TEXT", "VECTOR", "LINE"].includes(node.type)) {
       unmapped.push(node.name);
     }
   }
-
   return { detected, unmapped: [...new Set(unmapped)].slice(0, 8) };
 }
 
 function generateStoryFile({ selection, prompt, frameName, componentName, slug }) {
   const { detected, unmapped } = detectComponents(selection);
   const date = new Date().toISOString().split("T")[0];
-
   const mappedComponents = detected.length
     ? detected.map(d => `      ${d.render(d.node)}`).join("\n")
     : `      <!-- TODO: map layers from "${frameName}" to S2A components -->`;
-
   const mappingReport = [
     detected.length ? `Mapped: ${detected.map(d => d.name).join(", ")}` : "No components auto-mapped.",
     unmapped.length ? `Unmapped layers: ${unmapped.join(", ")}` : "",
   ].filter(Boolean).join(" · ");
-
-  const promptNote = prompt ? `\n * Intent: ${prompt}` : "";
-  const unmappedNote = unmapped.length
-    ? `\n * ⚠ Unmapped: ${unmapped.join(", ")}`
-    : "";
+  const promptNote  = prompt ? `\n * Intent: ${prompt}` : "";
+  const unmappedNote = unmapped.length ? `\n * ⚠ Unmapped: ${unmapped.join(", ")}` : "";
 
   return `import { html } from "lit";
 
@@ -136,7 +126,7 @@ export default {
     layout: "fullscreen",
     docs: {
       description: {
-        component: \`Prototype generated from Figma frame **${frameName}**.\\n\\n${mappingReport.replace(/`/g, "'")}\\n\\nReview token usage and component mapping before promoting to production.\`,
+        component: \`Prototype generated from Figma frame **${frameName}**.\\n\\n${mappingReport.replace(/\`/g, "'")}\\n\\nReview token usage and component mapping before promoting to production.\`,
       },
     },
   },
@@ -196,87 +186,111 @@ Review component mapping and token usage before promoting to production.
 🤖 Generated with [S2A Toolkit](https://github.com/adobecom/consonant)`;
 }
 
-// ── Git + PR helpers ──────────────────────────────────────────────────────────
+// ── Git helpers ───────────────────────────────────────────────────────────────
 
 function git(args) {
   const r = spawnSync("git", args, { cwd: REPO_ROOT, encoding: "utf8", timeout: 30000 });
   return { ok: r.status === 0, stdout: r.stdout.trim(), stderr: r.stderr.trim() };
 }
 
-function ensureBranch(branchName) {
-  const exists = git(["branch", "--list", branchName]).stdout.length > 0;
-  if (exists) {
-    return git(["checkout", branchName]);
-  }
-  // Fetch + branch from origin/main
-  git(["fetch", "origin", "main"]);
-  return git(["checkout", "-b", branchName, "origin/main"]);
+function makeWorktreeGit(worktreeDir) {
+  return function(args) {
+    const r = spawnSync("git", args, { cwd: worktreeDir, encoding: "utf8", timeout: 30000 });
+    return { ok: r.status === 0, stdout: r.stdout.trim(), stderr: r.stderr.trim() };
+  };
 }
 
-// ── Core generator ────────────────────────────────────────────────────────────
+function listPrototypeBranches() {
+  const current = git(["branch", "--show-current"]).stdout;
+  const all = git(["branch", "-a", "--format=%(refname:short)"]).stdout.split("\n").filter(Boolean);
+  const proto = [...new Set(
+    all.map(b => b.replace(/^origin\//, "")).filter(b => b.startsWith("figma-prototype/"))
+  )].sort().reverse();
+  return { current, prototypeBranches: proto };
+}
 
-function generatePrototype({ selection, prompt }) {
+// ── Core generator (worktree — never switches the main working dir branch) ────
+
+function generatePrototype({ selection, prompt, branchOverride }) {
   const frameName = (selection.name || "Untitled").trim();
   const slug      = toSlug(frameName);
   const pascal    = toPascal(frameName);
   const date      = new Date().toISOString().split("T")[0];
-  const branch    = `figma-prototype/${slug}-${date}`;
+  const branch    = (branchOverride || `figma-prototype/${slug}-${date}`).trim();
   const fileName  = `${pascal}.stories.js`;
-  const absPath   = path.join(STORIES_OUT, fileName);
-  const relPath   = path.relative(REPO_ROOT, absPath);
+  const relPath   = path.join(STORIES_REL, fileName);
 
-  fs.mkdirSync(STORIES_OUT, { recursive: true });
+  // Ensure remote refs are fresh
+  git(["fetch", "origin", "main"]);
 
-  // Branch
-  const branchResult = ensureBranch(branch);
-  if (!branchResult.ok) throw new Error("Branch failed: " + branchResult.stderr);
+  // Create an isolated worktree — main working dir branch never changes
+  const worktreeDir = path.join(os.tmpdir(), `s2a-worktree-${slug}-${Date.now()}`);
+  const localExists  = git(["branch", "--list", branch]).stdout.length > 0;
+  const remoteExists = git(["branch", "-r", "--list", `origin/${branch}`]).stdout.length > 0;
 
-  // Write story
-  const content = generateStoryFile({ selection, prompt, frameName, componentName: pascal, slug });
-  fs.writeFileSync(absPath, content, "utf8");
-  console.log(`[proto]  wrote ${relPath}`);
-
-  // Checks (non-blocking — don't fail the whole pipeline)
-  const lint      = spawnSync("npm", ["run", "lint",      "--if-present"], { cwd: REPO_ROOT, encoding: "utf8", timeout: 60000 });
-  const typecheck = spawnSync("npm", ["run", "typecheck", "--if-present"], { cwd: REPO_ROOT, encoding: "utf8", timeout: 60000 });
-  const checks    = { lint: lint.status === 0, typecheck: typecheck.status === 0 };
-  console.log(`[proto]  lint=${checks.lint} typecheck=${checks.typecheck}`);
-
-  // Commit — only if there are staged changes (re-generating same frame skips this)
-  git(["add", absPath]);
-  const staged = git(["diff", "--cached", "--name-only"]);
-  const hasChanges = staged.stdout.trim().length > 0;
-
-  if (hasChanges) {
-    const msg = `feat(prototype): generate ${frameName} from Figma\n\nSource: ${selection.fileName || "Figma"}\nFrame: ${frameName}`;
-    const commit = git(["commit", "-m", msg]);
-    if (!commit.ok) throw new Error("Commit failed: " + (commit.stderr || commit.stdout));
+  let wtResult;
+  if (localExists) {
+    wtResult = git(["worktree", "add", worktreeDir, branch]);
+  } else if (remoteExists) {
+    wtResult = git(["worktree", "add", "--track", "-b", branch, worktreeDir, `origin/${branch}`]);
   } else {
-    console.log(`[proto]  no changes to commit — story unchanged, skipping commit`);
+    wtResult = git(["worktree", "add", "-b", branch, worktreeDir, "origin/main"]);
   }
 
-  // Push
-  const push = git(["push", "-u", "origin", branch]);
-  if (!push.ok) throw new Error("Push failed: " + push.stderr);
+  if (!wtResult.ok) throw new Error("Worktree setup failed: " + wtResult.stderr);
 
-  // PR — create if none exists for this branch, otherwise fetch existing URL
-  const existingPR = spawnSync("gh", ["pr", "view", branch, "--json", "url", "--jq", ".url"],
-    { cwd: REPO_ROOT, encoding: "utf8", timeout: 15000 });
+  const wgit = makeWorktreeGit(worktreeDir);
 
-  let prUrl = existingPR.status === 0 ? existingPR.stdout.trim() : null;
+  try {
+    // Write story inside the worktree
+    const storyDir = path.join(worktreeDir, STORIES_REL);
+    const absPath  = path.join(storyDir, fileName);
+    fs.mkdirSync(storyDir, { recursive: true });
+    const content = generateStoryFile({ selection, prompt, frameName, componentName: pascal, slug });
+    fs.writeFileSync(absPath, content, "utf8");
+    console.log(`[proto]  wrote ${relPath}  (branch: ${branch})`);
 
-  if (!prUrl) {
-    const prBody = buildPRBody({ frameName, selection, prompt, storyFileRelative: relPath, checks, branchName: branch });
-    const pr = spawnSync(
-      "gh",
-      ["pr", "create", "--title", `prototype: ${frameName}`, "--body", prBody, "--draft", "--label", "prototype"],
-      { cwd: REPO_ROOT, encoding: "utf8", timeout: 30000 }
-    );
-    prUrl = pr.status === 0 ? pr.stdout.trim() : null;
-    if (!prUrl) console.warn("[proto]  PR creation failed:", pr.stderr);
+    // Checks (non-blocking)
+    const lint      = spawnSync("npm", ["run", "lint",      "--if-present"], { cwd: REPO_ROOT, encoding: "utf8", timeout: 60000 });
+    const typecheck = spawnSync("npm", ["run", "typecheck", "--if-present"], { cwd: REPO_ROOT, encoding: "utf8", timeout: 60000 });
+    const checks    = { lint: lint.status === 0, typecheck: typecheck.status === 0 };
+    console.log(`[proto]  lint=${checks.lint} typecheck=${checks.typecheck}`);
+
+    // Commit (skip if story is identical to last commit)
+    wgit(["add", absPath]);
+    const staged = wgit(["diff", "--cached", "--name-only"]);
+    if (staged.stdout.trim().length > 0) {
+      const msg = `feat(prototype): generate ${frameName} from Figma\n\nSource: ${selection.fileName || "Figma"}\nFrame: ${frameName}`;
+      const commit = wgit(["commit", "-m", msg]);
+      if (!commit.ok) throw new Error("Commit failed: " + (commit.stderr || commit.stdout));
+    } else {
+      console.log(`[proto]  no changes — story unchanged, skipping commit`);
+    }
+
+    // Push
+    const push = wgit(["push", "-u", "origin", branch]);
+    if (!push.ok) throw new Error("Push failed: " + push.stderr);
+
+    // PR — reuse existing if already open for this branch
+    const existingPR = spawnSync("gh", ["pr", "view", branch, "--json", "url", "--jq", ".url"],
+      { cwd: REPO_ROOT, encoding: "utf8", timeout: 15000 });
+    let prUrl = existingPR.status === 0 ? existingPR.stdout.trim() : null;
+
+    if (!prUrl) {
+      const prBody = buildPRBody({ frameName, selection, prompt, storyFileRelative: relPath, checks, branchName: branch });
+      const pr = spawnSync(
+        "gh",
+        ["pr", "create", "--title", `prototype: ${frameName}`, "--body", prBody, "--draft", "--label", "prototype"],
+        { cwd: REPO_ROOT, encoding: "utf8", timeout: 30000 }
+      );
+      prUrl = pr.status === 0 ? pr.stdout.trim() : null;
+      if (!prUrl) console.warn("[proto]  PR creation failed:", pr.stderr);
+    }
+
+    return { storyFile: relPath, branchName: branch, prUrl, checks };
+  } finally {
+    git(["worktree", "remove", "--force", worktreeDir]);
   }
-
-  return { storyFile: relPath, branchName: branch, prUrl, checks };
 }
 
 // ── HTTP server ───────────────────────────────────────────────────────────────
@@ -297,7 +311,26 @@ const server = http.createServer((req, res) => {
 
   if (req.method === "GET" && req.url === "/health") {
     res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
-    res.end(JSON.stringify({ ok: true, port: PORT, version: "0.1.0" }));
+    res.end(JSON.stringify({ ok: true, port: PORT, version: "0.2.0" }));
+    return;
+  }
+
+  if (req.method === "GET" && req.url === "/open-cursor") {
+    spawnSync("open", ["-a", "Cursor", REPO_ROOT]);
+    res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true, path: REPO_ROOT }));
+    return;
+  }
+
+  if (req.method === "GET" && req.url === "/git/branches") {
+    try {
+      const data = listPrototypeBranches();
+      res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: true, ...data }));
+    } catch (err) {
+      res.writeHead(500, { ...CORS, "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: err.message }));
+    }
     return;
   }
 
@@ -305,9 +338,9 @@ const server = http.createServer((req, res) => {
     let body = "";
     req.on("data", chunk => { body += chunk; });
     req.on("end", () => {
-      let selection, prompt;
+      let selection, prompt, branch;
       try {
-        ({ selection, prompt } = JSON.parse(body));
+        ({ selection, prompt, branch } = JSON.parse(body));
       } catch {
         res.writeHead(400, { ...CORS, "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Invalid JSON body" }));
@@ -320,9 +353,13 @@ const server = http.createServer((req, res) => {
         return;
       }
 
-      console.log(`[proto]  generating: "${selection.name}"`);
+      console.log(`[proto]  generating: "${selection.name}" → ${branch || "(auto branch)"}`);
       try {
-        const result = generatePrototype({ selection, prompt: (prompt || "").trim() });
+        const result = generatePrototype({
+          selection,
+          prompt: (prompt || "").trim(),
+          branchOverride: branch || null,
+        });
         res.writeHead(200, { ...CORS, "Content-Type": "application/json" });
         res.end(JSON.stringify({ ok: true, ...result }));
       } catch (err) {
@@ -340,6 +377,8 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, "localhost", () => {
   console.log(`\n[S2A Prototype Server] http://localhost:${PORT}`);
-  console.log(`  POST /prototype/generate  — Figma selection + prompt → story + PR`);
+  console.log(`  POST /prototype/generate  — Figma selection + prompt + branch → story + PR`);
+  console.log(`  GET  /git/branches        — list current + prototype branches`);
+  console.log(`  GET  /open-cursor         — open repo in Cursor`);
   console.log(`  GET  /health              — health check\n`);
 });

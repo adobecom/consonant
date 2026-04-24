@@ -43,6 +43,7 @@ function navigateTo(view: View) {
   if (view === 'prototype') {
     postToPlugin('resize-for-view', { width: 520, height: 680 });
     checkServerHealth();
+    loadProtoBranches();
   } else {
     postToPlugin('resize-for-view', { width: 320, height: 480 });
   }
@@ -658,6 +659,12 @@ function updateProtoSelection(sel: ProtoSelection | null) {
     typeEl.textContent = sel.nodeType + (sel.width ? ` · ${sel.width}×${sel.height}` : '');
     genBtn.disabled = false;
     setProtoMeta(sel.name);
+    // Auto-fill branch name only if the user hasn't typed something custom
+    const bi = document.getElementById('branchInput') as HTMLInputElement;
+    if (bi && (!bi.value || bi.dataset.autoFilled === 'true')) {
+      bi.value = autoBranchName(sel.name);
+      bi.dataset.autoFilled = 'true';
+    }
   } else {
     empty.style.display = 'block';
     info.style.display = 'none';
@@ -713,9 +720,10 @@ async function waitForStory(storyId: string, maxAttempts = 20, intervalMs = 2000
 document.getElementById('protoGenerateBtn')?.addEventListener('click', async () => {
   if (!protoSelection) return;
 
-  const prompt = (document.getElementById('protoPrompt') as HTMLTextAreaElement).value.trim();
-  const genBtn = document.getElementById('protoGenerateBtn') as HTMLButtonElement;
-  const steps  = document.getElementById('protoSteps') as HTMLElement;
+  const prompt  = (document.getElementById('protoPrompt') as HTMLTextAreaElement).value.trim();
+  const branch  = (document.getElementById('branchInput') as HTMLInputElement).value.trim() || undefined;
+  const genBtn  = document.getElementById('protoGenerateBtn') as HTMLButtonElement;
+  const steps   = document.getElementById('protoSteps') as HTMLElement;
 
   genBtn.disabled = true;
   genBtn.textContent = 'Generating…';
@@ -744,7 +752,7 @@ document.getElementById('protoGenerateBtn')?.addEventListener('click', async () 
     const res = await fetch('http://localhost:9400/prototype/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ selection: selectionData, prompt }),
+      body: JSON.stringify({ selection: selectionData, prompt, branch }),
     });
 
     if (!res.ok) {
@@ -763,6 +771,8 @@ document.getElementById('protoGenerateBtn')?.addEventListener('click', async () 
     setProtoStep(1, 'done');
     setProtoStep(2, data.checks?.lint && data.checks?.typecheck ? 'done' : 'error');
     setProtoStep(3, data.prUrl ? 'done' : 'idle');
+    // Refresh branch list so the new branch appears in the picker
+    loadProtoBranches();
 
     // Show inline Storybook preview
     const storyEmbed  = document.getElementById('storyEmbed') as HTMLElement;
@@ -812,6 +822,68 @@ document.getElementById('protoGenerateBtn')?.addEventListener('click', async () 
     genBtn.textContent = 'Generate Prototype';
   }
 });
+
+// ── Branch picker ─────────────────────────────────────────────────────────────
+
+const branchInput    = document.getElementById('branchInput')    as HTMLInputElement;
+const branchPickBtn  = document.getElementById('branchPickBtn')  as HTMLButtonElement;
+const branchDropdown = document.getElementById('branchDropdown') as HTMLElement;
+
+let branchDropdownOpen = false;
+let cachedProtoBranches: string[] = [];
+
+function autoBranchName(frameName: string): string {
+  const slug = frameName.replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '-').toLowerCase();
+  const date = new Date().toISOString().split('T')[0];
+  return `figma-prototype/${slug}-${date}`;
+}
+
+function closeBranchDropdown() {
+  branchDropdownOpen = false;
+  branchDropdown?.classList.remove('open');
+}
+
+async function loadProtoBranches() {
+  try {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch('http://localhost:9400/git/branches', { signal: ctrl.signal });
+    clearTimeout(tid);
+    if (!res.ok) return;
+    const data = await res.json() as { prototypeBranches?: string[] };
+    cachedProtoBranches = data.prototypeBranches || [];
+  } catch {}
+}
+
+function renderBranchDropdown(branches: string[]) {
+  if (!branchDropdown) return;
+  if (branches.length === 0) {
+    branchDropdown.innerHTML = '<div class="branch-dropdown-empty">No existing branches yet</div>';
+    return;
+  }
+  branchDropdown.innerHTML = branches.map(b => {
+    const label = b.replace('figma-prototype/', '');
+    return `<button class="branch-dropdown-item" data-branch="${b}">${label}</button>`;
+  }).join('');
+  branchDropdown.querySelectorAll<HTMLButtonElement>('.branch-dropdown-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (branchInput) { branchInput.value = btn.dataset.branch!; branchInput.dataset.autoFilled = 'false'; }
+      closeBranchDropdown();
+    });
+  });
+}
+
+branchInput?.addEventListener('input', () => { branchInput.dataset.autoFilled = 'false'; });
+
+branchPickBtn?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  branchDropdownOpen = !branchDropdownOpen;
+  if (branchDropdownOpen) { renderBranchDropdown(cachedProtoBranches); branchDropdown?.classList.add('open'); }
+  else closeBranchDropdown();
+});
+
+document.addEventListener('click', () => { if (branchDropdownOpen) closeBranchDropdown(); });
+branchDropdown?.addEventListener('click', e => e.stopPropagation());
 
 // ── Open in Cursor ────────────────────────────────────────────────────────────
 

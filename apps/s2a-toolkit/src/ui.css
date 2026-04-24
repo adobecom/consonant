@@ -667,6 +667,81 @@ body {
   background: #fff;
 }
 
+/* ── Branch picker ───────────────────────────────────────────────────────── */
+
+.branch-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.branch-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  font-size: 11px;
+  font-family: 'Menlo', monospace;
+  color: var(--text-1);
+  outline: none;
+  min-width: 0;
+  transition: border-color 0.15s;
+}
+.branch-input:focus { border-color: var(--text-2); background: var(--bg); }
+.branch-input::placeholder { color: var(--text-3); font-family: inherit; }
+
+.branch-pick-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  cursor: pointer;
+  color: var(--text-2);
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s;
+}
+.branch-pick-btn:hover { background: var(--bg-hover); color: var(--text-1); }
+
+.branch-dropdown {
+  display: none;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+  overflow: hidden;
+  margin-top: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.branch-dropdown.open { display: flex; }
+
+.branch-dropdown-item {
+  padding: 7px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 11px;
+  font-family: 'Menlo', monospace;
+  color: var(--text-1);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+.branch-dropdown-item:last-child { border-bottom: none; }
+.branch-dropdown-item:hover { background: var(--bg-hover); }
+
+.branch-dropdown-empty {
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--text-3);
+  text-align: center;
+}
+
 /* ── Quick actions (home footer) ─────────────────────────────────────────── */
 
 .quick-actions {

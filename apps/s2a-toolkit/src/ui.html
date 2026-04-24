@@ -159,6 +159,17 @@
           rows="4"
         ></textarea>
 
+        <div class="section-label" style="margin-top:12px;">Branch</div>
+        <div class="branch-row">
+          <input class="branch-input" id="branchInput" type="text" placeholder="figma-prototype/…" spellcheck="false" />
+          <button class="branch-pick-btn" id="branchPickBtn" title="Pick existing branch" aria-label="Pick existing branch">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="branch-dropdown" id="branchDropdown"></div>
+
         <div class="btn-row" style="margin-top:8px;">
           <button class="btn" id="protoGenerateBtn" disabled style="flex:1;">Generate Prototype</button>
         </div>

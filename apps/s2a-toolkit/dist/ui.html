@@ -671,6 +671,81 @@ body {
   background: #fff;
 }
 
+/* ── Branch picker ───────────────────────────────────────────────────────── */
+
+.branch-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.branch-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  font-size: 11px;
+  font-family: 'Menlo', monospace;
+  color: var(--text-1);
+  outline: none;
+  min-width: 0;
+  transition: border-color 0.15s;
+}
+.branch-input:focus { border-color: var(--text-2); background: var(--bg); }
+.branch-input::placeholder { color: var(--text-3); font-family: inherit; }
+
+.branch-pick-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  cursor: pointer;
+  color: var(--text-2);
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s;
+}
+.branch-pick-btn:hover { background: var(--bg-hover); color: var(--text-1); }
+
+.branch-dropdown {
+  display: none;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+  overflow: hidden;
+  margin-top: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.branch-dropdown.open { display: flex; }
+
+.branch-dropdown-item {
+  padding: 7px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 11px;
+  font-family: 'Menlo', monospace;
+  color: var(--text-1);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+.branch-dropdown-item:last-child { border-bottom: none; }
+.branch-dropdown-item:hover { background: var(--bg-hover); }
+
+.branch-dropdown-empty {
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--text-3);
+  text-align: center;
+}
+
 /* ── Quick actions (home footer) ─────────────────────────────────────────── */
 
 .quick-actions {
@@ -851,6 +926,17 @@ body {
           rows="4"
         ></textarea>
 
+        <div class="section-label" style="margin-top:12px;">Branch</div>
+        <div class="branch-row">
+          <input class="branch-input" id="branchInput" type="text" placeholder="figma-prototype/…" spellcheck="false" />
+          <button class="branch-pick-btn" id="branchPickBtn" title="Pick existing branch" aria-label="Pick existing branch">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="branch-dropdown" id="branchDropdown"></div>
+
         <div class="btn-row" style="margin-top:8px;">
           <button class="btn" id="protoGenerateBtn" disabled style="flex:1;">Generate Prototype</button>
         </div>
@@ -977,6 +1063,7 @@ body {
     if (view === "prototype") {
       postToPlugin("resize-for-view", { width: 520, height: 680 });
       checkServerHealth();
+      loadProtoBranches();
     } else {
       postToPlugin("resize-for-view", { width: 320, height: 480 });
     }
@@ -1567,6 +1654,11 @@ body {
       typeEl.textContent = sel.nodeType + (sel.width ? ` \xB7 ${sel.width}\xD7${sel.height}` : "");
       genBtn.disabled = false;
       setProtoMeta(sel.name);
+      const bi = document.getElementById("branchInput");
+      if (bi && (!bi.value || bi.dataset.autoFilled === "true")) {
+        bi.value = autoBranchName(sel.name);
+        bi.dataset.autoFilled = "true";
+      }
     } else {
       empty.style.display = "block";
       info.style.display = "none";
@@ -1619,6 +1711,7 @@ body {
     var _a11, _b;
     if (!protoSelection) return;
     const prompt = document.getElementById("protoPrompt").value.trim();
+    const branch = document.getElementById("branchInput").value.trim() || void 0;
     const genBtn = document.getElementById("protoGenerateBtn");
     const steps = document.getElementById("protoSteps");
     genBtn.disabled = true;
@@ -1644,7 +1737,7 @@ body {
       const res = await fetch("http://localhost:9400/prototype/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selection: selectionData, prompt })
+        body: JSON.stringify({ selection: selectionData, prompt, branch })
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
@@ -1654,6 +1747,7 @@ body {
       setProtoStep(1, "done");
       setProtoStep(2, ((_a11 = data.checks) == null ? void 0 : _a11.lint) && ((_b = data.checks) == null ? void 0 : _b.typecheck) ? "done" : "error");
       setProtoStep(3, data.prUrl ? "done" : "idle");
+      loadProtoBranches();
       const storyEmbed = document.getElementById("storyEmbed");
       const storyIframe = document.getElementById("storyIframe");
       const storyOpenBtn = document.getElementById("storyOpenBtn");
@@ -1694,6 +1788,67 @@ body {
       genBtn.textContent = "Generate Prototype";
     }
   });
+  var branchInput = document.getElementById("branchInput");
+  var branchPickBtn = document.getElementById("branchPickBtn");
+  var branchDropdown = document.getElementById("branchDropdown");
+  var branchDropdownOpen = false;
+  var cachedProtoBranches = [];
+  function autoBranchName(frameName) {
+    const slug = frameName.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "-").toLowerCase();
+    const date = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+    return `figma-prototype/${slug}-${date}`;
+  }
+  function closeBranchDropdown() {
+    branchDropdownOpen = false;
+    branchDropdown == null ? void 0 : branchDropdown.classList.remove("open");
+  }
+  async function loadProtoBranches() {
+    try {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 4e3);
+      const res = await fetch("http://localhost:9400/git/branches", { signal: ctrl.signal });
+      clearTimeout(tid);
+      if (!res.ok) return;
+      const data = await res.json();
+      cachedProtoBranches = data.prototypeBranches || [];
+    } catch (e) {
+    }
+  }
+  function renderBranchDropdown(branches) {
+    if (!branchDropdown) return;
+    if (branches.length === 0) {
+      branchDropdown.innerHTML = '<div class="branch-dropdown-empty">No existing branches yet</div>';
+      return;
+    }
+    branchDropdown.innerHTML = branches.map((b) => {
+      const label = b.replace("figma-prototype/", "");
+      return `<button class="branch-dropdown-item" data-branch="${b}">${label}</button>`;
+    }).join("");
+    branchDropdown.querySelectorAll(".branch-dropdown-item").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (branchInput) {
+          branchInput.value = btn.dataset.branch;
+          branchInput.dataset.autoFilled = "false";
+        }
+        closeBranchDropdown();
+      });
+    });
+  }
+  branchInput == null ? void 0 : branchInput.addEventListener("input", () => {
+    branchInput.dataset.autoFilled = "false";
+  });
+  branchPickBtn == null ? void 0 : branchPickBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    branchDropdownOpen = !branchDropdownOpen;
+    if (branchDropdownOpen) {
+      renderBranchDropdown(cachedProtoBranches);
+      branchDropdown == null ? void 0 : branchDropdown.classList.add("open");
+    } else closeBranchDropdown();
+  });
+  document.addEventListener("click", () => {
+    if (branchDropdownOpen) closeBranchDropdown();
+  });
+  branchDropdown == null ? void 0 : branchDropdown.addEventListener("click", (e) => e.stopPropagation());
   var _a10;
   (_a10 = document.getElementById("openCursorBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
     try {
