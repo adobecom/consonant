@@ -665,8 +665,28 @@
     steps.style.display = "none";
     storyEmbed.style.display = "none";
     storyIframe.src = "about:blank";
+    storyIframe.style.display = "none";
+    const storyLoading = document.getElementById("storyLoading");
+    if (storyLoading) storyLoading.style.display = "none";
     postToPlugin("resize-for-view", { width: 520, height: 680 });
     setProtoStatus("");
+  }
+  async function waitForStory(storyId, maxAttempts = 20, intervalMs = 2e3) {
+    var _a10, _b;
+    for (let i = 0; i < maxAttempts; i++) {
+      await new Promise((r) => setTimeout(r, intervalMs));
+      try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 2e3);
+        const res = await fetch("http://localhost:6006/index.json", { signal: ctrl.signal });
+        clearTimeout(tid);
+        if (res.ok) {
+          const json = await res.json();
+          if (((_a10 = json.entries) == null ? void 0 : _a10[storyId]) || ((_b = json.stories) == null ? void 0 : _b[storyId])) return;
+        }
+      } catch (e) {
+      }
+    }
   }
   var _a9;
   (_a9 = document.getElementById("protoGenerateBtn")) == null ? void 0 : _a9.addEventListener("click", async () => {
@@ -718,12 +738,22 @@
         const storyUrl = "http://localhost:6006/?path=/story/" + storyId;
         storyOpenBtn.href = storyUrl;
         if (data.prUrl) storyPRBtn.href = data.prUrl;
-        storyIframe.src = storyUrl;
+        const storyLoading = document.getElementById("storyLoading");
+        storyLoading.style.display = "flex";
+        storyIframe.style.display = "none";
+        storyIframe.src = "about:blank";
         storyEmbed.style.display = "block";
         postToPlugin("resize-for-view", { width: 520, height: 900 });
+        setProtoStatus("\u23F3 Waiting for Storybook to compile\u2026");
+        await waitForStory(storyId);
+        storyLoading.style.display = "none";
+        storyIframe.style.display = "block";
+        storyIframe.src = storyUrl;
+        setProtoStatus("\u2713 " + (data.storyFile.split("/").pop() || "story") + " ready", "ok");
       }
-      const fileName = data.storyFile ? data.storyFile.split("/").pop() : "story";
-      setProtoStatus("\u2713 " + fileName + " created", "ok");
+      if (!data.storyFile) {
+        setProtoStatus("\u2713 Done", "ok");
+      }
     } catch (e) {
       const msg = e.message || "Unknown error";
       if (msg.includes("fetch") || msg.includes("NetworkError") || msg.includes("Failed to fetch")) {
