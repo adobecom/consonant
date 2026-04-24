@@ -2,6 +2,35 @@
 
 **This is the authoritative list of available components. ALWAYS check this before creating any UI element.**
 
+## ⚠️ CRITICAL: Function Calls Only — Never Custom Element Tags
+
+All S2A components are **Lit template functions**, not registered custom elements.
+
+```js
+// ✅ CORRECT — always call the function inside html``
+${Button({ label: 'Get started', background: 'solid' })}
+${ProductLockup({ label: 'Adobe Express', app: 'express' })}
+
+// ❌ WRONG — never use custom element tag syntax
+<button-component label="Get started"></button-component>
+<product-lockup app="express"></product-lockup>
+<s2a-button></s2a-button>
+```
+
+## ⚠️ CRITICAL: Always Use S2A Tokens — Never Hardcode Colors or Spacing
+
+```css
+/* ✅ CORRECT */
+padding: var(--s2a-spacing-lg, 24px);
+color: var(--s2a-color-content-default, #292929);
+background: var(--s2a-color-background-default, #ffffff);
+
+/* ❌ WRONG */
+padding: 24px;
+color: #1a1a1a;
+background: #f5f0ff;
+```
+
 ## Available Components
 
 ### 1. Button

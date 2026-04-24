@@ -17,6 +17,13 @@
       "env": {
         "JIRA_API_BASE_URL": "https://jira.corp.adobe.com/rest/api/2"
       }
+    },
+    "story-ui": {
+      "command": "node",
+      "args": ["--env-file=/Users/mhuntsberry/Desktop/consonant-2/.env", "/Users/mhuntsberry/Desktop/consonant-2/node_modules/@tpitre/story-ui/dist/cli/index.js", "mcp"],
+      "env": {
+        "STORY_UI_HTTP_BASE_URL": "http://localhost:4001"
+      }
     }
   }
 }
