@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.14] - 2026-04-27
+
+### 💥 Breaking changes
+
+- **`lg` breakpoint typography scale updated (redesign team)**
+  All title and super roles in `tokens.responsive.lg.css` now reference larger font-size, adjusted letter-spacing, and taller line-height primitives. Consumers applying `lg` breakpoint overrides will see larger text:
+
+  | Role | Font size (was → now) | Line height (was → now) |
+  |---|---|---|
+  | `super` | `9xl` → `11xl` | `4xl` → `6xl` |
+  | `title-1` | `7xl` → `10xl` | `3xl` → `5xl` |
+  | `title-2` | `6xl` → `7xl` | `2xl` → `3xl` |
+  | `title-3` | `3xl` → `6xl` | `lg` → `2xl` |
+  | `title-4` | `2xl` → `4xl` | `md` → `xl` |
+  | `title-5` | `xl` → `2xl` | `sm` → `md` |
+  | `title-6` | `md` → `lg` | *(unchanged)* |
+  | `body-lg` | `lg` → `xl` | *(unchanged)* |
+
+  Letter-spacing also shifted for `super` (`md` → `xs`), `title-2` (`xl` → `lg`), `title-3` (`5xl` → `xl`), `title-4` (`5xl` → `3xl`), and `title-5` (`5xl` → `4xl`).
+
+  Visually re-check any layout using the `lg` breakpoint's title or super scale.
+
+- **`--s2a-font-line-height-sm-md` removed**
+  The intermediate 21px line-height semantic stop has been removed from `tokens.semantic.css`. Any direct usage of `var(--s2a-font-line-height-sm-md)` will now fall through to the browser default. Migrate to `--s2a-font-line-height-sm` (20px) or `--s2a-font-line-height-md` (24px) depending on context.
+
+### 🧹 Build & filtering
+
+- **Figma sync refreshed across 16 JSON files**
+  Latest pull includes updated responsive container grid, semantic color theme additions, typography collection updates, and static variable values.
+
+---
+
 ## [0.0.13] - 2026-04-22
 
 ### 💥 Breaking changes

@@ -209,6 +209,22 @@
           }
         }
       },
+      "_static": {
+        "$type": "number",
+        "$value": 1920,
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "WIDTH_HEIGHT"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-grid-container-max-width)"
+            }
+          }
+        }
+      },
       "vertical-padding": {
         "xl": {
           "$type": "number",
@@ -323,22 +339,6 @@
           }
         }
       },
-      "_static": {
-        "$type": "number",
-        "$value": 1920,
-        "$description": "DESIGN ONLY",
-        "$extensions": {
-          "com.figma": {
-            "hiddenFromPublishing": false,
-            "scopes": [
-              "WIDTH_HEIGHT"
-            ],
-            "codeSyntax": {
-              "WEB": "var(--s2a-grid-container-max-width)"
-            }
-          }
-        }
-      },
       "_static_alt": {
         "$type": "number",
         "$value": 1920,
@@ -373,7 +373,7 @@
       },
       "_min-width": {
         "$type": "number",
-        "$value": 1441,
+        "$value": 1440,
         "$description": "DESIGN ONLY",
         "$extensions": {
           "com.figma": {
@@ -390,7 +390,7 @@
       "_visibility": {
         "xl": {
           "$type": "boolean",
-          "$value": false,
+          "$value": true,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -432,7 +432,7 @@
         },
         "lg": {
           "$type": "boolean",
-          "$value": true,
+          "$value": false,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -446,7 +446,7 @@
         },
         "lg-md": {
           "$type": "boolean",
-          "$value": true,
+          "$value": false,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -460,7 +460,7 @@
         },
         "lg-sm": {
           "$type": "boolean",
-          "$value": true,
+          "$value": false,
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1248,7 +1248,7 @@
     },
     "_breakpoint": {
       "$type": "string",
-      "$value": "Desktop LG",
+      "$value": "Desktop XL",
       "$description": "",
       "$extensions": {
         "com.figma": {
