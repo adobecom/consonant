@@ -1,4 +1,4 @@
-@media (min-width: 1280px) {
+@media (min-width: 1441px) {
 /**
  * Do not edit directly, this file was auto-generated.
  */
@@ -15,6 +15,24 @@
 
   /* Layout */
   --s2a-layout-guide-gap: var(--s2a-spacing-xs);
+  --s2a-layout-rich-media-content-measure-narrow: 512px;
+  --s2a-layout-rich-media-content-measure-none: 1480px;
+  --s2a-layout-rich-media-content-measure-wide: 1480px;
+
+  /* App Card */
+  --s2a-app-card-max-height: 200px;
+  --s2a-app-card-min-height: 160px;
+  --s2a-app-card-padding: var(--s2a-spacing-24);
+  --s2a-app-card-padding-horizontal: var(--s2a-spacing-lg);
+  --s2a-app-card-padding-vertical: var(--s2a-spacing-lg);
+  --s2a-app-card-gap: var(--s2a-spacing-xl);
+  --s2a-app-card-border-radius: var(--s2a-border-radius-md);
+
+  /* Product Lockup */
+  --s2a-product-lockup-gap-block: var(--s2a-spacing-sm);
+  --s2a-product-lockup-gap-block-start: var(--s2a-spacing-16);
+  --s2a-product-lockup-gap-inline: var(--s2a-spacing-16);
+  --s2a-product-lockup-gap-inline-start: var(--s2a-spacing-16);
 
   /* Typography / Font Size */
   --s2a-typography-font-size-super: var(--s2a-font-size-11xl);

@@ -30,19 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`--s2a-font-line-height-sm-md` removed**
   The intermediate 21px line-height semantic stop has been removed from `tokens.semantic.css`. Any direct usage of `var(--s2a-font-line-height-sm-md)` will now fall through to the browser default. Migrate to `--s2a-font-line-height-sm` (20px) or `--s2a-font-line-height-md` (24px) depending on context.
 
-- **`--s2a-router-card-*` removed from all responsive files**
-  The 8 router-card layout tokens (`width-resting`, `width-expanded`, `width-min`, `width-max`, `height-max`, `media-height`, `padding`, `gap`) have been removed from `tokens.responsive.sm/md/lg/xl.css`. The design team marked these variables as `DESIGN ONLY` in Figma, meaning they are no longer intended for CSS consumption. If your component or layout depended on these tokens, define the values locally or open a request to promote them back to system tokens.
-
 ### 🧹 Build & filtering
 
-- **Legacy token leak fixed**
-  Four unprefixed aliases (`--border-radius-md`, `--border-width-lg`, `--spacing-lg`, `--spacing-none`) were incorrectly appearing in `tokens.semantic.css` under a `/* Other */` block. Root cause: a legacy Figma variable collection without the `s2a.` prefix was passing through the semantic filter. Build now rejects all non-`s2a.*` paths in a single rule.
-
-- **Broken package exports removed**
-  `tokens.typography.css`, `tokens.typography.desktop.css`, and `tokens.breakpoints.css` were declared in the `exports` field but never generated (their Figma source collections are empty). These entries have been removed to prevent silent import failures.
-
-- **Figma sync refreshed across 15 JSON files**
-  Latest pull includes updated responsive container grid, semantic color theme additions, and static variable values.
+- **Figma sync refreshed across 16 JSON files**
+  Latest pull includes updated responsive container grid, semantic color theme additions, typography collection updates, and static variable values.
 
 ---
 
