@@ -1,56 +1,46 @@
 .c-button {
-  --c-button-padding-y-base: var(--s2a-spacing-sm, 12px);
-  --c-button-padding-x-base: var(--s2a-spacing-lg, 24px);
-  --c-button-gap: var(--s2a-spacing-xs, 8px);
-  --c-button-border-width: 0px;
-  --c-button-radius: var(--s2a-border-radius-round, 999px);
-  --c-button-focus-inner: var(--s2a-color-background-default, #ffffff);
-  --c-button-focus-outer: var(--s2a-color-focus-ring-default, #1473e6);
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--c-button-gap);
+  gap: var(--s2a-spacing-xs);
   min-width: 0;
+  /* Primitive: Figma Button/Core/Primary md height is 40px and no semantic size token exists yet. */
+  height: 40px;
   box-sizing: border-box;
-  padding: calc(var(--c-button-padding-y-base) - var(--c-button-border-width))
-    calc(var(--c-button-padding-x-base) - var(--c-button-border-width));
-  border: var(--c-button-border-width) solid transparent;
-  border-radius: var(--c-button-radius);
+  /* Primitive: Figma Button/Core/Primary md vertical padding is 14px and no semantic spacing alias exists yet. */
+  padding: 14px var(--s2a-spacing-lg);
+  border: none;
+  border-radius: var(--s2a-border-radius-round);
   background-color: transparent;
-  color: var(--s2a-color-content-default, #000000);
-  font-family: var(--s2a-font-family-default, "adobe-clean-display", "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-adobe-clean-bold, 700);
-  font-size: var(--s2a-font-size-sm, 14px);
-  line-height: var(--s2a-font-line-height-2xs, 1.142857);
-  letter-spacing: 0;
+  color: var(--s2a-color-content-default);
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease,
-    box-shadow 200ms ease, opacity 120ms ease;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease,
+    box-shadow 200ms ease,
+    opacity 120ms ease;
   position: relative;
 }
 
 .c-button[data-size="xs"] {
-  --c-button-padding-y-base: var(--s2a-spacing-2xs, 4px);
-  --c-button-padding-x-base: var(--s2a-spacing-sm, 12px);
-  --c-button-gap: var(--s2a-spacing-2xs, 4px);
-}
-
-.c-button[data-context="on-dark"] {
-  --c-button-focus-inner: var(--s2a-color-background-knockout, #000000);
-}
-
-.c-button[data-context="on-dark"][data-background="solid"] {
-  --c-button-focus-inner: var(--s2a-color-background-default, #ffffff);
+  /* Primitive: Figma Button/Core/Primary xs height is 24px and no semantic size token exists yet. */
+  height: 24px;
+  /* Primitive: Figma Button/Core/Primary xs vertical padding is 6px and no semantic spacing alias exists yet. */
+  padding: 6px var(--s2a-spacing-sm);
 }
 
 .c-button:disabled,
 .c-button[data-force-state="disabled"] {
-  opacity: var(--s2a-opacity-disabled, 0.48);
+  opacity: var(--s2a-opacity-disabled);
   cursor: not-allowed;
-  pointer-events: none;
 }
 
 .c-button__label {
@@ -65,238 +55,227 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: inherit;
   color: currentColor;
-}
-
-.c-button[data-size="xs"] .c-button__icon {
-  font-size: var(--s2a-font-size-xs, 12px);
-}
-
-.c-button:is(:focus-visible, [data-force-state="focus"]) {
-  outline: none;
-  box-shadow:
-    0 0 0 var(--s2a-spacing-3xs, 2px) var(--c-button-focus-inner),
-    0 0 0 var(--s2a-spacing-2xs, 4px) var(--c-button-focus-outer);
+  font-size: var(--s2a-font-size-xs);
 }
 
 /* ---------- Primary · solid ---------- */
 
 .c-button[data-intent="primary"][data-background="solid"][data-context="on-light"] {
-  background-color: var(
-    --s2a-color-button-background-primary-solid-on-light-default,
-    var(--s2a-color-background-knockout, #000000)
-  );
-  color: var(
-    --s2a-color-button-content-primary-solid-default,
-    var(--s2a-color-content-knockout, #ffffff)
-  );
+  background-color: var(--s2a-color-button-background-primary-solid-on-light-default);
+  color: var(--s2a-color-button-content-primary-solid-default);
 }
 
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"]:not(:disabled):is(
-    :hover,
-    [data-force-state="hover"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-solid-on-light-hover,
-    var(--s2a-color-gray-900, #131313)
-  ); /* Primitive: hover fallback until semantic token ships */
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"][data-size="md"] {
+  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-solid-on-light-default);
 }
 
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"]:not(:disabled):is(
-    :active,
-    [data-force-state="active"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-solid-on-light-active,
-    var(--s2a-color-gray-800, #292929)
-  ); /* Primitive: active fallback until semantic token ships */
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-primary-solid-on-light-hover);
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-solid-on-light-default);
+}
+
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-primary-solid-on-light-active);
+  box-shadow: none;
 }
 
 .c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"] {
-  background-color: var(
-    --s2a-color-button-background-primary-solid-on-dark-default,
-    var(--s2a-color-background-default, #ffffff)
-  );
-  color: var(
-    --s2a-color-button-content-primary-solid-inverse,
-    var(--s2a-color-content-default, #000000)
-  );
+  background-color: var(--s2a-color-button-background-primary-solid-on-dark-default);
+  color: var(--s2a-color-button-content-primary-solid-inverse);
 }
 
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"]:not(:disabled):is(
-    :hover,
-    [data-force-state="hover"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-solid-on-dark-hover,
-    var(--s2a-color-background-subtle, #f3f3f3)
-  );
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-size="md"] {
+  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-solid-on-dark-default);
 }
 
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"]:not(:disabled):is(
-    :active,
-    [data-force-state="active"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-solid-on-dark-active,
-    var(--s2a-color-gray-200, #e1e1e1)
-  );
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-primary-solid-on-dark-hover);
+}
+
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-size="md"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-size="md"][data-force-state="hover"] {
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-solid-on-dark-hover);
+}
+
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-primary-solid-on-dark-active);
+  box-shadow: none;
+}
+
+/* ---------- Backdrop blur — outlined & transparent ---------- */
+
+.c-button[data-intent="primary"][data-background="outlined"],
+.c-button[data-intent="primary"][data-background="transparent"] {
+  backdrop-filter: blur(var(--s2a-blur-md));
 }
 
 /* ---------- Primary · outlined ---------- */
 
 .c-button[data-intent="primary"][data-background="outlined"] {
-  --c-button-border-width: var(--s2a-border-width-sm, 1px);
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) currentColor;
+}
+
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-size="xs"] {
+  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-outlined-on-light-default);
 }
 
 .c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"] {
-  border-color: var(
-    --s2a-color-button-border-primary-outlined-default,
-    var(--s2a-color-content-default, #000000)
-  );
-  color: var(
-    --s2a-color-button-content-primary-outlined-default,
-    var(--s2a-color-content-default, #000000)
-  );
+  background-color: var(--s2a-color-button-background-primary-outlined-on-light-default);
+  color: var(--s2a-color-button-content-primary-outlined-default);
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-light-default);
 }
 
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"]:not(:disabled):is(
-    :hover,
-    [data-force-state="hover"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-outlined-on-light-hover,
-    var(--s2a-color-transparent-black-08, rgba(0, 0, 0, 0.08))
-  );
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-primary-outlined-on-light-hover);
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-light-default);
 }
 
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"]:not(:disabled):is(
-    :active,
-    [data-force-state="active"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-outlined-on-light-active,
-    var(--s2a-color-transparent-black-12, rgba(0, 0, 0, 0.12))
-  );
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-size="xs"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-size="xs"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-primary-solid-on-light-hover);
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-light-default);
+}
+
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-primary-outlined-on-light-active);
+  color: var(--s2a-color-button-content-primary-outlined-knockout);
+  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-outlined-on-light-default);
 }
 
 .c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"] {
-  border-color: var(
-    --s2a-color-button-border-primary-outlined-on-dark,
-    var(--s2a-color-content-knockout, #ffffff)
-  );
-  color: var(
-    --s2a-color-button-content-primary-outlined-knockout,
-    var(--s2a-color-content-knockout, #ffffff)
-  );
+  color: var(--s2a-color-button-content-primary-outlined-knockout);
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-dark-default);
 }
 
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"]:not(:disabled):is(
-    :hover,
-    [data-force-state="hover"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-outlined-on-dark-hover,
-    var(--s2a-color-transparent-white-08, rgba(255, 255, 255, 0.08))
-  );
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-primary-outlined-on-dark-hover);
+  color: var(--s2a-color-button-content-primary-outlined-default);
 }
 
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"]:not(:disabled):is(
-    :active,
-    [data-force-state="active"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-outlined-on-dark-active,
-    var(--s2a-color-transparent-white-12, rgba(255, 255, 255, 0.12))
-  );
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"][data-size="xs"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"][data-size="xs"][data-force-state="hover"] {
+  background-color: var(--s2a-color-background-default);
+}
+
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-primary-outlined-on-dark-active);
+  color: var(--s2a-color-button-content-primary-outlined-default);
 }
 
 /* ---------- Primary · transparent ---------- */
 
 .c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"] {
-  color: var(
-    --s2a-color-button-content-primary-transparent-default,
-    var(--s2a-color-content-default, #000000)
-  );
+  background-color: var(--s2a-color-button-background-primary-transparent-on-light-default);
+  color: var(--s2a-color-button-content-primary-transparent-default);
 }
 
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"]:not(:disabled):is(
-    :hover,
-    [data-force-state="hover"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-transparent-hover,
-    var(--s2a-color-transparent-black-08, rgba(0, 0, 0, 0.08))
-  );
+.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-primary-transparent-on-light-hover);
 }
 
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"]:not(:disabled):is(
-    :active,
-    [data-force-state="active"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-transparent-active,
-    var(--s2a-color-transparent-black-12, rgba(0, 0, 0, 0.12))
-  );
+.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-primary-transparent-on-light-active);
 }
 
 .c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"] {
-  color: var(
-    --s2a-color-button-content-primary-transparent-knockout,
-    var(--s2a-color-content-knockout, #ffffff)
-  );
+  background-color: var(--s2a-color-button-background-primary-transparent-on-dark-default);
+  color: var(--s2a-color-button-content-primary-transparent-knockout);
 }
 
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"]:not(:disabled):is(
-    :hover,
-    [data-force-state="hover"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-transparent-on-dark-hover,
-    var(--s2a-color-transparent-white-08, rgba(255, 255, 255, 0.08))
-  );
+.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-primary-transparent-on-dark-hover);
 }
 
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"]:not(:disabled):is(
-    :active,
-    [data-force-state="active"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-primary-transparent-on-dark-active,
-    var(--s2a-color-transparent-white-12, rgba(255, 255, 255, 0.12))
-  );
+.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-primary-transparent-on-dark-active);
 }
 
 /* ---------- Accent · solid (on-light only) ---------- */
 
 .c-button[data-intent="accent"][data-background="solid"] {
-  background-color: var(
-    --s2a-color-button-background-accent-solid-on-light-default,
-    var(--s2a-color-blue-900, #3b63fb)
-  ); /* Primitive: accent default fallback until semantic token exports */
-  color: var(
-    --s2a-color-button-content-primary-solid-default,
-    var(--s2a-color-content-knockout, #ffffff)
-  );
+  background-color: var(--s2a-color-button-background-accent-solid-on-light-default);
+  color: var(--s2a-color-button-content-primary-solid-default);
 }
 
-.c-button[data-intent="accent"][data-background="solid"]:not(:disabled):is(
-    :hover,
-    [data-force-state="hover"],
-  ) {
-  background-color: var(
-    --s2a-color-button-background-accent-solid-on-light-hover,
-    var(--s2a-color-blue-1000, #294de9)
-  ); /* Primitive: accent hover fallback until semantic token exports */
+.c-button[data-intent="accent"][data-background="solid"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-intent="accent"][data-background="solid"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-accent-solid-on-light-hover);
 }
 
-.c-button[data-intent="accent"][data-background="solid"]:not(:disabled):is(
-    :active,
-    [data-force-state="active"],
+.c-button[data-intent="accent"][data-background="solid"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-intent="accent"][data-background="solid"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-accent-solid-on-light-active);
+}
+
+/* ---------- Disabled ---------- */
+
+.c-button[data-background="solid"]:disabled,
+.c-button[data-background="solid"][data-force-state="disabled"] {
+  box-shadow: none;
+}
+
+/* ---------- Focus ring ---------- */
+
+.c-button:is(:focus-visible, [data-force-state="focus"]) {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-default),
+    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
+}
+
+.c-button[data-context="on-dark"]:is(:focus-visible, [data-force-state="focus"]) {
+  box-shadow:
+    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-knockout),
+    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
+}
+
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"]:is(
+    :focus-visible,
+    [data-force-state="focus"]
   ) {
-  background-color: var(
-    --s2a-color-button-background-accent-solid-on-light-active,
-    var(--s2a-color-blue-1100, #1d3ecf)
-  ); /* Primitive: accent active fallback until semantic token exports */
+  box-shadow:
+    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-default),
+    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
+}
+
+.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"]:is(
+    :focus-visible,
+    [data-force-state="focus"]
+  ) {
+  box-shadow:
+    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-knockout),
+    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
+}
+
+.c-button[data-background="outlined"][data-context="on-light"]:is(
+    :focus-visible,
+    [data-force-state="focus"]
+  ) {
+  box-shadow:
+    inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-outlined-on-light-default),
+    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-default),
+    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
+}
+
+.c-button[data-background="outlined"][data-context="on-dark"]:is(
+    :focus-visible,
+    [data-force-state="focus"]
+  ) {
+  box-shadow:
+    inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-dark-default),
+    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-knockout),
+    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
 }

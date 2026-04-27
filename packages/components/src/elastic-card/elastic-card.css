@@ -60,6 +60,8 @@
 
 .c-elastic-card[data-state="resting"]:hover .c-elastic-card__body-content {
   gap: var(--s2a-spacing-2xs, 4px);
+  /* Figma node 4053:701589 — expanded text-content width = 270px */
+  max-inline-size: 270px;
 }
 
 .c-elastic-card[data-state="resting"]:hover .c-elastic-card__body-action {
@@ -274,6 +276,8 @@
 /* Expanded text-content gap is 4px (s2a/spacing/2xs) vs 2px for resting */
 .c-elastic-card[data-state="expanded"] .c-elastic-card__body-content {
   gap: var(--s2a-spacing-2xs, 4px);
+  /* Figma node 4053:701589 — expanded text-content width = 270px */
+  max-inline-size: 270px;
 }
 
 .c-elastic-card[data-state="expanded"] .c-elastic-card__body-action {

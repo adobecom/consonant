@@ -73,9 +73,9 @@
           }
         }
       },
-      "disabled": {
+      "brand": {
         "$type": "color",
-        "$value": "{color.gray.50}",
+        "$value": "{color.brand.adobe-red}",
         "$description": "Placeholder token: awaiting design definition for final value",
         "$extensions": {
           "com.figma": {
@@ -87,9 +87,9 @@
           }
         }
       },
-      "brand": {
+      "disabled": {
         "$type": "color",
-        "$value": "{color.brand.adobe-red}",
+        "$value": "{color.gray.50}",
         "$description": "Placeholder token: awaiting design definition for final value",
         "$extensions": {
           "com.figma": {

@@ -321,8 +321,12 @@ function convertNumberTokens(node, path, maps) {
       // Keep them in px so they exactly match Figma dev mode.
       // Scaling (browser zoom / OS text scaling) will still work correctly.
       node.$value = toPx(value);
-    } else if (path[0] === "opacity") {
-      node.$value = roundTo(Math.max(0, Math.min(1, value / 100)), 4);
+    } else if (
+      path[0] === "opacity" ||
+      (path[0] === "s2a" && path[1] === "opacity")
+    ) {
+      // Figma stores opacity as percentage integers (0–100); output as CSS percentage
+      node.$value = `${roundTo(Math.max(0, Math.min(100, value)), 4)}%`;
     } else {
       node.$value = toPx(value);
     }

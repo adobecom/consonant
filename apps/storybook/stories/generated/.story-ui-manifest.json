@@ -1,18 +1,7 @@
 {
   "version": 1,
-  "lastReconciled": "2026-04-24T11:57:07.773Z",
+  "lastReconciled": "2026-04-24T14:10:21.701Z",
   "stories": {
-    "Actions.stories.js": {
-      "id": "Actions",
-      "fileName": "Actions.stories.js",
-      "title": "Prototypes/Generated/Actions",
-      "source": "mcp-external",
-      "permanent": false,
-      "createdAt": "2026-04-24T02:40:01.045Z",
-      "updatedAt": "2026-04-24T11:37:40.288Z",
-      "conversation": [],
-      "metadata": {}
-    },
     "voice-canvas.stories.tsx": {
       "id": "voice-canvas",
       "fileName": "voice-canvas.stories.tsx",
@@ -24,16 +13,72 @@
       "conversation": [],
       "metadata": {}
     },
-    "adobe-express-hero-section-b9e290b6.stories.ts": {
-      "id": "adobe-express-hero-section-b9e290b6",
-      "fileName": "adobe-express-hero-section-b9e290b6.stories.ts",
-      "title": "Adobe Express Hero Section",
-      "source": "mcp-external",
-      "createdAt": "2026-04-24T11:57:35.328Z",
-      "updatedAt": "2026-04-24T11:57:35.328Z",
-      "conversation": [],
+    "firefly-hero-section-4a823226.stories.ts": {
+      "id": "firefly-hero-section-v5-4a823226",
+      "fileName": "firefly-hero-section-4a823226.stories.ts",
+      "title": "Firefly Hero Section v5",
+      "source": "panel",
+      "createdAt": "2026-04-24T14:05:49.914Z",
+      "updatedAt": "2026-04-24T14:05:49.914Z",
+      "conversation": [
+        {
+          "role": "user",
+          "content": "A hero section for Adobe Firefly. Dark background. ProductLockup with the Firefly icon, a headline, one line of body copy, and a primary CTA button. Use S2A tokens for all colors."
+        }
+      ],
       "metadata": {
-        "prompt": "Generate a simple hero section with a ProductLockup for Adobe Express and a primary CTA button"
+        "provider": "claude",
+        "model": "claude-opus-4-6",
+        "prompt": "A hero section for Adobe Firefly. Dark background. ProductLockup with the Firefly icon, a headline, one line of body copy, and a primary CTA button. Use S2A tokens for all colors."
+      }
+    },
+    "firefly-hero-section-5202a5c1.stories.ts": {
+      "id": "firefly-hero-section-v6-5202a5c1",
+      "fileName": "firefly-hero-section-5202a5c1.stories.ts",
+      "title": "Firefly Hero Section v6",
+      "source": "panel",
+      "createdAt": "2026-04-24T14:06:56.010Z",
+      "updatedAt": "2026-04-24T14:06:56.010Z",
+      "conversation": [
+        {
+          "role": "user",
+          "content": "A hero section for Adobe Firefly. Dark background. ProductLockup with the Firefly icon, a headline, one line of body copy, and a primary CTA button. Use S2A tokens for all colors."
+        }
+      ],
+      "metadata": {
+        "provider": "claude",
+        "model": "claude-opus-4-6",
+        "prompt": "A hero section for Adobe Firefly. Dark background. ProductLockup with the Firefly icon, a headline, one line of body copy, and a primary CTA button. Use S2A tokens for all colors."
+      }
+    },
+    "examples-darkherosection.stories.js": {
+      "id": "examples-darkherosection",
+      "fileName": "examples-darkherosection.stories.js",
+      "title": "Examples/Dark Hero Section",
+      "source": "mcp-external",
+      "permanent": false,
+      "createdAt": "2026-04-24T14:09:54.944Z",
+      "updatedAt": "2026-04-24T14:09:54.944Z",
+      "conversation": [],
+      "metadata": {}
+    },
+    "firefly-hero-section-e4e038ec.stories.ts": {
+      "id": "firefly-hero-section-v7-e4e038ec",
+      "fileName": "firefly-hero-section-e4e038ec.stories.ts",
+      "title": "Firefly Hero Section v7",
+      "source": "panel",
+      "createdAt": "2026-04-24T14:10:50.454Z",
+      "updatedAt": "2026-04-24T14:10:50.454Z",
+      "conversation": [
+        {
+          "role": "user",
+          "content": "A hero section for Adobe Firefly. Dark background. ProductLockup with the Firefly icon, a headline, one line of body copy, and a primary CTA button. Use S2A tokens for all colors."
+        }
+      ],
+      "metadata": {
+        "provider": "claude",
+        "model": "claude-opus-4-6",
+        "prompt": "A hero section for Adobe Firefly. Dark background. ProductLockup with the Firefly icon, a headline, one line of body copy, and a primary CTA button. Use S2A tokens for all colors."
       }
     }
   }

@@ -12,6 +12,10 @@
   flex-shrink: 0;
 }
 
+.c-app-icon[data-load-state="error"] {
+  visibility: hidden;
+}
+
 .c-app-icon[data-size="xs"] {
   --c-app-icon-size: var(--s2a-spacing-md, 16px);
 }

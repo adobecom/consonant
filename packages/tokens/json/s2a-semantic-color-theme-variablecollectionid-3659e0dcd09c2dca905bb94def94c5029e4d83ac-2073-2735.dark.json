@@ -566,7 +566,7 @@
                 },
                 "active": {
                   "$type": "color",
-                  "$value": "{s2a.color.transparent.white.64}",
+                  "$value": "{s2a.color.gray.25}",
                   "$description": "",
                   "$extensions": {
                     "com.figma": {
@@ -595,6 +595,34 @@
                       "codeSyntax": {
                         "WEB": "var(--s2a-color-button-background-primary-solid-default)"
                       }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.64}",
+                  "$description": "",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {}
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {}
                     }
                   }
                 }
@@ -636,7 +664,7 @@
                 },
                 "active": {
                   "$type": "color",
-                  "$value": "{s2a.color.transparent.black.12}",
+                  "$value": "{s2a.color.gray.25}",
                   "$description": "",
                   "$extensions": {
                     "com.figma": {
@@ -654,7 +682,7 @@
               "on-dark": {
                 "hover": {
                   "$type": "color",
-                  "$value": "{s2a.color.transparent.white.24}",
+                  "$value": "{s2a.color.transparent.white.64}",
                   "$description": "",
                   "$extensions": {
                     "com.figma": {
@@ -670,7 +698,7 @@
                 },
                 "active": {
                   "$type": "color",
-                  "$value": "{s2a.color.transparent.white.24}",
+                  "$value": "{s2a.color.gray.25}",
                   "$description": "",
                   "$extensions": {
                     "com.figma": {
@@ -864,6 +892,36 @@
                     }
                   }
                 }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {}
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {}
+                    }
+                  }
+                }
               }
             },
             "outlined": {
@@ -888,7 +946,7 @@
               "on-dark": {
                 "default": {
                   "$type": "color",
-                  "$value": "{s2a.color.transparent.white.24}",
+                  "$value": "{s2a.color.gray.25}",
                   "$description": "",
                   "$extensions": {
                     "com.figma": {
@@ -1052,7 +1110,7 @@
                 },
                 "active": {
                   "$type": "color",
-                  "$value": "{s2a.color.transparent.white.64}",
+                  "$value": "{s2a.color.gray.25}",
                   "$description": "",
                   "$extensions": {
                     "com.figma": {
@@ -1081,6 +1139,34 @@
                       "codeSyntax": {
                         "WEB": "var(--s2a-color-iconbutton-background-primary-solid-on-dark)"
                       }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.64}",
+                  "$description": "",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {}
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {}
                     }
                   }
                 }
@@ -1122,7 +1208,7 @@
                 },
                 "active": {
                   "$type": "color",
-                  "$value": "{s2a.color.transparent.white.24}",
+                  "$value": "{s2a.color.gray.25}",
                   "$description": "",
                   "$extensions": {
                     "com.figma": {
@@ -1156,7 +1242,7 @@
                 },
                 "hover": {
                   "$type": "color",
-                  "$value": "{s2a.color.transparent.white.24}",
+                  "$value": "{s2a.color.transparent.white.64}",
                   "$description": "",
                   "$extensions": {
                     "com.figma": {
@@ -1172,7 +1258,7 @@
                 },
                 "active": {
                   "$type": "color",
-                  "$value": "{s2a.color.transparent.white.24}",
+                  "$value": "{s2a.color.gray.25}",
                   "$description": "",
                   "$extensions": {
                     "com.figma": {

@@ -6657,6 +6657,38 @@ figma.ui.onmessage = async (msg) => {
       figma.notify("API key cleared");
       break;
     }
+    // ── Select tab — filter and select component set variants ──────────────
+    case "select:apply-filter": {
+      let parseVariantProps2 = function(name) {
+        const props = {};
+        for (const part of name.split(",")) {
+          const eq = part.indexOf("=");
+          if (eq !== -1) props[part.slice(0, eq).trim()] = part.slice(eq + 1).trim();
+        }
+        return props;
+      };
+      var parseVariantProps = parseVariantProps2;
+      const setNode = await figma.getNodeByIdAsync(msg.setId);
+      if (!setNode || setNode.type !== "COMPONENT_SET") {
+        figma.notify("Component set not found");
+        break;
+      }
+      const filter = msg.filter || {};
+      const variants = setNode.children;
+      const axes = Object.keys(filter);
+      const matched = variants.filter((v) => {
+        if (axes.length === 0) return true;
+        const props = parseVariantProps2(v.name);
+        return axes.every((axis) => {
+          const allowed = filter[axis];
+          return !allowed || allowed.length === 0 || allowed.includes(props[axis]);
+        });
+      });
+      figma.currentPage.selection = matched;
+      figma.viewport.scrollAndZoomIntoView(matched);
+      figma.ui.postMessage({ type: "select:result", message: `Selected ${matched.length} of ${variants.length} variants` });
+      break;
+    }
     // ── Bridge unified command handler (figma-console MCP protocol) ──────
     case "bridge:command": {
       const requestId = msg.requestId;
@@ -6758,5 +6790,17 @@ function notifySelection() {
   if (sel.length > 0) {
     const properties = getNodeProperties(sel[0]);
     figma.ui.postMessage({ type: "node-properties", properties });
+  }
+  const first = sel[0];
+  if (first && first.type === "COMPONENT_SET") {
+    const defs = first.componentPropertyDefinitions;
+    const axes = Object.entries(defs).map(([name, def]) => ({
+      name,
+      type: def.type,
+      variantOptions: def.variantOptions || void 0
+    }));
+    figma.ui.postMessage({ type: "select:axes-data", setId: first.id, setName: first.name, axes });
+  } else {
+    figma.ui.postMessage({ type: "select:axes-data", setId: null });
   }
 }

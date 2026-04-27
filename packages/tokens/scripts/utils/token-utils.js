@@ -42,9 +42,16 @@ function mergeTokens(target, source, path = []) {
       }
       mergeTokens(target[key], value, currentPath);
     } else {
-      // Silently overwrite duplicate tokens - this is expected when merging
-      // multiple token files that may have overlapping definitions.
-      // The latest value (from source) will be used, which is the desired behavior.
+      // Prefer reference values ({...}) over raw primitive values.
+      // When two files define the same token, keep whichever has a reference
+      // so semantic aliases preserve their variable chain.
+      const sourceVal = value && value.$value;
+      const targetVal = target[key] && target[key].$value;
+      const targetIsRef = typeof targetVal === "string" && targetVal.startsWith("{");
+      const sourceIsRef = typeof sourceVal === "string" && sourceVal.startsWith("{");
+      if (targetIsRef && !sourceIsRef) {
+        continue;
+      }
       target[key] = clone(value);
     }
   }

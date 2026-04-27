@@ -49,7 +49,12 @@ function removeDesignOnlyTokens(node) {
       keysToDelete.push(key);
       continue;
     }
-    if (value && typeof value === "object" && !Array.isArray(value) && "$value" in value) {
+    if (
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      "$value" in value
+    ) {
       const desc = value.$description ?? "";
       if (String(desc).toUpperCase().includes("DESIGN ONLY")) {
         keysToDelete.push(key);
@@ -180,7 +185,7 @@ async function buildFromFigma() {
     // Handle new collection structure: Category / Subcategory / Attribute
     // e.g., "Primitives / Dimension / Static" → "primitives-dimension-static"
     // Also handle S2A collections: "S2A / Color" → "s2a-color"
-    
+
     // 1. Primitives / Dimension / Static → primitives-core
     if (
       collectionSlug === "primitives-core" ||
@@ -195,7 +200,8 @@ async function buildFromFigma() {
       collectionSlug === "primitives-color" ||
       collectionSlug === "primitives-color-theme" ||
       collectionSlug.startsWith("primitives-color") ||
-      (collectionSlug.includes("primitives") && collectionSlug.includes("color"))
+      (collectionSlug.includes("primitives") &&
+        collectionSlug.includes("color"))
     ) {
       if (!primitivesColorFiles.has(modeSlug)) {
         primitivesColorFiles.set(modeSlug, []);
@@ -240,7 +246,8 @@ async function buildFromFigma() {
     else if (
       collectionSlug === "component-core" ||
       collectionSlug === "component-dimension-responsive" ||
-      (collectionSlug.includes("component") && collectionSlug.includes("dimension"))
+      (collectionSlug.includes("component") &&
+        collectionSlug.includes("dimension"))
     ) {
       componentCoreFiles.push(normalizedEntry);
     }
@@ -256,7 +263,10 @@ async function buildFromFigma() {
       collectionSlug.includes("typography")
     ) {
       const responsiveBreakpoints = new Set(["sm", "md", "lg", "xl"]);
-      if (collectionSlug.includes("responsive") && responsiveBreakpoints.has(modeSlug)) {
+      if (
+        collectionSlug.includes("responsive") &&
+        responsiveBreakpoints.has(modeSlug)
+      ) {
         if (!responsiveFiles.has(modeSlug)) {
           responsiveFiles.set(modeSlug, []);
         }
@@ -272,7 +282,8 @@ async function buildFromFigma() {
     else if (
       collectionSlug === "breakpoints-core" ||
       collectionSlug === "layout-breakpoints-static" ||
-      (collectionSlug.includes("breakpoint") || collectionSlug.includes("layout"))
+      collectionSlug.includes("breakpoint") ||
+      collectionSlug.includes("layout")
     ) {
       breakpointFiles.push(normalizedEntry);
     }
@@ -295,11 +306,17 @@ async function buildFromFigma() {
       }
     }
     // Handle S2A / Annotations collection - treat as semantic annotations
-    else if (collectionSlug === "s2a-annotations" || collectionSlug.includes("annotations")) {
+    else if (
+      collectionSlug === "s2a-annotations" ||
+      collectionSlug.includes("annotations")
+    ) {
       semanticFiles.push(normalizedEntry);
     }
     // Handle other responsive collections
-    else if (collectionSlug === "responsive" || collectionSlug.includes("responsive")) {
+    else if (
+      collectionSlug === "responsive" ||
+      collectionSlug.includes("responsive")
+    ) {
       if (!responsiveFiles.has(modeSlug)) {
         responsiveFiles.set(modeSlug, []);
       }
@@ -395,7 +412,7 @@ async function buildFromFigma() {
     // Now apply unit conversions to the merged tree
     // This preserves references while converting numeric values
     applyUnitConversions(mergedPrimitivesBeforeConversion);
-    
+
     // Use the merged and converted tokens for build
     const mergedPrimitivesForBuild = mergedPrimitivesBeforeConversion;
 
@@ -423,7 +440,10 @@ async function buildFromFigma() {
     // so shadow tokens resolve to --s2a-color-transparent-* variables
     function rewritePrimitiveColorRefs(obj) {
       if (!obj || typeof obj !== "object") return;
-      if (Array.isArray(obj)) { obj.forEach(rewritePrimitiveColorRefs); return; }
+      if (Array.isArray(obj)) {
+        obj.forEach(rewritePrimitiveColorRefs);
+        return;
+      }
       if ("$value" in obj && typeof obj.$value === "string") {
         const v = obj.$value;
         if (v.startsWith("{color.") && !v.startsWith("{s2a.")) {
@@ -466,7 +486,7 @@ async function buildFromFigma() {
     );
     await buildCssFromTokens(mergedLightPrimitives, {
       destination: "tokens.primitives.light.css",
-      selector: ':root[data-theme="light"]',
+      selector: ':root, :root[data-theme="light"]',
       filter: (token) => {
         const path = token.path || [];
         // Only emit s2a.color.* — exclude legacy bare color.* duplicates and dataviz
@@ -526,11 +546,11 @@ async function buildFromFigma() {
     ? await loadTokensForMode(primitivesColorFiles.get("dark"))
     : {};
 
-    // 2a. Semantic (non-color)
-    // Merge component-core into semantic files (typography-core is handled separately)
-    // typographyCoreTokensRaw is already loaded above (before primitives build)
+  // 2a. Semantic (non-color)
+  // Merge component-core into semantic files (typography-core is handled separately)
+  // typographyCoreTokensRaw is already loaded above (before primitives build)
 
-    const allSemanticFiles = [...semanticFiles, ...componentCoreFiles];
+  const allSemanticFiles = [...semanticFiles, ...componentCoreFiles];
   if (
     allSemanticFiles.length > 0 ||
     Object.keys(typographyCoreTokensRaw).length > 0
@@ -555,11 +575,11 @@ async function buildFromFigma() {
     if (primitivesCoreForSemantic["font-size"]) {
       delete primitivesCoreForSemantic["font-size"];
     }
-    
+
     const lightColorPrimitivesForSemantic = primitivesColorFiles.has("light")
       ? await loadTokensForMode(primitivesColorFiles.get("light"))
       : {};
-    
+
     // Merge order: colors first (base), then primitives-core (without shadows), then semantic tokens
     // Merge BEFORE applying conversions so references are preserved
     const mergedSemanticBeforeConversion = mergeTokenTrees(
@@ -569,14 +589,14 @@ async function buildFromFigma() {
       ),
       mergedSemanticTokens, // Add: semantic tokens
     );
-    
+
     // Apply conversions after merging to preserve references
     applyUnitConversions(mergedSemanticBeforeConversion);
     const mergedSemantic = mergedSemanticBeforeConversion;
     // Track which color tokens are in semantic collection (for excluding from non-color file)
     const semanticColorPaths = new Set();
     collectColorPaths(mergedSemanticTokens, [], semanticColorPaths);
-    
+
     // Collect all token references before filtering to ensure referenced colors are available
     const referencedColorPathsSemantic = new Set();
     function collectReferencesSemantic(node, currentPath = []) {
@@ -596,13 +616,13 @@ async function buildFromFigma() {
       }
     }
     collectReferencesSemantic(mergedSemantic);
-    
+
     // Remove shadows completely from mergedSemantic before passing to Style Dictionary
     // This prevents Style Dictionary from trying to process shadow references
     function removeShadowsFromTree(obj) {
       if (!obj || typeof obj !== "object") return;
       if (Array.isArray(obj)) {
-        obj.forEach(item => removeShadowsFromTree(item));
+        obj.forEach((item) => removeShadowsFromTree(item));
         return;
       }
       if ("shadow" in obj) {
@@ -657,7 +677,15 @@ async function buildFromFigma() {
         // Exclude primitive color palette (s2a.color.gray, .green, .blue, etc.) — they live in primitives.css
         // Only include semantic color groups (s2a.color.background, .content, .border, etc.)
         const primitiveColorPaletteKeys = [
-          "gray", "green", "blue", "red", "orange", "yellow", "transparent", "brand", "dataviz",
+          "gray",
+          "green",
+          "blue",
+          "red",
+          "orange",
+          "yellow",
+          "transparent",
+          "brand",
+          "dataviz",
         ];
         if (path[0] === "s2a" && path[1] === "color" && path[2]) {
           if (primitiveColorPaletteKeys.includes(String(path[2]))) {
@@ -667,8 +695,21 @@ async function buildFromFigma() {
 
         // Exclude primitive dimension/opacity/font/blur tokens under s2a — they live in primitives.css
         // Only include semantic aliases (tokens that reference primitives)
-        const s2aPrimitiveTopKeys = ["border", "spacing", "layout", "opacity", "font", "blur"];
+        const s2aPrimitiveTopKeys = [
+          "border",
+          "spacing",
+          "layout",
+          "opacity",
+          "font",
+          "blur",
+        ];
         if (path[0] === "s2a" && s2aPrimitiveTopKeys.includes(path[1])) {
+          // For spacing/opacity: include t-shirt size aliases (non-numeric keys), exclude numeric primitives
+          // This handles cases where the token file stores raw values instead of references
+          if ((path[1] === "spacing" || path[1] === "opacity") && path[2]) {
+            const isNumericKey = /^\d+$/.test(String(path[2]));
+            return !isNumericKey;
+          }
           const rawValue = token.original?.$value ?? token.value;
           if (typeof rawValue !== "string" || !rawValue.startsWith("{")) {
             return false; // primitive value, not a semantic reference
@@ -679,7 +720,7 @@ async function buildFromFigma() {
         if (path[0] === "color") {
           return referencedColorPathsSemantic.has(pathStr);
         }
-        
+
         // Exclude primitive font-size values (numeric keys like font-size.12, font-size.14)
         // Also exclude font.size.12 (alternative path structure)
         // These should only be in tokens.primitives.css
@@ -720,7 +761,10 @@ async function buildFromFigma() {
         // Exclude primitive font.family (adobe-clean, adobe-clean-display) - only keep semantic (heading, default)
         if (path[0] === "font" && path[1] === "family") {
           const key = path[2];
-          const isPrimitiveFontName = ["adobe-clean", "adobe-clean-display"].includes(String(key));
+          const isPrimitiveFontName = [
+            "adobe-clean",
+            "adobe-clean-display",
+          ].includes(String(key));
           if (isPrimitiveFontName) {
             return false;
           }
@@ -730,7 +774,7 @@ async function buildFromFigma() {
         if (path[0] === "font" && path[1] === "weight") {
           return false; // All font.weight in primitives-core are primitives
         }
-        
+
         // Exclude primitives-core paths (border, opacity, shadow, spacing, blur)
         // These are already in tokens.primitives.css
         const primitivesPaths = [
@@ -833,7 +877,7 @@ async function buildFromFigma() {
     }
     await buildCssFromTokens(mergedSemanticLight, {
       destination: "tokens.semantic.light.css",
-      selector: ':root[data-theme="light"]',
+      selector: ':root, :root[data-theme="light"]',
       filter: (token) => {
         const path = token.path || [];
         // Exclude tokens whose ref is still unresolved (literal {color.xxx} not {s2a.color.xxx}) — avoids truncated names and broken values
@@ -861,10 +905,6 @@ async function buildFromFigma() {
           "dataviz",
         ];
         if (path[2] && primitiveColorPaletteKeys.includes(String(path[2]))) {
-          return false;
-        }
-        // Temporarily exclude semantic button/iconbutton tokens from semantic output
-        if (path[2] === "button" || path[2] === "iconbutton") {
           return false;
         }
         return true;
@@ -950,17 +990,13 @@ async function buildFromFigma() {
         if (path[2] && primitiveColorPaletteKeys.includes(String(path[2]))) {
           return false;
         }
-        // Temporarily exclude semantic button/iconbutton tokens from semantic output
-        if (path[2] === "button" || path[2] === "iconbutton") {
-          return false;
-        }
         return true;
       },
     });
   }
 
   // ============================================================================
-  // 3. BREAKPOINTS (component build removed; theme modes are semantic light/dark)
+  // 3. BREAKPOINTS (component color tokens are emitted with semantic light/dark)
   // ============================================================================
 
   if (breakpointFiles.length > 0) {
@@ -1015,9 +1051,9 @@ async function buildFromFigma() {
     const baseMergedForTypography = mergeTokenTrees(
       mergeTokenTrees(
         primitivesCoreForTypography,
-        clone(lightColorPrimitivesForTypography)
+        clone(lightColorPrimitivesForTypography),
       ),
-      clone(semanticTokensForTypography)
+      clone(semanticTokensForTypography),
     );
 
     const typographyFilter = (token) => {
@@ -1043,7 +1079,7 @@ async function buildFromFigma() {
       const typographyTokens = await loadTokensForMode(modeFiles, true);
       const mergedTypographyBeforeConversion = mergeTokenTrees(
         clone(baseMergedForTypography),
-        typographyTokens
+        typographyTokens,
       );
 
       transformFontSizeReferences(mergedTypographyBeforeConversion);
@@ -1085,7 +1121,7 @@ async function buildFromFigma() {
       const typographyTokens = await loadTokensForMode(allFiles, true);
       const mergedTypographyBeforeConversion = mergeTokenTrees(
         clone(baseMergedForTypography),
-        typographyTokens
+        typographyTokens,
       );
       transformFontSizeReferences(mergedTypographyBeforeConversion);
       applyUnitConversions(mergedTypographyBeforeConversion);
@@ -1153,9 +1189,7 @@ async function buildFromFigma() {
       rewriteSemanticRefsToS2a(mergedResponsive);
 
       const mediaQuery =
-        minWidth != null
-          ? `@media (min-width: ${minWidth}px)`
-          : null;
+        minWidth != null ? `@media (min-width: ${minWidth}px)` : null;
 
       await buildCssFromTokens(mergedResponsive, {
         destination: `tokens.responsive.${shortName}.css`,
@@ -1197,12 +1231,7 @@ async function buildFromFigma() {
 
 async function copyPackageJson() {
   const PACKAGE_DIR = path.join(__dirname, "..");
-  const BUILD_DIR = path.join(
-    process.cwd(),
-    "dist",
-    "packages",
-    "tokens",
-  );
+  const BUILD_DIR = path.join(process.cwd(), "dist", "packages", "tokens");
   const sourcePackageJsonPath = path.join(PACKAGE_DIR, "package.json");
   const destPackageJsonPath = path.join(BUILD_DIR, "package.json");
 
@@ -1223,12 +1252,7 @@ async function copyPackageJson() {
 
 async function copyReadme() {
   const PACKAGE_DIR = path.join(__dirname, "..");
-  const BUILD_DIR = path.join(
-    process.cwd(),
-    "dist",
-    "packages",
-    "tokens",
-  );
+  const BUILD_DIR = path.join(process.cwd(), "dist", "packages", "tokens");
   const sourceReadmePath = path.join(PACKAGE_DIR, "README.md");
   const destReadmePath = path.join(BUILD_DIR, "README.md");
 
@@ -1248,12 +1272,7 @@ async function copyReadme() {
 
 async function copyChangelog() {
   const PACKAGE_DIR = path.join(__dirname, "..");
-  const BUILD_DIR = path.join(
-    process.cwd(),
-    "dist",
-    "packages",
-    "tokens",
-  );
+  const BUILD_DIR = path.join(process.cwd(), "dist", "packages", "tokens");
   const sourceChangelogPath = path.join(PACKAGE_DIR, "CHANGELOG.md");
   const destChangelogPath = path.join(BUILD_DIR, "CHANGELOG.md");
 
@@ -1274,13 +1293,7 @@ async function copyChangelog() {
 }
 
 async function minifyAllCssFiles() {
-  const cssDir = path.join(
-    process.cwd(),
-    "dist",
-    "packages",
-    "tokens",
-    "css",
-  );
+  const cssDir = path.join(process.cwd(), "dist", "packages", "tokens", "css");
   const devDir = path.join(cssDir, "dev");
   const minDir = path.join(cssDir, "min");
 
@@ -1288,13 +1301,20 @@ async function minifyAllCssFiles() {
   await fs.mkdir(devDir, { recursive: true });
   await fs.mkdir(minDir, { recursive: true });
 
-  // Remove obsolete component CSS (component collection removed; theme modes are semantic)
-  for (const obsolete of ["tokens.component.css", "tokens.component.light.css", "tokens.component.dark.css"]) {
+  // Remove obsolete split component CSS (component color tokens ship with semantic theme files)
+  for (const obsolete of [
+    "tokens.component.css",
+    "tokens.component.light.css",
+    "tokens.component.dark.css",
+  ]) {
     try {
       await fs.unlink(path.join(devDir, obsolete));
     } catch (e) {
       if (e.code !== "ENOENT") {
-        console.warn(`Warning: failed to remove obsolete ${obsolete}:`, e.message);
+        console.warn(
+          `Warning: failed to remove obsolete ${obsolete}:`,
+          e.message,
+        );
       }
     }
   }
@@ -1316,7 +1336,7 @@ async function minifyAllCssFiles() {
     }
   }
 
-  // Define files in the correct import order (primitives → semantic; component removed, theme modes are semantic)
+  // Define files in the correct import order (primitives → semantic; component colors ship with theme modes)
   const cssFiles = [
     "tokens.primitives.css",
     "tokens.primitives.light.css",
@@ -1360,11 +1380,18 @@ async function minifyAllCssFiles() {
       let sorted = css;
       if (file.startsWith("tokens.responsive.")) {
         sorted = sortResponsiveCssVars(css);
-      } else if (file === "tokens.primitives.css" || file === "tokens.primitives.light.css" || file === "tokens.primitives.dark.css") {
+      } else if (
+        file === "tokens.primitives.css" ||
+        file === "tokens.primitives.light.css" ||
+        file === "tokens.primitives.dark.css"
+      ) {
         sorted = sortPrimitiveCssVars(css);
       } else if (file === "tokens.semantic.css") {
         sorted = sortSemanticCssVars(css);
-      } else if (file === "tokens.semantic.light.css" || file === "tokens.semantic.dark.css") {
+      } else if (
+        file === "tokens.semantic.light.css" ||
+        file === "tokens.semantic.dark.css"
+      ) {
         sorted = sortSemanticThemeCssVars(css);
       }
       if (sorted !== css) {

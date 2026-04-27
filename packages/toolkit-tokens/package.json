@@ -1,0 +1,12 @@
+{
+  "name": "@s2a/toolkit-tokens",
+  "version": "0.1.0",
+  "description": "Experimental token pipeline fed by Figma plugin export — separate from packages/tokens.",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev-server": "node scripts/dev-server.js",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
+  },
+  "devDependencies": {}
+}

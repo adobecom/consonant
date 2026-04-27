@@ -1,23 +1,9 @@
 import { html } from "lit";
 import { ProductLockup } from "./ProductLockup";
+import { APP_OPTIONS } from "./AppIcon";
 import productLockupCss from "../../../packages/components/src/product-lockup/product-lockup.css?raw";
 
-const APP_OPTIONS = [
-  "creative-cloud",
-  "firefly",
-  "acrobat-pdf",
-  "photoshop",
-  "illustrator",
-  "experience-cloud",
-  "premiere-pro",
-  "experience-platform",
-  "acrobat-pro",
-  "express",
-  "after-effects",
-  "lightroom",
-  "indesign",
-  "stock",
-];
+const APP_SLUGS = APP_OPTIONS.map((app) => app.slug);
 
 const normalizeIconSize = (value) => {
   if (value === undefined || value === null || value === "auto") {
@@ -162,7 +148,7 @@ ${productLockupCss}
     },
     app: {
       control: { type: "select" },
-      options: APP_OPTIONS,
+      options: APP_SLUGS,
       description: "AppIcon slug",
     },
     orientation: {
@@ -184,7 +170,8 @@ ${productLockupCss}
     width: {
       control: { type: "select" },
       options: ["hug", "fill"],
-      description: 'Layout width — "fill" lets the label truncate within its container',
+      description:
+        'Layout width — "fill" lets the label truncate within its container',
     },
     showIconStart: {
       control: "boolean",
@@ -197,7 +184,8 @@ ${productLockupCss}
     iconSize: {
       control: { type: "select" },
       options: ["auto", "xs", "sm", "md", "lg"],
-      description: "Icon size override (auto defaults to the matt-atoms 24px tile)",
+      description:
+        "Icon size override (auto defaults to the matt-atoms 24px tile)",
     },
   },
   args: {
@@ -270,17 +258,37 @@ export const NoCaret = {
 export const AllVariants = {
   render: (args) => {
     const combos = [
-      { label: "Inline label", orientation: "horizontal", styleVariant: "label" },
-      { label: "Inline eyebrow", orientation: "horizontal", styleVariant: "eyebrow" },
-      { label: "Vertical label", orientation: "vertical", styleVariant: "label" },
-      { label: "Vertical eyebrow", orientation: "vertical", styleVariant: "eyebrow" },
+      {
+        label: "Inline label",
+        orientation: "horizontal",
+        styleVariant: "label",
+      },
+      {
+        label: "Inline eyebrow",
+        orientation: "horizontal",
+        styleVariant: "eyebrow",
+      },
+      {
+        label: "Vertical label",
+        orientation: "vertical",
+        styleVariant: "label",
+      },
+      {
+        label: "Vertical eyebrow",
+        orientation: "vertical",
+        styleVariant: "eyebrow",
+      },
     ];
 
     return html`
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;">
-        ${combos.map((combo) =>
-          html`
-            <div style="padding: 16px; border: 1px solid #e1e1e1; border-radius: 12px; background: #fff; min-height: 96px;">
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;"
+      >
+        ${combos.map(
+          (combo) => html`
+            <div
+              style="padding: 16px; border: 1px solid #e1e1e1; border-radius: 12px; background: #fff; min-height: 96px;"
+            >
               ${renderLockup(args, { ...combo, width: "fill" })}
             </div>
           `,

@@ -2,19 +2,28 @@ import { html } from "lit";
 import { fn } from "storybook/test";
 
 import { Button } from "./Button";
-import buttonCss from "../../../packages/components/src/button/button.css?raw";
 
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-download.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-folder.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-down.js";
 
-const iconStyle = "width:12px;height:12px;display:inline-flex;align-items:center;justify-content:center;";
+const iconStyle =
+  "width:12px;height:12px;display:inline-flex;align-items:center;justify-content:center;";
 const SpectrumDownloadIcon = () =>
-  html`<sp-icon-download aria-hidden="true" style="${iconStyle}"></sp-icon-download>`;
+  html`<sp-icon-download
+    aria-hidden="true"
+    style="${iconStyle}"
+  ></sp-icon-download>`;
 const SpectrumFolderIcon = () =>
-  html`<sp-icon-folder aria-hidden="true" style="${iconStyle}"></sp-icon-folder>`;
+  html`<sp-icon-folder
+    aria-hidden="true"
+    style="${iconStyle}"
+  ></sp-icon-folder>`;
 const SpectrumChevronDownIcon = () =>
-  html`<sp-icon-chevron-down aria-hidden="true" style="${iconStyle}"></sp-icon-chevron-down>`;
+  html`<sp-icon-chevron-down
+    aria-hidden="true"
+    style="${iconStyle}"
+  ></sp-icon-chevron-down>`;
 
 export default {
   title: "Components/Button",
@@ -35,23 +44,25 @@ export default {
   list-style: none;
   cursor: pointer;
   padding: 18px 24px;
-  font-size: 15px;
-  font-weight: 700;
+  font-family: var(--s2a-font-family-label);
+  font-size: var(--s2a-font-size-sm);
+  font-weight: var(--s2a-font-weight-label);
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 .doc-collapse summary::-webkit-details-marker { display: none; }
-.doc-collapse summary span { color: #555; font-size: 13px; font-weight: 600; }
+.doc-collapse summary span { color: #555; font-family: var(--s2a-font-family-label); font-size: var(--s2a-typography-font-size-caption); font-weight: var(--s2a-font-weight-label); }
 .doc-collapse[open] summary { border-bottom: 1px solid rgba(0,0,0,0.08); }
 .doc-body { padding: 20px 24px 24px; }
-.doc-body p { margin: 0 0 12px; font-size: 14px; color: #333; }
-.doc-body code { font-weight: 600; }
+.doc-body p { margin: 0 0 12px; font-family: var(--s2a-font-family-body); font-size: var(--s2a-typography-font-size-label); color: #333; }
+.doc-body code { font-family: var(--s2a-font-family-label); font-weight: var(--s2a-font-weight-label); }
 </style>
 <details class="doc-pattern doc-collapse">
   <summary>Preferred · Data-attribute HTML structure <span>Recommended</span></summary>
   <div class="doc-body">
-    <p>Mimic the exact Figma variant axes using <code>data-*</code> attributes. Icon slots are optional.</p>
+    <p>Matches Figma <code>.Button/Core/Primary</code> node <code>141:53460</code>: <code>Background</code>, <code>Context</code>, <code>Size</code>, and <code>State</code> combine into 60 primary variants. The Figma component exposes a label plus optional start/end icon slots.</p>
+    <p><code>intent="accent"</code> is an S2A extension for blue CTAs on light surfaces; it is not part of this primary Figma component set.</p>
 
 \`\`\`html
 <button
@@ -80,7 +91,7 @@ export default {
 }
 
 .c-button[data-background="outlined"][data-context="on-dark"] {
-  border: var(--s2a-border-width-sm) solid var(--s2a-color-button-border-primary-outlined-on-dark);
+  border: var(--s2a-border-width-md) solid var(--s2a-color-button-border-primary-outlined-on-dark-default);
   color: var(--s2a-color-button-content-primary-outlined-knockout);
 }
 
@@ -114,7 +125,7 @@ export default {
 }
 
 .c-button--outlined.c-button--on-dark {
-  border: var(--s2a-border-width-sm) solid var(--s2a-color-button-border-primary-outlined-on-dark);
+  border: var(--s2a-border-width-md) solid var(--s2a-color-button-border-primary-outlined-on-dark-default);
   color: var(--s2a-color-button-content-primary-outlined-knockout);
 }
 
@@ -126,16 +137,7 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Full CSS reference <span>Source of truth</span></summary>
-  <div class="doc-body">
-    <p>This is the exact stylesheet shipped in <code>packages/components/src/button/button.css</code>.</p>
-
-\`\`\`css
-${buttonCss}
-\`\`\`
-  </div>
-</details>
+<p>Source stylesheet: <code>packages/components/src/button/button.css</code>.</p>
         `,
       },
     },
@@ -145,7 +147,8 @@ ${buttonCss}
     intent: {
       control: { type: "select" },
       options: ["primary", "accent"],
-      description: "Color intent (primary = core black/white, accent = blue CTA)",
+      description:
+        "Color intent (primary = core black/white, accent = blue CTA)",
     },
     context: {
       control: { type: "select" },
@@ -209,14 +212,6 @@ export const Accent = {
   args: { intent: "accent", background: "solid", label: "Get started" },
 };
 
-export const Dropdown = {
-  args: {
-    background: "outlined",
-    showIconEnd: true,
-    label: "Filters",
-    iconEnd: SpectrumChevronDownIcon,
-  },
-};
 
 export const Sizes = {
   render: () => html`
@@ -237,7 +232,9 @@ export const ContextGrid = {
             Button({ label: background, background, context: "on-light" }),
           )}
         </div>
-        <div style="background: #050505; padding: 24px; border-radius: 24px; display: flex; gap: 16px; flex-wrap: wrap;">
+        <div
+          style="background: #050505; padding: 24px; border-radius: 24px; display: flex; gap: 16px; flex-wrap: wrap;"
+        >
           ${backgrounds.map((background) =>
             Button({
               label: `${background} on dark`,
@@ -284,6 +281,81 @@ export const ForcedStates = {
             context: "on-light",
             background: "solid",
           }),
+        )}
+      </div>
+    `;
+  },
+};
+
+export const BackdropBlur = {
+  name: "Backdrop blur (outlined & transparent)",
+  render: () => html`
+    <div
+      style="
+        background: linear-gradient(135deg, #e040fb 0%, #00b0ff 50%, #69f0ae 100%);
+        padding: 40px 32px;
+        border-radius: 24px;
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+      "
+    >
+      ${Button({ label: "outlined on-light", background: "outlined", context: "on-light" })}
+      ${Button({ label: "outlined on-dark", background: "outlined", context: "on-dark" })}
+      ${Button({ label: "transparent on-light", background: "transparent", context: "on-light" })}
+      ${Button({ label: "transparent on-dark", background: "transparent", context: "on-dark" })}
+    </div>
+  `,
+};
+
+export const PrimaryMatrix = {
+  render: () => {
+    const backgrounds = ["solid", "outlined", "transparent"];
+    const contexts = ["on-light", "on-dark"];
+    const sizes = ["md", "xs"];
+    const states = ["default", "hover", "active", "focus", "disabled"];
+
+    return html`
+      <div style="display: grid; gap: 28px;">
+        ${contexts.map(
+          (context) => html`
+            <section
+              style=${context === "on-dark"
+                ? "background:#050505;color:#fff;padding:24px;border-radius:24px;"
+                : "background:#fff;color:#000;padding:24px;border:1px solid rgba(0,0,0,0.08);border-radius:24px;"}
+            >
+              <h3 style="margin:0 0 var(--s2a-spacing-md);font-family:var(--s2a-font-family-label);font-size:var(--s2a-font-size-md);font-weight:var(--s2a-font-weight-label);line-height:var(--s2a-typography-line-height-label);letter-spacing:var(--s2a-typography-letter-spacing-label);">${context}</h3>
+              <div style="display:grid;gap:20px;">
+                ${backgrounds.map(
+                  (background) => html`
+                    <div style="display:grid;gap:12px;">
+                      <strong style="font-family:var(--s2a-font-family-label);font-size:var(--s2a-typography-font-size-label);font-weight:var(--s2a-font-weight-label);line-height:var(--s2a-typography-line-height-label);letter-spacing:var(--s2a-typography-letter-spacing-label);text-transform:capitalize;"
+                        >${background}</strong
+                      >
+                      ${sizes.map(
+                        (size) => html`
+                          <div
+                            style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;"
+                          >
+                            ${states.map((state) =>
+                              Button({
+                                label: `${size} ${state}`,
+                                background,
+                                context,
+                                size,
+                                state,
+                              }),
+                            )}
+                          </div>
+                        `,
+                      )}
+                    </div>
+                  `,
+                )}
+              </div>
+            </section>
+          `,
         )}
       </div>
     `;

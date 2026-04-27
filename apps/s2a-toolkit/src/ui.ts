@@ -10,13 +10,14 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
 
 // ── Navigation ────────────────────────────────────────────────────────────────
 
-type View = 'home' | 'variables' | 'select' | 'settings' | 'prototype';
+type View = 'home' | 'variables' | 'select' | 'settings' | 'prototype' | 'annotate';
 
 const homeView       = document.getElementById('homeView') as HTMLElement;
 const variablesPanel = document.getElementById('variablesPanel') as HTMLElement;
 const selectPanel    = document.getElementById('selectPanel') as HTMLElement;
 const settingsPanel  = document.getElementById('settingsPanel') as HTMLElement;
 const protoPanel     = document.getElementById('protoPanel') as HTMLElement;
+const annotatePanel  = document.getElementById('annotatePanel') as HTMLElement;
 const headerTitle    = document.getElementById('headerTitle') as HTMLElement;
 const backBtn        = document.getElementById('backBtn') as HTMLButtonElement;
 const settingsBtn    = document.getElementById('settingsBtn') as HTMLButtonElement;
@@ -27,6 +28,7 @@ const views: Record<View, { el: HTMLElement; title: string }> = {
   select:    { el: selectPanel,    title: 'Select Variants' },
   settings:  { el: settingsPanel,  title: 'GitHub Settings' },
   prototype: { el: protoPanel,     title: 'Generate Prototype' },
+  annotate:  { el: annotatePanel,  title: 'Annotate' },
 };
 
 let currentView: View = 'home';
@@ -525,6 +527,68 @@ document.getElementById('selectNoneBtn')?.addEventListener('click', () => {
   document.querySelectorAll<HTMLButtonElement>('.chip').forEach(c => c.classList.remove('on'));
 });
 
+// ── Annotate ──────────────────────────────────────────────────────────────────
+
+let annotateNodeId: string | null = null;
+
+function setAnnotateMeta(text: string) {
+  const el = document.getElementById('annotateMeta');
+  if (el) el.textContent = text;
+}
+
+function setAnnotateStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('annotateStatus') as HTMLElement;
+  el.textContent = msg;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+function updateAnnotateSelection(sel: { id: string; name: string; nodeType: string } | null) {
+  annotateNodeId = sel?.id ?? null;
+  const empty    = document.getElementById('annotateSelectionEmpty') as HTMLElement;
+  const info     = document.getElementById('annotateSelectionInfo') as HTMLElement;
+  const nameEl   = document.getElementById('annotateNodeName') as HTMLElement;
+  const typeEl   = document.getElementById('annotateNodeType') as HTMLElement;
+  const applyBtn = document.getElementById('annotateApplyBtn') as HTMLButtonElement;
+  if (sel) {
+    empty.style.display = 'none';
+    info.style.display = 'flex';
+    nameEl.textContent = sel.name;
+    typeEl.textContent = sel.nodeType;
+    applyBtn.disabled = false;
+    setAnnotateMeta(sel.name);
+  } else {
+    empty.style.display = 'block';
+    info.style.display = 'none';
+    applyBtn.disabled = true;
+    setAnnotateMeta('Select a node to start');
+  }
+}
+
+document.querySelectorAll<HTMLButtonElement>('#annotateCats .chip').forEach(chip => {
+  chip.addEventListener('click', () => chip.classList.toggle('on'));
+});
+
+document.getElementById('annotateApplyBtn')?.addEventListener('click', () => {
+  if (!annotateNodeId) return;
+  const categories = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('#annotateCats .chip.on')
+  ).map(c => c.dataset.cat!);
+  if (categories.length === 0) { setAnnotateStatus('Select at least one category', 'err'); return; }
+  const applyBtn = document.getElementById('annotateApplyBtn') as HTMLButtonElement;
+  applyBtn.disabled = true;
+  applyBtn.textContent = 'Annotating…';
+  setAnnotateStatus('');
+  postToPlugin('annotate:apply', { nodeId: annotateNodeId, categories });
+});
+
+document.getElementById('annotateClearBtn')?.addEventListener('click', () => {
+  if (!annotateNodeId) return;
+  const clearBtn = document.getElementById('annotateClearBtn') as HTMLButtonElement;
+  clearBtn.disabled = true;
+  setAnnotateStatus('Clearing…');
+  postToPlugin('annotate:clear', { nodeId: annotateNodeId });
+});
+
 // ── Plugin messages ───────────────────────────────────────────────────────────
 
 window.addEventListener('message', (event) => {
@@ -579,16 +643,38 @@ window.addEventListener('message', (event) => {
     }
     case 'selection-changed': {
       if (msg.nodeId) {
-        updateProtoSelection({
+        const sel = {
           id: msg.nodeId as string,
           name: msg.nodeName as string,
           nodeType: msg.nodeType as string,
           width: msg.width as number | undefined,
           height: msg.height as number | undefined,
-        });
+        };
+        updateProtoSelection(sel);
+        updateAnnotateSelection(sel);
       } else {
         updateProtoSelection(null);
+        updateAnnotateSelection(null);
       }
+      break;
+    }
+    case 'annotate:result': {
+      const applyBtn = document.getElementById('annotateApplyBtn') as HTMLButtonElement;
+      applyBtn.disabled = !annotateNodeId;
+      applyBtn.textContent = 'Annotate';
+      if (msg.error) {
+        setAnnotateStatus('❌ ' + (msg.error as string), 'err');
+      } else {
+        const n = msg.annotated as number;
+        setAnnotateStatus(`✓ ${n} node${n !== 1 ? 's' : ''} annotated`, 'ok');
+      }
+      break;
+    }
+    case 'annotate:cleared': {
+      const clearBtn = document.getElementById('annotateClearBtn') as HTMLButtonElement;
+      clearBtn.disabled = false;
+      const n = msg.cleared as number;
+      setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? 's' : ''}` : 'Nothing to clear', 'ok');
       break;
     }
   }

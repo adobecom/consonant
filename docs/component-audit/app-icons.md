@@ -7,19 +7,21 @@
 ## Design source of truth
 
 - **Primary file:** [App Icons Library](https://www.figma.com/design/8or0zCnGc5fiTnQ1NeIRnh/App-Icons-Library?node-id=0-1) (shared Figma library w/ publish rights).
-- **Deprecated component:** `AppIcon` in [S2A — Foundations](https://www.figma.com/design/eGSyBcD5XdFXR8rJXJmVNY/S2A---Foundations?node-id=3346-130118). Do not edit or duplicate this node — the assets now live exclusively in the App Icons Library file.
+- **S2A component set:** `AppIcon` in [S2A — Foundations](https://www.figma.com/design/eGSyBcD5XdFXR8rJXJmVNY/S2A---Foundations?node-id=3582-130846). This component set owns the wrapper sizing variants only.
+- **Icon source:** the `Icon` instance-swap points to standalone `B_app_*` components in the App Icons Library. Do not duplicate those icon assets into S2A Foundations.
 - **How to consume in Figma:** enable the "App Icons Library" in Assets → Libraries, then insert the desired `App Tile / {Product} / {Size}` instance. All tiles share the same corner radius and live on the 4px grid.
 
 ## Front-end implementation
 
 - **CDN base URL:** `https://www.adobe.com/content/dam/shared/images/product-icons/svg`
-- **Component:** `packages/components/src/app-icon/app-icon.js` loads icons directly from the CDN. No SVGs ship with the repo anymore.
+- **Component:** `packages/components/src/app-icon/app-icon.js` loads icons directly from the CDN and exports `APP_LIBRARY` / `APP_OPTIONS` for Storybook controls. No SVGs ship with the repo anymore.
+- **Catalog coverage:** the published App Icons Library currently exposes 92 standalone components. Storybook lists those plus existing S2A product aliases in the reference catalog; the `app` control only includes the verified CDN-backed entries so library-only assets do not render broken images.
 - **Do not color shift or add dropshadows.** The SVGs include the correct gradients per brand.
 
 ### Size guide
 
-| Size prop | px  | Use case                                                            |
-| --------- | --- | ------------------------------------------------------------------- |
+| Size prop | px   | Use case                                                          |
+| --------- | ---- | ----------------------------------------------------------------- |
 | `xs`      | 16px | Inline badges, extra-dense metadata, table rows                   |
 | `sm`      | 18px | Compact horizontal lockups, toolbar controls                      |
 | `md`      | 24px | **Default.** ProductLockup (all orientations), RouterMarquee tabs |
@@ -33,103 +35,105 @@ Use `AppIcon` with orientation-aware size selection:
 import { AppIcon } from "../app-icon/app-icon.js";
 
 // Default usage (both orientations) — 24px
-AppIcon({ app: "creative-cloud", size: "md" })
+AppIcon({ app: "creative-cloud", size: "md" });
 
 // Custom dense rows — 18px
-AppIcon({ app: "creative-cloud", size: "sm" })
+AppIcon({ app: "creative-cloud", size: "sm" });
 ```
 
 Do **not** pass a raw `<img>` pointing at the CDN. Always use the `AppIcon` component so sizing tokens, lazy-loading, and accessibility attributes are applied consistently.
 
-### Supported mappings
+### Common mappings
+
+The full implementation catalog lives in `APP_LIBRARY` in `packages/components/src/app-icon/app-icon.js`; use that exported map rather than copying tables into stories. The mappings below are the commonly used production slugs.
 
 #### Cross Cloud
 
-| slug              | Product label              | CDN filename              |
-| ----------------- | -------------------------- | ------------------------- |
-| `creative-cloud`  | Adobe Creative Cloud       | `creative-cloud.svg`      |
-| `experience-cloud`| Adobe Experience Cloud     | `experience-cloud.svg`    |
-| `document-cloud`  | Adobe Document Cloud       | `document-cloud.svg`      |
-| `stock`           | Adobe Stock                | `stock.svg`               |
-| `fonts`           | Adobe Fonts                | `fonts.svg`               |
-| `behance`         | Adobe Behance              | `behance.svg`             |
-| `portfolio`       | Adobe Portfolio            | `portfolio.svg`           |
+| slug               | Product label          | CDN filename           |
+| ------------------ | ---------------------- | ---------------------- |
+| `creative-cloud`   | Adobe Creative Cloud   | `creative-cloud.svg`   |
+| `experience-cloud` | Adobe Experience Cloud | `experience-cloud.svg` |
+| `document-cloud`   | Adobe Document Cloud   | `document-cloud.svg`   |
+| `stock`            | Adobe Stock            | `stock.svg`            |
+| `fonts`            | Adobe Fonts            | `fonts.svg`            |
+| `behance`          | Adobe Behance          | `behance.svg`          |
+| `portfolio`        | Adobe Portfolio        | `portfolio.svg`        |
 
 #### Gen AI
 
-| slug          | Product label    | CDN filename      |
-| ------------- | ---------------- | ----------------- |
-| `firefly`     | Adobe Firefly    | `firefly.svg`     |
-| `gen-studio`  | Adobe GenStudio  | `gen-studio.svg`  |
+| slug         | Product label   | CDN filename     |
+| ------------ | --------------- | ---------------- |
+| `firefly`    | Adobe Firefly   | `firefly.svg`    |
+| `gen-studio` | Adobe GenStudio | `gen-studio.svg` |
 
 #### Adobe Express
 
-| slug      | Product label  | CDN filename      |
-| --------- | -------------- | ----------------- |
-| `express` | Adobe Express  | `cc-express.svg`  |
+| slug      | Product label | CDN filename     |
+| --------- | ------------- | ---------------- |
+| `express` | Adobe Express | `cc-express.svg` |
 
 #### Document Cloud
 
-| slug           | Product label          | CDN filename          |
-| -------------- | ---------------------- | --------------------- |
-| `acrobat-pro`  | Adobe Acrobat Pro      | `acrobat.svg`         |
-| `acrobat-pdf`  | Adobe Acrobat Reader   | `acrobat-reader.svg`  |
-| `acrobat-sign` | Adobe Acrobat Sign     | `sign.svg`            |
-| `scan`         | Adobe Scan             | `scan.svg`            |
+| slug           | Product label        | CDN filename         |
+| -------------- | -------------------- | -------------------- |
+| `acrobat-pro`  | Adobe Acrobat Pro    | `acrobat.svg`        |
+| `acrobat-pdf`  | Adobe Acrobat Reader | `acrobat-reader.svg` |
+| `acrobat-sign` | Adobe Acrobat Sign   | `sign.svg`           |
+| `scan`         | Adobe Scan           | `scan.svg`           |
 
 #### Digital Imaging
 
-| slug                | Product label              | CDN filename              |
-| ------------------- | -------------------------- | ------------------------- |
-| `photoshop`         | Adobe Photoshop            | `photoshop.svg`           |
-| `lightroom`         | Adobe Lightroom            | `lightroom.svg`           |
-| `lightroom-classic` | Adobe Lightroom Classic    | `lightroom-classic.svg`   |
-| `fresco`            | Adobe Fresco               | `fresco.svg`              |
+| slug                | Product label           | CDN filename            |
+| ------------------- | ----------------------- | ----------------------- |
+| `photoshop`         | Adobe Photoshop         | `photoshop.svg`         |
+| `lightroom`         | Adobe Lightroom         | `lightroom.svg`         |
+| `lightroom-classic` | Adobe Lightroom Classic | `lightroom-classic.svg` |
+| `fresco`            | Adobe Fresco            | `fresco.svg`            |
 
 #### DVA (Digital Video & Audio)
 
-| slug                 | Product label              | CDN filename              |
-| -------------------- | -------------------------- | ------------------------- |
-| `premiere-pro`       | Adobe Premiere Pro         | `premiere.svg`            |
-| `after-effects`      | Adobe After Effects        | `after-effects.svg`       |
-| `audition`           | Adobe Audition             | `audition.svg`            |
-| `character-animator` | Adobe Character Animator   | `character-animator.svg`  |
-| `media-encoder`      | Adobe Media Encoder        | `media-encoder.svg`       |
-| `premiere-rush`      | Adobe Premiere Rush        | `rush.svg`                |
+| slug                 | Product label            | CDN filename             |
+| -------------------- | ------------------------ | ------------------------ |
+| `premiere-pro`       | Adobe Premiere Pro       | `premiere.svg`           |
+| `after-effects`      | Adobe After Effects      | `after-effects.svg`      |
+| `audition`           | Adobe Audition           | `audition.svg`           |
+| `character-animator` | Adobe Character Animator | `character-animator.svg` |
+| `media-encoder`      | Adobe Media Encoder      | `media-encoder.svg`      |
+| `premiere-rush`      | Adobe Premiere Rush      | `rush.svg`               |
 
 #### Print & Publishing
 
-| slug           | Product label       | CDN filename      |
-| -------------- | ------------------- | ----------------- |
-| `illustrator`  | Adobe Illustrator   | `illustrator.svg` |
-| `indesign`     | Adobe InDesign      | `indesign.svg`    |
-| `incopy`       | Adobe InCopy        | `incopy.svg`      |
-| `bridge`       | Adobe Bridge        | `bridge.svg`      |
-| `animate`      | Adobe Animate       | `animate.svg`     |
-| `dreamweaver`  | Adobe Dreamweaver   | `dreamweaver.svg` |
+| slug          | Product label     | CDN filename      |
+| ------------- | ----------------- | ----------------- |
+| `illustrator` | Adobe Illustrator | `illustrator.svg` |
+| `indesign`    | Adobe InDesign    | `indesign.svg`    |
+| `incopy`      | Adobe InCopy      | `incopy.svg`      |
+| `bridge`      | Adobe Bridge      | `bridge.svg`      |
+| `animate`     | Adobe Animate     | `animate.svg`     |
+| `dreamweaver` | Adobe Dreamweaver | `dreamweaver.svg` |
 
 #### 3D & AR
 
-| slug           | Product label        | CDN filename        |
-| -------------- | -------------------- | ------------------- |
-| `substance-3d` | Adobe Substance 3D   | `substance-3d.svg`  |
-| `dimension`    | Adobe Dimension      | `dimension.svg`     |
-| `aero`         | Adobe Aero           | `aero.svg`          |
+| slug           | Product label      | CDN filename       |
+| -------------- | ------------------ | ------------------ |
+| `substance-3d` | Adobe Substance 3D | `substance-3d.svg` |
+| `dimension`    | Adobe Dimension    | `dimension.svg`    |
+| `aero`         | Adobe Aero         | `aero.svg`         |
 
 #### Experience Cloud
 
-| slug                  | Product label                          | CDN filename                      |
-| --------------------- | -------------------------------------- | --------------------------------- |
-| `experience-platform` | Adobe Experience Platform              | `experience-platform.svg`         |
-| `experience-manager`  | Adobe Experience Manager               | `experience-manager.svg`          |
-| `analytics`           | Adobe Analytics                        | `analytics.svg`                   |
-| `campaign`            | Adobe Campaign                         | `campaign.svg`                    |
-| `customer-journey`    | Adobe Customer Journey Analytics       | `customer-journey-analytics.svg`  |
-| `real-time-cdp`       | Adobe Real-Time CDP                    | `real-time-cdp.svg`               |
-| `journey-optimizer`   | Adobe Journey Optimizer                | `journey-optimizer.svg`           |
-| `target`              | Adobe Target                           | `target.svg`                      |
-| `marketo`             | Adobe Marketo Engage                   | `marketo.svg`                     |
-| `workfront`           | Adobe Workfront                        | `workfront.svg`                   |
+| slug                  | Product label                    | CDN filename                     |
+| --------------------- | -------------------------------- | -------------------------------- |
+| `experience-platform` | Adobe Experience Platform        | `experience-platform.svg`        |
+| `experience-manager`  | Adobe Experience Manager         | `experience-manager.svg`         |
+| `analytics`           | Adobe Analytics                  | `analytics.svg`                  |
+| `campaign`            | Adobe Campaign                   | `campaign.svg`                   |
+| `customer-journey`    | Adobe Customer Journey Analytics | `customer-journey-analytics.svg` |
+| `real-time-cdp`       | Adobe Real-Time CDP              | `real-time-cdp.svg`              |
+| `journey-optimizer`   | Adobe Journey Optimizer          | `journey-optimizer.svg`          |
+| `target`              | Adobe Target                     | `target.svg`                     |
+| `marketo`             | Adobe Marketo Engage             | `marketo.svg`                    |
+| `workfront`           | Adobe Workfront                  | `workfront.svg`                  |
 
 > Need an icon that is not listed? Grab the CDN filename from the App Icons Library file and add a row to the table above before using it in code.
 
@@ -145,7 +149,7 @@ Do **not** pass a raw `<img>` pointing at the CDN. Always use the `AppIcon` comp
 
 - [x] Remove repo-hosted SVGs (formerly under `packages/components/src/app-icon/assets`).
 - [x] Update the AppIcon component to proxy the CDN.
-- [x] Expand APP_LIBRARY to full catalog (40+ entries across all Figma library categories).
-- [ ] Add `xl` (40px) size for vertical/tile ProductLockup when design requires it (current matt-atoms spec sticks with 24px).
+- [x] Expand `APP_LIBRARY` to the published App Icons Library catalog (92 Figma components) plus S2A aliases.
+- [x] Keep size coverage aligned to the current Figma component set: `xs`, `sm`, `md`, `lg`.
 - [x] Publish this doc + point Storybook docs to it.
 - [ ] Update the S2A Figma file description to point to the App Icons Library (manual action for design team).

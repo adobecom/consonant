@@ -1,54 +1,664 @@
 import { html, nothing } from "lit";
 import "./app-icon.css";
 
-const CDN_BASE_URL = "https://www.adobe.com/content/dam/shared/images/product-icons/svg";
+const CDN_BASE_URL =
+  "https://www.adobe.com/content/dam/shared/images/product-icons/svg";
 const DEFAULT_APP = "experience-cloud";
 
-const APP_LIBRARY = {
-  "creative-cloud": { label: "Adobe Creative Cloud", filename: "creative-cloud.svg" },
-  "experience-cloud": { label: "Adobe Experience Cloud", filename: "experience-cloud.svg" },
-  "document-cloud": { label: "Adobe Document Cloud", filename: "document-cloud.svg" },
-  stock: { label: "Adobe Stock", filename: "stock.svg" },
-  fonts: { label: "Adobe Fonts", filename: "fonts.svg" },
-  behance: { label: "Adobe Behance", filename: "behance.svg" },
-  portfolio: { label: "Adobe Portfolio", filename: "portfolio.svg" },
-  firefly: { label: "Adobe Firefly", filename: "firefly.svg" },
-  "gen-studio": { label: "Adobe GenStudio", filename: "gen-studio.svg" },
-  express: { label: "Adobe Express", filename: "cc-express.svg" },
-  "acrobat-pro": { label: "Adobe Acrobat Pro", filename: "acrobat.svg" },
-  "acrobat-pdf": { label: "Adobe Acrobat Reader", filename: "acrobat-reader.svg" },
-  "acrobat-sign": { label: "Adobe Acrobat Sign", filename: "sign.svg" },
-  scan: { label: "Adobe Scan", filename: "scan.svg" },
-  photoshop: { label: "Adobe Photoshop", filename: "photoshop.svg" },
-  lightroom: { label: "Adobe Lightroom", filename: "lightroom.svg" },
-  "lightroom-classic": { label: "Adobe Lightroom Classic", filename: "lightroom-classic.svg" },
-  fresco: { label: "Adobe Fresco", filename: "fresco.svg" },
-  "premiere-pro": { label: "Adobe Premiere Pro", filename: "premiere.svg" },
-  "after-effects": { label: "Adobe After Effects", filename: "after-effects.svg" },
-  audition: { label: "Adobe Audition", filename: "audition.svg" },
-  "character-animator": { label: "Adobe Character Animator", filename: "character-animator.svg" },
-  "media-encoder": { label: "Adobe Media Encoder", filename: "media-encoder.svg" },
-  "premiere-rush": { label: "Adobe Premiere Rush", filename: "rush.svg" },
-  illustrator: { label: "Adobe Illustrator", filename: "illustrator.svg" },
-  indesign: { label: "Adobe InDesign", filename: "indesign.svg" },
-  incopy: { label: "Adobe InCopy", filename: "incopy.svg" },
-  bridge: { label: "Adobe Bridge", filename: "bridge.svg" },
-  animate: { label: "Adobe Animate", filename: "animate.svg" },
-  dreamweaver: { label: "Adobe Dreamweaver", filename: "dreamweaver.svg" },
-  "substance-3d": { label: "Adobe Substance 3D", filename: "substance-3d.svg" },
-  dimension: { label: "Adobe Dimension", filename: "dimension.svg" },
-  aero: { label: "Adobe Aero", filename: "aero.svg" },
-  "experience-platform": { label: "Adobe Experience Platform", filename: "experience-platform.svg" },
-  "experience-manager": { label: "Adobe Experience Manager", filename: "experience-manager.svg" },
-  analytics: { label: "Adobe Analytics", filename: "analytics.svg" },
-  campaign: { label: "Adobe Campaign", filename: "campaign.svg" },
-  "customer-journey": { label: "Adobe Customer Journey Analytics", filename: "customer-journey-analytics.svg" },
-  "real-time-cdp": { label: "Adobe Real-Time CDP", filename: "real-time-cdp.svg" },
-  "journey-optimizer": { label: "Adobe Journey Optimizer", filename: "journey-optimizer.svg" },
-  target: { label: "Adobe Target", filename: "target.svg" },
-  marketo: { label: "Adobe Marketo Engage", filename: "marketo.svg" },
-  workfront: { label: "Adobe Workfront", filename: "workfront.svg" },
-};
+export const APP_LIBRARY = Object.freeze({
+  "creative-cloud": {
+    label: "Adobe Creative Cloud",
+    filename: "creative-cloud.svg",
+    category: "Cross Cloud",
+    figmaName: "B_app_CreativeCloud",
+  },
+  "experience-cloud": {
+    label: "Adobe Experience Cloud",
+    filename: "experience-cloud.svg",
+    category: "Experience Cloud",
+    figmaName: "B_app_ExperienceCloud",
+  },
+  "document-cloud": {
+    label: "Adobe Document Cloud",
+    filename: "document-cloud.svg",
+    category: "Document Cloud",
+    figmaName: "B_app_AdobeDocumentCloud",
+  },
+  stock: {
+    label: "Adobe Stock",
+    filename: "stock.svg",
+    category: "Cross Cloud",
+    figmaName: "B_app_Stock",
+  },
+  fonts: {
+    label: "Adobe Fonts",
+    filename: "fonts.svg",
+    category: "Cross Cloud",
+    figmaName: "B_app_AdobeFonts",
+  },
+  behance: {
+    label: "Adobe Behance",
+    filename: "behance.svg",
+    category: "Cross Cloud",
+    figmaName: "B_app_Behance",
+  },
+  portfolio: {
+    label: "Adobe Portfolio",
+    filename: "portfolio.svg",
+    category: "Cross Cloud",
+    figmaName: "B_app_Portfolio",
+  },
+  firefly: {
+    label: "Adobe Firefly",
+    filename: "firefly.svg",
+    category: "Gen AI",
+    figmaName: "B_app_AdobeFirefly",
+  },
+  "gen-studio": {
+    label: "Adobe GenStudio",
+    filename: "gen-studio.svg",
+    category: "Gen AI",
+  },
+  express: {
+    label: "Adobe Express",
+    filename: "cc-express.svg",
+    category: "Adobe Express",
+    figmaName: "B_app_AdobeExpress",
+  },
+  "acrobat-pro": {
+    label: "Adobe Acrobat Pro",
+    filename: "acrobat.svg",
+    category: "Document Cloud",
+    figmaName: "B_app_AdobeAcrobatPro",
+  },
+  "acrobat-pdf": {
+    label: "Adobe Acrobat Reader",
+    filename: "acrobat-reader.svg",
+    category: "Document Cloud",
+    figmaName: "B_app_AdobeAcrobatPDF",
+  },
+  "acrobat-sign": {
+    label: "Adobe Acrobat Sign",
+    filename: "sign.svg",
+    category: "Document Cloud",
+    figmaName: "B_app_AdobeSign",
+  },
+  scan: {
+    label: "Adobe Scan",
+    filename: "scan.svg",
+    category: "Document Cloud",
+    figmaName: "B_app_AdobeScan",
+  },
+  "acrobat-classic": {
+    label: "Adobe Acrobat Classic",
+    filename: "acrobat-classic.svg",
+    category: "Document Cloud",
+    figmaName: "B_app_AdobeAcrobatClassic",
+  },
+  "acrobat-diagnostics": {
+    label: "Adobe Acrobat Diagnostics",
+    filename: "acrobat-diagnostics.svg",
+    category: "Document Cloud",
+    figmaName: "B_app_AcrobatDiagnostics",
+  },
+  distiller: {
+    label: "Adobe Distiller",
+    filename: "distiller.svg",
+    category: "Document Cloud",
+    figmaName: "B_app_AdobeDistiller",
+  },
+  "fill-and-sign": {
+    label: "Adobe Fill & Sign",
+    filename: "fill-and-sign.svg",
+    category: "Document Cloud",
+    figmaName: "B_app_FillAndSign",
+  },
+  photoshop: {
+    label: "Adobe Photoshop",
+    filename: "photoshop.svg",
+    category: "Digital Imaging",
+    figmaName: "B_app_Photoshop",
+  },
+  lightroom: {
+    label: "Adobe Lightroom",
+    filename: "lightroom.svg",
+    category: "Digital Imaging",
+    figmaName: "B_app_Lightroom",
+  },
+  "lightroom-classic": {
+    label: "Adobe Lightroom Classic",
+    filename: "lightroom-classic.svg",
+    category: "Digital Imaging",
+    figmaName: "B_app_LightroomClassic",
+  },
+  fresco: {
+    label: "Adobe Fresco",
+    filename: "fresco.svg",
+    category: "Digital Imaging",
+    figmaName: "B_app_Fresco",
+  },
+  "camera-raw": {
+    label: "Adobe Camera Raw",
+    filename: "camera-raw.svg",
+    category: "Digital Imaging",
+    figmaName: "B_app_CameraRaw",
+  },
+  capture: {
+    label: "Adobe Capture",
+    filename: "capture.svg",
+    category: "Digital Imaging",
+    figmaName: "B_app_Capture",
+  },
+  "photoshop-camera": {
+    label: "Adobe Photoshop Camera",
+    filename: "photoshop-camera.svg",
+    category: "Digital Imaging",
+    figmaName: "B_app_PhotoshopCamera",
+  },
+  "photoshop-express": {
+    label: "Adobe Photoshop Express",
+    filename: "photoshop-express.svg",
+    category: "Digital Imaging",
+    figmaName: "B_app_PhotoshopExpress",
+  },
+  "premiere-pro": {
+    label: "Adobe Premiere Pro",
+    filename: "premiere.svg",
+    category: "Digital Video & Audio",
+    figmaName: "B_app_PremierePro",
+  },
+  "after-effects": {
+    label: "Adobe After Effects",
+    filename: "after-effects.svg",
+    category: "Digital Video & Audio",
+    figmaName: "B_app_AfterEffects",
+  },
+  audition: {
+    label: "Adobe Audition",
+    filename: "audition.svg",
+    category: "Digital Video & Audio",
+    figmaName: "B_app_Audition",
+  },
+  "character-animator": {
+    label: "Adobe Character Animator",
+    filename: "character-animator.svg",
+    category: "Digital Video & Audio",
+    figmaName: "B_app_CharacterAnimator",
+  },
+  "media-encoder": {
+    label: "Adobe Media Encoder",
+    filename: "media-encoder.svg",
+    category: "Digital Video & Audio",
+    figmaName: "B_app_MediaEncoder",
+  },
+  "premiere-rush": {
+    label: "Adobe Premiere Rush",
+    filename: "rush.svg",
+    category: "Digital Video & Audio",
+    figmaName: "B_app_PremiereRush",
+  },
+  prelude: {
+    label: "Adobe Prelude",
+    filename: "prelude.svg",
+    category: "Digital Video & Audio",
+    figmaName: "B_app_Prelude",
+  },
+  illustrator: {
+    label: "Adobe Illustrator",
+    filename: "illustrator.svg",
+    category: "Print & Publishing",
+    figmaName: "B_app_Illustrator",
+  },
+  indesign: {
+    label: "Adobe InDesign",
+    filename: "indesign.svg",
+    category: "Print & Publishing",
+    figmaName: "B_app_InDesign",
+  },
+  incopy: {
+    label: "Adobe InCopy",
+    filename: "incopy.svg",
+    category: "Print & Publishing",
+    figmaName: "B_app_InCopy",
+  },
+  bridge: {
+    label: "Adobe Bridge",
+    filename: "bridge.svg",
+    category: "Print & Publishing",
+    figmaName: "B_app_Bridge",
+  },
+  animate: {
+    label: "Adobe Animate",
+    filename: "animate.svg",
+    category: "Print & Publishing",
+    figmaName: "B_app_Animate",
+  },
+  dreamweaver: {
+    label: "Adobe Dreamweaver",
+    filename: "dreamweaver.svg",
+    category: "Print & Publishing",
+    figmaName: "B_app_Dreamweaver",
+  },
+  "indesign-server": {
+    label: "Adobe InDesign Server",
+    filename: "indesign-server.svg",
+    category: "Print & Publishing",
+    figmaName: "B_app_InDesignServer",
+  },
+  "adobe-color": {
+    label: "Adobe Color",
+    filename: "color.svg",
+    category: "Print & Publishing",
+    figmaName: "B_app_AdobeColor",
+  },
+  "substance-3d": {
+    label: "Adobe Substance 3D",
+    filename: "substance-3d.svg",
+    category: "3D & AR",
+  },
+  dimension: {
+    label: "Adobe Dimension",
+    filename: "dimension.svg",
+    category: "3D & AR",
+    figmaName: "B_app_Dimension",
+  },
+  aero: {
+    label: "Adobe Aero",
+    filename: "aero.svg",
+    category: "3D & AR",
+    figmaName: "B_app_Aero",
+  },
+  "substance-3d-assets": {
+    label: "Adobe Substance 3D Assets",
+    filename: "substance-3d-assets.svg",
+    category: "3D & AR",
+    figmaName: "B_app_Substance3DAssets",
+  },
+  "substance-3d-collection": {
+    label: "Adobe Substance 3D Collection",
+    filename: "substance-3d-collection.svg",
+    category: "3D & AR",
+    figmaName: "B_app_Substance3DCollection",
+  },
+  "substance-3d-designer": {
+    label: "Adobe Substance 3D Designer",
+    filename: "substance-3d-designer.svg",
+    category: "3D & AR",
+    figmaName: "B_app_Substance3DDesigner",
+  },
+  "substance-3d-painter": {
+    label: "Adobe Substance 3D Painter",
+    filename: "substance-3d-painter.svg",
+    category: "3D & AR",
+    figmaName: "B_app_Substance3DPainter",
+  },
+  "substance-3d-sampler": {
+    label: "Adobe Substance 3D Sampler",
+    filename: "substance-3d-sampler.svg",
+    category: "3D & AR",
+    figmaName: "B_app_Substance3DSampler",
+  },
+  "substance-3d-stager": {
+    label: "Adobe Substance 3D Stager",
+    filename: "substance-3d-stager.svg",
+    category: "3D & AR",
+    figmaName: "B_app_Substance3DStager",
+  },
+  "substance-reviewer": {
+    label: "Adobe Substance Reviewer",
+    filename: "substance-reviewer.svg",
+    category: "3D & AR",
+    figmaName: "B_app_SubstanceReviewer",
+  },
+  modeler: {
+    label: "Adobe Substance 3D Modeler",
+    filename: "substance-3d-modeler.svg",
+    category: "3D & AR",
+    figmaName: "B_app_Modeler",
+  },
+  "experience-platform": {
+    label: "Adobe Experience Platform",
+    filename: "experience-platform.svg",
+    category: "Experience Cloud",
+    figmaName: "B_app_ExperiencePlatform",
+  },
+  "experience-manager": {
+    label: "Adobe Experience Manager",
+    filename: "experience-manager.svg",
+    category: "Experience Cloud",
+  },
+  analytics: {
+    label: "Adobe Analytics",
+    filename: "analytics.svg",
+    category: "Experience Cloud",
+  },
+  campaign: {
+    label: "Adobe Campaign",
+    filename: "campaign.svg",
+    category: "Experience Cloud",
+  },
+  "customer-journey": {
+    label: "Adobe Customer Journey Analytics",
+    filename: "customer-journey-analytics.svg",
+    category: "Experience Cloud",
+  },
+  "real-time-cdp": {
+    label: "Adobe Real-Time CDP",
+    filename: "real-time-cdp.svg",
+    category: "Experience Cloud",
+  },
+  "journey-optimizer": {
+    label: "Adobe Journey Optimizer",
+    filename: "journey-optimizer.svg",
+    category: "Experience Cloud",
+  },
+  target: {
+    label: "Adobe Target",
+    filename: "target.svg",
+    category: "Experience Cloud",
+  },
+  marketo: {
+    label: "Adobe Marketo Engage",
+    filename: "marketo.svg",
+    category: "Experience Cloud",
+  },
+  workfront: {
+    label: "Adobe Workfront",
+    filename: "workfront.svg",
+    category: "Experience Cloud",
+    figmaName: "B_app_Workfront",
+  },
+  "advertising-cloud": {
+    label: "Adobe Advertising Cloud",
+    filename: "advertising-cloud.svg",
+    category: "Experience Cloud",
+    figmaName: "B_app_AdvertisingCloud",
+  },
+  "analytics-cloud": {
+    label: "Adobe Analytics Cloud",
+    filename: "analytics-cloud.svg",
+    category: "Experience Cloud",
+    figmaName: "B_app_AnalyticsCloud",
+  },
+  "commerce-cloud": {
+    label: "Adobe Commerce Cloud",
+    filename: "commerce-cloud.svg",
+    category: "Experience Cloud",
+    figmaName: "B_app_CommerceCloud",
+  },
+  "marketing-cloud": {
+    label: "Adobe Marketing Cloud",
+    filename: "marketing-cloud.svg",
+    category: "Experience Cloud",
+    figmaName: "B_app_MarketingCloud",
+  },
+  "community-assets": {
+    label: "Adobe Community Assets",
+    filename: "community-assets.svg",
+    category: "Services & Utilities",
+    figmaName: "B_app_communityAssets",
+  },
+  "generative-credits": {
+    label: "Adobe Generative Credits",
+    filename: "generative-credits.svg",
+    category: "Services & Utilities",
+    figmaName: "B_app_GenerativeCredits",
+  },
+  mixamo: {
+    label: "Adobe Mixamo",
+    filename: "mixamo.svg",
+    category: "Services & Utilities",
+    figmaName: "B_app_Mixamo",
+  },
+  "spark-page": {
+    label: "Adobe Spark Page",
+    filename: "spark-page.svg",
+    category: "Services & Utilities",
+    figmaName: "B_app_SparkPage",
+  },
+  "spark-video": {
+    label: "Adobe Spark Video",
+    filename: "spark-video.svg",
+    category: "Services & Utilities",
+    figmaName: "B_app_SparkVideo",
+  },
+  "uxp-developer-tools": {
+    label: "Adobe UXP Developer Tools",
+    filename: "uxp-developer-tools.svg",
+    category: "Services & Utilities",
+    figmaName: "B_app_UXPDeveloperTools",
+  },
+  xd: {
+    label: "Adobe XD",
+    filename: "xd.svg",
+    category: "Services & Utilities",
+    figmaName: "B_app_XD",
+  },
+  "frame-io": {
+    label: "Frame.io",
+    filename: "frame-io.svg",
+    category: "Services & Utilities",
+    figmaName: "Frame.io",
+  },
+  "beta-express": {
+    label: "Adobe Express Beta",
+    filename: "cc-express-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAAdobeExpress",
+  },
+  "beta-after-effects": {
+    label: "Adobe After Effects Beta",
+    filename: "after-effects-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAAfterEffects",
+  },
+  "beta-animate": {
+    label: "Adobe Animate Beta",
+    filename: "animate-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAAnimate",
+  },
+  "beta-audition": {
+    label: "Adobe Audition Beta",
+    filename: "audition-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAAudition",
+  },
+  "beta-bridge": {
+    label: "Adobe Bridge Beta",
+    filename: "bridge-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETABridge",
+  },
+  "beta-character-animator": {
+    label: "Adobe Character Animator Beta",
+    filename: "character-animator-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETACharacterAnimator",
+  },
+  "beta-fresco": {
+    label: "Adobe Fresco Beta",
+    filename: "fresco-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAFresco",
+  },
+  "beta-hi-five": {
+    label: "Adobe Hi Five Beta",
+    filename: "hi-five-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAHiFive",
+  },
+  "beta-illustrator": {
+    label: "Adobe Illustrator Beta",
+    filename: "illustrator-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAIllustrator",
+  },
+  "beta-incopy": {
+    label: "Adobe InCopy Beta",
+    filename: "incopy-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAInCopy",
+  },
+  "beta-indesign": {
+    label: "Adobe InDesign Beta",
+    filename: "indesign-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAInDesign",
+  },
+  "beta-lightroom": {
+    label: "Adobe Lightroom Beta",
+    filename: "lightroom-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETALightroom",
+  },
+  "beta-lightroom-classic": {
+    label: "Adobe Lightroom Classic Beta",
+    filename: "lightroom-classic-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETALightroomClassic",
+  },
+  "beta-media-encoder": {
+    label: "Adobe Media Encoder Beta",
+    filename: "media-encoder-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAMediaEncoder",
+  },
+  "beta-neo": {
+    label: "Adobe Neo Beta",
+    filename: "neo-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETANeo",
+  },
+  "beta-painter": {
+    label: "Adobe Painter Beta",
+    filename: "painter-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAPainter",
+  },
+  "beta-photoshop": {
+    label: "Adobe Photoshop Beta",
+    filename: "photoshop-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAPhotoshop",
+  },
+  "beta-photoshop-express": {
+    label: "Adobe Photoshop Express Beta",
+    filename: "photoshop-express-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAPhotoshopExpress",
+  },
+  "beta-premiere-pro": {
+    label: "Adobe Premiere Pro Beta",
+    filename: "premiere-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAPremierePro",
+  },
+  "beta-project-concept": {
+    label: "Adobe Project Concept Beta",
+    filename: "project-concept-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAProjectConcept",
+  },
+  "beta-pulsar": {
+    label: "Adobe Pulsar Beta",
+    filename: "pulsar-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAPulsar",
+  },
+  "beta-rush": {
+    label: "Adobe Premiere Rush Beta",
+    filename: "rush-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETARush",
+  },
+  "beta-seashell": {
+    label: "Adobe Seashell Beta",
+    filename: "seashell-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETASeashell",
+  },
+  "beta-substance-3d-designer": {
+    label: "Adobe Substance 3D Designer Beta",
+    filename: "substance-3d-designer-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETASubstance3DDesigner",
+  },
+  "beta-substance-3d-sampler": {
+    label: "Adobe Substance 3D Sampler Beta",
+    filename: "substance-3d-sampler-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETASubstance3DSampler",
+  },
+  "beta-substance-3d-stager": {
+    label: "Adobe Substance 3D Stager Beta",
+    filename: "substance-3d-stager-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETASubstanceStager",
+  },
+  "beta-viewer": {
+    label: "Adobe Viewer Beta",
+    filename: "viewer-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAViewer",
+  },
+  "beta-xd": {
+    label: "Adobe XD Beta",
+    filename: "xd-beta.svg",
+    category: "Beta",
+    figmaName: "B_app_BETAXd",
+  },
+});
+
+export const APP_LIBRARY_OPTIONS = Object.freeze(
+  Object.entries(APP_LIBRARY).map(([slug, entry]) =>
+    Object.freeze({ slug, ...entry }),
+  ),
+);
+
+const CDN_BACKED_SLUGS = new Set([
+  "creative-cloud",
+  "experience-cloud",
+  "document-cloud",
+  "stock",
+  "fonts",
+  "behance",
+  "portfolio",
+  "firefly",
+  "gen-studio",
+  "express",
+  "acrobat-pro",
+  "acrobat-pdf",
+  "acrobat-sign",
+  "scan",
+  "acrobat-classic",
+  "photoshop",
+  "lightroom",
+  "lightroom-classic",
+  "fresco",
+  "capture",
+  "premiere-pro",
+  "after-effects",
+  "audition",
+  "character-animator",
+  "media-encoder",
+  "premiere-rush",
+  "illustrator",
+  "indesign",
+  "incopy",
+  "bridge",
+  "animate",
+  "dreamweaver",
+  "substance-3d-designer",
+  "dimension",
+  "aero",
+  "experience-platform",
+  "frame-io",
+]);
+
+export const APP_OPTIONS = Object.freeze(
+  APP_LIBRARY_OPTIONS.filter((entry) => CDN_BACKED_SLUGS.has(entry.slug)),
+);
 
 const SIZE_MAP = {
   xs: { px: 16 },
@@ -60,10 +670,13 @@ const SIZE_MAP = {
 const getIconEntry = (slug) => APP_LIBRARY[slug] ?? APP_LIBRARY[DEFAULT_APP];
 const getSize = (size) => (SIZE_MAP[size] ? size : "md");
 const buildSrc = (filename) => `${CDN_BASE_URL}/${filename}`;
+const setLoadState = (event, state) => {
+  event.currentTarget.parentElement?.setAttribute("data-load-state", state);
+};
 
 /**
  * AppIcon component renders Adobe product tiles using the official CDN.
- * Matches the matt-atoms AppIcon component (Figma node 3346-130118 replacement).
+ * Matches the S2A Foundations AppIcon component set (Figma node 3582:130846).
  */
 export const AppIcon = ({
   app = DEFAULT_APP,
@@ -76,7 +689,7 @@ export const AppIcon = ({
   const entry = getIconEntry(app);
   const normalizedSize = getSize(size);
   const fallbackLabel = `${entry.label} app icon`;
-  const computedAriaLabel = ariaHidden ? nothing : ariaLabel ?? fallbackLabel;
+  const computedAriaLabel = ariaHidden ? nothing : (ariaLabel ?? fallbackLabel);
 
   return html`
     <span
@@ -97,6 +710,8 @@ export const AppIcon = ({
         decoding="async"
         draggable="false"
         aria-hidden="true"
+        @load=${(event) => setLoadState(event, "loaded")}
+        @error=${(event) => setLoadState(event, "error")}
       />
     </span>
   `;

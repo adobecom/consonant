@@ -758,6 +758,14 @@ body {
   text-align: center;
 }
 
+/* ── Annotate panel ──────────────────────────────────────────────────────── */
+
+.annotate-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
 /* ── Quick actions (home footer) ─────────────────────────────────────────── */
 
 .quick-actions {

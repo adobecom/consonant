@@ -339,6 +339,22 @@
           }
         }
       },
+      "_static_alt": {
+        "$type": "number",
+        "$value": 768,
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "WIDTH_HEIGHT"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-grid-container-max-width)"
+            }
+          }
+        }
+      },
       "_max-width": {
         "$type": "number",
         "$value": 1279,

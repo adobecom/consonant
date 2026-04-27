@@ -325,6 +325,22 @@
       },
       "_static": {
         "$type": "number",
+        "$value": 1440,
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "WIDTH_HEIGHT"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-grid-container-max-width)"
+            }
+          }
+        }
+      },
+      "_static_alt": {
+        "$type": "number",
         "$value": 1280,
         "$description": "DESIGN ONLY",
         "$extensions": {
@@ -341,7 +357,7 @@
       },
       "_max-width": {
         "$type": "number",
-        "$value": 1920,
+        "$value": 1440,
         "$description": "DESIGN ONLY",
         "$extensions": {
           "com.figma": {

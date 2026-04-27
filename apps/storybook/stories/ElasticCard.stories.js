@@ -9,8 +9,15 @@ import elasticCardCss from "../../../packages/components/src/elastic-card/elasti
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-more.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-right.js";
 
-const MEDIA_SAMPLE =
-  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
+// Live adobe.com elastic-carousel video sources (scraped from .elastic-carousel on adobe.com)
+const BASE = "https://www.adobe.com/upp";
+const VID_CREATIVITY   = `${BASE}/media_1badc9f153c69f16292c23f9752012c9ab7edb851.mp4`;
+const VID_CONTENT      = `${BASE}/media_159d163e5e983109aed71b1cb4e1048b4f849ab72.mp4`;
+const VID_PDF          = `${BASE}/media_1928dd1a3e8e5ed6e7979b5bb37fcd4c273746e62.mp4`;
+const VID_BUSINESS     = `${BASE}/media_14d261ad034b647cf9ec9e77e1a4e53cbbd31af35.mp4`;
+const VID_STUDENTS     = `${BASE}/media_11ef0b05657078d2235cbedc8322cd486a4d83a86.mp4`;
+
+const cardVideo = (src) => Media({ src, type: "video", aspectRatio: "3:4", autoplay: true, muted: true, loop: true, playsinline: true, overlay: undefined });
 
 // Figma reference image (node 4192:30683) — expires ~7 days from export
 const MEDIA_MOBILE =
@@ -136,24 +143,28 @@ ${elasticCardCss}
   },
   args: {
     label: "Creativity and design",
-    app: "creative-cloud",
-    title: "Adobe Express",
-    body: "Create standout content with quick actions and guided templates.",
+    app: "firefly",
+    title: "Create with the top tools.",
+    body: "Do it all with industry-leading apps for design, photo, video, and creative AI.",
     state: "resting",
-    mediaSrc: MEDIA_SAMPLE,
     mediaAspect: "3:4",
     mediaOverlay: true,
     onClick: fn(),
   },
 };
 
-export const Resting = {};
+export const Resting = {
+  render: (args) => ElasticCard({ ...args, mediaTemplate: cardVideo(VID_CREATIVITY) }),
+};
 
 export const Expanded = {
+  render: (args) => ElasticCard({ ...args, mediaTemplate: cardVideo(VID_CONTENT) }),
   args: {
     state: "expanded",
-    title: "Photoshop + Lightroom",
-    body: "Pro photography tools and new Firefly-powered workflows across surfaces.",
+    label: "Content creation",
+    app: "creative-cloud",
+    title: "Generate stunning content easily.",
+    body: "Quickly create and edit images, video, and audio with creative AI.",
     showCaret: false,
   },
 };
@@ -215,4 +226,53 @@ export const OverlayScrim = {
     state: "resting",
     mediaOverlay: true,
   },
+};
+
+export const RoutingCarousel = {
+  name: "Routing Carousel (adobe.com live)",
+  render: () => html`
+    <div style="display:flex;gap:8px;align-items:stretch;background:#f5f5f5;padding:24px;border-radius:24px;overflow:auto;">
+      ${ElasticCard({
+        label: "Creativity and design",
+        app: "firefly",
+        title: "Create with the top tools.",
+        body: "Do it all with industry-leading apps for design, photo, video, and creative AI.",
+        state: "resting",
+        mediaTemplate: cardVideo(VID_CREATIVITY),
+      })}
+      ${ElasticCard({
+        label: "Content creation",
+        app: "creative-cloud",
+        title: "Generate stunning content easily.",
+        body: "Quickly create and edit images, video, and audio with creative AI.",
+        state: "expanded",
+        mediaTemplate: cardVideo(VID_CONTENT),
+        showCaret: false,
+      })}
+      ${ElasticCard({
+        label: "PDF and productivity",
+        app: "acrobat",
+        title: "Do it all in less time.",
+        body: "Create, edit, and share PDFs. Make edits and create presentations with AI.",
+        state: "resting",
+        mediaTemplate: cardVideo(VID_PDF),
+      })}
+      ${ElasticCard({
+        label: "Adobe for Business",
+        app: "genstudio",
+        title: "Orchestrate customer experiences.",
+        body: "Deliver business impact, move faster, and personalize at scale.",
+        state: "resting",
+        mediaTemplate: cardVideo(VID_BUSINESS),
+      })}
+      ${ElasticCard({
+        label: "Students and teachers",
+        app: "creative-cloud",
+        title: "Students and teachers save big.",
+        body: "Save a bundle on our biggest bundle of top industry creative tools.",
+        state: "resting",
+        mediaTemplate: cardVideo(VID_STUDENTS),
+      })}
+    </div>
+  `,
 };

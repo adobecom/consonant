@@ -234,6 +234,92 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       break;
     }
 
+    case 'annotate:apply': {
+      const nodeId    = msg.nodeId as string;
+      const categories = new Set((msg.categories as string[]) ?? []);
+      const node = await figma.getNodeByIdAsync(nodeId);
+      if (!node) { figma.ui.postMessage({ type: 'annotate:result', error: 'Node not found' }); break; }
+
+      const allNodes: BaseNode[] = [node];
+      if ('findAll' in node) allNodes.push(...(node as any).findAll(() => true) as BaseNode[]);
+
+      // Prefetch font-weight variable names so we avoid await inside the loop
+      const weightVarIds = new Set<string>();
+      for (const n of allNodes) {
+        const fs = (n as any).boundVariables?.fontStyle;
+        if (fs?.[0]?.id) weightVarIds.add(fs[0].id);
+      }
+      const weightNames = new Map<string, string>();
+      await Promise.all([...weightVarIds].map(async id => {
+        try { const v = await figma.variables.getVariableByIdAsync(id); if (v) weightNames.set(id, v.name); } catch {}
+      }));
+
+      let annotated = 0;
+      for (const n of allNodes) {
+        const bv = (n as any).boundVariables ?? {};
+        const anns: Array<{ labelMarkdown: string; properties: Array<{ type: string }> }> = [];
+
+        if (categories.has('color-fg') && n.type === 'TEXT' && (bv.fills?.length ?? 0) > 0)
+          anns.push({ labelMarkdown: 'Color', properties: [{ type: 'fills' }] });
+
+        if (categories.has('color-bg') && n.type !== 'TEXT' && (bv.fills?.length ?? 0) > 0)
+          anns.push({ labelMarkdown: 'Background', properties: [{ type: 'fills' }] });
+
+        if (categories.has('spacing')) {
+          const sp: Array<{ type: string }> = [];
+          if (bv.paddingTop || bv.paddingBottom || bv.paddingLeft || bv.paddingRight) sp.push({ type: 'padding' });
+          if (bv.itemSpacing) sp.push({ type: 'itemSpacing' });
+          if (sp.length) anns.push({ labelMarkdown: 'Spacing', properties: sp });
+        }
+
+        if (categories.has('shape')) {
+          const sh: Array<{ type: string }> = [];
+          if (bv.cornerRadius) sh.push({ type: 'cornerRadius' });
+          if ((bv.strokes?.length ?? 0) > 0) sh.push({ type: 'strokes' });
+          if (sh.length) anns.push({ labelMarkdown: 'Shape', properties: sh });
+        }
+
+        if (categories.has('typography') && n.type === 'TEXT') {
+          const tp: Array<{ type: string }> = [];
+          if ((bv.fontFamily?.length    ?? 0) > 0) tp.push({ type: 'fontFamily' });
+          if ((bv.fontSize?.length      ?? 0) > 0) tp.push({ type: 'fontSize' });
+          if ((bv.lineHeight?.length    ?? 0) > 0) tp.push({ type: 'lineHeight' });
+          if ((bv.letterSpacing?.length ?? 0) > 0) tp.push({ type: 'letterSpacing' });
+          if (tp.length) anns.push({ labelMarkdown: 'Typography', properties: tp });
+          if ((bv.fontStyle?.length ?? 0) > 0) {
+            const label = weightNames.get(bv.fontStyle[0].id) ?? 'font-weight';
+            anns.push({ labelMarkdown: label, properties: [{ type: 'fontWeight' }] });
+          }
+        }
+
+        if (categories.has('sizing') && n === node)
+          anns.push({ labelMarkdown: (node as SceneNode).name.replace(/^\./, ''), properties: [{ type: 'width' }, { type: 'height' }] });
+
+        if (anns.length > 0) {
+          try { (n as any).annotations = anns; annotated++; } catch {}
+        }
+      }
+      figma.ui.postMessage({ type: 'annotate:result', annotated });
+      break;
+    }
+
+    case 'annotate:clear': {
+      const nodeId = msg.nodeId as string;
+      const node = await figma.getNodeByIdAsync(nodeId);
+      if (node) {
+        const all: BaseNode[] = [node];
+        if ('findAll' in node) all.push(...(node as any).findAll(() => true) as BaseNode[]);
+        let cleared = 0;
+        for (const n of all) {
+          try { if ((n as any).annotations?.length > 0) { (n as any).annotations = []; cleared++; } } catch {}
+        }
+        figma.ui.postMessage({ type: 'annotate:cleared', cleared });
+      } else {
+        figma.ui.postMessage({ type: 'annotate:cleared', cleared: 0 });
+      }
+      break;
+    }
+
     case 'bridge:command': {
       const requestId = msg.requestId as string;
       const method = msg.method as string;

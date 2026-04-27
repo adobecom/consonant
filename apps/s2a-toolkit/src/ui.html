@@ -72,6 +72,16 @@
               <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
+          <button class="tool-card" data-tool="annotate">
+            <div class="tool-card-body">
+              <span class="tool-card-name">Annotate</span>
+              <span class="tool-card-desc">Apply token annotations by category</span>
+              <span class="tool-card-meta" id="annotateMeta">Select a node to start</span>
+            </div>
+            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </div>
 
         <div class="category">
@@ -117,6 +127,41 @@
           </div>
           <div class="status" id="selectStatus"></div>
         </div>
+      </div>
+
+      <!-- Annotate panel -->
+      <div class="panel" id="annotatePanel">
+
+        <div class="section-label">Selection</div>
+        <div class="proto-selection" id="annotateSelection">
+          <div id="annotateSelectionEmpty" class="proto-selection-empty">
+            Select an instance or frame on the canvas
+          </div>
+          <div id="annotateSelectionInfo" class="proto-selection-info" style="display:none;">
+            <span class="proto-frame-icon">◈</span>
+            <div class="proto-frame-meta">
+              <span class="proto-frame-name" id="annotateNodeName">—</span>
+              <span class="proto-frame-type" id="annotateNodeType">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:12px;">Categories</div>
+        <div class="annotate-cats" id="annotateCats">
+          <button class="chip on" data-cat="color-fg">Color Fg</button>
+          <button class="chip on" data-cat="color-bg">Color Bg</button>
+          <button class="chip on" data-cat="spacing">Spacing</button>
+          <button class="chip on" data-cat="shape">Shape</button>
+          <button class="chip on" data-cat="typography">Typography</button>
+          <button class="chip on" data-cat="sizing">Sizing</button>
+        </div>
+
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="btn btn-ghost" id="annotateClearBtn">Clear</button>
+          <button class="btn" id="annotateApplyBtn" disabled style="flex:2;">Annotate</button>
+        </div>
+        <div class="status" id="annotateStatus"></div>
+
       </div>
 
       <!-- Prototype panel -->

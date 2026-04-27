@@ -168,6 +168,7 @@ figma.on("currentpagechange", () => {
 });
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
 figma.ui.onmessage = async (msg) => {
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v;
   switch (msg.type) {
     case "ui-ready":
       notifySelection();
@@ -228,6 +229,96 @@ figma.ui.onmessage = async (msg) => {
       const w = msg.width || 320;
       const h = msg.height || 480;
       figma.ui.resize(w, h);
+      break;
+    }
+    case "annotate:apply": {
+      const nodeId = msg.nodeId;
+      const categories = new Set((_a = msg.categories) != null ? _a : []);
+      const node = await figma.getNodeByIdAsync(nodeId);
+      if (!node) {
+        figma.ui.postMessage({ type: "annotate:result", error: "Node not found" });
+        break;
+      }
+      const allNodes = [node];
+      if ("findAll" in node) allNodes.push(...node.findAll(() => true));
+      const weightVarIds = /* @__PURE__ */ new Set();
+      for (const n of allNodes) {
+        const fs = (_b = n.boundVariables) == null ? void 0 : _b.fontStyle;
+        if ((_c = fs == null ? void 0 : fs[0]) == null ? void 0 : _c.id) weightVarIds.add(fs[0].id);
+      }
+      const weightNames = /* @__PURE__ */ new Map();
+      await Promise.all([...weightVarIds].map(async (id) => {
+        try {
+          const v = await figma.variables.getVariableByIdAsync(id);
+          if (v) weightNames.set(id, v.name);
+        } catch (e) {
+        }
+      }));
+      let annotated = 0;
+      for (const n of allNodes) {
+        const bv = (_d = n.boundVariables) != null ? _d : {};
+        const anns = [];
+        if (categories.has("color-fg") && n.type === "TEXT" && ((_f = (_e = bv.fills) == null ? void 0 : _e.length) != null ? _f : 0) > 0)
+          anns.push({ labelMarkdown: "Color", properties: [{ type: "fills" }] });
+        if (categories.has("color-bg") && n.type !== "TEXT" && ((_h = (_g = bv.fills) == null ? void 0 : _g.length) != null ? _h : 0) > 0)
+          anns.push({ labelMarkdown: "Background", properties: [{ type: "fills" }] });
+        if (categories.has("spacing")) {
+          const sp = [];
+          if (bv.paddingTop || bv.paddingBottom || bv.paddingLeft || bv.paddingRight) sp.push({ type: "padding" });
+          if (bv.itemSpacing) sp.push({ type: "itemSpacing" });
+          if (sp.length) anns.push({ labelMarkdown: "Spacing", properties: sp });
+        }
+        if (categories.has("shape")) {
+          const sh = [];
+          if (bv.cornerRadius) sh.push({ type: "cornerRadius" });
+          if (((_j = (_i = bv.strokes) == null ? void 0 : _i.length) != null ? _j : 0) > 0) sh.push({ type: "strokes" });
+          if (sh.length) anns.push({ labelMarkdown: "Shape", properties: sh });
+        }
+        if (categories.has("typography") && n.type === "TEXT") {
+          const tp = [];
+          if (((_l = (_k = bv.fontFamily) == null ? void 0 : _k.length) != null ? _l : 0) > 0) tp.push({ type: "fontFamily" });
+          if (((_n = (_m = bv.fontSize) == null ? void 0 : _m.length) != null ? _n : 0) > 0) tp.push({ type: "fontSize" });
+          if (((_p = (_o = bv.lineHeight) == null ? void 0 : _o.length) != null ? _p : 0) > 0) tp.push({ type: "lineHeight" });
+          if (((_r = (_q = bv.letterSpacing) == null ? void 0 : _q.length) != null ? _r : 0) > 0) tp.push({ type: "letterSpacing" });
+          if (tp.length) anns.push({ labelMarkdown: "Typography", properties: tp });
+          if (((_t = (_s = bv.fontStyle) == null ? void 0 : _s.length) != null ? _t : 0) > 0) {
+            const label = (_u = weightNames.get(bv.fontStyle[0].id)) != null ? _u : "font-weight";
+            anns.push({ labelMarkdown: label, properties: [{ type: "fontWeight" }] });
+          }
+        }
+        if (categories.has("sizing") && n === node)
+          anns.push({ labelMarkdown: node.name.replace(/^\./, ""), properties: [{ type: "width" }, { type: "height" }] });
+        if (anns.length > 0) {
+          try {
+            n.annotations = anns;
+            annotated++;
+          } catch (e) {
+          }
+        }
+      }
+      figma.ui.postMessage({ type: "annotate:result", annotated });
+      break;
+    }
+    case "annotate:clear": {
+      const nodeId = msg.nodeId;
+      const node = await figma.getNodeByIdAsync(nodeId);
+      if (node) {
+        const all = [node];
+        if ("findAll" in node) all.push(...node.findAll(() => true));
+        let cleared = 0;
+        for (const n of all) {
+          try {
+            if (((_v = n.annotations) == null ? void 0 : _v.length) > 0) {
+              n.annotations = [];
+              cleared++;
+            }
+          } catch (e) {
+          }
+        }
+        figma.ui.postMessage({ type: "annotate:cleared", cleared });
+      } else {
+        figma.ui.postMessage({ type: "annotate:cleared", cleared: 0 });
+      }
       break;
     }
     case "bridge:command": {

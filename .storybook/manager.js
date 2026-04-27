@@ -104,3 +104,4 @@ addons.register(ADDON_ID, () => {
     render: () => React.createElement(FigmaOverlayTool),
   });
 });
+

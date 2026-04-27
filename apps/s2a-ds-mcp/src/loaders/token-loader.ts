@@ -107,10 +107,24 @@ export function loadTokens(dsRoot: string): TokenIndex {
   const collectionSet = new Set<string>();
 
   for (const entry of all) {
-    // byProp
-    const existing = byProp.get(entry.cssProp) ?? [];
-    existing.push(entry);
-    byProp.set(entry.cssProp, existing);
+    // byProp. Index both Figma codeSyntax names and generated path names because
+    // the CSS build uses path-derived custom properties when codeSyntax is
+    // absent, ambiguous, or intentionally shorter than the token path.
+    const generatedCssProp = `--${entry.displayPath.replace(/\//g, "-")}`;
+    const propEntries = new Set([entry.cssProp, generatedCssProp]);
+    for (const cssProp of propEntries) {
+      const indexedEntry =
+        cssProp === entry.cssProp
+          ? entry
+          : {
+              ...entry,
+              cssProp,
+              cssVar: `var(${cssProp})`,
+            };
+      const existing = byProp.get(cssProp) ?? [];
+      existing.push(indexedEntry);
+      byProp.set(cssProp, existing);
+    }
 
     // byPath
     const pathExisting = byPath.get(entry.displayPath) ?? [];

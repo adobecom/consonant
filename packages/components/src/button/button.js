@@ -2,9 +2,11 @@ import { html, nothing } from "lit";
 import "./button.css";
 
 /** Phosphor CaretDown icon - requires @phosphor-icons/web bold stylesheet to be loaded */
-const CaretDownIcon = () => html`<i class="ph-bold ph-caret-down" aria-hidden="true"></i>`;
+const CaretDownIcon = () =>
+  html`<i class="ph-bold ph-caret-down" aria-hidden="true"></i>`;
 
-const normalizeIntent = (intent) => (intent === "accent" ? "accent" : "primary");
+const normalizeIntent = (intent) =>
+  intent === "accent" ? "accent" : "primary";
 
 const normalizeContext = (intent, context, tone) => {
   if (intent === "accent") return "on-light";
@@ -32,6 +34,7 @@ const resolveIcon = (icon) => (typeof icon === "function" ? icon() : icon);
  * @param {boolean} args.showIconEnd - show trailing icon slot
  * @param {unknown} args.iconStart - template/renderable for start icon
  * @param {unknown} args.iconEnd - template/renderable for end icon
+ * @param {string} args.href - when present, renders a navigation CTA
  * @param {Function} args.onClick - Click handler
  */
 export const Button = ({
@@ -53,21 +56,37 @@ export const Button = ({
   const resolvedIntent = normalizeIntent(intent);
   const resolvedContext = normalizeContext(resolvedIntent, context, tone);
   const resolvedSize = size === "xs" ? "xs" : "md";
-  const finalShowIconEnd = typeof showElementEnd === "boolean" ? showElementEnd : showIconEnd;
+  const finalShowIconEnd =
+    typeof showElementEnd === "boolean" ? showElementEnd : showIconEnd;
   const forceState = state && state !== "default" ? state : null;
   const isDisabled = state === "disabled";
+  const handleAnchorClick = (event) => {
+    if (isDisabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    onClick?.(event);
+  };
 
   // Lit 3+: dynamic tag names (<${tag}>) are not allowed with standard `html`.
   // Use separate static <a> / <button> templates instead of lit/static-html.
   const content = html`
     ${showIconStart
-      ? html`<span class="c-button__icon c-button__icon--start" aria-hidden="true">
+      ? html`<span
+          class="c-button__icon c-button__icon--start"
+          aria-hidden="true"
+        >
           ${resolveIcon(iconStart) ?? nothing}
         </span>`
       : nothing}
     <span class="c-button__label">${label}</span>
     ${finalShowIconEnd
-      ? html`<span class="c-button__icon c-button__icon--end" aria-hidden="true">
+      ? html`<span
+          class="c-button__icon c-button__icon--end"
+          aria-hidden="true"
+        >
           ${resolveIcon(iconEnd) ?? CaretDownIcon()}
         </span>`
       : nothing}
@@ -84,8 +103,10 @@ export const Button = ({
         data-force-state=${forceState ?? nothing}
         data-has-icon-start=${showIconStart ? "true" : "false"}
         data-has-icon-end=${finalShowIconEnd ? "true" : "false"}
-        href=${href}
-        @click=${onClick}
+        href=${isDisabled ? nothing : href}
+        aria-disabled=${isDisabled ? "true" : nothing}
+        tabindex=${isDisabled ? "-1" : nothing}
+        @click=${handleAnchorClick}
       >
         ${content}
       </a>
