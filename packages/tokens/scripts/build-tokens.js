@@ -670,9 +670,8 @@ async function buildFromFigma() {
         const path = token.path || [];
         const pathStr = path.join(".");
 
-        // Exclude shadows and bare-path color aliases (only s2a.* tokens belong here)
-        if (path[0] === "shadow") return false;
-        if (path[0] === "color") return false;
+        // Exclude all bare-path (non-s2a-prefixed) legacy duplicates — only s2a.* tokens belong here
+        if (path[0] !== "s2a") return false;
 
         // Exclude primitive color palette (s2a.color.gray, .green, .blue, etc.) — they live in primitives.css
         // Only include semantic color groups (s2a.color.background, .content, .border, etc.)

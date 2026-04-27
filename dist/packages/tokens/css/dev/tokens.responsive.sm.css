@@ -18,16 +18,6 @@
   --s2a-layout-rich-media-content-measure-none: 375px;
   --s2a-layout-rich-media-content-measure-wide: 375px;
 
-  /* Router Card */
-  --s2a-router-card-width-expanded: 409px;
-  --s2a-router-card-width-max: 409px;
-  --s2a-router-card-width-min: 200px;
-  --s2a-router-card-width-resting: 243px;
-  --s2a-router-card-height-max: 510px;
-  --s2a-router-card-media-height: 325px;
-  --s2a-router-card-padding: var(--s2a-spacing-lg);
-  --s2a-router-card-gap: var(--s2a-spacing-8);
-
   /* App Card */
   --s2a-app-card-max-height: 200px;
   --s2a-app-card-min-height: 160px;
