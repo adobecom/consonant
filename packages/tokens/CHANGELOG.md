@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.15] - 2026-04-30
+
+### 🐛 Bug fix
+
+- **`title-5` letter-spacing corrected at `lg` and `xl` breakpoints**
+  `--s2a-typography-letter-spacing-title-5` was aliasing to `--s2a-font-letter-spacing-4xl` (-0.96px) at both `lg` and `xl`. The correct value matches `md` and is `--s2a-font-letter-spacing-5xl` (-0.48px). Updated in `tokens.responsive.lg.css`, `tokens.responsive.xl.css`, and `tokens.min.css`. The `xl` alias also referenced a deleted Figma variable (`deletedButReferenced: true`) — that stale reference has been cleaned up in `raw.json`.
+
+  | Breakpoint | Was | Now |
+  |---|---|---|
+  | `xl` | `var(--s2a-font-letter-spacing-4xl)` (-0.96px) | `var(--s2a-font-letter-spacing-5xl)` (-0.48px) |
+  | `lg` | `var(--s2a-font-letter-spacing-4xl)` (-0.96px) | `var(--s2a-font-letter-spacing-5xl)` (-0.48px) |
+  | `md` | `var(--s2a-font-letter-spacing-5xl)` (-0.48px) | *(unchanged)* |
+  | `sm` | `var(--s2a-font-letter-spacing-6xl)` (-0.2px) | *(unchanged)* |
+
+---
+
 ## [0.0.14] - 2026-04-27
 
 ### 💥 Breaking changes
