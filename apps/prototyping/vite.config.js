@@ -1,8 +1,11 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = resolve(fileURLToPath(import.meta.url), "..");
 
 export default defineConfig({
-  root: ".",
+  root: __dirname,
   resolve: {
     alias: {
       "@tokens": resolve(__dirname, "../../dist/packages/tokens/css/min/tokens.min.css"),
@@ -11,6 +14,9 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    open: true,
+    open: false,
+    fs: {
+      allow: ["."],
+    },
   },
 });

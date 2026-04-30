@@ -2,28 +2,18 @@
   "mcpServers": {
     "figma-console": {
       "command": "node",
-      "args": ["/Users/mhuntsberry/Desktop/consonant-2/node_modules/figma-console-mcp/dist/local.js"]
+      "args": ["/Users/mhuntsberry/Desktop/prototyping/consonant/node_modules/figma-console-mcp/dist/local.js"]
     },
     "s2a-ds": {
       "command": "node",
-      "args": ["/Users/mhuntsberry/Desktop/consonant-2/apps/s2a-ds-mcp/dist/local.js"],
+      "args": ["/Users/mhuntsberry/Desktop/prototyping/consonant/apps/s2a-ds-mcp/dist/local.js"],
       "env": {
-        "DS_ROOT": "/Users/mhuntsberry/Desktop/consonant-2"
+        "DS_ROOT": "/Users/mhuntsberry/Desktop/prototyping/consonant"
       }
     },
-    "corp-jira": {
-      "command": "node",
-      "args": ["/Users/mhuntsberry/adobe-mcp-servers/src/corp-jira/dist/index.js"],
-      "env": {
-        "JIRA_API_BASE_URL": "https://jira.corp.adobe.com/rest/api/2"
-      }
-    },
-    "story-ui": {
-      "command": "node",
-      "args": ["--env-file=/Users/mhuntsberry/Desktop/consonant-2/.env", "/Users/mhuntsberry/Desktop/consonant-2/node_modules/@tpitre/story-ui/dist/cli/index.js", "mcp"],
-      "env": {
-        "STORY_UI_HTTP_BASE_URL": "http://localhost:4001"
-      }
+    "design-systems": {
+      "type": "http",
+      "url": "https://design-systems-mcp.southleft.com/mcp"
     }
   }
 }

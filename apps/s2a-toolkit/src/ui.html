@@ -100,20 +100,6 @@
           </button>
         </div>
 
-        <div class="category">
-          <div class="category-label">Prototypes</div>
-          <button class="tool-card" data-tool="prototype">
-            <div class="tool-card-body">
-              <span class="tool-card-name">Generate Prototype</span>
-              <span class="tool-card-desc">Figma frame → Storybook story + PR</span>
-              <span class="tool-card-meta" id="protoMeta">Select a frame to start</span>
-            </div>
-            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
-
       </div>
 
       <!-- Variables panel -->
@@ -214,64 +200,6 @@
         </div>
         <div class="status" id="specStatus"></div>
 
-      </div>
-
-      <!-- Prototype panel -->
-      <div class="panel proto-chat-panel" id="protoPanel">
-
-        <!-- Thread sidebar -->
-        <div class="proto-sidebar" id="protoSidebar">
-          <div class="proto-sidebar-header">
-            <span class="proto-sidebar-title">Threads</span>
-            <button class="proto-sidebar-new" id="protoNewThreadBtn" title="New thread">+</button>
-          </div>
-          <div class="proto-thread-list" id="protoThreadList">
-            <div class="proto-thread-empty-list">No threads yet</div>
-          </div>
-        </div>
-
-        <!-- Main area -->
-        <div class="proto-main" id="protoMain">
-
-          <!-- Server status -->
-          <div class="server-status" id="serverStatus">
-            <div class="server-dot" id="serverDot"></div>
-            <span class="server-label" id="serverStatusLabel">Checking servers…</span>
-            <button class="server-refresh" id="serverRefreshBtn" title="Recheck">↺</button>
-            <button class="server-start-btn" id="serverStartBtn" style="display:none;" title="Copy start command">Start ↗</button>
-          </div>
-
-          <!-- Compact selection strip -->
-          <div class="proto-sel-strip" id="protoSelStrip">
-            <span class="proto-sel-icon">▣</span>
-            <span class="proto-sel-name" id="protoSelName">Select a frame on the canvas</span>
-            <button class="proto-sel-new hidden" id="protoNewSession" title="Start new session">New</button>
-          </div>
-
-          <!-- Conversation thread -->
-          <div class="proto-thread" id="protoThread">
-            <div class="proto-thread-empty" id="protoThreadEmpty">
-              Select a frame, then describe what you want to build. Each follow-up refines the same thread.
-            </div>
-          </div>
-
-          <!-- Sticky input row -->
-          <div class="proto-input-bar">
-            <textarea
-              class="proto-chat-input"
-              id="protoChatInput"
-              placeholder="Describe what you want…"
-              rows="2"
-            ></textarea>
-            <button class="proto-send-btn" id="protoSendBtn" disabled aria-label="Send">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M1.5 6.5h10M6.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-
-          <div class="status" id="protoStatus"></div>
-        </div>
       </div>
 
       <!-- Settings panel -->

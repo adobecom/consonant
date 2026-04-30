@@ -130,6 +130,14 @@ if [[ -d "$PROTO_DIR" ]]; then
   ok "Prototyping app ready at apps/prototyping/"
 fi
 
+# ── 8b-ii. Install Playwright Chromium (for screenshot parity checks) ────────
+log "Installing Playwright Chromium (for design/code parity screenshots)..."
+cd "$INSTALL_DIR"
+npx playwright install chromium --with-deps --quiet 2>/dev/null || \
+  npx playwright install chromium --quiet 2>/dev/null || \
+  warn "Playwright browser install failed — run 'npx playwright install chromium' manually"
+ok "Playwright Chromium ready"
+
 # ── 8c. Scaffold the designer's personal prototype folder ─────────────────────
 echo ""
 read -rp "Your first name or handle (used to create your prototype folder, e.g. matt): " DESIGNER_NAME
@@ -351,10 +359,10 @@ echo "         cd apps/prototyping"
 echo "         npm run new"
 echo "       Enter your name and feature name — your folder is created instantly."
 echo ""
-echo "    3. Start the dev server from your prototype folder:"
-echo "         cd apps/prototyping/{your-name}/{feature}"
-echo "         npx vite"
-echo "       Opens at http://localhost:5173 with live reload."
+echo "    3. Start the dev server:"
+echo "         cd apps/prototyping"
+echo "         npm run dev"
+echo "       Then open http://localhost:5173/{your-name}/{feature}/"
 echo ""
 echo "    4. Describe what you want to build to Claude:"
 echo "         'Build a dark hero section with a Firefly product lockup,"

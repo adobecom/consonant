@@ -28,7 +28,6 @@
   var variablesPanel = document.getElementById("variablesPanel");
   var selectPanel = document.getElementById("selectPanel");
   var settingsPanel = document.getElementById("settingsPanel");
-  var protoPanel = document.getElementById("protoPanel");
   var annotatePanel = document.getElementById("annotatePanel");
   var specPanel = document.getElementById("specPanel");
   var headerTitle = document.getElementById("headerTitle");
@@ -39,7 +38,6 @@
     variables: { el: variablesPanel, title: "Variables" },
     select: { el: selectPanel, title: "Select Variants" },
     settings: { el: settingsPanel, title: "GitHub Settings" },
-    prototype: { el: protoPanel, title: "Generate Prototype" },
     annotate: { el: annotatePanel, title: "Annotate" },
     spec: { el: specPanel, title: "Spec Sheet" }
   };
@@ -52,13 +50,7 @@
     headerTitle.textContent = views[view].title;
     backBtn.classList.toggle("visible", view !== "home");
     settingsBtn.style.display = view === "settings" ? "none" : "flex";
-    if (view === "prototype") {
-      postToPlugin("resize-for-view", { width: 660, height: 680 });
-      checkServerHealth();
-      loadThreads();
-    } else {
-      postToPlugin("resize-for-view", { width: 320, height: 480 });
-    }
+    postToPlugin("resize-for-view", { width: 320, height: 480 });
   }
   backBtn.addEventListener("click", () => navigateTo("home"));
   settingsBtn.addEventListener("click", () => {
@@ -541,8 +533,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a16;
-    annotateNodeId = (_a16 = sel == null ? void 0 : sel.id) != null ? _a16 : null;
+    var _a13;
+    annotateNodeId = (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null;
     const empty = document.getElementById("annotateSelectionEmpty");
     const info = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -600,9 +592,9 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateSpecSelection(sel) {
-    var _a16, _b;
+    var _a13, _b;
     const isSet = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
-    specSetId = isSet ? (_a16 = sel == null ? void 0 : sel.id) != null ? _a16 : null : null;
+    specSetId = isSet ? (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null : null;
     const empty = document.getElementById("specSelectionEmpty");
     const info = document.getElementById("specSelectionInfo");
     const nameEl = document.getElementById("specSetName");
@@ -757,420 +749,6 @@
         break;
       }
     }
-  });
-  var serverDot = document.getElementById("serverDot");
-  var serverStatusLabel = document.getElementById("serverStatusLabel");
-  var serverStartBtn = document.getElementById("serverStartBtn");
-  var START_CMD = "launchctl start com.s2a.prototype-server";
-  async function checkServerHealth() {
-    serverStatusLabel.textContent = "Checking\u2026";
-    serverDot.classList.remove("on");
-    serverStartBtn.style.display = "none";
-    try {
-      const ctrl = new AbortController();
-      const tid = setTimeout(() => ctrl.abort(), 3e3);
-      const res = await fetch("http://localhost:4002/health", { signal: ctrl.signal });
-      clearTimeout(tid);
-      const data = await res.json();
-      if (data.ok) {
-        serverDot.classList.add("on");
-        serverStatusLabel.textContent = "Servers ready";
-      } else {
-        serverStatusLabel.textContent = "Server error";
-        serverStartBtn.style.display = "inline-flex";
-      }
-    } catch (e) {
-      serverStatusLabel.textContent = "Server offline";
-      serverStartBtn.style.display = "inline-flex";
-    }
-  }
-  serverStartBtn == null ? void 0 : serverStartBtn.addEventListener("click", () => {
-    const ta = document.createElement("textarea");
-    ta.value = START_CMD;
-    ta.style.cssText = "position:fixed;opacity:0;pointer-events:none";
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    try {
-      document.execCommand("copy");
-    } catch (e) {
-    }
-    document.body.removeChild(ta);
-    serverStartBtn.textContent = "Copied!";
-    setTimeout(() => {
-      serverStartBtn.textContent = "Start \u2197";
-    }, 2e3);
-  });
-  var _a13;
-  (_a13 = document.getElementById("serverRefreshBtn")) == null ? void 0 : _a13.addEventListener("click", checkServerHealth);
-  var protoSelection = null;
-  var sessionBranch = null;
-  var sessionStoryFile = null;
-  var sessionPrUrl = null;
-  var currentThreadId = null;
-  var threadCache = [];
-  var PROTOTYPABLE = /* @__PURE__ */ new Set(["FRAME", "COMPONENT", "SECTION", "GROUP", "INSTANCE", "COMPONENT_SET"]);
-  function setProtoMeta(text) {
-    const el = document.getElementById("protoMeta");
-    if (el) el.textContent = text;
-  }
-  function setProtoStatus(msg, type = "") {
-    const el = document.getElementById("protoStatus");
-    el.textContent = msg;
-    el.className = "status" + (type ? " " + type : "");
-  }
-  function updateProtoSelection(sel) {
-    protoSelection = sel;
-    const nameEl = document.getElementById("protoSelName");
-    const sendBtn = document.getElementById("protoSendBtn");
-    if (sel && PROTOTYPABLE.has(sel.nodeType)) {
-      nameEl.textContent = sel.name;
-      sendBtn.disabled = false;
-      setProtoMeta(sel.name);
-    } else {
-      nameEl.textContent = "Select a frame on the canvas";
-      sendBtn.disabled = true;
-      setProtoMeta("Select a frame to start");
-    }
-  }
-  var copyNodeBtn = document.getElementById("copyNodeBtn");
-  var copyNodeId = null;
-  var copyFileKey = null;
-  var copyFileName = null;
-  var COPY_ICON = copyNodeBtn.innerHTML;
-  var CHECK_ICON = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  function updateCopyBtn(sel, fileKey, fileName = null) {
-    var _a16;
-    copyNodeId = (_a16 = sel == null ? void 0 : sel.id) != null ? _a16 : null;
-    copyFileKey = fileKey;
-    copyFileName = fileName;
-    const COPYABLE = /* @__PURE__ */ new Set(["FRAME", "SECTION", "COMPONENT", "INSTANCE", "GROUP"]);
-    if (sel && COPYABLE.has(sel.nodeType) && fileKey) {
-      copyNodeBtn.classList.remove("hidden");
-    } else {
-      copyNodeBtn.classList.add("hidden");
-    }
-  }
-  function flashCheck() {
-    copyNodeBtn.innerHTML = CHECK_ICON;
-    copyNodeBtn.style.color = "var(--green)";
-    setTimeout(() => {
-      copyNodeBtn.innerHTML = COPY_ICON;
-      copyNodeBtn.style.color = "";
-    }, 1500);
-  }
-  copyNodeBtn.addEventListener("click", () => {
-    if (!copyNodeId || !copyFileKey) return;
-    const urlNodeId = copyNodeId.replace(":", "-");
-    const nameSlug = (copyFileName != null ? copyFileName : "file").replace(/\s+/g, "-").replace(/[^\w-]/g, "");
-    const url = `https://www.figma.com/design/${copyFileKey}/${nameSlug}?node-id=${urlNodeId}`;
-    const ta = document.createElement("textarea");
-    ta.value = url;
-    ta.style.cssText = "position:fixed;opacity:0;pointer-events:none";
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    try {
-      document.execCommand("copy");
-    } catch (e) {
-    }
-    document.body.removeChild(ta);
-    flashCheck();
-  });
-  async function loadThreads() {
-    try {
-      const res = await fetch("http://localhost:4002/threads");
-      if (!res.ok) return;
-      threadCache = await res.json();
-      renderThreadList(threadCache);
-    } catch (e) {
-    }
-  }
-  function renderThreadList(threads) {
-    const listEl = document.getElementById("protoThreadList");
-    if (!listEl) return;
-    if (threads.length === 0) {
-      listEl.innerHTML = '<div class="proto-thread-empty-list">No threads yet.<br>Select a frame and send a prompt.</div>';
-      return;
-    }
-    listEl.innerHTML = threads.map((t) => `
-    <button class="proto-thread-item${t.id === currentThreadId ? " active" : ""}" data-thread-id="${esc(t.id)}">
-      <span class="proto-thread-item-name">${esc(t.name)}</span>
-      <span class="proto-thread-item-meta">${t.messages.length} msg${t.messages.length !== 1 ? "s" : ""}</span>
-    </button>
-  `).join("");
-    listEl.querySelectorAll(".proto-thread-item").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const thread = threadCache.find((t) => t.id === btn.dataset.threadId);
-        if (thread) activateThread(thread);
-      });
-    });
-  }
-  function activateThread(thread) {
-    var _a16, _b;
-    currentThreadId = thread.id;
-    sessionBranch = thread.branch;
-    sessionStoryFile = thread.storyFile;
-    sessionPrUrl = thread.prUrl;
-    const threadEl = document.getElementById("protoThread");
-    const emptyEl = document.getElementById("protoThreadEmpty");
-    const newBtn = document.getElementById("protoNewSession");
-    const sendBtn = document.getElementById("protoSendBtn");
-    Array.from(threadEl.children).forEach((c) => {
-      if (c.id !== "protoThreadEmpty") c.remove();
-    });
-    if (thread.messages.length === 0) {
-      emptyEl.style.display = "";
-    } else {
-      emptyEl.style.display = "none";
-      for (const m of thread.messages) {
-        const card = appendThreadMessage(m.prompt);
-        updateMsgStatus(card, [{ label: m.status === "done" ? "Done" : "Failed", state: m.status === "done" ? "done" : "error" }]);
-        if (m.status === "done") showMsgResult(card, (_a16 = m.storyFile) != null ? _a16 : null, (_b = m.prUrl) != null ? _b : null, null);
-      }
-    }
-    if (thread.branch) newBtn.classList.remove("hidden");
-    else newBtn.classList.add("hidden");
-    sendBtn.disabled = !protoSelection;
-    setProtoStatus("");
-    renderThreadList(threadCache);
-  }
-  async function createThread(name, frameName) {
-    try {
-      const res = await fetch("http://localhost:4002/threads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, frameName })
-      });
-      if (!res.ok) return null;
-      const thread = await res.json();
-      threadCache.unshift(thread);
-      renderThreadList(threadCache);
-      return thread;
-    } catch (e) {
-      return null;
-    }
-  }
-  async function updateCurrentThread(patch) {
-    if (!currentThreadId) return;
-    try {
-      const res = await fetch(`http://localhost:4002/threads/${currentThreadId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(patch)
-      });
-      if (!res.ok) return;
-      const updated = await res.json();
-      const idx = threadCache.findIndex((t) => t.id === currentThreadId);
-      if (idx !== -1) threadCache[idx] = updated;
-      renderThreadList(threadCache);
-    } catch (e) {
-    }
-  }
-  function clearProtoSession() {
-    sessionBranch = null;
-    sessionStoryFile = null;
-    sessionPrUrl = null;
-    currentThreadId = null;
-    const thread = document.getElementById("protoThread");
-    const emptyState = document.getElementById("protoThreadEmpty");
-    Array.from(thread.children).forEach((child) => {
-      if (child.id !== "protoThreadEmpty") child.remove();
-    });
-    emptyState.style.display = "";
-    document.getElementById("protoNewSession").classList.add("hidden");
-    setProtoStatus("");
-    renderThreadList(threadCache);
-  }
-  function appendThreadMessage(prompt) {
-    const thread = document.getElementById("protoThread");
-    const emptyState = document.getElementById("protoThreadEmpty");
-    emptyState.style.display = "none";
-    const msg = document.createElement("div");
-    msg.className = "proto-msg";
-    msg.innerHTML = `<div class="proto-msg-prompt">${esc(prompt)}</div><div class="proto-msg-status"></div>`;
-    thread.appendChild(msg);
-    thread.scrollTop = thread.scrollHeight;
-    return msg;
-  }
-  function updateMsgStatus(msg, steps) {
-    const statusEl = msg.querySelector(".proto-msg-status");
-    statusEl.innerHTML = steps.map(
-      (s) => `<div class="proto-step" data-state="${s.state}"><div class="proto-step-dot"></div><span class="proto-step-label">${esc(s.label)}</span></div>`
-    ).join("");
-    const thread = document.getElementById("protoThread");
-    thread.scrollTop = thread.scrollHeight;
-  }
-  function showMsgResult(msg, storyFile, prUrl, err) {
-    const thread = document.getElementById("protoThread");
-    if (err) {
-      const statusEl = msg.querySelector(".proto-msg-status");
-      statusEl.innerHTML = `<div class="proto-step" data-state="error"><div class="proto-step-dot"></div><span class="proto-step-label">${esc(err)}</span></div>`;
-      thread.scrollTop = thread.scrollHeight;
-      return;
-    }
-    if (storyFile || prUrl) {
-      const componentName = ((storyFile == null ? void 0 : storyFile.split("/").pop()) || "").replace(".stories.js", "");
-      const storyId = "generated-" + componentName.toLowerCase() + "--default";
-      const storyUrl = "http://localhost:6006/?path=/story/" + storyId;
-      const resultEl = document.createElement("div");
-      resultEl.className = "proto-msg-result";
-      let links = "";
-      if (storyFile) links += `<a class="proto-result-link" href="${storyUrl}" target="_blank">\u2197 Story</a>`;
-      if (prUrl) links += `<a class="proto-result-link" href="${prUrl}" target="_blank">\u2197 PR</a>`;
-      resultEl.innerHTML = links;
-      msg.appendChild(resultEl);
-    }
-    thread.scrollTop = thread.scrollHeight;
-  }
-  var _a14;
-  (_a14 = document.getElementById("protoNewSession")) == null ? void 0 : _a14.addEventListener("click", clearProtoSession);
-  var _a15;
-  (_a15 = document.getElementById("protoNewThreadBtn")) == null ? void 0 : _a15.addEventListener("click", clearProtoSession);
-  var protoChatInput = document.getElementById("protoChatInput");
-  var protoSendBtn = document.getElementById("protoSendBtn");
-  protoChatInput == null ? void 0 : protoChatInput.addEventListener("input", () => {
-    protoChatInput.style.height = "auto";
-    protoChatInput.style.height = Math.min(protoChatInput.scrollHeight, 100) + "px";
-  });
-  protoChatInput == null ? void 0 : protoChatInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      if (!protoSendBtn.disabled) protoSendBtn.click();
-    }
-  });
-  protoSendBtn == null ? void 0 : protoSendBtn.addEventListener("click", async () => {
-    var _a16, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
-    if (!protoSelection) return;
-    const prompt = protoChatInput.value.trim();
-    if (!prompt) return;
-    protoSendBtn.disabled = true;
-    protoChatInput.value = "";
-    protoChatInput.style.height = "";
-    setProtoStatus("");
-    const msgCard = appendThreadMessage(prompt);
-    const isFirstSend = !sessionBranch;
-    if (!currentThreadId && isFirstSend) {
-      const threadName = (_a16 = protoSelection == null ? void 0 : protoSelection.name) != null ? _a16 : prompt.slice(0, 36);
-      const t = await createThread(threadName, protoSelection == null ? void 0 : protoSelection.name);
-      if (t) currentThreadId = t.id;
-    }
-    if (isFirstSend) {
-      updateMsgStatus(msgCard, [
-        { label: "Reading frame\u2026", state: "active" },
-        { label: "Generating story", state: "idle" },
-        { label: "Creating PR", state: "idle" }
-      ]);
-      let selectionData;
-      try {
-        const result = await sendBridgeCommand("GET_SELECTION_DATA", {}, 1e4);
-        selectionData = result.selectionData;
-      } catch (e) {
-        showMsgResult(msgCard, null, null, "Could not read frame: " + (e.message || "Bridge error"));
-        if (currentThreadId) await updateCurrentThread({ messages: [...(_c = (_b = threadCache.find((t) => t.id === currentThreadId)) == null ? void 0 : _b.messages) != null ? _c : [], { prompt, timestamp: (/* @__PURE__ */ new Date()).toISOString(), status: "error" }] });
-        protoSendBtn.disabled = false;
-        return;
-      }
-      updateMsgStatus(msgCard, [
-        { label: "Frame read", state: "done" },
-        { label: "Generating story\u2026", state: "active" },
-        { label: "Creating PR", state: "idle" }
-      ]);
-      try {
-        const startRes = await fetch("http://localhost:4002/prototype/generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ selection: selectionData, prompt })
-        });
-        if (!startRes.ok) {
-          const errData = await startRes.json().catch(() => ({ error: `HTTP ${startRes.status}` }));
-          throw new Error(errData.error || `HTTP ${startRes.status}`);
-        }
-        const { jobId } = await startRes.json();
-        const data = await (async () => {
-          const deadline = Date.now() + 5 * 60 * 1e3;
-          while (Date.now() < deadline) {
-            await new Promise((r) => setTimeout(r, 3e3));
-            const poll = await fetch(`http://localhost:4002/jobs/${jobId}`);
-            if (!poll.ok) continue;
-            const job = await poll.json();
-            if (job.status === "running" && job.phase) {
-              const phaseLabel = job.phase.includes("Claude") ? "Generating story\u2026" : job.phase.includes("branch") || job.phase.includes("PR") ? "Creating PR\u2026" : job.phase;
-              updateMsgStatus(msgCard, [
-                { label: "Frame read", state: "done" },
-                { label: phaseLabel, state: "active" },
-                { label: "Creating PR", state: "idle" }
-              ]);
-            }
-            if (job.status === "done") return job.result;
-            if (job.status === "error") throw new Error(job.error || "Generation failed");
-          }
-          throw new Error("Generation timed out after 5 minutes");
-        })();
-        sessionBranch = (_d = data.branchName) != null ? _d : null;
-        sessionStoryFile = (_e = data.storyFile) != null ? _e : null;
-        sessionPrUrl = (_f = data.prUrl) != null ? _f : null;
-        updateMsgStatus(msgCard, [
-          { label: "Frame read", state: "done" },
-          { label: "Story generated", state: "done" },
-          { label: data.prUrl ? "PR created" : "Skipped PR", state: data.prUrl ? "done" : "idle" }
-        ]);
-        showMsgResult(msgCard, (_g = data.storyFile) != null ? _g : null, (_h = data.prUrl) != null ? _h : null, null);
-        document.getElementById("protoNewSession").classList.remove("hidden");
-        if (currentThreadId) {
-          const existing = threadCache.find((t) => t.id === currentThreadId);
-          await updateCurrentThread({
-            branch: sessionBranch,
-            storyFile: sessionStoryFile,
-            prUrl: sessionPrUrl,
-            messages: [...(_i = existing == null ? void 0 : existing.messages) != null ? _i : [], { prompt, timestamp: (/* @__PURE__ */ new Date()).toISOString(), status: "done", storyFile: sessionStoryFile != null ? sessionStoryFile : void 0, prUrl: sessionPrUrl != null ? sessionPrUrl : void 0 }]
-          });
-        }
-      } catch (e) {
-        const errMsg = e.message || "Unknown error";
-        const isNetwork = errMsg.includes("fetch") || errMsg.includes("NetworkError") || errMsg.includes("Failed to fetch");
-        showMsgResult(msgCard, null, null, isNetwork ? "Server offline \u2014 run: npm run prototype-server" : errMsg);
-        if (currentThreadId) {
-          const existing = threadCache.find((t) => t.id === currentThreadId);
-          await updateCurrentThread({ messages: [...(_j = existing == null ? void 0 : existing.messages) != null ? _j : [], { prompt, timestamp: (/* @__PURE__ */ new Date()).toISOString(), status: "error" }] });
-        }
-      }
-    } else {
-      updateMsgStatus(msgCard, [{ label: "Updating story\u2026", state: "active" }]);
-      try {
-        const res = await fetch("http://localhost:4002/prompt/iterate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, branch: sessionBranch, storyFile: sessionStoryFile })
-        });
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
-          throw new Error(errData.error || `HTTP ${res.status}`);
-        }
-        const data = await res.json();
-        if (data.storyFile) sessionStoryFile = data.storyFile;
-        if (data.prUrl) sessionPrUrl = data.prUrl;
-        updateMsgStatus(msgCard, [{ label: "Story updated", state: "done" }]);
-        showMsgResult(msgCard, sessionStoryFile, sessionPrUrl, null);
-        if (currentThreadId) {
-          const existing = threadCache.find((t) => t.id === currentThreadId);
-          await updateCurrentThread({
-            storyFile: sessionStoryFile,
-            prUrl: sessionPrUrl,
-            messages: [...(_k = existing == null ? void 0 : existing.messages) != null ? _k : [], { prompt, timestamp: (/* @__PURE__ */ new Date()).toISOString(), status: "done", storyFile: sessionStoryFile != null ? sessionStoryFile : void 0, prUrl: sessionPrUrl != null ? sessionPrUrl : void 0 }]
-          });
-        }
-      } catch (e) {
-        const errMsg = e.message || "Unknown error";
-        const isNetwork = errMsg.includes("fetch") || errMsg.includes("NetworkError") || errMsg.includes("Failed to fetch");
-        showMsgResult(msgCard, null, null, isNetwork ? "Server offline \u2014 run: npm run prototype-server" : errMsg);
-        if (currentThreadId) {
-          const existing = threadCache.find((t) => t.id === currentThreadId);
-          await updateCurrentThread({ messages: [...(_l = existing == null ? void 0 : existing.messages) != null ? _l : [], { prompt, timestamp: (/* @__PURE__ */ new Date()).toISOString(), status: "error" }] });
-        }
-      }
-    }
-    protoSendBtn.disabled = !protoSelection;
   });
   postToPlugin("ui-ready");
   postToPlugin("get-settings");

@@ -35,6 +35,13 @@ This will:
 6. Ask for your name and create your personal folder at `apps/prototyping/{your-name}/`
 7. Open Cursor with the project
 
+Then install the Playwright browser (used for screenshot parity checks — one time only):
+
+```bash
+cd ~/Desktop/prototyping/consonant
+npx playwright install chromium
+```
+
 After the script finishes, do the one-time Figma plugin setup (printed at the end).
 
 ---
@@ -64,14 +71,19 @@ apps/prototyping/{your-name}/{feature}/
 
 ## Starting the dev server
 
-From inside your prototype folder:
+From `apps/prototyping/`:
 
 ```bash
-cd apps/prototyping/{your-name}/{feature}
-npx vite
+cd ~/Desktop/prototyping/consonant/apps/prototyping
+npm run dev
 ```
 
-Opens at `http://localhost:5173`. Edits live-reload automatically.
+Then open your prototype at:
+```
+http://localhost:5173/{your-name}/{feature}/
+```
+
+Edits live-reload automatically.
 
 ---
 

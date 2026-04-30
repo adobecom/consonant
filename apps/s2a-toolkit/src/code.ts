@@ -104,7 +104,6 @@ function notifySelection() {
   }
   const first = sel[0];
 
-  // Always notify with full node info for prototype panel
   figma.ui.postMessage({
     type: 'selection-changed',
     setId: first.type === 'COMPONENT_SET' ? first.id : null,
