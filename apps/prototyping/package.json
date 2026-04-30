@@ -1,0 +1,11 @@
+{
+  "name": "@consonant/prototyping",
+  "private": true,
+  "scripts": {
+    "new": "node scripts/new-prototype.js",
+    "dev": "vite --open"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

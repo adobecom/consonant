@@ -13,8 +13,8 @@ warn() { echo -e "${YELLOW}!${NC} $1"; }
 hi()   { echo -e "${BOLD}$1${NC}"; }
 
 echo ""
-hi "S2A Design System — Prototype Setup (Test Build)"
-hi "=================================================="
+hi "S2A Design System — Prototype Setup"
+hi "====================================="
 echo ""
 
 REPO_URL="https://github.com/adobecom/consonant.git"
@@ -120,7 +120,28 @@ cd "$INSTALL_DIR"
 npm install --silent
 ok "Dependencies installed"
 
-# ── 8b. Build S2A Toolkit plugin ─────────────────────────────────────────────
+# ── 8b. Install prototyping app dependencies ─────────────────────────────────
+PROTO_DIR="$INSTALL_DIR/apps/prototyping"
+if [[ -d "$PROTO_DIR" ]]; then
+  log "Installing prototyping app dependencies..."
+  cd "$PROTO_DIR"
+  npm install --silent
+  cd "$INSTALL_DIR"
+  ok "Prototyping app ready at apps/prototyping/"
+fi
+
+# ── 8c. Scaffold the designer's personal prototype folder ─────────────────────
+echo ""
+read -rp "Your first name or handle (used to create your prototype folder, e.g. matt): " DESIGNER_NAME
+DESIGNER_NAME_SLUG="$(echo "$DESIGNER_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g')"
+
+if [[ -n "$DESIGNER_NAME_SLUG" ]]; then
+  mkdir -p "$INSTALL_DIR/apps/prototyping/$DESIGNER_NAME_SLUG"
+  ok "Your prototyping folder created: apps/prototyping/$DESIGNER_NAME_SLUG/"
+  ok "Run 'npm run new' from apps/prototyping/ to scaffold your first prototype"
+fi
+
+# ── 8d. Build S2A Toolkit plugin ─────────────────────────────────────────────
 TOOLKIT_DIR="$INSTALL_DIR/apps/s2a-toolkit"
 if [[ -d "$TOOLKIT_DIR" ]]; then
   log "Building S2A Toolkit plugin..."
@@ -313,112 +334,33 @@ echo "    2. Press Cmd+Shift+G, paste this path, press Return:"
 echo "         $INSTALL_DIR/apps/s2a-toolkit/dist/manifest.json"
 echo "    3. Click Open — plugin appears as 'S2A Toolkit'"
 echo ""
-echo "  Opening Cursor and Storybook for you now..."
+echo "  Opening Cursor for you now..."
 echo ""
 
-# ── 12. Write launcher scripts + launchd agents ──────────────────────────────
-log "Setting up background services (Storybook + prototype server)..."
-
-mkdir -p "$HOME/.s2a"
-
-cat > "$HOME/.s2a/start-storybook.sh" <<SCRIPT
-#!/usr/bin/env bash
-export NVM_DIR="\$HOME/.nvm"
-[[ -s "\$NVM_DIR/nvm.sh" ]] && . "\$NVM_DIR/nvm.sh"
-[[ -s "\$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]] && . "\$(brew --prefix nvm)/nvm.sh"
-export PATH="${NODE_BIN_DIR}:\$PATH"
-cd "$INSTALL_DIR"
-exec npm run storybook
-SCRIPT
-chmod +x "$HOME/.s2a/start-storybook.sh"
-
-cat > "$HOME/.s2a/start-proto-server.sh" <<SCRIPT
-#!/usr/bin/env bash
-export NVM_DIR="\$HOME/.nvm"
-[[ -s "\$NVM_DIR/nvm.sh" ]] && . "\$NVM_DIR/nvm.sh"
-[[ -s "\$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]] && . "\$(brew --prefix nvm)/nvm.sh"
-export PATH="${NODE_BIN_DIR}:\$PATH"
-exec node "$INSTALL_DIR/apps/s2a-toolkit/server/figma-story-server.js"
-SCRIPT
-chmod +x "$HOME/.s2a/start-proto-server.sh"
-
-mkdir -p "$HOME/Library/LaunchAgents"
-
-cat > "$HOME/Library/LaunchAgents/com.s2a.storybook.plist" <<PLIST
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key>
-  <string>com.s2a.storybook</string>
-  <key>ProgramArguments</key>
-  <array>
-    <string>/bin/bash</string>
-    <string>$HOME/.s2a/start-storybook.sh</string>
-  </array>
-  <key>RunAtLoad</key>
-  <true/>
-  <key>KeepAlive</key>
-  <dict>
-    <key>SuccessfulExit</key>
-    <false/>
-  </dict>
-  <key>StandardOutPath</key>
-  <string>/tmp/s2a-storybook.log</string>
-  <key>StandardErrorPath</key>
-  <string>/tmp/s2a-storybook.log</string>
-</dict>
-</plist>
-PLIST
-
-cat > "$HOME/Library/LaunchAgents/com.s2a.prototype-server.plist" <<PLIST
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key>
-  <string>com.s2a.prototype-server</string>
-  <key>ProgramArguments</key>
-  <array>
-    <string>/bin/bash</string>
-    <string>$HOME/.s2a/start-proto-server.sh</string>
-  </array>
-  <key>RunAtLoad</key>
-  <true/>
-  <key>KeepAlive</key>
-  <dict>
-    <key>SuccessfulExit</key>
-    <false/>
-  </dict>
-  <key>StandardOutPath</key>
-  <string>/tmp/s2a-proto-server.log</string>
-  <key>StandardErrorPath</key>
-  <string>/tmp/s2a-proto-server.log</string>
-</dict>
-</plist>
-PLIST
-
-# Load (or reload) the agents
-launchctl unload "$HOME/Library/LaunchAgents/com.s2a.storybook.plist"       2>/dev/null || true
-launchctl unload "$HOME/Library/LaunchAgents/com.s2a.prototype-server.plist" 2>/dev/null || true
-launchctl load   "$HOME/Library/LaunchAgents/com.s2a.storybook.plist"
-launchctl load   "$HOME/Library/LaunchAgents/com.s2a.prototype-server.plist"
-ok "Background services registered — Storybook + prototype server start automatically at login"
-
-# Open Cursor with the project
+# ── 12. Open Cursor with the project ─────────────────────────────────────────
 open -a Cursor "$INSTALL_DIR" 2>/dev/null || warn "Couldn't open Cursor automatically — open it from Applications or Spotlight"
 
-echo "  Storybook:        http://localhost:6006  (starting in background, ~30s)"
-echo "  Prototype server: http://localhost:4002  (starting in background)"
+echo "  Daily workflow:"
 echo ""
-echo "  Daily workflow (no launcher needed — services start automatically at login):"
-echo "    1. Open Figma Desktop and load your working file"
-echo "    2. Plugins → Development → S2A Toolkit → Run"
-echo "    3. Click the Prototype tab — 'Servers ready' appears when Storybook is up"
-echo "    4. Select any frame on the canvas"
-echo "    5. Describe what the prototype should demonstrate"
-echo "    6. Click Generate — the story preview loads right inside the plugin"
+echo "    1. Open Claude Code in the project:"
+echo "         cd $INSTALL_DIR"
+echo "         claude"
 echo ""
-echo "  Logs: tail -f /tmp/s2a-storybook.log"
-echo "        tail -f /tmp/s2a-proto-server.log"
+echo "    2. Scaffold a new prototype:"
+echo "         cd apps/prototyping"
+echo "         npm run new"
+echo "       Enter your name and feature name — your folder is created instantly."
+echo ""
+echo "    3. Start the dev server from your prototype folder:"
+echo "         cd apps/prototyping/{your-name}/{feature}"
+echo "         npx vite"
+echo "       Opens at http://localhost:5173 with live reload."
+echo ""
+echo "    4. Describe what you want to build to Claude:"
+echo "         'Build a dark hero section with a Firefly product lockup,"
+echo "          a title-1 headline, body-md subtitle, and an accent button.'"
+echo "       Claude uses real S2A tokens and components — no guesswork."
+echo ""
+echo "    5. Save and share:"
+echo "         /push 'prototype: your-feature-name'"
 echo ""
