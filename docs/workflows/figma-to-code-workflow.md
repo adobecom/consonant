@@ -402,42 +402,50 @@ Milo uses vanilla HTML/CSS/JS with no build step. To supply components for copy-
 3. Include the exact HTML structure and full CSS in markdown code blocks so authors can copy-paste into Milo pages or blocks.
 4. See `apps/storybook/stories/Button.stories.js` for the pattern (HTML variants + CSS with `--s2a-*` tokens and fallbacks).
 
-#### 7.2 AI Story Generation (Story UI)
+#### 7.2 Prototyping in `apps/prototyping/`
 
-Once a component exists in `packages/components/src` and is wired to tokens, Story UI can generate additional stories.
+Once a component exists in `packages/components/src` and is wired to tokens, you can build and share prototypes from `apps/prototyping/`.
 
-- We use Story UI (https://github.com/southleft/story-ui) as an **MCP/CLI tool** (no Storybook panel).
-- Configuration lives in `story-ui.config.cjs`; it points to:
-  - `componentsPath: ./packages/components/src` (real components)
-  - `generatedStoriesPath: ./apps/storybook/stories/generated/`
-  - `considerationsPath: ../guardrails/story-ui-considerations.md`
-  - `docsPath: ./story-ui-docs`
-- The `components` array teaches Story UI which components to reuse (e.g., `Button`, `ProductLockup`) and how to import them.
+**Why prototyping over Story UI**: Working directly in the repo gives Claude Code access to the real token MCP, component specs, and Figma Desktop Bridge — producing token-accurate output on the first pass without a separate server or API key.
 
-**Workflow**:
+**Scaffold a new prototype:**
 
-1. Start Story UI MCP server:
+```bash
+cd apps/prototyping
+npm run new
+```
 
-   ```bash
-   npm run story-ui:mcp
-   ```
+Enter your name and a feature name. The script creates:
 
-2. In Cursor/Codex, prompt Story UI via MCP, for example:
-   - “Generate Storybook stories for the Button component using our existing variants and tokens.”
-   - “Create a Hero Marquee story that composes `ProductLockup` + `Button` using our `--s2a-*` tokens.”
+```
+apps/prototyping/{name}/{feature}/
+  index.html   ← tokens already imported
+  styles.css   ← semantic token reference in comments
+  script.js    ← commented component import examples
+```
 
-3. Story UI will:
-   - Read the config + docs to understand components, tokens, and patterns.
-   - Generate `.stories.ts` files into `apps/storybook/stories/generated/`.
-   - Import and call the real components (`Button`, `ProductLockup`) instead of inventing new elements.
+**Start the dev server** (from your prototype folder):
 
-4. Review each generated story:
-   - **Imports**: Ensure imports use `index.js` re‑exports and correct relative paths.
-   - **Tokens**: Enforce guardrails (only `--s2a-*` tokens; primitives require `/* Primitive: ... */` comments).
-   - **A11y**: Add a `play` function with `expect(canvasElement).toBeAccessible()` for any story you keep.
-   - **Variants**: Prune variants/layouts you don’t intend to support.
+```bash
+cd apps/prototyping/{name}/{feature}
+npx vite
+```
 
-Story UI effectively automates the “examples matrix” in Phase 7, while the **contract** (component API + tokens) still comes from Figma + MCP + the token pipeline.
+Opens at `http://localhost:5173` with live reload.
+
+**Describe what you want to Claude:**
+
+> “Build a dark hero section for Adobe Firefly. Use the product lockup component, a title-1 headline, body-md subtitle, and two buttons — one accent solid, one ghost. Use knockout tokens for text and background.”
+
+Claude uses the `s2a-ds` MCP to look up real `--s2a-*` token names and component props. See `docs/guardrails/story-ui-considerations.md` for the full token rules.
+
+**Save and share:**
+
+```bash
+/push “prototype: {feature-name}”
+```
+
+See `docs/setup-guides/prototyping-setup.md` for the full setup guide.
 
 ---
 
