@@ -1,12 +1,11 @@
 /**
  * S2A Grid Overlay + Breakpoint Switcher
  *
- * Grid breakpoints (from packages/grid):
- *   <768px   6 cols, full width, 16px side padding
- *   ≥768px  12 cols, 83.4% centered, max 1440px
- *
- * Token breakpoints (badge + switcher):
- *   sm <1024 · md 1024 · lg 1280 · xl 1441
+ * Grid breakpoints:
+ *   sm  320–767px    6 cols, full width, 16px side padding
+ *   md  768–1279px  12 cols, 83.4% centered, max 1440px
+ *   lg  1280–1919px 12 cols, 83.4% centered, max 1440px
+ *   xl  1920+       12 cols, 83.4% centered, max 1920px
  *
  * BP buttons open a correctly-sized popup so CSS media queries fire for real.
  * Popup dimensions compensate for browser chrome so viewport is accurate.
@@ -16,9 +15,9 @@
 
 const BREAKPOINTS = [
   { name: 'sm', min:    0, w:  390, h:  844 },
-  { name: 'md', min: 1024, w: 1024, h:  768 },
+  { name: 'md', min:  768, w:  768, h: 1024 },
   { name: 'lg', min: 1280, w: 1280, h:  900 },
-  { name: 'xl', min: 1441, w: 1440, h:  900 },
+  { name: 'xl', min: 1920, w: 1920, h: 1080 },
 ];
 
 const COL_FILL   = 'rgba(123, 58, 237, 0.08)';
