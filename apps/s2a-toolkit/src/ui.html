@@ -18,6 +18,12 @@
         <span class="header-title" id="headerTitle">S2A Toolkit</span>
       </div>
       <div class="header-right">
+        <button class="icon-btn hidden" id="copyNodeBtn" aria-label="Copy Figma link">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="5" y="5" width="7" height="7" rx="1.2" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M9 5V3.2A1.2 1.2 0 0 0 7.8 2H3.2A1.2 1.2 0 0 0 2 3.2v4.6C2 8.46 2.54 9 3.2 9H5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </button>
         <button class="icon-btn" id="settingsBtn" aria-label="GitHub settings">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/>
@@ -77,6 +83,16 @@
               <span class="tool-card-name">Annotate</span>
               <span class="tool-card-desc">Apply token annotations by category</span>
               <span class="tool-card-meta" id="annotateMeta">Select a node to start</span>
+            </div>
+            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="tool-card" data-tool="spec">
+            <div class="tool-card-body">
+              <span class="tool-card-name">Spec Sheet</span>
+              <span class="tool-card-desc">Generate annotated variant gallery</span>
+              <span class="tool-card-meta" id="specMeta">Select a component set</span>
             </div>
             <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -164,88 +180,98 @@
 
       </div>
 
-      <!-- Prototype panel -->
-      <div class="panel" id="protoPanel">
-
-        <!-- Server status -->
-        <div class="server-status" id="serverStatus">
-          <div class="server-dot" id="serverDot"></div>
-          <span class="server-label" id="serverStatusLabel">Checking servers…</span>
-          <button class="server-refresh" id="serverRefreshBtn" title="Recheck">↺</button>
-          <button class="server-start-btn" id="serverStartBtn" style="display:none;" title="Copy start command">Start ↗</button>
-        </div>
+      <!-- Spec panel -->
+      <div class="panel" id="specPanel">
 
         <div class="section-label">Selection</div>
-        <div class="proto-selection" id="protoSelection">
-          <div class="proto-selection-empty" id="protoSelectionEmpty">
-            Select a frame on the canvas to get started
+        <div class="proto-selection" id="specSelection">
+          <div id="specSelectionEmpty" class="proto-selection-empty">
+            Select a component set on the canvas
           </div>
-          <div class="proto-selection-info" id="protoSelectionInfo" style="display:none;">
-            <span class="proto-frame-icon">▣</span>
+          <div id="specSelectionInfo" class="proto-selection-info" style="display:none;">
+            <span class="proto-frame-icon">◈</span>
             <div class="proto-frame-meta">
-              <span class="proto-frame-name" id="protoFrameName">—</span>
-              <span class="proto-frame-type" id="protoFrameType">—</span>
+              <span class="proto-frame-name" id="specSetName">—</span>
+              <span class="proto-frame-type" id="specSetCount">—</span>
             </div>
           </div>
         </div>
 
-        <div class="section-label" style="margin-top:12px;">What should this prototype demonstrate?</div>
-        <textarea
-          class="proto-prompt"
-          id="protoPrompt"
-          placeholder="e.g. On mobile, stack cards vertically. CTA slides in after headline. Hover reveals secondary link."
-          rows="4"
-        ></textarea>
-
-        <div class="section-label" style="margin-top:12px;">Branch</div>
-        <div class="branch-row">
-          <input class="branch-input" id="branchInput" type="text" placeholder="figma-prototype/…" spellcheck="false" />
-          <button class="branch-pick-btn" id="branchPickBtn" title="Pick existing branch" aria-label="Pick existing branch">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-              <path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
-        <div class="branch-dropdown" id="branchDropdown"></div>
-
-        <div class="btn-row" style="margin-top:8px;">
-          <button class="btn" id="protoGenerateBtn" disabled style="flex:1;">Generate Prototype</button>
+        <div class="section-label" style="margin-top:12px;">Categories</div>
+        <div class="annotate-cats" id="specCats">
+          <button class="chip on" data-cat="color-fg">Color Fg</button>
+          <button class="chip on" data-cat="color-bg">Color Bg</button>
+          <button class="chip on" data-cat="spacing">Spacing</button>
+          <button class="chip on" data-cat="shape">Shape</button>
+          <button class="chip on" data-cat="typography">Typography</button>
+          <button class="chip on" data-cat="sizing">Sizing</button>
         </div>
 
-        <div class="proto-steps" id="protoSteps" style="display:none;">
-          <div class="proto-step" id="protoStep0" data-state="idle">
-            <span class="proto-step-dot"></span>
-            <span class="proto-step-label">Reading selection</span>
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="btn btn-ghost" id="specAllBtn">All</button>
+          <button class="btn btn-ghost" id="specNoneBtn">None</button>
+          <button class="btn" id="specGenerateBtn" disabled style="flex:2;">Generate Spec Sheet</button>
+        </div>
+        <div class="status" id="specStatus"></div>
+
+      </div>
+
+      <!-- Prototype panel -->
+      <div class="panel proto-chat-panel" id="protoPanel">
+
+        <!-- Thread sidebar -->
+        <div class="proto-sidebar" id="protoSidebar">
+          <div class="proto-sidebar-header">
+            <span class="proto-sidebar-title">Threads</span>
+            <button class="proto-sidebar-new" id="protoNewThreadBtn" title="New thread">+</button>
           </div>
-          <div class="proto-step" id="protoStep1" data-state="idle">
-            <span class="proto-step-dot"></span>
-            <span class="proto-step-label">Generating story</span>
-          </div>
-          <div class="proto-step" id="protoStep2" data-state="idle">
-            <span class="proto-step-dot"></span>
-            <span class="proto-step-label">Running checks</span>
-          </div>
-          <div class="proto-step" id="protoStep3" data-state="idle">
-            <span class="proto-step-dot"></span>
-            <span class="proto-step-label">Creating PR</span>
+          <div class="proto-thread-list" id="protoThreadList">
+            <div class="proto-thread-empty-list">No threads yet</div>
           </div>
         </div>
 
-        <!-- Inline Storybook preview — shown after generation -->
-        <div class="story-embed" id="storyEmbed" style="display:none;">
-          <div class="story-embed-header">
-            <span class="story-embed-title">Preview</span>
-            <div class="story-embed-links">
-              <a class="embed-link" id="storyOpenBtn" href="#" target="_blank">Open ↗</a>
-              <a class="embed-link" id="storyPRBtn" href="#" target="_blank">PR ↗</a>
-              <button class="embed-link embed-link-btn" id="openCursorBtn">Cursor ↗</button>
+        <!-- Main area -->
+        <div class="proto-main" id="protoMain">
+
+          <!-- Server status -->
+          <div class="server-status" id="serverStatus">
+            <div class="server-dot" id="serverDot"></div>
+            <span class="server-label" id="serverStatusLabel">Checking servers…</span>
+            <button class="server-refresh" id="serverRefreshBtn" title="Recheck">↺</button>
+            <button class="server-start-btn" id="serverStartBtn" style="display:none;" title="Copy start command">Start ↗</button>
+          </div>
+
+          <!-- Compact selection strip -->
+          <div class="proto-sel-strip" id="protoSelStrip">
+            <span class="proto-sel-icon">▣</span>
+            <span class="proto-sel-name" id="protoSelName">Select a frame on the canvas</span>
+            <button class="proto-sel-new hidden" id="protoNewSession" title="Start new session">New</button>
+          </div>
+
+          <!-- Conversation thread -->
+          <div class="proto-thread" id="protoThread">
+            <div class="proto-thread-empty" id="protoThreadEmpty">
+              Select a frame, then describe what you want to build. Each follow-up refines the same thread.
             </div>
           </div>
-          <div class="story-loading" id="storyLoading">Storybook compiling…</div>
-          <iframe class="story-iframe" id="storyIframe" src="about:blank" frameborder="0" style="display:none;"></iframe>
-        </div>
 
-        <div class="status" id="protoStatus"></div>
+          <!-- Sticky input row -->
+          <div class="proto-input-bar">
+            <textarea
+              class="proto-chat-input"
+              id="protoChatInput"
+              placeholder="Describe what you want…"
+              rows="2"
+            ></textarea>
+            <button class="proto-send-btn" id="protoSendBtn" disabled aria-label="Send">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <path d="M1.5 6.5h10M6.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="status" id="protoStatus"></div>
+        </div>
       </div>
 
       <!-- Settings panel -->

@@ -10,7 +10,7 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
 
 // ── Navigation ────────────────────────────────────────────────────────────────
 
-type View = 'home' | 'variables' | 'select' | 'settings' | 'prototype' | 'annotate';
+type View = 'home' | 'variables' | 'select' | 'settings' | 'prototype' | 'annotate' | 'spec';
 
 const homeView       = document.getElementById('homeView') as HTMLElement;
 const variablesPanel = document.getElementById('variablesPanel') as HTMLElement;
@@ -18,6 +18,7 @@ const selectPanel    = document.getElementById('selectPanel') as HTMLElement;
 const settingsPanel  = document.getElementById('settingsPanel') as HTMLElement;
 const protoPanel     = document.getElementById('protoPanel') as HTMLElement;
 const annotatePanel  = document.getElementById('annotatePanel') as HTMLElement;
+const specPanel      = document.getElementById('specPanel') as HTMLElement;
 const headerTitle    = document.getElementById('headerTitle') as HTMLElement;
 const backBtn        = document.getElementById('backBtn') as HTMLButtonElement;
 const settingsBtn    = document.getElementById('settingsBtn') as HTMLButtonElement;
@@ -29,6 +30,7 @@ const views: Record<View, { el: HTMLElement; title: string }> = {
   settings:  { el: settingsPanel,  title: 'GitHub Settings' },
   prototype: { el: protoPanel,     title: 'Generate Prototype' },
   annotate:  { el: annotatePanel,  title: 'Annotate' },
+  spec:      { el: specPanel,      title: 'Spec Sheet' },
 };
 
 let currentView: View = 'home';
@@ -43,9 +45,9 @@ function navigateTo(view: View) {
   settingsBtn.style.display = view === 'settings' ? 'none' : 'flex';
 
   if (view === 'prototype') {
-    postToPlugin('resize-for-view', { width: 520, height: 680 });
+    postToPlugin('resize-for-view', { width: 660, height: 680 });
     checkServerHealth();
-    loadProtoBranches();
+    loadThreads();
   } else {
     postToPlugin('resize-for-view', { width: 320, height: 480 });
   }
@@ -589,6 +591,71 @@ document.getElementById('annotateClearBtn')?.addEventListener('click', () => {
   postToPlugin('annotate:clear', { nodeId: annotateNodeId });
 });
 
+// ── Spec ──────────────────────────────────────────────────────────────────────
+
+let specSetId: string | null = null;
+
+function setSpecMeta(text: string) {
+  const el = document.getElementById('specMeta');
+  if (el) el.textContent = text;
+}
+
+function setSpecStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('specStatus') as HTMLElement;
+  el.textContent = msg;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+function updateSpecSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
+  const isSet = sel?.nodeType === 'COMPONENT_SET';
+  specSetId = isSet ? (sel?.id ?? null) : null;
+
+  const empty   = document.getElementById('specSelectionEmpty') as HTMLElement;
+  const info    = document.getElementById('specSelectionInfo') as HTMLElement;
+  const nameEl  = document.getElementById('specSetName') as HTMLElement;
+  const countEl = document.getElementById('specSetCount') as HTMLElement;
+  const genBtn  = document.getElementById('specGenerateBtn') as HTMLButtonElement;
+
+  if (isSet && sel) {
+    empty.style.display = 'none';
+    info.style.display = 'flex';
+    nameEl.textContent = sel.name;
+    countEl.textContent = 'COMPONENT_SET · ' + (sel.variantCount ?? 0) + ' variants';
+    genBtn.disabled = false;
+    setSpecMeta(sel.name);
+  } else {
+    empty.style.display = 'block';
+    info.style.display = 'none';
+    genBtn.disabled = true;
+    setSpecMeta('Select a component set');
+  }
+}
+
+document.querySelectorAll<HTMLButtonElement>('#specCats .chip').forEach(chip => {
+  chip.addEventListener('click', () => chip.classList.toggle('on'));
+});
+
+document.getElementById('specAllBtn')?.addEventListener('click', () => {
+  document.querySelectorAll<HTMLButtonElement>('#specCats .chip').forEach(c => c.classList.add('on'));
+});
+
+document.getElementById('specNoneBtn')?.addEventListener('click', () => {
+  document.querySelectorAll<HTMLButtonElement>('#specCats .chip').forEach(c => c.classList.remove('on'));
+});
+
+document.getElementById('specGenerateBtn')?.addEventListener('click', () => {
+  if (!specSetId) return;
+  const categories = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('#specCats .chip.on')
+  ).map(c => c.dataset.cat!);
+  if (categories.length === 0) { setSpecStatus('Select at least one category', 'err'); return; }
+  const genBtn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
+  genBtn.disabled = true;
+  genBtn.textContent = 'Generating…';
+  setSpecStatus('');
+  postToPlugin('spec:generate', { setId: specSetId, categories });
+});
+
 // ── Plugin messages ───────────────────────────────────────────────────────────
 
 window.addEventListener('message', (event) => {
@@ -649,12 +716,17 @@ window.addEventListener('message', (event) => {
           nodeType: msg.nodeType as string,
           width: msg.width as number | undefined,
           height: msg.height as number | undefined,
+          variantCount: msg.variantCount as number | undefined,
         };
         updateProtoSelection(sel);
         updateAnnotateSelection(sel);
+        updateSpecSelection(sel);
+        updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null);
       } else {
         updateProtoSelection(null);
         updateAnnotateSelection(null);
+        updateSpecSelection(null);
+        updateCopyBtn(null, null);
       }
       break;
     }
@@ -677,6 +749,19 @@ window.addEventListener('message', (event) => {
       setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? 's' : ''}` : 'Nothing to clear', 'ok');
       break;
     }
+    case 'spec:result': {
+      const genBtn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
+      genBtn.disabled = !specSetId;
+      genBtn.textContent = 'Generate Spec Sheet';
+      if (msg.error) {
+        setSpecStatus('❌ ' + (msg.error as string), 'err');
+      } else {
+        const cats = msg.categoryCount as number;
+        const vars = msg.variantCount as number;
+        setSpecStatus(`✓ ${cats} categor${cats !== 1 ? 'ies' : 'y'} · ${vars} variant${vars !== 1 ? 's' : ''}`, 'ok');
+      }
+      break;
+    }
   }
 });
 
@@ -695,7 +780,7 @@ async function checkServerHealth() {
   try {
     const ctrl = new AbortController();
     const tid = setTimeout(() => ctrl.abort(), 3000);
-    const res = await fetch('http://localhost:9400/health', { signal: ctrl.signal });
+    const res = await fetch('http://localhost:4002/health', { signal: ctrl.signal });
     clearTimeout(tid);
     const data = await res.json() as { ok?: boolean };
     if (data.ok) {
@@ -711,15 +796,17 @@ async function checkServerHealth() {
   }
 }
 
-serverStartBtn?.addEventListener('click', async () => {
-  try {
-    await navigator.clipboard.writeText(START_CMD);
-    serverStartBtn.textContent = 'Copied!';
-    setTimeout(() => { serverStartBtn.textContent = 'Start ↗'; }, 2000);
-  } catch {
-    // clipboard blocked — show inline
-    serverStatusLabel.textContent = START_CMD;
-  }
+serverStartBtn?.addEventListener('click', () => {
+  const ta = document.createElement('textarea');
+  ta.value = START_CMD;
+  ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); } catch {}
+  document.body.removeChild(ta);
+  serverStartBtn.textContent = 'Copied!';
+  setTimeout(() => { serverStartBtn.textContent = 'Start ↗'; }, 2000);
 });
 
 document.getElementById('serverRefreshBtn')?.addEventListener('click', checkServerHealth);
@@ -734,7 +821,26 @@ interface ProtoSelection {
   height?: number;
 }
 
+interface ProtoThread {
+  id: string;
+  name: string;
+  frameName?: string;
+  branch: string | null;
+  storyFile: string | null;
+  prUrl: string | null;
+  messages: Array<{ prompt: string; timestamp: string; status: 'done' | 'error'; storyFile?: string; prUrl?: string }>;
+  createdAt: string;
+  updatedAt: string;
+}
+
 let protoSelection: ProtoSelection | null = null;
+let sessionBranch: string | null = null;
+let sessionStoryFile: string | null = null;
+let sessionPrUrl: string | null = null;
+let currentThreadId: string | null = null;
+let threadCache: ProtoThread[] = [];
+
+const PROTOTYPABLE = new Set(['FRAME', 'COMPONENT', 'SECTION', 'GROUP', 'INSTANCE', 'COMPONENT_SET']);
 
 function setProtoMeta(text: string) {
   const el = document.getElementById('protoMeta');
@@ -749,247 +855,398 @@ function setProtoStatus(msg: string, type: '' | 'ok' | 'err' = '') {
 
 function updateProtoSelection(sel: ProtoSelection | null) {
   protoSelection = sel;
-  const empty    = document.getElementById('protoSelectionEmpty') as HTMLElement;
-  const info     = document.getElementById('protoSelectionInfo') as HTMLElement;
-  const nameEl   = document.getElementById('protoFrameName') as HTMLElement;
-  const typeEl   = document.getElementById('protoFrameType') as HTMLElement;
-  const genBtn   = document.getElementById('protoGenerateBtn') as HTMLButtonElement;
+  const nameEl  = document.getElementById('protoSelName') as HTMLElement;
+  const sendBtn = document.getElementById('protoSendBtn') as HTMLButtonElement;
 
-  if (sel) {
-    empty.style.display = 'none';
-    info.style.display = 'flex';
+  if (sel && PROTOTYPABLE.has(sel.nodeType)) {
     nameEl.textContent = sel.name;
-    typeEl.textContent = sel.nodeType + (sel.width ? ` · ${sel.width}×${sel.height}` : '');
-    genBtn.disabled = false;
+    sendBtn.disabled = false;
     setProtoMeta(sel.name);
-    // Auto-fill branch name only if the user hasn't typed something custom
-    const bi = document.getElementById('branchInput') as HTMLInputElement;
-    if (bi && (!bi.value || bi.dataset.autoFilled === 'true')) {
-      bi.value = autoBranchName(sel.name);
-      bi.dataset.autoFilled = 'true';
-    }
   } else {
-    empty.style.display = 'block';
-    info.style.display = 'none';
-    genBtn.disabled = true;
+    nameEl.textContent = 'Select a frame on the canvas';
+    sendBtn.disabled = true;
     setProtoMeta('Select a frame to start');
   }
 }
 
-type StepState = 'idle' | 'active' | 'done' | 'error';
+// ── Copy-node button ──────────────────────────────────────────────────────────
 
-function setProtoStep(index: number, state: StepState, label?: string) {
-  const step = document.getElementById('protoStep' + index);
-  if (!step) return;
-  step.dataset.state = state;
-  if (label) {
-    const lbl = step.querySelector('.proto-step-label');
-    if (lbl) lbl.textContent = label;
+const copyNodeBtn = document.getElementById('copyNodeBtn') as HTMLButtonElement;
+let copyNodeId:   string | null = null;
+let copyFileKey:  string | null = null;
+let copyFileName: string | null = null;
+
+const COPY_ICON = copyNodeBtn.innerHTML;
+const CHECK_ICON = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function updateCopyBtn(sel: ProtoSelection | null, fileKey: string | null, fileName: string | null = null) {
+  copyNodeId   = sel?.id ?? null;
+  copyFileKey  = fileKey;
+  copyFileName = fileName;
+  const COPYABLE = new Set(['FRAME', 'SECTION', 'COMPONENT', 'INSTANCE', 'GROUP']);
+  if (sel && COPYABLE.has(sel.nodeType) && fileKey) {
+    copyNodeBtn.classList.remove('hidden');
+  } else {
+    copyNodeBtn.classList.add('hidden');
   }
 }
 
-function resetProtoSteps() {
-  [0, 1, 2, 3].forEach(i => setProtoStep(i, 'idle'));
-  const steps      = document.getElementById('protoSteps') as HTMLElement;
-  const storyEmbed = document.getElementById('storyEmbed') as HTMLElement;
-  const storyIframe = document.getElementById('storyIframe') as HTMLIFrameElement;
-  steps.style.display = 'none';
-  storyEmbed.style.display = 'none';
-  storyIframe.srcdoc = '';
-  storyIframe.src = 'about:blank';
-  storyIframe.style.display = 'none';
-  postToPlugin('resize-for-view', { width: 520, height: 680 });
-  setProtoStatus('');
+function flashCheck() {
+  copyNodeBtn.innerHTML = CHECK_ICON;
+  copyNodeBtn.style.color = 'var(--green)';
+  setTimeout(() => {
+    copyNodeBtn.innerHTML = COPY_ICON;
+    copyNodeBtn.style.color = '';
+  }, 1500);
 }
 
-async function waitForStory(storyId: string, maxAttempts = 20, intervalMs = 2000): Promise<void> {
-  for (let i = 0; i < maxAttempts; i++) {
-    await new Promise<void>(r => setTimeout(r, intervalMs));
-    try {
-      const ctrl = new AbortController();
-      const tid = setTimeout(() => ctrl.abort(), 2000);
-      const res = await fetch('http://localhost:6006/index.json', { signal: ctrl.signal });
-      clearTimeout(tid);
-      if (res.ok) {
-        const json = await res.json() as { entries?: Record<string, unknown>; stories?: Record<string, unknown> };
-        if (json.entries?.[storyId] || json.stories?.[storyId]) return;
-      }
-    } catch {}
-  }
-  // Timed out — load anyway so the user sees something
-}
+copyNodeBtn.addEventListener('click', () => {
+  if (!copyNodeId || !copyFileKey) return;
+  const urlNodeId  = copyNodeId.replace(':', '-');
+  const nameSlug   = (copyFileName ?? 'file').replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+  const url = `https://www.figma.com/design/${copyFileKey}/${nameSlug}?node-id=${urlNodeId}`;
 
-document.getElementById('protoGenerateBtn')?.addEventListener('click', async () => {
-  if (!protoSelection) return;
+  // navigator.clipboard is often blocked in Figma plugin iframes — use execCommand fallback
+  const ta = document.createElement('textarea');
+  ta.value = url;
+  ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); } catch {}
+  document.body.removeChild(ta);
 
-  const prompt  = (document.getElementById('protoPrompt') as HTMLTextAreaElement).value.trim();
-  const branch  = (document.getElementById('branchInput') as HTMLInputElement).value.trim() || undefined;
-  const genBtn  = document.getElementById('protoGenerateBtn') as HTMLButtonElement;
-  const steps   = document.getElementById('protoSteps') as HTMLElement;
-
-  genBtn.disabled = true;
-  genBtn.textContent = 'Generating…';
-  resetProtoSteps();
-  steps.style.display = 'flex';
-  setProtoStatus('');
-
-  // Step 0: read selection data from plugin
-  setProtoStep(0, 'active');
-  let selectionData: Record<string, unknown>;
-  try {
-    const result = await sendBridgeCommand('GET_SELECTION_DATA', {}, 10000);
-    selectionData = result.selectionData as Record<string, unknown>;
-    setProtoStep(0, 'done');
-  } catch (e: any) {
-    setProtoStep(0, 'error', 'Reading selection — failed');
-    setProtoStatus('Could not read selection: ' + (e.message || 'unknown error'), 'err');
-    genBtn.disabled = false;
-    genBtn.textContent = 'Generate Prototype';
-    return;
-  }
-
-  // Steps 1–3: handled by local prototype server
-  setProtoStep(1, 'active');
-  try {
-    const res = await fetch('http://localhost:9400/prototype/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ selection: selectionData, prompt, branch }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
-      throw new Error(err.error || `HTTP ${res.status}`);
-    }
-
-    const data = await res.json() as {
-      storyFile?: string;
-      branchName?: string;
-      prUrl?: string;
-      previewHtml?: string;
-      checks?: { lint?: boolean; typecheck?: boolean; storybook?: boolean };
-    };
-
-    setProtoStep(1, 'done');
-    setProtoStep(2, data.checks?.lint && data.checks?.typecheck ? 'done' : 'error');
-    setProtoStep(3, data.prUrl ? 'done' : 'idle');
-    // Refresh branch list so the new branch appears in the picker
-    loadProtoBranches();
-
-    // Show inline Storybook preview
-    const storyEmbed  = document.getElementById('storyEmbed') as HTMLElement;
-    const storyIframe = document.getElementById('storyIframe') as HTMLIFrameElement;
-    const storyOpenBtn = document.getElementById('storyOpenBtn') as HTMLAnchorElement;
-    const storyPRBtn   = document.getElementById('storyPRBtn') as HTMLAnchorElement;
-
-    if (data.storyFile) {
-      const componentName = (data.storyFile.split('/').pop() || '').replace('.stories.js', '');
-      const storyId  = 'prototypes-generated-' + componentName.toLowerCase() + '--default';
-      const storyUrl = 'http://localhost:6006/?path=/story/' + storyId;
-      storyOpenBtn.href = storyUrl;
-      if (data.prUrl) storyPRBtn.href = data.prUrl;
-
-      storyEmbed.style.display = 'block';
-      storyIframe.style.display = 'block';
-      if (data.previewHtml) {
-        storyIframe.srcdoc = data.previewHtml;
-      } else {
-        storyIframe.src = storyUrl;
-      }
-      postToPlugin('resize-for-view', { width: 520, height: 900 });
-      setProtoStatus('✓ ' + (data.storyFile.split('/').pop() || 'story') + ' ready', 'ok');
-    }
-
-    if (!data.storyFile) {
-      setProtoStatus('✓ Done', 'ok');
-    }
-
-  } catch (e: any) {
-    const msg = e.message || 'Unknown error';
-    if (msg.includes('fetch') || msg.includes('NetworkError') || msg.includes('Failed to fetch')) {
-      setProtoStep(1, 'error', 'Generating story — server not running');
-      setProtoStatus('❌ Prototype server not running — run: npm run prototype-server', 'err');
-    } else {
-      setProtoStep(1, 'error');
-      setProtoStatus('❌ ' + msg, 'err');
-    }
-  } finally {
-    genBtn.disabled = false;
-    genBtn.textContent = 'Generate Prototype';
-  }
+  flashCheck();
 });
 
-// ── Branch picker ─────────────────────────────────────────────────────────────
+// ── Thread management ─────────────────────────────────────────────────────────
 
-const branchInput    = document.getElementById('branchInput')    as HTMLInputElement;
-const branchPickBtn  = document.getElementById('branchPickBtn')  as HTMLButtonElement;
-const branchDropdown = document.getElementById('branchDropdown') as HTMLElement;
-
-let branchDropdownOpen = false;
-let cachedProtoBranches: string[] = [];
-
-function autoBranchName(frameName: string): string {
-  const slug = frameName.replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '-').toLowerCase();
-  const date = new Date().toISOString().split('T')[0];
-  return `figma-prototype/${slug}-${date}`;
-}
-
-function closeBranchDropdown() {
-  branchDropdownOpen = false;
-  branchDropdown?.classList.remove('open');
-}
-
-async function loadProtoBranches() {
+async function loadThreads() {
   try {
-    const ctrl = new AbortController();
-    const tid = setTimeout(() => ctrl.abort(), 4000);
-    const res = await fetch('http://localhost:9400/git/branches', { signal: ctrl.signal });
-    clearTimeout(tid);
+    const res = await fetch('http://localhost:4002/threads');
     if (!res.ok) return;
-    const data = await res.json() as { prototypeBranches?: string[] };
-    cachedProtoBranches = data.prototypeBranches || [];
+    threadCache = await res.json() as ProtoThread[];
+    renderThreadList(threadCache);
   } catch {}
 }
 
-function renderBranchDropdown(branches: string[]) {
-  if (!branchDropdown) return;
-  if (branches.length === 0) {
-    branchDropdown.innerHTML = '<div class="branch-dropdown-empty">No existing branches yet</div>';
+function renderThreadList(threads: ProtoThread[]) {
+  const listEl = document.getElementById('protoThreadList') as HTMLElement;
+  if (!listEl) return;
+  if (threads.length === 0) {
+    listEl.innerHTML = '<div class="proto-thread-empty-list">No threads yet.<br>Select a frame and send a prompt.</div>';
     return;
   }
-  branchDropdown.innerHTML = branches.map(b => {
-    const label = b.replace('figma-prototype/', '');
-    return `<button class="branch-dropdown-item" data-branch="${b}">${label}</button>`;
-  }).join('');
-  branchDropdown.querySelectorAll<HTMLButtonElement>('.branch-dropdown-item').forEach(btn => {
+  listEl.innerHTML = threads.map(t => `
+    <button class="proto-thread-item${t.id === currentThreadId ? ' active' : ''}" data-thread-id="${esc(t.id)}">
+      <span class="proto-thread-item-name">${esc(t.name)}</span>
+      <span class="proto-thread-item-meta">${t.messages.length} msg${t.messages.length !== 1 ? 's' : ''}</span>
+    </button>
+  `).join('');
+  listEl.querySelectorAll<HTMLButtonElement>('.proto-thread-item').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (branchInput) { branchInput.value = btn.dataset.branch!; branchInput.dataset.autoFilled = 'false'; }
-      closeBranchDropdown();
+      const thread = threadCache.find(t => t.id === btn.dataset.threadId);
+      if (thread) activateThread(thread);
     });
   });
 }
 
-branchInput?.addEventListener('input', () => { branchInput.dataset.autoFilled = 'false'; });
+function activateThread(thread: ProtoThread) {
+  currentThreadId  = thread.id;
+  sessionBranch    = thread.branch;
+  sessionStoryFile = thread.storyFile;
+  sessionPrUrl     = thread.prUrl;
 
-branchPickBtn?.addEventListener('click', (e) => {
-  e.stopPropagation();
-  branchDropdownOpen = !branchDropdownOpen;
-  if (branchDropdownOpen) { renderBranchDropdown(cachedProtoBranches); branchDropdown?.classList.add('open'); }
-  else closeBranchDropdown();
+  const threadEl   = document.getElementById('protoThread') as HTMLElement;
+  const emptyEl    = document.getElementById('protoThreadEmpty') as HTMLElement;
+  const newBtn     = document.getElementById('protoNewSession') as HTMLButtonElement;
+  const sendBtn    = document.getElementById('protoSendBtn') as HTMLButtonElement;
+
+  // Clear and re-render message history
+  Array.from(threadEl.children).forEach(c => { if (c.id !== 'protoThreadEmpty') c.remove(); });
+
+  if (thread.messages.length === 0) {
+    emptyEl.style.display = '';
+  } else {
+    emptyEl.style.display = 'none';
+    for (const m of thread.messages) {
+      const card = appendThreadMessage(m.prompt);
+      updateMsgStatus(card, [{ label: m.status === 'done' ? 'Done' : 'Failed', state: m.status === 'done' ? 'done' : 'error' }]);
+      if (m.status === 'done') showMsgResult(card, m.storyFile ?? null, m.prUrl ?? null, null);
+    }
+  }
+
+  if (thread.branch) newBtn.classList.remove('hidden'); else newBtn.classList.add('hidden');
+  sendBtn.disabled = !protoSelection;
+  setProtoStatus('');
+  renderThreadList(threadCache);
+}
+
+async function createThread(name: string, frameName?: string): Promise<ProtoThread | null> {
+  try {
+    const res = await fetch('http://localhost:4002/threads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, frameName }),
+    });
+    if (!res.ok) return null;
+    const thread = await res.json() as ProtoThread;
+    threadCache.unshift(thread);
+    renderThreadList(threadCache);
+    return thread;
+  } catch { return null; }
+}
+
+async function updateCurrentThread(patch: Partial<ProtoThread>) {
+  if (!currentThreadId) return;
+  try {
+    const res = await fetch(`http://localhost:4002/threads/${currentThreadId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch),
+    });
+    if (!res.ok) return;
+    const updated = await res.json() as ProtoThread;
+    const idx = threadCache.findIndex(t => t.id === currentThreadId);
+    if (idx !== -1) threadCache[idx] = updated;
+    renderThreadList(threadCache);
+  } catch {}
+}
+
+function clearProtoSession() {
+  sessionBranch    = null;
+  sessionStoryFile = null;
+  sessionPrUrl     = null;
+  currentThreadId  = null;
+  const thread     = document.getElementById('protoThread') as HTMLElement;
+  const emptyState = document.getElementById('protoThreadEmpty') as HTMLElement;
+  Array.from(thread.children).forEach(child => {
+    if (child.id !== 'protoThreadEmpty') child.remove();
+  });
+  emptyState.style.display = '';
+  (document.getElementById('protoNewSession') as HTMLButtonElement).classList.add('hidden');
+  setProtoStatus('');
+  renderThreadList(threadCache);
+}
+
+function appendThreadMessage(prompt: string): HTMLElement {
+  const thread     = document.getElementById('protoThread') as HTMLElement;
+  const emptyState = document.getElementById('protoThreadEmpty') as HTMLElement;
+  emptyState.style.display = 'none';
+  const msg = document.createElement('div');
+  msg.className = 'proto-msg';
+  msg.innerHTML = `<div class="proto-msg-prompt">${esc(prompt)}</div><div class="proto-msg-status"></div>`;
+  thread.appendChild(msg);
+  thread.scrollTop = thread.scrollHeight;
+  return msg;
+}
+
+function updateMsgStatus(msg: HTMLElement, steps: Array<{ label: string; state: 'active' | 'done' | 'error' | 'idle' }>) {
+  const statusEl = msg.querySelector('.proto-msg-status') as HTMLElement;
+  statusEl.innerHTML = steps.map(s =>
+    `<div class="proto-step" data-state="${s.state}"><div class="proto-step-dot"></div><span class="proto-step-label">${esc(s.label)}</span></div>`
+  ).join('');
+  const thread = document.getElementById('protoThread') as HTMLElement;
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function showMsgResult(msg: HTMLElement, storyFile: string | null, prUrl: string | null, err: string | null) {
+  const thread = document.getElementById('protoThread') as HTMLElement;
+  if (err) {
+    const statusEl = msg.querySelector('.proto-msg-status') as HTMLElement;
+    statusEl.innerHTML = `<div class="proto-step" data-state="error"><div class="proto-step-dot"></div><span class="proto-step-label">${esc(err)}</span></div>`;
+    thread.scrollTop = thread.scrollHeight;
+    return;
+  }
+  if (storyFile || prUrl) {
+    const componentName = (storyFile?.split('/').pop() || '').replace('.stories.js', '');
+    const storyId  = 'generated-' + componentName.toLowerCase() + '--default';
+    const storyUrl = 'http://localhost:6006/?path=/story/' + storyId;
+    const resultEl = document.createElement('div');
+    resultEl.className = 'proto-msg-result';
+    let links = '';
+    if (storyFile) links += `<a class="proto-result-link" href="${storyUrl}" target="_blank">↗ Story</a>`;
+    if (prUrl)     links += `<a class="proto-result-link" href="${prUrl}" target="_blank">↗ PR</a>`;
+    resultEl.innerHTML = links;
+    msg.appendChild(resultEl);
+  }
+  thread.scrollTop = thread.scrollHeight;
+}
+
+document.getElementById('protoNewSession')?.addEventListener('click', clearProtoSession);
+document.getElementById('protoNewThreadBtn')?.addEventListener('click', clearProtoSession);
+
+const protoChatInput = document.getElementById('protoChatInput') as HTMLTextAreaElement;
+const protoSendBtn   = document.getElementById('protoSendBtn') as HTMLButtonElement;
+
+protoChatInput?.addEventListener('input', () => {
+  protoChatInput.style.height = 'auto';
+  protoChatInput.style.height = Math.min(protoChatInput.scrollHeight, 100) + 'px';
 });
 
-document.addEventListener('click', () => { if (branchDropdownOpen) closeBranchDropdown(); });
-branchDropdown?.addEventListener('click', e => e.stopPropagation());
+protoChatInput?.addEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    if (!protoSendBtn.disabled) protoSendBtn.click();
+  }
+});
 
-// ── Open in Cursor ────────────────────────────────────────────────────────────
+protoSendBtn?.addEventListener('click', async () => {
+  if (!protoSelection) return;
+  const prompt = protoChatInput.value.trim();
+  if (!prompt) return;
 
-document.getElementById('openCursorBtn')?.addEventListener('click', async () => {
-  try {
-    const ctrl = new AbortController();
-    const tid = setTimeout(() => ctrl.abort(), 3000);
-    await fetch('http://localhost:9400/open-cursor', { signal: ctrl.signal });
-    clearTimeout(tid);
-  } catch {}
+  protoSendBtn.disabled = true;
+  protoChatInput.value = '';
+  protoChatInput.style.height = '';
+  setProtoStatus('');
+
+  const msgCard     = appendThreadMessage(prompt);
+  const isFirstSend = !sessionBranch;
+
+  // Create a thread on the first send if none is active
+  if (!currentThreadId && isFirstSend) {
+    const threadName = protoSelection?.name ?? prompt.slice(0, 36);
+    const t = await createThread(threadName, protoSelection?.name);
+    if (t) currentThreadId = t.id;
+  }
+
+  if (isFirstSend) {
+    updateMsgStatus(msgCard, [
+      { label: 'Reading frame…',   state: 'active' },
+      { label: 'Generating story', state: 'idle'   },
+      { label: 'Creating PR',      state: 'idle'   },
+    ]);
+
+    let selectionData: Record<string, unknown>;
+    try {
+      const result = await sendBridgeCommand('GET_SELECTION_DATA', {}, 10000);
+      selectionData = result.selectionData as Record<string, unknown>;
+    } catch (e: any) {
+      showMsgResult(msgCard, null, null, 'Could not read frame: ' + (e.message || 'Bridge error'));
+      if (currentThreadId) await updateCurrentThread({ messages: [...(threadCache.find(t => t.id === currentThreadId)?.messages ?? []), { prompt, timestamp: new Date().toISOString(), status: 'error' }] });
+      protoSendBtn.disabled = false;
+      return;
+    }
+
+    updateMsgStatus(msgCard, [
+      { label: 'Frame read',        state: 'done'   },
+      { label: 'Generating story…', state: 'active' },
+      { label: 'Creating PR',       state: 'idle'   },
+    ]);
+
+    try {
+      // POST immediately returns a jobId — generation runs in background
+      const startRes = await fetch('http://localhost:4002/prototype/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selection: selectionData, prompt }),
+      });
+      if (!startRes.ok) {
+        const errData = await startRes.json().catch(() => ({ error: `HTTP ${startRes.status}` }));
+        throw new Error((errData as any).error || `HTTP ${startRes.status}`);
+      }
+      const { jobId } = await startRes.json() as { jobId: string };
+
+      // Poll until done (max 5 min)
+      const data = await (async () => {
+        const deadline = Date.now() + 5 * 60 * 1000;
+        while (Date.now() < deadline) {
+          await new Promise(r => setTimeout(r, 3000));
+          const poll = await fetch(`http://localhost:4002/jobs/${jobId}`);
+          if (!poll.ok) continue;
+          const job = await poll.json() as { status: string; phase?: string; result?: any; error?: string };
+          // Update the status line with server-reported phase
+          if (job.status === 'running' && job.phase) {
+            const phaseLabel = job.phase.includes('Claude') ? 'Generating story…' :
+                               job.phase.includes('branch') || job.phase.includes('PR') ? 'Creating PR…' :
+                               job.phase;
+            updateMsgStatus(msgCard, [
+              { label: 'Frame read',   state: 'done'   },
+              { label: phaseLabel,     state: 'active' },
+              { label: 'Creating PR',  state: 'idle'   },
+            ]);
+          }
+          if (job.status === 'done')  return job.result;
+          if (job.status === 'error') throw new Error(job.error || 'Generation failed');
+        }
+        throw new Error('Generation timed out after 5 minutes');
+      })();
+
+      sessionBranch    = data.branchName ?? null;
+      sessionStoryFile = data.storyFile  ?? null;
+      sessionPrUrl     = data.prUrl      ?? null;
+
+      updateMsgStatus(msgCard, [
+        { label: 'Frame read',                              state: 'done'                        },
+        { label: 'Story generated',                         state: 'done'                        },
+        { label: data.prUrl ? 'PR created' : 'Skipped PR', state: data.prUrl ? 'done' : 'idle'  },
+      ]);
+      showMsgResult(msgCard, data.storyFile ?? null, data.prUrl ?? null, null);
+      (document.getElementById('protoNewSession') as HTMLButtonElement).classList.remove('hidden');
+
+      // Persist to thread
+      if (currentThreadId) {
+        const existing = threadCache.find(t => t.id === currentThreadId);
+        await updateCurrentThread({
+          branch: sessionBranch, storyFile: sessionStoryFile, prUrl: sessionPrUrl,
+          messages: [...(existing?.messages ?? []), { prompt, timestamp: new Date().toISOString(), status: 'done', storyFile: sessionStoryFile ?? undefined, prUrl: sessionPrUrl ?? undefined }],
+        });
+      }
+
+    } catch (e: any) {
+      const errMsg    = e.message || 'Unknown error';
+      const isNetwork = errMsg.includes('fetch') || errMsg.includes('NetworkError') || errMsg.includes('Failed to fetch');
+      showMsgResult(msgCard, null, null, isNetwork ? 'Server offline — run: npm run prototype-server' : errMsg);
+      if (currentThreadId) {
+        const existing = threadCache.find(t => t.id === currentThreadId);
+        await updateCurrentThread({ messages: [...(existing?.messages ?? []), { prompt, timestamp: new Date().toISOString(), status: 'error' }] });
+      }
+    }
+
+  } else {
+    updateMsgStatus(msgCard, [{ label: 'Updating story…', state: 'active' }]);
+
+    try {
+      const res = await fetch('http://localhost:4002/prompt/iterate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, branch: sessionBranch, storyFile: sessionStoryFile }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+        throw new Error((errData as any).error || `HTTP ${res.status}`);
+      }
+
+      const data = await res.json() as { storyFile?: string; prUrl?: string };
+      if (data.storyFile) sessionStoryFile = data.storyFile;
+      if (data.prUrl)     sessionPrUrl     = data.prUrl;
+
+      updateMsgStatus(msgCard, [{ label: 'Story updated', state: 'done' }]);
+      showMsgResult(msgCard, sessionStoryFile, sessionPrUrl, null);
+
+      // Persist to thread
+      if (currentThreadId) {
+        const existing = threadCache.find(t => t.id === currentThreadId);
+        await updateCurrentThread({
+          storyFile: sessionStoryFile, prUrl: sessionPrUrl,
+          messages: [...(existing?.messages ?? []), { prompt, timestamp: new Date().toISOString(), status: 'done', storyFile: sessionStoryFile ?? undefined, prUrl: sessionPrUrl ?? undefined }],
+        });
+      }
+
+    } catch (e: any) {
+      const errMsg    = e.message || 'Unknown error';
+      const isNetwork = errMsg.includes('fetch') || errMsg.includes('NetworkError') || errMsg.includes('Failed to fetch');
+      showMsgResult(msgCard, null, null, isNetwork ? 'Server offline — run: npm run prototype-server' : errMsg);
+      if (currentThreadId) {
+        const existing = threadCache.find(t => t.id === currentThreadId);
+        await updateCurrentThread({ messages: [...(existing?.messages ?? []), { prompt, timestamp: new Date().toISOString(), status: 'error' }] });
+      }
+    }
+  }
+
+  protoSendBtn.disabled = !protoSelection;
 });
 
 postToPlugin('ui-ready');

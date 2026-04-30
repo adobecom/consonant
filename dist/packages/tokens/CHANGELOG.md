@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.15] - 2026-04-30
+
+### 🐛 Bug fix
+
+- **`title-5` letter-spacing corrected at `lg` and `xl` breakpoints**
+  `--s2a-typography-letter-spacing-title-5` was aliasing to `--s2a-font-letter-spacing-4xl` (-0.96px) at both `lg` and `xl`. The correct value matches `md` and is `--s2a-font-letter-spacing-5xl` (-0.48px). Updated in `tokens.responsive.lg.css`, `tokens.responsive.xl.css`, and `tokens.min.css`. The `xl` alias also referenced a deleted Figma variable (`deletedButReferenced: true`) — that stale reference has been cleaned up in `raw.json`.
+
+  | Breakpoint | Was | Now |
+  |---|---|---|
+  | `xl` | `var(--s2a-font-letter-spacing-4xl)` (-0.96px) | `var(--s2a-font-letter-spacing-5xl)` (-0.48px) |
+  | `lg` | `var(--s2a-font-letter-spacing-4xl)` (-0.96px) | `var(--s2a-font-letter-spacing-5xl)` (-0.48px) |
+  | `md` | `var(--s2a-font-letter-spacing-5xl)` (-0.48px) | *(unchanged)* |
+  | `sm` | `var(--s2a-font-letter-spacing-6xl)` (-0.2px) | *(unchanged)* |
+
+---
+
 ## [0.0.14] - 2026-04-27
 
 ### 💥 Breaking changes
@@ -30,8 +46,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`--s2a-font-line-height-sm-md` removed**
   The intermediate 21px line-height semantic stop has been removed from `tokens.semantic.css`. Any direct usage of `var(--s2a-font-line-height-sm-md)` will now fall through to the browser default. Migrate to `--s2a-font-line-height-sm` (20px) or `--s2a-font-line-height-md` (24px) depending on context.
 
-- **`--s2a-router-card-*` removed from all responsive files**
-  The 8 router-card layout tokens (`width-resting`, `width-expanded`, `width-min`, `width-max`, `height-max`, `media-height`, `padding`, `gap`) have been removed from `tokens.responsive.sm/md/lg/xl.css`. The design team marked these variables as `DESIGN ONLY` in Figma, meaning they are no longer intended for CSS consumption. If your component or layout depended on these tokens, define the values locally or open a request to promote them back to system tokens.
+- **Component layout tokens removed from all responsive files**
+  The following tokens have been removed from `tokens.responsive.sm/md/lg/xl.css` — their Figma variables are marked `DESIGN ONLY` and are not intended for CSS consumption. Define values locally in your component or open a request to promote them back to system tokens.
+
+  *Router Card (8 tokens):* `--s2a-router-card-width-resting`, `width-expanded`, `width-min`, `width-max`, `height-max`, `media-height`, `padding`, `gap`
+
+  *App Card (7 tokens):* `--s2a-app-card-max-height`, `min-height`, `padding`, `padding-horizontal`, `padding-vertical`, `gap`, `border-radius`
+
+  *Product Lockup (4 tokens):* `--s2a-product-lockup-gap-block`, `gap-block-start`, `gap-inline`, `gap-inline-start`
 
 ### 🧹 Build & filtering
 

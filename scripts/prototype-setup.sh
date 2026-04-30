@@ -338,7 +338,7 @@ export NVM_DIR="\$HOME/.nvm"
 [[ -s "\$NVM_DIR/nvm.sh" ]] && . "\$NVM_DIR/nvm.sh"
 [[ -s "\$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]] && . "\$(brew --prefix nvm)/nvm.sh"
 export PATH="${NODE_BIN_DIR}:\$PATH"
-exec node "$INSTALL_DIR/apps/s2a-toolkit/server/prototype-server.js"
+exec node "$INSTALL_DIR/apps/s2a-toolkit/server/figma-story-server.js"
 SCRIPT
 chmod +x "$HOME/.s2a/start-proto-server.sh"
 
@@ -409,7 +409,7 @@ ok "Background services registered — Storybook + prototype server start automa
 open -a Cursor "$INSTALL_DIR" 2>/dev/null || warn "Couldn't open Cursor automatically — open it from Applications or Spotlight"
 
 echo "  Storybook:        http://localhost:6006  (starting in background, ~30s)"
-echo "  Prototype server: http://localhost:9400  (starting in background)"
+echo "  Prototype server: http://localhost:4002  (starting in background)"
 echo ""
 echo "  Daily workflow (no launcher needed — services start automatically at login):"
 echo "    1. Open Figma Desktop and load your working file"

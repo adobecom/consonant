@@ -111,8 +111,11 @@ function notifySelection() {
     nodeId: first.id,
     nodeName: first.name,
     nodeType: first.type,
+    fileKey: figma.fileKey || null,
+    fileName: figma.root.name,
     width: 'width' in first ? Math.round((first as FrameNode).width) : undefined,
     height: 'height' in first ? Math.round((first as FrameNode).height) : undefined,
+    variantCount: first.type === 'COMPONENT_SET' ? (first as ComponentSetNode).children.length : undefined,
   });
 
   // Select tab — send variant axes when a COMPONENT_SET is selected
@@ -317,6 +320,202 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       } else {
         figma.ui.postMessage({ type: 'annotate:cleared', cleared: 0 });
       }
+      break;
+    }
+
+    case 'spec:generate': {
+      const setId      = msg.setId as string;
+      const categories = (msg.categories as string[]) ?? [];
+
+      if (categories.length === 0) {
+        figma.ui.postMessage({ type: 'spec:result', error: 'Select at least one category' });
+        break;
+      }
+
+      const specSetNode = await figma.getNodeByIdAsync(setId);
+      if (!specSetNode || specSetNode.type !== 'COMPONENT_SET') {
+        figma.ui.postMessage({ type: 'spec:result', error: 'Component set not found — select it and try again' });
+        break;
+      }
+      const specSet = specSetNode as ComponentSetNode;
+      const variants = specSet.children as ComponentNode[];
+
+      // Prefetch all fontStyle variable IDs across all variants
+      const specWeightIds = new Set<string>();
+      for (const v of variants) {
+        for (const n of [v as BaseNode, ...v.findAll(() => true)]) {
+          const fs = (n as any).boundVariables?.fontStyle;
+          if (fs?.[0]?.id) specWeightIds.add(fs[0].id);
+        }
+      }
+      const specWeightNames = new Map<string, string>();
+      await Promise.all([...specWeightIds].map(async id => {
+        try { const v = await figma.variables.getVariableByIdAsync(id); if (v) specWeightNames.set(id, v.name); } catch {}
+      }));
+
+      const CAT_LABELS: Record<string, string> = {
+        'color-fg': 'Color Fg', 'color-bg': 'Color Bg', 'spacing': 'Spacing',
+        'shape': 'Shape', 'typography': 'Typography', 'sizing': 'Sizing',
+      };
+
+      // Returns a fingerprint of the property values relevant to a given category.
+      // Variants with the same fingerprint are visually identical for that category —
+      // we show only one representative per unique fingerprint.
+      const getVariantFingerprint = (v: ComponentNode, cat: string): string => {
+        const all = [v as BaseNode, ...v.findAll(() => true)];
+        const roundColor = (c: any) => c ? `${Math.round((c.r ?? 0) * 255)},${Math.round((c.g ?? 0) * 255)},${Math.round((c.b ?? 0) * 255)}` : '';
+        switch (cat) {
+          case 'shape':
+            return all.map(n => {
+              const cr = (n as any).cornerRadius;
+              const sl = ((n as any).strokes ?? []).length;
+              return `${typeof cr === 'number' ? Math.round(cr) : '?'}:${sl}`;
+            }).join('|');
+          case 'spacing':
+            return all.filter(n => n.type === 'FRAME' || n.type === 'COMPONENT').map(n => {
+              const f = n as any;
+              return `${f.paddingTop ?? 0},${f.paddingBottom ?? 0},${f.paddingLeft ?? 0},${f.paddingRight ?? 0},${f.itemSpacing ?? 0}`;
+            }).join('|');
+          case 'color-fg':
+            return all.filter(n => n.type === 'TEXT').map(n =>
+              ((n as any).fills ?? []).map((f: any) => roundColor(f.color) + ':' + Math.round((f.opacity ?? 1) * 100)).join(';')
+            ).join('|');
+          case 'color-bg':
+            return all.filter(n => n.type !== 'TEXT').map(n =>
+              ((n as any).fills ?? []).map((f: any) => roundColor(f.color) + ':' + Math.round((f.opacity ?? 1) * 100)).join(';')
+            ).join('|');
+          case 'typography':
+            return all.filter(n => n.type === 'TEXT').map(n => {
+              const f = n as any;
+              const fn = typeof f.fontName === 'object' ? `${f.fontName?.family}/${f.fontName?.style}` : '';
+              return `${f.fontSize}:${fn}`;
+            }).join('|');
+          case 'sizing':
+            return `${Math.round((v as any).width)}:${Math.round((v as any).height)}`;
+          default:
+            return v.id;
+        }
+      };
+
+      // One section per category, stacked vertically to the right of the component set
+      const xBase = specSet.x + specSet.width + 100;
+      let yOffset = specSet.y;
+      const allSections: SectionNode[] = [];
+
+      for (const cat of categories) {
+        const section = figma.createSection();
+        section.name = specSet.name + ' — ' + (CAT_LABELS[cat] ?? cat) + ' Spec';
+        section.x = xBase;
+        section.y = yOffset;
+        figma.currentPage.appendChild(section);
+        try { (section as any).fills = []; } catch {}
+        allSections.push(section);
+
+        // Single continuous white frame holding all variants
+        const row = figma.createFrame();
+        row.name = 'variants';
+        row.layoutMode = 'HORIZONTAL';
+        row.primaryAxisSizingMode = 'AUTO';
+        row.counterAxisSizingMode = 'AUTO';
+        row.primaryAxisAlignItems = 'CENTER';
+        row.counterAxisAlignItems = 'CENTER';
+        row.paddingLeft = 24; row.paddingRight = 24;
+        row.paddingTop = 24;  row.paddingBottom = 24;
+        row.itemSpacing = 16;
+        row.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+
+        // Only include one representative per unique property value for this category
+        const seenFps = new Set<string>();
+        const catVariants: ComponentNode[] = [];
+        for (const v of variants) {
+          const fp = getVariantFingerprint(v, cat);
+          if (!seenFps.has(fp)) { seenFps.add(fp); catVariants.push(v); }
+        }
+
+        for (const variant of catVariants) {
+          const instance = variant.createInstance();
+          row.appendChild(instance);
+
+          // Component nodes are the source of truth for bound variables.
+          // Instance override nodes only expose explicit overrides — shape
+          // bindings (cornerRadius, strokes) live on the master component and
+          // won't appear on the instance tree unless overridden.
+          const compNodes: BaseNode[] = [variant as BaseNode, ...variant.findAll(() => true)];
+          const allNodes: BaseNode[] = [instance];
+          if ('findAll' in instance) allNodes.push(...(instance as any).findAll(() => true) as BaseNode[]);
+
+          for (let ni = 0; ni < allNodes.length; ni++) {
+            const n = allNodes[ni];
+            const instBv = (n as any).boundVariables ?? {};
+            const compBv = ni < compNodes.length ? ((compNodes[ni] as any).boundVariables ?? {}) : {};
+            // Component bindings as base; instance overrides on top
+            const bv: Record<string, any> = { ...compBv, ...instBv };
+            const anns: Array<{ labelMarkdown: string; properties: Array<{ type: string }> }> = [];
+
+            if (cat === 'color-fg' && n.type === 'TEXT' && (bv.fills?.length ?? 0) > 0)
+              anns.push({ labelMarkdown: 'Color', properties: [{ type: 'fills' }] });
+
+            if (cat === 'color-bg' && n.type !== 'TEXT' && (bv.fills?.length ?? 0) > 0)
+              anns.push({ labelMarkdown: 'Background', properties: [{ type: 'fills' }] });
+
+            if (cat === 'spacing') {
+              const sp: Array<{ type: string }> = [];
+              if (bv.paddingTop || bv.paddingBottom || bv.paddingLeft || bv.paddingRight) sp.push({ type: 'padding' });
+              if (bv.itemSpacing) sp.push({ type: 'itemSpacing' });
+              if (sp.length) anns.push({ labelMarkdown: 'Spacing', properties: sp });
+            }
+
+            if (cat === 'shape') {
+              const sh: Array<{ type: string }> = [];
+              const compN = ni < compNodes.length ? compNodes[ni] : null;
+              // Bound variable check (any corner key) OR raw non-zero value on the component node
+              const hasCornerVar = bv.cornerRadius || bv.topLeftRadius || bv.topRightRadius || bv.bottomLeftRadius || bv.bottomRightRadius;
+              const rawCorner = compN ? (compN as any).cornerRadius : undefined;
+              const hasCornerRaw = typeof rawCorner === 'number' && rawCorner > 0;
+              const nodeAcceptsCorner = n.type === 'FRAME' || n.type === 'RECTANGLE' || n.type === 'INSTANCE' || n.type === 'COMPONENT' || n.type === 'ELLIPSE';
+              if ((hasCornerVar || hasCornerRaw) && nodeAcceptsCorner) sh.push({ type: 'cornerRadius' });
+              // Bound variable check OR actual strokes on the component node
+              const hasStrokesVar = (bv.strokes?.length ?? 0) > 0;
+              const compStrokes = compN ? (compN as any).strokes : null;
+              const hasStrokesRaw = Array.isArray(compStrokes) && compStrokes.length > 0;
+              if (hasStrokesVar || hasStrokesRaw) sh.push({ type: 'strokes' });
+              if (sh.length) anns.push({ labelMarkdown: 'Shape', properties: sh });
+            }
+
+            if (cat === 'typography' && n.type === 'TEXT') {
+              const tp: Array<{ type: string }> = [];
+              if ((bv.fontFamily?.length    ?? 0) > 0) tp.push({ type: 'fontFamily' });
+              if ((bv.fontSize?.length      ?? 0) > 0) tp.push({ type: 'fontSize' });
+              if ((bv.lineHeight?.length    ?? 0) > 0) tp.push({ type: 'lineHeight' });
+              if ((bv.letterSpacing?.length ?? 0) > 0) tp.push({ type: 'letterSpacing' });
+              if (tp.length) anns.push({ labelMarkdown: 'Typography', properties: tp });
+              if ((bv.fontStyle?.length ?? 0) > 0) {
+                const label = specWeightNames.get(bv.fontStyle[0].id) ?? 'font-weight';
+                anns.push({ labelMarkdown: label, properties: [{ type: 'fontWeight' }] });
+              }
+            }
+
+            if (cat === 'sizing' && n === instance)
+              anns.push({ labelMarkdown: (instance as SceneNode).name.replace(/^\./, ''), properties: [{ type: 'width' }, { type: 'height' }] });
+
+            if (anns.length > 0) {
+              try { (n as any).annotations = anns; } catch {}
+            }
+          }
+        }
+
+        section.appendChild(row);
+        row.x = 24;
+        row.y = 40;
+        section.resizeWithoutConstraints(row.width + 48, row.height + 72);
+        yOffset += section.height + 40;
+      }
+
+      if (allSections.length > 0) {
+        figma.currentPage.selection = allSections;
+        figma.viewport.scrollAndZoomIntoView(allSections);
+      }
+      figma.ui.postMessage({ type: 'spec:result', categoryCount: categories.length, variantCount: variants.length });
       break;
     }
 
