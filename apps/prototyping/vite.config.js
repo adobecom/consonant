@@ -32,10 +32,10 @@ const normalizeCss = readFileSync(
   resolve(__dirname, "./_shared/normalize.css"),
   "utf-8"
 );
-const tokensCss = readFileSync(
-  resolve(__dirname, "../../dist/packages/tokens/css/min/tokens.min.css"),
-  "utf-8"
-);
+const tokensPath = resolve(__dirname, "../../dist/packages/tokens/css/min/tokens.min.css");
+const tokensCss = existsSync(tokensPath)
+  ? readFileSync(tokensPath, "utf-8")
+  : "/* tokens not built — run: npm run tokens:build from the repo root */";
 const gridCss = readFileSync(
   resolve(__dirname, "../../packages/grid/src/s2a-layout-grids.css"),
   "utf-8"
