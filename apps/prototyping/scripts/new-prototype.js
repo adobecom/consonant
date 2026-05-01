@@ -21,7 +21,7 @@ import readline from "readline";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const TEMPLATE_DIR = resolve(ROOT, "_template");
-const EXCLUDE = new Set(["_shared", "_template", "scripts", "node_modules"]);
+const EXCLUDE = new Set(["_shared", "_template", "scripts", "node_modules", "dist", "packages"]);
 
 function parseArgs() {
   return Object.fromEntries(

@@ -3,6 +3,9 @@ import "@phosphor-icons/web/bold";
 
 import { withFigmaOverlay, figmaOverlayGlobals } from "./figma-overlay.js";
 
+// Normalize — must come first, before tokens
+import "../apps/prototyping/_shared/normalize.css";
+
 // Import design tokens CSS files in the correct order
 // 1. Primitives (non-color)
 import "../dist/packages/tokens/css/dev/tokens.primitives.css";
@@ -18,6 +21,9 @@ import "../dist/packages/tokens/css/dev/tokens.responsive.md.css";
 import "../dist/packages/tokens/css/dev/tokens.responsive.lg.css";
 import "../dist/packages/tokens/css/dev/tokens.responsive.xl.css";
 // Component color tokens are emitted through the semantic light/dark theme files.
+
+// Base reset — after tokens so token references in base.css resolve correctly
+import "../apps/prototyping/_shared/base.css";
 
 // Font Loading
 // Adobe Clean is an Adobe-internal typeface (not for external distribution), so we mirror Milo

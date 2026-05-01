@@ -1,21 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prototype — router-marquee</title>
-  <link rel="stylesheet" href="../../_shared/tokens.css">
-  <link rel="stylesheet" href="../../_shared/base.css">
+  <title>Router Marquee</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Your prototype goes here -->
-  <main class="proto-root">
-    <h1>router-marquee</h1>
-    <p>Start building your prototype here.</p>
-  </main>
+  <section class="hero">
+    <img
+      class="hero-bg"
+      src="assets/hero-bg.jpg"
+      alt=""
+      width="1920"
+      height="960"
+      loading="eager"
+      fetchpriority="high"
+    >
+    <div class="hero-content">
 
-  <script type="module" src="script.js"></script>
+      <div class="hero-upper">
+        <p class="hero-eyebrow" id="hero-eyebrow">Acrobat</p>
+        <h1 class="hero-headline" id="hero-headline">Get work done. Faster.</h1>
+        <p class="hero-body" id="hero-body">Create, edit, share, and sign documents with trusted PDF tools. Use AI to make easy edits, get answers, generate summaries, and create polished content.</p>
+        <div class="hero-ctas">
+          <div id="cta-primary"></div>
+          <div id="cta-secondary"></div>
+        </div>
+      </div>
+
+      <div class="hero-nav">
+        <div class="nav-cards" id="nav-cards">
+
+          <div class="nav-card" data-index="0" role="button" tabindex="0" aria-pressed="false">
+            <div class="nav-card__indicator"><div class="nav-card__indicator-fill"></div></div>
+            <div class="nav-card__icon" data-app="creative-cloud"></div>
+            <div class="nav-card__cta">
+              <span class="nav-card__label">Creativity and design</span>
+              <img class="nav-card__chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+
+          <div class="nav-card" data-index="1" role="button" tabindex="0" aria-pressed="false">
+            <div class="nav-card__indicator"><div class="nav-card__indicator-fill"></div></div>
+            <div class="nav-card__icon" data-app="firefly"></div>
+            <div class="nav-card__cta">
+              <span class="nav-card__label">Content creation</span>
+              <img class="nav-card__chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+
+          <div class="nav-card active" data-index="2" role="button" tabindex="0" aria-pressed="true">
+            <div class="nav-card__indicator"><div class="nav-card__indicator-fill"></div></div>
+            <div class="nav-card__icon" data-app="acrobat-pdf"></div>
+            <div class="nav-card__cta">
+              <span class="nav-card__label">PDF and productivity</span>
+              <img class="nav-card__chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+
+          <div class="nav-card" data-index="3" role="button" tabindex="0" aria-pressed="false">
+            <div class="nav-card__indicator"><div class="nav-card__indicator-fill"></div></div>
+            <div class="nav-card__icon" data-app="experience-cloud"></div>
+            <div class="nav-card__cta">
+              <span class="nav-card__label">Adobe for Business</span>
+              <img class="nav-card__chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+
+          <div class="nav-card" data-index="4" role="button" tabindex="0" aria-pressed="false">
+            <div class="nav-card__indicator"><div class="nav-card__indicator-fill"></div></div>
+            <div class="nav-card__icon" data-app="creative-cloud"></div>
+            <div class="nav-card__cta">
+              <span class="nav-card__label">Students and teachers</span>
+              <img class="nav-card__chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+
+        </div>
+
+        <button class="nav-play-pause" id="play-pause" aria-label="Pause auto-advance" type="button">
+          <svg id="play-pause-icon" class="nav-play-pause__icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor">
+            <!-- pause state (default) -->
+            <rect x="3" y="2" width="4" height="12" rx="1"/>
+            <rect x="9" y="2" width="4" height="12" rx="1"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
 </body>
+<script type="module" src="script.js"></script>
 </html>
