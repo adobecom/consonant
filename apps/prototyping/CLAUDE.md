@@ -19,14 +19,14 @@ Prototypes live at `apps/prototyping/{your-name}/{feature-name}/`. Each feature 
 cd apps/prototyping
 npm run new
 ```
-It will ask for your name and a feature name, then create the folder with tokens pre-wired.
+It will ask for your name and a feature name, create the folder with tokens pre-wired, and automatically create and check out a branch named `proto/{name}/{feature}`.
 
-**Start the dev server** (from inside any prototype folder):
+**Start the dev server** (from `apps/prototyping/` — not the feature folder):
 ```bash
-cd apps/prototyping/{your-name}/{feature-name}
-npx vite
+cd apps/prototyping
+npm run dev
 ```
-Opens at `http://localhost:5173`. Edits live-reload automatically.
+Opens at `http://localhost:5173`. Navigate to `http://localhost:5173/{your-name}/{feature}/`. Edits live-reload automatically.
 
 ---
 

@@ -29,7 +29,7 @@ render(AppIcon({ app: 'acrobat-pdf', size: 'sm' }), el);
 
 **CDN:** `https://www.adobe.com/federal/assets/icons/svgs/{iconName}.svg`
 
-This is the same CDN Milo uses in production. Common icon names: `chevron-right`, `chevron-down`, `arrow-right`, `play`, `pause`.
+This is the same CDN Milo uses in production. Confirmed available: `chevron-right`, `chevron-down`, `arrow-right`, `play`. **`pause` does NOT exist on this CDN — it returns 404.**
 
 **Use:** Drop an `<img>` tag pointing at the CDN URL. Use CSS `filter` to control color — the SVGs ship as black on transparent.
 
@@ -55,6 +55,23 @@ This is the same CDN Milo uses in production. Common icon names: `chevron-right`
 ```
 
 **Do not** build chevrons or arrows out of CSS borders/transforms. Always use the Federal CDN SVG.
+
+**When an icon isn't on the CDN** (e.g. `pause`): use an inline `<svg>` element and toggle its `innerHTML` from JS. Never use `<img src="...">` for icons that may 404.
+
+```html
+<svg id="play-pause-icon" viewBox="0 0 16 16" fill="currentColor" width="16" height="16" aria-hidden="true">
+  <rect x="3" y="2" width="4" height="12" rx="1"/>
+  <rect x="9" y="2" width="4" height="12" rx="1"/>
+</svg>
+```
+
+```js
+const ICON_PAUSE = `<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>`;
+const ICON_PLAY  = `<polygon points="3,1 15,8 3,15"/>`;
+
+// Toggle:
+icon.innerHTML = isPaused ? ICON_PLAY : ICON_PAUSE;
+```
 
 ---
 
