@@ -1,0 +1,11 @@
+/*
+ * S2A Design Tokens
+ *
+ * Tokens are injected automatically by the Vite plugin in vite.config.js —
+ * this file does not need to be linked in prototype HTML.
+ *
+ * The plugin reads dist/packages/tokens/css/min/tokens.min.css at server
+ * startup and inlines it into every page's <head> via transformIndexHtml.
+ *
+ * To rebuild tokens: npm run build:tokens (from repo root)
+ */
