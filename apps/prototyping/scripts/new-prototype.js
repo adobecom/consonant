@@ -17,6 +17,7 @@ import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, statSy
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import readline from "readline";
+import { execSync } from "child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -140,6 +141,23 @@ async function main() {
     writeFileSync(dest, content, "utf8");
   }
 
+  // Create and check out a branch for this prototype
+  const branch = `proto/${name}/${feature}`;
+  const repoRoot = resolve(ROOT, "../..");
+  let branchStatus = "";
+  try {
+    execSync(`git checkout -b ${branch}`, { cwd: repoRoot, stdio: "pipe" });
+    branchStatus = `✓ Branch created: ${branch}`;
+  } catch {
+    // Branch already exists — check it out
+    try {
+      execSync(`git checkout ${branch}`, { cwd: repoRoot, stdio: "pipe" });
+      branchStatus = `✓ Switched to existing branch: ${branch}`;
+    } catch {
+      branchStatus = `⚠  Could not create branch ${branch} — continuing on current branch.`;
+    }
+  }
+
   console.log(`
 ✓ Prototype scaffolded:
 
@@ -147,6 +165,8 @@ async function main() {
     index.html  ← your canvas
     styles.css  ← S2A tokens already available
     script.js   ← optional JS / component imports
+
+${branchStatus}
 
 To start the dev server (from apps/prototyping/):
   npm run dev

@@ -14,6 +14,10 @@
     "design-systems": {
       "type": "http",
       "url": "https://design-systems-mcp.southleft.com/mcp"
+    },
+    "corp-jira": {
+      "command": "node",
+      "args": ["/Users/mhuntsberry/adobe-mcp-servers/src/corp-jira/dist/index.js"]
     }
   }
 }

@@ -9,6 +9,11 @@
   padding: 0;
 }
 
+h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dd, blockquote, figure, pre, fieldset {
+  margin: 0;
+  padding: 0;
+}
+
 html {
   font-family: var(--s2a-font-family-adobe-clean, "Adobe Clean", sans-serif);
   font-size: 1rem;
