@@ -38,11 +38,36 @@ jobs:
         env:
           STORYBOOK_BASE_PATH: /consonant/pr-preview/pr-${{ github.event.pull_request.number }}/
 
+      - name: Install prototyping dependencies
+        if: github.event.action != 'closed'
+        run: cd apps/prototyping && npm ci
+
+      - name: Build prototypes
+        if: github.event.action != 'closed'
+        run: cd apps/prototyping && npm run build
+
       - name: Copy prototypes into build
         if: github.event.action != 'closed'
-        run: cp -r apps/prototyping storybook-static/prototyping
+        run: cp -r apps/prototyping/dist storybook-static/prototyping
 
       - name: Deploy PR preview
         uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: storybook-static
+
+      - name: Compute prototype preview URL
+        if: github.event.action != 'closed' && startsWith(github.head_ref, 'proto/')
+        id: proto-url
+        run: |
+          SLUG="${{ github.head_ref }}"
+          SLUG="${SLUG#proto/}"
+          echo "url=https://adobecom.github.io/consonant/pr-preview/pr-${{ github.event.pull_request.number }}/prototyping/${SLUG}/" >> $GITHUB_OUTPUT
+
+      - name: Post prototype preview link
+        if: github.event.action != 'closed' && startsWith(github.head_ref, 'proto/')
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: prototype-preview
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          message: |
+            🎨 **Prototype preview:** ${{ steps.proto-url.outputs.url }}

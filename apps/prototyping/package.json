@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "new": "node scripts/new-prototype.js",
+    "build": "vite build",
     "dev": "vite --open",
     "screenshot": "node _shared/screenshot.js"
   },
