@@ -1072,22 +1072,6 @@
             }
           }
         },
-        "neg-1_2": {
-          "$type": "number",
-          "$value": -1.2000000476837158,
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": true,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {
-                "WEB": "var(--s2a-font-letter-spacing-neg-1_2)"
-              }
-            }
-          }
-        },
         "neg-1": {
           "$type": "number",
           "$value": -1,
@@ -1152,66 +1136,6 @@
           "$type": "number",
           "$value": -0.1599999964237213,
           "$description": "Letter spacing primitive: -0.16px",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        },
-        "0_16": {
-          "$type": "number",
-          "$value": 0.1599999964237213,
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": true,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {
-                "WEB": "var(--s2a-font-letter-spacing-0_16)"
-              }
-            }
-          }
-        },
-        "0_24": {
-          "$type": "number",
-          "$value": 0.23999999463558197,
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": true,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {
-                "WEB": "var(--s2a-font-letter-spacing-0_24)"
-              }
-            }
-          }
-        },
-        "0_12": {
-          "$type": "number",
-          "$value": 0.11999999731779099,
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        },
-        "0_14": {
-          "$type": "number",
-          "$value": 0.14000000059604645,
-          "$description": "",
           "$extensions": {
             "com.figma": {
               "hiddenFromPublishing": false,

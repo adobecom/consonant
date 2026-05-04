@@ -1,23 +1,9 @@
 {
   "fileId": "eGSyBcD5XdFXR8rJXJmVNY",
-  "branchKey": null,
+  "branchKey": "nlp8sNw7niZ7GmhgBTDHYV",
   "apiBase": "https://api.figma.com",
-  "generatedAt": "2026-04-27T18:59:54.801Z",
+  "generatedAt": "2026-05-04T16:57:45.674Z",
   "files": [
-    {
-      "fileName": "primitives-core-variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:433e182a0b86bf16dd1ed62dacdbd3d3d2025110/82:74",
-        "name": "Primitives (Core)",
-        "slug": "primitives-core",
-        "idSlug": "variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74"
-      },
-      "mode": {
-        "id": "1:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
     {
       "fileName": "semantic-color-theme-variablecollectionid-6579f39324020088fbf713bf2d5f721f66137e6a-18943-3973.light.json",
       "collection": {
@@ -44,6 +30,62 @@
         "id": "17135:3",
         "name": "Dark",
         "slug": "dark"
+      }
+    },
+    {
+      "fileName": "s2a-primitives-color-theme-variablecollectionid-1-138.light.json",
+      "collection": {
+        "id": "VariableCollectionId:1:138",
+        "name": "S2A / Primitives / Color / Theme",
+        "slug": "s2a-primitives-color-theme",
+        "idSlug": "variablecollectionid-1-138"
+      },
+      "mode": {
+        "id": "1:6",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "primitives-color-theme-variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841.light.json",
+      "collection": {
+        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/18953:841",
+        "name": "Primitives / Color / Theme",
+        "slug": "primitives-color-theme",
+        "idSlug": "variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841"
+      },
+      "mode": {
+        "id": "17135:0",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "s2a-semantic-dimension-static-variablecollectionid-1-251.value.json",
+      "collection": {
+        "id": "VariableCollectionId:1:251",
+        "name": "S2A / Semantic / Dimension / Static",
+        "slug": "s2a-semantic-dimension-static",
+        "idSlug": "variablecollectionid-1-251"
+      },
+      "mode": {
+        "id": "1:7",
+        "name": "Value",
+        "slug": "value"
+      }
+    },
+    {
+      "fileName": "semantic-dimension-static-variablecollectionid-27a4206887fe2c99a83dde8d9268493c141504fc-18943-3743.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:27a4206887fe2c99a83dde8d9268493c141504fc/18943:3743",
+        "name": "Semantic / Dimension / Static",
+        "slug": "semantic-dimension-static",
+        "idSlug": "variablecollectionid-27a4206887fe2c99a83dde8d9268493c141504fc-18943-3743"
+      },
+      "mode": {
+        "id": "17135:1",
+        "name": "Mode 1",
+        "slug": "mode-1"
       }
     },
     {
@@ -75,20 +117,6 @@
       }
     },
     {
-      "fileName": "primitives-dimension-static-variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
-        "name": "Primitives / Dimension / Static",
-        "slug": "primitives-dimension-static",
-        "idSlug": "variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239"
-      },
-      "mode": {
-        "id": "16797:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
       "fileName": "s2a-primitives-dimension-static-variablecollectionid-1-44.mode-1.json",
       "collection": {
         "id": "VariableCollectionId:1:44",
@@ -103,59 +131,17 @@
       }
     },
     {
-      "fileName": "s2a-semantic-dimension-static-variablecollectionid-1-251.value.json",
+      "fileName": "primitives-dimension-static-variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239.mode-1.json",
       "collection": {
-        "id": "VariableCollectionId:1:251",
-        "name": "S2A / Semantic / Dimension / Static",
-        "slug": "s2a-semantic-dimension-static",
-        "idSlug": "variablecollectionid-1-251"
+        "id": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
+        "name": "Primitives / Dimension / Static",
+        "slug": "primitives-dimension-static",
+        "idSlug": "variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239"
       },
       "mode": {
-        "id": "1:7",
-        "name": "Value",
-        "slug": "value"
-      }
-    },
-    {
-      "fileName": "s-typography-variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:dbeda2c7fb4dab171973418e8101f01785b5e6e2/27101:21627",
-        "name": "•S Typography",
-        "slug": "s-typography",
-        "idSlug": "variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627"
-      },
-      "mode": {
-        "id": "19458:0",
+        "id": "16797:0",
         "name": "Mode 1",
         "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "s2a-min-max-variablecollectionid-3364-2800.min.json",
-      "collection": {
-        "id": "VariableCollectionId:3364:2800",
-        "name": "S2A / Min-Max",
-        "slug": "s2a-min-max",
-        "idSlug": "variablecollectionid-3364-2800"
-      },
-      "mode": {
-        "id": "3364:0",
-        "name": "Min",
-        "slug": "min"
-      }
-    },
-    {
-      "fileName": "s2a-min-max-variablecollectionid-3364-2800.max.json",
-      "collection": {
-        "id": "VariableCollectionId:3364:2800",
-        "name": "S2A / Min-Max",
-        "slug": "s2a-min-max",
-        "idSlug": "variablecollectionid-3364-2800"
-      },
-      "mode": {
-        "id": "3364:1",
-        "name": "Max",
-        "slug": "max"
       }
     },
     {
@@ -229,29 +215,15 @@
       }
     },
     {
-      "fileName": "s-typography-variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627.mode-1.json",
+      "fileName": "primitives-core-variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74.mode-1.json",
       "collection": {
-        "id": "VariableCollectionId:df621fb21582d7e499c45bf908fe7ea44b7c9c01/27101:21627",
-        "name": "•S Typography",
-        "slug": "s-typography",
-        "idSlug": "variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627"
+        "id": "VariableCollectionId:433e182a0b86bf16dd1ed62dacdbd3d3d2025110/82:74",
+        "name": "Primitives (Core)",
+        "slug": "primitives-core",
+        "idSlug": "variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74"
       },
       "mode": {
-        "id": "19458:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "semantic-dimension-static-variablecollectionid-27a4206887fe2c99a83dde8d9268493c141504fc-18943-3743.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:27a4206887fe2c99a83dde8d9268493c141504fc/18943:3743",
-        "name": "Semantic / Dimension / Static",
-        "slug": "semantic-dimension-static",
-        "idSlug": "variablecollectionid-27a4206887fe2c99a83dde8d9268493c141504fc-18943-3743"
-      },
-      "mode": {
-        "id": "17135:1",
+        "id": "1:0",
         "name": "Mode 1",
         "slug": "mode-1"
       }
@@ -271,48 +243,6 @@
       }
     },
     {
-      "fileName": "primitives-color-theme-variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841.light.json",
-      "collection": {
-        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/18953:841",
-        "name": "Primitives / Color / Theme",
-        "slug": "primitives-color-theme",
-        "idSlug": "variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841"
-      },
-      "mode": {
-        "id": "17135:0",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-color-theme-variablecollectionid-3659e0dcd09c2dca905bb94def94c5029e4d83ac-2073-2735.light.json",
-      "collection": {
-        "id": "VariableCollectionId:3659e0dcd09c2dca905bb94def94c5029e4d83ac/2073:2735",
-        "name": "S2A / Semantic / Color / Theme",
-        "slug": "s2a-semantic-color-theme",
-        "idSlug": "variablecollectionid-3659e0dcd09c2dca905bb94def94c5029e4d83ac-2073-2735"
-      },
-      "mode": {
-        "id": "6:0",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-color-theme-variablecollectionid-3659e0dcd09c2dca905bb94def94c5029e4d83ac-2073-2735.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:3659e0dcd09c2dca905bb94def94c5029e4d83ac/2073:2735",
-        "name": "S2A / Semantic / Color / Theme",
-        "slug": "s2a-semantic-color-theme",
-        "idSlug": "variablecollectionid-3659e0dcd09c2dca905bb94def94c5029e4d83ac-2073-2735"
-      },
-      "mode": {
-        "id": "6:1",
-        "name": "Dark",
-        "slug": "dark"
-      }
-    },
-    {
       "fileName": "s2a-semantic-dimension-static-variablecollectionid-530eb9fc4e9077abe9390613e61263db0c186e91-4458-183.token.json",
       "collection": {
         "id": "VariableCollectionId:530eb9fc4e9077abe9390613e61263db0c186e91/4458:183",
@@ -327,17 +257,115 @@
       }
     },
     {
-      "fileName": "s2a-primitives-color-theme-variablecollectionid-23dfb9688d347020258cb5a8b587fd4c5c7287bc-2073-2569.light.json",
+      "fileName": "s2a-responsive-grid-typography-variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97.xl.json",
       "collection": {
-        "id": "VariableCollectionId:23dfb9688d347020258cb5a8b587fd4c5c7287bc/2073:2569",
-        "name": "S2A / Primitives / Color / Theme",
-        "slug": "s2a-primitives-color-theme",
-        "idSlug": "variablecollectionid-23dfb9688d347020258cb5a8b587fd4c5c7287bc-2073-2569"
+        "id": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/2565:97",
+        "name": "S2A / Responsive / Grid / Typography",
+        "slug": "s2a-responsive-grid-typography",
+        "idSlug": "variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97"
       },
       "mode": {
-        "id": "1:6",
-        "name": "Light",
-        "slug": "light"
+        "id": "6:5",
+        "name": "xl",
+        "slug": "xl"
+      }
+    },
+    {
+      "fileName": "s2a-responsive-grid-typography-variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97.lg.json",
+      "collection": {
+        "id": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/2565:97",
+        "name": "S2A / Responsive / Grid / Typography",
+        "slug": "s2a-responsive-grid-typography",
+        "idSlug": "variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97"
+      },
+      "mode": {
+        "id": "102:0",
+        "name": "lg",
+        "slug": "lg"
+      }
+    },
+    {
+      "fileName": "s2a-responsive-grid-typography-variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97.md.json",
+      "collection": {
+        "id": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/2565:97",
+        "name": "S2A / Responsive / Grid / Typography",
+        "slug": "s2a-responsive-grid-typography",
+        "idSlug": "variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97"
+      },
+      "mode": {
+        "id": "102:1",
+        "name": "md",
+        "slug": "md"
+      }
+    },
+    {
+      "fileName": "s2a-responsive-grid-typography-variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97.sm.json",
+      "collection": {
+        "id": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/2565:97",
+        "name": "S2A / Responsive / Grid / Typography",
+        "slug": "s2a-responsive-grid-typography",
+        "idSlug": "variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97"
+      },
+      "mode": {
+        "id": "2297:1",
+        "name": "sm",
+        "slug": "sm"
+      }
+    },
+    {
+      "fileName": "s2a-min-max-variablecollectionid-3364-2800.min.json",
+      "collection": {
+        "id": "VariableCollectionId:3364:2800",
+        "name": "S2A / Min-Max",
+        "slug": "s2a-min-max",
+        "idSlug": "variablecollectionid-3364-2800"
+      },
+      "mode": {
+        "id": "3364:0",
+        "name": "Min",
+        "slug": "min"
+      }
+    },
+    {
+      "fileName": "s2a-min-max-variablecollectionid-3364-2800.max.json",
+      "collection": {
+        "id": "VariableCollectionId:3364:2800",
+        "name": "S2A / Min-Max",
+        "slug": "s2a-min-max",
+        "idSlug": "variablecollectionid-3364-2800"
+      },
+      "mode": {
+        "id": "3364:1",
+        "name": "Max",
+        "slug": "max"
+      }
+    },
+    {
+      "fileName": "s-typography-variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:df621fb21582d7e499c45bf908fe7ea44b7c9c01/27101:21627",
+        "name": "•S Typography",
+        "slug": "s-typography",
+        "idSlug": "variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627"
+      },
+      "mode": {
+        "id": "19458:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "s-typography-variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:dbeda2c7fb4dab171973418e8101f01785b5e6e2/27101:21627",
+        "name": "•S Typography",
+        "slug": "s-typography",
+        "idSlug": "variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627"
+      },
+      "mode": {
+        "id": "19458:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
       }
     },
     {
@@ -439,12 +467,12 @@
       }
     },
     {
-      "fileName": "s2a-primitives-color-theme-variablecollectionid-1-138.light.json",
+      "fileName": "s2a-primitives-color-theme-variablecollectionid-23dfb9688d347020258cb5a8b587fd4c5c7287bc-2073-2569.light.json",
       "collection": {
-        "id": "VariableCollectionId:1:138",
+        "id": "VariableCollectionId:23dfb9688d347020258cb5a8b587fd4c5c7287bc/2073:2569",
         "name": "S2A / Primitives / Color / Theme",
         "slug": "s2a-primitives-color-theme",
-        "idSlug": "variablecollectionid-1-138"
+        "idSlug": "variablecollectionid-23dfb9688d347020258cb5a8b587fd4c5c7287bc-2073-2569"
       },
       "mode": {
         "id": "1:6",
@@ -453,59 +481,31 @@
       }
     },
     {
-      "fileName": "s2a-responsive-grid-typography-variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97.xl.json",
+      "fileName": "s2a-semantic-color-theme-variablecollectionid-3659e0dcd09c2dca905bb94def94c5029e4d83ac-2073-2735.light.json",
       "collection": {
-        "id": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/2565:97",
-        "name": "S2A / Responsive / Grid / Typography",
-        "slug": "s2a-responsive-grid-typography",
-        "idSlug": "variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97"
+        "id": "VariableCollectionId:3659e0dcd09c2dca905bb94def94c5029e4d83ac/2073:2735",
+        "name": "S2A / Semantic / Color / Theme",
+        "slug": "s2a-semantic-color-theme",
+        "idSlug": "variablecollectionid-3659e0dcd09c2dca905bb94def94c5029e4d83ac-2073-2735"
       },
       "mode": {
-        "id": "6:5",
-        "name": "xl",
-        "slug": "xl"
+        "id": "6:0",
+        "name": "Light",
+        "slug": "light"
       }
     },
     {
-      "fileName": "s2a-responsive-grid-typography-variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97.lg.json",
+      "fileName": "s2a-semantic-color-theme-variablecollectionid-3659e0dcd09c2dca905bb94def94c5029e4d83ac-2073-2735.dark.json",
       "collection": {
-        "id": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/2565:97",
-        "name": "S2A / Responsive / Grid / Typography",
-        "slug": "s2a-responsive-grid-typography",
-        "idSlug": "variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97"
+        "id": "VariableCollectionId:3659e0dcd09c2dca905bb94def94c5029e4d83ac/2073:2735",
+        "name": "S2A / Semantic / Color / Theme",
+        "slug": "s2a-semantic-color-theme",
+        "idSlug": "variablecollectionid-3659e0dcd09c2dca905bb94def94c5029e4d83ac-2073-2735"
       },
       "mode": {
-        "id": "102:0",
-        "name": "lg",
-        "slug": "lg"
-      }
-    },
-    {
-      "fileName": "s2a-responsive-grid-typography-variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97.md.json",
-      "collection": {
-        "id": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/2565:97",
-        "name": "S2A / Responsive / Grid / Typography",
-        "slug": "s2a-responsive-grid-typography",
-        "idSlug": "variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97"
-      },
-      "mode": {
-        "id": "102:1",
-        "name": "md",
-        "slug": "md"
-      }
-    },
-    {
-      "fileName": "s2a-responsive-grid-typography-variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97.sm.json",
-      "collection": {
-        "id": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/2565:97",
-        "name": "S2A / Responsive / Grid / Typography",
-        "slug": "s2a-responsive-grid-typography",
-        "idSlug": "variablecollectionid-ce424e312b8d55fff344955c7626321200e2bd3f-2565-97"
-      },
-      "mode": {
-        "id": "2297:1",
-        "name": "sm",
-        "slug": "sm"
+        "id": "6:1",
+        "name": "Dark",
+        "slug": "dark"
       }
     }
   ]

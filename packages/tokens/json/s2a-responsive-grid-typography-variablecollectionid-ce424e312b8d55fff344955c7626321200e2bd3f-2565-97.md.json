@@ -209,6 +209,22 @@
           }
         }
       },
+      "_static": {
+        "$type": "number",
+        "$value": 768,
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "WIDTH_HEIGHT"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-grid-container-max-width)"
+            }
+          }
+        }
+      },
       "vertical-padding": {
         "xl": {
           "$type": "number",
@@ -319,22 +335,6 @@
                 "GAP"
               ],
               "codeSyntax": {}
-            }
-          }
-        }
-      },
-      "_static": {
-        "$type": "number",
-        "$value": 768,
-        "$description": "DESIGN ONLY",
-        "$extensions": {
-          "com.figma": {
-            "hiddenFromPublishing": false,
-            "scopes": [
-              "WIDTH_HEIGHT"
-            ],
-            "codeSyntax": {
-              "WEB": "var(--s2a-grid-container-max-width)"
             }
           }
         }
@@ -824,7 +824,7 @@
         },
         "title-3": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.5xl}",
+          "$value": "{s2a.font.letter-spacing.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -840,7 +840,7 @@
         },
         "title-4": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.5xl}",
+          "$value": "{s2a.font.letter-spacing.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -854,7 +854,7 @@
         },
         "title-5": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.5xl}",
+          "$value": "{s2a.font.letter-spacing.4xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -884,7 +884,7 @@
         },
         "body-lg": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.7xl}",
+          "$value": "{s2a.font.letter-spacing.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -900,7 +900,7 @@
         },
         "body-md": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.10xl}",
+          "$value": "{s2a.font.letter-spacing.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -916,7 +916,7 @@
         },
         "body-sm": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.9xl}",
+          "$value": "{s2a.font.letter-spacing.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -932,7 +932,7 @@
         },
         "body-xs": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.7xl}",
+          "$value": "{s2a.font.letter-spacing.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -948,7 +948,7 @@
         },
         "eyebrow": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.10xl}",
+          "$value": "{s2a.font.letter-spacing.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -964,7 +964,7 @@
         },
         "label": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.7xl}",
+          "$value": "{s2a.font.letter-spacing.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -980,7 +980,7 @@
         },
         "caption": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.11xl}",
+          "$value": "{s2a.font.letter-spacing.6xl}",
           "$description": "",
           "$extensions": {
             "com.figma": {
