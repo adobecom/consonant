@@ -19,14 +19,14 @@ Prototypes live at `apps/prototyping/{your-name}/{feature-name}/`. Each feature 
 cd apps/prototyping
 npm run new
 ```
-It will ask for your name and a feature name, then create the folder with tokens pre-wired.
+It will ask for your name and a feature name, create the folder with tokens pre-wired, and automatically create and check out a branch named `proto/{name}/{feature}`.
 
-**Start the dev server** (from inside any prototype folder):
+**Start the dev server** (from `apps/prototyping/` — not the feature folder):
 ```bash
-cd apps/prototyping/{your-name}/{feature-name}
-npx vite
+cd apps/prototyping
+npm run dev
 ```
-Opens at `http://localhost:5173`. Edits live-reload automatically.
+Opens at `http://localhost:5173`. Navigate to `http://localhost:5173/{your-name}/{feature}/`. Edits live-reload automatically.
 
 ---
 
@@ -67,14 +67,14 @@ padding: 24px;
 
 ## Responsive typography
 
-Typography tokens change at breakpoints. Import the responsive CSS files if you need accurate sizing:
+All `--s2a-*` tokens are injected automatically by the Vite dev server — no `<link>` needed in your HTML. The `vite.config.js` plugin reads `dist/packages/tokens/css/min/tokens.min.css` at startup and inlines it into every page's `<head>`.
+
+Typography tokens change at breakpoints. Responsive overrides are not yet auto-injected — if you need accurate type sizing at MD/LG/XL, add these manually:
 
 ```html
-<link rel="stylesheet" href="../../_shared/tokens.css">
-<!-- optionally add responsive overrides: -->
-<link rel="stylesheet" media="(min-width: 768px)"  href="../../../../dist/packages/tokens/css/dev/tokens.responsive.md.css">
-<link rel="stylesheet" media="(min-width: 1024px)" href="../../../../dist/packages/tokens/css/dev/tokens.responsive.lg.css">
-<link rel="stylesheet" media="(min-width: 1200px)" href="../../../../dist/packages/tokens/css/dev/tokens.responsive.xl.css">
+<link rel="stylesheet" media="(min-width: 768px)"  href="../../dist/packages/tokens/css/dev/tokens.responsive.md.css">
+<link rel="stylesheet" media="(min-width: 1024px)" href="../../dist/packages/tokens/css/dev/tokens.responsive.lg.css">
+<link rel="stylesheet" media="(min-width: 1200px)" href="../../dist/packages/tokens/css/dev/tokens.responsive.xl.css">
 ```
 
 ---

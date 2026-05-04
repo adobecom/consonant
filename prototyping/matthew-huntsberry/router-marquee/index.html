@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Router Marquee</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section class="hero" id="hero">
+    <img class="hero-bg" src="assets/hero-bg.jpg" alt="" width="1920" height="960" loading="eager" fetchpriority="high">
+    <div class="hero-content">
+      <p class="hero-eyebrow" id="hero-eyebrow"></p>
+      <h1 class="hero-headline" id="hero-headline"></h1>
+      <p class="hero-body" id="hero-body"></p>
+      <div class="hero-ctas">
+        <div id="cta-primary"></div>
+        <div id="cta-secondary"></div>
+      </div>
+    </div>
+    <div class="nav-strip">
+      <div class="nav-cards" id="nav-cards">
+        <button class="nav-card" data-index="0" aria-selected="false">
+          <div class="nav-progress"></div>
+          <div class="nav-card-inner">
+            <div class="tab-icon" data-app="firefly"></div>
+            <div class="nav-card-text">
+              <span class="nav-label">Firefly</span>
+              <img class="nav-chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+        </button>
+        <button class="nav-card" data-index="1" aria-selected="false">
+          <div class="nav-progress"></div>
+          <div class="nav-card-inner">
+            <div class="tab-icon" data-app="photoshop"></div>
+            <div class="nav-card-text">
+              <span class="nav-label">Photoshop</span>
+              <img class="nav-chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+        </button>
+        <button class="nav-card" data-index="2" aria-selected="false">
+          <div class="nav-progress"></div>
+          <div class="nav-card-inner">
+            <div class="tab-icon" data-app="acrobat-pdf"></div>
+            <div class="nav-card-text">
+              <span class="nav-label">Acrobat</span>
+              <img class="nav-chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+        </button>
+        <button class="nav-card" data-index="3" aria-selected="false">
+          <div class="nav-progress"></div>
+          <div class="nav-card-inner">
+            <div class="tab-icon" data-app="illustrator"></div>
+            <div class="nav-card-text">
+              <span class="nav-label">Illustrator</span>
+              <img class="nav-chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+        </button>
+        <button class="nav-card" data-index="4" aria-selected="false">
+          <div class="nav-progress"></div>
+          <div class="nav-card-inner">
+            <div class="tab-icon" data-app="creative-cloud"></div>
+            <div class="nav-card-text">
+              <span class="nav-label">Creative Cloud</span>
+              <img class="nav-chevron" src="https://www.adobe.com/federal/assets/icons/svgs/chevron-right.svg" width="12" height="12" alt="" aria-hidden="true">
+            </div>
+          </div>
+        </button>
+      </div>
+      <button class="nav-play-pause" id="nav-play-pause" aria-label="Pause auto-advance">
+        <svg id="play-pause-icon" viewBox="0 0 16 16" fill="currentColor" width="16" height="16" aria-hidden="true">
+          <rect x="3" y="2" width="4" height="12" rx="1"/>
+          <rect x="9" y="2" width="4" height="12" rx="1"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+  <script type="module" src="script.js"></script>
+</body>
+</html>
