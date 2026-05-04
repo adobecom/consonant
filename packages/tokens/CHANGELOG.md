@@ -7,7 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.16] - 2026-05-04
 
+### 💥 Breaking changes
+
+- **Letter-spacing primitive ramp restructured — `7xl`–`11xl` removed, `2xl`–`6xl` remapped**
+  The `--s2a-font-letter-spacing-Nxl` semantic alias chain was compressed as part of the Figma sync that powered the body/label/caption normalization below. Stops `7xl`–`11xl` have been deleted. Stops `2xl`–`6xl` now resolve to different px values than in 0.0.15:
+
+  | Alias | 0.0.15 | 0.0.16 |
+  |---|---|---|
+  | `--s2a-font-letter-spacing-2xl` | −1.2px | −1px |
+  | `--s2a-font-letter-spacing-3xl` | −1px | −0.96px |
+  | `--s2a-font-letter-spacing-4xl` | −0.96px | −0.48px |
+  | `--s2a-font-letter-spacing-5xl` | −0.48px | −0.2px |
+  | `--s2a-font-letter-spacing-6xl` | −0.2px | 0px |
+  | `--s2a-font-letter-spacing-7xl` | 0px | *(removed)* |
+  | `--s2a-font-letter-spacing-8xl` | 0.12px | *(removed)* |
+  | `--s2a-font-letter-spacing-9xl` | 0.14px | *(removed)* |
+  | `--s2a-font-letter-spacing-10xl` | 0.16px | *(removed)* |
+  | `--s2a-font-letter-spacing-11xl` | 0.24px | *(removed)* |
+
+  All `--s2a-typography-letter-spacing-*` responsive references were updated to compensate, so resolved px values for typography tokens are preserved. **Only affects consumers referencing the `--s2a-font-letter-spacing-Nxl` primitive aliases directly** — those references will now resolve to `unset`.
+
 ### 🐛 Bug fixes
+
+- **`title-4` line-height corrected at `lg` and `xl` breakpoints**
+  `--s2a-typography-line-height-title-4` was resolving to `--s2a-font-line-height-xl` (40px) at both `lg` and `xl`. Now aliases `--s2a-font-line-height-lg` (32px), matching the intended scale.
+
+  | Breakpoint | Was | Now |
+  |---|---|---|
+  | `lg` | `var(--s2a-font-line-height-xl)` (40px) | `var(--s2a-font-line-height-lg)` (32px) |
+  | `xl` | `var(--s2a-font-line-height-xl)` (40px) | `var(--s2a-font-line-height-lg)` (32px) |
 
 - **`title-5` font-size at `sm` breakpoint corrected to 18px**
   `--s2a-typography-font-size-title-5` at `sm` was resolving to 20px (same as `title-4`). Now aliases `--s2a-font-size-lg` (18px).
