@@ -8,71 +8,114 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
   parent.postMessage({ pluginMessage: { type, ...payload } }, 'https://www.figma.com');
 }
 
-// ── Navigation ────────────────────────────────────────────────────────────────
+// Stub — prototype chat panel removed
+function updateProtoSelection(_sel: { id: string; name: string; nodeType: string } | null) {}
 
-type View = 'home' | 'variables' | 'select' | 'settings' | 'annotate' | 'spec';
+// ── Tab navigation ────────────────────────────────────────────────────────────
 
-const homeView       = document.getElementById('homeView') as HTMLElement;
-const variablesPanel = document.getElementById('variablesPanel') as HTMLElement;
-const selectPanel    = document.getElementById('selectPanel') as HTMLElement;
-const settingsPanel  = document.getElementById('settingsPanel') as HTMLElement;
-const annotatePanel  = document.getElementById('annotatePanel') as HTMLElement;
-const specPanel      = document.getElementById('specPanel') as HTMLElement;
-const headerTitle    = document.getElementById('headerTitle') as HTMLElement;
-const backBtn        = document.getElementById('backBtn') as HTMLButtonElement;
-const settingsBtn    = document.getElementById('settingsBtn') as HTMLButtonElement;
+type Panel = 'variables' | 'select' | 'annotate' | 'spec' | 'settings';
 
-const views: Record<View, { el: HTMLElement; title: string }> = {
-  home:      { el: homeView,       title: 'S2A Toolkit' },
-  variables: { el: variablesPanel, title: 'Variables' },
-  select:    { el: selectPanel,    title: 'Select Variants' },
-  settings:  { el: settingsPanel,  title: 'GitHub Settings' },
-  annotate:  { el: annotatePanel,  title: 'Annotate' },
-  spec:      { el: specPanel,      title: 'Spec Sheet' },
+const panels: Record<Panel, HTMLElement> = {
+  variables: document.getElementById('variablesPanel') as HTMLElement,
+  select:    document.getElementById('selectPanel')    as HTMLElement,
+  annotate:  document.getElementById('annotatePanel')  as HTMLElement,
+  spec:      document.getElementById('specPanel')      as HTMLElement,
+  settings:  document.getElementById('settingsPanel')  as HTMLElement,
 };
 
-let currentView: View = 'home';
+let activePanel: Panel = 'variables';
 
-function navigateTo(view: View) {
-  currentView = view;
-  Object.entries(views).forEach(([key, v]) => {
-    v.el.style.display = key === view ? 'block' : 'none';
+function switchPanel(panel: Panel) {
+  activePanel = panel;
+  Object.entries(panels).forEach(([key, el]) => {
+    el.classList.toggle('active', key === panel);
   });
-  headerTitle.textContent = views[view].title;
-  backBtn.classList.toggle('visible', view !== 'home');
-  settingsBtn.style.display = view === 'settings' ? 'none' : 'flex';
-
-  postToPlugin('resize-for-view', { width: 320, height: 480 });
+  document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.panel === panel);
+  });
+  if (panel === 'settings') postToPlugin('get-settings');
 }
 
-backBtn.addEventListener('click', () => navigateTo('home'));
-settingsBtn.addEventListener('click', () => {
-  postToPlugin('get-settings');
-  navigateTo('settings');
-});
-
-document.querySelectorAll<HTMLButtonElement>('.tool-card').forEach(card => {
-  card.addEventListener('click', () => {
-    const tool = card.dataset.tool as View;
-    if (tool) navigateTo(tool);
+document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const p = tab.dataset.panel as Panel;
+    if (p) switchPanel(p);
   });
 });
 
-navigateTo('home');
+// ── Minimize / expand ─────────────────────────────────────────────────────────
+
+let isMini = false;
+const app = document.getElementById('app') as HTMLElement;
+
+const toggleMiniBtn = document.getElementById('toggleMiniBtn') as HTMLButtonElement;
+
+toggleMiniBtn.addEventListener('click', () => {
+  isMini = !isMini;
+  app.classList.toggle('mini', isMini);
+  postToPlugin('resize-for-view', {
+    width: 320,
+    height: isMini ? 36 : 460,
+  });
+  if (isMini && popoverOpen) closePopover();
+});
+
+// ── Copy frame link ───────────────────────────────────────────────────────────
+
+const copyNodeBtn  = document.getElementById('copyNodeBtn')  as HTMLButtonElement;
+const headerSelName = document.getElementById('headerSelName') as HTMLElement;
+
+let _copyFileKey: string | null = null;
+let _copyNodeId:  string | null = null;
+let _copyFileName: string | null = null;
+
+function updateCopyBtn(
+  sel: { id: string; name: string; nodeType: string } | null,
+  fileKey: string | null,
+  fileName?: string | null,
+) {
+  _copyFileKey  = fileKey;
+  _copyNodeId   = sel?.id ?? null;
+  _copyFileName = fileName ?? null;
+
+  const hasNode = !!(sel && fileKey);
+  copyNodeBtn.classList.toggle('hidden', !hasNode);
+
+  // Mini header selection label
+  if (sel) {
+    headerSelName.textContent = sel.name;
+    headerSelName.classList.add('has-sel');
+  } else {
+    headerSelName.textContent = '—';
+    headerSelName.classList.remove('has-sel');
+  }
+}
+
+copyNodeBtn.addEventListener('click', () => {
+  if (!_copyFileKey || !_copyNodeId) return;
+  const slug = (_copyFileName || 'file')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const nid = _copyNodeId.replace(':', '-');
+  const url = `https://www.figma.com/design/${_copyFileKey}/${slug}?node-id=${nid}`;
+  navigator.clipboard.writeText(url).catch(() => {});
+  // Briefly flash the button
+  copyNodeBtn.style.color = 'var(--accent)';
+  setTimeout(() => { copyNodeBtn.style.color = ''; }, 1200);
+});
 
 // ── Bridge ────────────────────────────────────────────────────────────────────
 
-let bridgeConnected = false;
+const BRIDGE_MAX_RECONNECT    = 20;
+const BRIDGE_RECONNECT_BASE_MS = 2000;
+const WS_PORTS = [9220,9221,9222,9223,9224,9225,9226,9227,9228,9229,9230,9231,9232];
+
+let bridgeConnected      = false;
 let bridgeWs: WebSocket | null = null;
 let bridgeWsPort: number | null = null;
 let bridgeKeepaliveTimer: ReturnType<typeof setInterval> | null = null;
-let bridgeReconnectTimer: ReturnType<typeof setTimeout> | null = null;
+let bridgeReconnectTimer: ReturnType<typeof setTimeout>  | null = null;
 let bridgeReconnectAttempts = 0;
-let bridgeUserDisconnected = false;
-
-const BRIDGE_MAX_RECONNECT = 20;
-const BRIDGE_RECONNECT_BASE_MS = 2000;
-const WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+let bridgeUserDisconnected  = false;
 
 const pendingRequests = new Map<string, {
   resolve: (v: any) => void;
@@ -95,54 +138,44 @@ function sendBridgeCommand(method: string, params: Record<string, unknown> = {},
   });
 }
 
-// Bridge pill + popover
-const bridgePill      = document.getElementById('bridgePill') as HTMLButtonElement;
-const bridgeDot       = document.getElementById('bridgeDot') as HTMLElement;
-const bridgePillLabel = document.getElementById('bridgePillLabel') as HTMLElement;
-const bridgePopover   = document.getElementById('bridgePopover') as HTMLElement;
-const popoverDot      = document.getElementById('popoverDot') as HTMLElement;
-const popoverLabel    = document.getElementById('popoverLabel') as HTMLElement;
-const popoverSub      = document.getElementById('popoverSub') as HTMLElement;
+const bridgeDot       = document.getElementById('bridgeDot')       as HTMLElement;
+const bridgeDotMini   = document.getElementById('bridgeDotMini')   as HTMLElement;
+const popoverDot      = document.getElementById('popoverDot')      as HTMLElement;
+const bridgePortLabel = document.getElementById('bridgePortLabel') as HTMLElement;
 const bridgeToggleBtn = document.getElementById('bridgeToggleBtn') as HTMLButtonElement;
+const bridgePopover   = document.getElementById('bridgePopover')   as HTMLElement;
+const bridgeTabBtn    = document.getElementById('bridgeTabBtn')    as HTMLButtonElement;
+const bridgeMiniBtn   = document.getElementById('bridgeMiniBtn')   as HTMLButtonElement;
 
 let popoverOpen = false;
+function openPopover()  { popoverOpen = true;  bridgePopover.classList.add('open'); }
+function closePopover() { popoverOpen = false; bridgePopover.classList.remove('open'); }
 
-bridgePill.addEventListener('click', (e) => {
-  e.stopPropagation();
-  popoverOpen = !popoverOpen;
-  bridgePopover.classList.toggle('open', popoverOpen);
-});
-
-document.addEventListener('click', () => {
-  if (popoverOpen) { popoverOpen = false; bridgePopover.classList.remove('open'); }
-});
-
+bridgeTabBtn.addEventListener('click',  (e) => { e.stopPropagation(); popoverOpen ? closePopover() : openPopover(); });
+bridgeMiniBtn.addEventListener('click', (e) => { e.stopPropagation(); popoverOpen ? closePopover() : openPopover(); });
+document.addEventListener('click', () => { if (popoverOpen) closePopover(); });
 bridgePopover.addEventListener('click', e => e.stopPropagation());
 
 bridgeToggleBtn.addEventListener('click', () => {
-  if (bridgeConnected) bridgeDisconnect();
-  else bridgeConnect();
+  if (bridgeConnected) bridgeDisconnect(); else bridgeConnect();
 });
+
+function setAllDots(on: boolean) {
+  [bridgeDot, bridgeDotMini, popoverDot].forEach(el => el?.classList.toggle('on', on));
+}
 
 function updateBridgeUi() {
   if (bridgeConnected) {
-    bridgeDot.classList.add('on');
-    bridgePill.classList.add('connected');
-    bridgePillLabel.textContent = 'Claude Code';
-    popoverDot.classList.add('on');
-    popoverLabel.textContent = 'Connected';
-    popoverSub.textContent = 'Variables auto-sync on connect.';
+    setAllDots(true);
+    bridgePortLabel.textContent = 'Port ' + bridgeWsPort;
     bridgeToggleBtn.textContent = 'Disconnect';
-    bridgeToggleBtn.className = 'btn btn-ghost';
+    bridgeToggleBtn.className   = 'btn btn-ghost';
   } else {
-    bridgeDot.classList.remove('on');
-    bridgePill.classList.remove('connected');
-    bridgePillLabel.textContent = 'Connect';
-    popoverDot.classList.remove('on');
-    popoverLabel.textContent = 'Not connected';
-    popoverSub.textContent = 'Start Claude Code, then connect.';
+    setAllDots(false);
+    bridgePortLabel.textContent = '—';
     bridgeToggleBtn.textContent = 'Connect';
-    bridgeToggleBtn.className = 'btn';
+    bridgeToggleBtn.className   = 'btn';
+    bridgeToggleBtn.disabled    = false;
   }
 }
 
@@ -162,7 +195,7 @@ function initBridgeConnection(ws: WebSocket) {
     if (ws.readyState !== 1 || !result) return;
     const info = result.fileInfo || result;
     if (!info.fileKey) info.fileKey = 'local-' + Date.now();
-    info.pluginVersion = '0.1.0';
+    info.pluginVersion = '0.2.0';
     ws.send(JSON.stringify({ type: 'FILE_INFO', data: info }));
   }).catch(() => {});
 
@@ -179,23 +212,19 @@ function attachWsHandlers(ws: WebSocket, port: number) {
     try {
       const msg = JSON.parse(event.data);
       if (!msg.id || !msg.method) return;
-
       sendBridgeCommand(msg.method, msg.params || {}, 15000)
         .then(result => { if (ws.readyState === 1) ws.send(JSON.stringify({ id: msg.id, result })); })
-        .catch(err => { if (ws.readyState === 1) ws.send(JSON.stringify({ id: msg.id, error: err.message })); });
+        .catch(err  => { if (ws.readyState === 1) ws.send(JSON.stringify({ id: msg.id, error: err.message })); });
     } catch {}
   };
-
   ws.onclose = () => {
     bridgeStopKeepalive();
-    bridgeWs = null;
-    bridgeConnected = false;
+    bridgeWs = null; bridgeConnected = false;
     for (const [, p] of pendingRequests) { clearTimeout(p.timeoutId); p.reject(new Error('Bridge disconnected')); }
     pendingRequests.clear();
     updateBridgeUi();
     if (!bridgeUserDisconnected) scheduleReconnect(port);
   };
-
   ws.onerror = () => {};
 }
 
@@ -212,7 +241,11 @@ function reconnectToPort(port: number) {
   try {
     const ws = new WebSocket('ws://localhost:' + port);
     const t = setTimeout(() => { if (ws.readyState !== 1) ws.close(); }, 3000);
-    ws.onopen = () => { clearTimeout(t); bridgeWs = ws; bridgeWsPort = port; bridgeConnected = true; bridgeReconnectAttempts = 0; updateBridgeUi(); attachWsHandlers(ws, port); initBridgeConnection(ws); bridgeStartKeepalive(); };
+    ws.onopen = () => {
+      clearTimeout(t);
+      bridgeWs = ws; bridgeWsPort = port; bridgeConnected = true; bridgeReconnectAttempts = 0;
+      updateBridgeUi(); attachWsHandlers(ws, port); initBridgeConnection(ws); bridgeStartKeepalive();
+    };
     ws.onerror = () => { clearTimeout(t); };
     ws.onclose = () => { clearTimeout(t); if (!bridgeConnected && !bridgeUserDisconnected) bridgeConnect(); };
   } catch { if (!bridgeUserDisconnected) bridgeConnect(); }
@@ -238,21 +271,22 @@ function bridgeConnect() {
         found = true;
         bridgeWs = ws; bridgeWsPort = port; bridgeConnected = true; bridgeReconnectAttempts = 0;
         updateBridgeUi();
-        bridgeToggleBtn.disabled = false;
-        attachWsHandlers(ws, port);
-        initBridgeConnection(ws);
-        bridgeStartKeepalive();
+        attachWsHandlers(ws, port); initBridgeConnection(ws); bridgeStartKeepalive();
       };
       ws.onerror = () => { clearTimeout(t); };
-      ws.onclose = () => { clearTimeout(t); if (!found) { pending--; if (pending <= 0) connectFailed(); } };
-    } catch { pending--; if (pending <= 0 && !found) connectFailed(); }
+      ws.onclose = () => {
+        clearTimeout(t);
+        if (!found) {
+          pending--;
+          if (pending <= 0) {
+            bridgeToggleBtn.textContent = 'Connect';
+            bridgeToggleBtn.disabled    = false;
+            bridgePortLabel.textContent = 'No server found';
+          }
+        }
+      };
+    } catch { pending--; if (pending <= 0 && !found) { bridgeToggleBtn.textContent = 'Connect'; bridgeToggleBtn.disabled = false; } }
   });
-}
-
-function connectFailed() {
-  bridgeToggleBtn.textContent = 'Connect';
-  bridgeToggleBtn.disabled = false;
-  popoverSub.textContent = 'No MCP server found — start Claude Code first.';
 }
 
 function bridgeDisconnect() {
@@ -268,10 +302,7 @@ function bridgeDisconnect() {
 
 let variablesCache: { variables: any[]; variableCollections: any[] } | null = null;
 
-function setVarMeta(text: string) {
-  const el = document.getElementById('varMeta');
-  if (el) el.textContent = text;
-}
+function setVarMeta(_text: string) {}  // no meta field in new design
 
 function setVarStatus(msg: string, type: '' | 'ok' | 'err' = '') {
   const el = document.getElementById('varStatus') as HTMLElement;
@@ -301,14 +332,13 @@ function renderVariables(data: { variables: any[]; variableCollections: any[] })
   const byCol: Record<string, number> = {};
   for (const v of data.variables) byCol[v.variableCollectionId] = (byCol[v.variableCollectionId] || 0) + 1;
 
-  el.innerHTML = '<div class="collection-list">' + data.variableCollections.map((c: any) =>
+  el.innerHTML = data.variableCollections.map((c: any) =>
     `<div class="collection-row">
       <span class="collection-name">${esc(c.name)}</span>
       <span class="collection-count">${byCol[c.id] || 0}</span>
     </div>`
-  ).join('') + '</div>';
+  ).join('');
 
-  setVarMeta(data.variables.length + ' variables');
   updateExportButtons();
 }
 
@@ -318,8 +348,12 @@ document.getElementById('varRefreshBtn')?.addEventListener('click', async () => 
   setVarStatus('Loading…');
   try {
     const result = await sendBridgeCommand('REFRESH_VARIABLES', {}, 30000);
-    if (result?.data) { renderVariables(result.data); setVarStatus(result.data.variables.length + ' variables loaded', 'ok'); }
-    else setVarStatus('No data returned', 'err');
+    if (result?.data) {
+      renderVariables(result.data);
+      setVarStatus(result.data.variables.length + ' variables loaded', 'ok');
+    } else {
+      setVarStatus('No data returned', 'err');
+    }
   } catch (e: any) {
     setVarStatus(e.message || 'Error', 'err');
   } finally {
@@ -327,7 +361,6 @@ document.getElementById('varRefreshBtn')?.addEventListener('click', async () => 
   }
 });
 
-// Export Local → dev-server
 document.getElementById('varExportLocalBtn')?.addEventListener('click', () => {
   if (!variablesCache) { setVarStatus('No variables — hit Refresh first', 'err'); return; }
   const btn = document.getElementById('varExportLocalBtn') as HTMLButtonElement;
@@ -344,10 +377,9 @@ document.getElementById('varExportLocalBtn')?.addEventListener('click', () => {
       else setVarStatus('❌ ' + (data.error || 'Build failed'), 'err');
     })
     .catch(() => setVarStatus('❌ Dev server not running — run: npm run dev-server', 'err'))
-    .finally(() => { btn.textContent = 'Export Local'; updateExportButtons(); });
+    .finally(() => { btn.textContent = 'Local'; updateExportButtons(); });
 });
 
-// Export → GitHub API
 document.getElementById('varExportGithubBtn')?.addEventListener('click', async () => {
   if (!variablesCache || !githubSettings?.token) return;
   const btn = document.getElementById('varExportGithubBtn') as HTMLButtonElement;
@@ -366,11 +398,7 @@ document.getElementById('varExportGithubBtn')?.addEventListener('click', async (
 // ── GitHub API ────────────────────────────────────────────────────────────────
 
 interface GitHubSettings {
-  token: string;
-  owner: string;
-  repo: string;
-  branch: string;
-  filePath: string;
+  token: string; owner: string; repo: string; branch: string; filePath: string;
 }
 
 let githubSettings: GitHubSettings | null = null;
@@ -383,34 +411,15 @@ async function pushToGitHub(data: any, settings: GitHubSettings): Promise<void> 
     Accept: 'application/vnd.github.v3+json',
     'Content-Type': 'application/json',
   };
-
-  // Get current SHA (needed to update an existing file)
   let sha: string | undefined;
   const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
-  if (getRes.ok) {
-    sha = (await getRes.json()).sha;
-  } else if (getRes.status !== 404) {
-    throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
-  }
-
-  // Encode as base64 (handles Unicode)
+  if (getRes.ok) sha = (await getRes.json()).sha;
+  else if (getRes.status !== 404) throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-  const body: Record<string, any> = {
-    message: 'chore: sync tokens from Figma',
-    content,
-    branch,
-  };
+  const body: Record<string, any> = { message: 'chore: sync tokens from Figma', content, branch };
   if (sha) body.sha = sha;
-
-  const putRes = await fetch(apiBase, {
-    method: 'PUT',
-    headers,
-    body: JSON.stringify(body),
-  });
-
-  if (!putRes.ok) {
-    throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
-  }
+  const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
+  if (!putRes.ok) throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
 }
 
 // ── Settings ──────────────────────────────────────────────────────────────────
@@ -451,16 +460,10 @@ document.getElementById('saveSettingsBtn')?.addEventListener('click', () => {
 
 let selectSetId: string | null = null;
 
-function setSelectMeta(text: string) {
-  const el = document.getElementById('selectMeta');
-  if (el) el.textContent = text;
-}
-
 function renderAxes(setId: string, setName: string, axes: Array<{ name: string; type: string; variantOptions?: string[] }>) {
   selectSetId = setId;
-
   const empty  = document.getElementById('selectEmpty') as HTMLElement;
-  const body   = document.getElementById('selectBody') as HTMLElement;
+  const body   = document.getElementById('selectBody')  as HTMLElement;
   const nameEl = document.getElementById('selectSetName') as HTMLElement;
   const axesEl = document.getElementById('selectAxes') as HTMLElement;
   const status = document.getElementById('selectStatus') as HTMLElement;
@@ -471,22 +474,20 @@ function renderAxes(setId: string, setName: string, axes: Array<{ name: string; 
   if (status) status.textContent = '';
 
   const variantAxes = axes.filter(a => a.type === 'VARIANT');
-  setSelectMeta(setName);
 
   if (variantAxes.length === 0) {
     axesEl.innerHTML = '<div class="empty-state">No variant axes found</div>';
     return;
   }
 
-  axesEl.innerHTML = variantAxes.map(axis => {
-    const chips = (axis.variantOptions || []).map(v =>
-      `<button class="chip on" data-axis="${esc(axis.name)}" data-value="${esc(v)}">${esc(v)}</button>`
-    ).join('');
-    return `<div class="axis-group">
+  axesEl.innerHTML = variantAxes.map(axis =>
+    `<div class="axis-group">
       <div class="axis-label">${esc(axis.name)}</div>
-      <div class="axis-values">${chips}</div>
-    </div>`;
-  }).join('');
+      <div class="axis-values">${(axis.variantOptions || []).map(v =>
+        `<button class="chip on" data-axis="${esc(axis.name)}" data-value="${esc(v)}">${esc(v)}</button>`
+      ).join('')}</div>
+    </div>`
+  ).join('');
 
   axesEl.querySelectorAll<HTMLButtonElement>('.chip').forEach(chip => {
     chip.addEventListener('click', () => chip.classList.toggle('on'));
@@ -495,17 +496,14 @@ function renderAxes(setId: string, setName: string, axes: Array<{ name: string; 
 
 function clearSelect() {
   selectSetId = null;
-  const empty = document.getElementById('selectEmpty') as HTMLElement;
-  const body  = document.getElementById('selectBody') as HTMLElement;
-  empty.style.display = 'block';
-  body.style.display = 'none';
-  setSelectMeta('Select a component set');
+  (document.getElementById('selectEmpty') as HTMLElement).style.display = 'block';
+  (document.getElementById('selectBody')  as HTMLElement).style.display = 'none';
 }
 
 document.getElementById('selectApplyBtn')?.addEventListener('click', () => {
   if (!selectSetId) return;
   const filter: Record<string, string[]> = {};
-  document.querySelectorAll<HTMLButtonElement>('.chip.on').forEach(chip => {
+  document.querySelectorAll<HTMLButtonElement>('.chip.on[data-axis]').forEach(chip => {
     const axis = chip.dataset.axis!;
     if (!filter[axis]) filter[axis] = [];
     filter[axis].push(chip.dataset.value!);
@@ -514,26 +512,19 @@ document.getElementById('selectApplyBtn')?.addEventListener('click', () => {
 });
 
 document.getElementById('selectAllBtn')?.addEventListener('click', () => {
-  document.querySelectorAll<HTMLButtonElement>('.chip').forEach(c => c.classList.add('on'));
+  document.querySelectorAll<HTMLButtonElement>('#selectAxes .chip').forEach(c => c.classList.add('on'));
 });
-
 document.getElementById('selectNoneBtn')?.addEventListener('click', () => {
-  document.querySelectorAll<HTMLButtonElement>('.chip').forEach(c => c.classList.remove('on'));
+  document.querySelectorAll<HTMLButtonElement>('#selectAxes .chip').forEach(c => c.classList.remove('on'));
 });
 
 // ── Annotate ──────────────────────────────────────────────────────────────────
 
 let annotateNodeId: string | null = null;
 
-function setAnnotateMeta(text: string) {
-  const el = document.getElementById('annotateMeta');
-  if (el) el.textContent = text;
-}
-
 function setAnnotateStatus(msg: string, type: '' | 'ok' | 'err' = '') {
   const el = document.getElementById('annotateStatus') as HTMLElement;
-  el.textContent = msg;
-  el.className = 'status' + (type ? ' ' + type : '');
+  el.textContent = msg; el.className = 'status' + (type ? ' ' + type : '');
 }
 
 function updateAnnotateSelection(sel: { id: string; name: string; nodeType: string } | null) {
@@ -544,17 +535,12 @@ function updateAnnotateSelection(sel: { id: string; name: string; nodeType: stri
   const typeEl   = document.getElementById('annotateNodeType') as HTMLElement;
   const applyBtn = document.getElementById('annotateApplyBtn') as HTMLButtonElement;
   if (sel) {
-    empty.style.display = 'none';
-    info.style.display = 'flex';
-    nameEl.textContent = sel.name;
-    typeEl.textContent = sel.nodeType;
+    empty.style.display = 'none'; info.style.display = 'flex';
+    nameEl.textContent = sel.name; typeEl.textContent = sel.nodeType;
     applyBtn.disabled = false;
-    setAnnotateMeta(sel.name);
   } else {
-    empty.style.display = 'block';
-    info.style.display = 'none';
+    empty.style.display = 'block'; info.style.display = 'none';
     applyBtn.disabled = true;
-    setAnnotateMeta('Select a node to start');
   }
 }
 
@@ -568,18 +554,16 @@ document.getElementById('annotateApplyBtn')?.addEventListener('click', () => {
     document.querySelectorAll<HTMLButtonElement>('#annotateCats .chip.on')
   ).map(c => c.dataset.cat!);
   if (categories.length === 0) { setAnnotateStatus('Select at least one category', 'err'); return; }
-  const applyBtn = document.getElementById('annotateApplyBtn') as HTMLButtonElement;
-  applyBtn.disabled = true;
-  applyBtn.textContent = 'Annotating…';
+  const btn = document.getElementById('annotateApplyBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Annotating…';
   setAnnotateStatus('');
   postToPlugin('annotate:apply', { nodeId: annotateNodeId, categories });
 });
 
 document.getElementById('annotateClearBtn')?.addEventListener('click', () => {
   if (!annotateNodeId) return;
-  const clearBtn = document.getElementById('annotateClearBtn') as HTMLButtonElement;
-  clearBtn.disabled = true;
-  setAnnotateStatus('Clearing…');
+  const btn = document.getElementById('annotateClearBtn') as HTMLButtonElement;
+  btn.disabled = true; setAnnotateStatus('Clearing…');
   postToPlugin('annotate:clear', { nodeId: annotateNodeId });
 });
 
@@ -587,50 +571,36 @@ document.getElementById('annotateClearBtn')?.addEventListener('click', () => {
 
 let specSetId: string | null = null;
 
-function setSpecMeta(text: string) {
-  const el = document.getElementById('specMeta');
-  if (el) el.textContent = text;
-}
-
 function setSpecStatus(msg: string, type: '' | 'ok' | 'err' = '') {
   const el = document.getElementById('specStatus') as HTMLElement;
-  el.textContent = msg;
-  el.className = 'status' + (type ? ' ' + type : '');
+  el.textContent = msg; el.className = 'status' + (type ? ' ' + type : '');
 }
 
 function updateSpecSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
   const isSet = sel?.nodeType === 'COMPONENT_SET';
   specSetId = isSet ? (sel?.id ?? null) : null;
-
   const empty   = document.getElementById('specSelectionEmpty') as HTMLElement;
-  const info    = document.getElementById('specSelectionInfo') as HTMLElement;
-  const nameEl  = document.getElementById('specSetName') as HTMLElement;
+  const info    = document.getElementById('specSelectionInfo')  as HTMLElement;
+  const nameEl  = document.getElementById('specSetName')  as HTMLElement;
   const countEl = document.getElementById('specSetCount') as HTMLElement;
   const genBtn  = document.getElementById('specGenerateBtn') as HTMLButtonElement;
-
   if (isSet && sel) {
-    empty.style.display = 'none';
-    info.style.display = 'flex';
-    nameEl.textContent = sel.name;
-    countEl.textContent = 'COMPONENT_SET · ' + (sel.variantCount ?? 0) + ' variants';
+    empty.style.display = 'none'; info.style.display = 'flex';
+    nameEl.textContent  = sel.name;
+    countEl.textContent = (sel.variantCount ?? 0) + ' variants';
     genBtn.disabled = false;
-    setSpecMeta(sel.name);
   } else {
-    empty.style.display = 'block';
-    info.style.display = 'none';
+    empty.style.display = 'block'; info.style.display = 'none';
     genBtn.disabled = true;
-    setSpecMeta('Select a component set');
   }
 }
 
 document.querySelectorAll<HTMLButtonElement>('#specCats .chip').forEach(chip => {
   chip.addEventListener('click', () => chip.classList.toggle('on'));
 });
-
 document.getElementById('specAllBtn')?.addEventListener('click', () => {
   document.querySelectorAll<HTMLButtonElement>('#specCats .chip').forEach(c => c.classList.add('on'));
 });
-
 document.getElementById('specNoneBtn')?.addEventListener('click', () => {
   document.querySelectorAll<HTMLButtonElement>('#specCats .chip').forEach(c => c.classList.remove('on'));
 });
@@ -641,9 +611,8 @@ document.getElementById('specGenerateBtn')?.addEventListener('click', () => {
     document.querySelectorAll<HTMLButtonElement>('#specCats .chip.on')
   ).map(c => c.dataset.cat!);
   if (categories.length === 0) { setSpecStatus('Select at least one category', 'err'); return; }
-  const genBtn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
-  genBtn.disabled = true;
-  genBtn.textContent = 'Generating…';
+  const btn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Generating…';
   setSpecStatus('');
   postToPlugin('spec:generate', { setId: specSetId, categories });
 });
@@ -670,10 +639,7 @@ window.addEventListener('message', (event) => {
       }
       break;
     }
-    case 'settings-loaded': {
-      applySettings(msg.settings as GitHubSettings | null);
-      break;
-    }
+    case 'settings-loaded': applySettings(msg.settings as GitHubSettings | null); break;
     case 'settings-saved': {
       if (msg.success) {
         githubSettings = {
@@ -723,31 +689,27 @@ window.addEventListener('message', (event) => {
       break;
     }
     case 'annotate:result': {
-      const applyBtn = document.getElementById('annotateApplyBtn') as HTMLButtonElement;
-      applyBtn.disabled = !annotateNodeId;
-      applyBtn.textContent = 'Annotate';
-      if (msg.error) {
-        setAnnotateStatus('❌ ' + (msg.error as string), 'err');
-      } else {
+      const btn = document.getElementById('annotateApplyBtn') as HTMLButtonElement;
+      btn.disabled = !annotateNodeId; btn.textContent = 'Annotate';
+      if (msg.error) setAnnotateStatus('❌ ' + (msg.error as string), 'err');
+      else {
         const n = msg.annotated as number;
         setAnnotateStatus(`✓ ${n} node${n !== 1 ? 's' : ''} annotated`, 'ok');
       }
       break;
     }
     case 'annotate:cleared': {
-      const clearBtn = document.getElementById('annotateClearBtn') as HTMLButtonElement;
-      clearBtn.disabled = false;
+      const btn = document.getElementById('annotateClearBtn') as HTMLButtonElement;
+      btn.disabled = false;
       const n = msg.cleared as number;
       setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? 's' : ''}` : 'Nothing to clear', 'ok');
       break;
     }
     case 'spec:result': {
-      const genBtn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
-      genBtn.disabled = !specSetId;
-      genBtn.textContent = 'Generate Spec Sheet';
-      if (msg.error) {
-        setSpecStatus('❌ ' + (msg.error as string), 'err');
-      } else {
+      const btn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
+      btn.disabled = !specSetId; btn.textContent = 'Generate';
+      if (msg.error) setSpecStatus('❌ ' + (msg.error as string), 'err');
+      else {
         const cats = msg.categoryCount as number;
         const vars = msg.variantCount as number;
         setSpecStatus(`✓ ${cats} categor${cats !== 1 ? 'ies' : 'y'} · ${vars} variant${vars !== 1 ? 's' : ''}`, 'ok');
@@ -757,5 +719,8 @@ window.addEventListener('message', (event) => {
   }
 });
 
+// ── Init ──────────────────────────────────────────────────────────────────────
+
 postToPlugin('ui-ready');
 postToPlugin('get-settings');
+postToPlugin('resize-for-view', { width: 320, height: 460 });

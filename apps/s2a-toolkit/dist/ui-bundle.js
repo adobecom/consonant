@@ -24,46 +24,79 @@
   function postToPlugin(type, payload) {
     parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
   }
-  var homeView = document.getElementById("homeView");
-  var variablesPanel = document.getElementById("variablesPanel");
-  var selectPanel = document.getElementById("selectPanel");
-  var settingsPanel = document.getElementById("settingsPanel");
-  var annotatePanel = document.getElementById("annotatePanel");
-  var specPanel = document.getElementById("specPanel");
-  var headerTitle = document.getElementById("headerTitle");
-  var backBtn = document.getElementById("backBtn");
-  var settingsBtn = document.getElementById("settingsBtn");
-  var views = {
-    home: { el: homeView, title: "S2A Toolkit" },
-    variables: { el: variablesPanel, title: "Variables" },
-    select: { el: selectPanel, title: "Select Variants" },
-    settings: { el: settingsPanel, title: "GitHub Settings" },
-    annotate: { el: annotatePanel, title: "Annotate" },
-    spec: { el: specPanel, title: "Spec Sheet" }
-  };
-  var currentView = "home";
-  function navigateTo(view) {
-    currentView = view;
-    Object.entries(views).forEach(([key, v]) => {
-      v.el.style.display = key === view ? "block" : "none";
-    });
-    headerTitle.textContent = views[view].title;
-    backBtn.classList.toggle("visible", view !== "home");
-    settingsBtn.style.display = view === "settings" ? "none" : "flex";
-    postToPlugin("resize-for-view", { width: 320, height: 480 });
+  function updateProtoSelection(_sel) {
   }
-  backBtn.addEventListener("click", () => navigateTo("home"));
-  settingsBtn.addEventListener("click", () => {
-    postToPlugin("get-settings");
-    navigateTo("settings");
-  });
-  document.querySelectorAll(".tool-card").forEach((card) => {
-    card.addEventListener("click", () => {
-      const tool = card.dataset.tool;
-      if (tool) navigateTo(tool);
+  var panels = {
+    variables: document.getElementById("variablesPanel"),
+    select: document.getElementById("selectPanel"),
+    annotate: document.getElementById("annotatePanel"),
+    spec: document.getElementById("specPanel"),
+    settings: document.getElementById("settingsPanel")
+  };
+  var activePanel = "variables";
+  function switchPanel(panel) {
+    activePanel = panel;
+    Object.entries(panels).forEach(([key, el]) => {
+      el.classList.toggle("active", key === panel);
+    });
+    document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
+      tab.classList.toggle("active", tab.dataset.panel === panel);
+    });
+    if (panel === "settings") postToPlugin("get-settings");
+  }
+  document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const p = tab.dataset.panel;
+      if (p) switchPanel(p);
     });
   });
-  navigateTo("home");
+  var isMini = false;
+  var app = document.getElementById("app");
+  var toggleMiniBtn = document.getElementById("toggleMiniBtn");
+  toggleMiniBtn.addEventListener("click", () => {
+    isMini = !isMini;
+    app.classList.toggle("mini", isMini);
+    postToPlugin("resize-for-view", {
+      width: 320,
+      height: isMini ? 36 : 460
+    });
+    if (isMini && popoverOpen) closePopover();
+  });
+  var copyNodeBtn = document.getElementById("copyNodeBtn");
+  var headerSelName = document.getElementById("headerSelName");
+  var _copyFileKey = null;
+  var _copyNodeId = null;
+  var _copyFileName = null;
+  function updateCopyBtn(sel, fileKey, fileName) {
+    var _a13;
+    _copyFileKey = fileKey;
+    _copyNodeId = (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null;
+    _copyFileName = fileName != null ? fileName : null;
+    const hasNode = !!(sel && fileKey);
+    copyNodeBtn.classList.toggle("hidden", !hasNode);
+    if (sel) {
+      headerSelName.textContent = sel.name;
+      headerSelName.classList.add("has-sel");
+    } else {
+      headerSelName.textContent = "\u2014";
+      headerSelName.classList.remove("has-sel");
+    }
+  }
+  copyNodeBtn.addEventListener("click", () => {
+    if (!_copyFileKey || !_copyNodeId) return;
+    const slug = (_copyFileName || "file").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const nid = _copyNodeId.replace(":", "-");
+    const url = `https://www.figma.com/design/${_copyFileKey}/${slug}?node-id=${nid}`;
+    navigator.clipboard.writeText(url).catch(() => {
+    });
+    copyNodeBtn.style.color = "var(--accent)";
+    setTimeout(() => {
+      copyNodeBtn.style.color = "";
+    }, 1200);
+  });
+  var BRIDGE_MAX_RECONNECT = 20;
+  var BRIDGE_RECONNECT_BASE_MS = 2e3;
+  var WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
@@ -71,9 +104,6 @@
   var bridgeReconnectTimer = null;
   var bridgeReconnectAttempts = 0;
   var bridgeUserDisconnected = false;
-  var BRIDGE_MAX_RECONNECT = 20;
-  var BRIDGE_RECONNECT_BASE_MS = 2e3;
-  var WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
   var pendingRequests = /* @__PURE__ */ new Map();
   var requestCounter = 0;
   function sendBridgeCommand(method, params = {}, timeoutMs = 15e3) {
@@ -89,50 +119,54 @@
       postToPlugin("bridge:command", { requestId, method, params });
     });
   }
-  var bridgePill = document.getElementById("bridgePill");
   var bridgeDot = document.getElementById("bridgeDot");
-  var bridgePillLabel = document.getElementById("bridgePillLabel");
-  var bridgePopover = document.getElementById("bridgePopover");
+  var bridgeDotMini = document.getElementById("bridgeDotMini");
   var popoverDot = document.getElementById("popoverDot");
-  var popoverLabel = document.getElementById("popoverLabel");
-  var popoverSub = document.getElementById("popoverSub");
+  var bridgePortLabel = document.getElementById("bridgePortLabel");
   var bridgeToggleBtn = document.getElementById("bridgeToggleBtn");
+  var bridgePopover = document.getElementById("bridgePopover");
+  var bridgeTabBtn = document.getElementById("bridgeTabBtn");
+  var bridgeMiniBtn = document.getElementById("bridgeMiniBtn");
   var popoverOpen = false;
-  bridgePill.addEventListener("click", (e) => {
+  function openPopover() {
+    popoverOpen = true;
+    bridgePopover.classList.add("open");
+  }
+  function closePopover() {
+    popoverOpen = false;
+    bridgePopover.classList.remove("open");
+  }
+  bridgeTabBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    popoverOpen = !popoverOpen;
-    bridgePopover.classList.toggle("open", popoverOpen);
+    popoverOpen ? closePopover() : openPopover();
+  });
+  bridgeMiniBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    popoverOpen ? closePopover() : openPopover();
   });
   document.addEventListener("click", () => {
-    if (popoverOpen) {
-      popoverOpen = false;
-      bridgePopover.classList.remove("open");
-    }
+    if (popoverOpen) closePopover();
   });
   bridgePopover.addEventListener("click", (e) => e.stopPropagation());
   bridgeToggleBtn.addEventListener("click", () => {
     if (bridgeConnected) bridgeDisconnect();
     else bridgeConnect();
   });
+  function setAllDots(on) {
+    [bridgeDot, bridgeDotMini, popoverDot].forEach((el) => el == null ? void 0 : el.classList.toggle("on", on));
+  }
   function updateBridgeUi() {
     if (bridgeConnected) {
-      bridgeDot.classList.add("on");
-      bridgePill.classList.add("connected");
-      bridgePillLabel.textContent = "Claude Code";
-      popoverDot.classList.add("on");
-      popoverLabel.textContent = "Connected";
-      popoverSub.textContent = "Variables auto-sync on connect.";
+      setAllDots(true);
+      bridgePortLabel.textContent = "Port " + bridgeWsPort;
       bridgeToggleBtn.textContent = "Disconnect";
       bridgeToggleBtn.className = "btn btn-ghost";
     } else {
-      bridgeDot.classList.remove("on");
-      bridgePill.classList.remove("connected");
-      bridgePillLabel.textContent = "Connect";
-      popoverDot.classList.remove("on");
-      popoverLabel.textContent = "Not connected";
-      popoverSub.textContent = "Start Claude Code, then connect.";
+      setAllDots(false);
+      bridgePortLabel.textContent = "\u2014";
       bridgeToggleBtn.textContent = "Connect";
       bridgeToggleBtn.className = "btn";
+      bridgeToggleBtn.disabled = false;
     }
   }
   function bridgeStartKeepalive() {
@@ -155,7 +189,7 @@
       if (ws.readyState !== 1 || !result) return;
       const info = result.fileInfo || result;
       if (!info.fileKey) info.fileKey = "local-" + Date.now();
-      info.pluginVersion = "0.1.0";
+      info.pluginVersion = "0.2.0";
       ws.send(JSON.stringify({ type: "FILE_INFO", data: info }));
     }).catch(() => {
     });
@@ -260,7 +294,6 @@
           bridgeConnected = true;
           bridgeReconnectAttempts = 0;
           updateBridgeUi();
-          bridgeToggleBtn.disabled = false;
           attachWsHandlers(ws, port);
           initBridgeConnection(ws);
           bridgeStartKeepalive();
@@ -272,19 +305,21 @@
           clearTimeout(t);
           if (!found) {
             pending--;
-            if (pending <= 0) connectFailed();
+            if (pending <= 0) {
+              bridgeToggleBtn.textContent = "Connect";
+              bridgeToggleBtn.disabled = false;
+              bridgePortLabel.textContent = "No server found";
+            }
           }
         };
       } catch (e) {
         pending--;
-        if (pending <= 0 && !found) connectFailed();
+        if (pending <= 0 && !found) {
+          bridgeToggleBtn.textContent = "Connect";
+          bridgeToggleBtn.disabled = false;
+        }
       }
     });
-  }
-  function connectFailed() {
-    bridgeToggleBtn.textContent = "Connect";
-    bridgeToggleBtn.disabled = false;
-    popoverSub.textContent = "No MCP server found \u2014 start Claude Code first.";
   }
   function bridgeDisconnect() {
     bridgeUserDisconnected = true;
@@ -304,9 +339,7 @@
     updateBridgeUi();
   }
   var variablesCache = null;
-  function setVarMeta(text) {
-    const el = document.getElementById("varMeta");
-    if (el) el.textContent = text;
+  function setVarMeta(_text) {
   }
   function setVarStatus(msg, type = "") {
     const el = document.getElementById("varStatus");
@@ -331,13 +364,12 @@
     }
     const byCol = {};
     for (const v of data.variables) byCol[v.variableCollectionId] = (byCol[v.variableCollectionId] || 0) + 1;
-    el.innerHTML = '<div class="collection-list">' + data.variableCollections.map(
+    el.innerHTML = data.variableCollections.map(
       (c) => `<div class="collection-row">
       <span class="collection-name">${esc(c.name)}</span>
       <span class="collection-count">${byCol[c.id] || 0}</span>
     </div>`
-    ).join("") + "</div>";
-    setVarMeta(data.variables.length + " variables");
+    ).join("");
     updateExportButtons();
   }
   var _a;
@@ -351,7 +383,9 @@
       if (result == null ? void 0 : result.data) {
         renderVariables(result.data);
         setVarStatus(result.data.variables.length + " variables loaded", "ok");
-      } else setVarStatus("No data returned", "err");
+      } else {
+        setVarStatus("No data returned", "err");
+      }
     } catch (e) {
       setVarStatus(e.message || "Error", "err");
     } finally {
@@ -377,7 +411,7 @@
       if (data.ok) setVarStatus(`\u2713 ${data.variables} vars \u2192 dist/css/`, "ok");
       else setVarStatus("\u274C " + (data.error || "Build failed"), "err");
     }).catch(() => setVarStatus("\u274C Dev server not running \u2014 run: npm run dev-server", "err")).finally(() => {
-      btn.textContent = "Export Local";
+      btn.textContent = "Local";
       updateExportButtons();
     });
   });
@@ -409,26 +443,13 @@
     };
     let sha;
     const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
-    if (getRes.ok) {
-      sha = (await getRes.json()).sha;
-    } else if (getRes.status !== 404) {
-      throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
-    }
+    if (getRes.ok) sha = (await getRes.json()).sha;
+    else if (getRes.status !== 404) throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-    const body = {
-      message: "chore: sync tokens from Figma",
-      content,
-      branch
-    };
+    const body = { message: "chore: sync tokens from Figma", content, branch };
     if (sha) body.sha = sha;
-    const putRes = await fetch(apiBase, {
-      method: "PUT",
-      headers,
-      body: JSON.stringify(body)
-    });
-    if (!putRes.ok) {
-      throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
-    }
+    const putRes = await fetch(apiBase, { method: "PUT", headers, body: JSON.stringify(body) });
+    if (!putRes.ok) throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
   }
   function setSettingsStatus(msg, type = "") {
     const el = document.getElementById("settingsStatus");
@@ -461,10 +482,6 @@
     postToPlugin("save-settings", { settings });
   });
   var selectSetId = null;
-  function setSelectMeta(text) {
-    const el = document.getElementById("selectMeta");
-    if (el) el.textContent = text;
-  }
   function renderAxes(setId, setName, axes) {
     selectSetId = setId;
     const empty = document.getElementById("selectEmpty");
@@ -477,37 +494,32 @@
     nameEl.textContent = setName;
     if (status) status.textContent = "";
     const variantAxes = axes.filter((a) => a.type === "VARIANT");
-    setSelectMeta(setName);
     if (variantAxes.length === 0) {
       axesEl.innerHTML = '<div class="empty-state">No variant axes found</div>';
       return;
     }
-    axesEl.innerHTML = variantAxes.map((axis) => {
-      const chips = (axis.variantOptions || []).map(
-        (v) => `<button class="chip on" data-axis="${esc(axis.name)}" data-value="${esc(v)}">${esc(v)}</button>`
-      ).join("");
-      return `<div class="axis-group">
+    axesEl.innerHTML = variantAxes.map(
+      (axis) => `<div class="axis-group">
       <div class="axis-label">${esc(axis.name)}</div>
-      <div class="axis-values">${chips}</div>
-    </div>`;
-    }).join("");
+      <div class="axis-values">${(axis.variantOptions || []).map(
+        (v) => `<button class="chip on" data-axis="${esc(axis.name)}" data-value="${esc(v)}">${esc(v)}</button>`
+      ).join("")}</div>
+    </div>`
+    ).join("");
     axesEl.querySelectorAll(".chip").forEach((chip) => {
       chip.addEventListener("click", () => chip.classList.toggle("on"));
     });
   }
   function clearSelect() {
     selectSetId = null;
-    const empty = document.getElementById("selectEmpty");
-    const body = document.getElementById("selectBody");
-    empty.style.display = "block";
-    body.style.display = "none";
-    setSelectMeta("Select a component set");
+    document.getElementById("selectEmpty").style.display = "block";
+    document.getElementById("selectBody").style.display = "none";
   }
   var _a5;
   (_a5 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
     if (!selectSetId) return;
     const filter = {};
-    document.querySelectorAll(".chip.on").forEach((chip) => {
+    document.querySelectorAll(".chip.on[data-axis]").forEach((chip) => {
       const axis = chip.dataset.axis;
       if (!filter[axis]) filter[axis] = [];
       filter[axis].push(chip.dataset.value);
@@ -516,17 +528,13 @@
   });
   var _a6;
   (_a6 = document.getElementById("selectAllBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
-    document.querySelectorAll(".chip").forEach((c) => c.classList.add("on"));
+    document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.add("on"));
   });
   var _a7;
   (_a7 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
-    document.querySelectorAll(".chip").forEach((c) => c.classList.remove("on"));
+    document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.remove("on"));
   });
   var annotateNodeId = null;
-  function setAnnotateMeta(text) {
-    const el = document.getElementById("annotateMeta");
-    if (el) el.textContent = text;
-  }
   function setAnnotateStatus(msg, type = "") {
     const el = document.getElementById("annotateStatus");
     el.textContent = msg;
@@ -546,12 +554,10 @@
       nameEl.textContent = sel.name;
       typeEl.textContent = sel.nodeType;
       applyBtn.disabled = false;
-      setAnnotateMeta(sel.name);
     } else {
       empty.style.display = "block";
       info.style.display = "none";
       applyBtn.disabled = true;
-      setAnnotateMeta("Select a node to start");
     }
   }
   document.querySelectorAll("#annotateCats .chip").forEach((chip) => {
@@ -567,25 +573,21 @@
       setAnnotateStatus("Select at least one category", "err");
       return;
     }
-    const applyBtn = document.getElementById("annotateApplyBtn");
-    applyBtn.disabled = true;
-    applyBtn.textContent = "Annotating\u2026";
+    const btn = document.getElementById("annotateApplyBtn");
+    btn.disabled = true;
+    btn.textContent = "Annotating\u2026";
     setAnnotateStatus("");
     postToPlugin("annotate:apply", { nodeId: annotateNodeId, categories });
   });
   var _a9;
   (_a9 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
     if (!annotateNodeId) return;
-    const clearBtn = document.getElementById("annotateClearBtn");
-    clearBtn.disabled = true;
+    const btn = document.getElementById("annotateClearBtn");
+    btn.disabled = true;
     setAnnotateStatus("Clearing\u2026");
     postToPlugin("annotate:clear", { nodeId: annotateNodeId });
   });
   var specSetId = null;
-  function setSpecMeta(text) {
-    const el = document.getElementById("specMeta");
-    if (el) el.textContent = text;
-  }
   function setSpecStatus(msg, type = "") {
     const el = document.getElementById("specStatus");
     el.textContent = msg;
@@ -604,14 +606,12 @@
       empty.style.display = "none";
       info.style.display = "flex";
       nameEl.textContent = sel.name;
-      countEl.textContent = "COMPONENT_SET \xB7 " + ((_b = sel.variantCount) != null ? _b : 0) + " variants";
+      countEl.textContent = ((_b = sel.variantCount) != null ? _b : 0) + " variants";
       genBtn.disabled = false;
-      setSpecMeta(sel.name);
     } else {
       empty.style.display = "block";
       info.style.display = "none";
       genBtn.disabled = true;
-      setSpecMeta("Select a component set");
     }
   }
   document.querySelectorAll("#specCats .chip").forEach((chip) => {
@@ -635,9 +635,9 @@
       setSpecStatus("Select at least one category", "err");
       return;
     }
-    const genBtn = document.getElementById("specGenerateBtn");
-    genBtn.disabled = true;
-    genBtn.textContent = "Generating\u2026";
+    const btn = document.getElementById("specGenerateBtn");
+    btn.disabled = true;
+    btn.textContent = "Generating\u2026";
     setSpecStatus("");
     postToPlugin("spec:generate", { setId: specSetId, categories });
   });
@@ -661,10 +661,9 @@
         }
         break;
       }
-      case "settings-loaded": {
+      case "settings-loaded":
         applySettings(msg.settings);
         break;
-      }
       case "settings-saved": {
         if (msg.success) {
           githubSettings = {
@@ -717,31 +716,29 @@
         break;
       }
       case "annotate:result": {
-        const applyBtn = document.getElementById("annotateApplyBtn");
-        applyBtn.disabled = !annotateNodeId;
-        applyBtn.textContent = "Annotate";
-        if (msg.error) {
-          setAnnotateStatus("\u274C " + msg.error, "err");
-        } else {
+        const btn = document.getElementById("annotateApplyBtn");
+        btn.disabled = !annotateNodeId;
+        btn.textContent = "Annotate";
+        if (msg.error) setAnnotateStatus("\u274C " + msg.error, "err");
+        else {
           const n = msg.annotated;
           setAnnotateStatus(`\u2713 ${n} node${n !== 1 ? "s" : ""} annotated`, "ok");
         }
         break;
       }
       case "annotate:cleared": {
-        const clearBtn = document.getElementById("annotateClearBtn");
-        clearBtn.disabled = false;
+        const btn = document.getElementById("annotateClearBtn");
+        btn.disabled = false;
         const n = msg.cleared;
         setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? "s" : ""}` : "Nothing to clear", "ok");
         break;
       }
       case "spec:result": {
-        const genBtn = document.getElementById("specGenerateBtn");
-        genBtn.disabled = !specSetId;
-        genBtn.textContent = "Generate Spec Sheet";
-        if (msg.error) {
-          setSpecStatus("\u274C " + msg.error, "err");
-        } else {
+        const btn = document.getElementById("specGenerateBtn");
+        btn.disabled = !specSetId;
+        btn.textContent = "Generate";
+        if (msg.error) setSpecStatus("\u274C " + msg.error, "err");
+        else {
           const cats = msg.categoryCount;
           const vars = msg.variantCount;
           setSpecStatus(`\u2713 ${cats} categor${cats !== 1 ? "ies" : "y"} \xB7 ${vars} variant${vars !== 1 ? "s" : ""}`, "ok");
@@ -752,4 +749,5 @@
   });
   postToPlugin("ui-ready");
   postToPlugin("get-settings");
+  postToPlugin("resize-for-view", { width: 320, height: 460 });
 })();
