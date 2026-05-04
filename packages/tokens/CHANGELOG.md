@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.16] - 2026-05-04
+
+### 🐛 Bug fixes
+
+- **`title-5` font-size at `sm` breakpoint corrected to 18px**
+  `--s2a-typography-font-size-title-5` at `sm` was resolving to 20px (same as `title-4`). Now aliases `--s2a-font-size-lg` (18px).
+
+- **`title-6` letter-spacing normalized to −0.2px across all breakpoints**
+  `--s2a-typography-letter-spacing-title-6` was −0.48px at `xl`, `lg`, `md`, and `sm`. Now aliases `--s2a-font-letter-spacing-5xl` (−0.2px) at all four breakpoints.
+
+- **`title-6` line-height corrected to 18px at `sm` breakpoint**
+  `--s2a-typography-line-height-title-6` at `sm` was 21px. Now aliases `--s2a-font-line-height-xs` (18px).
+
+### ✨ Changes
+
+- **Body, label, caption, and eyebrow letter-spacing normalized to 0**
+  `--s2a-typography-letter-spacing-body-lg`, `-body-md`, `-body-sm`, `-body-xs`, `-eyebrow`, `-label`, and `-caption` now alias `--s2a-font-letter-spacing-6xl` (0px) across all breakpoints. Previously these carried small negative tracking values.
+
+---
+
 ## [0.0.15] - 2026-04-30
 
 ### 🐛 Bug fix
