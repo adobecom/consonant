@@ -5,16 +5,21 @@
   <style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:        #fafaf8;
-  --bg-card:   #f4f3f0;
-  --bg-hover:  #eeecea;
-  --border:    #e2e0dc;
-  --text-1:    #1c1b19;
-  --text-2:    #6b6864;
-  --text-3:    #a8a49f;
-  --green:     #2d7a52;
-  --green-bg:  rgba(45,122,82,0.08);
-  --accent:    #1c1b19;
+  --bg:         #18181f;
+  --bg-raised:  #21212d;
+  --bg-hover:   #2a2a3a;
+  --border:     #48486a;   /* 3:1 on bg-raised for input borders (WCAG 1.4.11) */
+  --text-1:     #e8e8f6;   /* ~15:1 on bg */
+  --text-2:     #9898c0;   /* ~6.4:1 on bg, 5.8:1 on bg-raised — was #7070a0 (3.8:1, fail) */
+  --text-3:     #8585b5;   /* ~5.1:1 on bg, 4.6:1 on bg-raised — was #424260 (1.8:1, fail) */
+  --accent:     #6bb5cc;   /* ~7.7:1 on bg — text, borders, tab active */
+  --accent-bg:  rgba(107,181,204,0.10);
+  --accent-bdr: rgba(107,181,204,0.28);
+  --accent-btn: #1e7a96;   /* button bg — white text ~4.9:1 */
+  --green:      #4ade80;   /* ~10.2:1 on bg */
+  --green-bg:   rgba(74,222,128,0.10);
+  --green-bdr:  rgba(74,222,128,0.22);
+  --red:        #f87171;   /* ~6.5:1 on bg */
 }
 
 body {
@@ -25,62 +30,102 @@ body {
   background: var(--bg);
   height: 100vh;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 #app {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
+  position: relative;
 }
+
+/* ── Mini mode ──────────────────────────────────────────────────────────── */
+
+#app.mini .main-content,
+#app.mini .tab-bar { display: none !important; }
+
+.full-only { }
+#app.mini .full-only { display: none !important; }
+
+.mini-only { display: none !important; }
+#app.mini .mini-only { display: flex !important; }
+
+.icon-expand { display: none !important; }
+.icon-collapse { display: block !important; }
+#app.mini .icon-expand { display: block !important; }
+#app.mini .icon-collapse { display: none !important; }
 
 /* ── Header ─────────────────────────────────────────────────────────────── */
 
 .header {
+  height: 36px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
+  padding: 0 8px;
+  gap: 6px;
   background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 20;
+}
+
+.header-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-bdr);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.back-btn {
-  display: none;
-  align-items: center;
-  gap: 4px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-2);
-  font-size: 12px;
-  padding: 0;
-  line-height: 1;
-}
-.back-btn:hover { color: var(--text-1); }
-.back-btn svg { flex-shrink: 0; }
-.back-btn.visible { display: flex; }
 
 .header-title {
   font-size: 12px;
   font-weight: 600;
   color: var(--text-1);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+  flex-shrink: 0;
 }
 
-.header-right {
+/* Selection name — mini mode only, fills space */
+.header-sel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-sel-name {
+  font-size: 11px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+.header-sel-name.has-sel { color: var(--text-1); font-weight: 500; }
+
+.header-spacer { flex: 1; }
+
+.header-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 1px;
+  flex-shrink: 0;
 }
 
+/* ── Icon button ────────────────────────────────────────────────────────── */
+
 .icon-btn {
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,126 +133,171 @@ body {
   border: none;
   cursor: pointer;
   color: var(--text-3);
-  padding: 3px;
-  border-radius: 4px;
-  line-height: 1;
+  border-radius: 5px;
+  padding: 0;
+  transition: color 0.12s, background 0.12s;
+  font-family: inherit;
 }
 .icon-btn:hover { color: var(--text-1); background: var(--bg-hover); }
 
-/* Bridge pill */
-.bridge-pill {
+/* Bridge dot button — mini header */
+.bridge-mini-btn {
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 8px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
+  justify-content: center;
+  background: none;
+  border: none;
   cursor: pointer;
-  font-size: 10px;
-  color: var(--text-2);
-  transition: background 0.15s, border-color 0.15s;
-  white-space: nowrap;
+  border-radius: 5px;
+  padding: 0;
+  transition: background 0.12s;
+  font-family: inherit;
 }
-.bridge-pill:hover { background: var(--bg-hover); }
-.bridge-pill.connected {
-  background: var(--green-bg);
-  border-color: rgba(45,122,82,0.25);
-  color: var(--green);
+.bridge-mini-btn:hover { background: var(--bg-hover); }
+
+/* ── Main content ───────────────────────────────────────────────────────── */
+
+.main-content {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
 }
 
+/* ── Panels ─────────────────────────────────────────────────────────────── */
+
+.panel {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  padding: 14px 12px;
+}
+.panel.active { display: block; }
+
+/* ── Tab bar ────────────────────────────────────────────────────────────── */
+
+.tab-bar {
+  height: 44px;
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-raised);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  background: none;
+  border: none;
+  border-top: 2px solid transparent;
+  cursor: pointer;
+  color: var(--text-3);
+  padding: 4px 2px 5px;
+  transition: color 0.12s, background 0.12s, border-top-color 0.12s;
+  font-family: inherit;
+}
+.tab:hover { color: var(--text-2); background: var(--bg-hover); }
+.tab.active { color: var(--accent); border-top-color: var(--accent); }
+
+.tab-icon { flex-shrink: 0; display: block; }
+.tab-label { font-size: 8px; font-weight: 500; letter-spacing: 0.02em; white-space: nowrap; }
+
+/* Bridge dot in tab bar */
+.tab-bridge {
+  width: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-top: 2px solid transparent;
+  border-left: 1px solid var(--border);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.12s;
+  font-family: inherit;
+}
+.tab-bridge:hover { background: var(--bg-hover); }
+
+/* ── Bridge dot ─────────────────────────────────────────────────────────── */
+
 .bridge-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--text-3);
   flex-shrink: 0;
-  transition: background 0.2s;
+  display: block;
+  transition: background 0.2s, box-shadow 0.2s;
 }
-.bridge-dot.on { background: var(--green); }
-
-/* ── Scroll content ─────────────────────────────────────────────────────── */
-
-.content {
-  flex: 1;
-  overflow-y: auto;
+.bridge-dot.on {
+  background: var(--green);
+  box-shadow: 0 0 0 2.5px var(--green-bg);
 }
 
-/* ── Home — tool list ───────────────────────────────────────────────────── */
+/* ── Bridge popover ─────────────────────────────────────────────────────── */
 
-.home { padding: 16px 14px; }
-
-.category {
-  margin-bottom: 20px;
+.bridge-popover {
+  display: none;
+  position: absolute;
+  bottom: calc(44px + 8px);
+  right: 10px;
+  width: 222px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 -6px 32px rgba(0,0,0,0.45);
+  padding: 12px;
+  z-index: 100;
 }
-.category:last-child { margin-bottom: 0; }
-
-.category-label {
-  font-size: 9px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-3);
-  margin-bottom: 6px;
-  padding: 0 2px;
+.bridge-popover.open { display: block; }
+#app.mini .bridge-popover {
+  bottom: auto;
+  top: 44px;
 }
 
-.tool-card {
+/* ── Agent cards ──────────────────────────────────────────────────────── */
+
+.agent-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 9px 10px;
+  margin-bottom: 7px;
+}
+.agent-card:last-child { margin-bottom: 0; }
+
+.agent-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 10px 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.12s;
-  margin-bottom: 6px;
-  gap: 12px;
+  gap: 8px;
+  margin-bottom: 4px;
 }
-.tool-card:last-child { margin-bottom: 0; }
-.tool-card:hover { background: var(--bg-hover); }
 
-.tool-card-body { flex: 1; min-width: 0; }
-.tool-card-name {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-1);
-  display: block;
-}
-.tool-card-desc {
-  font-size: 11px;
-  color: var(--text-2);
-  display: block;
-  margin-top: 1px;
-}
-.tool-card-meta {
+.agent-icon { flex-shrink: 0; display: block; border-radius: 4px; }
+
+.agent-meta { flex: 1; min-width: 0; }
+.agent-name { font-size: 11px; font-weight: 600; color: var(--text-1); display: block; }
+.agent-port { font-size: 10px; color: var(--text-3); display: block; margin-top: 1px; font-variant-numeric: tabular-nums; }
+
+.agent-status-text {
   font-size: 10px;
-  color: var(--text-3);
-  display: block;
-  margin-top: 3px;
-}
-
-.tool-card-chevron {
-  color: var(--text-3);
-  flex-shrink: 0;
-}
-
-/* ── Tool panels ────────────────────────────────────────────────────────── */
-
-.panel { display: none; padding: 16px 14px; }
-.panel.active { display: block; }
-
-.section-label {
-  font-size: 9px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-3);
+  color: var(--text-2);
   margin-bottom: 8px;
+  line-height: 1.4;
 }
+
+/* Mini header — two dots side by side */
+.bridge-mini-btn { gap: 5px; }
 
 /* ── Buttons ────────────────────────────────────────────────────────────── */
 
@@ -215,19 +305,20 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 5px;
   padding: 7px 14px;
-  border-radius: 6px;
+  border-radius: 7px;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   border: 1px solid transparent;
-  background: var(--text-1);
-  color: var(--bg);
+  background: var(--accent-btn);
+  color: #fff;
   transition: opacity 0.15s;
   font-family: inherit;
 }
-.btn:hover:not(:disabled) { opacity: 0.82; }
-.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn:hover:not(:disabled) { opacity: 0.87; }
+.btn:disabled { opacity: 0.28; cursor: not-allowed; }
 
 .btn-ghost {
   background: transparent;
@@ -236,58 +327,58 @@ body {
 }
 .btn-ghost:hover:not(:disabled) { background: var(--bg-hover); opacity: 1; }
 
-.btn-row { display: flex; gap: 8px; margin-top: 12px; }
+.btn-row { display: flex; gap: 6px; margin-top: 12px; }
 .btn-row .btn { flex: 1; }
 
 /* ── Status ─────────────────────────────────────────────────────────────── */
 
-.status {
-  font-size: 11px;
-  color: var(--text-2);
-  margin-top: 8px;
-  min-height: 16px;
-}
+.status { font-size: 11px; color: var(--text-2); margin-top: 8px; min-height: 16px; }
 .status.ok { color: var(--green); }
-.status.err { color: #b94040; }
+.status.err { color: var(--red); }
 
-/* ── Variables panel ─────────────────────────────────────────────────────── */
+/* ── Section label ──────────────────────────────────────────────────────── */
 
-.collection-list { margin-bottom: 4px; }
+.section-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-3);
+  margin-bottom: 7px;
+}
+
+/* ── Variables ──────────────────────────────────────────────────────────── */
 
 .collection-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 7px 0;
+  padding: 8px 0;
   border-bottom: 1px solid var(--border);
   gap: 8px;
 }
 .collection-row:last-child { border-bottom: none; }
-
-.collection-name {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--text-1);
-  font-size: 12px;
-}
-
+.collection-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-1); font-size: 12px; }
 .collection-count {
   font-size: 10px;
   color: var(--text-3);
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
 }
 
 .empty-state {
   text-align: center;
-  padding: 24px 0;
+  padding: 32px 0;
   color: var(--text-3);
   font-size: 11px;
+  line-height: 1.7;
 }
 
-/* ── Select panel ────────────────────────────────────────────────────────── */
+/* ── Select ─────────────────────────────────────────────────────────────── */
 
 .set-name {
   font-size: 11px;
@@ -295,7 +386,7 @@ body {
   color: var(--text-1);
   margin-bottom: 12px;
   padding: 6px 10px;
-  background: var(--bg-card);
+  background: var(--bg-raised);
   border: 1px solid var(--border);
   border-radius: 6px;
   font-family: 'Menlo', monospace;
@@ -306,884 +397,315 @@ body {
 
 .axis-group { margin-bottom: 12px; }
 .axis-group:last-of-type { margin-bottom: 0; }
-
-.axis-label {
-  font-size: 9px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-3);
-  margin-bottom: 5px;
-}
-
+.axis-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--text-3); margin-bottom: 5px; }
 .axis-values { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* ── Chips ──────────────────────────────────────────────────────────────── */
 
 .chip {
   padding: 3px 10px;
   border-radius: 20px;
   border: 1px solid var(--border);
-  background: var(--bg-card);
+  background: var(--bg-raised);
   font-size: 11px;
   color: var(--text-2);
   cursor: pointer;
   user-select: none;
-  transition: all 0.1s;
+  transition: all 0.12s;
   font-family: inherit;
 }
-.chip:hover { background: var(--bg-hover); }
-.chip.on {
-  background: var(--text-1);
-  border-color: var(--text-1);
-  color: var(--bg);
-}
+.chip:hover { background: var(--bg-hover); color: var(--text-1); }
+.chip.on { background: var(--accent-bg); border-color: var(--accent-bdr); color: var(--accent); }
 
-/* ── Settings panel ──────────────────────────────────────────────────────── */
+.chip-grid { display: flex; flex-wrap: wrap; gap: 4px; }
 
-.settings-hint {
-  font-size: 11px;
-  color: var(--text-2);
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
-.settings-hint a { color: var(--text-1); }
-.settings-hint code {
-  font-family: 'Menlo', monospace;
-  font-size: 10px;
-  background: var(--bg-card);
-  padding: 1px 4px;
-  border-radius: 3px;
+/* ── Selection card (annotate + spec) ──────────────────────────────────── */
+
+.sel-card {
+  background: var(--bg-raised);
   border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 9px 11px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
 }
+.sel-card-empty { font-size: 11px; color: var(--text-3); }
+.sel-card-info { display: flex; align-items: center; gap: 8px; width: 100%; }
+.sel-icon { font-size: 13px; color: var(--accent); flex-shrink: 0; line-height: 1; }
+.sel-meta { flex: 1; min-width: 0; }
+.sel-name { font-size: 12px; font-weight: 600; color: var(--text-1); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sel-type { font-size: 10px; color: var(--text-3); display: block; margin-top: 1px; }
+
+/* ── Settings ───────────────────────────────────────────────────────────── */
+
+.settings-hint { font-size: 11px; color: var(--text-2); margin-bottom: 14px; line-height: 1.5; }
+.settings-hint a { color: var(--accent); text-decoration: none; }
+.settings-hint a:hover { text-decoration: underline; }
+.settings-hint code { font-family: 'Menlo', monospace; font-size: 10px; background: var(--bg-raised); padding: 1px 4px; border-radius: 3px; border: 1px solid var(--border); }
 
 .form-field { margin-bottom: 10px; }
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .form-row .form-field { margin-bottom: 0; }
-
-.form-label {
-  display: block;
-  font-size: 9px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-3);
-  margin-bottom: 4px;
-}
-
+.form-label { display: block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 4px; }
 .form-input {
   width: 100%;
   padding: 7px 10px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--bg-card);
+  background: var(--bg-raised);
   font-size: 12px;
   color: var(--text-1);
   font-family: inherit;
   outline: none;
   transition: border-color 0.15s;
 }
-.form-input:focus { border-color: var(--text-2); background: var(--bg); }
+.form-input:focus { border-color: var(--accent); }
 .form-input::placeholder { color: var(--text-3); }
-
-/* ── Bridge popover ──────────────────────────────────────────────────────── */
-
-.bridge-popover {
-  display: none;
-  position: absolute;
-  top: 40px;
-  right: 14px;
-  width: 220px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
-  padding: 14px;
-  z-index: 100;
-}
-.bridge-popover.open { display: block; }
-
-.bridge-popover-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.bridge-popover-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-1);
-}
-.bridge-popover-sub {
-  font-size: 10px;
-  color: var(--text-2);
-  margin-bottom: 10px;
-}
-
-/* ── Prototype chat panel ────────────────────────────────────────────────── */
-
-.proto-chat-panel {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  overflow: hidden;
-}
-
-/* Thread sidebar */
-.proto-sidebar {
-  width: 148px;
-  flex-shrink: 0;
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--bg-base);
-}
-.proto-sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 10px 6px;
-  flex-shrink: 0;
-}
-.proto-sidebar-title {
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--text-3);
-}
-.proto-sidebar-new {
-  width: 18px;
-  height: 18px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text-2);
-  font-size: 15px;
-  line-height: 1;
-  cursor: pointer;
-  font-family: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-.proto-sidebar-new:hover { color: var(--text-1); border-color: var(--text-3); }
-
-.proto-thread-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 6px 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-.proto-thread-empty-list {
-  font-size: 10px;
-  color: var(--text-3);
-  text-align: center;
-  padding: 12px 4px;
-  line-height: 1.5;
-}
-.proto-thread-item {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 5px 7px;
-  border-radius: 5px;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  text-align: left;
-  width: 100%;
-  font-family: inherit;
-}
-.proto-thread-item:hover { background: var(--bg-hover); }
-.proto-thread-item.active { background: var(--bg-card); }
-.proto-thread-item-name {
-  font-size: 11px;
-  color: var(--text-1);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-  font-weight: 500;
-}
-.proto-thread-item-meta {
-  font-size: 9px;
-  color: var(--text-3);
-  display: block;
-}
-.proto-thread-item-del {
-  opacity: 0;
-  margin-left: auto;
-  flex-shrink: 0;
-  background: none;
-  border: none;
-  color: var(--text-3);
-  font-size: 13px;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0 2px;
-  font-family: inherit;
-  align-self: center;
-}
-.proto-thread-item:hover .proto-thread-item-del { opacity: 1; }
-.proto-thread-item-del:hover { color: #c44; }
-
-/* Main area */
-.proto-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-width: 0;
-}
-
-/* Compact selection strip */
-.proto-sel-strip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 0 10px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 0;
-  font-size: 11px;
-  color: var(--text-2);
-  flex-shrink: 0;
-}
-.proto-sel-icon { flex-shrink: 0; font-size: 13px; }
-.proto-sel-name {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
-  color: var(--text-1);
-}
-.proto-sel-new {
-  flex-shrink: 0;
-  font-size: 10px;
-  padding: 2px 7px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  background: none;
-  color: var(--text-2);
-  cursor: pointer;
-  font-family: inherit;
-}
-.proto-sel-new:hover { background: var(--bg-hover); color: var(--text-1); }
-
-/* Thread */
-.proto-thread {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.proto-thread-empty {
-  font-size: 11px;
-  color: var(--text-2);
-  line-height: 1.6;
-  padding: 20px 0 0;
-  text-align: center;
-}
-
-/* Individual message card */
-.proto-msg {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.proto-msg-prompt {
-  align-self: flex-end;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 10px 10px 2px 10px;
-  padding: 7px 11px;
-  font-size: 12px;
-  color: var(--text-1);
-  max-width: 90%;
-  line-height: 1.5;
-  word-break: break-word;
-}
-.proto-msg-status {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 4px 2px;
-}
-.proto-step {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  color: var(--text-2);
-}
-.proto-step-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--border);
-  flex-shrink: 0;
-  transition: background 0.2s;
-}
-.proto-step[data-state="active"] .proto-step-dot {
-  background: var(--accent);
-  animation: pulse 1s ease-in-out infinite;
-}
-.proto-step[data-state="active"] { color: var(--text-1); }
-.proto-step[data-state="done"] .proto-step-dot { background: #3c8a47; }
-.proto-step[data-state="done"] { color: var(--text-2); }
-.proto-step[data-state="error"] .proto-step-dot { background: #c44; }
-.proto-step[data-state="error"] { color: #c44; }
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.proto-msg-result {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 4px 2px;
-  font-size: 11px;
-}
-.proto-result-ok { color: var(--green); font-weight: 500; flex: 1; }
-.proto-result-err { color: #b94040; font-weight: 500; flex: 1; }
-.proto-result-link {
-  color: var(--text-2);
-  text-decoration: none;
-  font-weight: 500;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  padding: 2px 8px;
-  background: var(--bg-card);
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 11px;
-}
-.proto-result-link:hover { background: var(--bg-hover); color: var(--text-1); }
-
-/* Sticky input bar */
-.proto-input-bar {
-  display: flex;
-  gap: 6px;
-  align-items: flex-end;
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.proto-chat-input {
-  flex: 1;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 7px 10px;
-  font-size: 11px;
-  color: var(--text-1);
-  font-family: inherit;
-  resize: none;
-  line-height: 1.5;
-  outline: none;
-  min-height: 36px;
-  max-height: 100px;
-  overflow-y: auto;
-}
-.proto-chat-input::placeholder { color: var(--text-3); }
-.proto-chat-input:focus { border-color: var(--text-2); }
-.proto-send-btn {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-  border-radius: 7px;
-  border: none;
-  background: var(--accent);
-  color: var(--bg);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.15s;
-}
-.proto-send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-.proto-send-btn:not(:disabled):hover { opacity: 0.8; }
-
-/* ── Server status ───────────────────────────────────────────────────────── */
-
-.server-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 12px;
-  font-size: 11px;
-  color: var(--text-2);
-}
-
-.server-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--text-3);
-  flex-shrink: 0;
-  transition: background 0.2s;
-}
-
-.server-dot.on { background: #22c55e; }
-
-.server-label { flex: 1; }
-
-.server-refresh {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-2);
-  padding: 0 2px;
-  font-size: 13px;
-  line-height: 1;
-  border-radius: 3px;
-}
-.server-refresh:hover { color: var(--text-1); }
-
-.server-start-btn {
-  display: none;
-  align-items: center;
-  padding: 2px 7px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  font-size: 10px;
-  font-family: inherit;
-  color: var(--text-2);
-  cursor: pointer;
-  margin-left: auto;
-}
-.server-start-btn:hover { background: var(--bg-hover); color: var(--text-1); }
-
-/* ── Story embed (inline Storybook iframe) ───────────────────────────────── */
-
-.story-embed {
-  margin-top: 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.story-embed-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 6px 10px;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border);
-}
-
-.story-embed-title {
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--text-2);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.story-embed-links {
-  display: flex;
-  gap: 10px;
-}
-
-.embed-link {
-  font-size: 11px;
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 500;
-}
-.embed-link:hover { text-decoration: underline; }
-.embed-link-btn { background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
-
-.story-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 120px;
-  font-size: 11px;
-  color: var(--text-2);
-  gap: 8px;
-}
-
-.story-loading::after {
-  content: '';
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--border);
-  border-top-color: var(--text-2);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.story-iframe {
-  width: 100%;
-  height: 480px;
-  border: none;
-  display: block;
-  background: #fff;
-}
-
-/* ── Branch picker ───────────────────────────────────────────────────────── */
-
-.branch-row {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.branch-input {
-  flex: 1;
-  padding: 6px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg-card);
-  font-size: 11px;
-  font-family: 'Menlo', monospace;
-  color: var(--text-1);
-  outline: none;
-  min-width: 0;
-  transition: border-color 0.15s;
-}
-.branch-input:focus { border-color: var(--text-2); background: var(--bg); }
-.branch-input::placeholder { color: var(--text-3); font-family: inherit; }
-
-.branch-pick-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg-card);
-  cursor: pointer;
-  color: var(--text-2);
-  flex-shrink: 0;
-  transition: background 0.12s, color 0.12s;
-}
-.branch-pick-btn:hover { background: var(--bg-hover); color: var(--text-1); }
-
-.branch-dropdown {
-  display: none;
-  flex-direction: column;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
-  overflow: hidden;
-  margin-top: 4px;
-  max-height: 180px;
-  overflow-y: auto;
-}
-.branch-dropdown.open { display: flex; }
-
-.branch-dropdown-item {
-  padding: 7px 12px;
-  border: none;
-  background: none;
-  text-align: left;
-  font-size: 11px;
-  font-family: 'Menlo', monospace;
-  color: var(--text-1);
-  cursor: pointer;
-  border-bottom: 1px solid var(--border);
-}
-.branch-dropdown-item:last-child { border-bottom: none; }
-.branch-dropdown-item:hover { background: var(--bg-hover); }
-
-.branch-dropdown-empty {
-  padding: 10px 12px;
-  font-size: 11px;
-  color: var(--text-3);
-  text-align: center;
-}
-
-/* ── Annotate panel ──────────────────────────────────────────────────────── */
-
-.annotate-cats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-/* ── Quick actions (home footer) ─────────────────────────────────────────── */
-
-.quick-actions {
-  margin-top: 20px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-}
-
-.quick-action-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  font-size: 11px;
-  font-family: inherit;
-  color: var(--text-2);
-  cursor: pointer;
-  transition: background 0.12s, color 0.12s;
-}
-.quick-action-btn:hover { background: var(--bg-hover); color: var(--text-1); }
 
 .hidden { display: none !important; }
 </style>
 </head>
 <body>
-  <div id="app">
+<div id="app">
 
-    <!-- ── Header ────────────────────────────────────────────────────── -->
-    <header class="header">
-      <div class="header-left">
-        <button class="back-btn" id="backBtn" aria-label="Back to home">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <span class="header-title" id="headerTitle">S2A Toolkit</span>
-      </div>
-      <div class="header-right">
-        <button class="icon-btn hidden" id="copyNodeBtn" aria-label="Copy Figma link">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <rect x="5" y="5" width="7" height="7" rx="1.2" stroke="currentColor" stroke-width="1.3"/>
-            <path d="M9 5V3.2A1.2 1.2 0 0 0 7.8 2H3.2A1.2 1.2 0 0 0 2 3.2v4.6C2 8.46 2.54 9 3.2 9H5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <button class="icon-btn" id="settingsBtn" aria-label="GitHub settings">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/>
-            <path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <button class="bridge-pill" id="bridgePill" aria-label="Bridge connection">
-          <span class="bridge-dot" id="bridgeDot"></span>
-          <span id="bridgePillLabel">Connect</span>
-        </button>
-      </div>
-    </header>
+  <!-- ── Header (always visible) ──────────────────────────────────────── -->
+  <header class="header">
 
-    <!-- Bridge popover -->
-    <div class="bridge-popover" id="bridgePopover">
-      <div class="bridge-popover-status">
-        <span class="bridge-dot" id="popoverDot"></span>
-        <span class="bridge-popover-label" id="popoverLabel">Not connected</span>
-      </div>
-      <p class="bridge-popover-sub" id="popoverSub">Start Claude Code, then connect.</p>
-      <button class="btn" id="bridgeToggleBtn" style="width:100%;">Connect</button>
+    <!-- Logo mark — always shows -->
+    <div class="header-logo" aria-hidden="true">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+        <path d="M5.5 1L10 5.5L5.5 10L1 5.5L5.5 1Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/>
+      </svg>
     </div>
 
-    <!-- ── Content ───────────────────────────────────────────────────── -->
-    <div class="content">
+    <!-- Title — full mode only -->
+    <span class="header-title full-only">S2A Toolkit</span>
 
-      <!-- Home -->
-      <div class="home" id="homeView">
-        <div class="category">
-          <div class="category-label">Tokens</div>
-          <button class="tool-card" data-tool="variables">
-            <div class="tool-card-body">
-              <span class="tool-card-name">Variables</span>
-              <span class="tool-card-desc">Export &amp; sync to token pipeline</span>
-              <span class="tool-card-meta" id="varMeta">—</span>
-            </div>
-            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
+    <!-- Selection strip — mini mode only, fills remaining space -->
+    <div class="header-sel mini-only" id="headerSel">
+      <span class="header-sel-name" id="headerSelName">—</span>
+    </div>
 
-        <div class="category">
-          <div class="category-label">Components</div>
-          <button class="tool-card" data-tool="select">
-            <div class="tool-card-body">
-              <span class="tool-card-name">Select Variants</span>
-              <span class="tool-card-desc">Filter a component set by axis</span>
-              <span class="tool-card-meta" id="selectMeta">Select a component set</span>
-            </div>
-            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="tool-card" data-tool="annotate">
-            <div class="tool-card-body">
-              <span class="tool-card-name">Annotate</span>
-              <span class="tool-card-desc">Apply token annotations by category</span>
-              <span class="tool-card-meta" id="annotateMeta">Select a node to start</span>
-            </div>
-            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="tool-card" data-tool="spec">
-            <div class="tool-card-body">
-              <span class="tool-card-name">Spec Sheet</span>
-              <span class="tool-card-desc">Generate annotated variant gallery</span>
-              <span class="tool-card-meta" id="specMeta">Select a component set</span>
-            </div>
-            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
+    <div class="header-spacer full-only"></div>
 
+    <div class="header-actions">
+      <!-- Copy Figma link (visible when a node is selected) -->
+      <button class="icon-btn hidden" id="copyNodeBtn" title="Copy Figma link" aria-label="Copy Figma link">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <rect x="5" y="5" width="7" height="7" rx="1.2" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M9 5V3.2A1.2 1.2 0 0 0 7.8 2H3.2A1.2 1.2 0 0 0 2 3.2v4.6C2 8.46 2.54 9 3.2 9H5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Bridge dot — mini mode only -->
+      <button class="bridge-mini-btn mini-only" id="bridgeMiniBtn" aria-label="Bridge status">
+        <span class="bridge-dot" id="bridgeDotMini"></span>
+      </button>
+
+      <!-- Minimize ↔ Expand -->
+      <button class="icon-btn" id="toggleMiniBtn" aria-label="Minimize plugin">
+        <svg class="icon-collapse" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 5h10M2 9h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <svg class="icon-expand" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 8.5l4-4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Panels ───────────────────────────────────────────────────────── -->
+  <div class="main-content" id="mainContent">
+
+    <!-- Variables -->
+    <div class="panel active" id="variablesPanel">
+      <div class="section-label">Collections</div>
+      <div id="varCollections">
+        <div class="empty-state">Click Refresh to load collections</div>
       </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" id="varRefreshBtn">Refresh</button>
+        <button class="btn btn-ghost" id="varExportLocalBtn" disabled>Local</button>
+        <button class="btn" id="varExportGithubBtn" disabled>↑ GitHub</button>
+      </div>
+      <div class="status" id="varStatus"></div>
+    </div>
 
-      <!-- Variables panel -->
-      <div class="panel" id="variablesPanel">
-        <div class="section-label">Collections</div>
-        <div class="collection-list" id="varCollections">
-          <div class="empty-state">Click Refresh to load</div>
-        </div>
+    <!-- Select Variants -->
+    <div class="panel" id="selectPanel">
+      <div class="empty-state" id="selectEmpty">Select a component set on the canvas</div>
+      <div id="selectBody" style="display:none;">
+        <div class="set-name" id="selectSetName"></div>
+        <div id="selectAxes"></div>
         <div class="btn-row">
-          <button class="btn btn-ghost" id="varRefreshBtn">Refresh</button>
-          <button class="btn btn-ghost" id="varExportLocalBtn" disabled>Export Local</button>
-          <button class="btn" id="varExportGithubBtn" disabled>↑ GitHub</button>
+          <button class="btn btn-ghost" id="selectAllBtn">All</button>
+          <button class="btn btn-ghost" id="selectNoneBtn">None</button>
+          <button class="btn" id="selectApplyBtn" style="flex:2;">Select</button>
         </div>
-        <div class="status" id="varStatus"></div>
+        <div class="status" id="selectStatus"></div>
       </div>
+    </div>
 
-      <!-- Select panel -->
-      <div class="panel" id="selectPanel">
-        <div class="empty-state" id="selectEmpty">Select a component set on the canvas</div>
-        <div id="selectBody" style="display:none;">
-          <div class="set-name" id="selectSetName"></div>
-          <div id="selectAxes"></div>
-          <div class="btn-row">
-            <button class="btn btn-ghost" id="selectAllBtn">All</button>
-            <button class="btn btn-ghost" id="selectNoneBtn">None</button>
-            <button class="btn" id="selectApplyBtn" style="flex:2;">Select</button>
+    <!-- Annotate -->
+    <div class="panel" id="annotatePanel">
+      <div class="section-label">Selection</div>
+      <div class="sel-card" id="annotateSelection">
+        <span class="sel-card-empty" id="annotateSelectionEmpty">Select an instance or frame</span>
+        <div class="sel-card-info" id="annotateSelectionInfo" style="display:none;">
+          <span class="sel-icon">◈</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="annotateNodeName">—</span>
+            <span class="sel-type" id="annotateNodeType">—</span>
           </div>
-          <div class="status" id="selectStatus"></div>
         </div>
       </div>
-
-      <!-- Annotate panel -->
-      <div class="panel" id="annotatePanel">
-
-        <div class="section-label">Selection</div>
-        <div class="proto-selection" id="annotateSelection">
-          <div id="annotateSelectionEmpty" class="proto-selection-empty">
-            Select an instance or frame on the canvas
-          </div>
-          <div id="annotateSelectionInfo" class="proto-selection-info" style="display:none;">
-            <span class="proto-frame-icon">◈</span>
-            <div class="proto-frame-meta">
-              <span class="proto-frame-name" id="annotateNodeName">—</span>
-              <span class="proto-frame-type" id="annotateNodeType">—</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-label" style="margin-top:12px;">Categories</div>
-        <div class="annotate-cats" id="annotateCats">
-          <button class="chip on" data-cat="color-fg">Color Fg</button>
-          <button class="chip on" data-cat="color-bg">Color Bg</button>
-          <button class="chip on" data-cat="spacing">Spacing</button>
-          <button class="chip on" data-cat="shape">Shape</button>
-          <button class="chip on" data-cat="typography">Typography</button>
-          <button class="chip on" data-cat="sizing">Sizing</button>
-        </div>
-
-        <div class="btn-row" style="margin-top:12px;">
-          <button class="btn btn-ghost" id="annotateClearBtn">Clear</button>
-          <button class="btn" id="annotateApplyBtn" disabled style="flex:2;">Annotate</button>
-        </div>
-        <div class="status" id="annotateStatus"></div>
-
+      <div class="section-label" style="margin-top:14px;">Token categories</div>
+      <div class="chip-grid" id="annotateCats">
+        <button class="chip on" data-cat="color-fg">Color Fg</button>
+        <button class="chip on" data-cat="color-bg">Color Bg</button>
+        <button class="chip on" data-cat="spacing">Spacing</button>
+        <button class="chip on" data-cat="shape">Shape</button>
+        <button class="chip on" data-cat="typography">Typography</button>
+        <button class="chip on" data-cat="sizing">Sizing</button>
       </div>
-
-      <!-- Spec panel -->
-      <div class="panel" id="specPanel">
-
-        <div class="section-label">Selection</div>
-        <div class="proto-selection" id="specSelection">
-          <div id="specSelectionEmpty" class="proto-selection-empty">
-            Select a component set on the canvas
-          </div>
-          <div id="specSelectionInfo" class="proto-selection-info" style="display:none;">
-            <span class="proto-frame-icon">◈</span>
-            <div class="proto-frame-meta">
-              <span class="proto-frame-name" id="specSetName">—</span>
-              <span class="proto-frame-type" id="specSetCount">—</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-label" style="margin-top:12px;">Categories</div>
-        <div class="annotate-cats" id="specCats">
-          <button class="chip on" data-cat="color-fg">Color Fg</button>
-          <button class="chip on" data-cat="color-bg">Color Bg</button>
-          <button class="chip on" data-cat="spacing">Spacing</button>
-          <button class="chip on" data-cat="shape">Shape</button>
-          <button class="chip on" data-cat="typography">Typography</button>
-          <button class="chip on" data-cat="sizing">Sizing</button>
-        </div>
-
-        <div class="btn-row" style="margin-top:12px;">
-          <button class="btn btn-ghost" id="specAllBtn">All</button>
-          <button class="btn btn-ghost" id="specNoneBtn">None</button>
-          <button class="btn" id="specGenerateBtn" disabled style="flex:2;">Generate Spec Sheet</button>
-        </div>
-        <div class="status" id="specStatus"></div>
-
+      <div class="btn-row" style="margin-top:12px;">
+        <button class="btn btn-ghost" id="annotateClearBtn">Clear</button>
+        <button class="btn" id="annotateApplyBtn" disabled style="flex:2;">Annotate</button>
       </div>
+      <div class="status" id="annotateStatus"></div>
+    </div>
 
-      <!-- Settings panel -->
-      <div class="panel" id="settingsPanel">
-        <div class="section-label">GitHub Export</div>
-        <p class="settings-hint">Tokens will be committed directly to your repo. Requires a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> scope.</p>
+    <!-- Spec Sheet -->
+    <div class="panel" id="specPanel">
+      <div class="section-label">Selection</div>
+      <div class="sel-card" id="specSelection">
+        <span class="sel-card-empty" id="specSelectionEmpty">Select a component set on the canvas</span>
+        <div class="sel-card-info" id="specSelectionInfo" style="display:none;">
+          <span class="sel-icon">◈</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="specSetName">—</span>
+            <span class="sel-type" id="specSetCount">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="section-label" style="margin-top:14px;">Token categories</div>
+      <div class="chip-grid" id="specCats">
+        <button class="chip on" data-cat="color-fg">Color Fg</button>
+        <button class="chip on" data-cat="color-bg">Color Bg</button>
+        <button class="chip on" data-cat="spacing">Spacing</button>
+        <button class="chip on" data-cat="shape">Shape</button>
+        <button class="chip on" data-cat="typography">Typography</button>
+        <button class="chip on" data-cat="sizing">Sizing</button>
+      </div>
+      <div class="btn-row" style="margin-top:12px;">
+        <button class="btn btn-ghost" id="specAllBtn">All</button>
+        <button class="btn btn-ghost" id="specNoneBtn">None</button>
+        <button class="btn" id="specGenerateBtn" disabled style="flex:2;">Generate</button>
+      </div>
+      <div class="status" id="specStatus"></div>
+    </div>
+
+    <!-- Settings -->
+    <div class="panel" id="settingsPanel">
+      <div class="section-label">GitHub Export</div>
+      <p class="settings-hint">Tokens commit directly to your repo. Needs a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> scope.</p>
+      <div class="form-field">
+        <label class="form-label" for="ghToken">Token</label>
+        <input class="form-input" type="password" id="ghToken" placeholder="ghp_…" autocomplete="off" />
+      </div>
+      <div class="form-row">
         <div class="form-field">
-          <label class="form-label" for="ghToken">Personal Access Token</label>
-          <input class="form-input" type="password" id="ghToken" placeholder="ghp_…" autocomplete="off" />
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label" for="ghOwner">Owner</label>
-            <input class="form-input" type="text" id="ghOwner" placeholder="adobecom" />
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="ghRepo">Repo</label>
-            <input class="form-input" type="text" id="ghRepo" placeholder="consonant-2" />
-          </div>
+          <label class="form-label" for="ghOwner">Owner</label>
+          <input class="form-input" type="text" id="ghOwner" placeholder="adobecom" />
         </div>
         <div class="form-field">
-          <label class="form-label" for="ghBranch">Branch</label>
-          <input class="form-input" type="text" id="ghBranch" placeholder="main" />
+          <label class="form-label" for="ghRepo">Repo</label>
+          <input class="form-input" type="text" id="ghRepo" placeholder="consonant-2" />
         </div>
-        <div class="form-field">
-          <label class="form-label" for="ghFilePath">File path in repo</label>
-          <input class="form-input" type="text" id="ghFilePath" placeholder="packages/toolkit-tokens/json/figma-export.json" />
-        </div>
-        <div class="btn-row">
-          <button class="btn" id="saveSettingsBtn">Save</button>
-        </div>
-        <div class="status" id="settingsStatus"></div>
       </div>
+      <div class="form-field">
+        <label class="form-label" for="ghBranch">Branch</label>
+        <input class="form-input" type="text" id="ghBranch" placeholder="main" />
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="ghFilePath">File path</label>
+        <input class="form-input" type="text" id="ghFilePath" placeholder="packages/toolkit-tokens/json/figma-export.json" />
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="saveSettingsBtn">Save</button>
+      </div>
+      <div class="status" id="settingsStatus"></div>
+    </div>
 
+  </div>
+
+  <!-- ── Tab bar ───────────────────────────────────────────────────────── -->
+  <nav class="tab-bar" id="tabBar" aria-label="Tools">
+    <button class="tab active" data-panel="variables" aria-label="Variables">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <rect x="1.5" y="3.5" width="12" height="3" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
+        <rect x="1.5" y="8.5" width="8" height="3" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
+      </svg>
+      <span class="tab-label">Variables</span>
+    </button>
+    <button class="tab" data-panel="select" aria-label="Select Variants">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <path d="M2 4h11M3.5 7.5h8M5.5 11h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+      </svg>
+      <span class="tab-label">Select</span>
+    </button>
+    <button class="tab" data-panel="annotate" aria-label="Annotate">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <circle cx="7.5" cy="6" r="3" stroke="currentColor" stroke-width="1.25"/>
+        <path d="M7.5 9v5M5.5 14h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+      </svg>
+      <span class="tab-label">Annotate</span>
+    </button>
+    <button class="tab" data-panel="spec" aria-label="Spec Sheet">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <rect x="1.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
+        <rect x="8.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
+        <rect x="1.5" y="8.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
+        <rect x="8.5" y="8.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
+      </svg>
+      <span class="tab-label">Spec</span>
+    </button>
+    <button class="tab" data-panel="settings" aria-label="Settings">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <circle cx="7.5" cy="7.5" r="2.2" stroke="currentColor" stroke-width="1.25"/>
+        <path d="M7.5 1.5v1.6M7.5 11.9v1.6M1.5 7.5h1.6M11.9 7.5h1.6M3.4 3.4l1.1 1.1M10.5 10.5l1.1 1.1M3.4 11.6l1.1-1.1M10.5 4.5l1.1-1.1" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+      </svg>
+      <span class="tab-label">Settings</span>
+    </button>
+
+    <!-- Bridge status dot -->
+    <button class="tab-bridge" id="bridgeTabBtn" aria-label="Bridge status">
+      <span class="bridge-dot" id="bridgeDot"></span>
+    </button>
+  </nav>
+
+  <!-- Bridge popover (absolute) -->
+  <div class="bridge-popover" id="bridgePopover">
+    <div class="agent-card">
+      <div class="agent-header">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="agent-icon" aria-hidden="true">
+          <rect width="20" height="20" rx="5" fill="#D97559"/>
+          <path d="M10 4.5L14 14H12.2L11.2 11.5H8.8L7.8 14H6L10 4.5Z" fill="white"/>
+          <rect x="9" y="10" width="2" height="1.2" rx="0.6" fill="#D97559"/>
+        </svg>
+        <div class="agent-meta">
+          <span class="agent-name">Claude Code</span>
+          <span class="agent-port" id="bridgePortLabel">—</span>
+        </div>
+        <span class="bridge-dot" id="popoverDot"></span>
+      </div>
+      <button class="btn" id="bridgeToggleBtn" style="width:100%;margin-top:8px;">Connect</button>
     </div>
   </div>
-  <script>"use strict";
+
+</div>
+<script>"use strict";
 (() => {
   var __defProp = Object.defineProperty;
   var __getOwnPropSymbols = Object.getOwnPropertySymbols;
@@ -1209,46 +731,79 @@ body {
   function postToPlugin(type, payload) {
     parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
   }
-  var homeView = document.getElementById("homeView");
-  var variablesPanel = document.getElementById("variablesPanel");
-  var selectPanel = document.getElementById("selectPanel");
-  var settingsPanel = document.getElementById("settingsPanel");
-  var annotatePanel = document.getElementById("annotatePanel");
-  var specPanel = document.getElementById("specPanel");
-  var headerTitle = document.getElementById("headerTitle");
-  var backBtn = document.getElementById("backBtn");
-  var settingsBtn = document.getElementById("settingsBtn");
-  var views = {
-    home: { el: homeView, title: "S2A Toolkit" },
-    variables: { el: variablesPanel, title: "Variables" },
-    select: { el: selectPanel, title: "Select Variants" },
-    settings: { el: settingsPanel, title: "GitHub Settings" },
-    annotate: { el: annotatePanel, title: "Annotate" },
-    spec: { el: specPanel, title: "Spec Sheet" }
-  };
-  var currentView = "home";
-  function navigateTo(view) {
-    currentView = view;
-    Object.entries(views).forEach(([key, v]) => {
-      v.el.style.display = key === view ? "block" : "none";
-    });
-    headerTitle.textContent = views[view].title;
-    backBtn.classList.toggle("visible", view !== "home");
-    settingsBtn.style.display = view === "settings" ? "none" : "flex";
-    postToPlugin("resize-for-view", { width: 320, height: 480 });
+  function updateProtoSelection(_sel) {
   }
-  backBtn.addEventListener("click", () => navigateTo("home"));
-  settingsBtn.addEventListener("click", () => {
-    postToPlugin("get-settings");
-    navigateTo("settings");
-  });
-  document.querySelectorAll(".tool-card").forEach((card) => {
-    card.addEventListener("click", () => {
-      const tool = card.dataset.tool;
-      if (tool) navigateTo(tool);
+  var panels = {
+    variables: document.getElementById("variablesPanel"),
+    select: document.getElementById("selectPanel"),
+    annotate: document.getElementById("annotatePanel"),
+    spec: document.getElementById("specPanel"),
+    settings: document.getElementById("settingsPanel")
+  };
+  var activePanel = "variables";
+  function switchPanel(panel) {
+    activePanel = panel;
+    Object.entries(panels).forEach(([key, el]) => {
+      el.classList.toggle("active", key === panel);
+    });
+    document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
+      tab.classList.toggle("active", tab.dataset.panel === panel);
+    });
+    if (panel === "settings") postToPlugin("get-settings");
+  }
+  document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const p = tab.dataset.panel;
+      if (p) switchPanel(p);
     });
   });
-  navigateTo("home");
+  var isMini = false;
+  var app = document.getElementById("app");
+  var toggleMiniBtn = document.getElementById("toggleMiniBtn");
+  toggleMiniBtn.addEventListener("click", () => {
+    isMini = !isMini;
+    app.classList.toggle("mini", isMini);
+    postToPlugin("resize-for-view", {
+      width: 320,
+      height: isMini ? 36 : 460
+    });
+    if (isMini && popoverOpen) closePopover();
+  });
+  var copyNodeBtn = document.getElementById("copyNodeBtn");
+  var headerSelName = document.getElementById("headerSelName");
+  var _copyFileKey = null;
+  var _copyNodeId = null;
+  var _copyFileName = null;
+  function updateCopyBtn(sel, fileKey, fileName) {
+    var _a13;
+    _copyFileKey = fileKey;
+    _copyNodeId = (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null;
+    _copyFileName = fileName != null ? fileName : null;
+    const hasNode = !!(sel && fileKey);
+    copyNodeBtn.classList.toggle("hidden", !hasNode);
+    if (sel) {
+      headerSelName.textContent = sel.name;
+      headerSelName.classList.add("has-sel");
+    } else {
+      headerSelName.textContent = "\u2014";
+      headerSelName.classList.remove("has-sel");
+    }
+  }
+  copyNodeBtn.addEventListener("click", () => {
+    if (!_copyFileKey || !_copyNodeId) return;
+    const slug = (_copyFileName || "file").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const nid = _copyNodeId.replace(":", "-");
+    const url = `https://www.figma.com/design/${_copyFileKey}/${slug}?node-id=${nid}`;
+    navigator.clipboard.writeText(url).catch(() => {
+    });
+    copyNodeBtn.style.color = "var(--accent)";
+    setTimeout(() => {
+      copyNodeBtn.style.color = "";
+    }, 1200);
+  });
+  var BRIDGE_MAX_RECONNECT = 20;
+  var BRIDGE_RECONNECT_BASE_MS = 2e3;
+  var WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
@@ -1256,9 +811,6 @@ body {
   var bridgeReconnectTimer = null;
   var bridgeReconnectAttempts = 0;
   var bridgeUserDisconnected = false;
-  var BRIDGE_MAX_RECONNECT = 20;
-  var BRIDGE_RECONNECT_BASE_MS = 2e3;
-  var WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
   var pendingRequests = /* @__PURE__ */ new Map();
   var requestCounter = 0;
   function sendBridgeCommand(method, params = {}, timeoutMs = 15e3) {
@@ -1274,50 +826,54 @@ body {
       postToPlugin("bridge:command", { requestId, method, params });
     });
   }
-  var bridgePill = document.getElementById("bridgePill");
   var bridgeDot = document.getElementById("bridgeDot");
-  var bridgePillLabel = document.getElementById("bridgePillLabel");
-  var bridgePopover = document.getElementById("bridgePopover");
+  var bridgeDotMini = document.getElementById("bridgeDotMini");
   var popoverDot = document.getElementById("popoverDot");
-  var popoverLabel = document.getElementById("popoverLabel");
-  var popoverSub = document.getElementById("popoverSub");
+  var bridgePortLabel = document.getElementById("bridgePortLabel");
   var bridgeToggleBtn = document.getElementById("bridgeToggleBtn");
+  var bridgePopover = document.getElementById("bridgePopover");
+  var bridgeTabBtn = document.getElementById("bridgeTabBtn");
+  var bridgeMiniBtn = document.getElementById("bridgeMiniBtn");
   var popoverOpen = false;
-  bridgePill.addEventListener("click", (e) => {
+  function openPopover() {
+    popoverOpen = true;
+    bridgePopover.classList.add("open");
+  }
+  function closePopover() {
+    popoverOpen = false;
+    bridgePopover.classList.remove("open");
+  }
+  bridgeTabBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    popoverOpen = !popoverOpen;
-    bridgePopover.classList.toggle("open", popoverOpen);
+    popoverOpen ? closePopover() : openPopover();
+  });
+  bridgeMiniBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    popoverOpen ? closePopover() : openPopover();
   });
   document.addEventListener("click", () => {
-    if (popoverOpen) {
-      popoverOpen = false;
-      bridgePopover.classList.remove("open");
-    }
+    if (popoverOpen) closePopover();
   });
   bridgePopover.addEventListener("click", (e) => e.stopPropagation());
   bridgeToggleBtn.addEventListener("click", () => {
     if (bridgeConnected) bridgeDisconnect();
     else bridgeConnect();
   });
+  function setAllDots(on) {
+    [bridgeDot, bridgeDotMini, popoverDot].forEach((el) => el == null ? void 0 : el.classList.toggle("on", on));
+  }
   function updateBridgeUi() {
     if (bridgeConnected) {
-      bridgeDot.classList.add("on");
-      bridgePill.classList.add("connected");
-      bridgePillLabel.textContent = "Claude Code";
-      popoverDot.classList.add("on");
-      popoverLabel.textContent = "Connected";
-      popoverSub.textContent = "Variables auto-sync on connect.";
+      setAllDots(true);
+      bridgePortLabel.textContent = "Port " + bridgeWsPort;
       bridgeToggleBtn.textContent = "Disconnect";
       bridgeToggleBtn.className = "btn btn-ghost";
     } else {
-      bridgeDot.classList.remove("on");
-      bridgePill.classList.remove("connected");
-      bridgePillLabel.textContent = "Connect";
-      popoverDot.classList.remove("on");
-      popoverLabel.textContent = "Not connected";
-      popoverSub.textContent = "Start Claude Code, then connect.";
+      setAllDots(false);
+      bridgePortLabel.textContent = "\u2014";
       bridgeToggleBtn.textContent = "Connect";
       bridgeToggleBtn.className = "btn";
+      bridgeToggleBtn.disabled = false;
     }
   }
   function bridgeStartKeepalive() {
@@ -1340,7 +896,7 @@ body {
       if (ws.readyState !== 1 || !result) return;
       const info = result.fileInfo || result;
       if (!info.fileKey) info.fileKey = "local-" + Date.now();
-      info.pluginVersion = "0.1.0";
+      info.pluginVersion = "0.2.0";
       ws.send(JSON.stringify({ type: "FILE_INFO", data: info }));
     }).catch(() => {
     });
@@ -1445,7 +1001,6 @@ body {
           bridgeConnected = true;
           bridgeReconnectAttempts = 0;
           updateBridgeUi();
-          bridgeToggleBtn.disabled = false;
           attachWsHandlers(ws, port);
           initBridgeConnection(ws);
           bridgeStartKeepalive();
@@ -1457,19 +1012,21 @@ body {
           clearTimeout(t);
           if (!found) {
             pending--;
-            if (pending <= 0) connectFailed();
+            if (pending <= 0) {
+              bridgeToggleBtn.textContent = "Connect";
+              bridgeToggleBtn.disabled = false;
+              bridgePortLabel.textContent = "No server found";
+            }
           }
         };
       } catch (e) {
         pending--;
-        if (pending <= 0 && !found) connectFailed();
+        if (pending <= 0 && !found) {
+          bridgeToggleBtn.textContent = "Connect";
+          bridgeToggleBtn.disabled = false;
+        }
       }
     });
-  }
-  function connectFailed() {
-    bridgeToggleBtn.textContent = "Connect";
-    bridgeToggleBtn.disabled = false;
-    popoverSub.textContent = "No MCP server found \u2014 start Claude Code first.";
   }
   function bridgeDisconnect() {
     bridgeUserDisconnected = true;
@@ -1489,9 +1046,7 @@ body {
     updateBridgeUi();
   }
   var variablesCache = null;
-  function setVarMeta(text) {
-    const el = document.getElementById("varMeta");
-    if (el) el.textContent = text;
+  function setVarMeta(_text) {
   }
   function setVarStatus(msg, type = "") {
     const el = document.getElementById("varStatus");
@@ -1516,13 +1071,12 @@ body {
     }
     const byCol = {};
     for (const v of data.variables) byCol[v.variableCollectionId] = (byCol[v.variableCollectionId] || 0) + 1;
-    el.innerHTML = '<div class="collection-list">' + data.variableCollections.map(
+    el.innerHTML = data.variableCollections.map(
       (c) => `<div class="collection-row">
       <span class="collection-name">${esc(c.name)}</span>
       <span class="collection-count">${byCol[c.id] || 0}</span>
     </div>`
-    ).join("") + "</div>";
-    setVarMeta(data.variables.length + " variables");
+    ).join("");
     updateExportButtons();
   }
   var _a;
@@ -1536,7 +1090,9 @@ body {
       if (result == null ? void 0 : result.data) {
         renderVariables(result.data);
         setVarStatus(result.data.variables.length + " variables loaded", "ok");
-      } else setVarStatus("No data returned", "err");
+      } else {
+        setVarStatus("No data returned", "err");
+      }
     } catch (e) {
       setVarStatus(e.message || "Error", "err");
     } finally {
@@ -1562,7 +1118,7 @@ body {
       if (data.ok) setVarStatus(`\u2713 ${data.variables} vars \u2192 dist/css/`, "ok");
       else setVarStatus("\u274C " + (data.error || "Build failed"), "err");
     }).catch(() => setVarStatus("\u274C Dev server not running \u2014 run: npm run dev-server", "err")).finally(() => {
-      btn.textContent = "Export Local";
+      btn.textContent = "Local";
       updateExportButtons();
     });
   });
@@ -1594,26 +1150,13 @@ body {
     };
     let sha;
     const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
-    if (getRes.ok) {
-      sha = (await getRes.json()).sha;
-    } else if (getRes.status !== 404) {
-      throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
-    }
+    if (getRes.ok) sha = (await getRes.json()).sha;
+    else if (getRes.status !== 404) throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-    const body = {
-      message: "chore: sync tokens from Figma",
-      content,
-      branch
-    };
+    const body = { message: "chore: sync tokens from Figma", content, branch };
     if (sha) body.sha = sha;
-    const putRes = await fetch(apiBase, {
-      method: "PUT",
-      headers,
-      body: JSON.stringify(body)
-    });
-    if (!putRes.ok) {
-      throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
-    }
+    const putRes = await fetch(apiBase, { method: "PUT", headers, body: JSON.stringify(body) });
+    if (!putRes.ok) throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
   }
   function setSettingsStatus(msg, type = "") {
     const el = document.getElementById("settingsStatus");
@@ -1646,10 +1189,6 @@ body {
     postToPlugin("save-settings", { settings });
   });
   var selectSetId = null;
-  function setSelectMeta(text) {
-    const el = document.getElementById("selectMeta");
-    if (el) el.textContent = text;
-  }
   function renderAxes(setId, setName, axes) {
     selectSetId = setId;
     const empty = document.getElementById("selectEmpty");
@@ -1662,37 +1201,32 @@ body {
     nameEl.textContent = setName;
     if (status) status.textContent = "";
     const variantAxes = axes.filter((a) => a.type === "VARIANT");
-    setSelectMeta(setName);
     if (variantAxes.length === 0) {
       axesEl.innerHTML = '<div class="empty-state">No variant axes found</div>';
       return;
     }
-    axesEl.innerHTML = variantAxes.map((axis) => {
-      const chips = (axis.variantOptions || []).map(
-        (v) => `<button class="chip on" data-axis="${esc(axis.name)}" data-value="${esc(v)}">${esc(v)}</button>`
-      ).join("");
-      return `<div class="axis-group">
+    axesEl.innerHTML = variantAxes.map(
+      (axis) => `<div class="axis-group">
       <div class="axis-label">${esc(axis.name)}</div>
-      <div class="axis-values">${chips}</div>
-    </div>`;
-    }).join("");
+      <div class="axis-values">${(axis.variantOptions || []).map(
+        (v) => `<button class="chip on" data-axis="${esc(axis.name)}" data-value="${esc(v)}">${esc(v)}</button>`
+      ).join("")}</div>
+    </div>`
+    ).join("");
     axesEl.querySelectorAll(".chip").forEach((chip) => {
       chip.addEventListener("click", () => chip.classList.toggle("on"));
     });
   }
   function clearSelect() {
     selectSetId = null;
-    const empty = document.getElementById("selectEmpty");
-    const body = document.getElementById("selectBody");
-    empty.style.display = "block";
-    body.style.display = "none";
-    setSelectMeta("Select a component set");
+    document.getElementById("selectEmpty").style.display = "block";
+    document.getElementById("selectBody").style.display = "none";
   }
   var _a5;
   (_a5 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
     if (!selectSetId) return;
     const filter = {};
-    document.querySelectorAll(".chip.on").forEach((chip) => {
+    document.querySelectorAll(".chip.on[data-axis]").forEach((chip) => {
       const axis = chip.dataset.axis;
       if (!filter[axis]) filter[axis] = [];
       filter[axis].push(chip.dataset.value);
@@ -1701,17 +1235,13 @@ body {
   });
   var _a6;
   (_a6 = document.getElementById("selectAllBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
-    document.querySelectorAll(".chip").forEach((c) => c.classList.add("on"));
+    document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.add("on"));
   });
   var _a7;
   (_a7 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
-    document.querySelectorAll(".chip").forEach((c) => c.classList.remove("on"));
+    document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.remove("on"));
   });
   var annotateNodeId = null;
-  function setAnnotateMeta(text) {
-    const el = document.getElementById("annotateMeta");
-    if (el) el.textContent = text;
-  }
   function setAnnotateStatus(msg, type = "") {
     const el = document.getElementById("annotateStatus");
     el.textContent = msg;
@@ -1731,12 +1261,10 @@ body {
       nameEl.textContent = sel.name;
       typeEl.textContent = sel.nodeType;
       applyBtn.disabled = false;
-      setAnnotateMeta(sel.name);
     } else {
       empty.style.display = "block";
       info.style.display = "none";
       applyBtn.disabled = true;
-      setAnnotateMeta("Select a node to start");
     }
   }
   document.querySelectorAll("#annotateCats .chip").forEach((chip) => {
@@ -1752,25 +1280,21 @@ body {
       setAnnotateStatus("Select at least one category", "err");
       return;
     }
-    const applyBtn = document.getElementById("annotateApplyBtn");
-    applyBtn.disabled = true;
-    applyBtn.textContent = "Annotating\u2026";
+    const btn = document.getElementById("annotateApplyBtn");
+    btn.disabled = true;
+    btn.textContent = "Annotating\u2026";
     setAnnotateStatus("");
     postToPlugin("annotate:apply", { nodeId: annotateNodeId, categories });
   });
   var _a9;
   (_a9 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
     if (!annotateNodeId) return;
-    const clearBtn = document.getElementById("annotateClearBtn");
-    clearBtn.disabled = true;
+    const btn = document.getElementById("annotateClearBtn");
+    btn.disabled = true;
     setAnnotateStatus("Clearing\u2026");
     postToPlugin("annotate:clear", { nodeId: annotateNodeId });
   });
   var specSetId = null;
-  function setSpecMeta(text) {
-    const el = document.getElementById("specMeta");
-    if (el) el.textContent = text;
-  }
   function setSpecStatus(msg, type = "") {
     const el = document.getElementById("specStatus");
     el.textContent = msg;
@@ -1789,14 +1313,12 @@ body {
       empty.style.display = "none";
       info.style.display = "flex";
       nameEl.textContent = sel.name;
-      countEl.textContent = "COMPONENT_SET \xB7 " + ((_b = sel.variantCount) != null ? _b : 0) + " variants";
+      countEl.textContent = ((_b = sel.variantCount) != null ? _b : 0) + " variants";
       genBtn.disabled = false;
-      setSpecMeta(sel.name);
     } else {
       empty.style.display = "block";
       info.style.display = "none";
       genBtn.disabled = true;
-      setSpecMeta("Select a component set");
     }
   }
   document.querySelectorAll("#specCats .chip").forEach((chip) => {
@@ -1820,9 +1342,9 @@ body {
       setSpecStatus("Select at least one category", "err");
       return;
     }
-    const genBtn = document.getElementById("specGenerateBtn");
-    genBtn.disabled = true;
-    genBtn.textContent = "Generating\u2026";
+    const btn = document.getElementById("specGenerateBtn");
+    btn.disabled = true;
+    btn.textContent = "Generating\u2026";
     setSpecStatus("");
     postToPlugin("spec:generate", { setId: specSetId, categories });
   });
@@ -1846,10 +1368,9 @@ body {
         }
         break;
       }
-      case "settings-loaded": {
+      case "settings-loaded":
         applySettings(msg.settings);
         break;
-      }
       case "settings-saved": {
         if (msg.success) {
           githubSettings = {
@@ -1902,31 +1423,29 @@ body {
         break;
       }
       case "annotate:result": {
-        const applyBtn = document.getElementById("annotateApplyBtn");
-        applyBtn.disabled = !annotateNodeId;
-        applyBtn.textContent = "Annotate";
-        if (msg.error) {
-          setAnnotateStatus("\u274C " + msg.error, "err");
-        } else {
+        const btn = document.getElementById("annotateApplyBtn");
+        btn.disabled = !annotateNodeId;
+        btn.textContent = "Annotate";
+        if (msg.error) setAnnotateStatus("\u274C " + msg.error, "err");
+        else {
           const n = msg.annotated;
           setAnnotateStatus(`\u2713 ${n} node${n !== 1 ? "s" : ""} annotated`, "ok");
         }
         break;
       }
       case "annotate:cleared": {
-        const clearBtn = document.getElementById("annotateClearBtn");
-        clearBtn.disabled = false;
+        const btn = document.getElementById("annotateClearBtn");
+        btn.disabled = false;
         const n = msg.cleared;
         setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? "s" : ""}` : "Nothing to clear", "ok");
         break;
       }
       case "spec:result": {
-        const genBtn = document.getElementById("specGenerateBtn");
-        genBtn.disabled = !specSetId;
-        genBtn.textContent = "Generate Spec Sheet";
-        if (msg.error) {
-          setSpecStatus("\u274C " + msg.error, "err");
-        } else {
+        const btn = document.getElementById("specGenerateBtn");
+        btn.disabled = !specSetId;
+        btn.textContent = "Generate";
+        if (msg.error) setSpecStatus("\u274C " + msg.error, "err");
+        else {
           const cats = msg.categoryCount;
           const vars = msg.variantCount;
           setSpecStatus(`\u2713 ${cats} categor${cats !== 1 ? "ies" : "y"} \xB7 ${vars} variant${vars !== 1 ? "s" : ""}`, "ok");
@@ -1937,6 +1456,7 @@ body {
   });
   postToPlugin("ui-ready");
   postToPlugin("get-settings");
+  postToPlugin("resize-for-view", { width: 320, height: 460 });
 })();
 </script>
 </body>

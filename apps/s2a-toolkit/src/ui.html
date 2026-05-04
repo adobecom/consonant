@@ -5,237 +5,244 @@
   <!-- INLINE_CSS -->
 </head>
 <body>
-  <div id="app">
+<div id="app">
 
-    <!-- ── Header ────────────────────────────────────────────────────── -->
-    <header class="header">
-      <div class="header-left">
-        <button class="back-btn" id="backBtn" aria-label="Back to home">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <span class="header-title" id="headerTitle">S2A Toolkit</span>
-      </div>
-      <div class="header-right">
-        <button class="icon-btn hidden" id="copyNodeBtn" aria-label="Copy Figma link">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <rect x="5" y="5" width="7" height="7" rx="1.2" stroke="currentColor" stroke-width="1.3"/>
-            <path d="M9 5V3.2A1.2 1.2 0 0 0 7.8 2H3.2A1.2 1.2 0 0 0 2 3.2v4.6C2 8.46 2.54 9 3.2 9H5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <button class="icon-btn" id="settingsBtn" aria-label="GitHub settings">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/>
-            <path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <button class="bridge-pill" id="bridgePill" aria-label="Bridge connection">
-          <span class="bridge-dot" id="bridgeDot"></span>
-          <span id="bridgePillLabel">Connect</span>
-        </button>
-      </div>
-    </header>
+  <!-- ── Header (always visible) ──────────────────────────────────────── -->
+  <header class="header">
 
-    <!-- Bridge popover -->
-    <div class="bridge-popover" id="bridgePopover">
-      <div class="bridge-popover-status">
-        <span class="bridge-dot" id="popoverDot"></span>
-        <span class="bridge-popover-label" id="popoverLabel">Not connected</span>
-      </div>
-      <p class="bridge-popover-sub" id="popoverSub">Start Claude Code, then connect.</p>
-      <button class="btn" id="bridgeToggleBtn" style="width:100%;">Connect</button>
+    <!-- Logo mark — always shows -->
+    <div class="header-logo" aria-hidden="true">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+        <path d="M5.5 1L10 5.5L5.5 10L1 5.5L5.5 1Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/>
+      </svg>
     </div>
 
-    <!-- ── Content ───────────────────────────────────────────────────── -->
-    <div class="content">
+    <!-- Title — full mode only -->
+    <span class="header-title full-only">S2A Toolkit</span>
 
-      <!-- Home -->
-      <div class="home" id="homeView">
-        <div class="category">
-          <div class="category-label">Tokens</div>
-          <button class="tool-card" data-tool="variables">
-            <div class="tool-card-body">
-              <span class="tool-card-name">Variables</span>
-              <span class="tool-card-desc">Export &amp; sync to token pipeline</span>
-              <span class="tool-card-meta" id="varMeta">—</span>
-            </div>
-            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
+    <!-- Selection strip — mini mode only, fills remaining space -->
+    <div class="header-sel mini-only" id="headerSel">
+      <span class="header-sel-name" id="headerSelName">—</span>
+    </div>
 
-        <div class="category">
-          <div class="category-label">Components</div>
-          <button class="tool-card" data-tool="select">
-            <div class="tool-card-body">
-              <span class="tool-card-name">Select Variants</span>
-              <span class="tool-card-desc">Filter a component set by axis</span>
-              <span class="tool-card-meta" id="selectMeta">Select a component set</span>
-            </div>
-            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="tool-card" data-tool="annotate">
-            <div class="tool-card-body">
-              <span class="tool-card-name">Annotate</span>
-              <span class="tool-card-desc">Apply token annotations by category</span>
-              <span class="tool-card-meta" id="annotateMeta">Select a node to start</span>
-            </div>
-            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="tool-card" data-tool="spec">
-            <div class="tool-card-body">
-              <span class="tool-card-name">Spec Sheet</span>
-              <span class="tool-card-desc">Generate annotated variant gallery</span>
-              <span class="tool-card-meta" id="specMeta">Select a component set</span>
-            </div>
-            <svg class="tool-card-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
+    <div class="header-spacer full-only"></div>
 
+    <div class="header-actions">
+      <!-- Copy Figma link (visible when a node is selected) -->
+      <button class="icon-btn hidden" id="copyNodeBtn" title="Copy Figma link" aria-label="Copy Figma link">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <rect x="5" y="5" width="7" height="7" rx="1.2" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M9 5V3.2A1.2 1.2 0 0 0 7.8 2H3.2A1.2 1.2 0 0 0 2 3.2v4.6C2 8.46 2.54 9 3.2 9H5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Bridge dot — mini mode only -->
+      <button class="bridge-mini-btn mini-only" id="bridgeMiniBtn" aria-label="Bridge status">
+        <span class="bridge-dot" id="bridgeDotMini"></span>
+      </button>
+
+      <!-- Minimize ↔ Expand -->
+      <button class="icon-btn" id="toggleMiniBtn" aria-label="Minimize plugin">
+        <svg class="icon-collapse" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 5h10M2 9h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <svg class="icon-expand" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 8.5l4-4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Panels ───────────────────────────────────────────────────────── -->
+  <div class="main-content" id="mainContent">
+
+    <!-- Variables -->
+    <div class="panel active" id="variablesPanel">
+      <div class="section-label">Collections</div>
+      <div id="varCollections">
+        <div class="empty-state">Click Refresh to load collections</div>
       </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" id="varRefreshBtn">Refresh</button>
+        <button class="btn btn-ghost" id="varExportLocalBtn" disabled>Local</button>
+        <button class="btn" id="varExportGithubBtn" disabled>↑ GitHub</button>
+      </div>
+      <div class="status" id="varStatus"></div>
+    </div>
 
-      <!-- Variables panel -->
-      <div class="panel" id="variablesPanel">
-        <div class="section-label">Collections</div>
-        <div class="collection-list" id="varCollections">
-          <div class="empty-state">Click Refresh to load</div>
-        </div>
+    <!-- Select Variants -->
+    <div class="panel" id="selectPanel">
+      <div class="empty-state" id="selectEmpty">Select a component set on the canvas</div>
+      <div id="selectBody" style="display:none;">
+        <div class="set-name" id="selectSetName"></div>
+        <div id="selectAxes"></div>
         <div class="btn-row">
-          <button class="btn btn-ghost" id="varRefreshBtn">Refresh</button>
-          <button class="btn btn-ghost" id="varExportLocalBtn" disabled>Export Local</button>
-          <button class="btn" id="varExportGithubBtn" disabled>↑ GitHub</button>
+          <button class="btn btn-ghost" id="selectAllBtn">All</button>
+          <button class="btn btn-ghost" id="selectNoneBtn">None</button>
+          <button class="btn" id="selectApplyBtn" style="flex:2;">Select</button>
         </div>
-        <div class="status" id="varStatus"></div>
+        <div class="status" id="selectStatus"></div>
       </div>
+    </div>
 
-      <!-- Select panel -->
-      <div class="panel" id="selectPanel">
-        <div class="empty-state" id="selectEmpty">Select a component set on the canvas</div>
-        <div id="selectBody" style="display:none;">
-          <div class="set-name" id="selectSetName"></div>
-          <div id="selectAxes"></div>
-          <div class="btn-row">
-            <button class="btn btn-ghost" id="selectAllBtn">All</button>
-            <button class="btn btn-ghost" id="selectNoneBtn">None</button>
-            <button class="btn" id="selectApplyBtn" style="flex:2;">Select</button>
+    <!-- Annotate -->
+    <div class="panel" id="annotatePanel">
+      <div class="section-label">Selection</div>
+      <div class="sel-card" id="annotateSelection">
+        <span class="sel-card-empty" id="annotateSelectionEmpty">Select an instance or frame</span>
+        <div class="sel-card-info" id="annotateSelectionInfo" style="display:none;">
+          <span class="sel-icon">◈</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="annotateNodeName">—</span>
+            <span class="sel-type" id="annotateNodeType">—</span>
           </div>
-          <div class="status" id="selectStatus"></div>
         </div>
       </div>
-
-      <!-- Annotate panel -->
-      <div class="panel" id="annotatePanel">
-
-        <div class="section-label">Selection</div>
-        <div class="proto-selection" id="annotateSelection">
-          <div id="annotateSelectionEmpty" class="proto-selection-empty">
-            Select an instance or frame on the canvas
-          </div>
-          <div id="annotateSelectionInfo" class="proto-selection-info" style="display:none;">
-            <span class="proto-frame-icon">◈</span>
-            <div class="proto-frame-meta">
-              <span class="proto-frame-name" id="annotateNodeName">—</span>
-              <span class="proto-frame-type" id="annotateNodeType">—</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-label" style="margin-top:12px;">Categories</div>
-        <div class="annotate-cats" id="annotateCats">
-          <button class="chip on" data-cat="color-fg">Color Fg</button>
-          <button class="chip on" data-cat="color-bg">Color Bg</button>
-          <button class="chip on" data-cat="spacing">Spacing</button>
-          <button class="chip on" data-cat="shape">Shape</button>
-          <button class="chip on" data-cat="typography">Typography</button>
-          <button class="chip on" data-cat="sizing">Sizing</button>
-        </div>
-
-        <div class="btn-row" style="margin-top:12px;">
-          <button class="btn btn-ghost" id="annotateClearBtn">Clear</button>
-          <button class="btn" id="annotateApplyBtn" disabled style="flex:2;">Annotate</button>
-        </div>
-        <div class="status" id="annotateStatus"></div>
-
+      <div class="section-label" style="margin-top:14px;">Token categories</div>
+      <div class="chip-grid" id="annotateCats">
+        <button class="chip on" data-cat="color-fg">Color Fg</button>
+        <button class="chip on" data-cat="color-bg">Color Bg</button>
+        <button class="chip on" data-cat="spacing">Spacing</button>
+        <button class="chip on" data-cat="shape">Shape</button>
+        <button class="chip on" data-cat="typography">Typography</button>
+        <button class="chip on" data-cat="sizing">Sizing</button>
       </div>
-
-      <!-- Spec panel -->
-      <div class="panel" id="specPanel">
-
-        <div class="section-label">Selection</div>
-        <div class="proto-selection" id="specSelection">
-          <div id="specSelectionEmpty" class="proto-selection-empty">
-            Select a component set on the canvas
-          </div>
-          <div id="specSelectionInfo" class="proto-selection-info" style="display:none;">
-            <span class="proto-frame-icon">◈</span>
-            <div class="proto-frame-meta">
-              <span class="proto-frame-name" id="specSetName">—</span>
-              <span class="proto-frame-type" id="specSetCount">—</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-label" style="margin-top:12px;">Categories</div>
-        <div class="annotate-cats" id="specCats">
-          <button class="chip on" data-cat="color-fg">Color Fg</button>
-          <button class="chip on" data-cat="color-bg">Color Bg</button>
-          <button class="chip on" data-cat="spacing">Spacing</button>
-          <button class="chip on" data-cat="shape">Shape</button>
-          <button class="chip on" data-cat="typography">Typography</button>
-          <button class="chip on" data-cat="sizing">Sizing</button>
-        </div>
-
-        <div class="btn-row" style="margin-top:12px;">
-          <button class="btn btn-ghost" id="specAllBtn">All</button>
-          <button class="btn btn-ghost" id="specNoneBtn">None</button>
-          <button class="btn" id="specGenerateBtn" disabled style="flex:2;">Generate Spec Sheet</button>
-        </div>
-        <div class="status" id="specStatus"></div>
-
+      <div class="btn-row" style="margin-top:12px;">
+        <button class="btn btn-ghost" id="annotateClearBtn">Clear</button>
+        <button class="btn" id="annotateApplyBtn" disabled style="flex:2;">Annotate</button>
       </div>
+      <div class="status" id="annotateStatus"></div>
+    </div>
 
-      <!-- Settings panel -->
-      <div class="panel" id="settingsPanel">
-        <div class="section-label">GitHub Export</div>
-        <p class="settings-hint">Tokens will be committed directly to your repo. Requires a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> scope.</p>
+    <!-- Spec Sheet -->
+    <div class="panel" id="specPanel">
+      <div class="section-label">Selection</div>
+      <div class="sel-card" id="specSelection">
+        <span class="sel-card-empty" id="specSelectionEmpty">Select a component set on the canvas</span>
+        <div class="sel-card-info" id="specSelectionInfo" style="display:none;">
+          <span class="sel-icon">◈</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="specSetName">—</span>
+            <span class="sel-type" id="specSetCount">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="section-label" style="margin-top:14px;">Token categories</div>
+      <div class="chip-grid" id="specCats">
+        <button class="chip on" data-cat="color-fg">Color Fg</button>
+        <button class="chip on" data-cat="color-bg">Color Bg</button>
+        <button class="chip on" data-cat="spacing">Spacing</button>
+        <button class="chip on" data-cat="shape">Shape</button>
+        <button class="chip on" data-cat="typography">Typography</button>
+        <button class="chip on" data-cat="sizing">Sizing</button>
+      </div>
+      <div class="btn-row" style="margin-top:12px;">
+        <button class="btn btn-ghost" id="specAllBtn">All</button>
+        <button class="btn btn-ghost" id="specNoneBtn">None</button>
+        <button class="btn" id="specGenerateBtn" disabled style="flex:2;">Generate</button>
+      </div>
+      <div class="status" id="specStatus"></div>
+    </div>
+
+    <!-- Settings -->
+    <div class="panel" id="settingsPanel">
+      <div class="section-label">GitHub Export</div>
+      <p class="settings-hint">Tokens commit directly to your repo. Needs a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> scope.</p>
+      <div class="form-field">
+        <label class="form-label" for="ghToken">Token</label>
+        <input class="form-input" type="password" id="ghToken" placeholder="ghp_…" autocomplete="off" />
+      </div>
+      <div class="form-row">
         <div class="form-field">
-          <label class="form-label" for="ghToken">Personal Access Token</label>
-          <input class="form-input" type="password" id="ghToken" placeholder="ghp_…" autocomplete="off" />
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label" for="ghOwner">Owner</label>
-            <input class="form-input" type="text" id="ghOwner" placeholder="adobecom" />
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="ghRepo">Repo</label>
-            <input class="form-input" type="text" id="ghRepo" placeholder="consonant-2" />
-          </div>
+          <label class="form-label" for="ghOwner">Owner</label>
+          <input class="form-input" type="text" id="ghOwner" placeholder="adobecom" />
         </div>
         <div class="form-field">
-          <label class="form-label" for="ghBranch">Branch</label>
-          <input class="form-input" type="text" id="ghBranch" placeholder="main" />
+          <label class="form-label" for="ghRepo">Repo</label>
+          <input class="form-input" type="text" id="ghRepo" placeholder="consonant-2" />
         </div>
-        <div class="form-field">
-          <label class="form-label" for="ghFilePath">File path in repo</label>
-          <input class="form-input" type="text" id="ghFilePath" placeholder="packages/toolkit-tokens/json/figma-export.json" />
-        </div>
-        <div class="btn-row">
-          <button class="btn" id="saveSettingsBtn">Save</button>
-        </div>
-        <div class="status" id="settingsStatus"></div>
       </div>
+      <div class="form-field">
+        <label class="form-label" for="ghBranch">Branch</label>
+        <input class="form-input" type="text" id="ghBranch" placeholder="main" />
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="ghFilePath">File path</label>
+        <input class="form-input" type="text" id="ghFilePath" placeholder="packages/toolkit-tokens/json/figma-export.json" />
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="saveSettingsBtn">Save</button>
+      </div>
+      <div class="status" id="settingsStatus"></div>
+    </div>
 
+  </div>
+
+  <!-- ── Tab bar ───────────────────────────────────────────────────────── -->
+  <nav class="tab-bar" id="tabBar" aria-label="Tools">
+    <button class="tab active" data-panel="variables" aria-label="Variables">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <rect x="1.5" y="3.5" width="12" height="3" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
+        <rect x="1.5" y="8.5" width="8" height="3" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
+      </svg>
+      <span class="tab-label">Variables</span>
+    </button>
+    <button class="tab" data-panel="select" aria-label="Select Variants">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <path d="M2 4h11M3.5 7.5h8M5.5 11h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+      </svg>
+      <span class="tab-label">Select</span>
+    </button>
+    <button class="tab" data-panel="annotate" aria-label="Annotate">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <circle cx="7.5" cy="6" r="3" stroke="currentColor" stroke-width="1.25"/>
+        <path d="M7.5 9v5M5.5 14h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+      </svg>
+      <span class="tab-label">Annotate</span>
+    </button>
+    <button class="tab" data-panel="spec" aria-label="Spec Sheet">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <rect x="1.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
+        <rect x="8.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
+        <rect x="1.5" y="8.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
+        <rect x="8.5" y="8.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
+      </svg>
+      <span class="tab-label">Spec</span>
+    </button>
+    <button class="tab" data-panel="settings" aria-label="Settings">
+      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <circle cx="7.5" cy="7.5" r="2.2" stroke="currentColor" stroke-width="1.25"/>
+        <path d="M7.5 1.5v1.6M7.5 11.9v1.6M1.5 7.5h1.6M11.9 7.5h1.6M3.4 3.4l1.1 1.1M10.5 10.5l1.1 1.1M3.4 11.6l1.1-1.1M10.5 4.5l1.1-1.1" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+      </svg>
+      <span class="tab-label">Settings</span>
+    </button>
+
+    <!-- Bridge status dot -->
+    <button class="tab-bridge" id="bridgeTabBtn" aria-label="Bridge status">
+      <span class="bridge-dot" id="bridgeDot"></span>
+    </button>
+  </nav>
+
+  <!-- Bridge popover (absolute) -->
+  <div class="bridge-popover" id="bridgePopover">
+    <div class="agent-card">
+      <div class="agent-header">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="agent-icon" aria-hidden="true">
+          <rect width="20" height="20" rx="5" fill="#D97559"/>
+          <path d="M10 4.5L14 14H12.2L11.2 11.5H8.8L7.8 14H6L10 4.5Z" fill="white"/>
+          <rect x="9" y="10" width="2" height="1.2" rx="0.6" fill="#D97559"/>
+        </svg>
+        <div class="agent-meta">
+          <span class="agent-name">Claude Code</span>
+          <span class="agent-port" id="bridgePortLabel">—</span>
+        </div>
+        <span class="bridge-dot" id="popoverDot"></span>
+      </div>
+      <button class="btn" id="bridgeToggleBtn" style="width:100%;margin-top:8px;">Connect</button>
     </div>
   </div>
-  <!-- INLINE_JS -->
+
+</div>
+<!-- INLINE_JS -->
 </body>
 </html>
