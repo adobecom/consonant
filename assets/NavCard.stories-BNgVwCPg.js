@@ -1,4 +1,4 @@
-import{x as o}from"./iframe-BhDShkxz.js";import{N as t}from"./nav-card-CZo9zdRS.js";import"./preload-helper-BSds_FOV.js";import"./nav-card-shell-gkpE7kF7.js";import"./nav-card-button-CGriw1ag.js";const c=`/* ─── Component tokens ──────────────────────────────────────────────────────── */
+import{x as o}from"./iframe-BJutOslQ.js";import{N as t}from"./nav-card-dpIenhSa.js";import"./preload-helper-BSds_FOV.js";import"./nav-card-shell-DU3FL5mS.js";import"./nav-card-button-B63a4up3.js";const c=`/* ─── Component tokens ──────────────────────────────────────────────────────── */
 .c-nav-card {
   --c-nav-card-bg:            var(--s2a-color-background-default, #ffffff);
   --c-nav-card-eyebrow-color: var(--s2a-color-transparent-black-64, rgba(0, 0, 0, 0.64));

@@ -1,4 +1,4 @@
-import{x as e}from"./iframe-BhDShkxz.js";import{I}from"./icon-button-SMrwkh1o.js";import{t as c,I as v,s as f,o as x}from"./define-element-CDP0E6aq.js";import"./preload-helper-BSds_FOV.js";const C=`.c-icon-button {
+import{x as e}from"./iframe-BJutOslQ.js";import{I}from"./icon-button-BUsXcxmA.js";import{t as c,I as v,s as f,o as x}from"./define-element-BBqFk53l.js";import"./preload-helper-BSds_FOV.js";const C=`.c-icon-button {
   --c-icon-button-size: var(--s2a-spacing-2xl, 40px);
   --c-icon-button-icon-size: var(--s2a-spacing-lg, 24px);
   --c-icon-button-border-width: 0px;

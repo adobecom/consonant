@@ -1,4 +1,4 @@
-import{x as r}from"./iframe-BhDShkxz.js";import{N as o}from"./nav-card-menu-item-DtHGNujP.js";import"./preload-helper-BSds_FOV.js";import"./nav-card-shell-gkpE7kF7.js";import"./nav-card-button-CGriw1ag.js";const i=`.c-nav-card-menu-item {
+import{x as r}from"./iframe-BJutOslQ.js";import{N as o}from"./nav-card-menu-item-BnM9rH-K.js";import"./preload-helper-BSds_FOV.js";import"./nav-card-shell-DU3FL5mS.js";import"./nav-card-button-B63a4up3.js";const i=`.c-nav-card-menu-item {
   --c-nav-card-menu-item-title-color: var(--s2a-color-content-default, #000000);
   --c-nav-card-menu-item-link-color: var(--s2a-color-content-default, #000000);
   --c-nav-card-menu-item-link-hover-color: var(--s2a-color-content-default, #000000);

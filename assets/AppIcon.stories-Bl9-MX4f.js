@@ -1,4 +1,4 @@
-import{x as n}from"./iframe-BhDShkxz.js";import{A as o,a as f,b as u}from"./app-icon-CTMmVYPI.js";import"./preload-helper-BSds_FOV.js";const x=`.c-app-icon {
+import{x as n}from"./iframe-BJutOslQ.js";import{A as o,a as f,b as u}from"./app-icon-jmASRcT3.js";import"./preload-helper-BSds_FOV.js";const x=`.c-app-icon {
   --c-app-icon-size: var(--s2a-spacing-lg, 24px);
   --c-app-icon-radius: calc(var(--c-app-icon-size) * 0.18);
   /* Primitive: AppIcon tiles use ~18% corner radius in Figma until semantic token exists */
