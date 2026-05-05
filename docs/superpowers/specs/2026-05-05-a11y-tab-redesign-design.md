@@ -75,27 +75,44 @@ Below the summary: `"Continue in Claude Code"` button — opens the terminal com
 
 ### Category renaming
 
-Replace WCAG code labels with plain designer language:
+The actual checkboxes in `src/ui.html:121-145` use these labels. The table shows the proposed rename and one-line description for each (confirmed against `a11y-blueline.ts:307-376`):
 
-| Current label | Renamed label | Description shown |
+**Group 1 — AI-assisted** (visible by default)
+
+| Current label | Proposed label | Description shown |
 |---|---|---|
-| Keyboard Navigation | Keyboard & Focus | "Can keyboard users reach and use everything?" |
+| Focus Indicators (AI) | Focus Indicators | "Do interactive elements have a visible focus ring?" |
+| Focus Order (AI) | Focus Order | "Does the keyboard tab order match the visual layout?" |
+| Heading Hierarchy | Heading Hierarchy | "Are headings structured so screen readers can navigate?" |
+| Landmarks & Navigation | Landmarks & Navigation | "Are page regions labeled so screen readers can jump to them?" |
+| Names & Alt-Text | Names & Alt-Text | "Do images and controls have clear names for assistive tech?" |
 | Color Contrast | Color Contrast | "Is text readable against its background?" |
-| Text Alternatives | Image Alt Text | "Do images have descriptions for screen readers?" |
-| Screen Reader | Screen Reader Flow | "Does the reading order make sense?" |
-| Form Accessibility | Forms | "Are inputs labeled and errors clear?" |
-| ARIA Roles | ARIA & Roles | "Are interactive elements correctly labeled for assistive tech?" |
+| ARIA & Keyboard | ARIA & Keyboard | "Are custom widgets correctly labeled and keyboard-operable?" |
+| Target Size | Target Size | "Are tap/click targets large enough for motor accessibility?" |
+| Page Setup | Page Setup | "Does the page have a title and language declared?" |
+
+**Group 2 — Accessibility notes** (collapsed under "Show more" by default)
+
+| Current label | Proposed label | Description shown |
+|---|---|---|
+| Forms | Forms | "Are inputs labeled and error messages clear?" |
 | Carousel | Carousel | "Can users navigate slides with keyboard and screen reader?" |
-| *(remaining categories)* | *(existing names kept unless redesign changes them)* | One-line description added to each |
+| DOM Strategy | DOM Strategy | "Does the DOM order support the correct reading sequence?" |
+| Motion & Media | Motion & Media | "Can users pause motion and is media accessible?" |
+| Screen Reader Notes | Screen Reader Notes | "Platform-specific notes for VoiceOver, TalkBack, Narrator" |
+| React Native | React Native | "Accessibility notes specific to the React Native platform" |
+| TV Note | TV Note | "Notes for TV/10-foot UI accessibility" |
+| General Note | General Note | "Any other accessibility notes for this frame" |
 
 ### Smart defaults
 
-Pre-check the categories that apply to nearly every design:
-- Keyboard & Focus
+Pre-check the four categories that apply to nearly every interactive design (confirmed by peer review against `PANEL_DESCRIPTIONS` in `a11y-blueline.ts:342-376`):
+- Focus Indicators
+- Focus Order
 - Color Contrast
-- Screen Reader Flow
+- Names & Alt-Text
 
-Collapse the rest under `"Show more categories"` — expanded on demand.
+Collapse Group 2 under `"Show more categories"` — expanded on demand. Group 1 items not in the default set (Heading Hierarchy, Landmarks & Navigation, ARIA & Keyboard, Target Size, Page Setup) remain visible but unchecked.
 
 ### Bridge dependency
 
@@ -109,46 +126,60 @@ The `"Start A11y Review"` button is always enabled. Bridge disconnection is hand
 
 ### Problem with today's command
 
-Today the plugin generates:
+Today `showAiFillInstruction()` in `src/ui.ts:502-511` generates:
 
-> "Fill ONLY these blueline categories for [Frame]: Keyboard Navigation, Color Contrast, ARIA Roles. Use the structural scan embedded in the Figma file."
+> "Fill ONLY these blueline categories for "[Frame]": [categories]. Call `figma_get_blueline_data` first — it returns structural data and orchestration instructions. Then call `figma_get_knowledge` for each agent group to fetch expert knowledge. Dispatch parallel agents, then call `figma_render_blueline` with all card JSON."
 
-This is a batch job. Claude runs it silently and fills what it can guess.
+This is a batch job. Claude runs it silently and fills what it can guess. It never asks a question.
 
-### New conversational opener
+### What the existing pipeline does (confirmed by peer review)
 
-The generated command becomes:
+The render pipeline must be preserved — it is what actually writes content to Figma:
+
+1. `figma_get_blueline_data` — reads the `.structural-scan` text node, takes a screenshot, returns agent orchestration instructions and `availableKnowledge` keys (`mcp/index.ts:563-639`)
+2. `figma_get_knowledge` per agent group — fetches expert WCAG knowledge content
+3. `figma_render_blueline({ cards })` — writes card content to Figma; `cards` is keyed by category slug (e.g. `focusIndicators`, `colorContrast`) with `{ items: [{ title, desc }], notes?, warnings? }` per key (`mcp/index.ts:693-737`)
+
+The new command wraps this pipeline with a conversational layer — it does not replace any of these calls.
+
+### New conversational command
 
 ```
 Start an A11y review conversation for the frame "[Frame Name]".
 
-Context:
-- Categories to review: [list]
-- Structural scan is embedded in the page as a JSON text node named "Structural Scan — [Frame Name]"
+Categories to review: [comma-separated category slugs]
 
-Instructions:
-1. Read the structural scan first. Use it to ground your analysis — do not infer elements that aren't in the scan.
-2. Before filling any cards, ask the designer 1–3 clarifying questions about things you need to understand to do this accurately (e.g., intended interaction, context of use, whether a pattern is intentional).
-3. Fill cards you are confident about. For each, write: the issue or passing note, the WCAG criterion, and a plain-language suggestion.
-4. For cards where you are uncertain, leave the annotation blank and add a note explaining exactly what you need from the designer to complete it.
-5. At the end, send a summary back through the bridge in this format:
+Step 1 — Ground yourself:
+Call figma_get_blueline_data. It returns the structural scan (a hidden text node named .structural-scan), a screenshot, and per-agent orchestration instructions. Read the structural scan carefully. Do not infer elements that aren't in it.
 
-BRIDGE_RESULT:
+Step 2 — Ask questions first (REQUIRED before any rendering):
+Before calling figma_render_blueline, ask the designer 1–3 clarifying questions about things you genuinely need to know to be accurate. Examples: intended interaction pattern, whether a visual-only element is intentional, context of use for a form. If you have no real questions, say so briefly and proceed.
+
+Wait for the designer's answers before continuing.
+
+Step 3 — Analyze:
+For each selected category, call figma_get_knowledge for its agent group. Use the structural scan + screenshot + designer answers to assess each category.
+
+Step 4 — Render:
+Call figma_render_blueline with the cards object. For categories you are confident about: write the issue or passing note, the WCAG criterion, and a plain-language suggestion in desc. For categories where you are uncertain: pass an empty string for desc and put the open question in notes (e.g. "notes": "Need to know: is this button keyboard-only or also touch?").
+
+Step 5 — Send summary to plugin:
+After figma_render_blueline completes, call bridge_send_a11y_result with:
 {
+  "frameName": "[Frame Name]",
   "issues": [{ "category": "...", "description": "..." }],
   "needs_input": [{ "category": "...", "question": "..." }],
   "suggestions": [{ "category": "...", "description": "..." }]
 }
+This updates the plugin panel so the designer can see the results without hunting the Figma canvas.
 ```
-
-The `BRIDGE_RESULT:` block is the hook for the loop-back (see Part 3).
 
 ### Where this lives in code
 
 File: `apps/consonant-specs-plugin/src/ui.ts`  
-Function: `showAiFillInstruction()` (currently generates the batch command)
+Function: `showAiFillInstruction()` (`ui.ts:502-528`)
 
-This function builds the command string. It needs to be replaced with the new template above, parameterized by `frameName` and `selectedCategories[]`.
+Replace the function body with the new template, parameterized by `frameName` and `selectedCategories[]` (canonical category slugs from `getCheckedA11yCategories()` at `ui.ts:574-607`).
 
 ---
 
@@ -156,55 +187,56 @@ This function builds the command string. It needs to be replaced with the new te
 
 ### What this is
 
-After Claude Code runs and fills blueline cards, it sends a `BRIDGE_RESULT:` JSON block through standard output. The bridge captures this and posts it back to the plugin. The plugin reads it and renders State 3 (results panel).
+After Claude Code calls `figma_render_blueline`, it calls a new MCP tool `bridge_send_a11y_result` with a structured JSON summary. The bridge forwards this to the plugin as an `A11Y_RESULT` WebSocket event. The plugin handles it and renders State 3.
 
-### New bridge message type
+**Option A confirmed by peer review** — figma-console communicates with Claude Code via stdio (MCP) and with plugins via WebSocket. A fire-and-forget `sendEvent` on the WebSocket server is the correct mechanism. `figma_execute` relay (Option B) was ruled out due to active-client routing instability when multiple plugins are connected.
 
-Add a new message type to the bridge protocol:
+### Change 1 — figma-console: add fire-and-forget push
+
+File: `apps/figma-console-mcp/src/core/websocket-server.ts`
+
+Add a `sendEvent(type: string, data: unknown): void` method that sends `{ type, data }` to the active client without registering a pending-promise entry. This is a one-way push, not a request/response.
+
+### Change 2 — figma-console: register the new MCP tool
+
+File: `apps/figma-console-mcp/src/local.ts`
+
+Register `bridge_send_a11y_result` with this schema:
 
 ```typescript
-// Message from Claude Code → bridge → plugin
-interface A11yResultMessage {
-  type: 'A11Y_RESULT';
-  frameName: string;
-  issues: Array<{ category: string; description: string }>;
-  needs_input: Array<{ category: string; question: string }>;
-  suggestions: Array<{ category: string; description: string }>;
+{
+  frameName: z.string(),
+  issues: z.array(z.object({ category: z.string(), description: z.string() })),
+  needs_input: z.array(z.object({ category: z.string(), question: z.string() })),
+  suggestions: z.array(z.object({ category: z.string(), description: z.string() })),
 }
 ```
 
-### Bridge server changes
+Handler calls `this.wsServer.sendEvent('A11Y_RESULT', args)` and returns `{ content: [{ type: 'text', text: 'sent' }] }`.
 
-File: `apps/consonant-specs-plugin/src/bridge-server.ts` (or equivalent — verify path before implementing)
+Rebuild dist after this change: `npm run build:local` in `apps/figma-console-mcp/`.
 
-The exact loop-back mechanism needs investigation before implementing. The bridge (figma-console) is an MCP server that Claude Code communicates with via tool calls — stdout parsing is not applicable here. Two viable approaches:
-
-**Option A — New MCP tool (recommended):** Add a `bridge_send_a11y_result` tool to the figma-console MCP server. The generated prompt instructs Claude Code to call this tool with the result JSON when done. The bridge server forwards the payload to the plugin as `{ type: 'A11Y_RESULT', ...payload }`.
-
-**Option B — figma_execute relay:** The prompt instructs Claude to call `figma_execute` with a small script that posts a message to the plugin (`figma.ui.postMessage({ type: 'A11Y_RESULT', ... })`). No new MCP tool required, but relies on the plugin receiving postMessage from the console.
-
-Determine which approach is available given the current bridge implementation before writing the implementation plan.
-
-### Plugin changes (State 3 render)
+### Change 3 — plugin: handle the event and render State 3
 
 File: `apps/consonant-specs-plugin/src/ui.ts`
 
-Add handler for `A11Y_RESULT` message:
+In the `ws.onmessage` handler (around `ui.ts:910`), add a branch **before** the existing early-return for unrecognized messages:
 
 ```typescript
-case 'A11Y_RESULT':
-  renderA11yResults(msg.issues, msg.needs_input, msg.suggestions);
-  break;
+if (message.type === 'A11Y_RESULT') {
+  renderA11yResults(message.data);
+  return;
+}
 ```
 
-`renderA11yResults()` replaces the current State 1 content with State 3:
+`renderA11yResults(data)` replaces the current panel content with State 3:
 - Three sections: Issues (red), Needs Input (yellow), Suggestions (blue)
 - Each item shows category name + description/question
-- `"Continue in Claude Code"` button below (same terminal command, re-copyable)
+- `"Continue in Claude Code"` button below (same command string, re-copyable)
 
 ### Fallback
 
-If no result message is received within 5 minutes (or bridge is offline), State 3 shows:
+If no `A11Y_RESULT` event arrives within 5 minutes (or bridge is offline), the plugin remains on State 2 and shows:
 
 > "Review complete in Claude Code. Open Claude Code to see results and continue the conversation."  
 > `[Continue in Claude Code]` button
@@ -258,6 +290,8 @@ The plugin could pre-filter the category list using the structural scan before t
 | One spec or three? | One spec — all three priorities are interdependent |
 | Should State 3 be gated on bridge? | No — graceful fallback if bridge offline |
 | Smart detection: plugin or prompt? | Prompt-level for this spec; plugin-level is a future improvement |
+| Bridge loop-back: Option A or B? | Option A (new MCP tool) — `figma_execute` relay is unstable when multiple plugins are connected |
+| Smart defaults: 3 or 4? | 4 — Focus Indicators, Focus Order, Color Contrast, Names & Alt-Text (confirmed against actual checkbox structure) |
 
 ---
 
