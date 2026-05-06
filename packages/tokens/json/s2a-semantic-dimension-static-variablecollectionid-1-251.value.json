@@ -266,22 +266,6 @@
             }
           }
         },
-        "title": {
-          "$type": "string",
-          "$value": "{s2a.font.family.adobe-clean-display}",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "FONT_FAMILY"
-              ],
-              "codeSyntax": {
-                "WEB": "var(--s2a-font-family-title)"
-              }
-            }
-          }
-        },
         "subheading": {
           "$type": "string",
           "$value": "{s2a.font.family.adobe-clean-display}",
@@ -940,7 +924,7 @@
         }
       },
       "weight": {
-        "title": {
+        "heading": {
           "$type": "string",
           "$value": "{s2a.font.weight.adobe-clean-display.black}",
           "$description": "",
