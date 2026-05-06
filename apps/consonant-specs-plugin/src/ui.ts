@@ -549,6 +549,8 @@ After figma_render_blueline completes, call bridge_send_a11y_result with:
 This updates the plugin panel so the designer can see results without hunting the Figma canvas.${bridgeNote}`;
   }
 
+  lastA11yCmd = cmd;
+
   const el = document.getElementById('a11yStatus');
   if (el) {
     el.innerHTML = `
@@ -591,15 +593,15 @@ function renderA11yResults(data: A11yResultPayload) {
     </div>`;
   }
 
-  const issueItems = data.issues.map(i => ({ label: i.category, text: i.description }));
-  const needsItems = data.needs_input.map(i => ({ label: i.category, text: i.question }));
-  const suggItems  = data.suggestions.map(i => ({ label: i.category, text: i.description }));
+  const issueItems = (data.issues ?? []).map(i => ({ label: i.category, text: i.description }));
+  const needsItems = (data.needs_input ?? []).map(i => ({ label: i.category, text: i.question }));
+  const suggItems  = (data.suggestions ?? []).map(i => ({ label: i.category, text: i.description }));
 
   const empty = issueItems.length === 0 && needsItems.length === 0 && suggItems.length === 0;
 
   el.innerHTML = `
     <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
-      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete — ${esc(data.frameName)}</div>
+      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete — ${esc(data.frameName ?? '')}</div>
       <div class="a11y-results">
         ${empty
           ? '<div class="a11y-results-empty">No issues or suggestions returned.</div>'
@@ -612,9 +614,8 @@ function renderA11yResults(data: A11yResultPayload) {
     </div>`;
 
   document.getElementById('a11yContinueBtn')?.addEventListener('click', async () => {
-    const cmdEl = document.getElementById('fillCmdText');
-    if (cmdEl) {
-      await copyToClipboard(cmdEl.textContent || '');
+    if (lastA11yCmd) {
+      await copyToClipboard(lastA11yCmd);
       const btn = document.getElementById('a11yContinueBtn');
       if (btn) { btn.textContent = 'Copied — paste in Claude Code'; setTimeout(() => { btn.textContent = 'Continue in Claude Code'; }, 2000); }
     }
@@ -786,6 +787,8 @@ function triggerBluelinePanels() {
 
 document.getElementById('generateBluelinePanelsBtn')?.addEventListener('click', () => triggerBluelinePanels());
 
+
+let lastA11yCmd = '';
 
 // Bridge tab — WebSocket connection to figma-console MCP
 let bridgeConnected = false;

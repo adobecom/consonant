@@ -1129,6 +1129,7 @@ After figma_render_blueline completes, call bridge_send_a11y_result with:
 }
 This updates the plugin panel so the designer can see results without hunting the Figma canvas.${bridgeNote}`;
     }
+    lastA11yCmd = cmd;
     const el = document.getElementById("a11yStatus");
     if (el) {
       el.innerHTML = `
@@ -1152,7 +1153,7 @@ This updates the plugin panel so the designer can see results without hunting th
     }
   }
   function renderA11yResults(data) {
-    var _a22;
+    var _a22, _b, _c, _d, _e;
     const el = document.getElementById("a11yStatus");
     if (!el) return;
     function section(title, cls, items, itemCls) {
@@ -1165,22 +1166,21 @@ This updates the plugin panel so the designer can see results without hunting th
       ${rows}
     </div>`;
     }
-    const issueItems = data.issues.map((i) => ({ label: i.category, text: i.description }));
-    const needsItems = data.needs_input.map((i) => ({ label: i.category, text: i.question }));
-    const suggItems = data.suggestions.map((i) => ({ label: i.category, text: i.description }));
+    const issueItems = ((_a22 = data.issues) != null ? _a22 : []).map((i) => ({ label: i.category, text: i.description }));
+    const needsItems = ((_b = data.needs_input) != null ? _b : []).map((i) => ({ label: i.category, text: i.question }));
+    const suggItems = ((_c = data.suggestions) != null ? _c : []).map((i) => ({ label: i.category, text: i.description }));
     const empty = issueItems.length === 0 && needsItems.length === 0 && suggItems.length === 0;
     el.innerHTML = `
     <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
-      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc(data.frameName)}</div>
+      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc((_d = data.frameName) != null ? _d : "")}</div>
       <div class="a11y-results">
         ${empty ? '<div class="a11y-results-empty">No issues or suggestions returned.</div>' : section("Issues", "issues", issueItems, "issue") + section("Needs your input", "needs-input", needsItems, "needs") + section("Suggestions", "suggestions", suggItems, "suggestion")}
       </div>
       <button class="btn btn-secondary" id="a11yContinueBtn" style="margin-top:8px;font-size:10px;width:100%;">Continue in Claude Code</button>
     </div>`;
-    (_a22 = document.getElementById("a11yContinueBtn")) == null ? void 0 : _a22.addEventListener("click", async () => {
-      const cmdEl = document.getElementById("fillCmdText");
-      if (cmdEl) {
-        await copyToClipboard(cmdEl.textContent || "");
+    (_e = document.getElementById("a11yContinueBtn")) == null ? void 0 : _e.addEventListener("click", async () => {
+      if (lastA11yCmd) {
+        await copyToClipboard(lastA11yCmd);
         const btn = document.getElementById("a11yContinueBtn");
         if (btn) {
           btn.textContent = "Copied \u2014 paste in Claude Code";
@@ -1371,6 +1371,7 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
   }
   var _a19;
   (_a19 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a19.addEventListener("click", () => triggerBluelinePanels());
+  var lastA11yCmd = "";
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
