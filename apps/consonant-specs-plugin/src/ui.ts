@@ -487,6 +487,14 @@ function updateA11yBridgeState() {
     if (badge) { badge.textContent = '\u2713 bridge connected'; badge.classList.add('connected'); }
     items.forEach(el => el.classList.add('enabled'));
     checkboxes.forEach(cb => cb.disabled = false);
+    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+    if (!anyChecked) {
+      const defaults = ['a11yFocusIndicators', 'a11yFocusOrder', 'a11yColorContrast', 'a11yNamesAlt'];
+      defaults.forEach(id => {
+        const cb = document.getElementById(id) as HTMLInputElement;
+        if (cb) cb.checked = true;
+      });
+    }
   } else {
     if (badge) { badge.textContent = 'connect bridge'; badge.classList.remove('connected'); }
     items.forEach(el => el.classList.remove('enabled'));
