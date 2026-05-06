@@ -1603,7 +1603,7 @@ async function drawA11yAnnotations(
   container.locked = true;
 }
 
-figma.showUI(__html__, { width: 360, height: 500, themeColors: true });
+figma.showUI(__html__, { width: 300, height: 500, themeColors: true });
 
 figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
   switch (msg.type) {
