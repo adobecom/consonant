@@ -508,24 +508,56 @@ function updateA11yStatus(message: string) {
 }
 
 function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string) {
+  const categoryList = sections && sections.length > 0 ? sections.join(', ') : 'all categories';
+  const frame = frameName ? `"${frameName}"` : 'the selected frame';
+  const bridgeNote = bridgeConnected ? '' : '\n\n⚠ Bridge offline — paste this in Claude Code manually.';
+
   let cmd: string;
-  const agentNote = ' Call figma_get_blueline_data first — it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.';
   if (mode === 'sections') {
-    cmd = `Fill the blueline cards on the current Figma page.${agentNote}`;
+    cmd = `Fill the blueline cards on the current Figma page. Call figma_get_blueline_data first — it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.`;
   } else {
-    const categoryList = sections && sections.length > 0 ? sections.join(', ') : 'all categories';
-    const frame = frameName ? ` for "${frameName}"` : '';
-    cmd = `Fill ONLY these blueline categories${frame}: ${categoryList}.${agentNote} Do not fill cards from other categories or previous generations.`;
+    cmd = `Start an A11y review conversation for the frame ${frame}.
+
+Categories to review: ${categoryList}
+
+Step 1 — Ground yourself:
+Call figma_get_blueline_data. It returns the structural scan (a hidden text node named .structural-scan), a screenshot, and per-agent orchestration instructions. Read the structural scan carefully. Do not infer elements that are not present in it.
+
+Step 2 — Ask questions first (REQUIRED before any rendering):
+Before calling figma_render_blueline, ask the designer 1–3 clarifying questions about things you genuinely need to know to be accurate — e.g. intended interaction pattern, whether a visual-only element is intentional, context of use. If you have no real questions, say so briefly and proceed.
+Wait for the designer's answers before continuing.
+
+Step 3 — Analyze:
+For each selected category, call figma_get_knowledge for its agent group. Use the structural scan + screenshot + designer answers to assess each category.
+Before filling a category, check whether the structural scan contains elements that match it:
+- "autoRotation" (Carousel) → skip if no carousel/slider elements in scan
+- "forms" → skip if no input/select/textarea elements in scan
+- "reducedMotion"/"media"/"reflow" → skip if no animation or media elements in scan
+If a category has no matching elements, skip it and note: "Skipped [category] — no matching elements found."
+
+Step 4 — Render:
+Call figma_render_blueline with the cards object. For confident items: write the issue or passing note, WCAG criterion, and a plain-language suggestion in desc. For uncertain items: pass an empty string for desc and put the open question in notes (e.g. "notes": "Need to know: is this button keyboard-only or also touch?").
+
+Step 5 — Send summary to plugin:
+After figma_render_blueline completes, call bridge_send_a11y_result with:
+{
+  "frameName": ${frame},
+  "issues": [{ "category": "...", "description": "..." }],
+  "needs_input": [{ "category": "...", "question": "..." }],
+  "suggestions": [{ "category": "...", "description": "..." }]
+}
+This updates the plugin panel so the designer can see results without hunting the Figma canvas.${bridgeNote}`;
   }
+
   const el = document.getElementById('a11yStatus');
   if (el) {
     el.innerHTML = `
       <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
-        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Scaffolding done &#x2714;</div>
-        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">To fill AI sections, paste this in Claude Code:</div>
-        <code id="fillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
+        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Cards created &#x2714; — waiting for Claude</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">Paste this in Claude Code to start the review:</div>
+        <code id="fillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;white-space:pre-wrap;">${esc(cmd)}</code>
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
-        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Results will appear here when Claude finishes.</div>
       </div>`;
     document.getElementById('copyFillCmd')?.addEventListener('click', async () => {
       await copyToClipboard(cmd);
