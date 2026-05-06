@@ -559,6 +559,15 @@ document.getElementById('a11yCheckAllAi')?.addEventListener('click', () => {
   if (btn) btn.textContent = allChecked ? 'Check All' : 'Uncheck All';
 });
 
+document.getElementById('a11yShowMore')?.addEventListener('click', () => {
+  const section = document.getElementById('a11yConditionalSection');
+  const btn = document.getElementById('a11yShowMore') as HTMLButtonElement;
+  if (!section || !btn) return;
+  const isHidden = section.style.display === 'none';
+  section.style.display = isHidden ? '' : 'none';
+  btn.textContent = isHidden ? '▾ Hide extra categories' : '▸ Show more categories';
+});
+
 // Check All / Uncheck All — Accessibility Notes section
 document.getElementById('a11yCheckAllNotes')?.addEventListener('click', () => {
   if (!bridgeConnected) return;

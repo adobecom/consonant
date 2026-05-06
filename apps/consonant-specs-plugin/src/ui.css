@@ -268,3 +268,16 @@ body {
   margin-left: 20px;
   line-height: 1.4;
 }
+
+.a11y-show-more {
+  background: none;
+  border: none;
+  color: var(--text-tertiary, #999);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 4px 0;
+  text-align: left;
+  width: 100%;
+  margin-top: 4px;
+}
+.a11y-show-more:hover { color: var(--text-secondary, #666); }

@@ -38,7 +38,7 @@
   }
   var a11yTab = document.querySelector('.tab[data-tab="a11y"]');
   var a11yPanel = document.querySelector('.tab-panel[data-panel="a11y"]');
-  if (true) {
+  if (false) {
     a11yTab == null ? void 0 : a11yTab.remove();
     a11yPanel == null ? void 0 : a11yPanel.remove();
   }
@@ -184,7 +184,7 @@
     postToPlugin("navigate-to-node", { nodeId });
   }
   function renderAuditResult(result) {
-    var _a25;
+    var _a22;
     const list = document.getElementById("propertyList");
     if (!list) return;
     const pct = result.total > 0 ? Math.round(result.matched / result.total * 100) : 0;
@@ -214,7 +214,7 @@
         if (nodeId) navigateToNode(nodeId);
       });
     });
-    (_a25 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a25.addEventListener("click", () => {
+    (_a22 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a22.addEventListener("click", () => {
       postToPlugin("annotate-audit-issues", { issues: result.issues });
     });
   }
@@ -330,9 +330,9 @@
   });
   var _a10;
   (_a10 = document.getElementById("specItBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
-    var _a25, _b, _c, _d, _e, _f;
+    var _a22, _b, _c, _d, _e, _f;
     const sections = [];
-    if ((_a25 = document.getElementById("specAnatomy")) == null ? void 0 : _a25.checked) sections.push("anatomy");
+    if ((_a22 = document.getElementById("specAnatomy")) == null ? void 0 : _a22.checked) sections.push("anatomy");
     if ((_b = document.getElementById("specCardGaps")) == null ? void 0 : _b.checked) sections.push("cardGaps");
     if ((_c = document.getElementById("specSpacingGeneral")) == null ? void 0 : _c.checked) sections.push("spacingGeneral");
     if ((_d = document.getElementById("specSpacing")) == null ? void 0 : _d.checked) sections.push("spacing");
@@ -411,7 +411,7 @@
   }
   var LANG_NAMES = { de: "German", zh: "Chinese", th: "Thai", ar: "Arabic" };
   function showLocalizeBridgePrompt(data) {
-    var _a25;
+    var _a22;
     const langList = data.languages.map((l) => LANG_NAMES[l] || l).join(", ");
     const cmd = `Translate the frame "${data.frameName}" (${data.frameId}) into ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? " Apply RTL layout for Arabic." : ""}
 
@@ -426,7 +426,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
         <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a25 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a25.addEventListener("click", async () => {
+      (_a22 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a22.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyLocalizeCmd");
         if (btn) {
@@ -483,7 +483,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
   function showAiFillInstruction(mode, sections, frameName) {
-    var _a25;
+    var _a22;
     let cmd;
     const agentNote = " Call figma_get_blueline_data first \u2014 it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.";
     if (mode === "sections") {
@@ -503,7 +503,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a25 = document.getElementById("copyFillCmd")) == null ? void 0 : _a25.addEventListener("click", async () => {
+      (_a22 = document.getElementById("copyFillCmd")) == null ? void 0 : _a22.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyFillCmd");
         if (btn) {
@@ -516,7 +516,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
     }
   }
   function showPanelsFillInstruction(sections, frameName, sectionIds) {
-    var _a25;
+    var _a22;
     const sectionList = sections.join(", ");
     const cmd = `Fill the blueline panels on the current Figma page for "${frameName}". Categories: ${sectionList}.
 
@@ -537,7 +537,7 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         <button class="btn btn-secondary" id="copyPanelsFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Paste into your current Claude Code session (Bridge must be connected)</div>
       </div>`;
-      (_a25 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a25.addEventListener("click", async () => {
+      (_a22 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a22.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyPanelsFillCmd");
         if (btn) {
@@ -562,7 +562,16 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
   var _a16;
-  (_a16 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a16.addEventListener("click", () => {
+  (_a16 = document.getElementById("a11yShowMore")) == null ? void 0 : _a16.addEventListener("click", () => {
+    const section = document.getElementById("a11yConditionalSection");
+    const btn = document.getElementById("a11yShowMore");
+    if (!section || !btn) return;
+    const isHidden = section.style.display === "none";
+    section.style.display = isHidden ? "" : "none";
+    btn.textContent = isHidden ? "\u25BE Hide extra categories" : "\u25B8 Show more categories";
+  });
+  var _a17;
+  (_a17 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a17.addEventListener("click", () => {
     if (!bridgeConnected) return;
     const noteIds = ["a11yForms", "a11yCarousel", "a11yDom", "a11yMotionMedia", "a11yScreenReader", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
     const boxes = noteIds.map((id) => document.getElementById(id)).filter(Boolean);
@@ -574,9 +583,9 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
   function getCheckedA11yCategories() {
-    var _a25, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
+    var _a22, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const categories = [];
-    if ((_a25 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a25.checked) categories.push("focusIndicators");
+    if ((_a22 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a22.checked) categories.push("focusIndicators");
     if ((_b = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b.checked) categories.push("focusOrder");
     if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) categories.push("headings");
     if ((_d = document.getElementById("a11yLandmarksNav")) == null ? void 0 : _d.checked) {
@@ -619,8 +628,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }
     postToPlugin("generate-blueline", { categories });
   }
-  var _a17;
-  (_a17 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a17.addEventListener("click", () => triggerBlueline());
+  var _a18;
+  (_a18 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a18.addEventListener("click", () => triggerBlueline());
   function triggerBluelinePanels() {
     const categories = getCheckedA11yCategories();
     if (categories.length === 0) {
@@ -633,8 +642,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }
     postToPlugin("generate-blueline-panels", { categories });
   }
-  var _a18;
-  (_a18 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a18.addEventListener("click", () => triggerBluelinePanels());
+  var _a19;
+  (_a19 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a19.addEventListener("click", () => triggerBluelinePanels());
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
@@ -868,10 +877,10 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }).catch(() => {
     });
     sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
-      var _a25, _b;
+      var _a22, _b;
       if (ws.readyState !== 1 || !result) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
-      appendBridgeLog("Variables synced: " + (((_b = (_a25 = result.data) == null ? void 0 : _a25.variables) == null ? void 0 : _b.length) || 0) + " vars");
+      appendBridgeLog("Variables synced: " + (((_b = (_a22 = result.data) == null ? void 0 : _a22.variables) == null ? void 0 : _b.length) || 0) + " vars");
     }).catch(() => {
     });
   }
@@ -962,176 +971,9 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       info.style.color = "";
     }
   }
-  var _a19;
-  (_a19 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a19.addEventListener("click", () => bridgeConnect());
   var _a20;
-  (_a20 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a20.addEventListener("click", () => bridgeDisconnect());
-  var variablesCache = null;
-  function updateVariablesBridgeWarning() {
-    const el = document.getElementById("variablesBridgeWarning");
-    const pushBtn = document.getElementById("variablesPushBtn");
-    if (!el) return;
-    if (bridgeConnected) {
-      el.textContent = "Bridge connected \u2014 Push will sync variables to Claude Code.";
-      el.style.background = "rgba(0,180,100,0.08)";
-      el.style.color = "var(--success, #1a8a4a)";
-      if (pushBtn) pushBtn.disabled = variablesCache === null;
-    } else {
-      el.textContent = "Connect Bridge to push variables to Claude Code";
-      el.style.background = "";
-      el.style.color = "";
-      if (pushBtn) pushBtn.disabled = true;
-    }
-  }
-  function renderVariablesSummary(data) {
-    variablesCache = data;
-    const summary = document.getElementById("variablesSummary");
-    if (!summary) return;
-    const byCollection = {};
-    for (const v of data.variables) {
-      byCollection[v.variableCollectionId] = (byCollection[v.variableCollectionId] || 0) + 1;
-    }
-    const rows = data.variableCollections.map((c) => {
-      const count = byCollection[c.id] || 0;
-      return `<div class="property-row" style="justify-content:space-between;">
-      <span class="property-name" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.name)}</span>
-      <span class="token-badge token-badge-match" style="flex-shrink:0;">${count}</span>
-    </div>`;
-    }).join("");
-    summary.innerHTML = `
-    <div style="margin-bottom:8px;font-size:11px;color:var(--text-secondary);">
-      ${data.variables.length} variables across ${data.variableCollections.length} collections
-    </div>
-    ${rows || '<p style="color:var(--text-secondary);font-size:11px;">No collections found.</p>'}
-  `;
-    const pushBtn = document.getElementById("variablesPushBtn");
-    if (pushBtn && bridgeConnected) pushBtn.disabled = false;
-    updateVariablesBridgeWarning();
-  }
-  function updateVariablesStatus(msg) {
-    const el = document.getElementById("variablesStatus");
-    if (el) el.textContent = msg;
-  }
+  (_a20 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a20.addEventListener("click", () => bridgeConnect());
   var _a21;
-  (_a21 = document.getElementById("variablesRefreshBtn")) == null ? void 0 : _a21.addEventListener("click", async () => {
-    const btn = document.getElementById("variablesRefreshBtn");
-    if (btn) {
-      btn.textContent = "Refreshing...";
-      btn.disabled = true;
-    }
-    updateVariablesStatus("Loading variables...");
-    try {
-      const result = await sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4);
-      if (result == null ? void 0 : result.data) {
-        renderVariablesSummary(result.data);
-        updateVariablesStatus("");
-      } else {
-        updateVariablesStatus("No data returned.");
-      }
-    } catch (e) {
-      updateVariablesStatus("Error: " + (e.message || String(e)));
-    } finally {
-      if (btn) {
-        btn.textContent = "Refresh";
-        btn.disabled = false;
-      }
-    }
-  });
-  var _a22;
-  (_a22 = document.getElementById("variablesPushBtn")) == null ? void 0 : _a22.addEventListener("click", async () => {
-    if (!variablesCache || !bridgeWs || bridgeWs.readyState !== 1) {
-      updateVariablesStatus("Bridge not connected or no data loaded.");
-      return;
-    }
-    try {
-      bridgeWs.send(JSON.stringify({ type: "VARIABLES_DATA", data: variablesCache }));
-      updateVariablesStatus(`Pushed ${variablesCache.variables.length} variables to Bridge.`);
-    } catch (e) {
-      updateVariablesStatus("Push failed: " + (e.message || String(e)));
-    }
-  });
-  var _origUpdateBridgeUi = window.__updateBridgeUi;
-  function updateBridgeUiWithVariables() {
-    updateVariablesBridgeWarning();
-  }
-  var selectCurrentSetId = null;
-  var selectCurrentSetName = "";
-  var selectAxesData = [];
-  function renderSelectAxes(setId, setName, axes) {
-    selectCurrentSetId = setId;
-    selectCurrentSetName = setName;
-    selectAxesData = axes;
-    const placeholder = document.getElementById("selectPlaceholder");
-    const controls = document.getElementById("selectControls");
-    const setNameEl = document.getElementById("selectSetName");
-    const axesEl = document.getElementById("selectAxes");
-    const statusEl = document.getElementById("selectStatus");
-    if (placeholder) placeholder.style.display = "none";
-    if (controls) controls.style.display = "block";
-    if (setNameEl) setNameEl.textContent = setName;
-    if (statusEl) statusEl.textContent = "";
-    const variantAxes = axes.filter((a) => a.type === "VARIANT");
-    if (axesEl) {
-      if (variantAxes.length === 0) {
-        axesEl.innerHTML = '<p style="color:var(--text-secondary);font-size:11px;">No variant axes found.</p>';
-        return;
-      }
-      axesEl.innerHTML = variantAxes.map((axis) => {
-        const values = axis.variantOptions || [];
-        const checks = values.map(
-          (v) => `<label class="match-option" style="padding:2px 0;">
-          <input type="checkbox" class="select-axis-check" data-axis="${esc(axis.name)}" data-value="${esc(v)}" checked>
-          ${esc(v)}
-        </label>`
-        ).join("");
-        return `<div style="margin-bottom:10px;">
-        <div class="section-title" style="margin-bottom:4px;">${esc(axis.name)}</div>
-        <div class="match-checklist" style="gap:2px;">${checks}</div>
-      </div>`;
-      }).join("");
-    }
-  }
-  function clearSelectTab() {
-    selectCurrentSetId = null;
-    const placeholder = document.getElementById("selectPlaceholder");
-    const controls = document.getElementById("selectControls");
-    if (placeholder) placeholder.style.display = "block";
-    if (controls) controls.style.display = "none";
-  }
-  var _a23;
-  (_a23 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a23.addEventListener("click", () => {
-    if (!selectCurrentSetId) return;
-    const filterMap = {};
-    document.querySelectorAll(".select-axis-check").forEach((cb) => {
-      const axis = cb.dataset.axis;
-      const value = cb.dataset.value;
-      if (!filterMap[axis]) filterMap[axis] = /* @__PURE__ */ new Set();
-      if (cb.checked) filterMap[axis].add(value);
-    });
-    postToPlugin("select:apply-filter", { setId: selectCurrentSetId, filter: Object.fromEntries(Object.entries(filterMap).map(([k, s]) => [k, [...s]])) });
-  });
-  var _a24;
-  (_a24 = document.getElementById("selectAllBtn")) == null ? void 0 : _a24.addEventListener("click", () => {
-    if (!selectCurrentSetId) return;
-    postToPlugin("select:apply-filter", { setId: selectCurrentSetId, filter: {} });
-  });
-  window.addEventListener("message", (event) => {
-    const msg = event.data.pluginMessage;
-    if (!msg) return;
-    if (msg.type === "select:axes-data") {
-      if (msg.setId) {
-        renderSelectAxes(msg.setId, msg.setName, msg.axes);
-      } else {
-        clearSelectTab();
-      }
-    }
-    if (msg.type === "select:result") {
-      const statusEl = document.getElementById("selectStatus");
-      if (statusEl) statusEl.textContent = msg.message;
-    }
-    if (msg.type === "bridge-state-changed") {
-      updateBridgeUiWithVariables();
-    }
-  });
+  (_a21 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a21.addEventListener("click", () => bridgeDisconnect());
   postToPlugin("ui-ready");
 })();

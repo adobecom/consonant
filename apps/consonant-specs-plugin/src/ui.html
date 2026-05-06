@@ -129,20 +129,23 @@
               <label class="match-option a11y-item"><input type="checkbox" id="a11yPageSetup" disabled> Page Setup<span class="a11y-desc">Does the page have a title and language declared?</span></label>
             </div>
 
-            <!-- Accessibility Notes (bridge-gated) -->
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-              <span class="section-title" style="margin-bottom:0;">Accessibility Notes</span>
-              <button id="a11yCheckAllNotes" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
-            </div>
-            <div class="match-checklist" id="a11yConditionalList">
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yForms" disabled> Forms<span class="a11y-desc">Are inputs labeled and error messages clear?</span></label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yCarousel" disabled> Carousel<span class="a11y-desc">Can users navigate slides with keyboard and screen reader?</span></label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yDom" disabled> DOM Strategy<span class="a11y-desc">Does the DOM order support the correct reading sequence?</span></label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yMotionMedia" disabled> Motion &amp; Media<span class="a11y-desc">Can users pause motion and is media accessible?</span></label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yScreenReader" disabled> Screen Reader Notes<span class="a11y-desc">Platform-specific notes for VoiceOver, TalkBack, Narrator</span></label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yReactNative" disabled> React Native<span class="a11y-desc">Accessibility notes specific to the React Native platform</span></label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yTvNote" disabled> TV Note<span class="a11y-desc">Notes for TV/10-foot UI accessibility</span></label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yGeneralNote" disabled> General Note<span class="a11y-desc">Any other accessibility notes for this frame</span></label>
+            <!-- Group 2 toggle -->
+            <button class="a11y-show-more" id="a11yShowMore" style="margin-top:8px;">▸ Show more categories</button>
+            <div id="a11yConditionalSection" style="display:none;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+                <span class="section-title" style="margin-bottom:0;">Accessibility Notes</span>
+                <button id="a11yCheckAllNotes" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+              </div>
+              <div class="match-checklist" id="a11yConditionalList">
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yForms" disabled> Forms<span class="a11y-desc">Are inputs labeled and error messages clear?</span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yCarousel" disabled> Carousel<span class="a11y-desc">Can users navigate slides with keyboard and screen reader?</span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yDom" disabled> DOM Strategy<span class="a11y-desc">Does the DOM order support the correct reading sequence?</span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yMotionMedia" disabled> Motion &amp; Media<span class="a11y-desc">Can users pause motion and is media accessible?</span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yScreenReader" disabled> Screen Reader Notes<span class="a11y-desc">Platform-specific notes for VoiceOver, TalkBack, Narrator</span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yReactNative" disabled> React Native<span class="a11y-desc">Accessibility notes specific to the React Native platform</span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yTvNote" disabled> TV Note<span class="a11y-desc">Notes for TV/10-foot UI accessibility</span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yGeneralNote" disabled> General Note<span class="a11y-desc">Any other accessibility notes for this frame</span></label>
+              </div>
             </div>
 
             <button class="btn" id="generateBluelineBtn" style="margin-top:12px;">Generate Blueline</button>
