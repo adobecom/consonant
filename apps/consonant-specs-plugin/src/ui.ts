@@ -480,7 +480,7 @@ function updateA11yBridgeState() {
   const badge = document.getElementById('a11yBridgeBadge') as HTMLElement;
   const items = document.querySelectorAll('.a11y-item');
   const checkboxes = document.querySelectorAll('.a11y-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
-  const genBtn = document.getElementById('generateBluelineBtn') as HTMLButtonElement;
+  const genBtn = document.getElementById('a11yStartBtn') as HTMLButtonElement;
   // Generate buttons are always enabled (plugin-generated doesn't need bridge)
   if (genBtn) genBtn.disabled = false;
   if (bridgeConnected) {
@@ -588,6 +588,60 @@ document.getElementById('a11yCheckAllNotes')?.addEventListener('click', () => {
   if (btn) btn.textContent = allChecked ? 'Check All' : 'Uncheck All';
 });
 
+const A11Y_LABELS: Record<string, string> = {
+  a11yFocusIndicators: 'Focus Indicators',
+  a11yFocusOrder: 'Focus Order',
+  a11yHeadings: 'Heading Hierarchy',
+  a11yLandmarksNav: 'Landmarks & Navigation',
+  a11yNamesAlt: 'Names & Alt-Text',
+  a11yColorContrast: 'Color Contrast',
+  a11yAriaKeyboard: 'ARIA & Keyboard',
+  a11yTargetSize: 'Target Size',
+  a11yPageSetup: 'Page Setup',
+  a11yForms: 'Forms',
+  a11yCarousel: 'Carousel',
+  a11yDom: 'DOM Strategy',
+  a11yMotionMedia: 'Motion & Media',
+  a11yScreenReader: 'Screen Reader Notes',
+  a11yReactNative: 'React Native',
+  a11yTvNote: 'TV Note',
+  a11yGeneralNote: 'General Note',
+};
+
+function getCheckedA11yCheckboxIds(): string[] {
+  return Object.keys(A11Y_LABELS).filter(
+    id => (document.getElementById(id) as HTMLInputElement)?.checked
+  );
+}
+
+function showConfirmPanel(checkedIds: string[]) {
+  const categoryView = document.getElementById('a11yCategoryView');
+  const statusEl = document.getElementById('a11yStatus');
+  if (!statusEl) return;
+  if (categoryView) categoryView.style.display = 'none';
+  const labels = checkedIds.map(id => A11Y_LABELS[id] || id).join(', ');
+  const frameLabel = 'the selected frame';
+  statusEl.innerHTML = `
+    <div class="a11y-confirm-panel">
+      <h4>Create ${checkedIds.length} annotation card${checkedIds.length === 1 ? '' : 's'} for ${esc(frameLabel)}</h4>
+      <div class="a11y-confirm-categories">${esc(labels)}</div>
+      <div class="a11y-confirm-note">Claude will ask you questions before filling any cards. Empty cards are normal — they mean Claude needs more information from you.</div>
+      <div class="a11y-confirm-actions">
+        <button class="btn btn-secondary" id="a11yConfirmBack">Back</button>
+        <button class="btn" id="a11yConfirmGo">Confirm &amp; Create Cards</button>
+      </div>
+    </div>`;
+  document.getElementById('a11yConfirmBack')?.addEventListener('click', () => {
+    statusEl.innerHTML = '';
+    if (categoryView) categoryView.style.display = '';
+  });
+  document.getElementById('a11yConfirmGo')?.addEventListener('click', () => {
+    statusEl.innerHTML = '';
+    if (categoryView) categoryView.style.display = '';
+    postToPlugin('generate-blueline', { categories: getCheckedA11yCategories() });
+  });
+}
+
 // Collect checked a11y categories
 function getCheckedA11yCategories(): string[] {
   const categories: string[] = [];
@@ -635,7 +689,14 @@ function triggerBlueline() {
   postToPlugin('generate-blueline', { categories });
 }
 
-document.getElementById('generateBluelineBtn')?.addEventListener('click', () => triggerBlueline());
+document.getElementById('a11yStartBtn')?.addEventListener('click', () => {
+  const checkedIds = getCheckedA11yCheckboxIds();
+  if (checkedIds.length === 0) {
+    updateA11yStatus('Select at least one category.');
+    return;
+  }
+  showConfirmPanel(checkedIds);
+});
 
 function triggerBluelinePanels() {
   const categories = getCheckedA11yCategories();

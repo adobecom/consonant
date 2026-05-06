@@ -457,7 +457,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
     const badge = document.getElementById("a11yBridgeBadge");
     const items = document.querySelectorAll(".a11y-item");
     const checkboxes = document.querySelectorAll('.a11y-item input[type="checkbox"]');
-    const genBtn = document.getElementById("generateBluelineBtn");
+    const genBtn = document.getElementById("a11yStartBtn");
     if (genBtn) genBtn.disabled = false;
     if (bridgeConnected) {
       if (badge) {
@@ -466,6 +466,14 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
       }
       items.forEach((el) => el.classList.add("enabled"));
       checkboxes.forEach((cb) => cb.disabled = false);
+      const anyChecked = Array.from(checkboxes).some((cb) => cb.checked);
+      if (!anyChecked) {
+        const defaults = ["a11yFocusIndicators", "a11yFocusOrder", "a11yColorContrast", "a11yNamesAlt"];
+        defaults.forEach((id) => {
+          const cb = document.getElementById(id);
+          if (cb) cb.checked = true;
+        });
+      }
     } else {
       if (badge) {
         badge.textContent = "connect bridge";
@@ -569,6 +577,7 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     const isHidden = section.style.display === "none";
     section.style.display = isHidden ? "" : "none";
     btn.textContent = isHidden ? "\u25BE Hide extra categories" : "\u25B8 Show more categories";
+    btn.setAttribute("aria-expanded", String(isHidden));
   });
   var _a17;
   (_a17 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a17.addEventListener("click", () => {
@@ -582,6 +591,61 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     const btn = document.getElementById("a11yCheckAllNotes");
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
+  var A11Y_LABELS = {
+    a11yFocusIndicators: "Focus Indicators",
+    a11yFocusOrder: "Focus Order",
+    a11yHeadings: "Heading Hierarchy",
+    a11yLandmarksNav: "Landmarks & Navigation",
+    a11yNamesAlt: "Names & Alt-Text",
+    a11yColorContrast: "Color Contrast",
+    a11yAriaKeyboard: "ARIA & Keyboard",
+    a11yTargetSize: "Target Size",
+    a11yPageSetup: "Page Setup",
+    a11yForms: "Forms",
+    a11yCarousel: "Carousel",
+    a11yDom: "DOM Strategy",
+    a11yMotionMedia: "Motion & Media",
+    a11yScreenReader: "Screen Reader Notes",
+    a11yReactNative: "React Native",
+    a11yTvNote: "TV Note",
+    a11yGeneralNote: "General Note"
+  };
+  function getCheckedA11yCheckboxIds() {
+    return Object.keys(A11Y_LABELS).filter(
+      (id) => {
+        var _a22;
+        return (_a22 = document.getElementById(id)) == null ? void 0 : _a22.checked;
+      }
+    );
+  }
+  function showConfirmPanel(checkedIds) {
+    var _a22, _b;
+    const categoryView = document.getElementById("a11yCategoryView");
+    const statusEl = document.getElementById("a11yStatus");
+    if (!statusEl) return;
+    if (categoryView) categoryView.style.display = "none";
+    const labels = checkedIds.map((id) => A11Y_LABELS[id] || id).join(", ");
+    const frameLabel = "the selected frame";
+    statusEl.innerHTML = `
+    <div class="a11y-confirm-panel">
+      <h4>Create ${checkedIds.length} annotation card${checkedIds.length === 1 ? "" : "s"} for ${esc(frameLabel)}</h4>
+      <div class="a11y-confirm-categories">${esc(labels)}</div>
+      <div class="a11y-confirm-note">Claude will ask you questions before filling any cards. Empty cards are normal \u2014 they mean Claude needs more information from you.</div>
+      <div class="a11y-confirm-actions">
+        <button class="btn btn-secondary" id="a11yConfirmBack">Back</button>
+        <button class="btn" id="a11yConfirmGo">Confirm &amp; Create Cards</button>
+      </div>
+    </div>`;
+    (_a22 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a22.addEventListener("click", () => {
+      statusEl.innerHTML = "";
+      if (categoryView) categoryView.style.display = "";
+    });
+    (_b = document.getElementById("a11yConfirmGo")) == null ? void 0 : _b.addEventListener("click", () => {
+      statusEl.innerHTML = "";
+      if (categoryView) categoryView.style.display = "";
+      postToPlugin("generate-blueline", { categories: getCheckedA11yCategories() });
+    });
+  }
   function getCheckedA11yCategories() {
     var _a22, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const categories = [];
@@ -616,20 +680,15 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     if ((_q = document.getElementById("a11yGeneralNote")) == null ? void 0 : _q.checked) categories.push("generalNote");
     return categories;
   }
-  function triggerBlueline() {
-    const categories = getCheckedA11yCategories();
-    if (categories.length === 0) {
-      updateA11yStatus("Select at least one option.");
-      return;
-    }
-    if (!bridgeConnected) {
-      updateA11yStatus("Connect Bridge for AI-assisted categories.");
-      return;
-    }
-    postToPlugin("generate-blueline", { categories });
-  }
   var _a18;
-  (_a18 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a18.addEventListener("click", () => triggerBlueline());
+  (_a18 = document.getElementById("a11yStartBtn")) == null ? void 0 : _a18.addEventListener("click", () => {
+    const checkedIds = getCheckedA11yCheckboxIds();
+    if (checkedIds.length === 0) {
+      updateA11yStatus("Select at least one category.");
+      return;
+    }
+    showConfirmPanel(checkedIds);
+  });
   function triggerBluelinePanels() {
     const categories = getCheckedA11yCategories();
     if (categories.length === 0) {

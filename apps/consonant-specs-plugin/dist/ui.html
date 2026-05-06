@@ -285,6 +285,33 @@ body {
   margin-top: 4px;
 }
 .a11y-show-more:hover { color: var(--text-secondary, #666); }
+
+.a11y-confirm-panel {
+  padding: 12px;
+  background: var(--bg-secondary, #f5f5f5);
+  border-radius: 6px;
+  border-left: 3px solid var(--accent, #1473E6);
+}
+.a11y-confirm-panel h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text, #222);
+  margin: 0 0 6px 0;
+}
+.a11y-confirm-panel .a11y-confirm-categories {
+  font-size: 11px;
+  color: var(--text-secondary, #555);
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.a11y-confirm-panel .a11y-confirm-note {
+  font-size: 11px;
+  color: var(--text-tertiary, #999);
+  margin-bottom: 10px;
+  font-style: italic;
+}
+.a11y-confirm-actions { display: flex; gap: 6px; }
+.a11y-confirm-actions .btn { flex: 1; margin-bottom: 0; }
 </style>
 </head>
 <body>
@@ -391,6 +418,7 @@ body {
         <div id="a11yContent">
           <p class="placeholder" id="a11yPlaceholder">Select a frame to analyze</p>
           <div id="a11yControls" style="display:none;">
+            <div id="a11yCategoryView">
 
             <!-- AI-assisted (bridge-gated) -->
             <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -413,7 +441,7 @@ body {
             </div>
 
             <!-- Group 2 toggle -->
-            <button class="a11y-show-more" id="a11yShowMore" style="margin-top:8px;">▸ Show more categories</button>
+            <button class="a11y-show-more" id="a11yShowMore" aria-expanded="false" aria-controls="a11yConditionalSection" style="margin-top:8px;">▸ Show more categories</button>
             <div id="a11yConditionalSection" style="display:none;">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
                 <span class="section-title" style="margin-bottom:0;">Accessibility Notes</span>
@@ -431,8 +459,9 @@ body {
               </div>
             </div>
 
-            <button class="btn" id="generateBluelineBtn" style="margin-top:12px;">Generate Blueline</button>
+            <button class="btn" id="a11yStartBtn" style="margin-top:12px;">Start A11y Review</button>
             <button class="btn btn-secondary" id="generateBluelinePanelsBtn" style="margin-top:4px;">Generate Blueline Panels</button>
+            </div>
             <div id="a11yStatus" style="margin-top:12px;"></div>
           </div>
         </div>
@@ -999,7 +1028,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
     const badge = document.getElementById("a11yBridgeBadge");
     const items = document.querySelectorAll(".a11y-item");
     const checkboxes = document.querySelectorAll('.a11y-item input[type="checkbox"]');
-    const genBtn = document.getElementById("generateBluelineBtn");
+    const genBtn = document.getElementById("a11yStartBtn");
     if (genBtn) genBtn.disabled = false;
     if (bridgeConnected) {
       if (badge) {
@@ -1008,6 +1037,14 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
       }
       items.forEach((el) => el.classList.add("enabled"));
       checkboxes.forEach((cb) => cb.disabled = false);
+      const anyChecked = Array.from(checkboxes).some((cb) => cb.checked);
+      if (!anyChecked) {
+        const defaults = ["a11yFocusIndicators", "a11yFocusOrder", "a11yColorContrast", "a11yNamesAlt"];
+        defaults.forEach((id) => {
+          const cb = document.getElementById(id);
+          if (cb) cb.checked = true;
+        });
+      }
     } else {
       if (badge) {
         badge.textContent = "connect bridge";
@@ -1111,6 +1148,7 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     const isHidden = section.style.display === "none";
     section.style.display = isHidden ? "" : "none";
     btn.textContent = isHidden ? "\u25BE Hide extra categories" : "\u25B8 Show more categories";
+    btn.setAttribute("aria-expanded", String(isHidden));
   });
   var _a17;
   (_a17 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a17.addEventListener("click", () => {
@@ -1124,6 +1162,61 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     const btn = document.getElementById("a11yCheckAllNotes");
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
+  var A11Y_LABELS = {
+    a11yFocusIndicators: "Focus Indicators",
+    a11yFocusOrder: "Focus Order",
+    a11yHeadings: "Heading Hierarchy",
+    a11yLandmarksNav: "Landmarks & Navigation",
+    a11yNamesAlt: "Names & Alt-Text",
+    a11yColorContrast: "Color Contrast",
+    a11yAriaKeyboard: "ARIA & Keyboard",
+    a11yTargetSize: "Target Size",
+    a11yPageSetup: "Page Setup",
+    a11yForms: "Forms",
+    a11yCarousel: "Carousel",
+    a11yDom: "DOM Strategy",
+    a11yMotionMedia: "Motion & Media",
+    a11yScreenReader: "Screen Reader Notes",
+    a11yReactNative: "React Native",
+    a11yTvNote: "TV Note",
+    a11yGeneralNote: "General Note"
+  };
+  function getCheckedA11yCheckboxIds() {
+    return Object.keys(A11Y_LABELS).filter(
+      (id) => {
+        var _a22;
+        return (_a22 = document.getElementById(id)) == null ? void 0 : _a22.checked;
+      }
+    );
+  }
+  function showConfirmPanel(checkedIds) {
+    var _a22, _b;
+    const categoryView = document.getElementById("a11yCategoryView");
+    const statusEl = document.getElementById("a11yStatus");
+    if (!statusEl) return;
+    if (categoryView) categoryView.style.display = "none";
+    const labels = checkedIds.map((id) => A11Y_LABELS[id] || id).join(", ");
+    const frameLabel = "the selected frame";
+    statusEl.innerHTML = `
+    <div class="a11y-confirm-panel">
+      <h4>Create ${checkedIds.length} annotation card${checkedIds.length === 1 ? "" : "s"} for ${esc(frameLabel)}</h4>
+      <div class="a11y-confirm-categories">${esc(labels)}</div>
+      <div class="a11y-confirm-note">Claude will ask you questions before filling any cards. Empty cards are normal \u2014 they mean Claude needs more information from you.</div>
+      <div class="a11y-confirm-actions">
+        <button class="btn btn-secondary" id="a11yConfirmBack">Back</button>
+        <button class="btn" id="a11yConfirmGo">Confirm &amp; Create Cards</button>
+      </div>
+    </div>`;
+    (_a22 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a22.addEventListener("click", () => {
+      statusEl.innerHTML = "";
+      if (categoryView) categoryView.style.display = "";
+    });
+    (_b = document.getElementById("a11yConfirmGo")) == null ? void 0 : _b.addEventListener("click", () => {
+      statusEl.innerHTML = "";
+      if (categoryView) categoryView.style.display = "";
+      postToPlugin("generate-blueline", { categories: getCheckedA11yCategories() });
+    });
+  }
   function getCheckedA11yCategories() {
     var _a22, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const categories = [];
@@ -1158,20 +1251,15 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     if ((_q = document.getElementById("a11yGeneralNote")) == null ? void 0 : _q.checked) categories.push("generalNote");
     return categories;
   }
-  function triggerBlueline() {
-    const categories = getCheckedA11yCategories();
-    if (categories.length === 0) {
-      updateA11yStatus("Select at least one option.");
-      return;
-    }
-    if (!bridgeConnected) {
-      updateA11yStatus("Connect Bridge for AI-assisted categories.");
-      return;
-    }
-    postToPlugin("generate-blueline", { categories });
-  }
   var _a18;
-  (_a18 = document.getElementById("generateBluelineBtn")) == null ? void 0 : _a18.addEventListener("click", () => triggerBlueline());
+  (_a18 = document.getElementById("a11yStartBtn")) == null ? void 0 : _a18.addEventListener("click", () => {
+    const checkedIds = getCheckedA11yCheckboxIds();
+    if (checkedIds.length === 0) {
+      updateA11yStatus("Select at least one category.");
+      return;
+    }
+    showConfirmPanel(checkedIds);
+  });
   function triggerBluelinePanels() {
     const categories = getCheckedA11yCategories();
     if (categories.length === 0) {
