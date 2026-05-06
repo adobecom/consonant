@@ -305,6 +305,13 @@ function getTokenVersion() {
 function getTokenCount() {
   return tokenCount;
 }
+function hasS2AVariables() {
+  return colorVarMap.length > 0 || dimensionVarMap.length > 0;
+}
+async function reloadLibraryTokens() {
+  loadingPromise = null;
+  return loadLibraryTokens();
+}
 function isLoaded() {
   return loaded;
 }
@@ -6665,7 +6672,7 @@ async function drawA11yAnnotations(clone, originalFrame, categoryId, categoryLab
   }
   container.locked = true;
 }
-figma.showUI(__html__, { width: 360, height: 500, themeColors: true });
+figma.showUI(__html__, { width: 300, height: 500, themeColors: true });
 figma.ui.onmessage = async (msg) => {
   switch (msg.type) {
     case "ui-ready":
@@ -6678,12 +6685,27 @@ figma.ui.onmessage = async (msg) => {
         figma.ui.postMessage({
           type: "token-status",
           count,
-          version: count > 0 ? getTokenVersion() : "no library"
+          version: count > 0 ? getTokenVersion() : "no library",
+          hasS2ALibrary: hasS2AVariables()
         });
         figma.notify(count > 0 ? `S2A library: ${count} tokens loaded` : "No S2A tokens found");
       } catch (e) {
         figma.ui.postMessage({ type: "token-status", count: 0, version: `error: ${e.message}` });
         figma.notify(`Library load error: ${e.message}`, { error: true });
+      }
+      break;
+    case "reload-tokens":
+      try {
+        await reloadLibraryTokens();
+        const reloadCount = getTokenCount();
+        figma.ui.postMessage({
+          type: "token-status",
+          count: reloadCount,
+          version: reloadCount > 0 ? getTokenVersion() : "no library",
+          hasS2ALibrary: hasS2AVariables()
+        });
+      } catch (e) {
+        figma.ui.postMessage({ type: "token-status", count: 0, version: `error: ${e.message}`, hasS2ALibrary: false });
       }
       break;
     case "s2a-audit": {

@@ -482,6 +482,34 @@ body {
 .a11y-annotate-btn:hover { background: rgba(124,58,237,0.08); }
 .a11y-annotate-btn.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
 .a11y-annotate-btn:disabled { opacity: 0.35; cursor: default; }
+
+/* S2A library missing banner */
+.s2a-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #fff0f0;
+  border-bottom: 1px solid #ffc0c0;
+  padding: 8px 10px;
+}
+.s2a-banner-text {
+  flex: 1;
+  font-size: 11px;
+  color: #c0392b;
+  line-height: 1.4;
+}
+.s2a-banner-dismiss {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #c0392b;
+  font-size: 12px;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+}
+.s2a-banner-dismiss:hover { opacity: 1; }
 </style>
 </head>
 <body>
@@ -503,13 +531,13 @@ body {
         <div class="hamburger-wrapper">
           <button class="hamburger-btn" id="hamburgerBtn" aria-label="All tools" aria-expanded="false">&#9776;</button>
           <div class="hamburger-menu" id="hamburgerMenu">
-            <button class="hamburger-item" data-tool="align"><span class="hm-icon">&#x229E;</span>Align</button>
-            <button class="hamburger-item" data-tool="match"><span class="hm-icon">&#x25C8;</span>Match</button>
-            <button class="hamburger-item" data-tool="design"><span class="hm-icon">&#x229F;</span>Grids</button>
-            <button class="hamburger-item" data-tool="specs"><span class="hm-icon">&#x25A4;</span>Specs</button>
+            <button class="hamburger-item" data-tool="align"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><line x1="1.5" y1="3.5" x2="10" y2="3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="8,1.8 10.2,3.5 8,5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="10.5" y1="8.5" x2="2" y2="8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="4,6.8 1.8,8.5 4,10.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Align</button>
+            <button class="hamburger-item" data-tool="match"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 1.5 H4.5 A1.5 1.5 0 0 0 7.5 1.5 H10.5 V4.5 A1.5 1.5 0 0 1 10.5 7.5 V10.5 H7.5 A1.5 1.5 0 0 0 4.5 10.5 H1.5 V7.5 A1.5 1.5 0 0 1 1.5 4.5 Z" stroke="currentColor" stroke-width="1"/></svg></span>Match</button>
+            <button class="hamburger-item" data-tool="design"><span class="hm-icon">&#x229E;</span>Grids</button>
+            <button class="hamburger-item" data-tool="specs"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1"/><line x1="7.8" y1="7.8" x2="10.5" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>Specs</button>
             <button class="hamburger-item" data-tool="a11y" id="hamburgerA11yItem"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg></span>A11y</button>
             <button class="hamburger-item" data-tool="localize"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><ellipse cx="6" cy="6" rx="2.2" ry="5" stroke="currentColor" stroke-width="1"/><line x1="1" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1"/><line x1="1" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1"/></svg></span>Localize</button>
-            <button class="hamburger-item" data-tool="variables"><span class="hm-icon">&#x22A1;</span>Variables</button>
+            <button class="hamburger-item" data-tool="variables"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 5V1.5H5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/><circle cx="8.8" cy="3.2" r="1.7" stroke="currentColor" stroke-width="1.1"/><path d="M3.2 7.5L1.5 9.2 3.2 10.9 4.9 9.2Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M10.5 7V10.5H7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/></svg></span>Variables</button>
             <button class="hamburger-item" data-tool="select"><span class="hm-icon">&#x25CE;</span>Select</button>
             <button class="hamburger-item" data-tool="bridge"><span class="hm-icon">&#x03DF;</span>Bridge</button>
           </div>
@@ -517,21 +545,26 @@ body {
       </div>
     </header>
 
+    <div class="s2a-banner" id="s2aBanner" style="display:none;">
+      <span class="s2a-banner-text">S2A / Foundations library not found. Add it via Assets &rsaquo; Browse team libraries, then restart Figma.</span>
+      <button class="s2a-banner-dismiss" id="s2aBannerDismiss" aria-label="Dismiss">&#x2715;</button>
+    </div>
+
     <div class="selection-info" id="selectionInfo">
       <span class="selection-label">No selection</span>
     </div>
 
     <div id="menuView" class="menu-view">
       <div class="menu-section-label">Design</div>
-      <button class="menu-item" data-tool="align"><span class="menu-item-icon">&#x229E;</span><span class="menu-item-name">Align</span><span class="menu-item-chevron">&#8250;</span></button>
-      <button class="menu-item" data-tool="match"><span class="menu-item-icon">&#x25C8;</span><span class="menu-item-name">Match</span><span class="menu-item-chevron">&#8250;</span></button>
-      <button class="menu-item" data-tool="design"><span class="menu-item-icon">&#x229F;</span><span class="menu-item-name">Grids</span><span class="menu-item-chevron">&#8250;</span></button>
-      <button class="menu-item" data-tool="specs"><span class="menu-item-icon">&#x25A4;</span><span class="menu-item-name">Specs</span><span class="menu-item-chevron">&#8250;</span></button>
-      <div class="menu-section-label">Annotation</div>
+      <button class="menu-item" data-tool="align"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><line x1="1.5" y1="3.5" x2="10" y2="3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="8,1.8 10.2,3.5 8,5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="10.5" y1="8.5" x2="2" y2="8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="4,6.8 1.8,8.5 4,10.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="menu-item-name">Align</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="match"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 1.5 H4.5 A1.5 1.5 0 0 0 7.5 1.5 H10.5 V4.5 A1.5 1.5 0 0 1 10.5 7.5 V10.5 H7.5 A1.5 1.5 0 0 0 4.5 10.5 H1.5 V7.5 A1.5 1.5 0 0 1 1.5 4.5 Z" stroke="currentColor" stroke-width="1"/></svg></span><span class="menu-item-name">Match</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="design"><span class="menu-item-icon">&#x229E;</span><span class="menu-item-name">Grids</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="specs"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1"/><line x1="7.8" y1="7.8" x2="10.5" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span><span class="menu-item-name">Specs</span><span class="menu-item-chevron">&#8250;</span></button>
+      <div class="menu-section-label">Compliance</div>
       <button class="menu-item" data-tool="a11y" id="menuA11yItem"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg></span><span class="menu-item-name">A11y</span><span class="menu-item-chevron">&#8250;</span></button>
       <button class="menu-item" data-tool="localize"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><ellipse cx="6" cy="6" rx="2.2" ry="5" stroke="currentColor" stroke-width="1"/><line x1="1" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1"/><line x1="1" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1"/></svg></span><span class="menu-item-name">Localize</span><span class="menu-item-chevron">&#8250;</span></button>
       <div class="menu-section-label">Utilities</div>
-      <button class="menu-item" data-tool="variables"><span class="menu-item-icon">&#x22A1;</span><span class="menu-item-name">Variables</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="variables"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 5V1.5H5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/><circle cx="8.8" cy="3.2" r="1.7" stroke="currentColor" stroke-width="1.1"/><path d="M3.2 7.5L1.5 9.2 3.2 10.9 4.9 9.2Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M10.5 7V10.5H7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/></svg></span><span class="menu-item-name">Variables</span><span class="menu-item-chevron">&#8250;</span></button>
       <button class="menu-item" data-tool="select"><span class="menu-item-icon">&#x25CE;</span><span class="menu-item-name">Select</span><span class="menu-item-chevron">&#8250;</span></button>
       <button class="menu-item" data-tool="bridge"><span class="menu-item-icon">&#x03DF;</span><span class="menu-item-name">Bridge</span><span class="menu-item-chevron">&#8250;</span></button>
     </div>
@@ -805,7 +838,8 @@ body {
     }
   }
   var a11yPanel = document.querySelector('.tab-panel[data-panel="a11y"]');
-  if (false) {
+  var _a, _b;
+  if (true) {
     (_a = document.getElementById("menuA11yItem")) == null ? void 0 : _a.remove();
     (_b = document.getElementById("hamburgerA11yItem")) == null ? void 0 : _b.remove();
     a11yPanel == null ? void 0 : a11yPanel.remove();
@@ -849,18 +883,18 @@ body {
   }
   document.querySelectorAll(".menu-item").forEach((item) => {
     item.addEventListener("click", () => {
-      var _a26, _b, _c;
-      const tool = (_a26 = item.dataset.tool) != null ? _a26 : "";
-      const name = (_c = (_b = item.querySelector(".menu-item-name")) == null ? void 0 : _b.textContent) != null ? _c : tool;
+      var _a28, _b2, _c;
+      const tool = (_a28 = item.dataset.tool) != null ? _a28 : "";
+      const name = (_c = (_b2 = item.querySelector(".menu-item-name")) == null ? void 0 : _b2.textContent) != null ? _c : tool;
       navigateTo(tool, name);
     });
   });
   document.querySelectorAll(".hamburger-item").forEach((item) => {
     item.addEventListener("click", () => {
-      var _a26, _b, _c;
-      const tool = (_a26 = item.dataset.tool) != null ? _a26 : "";
+      var _a28, _b2, _c;
+      const tool = (_a28 = item.dataset.tool) != null ? _a28 : "";
       const menuItem = document.querySelector(`.menu-item[data-tool="${tool}"]`);
-      const name = (_c = (_b = menuItem == null ? void 0 : menuItem.querySelector(".menu-item-name")) == null ? void 0 : _b.textContent) != null ? _c : tool;
+      const name = (_c = (_b2 = menuItem == null ? void 0 : menuItem.querySelector(".menu-item-name")) == null ? void 0 : _b2.textContent) != null ? _c : tool;
       navigateTo(tool, name);
     });
   });
@@ -873,10 +907,10 @@ body {
       }
     });
   });
-  var _a;
-  (_a = document.getElementById("backBtn")) == null ? void 0 : _a.addEventListener("click", navigateBack);
   var _a2;
-  (_a2 = document.getElementById("hamburgerBtn")) == null ? void 0 : _a2.addEventListener("click", (e) => {
+  (_a2 = document.getElementById("backBtn")) == null ? void 0 : _a2.addEventListener("click", navigateBack);
+  var _a3;
+  (_a3 = document.getElementById("hamburgerBtn")) == null ? void 0 : _a3.addEventListener("click", (e) => {
     e.stopPropagation();
     const menu = document.getElementById("hamburgerMenu");
     const btn = document.getElementById("hamburgerBtn");
@@ -884,9 +918,14 @@ body {
     btn == null ? void 0 : btn.setAttribute("aria-expanded", String(!!isOpen));
   });
   document.addEventListener("click", () => {
-    var _a26, _b;
-    (_a26 = document.getElementById("hamburgerMenu")) == null ? void 0 : _a26.classList.remove("open");
-    (_b = document.getElementById("hamburgerBtn")) == null ? void 0 : _b.setAttribute("aria-expanded", "false");
+    var _a28, _b2;
+    (_a28 = document.getElementById("hamburgerMenu")) == null ? void 0 : _a28.classList.remove("open");
+    (_b2 = document.getElementById("hamburgerBtn")) == null ? void 0 : _b2.setAttribute("aria-expanded", "false");
+  });
+  var _a4;
+  (_a4 = document.getElementById("s2aBannerDismiss")) == null ? void 0 : _a4.addEventListener("click", () => {
+    const banner = document.getElementById("s2aBanner");
+    if (banner) banner.style.display = "none";
   });
   var currentSelection = { count: 0, hasAutoLayout: false };
   function updateTabControls(prefix) {
@@ -936,9 +975,12 @@ body {
       case "localize-bridge-prompt":
         showLocalizeBridgePrompt(msg);
         break;
-      case "token-status":
+      case "token-status": {
         updateTokenStatus(msg.count, msg.version);
+        const banner = document.getElementById("s2aBanner");
+        if (banner) banner.style.display = msg.hasS2ALibrary === false ? "flex" : "none";
         break;
+      }
       case "node-properties":
         renderPropertyList(msg.properties);
         break;
@@ -1021,7 +1063,7 @@ body {
     postToPlugin("navigate-to-node", { nodeId });
   }
   function renderAuditResult(result) {
-    var _a26;
+    var _a28;
     const list = document.getElementById("propertyList");
     if (!list) return;
     const pct = result.total > 0 ? Math.round(result.matched / result.total * 100) : 0;
@@ -1051,7 +1093,7 @@ body {
         if (nodeId) navigateToNode(nodeId);
       });
     });
-    (_a26 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a26.addEventListener("click", () => {
+    (_a28 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a28.addEventListener("click", () => {
       postToPlugin("annotate-audit-issues", { issues: result.issues });
     });
   }
@@ -1103,24 +1145,24 @@ body {
       });
     });
   }
-  var _a3;
-  (_a3 = document.getElementById("s2aAuditBtn")) == null ? void 0 : _a3.addEventListener("click", () => postToPlugin("s2a-audit"));
-  var _a4;
-  (_a4 = document.getElementById("fullAlignBtn")) == null ? void 0 : _a4.addEventListener("click", () => postToPlugin("full-align-s2a"));
   var _a5;
-  (_a5 = document.getElementById("textColorsAlignBtn")) == null ? void 0 : _a5.addEventListener("click", () => postToPlugin("text-colors-align"));
+  (_a5 = document.getElementById("s2aAuditBtn")) == null ? void 0 : _a5.addEventListener("click", () => postToPlugin("s2a-audit"));
   var _a6;
-  (_a6 = document.getElementById("gridBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
+  (_a6 = document.getElementById("fullAlignBtn")) == null ? void 0 : _a6.addEventListener("click", () => postToPlugin("full-align-s2a"));
+  var _a7;
+  (_a7 = document.getElementById("textColorsAlignBtn")) == null ? void 0 : _a7.addEventListener("click", () => postToPlugin("text-colors-align"));
+  var _a8;
+  (_a8 = document.getElementById("gridBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
     postToPlugin("apply-grid");
     updateGridStatus("Applying grid...");
   });
-  var _a7;
-  (_a7 = document.getElementById("gridXlBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
+  var _a9;
+  (_a9 = document.getElementById("gridXlBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
     postToPlugin("apply-grid-xl");
     updateGridStatus("Applying XL grid...");
   });
-  var _a8;
-  (_a8 = document.getElementById("clearGridBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+  var _a10;
+  (_a10 = document.getElementById("clearGridBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
     postToPlugin("clear-grids");
     updateGridStatus("Clearing grids...");
   });
@@ -1128,8 +1170,8 @@ body {
     const el = document.getElementById("gridStatus");
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
-  var _a9;
-  (_a9 = document.getElementById("matchCheckAll")) == null ? void 0 : _a9.addEventListener("click", () => {
+  var _a11;
+  (_a11 = document.getElementById("matchCheckAll")) == null ? void 0 : _a11.addEventListener("click", () => {
     const ids = ["matchTypography", "matchFillColors", "matchStrokeColors", "matchBorderRadius", "matchBorderWidth", "matchSpacing", "matchOpacity", "matchDropShadow", "matchBlur"];
     const boxes = ids.map((id) => document.getElementById(id)).filter(Boolean);
     const allChecked = boxes.every((cb) => cb.checked);
@@ -1139,8 +1181,8 @@ body {
     const btn = document.getElementById("matchCheckAll");
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
-  var _a10;
-  (_a10 = document.getElementById("matchBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
+  var _a12;
+  (_a12 = document.getElementById("matchBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
     const categories = [];
     if (document.getElementById("matchTypography").checked) categories.push("typography");
     if (document.getElementById("matchFillColors").checked) categories.push("fillColors");
@@ -1160,17 +1202,17 @@ body {
     if (!el) return;
     el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
-  var _a11;
-  (_a11 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
+  var _a13;
+  (_a13 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a13.addEventListener("click", () => {
     postToPlugin("spec-it", { sections: ["anatomy", "layout", "typography", "components"] });
     updateSpecStatus("Generating full specs...");
   });
-  var _a12;
-  (_a12 = document.getElementById("specItBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
-    var _a26, _b, _c, _d, _e, _f;
+  var _a14;
+  (_a14 = document.getElementById("specItBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
+    var _a28, _b2, _c, _d, _e, _f;
     const sections = [];
-    if ((_a26 = document.getElementById("specAnatomy")) == null ? void 0 : _a26.checked) sections.push("anatomy");
-    if ((_b = document.getElementById("specCardGaps")) == null ? void 0 : _b.checked) sections.push("cardGaps");
+    if ((_a28 = document.getElementById("specAnatomy")) == null ? void 0 : _a28.checked) sections.push("anatomy");
+    if ((_b2 = document.getElementById("specCardGaps")) == null ? void 0 : _b2.checked) sections.push("cardGaps");
     if ((_c = document.getElementById("specSpacingGeneral")) == null ? void 0 : _c.checked) sections.push("spacingGeneral");
     if ((_d = document.getElementById("specSpacing")) == null ? void 0 : _d.checked) sections.push("spacing");
     if ((_e = document.getElementById("specColors")) == null ? void 0 : _e.checked) sections.push("colors");
@@ -1196,8 +1238,8 @@ body {
   }
   providerSelect == null ? void 0 : providerSelect.addEventListener("change", syncKeySection);
   syncKeySection();
-  var _a13;
-  (_a13 = document.getElementById("locCheckAll")) == null ? void 0 : _a13.addEventListener("click", () => {
+  var _a15;
+  (_a15 = document.getElementById("locCheckAll")) == null ? void 0 : _a15.addEventListener("click", () => {
     const ids = ["locDe", "locZh", "locTh", "locAr"];
     const boxes = ids.map((id) => document.getElementById(id)).filter(Boolean);
     const allChecked = boxes.every((b) => b.checked);
@@ -1212,8 +1254,8 @@ body {
   locAr == null ? void 0 : locAr.addEventListener("change", () => {
     if (locAr.checked && locRtl && !locRtl.checked) locRtl.checked = true;
   });
-  var _a14;
-  (_a14 = document.getElementById("localizeBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
+  var _a16;
+  (_a16 = document.getElementById("localizeBtn")) == null ? void 0 : _a16.addEventListener("click", () => {
     const languages = [];
     if (document.getElementById("locDe").checked) languages.push("de");
     if (document.getElementById("locZh").checked) languages.push("zh");
@@ -1228,8 +1270,8 @@ body {
     postToPlugin("localize", { languages, applyRtl, provider });
     updateLocalizeStatus("Localizing \u2014 this may take a moment...");
   });
-  var _a15;
-  (_a15 = document.getElementById("saveKeyBtn")) == null ? void 0 : _a15.addEventListener("click", () => {
+  var _a17;
+  (_a17 = document.getElementById("saveKeyBtn")) == null ? void 0 : _a17.addEventListener("click", () => {
     const input = document.getElementById("apiKeyInput");
     const key = input.value.trim();
     if (!key) return;
@@ -1237,8 +1279,8 @@ body {
     postToPlugin("save-api-key", { key, provider });
     input.value = "";
   });
-  var _a16;
-  (_a16 = document.getElementById("clearKeyBtn")) == null ? void 0 : _a16.addEventListener("click", () => {
+  var _a18;
+  (_a18 = document.getElementById("clearKeyBtn")) == null ? void 0 : _a18.addEventListener("click", () => {
     const provider = (providerSelect == null ? void 0 : providerSelect.value) || "";
     postToPlugin("clear-api-key", { provider });
   });
@@ -1248,7 +1290,7 @@ body {
   }
   var LANG_NAMES = { de: "German", zh: "Chinese", th: "Thai", ar: "Arabic" };
   function showLocalizeBridgePrompt(data) {
-    var _a26;
+    var _a28;
     const langList = data.languages.map((l) => LANG_NAMES[l] || l).join(", ");
     const cmd = `Translate the frame "${data.frameName}" (${data.frameId}) into ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? " Apply RTL layout for Arabic." : ""}
 
@@ -1263,7 +1305,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
         <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a26 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a26.addEventListener("click", async () => {
+      (_a28 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a28.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyLocalizeCmd");
         if (btn) {
@@ -1328,7 +1370,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
   function showAiFillInstruction(mode, sections, frameName, frameId) {
-    var _a26;
+    var _a28;
     const categoryList = sections && sections.length > 0 ? sections.join(", ") : "all categories";
     const frame = frameName ? `"${frameName}"` : "the selected frame";
     const frameIdArg = frameId ? ` with frameId: "${frameId}"` : "";
@@ -1380,7 +1422,7 @@ This updates the plugin panel so the designer can see results without hunting th
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Results will appear here when Claude finishes.</div>
       </div>`;
-      (_a26 = document.getElementById("copyFillCmd")) == null ? void 0 : _a26.addEventListener("click", async () => {
+      (_a28 = document.getElementById("copyFillCmd")) == null ? void 0 : _a28.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyFillCmd");
         if (btn) {
@@ -1393,7 +1435,7 @@ This updates the plugin panel so the designer can see results without hunting th
     }
   }
   function renderA11yResults(data) {
-    var _a26;
+    var _a28;
     const el = document.getElementById("a11yStatus");
     if (!el) return;
     function section(title, cls, items, itemCls) {
@@ -1407,21 +1449,21 @@ This updates the plugin panel so the designer can see results without hunting th
     </div>`;
     }
     const issueItems = (Array.isArray(data.issues) ? data.issues : []).map((i) => {
-      var _a27, _b;
-      return { label: (_a27 = i == null ? void 0 : i.category) != null ? _a27 : "", text: (_b = i == null ? void 0 : i.description) != null ? _b : "" };
+      var _a29, _b2;
+      return { label: (_a29 = i == null ? void 0 : i.category) != null ? _a29 : "", text: (_b2 = i == null ? void 0 : i.description) != null ? _b2 : "" };
     });
     const needsItems = (Array.isArray(data.needs_input) ? data.needs_input : []).map((i) => {
-      var _a27, _b;
-      return { label: (_a27 = i == null ? void 0 : i.category) != null ? _a27 : "", text: (_b = i == null ? void 0 : i.question) != null ? _b : "" };
+      var _a29, _b2;
+      return { label: (_a29 = i == null ? void 0 : i.category) != null ? _a29 : "", text: (_b2 = i == null ? void 0 : i.question) != null ? _b2 : "" };
     });
     const suggItems = (Array.isArray(data.suggestions) ? data.suggestions : []).map((i) => {
-      var _a27, _b;
-      return { label: (_a27 = i == null ? void 0 : i.category) != null ? _a27 : "", text: (_b = i == null ? void 0 : i.description) != null ? _b : "" };
+      var _a29, _b2;
+      return { label: (_a29 = i == null ? void 0 : i.category) != null ? _a29 : "", text: (_b2 = i == null ? void 0 : i.description) != null ? _b2 : "" };
     });
     const empty = issueItems.length === 0 && needsItems.length === 0 && suggItems.length === 0;
     el.innerHTML = `
     <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
-      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc((_a26 = data.frameName) != null ? _a26 : "")}</div>
+      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc((_a28 = data.frameName) != null ? _a28 : "")}</div>
       <div class="a11y-results">
         ${empty ? '<div class="a11y-results-empty">No issues or suggestions returned.</div>' : section("Issues", "issues", issueItems, "issue") + section("Needs your input", "needs-input", needsItems, "needs") + section("Suggestions", "suggestions", suggItems, "suggestion")}
       </div>
@@ -1444,7 +1486,7 @@ This updates the plugin panel so the designer can see results without hunting th
     }
   }
   function showPanelsFillInstruction(sections, frameName, sectionIds, frameId) {
-    var _a26;
+    var _a28;
     const sectionList = sections.join(", ");
     const frameIdArg = frameId ? ` with frameId: "${frameId}"` : "";
     const cmd = `Fill the blueline panels for the frame "${frameName}"${frameId ? ` (ID: ${frameId})` : ""}. Categories: ${sectionList}.
@@ -1466,7 +1508,7 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         <button class="btn btn-secondary" id="copyPanelsFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Paste into your current Claude Code session (Bridge must be connected)</div>
       </div>`;
-      (_a26 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a26.addEventListener("click", async () => {
+      (_a28 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a28.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyPanelsFillCmd");
         if (btn) {
@@ -1478,8 +1520,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       });
     }
   }
-  var _a17;
-  (_a17 = document.getElementById("a11yCheckAllAi")) == null ? void 0 : _a17.addEventListener("click", () => {
+  var _a19;
+  (_a19 = document.getElementById("a11yCheckAllAi")) == null ? void 0 : _a19.addEventListener("click", () => {
     if (!bridgeConnected) return;
     const aiIds = ["a11yFocusIndicators", "a11yFocusOrder", "a11yHeadings", "a11yLandmarksNav", "a11yNamesAlt", "a11yColorContrast", "a11yAriaKeyboard", "a11yTargetSize", "a11yPageSetup"];
     const boxes = aiIds.map((id) => document.getElementById(id)).filter(Boolean);
@@ -1490,8 +1532,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     const btn = document.getElementById("a11yCheckAllAi");
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
-  var _a18;
-  (_a18 = document.getElementById("a11yShowMore")) == null ? void 0 : _a18.addEventListener("click", () => {
+  var _a20;
+  (_a20 = document.getElementById("a11yShowMore")) == null ? void 0 : _a20.addEventListener("click", () => {
     const section = document.getElementById("a11yConditionalSection");
     const btn = document.getElementById("a11yShowMore");
     if (!section || !btn) return;
@@ -1500,8 +1542,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     btn.textContent = isHidden ? "\u25BE Hide extra categories" : "\u25B8 Show more categories";
     btn.setAttribute("aria-expanded", String(isHidden));
   });
-  var _a19;
-  (_a19 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a19.addEventListener("click", () => {
+  var _a21;
+  (_a21 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a21.addEventListener("click", () => {
     if (!bridgeConnected) return;
     const noteIds = ["a11yForms", "a11yCarousel", "a11yDom", "a11yMotionMedia", "a11yScreenReader", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
     const boxes = noteIds.map((id) => document.getElementById(id)).filter(Boolean);
@@ -1534,13 +1576,13 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
   function getCheckedA11yCheckboxIds() {
     return Object.keys(A11Y_LABELS).filter(
       (id) => {
-        var _a26;
-        return (_a26 = document.getElementById(id)) == null ? void 0 : _a26.checked;
+        var _a28;
+        return (_a28 = document.getElementById(id)) == null ? void 0 : _a28.checked;
       }
     );
   }
   function showConfirmPanel(checkedIds) {
-    var _a26, _b;
+    var _a28, _b2;
     const categoryView = document.getElementById("a11yCategoryView");
     const statusEl = document.getElementById("a11yStatus");
     if (!statusEl) return;
@@ -1557,21 +1599,21 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         <button class="btn" id="a11yConfirmGo">Confirm &amp; Create Cards</button>
       </div>
     </div>`;
-    (_a26 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a26.addEventListener("click", () => {
+    (_a28 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a28.addEventListener("click", () => {
       statusEl.innerHTML = "";
       if (categoryView) categoryView.style.display = "block";
     });
-    (_b = document.getElementById("a11yConfirmGo")) == null ? void 0 : _b.addEventListener("click", () => {
+    (_b2 = document.getElementById("a11yConfirmGo")) == null ? void 0 : _b2.addEventListener("click", () => {
       statusEl.innerHTML = "";
       if (categoryView) categoryView.style.display = "block";
       postToPlugin("generate-blueline", { categories: getCheckedA11yCategories() });
     });
   }
   function getCheckedA11yCategories() {
-    var _a26, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
+    var _a28, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const categories = [];
-    if ((_a26 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a26.checked) categories.push("focusIndicators");
-    if ((_b = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b.checked) categories.push("focusOrder");
+    if ((_a28 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a28.checked) categories.push("focusIndicators");
+    if ((_b2 = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b2.checked) categories.push("focusOrder");
     if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) categories.push("headings");
     if ((_d = document.getElementById("a11yLandmarksNav")) == null ? void 0 : _d.checked) {
       categories.push("landmarks", "skipNav", "consistentNav");
@@ -1601,8 +1643,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     if ((_q = document.getElementById("a11yGeneralNote")) == null ? void 0 : _q.checked) categories.push("generalNote");
     return categories;
   }
-  var _a20;
-  (_a20 = document.getElementById("a11yStartBtn")) == null ? void 0 : _a20.addEventListener("click", () => {
+  var _a22;
+  (_a22 = document.getElementById("a11yStartBtn")) == null ? void 0 : _a22.addEventListener("click", () => {
     const checkedIds = getCheckedA11yCheckboxIds();
     if (checkedIds.length === 0) {
       updateA11yStatus("Select at least one category.");
@@ -1622,12 +1664,12 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }
     postToPlugin("generate-blueline-panels", { categories });
   }
-  var _a21;
-  (_a21 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a21.addEventListener("click", () => triggerBluelinePanels());
+  var _a23;
+  (_a23 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a23.addEventListener("click", () => triggerBluelinePanels());
   var lastA11yCmd = "";
   var annotationMode = false;
-  var _a22;
-  (_a22 = document.getElementById("a11yAnnotateToggle")) == null ? void 0 : _a22.addEventListener("click", () => {
+  var _a24;
+  (_a24 = document.getElementById("a11yAnnotateToggle")) == null ? void 0 : _a24.addEventListener("click", () => {
     annotationMode = !annotationMode;
     const btn = document.getElementById("a11yAnnotateToggle");
     if (btn) {
@@ -1645,8 +1687,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       updateA11yStatus("Annotation mode off.");
     }
   });
-  var _a23;
-  (_a23 = document.getElementById("a11yCategoryView")) == null ? void 0 : _a23.addEventListener("change", (e) => {
+  var _a25;
+  (_a25 = document.getElementById("a11yCategoryView")) == null ? void 0 : _a25.addEventListener("change", (e) => {
     if (!annotationMode) return;
     const target = e.target;
     if (target.type !== "checkbox" || !target.checked || !target.closest(".a11y-item")) return;
@@ -1899,10 +1941,10 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }).catch(() => {
     });
     sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
-      var _a26, _b;
+      var _a28, _b2;
       if (ws.readyState !== 1 || !result) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
-      appendBridgeLog("Variables synced: " + (((_b = (_a26 = result.data) == null ? void 0 : _a26.variables) == null ? void 0 : _b.length) || 0) + " vars");
+      appendBridgeLog("Variables synced: " + (((_b2 = (_a28 = result.data) == null ? void 0 : _a28.variables) == null ? void 0 : _b2.length) || 0) + " vars");
     }).catch(() => {
     });
   }
@@ -2004,10 +2046,10 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       info.style.color = "";
     }
   }
-  var _a24;
-  (_a24 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a24.addEventListener("click", () => bridgeConnect());
-  var _a25;
-  (_a25 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a25.addEventListener("click", () => bridgeDisconnect());
+  var _a26;
+  (_a26 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a26.addEventListener("click", () => bridgeConnect());
+  var _a27;
+  (_a27 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a27.addEventListener("click", () => bridgeDisconnect());
   postToPlugin("ui-ready");
 })();
 </script>
