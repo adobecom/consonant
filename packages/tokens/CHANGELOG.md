@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.17] - 2026-05-06
+
+### ♻️ Changed
+
+- **Typography tokens renamed: `title-*` → `heading-*`**
+  All responsive typography tokens have been renamed from the `title` prefix to `heading` across font-size, letter-spacing, and line-height axes and all breakpoints (sm/md/lg/xl). Semantic aliases updated:
+  - `--s2a-color-content-title` → `--s2a-color-content-heading`
+  - `--s2a-font-weight-title` → `--s2a-font-weight-heading`
+  - `--s2a-font-family-title` removed (no heading equivalent — family is inherited from the global font stack)
+
+  Consumers referencing any `--s2a-typography-*-title-N` CSS variable should update to `--s2a-typography-*-heading-N`.
+
+- **Dark mode border tokens recalibrated**
+  `--s2a-color-border-default`, `--s2a-color-border-strong`, `--s2a-color-border-knockout`, and `--s2a-color-border-inverse` values updated in the dark theme to better reflect the intended dark surface palette.
+
+---
+
 ## [0.0.16] - 2026-05-04
 
 ### 💥 Breaking changes
