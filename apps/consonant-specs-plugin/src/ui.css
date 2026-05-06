@@ -47,7 +47,12 @@ body {
 
 .tab-bar {
   display: flex;
+  flex-direction: column;
   border-bottom: 1px solid var(--border);
+}
+
+.tab-row {
+  display: flex;
 }
 
 .tab {
@@ -253,4 +258,12 @@ body {
   border: none;
   border-top: 1px solid var(--border);
   margin: 12px 0;
+}
+.a11y-desc {
+  display: block;
+  font-size: 10px;
+  color: var(--text-tertiary, #999);
+  margin-top: 1px;
+  margin-left: 20px;
+  line-height: 1.4;
 }

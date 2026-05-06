@@ -15,13 +15,19 @@
     </div>
 
     <nav class="tab-bar">
-      <button class="tab active" data-tab="align">Align</button>
-      <button class="tab" data-tab="match">Match</button>
-      <button class="tab" data-tab="design">Grids</button>
-      <button class="tab" data-tab="specs">Specs</button>
-      <button class="tab" data-tab="a11y">A11y</button>
-      <button class="tab" data-tab="localize">Localize</button>
-      <button class="tab" data-tab="bridge">Bridge</button>
+      <div class="tab-row">
+        <button class="tab active" data-tab="align">Align</button>
+        <button class="tab" data-tab="match">Match</button>
+        <button class="tab" data-tab="design">Grids</button>
+        <button class="tab" data-tab="specs">Specs</button>
+      </div>
+      <div class="tab-row">
+        <button class="tab" data-tab="a11y">A11y</button>
+        <button class="tab" data-tab="localize">Localize</button>
+        <button class="tab" data-tab="variables">Variables</button>
+        <button class="tab" data-tab="select">Select</button>
+        <button class="tab" data-tab="bridge">Bridge</button>
+      </div>
     </nav>
 
     <div class="tab-content" id="tabContent">
@@ -112,15 +118,15 @@
               <button id="a11yCheckAllAi" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
             </div>
             <div class="match-checklist" id="a11yItemList">
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusIndicators" disabled> Focus Indicators (AI)</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusOrder" disabled> Focus Order (AI)</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yHeadings" disabled> Heading Hierarchy</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yLandmarksNav" disabled> Landmarks &amp; Navigation</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yNamesAlt" disabled> Names &amp; Alt-Text</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yColorContrast" disabled> Color Contrast</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yAriaKeyboard" disabled> ARIA &amp; Keyboard</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yTargetSize" disabled> Target Size</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yPageSetup" disabled> Page Setup</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusIndicators" disabled> Focus Indicators<span class="a11y-desc">Do interactive elements have a visible focus ring?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusOrder" disabled> Focus Order<span class="a11y-desc">Does the keyboard tab order match the visual layout?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yHeadings" disabled> Heading Hierarchy<span class="a11y-desc">Are headings structured so screen readers can navigate?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yLandmarksNav" disabled> Landmarks &amp; Navigation<span class="a11y-desc">Are page regions labeled so screen readers can jump to them?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yNamesAlt" disabled> Names &amp; Alt-Text<span class="a11y-desc">Do images and controls have clear names for assistive tech?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yColorContrast" disabled> Color Contrast<span class="a11y-desc">Is text readable against its background?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yAriaKeyboard" disabled> ARIA &amp; Keyboard<span class="a11y-desc">Are custom widgets correctly labeled and keyboard-operable?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yTargetSize" disabled> Target Size<span class="a11y-desc">Are tap/click targets large enough for motor accessibility?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yPageSetup" disabled> Page Setup<span class="a11y-desc">Does the page have a title and language declared?</span></label>
             </div>
 
             <!-- Accessibility Notes (bridge-gated) -->
@@ -129,14 +135,14 @@
               <button id="a11yCheckAllNotes" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
             </div>
             <div class="match-checklist" id="a11yConditionalList">
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yForms" disabled> Forms</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yCarousel" disabled> Carousel</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yDom" disabled> DOM Strategy</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yMotionMedia" disabled> Motion &amp; Media</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yScreenReader" disabled> Screen Reader Notes</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yReactNative" disabled> React Native</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yTvNote" disabled> TV Note</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yGeneralNote" disabled> General Note</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yForms" disabled> Forms<span class="a11y-desc">Are inputs labeled and error messages clear?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yCarousel" disabled> Carousel<span class="a11y-desc">Can users navigate slides with keyboard and screen reader?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yDom" disabled> DOM Strategy<span class="a11y-desc">Does the DOM order support the correct reading sequence?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yMotionMedia" disabled> Motion &amp; Media<span class="a11y-desc">Can users pause motion and is media accessible?</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yScreenReader" disabled> Screen Reader Notes<span class="a11y-desc">Platform-specific notes for VoiceOver, TalkBack, Narrator</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yReactNative" disabled> React Native<span class="a11y-desc">Accessibility notes specific to the React Native platform</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yTvNote" disabled> TV Note<span class="a11y-desc">Notes for TV/10-foot UI accessibility</span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yGeneralNote" disabled> General Note<span class="a11y-desc">Any other accessibility notes for this frame</span></label>
             </div>
 
             <button class="btn" id="generateBluelineBtn" style="margin-top:12px;">Generate Blueline</button>
@@ -186,6 +192,38 @@
           </div>
         </div>
       </div>
+      <div class="tab-panel" data-panel="variables">
+        <div id="variablesContent">
+          <div id="variablesBridgeWarning" style="background:var(--bg-secondary,#f5f5f5);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text-secondary);margin-bottom:12px;">
+            Connect Bridge to push variables to Claude Code
+          </div>
+          <div class="section-title">Variable Collections</div>
+          <div id="variablesSummary" style="margin-bottom:12px;">
+            <p style="color:var(--text-secondary);font-size:11px;margin:0;">Click Refresh to load collections.</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn" id="variablesRefreshBtn" style="flex:1;">Refresh</button>
+            <button class="btn btn-secondary" id="variablesPushBtn" style="flex:1;" disabled>Push to Bridge</button>
+          </div>
+          <div id="variablesStatus" style="margin-top:10px;font-size:11px;color:var(--text-secondary);"></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-panel="select">
+        <div id="selectContent">
+          <p class="placeholder" id="selectPlaceholder">Select a component set to filter variants</p>
+          <div id="selectControls" style="display:none;">
+            <div class="section-title" id="selectSetName" style="margin-bottom:8px;"></div>
+            <div id="selectAxes"></div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button class="btn" id="selectApplyBtn" style="flex:1;">Select Variants</button>
+              <button class="btn btn-secondary" id="selectAllBtn" style="flex:1;">Select All</button>
+            </div>
+            <div id="selectStatus" style="margin-top:8px;font-size:11px;color:var(--text-secondary);"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="tab-panel" data-panel="bridge">
         <div id="bridgeContent">
           <div id="bridgeDisconnected">
