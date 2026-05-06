@@ -566,6 +566,7 @@ document.getElementById('a11yShowMore')?.addEventListener('click', () => {
   const isHidden = section.style.display === 'none';
   section.style.display = isHidden ? '' : 'none';
   btn.textContent = isHidden ? '▾ Hide extra categories' : '▸ Show more categories';
+  btn.setAttribute('aria-expanded', String(isHidden));
 });
 
 // Check All / Uncheck All — Accessibility Notes section
