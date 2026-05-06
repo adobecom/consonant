@@ -567,6 +567,60 @@ This updates the plugin panel so the designer can see results without hunting th
   }
 }
 
+interface A11yResultItem { category: string; description: string; }
+interface A11yNeedsInputItem { category: string; question: string; }
+interface A11yResultPayload {
+  frameName: string;
+  issues: A11yResultItem[];
+  needs_input: A11yNeedsInputItem[];
+  suggestions: A11yResultItem[];
+}
+
+function renderA11yResults(data: A11yResultPayload) {
+  const el = document.getElementById('a11yStatus');
+  if (!el) return;
+
+  function section(title: string, cls: string, items: Array<{ label: string; text: string }>, itemCls: string) {
+    if (items.length === 0) return '';
+    const rows = items.map(i =>
+      `<div class="a11y-result-item ${itemCls}"><strong>${esc(i.label)}</strong> — ${esc(i.text)}</div>`
+    ).join('');
+    return `<div class="a11y-results-section">
+      <div class="a11y-results-section-title ${cls}">${title} (${items.length})</div>
+      ${rows}
+    </div>`;
+  }
+
+  const issueItems = data.issues.map(i => ({ label: i.category, text: i.description }));
+  const needsItems = data.needs_input.map(i => ({ label: i.category, text: i.question }));
+  const suggItems  = data.suggestions.map(i => ({ label: i.category, text: i.description }));
+
+  const empty = issueItems.length === 0 && needsItems.length === 0 && suggItems.length === 0;
+
+  el.innerHTML = `
+    <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
+      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete — ${esc(data.frameName)}</div>
+      <div class="a11y-results">
+        ${empty
+          ? '<div class="a11y-results-empty">No issues or suggestions returned.</div>'
+          : section('Issues', 'issues', issueItems, 'issue') +
+            section('Needs your input', 'needs-input', needsItems, 'needs') +
+            section('Suggestions', 'suggestions', suggItems, 'suggestion')
+        }
+      </div>
+      <button class="btn btn-secondary" id="a11yContinueBtn" style="margin-top:8px;font-size:10px;width:100%;">Continue in Claude Code</button>
+    </div>`;
+
+  document.getElementById('a11yContinueBtn')?.addEventListener('click', async () => {
+    const cmdEl = document.getElementById('fillCmdText');
+    if (cmdEl) {
+      await copyToClipboard(cmdEl.textContent || '');
+      const btn = document.getElementById('a11yContinueBtn');
+      if (btn) { btn.textContent = 'Copied — paste in Claude Code'; setTimeout(() => { btn.textContent = 'Continue in Claude Code'; }, 2000); }
+    }
+  });
+}
+
 function showPanelsFillInstruction(sections: string[], frameName: string, sectionIds: string[]) {
   const sectionList = sections.join(', ');
   const cmd = `Fill the blueline panels on the current Figma page for "${frameName}". Categories: ${sectionList}.\n\nCall figma_get_blueline_data first — it returns structural data (including nodeIds for all elements) and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge.\n\nDispatch parallel agents. IMPORTANT: Each agent must return items with these additional fields:\n- nodeId (string|null): the node ID from the structural scan that this item refers to. Null if no element match.\n- annotationType ("element"|"region"|"none"): "element" for specific UI elements (buttons, links, inputs), "region" for area-level concepts (landmarks, sections), "none" for abstract/page-level items.\n\nThen call figma_render_blueline with mode: "panels" and all item JSON. The panels have already been scaffolded with cloned designs — the render call will place native Figma annotations on the clones.`;
@@ -1018,6 +1072,11 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
         return;
       }
 
+      // Handle A11y results loop-back from bridge_send_a11y_result MCP tool
+      if (message.type === 'A11Y_RESULT' && message.data) {
+        renderA11yResults(message.data as A11yResultPayload);
+        return;
+      }
 
       // Ignore pong or other non-command messages
       if (!message.id || !message.method) return;

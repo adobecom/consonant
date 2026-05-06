@@ -308,3 +308,30 @@ body {
 }
 .a11y-confirm-actions { display: flex; gap: 6px; }
 .a11y-confirm-actions .btn { flex: 1; margin-bottom: 0; }
+
+/* A11y State 3 — results panel */
+.a11y-results { margin-top: 8px; }
+.a11y-results-section { margin-bottom: 10px; }
+.a11y-results-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+.a11y-results-section-title.issues { color: #dc2626; }
+.a11y-results-section-title.needs-input { color: #d97706; }
+.a11y-results-section-title.suggestions { color: #2563eb; }
+.a11y-result-item {
+  font-size: 11px;
+  color: var(--text-secondary, #555);
+  padding: 4px 6px;
+  border-radius: 4px;
+  margin-bottom: 3px;
+  line-height: 1.4;
+}
+.a11y-result-item.issue { background: rgba(220,38,38,0.07); border-left: 2px solid #dc2626; }
+.a11y-result-item.needs { background: rgba(217,119,6,0.07); border-left: 2px solid #d97706; }
+.a11y-result-item.suggestion { background: rgba(37,99,235,0.07); border-left: 2px solid #2563eb; }
+.a11y-result-item strong { font-weight: 600; }
+.a11y-results-empty { font-size: 11px; color: var(--text-tertiary, #999); font-style: italic; }
