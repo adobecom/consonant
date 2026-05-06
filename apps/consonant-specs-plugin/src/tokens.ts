@@ -243,6 +243,15 @@ export function getTokenCount(): number {
   return tokenCount;
 }
 
+export function hasS2AVariables(): boolean {
+  return colorVarMap.length > 0 || dimensionVarMap.length > 0;
+}
+
+export async function reloadLibraryTokens(): Promise<void> {
+  loadingPromise = null;
+  return loadLibraryTokens();
+}
+
 export function isLoaded(): boolean {
   return loaded;
 }

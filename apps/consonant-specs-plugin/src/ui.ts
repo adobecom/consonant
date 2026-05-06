@@ -127,6 +127,12 @@ document.addEventListener('click', () => {
   document.getElementById('hamburgerBtn')?.setAttribute('aria-expanded', 'false');
 });
 
+document.getElementById('s2aBannerDismiss')?.addEventListener('click', () => {
+  const banner = document.getElementById('s2aBanner');
+  if (banner) banner.style.display = 'none';
+});
+
+
 let currentSelection: { count: number; hasAutoLayout: boolean } = { count: 0, hasAutoLayout: false };
 
 function updateTabControls(prefix: string) {
@@ -181,9 +187,12 @@ window.addEventListener('message', (event) => {
     case 'localize-bridge-prompt':
       showLocalizeBridgePrompt(msg as any);
       break;
-    case 'token-status':
-      updateTokenStatus(msg.count, msg.version);
+    case 'token-status': {
+      updateTokenStatus(msg.count as number, msg.version as string);
+      const banner = document.getElementById('s2aBanner');
+      if (banner) banner.style.display = msg.hasS2ALibrary === false ? 'flex' : 'none';
       break;
+    }
     case 'node-properties':
       renderPropertyList(msg.properties as PropertyEntry[]);
       break;
