@@ -633,11 +633,11 @@ function showConfirmPanel(checkedIds: string[]) {
     </div>`;
   document.getElementById('a11yConfirmBack')?.addEventListener('click', () => {
     statusEl.innerHTML = '';
-    if (categoryView) categoryView.style.display = '';
+    if (categoryView) categoryView.style.display = 'block';
   });
   document.getElementById('a11yConfirmGo')?.addEventListener('click', () => {
     statusEl.innerHTML = '';
-    if (categoryView) categoryView.style.display = '';
+    if (categoryView) categoryView.style.display = 'block';
     postToPlugin('generate-blueline', { categories: getCheckedA11yCategories() });
   });
 }
@@ -677,16 +677,6 @@ function getCheckedA11yCategories(): string[] {
   if ((document.getElementById('a11yTvNote') as HTMLInputElement)?.checked) categories.push('tvNote');
   if ((document.getElementById('a11yGeneralNote') as HTMLInputElement)?.checked) categories.push('generalNote');
   return categories;
-}
-
-function triggerBlueline() {
-  const categories = getCheckedA11yCategories();
-  if (categories.length === 0) {
-    updateA11yStatus('Select at least one option.');
-    return;
-  }
-  if (!bridgeConnected) { updateA11yStatus('Connect Bridge for AI-assisted categories.'); return; }
-  postToPlugin('generate-blueline', { categories });
 }
 
 document.getElementById('a11yStartBtn')?.addEventListener('click', () => {

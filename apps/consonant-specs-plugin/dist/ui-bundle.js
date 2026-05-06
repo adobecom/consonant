@@ -638,11 +638,11 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     </div>`;
     (_a22 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a22.addEventListener("click", () => {
       statusEl.innerHTML = "";
-      if (categoryView) categoryView.style.display = "";
+      if (categoryView) categoryView.style.display = "block";
     });
     (_b = document.getElementById("a11yConfirmGo")) == null ? void 0 : _b.addEventListener("click", () => {
       statusEl.innerHTML = "";
-      if (categoryView) categoryView.style.display = "";
+      if (categoryView) categoryView.style.display = "block";
       postToPlugin("generate-blueline", { categories: getCheckedA11yCategories() });
     });
   }
