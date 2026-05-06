@@ -3767,10 +3767,16 @@ function isTextLink(node) {
 }
 function isCardOrTile(node) {
   const name = node.name.toLowerCase();
-  if ((name.includes("card") || name.includes("tile")) && node.width >= 80 && node.height >= 40) {
-    return true;
+  if (!(name.includes("card") || name.includes("tile"))) return false;
+  if (node.width < 80 || node.height < 40) return false;
+  if ("children" in node) {
+    const cardChildren = node.children.filter((c) => {
+      const cName = c.name.toLowerCase();
+      return c.visible && (cName.includes("card") || cName.includes("tile")) && c.width >= 80 && c.height >= 40;
+    });
+    if (cardChildren.length >= 3) return false;
   }
-  return false;
+  return true;
 }
 function hasNavAncestor(node) {
   var _a;
@@ -3807,16 +3813,25 @@ function isNavItem(node) {
   if (!parent || parent.type === "PAGE") return false;
   if (!("layoutMode" in parent)) return false;
   const container = parent;
-  if (container.layoutMode !== "HORIZONTAL") return false;
   const siblings = container.children.filter(
     (c) => c.visible && c.width >= MIN_SIZE && c.height >= MIN_SIZE
   );
   if (siblings.length < 3) return false;
-  const heights = [...siblings.map((s) => s.height)].sort((a, b) => a - b);
-  const medianH = heights[Math.floor(heights.length / 2)];
-  if (Math.abs(node.height - medianH) > medianH * 0.5) return false;
-  if (node.width > 300 || node.height > 80) return false;
-  return true;
+  if (container.layoutMode === "HORIZONTAL") {
+    const heights = [...siblings.map((s) => s.height)].sort((a, b) => a - b);
+    const medianH = heights[Math.floor(heights.length / 2)];
+    if (Math.abs(node.height - medianH) > medianH * 0.5) return false;
+    if (node.width > 300 || node.height > 80) return false;
+    return true;
+  }
+  if (container.layoutMode === "VERTICAL") {
+    const heights = [...siblings.map((s) => s.height)].sort((a, b) => a - b);
+    const medianH = heights[Math.floor(heights.length / 2)];
+    if (Math.abs(node.height - medianH) > medianH * 0.4) return false;
+    if (node.height > 80) return false;
+    return true;
+  }
+  return false;
 }
 function isPaginationGroup(node) {
   if (!("children" in node)) return false;
@@ -3856,6 +3871,8 @@ function collectFocusable(node, results, depth = 0) {
     if (!child.visible) continue;
     if ("opacity" in child && child.opacity === 0) continue;
     if (child.width < MIN_SIZE || child.height < MIN_SIZE) continue;
+    const cNameLower = child.name.toLowerCase();
+    if (cNameLower === "accessibility annotations" || cNameLower.startsWith("a11y annotations") || cNameLower === "blueline cards" || cNameLower === "tier 2 cards") continue;
     if (isLeafInteractive(child)) {
       results.push(child);
       continue;
@@ -3955,7 +3972,7 @@ function walkLayoutOrder(node, focusableIds, result2) {
   const children = container.children.filter((c) => c.visible);
   if (children.length === 0) return;
   let orderedChildren;
-  if ("layoutMode" in container && container.layoutMode !== "NONE") {
+  if ("layoutMode" in container && (container.layoutMode === "HORIZONTAL" || container.layoutMode === "VERTICAL")) {
     orderedChildren = [...children];
     if ("itemReverseZIndex" in container && container.itemReverseZIndex === true) {
       orderedChildren.reverse();
@@ -3965,15 +3982,14 @@ function walkLayoutOrder(node, focusableIds, result2) {
       const aAbs = a.absoluteBoundingBox;
       const bAbs = b.absoluteBoundingBox;
       if (!aAbs || !bAbs) return 0;
-      const aCenterY = aAbs.y + aAbs.height / 2;
-      const bCenterY = bAbs.y + bAbs.height / 2;
-      const aCenterX = aAbs.x + aAbs.width / 2;
-      const bCenterX = bAbs.x + bAbs.width / 2;
-      const rowThreshold = Math.min(aAbs.height, bAbs.height) * 0.5;
-      if (Math.abs(aCenterY - bCenterY) <= rowThreshold) {
-        return aCenterX - bCenterX;
+      const aTop = aAbs.y, aBot = aAbs.y + aAbs.height;
+      const bTop = bAbs.y, bBot = bAbs.y + bAbs.height;
+      const overlap = Math.min(aBot, bBot) - Math.max(aTop, bTop);
+      const minHeight = Math.min(aAbs.height, bAbs.height);
+      if (overlap >= minHeight * 0.5) {
+        return aAbs.x - bAbs.x;
       }
-      return aCenterY - bCenterY;
+      return aTop - bTop;
     });
   }
   for (const child of orderedChildren) {
@@ -4677,6 +4693,9 @@ async function embedStructuralScan(node, parent) {
   scanNode.opacity = 0;
   scanNode.locked = true;
   parent.appendChild(scanNode);
+  if ("layoutMode" in parent && parent.layoutMode !== "NONE") {
+    scanNode.layoutPositioning = "ABSOLUTE";
+  }
 }
 function createText(content, size, weight = "Regular", color) {
   const text = figma.createText();
@@ -4870,13 +4889,25 @@ async function generateBlueline(node, categories, options) {
   const sourceAbs = node.absoluteBoundingBox;
   if (!sourceAbs) throw new Error("Node has no bounding box");
   const page = figma.currentPage;
-  const oldAnnotations = page.children.filter(
-    (n) => n.name === "Accessibility Annotations" || n.name === "Blueline Cards" || n.name === "Tier 2 Cards" || n.name === "Focus Rectangle" || n.name === ".structural-scan" || n.name === "Badge" && n.type === "FRAME" && n.width < 40
-  );
+  const _frameId = node.id;
+  const oldAnnotations = page.children.filter((n) => {
+    if (n.name === "Accessibility Annotations" || n.name === "Focus Rectangle" || n.name === ".structural-scan" || n.name === "Badge" && n.type === "FRAME" && n.width < 40) {
+      return true;
+    }
+    if (n.name === "Blueline Cards" || n.name === "Tier 2 Cards") {
+      if (!("children" in n)) return true;
+      const tag = n.children.find(
+        (c) => c.name === ".target-frame-id" && c.type === "TEXT"
+      );
+      return !tag || tag.characters === _frameId;
+    }
+    return false;
+  });
   for (const n of oldAnnotations) n.remove();
   const sourceX = sourceAbs.x;
   const sourceY = sourceAbs.y;
   const cardKeys = categories;
+  let bluelineContainer = null;
   if (cardKeys.length > 0) {
     const grouped = (options == null ? void 0 : options.grouped) === true;
     const NOTE_KEYS = /* @__PURE__ */ new Set(["voiceover", "talkback", "narrator", "reactNative", "tvNote", "generalNote"]);
@@ -4907,6 +4938,7 @@ async function generateBlueline(node, categories, options) {
       outerContainer.x = sourceX;
       outerContainer.y = sourceY + sourceAbs.height + CARDS_TOP_MARGIN;
       page.appendChild(outerContainer);
+      bluelineContainer = outerContainer;
     } else {
       const cardsContainer = figma.createFrame();
       cardsContainer.name = "Blueline Cards";
@@ -4928,10 +4960,24 @@ async function generateBlueline(node, categories, options) {
       cardsContainer.x = sourceX;
       cardsContainer.y = sourceY + sourceAbs.height + CARDS_TOP_MARGIN;
       page.appendChild(cardsContainer);
+      bluelineContainer = cardsContainer;
     }
   }
   figma.ui.postMessage({ type: "a11y-status", message: "Running structural scan..." });
-  await embedStructuralScan(node, page);
+  if (bluelineContainer) {
+    await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+    const tagNode = figma.createText();
+    tagNode.name = ".target-frame-id";
+    tagNode.characters = node.id;
+    tagNode.fontSize = 1;
+    tagNode.opacity = 0;
+    tagNode.locked = true;
+    bluelineContainer.appendChild(tagNode);
+    tagNode.layoutPositioning = "ABSOLUTE";
+    await embedStructuralScan(node, bluelineContainer);
+  } else {
+    await embedStructuralScan(node, page);
+  }
   figma.viewport.scrollAndZoomIntoView([node]);
   return { frameId: node.id, sections: categories };
 }
@@ -5024,7 +5070,25 @@ async function generateBluelinePanels(node, categories) {
       }
     }
     figma.ui.postMessage({ type: "a11y-status", message: "Running structural scan..." });
-    await embedStructuralScan(node, page);
+    await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+    const panelsMarker = figma.createFrame();
+    panelsMarker.name = "Blueline Cards";
+    panelsMarker.resize(1, 1);
+    panelsMarker.fills = [];
+    panelsMarker.clipsContent = false;
+    panelsMarker.opacity = 0;
+    panelsMarker.locked = true;
+    panelsMarker.x = sourceAbs.x;
+    panelsMarker.y = sourceAbs.y - 20;
+    page.appendChild(panelsMarker);
+    const panelsTagNode = figma.createText();
+    panelsTagNode.name = ".target-frame-id";
+    panelsTagNode.characters = node.id;
+    panelsTagNode.fontSize = 1;
+    panelsTagNode.opacity = 0;
+    panelsTagNode.locked = true;
+    panelsMarker.appendChild(panelsTagNode);
+    await embedStructuralScan(node, panelsMarker);
     figma.viewport.scrollAndZoomIntoView(allSections);
     return { frameId: node.id, sections: categories, sectionIds };
   }
@@ -5100,6 +5164,7 @@ function serializeNode(node) {
   return { id: node.id, name: node.name, type: node.type, x: node.x, y: node.y, width: node.width, height: node.height };
 }
 async function handleBridgeMethod(method, params) {
+  var _a, _b;
   switch (method) {
     // ── Code execution ──
     case "EXECUTE_CODE": {
@@ -5581,7 +5646,21 @@ async function handleBridgeMethod(method, params) {
     // ── Blueline data retrieval (for AI review + fill) ──
     case "GET_BLUELINE_DATA": {
       const page = figma.currentPage;
-      const scanNode = page.findOne((n) => n.name === ".structural-scan" && n.type === "TEXT");
+      const reqFrameId = params == null ? void 0 : params.frameId;
+      const allCardContainers = page.findAll((n) => n.name === "Blueline Cards" || n.name === "Tier 2 Cards");
+      let cardContainer = null;
+      let frameIdMatched = false;
+      if (reqFrameId) {
+        cardContainer = (_a = allCardContainers.find((c) => {
+          const tag = "children" in c ? c.children.find((ch) => ch.name === ".target-frame-id" && ch.type === "TEXT") : void 0;
+          return (tag == null ? void 0 : tag.characters) === reqFrameId;
+        })) != null ? _a : null;
+        frameIdMatched = cardContainer !== null;
+      }
+      if (!cardContainer && allCardContainers.length > 0) {
+        cardContainer = allCardContainers[allCardContainers.length - 1];
+      }
+      const scanNode = (_b = cardContainer ? cardContainer.children.find((n) => n.name === ".structural-scan" && n.type === "TEXT") : null) != null ? _b : page.findOne((n) => n.name === ".structural-scan" && n.type === "TEXT");
       const structuralScan = scanNode ? scanNode.characters : null;
       const sidebars = page.findAll((n) => n.name === "Accessibility Annotations" && n.type === "FRAME");
       const sidebar = sidebars[sidebars.length - 1];
@@ -5618,8 +5697,8 @@ async function handleBridgeMethod(method, params) {
         walk(sidebar);
       }
       const focusRects = page.findAll((n) => {
-        var _a;
-        return n.name === "Focus Rectangle" && ((_a = n.parent) == null ? void 0 : _a.type) === "PAGE";
+        var _a2;
+        return n.name === "Focus Rectangle" && ((_a2 = n.parent) == null ? void 0 : _a2.type) === "PAGE";
       });
       const focusIndicators = focusRects.map((r) => ({
         x: Math.round(r.x),
@@ -5655,8 +5734,6 @@ async function handleBridgeMethod(method, params) {
         "TV Note": "tvNote",
         "General Note": "generalNote"
       };
-      const cardContainers = page.findAll((n) => n.name === "Blueline Cards" || n.name === "Tier 2 Cards");
-      const cardContainer = cardContainers[cardContainers.length - 1];
       const bluelineCards = [];
       if (cardContainer && "children" in cardContainer) {
         for (const child of cardContainer.children) {
@@ -5697,6 +5774,9 @@ async function handleBridgeMethod(method, params) {
           targetFrameId = closest.id;
         }
       }
+      if (bluelineCards.length === 0 && !cardContainer) {
+        throw new Error("No blueline cards found on this page. Generate a blueline scaffold first (select a frame \u2192 A11y tab \u2192 Generate Blueline).");
+      }
       return {
         structuralScan: structuralScan ? (() => {
           try {
@@ -5708,7 +5788,8 @@ async function handleBridgeMethod(method, params) {
         focusOrder,
         focusIndicators,
         bluelineCards,
-        targetFrameId
+        targetFrameId,
+        frameIdMatched: reqFrameId ? frameIdMatched : null
       };
     }
     // ── Fill a blueline card with structured content ──
@@ -6321,6 +6402,269 @@ async function postApiKeyState(provider) {
     masked: typeof key === "string" && key.length > 0 ? maskKey(key) : void 0
   });
 }
+var annotateRunning = false;
+async function drawA11yAnnotations(clone, originalFrame, categoryId, categoryLabel) {
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+  const scan = runStructuralScan(originalFrame);
+  const fb = originalFrame.absoluteBoundingBox;
+  if (!fb) throw new Error("Frame has no bounding box \u2014 cannot position annotations.");
+  const fX = fb.x;
+  const fY = fb.y;
+  const container = figma.createFrame();
+  clone.appendChild(container);
+  try {
+    let badge2 = function(cx, cy, text, color) {
+      const S = 20;
+      const ellipse = figma.createEllipse();
+      container.appendChild(ellipse);
+      ellipse.resize(S, S);
+      ellipse.x = cx - S / 2;
+      ellipse.y = cy - S / 2;
+      ellipse.fills = [{ type: "SOLID", color }];
+      const lbl = figma.createText();
+      container.appendChild(lbl);
+      lbl.fontName = { family: "Inter", style: "Bold" };
+      lbl.fontSize = 9;
+      lbl.characters = text;
+      lbl.fills = [{ type: "SOLID", color: WHITE2 }];
+      lbl.textAlignHorizontal = "CENTER";
+      lbl.resize(S, S);
+      lbl.x = cx - S / 2;
+      lbl.y = cy - S / 2 + 2;
+    }, pill2 = function(x, y, text, color) {
+      const bg = figma.createFrame();
+      container.appendChild(bg);
+      bg.fills = [{ type: "SOLID", color }];
+      bg.cornerRadius = 3;
+      bg.resize(40, 14);
+      bg.x = x;
+      bg.y = y;
+      const lbl = figma.createText();
+      container.appendChild(lbl);
+      lbl.fontName = { family: "Inter", style: "Bold" };
+      lbl.fontSize = 8;
+      lbl.characters = text;
+      lbl.fills = [{ type: "SOLID", color: WHITE2 }];
+      lbl.x = x + 3;
+      lbl.y = y + 2;
+    }, dashedOutline2 = function(rx, ry, rw, rh, color) {
+      const outline = figma.createFrame();
+      container.appendChild(outline);
+      outline.layoutMode = "NONE";
+      outline.fills = [];
+      outline.strokes = [{ type: "SOLID", color }];
+      outline.dashPattern = [4, 3];
+      outline.strokeWeight = 1.5;
+      outline.resize(Math.max(rw, 2), Math.max(rh, 2));
+      outline.x = rx;
+      outline.y = ry;
+      outline.clipsContent = false;
+    }, labelTag2 = function(x, y, text, color) {
+      const lbl = figma.createText();
+      container.appendChild(lbl);
+      lbl.fontName = { family: "Inter", style: "Regular" };
+      lbl.fontSize = 8;
+      lbl.characters = text;
+      lbl.fills = [{ type: "SOLID", color: WHITE2 }];
+      lbl.x = x + 4;
+      lbl.y = y + 3;
+      const bg = figma.createFrame();
+      const idx = container.children.indexOf(lbl);
+      container.insertChild(idx, bg);
+      bg.layoutMode = "NONE";
+      bg.fills = [{ type: "SOLID", color }];
+      bg.cornerRadius = 3;
+      bg.resize(Math.max(lbl.width + 8, 24), lbl.height + 6);
+      bg.x = x;
+      bg.y = y;
+    }, cleanName2 = function(raw) {
+      const stripped = raw.replace(/^I\d+:\d+;.*/, "").replace(/^\d+:\d+$/, "").trim();
+      return (stripped || raw).slice(0, 20);
+    };
+    var badge = badge2, pill = pill2, dashedOutline = dashedOutline2, labelTag = labelTag2, cleanName = cleanName2;
+    container.name = `A11y Annotations \u2014 ${categoryLabel}`;
+    container.layoutPositioning = "ABSOLUTE";
+    container.layoutMode = "NONE";
+    container.fills = [];
+    container.clipsContent = false;
+    container.resize(clone.width, clone.height);
+    container.x = 0;
+    container.y = 0;
+    const BLUE = { r: 0.08, g: 0.45, b: 0.9 };
+    const ORANGE = { r: 0.96, g: 0.52, b: 0.07 };
+    const RED = { r: 0.85, g: 0.19, b: 0.18 };
+    const GREEN = { r: 0.07, g: 0.62, b: 0.48 };
+    const WHITE2 = { r: 1, g: 1, b: 1 };
+    switch (categoryId) {
+      case "a11yFocusOrder": {
+        scan.focusableElements.forEach((el, i) => {
+          const rx = el.x - fX;
+          const ry = el.y - fY;
+          badge2(rx + 10, ry + 10, String(i + 1), BLUE);
+        });
+        break;
+      }
+      case "a11yFocusIndicators": {
+        scan.focusableElements.forEach((el) => {
+          const rx = el.x - fX;
+          const ry = el.y - fY;
+          dashedOutline2(rx - 2, ry - 2, el.width + 4, el.height + 4, BLUE);
+        });
+        break;
+      }
+      case "a11yTargetSize": {
+        scan.focusableElements.forEach((el) => {
+          const rx = el.x - fX;
+          const ry = el.y - fY;
+          const w = Math.round(el.width);
+          const h = Math.round(el.height);
+          const color = w < 24 || h < 24 ? RED : w < 44 || h < 44 ? ORANGE : GREEN;
+          pill2(rx + el.width / 2 - 20, ry + el.height - 8, `${w}\xD7${h}`, color);
+        });
+        break;
+      }
+      case "a11yHeadings": {
+        const sized = scan.textNodes.filter((t) => t.fontSize > 14);
+        const uniqueSizes = [...new Set(sized.map((t) => t.fontSize))].sort((a, b) => b - a);
+        sized.forEach((t) => {
+          const rx = t.x - fX;
+          const ry = t.y - fY;
+          const level = Math.min(uniqueSizes.indexOf(t.fontSize) + 1, 6);
+          badge2(rx + 10, ry + t.height / 2, `H${level}`, BLUE);
+        });
+        break;
+      }
+      case "a11yNamesAlt": {
+        scan.focusableElements.forEach((el, i) => {
+          const rx = el.x - fX;
+          const ry = el.y - fY;
+          dashedOutline2(rx - 1, ry - 1, el.width + 2, el.height + 2, BLUE);
+          badge2(rx + 10, ry + 10, String(i + 1), BLUE);
+          const name = cleanName2(el.name);
+          if (name) labelTag2(rx, Math.max(ry - 20, 0), name, BLUE);
+        });
+        scan.iconFrames.forEach((icon) => {
+          if (!icon.hasTextChild) {
+            const rx = icon.x - fX;
+            const ry = icon.y - fY;
+            badge2(rx + icon.width / 2, ry + icon.height / 2, "!", RED);
+          }
+        });
+        scan.imageNodes.forEach((img) => {
+          if (!img.isFullBleed) {
+            const rx = img.x - fX;
+            const ry = img.y - fY;
+            badge2(rx + img.width / 2, ry + 10, "ALT", ORANGE);
+          }
+        });
+        break;
+      }
+      case "a11yColorContrast": {
+        scan.textNodes.forEach((t) => {
+          const rx = t.x - fX;
+          const ry = t.y - fY;
+          pill2(rx + t.width - 36, ry + t.height / 2 - 7, "CC?", ORANGE);
+        });
+        break;
+      }
+      case "a11yAriaKeyboard": {
+        scan.focusableElements.forEach((el) => {
+          const rx = el.x - fX;
+          const ry = el.y - fY;
+          pill2(rx + el.width - 36, ry, "KB?", BLUE);
+        });
+        break;
+      }
+      case "a11yLandmarksNav": {
+        const fw = clone.width;
+        const fh = clone.height;
+        if ("children" in originalFrame) {
+          const topKids = originalFrame.children.filter((c) => c.visible !== false);
+          topKids.forEach((child) => {
+            const cb = child.absoluteBoundingBox;
+            if (!cb) return;
+            const rx = cb.x - fX;
+            const ry = cb.y - fY;
+            const rw = cb.width;
+            const rh = cb.height;
+            let lmLabel;
+            let lmColor;
+            if (rw >= fw * 0.85 && ry <= fh * 0.12) {
+              lmLabel = 'role="banner" (nav)';
+              lmColor = BLUE;
+            } else if (rx <= fw * 0.18 && rh >= fh * 0.25) {
+              lmLabel = 'role="navigation" (aside)';
+              lmColor = ORANGE;
+            } else if (rw >= fw * 0.5 && rh >= fh * 0.35) {
+              lmLabel = 'role="main"';
+              lmColor = GREEN;
+            } else {
+              lmLabel = "region";
+              lmColor = ORANGE;
+            }
+            dashedOutline2(rx, ry, rw, rh, lmColor);
+            labelTag2(rx + 4, ry + 4, lmLabel, lmColor);
+          });
+        }
+        scan.repeatingGroups.forEach((group) => {
+          const rx = group.x - fX;
+          const ry = group.y - fY;
+          const listLabel = group.layoutMode === "HORIZONTAL" ? "list (horiz)" : group.layoutMode === "VERTICAL" ? "list (vert)" : "grid";
+          labelTag2(rx + 4, Math.max(ry - 22, 2), listLabel, ORANGE);
+        });
+        break;
+      }
+      case "a11yDom": {
+        const TEAL = { r: 0.03, g: 0.62, b: 0.58 };
+        const ROW_THRESHOLD = 12;
+        const nodes = scan.textNodes.map((t) => ({
+          rx: t.x - fX,
+          ry: t.y - fY,
+          rw: t.width,
+          rh: t.height
+        }));
+        nodes.sort((a, b) => {
+          const rowA = Math.round(a.ry / ROW_THRESHOLD);
+          const rowB = Math.round(b.ry / ROW_THRESHOLD);
+          return rowA !== rowB ? rowA - rowB : a.rx - b.rx;
+        });
+        nodes.forEach((n, i) => {
+          badge2(n.rx + 10, n.ry + n.rh / 2, String(i + 1), TEAL);
+        });
+        break;
+      }
+      default: {
+        const bg = figma.createFrame();
+        container.appendChild(bg);
+        bg.layoutMode = "NONE";
+        bg.fills = [{ type: "SOLID", color: { r: 0.47, g: 0.22, b: 0.93 }, opacity: 0.08 }];
+        bg.strokes = [{ type: "SOLID", color: { r: 0.47, g: 0.22, b: 0.93 } }];
+        bg.strokeWeight = 1;
+        bg.cornerRadius = 6;
+        bg.resize(clone.width - 24, 36);
+        bg.x = 12;
+        bg.y = 12;
+        const lbl = figma.createText();
+        container.appendChild(lbl);
+        lbl.fontName = { family: "Inter", style: "Regular" };
+        lbl.fontSize = 10;
+        lbl.characters = `${categoryLabel} \u2014 review manually`;
+        lbl.fills = [{ type: "SOLID", color: { r: 0.47, g: 0.22, b: 0.93 } }];
+        lbl.x = 24;
+        lbl.y = 22;
+        break;
+      }
+    }
+  } catch (e) {
+    try {
+      container.remove();
+    } catch (_) {
+    }
+    throw e;
+  }
+  container.locked = true;
+}
 figma.showUI(__html__, { width: 360, height: 500, themeColors: true });
 figma.ui.onmessage = async (msg) => {
   switch (msg.type) {
@@ -6623,6 +6967,7 @@ figma.ui.onmessage = async (msg) => {
           type: "a11y-panels-fill-request",
           sections: result2.sections,
           frameName: sel[0].name,
+          frameId: sel[0].id,
           sectionIds: result2.sectionIds
         });
         figma.notify(`Blueline panels created for "${sel[0].name}"`);
@@ -6630,6 +6975,53 @@ figma.ui.onmessage = async (msg) => {
         const errorMsg = e instanceof Error ? e.message : String(e);
         figma.ui.postMessage({ type: "a11y-status", message: `Error: ${errorMsg}` });
         figma.notify(`Panels failed: ${errorMsg}`, { error: true });
+      }
+      break;
+    }
+    case "a11y-annotate-category": {
+      if (annotateRunning) {
+        figma.ui.postMessage({ type: "a11y-annotate-status", message: "Annotation in progress \u2014 please wait." });
+        break;
+      }
+      const sel = figma.currentPage.selection;
+      if (sel.length === 0) {
+        figma.ui.postMessage({ type: "a11y-annotate-status", message: "Select a frame first." });
+        break;
+      }
+      annotateRunning = true;
+      const originalFrame = sel[0];
+      const categoryId = typeof msg.categoryId === "string" ? msg.categoryId : "";
+      const categoryLabel = typeof msg.categoryLabel === "string" ? msg.categoryLabel : categoryId;
+      try {
+        figma.ui.postMessage({ type: "a11y-annotate-status", message: `Creating annotation clone\u2026` });
+        const cloneName = `[A11y] ${originalFrame.name}`;
+        let clone = figma.currentPage.findOne((n) => n.name === cloneName && n.type === "FRAME");
+        if (!clone) {
+          clone = originalFrame.clone();
+          clone.name = cloneName;
+          clone.x = originalFrame.x + originalFrame.width + 80;
+          clone.y = originalFrame.y;
+        }
+        for (const child of [...clone.children]) {
+          if (child.name.startsWith("A11y Annotations")) child.remove();
+        }
+        await drawA11yAnnotations(clone, originalFrame, categoryId, categoryLabel);
+        figma.viewport.scrollAndZoomIntoView([clone]);
+        figma.ui.postMessage({ type: "a11y-annotate-status", message: `${categoryLabel} annotated on "${cloneName}"` });
+      } catch (e) {
+        const errMsg = e instanceof Error ? e.message : String(e);
+        figma.ui.postMessage({ type: "a11y-annotate-status", message: `Annotation error: ${errMsg}` });
+      } finally {
+        annotateRunning = false;
+      }
+      break;
+    }
+    case "a11y-annotate-cleanup": {
+      const sel = figma.currentPage.selection;
+      if (sel.length > 0) {
+        const cloneName = `[A11y] ${sel[0].name}`;
+        const clone = figma.currentPage.findOne((n) => n.name === cloneName && n.type === "FRAME");
+        if (clone) clone.remove();
       }
       break;
     }

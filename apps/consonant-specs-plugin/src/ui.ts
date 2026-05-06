@@ -1,5 +1,5 @@
-function esc(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function esc(s: unknown): string {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 async function copyToClipboard(text: string): Promise<boolean> {
@@ -28,25 +28,103 @@ interface PropertyEntry {
 
 declare const FEATURE_A11Y: boolean;
 
-const a11yTab = document.querySelector<HTMLButtonElement>('.tab[data-tab="a11y"]');
+// Feature flag: remove A11y if disabled
 const a11yPanel = document.querySelector<HTMLElement>('.tab-panel[data-panel="a11y"]');
 if (!FEATURE_A11Y) {
-  a11yTab?.remove();
+  document.getElementById('menuA11yItem')?.remove();
+  document.getElementById('hamburgerA11yItem')?.remove();
   a11yPanel?.remove();
 }
 
-const tabs = document.querySelectorAll<HTMLButtonElement>('.tab');
 const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
 
-tabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    const target = tab.dataset.tab;
-    tabs.forEach((t) => t.classList.remove('active'));
-    panels.forEach((p) => p.classList.remove('active'));
-    tab.classList.add('active');
-    const panel = document.querySelector(`[data-panel="${target}"]`);
-    if (panel) panel.classList.add('active');
+function navigateTo(toolId: string, toolName: string) {
+  panels.forEach(p => p.classList.remove('active'));
+  const panel = document.querySelector(`[data-panel="${toolId}"]`);
+  if (panel) panel.classList.add('active');
+
+  const menuView = document.getElementById('menuView');
+  const tabContent = document.getElementById('tabContent');
+  const headerMenu = document.getElementById('headerMenu');
+  const headerDetail = document.getElementById('headerDetail');
+  const backLabel = document.getElementById('backLabel');
+  const hamburgerMenu = document.getElementById('hamburgerMenu');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+
+  if (menuView) menuView.style.display = 'none';
+  if (tabContent) tabContent.style.display = '';
+  if (headerMenu) headerMenu.style.display = 'none';
+  if (headerDetail) headerDetail.style.display = 'flex';
+  if (backLabel) backLabel.textContent = toolName;
+  if (hamburgerMenu) hamburgerMenu.classList.remove('open');
+  if (hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded', 'false');
+
+  document.querySelectorAll<HTMLElement>('.hamburger-item').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tool === toolId);
   });
+}
+
+function navigateBack() {
+  const menuView = document.getElementById('menuView');
+  const tabContent = document.getElementById('tabContent');
+  const headerMenu = document.getElementById('headerMenu');
+  const headerDetail = document.getElementById('headerDetail');
+  const hamburgerMenu = document.getElementById('hamburgerMenu');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+
+  if (menuView) menuView.style.display = '';
+  if (tabContent) tabContent.style.display = 'none';
+  if (headerMenu) headerMenu.style.display = '';
+  if (headerDetail) headerDetail.style.display = 'none';
+  if (hamburgerMenu) hamburgerMenu.classList.remove('open');
+  if (hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded', 'false');
+}
+
+// Menu items
+document.querySelectorAll<HTMLButtonElement>('.menu-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const tool = item.dataset.tool ?? '';
+    const name = item.querySelector('.menu-item-name')?.textContent ?? tool;
+    navigateTo(tool, name);
+  });
+});
+
+// Hamburger items
+document.querySelectorAll<HTMLButtonElement>('.hamburger-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const tool = item.dataset.tool ?? '';
+    const menuItem = document.querySelector<HTMLElement>(`.menu-item[data-tool="${tool}"]`);
+    const name = menuItem?.querySelector('.menu-item-name')?.textContent ?? tool;
+    navigateTo(tool, name);
+  });
+});
+
+// Bridge status pills — click to connect/disconnect (one on menu, one on tool header)
+document.querySelectorAll<HTMLButtonElement>('.bridge-status-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    if (bridgeConnected) {
+      bridgeDisconnect();
+    } else {
+      bridgeConnect();
+    }
+  });
+});
+
+// Back button
+document.getElementById('backBtn')?.addEventListener('click', navigateBack);
+
+// Hamburger toggle
+document.getElementById('hamburgerBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const menu = document.getElementById('hamburgerMenu');
+  const btn = document.getElementById('hamburgerBtn');
+  const isOpen = menu?.classList.toggle('open');
+  btn?.setAttribute('aria-expanded', String(!!isOpen));
+});
+
+document.addEventListener('click', () => {
+  document.getElementById('hamburgerMenu')?.classList.remove('open');
+  document.getElementById('hamburgerBtn')?.setAttribute('aria-expanded', 'false');
 });
 
 let currentSelection: { count: number; hasAutoLayout: boolean } = { count: 0, hasAutoLayout: false };
@@ -127,11 +205,14 @@ window.addEventListener('message', (event) => {
     case 'a11y-status':
       updateA11yStatus(msg.message as string);
       break;
+    case 'a11y-annotate-status':
+      updateA11yStatus(msg.message as string);
+      break;
     case 'a11y-fill-request':
-      showAiFillInstruction(msg.mode as string, msg.sections as string[], msg.frameName as string);
+      showAiFillInstruction(msg.mode as string, msg.sections as string[], msg.frameName as string, msg.frameId as string | undefined);
       break;
     case 'a11y-panels-fill-request':
-      showPanelsFillInstruction(msg.sections as string[], msg.frameName as string, msg.sectionIds as string[]);
+      showPanelsFillInstruction(msg.sections as string[], msg.frameName as string, msg.sectionIds as string[], msg.frameId as string | undefined);
       break;
     // Unified bridge command result from code.ts
     case 'bridge:command-result': {
@@ -507,21 +588,22 @@ function updateA11yStatus(message: string) {
   if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
 }
 
-function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string) {
+function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string, frameId?: string) {
   const categoryList = sections && sections.length > 0 ? sections.join(', ') : 'all categories';
   const frame = frameName ? `"${frameName}"` : 'the selected frame';
+  const frameIdArg = frameId ? ` with frameId: "${frameId}"` : '';
   const bridgeNote = bridgeConnected ? '' : '\n\n⚠ Bridge offline — paste this in Claude Code manually.';
 
   let cmd: string;
   if (mode === 'sections') {
-    cmd = `Fill the blueline cards on the current Figma page. Call figma_get_blueline_data first — it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.`;
+    cmd = `Fill the blueline cards for the frame "${frameName ?? 'selected'}" (ID: ${frameId ?? 'unknown'}). Call figma_get_blueline_data${frameIdArg} first — it returns structural data and orchestration instructions scoped to this frame. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.`;
   } else {
     cmd = `Start an A11y review conversation for the frame ${frame}.
 
 Categories to review: ${categoryList}
 
 Step 1 — Ground yourself:
-Call figma_get_blueline_data. It returns the structural scan (a hidden text node named .structural-scan), a screenshot, and per-agent orchestration instructions. Read the structural scan carefully. Do not infer elements that are not present in it.
+Call figma_get_blueline_data${frameIdArg}. It returns the structural scan (a hidden text node named .structural-scan), a screenshot, and per-agent orchestration instructions — all scoped to this frame. Read the structural scan carefully. Do not infer elements that are not present in it.
 
 Step 2 — Ask questions first (REQUIRED before any rendering):
 Before calling figma_render_blueline, ask the designer 1–3 clarifying questions about things you genuinely need to know to be accurate — e.g. intended interaction pattern, whether a visual-only element is intentional, context of use. If you have no real questions, say so briefly and proceed.
@@ -593,9 +675,9 @@ function renderA11yResults(data: A11yResultPayload) {
     </div>`;
   }
 
-  const issueItems = (data.issues ?? []).map(i => ({ label: i.category, text: i.description }));
-  const needsItems = (data.needs_input ?? []).map(i => ({ label: i.category, text: i.question }));
-  const suggItems  = (data.suggestions ?? []).map(i => ({ label: i.category, text: i.description }));
+  const issueItems = (Array.isArray(data.issues) ? data.issues : []).map(i => ({ label: i?.category ?? '', text: i?.description ?? '' }));
+  const needsItems = (Array.isArray(data.needs_input) ? data.needs_input : []).map(i => ({ label: i?.category ?? '', text: i?.question ?? '' }));
+  const suggItems  = (Array.isArray(data.suggestions) ? data.suggestions : []).map(i => ({ label: i?.category ?? '', text: i?.description ?? '' }));
 
   const empty = issueItems.length === 0 && needsItems.length === 0 && suggItems.length === 0;
 
@@ -613,18 +695,25 @@ function renderA11yResults(data: A11yResultPayload) {
       <button class="btn btn-secondary" id="a11yContinueBtn" style="margin-top:8px;font-size:10px;width:100%;">Continue in Claude Code</button>
     </div>`;
 
-  document.getElementById('a11yContinueBtn')?.addEventListener('click', async () => {
-    if (lastA11yCmd) {
-      await copyToClipboard(lastA11yCmd);
-      const btn = document.getElementById('a11yContinueBtn');
-      if (btn) { btn.textContent = 'Copied — paste in Claude Code'; setTimeout(() => { btn.textContent = 'Continue in Claude Code'; }, 2000); }
+  const continueBtn = document.getElementById('a11yContinueBtn') as HTMLButtonElement | null;
+  if (continueBtn) {
+    if (!lastA11yCmd) {
+      continueBtn.disabled = true;
+      continueBtn.title = 'Re-generate the blueline cards to restore this prompt.';
     }
-  });
+    continueBtn.addEventListener('click', async () => {
+      if (!lastA11yCmd) return;
+      await copyToClipboard(lastA11yCmd);
+      continueBtn.textContent = 'Copied — paste in Claude Code';
+      setTimeout(() => { continueBtn.textContent = 'Continue in Claude Code'; }, 2000);
+    });
+  }
 }
 
-function showPanelsFillInstruction(sections: string[], frameName: string, sectionIds: string[]) {
+function showPanelsFillInstruction(sections: string[], frameName: string, sectionIds: string[], frameId?: string) {
   const sectionList = sections.join(', ');
-  const cmd = `Fill the blueline panels on the current Figma page for "${frameName}". Categories: ${sectionList}.\n\nCall figma_get_blueline_data first — it returns structural data (including nodeIds for all elements) and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge.\n\nDispatch parallel agents. IMPORTANT: Each agent must return items with these additional fields:\n- nodeId (string|null): the node ID from the structural scan that this item refers to. Null if no element match.\n- annotationType ("element"|"region"|"none"): "element" for specific UI elements (buttons, links, inputs), "region" for area-level concepts (landmarks, sections), "none" for abstract/page-level items.\n\nThen call figma_render_blueline with mode: "panels" and all item JSON. The panels have already been scaffolded with cloned designs — the render call will place native Figma annotations on the clones.`;
+  const frameIdArg = frameId ? ` with frameId: "${frameId}"` : '';
+  const cmd = `Fill the blueline panels for the frame "${frameName}"${frameId ? ` (ID: ${frameId})` : ''}. Categories: ${sectionList}.\n\nCall figma_get_blueline_data${frameIdArg} first — it returns structural data (including nodeIds for all elements) and orchestration instructions scoped to this frame. Then call figma_get_knowledge for each agent group to fetch expert knowledge.\n\nDispatch parallel agents. IMPORTANT: Each agent must return items with these additional fields:\n- nodeId (string|null): the node ID from the structural scan that this item refers to. Null if no element match.\n- annotationType ("element"|"region"|"none"): "element" for specific UI elements (buttons, links, inputs), "region" for area-level concepts (landmarks, sections), "none" for abstract/page-level items.\n\nThen call figma_render_blueline with mode: "panels" and all item JSON. The panels have already been scaffolded with cloned designs — the render call will place native Figma annotations on the clones.`;
   const el = document.getElementById('a11yStatus');
   if (el) {
     el.innerHTML = `
@@ -790,6 +879,45 @@ document.getElementById('generateBluelinePanelsBtn')?.addEventListener('click', 
 
 let lastA11yCmd = '';
 
+// ── Annotation mode ──────────────────────────────────────────────────────────
+let annotationMode = false;
+
+document.getElementById('a11yAnnotateToggle')?.addEventListener('click', () => {
+  annotationMode = !annotationMode;
+  const btn = document.getElementById('a11yAnnotateToggle') as HTMLButtonElement;
+  if (btn) {
+    btn.textContent = annotationMode ? 'Turn off annotation' : 'Turn on annotation';
+    btn.classList.toggle('active', annotationMode);
+  }
+  if (annotationMode) {
+    updateA11yStatus('Annotation mode on — select one category.');
+  } else {
+    // Uncheck all to reset single-select state
+    const allBoxes = document.querySelectorAll('.a11y-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+    allBoxes.forEach(cb => { cb.checked = false; });
+    postToPlugin('a11y-annotate-cleanup', {});
+    updateA11yStatus('Annotation mode off.');
+  }
+});
+
+// Single-select enforcement and annotation dispatch in annotation mode
+// Listener on the parent view so it covers both #a11yItemList and #a11yConditionalList
+document.getElementById('a11yCategoryView')?.addEventListener('change', (e) => {
+  if (!annotationMode) return;
+  const target = e.target as HTMLInputElement;
+  if (target.type !== 'checkbox' || !target.checked || !target.closest('.a11y-item')) return;
+
+  // Enforce single-select: uncheck all other a11y checkboxes
+  const allBoxes = document.querySelectorAll('.a11y-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+  allBoxes.forEach(cb => { if (cb !== target) cb.checked = false; });
+
+  // Dispatch annotation request to plugin
+  const categoryId = target.id;
+  const categoryLabel = A11Y_LABELS[categoryId] || categoryId;
+  postToPlugin('a11y-annotate-category', { categoryId, categoryLabel });
+  updateA11yStatus(`Annotating ${categoryLabel}…`);
+});
+
 // Bridge tab — WebSocket connection to figma-console MCP
 let bridgeConnected = false;
 let bridgeWs: WebSocket | null = null;
@@ -887,6 +1015,10 @@ function updateBridgeUi() {
     disconnected.style.display = 'block';
     connected.style.display = 'none';
   }
+  document.querySelectorAll<HTMLButtonElement>('.bridge-status-pill').forEach(pill => {
+    pill.disabled = false;
+    pill.classList.toggle('connected', bridgeConnected);
+  });
   updateA11yBridgeState();
 }
 
@@ -918,10 +1050,14 @@ function bridgeConnect() {
   bridgeUserDisconnected = false;
   if (bridgeReconnectTimer) { clearTimeout(bridgeReconnectTimer); bridgeReconnectTimer = null; }
 
+  document.querySelectorAll<HTMLButtonElement>('.bridge-status-pill').forEach(pill => {
+    pill.disabled = true;
+  });
+
   const btn = document.getElementById('bridgeConnectBtn') as HTMLButtonElement;
   if (btn) { btn.textContent = 'Connecting...'; btn.disabled = true; }
 
-  const WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+  const WS_PORTS = [9220, 9221, 9222];
   let found = false;
   let pending = WS_PORTS.length;
 
@@ -1076,8 +1212,15 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
       }
 
       // Handle A11y results loop-back from bridge_send_a11y_result MCP tool
-      if (message.type === 'A11Y_RESULT' && message.data) {
-        renderA11yResults(message.data as A11yResultPayload);
+      if (message.type === 'A11Y_RESULT' && message.data && typeof message.data === 'object') {
+        const d = message.data as Record<string, unknown>;
+        const safe: A11yResultPayload = {
+          frameName: typeof d.frameName === 'string' ? d.frameName : '',
+          issues: Array.isArray(d.issues) ? d.issues : [],
+          needs_input: Array.isArray(d.needs_input) ? d.needs_input : [],
+          suggestions: Array.isArray(d.suggestions) ? d.suggestions : [],
+        };
+        renderA11yResults(safe);
         return;
       }
 

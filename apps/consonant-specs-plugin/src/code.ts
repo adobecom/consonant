@@ -439,8 +439,29 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
     // ── Blueline data retrieval (for AI review + fill) ──
     case 'GET_BLUELINE_DATA': {
       const page = figma.currentPage;
-      // Structural scan
-      const scanNode = page.findOne(n => n.name === '.structural-scan' && n.type === 'TEXT') as TextNode | null;
+      const reqFrameId = params?.frameId as string | undefined;
+
+      // Blueline cards container — scoped to frameId when provided
+      const allCardContainers = page.findAll(n => n.name === 'Blueline Cards' || n.name === 'Tier 2 Cards') as FrameNode[];
+      let cardContainer: FrameNode | null = null;
+      let frameIdMatched = false;
+      if (reqFrameId) {
+        cardContainer = allCardContainers.find(c => {
+          const tag = 'children' in c
+            ? (c as FrameNode).children.find(ch => ch.name === '.target-frame-id' && ch.type === 'TEXT') as TextNode | undefined
+            : undefined;
+          return tag?.characters === reqFrameId;
+        }) ?? null;
+        frameIdMatched = cardContainer !== null;
+      }
+      if (!cardContainer && allCardContainers.length > 0) {
+        cardContainer = allCardContainers[allCardContainers.length - 1];
+      }
+
+      // Structural scan — prefer scan embedded inside the container, fall back to page-level
+      const scanNode = (cardContainer
+        ? (cardContainer as FrameNode).children.find(n => n.name === '.structural-scan' && n.type === 'TEXT') as TextNode | null
+        : null) ?? page.findOne(n => n.name === '.structural-scan' && n.type === 'TEXT') as TextNode | null;
       const structuralScan = scanNode ? scanNode.characters : null;
 
       // Focus order sidebar
@@ -518,8 +539,6 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
         'General Note': 'generalNote',
       };
 
-      const cardContainers = page.findAll(n => n.name === 'Blueline Cards' || n.name === 'Tier 2 Cards');
-      const cardContainer = cardContainers[cardContainers.length - 1] as FrameNode | null;
       const bluelineCards: { id: string; name: string; categoryKey: string; filled: boolean; container: string }[] = [];
       if (cardContainer && 'children' in cardContainer) {
         for (const child of cardContainer.children) {
@@ -565,12 +584,17 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
         }
       }
 
+      if (bluelineCards.length === 0 && !cardContainer) {
+        throw new Error('No blueline cards found on this page. Generate a blueline scaffold first (select a frame → A11y tab → Generate Blueline).');
+      }
+
       return {
         structuralScan: structuralScan ? (() => { try { return JSON.parse(structuralScan); } catch { return null; } })() : null,
         focusOrder,
         focusIndicators,
         bluelineCards,
         targetFrameId,
+        frameIdMatched: reqFrameId ? frameIdMatched : null,
       };
     }
 
@@ -1279,6 +1303,306 @@ async function postApiKeyState(provider: string): Promise<void> {
   });
 }
 
+// ── A11y annotation mode drawing ─────────────────────────────────────────────
+
+let annotateRunning = false;
+
+async function drawA11yAnnotations(
+  clone: FrameNode,
+  originalFrame: SceneNode,
+  categoryId: string,
+  categoryLabel: string,
+): Promise<void> {
+  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+  await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+
+  const scan = runStructuralScan(originalFrame);
+  const fb = originalFrame.absoluteBoundingBox;
+  if (!fb) throw new Error('Frame has no bounding box — cannot position annotations.');
+  const fX = fb.x;
+  const fY = fb.y;
+
+  const container = figma.createFrame();
+  clone.appendChild(container);
+  try {
+  container.name = `A11y Annotations — ${categoryLabel}`;
+  (container as any).layoutPositioning = 'ABSOLUTE';
+  container.layoutMode = 'NONE';
+  container.fills = [];
+  container.clipsContent = false;
+  container.resize(clone.width, clone.height);
+  container.x = 0;
+  container.y = 0;
+
+  const BLUE: RGB = { r: 0.08, g: 0.45, b: 0.90 };
+  const ORANGE: RGB = { r: 0.96, g: 0.52, b: 0.07 };
+  const RED: RGB = { r: 0.85, g: 0.19, b: 0.18 };
+  const GREEN: RGB = { r: 0.07, g: 0.62, b: 0.48 };
+  const WHITE: RGB = { r: 1, g: 1, b: 1 };
+
+  function badge(cx: number, cy: number, text: string, color: RGB): void {
+    const S = 20;
+    const ellipse = figma.createEllipse();
+    container.appendChild(ellipse);
+    ellipse.resize(S, S);
+    ellipse.x = cx - S / 2;
+    ellipse.y = cy - S / 2;
+    ellipse.fills = [{ type: 'SOLID', color }];
+    const lbl = figma.createText();
+    container.appendChild(lbl);
+    lbl.fontName = { family: 'Inter', style: 'Bold' };
+    lbl.fontSize = 9;
+    lbl.characters = text;
+    lbl.fills = [{ type: 'SOLID', color: WHITE }];
+    lbl.textAlignHorizontal = 'CENTER';
+    lbl.resize(S, S);
+    lbl.x = cx - S / 2;
+    lbl.y = cy - S / 2 + 2;
+  }
+
+  function pill(x: number, y: number, text: string, color: RGB): void {
+    const bg = figma.createFrame();
+    container.appendChild(bg);
+    bg.fills = [{ type: 'SOLID', color }];
+    bg.cornerRadius = 3;
+    bg.resize(40, 14);
+    bg.x = x;
+    bg.y = y;
+    const lbl = figma.createText();
+    container.appendChild(lbl);
+    lbl.fontName = { family: 'Inter', style: 'Bold' };
+    lbl.fontSize = 8;
+    lbl.characters = text;
+    lbl.fills = [{ type: 'SOLID', color: WHITE }];
+    lbl.x = x + 3;
+    lbl.y = y + 2;
+  }
+
+  function dashedOutline(rx: number, ry: number, rw: number, rh: number, color: RGB): void {
+    const outline = figma.createFrame();
+    container.appendChild(outline);
+    outline.layoutMode = 'NONE';
+    outline.fills = [];
+    outline.strokes = [{ type: 'SOLID', color }];
+    (outline as any).dashPattern = [4, 3];
+    outline.strokeWeight = 1.5;
+    outline.resize(Math.max(rw, 2), Math.max(rh, 2));
+    outline.x = rx;
+    outline.y = ry;
+    outline.clipsContent = false;
+  }
+
+  // Label chip: text on a colored background. Creates text first (to get width),
+  // then inserts bg before it so bg renders behind the text.
+  function labelTag(x: number, y: number, text: string, color: RGB): void {
+    const lbl = figma.createText();
+    container.appendChild(lbl);
+    lbl.fontName = { family: 'Inter', style: 'Regular' };
+    lbl.fontSize = 8;
+    lbl.characters = text;
+    lbl.fills = [{ type: 'SOLID', color: WHITE }];
+    lbl.x = x + 4;
+    lbl.y = y + 3;
+
+    const bg = figma.createFrame();
+    const idx = (container.children as readonly SceneNode[]).indexOf(lbl);
+    container.insertChild(idx, bg);
+    bg.layoutMode = 'NONE';
+    bg.fills = [{ type: 'SOLID', color }];
+    bg.cornerRadius = 3;
+    bg.resize(Math.max(lbl.width + 8, 24), lbl.height + 6);
+    bg.x = x;
+    bg.y = y;
+  }
+
+  function cleanName(raw: string): string {
+    // Instance node IDs like "I34:1648;1631:12652" → not human-readable → strip
+    const stripped = raw.replace(/^I\d+:\d+;.*/, '').replace(/^\d+:\d+$/, '').trim();
+    return (stripped || raw).slice(0, 20);
+  }
+
+  switch (categoryId) {
+    case 'a11yFocusOrder': {
+      scan.focusableElements.forEach((el, i) => {
+        const rx = el.x - fX;
+        const ry = el.y - fY;
+        badge(rx + 10, ry + 10, String(i + 1), BLUE);
+      });
+      break;
+    }
+    case 'a11yFocusIndicators': {
+      scan.focusableElements.forEach(el => {
+        const rx = el.x - fX;
+        const ry = el.y - fY;
+        dashedOutline(rx - 2, ry - 2, el.width + 4, el.height + 4, BLUE);
+      });
+      break;
+    }
+    case 'a11yTargetSize': {
+      scan.focusableElements.forEach(el => {
+        const rx = el.x - fX;
+        const ry = el.y - fY;
+        const w = Math.round(el.width);
+        const h = Math.round(el.height);
+        const color = (w < 24 || h < 24) ? RED : (w < 44 || h < 44) ? ORANGE : GREEN;
+        pill(rx + el.width / 2 - 20, ry + el.height - 8, `${w}×${h}`, color);
+      });
+      break;
+    }
+    case 'a11yHeadings': {
+      const sized = scan.textNodes.filter(t => t.fontSize > 14);
+      const uniqueSizes = [...new Set(sized.map(t => t.fontSize))].sort((a, b) => b - a);
+      sized.forEach(t => {
+        const rx = t.x - fX;
+        const ry = t.y - fY;
+        const level = Math.min(uniqueSizes.indexOf(t.fontSize) + 1, 6);
+        badge(rx + 10, ry + t.height / 2, `H${level}`, BLUE);
+      });
+      break;
+    }
+    case 'a11yNamesAlt': {
+      // Every focusable element (links, buttons) — number them + show layer name
+      // so designers can match card items ("Logo link", "Menu items") to elements in the design
+      scan.focusableElements.forEach((el, i) => {
+        const rx = el.x - fX;
+        const ry = el.y - fY;
+        dashedOutline(rx - 1, ry - 1, el.width + 2, el.height + 2, BLUE);
+        badge(rx + 10, ry + 10, String(i + 1), BLUE);
+        const name = cleanName(el.name);
+        if (name) labelTag(rx, Math.max(ry - 20, 0), name, BLUE);
+      });
+      // Icon frames without a text sibling — likely unlabeled icons
+      scan.iconFrames.forEach(icon => {
+        if (!icon.hasTextChild) {
+          const rx = icon.x - fX;
+          const ry = icon.y - fY;
+          badge(rx + icon.width / 2, ry + icon.height / 2, '!', RED);
+        }
+      });
+      // Standalone images (not full-bleed decorative) need alt text
+      scan.imageNodes.forEach(img => {
+        if (!img.isFullBleed) {
+          const rx = img.x - fX;
+          const ry = img.y - fY;
+          badge(rx + img.width / 2, ry + 10, 'ALT', ORANGE);
+        }
+      });
+      break;
+    }
+    case 'a11yColorContrast': {
+      scan.textNodes.forEach(t => {
+        const rx = t.x - fX;
+        const ry = t.y - fY;
+        pill(rx + t.width - 36, ry + t.height / 2 - 7, 'CC?', ORANGE);
+      });
+      break;
+    }
+    case 'a11yAriaKeyboard': {
+      scan.focusableElements.forEach(el => {
+        const rx = el.x - fX;
+        const ry = el.y - fY;
+        pill(rx + el.width - 36, ry, 'KB?', BLUE);
+      });
+      break;
+    }
+    case 'a11yLandmarksNav': {
+      const fw = clone.width;
+      const fh = clone.height;
+
+      // Classify top-level children of the original frame as landmark regions
+      if ('children' in originalFrame) {
+        const topKids = (originalFrame as FrameNode).children.filter(c => c.visible !== false);
+        topKids.forEach(child => {
+          const cb = (child as SceneNode).absoluteBoundingBox;
+          if (!cb) return;
+          const rx = cb.x - fX;
+          const ry = cb.y - fY;
+          const rw = cb.width;
+          const rh = cb.height;
+
+          // Heuristic landmark classification
+          let lmLabel: string;
+          let lmColor: RGB;
+          if (rw >= fw * 0.85 && ry <= fh * 0.12) {
+            lmLabel = 'role="banner" (nav)'; lmColor = BLUE;
+          } else if (rx <= fw * 0.18 && rh >= fh * 0.25) {
+            lmLabel = 'role="navigation" (aside)'; lmColor = ORANGE;
+          } else if (rw >= fw * 0.5 && rh >= fh * 0.35) {
+            lmLabel = 'role="main"'; lmColor = GREEN;
+          } else {
+            lmLabel = 'region'; lmColor = ORANGE;
+          }
+
+          dashedOutline(rx, ry, rw, rh, lmColor);
+          labelTag(rx + 4, ry + 4, lmLabel, lmColor);
+        });
+      }
+
+      // Repeating groups inside the frame — annotate as list / grid
+      scan.repeatingGroups.forEach(group => {
+        const rx = group.x - fX;
+        const ry = group.y - fY;
+        const listLabel = group.layoutMode === 'HORIZONTAL' ? 'list (horiz)' : group.layoutMode === 'VERTICAL' ? 'list (vert)' : 'grid';
+        labelTag(rx + 4, Math.max(ry - 22, 2), listLabel, ORANGE);
+      });
+      break;
+    }
+    case 'a11yDom': {
+      // Show all text content numbered in visual reading order (top→bottom, left→right).
+      // Distinct from Focus Order (interactive only, blue) — this is ALL content in teal.
+      const TEAL: RGB = { r: 0.03, g: 0.62, b: 0.58 };
+      const ROW_THRESHOLD = 12; // px tolerance for grouping into the same row
+
+      const nodes = scan.textNodes.map(t => ({
+        rx: t.x - fX,
+        ry: t.y - fY,
+        rw: t.width,
+        rh: t.height,
+      }));
+
+      // Sort: primary = row (y with threshold), secondary = x
+      nodes.sort((a, b) => {
+        const rowA = Math.round(a.ry / ROW_THRESHOLD);
+        const rowB = Math.round(b.ry / ROW_THRESHOLD);
+        return rowA !== rowB ? rowA - rowB : a.rx - b.rx;
+      });
+
+      nodes.forEach((n, i) => {
+        badge(n.rx + 10, n.ry + n.rh / 2, String(i + 1), TEAL);
+      });
+      break;
+    }
+    default: {
+      // Generic: info banner for categories without custom drawing
+      const bg = figma.createFrame();
+      container.appendChild(bg);
+      bg.layoutMode = 'NONE';
+      bg.fills = [{ type: 'SOLID', color: { r: 0.47, g: 0.22, b: 0.93 }, opacity: 0.08 } as any];
+      bg.strokes = [{ type: 'SOLID', color: { r: 0.47, g: 0.22, b: 0.93 } }];
+      bg.strokeWeight = 1;
+      bg.cornerRadius = 6;
+      bg.resize(clone.width - 24, 36);
+      bg.x = 12;
+      bg.y = 12;
+      const lbl = figma.createText();
+      container.appendChild(lbl);
+      lbl.fontName = { family: 'Inter', style: 'Regular' };
+      lbl.fontSize = 10;
+      lbl.characters = `${categoryLabel} — review manually`;
+      lbl.fills = [{ type: 'SOLID', color: { r: 0.47, g: 0.22, b: 0.93 } }];
+      lbl.x = 24;
+      lbl.y = 22;
+      break;
+    }
+  }
+
+  } catch (e) {
+    try { container.remove(); } catch (_) {}
+    throw e;
+  }
+  container.locked = true;
+}
+
 figma.showUI(__html__, { width: 360, height: 500, themeColors: true });
 
 figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
@@ -1539,6 +1863,7 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
           type: 'a11y-panels-fill-request',
           sections: result.sections,
           frameName: sel[0].name,
+          frameId: sel[0].id,
           sectionIds: result.sectionIds,
         });
         figma.notify(`Blueline panels created for "${sel[0].name}"`);
@@ -1546,6 +1871,54 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         const errorMsg = e instanceof Error ? e.message : String(e);
         figma.ui.postMessage({ type: 'a11y-status', message: `Error: ${errorMsg}` });
         figma.notify(`Panels failed: ${errorMsg}`, { error: true });
+      }
+      break;
+    }
+    case 'a11y-annotate-category': {
+      if (annotateRunning) {
+        figma.ui.postMessage({ type: 'a11y-annotate-status', message: 'Annotation in progress — please wait.' });
+        break;
+      }
+      const sel = figma.currentPage.selection;
+      if (sel.length === 0) {
+        figma.ui.postMessage({ type: 'a11y-annotate-status', message: 'Select a frame first.' });
+        break;
+      }
+      annotateRunning = true;
+      const originalFrame = sel[0] as FrameNode;
+      const categoryId = typeof msg.categoryId === 'string' ? msg.categoryId : '';
+      const categoryLabel = typeof msg.categoryLabel === 'string' ? msg.categoryLabel : categoryId;
+      try {
+        figma.ui.postMessage({ type: 'a11y-annotate-status', message: `Creating annotation clone…` });
+        const cloneName = `[A11y] ${originalFrame.name}`;
+        let clone = figma.currentPage.findOne(n => n.name === cloneName && n.type === 'FRAME') as FrameNode | null;
+        if (!clone) {
+          clone = originalFrame.clone() as FrameNode;
+          clone.name = cloneName;
+          clone.x = originalFrame.x + originalFrame.width + 80;
+          clone.y = originalFrame.y;
+        }
+        // Remove previous annotation overlay
+        for (const child of [...clone.children]) {
+          if (child.name.startsWith('A11y Annotations')) child.remove();
+        }
+        await drawA11yAnnotations(clone, originalFrame, categoryId, categoryLabel);
+        figma.viewport.scrollAndZoomIntoView([clone]);
+        figma.ui.postMessage({ type: 'a11y-annotate-status', message: `${categoryLabel} annotated on "${cloneName}"` });
+      } catch (e) {
+        const errMsg = e instanceof Error ? e.message : String(e);
+        figma.ui.postMessage({ type: 'a11y-annotate-status', message: `Annotation error: ${errMsg}` });
+      } finally {
+        annotateRunning = false;
+      }
+      break;
+    }
+    case 'a11y-annotate-cleanup': {
+      const sel = figma.currentPage.selection;
+      if (sel.length > 0) {
+        const cloneName = `[A11y] ${sel[0].name}`;
+        const clone = figma.currentPage.findOne(n => n.name === cloneName && n.type === 'FRAME');
+        if (clone) clone.remove();
       }
       break;
     }

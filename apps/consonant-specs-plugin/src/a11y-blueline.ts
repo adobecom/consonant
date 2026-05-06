@@ -413,6 +413,9 @@ async function embedStructuralScan(node: SceneNode, parent: BaseNode & ChildrenM
   scanNode.opacity = 0;
   scanNode.locked = true;
   parent.appendChild(scanNode);
+  if ('layoutMode' in parent && (parent as FrameNode).layoutMode !== 'NONE') {
+    (scanNode as TextNode).layoutPositioning = 'ABSOLUTE';
+  }
 }
 
 function createText(content: string, size: number, weight: 'Regular' | 'Bold' | 'Medium' | 'Semi Bold' = 'Regular', color?: RGB): TextNode {
@@ -684,15 +687,23 @@ export async function generateBlueline(
 
   const page = figma.currentPage;
 
-  // Clean up previous blueline output before generating new annotations
-  const oldAnnotations = page.children.filter(n =>
-    n.name === 'Accessibility Annotations' ||
-    n.name === 'Blueline Cards' ||
-    n.name === 'Tier 2 Cards' ||
-    n.name === 'Focus Rectangle' ||
-    n.name === '.structural-scan' ||
-    (n.name === 'Badge' && n.type === 'FRAME' && n.width < 40)
-  );
+  // Clean up previous blueline output — scope "Blueline Cards" removal to this frame only
+  const _frameId = node.id;
+  const oldAnnotations = page.children.filter(n => {
+    if (n.name === 'Accessibility Annotations' || n.name === 'Focus Rectangle' ||
+        n.name === '.structural-scan' ||
+        (n.name === 'Badge' && n.type === 'FRAME' && (n as FrameNode).width < 40)) {
+      return true;
+    }
+    if (n.name === 'Blueline Cards' || n.name === 'Tier 2 Cards') {
+      if (!('children' in n)) return true;
+      const tag = (n as FrameNode).children.find(
+        c => c.name === '.target-frame-id' && c.type === 'TEXT'
+      ) as TextNode | undefined;
+      return !tag || (tag as TextNode).characters === _frameId;
+    }
+    return false;
+  });
   for (const n of oldAnnotations) n.remove();
 
   // Use absolute coordinates — place everything directly on the page
@@ -701,6 +712,8 @@ export async function generateBlueline(
 
   // All categories are AI-driven — the scaffold creates empty cards; Claude fills everything via bridge.
   const cardKeys = categories;
+
+  let bluelineContainer: FrameNode | null = null;
 
   if (cardKeys.length > 0) {
     const grouped = options?.grouped === true; // default to individual cards
@@ -737,6 +750,7 @@ export async function generateBlueline(
       outerContainer.x = sourceX;
       outerContainer.y = sourceY + sourceAbs.height + CARDS_TOP_MARGIN;
       page.appendChild(outerContainer);
+      bluelineContainer = outerContainer;
     } else {
       // Classic mode: individual card per category in a wrap layout
       const cardsContainer = figma.createFrame();
@@ -761,12 +775,27 @@ export async function generateBlueline(
       cardsContainer.x = sourceX;
       cardsContainer.y = sourceY + sourceAbs.height + CARDS_TOP_MARGIN;
       page.appendChild(cardsContainer);
+      bluelineContainer = cardsContainer;
     }
   }
 
   // Embed structural scan data for Claude
   figma.ui.postMessage({ type: 'a11y-status', message: 'Running structural scan...' });
-  await embedStructuralScan(node, page);
+  if (bluelineContainer) {
+    // Tag the container with the source frame ID for scoped GET_BLUELINE_DATA lookups
+    await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+    const tagNode = figma.createText();
+    tagNode.name = '.target-frame-id';
+    tagNode.characters = node.id;
+    tagNode.fontSize = 1;
+    tagNode.opacity = 0;
+    tagNode.locked = true;
+    bluelineContainer.appendChild(tagNode);
+    tagNode.layoutPositioning = 'ABSOLUTE';
+    await embedStructuralScan(node, bluelineContainer);
+  } else {
+    await embedStructuralScan(node, page);
+  }
 
   // Zoom to show the annotation area
   figma.viewport.scrollAndZoomIntoView([node]);
@@ -961,9 +990,30 @@ export async function generateBluelinePanels(
     }
   }
 
-  // Embed structural scan data for Claude
+  // Embed structural scan data for Claude, scoped to this frame
   figma.ui.postMessage({ type: 'a11y-status', message: 'Running structural scan...' });
-  await embedStructuralScan(node, page);
+
+  // Create a lightweight hidden marker frame so GET_BLUELINE_DATA can scope to this frame.
+  // Panels use Sections (not a Blueline Cards FrameNode), so we use a minimal hidden container.
+  await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
+  const panelsMarker = figma.createFrame();
+  panelsMarker.name = 'Blueline Cards';
+  panelsMarker.resize(1, 1);
+  panelsMarker.fills = [];
+  panelsMarker.clipsContent = false;
+  panelsMarker.opacity = 0;
+  panelsMarker.locked = true;
+  panelsMarker.x = sourceAbs.x;
+  panelsMarker.y = sourceAbs.y - 20;
+  page.appendChild(panelsMarker);
+  const panelsTagNode = figma.createText();
+  panelsTagNode.name = '.target-frame-id';
+  panelsTagNode.characters = node.id;
+  panelsTagNode.fontSize = 1;
+  panelsTagNode.opacity = 0;
+  panelsTagNode.locked = true;
+  panelsMarker.appendChild(panelsTagNode);
+  await embedStructuralScan(node, panelsMarker);
 
   // Zoom to show all panels
   figma.viewport.scrollAndZoomIntoView(allSections);

@@ -19,7 +19,7 @@
 
   // src/ui.ts
   function esc(s) {
-    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    return String(s != null ? s : "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
   async function copyToClipboard(text) {
     try {
@@ -36,23 +36,89 @@
       return false;
     }
   }
-  var a11yTab = document.querySelector('.tab[data-tab="a11y"]');
   var a11yPanel = document.querySelector('.tab-panel[data-panel="a11y"]');
   if (false) {
-    a11yTab == null ? void 0 : a11yTab.remove();
+    (_a = document.getElementById("menuA11yItem")) == null ? void 0 : _a.remove();
+    (_b = document.getElementById("hamburgerA11yItem")) == null ? void 0 : _b.remove();
     a11yPanel == null ? void 0 : a11yPanel.remove();
   }
-  var tabs = document.querySelectorAll(".tab");
   var panels = document.querySelectorAll(".tab-panel");
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const target = tab.dataset.tab;
-      tabs.forEach((t) => t.classList.remove("active"));
-      panels.forEach((p) => p.classList.remove("active"));
-      tab.classList.add("active");
-      const panel = document.querySelector(`[data-panel="${target}"]`);
-      if (panel) panel.classList.add("active");
+  function navigateTo(toolId, toolName) {
+    panels.forEach((p) => p.classList.remove("active"));
+    const panel = document.querySelector(`[data-panel="${toolId}"]`);
+    if (panel) panel.classList.add("active");
+    const menuView = document.getElementById("menuView");
+    const tabContent = document.getElementById("tabContent");
+    const headerMenu = document.getElementById("headerMenu");
+    const headerDetail = document.getElementById("headerDetail");
+    const backLabel = document.getElementById("backLabel");
+    const hamburgerMenu = document.getElementById("hamburgerMenu");
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    if (menuView) menuView.style.display = "none";
+    if (tabContent) tabContent.style.display = "";
+    if (headerMenu) headerMenu.style.display = "none";
+    if (headerDetail) headerDetail.style.display = "flex";
+    if (backLabel) backLabel.textContent = toolName;
+    if (hamburgerMenu) hamburgerMenu.classList.remove("open");
+    if (hamburgerBtn) hamburgerBtn.setAttribute("aria-expanded", "false");
+    document.querySelectorAll(".hamburger-item").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.tool === toolId);
     });
+  }
+  function navigateBack() {
+    const menuView = document.getElementById("menuView");
+    const tabContent = document.getElementById("tabContent");
+    const headerMenu = document.getElementById("headerMenu");
+    const headerDetail = document.getElementById("headerDetail");
+    const hamburgerMenu = document.getElementById("hamburgerMenu");
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    if (menuView) menuView.style.display = "";
+    if (tabContent) tabContent.style.display = "none";
+    if (headerMenu) headerMenu.style.display = "";
+    if (headerDetail) headerDetail.style.display = "none";
+    if (hamburgerMenu) hamburgerMenu.classList.remove("open");
+    if (hamburgerBtn) hamburgerBtn.setAttribute("aria-expanded", "false");
+  }
+  document.querySelectorAll(".menu-item").forEach((item) => {
+    item.addEventListener("click", () => {
+      var _a26, _b, _c;
+      const tool = (_a26 = item.dataset.tool) != null ? _a26 : "";
+      const name = (_c = (_b = item.querySelector(".menu-item-name")) == null ? void 0 : _b.textContent) != null ? _c : tool;
+      navigateTo(tool, name);
+    });
+  });
+  document.querySelectorAll(".hamburger-item").forEach((item) => {
+    item.addEventListener("click", () => {
+      var _a26, _b, _c;
+      const tool = (_a26 = item.dataset.tool) != null ? _a26 : "";
+      const menuItem = document.querySelector(`.menu-item[data-tool="${tool}"]`);
+      const name = (_c = (_b = menuItem == null ? void 0 : menuItem.querySelector(".menu-item-name")) == null ? void 0 : _b.textContent) != null ? _c : tool;
+      navigateTo(tool, name);
+    });
+  });
+  document.querySelectorAll(".bridge-status-pill").forEach((pill) => {
+    pill.addEventListener("click", () => {
+      if (bridgeConnected) {
+        bridgeDisconnect();
+      } else {
+        bridgeConnect();
+      }
+    });
+  });
+  var _a;
+  (_a = document.getElementById("backBtn")) == null ? void 0 : _a.addEventListener("click", navigateBack);
+  var _a2;
+  (_a2 = document.getElementById("hamburgerBtn")) == null ? void 0 : _a2.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const menu = document.getElementById("hamburgerMenu");
+    const btn = document.getElementById("hamburgerBtn");
+    const isOpen = menu == null ? void 0 : menu.classList.toggle("open");
+    btn == null ? void 0 : btn.setAttribute("aria-expanded", String(!!isOpen));
+  });
+  document.addEventListener("click", () => {
+    var _a26, _b;
+    (_a26 = document.getElementById("hamburgerMenu")) == null ? void 0 : _a26.classList.remove("open");
+    (_b = document.getElementById("hamburgerBtn")) == null ? void 0 : _b.setAttribute("aria-expanded", "false");
   });
   var currentSelection = { count: 0, hasAutoLayout: false };
   function updateTabControls(prefix) {
@@ -126,11 +192,14 @@
       case "a11y-status":
         updateA11yStatus(msg.message);
         break;
+      case "a11y-annotate-status":
+        updateA11yStatus(msg.message);
+        break;
       case "a11y-fill-request":
-        showAiFillInstruction(msg.mode, msg.sections, msg.frameName);
+        showAiFillInstruction(msg.mode, msg.sections, msg.frameName, msg.frameId);
         break;
       case "a11y-panels-fill-request":
-        showPanelsFillInstruction(msg.sections, msg.frameName, msg.sectionIds);
+        showPanelsFillInstruction(msg.sections, msg.frameName, msg.sectionIds, msg.frameId);
         break;
       // Unified bridge command result from code.ts
       case "bridge:command-result": {
@@ -184,7 +253,7 @@
     postToPlugin("navigate-to-node", { nodeId });
   }
   function renderAuditResult(result) {
-    var _a22;
+    var _a26;
     const list = document.getElementById("propertyList");
     if (!list) return;
     const pct = result.total > 0 ? Math.round(result.matched / result.total * 100) : 0;
@@ -214,7 +283,7 @@
         if (nodeId) navigateToNode(nodeId);
       });
     });
-    (_a22 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a22.addEventListener("click", () => {
+    (_a26 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a26.addEventListener("click", () => {
       postToPlugin("annotate-audit-issues", { issues: result.issues });
     });
   }
@@ -266,24 +335,24 @@
       });
     });
   }
-  var _a;
-  (_a = document.getElementById("s2aAuditBtn")) == null ? void 0 : _a.addEventListener("click", () => postToPlugin("s2a-audit"));
-  var _a2;
-  (_a2 = document.getElementById("fullAlignBtn")) == null ? void 0 : _a2.addEventListener("click", () => postToPlugin("full-align-s2a"));
   var _a3;
-  (_a3 = document.getElementById("textColorsAlignBtn")) == null ? void 0 : _a3.addEventListener("click", () => postToPlugin("text-colors-align"));
+  (_a3 = document.getElementById("s2aAuditBtn")) == null ? void 0 : _a3.addEventListener("click", () => postToPlugin("s2a-audit"));
   var _a4;
-  (_a4 = document.getElementById("gridBtn")) == null ? void 0 : _a4.addEventListener("click", () => {
+  (_a4 = document.getElementById("fullAlignBtn")) == null ? void 0 : _a4.addEventListener("click", () => postToPlugin("full-align-s2a"));
+  var _a5;
+  (_a5 = document.getElementById("textColorsAlignBtn")) == null ? void 0 : _a5.addEventListener("click", () => postToPlugin("text-colors-align"));
+  var _a6;
+  (_a6 = document.getElementById("gridBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
     postToPlugin("apply-grid");
     updateGridStatus("Applying grid...");
   });
-  var _a5;
-  (_a5 = document.getElementById("gridXlBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
+  var _a7;
+  (_a7 = document.getElementById("gridXlBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
     postToPlugin("apply-grid-xl");
     updateGridStatus("Applying XL grid...");
   });
-  var _a6;
-  (_a6 = document.getElementById("clearGridBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
+  var _a8;
+  (_a8 = document.getElementById("clearGridBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
     postToPlugin("clear-grids");
     updateGridStatus("Clearing grids...");
   });
@@ -291,8 +360,8 @@
     const el = document.getElementById("gridStatus");
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
-  var _a7;
-  (_a7 = document.getElementById("matchCheckAll")) == null ? void 0 : _a7.addEventListener("click", () => {
+  var _a9;
+  (_a9 = document.getElementById("matchCheckAll")) == null ? void 0 : _a9.addEventListener("click", () => {
     const ids = ["matchTypography", "matchFillColors", "matchStrokeColors", "matchBorderRadius", "matchBorderWidth", "matchSpacing", "matchOpacity", "matchDropShadow", "matchBlur"];
     const boxes = ids.map((id) => document.getElementById(id)).filter(Boolean);
     const allChecked = boxes.every((cb) => cb.checked);
@@ -302,8 +371,8 @@
     const btn = document.getElementById("matchCheckAll");
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
-  var _a8;
-  (_a8 = document.getElementById("matchBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+  var _a10;
+  (_a10 = document.getElementById("matchBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
     const categories = [];
     if (document.getElementById("matchTypography").checked) categories.push("typography");
     if (document.getElementById("matchFillColors").checked) categories.push("fillColors");
@@ -323,16 +392,16 @@
     if (!el) return;
     el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
-  var _a9;
-  (_a9 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
+  var _a11;
+  (_a11 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
     postToPlugin("spec-it", { sections: ["anatomy", "layout", "typography", "components"] });
     updateSpecStatus("Generating full specs...");
   });
-  var _a10;
-  (_a10 = document.getElementById("specItBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
-    var _a22, _b, _c, _d, _e, _f;
+  var _a12;
+  (_a12 = document.getElementById("specItBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
+    var _a26, _b, _c, _d, _e, _f;
     const sections = [];
-    if ((_a22 = document.getElementById("specAnatomy")) == null ? void 0 : _a22.checked) sections.push("anatomy");
+    if ((_a26 = document.getElementById("specAnatomy")) == null ? void 0 : _a26.checked) sections.push("anatomy");
     if ((_b = document.getElementById("specCardGaps")) == null ? void 0 : _b.checked) sections.push("cardGaps");
     if ((_c = document.getElementById("specSpacingGeneral")) == null ? void 0 : _c.checked) sections.push("spacingGeneral");
     if ((_d = document.getElementById("specSpacing")) == null ? void 0 : _d.checked) sections.push("spacing");
@@ -359,8 +428,8 @@
   }
   providerSelect == null ? void 0 : providerSelect.addEventListener("change", syncKeySection);
   syncKeySection();
-  var _a11;
-  (_a11 = document.getElementById("locCheckAll")) == null ? void 0 : _a11.addEventListener("click", () => {
+  var _a13;
+  (_a13 = document.getElementById("locCheckAll")) == null ? void 0 : _a13.addEventListener("click", () => {
     const ids = ["locDe", "locZh", "locTh", "locAr"];
     const boxes = ids.map((id) => document.getElementById(id)).filter(Boolean);
     const allChecked = boxes.every((b) => b.checked);
@@ -375,8 +444,8 @@
   locAr == null ? void 0 : locAr.addEventListener("change", () => {
     if (locAr.checked && locRtl && !locRtl.checked) locRtl.checked = true;
   });
-  var _a12;
-  (_a12 = document.getElementById("localizeBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
+  var _a14;
+  (_a14 = document.getElementById("localizeBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
     const languages = [];
     if (document.getElementById("locDe").checked) languages.push("de");
     if (document.getElementById("locZh").checked) languages.push("zh");
@@ -391,8 +460,8 @@
     postToPlugin("localize", { languages, applyRtl, provider });
     updateLocalizeStatus("Localizing \u2014 this may take a moment...");
   });
-  var _a13;
-  (_a13 = document.getElementById("saveKeyBtn")) == null ? void 0 : _a13.addEventListener("click", () => {
+  var _a15;
+  (_a15 = document.getElementById("saveKeyBtn")) == null ? void 0 : _a15.addEventListener("click", () => {
     const input = document.getElementById("apiKeyInput");
     const key = input.value.trim();
     if (!key) return;
@@ -400,8 +469,8 @@
     postToPlugin("save-api-key", { key, provider });
     input.value = "";
   });
-  var _a14;
-  (_a14 = document.getElementById("clearKeyBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
+  var _a16;
+  (_a16 = document.getElementById("clearKeyBtn")) == null ? void 0 : _a16.addEventListener("click", () => {
     const provider = (providerSelect == null ? void 0 : providerSelect.value) || "";
     postToPlugin("clear-api-key", { provider });
   });
@@ -411,7 +480,7 @@
   }
   var LANG_NAMES = { de: "German", zh: "Chinese", th: "Thai", ar: "Arabic" };
   function showLocalizeBridgePrompt(data) {
-    var _a22;
+    var _a26;
     const langList = data.languages.map((l) => LANG_NAMES[l] || l).join(", ");
     const cmd = `Translate the frame "${data.frameName}" (${data.frameId}) into ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? " Apply RTL layout for Arabic." : ""}
 
@@ -426,7 +495,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
         <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a22 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a22.addEventListener("click", async () => {
+      (_a26 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a26.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyLocalizeCmd");
         if (btn) {
@@ -490,21 +559,22 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
     const el = document.getElementById("a11yStatus");
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
   }
-  function showAiFillInstruction(mode, sections, frameName) {
-    var _a22;
+  function showAiFillInstruction(mode, sections, frameName, frameId) {
+    var _a26;
     const categoryList = sections && sections.length > 0 ? sections.join(", ") : "all categories";
     const frame = frameName ? `"${frameName}"` : "the selected frame";
+    const frameIdArg = frameId ? ` with frameId: "${frameId}"` : "";
     const bridgeNote = bridgeConnected ? "" : "\n\n\u26A0 Bridge offline \u2014 paste this in Claude Code manually.";
     let cmd;
     if (mode === "sections") {
-      cmd = `Fill the blueline cards on the current Figma page. Call figma_get_blueline_data first \u2014 it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.`;
+      cmd = `Fill the blueline cards for the frame "${frameName != null ? frameName : "selected"}" (ID: ${frameId != null ? frameId : "unknown"}). Call figma_get_blueline_data${frameIdArg} first \u2014 it returns structural data and orchestration instructions scoped to this frame. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.`;
     } else {
       cmd = `Start an A11y review conversation for the frame ${frame}.
 
 Categories to review: ${categoryList}
 
 Step 1 \u2014 Ground yourself:
-Call figma_get_blueline_data. It returns the structural scan (a hidden text node named .structural-scan), a screenshot, and per-agent orchestration instructions. Read the structural scan carefully. Do not infer elements that are not present in it.
+Call figma_get_blueline_data${frameIdArg}. It returns the structural scan (a hidden text node named .structural-scan), a screenshot, and per-agent orchestration instructions \u2014 all scoped to this frame. Read the structural scan carefully. Do not infer elements that are not present in it.
 
 Step 2 \u2014 Ask questions first (REQUIRED before any rendering):
 Before calling figma_render_blueline, ask the designer 1\u20133 clarifying questions about things you genuinely need to know to be accurate \u2014 e.g. intended interaction pattern, whether a visual-only element is intentional, context of use. If you have no real questions, say so briefly and proceed.
@@ -542,7 +612,7 @@ This updates the plugin panel so the designer can see results without hunting th
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Results will appear here when Claude finishes.</div>
       </div>`;
-      (_a22 = document.getElementById("copyFillCmd")) == null ? void 0 : _a22.addEventListener("click", async () => {
+      (_a26 = document.getElementById("copyFillCmd")) == null ? void 0 : _a26.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyFillCmd");
         if (btn) {
@@ -555,7 +625,7 @@ This updates the plugin panel so the designer can see results without hunting th
     }
   }
   function renderA11yResults(data) {
-    var _a22, _b, _c, _d, _e;
+    var _a26;
     const el = document.getElementById("a11yStatus");
     if (!el) return;
     function section(title, cls, items, itemCls) {
@@ -568,37 +638,50 @@ This updates the plugin panel so the designer can see results without hunting th
       ${rows}
     </div>`;
     }
-    const issueItems = ((_a22 = data.issues) != null ? _a22 : []).map((i) => ({ label: i.category, text: i.description }));
-    const needsItems = ((_b = data.needs_input) != null ? _b : []).map((i) => ({ label: i.category, text: i.question }));
-    const suggItems = ((_c = data.suggestions) != null ? _c : []).map((i) => ({ label: i.category, text: i.description }));
+    const issueItems = (Array.isArray(data.issues) ? data.issues : []).map((i) => {
+      var _a27, _b;
+      return { label: (_a27 = i == null ? void 0 : i.category) != null ? _a27 : "", text: (_b = i == null ? void 0 : i.description) != null ? _b : "" };
+    });
+    const needsItems = (Array.isArray(data.needs_input) ? data.needs_input : []).map((i) => {
+      var _a27, _b;
+      return { label: (_a27 = i == null ? void 0 : i.category) != null ? _a27 : "", text: (_b = i == null ? void 0 : i.question) != null ? _b : "" };
+    });
+    const suggItems = (Array.isArray(data.suggestions) ? data.suggestions : []).map((i) => {
+      var _a27, _b;
+      return { label: (_a27 = i == null ? void 0 : i.category) != null ? _a27 : "", text: (_b = i == null ? void 0 : i.description) != null ? _b : "" };
+    });
     const empty = issueItems.length === 0 && needsItems.length === 0 && suggItems.length === 0;
     el.innerHTML = `
     <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
-      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc((_d = data.frameName) != null ? _d : "")}</div>
+      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc((_a26 = data.frameName) != null ? _a26 : "")}</div>
       <div class="a11y-results">
         ${empty ? '<div class="a11y-results-empty">No issues or suggestions returned.</div>' : section("Issues", "issues", issueItems, "issue") + section("Needs your input", "needs-input", needsItems, "needs") + section("Suggestions", "suggestions", suggItems, "suggestion")}
       </div>
       <button class="btn btn-secondary" id="a11yContinueBtn" style="margin-top:8px;font-size:10px;width:100%;">Continue in Claude Code</button>
     </div>`;
-    (_e = document.getElementById("a11yContinueBtn")) == null ? void 0 : _e.addEventListener("click", async () => {
-      if (lastA11yCmd) {
-        await copyToClipboard(lastA11yCmd);
-        const btn = document.getElementById("a11yContinueBtn");
-        if (btn) {
-          btn.textContent = "Copied \u2014 paste in Claude Code";
-          setTimeout(() => {
-            btn.textContent = "Continue in Claude Code";
-          }, 2e3);
-        }
+    const continueBtn = document.getElementById("a11yContinueBtn");
+    if (continueBtn) {
+      if (!lastA11yCmd) {
+        continueBtn.disabled = true;
+        continueBtn.title = "Re-generate the blueline cards to restore this prompt.";
       }
-    });
+      continueBtn.addEventListener("click", async () => {
+        if (!lastA11yCmd) return;
+        await copyToClipboard(lastA11yCmd);
+        continueBtn.textContent = "Copied \u2014 paste in Claude Code";
+        setTimeout(() => {
+          continueBtn.textContent = "Continue in Claude Code";
+        }, 2e3);
+      });
+    }
   }
-  function showPanelsFillInstruction(sections, frameName, sectionIds) {
-    var _a22;
+  function showPanelsFillInstruction(sections, frameName, sectionIds, frameId) {
+    var _a26;
     const sectionList = sections.join(", ");
-    const cmd = `Fill the blueline panels on the current Figma page for "${frameName}". Categories: ${sectionList}.
+    const frameIdArg = frameId ? ` with frameId: "${frameId}"` : "";
+    const cmd = `Fill the blueline panels for the frame "${frameName}"${frameId ? ` (ID: ${frameId})` : ""}. Categories: ${sectionList}.
 
-Call figma_get_blueline_data first \u2014 it returns structural data (including nodeIds for all elements) and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge.
+Call figma_get_blueline_data${frameIdArg} first \u2014 it returns structural data (including nodeIds for all elements) and orchestration instructions scoped to this frame. Then call figma_get_knowledge for each agent group to fetch expert knowledge.
 
 Dispatch parallel agents. IMPORTANT: Each agent must return items with these additional fields:
 - nodeId (string|null): the node ID from the structural scan that this item refers to. Null if no element match.
@@ -615,7 +698,7 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         <button class="btn btn-secondary" id="copyPanelsFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Paste into your current Claude Code session (Bridge must be connected)</div>
       </div>`;
-      (_a22 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a22.addEventListener("click", async () => {
+      (_a26 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a26.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyPanelsFillCmd");
         if (btn) {
@@ -627,8 +710,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       });
     }
   }
-  var _a15;
-  (_a15 = document.getElementById("a11yCheckAllAi")) == null ? void 0 : _a15.addEventListener("click", () => {
+  var _a17;
+  (_a17 = document.getElementById("a11yCheckAllAi")) == null ? void 0 : _a17.addEventListener("click", () => {
     if (!bridgeConnected) return;
     const aiIds = ["a11yFocusIndicators", "a11yFocusOrder", "a11yHeadings", "a11yLandmarksNav", "a11yNamesAlt", "a11yColorContrast", "a11yAriaKeyboard", "a11yTargetSize", "a11yPageSetup"];
     const boxes = aiIds.map((id) => document.getElementById(id)).filter(Boolean);
@@ -639,8 +722,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     const btn = document.getElementById("a11yCheckAllAi");
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
-  var _a16;
-  (_a16 = document.getElementById("a11yShowMore")) == null ? void 0 : _a16.addEventListener("click", () => {
+  var _a18;
+  (_a18 = document.getElementById("a11yShowMore")) == null ? void 0 : _a18.addEventListener("click", () => {
     const section = document.getElementById("a11yConditionalSection");
     const btn = document.getElementById("a11yShowMore");
     if (!section || !btn) return;
@@ -649,8 +732,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     btn.textContent = isHidden ? "\u25BE Hide extra categories" : "\u25B8 Show more categories";
     btn.setAttribute("aria-expanded", String(isHidden));
   });
-  var _a17;
-  (_a17 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a17.addEventListener("click", () => {
+  var _a19;
+  (_a19 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a19.addEventListener("click", () => {
     if (!bridgeConnected) return;
     const noteIds = ["a11yForms", "a11yCarousel", "a11yDom", "a11yMotionMedia", "a11yScreenReader", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
     const boxes = noteIds.map((id) => document.getElementById(id)).filter(Boolean);
@@ -683,13 +766,13 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
   function getCheckedA11yCheckboxIds() {
     return Object.keys(A11Y_LABELS).filter(
       (id) => {
-        var _a22;
-        return (_a22 = document.getElementById(id)) == null ? void 0 : _a22.checked;
+        var _a26;
+        return (_a26 = document.getElementById(id)) == null ? void 0 : _a26.checked;
       }
     );
   }
   function showConfirmPanel(checkedIds) {
-    var _a22, _b;
+    var _a26, _b;
     const categoryView = document.getElementById("a11yCategoryView");
     const statusEl = document.getElementById("a11yStatus");
     if (!statusEl) return;
@@ -706,7 +789,7 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         <button class="btn" id="a11yConfirmGo">Confirm &amp; Create Cards</button>
       </div>
     </div>`;
-    (_a22 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a22.addEventListener("click", () => {
+    (_a26 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a26.addEventListener("click", () => {
       statusEl.innerHTML = "";
       if (categoryView) categoryView.style.display = "block";
     });
@@ -717,9 +800,9 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     });
   }
   function getCheckedA11yCategories() {
-    var _a22, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
+    var _a26, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const categories = [];
-    if ((_a22 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a22.checked) categories.push("focusIndicators");
+    if ((_a26 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a26.checked) categories.push("focusIndicators");
     if ((_b = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b.checked) categories.push("focusOrder");
     if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) categories.push("headings");
     if ((_d = document.getElementById("a11yLandmarksNav")) == null ? void 0 : _d.checked) {
@@ -750,8 +833,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     if ((_q = document.getElementById("a11yGeneralNote")) == null ? void 0 : _q.checked) categories.push("generalNote");
     return categories;
   }
-  var _a18;
-  (_a18 = document.getElementById("a11yStartBtn")) == null ? void 0 : _a18.addEventListener("click", () => {
+  var _a20;
+  (_a20 = document.getElementById("a11yStartBtn")) == null ? void 0 : _a20.addEventListener("click", () => {
     const checkedIds = getCheckedA11yCheckboxIds();
     if (checkedIds.length === 0) {
       updateA11yStatus("Select at least one category.");
@@ -771,9 +854,43 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }
     postToPlugin("generate-blueline-panels", { categories });
   }
-  var _a19;
-  (_a19 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a19.addEventListener("click", () => triggerBluelinePanels());
+  var _a21;
+  (_a21 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a21.addEventListener("click", () => triggerBluelinePanels());
   var lastA11yCmd = "";
+  var annotationMode = false;
+  var _a22;
+  (_a22 = document.getElementById("a11yAnnotateToggle")) == null ? void 0 : _a22.addEventListener("click", () => {
+    annotationMode = !annotationMode;
+    const btn = document.getElementById("a11yAnnotateToggle");
+    if (btn) {
+      btn.textContent = annotationMode ? "Turn off annotation" : "Turn on annotation";
+      btn.classList.toggle("active", annotationMode);
+    }
+    if (annotationMode) {
+      updateA11yStatus("Annotation mode on \u2014 select one category.");
+    } else {
+      const allBoxes = document.querySelectorAll('.a11y-item input[type="checkbox"]');
+      allBoxes.forEach((cb) => {
+        cb.checked = false;
+      });
+      postToPlugin("a11y-annotate-cleanup", {});
+      updateA11yStatus("Annotation mode off.");
+    }
+  });
+  var _a23;
+  (_a23 = document.getElementById("a11yCategoryView")) == null ? void 0 : _a23.addEventListener("change", (e) => {
+    if (!annotationMode) return;
+    const target = e.target;
+    if (target.type !== "checkbox" || !target.checked || !target.closest(".a11y-item")) return;
+    const allBoxes = document.querySelectorAll('.a11y-item input[type="checkbox"]');
+    allBoxes.forEach((cb) => {
+      if (cb !== target) cb.checked = false;
+    });
+    const categoryId = target.id;
+    const categoryLabel = A11Y_LABELS[categoryId] || categoryId;
+    postToPlugin("a11y-annotate-category", { categoryId, categoryLabel });
+    updateA11yStatus(`Annotating ${categoryLabel}\u2026`);
+  });
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
@@ -845,6 +962,10 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       disconnected.style.display = "block";
       connected.style.display = "none";
     }
+    document.querySelectorAll(".bridge-status-pill").forEach((pill) => {
+      pill.disabled = false;
+      pill.classList.toggle("connected", bridgeConnected);
+    });
     updateA11yBridgeState();
   }
   function appendBridgeLog(message) {
@@ -879,12 +1000,15 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       clearTimeout(bridgeReconnectTimer);
       bridgeReconnectTimer = null;
     }
+    document.querySelectorAll(".bridge-status-pill").forEach((pill) => {
+      pill.disabled = true;
+    });
     const btn = document.getElementById("bridgeConnectBtn");
     if (btn) {
       btn.textContent = "Connecting...";
       btn.disabled = true;
     }
-    const WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+    const WS_PORTS = [9220, 9221, 9222];
     let found = false;
     let pending = WS_PORTS.length;
     WS_PORTS.forEach((port) => {
@@ -1007,10 +1131,10 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }).catch(() => {
     });
     sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
-      var _a22, _b;
+      var _a26, _b;
       if (ws.readyState !== 1 || !result) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
-      appendBridgeLog("Variables synced: " + (((_b = (_a22 = result.data) == null ? void 0 : _a22.variables) == null ? void 0 : _b.length) || 0) + " vars");
+      appendBridgeLog("Variables synced: " + (((_b = (_a26 = result.data) == null ? void 0 : _a26.variables) == null ? void 0 : _b.length) || 0) + " vars");
     }).catch(() => {
     });
   }
@@ -1022,8 +1146,15 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
           appendBridgeLog("Server v" + (message.data.serverVersion || "?") + " on port " + port);
           return;
         }
-        if (message.type === "A11Y_RESULT" && message.data) {
-          renderA11yResults(message.data);
+        if (message.type === "A11Y_RESULT" && message.data && typeof message.data === "object") {
+          const d = message.data;
+          const safe = {
+            frameName: typeof d.frameName === "string" ? d.frameName : "",
+            issues: Array.isArray(d.issues) ? d.issues : [],
+            needs_input: Array.isArray(d.needs_input) ? d.needs_input : [],
+            suggestions: Array.isArray(d.suggestions) ? d.suggestions : []
+          };
+          renderA11yResults(safe);
           return;
         }
         if (!message.id || !message.method) return;
@@ -1105,9 +1236,9 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       info.style.color = "";
     }
   }
-  var _a20;
-  (_a20 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a20.addEventListener("click", () => bridgeConnect());
-  var _a21;
-  (_a21 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a21.addEventListener("click", () => bridgeDisconnect());
+  var _a24;
+  (_a24 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a24.addEventListener("click", () => bridgeConnect());
+  var _a25;
+  (_a25 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a25.addEventListener("click", () => bridgeDisconnect());
   postToPlugin("ui-ready");
 })();
