@@ -541,7 +541,7 @@ Call figma_render_blueline with the cards object. For confident items: write the
 Step 5 — Send summary to plugin:
 After figma_render_blueline completes, call bridge_send_a11y_result with:
 {
-  "frameName": ${frame},
+  "frameName": "${frameName ?? 'the selected frame'}",
   "issues": [{ "category": "...", "description": "..." }],
   "needs_input": [{ "category": "...", "question": "..." }],
   "suggestions": [{ "category": "...", "description": "..." }]
