@@ -109,12 +109,13 @@ apps/s2a-ds-mcp/src/
 **Files:**
 - Create: `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.ts`, `postcss.config.js`, `manifest.json`, `tests/setup.ts`
 
-- [ ] **Step 1: Init repo**
+- [ ] **Step 1: Init repo and wire up GitHub remote**
 
 ```bash
 mkdir /Users/taehoc/Desktop/Taeho/specs-extension
 cd /Users/taehoc/Desktop/Taeho/specs-extension
 git init
+git remote add origin https://github.com/spicyxshrimp/specs-extension.git
 npm init -y
 ```
 
@@ -349,11 +350,12 @@ Expected: `dist/` directory created, no errors.
 - [ ] **Step 15: Load in Chrome**
 Open `chrome://extensions`, enable Developer Mode, click "Load unpacked", select the `dist/` folder. Click the extension icon — a new tab should open with "Design Audit Tool".
 
-- [ ] **Step 16: Commit**
+- [ ] **Step 16: Commit and push**
 
 ```bash
 git add -A
 git commit -m "feat: scaffold chrome extension with vite + react + tailwind"
+git push -u origin main
 ```
 
 ---
