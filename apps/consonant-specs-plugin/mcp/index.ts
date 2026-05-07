@@ -1482,7 +1482,43 @@ server.tool(
 const wsPort = await startWsServer();
 log(`WebSocket server listening on port ${wsPort}`);
 
-// 2. Start MCP server over stdio
+// 2. HTTP Bridge for Chrome Extension
+// POST /figma { method, params, timeout? } → routes to sendCommand
+// GET /status → returns plugin connection status
+// Runs on port 9240 alongside WS (9220-9222) and stdio MCP
+const HTTP_BRIDGE_PORT = 9240;
+createServer((req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+  if (req.method === 'GET' && req.url === '/status') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ connected: !!(pluginSocket && pluginSocket.readyState === 1), port: connectedPort }));
+    return;
+  }
+  if (req.method === 'POST' && req.url === '/figma') {
+    let body = '';
+    req.on('data', (chunk: string) => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const { method, params, timeout } = JSON.parse(body);
+        const result = await sendCommand(method, params, timeout);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ result }));
+      } catch (err) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }));
+      }
+    });
+    return;
+  }
+  res.writeHead(404); res.end();
+}).listen(HTTP_BRIDGE_PORT, '127.0.0.1', () => {
+  log(`HTTP bridge listening on port ${HTTP_BRIDGE_PORT}`);
+});
+
+// 3. Start MCP server over stdio
 const transport = new StdioServerTransport();
 await server.connect(transport);
 log('MCP server started (stdio)');
