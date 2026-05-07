@@ -8,7 +8,7 @@
 
 ## Overview
 
-A Chrome Extension that lets designers and engineers load any website or prototype into an embedded browser, extract structured design data from its code (design system tokens, animations, a11y, localization, etc.), and interact with Claude Opus 4.7 in a right-side chat panel to analyze, transform, and export that data. Outputs include preview tabs, saved files, and Figma annotations pushed via the Consonant plugin bridge.
+A Chrome Extension that lets designers and engineers load any website or prototype into an embedded browser, extract structured design data from its code (design system tokens, animations, a11y, localization, etc.), and interact with Claude Opus 4.7 in a right-side chat panel to analyze, transform, and export that data. Also supports building HTML/CSS prototypes directly from Figma files via the Consonant bridge, and testing responsive layouts at any viewport width. Outputs include preview tabs, saved files, and Figma annotations pushed via the Consonant plugin bridge.
 
 **Target users:** Adobe design team (internal, team-wide distribution)
 **Distribution:** Zip file shared internally; each user loads unpacked in Chrome developer mode. No Chrome Web Store.
@@ -37,7 +37,7 @@ Chrome Extension, Manifest V3. Opens as a dedicated full-screen tab (`chrome-ext
 - `declarativeNetRequest` API with dynamic rules: strips `X-Frame-Options` and `frame-src` CSP response headers for the current URL before the iframe loads
 - Rules are applied per-URL, added on navigate and removed on close
 - Because the iframe runs in the user's Chrome session, authentication cookies, localStorage, and session state are shared natively — password-protected pages load without any special handling
-- Includes a URL bar above the iframe with back/forward buttons and a reload button
+- Includes a URL bar above the iframe with back/forward buttons, a reload button, and a viewport width control (see Viewport Width Testing section)
 
 ### Strict-CSP Fallback (Side Panel Mode)
 
@@ -111,7 +111,7 @@ Each button:
 3. Streams the result into the right rail chat as a structured output card
 4. Offers export actions (spec table, Figma push, save file) within the output card
 
-### Seven Modes
+### Eight Modes
 
 | Mode | What Claude extracts | Primary output |
 |---|---|---|
@@ -122,6 +122,7 @@ Each button:
 | 🎬 **Animation** | All CSS transitions, `@keyframes`, animation libraries detected (Framer, GSAP, etc.), timing functions, durations, easing. Returns engineering-ready spec table. | Spec table + optional Figma push |
 | 🌍 **Localization** | Hardcoded strings vs. i18n keys, locale-specific patterns (date formats, RTL support, currency), untranslated content flags. | Spec card |
 | ♿ **A11y** | ARIA roles + labels, color contrast (WCAG AA/AAA), keyboard navigation, focus order, missing alt text, form labels. Issues and suggestions with WCAG SC references. | Spec card + optional Figma push |
+| 🎯 **S2A Align** | Audits the prototype's CSS against S2A design system tokens. Identifies hardcoded values (colors, spacing, radius, typography) and maps each to the correct S2A semantic token. Two sub-modes: **Align** (shows violation table, suggests tokens) and **Match** (rewrites CSS to use S2A tokens and opens a side-by-side preview). | S2A Audit card + optional preview tab |
 
 ---
 
@@ -145,8 +146,56 @@ Shown after Claude generates modified HTML. Displays a summary of changes made. 
 **Figma Card**
 Shown after a successful `push_to_figma` tool call. Displays what was created in Figma. Action button: "Open in Figma ↗" (deep-link to the relevant frame).
 
+**S2A Audit Card**
+Shown after an S2A Align or Match run. Renders a three-column table: Property | Current Value | S2A Token. Rows are color-coded: red for violations with a direct token match, yellow for violations requiring a new token. Footer shows violation count and a compliance score (% of declarations already using S2A tokens). Action buttons: "Apply Match →" (runs Match mode if not already done), "Save as CSV ↗", "Save as Markdown ↗".
+
 **Error Card**
 Shown when a tool call fails (Figma not connected, iframe blocked, download failed). Includes the error message and a suggested recovery action.
+
+---
+
+## Viewport Width Testing
+
+A width control in the URL bar row lets users simulate responsive breakpoints. The iframe is constrained to the selected width (centered in the available space) and a label shows the active width.
+
+**Preset widths:**
+| Label | Width | Use case |
+|---|---|---|
+| Mobile | 375px | iPhone SE / standard mobile |
+| Tablet | 768px | iPad portrait |
+| Laptop | 1024px | iPad Pro / small laptop |
+| Desktop | 1440px | Standard widescreen |
+| Full | 100% | No constraint (default) |
+| Custom | user input | Any px value |
+
+**Behavior:**
+- Default is Full (no constraint)
+- Selected width is applied as `max-width` + `width` on the iframe container, centered with `margin: 0 auto`
+- A faint device-frame outline appears at constrained widths to visually indicate the breakpoint
+- Active preset button is highlighted
+- Width state saved in `chrome.storage.local` per session
+
+---
+
+## Figma-to-Prototype
+
+Users can ask Claude to build a working HTML/CSS prototype from a Figma design. Claude reads the design via the Consonant bridge and generates code.
+
+**Trigger:** User types a message like "build a prototype from this Figma frame" and pastes a Figma URL or node ID, OR clicks a "From Figma" button in the left rail (added as an 8th extraction mode).
+
+**Flow:**
+1. Claude calls `read_figma_design(nodeId)` tool — uses the Figma bridge to call `figma_get_file_data` and `figma_get_component_details` for the target node
+2. Claude reads the design tree, extracts visual properties (layout, colors, typography, spacing)
+3. Claude generates a self-contained HTML/CSS file
+4. Claude calls `preview_in_tab(html)` to open the prototype immediately
+5. User can then ask Claude to iterate on it, and save via `save_files()`
+
+**Left rail addition:** 🔧 **From Figma** — 8th mode. Prompts user to paste a Figma URL or node ID, then triggers the prototype generation flow.
+
+**New tool:**
+| Tool | Description |
+|---|---|
+| `read_figma_design(nodeId: string)` | Calls Figma bridge: `figma_get_file_data` + `figma_get_component_details`. Returns design tree with visual properties. Requires Consonant plugin open. |
 
 ---
 
@@ -163,6 +212,62 @@ Claude Opus 4.7 calls these tools automatically based on user intent. The backgr
 | `push_to_figma(method: string, params: object)` | POSTs to `http://localhost:9240/figma` (Consonant MCP HTTP bridge). Requires Consonant plugin open in Figma. Returns Figma response or error. |
 | `navigate(url: string)` | Navigates the iframe/active tab to a new URL. Used when Claude needs to follow links or check multiple pages. |
 | `screenshot()` | Captures a screenshot of the current iframe viewport using `chrome.tabs` API. Returns base64 PNG for Claude's visual context. |
+| `read_figma_design(nodeId: string)` | Calls Figma bridge POST `/figma` with `figma_get_file_data` then `figma_get_component_details`. Returns design tree. Requires Consonant plugin open. |
+| `audit_s2a(css: string)` | POSTs CSS to `http://localhost:9241/audit` (s2a-ds HTTP bridge). Returns `{ violations: [{property, value, suggestedToken, tokenValue, category}][], summary: string, score: number }`. Requires s2a-ds MCP server running. |
+
+---
+
+## S2A Align/Match
+
+Targets designers who vibe-code prototypes (from Figma or manually) that don't follow S2A design system rules. Both sub-modes operate on the currently loaded prototype in the iframe.
+
+### Align mode (analyze only)
+
+1. `read_page()` collects all `<style>` blocks and linked stylesheet content
+2. `audit_s2a(css)` sends the CSS to the s2a-ds HTTP bridge on port 9241
+3. Bridge runs `audit_css` (color, spacing, radius, border, blur, typography violations) against live token data from `packages/tokens/json/`
+4. Claude receives the violations array and renders an **S2A Audit Card** with the violation table
+5. Compliance score shown (% of declarations already using S2A tokens)
+6. No changes are applied to the prototype
+
+### Match mode (apply changes)
+
+1–3. Same as Align mode
+4. Claude rewrites the prototype's CSS: replaces hardcoded values with S2A CSS custom properties (e.g., `color: #1473e6` → `color: var(--s2a-color-accent-default)`)
+5. For violations with no direct token match, Claude picks the closest semantic token and adds a `/* s2a: suggested */` comment
+6. Calls `preview_in_tab(html)` with the modified HTML — user sees a corrected prototype immediately
+7. Shows both the S2A Audit Card (violations + score) and a Preview Tab Card
+
+### S2A HTTP Bridge
+
+A second HTTP entry point added to `apps/s2a-ds-mcp/src/http.ts`, started alongside the stdio server in `src/local.ts`. Port: `9241`.
+
+**Endpoint:**
+
+```
+POST http://localhost:9241/audit
+Body: { css: string }
+Response: { violations: AuditViolation[], summary: string, score: number } | { error: string }
+CORS: allows chrome-extension:// origin
+```
+
+`AuditViolation` shape:
+```typescript
+interface AuditViolation {
+  property: string;       // CSS property (e.g., "color")
+  value: string;          // Hardcoded value (e.g., "#1473e6")
+  suggestedToken: string; // S2A token name (e.g., "--s2a-color-accent-default")
+  tokenValue: string;     // Resolved value of the token (e.g., "#1473e6")
+  category: 'color' | 'spacing' | 'radius' | 'border' | 'blur' | 'typography';
+  exact: boolean;         // true if value exactly matches the token's resolved value
+}
+```
+
+The `http.ts` entry imports and calls the internal audit logic directly from `apps/s2a-ds-mcp/src/tools/audit.ts` (which exports a standalone `auditCss(css, dsRoot)` function after a small refactor).
+
+### Team requirements (addition)
+
+No additional setup beyond what the s2a-ds MCP server already requires (it starts automatically via `.mcp.json`). The HTTP bridge launches in the same Node process when `local.ts` starts.
 
 ---
 
@@ -231,6 +336,20 @@ None blocking implementation. The following are build-time decisions:
 1. **Exact port for HTTP bridge** — 9240 chosen to avoid conflicts with consonant-specs WS (9220–9222) and figma-console-mcp (9223–9232). Confirm no other local servers use 9240.
 2. **Save folder UX** — On first `save_files` call, use `chrome.downloads` with `saveAs: true` to let the user pick their destination, then store it in `chrome.storage.local` for all future saves. Lower friction than prompting on extension open — user picks the folder when they first actually need it.
 3. **Conversation persistence** — Currently clears on tab close. If team wants persistent history, add `chrome.storage.local` serialization of the conversation array.
+
+---
+
+## Left Rail — Complete Mode List (Updated)
+
+1. 🎨 Design System
+2. 🗺 DS Mapping
+3. ✏️ Design Style
+4. 📐 Design Principles
+5. 🎬 Animation
+6. 🌍 Localization
+7. ♿ A11y
+8. 🔧 From Figma *(new — prototype generation from Figma node)*
+9. 🎯 S2A Align *(new — audit and force-align vibe-coded prototypes to S2A tokens)*
 
 ---
 
