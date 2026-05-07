@@ -323,7 +323,7 @@ This is the same setup requirement as using Claude Code with the Consonant plugi
 
 ## Project Location
 
-New repository: `/Users/taehoc/Desktop/Taeho/consonent-specs-extension/`
+New repository: `/Users/taehoc/Desktop/Taeho/specs-extension/`
 
 Separate from the consonant monorepo. Only dependency on consonant: the HTTP bridge addition to `apps/consonant-specs-plugin/mcp/index.ts`.
 

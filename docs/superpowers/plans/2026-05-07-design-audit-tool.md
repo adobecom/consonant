@@ -12,9 +12,9 @@
 
 ## File Map
 
-### New repo: `/Users/taehoc/Desktop/Taeho/consonent-specs-extension/`
+### New repo: `/Users/taehoc/Desktop/Taeho/specs-extension/`
 
-*(Folder name is `consonent-specs-extension` — note the spelling matches the user's chosen name.)*
+*(Folder name is `specs-extension` — note the spelling matches the user's chosen name.)*
 
 ```
 manifest.json
@@ -112,8 +112,8 @@ apps/s2a-ds-mcp/src/
 - [ ] **Step 1: Init repo**
 
 ```bash
-mkdir /Users/taehoc/Desktop/Taeho/consonent-specs-extension
-cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
+mkdir /Users/taehoc/Desktop/Taeho/specs-extension
+cd /Users/taehoc/Desktop/Taeho/specs-extension
 git init
 npm init -y
 ```
@@ -2807,7 +2807,7 @@ git commit -m "feat(mcp): add HTTP bridge on port 9240 for Chrome extension Figm
 - [ ] **Step 1: Run all tests in design-audit-tool repo**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
+cd /Users/taehoc/Desktop/Taeho/specs-extension
 npm test
 ```
 Expected: All tests pass. 0 failures.
@@ -3151,7 +3151,7 @@ git add apps/s2a-ds-mcp/src/tools/audit.ts apps/s2a-ds-mcp/src/http.ts apps/s2a-
 git commit -m "feat(s2a-ds-mcp): add HTTP bridge on port 9241 for S2A audit from Chrome extension"
 ```
 
-- [ ] **Step 10: Add types and constants in consonent-specs-extension repo**
+- [ ] **Step 10: Add types and constants in specs-extension repo**
 
 Modify `src/shared/types.ts` — update `ExtractMode` union, add `S2ACard` type, and **add `S2ACard` to the `OutputCard` union** (the union was originally defined in Task 2 and must be extended here):
 
@@ -3253,7 +3253,7 @@ describe('audit_s2a', () => {
 - [ ] **Step 13: Run tool-executor tests**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
+cd /Users/taehoc/Desktop/Taeho/specs-extension
 npx vitest run tests/unit/tool-executor.test.ts
 ```
 Expected: all tests pass including the 2 new ones.
@@ -3459,7 +3459,7 @@ The `onTriggerMode` callback sends a new extraction message to Claude with the `
 - [ ] **Step 18: Build and verify**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
+cd /Users/taehoc/Desktop/Taeho/specs-extension
 npm run build
 ```
 Expected: clean build, no TypeScript errors.
@@ -3477,7 +3477,7 @@ Expected: clean build, no TypeScript errors.
 - [ ] **Step 20: Run all tests**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
+cd /Users/taehoc/Desktop/Taeho/specs-extension
 npm test
 ```
 Expected: all tests pass.
@@ -3485,7 +3485,7 @@ Expected: all tests pass.
 - [ ] **Step 21: Commit**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
+cd /Users/taehoc/Desktop/Taeho/specs-extension
 git add src/shared/types.ts src/shared/constants.ts src/shared/extraction-prompts.ts \
   src/background/tool-executor.ts src/app/components/cards/S2ACard.tsx \
   src/app/components/LeftRail.tsx src/app/components/ChatMessage.tsx \
