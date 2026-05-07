@@ -147,9 +147,13 @@ npm install -D typescript vite @vitejs/plugin-react \
     "storage",
     "tabs",
     "sidePanel",
-    "activeTab"
+    "activeTab",
+    "webNavigation"
   ],
   "host_permissions": ["<all_urls>"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http://localhost:9240 http://localhost:9241"
+  },
   "background": {
     "service_worker": "src/background/index.ts",
     "type": "module"
@@ -507,7 +511,7 @@ export interface FigmaInputCard {
   prompt: string;
 }
 
-export type OutputCard = SpecTableCard | PreviewTabCard | FigmaCard | ErrorCard | FigmaInputCard;
+export type OutputCard = SpecTableCard | PreviewTabCard | FigmaCard | ErrorCard | FigmaInputCard | S2ACard;
 
 export interface ChatMessage {
   id: string;
@@ -525,7 +529,9 @@ export type ToBackground =
   | { type: 'GET_SNAPSHOT'; frameId: number; includeScripts: boolean }
   | { type: 'SET_HEADER_RULES'; url: string }
   | { type: 'CLEAR_HEADER_RULES' }
-  | { type: 'CANCEL_STREAM' };
+  | { type: 'CANCEL_STREAM' }
+  | { type: 'REGISTER_FRAME'; iframeUrl: string }
+  | { type: 'CREATE_PREVIEW_TAB'; html: string };
 
 export type FromBackground =
   | { type: 'STREAM_CHUNK'; text: string }
@@ -629,6 +635,20 @@ export default function App() {
       setLeftOpen(s.leftOpen);
       setRightOpen(s.rightOpen);
     });
+  }, []);
+
+  // Blob URLs must be created in a document context (not the service worker).
+  // The background tool-executor sends CREATE_PREVIEW_TAB here instead.
+  useEffect(() => {
+    const handler = (msg: { type: string; html: string }, _sender: chrome.runtime.MessageSender, sendResponse: (r: unknown) => void) => {
+      if (msg.type !== 'CREATE_PREVIEW_TAB') return false;
+      const blob = new Blob([msg.html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      chrome.tabs.create({ url }).then(tab => sendResponse({ tabId: tab.id ?? 0 }));
+      return true; // keep channel open for async sendResponse
+    };
+    chrome.runtime.onMessage.addListener(handler);
+    return () => chrome.runtime.onMessage.removeListener(handler);
   }, []);
 
   const toggleLeft = () => {
@@ -963,8 +983,19 @@ export default function CenterBrowser({ onFrameId }: Props) {
     getViewportWidth().then(w => setViewport(w));
   }, []);
 
+  // After the iframe navigates, ask the background to resolve its frameId
+  // via chrome.webNavigation.getAllFrames (requires webNavigation permission)
+  const handleIframeLoad = () => {
+    const src = iframeRef.current?.src;
+    if (!src) return;
+    chrome.runtime.sendMessage({ type: 'REGISTER_FRAME', iframeUrl: src })
+      .then((res: { frameId: number | null }) => onFrameId(res.frameId))
+      .catch(() => onFrameId(null));
+  };
+
   const navigate = (target: string) => {
     const full = target.startsWith('http') ? target : `https://${target}`;
+    onFrameId(null); // clear stale frameId while new page loads
     setCommitted(full);
   };
 
@@ -1007,6 +1038,7 @@ export default function CenterBrowser({ onFrameId }: Props) {
             className="border-none"
             sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
             title="Browser"
+            onLoad={handleIframeLoad}
           />
         ) : (
           <div className="flex items-center justify-center h-full text-[#999] text-sm">
@@ -1208,15 +1240,24 @@ git commit -m "feat: declarativeNetRequest header stripping for iframe embedding
 
 ```typescript
 // Injected into the iframe via chrome.scripting.executeScript
-// Returns a DomSnapshot — must be self-contained (no imports)
-(function () {
+// Returns a DomSnapshot — must be self-contained (no imports).
+// Must be async because it fetches linked stylesheets.
+(async function () {
   const stylesheets: string[] = [];
   document.querySelectorAll<HTMLStyleElement>('style').forEach(s => {
     stylesheets.push(s.textContent ?? '');
   });
-  document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]').forEach(l => {
-    stylesheets.push(`/* linked: ${l.href} */`);
-  });
+  // Attempt to fetch linked stylesheets so audit tools have full CSS coverage.
+  // Cross-origin sheets will fail (CORS); those get a placeholder comment instead.
+  for (const l of Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'))) {
+    try {
+      const res = await fetch(l.href, { cache: 'force-cache' });
+      if (res.ok) stylesheets.push(await res.text());
+      else stylesheets.push(`/* linked: ${l.href} */`);
+    } catch {
+      stylesheets.push(`/* linked: ${l.href} */`);
+    }
+  }
 
   const scripts: string[] = [];
   document.querySelectorAll<HTMLScriptElement>('script:not([src])').forEach(s => {
@@ -1315,9 +1356,17 @@ function extractDom(): DomSnapshot {
   document.querySelectorAll<HTMLStyleElement>('style').forEach(s => {
     stylesheets.push(s.textContent ?? '');
   });
-  document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]').forEach(l => {
-    stylesheets.push(`/* linked: ${l.href} */`);
-  });
+  // Attempt to fetch linked stylesheets so audit tools have full CSS coverage.
+  // Cross-origin sheets will fail (CORS); those get a placeholder comment instead.
+  for (const l of Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'))) {
+    try {
+      const res = await fetch(l.href, { cache: 'force-cache' });
+      if (res.ok) stylesheets.push(await res.text());
+      else stylesheets.push(`/* linked: ${l.href} */`);
+    } catch {
+      stylesheets.push(`/* linked: ${l.href} */`);
+    }
+  }
 
   const scripts: string[] = [];
   document.querySelectorAll<HTMLScriptElement>('script:not([src])').forEach(s => {
@@ -1802,11 +1851,11 @@ export async function executeTool(
       return readPage(frameId);
 
     case 'preview_in_tab': {
+      // Blob URLs created in a service worker are not accessible from a real tab.
+      // Forward the HTML to the app shell (a document context) which creates the Blob URL there.
       const html = input.html as string;
-      const blob = new Blob([html], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const tab = await chrome.tabs.create({ url });
-      return { type: 'preview-tab', tabId: tab.id ?? 0, summary: 'Opened preview in new tab' } satisfies OutputCard;
+      const response = await chrome.runtime.sendMessage({ type: 'CREATE_PREVIEW_TAB', html });
+      return { type: 'preview-tab', tabId: response.tabId ?? 0, summary: 'Opened preview in new tab' } satisfies OutputCard;
     }
 
     case 'save_files': {
@@ -1831,8 +1880,24 @@ export async function executeTool(
       return { navigated: true, url };
     }
 
-    case 'screenshot':
-      return { screenshot: null, note: 'Screenshot not yet implemented' };
+    case 'screenshot': {
+      if (frameId === null) {
+        return { type: 'error', message: 'No active page — navigate to a URL first.', recovery: 'Enter a URL in the address bar.' } satisfies OutputCard;
+      }
+      try {
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+        const windowId = tabs[0]?.windowId;
+        if (windowId === undefined) throw new Error('No active window');
+        const dataUrl = await chrome.tabs.captureVisibleTab(windowId, { format: 'png' });
+        return { screenshot: dataUrl };
+      } catch (err) {
+        return {
+          type: 'error',
+          message: 'Screenshot failed — the extension tab must be active and its window focused.',
+          recovery: 'Click the Design Audit Tool tab to bring it to the front, then try again.',
+        } satisfies OutputCard;
+      }
+    }
 
     default:
       return { error: `Unknown tool: ${name}` };
@@ -1870,9 +1935,20 @@ async function pushToFigma(method: string, params: Record<string, unknown>): Pro
 }
 
 async function readFigmaDesign(nodeId: string): Promise<ToolResult> {
-  const cleanId = nodeId.includes('figma.com')
-    ? new URL(nodeId).searchParams.get('node-id') ?? nodeId
-    : nodeId;
+  // Figma URLs encode node IDs as "node-id=123-456" (hyphens), but the Plugin API
+  // requires colon format "123:456". Convert after extraction.
+  let cleanId = nodeId.trim();
+  if (cleanId.includes('figma.com')) {
+    const raw = new URL(cleanId).searchParams.get('node-id') ?? cleanId;
+    cleanId = raw.replace(/-/g, ':'); // "123-456" → "123:456"
+  }
+  if (!cleanId || !/\d+:\d+/.test(cleanId)) {
+    return {
+      type: 'error',
+      message: `Could not parse a Figma node ID from: "${nodeId}". Expected a node ID like "123:456" or a Figma URL containing "?node-id=123-456".`,
+      recovery: 'Paste a Figma share URL or a raw node ID (e.g. 123:456).',
+    } satisfies OutputCard;
+  }
 
   try {
     const fileRes = await fetch(`${FIGMA_BRIDGE_URL}/figma`, {
@@ -1937,6 +2013,7 @@ chrome.action.onClicked.addListener(() => {
   chrome.tabs.create({ url: chrome.runtime.getURL('src/app/index.html') });
 });
 
+// Non-streaming messages (header rules, snapshots, frame registration)
 chrome.runtime.onMessage.addListener((msg: ToBackground, _sender, sendResponse) => {
   if (msg.type === 'SET_HEADER_RULES') {
     setHeaderRulesForUrl(msg.url).then(() => sendResponse({ ok: true }));
@@ -1953,30 +2030,44 @@ chrome.runtime.onMessage.addListener((msg: ToBackground, _sender, sendResponse) 
       .catch(err => sendResponse({ type: 'STREAM_ERROR', error: err.message }));
     return true;
   }
-  if (msg.type === 'SEND_MESSAGE' || msg.type === 'EXTRACT') {
+  if (msg.type === 'REGISTER_FRAME') {
+    // Find the iframe's frameId by matching its URL in webNavigation frame list
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      const tabId = tabs[0]?.id;
+      if (!tabId) { sendResponse({ frameId: null }); return; }
+      chrome.webNavigation.getAllFrames({ tabId }, frames => {
+        const match = frames?.find(f => f.frameId > 0 && f.url.startsWith(msg.iframeUrl.split('?')[0]));
+        activeFrameId = match?.frameId ?? null;
+        sendResponse({ frameId: activeFrameId });
+      });
+    });
+    return true;
+  }
+});
+
+// Streaming messages use a long-lived port so chunks can be pushed to the UI
+chrome.runtime.onConnect.addListener(port => {
+  if (port.name !== 'claude-stream') return;
+
+  port.onMessage.addListener((msg: ToBackground) => {
+    if (msg.type !== 'SEND_MESSAGE' && msg.type !== 'EXTRACT') return;
+
     if (msg.frameId !== null) activeFrameId = msg.frameId;
     const systemPrompt = msg.type === 'EXTRACT'
       ? getSystemPrompt(msg.mode)
       : 'You are a helpful design assistant embedded in a browser extension. You can read the current page, generate code, and push specs to Figma.';
-
     const userText = msg.type === 'SEND_MESSAGE' ? msg.text : `Please perform the ${msg.mode} extraction on the current page.`;
 
     claudeClient.sendMessage(
       userText,
       history,
       systemPrompt,
-      chunk => { chrome.runtime.sendMessage({ type: 'STREAM_CHUNK', text: chunk }); },
-      card => { chrome.runtime.sendMessage({ type: 'STREAM_CARD', card }); },
-      () => { chrome.runtime.sendMessage({ type: 'STREAM_DONE' }); },
-      err => { chrome.runtime.sendMessage({ type: 'STREAM_ERROR', error: err }); },
+      chunk => port.postMessage({ type: 'STREAM_CHUNK', text: chunk }),
+      card  => port.postMessage({ type: 'STREAM_CARD',  card }),
+      ()    => port.postMessage({ type: 'STREAM_DONE' }),
+      err   => port.postMessage({ type: 'STREAM_ERROR', error: err }),
     );
-    sendResponse({ ok: true });
-    return true;
-  }
-  if (msg.type === 'CANCEL_STREAM') {
-    sendResponse({ ok: true });
-    return true;
-  }
+  });
 });
 ```
 
@@ -2015,9 +2106,14 @@ export function useConversation(frameId: number | null) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streaming, setStreaming] = useState(false);
   const streamingMsgId = useRef<string | null>(null);
+  // Long-lived port for streaming — chunks are pushed, not polled
+  const portRef = useRef<chrome.runtime.Port | null>(null);
 
   useEffect(() => {
-    const handler = (msg: FromBackground) => {
+    const port = chrome.runtime.connect({ name: 'claude-stream' });
+    portRef.current = port;
+
+    port.onMessage.addListener((msg: FromBackground) => {
       if (msg.type === 'STREAM_CHUNK') {
         setMessages(prev => prev.map(m =>
           m.id === streamingMsgId.current
@@ -2049,9 +2145,9 @@ export function useConversation(frameId: number | null) {
         setStreaming(false);
         streamingMsgId.current = null;
       }
-    };
-    chrome.runtime.onMessage.addListener(handler);
-    return () => chrome.runtime.onMessage.removeListener(handler);
+    });
+
+    return () => port.disconnect();
   }, []);
 
   const sendMessage = useCallback((text: string) => {
@@ -2060,7 +2156,7 @@ export function useConversation(frameId: number | null) {
     streamingMsgId.current = assistantMsg.id;
     setMessages(prev => [...prev, userMsg, assistantMsg]);
     setStreaming(true);
-    chrome.runtime.sendMessage({ type: 'SEND_MESSAGE', text, frameId });
+    portRef.current?.postMessage({ type: 'SEND_MESSAGE', text, frameId });
   }, [frameId]);
 
   const extract = useCallback((mode: string) => {
@@ -2068,7 +2164,7 @@ export function useConversation(frameId: number | null) {
     streamingMsgId.current = assistantMsg.id;
     setMessages(prev => [...prev, assistantMsg]);
     setStreaming(true);
-    chrome.runtime.sendMessage({ type: 'EXTRACT', mode, frameId });
+    portRef.current?.postMessage({ type: 'EXTRACT', mode, frameId });
   }, [frameId]);
 
   return { messages, streaming, sendMessage, extract };
@@ -2768,69 +2864,120 @@ git commit -m "chore: final build verification — all tests pass"
 
 - [ ] **Step 1: Export standalone auditCss function from audit.ts**
 
-Read the current `registerAuditTools` handler in `apps/s2a-ds-mcp/src/tools/audit.ts`. Extract the core audit logic into a named export while keeping the MCP registration working:
+The existing `registerAuditTools` handler in `apps/s2a-ds-mcp/src/tools/audit.ts` contains a single large `for (const decl of decls)` loop (lines ~619–869) that does all violation detection inline. All the helper utilities it calls (`loadTokens`, `buildColorMap`, `buildDimensionMap`, `buildFontFamilyMap`, `parseDeclarations`, `isColorProp`, `colorNamespace`) are already at module scope and already exported.
+
+The real `Violation` interface (lines 557–575) has a richer shape than what the HTTP bridge needs to return. The `auditCss` function runs the same loop and maps results to the simpler `AuditViolation` shape.
+
+**Step 1a: Extract the loop body** — Move the `for (const decl of decls)` block (and the `violations` array, `seen` Set, and `return` statement) from the handler closure into a new module-level function `runAuditViolations`. Have the existing MCP handler call `runAuditViolations(css, dsRoot, categories)` instead of inlining the loop. This preserves MCP behavior exactly.
 
 ```typescript
-// Add at the bottom of apps/s2a-ds-mcp/src/tools/audit.ts, after all existing code
+// In apps/s2a-ds-mcp/src/tools/audit.ts:
+// 1. Cut the for-loop body out of registerAuditTools (lines ~616–869)
+// 2. Add this function above registerAuditTools:
 
+export function runAuditViolations(
+  css: string,
+  dsRoot: string,
+  categories?: string[],
+): Violation[] {
+  const index = loadTokens(dsRoot);
+  const colorMap = buildColorMap(dsRoot, index);
+  const dimMap = buildDimensionMap(dsRoot);
+  const fontFamilyMap = buildFontFamilyMap(dsRoot);
+  const decls = parseDeclarations(css);
+  const activeCategories = new Set<string>(
+    categories ?? ["color","spacing","border-radius","border-width","font-size","line-height","letter-spacing","font-weight","font-family","blur"]
+  );
+  const violations: Violation[] = [];
+  const seen = new Set<string>();
+
+  // ── paste the existing for (const decl of decls) { ... } loop here verbatim ──
+
+  return violations;
+}
+
+// 3. Inside registerAuditTools, replace the inlined loop with:
+//    const violations = runAuditViolations(css, dsRoot, categories);
+```
+
+**Step 1b: Add the public `auditCss` export and the `AuditViolation` / `AuditResult` types** at the bottom of `audit.ts`:
+
+```typescript
 export interface AuditViolation {
   property: string;
   value: string;
-  suggestedToken: string;
-  tokenValue: string;
+  suggestedToken: string; // maps from Violation.resolution.token ?? ''
+  tokenValue: string;     // maps from Violation.resolution.resolvedValue ?? value
   category: 'color' | 'spacing' | 'radius' | 'border' | 'blur' | 'typography';
-  exact: boolean;
+  exact: boolean;         // true when resolution.confidence === 'high'
 }
 
 export interface AuditResult {
   violations: AuditViolation[];
   summary: string;
-  score: number; // 0–100: percentage of declarations already using S2A tokens
+  score: number; // 0–100
 }
 
-export async function auditCss(css: string, dsRoot: string): Promise<AuditResult> {
-  // Call the same internal logic already used by the MCP tool handler.
-  // The existing handler reads CSS from a file path; this variant takes CSS as a string.
-  // Wrap it here: write css to a temp string buffer and call the existing parse logic.
-  const tokens: TokenIndex = await loadTokens(dsRoot);
-  const violations: AuditViolation[] = [];
-  let totalDeclarations = 0;
+// Maps the rich internal Category to the simpler HTTP-bridge category
+function mapCategory(c: Category): AuditViolation['category'] {
+  if (c === 'color') return 'color';
+  if (c === 'spacing') return 'spacing';
+  if (c === 'border-radius') return 'radius';
+  if (c === 'border-width') return 'border';
+  if (c === 'blur') return 'blur';
+  return 'typography'; // font-size, line-height, letter-spacing, font-weight, font-family
+}
 
-  // Reuse the existing per-category check functions (already defined in this file)
-  // by passing the css string directly to the parser utilities.
-  // Color violations:
-  const colorViolations = checkColorViolations(css, tokens);
-  // Spacing violations:
-  const spacingViolations = checkSpacingViolations(css, tokens);
-  // Radius, border, blur, typography violations:
-  const otherViolations = checkOtherViolations(css, tokens);
+export function auditCss(css: string, dsRoot: string): AuditResult {
+  const raw = runAuditViolations(css, dsRoot);
 
-  violations.push(...colorViolations, ...spacingViolations, ...otherViolations);
+  const violations: AuditViolation[] = raw.map(v => ({
+    property: v.property,
+    value: v.value,
+    suggestedToken: v.resolution.token ?? '',
+    tokenValue: v.resolution.resolvedValue ?? v.value,
+    category: mapCategory(v.category),
+    exact: v.resolution.confidence === 'high',
+  }));
 
-  // Count total CSS property declarations for score calculation
-  const declCount = (css.match(/[^{}]+:[^{}]+;/g) || []).length;
-  totalDeclarations = Math.max(declCount, violations.length);
+  const totalDeclarations = Math.max(parseDeclarations(css).length, violations.length);
   const score = totalDeclarations > 0
     ? Math.round(((totalDeclarations - violations.length) / totalDeclarations) * 100)
     : 100;
 
   const summary = violations.length === 0
     ? 'No violations — prototype already uses S2A tokens.'
-    : `${violations.length} violation${violations.length > 1 ? 's' : ''} found across ${[...new Set(violations.map(v => v.category))].join(', ')}.`;
+    : `${violations.length} violation${violations.length !== 1 ? 's' : ''} found across ${[...new Set(violations.map(v => v.category))].join(', ')}.`;
 
   return { violations, summary, score };
 }
 ```
 
-**Important:** The internal check functions (`checkColorViolations`, etc.) need to be extracted from within `registerAuditTools` so they can be called by `auditCss`. Refactor them to module-level functions during this step — they are pure functions so the refactor is safe.
-
-- [ ] **Step 2: Run existing s2a-ds tests to confirm no regression**
+- [ ] **Step 2: Add vitest to s2a-ds-mcp (it has no test framework yet)**
 
 ```bash
 cd /Users/taehoc/Desktop/Taeho/consonant/apps/s2a-ds-mcp
-npm test 2>/dev/null || npx tsc --noEmit
+npm install -D vitest
 ```
-Expected: tests pass (or no TypeScript errors if no test suite exists yet).
+
+Add a test script to `apps/s2a-ds-mcp/package.json` (inside `"scripts"`):
+```json
+"test": "vitest run"
+```
+
+Confirm vitest is available:
+```bash
+npx vitest --version
+```
+Expected: prints a version number (e.g. `2.x.x`).
+
+- [ ] **Step 2b: Confirm no TypeScript errors after audit.ts refactor**
+
+```bash
+cd /Users/taehoc/Desktop/Taeho/consonant/apps/s2a-ds-mcp
+npx tsc --noEmit
+```
+Expected: no errors.
 
 - [ ] **Step 3: Write the HTTP bridge test first**
 
@@ -3004,13 +3151,16 @@ git add apps/s2a-ds-mcp/src/tools/audit.ts apps/s2a-ds-mcp/src/http.ts apps/s2a-
 git commit -m "feat(s2a-ds-mcp): add HTTP bridge on port 9241 for S2A audit from Chrome extension"
 ```
 
-- [ ] **Step 10: Add types and constants in design-audit-tool repo**
+- [ ] **Step 10: Add types and constants in consonent-specs-extension repo**
 
-Modify `src/shared/types.ts` — add to `ExtractMode` union and add new card type:
+Modify `src/shared/types.ts` — update `ExtractMode` union, add `S2ACard` type, and **add `S2ACard` to the `OutputCard` union** (the union was originally defined in Task 2 and must be extended here):
 
 ```typescript
-// Add to ExtractMode union:
+// Update ExtractMode union:
 export type ExtractMode = 'designSystem'|'dsMapping'|'designStyle'|'principles'|'animation'|'localization'|'a11y'|'fromFigma'|'s2aAlign'|'s2aMatch';
+
+// Update OutputCard union — add | S2ACard:
+export type OutputCard = SpecTableCard | PreviewTabCard | FigmaCard | ErrorCard | FigmaInputCard | S2ACard;
 
 // Add new violation and card types:
 export interface AuditViolation {
@@ -3128,13 +3278,16 @@ export const S2A_MATCH_PROMPT = `You are an S2A design system auditor and CSS fi
 
 Your job:
 1. Call read_page() to get the full HTML + CSS of the prototype.
-2. Call audit_s2a(css) with the full CSS string.
-3. Rewrite the prototype's CSS to replace every hardcoded violation with its S2A CSS custom property: e.g., \`color: #1473e6\` → \`color: var(--s2a-color-accent-default)\`. For violations with no exact token match, use the closest semantic token and add a /* s2a: approximate */ comment.
-4. Reconstruct the full HTML with the corrected CSS.
-5. Call preview_in_tab(html) to open the corrected prototype in a side-by-side tab.
-6. Report the before/after compliance score.
+2. Collect ALL CSS: the full text of every <style> block from the HTML, and ALL inline style="" attributes on elements. Concatenate them as one string and call audit_s2a(css) with it.
+3. Rewrite the prototype's CSS in two passes:
+   a. In every <style> block: replace hardcoded values with S2A CSS custom properties (e.g. \`color: #1473e6\` → \`color: var(--s2a-color-accent-default)\`). For violations with no exact token match, use the closest semantic token and add a \`/* s2a: approximate */\` comment.
+   b. In every inline style="" attribute: apply the same replacements directly to the attribute value strings.
+4. Return EXACTLY the HTML you received from read_page(), modified ONLY in step 3a and 3b — do not regenerate, reformat, reorder, or simplify any other markup, text, attributes, or whitespace.
+5. If the stylesheets array contains any entries starting with "/* linked:", warn the user: "Note: [n] linked external stylesheet(s) could not be rewritten — only inline <style> blocks and style attributes were corrected."
+6. Call preview_in_tab(html) with the fully reconstructed HTML.
+7. Report the before/after compliance score.
 
-If the audit_s2a tool returns an error, tell the user the s2a-ds MCP server may not be running.`;
+If the audit_s2a tool returns an error, tell the user the s2a-ds MCP server may not be running and explain how to start it via Claude Code.`;
 ```
 
 Update `EXTRACTION_PROMPTS` map to include the two new modes:
