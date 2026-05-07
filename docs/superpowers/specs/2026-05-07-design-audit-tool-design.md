@@ -8,7 +8,7 @@
 
 ## Overview
 
-A Chrome Extension that lets designers and engineers load any website or prototype into an embedded browser, extract structured design data from its code (design system tokens, animations, a11y, localization, etc.), and interact with Claude Opus 4.7 in a right-side chat panel to analyze, transform, and export that data. Also supports building HTML/CSS prototypes directly from Figma files via the Consonant bridge, and testing responsive layouts at any viewport width. Outputs include preview tabs, saved files, and Figma annotations pushed via the Consonant plugin bridge.
+A Chrome Extension that lets designers and engineers load any website or prototype into an embedded browser, extract structured design data from its code (design system tokens, animations, a11y, localization, etc.), and interact with Claude in a right-side chat panel to analyze, transform, and export that data. Default model is **Sonnet 4.6** (fast, cost-effective); users can switch to **Opus 4.7** for heavier analysis tasks from the Settings panel. Also supports building HTML/CSS prototypes directly from Figma files via the Consonant bridge, and testing responsive layouts at any viewport width. Outputs include preview tabs, saved files, and Figma annotations pushed via the Consonant plugin bridge.
 
 **Target users:** Adobe design team (internal, team-wide distribution)
 **Distribution:** Zip file shared internally; each user loads unpacked in Chrome developer mode. No Chrome Web Store.
@@ -60,7 +60,7 @@ Owns all heavy work across three modules:
 
 **Claude API Client**
 - Anthropic SDK, streaming responses via Server-Sent Events
-- Model: `claude-opus-4-7`
+- Model: `claude-sonnet-4-6` (default). User can switch to `claude-opus-4-7` in Settings. Choice persisted in `chrome.storage.sync`.
 - Tool calling enabled — Claude can invoke any registered tool
 - Conversation history maintained per session in memory; cleared on extension tab close
 - API key read from `chrome.storage.sync` on each request
@@ -107,7 +107,7 @@ Rail open/closed state saved in `chrome.storage.local` per user, restored on nex
 
 Each button:
 1. Triggers the DOM Bridge to collect the full page snapshot from the iframe (or real tab in Side Panel mode)
-2. Sends the snapshot to Claude Opus 4.7 with a specialized system prompt for that extraction type
+2. Sends the snapshot to Claude (active model) with a specialized system prompt for that extraction type
 3. Streams the result into the right rail chat as a structured output card
 4. Offers export actions (spec table, Figma push, save file) within the output card
 
@@ -133,7 +133,7 @@ Each button:
 - Conversation thread with streaming responses
 - User input: text field + send button
 - Each Claude response may include one or more output cards (see below)
-- Settings icon (top-right of header): opens API key entry field, saved to `chrome.storage.sync`
+- Settings icon (top-right of header): opens Settings panel with two fields — API key (saved to `chrome.storage.sync`) and model selector (Sonnet 4.6 / Opus 4.7, also saved to `chrome.storage.sync`). Active model name is shown as a small badge in the rail header.
 
 ### Output Card Types
 
@@ -201,7 +201,7 @@ Users can ask Claude to build a working HTML/CSS prototype from a Figma design. 
 
 ## Claude's Tool Definitions
 
-Claude Opus 4.7 calls these tools automatically based on user intent. The background service worker executes them.
+Claude calls these tools automatically based on user intent. The background service worker executes them. Active model (Sonnet 4.6 or Opus 4.7) is used for all tool-calling requests.
 
 | Tool | Description |
 |---|---|
@@ -314,7 +314,7 @@ This is the same setup requirement as using Claude Code with the Consonant plugi
 | Extension shell | React + Vite + TypeScript | Team-scale UI with complex state (rail collapse, streaming, tool cards) |
 | Styling | Tailwind CSS | Consistent utility-first, fast iteration |
 | Manifest | V3 | Required for modern Chrome extensions |
-| Claude | Anthropic SDK, `claude-opus-4-7` | Streaming + tool calling; Opus for complex analysis tasks |
+| Claude | Anthropic SDK, `claude-sonnet-4-6` (default) / `claude-opus-4-7` (user-selectable) | Streaming + tool calling; Sonnet for everyday tasks, Opus for heavy analysis |
 | Build | Vite with `@crxjs/vite-plugin` (or equivalent MV3-compatible Vite plugin) | Native MV3 extension build support with HMR |
 | Storage | `chrome.storage.sync` (API key), `chrome.storage.local` (rail state, save folder) | sync for cross-device key, local for UI prefs |
 | Permissions | `declarativeNetRequest`, `scripting`, `downloads`, `storage`, `tabs`, `sidePanel` | All required, all standard MV3 APIs |
@@ -323,7 +323,7 @@ This is the same setup requirement as using Claude Code with the Consonant plugi
 
 ## Project Location
 
-New repository: `/Users/taehoc/Desktop/Taeho/design-audit-tool/`
+New repository: `/Users/taehoc/Desktop/Taeho/consonent-specs-extension/`
 
 Separate from the consonant monorepo. Only dependency on consonant: the HTTP bridge addition to `apps/consonant-specs-plugin/mcp/index.ts`.
 

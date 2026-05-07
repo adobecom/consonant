@@ -12,7 +12,9 @@
 
 ## File Map
 
-### New repo: `/Users/taehoc/Desktop/Taeho/design-audit-tool/`
+### New repo: `/Users/taehoc/Desktop/Taeho/consonent-specs-extension/`
+
+*(Folder name is `consonent-specs-extension` — note the spelling matches the user's chosen name.)*
 
 ```
 manifest.json
@@ -110,8 +112,8 @@ apps/s2a-ds-mcp/src/
 - [ ] **Step 1: Init repo**
 
 ```bash
-mkdir /Users/taehoc/Desktop/Taeho/design-audit-tool
-cd /Users/taehoc/Desktop/Taeho/design-audit-tool
+mkdir /Users/taehoc/Desktop/Taeho/consonent-specs-extension
+cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
 git init
 npm init -y
 ```
@@ -363,7 +365,7 @@ git commit -m "feat: scaffold chrome extension with vite + react + tailwind"
 ```typescript
 // tests/unit/storage.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getRailState, setRailState, getApiKey, setApiKey, getSaveFolder, setSaveFolder } from '../../src/shared/storage';
+import { getRailState, setRailState, getApiKey, setApiKey, getSaveFolder, setSaveFolder, getModel, setModel } from '../../src/shared/storage';
 
 beforeEach(() => { vi.clearAllMocks(); });
 
@@ -405,6 +407,25 @@ describe('setApiKey', () => {
     expect(chrome.storage.sync.set).toHaveBeenCalledWith({ apiKey: 'sk-ant-test' });
   });
 });
+
+describe('getModel', () => {
+  it('returns DEFAULT_MODEL when not set', async () => {
+    (chrome.storage.sync.get as ReturnType<typeof vi.fn>).mockResolvedValueOnce({});
+    expect(await getModel()).toBe('claude-sonnet-4-6');
+  });
+
+  it('returns stored model', async () => {
+    (chrome.storage.sync.get as ReturnType<typeof vi.fn>).mockResolvedValueOnce({ model: 'claude-opus-4-7' });
+    expect(await getModel()).toBe('claude-opus-4-7');
+  });
+});
+
+describe('setModel', () => {
+  it('writes model to chrome.storage.sync', async () => {
+    await setModel('claude-opus-4-7');
+    expect(chrome.storage.sync.set).toHaveBeenCalledWith({ model: 'claude-opus-4-7' });
+  });
+});
 ```
 
 - [ ] **Step 2: Run — confirm failure**
@@ -418,6 +439,7 @@ Expected: FAIL — module not found.
 
 ```typescript
 export const FIGMA_BRIDGE_URL = 'http://localhost:9240';
+export const S2A_BRIDGE_URL = 'http://localhost:9241';
 export const VIEWPORT_PRESETS = [
   { label: 'Mobile', width: 375 },
   { label: 'Tablet', width: 768 },
@@ -426,6 +448,13 @@ export const VIEWPORT_PRESETS = [
   { label: 'Full', width: null },
 ] as const;
 export type ViewportPreset = typeof VIEWPORT_PRESETS[number];
+
+export const MODELS = [
+  { id: 'claude-sonnet-4-6', label: 'Sonnet 4.6', description: 'Fast · everyday tasks' },
+  { id: 'claude-opus-4-7',   label: 'Opus 4.7',   description: 'Powerful · heavy analysis' },
+] as const;
+export type ModelId = typeof MODELS[number]['id'];
+export const DEFAULT_MODEL: ModelId = 'claude-sonnet-4-6';
 ```
 
 - [ ] **Step 4: Write `src/shared/types.ts`**
@@ -510,6 +539,7 @@ export type FromBackground =
 
 ```typescript
 import type { RailState } from './types';
+import { DEFAULT_MODEL, type ModelId } from './constants';
 
 export async function getRailState(): Promise<RailState> {
   const result = await chrome.storage.local.get('railState');
@@ -546,6 +576,15 @@ export async function getViewportWidth(): Promise<number | null> {
 export async function setViewportWidth(width: number | null): Promise<void> {
   await chrome.storage.local.set({ viewportWidth: width });
 }
+
+export async function getModel(): Promise<ModelId> {
+  const result = await chrome.storage.sync.get('model');
+  return (result.model as ModelId) ?? DEFAULT_MODEL;
+}
+
+export async function setModel(model: ModelId): Promise<void> {
+  await chrome.storage.sync.set({ model });
+}
 ```
 
 - [ ] **Step 6: Run tests — confirm pass**
@@ -553,7 +592,7 @@ export async function setViewportWidth(width: number | null): Promise<void> {
 ```bash
 npm test tests/unit/storage.test.ts
 ```
-Expected: PASS (5 tests).
+Expected: PASS (8 tests).
 
 - [ ] **Step 7: Commit**
 
@@ -1538,7 +1577,7 @@ npm test tests/unit/claude-client.test.ts
 
 ```typescript
 import Anthropic from '@anthropic-ai/sdk';
-import { getApiKey } from '../shared/storage';
+import { getApiKey, getModel } from '../shared/storage';
 import type { OutputCard, ChatMessage } from '../shared/types';
 
 export interface ClaudeClient {
@@ -1629,7 +1668,7 @@ const TOOLS: Anthropic.Tool[] = [
 export function createClaudeClient(): ClaudeClient {
   return {
     async sendMessage(text, history, systemPrompt, onChunk, onCard, onDone, onError) {
-      const apiKey = await getApiKey();
+      const [apiKey, model] = await Promise.all([getApiKey(), getModel()]);
       if (!apiKey) throw new Error('API key not set. Open Settings and enter your Anthropic API key.');
 
       const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
@@ -1644,7 +1683,7 @@ export function createClaudeClient(): ClaudeClient {
 
       try {
         const stream = client.messages.stream({
-          model: 'claude-opus-4-7',
+          model,
           max_tokens: 8192,
           system: systemPrompt,
           tools: TOOLS,
@@ -1688,7 +1727,7 @@ Expected: PASS (1 test).
 
 ```bash
 git add src/background/claude-client.ts tests/unit/claude-client.test.ts
-git commit -m "feat: Claude Opus 4.7 streaming client with tool definitions"
+git commit -m "feat: Claude streaming client — Sonnet 4.6 default, Opus 4.7 user-selectable"
 ```
 
 ---
@@ -2296,18 +2335,25 @@ git commit -m "feat: full Claude chat UI with streaming, output cards, extractio
 
 ```typescript
 import React, { useEffect, useState } from 'react';
-import { getApiKey, setApiKey } from '../../shared/storage';
+import { getApiKey, setApiKey, getModel, setModel } from '../../shared/storage';
+import { MODELS, type ModelId } from '../../shared/constants';
 
 interface Props { onClose: () => void }
 
 export default function SettingsModal({ onClose }: Props) {
   const [key, setKey] = useState('');
+  const [model, setModelState] = useState<ModelId>('claude-sonnet-4-6');
   const [saved, setSaved] = useState(false);
 
-  useEffect(() => { getApiKey().then(k => setKey(k ?? '')); }, []);
+  useEffect(() => {
+    Promise.all([getApiKey(), getModel()]).then(([k, m]) => {
+      setKey(k ?? '');
+      setModelState(m);
+    });
+  }, []);
 
   const save = async () => {
-    await setApiKey(key.trim());
+    await Promise.all([setApiKey(key.trim()), setModel(model)]);
     setSaved(true);
     setTimeout(onClose, 800);
   };
@@ -2315,15 +2361,35 @@ export default function SettingsModal({ onClose }: Props) {
   return (
     <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-50">
       <div className="bg-[#1e1e2e] border border-[#3a3a4e] rounded-lg p-5 w-72">
-        <h2 className="text-sm font-semibold text-[#ccc] mb-3">Settings</h2>
+        <h2 className="text-sm font-semibold text-[#ccc] mb-4">Settings</h2>
+
         <label className="text-[10px] uppercase tracking-wider text-[#666] mb-1 block">Anthropic API Key</label>
         <input
           type="password"
-          className="w-full bg-[#2a2a3e] border border-[#444] rounded px-2 py-1.5 text-xs text-[#ccc] focus:outline-none focus:border-[#6c47ff] mb-3"
+          className="w-full bg-[#2a2a3e] border border-[#444] rounded px-2 py-1.5 text-xs text-[#ccc] focus:outline-none focus:border-[#6c47ff] mb-4"
           value={key}
           onChange={e => setKey(e.target.value)}
           placeholder="sk-ant-..."
         />
+
+        <label className="text-[10px] uppercase tracking-wider text-[#666] mb-2 block">Model</label>
+        <div className="flex flex-col gap-1.5 mb-4">
+          {MODELS.map(m => (
+            <label key={m.id} className="flex items-center gap-2.5 cursor-pointer">
+              <input
+                type="radio"
+                name="model"
+                value={m.id}
+                checked={model === m.id}
+                onChange={() => setModelState(m.id as ModelId)}
+                className="accent-[#6c47ff]"
+              />
+              <span className="text-xs text-[#ccc]">{m.label}</span>
+              <span className="text-[10px] text-[#555]">{m.description}</span>
+            </label>
+          ))}
+        </div>
+
         <div className="flex justify-end gap-2">
           <button onClick={onClose} className="px-3 py-1 text-xs text-[#666] hover:text-[#aaa]">Cancel</button>
           <button onClick={save} className="px-3 py-1 text-xs bg-[#6c47ff] text-white rounded hover:bg-[#7c57ff]">
@@ -2343,13 +2409,27 @@ In `src/app/components/RightRail.tsx`, add settings state and button:
 ```typescript
 // add imports
 import SettingsModal from './SettingsModal';
+import { getModel } from '../../shared/storage';
+import type { ModelId } from '../../shared/constants';
 
 // add state inside component
 const [showSettings, setShowSettings] = useState(false);
+const [activeModel, setActiveModel] = useState<ModelId>('claude-sonnet-4-6');
 
-// update header div to include settings button between Claude title and collapse
+useEffect(() => { getModel().then(setActiveModel); }, []);
+
+// Refresh badge when settings close
+const handleSettingsClose = () => {
+  setShowSettings(false);
+  getModel().then(setActiveModel);
+};
+
+// update header div to include model badge, settings button, and collapse
 <span className="text-sm font-semibold text-[#ccc]">Claude</span>
 <div className="flex items-center gap-2">
+  <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#2a2a3e] text-[#6c47ff] font-mono leading-none">
+    {activeModel === 'claude-opus-4-7' ? 'Opus' : 'Sonnet'}
+  </span>
   <button onClick={() => setShowSettings(true)} className="text-[#555] hover:text-[#888] text-sm" title="Settings">⚙</button>
   <button onClick={onCollapse} className="flex items-center gap-1.5 hover:text-[#9c7fff] transition-colors">
     <span className="text-[10px] uppercase tracking-wider text-[#666]">Collapse</span>
@@ -2358,7 +2438,7 @@ const [showSettings, setShowSettings] = useState(false);
 </div>
 
 // add modal below header (inside the outer div, before ChatThread)
-{showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
+{showSettings && <SettingsModal onClose={handleSettingsClose} />}
 ```
 
 - [ ] **Step 3: Build and verify**
@@ -2366,13 +2446,13 @@ const [showSettings, setShowSettings] = useState(false);
 ```bash
 npm run build
 ```
-Reload extension. Click ⚙, enter an API key, save. Verify it persists on reload by opening settings again.
+Reload extension. Click ⚙, enter an API key. Switch model to Opus 4.7, save. Verify: the "Opus" badge appears in the rail header. Reopen settings — model radio should still show Opus. Switch back to Sonnet to confirm "Sonnet" badge updates.
 
 - [ ] **Step 4: Commit**
 
 ```bash
 git add src/app/components/SettingsModal.tsx src/app/components/RightRail.tsx
-git commit -m "feat: API key settings modal with chrome.storage.sync persistence"
+git commit -m "feat: settings modal — API key + model selector (Sonnet/Opus) with badge in header"
 ```
 
 ---
@@ -2631,7 +2711,7 @@ git commit -m "feat(mcp): add HTTP bridge on port 9240 for Chrome extension Figm
 - [ ] **Step 1: Run all tests in design-audit-tool repo**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/design-audit-tool
+cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
 npm test
 ```
 Expected: All tests pass. 0 failures.
@@ -3023,7 +3103,7 @@ describe('audit_s2a', () => {
 - [ ] **Step 13: Run tool-executor tests**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/design-audit-tool
+cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
 npx vitest run tests/unit/tool-executor.test.ts
 ```
 Expected: all tests pass including the 2 new ones.
@@ -3226,7 +3306,7 @@ The `onTriggerMode` callback sends a new extraction message to Claude with the `
 - [ ] **Step 18: Build and verify**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/design-audit-tool
+cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
 npm run build
 ```
 Expected: clean build, no TypeScript errors.
@@ -3244,7 +3324,7 @@ Expected: clean build, no TypeScript errors.
 - [ ] **Step 20: Run all tests**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/design-audit-tool
+cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
 npm test
 ```
 Expected: all tests pass.
@@ -3252,7 +3332,7 @@ Expected: all tests pass.
 - [ ] **Step 21: Commit**
 
 ```bash
-cd /Users/taehoc/Desktop/Taeho/design-audit-tool
+cd /Users/taehoc/Desktop/Taeho/consonent-specs-extension
 git add src/shared/types.ts src/shared/constants.ts src/shared/extraction-prompts.ts \
   src/background/tool-executor.ts src/app/components/cards/S2ACard.tsx \
   src/app/components/LeftRail.tsx src/app/components/ChatMessage.tsx \
