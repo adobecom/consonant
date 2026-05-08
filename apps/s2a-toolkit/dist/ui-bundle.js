@@ -65,34 +65,80 @@
   var copyNodeBtn = document.getElementById("copyNodeBtn");
   var headerSelName = document.getElementById("headerSelName");
   var _copyFileKey = null;
-  var _copyNodeId = null;
   var _copyFileName = null;
-  function updateCopyBtn(sel, fileKey, fileName) {
-    var _a13;
+  var _copyAllNodes = [];
+  function copyToClipboard(text) {
+    var _a11;
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand("copy");
+    } catch (e) {
+    }
+    document.body.removeChild(ta);
+    try {
+      (_a11 = navigator.clipboard) == null ? void 0 : _a11.writeText(text).catch(() => {
+      });
+    } catch (e) {
+    }
+  }
+  function updateCopyBtn(sel, fileKey, fileName, allNodes) {
     _copyFileKey = fileKey;
-    _copyNodeId = (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null;
     _copyFileName = fileName != null ? fileName : null;
+    _copyAllNodes = allNodes != null ? allNodes : sel ? [{ id: sel.id, name: sel.name }] : [];
+    const count = _copyAllNodes.length;
     const hasNode = !!(sel && fileKey);
     copyNodeBtn.classList.toggle("hidden", !hasNode);
+    if (count > 1) {
+      copyNodeBtn.title = `Copy ${count} Figma links`;
+      copyNodeBtn.setAttribute("aria-label", `Copy ${count} Figma links`);
+    } else {
+      copyNodeBtn.title = "Copy Figma link";
+      copyNodeBtn.setAttribute("aria-label", "Copy Figma link");
+    }
     if (sel) {
-      headerSelName.textContent = sel.name;
+      headerSelName.textContent = count > 1 ? `${count} selected` : sel.name;
       headerSelName.classList.add("has-sel");
     } else {
       headerSelName.textContent = "\u2014";
       headerSelName.classList.remove("has-sel");
     }
   }
+  var _copyResetTimer = null;
   copyNodeBtn.addEventListener("click", () => {
-    if (!_copyFileKey || !_copyNodeId) return;
+    if (!_copyFileKey || _copyAllNodes.length === 0) return;
     const slug = (_copyFileName || "file").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    const nid = _copyNodeId.replace(":", "-");
-    const url = `https://www.figma.com/design/${_copyFileKey}/${slug}?node-id=${nid}`;
-    navigator.clipboard.writeText(url).catch(() => {
+    const urls = _copyAllNodes.map((n) => {
+      const nid = n.id.replace(":", "-");
+      return `https://www.figma.com/design/${_copyFileKey}/${slug}?node-id=${nid}`;
     });
-    copyNodeBtn.style.color = "var(--accent)";
-    setTimeout(() => {
-      copyNodeBtn.style.color = "";
-    }, 1200);
+    if (_copyResetTimer) clearTimeout(_copyResetTimer);
+    copyNodeBtn.classList.add("copied");
+    _copyResetTimer = setTimeout(() => {
+      copyNodeBtn.classList.remove("copied");
+      _copyResetTimer = null;
+    }, 1500);
+    copyToClipboard(urls.join("\n"));
+    const msg = urls.length > 1 ? `Copied ${urls.length} links` : "Copied link";
+    postToPlugin("notify", { message: msg });
+  });
+  var sectionBar = document.getElementById("sectionBar");
+  var sectionBarName = document.getElementById("sectionBarName");
+  var formatSectionBtn = document.getElementById("formatSectionBtn");
+  function updateSectionBar(hasSection, sectionCount, firstName) {
+    sectionBar.classList.toggle("hidden", !hasSection);
+    if (hasSection) {
+      sectionBarName.textContent = sectionCount > 1 ? `${sectionCount} sections` : firstName;
+    }
+  }
+  formatSectionBtn.addEventListener("click", () => {
+    formatSectionBtn.disabled = true;
+    formatSectionBtn.textContent = "\u2026";
+    postToPlugin("format-section");
   });
   var BRIDGE_MAX_RECONNECT = 20;
   var BRIDGE_RECONNECT_BASE_MS = 2e3;
@@ -541,8 +587,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a13;
-    annotateNodeId = (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null;
+    var _a11;
+    annotateNodeId = (_a11 = sel == null ? void 0 : sel.id) != null ? _a11 : null;
     const empty = document.getElementById("annotateSelectionEmpty");
     const info = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -594,9 +640,9 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateSpecSelection(sel) {
-    var _a13, _b;
+    var _a11, _b;
     const isSet = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
-    specSetId = isSet ? (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null : null;
+    specSetId = isSet ? (_a11 = sel == null ? void 0 : sel.id) != null ? _a11 : null : null;
     const empty = document.getElementById("specSelectionEmpty");
     const info = document.getElementById("specSelectionInfo");
     const nameEl = document.getElementById("specSetName");
@@ -614,34 +660,30 @@
       genBtn.disabled = true;
     }
   }
-  document.querySelectorAll("#specCats .chip").forEach((chip) => {
+  document.querySelectorAll("#specOpts .chip").forEach((chip) => {
     chip.addEventListener("click", () => chip.classList.toggle("on"));
   });
   var _a10;
-  (_a10 = document.getElementById("specAllBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
-    document.querySelectorAll("#specCats .chip").forEach((c) => c.classList.add("on"));
-  });
-  var _a11;
-  (_a11 = document.getElementById("specNoneBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
-    document.querySelectorAll("#specCats .chip").forEach((c) => c.classList.remove("on"));
-  });
-  var _a12;
-  (_a12 = document.getElementById("specGenerateBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
+  (_a10 = document.getElementById("specGenerateBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
     if (!specSetId) return;
-    const categories = Array.from(
-      document.querySelectorAll("#specCats .chip.on")
-    ).map((c) => c.dataset.cat);
-    if (categories.length === 0) {
-      setSpecStatus("Select at least one category", "err");
+    const on = new Set(
+      Array.from(document.querySelectorAll("#specOpts .chip.on")).map((c) => c.dataset.opt)
+    );
+    if (on.size === 0) {
+      setSpecStatus("Select at least one section to include", "err");
       return;
     }
     const btn = document.getElementById("specGenerateBtn");
     btn.disabled = true;
     btn.textContent = "Generating\u2026";
     setSpecStatus("");
-    postToPlugin("spec:generate", { setId: specSetId, categories });
+    postToPlugin("spec:generate", {
+      setId: specSetId,
+      options: { variants: on.has("variants"), tokens: on.has("tokens"), children: on.has("children") }
+    });
   });
   window.addEventListener("message", (event) => {
+    var _a11, _b;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -706,13 +748,24 @@
           updateProtoSelection(sel);
           updateAnnotateSelection(sel);
           updateSpecSelection(sel);
-          updateCopyBtn(sel, msg.fileKey, msg.fileName);
+          updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
+          updateSectionBar(
+            !!msg.isSection,
+            (_a11 = msg.sectionCount) != null ? _a11 : 0,
+            (_b = msg.sectionName) != null ? _b : sel.name
+          );
         } else {
           updateProtoSelection(null);
           updateAnnotateSelection(null);
           updateSpecSelection(null);
           updateCopyBtn(null, null);
+          updateSectionBar(false, 0, "");
         }
+        break;
+      }
+      case "format-section:done": {
+        formatSectionBtn.disabled = false;
+        formatSectionBtn.textContent = "Format";
         break;
       }
       case "annotate:result": {
@@ -736,12 +789,11 @@
       case "spec:result": {
         const btn = document.getElementById("specGenerateBtn");
         btn.disabled = !specSetId;
-        btn.textContent = "Generate";
+        btn.textContent = "Generate Spec";
         if (msg.error) setSpecStatus("\u274C " + msg.error, "err");
         else {
-          const cats = msg.categoryCount;
           const vars = msg.variantCount;
-          setSpecStatus(`\u2713 ${cats} categor${cats !== 1 ? "ies" : "y"} \xB7 ${vars} variant${vars !== 1 ? "s" : ""}`, "ok");
+          setSpecStatus(`\u2713 Spec generated \xB7 ${vars} variant${vars !== 1 ? "s" : ""}`, "ok");
         }
         break;
       }

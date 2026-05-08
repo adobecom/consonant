@@ -65,25 +65,50 @@ toggleMiniBtn.addEventListener('click', () => {
 const copyNodeBtn  = document.getElementById('copyNodeBtn')  as HTMLButtonElement;
 const headerSelName = document.getElementById('headerSelName') as HTMLElement;
 
-let _copyFileKey: string | null = null;
-let _copyNodeId:  string | null = null;
+let _copyFileKey:  string | null = null;
 let _copyFileName: string | null = null;
+let _copyAllNodes: Array<{ id: string; name: string }> = [];
+
+function copyToClipboard(text: string) {
+  // execCommand is the reliable path inside Figma's sandboxed iframe —
+  // navigator.clipboard requires permissions that Figma doesn't grant.
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); } catch {}
+  document.body.removeChild(ta);
+  // Async API as a best-effort secondary write
+  try { navigator.clipboard?.writeText(text).catch(() => {}); } catch {}
+}
 
 function updateCopyBtn(
   sel: { id: string; name: string; nodeType: string } | null,
   fileKey: string | null,
   fileName?: string | null,
+  allNodes?: Array<{ id: string; name: string }>,
 ) {
   _copyFileKey  = fileKey;
-  _copyNodeId   = sel?.id ?? null;
   _copyFileName = fileName ?? null;
+  _copyAllNodes = allNodes ?? (sel ? [{ id: sel.id, name: sel.name }] : []);
 
+  const count = _copyAllNodes.length;
   const hasNode = !!(sel && fileKey);
   copyNodeBtn.classList.toggle('hidden', !hasNode);
 
+  if (count > 1) {
+    copyNodeBtn.title = `Copy ${count} Figma links`;
+    copyNodeBtn.setAttribute('aria-label', `Copy ${count} Figma links`);
+  } else {
+    copyNodeBtn.title = 'Copy Figma link';
+    copyNodeBtn.setAttribute('aria-label', 'Copy Figma link');
+  }
+
   // Mini header selection label
   if (sel) {
-    headerSelName.textContent = sel.name;
+    headerSelName.textContent = count > 1 ? `${count} selected` : sel.name;
     headerSelName.classList.add('has-sel');
   } else {
     headerSelName.textContent = '—';
@@ -91,16 +116,48 @@ function updateCopyBtn(
   }
 }
 
+let _copyResetTimer: ReturnType<typeof setTimeout> | null = null;
+
 copyNodeBtn.addEventListener('click', () => {
-  if (!_copyFileKey || !_copyNodeId) return;
+  if (!_copyFileKey || _copyAllNodes.length === 0) return;
   const slug = (_copyFileName || 'file')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  const nid = _copyNodeId.replace(':', '-');
-  const url = `https://www.figma.com/design/${_copyFileKey}/${slug}?node-id=${nid}`;
-  navigator.clipboard.writeText(url).catch(() => {});
-  // Briefly flash the button
-  copyNodeBtn.style.color = 'var(--accent)';
-  setTimeout(() => { copyNodeBtn.style.color = ''; }, 1200);
+  const urls = _copyAllNodes.map(n => {
+    const nid = n.id.replace(':', '-');
+    return `https://www.figma.com/design/${_copyFileKey}/${slug}?node-id=${nid}`;
+  });
+
+  // Icon swap first — before any clipboard ops that could throw
+  if (_copyResetTimer) clearTimeout(_copyResetTimer);
+  copyNodeBtn.classList.add('copied');
+  _copyResetTimer = setTimeout(() => {
+    copyNodeBtn.classList.remove('copied');
+    _copyResetTimer = null;
+  }, 1500);
+
+  copyToClipboard(urls.join('\n'));
+
+  const msg = urls.length > 1 ? `Copied ${urls.length} links` : 'Copied link';
+  postToPlugin('notify', { message: msg });
+});
+
+// ── Section bar ───────────────────────────────────────────────────────────────
+
+const sectionBar      = document.getElementById('sectionBar')      as HTMLElement;
+const sectionBarName  = document.getElementById('sectionBarName')  as HTMLElement;
+const formatSectionBtn = document.getElementById('formatSectionBtn') as HTMLButtonElement;
+
+function updateSectionBar(hasSection: boolean, sectionCount: number, firstName: string) {
+  sectionBar.classList.toggle('hidden', !hasSection);
+  if (hasSection) {
+    sectionBarName.textContent = sectionCount > 1 ? `${sectionCount} sections` : firstName;
+  }
+}
+
+formatSectionBtn.addEventListener('click', () => {
+  formatSectionBtn.disabled = true;
+  formatSectionBtn.textContent = '…';
+  postToPlugin('format-section');
 });
 
 // ── Bridge ────────────────────────────────────────────────────────────────────
@@ -595,26 +652,24 @@ function updateSpecSelection(sel: { id: string; name: string; nodeType: string; 
   }
 }
 
-document.querySelectorAll<HTMLButtonElement>('#specCats .chip').forEach(chip => {
+document.querySelectorAll<HTMLButtonElement>('#specOpts .chip').forEach(chip => {
   chip.addEventListener('click', () => chip.classList.toggle('on'));
-});
-document.getElementById('specAllBtn')?.addEventListener('click', () => {
-  document.querySelectorAll<HTMLButtonElement>('#specCats .chip').forEach(c => c.classList.add('on'));
-});
-document.getElementById('specNoneBtn')?.addEventListener('click', () => {
-  document.querySelectorAll<HTMLButtonElement>('#specCats .chip').forEach(c => c.classList.remove('on'));
 });
 
 document.getElementById('specGenerateBtn')?.addEventListener('click', () => {
   if (!specSetId) return;
-  const categories = Array.from(
-    document.querySelectorAll<HTMLButtonElement>('#specCats .chip.on')
-  ).map(c => c.dataset.cat!);
-  if (categories.length === 0) { setSpecStatus('Select at least one category', 'err'); return; }
+  const on = new Set(
+    Array.from(document.querySelectorAll<HTMLButtonElement>('#specOpts .chip.on'))
+      .map(c => c.dataset.opt!)
+  );
+  if (on.size === 0) { setSpecStatus('Select at least one section to include', 'err'); return; }
   const btn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
   btn.disabled = true; btn.textContent = 'Generating…';
   setSpecStatus('');
-  postToPlugin('spec:generate', { setId: specSetId, categories });
+  postToPlugin('spec:generate', {
+    setId: specSetId,
+    options: { variants: on.has('variants'), tokens: on.has('tokens'), children: on.has('children') },
+  });
 });
 
 // ── Plugin messages ───────────────────────────────────────────────────────────
@@ -679,13 +734,24 @@ window.addEventListener('message', (event) => {
         updateProtoSelection(sel);
         updateAnnotateSelection(sel);
         updateSpecSelection(sel);
-        updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null);
+        updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
+        updateSectionBar(
+          !!(msg.isSection as boolean),
+          (msg.sectionCount as number) ?? 0,
+          (msg.sectionName as string) ?? sel.name,
+        );
       } else {
         updateProtoSelection(null);
         updateAnnotateSelection(null);
         updateSpecSelection(null);
         updateCopyBtn(null, null);
+        updateSectionBar(false, 0, '');
       }
+      break;
+    }
+    case 'format-section:done': {
+      formatSectionBtn.disabled = false;
+      formatSectionBtn.textContent = 'Format';
       break;
     }
     case 'annotate:result': {
@@ -707,12 +773,11 @@ window.addEventListener('message', (event) => {
     }
     case 'spec:result': {
       const btn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
-      btn.disabled = !specSetId; btn.textContent = 'Generate';
+      btn.disabled = !specSetId; btn.textContent = 'Generate Spec';
       if (msg.error) setSpecStatus('❌ ' + (msg.error as string), 'err');
       else {
-        const cats = msg.categoryCount as number;
         const vars = msg.variantCount as number;
-        setSpecStatus(`✓ ${cats} categor${cats !== 1 ? 'ies' : 'y'} · ${vars} variant${vars !== 1 ? 's' : ''}`, 'ok');
+        setSpecStatus(`✓ Spec generated · ${vars} variant${vars !== 1 ? 's' : ''}`, 'ok');
       }
       break;
     }

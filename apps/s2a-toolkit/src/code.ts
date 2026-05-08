@@ -104,6 +104,8 @@ function notifySelection() {
   }
   const first = sel[0];
 
+  const sectionNodes = sel.filter(n => n.type === 'SECTION');
+
   figma.ui.postMessage({
     type: 'selection-changed',
     setId: first.type === 'COMPONENT_SET' ? first.id : null,
@@ -115,6 +117,10 @@ function notifySelection() {
     width: 'width' in first ? Math.round((first as FrameNode).width) : undefined,
     height: 'height' in first ? Math.round((first as FrameNode).height) : undefined,
     variantCount: first.type === 'COMPONENT_SET' ? (first as ComponentSetNode).children.length : undefined,
+    allNodes: sel.map(n => ({ id: n.id, name: n.name })),
+    isSection: sectionNodes.length > 0,
+    sectionCount: sectionNodes.length,
+    sectionName: sectionNodes.length > 0 ? sectionNodes[0].name : null,
   });
 
   // Select tab — send variant axes when a COMPONENT_SET is selected
@@ -229,6 +235,33 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       break;
     }
 
+    case 'notify': {
+      figma.notify(msg.message as string);
+      break;
+    }
+
+    case 'format-section': {
+      const sections = figma.currentPage.selection.filter(
+        n => n.type === 'SECTION'
+      ) as SectionNode[];
+      if (sections.length === 0) {
+        figma.notify('Select a section first');
+        figma.ui.postMessage({ type: 'format-section:done', count: 0 });
+        break;
+      }
+      let formatted = 0;
+      for (const section of sections) {
+        try {
+          section.fills = [];
+          formatted++;
+        } catch {}
+      }
+      const note = formatted === 1 ? 'Section cleared' : `${formatted} sections cleared`;
+      figma.notify(note);
+      figma.ui.postMessage({ type: 'format-section:done', count: formatted });
+      break;
+    }
+
     case 'resize-for-view': {
       const w = (msg.width as number) || 320;
       const h = (msg.height as number) || 480;
@@ -323,198 +356,400 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
     }
 
     case 'spec:generate': {
-      const setId      = msg.setId as string;
-      const categories = (msg.categories as string[]) ?? [];
-
-      if (categories.length === 0) {
-        figma.ui.postMessage({ type: 'spec:result', error: 'Select at least one category' });
-        break;
-      }
+      try {
+      const setId = msg.setId as string;
+      const opts  = (msg.options as { variants: boolean; tokens: boolean; children: boolean })
+                 ?? { variants: true, tokens: true, children: true };
 
       const specSetNode = await figma.getNodeByIdAsync(setId);
       if (!specSetNode || specSetNode.type !== 'COMPONENT_SET') {
-        figma.ui.postMessage({ type: 'spec:result', error: 'Component set not found — select it and try again' });
+        figma.ui.postMessage({ type: 'spec:result', error: 'Select a component set first' });
         break;
       }
-      const specSet = specSetNode as ComponentSetNode;
+      const specSet  = specSetNode as ComponentSetNode;
       const variants = specSet.children as ComponentNode[];
 
-      // Prefetch all fontStyle variable IDs across all variants
-      const specWeightIds = new Set<string>();
-      for (const v of variants) {
-        for (const n of [v as BaseNode, ...v.findAll(() => true)]) {
-          const fs = (n as any).boundVariables?.fontStyle;
-          if (fs?.[0]?.id) specWeightIds.add(fs[0].id);
+      await Promise.all([
+        figma.loadFontAsync({ family: 'Inter', style: 'Regular' }),
+        figma.loadFontAsync({ family: 'Inter', style: 'Medium' }),
+        figma.loadFontAsync({ family: 'Inter', style: 'Bold' }),
+        figma.loadFontAsync({ family: 'Adobe Clean', style: 'Regular' }).catch(() => {}),
+        figma.loadFontAsync({ family: 'Adobe Clean', style: 'Bold' }).catch(() => {}),
+        figma.loadFontAsync({ family: 'Adobe Clean Display', style: 'Black' }).catch(() => {}),
+      ]);
+
+      const allTextStyles = await figma.getLocalTextStylesAsync();
+      function findStyle(query: string): TextStyle | undefined {
+        const q = query.toLowerCase();
+        return allTextStyles.find(s => s.name.toLowerCase().includes(q));
+      }
+
+      // ── Property axes ──────────────────────────────────────────────────────
+      const propDefs = specSet.componentPropertyDefinitions;
+      const axes = Object.entries(propDefs)
+        .filter(([, d]) => d.type === 'VARIANT')
+        .map(([name, d]) => ({ name, values: (d as any).variantOptions as string[] }));
+
+      function parseProps(v: ComponentNode): Record<string, string> {
+        const r: Record<string, string> = {};
+        for (const part of v.name.split(', ')) {
+          const eq = part.indexOf('=');
+          if (eq > 0) r[part.slice(0, eq).trim()] = part.slice(eq + 1).trim();
+        }
+        return r;
+      }
+
+      const defaults: Record<string, string> = {};
+      for (const ax of axes) defaults[ax.name] = ax.values[0];
+
+      function pickVariant(override: Record<string, string>): ComponentNode {
+        const target = { ...defaults, ...override };
+        return variants.find(v => {
+          const p = parseProps(v);
+          return Object.entries(target).every(([k, val]) => p[k] === val);
+        }) ?? variants[0];
+      }
+
+      // ── Scoped annotation helpers ─────────────────────────────────────────
+      function applyAnnotations(nodes: BaseNode[]): void {
+        for (const n of nodes) {
+          const bv: Record<string, any> = (n as any).boundVariables ?? {};
+          const anns: Array<{ labelMarkdown: string; properties: Array<{ type: string }> }> = [];
+
+          if ((bv.fills?.length ?? 0) > 0)
+            anns.push({ labelMarkdown: n.type === 'TEXT' ? 'Color' : 'Fill', properties: [{ type: 'fills' }] });
+          if ((bv.strokes?.length ?? 0) > 0)
+            anns.push({ labelMarkdown: 'Border', properties: [{ type: 'strokes' }] });
+          if (bv.cornerRadius?.id || bv.topLeftRadius?.id)
+            anns.push({ labelMarkdown: 'Radius', properties: [{ type: 'cornerRadius' }] });
+
+          const sp: Array<{ type: string }> = [];
+          if (bv.paddingTop || bv.paddingBottom || bv.paddingLeft || bv.paddingRight) sp.push({ type: 'padding' });
+          if (bv.itemSpacing) sp.push({ type: 'itemSpacing' });
+          if (sp.length) anns.push({ labelMarkdown: 'Spacing', properties: sp });
+
+          if (n.type === 'TEXT') {
+            const tp: Array<{ type: string }> = [];
+            if ((bv.fontSize?.length      ?? 0) > 0) tp.push({ type: 'fontSize' });
+            if ((bv.lineHeight?.length    ?? 0) > 0) tp.push({ type: 'lineHeight' });
+            if ((bv.letterSpacing?.length ?? 0) > 0) tp.push({ type: 'letterSpacing' });
+            if (tp.length) anns.push({ labelMarkdown: 'Typography', properties: tp });
+          }
+
+          if (anns.length) { try { (n as any).annotations = anns; } catch {} }
         }
       }
-      const specWeightNames = new Map<string, string>();
-      await Promise.all([...specWeightIds].map(async id => {
-        try { const v = await figma.variables.getVariableByIdAsync(id); if (v) specWeightNames.set(id, v.name); } catch {}
-      }));
 
-      const CAT_LABELS: Record<string, string> = {
-        'color-fg': 'Color Fg', 'color-bg': 'Color Bg', 'spacing': 'Spacing',
-        'shape': 'Shape', 'typography': 'Typography', 'sizing': 'Sizing',
-      };
-
-      // Returns a fingerprint of the property values relevant to a given category.
-      // Variants with the same fingerprint are visually identical for that category —
-      // we show only one representative per unique fingerprint.
-      const getVariantFingerprint = (v: ComponentNode, cat: string): string => {
-        const all = [v as BaseNode, ...v.findAll(() => true)];
-        const roundColor = (c: any) => c ? `${Math.round((c.r ?? 0) * 255)},${Math.round((c.g ?? 0) * 255)},${Math.round((c.b ?? 0) * 255)}` : '';
-        switch (cat) {
-          case 'shape':
-            return all.map(n => {
-              const cr = (n as any).cornerRadius;
-              const sl = ((n as any).strokes ?? []).length;
-              return `${typeof cr === 'number' ? Math.round(cr) : '?'}:${sl}`;
-            }).join('|');
-          case 'spacing':
-            return all.filter(n => n.type === 'FRAME' || n.type === 'COMPONENT').map(n => {
-              const f = n as any;
-              return `${f.paddingTop ?? 0},${f.paddingBottom ?? 0},${f.paddingLeft ?? 0},${f.paddingRight ?? 0},${f.itemSpacing ?? 0}`;
-            }).join('|');
-          case 'color-fg':
-            return all.filter(n => n.type === 'TEXT').map(n =>
-              ((n as any).fills ?? []).map((f: any) => roundColor(f.color) + ':' + Math.round((f.opacity ?? 1) * 100)).join(';')
-            ).join('|');
-          case 'color-bg':
-            return all.filter(n => n.type !== 'TEXT').map(n =>
-              ((n as any).fills ?? []).map((f: any) => roundColor(f.color) + ':' + Math.round((f.opacity ?? 1) * 100)).join(';')
-            ).join('|');
-          case 'typography':
-            return all.filter(n => n.type === 'TEXT').map(n => {
-              const f = n as any;
-              const fn = typeof f.fontName === 'object' ? `${f.fontName?.family}/${f.fontName?.style}` : '';
-              return `${f.fontSize}:${fn}`;
-            }).join('|');
-          case 'sizing':
-            return `${Math.round((v as any).width)}:${Math.round((v as any).height)}`;
-          default:
-            return v.id;
+      function annotateScope(inst: InstanceNode, scope: 'root' | string): void {
+        if (scope === 'root') {
+          const nodes: BaseNode[] = [inst as BaseNode];
+          for (const c of inst.children as BaseNode[]) {
+            nodes.push(c);
+            nodes.push(...((c as any).children ?? []) as BaseNode[]);
+          }
+          applyAnnotations(nodes);
+        } else {
+          const target = inst.findOne(n => n.name === scope) as SceneNode | null;
+          if (!target) return;
+          const descendants = 'findAll' in target
+            ? (target as FrameNode).findAll(() => true)
+            : [];
+          applyAnnotations([target as BaseNode, ...descendants]);
         }
-      };
+      }
 
-      // One section per category, stacked vertically to the right of the component set
-      const xBase = specSet.x + specSet.width + 100;
-      let yOffset = specSet.y;
-      const allSections: SectionNode[] = [];
+      const refVariant = variants[0];
+      const refRootFrame = refVariant.children[0] as FrameNode | undefined;
+      const topLevelLayerNames: string[] = refRootFrame
+        ? (refRootFrame.children as SceneNode[]).map(c => c.name)
+        : [];
 
-      for (const cat of categories) {
-        const section = figma.createSection();
-        section.name = specSet.name + ' — ' + (CAT_LABELS[cat] ?? cat) + ' Spec';
-        section.x = xBase;
-        section.y = yOffset;
-        figma.currentPage.appendChild(section);
-        try { (section as any).fills = []; } catch {}
-        allSections.push(section);
+      // ── Token prefetch ────────────────────────────────────────────────────
+      const [
+        borderColorVar, borderWidthVar, radiusXsVar,
+        contentHeadingVar, contentDefaultVar, contentSubtleVar,
+      ] = await Promise.all([
+        figma.variables.getVariableByIdAsync('VariableID:6:22'),       // s2a/color/border/subtle
+        figma.variables.getVariableByIdAsync('VariableID:2:111'),      // s2a/border/width/sm
+        figma.variables.getVariableByIdAsync('VariableID:2:97'),       // s2a/border/radius/xs
+        figma.variables.getVariableByIdAsync('VariableID:2483:41398'), // s2a/color/content/heading
+        figma.variables.getVariableByIdAsync('VariableID:6:82'),       // s2a/color/content/default
+        figma.variables.getVariableByIdAsync('VariableID:6:84'),       // s2a/color/content/subtle
+      ]);
 
-        // Single continuous white frame holding all variants
-        const row = figma.createFrame();
-        row.name = 'variants';
-        row.layoutMode = 'HORIZONTAL';
-        row.primaryAxisSizingMode = 'AUTO';
-        row.counterAxisSizingMode = 'AUTO';
-        row.primaryAxisAlignItems = 'CENTER';
-        row.counterAxisAlignItems = 'CENTER';
-        row.paddingLeft = 24; row.paddingRight = 24;
-        row.paddingTop = 24;  row.paddingBottom = 24;
-        row.itemSpacing = 16;
-        row.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+      function setBorder(node: FrameNode): void {
+        node.fills = [];
+        node.strokes = borderColorVar
+          ? [figma.variables.setBoundVariableForPaint(
+              { type: 'SOLID', color: { r: 0.8, g: 0.8, b: 0.8 } },
+              'color', borderColorVar
+            )]
+          : [{ type: 'SOLID', color: { r: 0.871, g: 0.871, b: 0.871 } }];
+        node.strokeWeight = 1;
+        node.cornerRadius = 4;
+        if (borderWidthVar) { try { node.setBoundVariable('strokeWeight', borderWidthVar); } catch {} }
+        if (radiusXsVar)    { try { node.setBoundVariable('cornerRadius', radiusXsVar);   } catch {} }
+      }
 
-        // Only include one representative per unique property value for this category
-        const seenFps = new Set<string>();
-        const catVariants: ComponentNode[] = [];
-        for (const v of variants) {
-          const fp = getVariantFingerprint(v, cat);
-          if (!seenFps.has(fp)) { seenFps.add(fp); catVariants.push(v); }
+      // ── Layout constants ───────────────────────────────────────────────────
+      const SEC_PAD  = 48;
+      const refW     = variants[0].width;
+      const REF_PAD  = Math.max(80, Math.round(refW * 0.5));
+      const CARD_PAD = Math.max(28, Math.round(refW * 0.25));
+      const CARD_W   = Math.max(120, refW + CARD_PAD * 2); // column spacing reference
+      const CARD_GAP = 20;
+      const LBL_GAP  = 10;
+
+      // ── Section ────────────────────────────────────────────────────────────
+      const sec = figma.createSection();
+      sec.name = 'Annotations — ' + specSet.name;
+      sec.x = specSet.x + specSet.width + 100;
+      sec.y = specSet.y;
+      figma.currentPage.appendChild(sec);
+      try { (sec as any).fills = []; } catch {}
+
+      // ── Text style queue ──────────────────────────────────────────────────
+      type Var = Variable | null;
+      const styleQueue: Array<{ node: TextNode; query: string; colorVar: Var }> = [];
+
+      function bindFill(node: TextNode, colorVar: Var): void {
+        if (colorVar) {
+          node.fills = [figma.variables.setBoundVariableForPaint(
+            { type: 'SOLID', color: { r: 0.067, g: 0.067, b: 0.067 } },
+            'color', colorVar
+          )];
+        }
+      }
+
+      async function flushStyles(): Promise<void> {
+        await Promise.all(styleQueue.map(async ({ node, query, colorVar }) => {
+          const style = findStyle(query);
+          if (style) { try { await node.setTextStyleIdAsync(style.id); } catch {} }
+          bindFill(node, colorVar);
+        }));
+        styleQueue.length = 0;
+      }
+
+      // Creates a text node inside `sec`, queues S2A style + color token binding.
+      function txt(
+        content: string, styleQuery: string,
+        colorVar: Var,
+        x: number, y: number,
+        extra: { upper?: boolean; ls?: number } = {}
+      ): TextNode {
+        const t = figma.createText();
+        t.fontName = { family: 'Inter', style: 'Regular' };
+        t.characters = content;
+        if (extra.upper) t.textCase = 'UPPER';
+        if (extra.ls)    t.letterSpacing = { value: extra.ls, unit: 'PERCENT' };
+        t.textAutoResize = 'WIDTH_AND_HEIGHT';
+        sec.appendChild(t);
+        t.x = x; t.y = y;
+        styleQueue.push({ node: t, query: styleQuery, colorVar });
+        return t;
+      }
+
+      function eyebrow(label: string, x: number, y: number): TextNode {
+        return txt(label, 'eyebrow', contentSubtleVar, x, y, { upper: true, ls: 8 });
+      }
+
+      let curY = SEC_PAD;
+
+      // ── Page title ─────────────────────────────────────────────────────────
+      txt(specSet.name.toUpperCase() + ' · SPEC', 'eyebrow', contentSubtleVar, SEC_PAD, curY, { upper: true, ls: 8 });
+      txt(specSet.name, 'heading-lg', contentHeadingVar, SEC_PAD, curY + 18);
+      txt(
+        `${variants.length} variant${variants.length !== 1 ? 's' : ''}` +
+        (axes.length ? '  ·  ' + axes.map(a => a.name).join('  ·  ') : ''),
+        'body-md', contentSubtleVar, SEC_PAD, curY + 56
+      );
+      curY += 96;
+
+      // ── One row per variant axis ────────────────────────────────────────────
+      if (opts.variants) {
+        const axesToShow = axes.length > 0
+          ? axes
+          : [{ name: 'Variants', values: variants.map(v => v.name) }];
+
+        for (const ax of axesToShow) {
+          eyebrow(ax.name, SEC_PAD, curY);
+          curY += 22;
+
+          let rowMaxH = 0;
+          for (let i = 0; i < ax.values.length; i++) {
+            const val = ax.values[i];
+            const variant = axes.length > 0
+              ? pickVariant({ [ax.name]: val })
+              : (variants.find(v => v.name === val) ?? variants[0]);
+
+            const cx = SEC_PAD + i * (CARD_W + CARD_GAP);
+
+            const card = figma.createFrame();
+            card.name = 'card-' + val;
+            card.layoutMode = 'VERTICAL';
+            card.primaryAxisSizingMode = 'AUTO';
+            card.counterAxisSizingMode = 'AUTO';
+            card.primaryAxisAlignItems = 'CENTER';
+            card.counterAxisAlignItems = 'CENTER';
+            card.paddingTop    = CARD_PAD;
+            card.paddingBottom = CARD_PAD;
+            card.paddingLeft   = CARD_PAD;
+            card.paddingRight  = CARD_PAD;
+            setBorder(card);
+            sec.appendChild(card);
+            card.x = cx; card.y = curY;
+
+            const inst = variant.createInstance();
+            card.appendChild(inst);
+            rowMaxH = Math.max(rowMaxH, card.height);
+
+            const lbl = txt(val, 'label', contentDefaultVar, 0, curY + card.height + LBL_GAP);
+            lbl.x = cx + Math.round((card.width - lbl.width) / 2);
+          }
+
+          curY += rowMaxH + LBL_GAP + 24 + 40;
+        }
+      }
+
+      // ── Child components ───────────────────────────────────────────────────
+      if (opts.children) {
+        const childMap = new Map<string, ComponentSetNode>();
+        // Collect all instance nodes across all variants, then batch-resolve
+        // their main components in parallel instead of sequential awaits.
+        const allInstances: InstanceNode[] = [];
+        for (const v of variants)
+          for (const n of [v as BaseNode, ...v.findAll(() => true)])
+            if (n.type === 'INSTANCE') allInstances.push(n as InstanceNode);
+
+        const mains = await Promise.all(
+          allInstances.map(inst => inst.getMainComponentAsync().catch(() => null))
+        );
+        for (const main of mains) {
+          if (main?.parent?.type === 'COMPONENT_SET' && main.parent.id !== specSet.id)
+            childMap.set(main.parent.id, main.parent as ComponentSetNode);
         }
 
-        for (const variant of catVariants) {
-          const instance = variant.createInstance();
-          row.appendChild(instance);
+        if (childMap.size > 0) {
+          eyebrow('Child components', SEC_PAD, curY);
+          curY += 22;
 
-          // Component nodes are the source of truth for bound variables.
-          // Instance override nodes only expose explicit overrides — shape
-          // bindings (cornerRadius, strokes) live on the master component and
-          // won't appear on the instance tree unless overridden.
-          const compNodes: BaseNode[] = [variant as BaseNode, ...variant.findAll(() => true)];
-          const allNodes: BaseNode[] = [instance];
-          if ('findAll' in instance) allNodes.push(...(instance as any).findAll(() => true) as BaseNode[]);
+          let childX = SEC_PAD;
+          const CHILD_PAD = 20;
+          for (const [, cs] of childMap) {
+            const csRef = cs.children[0] as ComponentNode;
 
-          for (let ni = 0; ni < allNodes.length; ni++) {
-            const n = allNodes[ni];
-            const instBv = (n as any).boundVariables ?? {};
-            const compBv = ni < compNodes.length ? ((compNodes[ni] as any).boundVariables ?? {}) : {};
-            // Component bindings as base; instance overrides on top
-            const bv: Record<string, any> = { ...compBv, ...instBv };
-            const anns: Array<{ labelMarkdown: string; properties: Array<{ type: string }> }> = [];
+            const card = figma.createFrame();
+            card.name = 'child-' + cs.name;
+            card.layoutMode = 'VERTICAL';
+            card.primaryAxisSizingMode = 'AUTO';
+            card.counterAxisSizingMode = 'AUTO';
+            card.primaryAxisAlignItems = 'CENTER';
+            card.counterAxisAlignItems = 'CENTER';
+            card.paddingTop    = CHILD_PAD;
+            card.paddingBottom = CHILD_PAD;
+            card.paddingLeft   = CHILD_PAD;
+            card.paddingRight  = CHILD_PAD;
+            card.itemSpacing   = 12;
+            setBorder(card);
+            sec.appendChild(card);
+            card.x = childX; card.y = curY;
 
-            if (cat === 'color-fg' && n.type === 'TEXT' && (bv.fills?.length ?? 0) > 0)
-              anns.push({ labelMarkdown: 'Color', properties: [{ type: 'fills' }] });
+            try {
+              const ci = csRef.createInstance();
+              card.appendChild(ci);
+            } catch {}
 
-            if (cat === 'color-bg' && n.type !== 'TEXT' && (bv.fills?.length ?? 0) > 0)
-              anns.push({ labelMarkdown: 'Background', properties: [{ type: 'fills' }] });
+            const cnLbl = figma.createText();
+            cnLbl.fontName = { family: 'Inter', style: 'Regular' };
+            cnLbl.characters = cs.name;
+            cnLbl.textAutoResize = 'WIDTH_AND_HEIGHT';
+            card.appendChild(cnLbl);
+            styleQueue.push({ node: cnLbl, query: 'label', colorVar: contentDefaultVar });
 
-            if (cat === 'spacing') {
-              const sp: Array<{ type: string }> = [];
-              if (bv.paddingTop || bv.paddingBottom || bv.paddingLeft || bv.paddingRight) sp.push({ type: 'padding' });
-              if (bv.itemSpacing) sp.push({ type: 'itemSpacing' });
-              if (sp.length) anns.push({ labelMarkdown: 'Spacing', properties: sp });
-            }
-
-            if (cat === 'shape') {
-              const sh: Array<{ type: string }> = [];
-              const compN = ni < compNodes.length ? compNodes[ni] : null;
-              // Bound variable check (any corner key) OR raw non-zero value on the component node
-              const hasCornerVar = bv.cornerRadius || bv.topLeftRadius || bv.topRightRadius || bv.bottomLeftRadius || bv.bottomRightRadius;
-              const rawCorner = compN ? (compN as any).cornerRadius : undefined;
-              const hasCornerRaw = typeof rawCorner === 'number' && rawCorner > 0;
-              const nodeAcceptsCorner = n.type === 'FRAME' || n.type === 'RECTANGLE' || n.type === 'INSTANCE' || n.type === 'COMPONENT' || n.type === 'ELLIPSE';
-              if ((hasCornerVar || hasCornerRaw) && nodeAcceptsCorner) sh.push({ type: 'cornerRadius' });
-              // Bound variable check OR actual strokes on the component node
-              const hasStrokesVar = (bv.strokes?.length ?? 0) > 0;
-              const compStrokes = compN ? (compN as any).strokes : null;
-              const hasStrokesRaw = Array.isArray(compStrokes) && compStrokes.length > 0;
-              if (hasStrokesVar || hasStrokesRaw) sh.push({ type: 'strokes' });
-              if (sh.length) anns.push({ labelMarkdown: 'Shape', properties: sh });
-            }
-
-            if (cat === 'typography' && n.type === 'TEXT') {
-              const tp: Array<{ type: string }> = [];
-              if ((bv.fontFamily?.length    ?? 0) > 0) tp.push({ type: 'fontFamily' });
-              if ((bv.fontSize?.length      ?? 0) > 0) tp.push({ type: 'fontSize' });
-              if ((bv.lineHeight?.length    ?? 0) > 0) tp.push({ type: 'lineHeight' });
-              if ((bv.letterSpacing?.length ?? 0) > 0) tp.push({ type: 'letterSpacing' });
-              if (tp.length) anns.push({ labelMarkdown: 'Typography', properties: tp });
-              if ((bv.fontStyle?.length ?? 0) > 0) {
-                const label = specWeightNames.get(bv.fontStyle[0].id) ?? 'font-weight';
-                anns.push({ labelMarkdown: label, properties: [{ type: 'fontWeight' }] });
-              }
-            }
-
-            if (cat === 'sizing' && n === instance)
-              anns.push({ labelMarkdown: (instance as SceneNode).name.replace(/^\./, ''), properties: [{ type: 'width' }, { type: 'height' }] });
-
-            if (anns.length > 0) {
-              try { (n as any).annotations = anns; } catch {}
-            }
+            childX += card.width + 16;
           }
         }
-
-        section.appendChild(row);
-        row.x = 24;
-        row.y = 40;
-        section.resizeWithoutConstraints(row.width + 48, row.height + 72);
-        yOffset += section.height + 40;
       }
 
-      if (allSections.length > 0) {
-        figma.currentPage.selection = allSections;
-        figma.viewport.scrollAndZoomIntoView(allSections);
+      // ── Fit main section ───────────────────────────────────────────────────
+      await flushStyles();
+      let maxR = 0, maxB = 0;
+      for (const n of sec.children) {
+        const sn = n as SceneNode;
+        maxR = Math.max(maxR, sn.x + sn.width);
+        maxB = Math.max(maxB, sn.y + sn.height);
       }
-      figma.ui.postMessage({ type: 'spec:result', categoryCount: categories.length, variantCount: variants.length });
+      try { sec.resizeWithoutConstraints(maxR + SEC_PAD, maxB + SEC_PAD); } catch {}
+
+      // ── Annotated reference sections (one per structural layer) ────────────
+      const allCreated: SectionNode[] = [sec];
+
+      if (opts.tokens) {
+        const scopes: Array<{ key: 'root' | string; label: string }> = [
+          { key: 'root', label: 'Root' },
+          ...topLevelLayerNames.map(name => ({ key: name, label: name })),
+        ];
+
+        const REF_SEC_GAP = 200;
+        const refSecX = sec.x + sec.width + 120;
+        let refSecY = sec.y;
+
+        for (const { key, label } of scopes) {
+          const refSec = figma.createSection();
+          refSec.name = label;
+          figma.currentPage.appendChild(refSec);
+          try { (refSec as any).fills = []; } catch {}
+
+          const eb = figma.createText();
+          eb.fontName = { family: 'Inter', style: 'Regular' };
+          eb.characters = label.toUpperCase();
+          eb.textCase = 'UPPER';
+          eb.letterSpacing = { value: 8, unit: 'PERCENT' };
+          eb.textAutoResize = 'WIDTH_AND_HEIGHT';
+          refSec.appendChild(eb);
+          eb.x = SEC_PAD; eb.y = SEC_PAD;
+          styleQueue.push({ node: eb, query: 'eyebrow', colorVar: contentSubtleVar });
+
+          const panelY = SEC_PAD + 22 + 12;
+          const panel = figma.createFrame();
+          panel.name = 'panel';
+          panel.layoutMode = 'VERTICAL';
+          panel.primaryAxisSizingMode = 'AUTO';
+          panel.counterAxisSizingMode = 'AUTO';
+          panel.primaryAxisAlignItems = 'CENTER';
+          panel.counterAxisAlignItems = 'CENTER';
+          panel.paddingTop    = REF_PAD;
+          panel.paddingBottom = REF_PAD;
+          panel.paddingLeft   = REF_PAD;
+          panel.paddingRight  = REF_PAD;
+          setBorder(panel);
+          refSec.appendChild(panel);
+          panel.x = SEC_PAD; panel.y = panelY;
+
+          const inst = refVariant.createInstance();
+          panel.appendChild(inst);
+          annotateScope(inst, key);
+
+          await flushStyles();
+
+          const secW = Math.max(panel.width, eb.width) + SEC_PAD * 2;
+          const secH = panelY + panel.height + SEC_PAD;
+          try { refSec.resizeWithoutConstraints(secW, secH); } catch {}
+
+          refSec.x = refSecX;
+          refSec.y = refSecY;
+          refSecY += secH + REF_SEC_GAP;
+
+          allCreated.push(refSec);
+        }
+      }
+
+      figma.currentPage.selection = allCreated;
+      figma.viewport.scrollAndZoomIntoView(allCreated);
+      figma.ui.postMessage({ type: 'spec:result', variantCount: variants.length });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'spec:result', error: e.message || String(e) });
+      }
       break;
     }
 

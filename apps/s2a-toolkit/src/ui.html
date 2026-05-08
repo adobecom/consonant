@@ -30,9 +30,12 @@
     <div class="header-actions">
       <!-- Copy Figma link (visible when a node is selected) -->
       <button class="icon-btn hidden" id="copyNodeBtn" title="Copy Figma link" aria-label="Copy Figma link">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <svg class="icon-copy" width="14" height="14" viewBox="0 0 14 14" fill="none">
           <rect x="5" y="5" width="7" height="7" rx="1.2" stroke="currentColor" stroke-width="1.3"/>
           <path d="M9 5V3.2A1.2 1.2 0 0 0 7.8 2H3.2A1.2 1.2 0 0 0 2 3.2v4.6C2 8.46 2.54 9 3.2 9H5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        <svg class="icon-check" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
 
@@ -52,6 +55,15 @@
       </button>
     </div>
   </header>
+
+  <!-- ── Section context bar (shown when a Section node is selected) ──── -->
+  <div class="section-bar hidden" id="sectionBar">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="flex-shrink:0">
+      <rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2.5 1.5"/>
+    </svg>
+    <span class="section-bar-name" id="sectionBarName"></span>
+    <button class="btn btn-ghost section-bar-btn" id="formatSectionBtn">Format</button>
+  </div>
 
   <!-- ── Panels ───────────────────────────────────────────────────────── -->
   <div class="main-content" id="mainContent">
@@ -127,19 +139,14 @@
           </div>
         </div>
       </div>
-      <div class="section-label" style="margin-top:14px;">Token categories</div>
-      <div class="chip-grid" id="specCats">
-        <button class="chip on" data-cat="color-fg">Color Fg</button>
-        <button class="chip on" data-cat="color-bg">Color Bg</button>
-        <button class="chip on" data-cat="spacing">Spacing</button>
-        <button class="chip on" data-cat="shape">Shape</button>
-        <button class="chip on" data-cat="typography">Typography</button>
-        <button class="chip on" data-cat="sizing">Sizing</button>
+      <div class="section-label" style="margin-top:14px;">Include</div>
+      <div class="chip-grid" id="specOpts">
+        <button class="chip on" data-opt="variants">Variants</button>
+        <button class="chip on" data-opt="tokens">Tokens</button>
+        <button class="chip on" data-opt="children">Children</button>
       </div>
       <div class="btn-row" style="margin-top:12px;">
-        <button class="btn btn-ghost" id="specAllBtn">All</button>
-        <button class="btn btn-ghost" id="specNoneBtn">None</button>
-        <button class="btn" id="specGenerateBtn" disabled style="flex:2;">Generate</button>
+        <button class="btn" id="specGenerateBtn" disabled style="flex:1;">Generate Spec</button>
       </div>
       <div class="status" id="specStatus"></div>
     </div>

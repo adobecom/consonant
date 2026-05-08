@@ -460,3 +460,36 @@ body {
 .form-input::placeholder { color: var(--text-3); }
 
 .hidden { display: none !important; }
+
+/* ── Section context bar ─────────────────────────────────────────────────── */
+
+.section-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px 5px 10px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  color: var(--text-3);
+}
+.section-bar-name {
+  flex: 1;
+  font-size: 10px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.section-bar-btn {
+  padding: 3px 8px;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+/* ── Copy button icon swap ──────────────────────────────────────────────────── */
+
+#copyNodeBtn .icon-check { display: none; }
+#copyNodeBtn.copied .icon-copy { display: none; }
+#copyNodeBtn.copied .icon-check { display: block; }
+#copyNodeBtn.copied { color: var(--green) !important; }

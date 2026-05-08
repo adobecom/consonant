@@ -117,6 +117,7 @@ function notifySelection() {
     return;
   }
   const first = sel[0];
+  const sectionNodes = sel.filter((n) => n.type === "SECTION");
   figma.ui.postMessage({
     type: "selection-changed",
     setId: first.type === "COMPONENT_SET" ? first.id : null,
@@ -127,7 +128,11 @@ function notifySelection() {
     fileName: figma.root.name,
     width: "width" in first ? Math.round(first.width) : void 0,
     height: "height" in first ? Math.round(first.height) : void 0,
-    variantCount: first.type === "COMPONENT_SET" ? first.children.length : void 0
+    variantCount: first.type === "COMPONENT_SET" ? first.children.length : void 0,
+    allNodes: sel.map((n) => ({ id: n.id, name: n.name })),
+    isSection: sectionNodes.length > 0,
+    sectionCount: sectionNodes.length,
+    sectionName: sectionNodes.length > 0 ? sectionNodes[0].name : null
   });
   if (first.type === "COMPONENT_SET") {
     const defs = first.componentPropertyDefinitions;
@@ -171,7 +176,7 @@ figma.on("currentpagechange", () => {
 });
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
 figma.ui.onmessage = async (msg) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y;
   switch (msg.type) {
     case "ui-ready":
       notifySelection();
@@ -226,6 +231,32 @@ figma.ui.onmessage = async (msg) => {
       } catch (e) {
         figma.ui.postMessage({ type: "settings-saved", success: false, error: e.message || String(e) });
       }
+      break;
+    }
+    case "notify": {
+      figma.notify(msg.message);
+      break;
+    }
+    case "format-section": {
+      const sections = figma.currentPage.selection.filter(
+        (n) => n.type === "SECTION"
+      );
+      if (sections.length === 0) {
+        figma.notify("Select a section first");
+        figma.ui.postMessage({ type: "format-section:done", count: 0 });
+        break;
+      }
+      let formatted = 0;
+      for (const section of sections) {
+        try {
+          section.fills = [];
+          formatted++;
+        } catch (e) {
+        }
+      }
+      const note = formatted === 1 ? "Section cleared" : `${formatted} sections cleared`;
+      figma.notify(note);
+      figma.ui.postMessage({ type: "format-section:done", count: formatted });
       break;
     }
     case "resize-for-view": {
@@ -325,200 +356,364 @@ figma.ui.onmessage = async (msg) => {
       break;
     }
     case "spec:generate": {
-      const setId = msg.setId;
-      const categories = (_w = msg.categories) != null ? _w : [];
-      if (categories.length === 0) {
-        figma.ui.postMessage({ type: "spec:result", error: "Select at least one category" });
-        break;
-      }
-      const specSetNode = await figma.getNodeByIdAsync(setId);
-      if (!specSetNode || specSetNode.type !== "COMPONENT_SET") {
-        figma.ui.postMessage({ type: "spec:result", error: "Component set not found \u2014 select it and try again" });
-        break;
-      }
-      const specSet = specSetNode;
-      const variants = specSet.children;
-      const specWeightIds = /* @__PURE__ */ new Set();
-      for (const v of variants) {
-        for (const n of [v, ...v.findAll(() => true)]) {
-          const fs = (_x = n.boundVariables) == null ? void 0 : _x.fontStyle;
-          if ((_y = fs == null ? void 0 : fs[0]) == null ? void 0 : _y.id) specWeightIds.add(fs[0].id);
-        }
-      }
-      const specWeightNames = /* @__PURE__ */ new Map();
-      await Promise.all([...specWeightIds].map(async (id) => {
-        try {
-          const v = await figma.variables.getVariableByIdAsync(id);
-          if (v) specWeightNames.set(id, v.name);
-        } catch (e) {
-        }
-      }));
-      const CAT_LABELS = {
-        "color-fg": "Color Fg",
-        "color-bg": "Color Bg",
-        "spacing": "Spacing",
-        "shape": "Shape",
-        "typography": "Typography",
-        "sizing": "Sizing"
-      };
-      const getVariantFingerprint = (v, cat) => {
-        const all = [v, ...v.findAll(() => true)];
-        const roundColor = (c) => {
-          var _a2, _b2, _c2;
-          return c ? `${Math.round(((_a2 = c.r) != null ? _a2 : 0) * 255)},${Math.round(((_b2 = c.g) != null ? _b2 : 0) * 255)},${Math.round(((_c2 = c.b) != null ? _c2 : 0) * 255)}` : "";
-        };
-        switch (cat) {
-          case "shape":
-            return all.map((n) => {
-              var _a2;
-              const cr = n.cornerRadius;
-              const sl = ((_a2 = n.strokes) != null ? _a2 : []).length;
-              return `${typeof cr === "number" ? Math.round(cr) : "?"}:${sl}`;
-            }).join("|");
-          case "spacing":
-            return all.filter((n) => n.type === "FRAME" || n.type === "COMPONENT").map((n) => {
-              var _a2, _b2, _c2, _d2, _e2;
-              const f = n;
-              return `${(_a2 = f.paddingTop) != null ? _a2 : 0},${(_b2 = f.paddingBottom) != null ? _b2 : 0},${(_c2 = f.paddingLeft) != null ? _c2 : 0},${(_d2 = f.paddingRight) != null ? _d2 : 0},${(_e2 = f.itemSpacing) != null ? _e2 : 0}`;
-            }).join("|");
-          case "color-fg":
-            return all.filter((n) => n.type === "TEXT").map(
-              (n) => {
-                var _a2;
-                return ((_a2 = n.fills) != null ? _a2 : []).map((f) => {
-                  var _a3;
-                  return roundColor(f.color) + ":" + Math.round(((_a3 = f.opacity) != null ? _a3 : 1) * 100);
-                }).join(";");
-              }
-            ).join("|");
-          case "color-bg":
-            return all.filter((n) => n.type !== "TEXT").map(
-              (n) => {
-                var _a2;
-                return ((_a2 = n.fills) != null ? _a2 : []).map((f) => {
-                  var _a3;
-                  return roundColor(f.color) + ":" + Math.round(((_a3 = f.opacity) != null ? _a3 : 1) * 100);
-                }).join(";");
-              }
-            ).join("|");
-          case "typography":
-            return all.filter((n) => n.type === "TEXT").map((n) => {
-              var _a2, _b2;
-              const f = n;
-              const fn = typeof f.fontName === "object" ? `${(_a2 = f.fontName) == null ? void 0 : _a2.family}/${(_b2 = f.fontName) == null ? void 0 : _b2.style}` : "";
-              return `${f.fontSize}:${fn}`;
-            }).join("|");
-          case "sizing":
-            return `${Math.round(v.width)}:${Math.round(v.height)}`;
-          default:
-            return v.id;
-        }
-      };
-      const xBase = specSet.x + specSet.width + 100;
-      let yOffset = specSet.y;
-      const allSections = [];
-      for (const cat of categories) {
-        const section = figma.createSection();
-        section.name = specSet.name + " \u2014 " + ((_z = CAT_LABELS[cat]) != null ? _z : cat) + " Spec";
-        section.x = xBase;
-        section.y = yOffset;
-        figma.currentPage.appendChild(section);
-        try {
-          section.fills = [];
-        } catch (e) {
-        }
-        allSections.push(section);
-        const row = figma.createFrame();
-        row.name = "variants";
-        row.layoutMode = "HORIZONTAL";
-        row.primaryAxisSizingMode = "AUTO";
-        row.counterAxisSizingMode = "AUTO";
-        row.primaryAxisAlignItems = "CENTER";
-        row.counterAxisAlignItems = "CENTER";
-        row.paddingLeft = 24;
-        row.paddingRight = 24;
-        row.paddingTop = 24;
-        row.paddingBottom = 24;
-        row.itemSpacing = 16;
-        row.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
-        const seenFps = /* @__PURE__ */ new Set();
-        const catVariants = [];
-        for (const v of variants) {
-          const fp = getVariantFingerprint(v, cat);
-          if (!seenFps.has(fp)) {
-            seenFps.add(fp);
-            catVariants.push(v);
+      try {
+        let findStyle2 = function(query) {
+          const q = query.toLowerCase();
+          return allTextStyles.find((s) => s.name.toLowerCase().includes(q));
+        }, parseProps2 = function(v) {
+          const r = {};
+          for (const part of v.name.split(", ")) {
+            const eq = part.indexOf("=");
+            if (eq > 0) r[part.slice(0, eq).trim()] = part.slice(eq + 1).trim();
           }
-        }
-        for (const variant of catVariants) {
-          const instance = variant.createInstance();
-          row.appendChild(instance);
-          const compNodes = [variant, ...variant.findAll(() => true)];
-          const allNodes = [instance];
-          if ("findAll" in instance) allNodes.push(...instance.findAll(() => true));
-          for (let ni = 0; ni < allNodes.length; ni++) {
-            const n = allNodes[ni];
-            const instBv = (_A = n.boundVariables) != null ? _A : {};
-            const compBv = ni < compNodes.length ? (_B = compNodes[ni].boundVariables) != null ? _B : {} : {};
-            const bv = __spreadValues(__spreadValues({}, compBv), instBv);
+          return r;
+        }, pickVariant2 = function(override) {
+          var _a2;
+          const target = __spreadValues(__spreadValues({}, defaults), override);
+          return (_a2 = variants.find((v) => {
+            const p = parseProps2(v);
+            return Object.entries(target).every(([k, val]) => p[k] === val);
+          })) != null ? _a2 : variants[0];
+        }, applyAnnotations2 = function(nodes) {
+          var _a2, _b2, _c2, _d2, _e2, _f2, _g2, _h2, _i2, _j2, _k2, _l2, _m2;
+          for (const n of nodes) {
+            const bv = (_a2 = n.boundVariables) != null ? _a2 : {};
             const anns = [];
-            if (cat === "color-fg" && n.type === "TEXT" && ((_D = (_C = bv.fills) == null ? void 0 : _C.length) != null ? _D : 0) > 0)
-              anns.push({ labelMarkdown: "Color", properties: [{ type: "fills" }] });
-            if (cat === "color-bg" && n.type !== "TEXT" && ((_F = (_E = bv.fills) == null ? void 0 : _E.length) != null ? _F : 0) > 0)
-              anns.push({ labelMarkdown: "Background", properties: [{ type: "fills" }] });
-            if (cat === "spacing") {
-              const sp = [];
-              if (bv.paddingTop || bv.paddingBottom || bv.paddingLeft || bv.paddingRight) sp.push({ type: "padding" });
-              if (bv.itemSpacing) sp.push({ type: "itemSpacing" });
-              if (sp.length) anns.push({ labelMarkdown: "Spacing", properties: sp });
-            }
-            if (cat === "shape") {
-              const sh = [];
-              const compN = ni < compNodes.length ? compNodes[ni] : null;
-              const hasCornerVar = bv.cornerRadius || bv.topLeftRadius || bv.topRightRadius || bv.bottomLeftRadius || bv.bottomRightRadius;
-              const rawCorner = compN ? compN.cornerRadius : void 0;
-              const hasCornerRaw = typeof rawCorner === "number" && rawCorner > 0;
-              const nodeAcceptsCorner = n.type === "FRAME" || n.type === "RECTANGLE" || n.type === "INSTANCE" || n.type === "COMPONENT" || n.type === "ELLIPSE";
-              if ((hasCornerVar || hasCornerRaw) && nodeAcceptsCorner) sh.push({ type: "cornerRadius" });
-              const hasStrokesVar = ((_H = (_G = bv.strokes) == null ? void 0 : _G.length) != null ? _H : 0) > 0;
-              const compStrokes = compN ? compN.strokes : null;
-              const hasStrokesRaw = Array.isArray(compStrokes) && compStrokes.length > 0;
-              if (hasStrokesVar || hasStrokesRaw) sh.push({ type: "strokes" });
-              if (sh.length) anns.push({ labelMarkdown: "Shape", properties: sh });
-            }
-            if (cat === "typography" && n.type === "TEXT") {
+            if (((_c2 = (_b2 = bv.fills) == null ? void 0 : _b2.length) != null ? _c2 : 0) > 0)
+              anns.push({ labelMarkdown: n.type === "TEXT" ? "Color" : "Fill", properties: [{ type: "fills" }] });
+            if (((_e2 = (_d2 = bv.strokes) == null ? void 0 : _d2.length) != null ? _e2 : 0) > 0)
+              anns.push({ labelMarkdown: "Border", properties: [{ type: "strokes" }] });
+            if (((_f2 = bv.cornerRadius) == null ? void 0 : _f2.id) || ((_g2 = bv.topLeftRadius) == null ? void 0 : _g2.id))
+              anns.push({ labelMarkdown: "Radius", properties: [{ type: "cornerRadius" }] });
+            const sp = [];
+            if (bv.paddingTop || bv.paddingBottom || bv.paddingLeft || bv.paddingRight) sp.push({ type: "padding" });
+            if (bv.itemSpacing) sp.push({ type: "itemSpacing" });
+            if (sp.length) anns.push({ labelMarkdown: "Spacing", properties: sp });
+            if (n.type === "TEXT") {
               const tp = [];
-              if (((_J = (_I = bv.fontFamily) == null ? void 0 : _I.length) != null ? _J : 0) > 0) tp.push({ type: "fontFamily" });
-              if (((_L = (_K = bv.fontSize) == null ? void 0 : _K.length) != null ? _L : 0) > 0) tp.push({ type: "fontSize" });
-              if (((_N = (_M = bv.lineHeight) == null ? void 0 : _M.length) != null ? _N : 0) > 0) tp.push({ type: "lineHeight" });
-              if (((_P = (_O = bv.letterSpacing) == null ? void 0 : _O.length) != null ? _P : 0) > 0) tp.push({ type: "letterSpacing" });
+              if (((_i2 = (_h2 = bv.fontSize) == null ? void 0 : _h2.length) != null ? _i2 : 0) > 0) tp.push({ type: "fontSize" });
+              if (((_k2 = (_j2 = bv.lineHeight) == null ? void 0 : _j2.length) != null ? _k2 : 0) > 0) tp.push({ type: "lineHeight" });
+              if (((_m2 = (_l2 = bv.letterSpacing) == null ? void 0 : _l2.length) != null ? _m2 : 0) > 0) tp.push({ type: "letterSpacing" });
               if (tp.length) anns.push({ labelMarkdown: "Typography", properties: tp });
-              if (((_R = (_Q = bv.fontStyle) == null ? void 0 : _Q.length) != null ? _R : 0) > 0) {
-                const label = (_S = specWeightNames.get(bv.fontStyle[0].id)) != null ? _S : "font-weight";
-                anns.push({ labelMarkdown: label, properties: [{ type: "fontWeight" }] });
-              }
             }
-            if (cat === "sizing" && n === instance)
-              anns.push({ labelMarkdown: instance.name.replace(/^\./, ""), properties: [{ type: "width" }, { type: "height" }] });
-            if (anns.length > 0) {
+            if (anns.length) {
               try {
                 n.annotations = anns;
               } catch (e) {
               }
             }
           }
+        }, annotateScope2 = function(inst, scope) {
+          var _a2;
+          if (scope === "root") {
+            const nodes = [inst];
+            for (const c of inst.children) {
+              nodes.push(c);
+              nodes.push(...(_a2 = c.children) != null ? _a2 : []);
+            }
+            applyAnnotations2(nodes);
+          } else {
+            const target = inst.findOne((n) => n.name === scope);
+            if (!target) return;
+            const descendants = "findAll" in target ? target.findAll(() => true) : [];
+            applyAnnotations2([target, ...descendants]);
+          }
+        }, setBorder2 = function(node) {
+          node.fills = [];
+          node.strokes = borderColorVar ? [figma.variables.setBoundVariableForPaint(
+            { type: "SOLID", color: { r: 0.8, g: 0.8, b: 0.8 } },
+            "color",
+            borderColorVar
+          )] : [{ type: "SOLID", color: { r: 0.871, g: 0.871, b: 0.871 } }];
+          node.strokeWeight = 1;
+          node.cornerRadius = 4;
+          if (borderWidthVar) {
+            try {
+              node.setBoundVariable("strokeWeight", borderWidthVar);
+            } catch (e) {
+            }
+          }
+          if (radiusXsVar) {
+            try {
+              node.setBoundVariable("cornerRadius", radiusXsVar);
+            } catch (e) {
+            }
+          }
+        }, bindFill2 = function(node, colorVar) {
+          if (colorVar) {
+            node.fills = [figma.variables.setBoundVariableForPaint(
+              { type: "SOLID", color: { r: 0.067, g: 0.067, b: 0.067 } },
+              "color",
+              colorVar
+            )];
+          }
+        }, txt2 = function(content, styleQuery, colorVar, x, y, extra = {}) {
+          const t = figma.createText();
+          t.fontName = { family: "Inter", style: "Regular" };
+          t.characters = content;
+          if (extra.upper) t.textCase = "UPPER";
+          if (extra.ls) t.letterSpacing = { value: extra.ls, unit: "PERCENT" };
+          t.textAutoResize = "WIDTH_AND_HEIGHT";
+          sec.appendChild(t);
+          t.x = x;
+          t.y = y;
+          styleQueue.push({ node: t, query: styleQuery, colorVar });
+          return t;
+        }, eyebrow2 = function(label, x, y) {
+          return txt2(label, "eyebrow", contentSubtleVar, x, y, { upper: true, ls: 8 });
+        };
+        var findStyle = findStyle2, parseProps = parseProps2, pickVariant = pickVariant2, applyAnnotations = applyAnnotations2, annotateScope = annotateScope2, setBorder = setBorder2, bindFill = bindFill2, txt = txt2, eyebrow = eyebrow2;
+        const setId = msg.setId;
+        const opts = (_w = msg.options) != null ? _w : { variants: true, tokens: true, children: true };
+        const specSetNode = await figma.getNodeByIdAsync(setId);
+        if (!specSetNode || specSetNode.type !== "COMPONENT_SET") {
+          figma.ui.postMessage({ type: "spec:result", error: "Select a component set first" });
+          break;
         }
-        section.appendChild(row);
-        row.x = 24;
-        row.y = 40;
-        section.resizeWithoutConstraints(row.width + 48, row.height + 72);
-        yOffset += section.height + 40;
+        const specSet = specSetNode;
+        const variants = specSet.children;
+        await Promise.all([
+          figma.loadFontAsync({ family: "Inter", style: "Regular" }),
+          figma.loadFontAsync({ family: "Inter", style: "Medium" }),
+          figma.loadFontAsync({ family: "Inter", style: "Bold" }),
+          figma.loadFontAsync({ family: "Adobe Clean", style: "Regular" }).catch(() => {
+          }),
+          figma.loadFontAsync({ family: "Adobe Clean", style: "Bold" }).catch(() => {
+          }),
+          figma.loadFontAsync({ family: "Adobe Clean Display", style: "Black" }).catch(() => {
+          })
+        ]);
+        const allTextStyles = await figma.getLocalTextStylesAsync();
+        const propDefs = specSet.componentPropertyDefinitions;
+        const axes = Object.entries(propDefs).filter(([, d]) => d.type === "VARIANT").map(([name, d]) => ({ name, values: d.variantOptions }));
+        const defaults = {};
+        for (const ax of axes) defaults[ax.name] = ax.values[0];
+        const refVariant = variants[0];
+        const refRootFrame = refVariant.children[0];
+        const topLevelLayerNames = refRootFrame ? refRootFrame.children.map((c) => c.name) : [];
+        const [
+          borderColorVar,
+          borderWidthVar,
+          radiusXsVar,
+          contentHeadingVar,
+          contentDefaultVar,
+          contentSubtleVar
+        ] = await Promise.all([
+          figma.variables.getVariableByIdAsync("VariableID:6:22"),
+          // s2a/color/border/subtle
+          figma.variables.getVariableByIdAsync("VariableID:2:111"),
+          // s2a/border/width/sm
+          figma.variables.getVariableByIdAsync("VariableID:2:97"),
+          // s2a/border/radius/xs
+          figma.variables.getVariableByIdAsync("VariableID:2483:41398"),
+          // s2a/color/content/heading
+          figma.variables.getVariableByIdAsync("VariableID:6:82"),
+          // s2a/color/content/default
+          figma.variables.getVariableByIdAsync("VariableID:6:84")
+          // s2a/color/content/subtle
+        ]);
+        const SEC_PAD = 48;
+        const refW = variants[0].width;
+        const REF_PAD = Math.max(80, Math.round(refW * 0.5));
+        const CARD_PAD = Math.max(28, Math.round(refW * 0.25));
+        const CARD_W = Math.max(120, refW + CARD_PAD * 2);
+        const CARD_GAP = 20;
+        const LBL_GAP = 10;
+        const sec = figma.createSection();
+        sec.name = "Annotations \u2014 " + specSet.name;
+        sec.x = specSet.x + specSet.width + 100;
+        sec.y = specSet.y;
+        figma.currentPage.appendChild(sec);
+        try {
+          sec.fills = [];
+        } catch (e) {
+        }
+        const styleQueue = [];
+        async function flushStyles() {
+          await Promise.all(styleQueue.map(async ({ node, query, colorVar }) => {
+            const style = findStyle2(query);
+            if (style) {
+              try {
+                await node.setTextStyleIdAsync(style.id);
+              } catch (e) {
+              }
+            }
+            bindFill2(node, colorVar);
+          }));
+          styleQueue.length = 0;
+        }
+        let curY = SEC_PAD;
+        txt2(specSet.name.toUpperCase() + " \xB7 SPEC", "eyebrow", contentSubtleVar, SEC_PAD, curY, { upper: true, ls: 8 });
+        txt2(specSet.name, "heading-lg", contentHeadingVar, SEC_PAD, curY + 18);
+        txt2(
+          `${variants.length} variant${variants.length !== 1 ? "s" : ""}` + (axes.length ? "  \xB7  " + axes.map((a) => a.name).join("  \xB7  ") : ""),
+          "body-md",
+          contentSubtleVar,
+          SEC_PAD,
+          curY + 56
+        );
+        curY += 96;
+        if (opts.variants) {
+          const axesToShow = axes.length > 0 ? axes : [{ name: "Variants", values: variants.map((v) => v.name) }];
+          for (const ax of axesToShow) {
+            eyebrow2(ax.name, SEC_PAD, curY);
+            curY += 22;
+            let rowMaxH = 0;
+            for (let i = 0; i < ax.values.length; i++) {
+              const val = ax.values[i];
+              const variant = axes.length > 0 ? pickVariant2({ [ax.name]: val }) : (_x = variants.find((v) => v.name === val)) != null ? _x : variants[0];
+              const cx = SEC_PAD + i * (CARD_W + CARD_GAP);
+              const card = figma.createFrame();
+              card.name = "card-" + val;
+              card.layoutMode = "VERTICAL";
+              card.primaryAxisSizingMode = "AUTO";
+              card.counterAxisSizingMode = "AUTO";
+              card.primaryAxisAlignItems = "CENTER";
+              card.counterAxisAlignItems = "CENTER";
+              card.paddingTop = CARD_PAD;
+              card.paddingBottom = CARD_PAD;
+              card.paddingLeft = CARD_PAD;
+              card.paddingRight = CARD_PAD;
+              setBorder2(card);
+              sec.appendChild(card);
+              card.x = cx;
+              card.y = curY;
+              const inst = variant.createInstance();
+              card.appendChild(inst);
+              rowMaxH = Math.max(rowMaxH, card.height);
+              const lbl = txt2(val, "label", contentDefaultVar, 0, curY + card.height + LBL_GAP);
+              lbl.x = cx + Math.round((card.width - lbl.width) / 2);
+            }
+            curY += rowMaxH + LBL_GAP + 24 + 40;
+          }
+        }
+        if (opts.children) {
+          const childMap = /* @__PURE__ */ new Map();
+          const allInstances = [];
+          for (const v of variants)
+            for (const n of [v, ...v.findAll(() => true)])
+              if (n.type === "INSTANCE") allInstances.push(n);
+          const mains = await Promise.all(
+            allInstances.map((inst) => inst.getMainComponentAsync().catch(() => null))
+          );
+          for (const main of mains) {
+            if (((_y = main == null ? void 0 : main.parent) == null ? void 0 : _y.type) === "COMPONENT_SET" && main.parent.id !== specSet.id)
+              childMap.set(main.parent.id, main.parent);
+          }
+          if (childMap.size > 0) {
+            eyebrow2("Child components", SEC_PAD, curY);
+            curY += 22;
+            let childX = SEC_PAD;
+            const CHILD_PAD = 20;
+            for (const [, cs] of childMap) {
+              const csRef = cs.children[0];
+              const card = figma.createFrame();
+              card.name = "child-" + cs.name;
+              card.layoutMode = "VERTICAL";
+              card.primaryAxisSizingMode = "AUTO";
+              card.counterAxisSizingMode = "AUTO";
+              card.primaryAxisAlignItems = "CENTER";
+              card.counterAxisAlignItems = "CENTER";
+              card.paddingTop = CHILD_PAD;
+              card.paddingBottom = CHILD_PAD;
+              card.paddingLeft = CHILD_PAD;
+              card.paddingRight = CHILD_PAD;
+              card.itemSpacing = 12;
+              setBorder2(card);
+              sec.appendChild(card);
+              card.x = childX;
+              card.y = curY;
+              try {
+                const ci = csRef.createInstance();
+                card.appendChild(ci);
+              } catch (e) {
+              }
+              const cnLbl = figma.createText();
+              cnLbl.fontName = { family: "Inter", style: "Regular" };
+              cnLbl.characters = cs.name;
+              cnLbl.textAutoResize = "WIDTH_AND_HEIGHT";
+              card.appendChild(cnLbl);
+              styleQueue.push({ node: cnLbl, query: "label", colorVar: contentDefaultVar });
+              childX += card.width + 16;
+            }
+          }
+        }
+        await flushStyles();
+        let maxR = 0, maxB = 0;
+        for (const n of sec.children) {
+          const sn = n;
+          maxR = Math.max(maxR, sn.x + sn.width);
+          maxB = Math.max(maxB, sn.y + sn.height);
+        }
+        try {
+          sec.resizeWithoutConstraints(maxR + SEC_PAD, maxB + SEC_PAD);
+        } catch (e) {
+        }
+        const allCreated = [sec];
+        if (opts.tokens) {
+          const scopes = [
+            { key: "root", label: "Root" },
+            ...topLevelLayerNames.map((name) => ({ key: name, label: name }))
+          ];
+          const REF_SEC_GAP = 200;
+          const refSecX = sec.x + sec.width + 120;
+          let refSecY = sec.y;
+          for (const { key, label } of scopes) {
+            const refSec = figma.createSection();
+            refSec.name = label;
+            figma.currentPage.appendChild(refSec);
+            try {
+              refSec.fills = [];
+            } catch (e) {
+            }
+            const eb = figma.createText();
+            eb.fontName = { family: "Inter", style: "Regular" };
+            eb.characters = label.toUpperCase();
+            eb.textCase = "UPPER";
+            eb.letterSpacing = { value: 8, unit: "PERCENT" };
+            eb.textAutoResize = "WIDTH_AND_HEIGHT";
+            refSec.appendChild(eb);
+            eb.x = SEC_PAD;
+            eb.y = SEC_PAD;
+            styleQueue.push({ node: eb, query: "eyebrow", colorVar: contentSubtleVar });
+            const panelY = SEC_PAD + 22 + 12;
+            const panel = figma.createFrame();
+            panel.name = "panel";
+            panel.layoutMode = "VERTICAL";
+            panel.primaryAxisSizingMode = "AUTO";
+            panel.counterAxisSizingMode = "AUTO";
+            panel.primaryAxisAlignItems = "CENTER";
+            panel.counterAxisAlignItems = "CENTER";
+            panel.paddingTop = REF_PAD;
+            panel.paddingBottom = REF_PAD;
+            panel.paddingLeft = REF_PAD;
+            panel.paddingRight = REF_PAD;
+            setBorder2(panel);
+            refSec.appendChild(panel);
+            panel.x = SEC_PAD;
+            panel.y = panelY;
+            const inst = refVariant.createInstance();
+            panel.appendChild(inst);
+            annotateScope2(inst, key);
+            await flushStyles();
+            const secW = Math.max(panel.width, eb.width) + SEC_PAD * 2;
+            const secH = panelY + panel.height + SEC_PAD;
+            try {
+              refSec.resizeWithoutConstraints(secW, secH);
+            } catch (e) {
+            }
+            refSec.x = refSecX;
+            refSec.y = refSecY;
+            refSecY += secH + REF_SEC_GAP;
+            allCreated.push(refSec);
+          }
+        }
+        figma.currentPage.selection = allCreated;
+        figma.viewport.scrollAndZoomIntoView(allCreated);
+        figma.ui.postMessage({ type: "spec:result", variantCount: variants.length });
+      } catch (e) {
+        figma.ui.postMessage({ type: "spec:result", error: e.message || String(e) });
       }
-      if (allSections.length > 0) {
-        figma.currentPage.selection = allSections;
-        figma.viewport.scrollAndZoomIntoView(allSections);
-      }
-      figma.ui.postMessage({ type: "spec:result", categoryCount: categories.length, variantCount: variants.length });
       break;
     }
     case "bridge:command": {
