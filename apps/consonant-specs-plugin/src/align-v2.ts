@@ -1,6 +1,6 @@
 // apps/consonant-specs-plugin/src/align-v2.ts
 
-import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole, getDimensionVarMap, LoadedDimensionVar } from './tokens';
+import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole, getDimensionVarMap, LoadedDimensionVar, getTextStyleMap } from './tokens';
 import { figmaColorToHex, getCornerRadius } from './utils';
 
 // ── Output types ─────────────────────────────────────────────────────────
@@ -294,4 +294,64 @@ export async function auditDimensions(node: SceneNode): Promise<AlignV2Issue[]> 
   }
 
   return issues;
+}
+
+// ── Typography detection ─────────────────────────────────────────────────
+
+function buildTypographyCandidates(): TokenCandidate[] {
+  return getTextStyleMap().map(ts => ({
+    tokenName: ts.name,
+    textStyleId: ts.styleId,
+    value: `${ts.fontFamily} ${ts.fontStyle} ${ts.fontSize}px`,
+  }));
+}
+
+export async function auditTypography(node: SceneNode): Promise<AlignV2Issue[]> {
+  if (node.type !== 'TEXT') return [];
+  const text = node as TextNode;
+  if (text.fontName === figma.mixed) return []; // skip mixed-font text per edge-case spec
+
+  const candidates = buildTypographyCandidates();
+  const fontFamily = (text.fontName as FontName).family;
+  const fontStyle = (text.fontName as FontName).style;
+  const fontSize = typeof text.fontSize === 'number' ? text.fontSize : 0;
+  const valueLabel = `${fontFamily} ${fontStyle} ${fontSize}px`;
+
+  const styleId = text.textStyleId;
+  if (styleId && styleId !== '' && styleId !== figma.mixed) {
+    const s2aStyle = lookupTextStyleById(styleId as string);
+    if (s2aStyle) return []; // compliant — bound to S2A text style
+
+    // Wrong-library text style binding
+    const matchResult = matchTypographyStrict(fontFamily, fontSize, fontStyle);
+    const suggestion = matchResult.matched
+      ? { tokenName: matchResult.name, textStyleId: getTextStyleMap().find(ts => ts.name === matchResult.name)?.styleId, isExactMatch: true }
+      : null;
+    return [{
+      nodeId: node.id,
+      nodeName: node.name,
+      nodeType: node.type,
+      property: 'Text Style',
+      currentValue: `bound: ${valueLabel}`,
+      source: 'wrong-library',
+      currentBindingName: '(non-S2A text style)',
+      suggestion,
+      allCandidates: candidates,
+    }];
+  }
+
+  // No text style bound — match by family/size/weight
+  const matchResult = matchTypographyStrict(fontFamily, fontSize, fontStyle);
+  if (matchResult.matched) return []; // raw properties happen to match an S2A style; treat as compliant
+  const suggestion = null; // matchTypographyStrict.matched === false means no exact match
+  return [{
+    nodeId: node.id,
+    nodeName: node.name,
+    nodeType: node.type,
+    property: 'Text Style',
+    currentValue: valueLabel,
+    source: 'hardcoded',
+    suggestion,
+    allCandidates: candidates,
+  }];
 }
