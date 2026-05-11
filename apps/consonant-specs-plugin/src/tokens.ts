@@ -202,6 +202,16 @@ export async function loadLibraryTokens(): Promise<void> {
               if (imported.resolvedType === 'COLOR') {
                 if (value && typeof value === 'object' && 'r' in value) {
                   const color = value as RGBA;
+                  const lightAlpha = 'a' in color ? color.a : 1;
+                  // Encode alpha into hex as #RRGGBBAA when alpha < 1 so the value
+                  // string itself carries the transparency for both rendering and display.
+                  const alphaToHex = (a: number): string => {
+                    const clamped = Math.max(0, Math.min(1, a));
+                    return Math.round(clamped * 255).toString(16).padStart(2, '0');
+                  };
+                  const lightHex = lightAlpha < 1
+                    ? rgbToHex(color.r, color.g, color.b) + alphaToHex(lightAlpha)
+                    : rgbToHex(color.r, color.g, color.b);
                   // Resolve dark mode value if an alternate mode exists
                   let darkHex: string | undefined;
                   if (altModeId && altModeId in imported.valuesByMode) {
@@ -209,15 +219,18 @@ export async function loadLibraryTokens(): Promise<void> {
                       const darkValue = await resolveModeValue(imported, altModeId);
                       if (darkValue && typeof darkValue === 'object' && 'r' in darkValue) {
                         const dc = darkValue as RGBA;
-                        darkHex = rgbToHex(dc.r, dc.g, dc.b);
+                        const darkAlpha = 'a' in dc ? dc.a : 1;
+                        darkHex = darkAlpha < 1
+                          ? rgbToHex(dc.r, dc.g, dc.b) + alphaToHex(darkAlpha)
+                          : rgbToHex(dc.r, dc.g, dc.b);
                       }
                     } catch (_) {}
                   }
                   colorVarMap.push({
                     name: imported.name,
                     variable: imported,
-                    hex: rgbToHex(color.r, color.g, color.b),
-                    opacity: 'a' in color ? color.a : 1,
+                    hex: lightHex,
+                    opacity: lightAlpha,
                     semanticRole: parseSemanticRole(imported.name),
                     ...(darkHex !== undefined ? { darkHex } : {}),
                   });

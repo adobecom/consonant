@@ -411,11 +411,11 @@ function buildColorPopoverContent(
       out += `<button class="v2-color-option${id === chosen ? ' v2-color-option-selected' : ''}" data-id="${esc(id)}"${selectedAttr}>`;
       out += `<span class="v2-color-option-label">${esc(leaf)}</span>`;
       out += `<span class="v2-color-cell-hex">`;
-      out += `<span class="v2-mini-swatch" style="background:${esc(lightHex)}"></span>`;
+      out += `<span class="v2-mini-swatch" style="--swatch:${esc(lightHex)}"></span>`;
       out += `${esc(lightHex)}`;
       out += `</span>`;
       out += `<span class="v2-color-cell-hex">`;
-      out += `<span class="v2-mini-swatch" style="background:${esc(darkHex)}"></span>`;
+      out += `<span class="v2-mini-swatch" style="--swatch:${esc(darkHex)}"></span>`;
       out += `${esc(darkHex)}`;
       out += `</span>`;
       out += `</button>`;
@@ -672,6 +672,17 @@ function ensureV2Styles(): void {
   border-radius: 2px;
   border: 1px solid rgba(0,0,0,0.12);
   flex-shrink: 0;
+  /* Layered: solid color on top, checker pattern underneath — transparency in the color
+     reveals the checker so alpha tokens are visually obvious. */
+  background-image:
+    linear-gradient(var(--swatch, transparent), var(--swatch, transparent)),
+    linear-gradient(45deg, #ccc 25%, transparent 25%),
+    linear-gradient(-45deg, #ccc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ccc 75%),
+    linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: auto auto, 6px 6px, 6px 6px, 6px 6px, 6px 6px;
+  background-position: 0 0, 0 0, 0 3px, 3px -3px, -3px 0;
+  background-color: #fff;
 }
 `;
   document.head.appendChild(style);
