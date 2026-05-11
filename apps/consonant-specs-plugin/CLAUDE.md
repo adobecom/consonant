@@ -34,6 +34,50 @@
 
 ---
 
+# Development workflow — IMPORTANT
+
+The plugin loads in Figma from `dist/code.js` and `dist/ui.html`. **`dist/` is gitignored and not tracked in git** — it must be rebuilt locally before Figma can load your changes.
+
+## Setup (once)
+
+```bash
+cd apps/consonant-specs-plugin
+npm install
+```
+
+## Iterating
+
+**Recommended: watch mode** — auto-rebuilds on every src change. Run once, leave it open:
+```bash
+npm run watch
+```
+
+**Or one-off build** before each Figma reload:
+```bash
+npm run build
+# or from monorepo root:
+npx nx build consonant-specs-plugin
+```
+
+After rebuild, in Figma: Plugins → Development → Hot reload all plugins (or close + reopen the plugin window).
+
+## Why dist isn't tracked
+
+Earlier in the project's history, `dist/` was committed alongside source. This caused recurring out-of-sync issues: source would update, dist wouldn't be rebuilt, and pushed commits had stale bundles. Figma users would see old UI even though source was current. Untracking dist forces a deliberate build step and prevents that drift.
+
+## Feature flags
+
+`.env` (gitignored) controls feature visibility at build time:
+
+| Flag | Default | Effect when `true` |
+|---|---|---|
+| `FEATURE_A11Y` | false | Shows the A11y menu item + tab |
+| `FEATURE_LEGACY_ALIGN` | false | Shows the legacy `Align` and `Match` tools alongside `Align to S2A` |
+
+Set them per-developer in `.env`; commit-safe (gitignored). Build picks them up via `esbuild.config.mjs`.
+
+---
+
 # A11y Feature — Purpose and Goals
 
 The A11y tab in the Consonant Specs plugin is an a11y co-pilot for designers — not a linter, but a collaborator. Every decision about analysis logic, blueline output, UI copy, and conversation flow should be checked against these six goals:
