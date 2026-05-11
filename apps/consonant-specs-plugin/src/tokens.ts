@@ -22,7 +22,7 @@ const TEXT_STYLE_KEYS: Record<string, string> = {
 
 // ── Types ──
 
-interface LoadedTextStyle {
+export interface LoadedTextStyle {
   name: string;
   styleId: string;
   fontFamily: string;
@@ -32,7 +32,7 @@ interface LoadedTextStyle {
 
 type ColorSemanticRole = 'background' | 'content' | 'border' | null;
 
-interface LoadedColorVar {
+export interface LoadedColorVar {
   name: string;
   variable: Variable;
   hex: string;
@@ -64,7 +64,7 @@ export function detectNodeColorRole(node: SceneNode, property: 'fill' | 'stroke'
   return 'background';
 }
 
-interface LoadedDimensionVar {
+export interface LoadedDimensionVar {
   name: string;
   variable: Variable;
   value: number;
@@ -246,6 +246,13 @@ export function getTokenCount(): number {
 export function hasS2AVariables(): boolean {
   return colorVarMap.length > 0 || dimensionVarMap.length > 0;
 }
+
+// ── Read-only accessors for external modules (e.g., align-v2) ──
+// Return ReadonlyArray<T> so consumers can iterate/filter but not mutate
+// the underlying state managed by loadLibraryTokens.
+export function getColorVarMap(): ReadonlyArray<LoadedColorVar> { return colorVarMap; }
+export function getDimensionVarMap(): ReadonlyArray<LoadedDimensionVar> { return dimensionVarMap; }
+export function getTextStyleMap(): ReadonlyArray<LoadedTextStyle> { return textStyleMap; }
 
 export async function reloadLibraryTokens(): Promise<void> {
   loadingPromise = null;
