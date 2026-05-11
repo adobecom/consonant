@@ -229,10 +229,10 @@ function buildGroupedDropdownOptions(
     for (const c of items) {
       const id = c.variableId ?? c.textStyleId ?? '';
       const { leaf } = splitTokenPath(c.tokenName);
-      // Format value for direct comparison with currentValue: numbers → "Npx", strings → as-is.
+      // Format value for direct comparison with currentValue: numbers → "(Npx)", strings → "(value)".
       let valuePart = '';
-      if (typeof c.value === 'number') valuePart = ` ${c.value}px`;
-      else if (typeof c.value === 'string' && c.value !== '') valuePart = ` ${c.value}`;
+      if (typeof c.value === 'number') valuePart = ` (${c.value}px)`;
+      else if (typeof c.value === 'string' && c.value !== '') valuePart = ` (${c.value})`;
       const optionLabel = `${leaf}${valuePart}`;
       out += `<option value="${esc(id)}" ${id === chosen ? 'selected' : ''}>${esc(optionLabel)}</option>`;
     }
