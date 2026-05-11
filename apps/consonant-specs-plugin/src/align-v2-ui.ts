@@ -927,6 +927,21 @@ function renderV2Body(): void {
       const chosenVal = v2State.chosenOverrides.get(k)
         ?? (grp.suggestion?.variableId ?? grp.suggestion?.textStyleId ?? '');
 
+      // Auto-switch the popover tab so it opens on the tab containing the
+      // currently-chosen value (saves the user from hunting through tabs).
+      if (chosenVal) {
+        const chosenCandidate = grp.allCandidates.find(c => (c.variableId ?? c.textStyleId) === chosenVal);
+        if (chosenCandidate) {
+          const tabsToCheck: ColorPopoverTab[] = ['surface', 'text', 'component', 'overlay', 'palette'];
+          for (const t of tabsToCheck) {
+            if (matchesColorPopoverTab(chosenCandidate.tokenName, t)) {
+              v2ColorPopoverTab = t;
+              break;
+            }
+          }
+        }
+      }
+
       // Build popover
       const popover = document.createElement('div');
       popover.className = 'v2-color-popover';
@@ -970,6 +985,12 @@ function renderV2Body(): void {
         const shift = popAfter.right - (vw - PADDING);
         const newLeft = Math.max(PADDING, rect.left - shift);
         popover.style.left = `${newLeft}px`;
+      }
+
+      // Scroll the currently-selected option into view inside the popover.
+      const selectedOpt = popover.querySelector<HTMLElement>('button.v2-color-option.v2-color-option-selected');
+      if (selectedOpt) {
+        selectedOpt.scrollIntoView({ block: 'nearest', behavior: 'auto' });
       }
 
       /** Attach option click listeners to .v2-color-option buttons inside the popover. */
