@@ -1,6 +1,6 @@
 // apps/consonant-specs-plugin/src/align-v2.ts
 
-import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole } from './tokens';
+import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole, getDimensionVarMap } from './tokens';
 import { figmaColorToHex, getCornerRadius } from './utils';
 
 // ── Output types ─────────────────────────────────────────────────────────
@@ -171,6 +171,123 @@ export async function auditColors(node: SceneNode, candidates: TokenCandidate[])
         if (issue) issues.push(issue);
       }
     }
+  }
+
+  return issues;
+}
+
+// ── Dimension detection ──────────────────────────────────────────────────
+
+type DimScope = 'CORNER_RADIUS' | 'GAP' | 'STROKE_FLOAT';
+
+interface DimCheck {
+  property: string;
+  bindingKey: string;
+  value: number;
+  scope: DimScope;
+}
+
+function buildDimensionCandidates(scope: DimScope): TokenCandidate[] {
+  return getDimensionVarMap()
+    .filter(v => v.scopes.some(s => s === scope || s === 'ALL_SCOPES'))
+    .map(v => ({
+      tokenName: v.name,
+      variableId: v.variable.id,
+      value: v.value,
+    }));
+}
+
+async function classifyDim(
+  node: SceneNode,
+  check: DimCheck,
+  candidates: TokenCandidate[],
+): Promise<AlignV2Issue | null> {
+  const bv = (node as any).boundVariables as Record<string, { id: string } | undefined> | undefined;
+  const boundId = bv?.[check.bindingKey]?.id;
+
+  if (boundId) {
+    const { isS2A, variableName } = await isS2AVariable(boundId);
+    if (isS2A) return null;
+    const exact = getDimensionVarMap().find(v =>
+      v.value === check.value && v.scopes.some(s => s === check.scope || s === 'ALL_SCOPES')
+    ) ?? null;
+    return {
+      nodeId: node.id,
+      nodeName: node.name,
+      nodeType: node.type,
+      property: check.property,
+      currentValue: variableName ?? `${check.value}px`,
+      source: 'wrong-library',
+      currentBindingName: variableName,
+      suggestion: exact ? { tokenName: exact.name, variableId: exact.variable.id, isExactMatch: true } : null,
+      allCandidates: candidates,
+    };
+  }
+
+  // Hardcoded
+  const exact = getDimensionVarMap().find(v =>
+    v.value === check.value && v.scopes.some(s => s === check.scope || s === 'ALL_SCOPES')
+  ) ?? null;
+  return {
+    nodeId: node.id,
+    nodeName: node.name,
+    nodeType: node.type,
+    property: check.property,
+    currentValue: `${check.value}px`,
+    source: 'hardcoded',
+    suggestion: exact ? { tokenName: exact.name, variableId: exact.variable.id, isExactMatch: true } : null,
+    allCandidates: candidates,
+  };
+}
+
+/**
+ * Audit corner radius (per-corner), padding, item spacing, and stroke weight.
+ */
+export async function auditDimensions(node: SceneNode): Promise<AlignV2Issue[]> {
+  const issues: AlignV2Issue[] = [];
+  const radiusCandidates = buildDimensionCandidates('CORNER_RADIUS');
+  const gapCandidates = buildDimensionCandidates('GAP');
+  const strokeCandidates = buildDimensionCandidates('STROKE_FLOAT');
+
+  const radiusKeys: Array<{ prop: string; key: string; get: (n: any) => number | undefined }> = [
+    { prop: 'Top-Left Radius', key: 'topLeftRadius', get: n => n.topLeftRadius },
+    { prop: 'Top-Right Radius', key: 'topRightRadius', get: n => n.topRightRadius },
+    { prop: 'Bottom-Left Radius', key: 'bottomLeftRadius', get: n => n.bottomLeftRadius },
+    { prop: 'Bottom-Right Radius', key: 'bottomRightRadius', get: n => n.bottomRightRadius },
+  ];
+  for (const r of radiusKeys) {
+    const val = r.get(node as any);
+    if (typeof val === 'number' && val > 0) {
+      const issue = await classifyDim(node, { property: r.prop, bindingKey: r.key, value: val, scope: 'CORNER_RADIUS' }, radiusCandidates);
+      if (issue) issues.push(issue);
+    }
+  }
+
+  if ('layoutMode' in node && (node as FrameNode).layoutMode !== 'NONE') {
+    const f = node as FrameNode;
+    const padChecks: DimCheck[] = [
+      { property: 'Padding Top', bindingKey: 'paddingTop', value: f.paddingTop, scope: 'GAP' },
+      { property: 'Padding Right', bindingKey: 'paddingRight', value: f.paddingRight, scope: 'GAP' },
+      { property: 'Padding Bottom', bindingKey: 'paddingBottom', value: f.paddingBottom, scope: 'GAP' },
+      { property: 'Padding Left', bindingKey: 'paddingLeft', value: f.paddingLeft, scope: 'GAP' },
+    ];
+    for (const c of padChecks) {
+      if (c.value > 0) {
+        const issue = await classifyDim(node, c, gapCandidates);
+        if (issue) issues.push(issue);
+      }
+    }
+    const itemSpacing = (f.itemSpacing as any) === figma.mixed ? 0 : (f.itemSpacing as number);
+    if (itemSpacing > 0) {
+      const issue = await classifyDim(node, { property: 'Item Spacing', bindingKey: 'itemSpacing', value: itemSpacing, scope: 'GAP' }, gapCandidates);
+      if (issue) issues.push(issue);
+    }
+  }
+
+  if ('strokeWeight' in node && typeof (node as any).strokeWeight === 'number' && (node as any).strokeWeight > 0) {
+    const sw = (node as any).strokeWeight as number;
+    const issue = await classifyDim(node, { property: 'Stroke Weight', bindingKey: 'strokeWeight', value: sw, scope: 'STROKE_FLOAT' }, strokeCandidates);
+    if (issue) issues.push(issue);
   }
 
   return issues;
