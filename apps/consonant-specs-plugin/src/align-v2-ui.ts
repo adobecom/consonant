@@ -229,7 +229,10 @@ function buildGroupedDropdownOptions(
     for (const c of items) {
       const id = c.variableId ?? c.textStyleId ?? '';
       const { leaf } = splitTokenPath(c.tokenName);
-      const valuePart = c.value !== undefined && c.value !== '' ? `  (${c.value})` : '';
+      // Format value for direct comparison with currentValue: numbers → "Npx", strings → as-is.
+      let valuePart = '';
+      if (typeof c.value === 'number') valuePart = ` ${c.value}px`;
+      else if (typeof c.value === 'string' && c.value !== '') valuePart = ` ${c.value}`;
       const optionLabel = `${leaf}${valuePart}`;
       out += `<option value="${esc(id)}" ${id === chosen ? 'selected' : ''}>${esc(optionLabel)}</option>`;
     }
