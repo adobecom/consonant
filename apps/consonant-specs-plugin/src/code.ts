@@ -6,6 +6,7 @@ import { localize, collectSourceText, TranslationProvider } from './localize';
 import { generateBlueline, generateBluelinePanels, placeCategoryBadge } from './a11y-blueline';
 import { runStructuralScan } from './a11y-structural-scan';
 import { generateFocusIndicators, collectFocusableElements } from './spec-focus-indicators';
+import { runAlignV2Scan, AlignV2Result } from './align-v2';
 
 // Expose for eval/EXECUTE_CODE access
 (globalThis as any).__generateBlueline = generateBlueline;
@@ -1673,6 +1674,90 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       }
       figma.notify(`Annotated ${annotated} of ${issues.length} issues`);
       break;
+    }
+    case 'align-v2-scan': {
+      const sel = figma.currentPage.selection;
+      if (sel.length !== 1) {
+        figma.ui.postMessage({ type: 'align-v2-scan-result', error: 'Select exactly one frame.' });
+        return;
+      }
+      const root = sel[0];
+      if (root.type !== 'FRAME' && root.type !== 'COMPONENT' && root.type !== 'COMPONENT_SET') {
+        figma.ui.postMessage({ type: 'align-v2-scan-result', error: 'Selection must be a frame, component, or component set.' });
+        return;
+      }
+      try {
+        const result: AlignV2Result = await runAlignV2Scan(root);
+        figma.ui.postMessage({ type: 'align-v2-scan-result', result, selectionName: root.name, selectionType: root.type });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'align-v2-scan-result', error: `Scan failed: ${e?.message ?? String(e)}` });
+      }
+      return;
+    }
+    case 'align-v2-apply': {
+      const selections = msg.selections as Array<{ nodeId: string; property: string; bindingKey?: string; variableId?: string; textStyleId?: string }> | undefined;
+      if (!Array.isArray(selections) || selections.length === 0) {
+        figma.ui.postMessage({ type: 'align-v2-apply-result', results: [] });
+        return;
+      }
+
+      const results: Array<{ nodeId: string; property: string; success: boolean; error?: string }> = [];
+
+      for (const s of selections) {
+        try {
+          const node = await figma.getNodeByIdAsync(s.nodeId);
+          if (!node) { results.push({ nodeId: s.nodeId, property: s.property, success: false, error: 'Node not found' }); continue; }
+
+          if (s.textStyleId !== undefined && node.type === 'TEXT') {
+            await (node as TextNode).setTextStyleIdAsync(s.textStyleId);
+            results.push({ nodeId: s.nodeId, property: s.property, success: true });
+            continue;
+          }
+
+          if (s.variableId !== undefined) {
+            const variable = await figma.variables.getVariableByIdAsync(s.variableId);
+            if (!variable) { results.push({ nodeId: s.nodeId, property: s.property, success: false, error: 'Variable not found' }); continue; }
+
+            if (s.property === 'Fill' || s.property === 'Stroke') {
+              const arrKey = s.property === 'Fill' ? 'fills' : 'strokes';
+              const arr = (node as any)[arrKey] as Paint[] | undefined;
+              if (!Array.isArray(arr) || arr.length === 0 || arr[0].type !== 'SOLID') {
+                results.push({ nodeId: s.nodeId, property: s.property, success: false, error: 'No solid paint to bind' });
+                continue;
+              }
+              const newPaint = figma.variables.setBoundVariableForPaint(arr[0] as SolidPaint, 'color', variable);
+              (node as any)[arrKey] = [newPaint, ...arr.slice(1)];
+              results.push({ nodeId: s.nodeId, property: s.property, success: true });
+              continue;
+            }
+
+            if (s.bindingKey) {
+              (node as any).setBoundVariable(s.bindingKey, variable);
+              results.push({ nodeId: s.nodeId, property: s.property, success: true });
+              continue;
+            }
+
+            results.push({ nodeId: s.nodeId, property: s.property, success: false, error: 'No bindingKey provided for non-color property' });
+            continue;
+          }
+
+          results.push({ nodeId: s.nodeId, property: s.property, success: false, error: 'No variableId or textStyleId in selection' });
+        } catch (e: any) {
+          results.push({ nodeId: s.nodeId, property: s.property, success: false, error: e?.message ?? String(e) });
+        }
+      }
+
+      figma.ui.postMessage({ type: 'align-v2-apply-result', results });
+      return;
+    }
+    case 'align-v2-window-resize': {
+      const wide = !!msg.wide;
+      if (wide) {
+        figma.ui.resize(800, 600);
+      } else {
+        figma.ui.resize(300, 500);  // restores the default set in showUI at code.ts:1606
+      }
+      return;
     }
     case 'full-align-s2a': {
       const sel = figma.currentPage.selection;
