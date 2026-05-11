@@ -242,12 +242,13 @@ function buildGroupedDropdownOptions(
     out += `<optgroup label="${esc(groupLabel)}">`;
     for (const c of items) {
       const id = c.variableId ?? c.textStyleId ?? '';
-      const { leaf } = splitTokenPath(c.tokenName);
       // Format value for direct comparison with currentValue: numbers → "(Npx)", strings → "(value)".
       let valuePart = '';
       if (typeof c.value === 'number') valuePart = ` (${c.value}px)`;
       else if (typeof c.value === 'string' && c.value !== '') valuePart = ` (${c.value})`;
-      const optionLabel = `${leaf}${valuePart}`;
+      // Full path so the collapsed-select state shows the full token name; the optgroup
+      // header still provides hierarchical grouping when the dropdown is open.
+      const optionLabel = `${c.tokenName}${valuePart}`;
       out += `<option value="${esc(id)}" ${id === chosen ? 'selected' : ''}>${esc(optionLabel)}</option>`;
     }
     out += `</optgroup>`;
