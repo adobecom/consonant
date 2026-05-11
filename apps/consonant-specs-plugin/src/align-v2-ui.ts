@@ -212,9 +212,23 @@ function buildGroupedDropdownOptions(
     if (!groups.has(group)) groups.set(group, []);
     groups.get(group)!.push(c);
   }
-  // Sort groups alphabetically; within each group, sort by numeric value when
-  // both items have numbers (dimensions), otherwise by leaf name alphabetically.
-  const sortedGroupKeys = Array.from(groups.keys()).sort();
+  // Sort groups: canonical S2A groups first (in priority order), then everything else
+  // alphabetically. Within each group, sort by numeric value when both items have numbers
+  // (dimensions), otherwise by leaf name alphabetically.
+  const GROUP_PRIORITY: string[] = [
+    's2a/spacing',
+    's2a/layout',
+    's2a/border/radius',
+    's2a/border/width',
+  ];
+  const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => {
+    const ai = GROUP_PRIORITY.indexOf(a);
+    const bi = GROUP_PRIORITY.indexOf(b);
+    if (ai !== -1 && bi !== -1) return ai - bi;
+    if (ai !== -1) return -1;
+    if (bi !== -1) return 1;
+    return a.localeCompare(b);
+  });
 
   let out = '';
   for (const groupKey of sortedGroupKeys) {
