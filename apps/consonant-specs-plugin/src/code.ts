@@ -1753,7 +1753,7 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
     case 'align-v2-window-resize': {
       const wide = !!msg.wide;
       if (wide) {
-        figma.ui.resize(400, 600);
+        figma.ui.resize(450, 600);
       } else {
         figma.ui.resize(300, 500);  // restores the default set in showUI at code.ts:1606
       }
