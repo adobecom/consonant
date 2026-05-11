@@ -246,16 +246,29 @@ function buildGroupedDropdownOptions(
   // alphabetically. Within each group, sort by numeric value when both items have numbers
   // (dimensions), otherwise by leaf name alphabetically.
   const GROUP_PRIORITY: string[] = [
+    // Spacing / layout
     's2a/spacing',
     's2a/layout',
+    // Radii + stroke widths
     's2a/border/radius',
     's2a/border/width',
+    // Typography (custom typographic order)
     's2a/typography/super',
     's2a/typography/title',
     's2a/typography/body',
     's2a/typography/eyebrow',
     's2a/typography/label',
     's2a/typography/caption',
+    // Colors — canonical surfaces first, then utilities, then primary variants
+    's2a/color/background',
+    's2a/color/background/utility',
+    's2a/color/content',
+    's2a/color/content/utility',
+    's2a/color/border',
+    's2a/color/border/utility',
+    's2a/color/background/primary',
+    's2a/color/content/primary',
+    's2a/color/border/primary',
   ];
   const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => {
     const ai = GROUP_PRIORITY.indexOf(a);
@@ -314,16 +327,29 @@ function buildColorPopoverContent(
   }
 
   const GROUP_PRIORITY: string[] = [
+    // Spacing / layout
     's2a/spacing',
     's2a/layout',
+    // Radii + stroke widths
     's2a/border/radius',
     's2a/border/width',
+    // Typography (custom typographic order)
     's2a/typography/super',
     's2a/typography/title',
     's2a/typography/body',
     's2a/typography/eyebrow',
     's2a/typography/label',
     's2a/typography/caption',
+    // Colors — canonical surfaces first, then utilities, then primary variants
+    's2a/color/background',
+    's2a/color/background/utility',
+    's2a/color/content',
+    's2a/color/content/utility',
+    's2a/color/border',
+    's2a/color/border/utility',
+    's2a/color/background/primary',
+    's2a/color/content/primary',
+    's2a/color/border/primary',
   ];
   const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => {
     const ai = GROUP_PRIORITY.indexOf(a);
