@@ -331,9 +331,9 @@ export function matchS2ATextStyle(node: SceneNode): string | null {
 
 // Name-based filters to ensure tokens route to the right category.
 // S2A names follow patterns like s2a/spacing/*, s2a/border/radius/*, s2a/blur/*.
-const NAME_SPACING = /spacing|layout|gap|margin|padding/i;
-const NAME_RADIUS = /radius|corner|border[\-\/]radius/i;
-const NAME_BLUR = /blur/i;
+export const NAME_SPACING = /spacing|layout|gap|margin|padding/i;
+export const NAME_RADIUS = /radius|corner|border[\-\/]radius/i;
+export const NAME_BLUR = /blur/i;
 
 export function matchSpacing(value: string): string | null {
   const num = parseFloat(value);

@@ -1,6 +1,6 @@
 // apps/consonant-specs-plugin/src/align-v2.ts
 
-import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole, getDimensionVarMap, LoadedDimensionVar, getTextStyleMap } from './tokens';
+import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole, getDimensionVarMap, LoadedDimensionVar, getTextStyleMap, NAME_SPACING, NAME_RADIUS, NAME_BLUR } from './tokens';
 import { figmaColorToHex, getCornerRadius } from './utils';
 
 // ── Output types ─────────────────────────────────────────────────────────
@@ -189,7 +189,20 @@ interface DimCheck {
 
 function buildDimensionCandidates(scope: DimScope): TokenCandidate[] {
   return getDimensionVarMap()
-    .filter(v => v.scopes.some(s => s === scope || s === 'ALL_SCOPES'))
+    .filter(v => {
+      if (!v.scopes.some(s => s === scope || s === 'ALL_SCOPES')) return false;
+      // Exclude tokens whose name belongs to a different category
+      if (scope === 'GAP') {
+        return !NAME_RADIUS.test(v.name) && !NAME_BLUR.test(v.name);
+      }
+      if (scope === 'CORNER_RADIUS') {
+        return !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name);
+      }
+      if (scope === 'STROKE_FLOAT') {
+        return !NAME_RADIUS.test(v.name) && !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name);
+      }
+      return true;
+    })
     .map(v => ({
       tokenName: v.name,
       variableId: v.variable.id,
@@ -197,11 +210,16 @@ function buildDimensionCandidates(scope: DimScope): TokenCandidate[] {
     }));
 }
 
-/** Pick the S2A dimension token that exactly matches value+scope. */
+/** Pick the S2A dimension token that exactly matches value+scope, excluding cross-category names. */
 function findBestDimMatch(value: number, scope: DimScope): LoadedDimensionVar | null {
-  return getDimensionVarMap().find(v =>
-    v.value === value && v.scopes.some(s => s === scope || s === 'ALL_SCOPES')
-  ) ?? null;
+  return getDimensionVarMap().find(v => {
+    if (v.value !== value) return false;
+    if (!v.scopes.some(s => s === scope || s === 'ALL_SCOPES')) return false;
+    if (scope === 'GAP')          return !NAME_RADIUS.test(v.name) && !NAME_BLUR.test(v.name);
+    if (scope === 'CORNER_RADIUS') return !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name);
+    if (scope === 'STROKE_FLOAT') return !NAME_RADIUS.test(v.name) && !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name);
+    return true;
+  }) ?? null;
 }
 
 async function classifyDim(

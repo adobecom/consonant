@@ -329,9 +329,16 @@ function renderV2Body(): void {
       return `<option value="${esc(id)}" ${id === chosen ? 'selected' : ''}>${esc(c.tokenName)}</option>`;
     }).join('');
 
-    const suggestCell = disabled
-      ? `<span style="color:var(--text-secondary)">No S2A token</span>`
-      : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
+    // "No S2A token" rows: show a dropdown with a placeholder so the user can manually pick
+    const noSuggestionDropdown = disabled && group.allCandidates.length > 0
+      ? `<select data-group-key="${gk}" data-no-suggestion="1"><option value="" disabled ${!chosen ? 'selected' : ''}>Select a token…</option>${dropdownOpts}</select>`
+      : null;
+
+    const suggestCell = noSuggestionDropdown
+      ? noSuggestionDropdown
+      : disabled
+        ? `<span style="color:var(--text-secondary)">No S2A token</span>`
+        : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
 
     const badge = (!disabled && group.suggestion?.isExactMatch)
       ? `<span class="v2-badge">Match</span>`
@@ -344,9 +351,16 @@ function renderV2Body(): void {
     // Use the first item's nodeId for navigation click (representative node)
     const firstNodeId = esc(group.items[0]?.nodeId ?? '');
 
-    return `<div class="alignv2-group ${disabled ? 'disabled' : ''}" data-group-key="${gk}" data-first-node-id="${firstNodeId}">
+    // For no-suggestion rows that have candidates: checkbox starts disabled+unchecked,
+    // but becomes enabled once the user picks a token from the dropdown.
+    const isPickable = disabled && noSuggestionDropdown !== null;
+    const hasOverride = isPickable && !!v2State.chosenOverrides.get(group.groupKey);
+    const cbChecked = isPickable ? hasOverride : checked;
+    const cbDisabled = isPickable ? !hasOverride : disabled;
+
+    return `<div class="alignv2-group ${(disabled && !isPickable) ? 'disabled' : ''}" data-group-key="${gk}" data-first-node-id="${firstNodeId}">
   <div class="alignv2-group-line1">
-    <input type="checkbox" data-group-key="${gk}" ${checked ? 'checked' : ''} ${disabled ? 'disabled' : ''}>
+    <input type="checkbox" data-group-key="${gk}" ${cbChecked ? 'checked' : ''} ${cbDisabled ? 'disabled' : ''}>
     <span class="v2-meta">${esc(group.nodeType)} &middot; ${esc(group.property)}</span>
     ${countBadge}
   </div>
@@ -371,7 +385,31 @@ function renderV2Body(): void {
   // Dropdown listeners
   body.querySelectorAll<HTMLSelectElement>('select[data-group-key]').forEach(sel => {
     sel.addEventListener('change', () => {
-      v2State.chosenOverrides.set(sel.dataset.groupKey!, sel.value);
+      const k = sel.dataset.groupKey!;
+      const val = sel.value;
+      if (val) {
+        v2State.chosenOverrides.set(k, val);
+      } else {
+        v2State.chosenOverrides.delete(k);
+      }
+
+      // For no-suggestion rows, sync the paired checkbox
+      if (sel.dataset.noSuggestion) {
+        const cb = body.querySelector<HTMLInputElement>(`input[type="checkbox"][data-group-key="${CSS.escape(k)}"]`);
+        if (cb) {
+          if (val) {
+            cb.disabled = false;
+            cb.checked = true;
+            v2State.checkedGroupKeys.add(k);
+          } else {
+            cb.disabled = true;
+            cb.checked = false;
+            v2State.checkedGroupKeys.delete(k);
+          }
+        }
+      }
+
+      updateV2Footer();
     });
   });
 
@@ -418,7 +456,12 @@ export function collectV2ApplySelections(): Array<{ nodeId: string; property: st
       ?? (group.suggestion?.variableId ?? group.suggestion?.textStyleId);
     if (!chosen) continue;
 
-    const isTextStyle = !!group.suggestion?.textStyleId || group.property === 'Text Style';
+    // isTextStyle: check suggestion first; for no-suggestion rows, check if the chosen
+    // value appears as a textStyleId in allCandidates; also fall back to the property name.
+    const chosenAsTextStyle = group.suggestion === null
+      ? group.allCandidates.some(c => c.textStyleId === chosen)
+      : false;
+    const isTextStyle = !!group.suggestion?.textStyleId || group.property === 'Text Style' || chosenAsTextStyle;
 
     for (const item of group.items) {
       if (group.property === 'Fill' || group.property === 'Stroke') {
