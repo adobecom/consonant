@@ -2,13 +2,17 @@
   "mcpServers": {
     "figma-console": {
       "command": "node",
-      "args": ["/Users/mhuntsberry/Desktop/prototyping/consonant/node_modules/figma-console-mcp/dist/local.js"]
+      "args": ["/Users/taehoc/Desktop/Taeho/consonant/apps/figma-console-mcp/dist/local.js"]
+    },
+    "consonant-specs": {
+      "command": "node",
+      "args": ["/Users/taehoc/Desktop/Taeho/consonant/apps/consonant-specs-plugin/mcp/dist/index.js"]
     },
     "s2a-ds": {
       "command": "node",
-      "args": ["/Users/mhuntsberry/Desktop/prototyping/consonant/apps/s2a-ds-mcp/dist/local.js"],
+      "args": ["/Users/taehoc/Desktop/Taeho/consonant/apps/s2a-ds-mcp/dist/local.js"],
       "env": {
-        "DS_ROOT": "/Users/mhuntsberry/Desktop/prototyping/consonant"
+        "DS_ROOT": "/Users/taehoc/Desktop/Taeho/consonant"
       }
     },
     "design-systems": {

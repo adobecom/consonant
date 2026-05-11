@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>A11y Tab — Redesigned UI Mockup</title>
+<style>
+  body { font-family: Inter, system-ui, sans-serif; background: #1a1a2e; margin: 0; padding: 40px 24px; color: #333; }
+  h2 { color: #fff; font-size: 20px; margin-bottom: 8px; }
+  .subtitle { color: #aaa; font-size: 14px; margin-bottom: 32px; }
+
+  .stages { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
+  .stage-label { color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; text-align: center; margin-bottom: 10px; }
+
+  /* Plugin chrome */
+  .plugin {
+    width: 300px;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    font-size: 11px;
+  }
+  .plugin-header {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e5e5e5;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .selection-bar {
+    padding: 5px 12px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #e5e5e5;
+    color: #666;
+    font-size: 10px;
+  }
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  .tab {
+    flex: 1;
+    padding: 7px 4px;
+    text-align: center;
+    font-size: 10px;
+    color: #999;
+    border-bottom: 2px solid transparent;
+  }
+  .tab.active { color: #1473E6; border-bottom-color: #1473E6; font-weight: 600; }
+  .panel { padding: 12px; }
+  .footer { padding: 5px 12px; border-top: 1px solid #e5e5e5; color: #999; font-size: 10px; }
+
+  /* A11y panel elements */
+  .frame-confirm {
+    background: #e8f4fd;
+    border: 1px solid #b3d9f7;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    font-size: 10px;
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .frame-confirm .dot { width: 6px; height: 6px; border-radius: 50%; background: #0d6efd; flex-shrink: 0; }
+
+  .bridge-banner {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    font-size: 10px;
+    color: #7b5800;
+  }
+  .bridge-banner-title { font-weight: 600; margin-bottom: 2px; }
+  .bridge-banner-link { color: #1473E6; cursor: pointer; text-decoration: underline; font-size: 10px; }
+  .bridge-connected {
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+    font-size: 10px;
+    color: #2e7d32;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .bridge-dot { width: 6px; height: 6px; border-radius: 50%; background: #2e7d32; }
+
+  .section-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #999;
+    margin: 10px 0 6px;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 6px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    cursor: pointer;
+  }
+  .check-item:hover { background: #f5f5f5; }
+  .check-item input { margin-top: 1px; flex-shrink: 0; width: 13px; height: 13px; accent-color: #1473E6; }
+  .check-item .label-wrap {}
+  .check-item .label-name { font-weight: 500; color: #333; font-size: 11px; }
+  .check-item .label-desc { color: #999; font-size: 10px; margin-top: 1px; }
+  .check-item.checked .label-name { color: #1473E6; }
+
+  .advanced-toggle {
+    font-size: 10px;
+    color: #1473E6;
+    cursor: pointer;
+    margin: 6px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .btn-primary {
+    display: block;
+    width: 100%;
+    padding: 9px;
+    background: #1473E6;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 12px;
+    box-sizing: border-box;
+  }
+  .btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 7px;
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 6px;
+    box-sizing: border-box;
+  }
+
+  /* Confirm state */
+  .confirm-box {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .confirm-title { font-weight: 600; font-size: 11px; margin-bottom: 6px; color: #333; }
+  .confirm-list { list-style: none; padding: 0; margin: 0; }
+  .confirm-list li { padding: 2px 0; color: #555; font-size: 10px; display: flex; align-items: center; gap: 5px; }
+  .confirm-list li::before { content: "✓"; color: #1473E6; font-weight: bold; font-size: 10px; }
+  .confirm-note { font-size: 10px; color: #999; margin-top: 8px; }
+
+  /* Results state */
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .results-title { font-weight: 600; font-size: 12px; }
+  .badge { padding: 2px 7px; border-radius: 10px; font-size: 9px; font-weight: 700; }
+  .badge-red { background: #fde8e8; color: #c62828; }
+  .badge-yellow { background: #fff8e1; color: #f57f17; }
+  .badge-green { background: #e8f5e9; color: #2e7d32; }
+  .result-item {
+    padding: 6px 8px;
+    border-radius: 5px;
+    margin-bottom: 4px;
+    font-size: 10px;
+    border-left: 3px solid transparent;
+  }
+  .result-item.issue { background: #fdf3f3; border-color: #e53935; }
+  .result-item.suggestion { background: #f3f8ff; border-color: #1473E6; }
+  .result-item.needs-input { background: #fffde7; border-color: #f9a825; }
+  .result-item .r-label { font-weight: 600; color: #333; margin-bottom: 2px; }
+  .result-item .r-desc { color: #666; line-height: 1.4; }
+  .result-item .r-need { color: #f57f17; font-style: italic; }
+  .continue-btn {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    background: #1473E6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 10px;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  .divider { border: none; border-top: 1px solid #eee; margin: 10px 0; }
+
+  .stage-wrapper { display: flex; flex-direction: column; align-items: center; }
+  .arrow { color: #555; font-size: 24px; display: flex; align-items: center; padding-top: 60px; }
+</style>
+</head>
+<body>
+
+<h2>Redesigned A11y Tab — 3 Key States</h2>
+<p class="subtitle">Simplified language · one clear action · confirmation before canvas changes · results back in plugin</p>
+
+<div class="stages">
+
+  <!-- STATE 1: Ready to review -->
+  <div class="stage-wrapper">
+    <div class="stage-label">State 1 — Ready</div>
+    <div class="plugin">
+      <div class="plugin-header">Consonant Tools</div>
+      <div class="selection-bar"><strong>Hero Section</strong> (FRAME) — 1440 × 900</div>
+      <div class="tab-bar">
+        <div class="tab">Align</div>
+        <div class="tab">Match</div>
+        <div class="tab">Grids</div>
+        <div class="tab">Specs</div>
+        <div class="tab active">A11y</div>
+        <div class="tab">…</div>
+      </div>
+      <div class="panel">
+        <div class="bridge-connected"><span class="bridge-dot"></span> Claude Code connected</div>
+        <div class="frame-confirm"><span class="dot"></span> Reviewing: <strong>Hero Section</strong></div>
+
+        <div class="section-label">Core checks</div>
+        <div class="check-item checked">
+          <input type="checkbox" checked>
+          <div class="label-wrap">
+            <div class="label-name">Focus Styles</div>
+            <div class="label-desc">Visible focus rings on buttons, links, inputs</div>
+          </div>
+        </div>
+        <div class="check-item checked">
+          <input type="checkbox" checked>
+          <div class="label-wrap">
+            <div class="label-name">Focus Order</div>
+            <div class="label-desc">Keyboard tab sequence through the design</div>
+          </div>
+        </div>
+        <div class="check-item checked">
+          <input type="checkbox" checked>
+          <div class="label-wrap">
+            <div class="label-name">Headings</div>
+            <div class="label-desc">H1, H2… structure for screen readers</div>
+          </div>
+        </div>
+        <div class="check-item checked">
+          <input type="checkbox" checked>
+          <div class="label-wrap">
+            <div class="label-name">Labels &amp; Alt Text</div>
+            <div class="label-desc">Button names, image descriptions</div>
+          </div>
+        </div>
+        <div class="check-item checked">
+          <input type="checkbox" checked>
+          <div class="label-wrap">
+            <div class="label-name">Color Contrast</div>
+            <div class="label-desc">Text and UI element contrast ratios</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <input type="checkbox">
+          <div class="label-wrap">
+            <div class="label-name">Keyboard Behavior</div>
+            <div class="label-desc">How the design works without a mouse</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <input type="checkbox">
+          <div class="label-wrap">
+            <div class="label-name">Touch Targets</div>
+            <div class="label-desc">Minimum tap/click area sizes (24×24px)</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <input type="checkbox">
+          <div class="label-wrap">
+            <div class="label-name">Page Regions</div>
+            <div class="label-desc">Main, nav, footer landmark areas</div>
+          </div>
+        </div>
+
+        <div class="advanced-toggle">▶ Show optional checks (forms, carousel, motion…)</div>
+
+        <button class="btn-primary">Start A11y Review →</button>
+      </div>
+      <div class="footer">Tokens: S2A / Foundations — 330 loaded</div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- STATE 2: Confirm before canvas changes -->
+  <div class="stage-wrapper">
+    <div class="stage-label">State 2 — Confirm</div>
+    <div class="plugin">
+      <div class="plugin-header">Consonant Tools</div>
+      <div class="selection-bar"><strong>Hero Section</strong> (FRAME) — 1440 × 900</div>
+      <div class="tab-bar">
+        <div class="tab">Align</div>
+        <div class="tab">Match</div>
+        <div class="tab">Grids</div>
+        <div class="tab">Specs</div>
+        <div class="tab active">A11y</div>
+        <div class="tab">…</div>
+      </div>
+      <div class="panel">
+        <div class="confirm-box">
+          <div class="confirm-title">Ready to create 5 annotation cards for Hero Section</div>
+          <ul class="confirm-list">
+            <li>Focus Styles</li>
+            <li>Focus Order</li>
+            <li>Headings</li>
+            <li>Labels &amp; Alt Text</li>
+            <li>Color Contrast</li>
+          </ul>
+          <div class="confirm-note">Cards appear below your frame in Figma. Previous annotations will be replaced.</div>
+        </div>
+        <button class="btn-primary">Create Cards &amp; Open Claude Code</button>
+        <button class="btn-secondary">← Go back</button>
+        <hr class="divider">
+        <div style="font-size:10px; color:#999; line-height:1.5;">Claude will open in your terminal and ask you a few questions before filling the cards. The conversation will guide the review.</div>
+      </div>
+      <div class="footer">Tokens: S2A / Foundations — 330 loaded</div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- STATE 3: Results summary -->
+  <div class="stage-wrapper">
+    <div class="stage-label">State 3 — Results in plugin</div>
+    <div class="plugin">
+      <div class="plugin-header">Consonant Tools</div>
+      <div class="selection-bar"><strong>Hero Section</strong> (FRAME) — 1440 × 900</div>
+      <div class="tab-bar">
+        <div class="tab">Align</div>
+        <div class="tab">Match</div>
+        <div class="tab">Grids</div>
+        <div class="tab">Specs</div>
+        <div class="tab active">A11y</div>
+        <div class="tab">…</div>
+      </div>
+      <div class="panel">
+        <div class="bridge-connected"><span class="bridge-dot"></span> Review complete — Hero Section</div>
+
+        <div class="results-header">
+          <div class="results-title">5 categories reviewed</div>
+          <div style="display:flex;gap:4px;">
+            <span class="badge badge-red">3 issues</span>
+            <span class="badge badge-yellow">2 need input</span>
+            <span class="badge badge-green">4 suggestions</span>
+          </div>
+        </div>
+
+        <div class="result-item issue">
+          <div class="r-label">Color Contrast — CTA Button</div>
+          <div class="r-desc">Text #FFFFFF on #5C9CF5 is 2.8:1 — fails AA (needs 4.5:1)</div>
+        </div>
+        <div class="result-item issue">
+          <div class="r-label">Focus Styles — Nav links</div>
+          <div class="r-desc">No visible focus ring on hover nav items</div>
+        </div>
+        <div class="result-item needs-input">
+          <div class="r-label">Labels — Icon-only button</div>
+          <div class="r-need">ⓘ Claude needs more info: What should this button be called for screen readers?</div>
+        </div>
+        <div class="result-item needs-input">
+          <div class="r-label">Headings — Hero title</div>
+          <div class="r-need">ⓘ Is this the only H1 on the page, or are there other sections?</div>
+        </div>
+        <div class="result-item suggestion">
+          <div class="r-label">Focus Order — Suggestion</div>
+          <div class="r-desc">Move "Skip to content" link to top-left before nav</div>
+        </div>
+
+        <button class="continue-btn">Continue in Claude Code →</button>
+        <button class="btn-secondary" style="margin-top:6px;">Start new review</button>
+      </div>
+      <div class="footer">Tokens: S2A / Foundations — 330 loaded</div>
+    </div>
+  </div>
+
+</div>
+
+<div style="max-width:880px;margin:40px auto 0;background:rgba(255,255,255,0.07);border-radius:8px;padding:20px 24px;color:#ccc;font-size:13px;line-height:1.8;">
+  <strong style="color:#fff;font-size:14px;">What changed and why</strong>
+  <ul style="margin-top:10px;padding-left:20px;">
+    <li><strong>One button instead of two</strong> — "Start A11y Review" replaces "Generate Blueline" + "Generate Blueline Panels" — designers pick a mode elsewhere if needed</li>
+    <li><strong>Plain language labels with descriptions</strong> — "Focus Styles" not "Focus Indicators (AI)" · "Keyboard Behavior" not "ARIA &amp; Keyboard" · "Page Regions" not "Landmarks &amp; Navigation"</li>
+    <li><strong>Smart defaults pre-checked</strong> — most relevant checks selected on load, designer unchecks what doesn't apply</li>
+    <li><strong>Confirmation screen before canvas changes</strong> — designer sees exactly what will be created before Figma is touched</li>
+    <li><strong>Results summary back in the plugin</strong> — issues, items needing designer input, and suggestions appear inside the plugin after Claude Code runs</li>
+    <li><strong>Advanced options hidden by default</strong> — Forms, Carousel, Motion, React Native, TV Note behind a toggle — not visible unless needed</li>
+    <li><strong>Bridge explained, not just badged</strong> — "Claude Code connected" pill replaces the cryptic "connect bridge" badge</li>
+  </ul>
+</div>
+
+</body>
+</html>

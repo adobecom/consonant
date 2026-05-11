@@ -22,7 +22,7 @@ const TEXT_STYLE_KEYS: Record<string, string> = {
 
 // ── Types ──
 
-interface LoadedTextStyle {
+export interface LoadedTextStyle {
   name: string;
   styleId: string;
   fontFamily: string;
@@ -32,12 +32,14 @@ interface LoadedTextStyle {
 
 type ColorSemanticRole = 'background' | 'content' | 'border' | null;
 
-interface LoadedColorVar {
+export interface LoadedColorVar {
   name: string;
   variable: Variable;
   hex: string;
   opacity: number;
   semanticRole: ColorSemanticRole;
+  /** Hex value in the non-default (dark) mode. Undefined when there is only one mode or resolution fails. */
+  darkHex?: string;
 }
 
 /** Parse semantic role from S2A token name path */
@@ -64,7 +66,7 @@ export function detectNodeColorRole(node: SceneNode, property: 'fill' | 'stroke'
   return 'background';
 }
 
-interface LoadedDimensionVar {
+export interface LoadedDimensionVar {
   name: string;
   variable: Variable;
   value: number;
@@ -145,28 +147,31 @@ export async function loadLibraryTokens(): Promise<void> {
               libVars.map(v => figma.variables.importVariableByKeyAsync(v.key))
             );
 
-            // Resolve the collection's defaultModeId once, using the first successful import.
+            // Resolve the collection's defaultModeId and alternate (dark) modeId once,
+            // using the first successful import.
             // Object.keys ordering is not guaranteed — defaultModeId ensures we always read
             // the correct (default/light) mode, not whichever mode V8 happens to enumerate first.
             let defaultModeId: string | null = null;
+            let altModeId: string | null = null; // second mode (dark) if the collection has exactly 2 modes
             for (const r of importResults) {
               if (r.status === 'fulfilled') {
                 try {
                   const coll = await figma.variables.getVariableCollectionByIdAsync(r.value.variableCollectionId);
-                  if (coll) defaultModeId = coll.defaultModeId;
+                  if (coll) {
+                    defaultModeId = coll.defaultModeId;
+                    // Find the one non-default mode (if any) to use as "dark"
+                    const otherModes = coll.modes.filter(m => m.modeId !== coll.defaultModeId);
+                    if (otherModes.length >= 1) altModeId = otherModes[0].modeId;
+                  }
                 } catch (_) {}
                 break;
               }
             }
 
-            for (const result of importResults) {
-              if (result.status !== 'fulfilled') continue;
-              const imported = result.value;
-              const modeId = defaultModeId ?? Object.keys(imported.valuesByMode)[0];
-              let value = imported.valuesByMode[modeId];
-
-              // Resolve aliases — inherently sequential (each step depends on the previous),
-              // bounded to depth 5 to prevent infinite loops in circular references.
+            /** Resolve a single mode value for a variable, following alias chains up to depth 5. */
+            const resolveModeValue = async (imported: Variable, modeId: string): Promise<VariableValue | null> => {
+              let value: VariableValue | undefined = imported.valuesByMode[modeId];
+              if (value === undefined) return null;
               let depth = 0;
               while (value && typeof value === 'object' && 'type' in value && (value as any).type === 'VARIABLE_ALIAS' && depth < 5) {
                 try {
@@ -183,16 +188,51 @@ export async function loadLibraryTokens(): Promise<void> {
                 } catch (_) { break; }
                 depth++;
               }
+              return value ?? null;
+            };
+
+            for (const result of importResults) {
+              if (result.status !== 'fulfilled') continue;
+              const imported = result.value;
+              const modeId = defaultModeId ?? Object.keys(imported.valuesByMode)[0];
+
+              // Resolve default (light) mode value
+              const value = await resolveModeValue(imported, modeId);
 
               if (imported.resolvedType === 'COLOR') {
                 if (value && typeof value === 'object' && 'r' in value) {
                   const color = value as RGBA;
+                  const lightAlpha = 'a' in color ? color.a : 1;
+                  // Encode alpha into hex as #RRGGBBAA when alpha < 1 so the value
+                  // string itself carries the transparency for both rendering and display.
+                  const alphaToHex = (a: number): string => {
+                    const clamped = Math.max(0, Math.min(1, a));
+                    return Math.round(clamped * 255).toString(16).padStart(2, '0');
+                  };
+                  const lightHex = lightAlpha < 1
+                    ? rgbToHex(color.r, color.g, color.b) + alphaToHex(lightAlpha)
+                    : rgbToHex(color.r, color.g, color.b);
+                  // Resolve dark mode value if an alternate mode exists
+                  let darkHex: string | undefined;
+                  if (altModeId && altModeId in imported.valuesByMode) {
+                    try {
+                      const darkValue = await resolveModeValue(imported, altModeId);
+                      if (darkValue && typeof darkValue === 'object' && 'r' in darkValue) {
+                        const dc = darkValue as RGBA;
+                        const darkAlpha = 'a' in dc ? dc.a : 1;
+                        darkHex = darkAlpha < 1
+                          ? rgbToHex(dc.r, dc.g, dc.b) + alphaToHex(darkAlpha)
+                          : rgbToHex(dc.r, dc.g, dc.b);
+                      }
+                    } catch (_) {}
+                  }
                   colorVarMap.push({
                     name: imported.name,
                     variable: imported,
-                    hex: rgbToHex(color.r, color.g, color.b),
-                    opacity: 'a' in color ? color.a : 1,
+                    hex: lightHex,
+                    opacity: lightAlpha,
                     semanticRole: parseSemanticRole(imported.name),
+                    ...(darkHex !== undefined ? { darkHex } : {}),
                   });
                 }
               } else if (imported.resolvedType === 'FLOAT') {
@@ -241,6 +281,22 @@ export function getTokenVersion(): string {
 
 export function getTokenCount(): number {
   return tokenCount;
+}
+
+export function hasS2AVariables(): boolean {
+  return colorVarMap.length > 0 || dimensionVarMap.length > 0;
+}
+
+// ── Read-only accessors for external modules (e.g., align-v2) ──
+// Return ReadonlyArray<T> so consumers can iterate/filter but not mutate
+// the underlying state managed by loadLibraryTokens.
+export function getColorVarMap(): ReadonlyArray<LoadedColorVar> { return colorVarMap; }
+export function getDimensionVarMap(): ReadonlyArray<LoadedDimensionVar> { return dimensionVarMap; }
+export function getTextStyleMap(): ReadonlyArray<LoadedTextStyle> { return textStyleMap; }
+
+export async function reloadLibraryTokens(): Promise<void> {
+  loadingPromise = null;
+  return loadLibraryTokens();
 }
 
 export function isLoaded(): boolean {
@@ -315,9 +371,20 @@ export function matchS2ATextStyle(node: SceneNode): string | null {
 
 // Name-based filters to ensure tokens route to the right category.
 // S2A names follow patterns like s2a/spacing/*, s2a/border/radius/*, s2a/blur/*.
-const NAME_SPACING = /spacing|layout|gap|margin|padding/i;
-const NAME_RADIUS = /radius|corner|border[\-\/]radius/i;
-const NAME_BLUR = /blur/i;
+export const NAME_SPACING = /spacing|layout|gap|margin|padding/i;
+export const NAME_RADIUS = /radius|corner|border[\-\/]radius/i;
+export const NAME_BLUR = /blur/i;
+export const NAME_TYPOGRAPHY = /typography|letter[-\/_]spacing|line[-\/_]height|font[-\/_]size|font[-\/_]weight|font[-\/_]family/i;
+
+// Tight POSITIVE segment-based filters for align-v2 dimension dropdowns.
+// The (?:^|\/) prefix ensures the keyword starts at a path-segment boundary,
+// preventing substring matches like "letter-spacing" matching as "spacing".
+/** Tight positive match for spacing/padding/gap/margin path segments. */
+export const NAME_DIM_SPACING = /(?:^|\/)(?:spacing|layout|gap|margin|padding)(?=[-\/]|$)/i;
+/** Tight positive match for radius/corner path segments. */
+export const NAME_DIM_RADIUS = /(?:^|\/)(?:radius|corner)(?=[-\/]|$)|border[-\/]radius/i;
+/** Tight positive match for border/stroke + width/weight combinations. */
+export const NAME_DIM_STROKE = /(?:border|stroke)[-\/](?:width|weight)/i;
 
 export function matchSpacing(value: string): string | null {
   const num = parseFloat(value);

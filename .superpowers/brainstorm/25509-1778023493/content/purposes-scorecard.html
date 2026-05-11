@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Purposes Scorecard</title>
+<style>
+  body { font-family: Inter, system-ui, sans-serif; background: #0f1117; margin: 0; padding: 40px 24px; color: #eee; }
+  h2 { color: #fff; font-size: 22px; margin-bottom: 6px; }
+  .subtitle { color: #888; font-size: 14px; margin-bottom: 36px; }
+
+  .table { width: 100%; max-width: 960px; margin: 0 auto; border-collapse: collapse; }
+  .table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #666; padding: 0 12px 10px; }
+  .table td { padding: 10px 12px; border-top: 1px solid #1e2030; vertical-align: top; font-size: 13px; }
+
+  .purpose-name { font-weight: 600; color: #fff; font-size: 13px; }
+  .purpose-sub { color: #666; font-size: 11px; margin-top: 2px; }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .fail    { background: #3d1515; color: #f87171; border: 1px solid #5c2020; }
+  .partial { background: #3d2f10; color: #fbbf24; border: 1px solid #5c4a1a; }
+  .good    { background: #0f3020; color: #4ade80; border: 1px solid #1a5035; }
+  .strong  { background: #0a2540; color: #60a5fa; border: 1px solid #1a3f6f; }
+
+  .verdict { font-size: 13px; color: #ccc; line-height: 1.5; }
+  .honest { color: #f87171; font-size: 12px; margin-top: 4px; font-style: italic; }
+  .good-note { color: #4ade80; font-size: 12px; margin-top: 4px; }
+
+  .summary-box {
+    max-width: 960px;
+    margin: 32px auto 0;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    padding: 24px;
+    border: 1px solid #1e2030;
+  }
+  .summary-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+  .summary-row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .summary-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 80px; flex-shrink: 0; padding-top: 2px; }
+  .summary-tag.gap { color: #f87171; }
+  .summary-tag.win { color: #4ade80; }
+  .summary-content { font-size: 13px; color: #ccc; line-height: 1.5; }
+
+  .row-highlight { background: rgba(255,255,255,0.02); }
+</style>
+</head>
+<body>
+
+<h2>Honest Purposes Scorecard</h2>
+<p class="subtitle">Before redesign → After redesign. Where we actually stand.</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th style="width:200px;">Purpose</th>
+      <th style="width:100px;">Before</th>
+      <th style="width:100px;">After</th>
+      <th>Honest assessment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-highlight">
+      <td>
+        <div class="purpose-name">1. Analyze & flag</div>
+        <div class="purpose-sub">Scan design, identify WCAG issues</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill partial">Partial</span></td>
+      <td class="verdict">
+        Results now surface back into the plugin (State 3). Improvement.
+        <div class="honest">But: analysis still runs outside the plugin in Claude Code. The plugin itself still doesn't scan. We improved the output visibility, not the analysis itself.</div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="purpose-name">2. Annotate with confidence</div>
+        <div class="purpose-sub">Confident annotations; blanks where uncertain</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill good">Good</span></td>
+      <td class="verdict">
+        State 3 now shows "needs designer input" items — the blank + reason pattern is visible in the plugin.
+        <div class="good-note">This is the right model. Claude flags what it doesn't know, and the designer can answer in Claude Code.</div>
+      </td>
+    </tr>
+    <tr class="row-highlight">
+      <td>
+        <div class="purpose-name">3. No hallucination</div>
+        <div class="purpose-sub">Uncertain = flag, not fill</div>
+      </td>
+      <td><span class="pill partial">Partial</span></td>
+      <td><span class="pill good">Good</span></td>
+      <td class="verdict">
+        State 3's "needs input" cards make the uncertainty visible. The structural scan still grounds Claude.
+        <div class="honest">Gap: the plugin still pre-commits cards for categories the design may not warrant (tick "Carousel" with no carousel). State 2 confirmation helps but doesn't fully solve this.</div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="purpose-name">4. Issues + suggestions</div>
+        <div class="purpose-sub">Problems AND what to do about them</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill strong">Strong</span></td>
+      <td class="verdict">
+        State 3 clearly separates issues (red), needs-input (yellow), and suggestions (blue).
+        <div class="good-note">This is a real win. Designer sees the full picture inside the plugin, not just in Figma cards.</div>
+      </td>
+    </tr>
+    <tr class="row-highlight">
+      <td>
+        <div class="purpose-name">5. Conversational</div>
+        <div class="purpose-sub">Two-way, Claude asks questions</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill partial">Partial</span></td>
+      <td class="verdict">
+        State 2 tells designer Claude will ask questions. State 3 brings results back. "Continue in Claude Code" allows follow-up.
+        <div class="honest">But: the conversation is still in Claude Code terminal, not the plugin. A designer who's never used Claude Code still hits a wall. This is better — not solved.</div>
+        <div class="honest">Biggest remaining gap. Full solution requires conversation surface inside the plugin (future phase).</div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="purpose-name">6. Designer-first UX</div>
+        <div class="purpose-sub">Plain language, simple, not overwhelming</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill strong">Strong</span></td>
+      <td class="verdict">
+        Plain labels with descriptions. Smart defaults. Advanced options hidden. One button. Confirmation screen. Results in plugin.
+        <div class="good-note">This is the biggest UX win. A designer who has never heard of WCAG can now use this tab without hitting a wall on every step.</div>
+        <div class="honest">Remaining: "Continue in Claude Code" still assumes the designer knows what Claude Code is. Needs better onboarding copy.</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="summary-box">
+  <div class="summary-title">Bottom line</div>
+
+  <div class="summary-row">
+    <div class="summary-tag win">Solved</div>
+    <div class="summary-content">Purposes 4 and 6 are fully addressed. The plugin is now genuinely designer-friendly, and results are visible inside the plugin with clear issue/suggestion separation.</div>
+  </div>
+  <div class="summary-row">
+    <div class="summary-tag win">Improved</div>
+    <div class="summary-content">Purposes 2 and 3 are significantly better. Uncertainty is now visible and the designer can act on it. Pre-commit confirmation reduces hallucination risk.</div>
+  </div>
+  <div class="summary-row">
+    <div class="summary-tag gap">Still gaps</div>
+    <div class="summary-content">Purpose 5 (conversational) is only partially met — the loop-back from Claude Code helps, but a designer unfamiliar with Claude Code still hits friction. Purpose 1 (analysis) still lives outside the plugin.</div>
+  </div>
+  <div class="summary-row">
+    <div class="summary-tag gap">Not yet built</div>
+    <div class="summary-content">State 3 (results summary in plugin) requires new bridge messaging that doesn't exist yet. The "smarter command" that makes Claude ask questions first also needs to be built. These are the two biggest implementation gaps between this mockup and reality.</div>
+  </div>
+</div>
+
+</body>
+</html>

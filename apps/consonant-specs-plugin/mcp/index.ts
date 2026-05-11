@@ -206,6 +206,8 @@ function startWsServer(): Promise<number> {
           }
           // Reset the ready promise for next connection
           resetPluginReady();
+          // Release auto-fill lock so a reconnected session can start a new fill
+          autoFillRunning = false;
         });
 
         socket.on('error', () => { /* onclose will fire */ });
@@ -279,6 +281,15 @@ async function sendCommand(
   });
 }
 
+function sendEvent(type: string, data: unknown): void {
+  if (!pluginSocket || pluginSocket.readyState !== WebSocket.OPEN) return;
+  try {
+    pluginSocket.send(JSON.stringify({ type, data }));
+  } catch {
+    // best-effort
+  }
+}
+
 // ── Auto-fill via claude -p ─────────────────────────────────────────────────
 
 let autoFillRunning = false;
@@ -297,7 +308,8 @@ async function handleAutoFill(
   try {
     // 1. Get blueline data from plugin
     log('Auto-fill: fetching blueline data...');
-    const blData = await sendCommand('GET_BLUELINE_DATA', {}, 15000);
+    const autoFillFrameId = (_data.frameId as string | undefined) || undefined;
+    const blData = await sendCommand('GET_BLUELINE_DATA', { frameId: autoFillFrameId }, 15000);
     const scan = (blData as any)?.structuralScan || {};
     const cards: Array<{ name: string; nodeId: string; categoryKey: string }> = (blData as any)?.bluelineCards || [];
     const focusOrder = (blData as any)?.focusOrder || [];
@@ -563,9 +575,10 @@ server.tool(
   'figma_get_blueline_data',
   'Get blueline state + preloaded expert knowledge for AI fill. Returns structural scan, focus order, card info, orchestration instructions, AND full knowledge file contents for every category — agents can start immediately with zero file reads.',
   {
+    frameId: z.string().optional().describe('ID of the source design frame. Scopes the result to blueline cards generated for that frame. Always pass this when available.'),
   },
-  async () => {
-    const result = await sendCommand('GET_BLUELINE_DATA', {}, 15000);
+  async ({ frameId }) => {
+    const result = await sendCommand('GET_BLUELINE_DATA', { frameId }, 15000);
 
     // Take screenshot of the target design frame (not the whole page)
     const targetFrameId = (result as any)?.targetFrameId || undefined;
@@ -592,7 +605,7 @@ server.tool(
       .map(g => {
         const activeKeys = g.cardKeys.filter(k => activeCardKeys.has(k));
         if (activeKeys.length === 0) return null;
-        return { ...g, cardKeys: activeKeys, knowledgeKeys: activeKeys.map(k => g.knowledgeKeys.includes(k) ? k : g.knowledgeKeys[0]).filter((v, i, a) => a.indexOf(v) === i) };
+        return { ...g, cardKeys: activeKeys, knowledgeKeys: activeKeys.map(k => g.knowledgeKeys.includes(k as never) ? k : g.knowledgeKeys[0]).filter((v, i, a) => a.indexOf(v) === i) };
       })
       .filter(Boolean);
 
@@ -1437,13 +1450,75 @@ server.tool(
   }
 );
 
+server.tool(
+  'bridge_send_a11y_result',
+  'Send an A11y review result summary back to the Consonant plugin panel (State 3). Call this after figma_render_blueline completes. The plugin will display issues, needs-input, and suggestions in three colour-coded sections.',
+  {
+    frameName: z.string().describe('The name of the frame that was reviewed'),
+    issues: z.array(z.object({
+      category: z.string().describe('Category slug (e.g. colorContrast)'),
+      description: z.string().describe('Plain-language description of the issue'),
+    })).describe('WCAG violations found'),
+    needs_input: z.array(z.object({
+      category: z.string().describe('Category slug'),
+      question: z.string().describe('The specific question Claude needs answered to complete this card'),
+    })).describe('Cards left blank because Claude needs more information'),
+    suggestions: z.array(z.object({
+      category: z.string().describe('Category slug'),
+      description: z.string().describe('Improvement suggestion that is not a hard violation'),
+    })).describe('Non-blocking improvements noticed during review'),
+  },
+  async (args) => {
+    sendEvent('A11Y_RESULT', args);
+    return {
+      content: [{ type: 'text' as const, text: `A11y result sent to plugin for frame "${args.frameName}": ${args.issues.length} issues, ${args.needs_input.length} needs input, ${args.suggestions.length} suggestions.` }],
+    };
+  }
+);
+
 // ── Start Servers ──
 
 // 1. Start WebSocket server for plugin connections
 const wsPort = await startWsServer();
 log(`WebSocket server listening on port ${wsPort}`);
 
-// 2. Start MCP server over stdio
+// 2. HTTP Bridge for Chrome Extension
+// POST /figma { method, params, timeout? } → routes to sendCommand
+// GET /status → returns plugin connection status
+// Runs on port 9240 alongside WS (9220-9222) and stdio MCP
+const HTTP_BRIDGE_PORT = 9240;
+createServer((req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+  if (req.method === 'GET' && req.url === '/status') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ connected: !!(pluginSocket && pluginSocket.readyState === 1), port: connectedPort }));
+    return;
+  }
+  if (req.method === 'POST' && req.url === '/figma') {
+    let body = '';
+    req.on('data', (chunk: string) => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const { method, params, timeout } = JSON.parse(body);
+        const result = await sendCommand(method, params, timeout);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ result }));
+      } catch (err) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }));
+      }
+    });
+    return;
+  }
+  res.writeHead(404); res.end();
+}).listen(HTTP_BRIDGE_PORT, '127.0.0.1', () => {
+  log(`HTTP bridge listening on port ${HTTP_BRIDGE_PORT}`);
+});
+
+// 3. Start MCP server over stdio
 const transport = new StdioServerTransport();
 await server.connect(transport);
 log('MCP server started (stdio)');

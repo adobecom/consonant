@@ -69,16 +69,28 @@ This installs the `figma-console-mcp` command globally. The repo's `.mcp.json` a
 
 The bridge stays connected as long as the plugin window is open. You can switch between tabs (Align, Specs, A11y, etc.) without disconnecting.
 
-### 6. Start Claude Code
+### 6. Configure `.mcp.json` for your machine
 
-Open a terminal in the cloned repo directory:
+The `.mcp.json` file tells Claude Code where the MCP servers are installed on your computer. It contains absolute paths — meaning they're specific to whoever last edited the file. You need to update them to match where you cloned the repo.
+
+**The easy way — let Claude fix it:**
+
+Open a terminal in the cloned repo directory and start Claude Code:
 
 ```bash
 cd consonant-figma-plugin
 claude
 ```
 
-Claude Code will automatically detect the `.mcp.json` and start the figma-console MCP server. You should see it listed when the session starts.
+Then tell Claude: "Fix the `.mcp.json` paths for my machine." Claude will detect the repo location and update all the paths automatically.
+
+**The manual way:**
+
+Open `.mcp.json` at the repo root. Replace every path that starts with `/Users/<someone>/...` with the actual path to your local clone. For example, if you cloned to `/Users/yourname/projects/consonant-figma-plugin`, update accordingly.
+
+The paths to update are the `args` values for each MCP server (`figma-console`, `consonant-specs`, `s2a-ds`) and the `DS_ROOT` environment variable.
+
+After updating, restart Claude Code for the changes to take effect.
 
 ## Using the A11y Blueline Features
 
@@ -119,6 +131,11 @@ Every team member runs their own instance:
 There's no conflict if multiple people run it simultaneously. Each person's bridge talks to their own Figma instance.
 
 ## Troubleshooting
+
+**MCP servers not showing up in Claude Code:**
+- The `.mcp.json` paths are probably still pointing to someone else's machine
+- Tell Claude: "Fix the `.mcp.json` paths for my machine" — it will detect your repo location and update them
+- Then restart Claude Code
 
 **Bridge won't connect:**
 - Make sure you're using Figma Desktop, not the browser

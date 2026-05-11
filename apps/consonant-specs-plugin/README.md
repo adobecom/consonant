@@ -10,6 +10,8 @@ A Figma plugin for measurements, annotations, and developer handoff with S2A tok
 4. In Figma Desktop: Plugins > Development > Import plugin from manifest
 5. Select `manifest.json` from this project
 
+**First time on a new machine?** The `.mcp.json` file has absolute paths that need to match your local clone location. Tell Claude Code: "Fix the `.mcp.json` paths for my machine" and it will update them automatically. See `docs/setup-guide.md` for full setup instructions.
+
 ## Development
 
 - `npm run watch` — rebuild on file changes
