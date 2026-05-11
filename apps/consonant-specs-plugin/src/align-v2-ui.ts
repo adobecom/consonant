@@ -193,6 +193,45 @@ function groupIssues(issues: V2Issue[]): V2Group[] {
   return Array.from(groupMap.values());
 }
 
+// ─── Token dropdown helpers ──────────────────────────────────────────────────
+
+function splitTokenPath(tokenName: string): { group: string; leaf: string } {
+  const lastSlash = tokenName.lastIndexOf('/');
+  if (lastSlash === -1) return { group: '', leaf: tokenName };
+  return { group: tokenName.slice(0, lastSlash), leaf: tokenName.slice(lastSlash + 1) };
+}
+
+function buildGroupedDropdownOptions(
+  candidates: ReadonlyArray<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number }>,
+  chosen: string,
+): string {
+  // Group by path prefix
+  const groups = new Map<string, Array<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number }>>();
+  for (const c of candidates) {
+    const { group } = splitTokenPath(c.tokenName);
+    if (!groups.has(group)) groups.set(group, []);
+    groups.get(group)!.push(c);
+  }
+  // Sort groups alphabetically; within each group, preserve order
+  const sortedGroupKeys = Array.from(groups.keys()).sort();
+
+  let out = '';
+  for (const groupKey of sortedGroupKeys) {
+    const items = groups.get(groupKey)!;
+    const groupLabel = groupKey || '(uncategorised)';
+    out += `<optgroup label="${esc(groupLabel)}">`;
+    for (const c of items) {
+      const id = c.variableId ?? c.textStyleId ?? '';
+      const { leaf } = splitTokenPath(c.tokenName);
+      const valuePart = c.value !== undefined && c.value !== '' ? `  (${c.value})` : '';
+      const optionLabel = `${leaf}${valuePart}`;
+      out += `<option value="${esc(id)}" ${id === chosen ? 'selected' : ''}>${esc(optionLabel)}</option>`;
+    }
+    out += `</optgroup>`;
+  }
+  return out;
+}
+
 // ─── CSS injection (one-time) ────────────────────────────────────────────────
 
 let v2StyleInjected = false;
@@ -324,11 +363,7 @@ function renderV2Body(): void {
     const chosen = v2State.chosenOverrides.get(group.groupKey)
       ?? (group.suggestion?.variableId ?? group.suggestion?.textStyleId ?? '');
 
-    const dropdownOpts = group.allCandidates.map(c => {
-      const id = c.variableId ?? c.textStyleId ?? '';
-      const label = c.value !== undefined && c.value !== '' ? `${c.tokenName}  (${c.value})` : c.tokenName;
-      return `<option value="${esc(id)}" ${id === chosen ? 'selected' : ''}>${esc(label)}</option>`;
-    }).join('');
+    const dropdownOpts = buildGroupedDropdownOptions(group.allCandidates, chosen);
 
     // "No S2A token" rows: show a dropdown with a placeholder so the user can manually pick
     const noSuggestionDropdown = disabled && group.allCandidates.length > 0
