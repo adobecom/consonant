@@ -52,12 +52,14 @@ let v2State: {
   groups: Record<V2Tab, V2Group[]>;
   checkedGroupKeys: Set<string>;
   chosenOverrides: Map<string, string>; // groupKey → variableId or textStyleId
+  forceMatchedKeys: Set<string>;        // groupKey → was set via Force Match (closest-value, not exact)
 } = {
   result: null,
   activeTab: 'colors',
   groups: { colors: [], dimensions: [], typography: [] },
   checkedGroupKeys: new Set(),
   chosenOverrides: new Map(),
+  forceMatchedKeys: new Set(),
 };
 
 // ─── Color popover open state ────────────────────────────────────────────────
@@ -505,10 +507,17 @@ function ensureV2Styles(): void {
   border-radius: 8px;
   background: var(--success-bg, #e6f4ea);
   color: var(--success, #137333);
+  min-width: 44px;
+  text-align: center;
+  box-sizing: border-box;
 }
 .alignv2-group-line2 .v2-badge.v2-badge-muted {
   background: var(--bg-secondary, #f0f0f0);
   color: var(--text-secondary, #999);
+}
+.alignv2-group-line2 .v2-badge.v2-badge-force {
+  background: #ffe5e5;
+  color: #b00020;
 }
 .alignv2-group-line2 .v2-color-swatch {
   display: inline-block;
@@ -713,6 +722,7 @@ export function renderAlignV2ScanResult(result: V2Result, selectionName: string,
   v2State.activeTab = 'colors';
   v2State.chosenOverrides = new Map();
   v2State.checkedGroupKeys = new Set();
+  v2State.forceMatchedKeys = new Set();
 
   // Build groups for all tabs upfront so counts are correct
   v2State.groups = {
@@ -730,6 +740,7 @@ export function renderAlignV2ScanResult(result: V2Result, selectionName: string,
 
   document.getElementById('alignV2Selection')!.textContent = `${selectionName} (${selectionType})`;
   document.getElementById('alignV2Tabs')!.style.display = '';
+  document.getElementById('alignV2Toolbar')!.style.display = 'flex';
   document.getElementById('alignV2Footer')!.style.display = 'flex';
 
   // Tab counts = group counts
@@ -801,12 +812,27 @@ function renderV2Body(): void {
           : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
     }
 
-    // Always render a badge for consistent right-edge alignment.
-    // Green "Match" when the suggestion exactly matches the current value;
-    // muted/grayed placeholder otherwise.
-    const badge = (!disabled && group.suggestion?.isExactMatch)
-      ? `<span class="v2-badge">Match</span>`
-      : `<span class="v2-badge v2-badge-muted">Match</span>`;
+    // Three-state badge:
+    // Green "Align"  — exact-match auto-suggestion accepted
+    // Pink  "Match"  — force-matched (closest-value, not exact)
+    // Gray  "Select" — no selection yet
+    const chosenValueId = v2State.chosenOverrides.get(group.groupKey)
+      ?? group.suggestion?.variableId
+      ?? group.suggestion?.textStyleId
+      ?? null;
+    const wasForceMatched = v2State.forceMatchedKeys?.has(group.groupKey) === true;
+
+    let badge: string;
+    if (chosenValueId && wasForceMatched) {
+      // Force-matched (closest-value, not exact)
+      badge = `<span class="v2-badge v2-badge-force">Match</span>`;
+    } else if (chosenValueId && group.suggestion?.isExactMatch) {
+      // Exact match auto-suggestion accepted
+      badge = `<span class="v2-badge">Align</span>`;
+    } else {
+      // No selection yet
+      badge = `<span class="v2-badge v2-badge-muted">Select</span>`;
+    }
 
     const countBadge = group.items.length > 1
       ? `<span class="v2-count">${group.items.length} items</span>`
@@ -857,6 +883,9 @@ function renderV2Body(): void {
       } else {
         v2State.chosenOverrides.delete(k);
       }
+
+      // Manual override removes force-match flag — user's explicit choice
+      v2State.forceMatchedKeys.delete(k);
 
       // For no-suggestion rows, sync the paired checkbox
       if (sel.dataset.noSuggestion) {
@@ -955,6 +984,8 @@ function renderV2Body(): void {
             if (!val) return;
 
             v2State.chosenOverrides.set(k, val);
+            // Manual override removes force-match flag — user's explicit choice
+            v2State.forceMatchedKeys.delete(k);
 
             // Update the collapsed button's swatch and label
             const cand = grp.allCandidates.find(c => (c.variableId ?? c.textStyleId) === val);
@@ -1138,4 +1169,138 @@ export function renderAlignV2ApplyResult(results: Array<{ nodeId: string; proper
   toast.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:6px 12px;border-radius:4px;font-size:11px;z-index:9999;';
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
+}
+
+// ─── Toolbar: Check All ───────────────────────────────────────────────────────
+
+document.getElementById('alignV2CheckAllBtn')?.addEventListener('click', () => {
+  const groups = v2State.groups[v2State.activeTab];
+  // A row is checkable if it has a suggestion OR the user has manually picked a token
+  const checkableGroups = groups.filter(g =>
+    g.suggestion !== null || v2State.chosenOverrides.has(g.groupKey)
+  );
+  const allChecked = checkableGroups.length > 0 &&
+    checkableGroups.every(g => v2State.checkedGroupKeys.has(g.groupKey));
+  for (const g of checkableGroups) {
+    if (allChecked) v2State.checkedGroupKeys.delete(g.groupKey);
+    else v2State.checkedGroupKeys.add(g.groupKey);
+  }
+  renderV2Body();
+});
+
+// ─── Toolbar: Force Match ─────────────────────────────────────────────────────
+
+document.getElementById('alignV2ForceMatchBtn')?.addEventListener('click', () => {
+  const groups = v2State.groups[v2State.activeTab];
+  for (const g of groups) {
+    if (g.suggestion !== null) continue;                       // already has an exact match
+    if (v2State.chosenOverrides.has(g.groupKey)) continue;    // user already picked
+
+    const candidate = pickClosestByCategory(g);
+    if (!candidate) continue;
+
+    const candidateId = candidate.variableId ?? candidate.textStyleId;
+    if (!candidateId) continue;
+    v2State.chosenOverrides.set(g.groupKey, candidateId);
+    v2State.forceMatchedKeys.add(g.groupKey);
+    v2State.checkedGroupKeys.add(g.groupKey);
+  }
+  renderV2Body();
+});
+
+// ─── Force Match: closest-value picker ───────────────────────────────────────
+
+function pickClosestByCategory(g: V2Group): V2Group['allCandidates'][number] | null {
+  if (g.allCandidates.length === 0) return null;
+
+  const prop = g.property;
+  const currentValue = g.currentValue;
+
+  // ── Color ──────────────────────────────────────────────────────────────────
+  // Detect by property name (Fill / Stroke) or hex-like currentValue
+  const isColorProp = prop === 'Fill' || prop === 'Stroke';
+  if (isColorProp) {
+    // Extract last #RRGGBB or #RGB from currentValue
+    const hexMatch = currentValue.match(/#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g);
+    const lastHex = hexMatch ? hexMatch[hexMatch.length - 1] : null;
+    if (!lastHex) return null;
+
+    const parseHex = (h: string): [number, number, number] | null => {
+      const clean = h.replace('#', '');
+      if (clean.length === 3) {
+        const r = parseInt(clean[0] + clean[0], 16);
+        const g2 = parseInt(clean[1] + clean[1], 16);
+        const b = parseInt(clean[2] + clean[2], 16);
+        return [r, g2, b];
+      }
+      if (clean.length === 6) {
+        return [parseInt(clean.slice(0, 2), 16), parseInt(clean.slice(2, 4), 16), parseInt(clean.slice(4, 6), 16)];
+      }
+      return null;
+    };
+
+    const srcRgb = parseHex(lastHex);
+    if (!srcRgb) return null;
+
+    let best: V2Group['allCandidates'][number] | null = null;
+    let bestDist = Infinity;
+    for (const c of g.allCandidates) {
+      const hexVal = typeof c.value === 'string' ? c.value.match(/#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/)?.[0] ?? null : null;
+      if (!hexVal) continue;
+      const rgb = parseHex(hexVal);
+      if (!rgb) continue;
+      const dist = (srcRgb[0] - rgb[0]) ** 2 + (srcRgb[1] - rgb[1]) ** 2 + (srcRgb[2] - rgb[2]) ** 2;
+      if (dist < bestDist) { bestDist = dist; best = c; }
+    }
+    return best;
+  }
+
+  // ── Typography ────────────────────────────────────────────────────────────
+  // Typography currentValue format: "Family Style Npx" or similar — extract trailing number+px
+  const isTypographyProp = prop === 'Text Style' || prop === 'Typography';
+  if (isTypographyProp) {
+    const sizeMatch = currentValue.match(/(\d+(?:\.\d+)?)px/);
+    const srcSize = sizeMatch ? parseFloat(sizeMatch[1]) : NaN;
+    if (isNaN(srcSize)) return null;
+
+    let best: V2Group['allCandidates'][number] | null = null;
+    let bestDist = Infinity;
+    for (const c of g.allCandidates) {
+      // candidate.value for typography is typically "Family Style Npx" or numeric
+      let candSize: number = NaN;
+      if (typeof c.value === 'number') {
+        candSize = c.value;
+      } else if (typeof c.value === 'string') {
+        const m = c.value.match(/(\d+(?:\.\d+)?)px/);
+        if (m) candSize = parseFloat(m[1]);
+      }
+      if (isNaN(candSize)) continue;
+      const dist = Math.abs(srcSize - candSize);
+      if (dist < bestDist) { bestDist = dist; best = c; }
+    }
+    return best;
+  }
+
+  // ── Dimensions (default) ──────────────────────────────────────────────────
+  // Parse the leading numeric portion of currentValue: "24px" → 24, "S2AC / sizing / S (2px)" → 2
+  // Strategy: find the first standalone integer/float in the string
+  const numMatch = currentValue.match(/(\d+(?:\.\d+)?)/);
+  const srcNum = numMatch ? parseFloat(numMatch[1]) : NaN;
+  if (isNaN(srcNum)) return null;
+
+  let best: V2Group['allCandidates'][number] | null = null;
+  let bestDist = Infinity;
+  for (const c of g.allCandidates) {
+    let candNum: number = NaN;
+    if (typeof c.value === 'number') {
+      candNum = c.value;
+    } else if (typeof c.value === 'string') {
+      const m = c.value.match(/(\d+(?:\.\d+)?)/);
+      if (m) candNum = parseFloat(m[1]);
+    }
+    if (isNaN(candNum)) continue;
+    const dist = Math.abs(srcNum - candNum);
+    if (dist < bestDist) { bestDist = dist; best = c; }
+  }
+  return best;
 }
