@@ -1877,7 +1877,32 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         const target = (await figma.getNodeByIdAsync(nodeId)) as SceneNode | null;
         if (target) {
           figma.currentPage.selection = [target];
-          figma.viewport.scrollAndZoomIntoView([target]);
+          // Compute a zoom that fits the node within roughly half the viewport
+          // (so it's not zoomed in so far that the plugin covers it). Then shift
+          // viewport.center to the right of the node, which positions the node
+          // toward the LEFT half of the canvas — opposite the right-docked plugin.
+          const bbox = (target as any).absoluteBoundingBox as
+            | { x: number; y: number; width: number; height: number }
+            | null;
+          if (bbox && bbox.width > 0 && bbox.height > 0) {
+            const vw = figma.viewport.bounds.width;
+            const vh = figma.viewport.bounds.height;
+            // Target: node occupies ~40% of viewport width and ~70% of height
+            const fitZoomX = (vw * 0.4) / bbox.width;
+            const fitZoomY = (vh * 0.7) / bbox.height;
+            const newZoom = Math.min(fitZoomX, fitZoomY, 2);
+            figma.viewport.zoom = Math.max(newZoom, 0.05);
+            // After setting zoom, re-read viewport.bounds (width changes with zoom).
+            // Then shift center: place node center at ~25% from left of viewport.
+            const vwAfter = figma.viewport.bounds.width;
+            figma.viewport.center = {
+              x: bbox.x + bbox.width / 2 + vwAfter * 0.25,
+              y: bbox.y + bbox.height / 2,
+            };
+          } else {
+            // Fallback for nodes without bounding box info
+            figma.viewport.scrollAndZoomIntoView([target]);
+          }
         }
       }
       break;
