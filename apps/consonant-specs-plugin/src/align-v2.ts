@@ -1,6 +1,6 @@
 // apps/consonant-specs-plugin/src/align-v2.ts
 
-import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole, getDimensionVarMap } from './tokens';
+import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole, getDimensionVarMap, LoadedDimensionVar } from './tokens';
 import { figmaColorToHex, getCornerRadius } from './utils';
 
 // ── Output types ─────────────────────────────────────────────────────────
@@ -197,6 +197,13 @@ function buildDimensionCandidates(scope: DimScope): TokenCandidate[] {
     }));
 }
 
+/** Pick the S2A dimension token that exactly matches value+scope. */
+function findBestDimMatch(value: number, scope: DimScope): LoadedDimensionVar | null {
+  return getDimensionVarMap().find(v =>
+    v.value === value && v.scopes.some(s => s === scope || s === 'ALL_SCOPES')
+  ) ?? null;
+}
+
 async function classifyDim(
   node: SceneNode,
   check: DimCheck,
@@ -208,9 +215,7 @@ async function classifyDim(
   if (boundId) {
     const { isS2A, variableName } = await isS2AVariable(boundId);
     if (isS2A) return null;
-    const exact = getDimensionVarMap().find(v =>
-      v.value === check.value && v.scopes.some(s => s === check.scope || s === 'ALL_SCOPES')
-    ) ?? null;
+    const exact = findBestDimMatch(check.value, check.scope);
     return {
       nodeId: node.id,
       nodeName: node.name,
@@ -225,9 +230,7 @@ async function classifyDim(
   }
 
   // Hardcoded
-  const exact = getDimensionVarMap().find(v =>
-    v.value === check.value && v.scopes.some(s => s === check.scope || s === 'ALL_SCOPES')
-  ) ?? null;
+  const exact = findBestDimMatch(check.value, check.scope);
   return {
     nodeId: node.id,
     nodeName: node.name,
@@ -277,7 +280,7 @@ export async function auditDimensions(node: SceneNode): Promise<AlignV2Issue[]> 
         if (issue) issues.push(issue);
       }
     }
-    const itemSpacing = (f.itemSpacing as any) === figma.mixed ? 0 : (f.itemSpacing as number);
+    const itemSpacing = f.itemSpacing;
     if (itemSpacing > 0) {
       const issue = await classifyDim(node, { property: 'Item Spacing', bindingKey: 'itemSpacing', value: itemSpacing, scope: 'GAP' }, gapCandidates);
       if (issue) issues.push(issue);
