@@ -1172,36 +1172,33 @@ export function renderAlignV2ApplyResult(results: Array<{ nodeId: string; proper
 
 document.getElementById('alignV2CheckAllBtn')?.addEventListener('click', () => {
   const groups = v2State.groups[v2State.activeTab];
-  // A row is checkable only if it already has a value (exact suggestion or user pick).
-  // Grayed-out rows are NOT touched — use the separate Force Match button for those.
-  const checkableGroups = groups.filter(g =>
-    g.suggestion !== null || v2State.chosenOverrides.has(g.groupKey)
-  );
-  const allChecked = checkableGroups.length > 0 &&
-    checkableGroups.every(g => v2State.checkedGroupKeys.has(g.groupKey));
-  for (const g of checkableGroups) {
-    if (allChecked) v2State.checkedGroupKeys.delete(g.groupKey);
-    else v2State.checkedGroupKeys.add(g.groupKey);
-  }
-  renderV2Body();
-});
+  // Force Match (single button): if EVERY row is currently checked, uncheck them all
+  // (toggle). Otherwise: for every row without a value, run closest-by-category force
+  // match, then check every row.
+  const allChecked = groups.length > 0 &&
+    groups.every(g => v2State.checkedGroupKeys.has(g.groupKey));
 
-// ─── Toolbar: Force Match ─────────────────────────────────────────────────────
-
-document.getElementById('alignV2ForceMatchBtn')?.addEventListener('click', () => {
-  const groups = v2State.groups[v2State.activeTab];
-  for (const g of groups) {
-    if (g.suggestion !== null) continue;                       // already has an exact match
-    if (v2State.chosenOverrides.has(g.groupKey)) continue;    // user already picked
-
-    const candidate = pickClosestByCategory(g);
-    if (!candidate) continue;
-
-    const candidateId = candidate.variableId ?? candidate.textStyleId;
-    if (!candidateId) continue;
-    v2State.chosenOverrides.set(g.groupKey, candidateId);
-    v2State.forceMatchedKeys.add(g.groupKey);
-    v2State.checkedGroupKeys.add(g.groupKey);
+  if (allChecked) {
+    for (const g of groups) v2State.checkedGroupKeys.delete(g.groupKey);
+  } else {
+    for (const g of groups) {
+      const hasValue = g.suggestion !== null || v2State.chosenOverrides.has(g.groupKey);
+      if (!hasValue) {
+        const candidate = pickClosestByCategory(g);
+        if (candidate) {
+          const candidateId = candidate.variableId ?? candidate.textStyleId;
+          if (candidateId) {
+            v2State.chosenOverrides.set(g.groupKey, candidateId);
+            v2State.forceMatchedKeys.add(g.groupKey);
+          } else {
+            continue;
+          }
+        } else {
+          continue;
+        }
+      }
+      v2State.checkedGroupKeys.add(g.groupKey);
+    }
   }
   renderV2Body();
 });
