@@ -221,21 +221,24 @@ async function loadLibraryTokens() {
               libVars.map((v) => figma.variables.importVariableByKeyAsync(v.key))
             );
             let defaultModeId = null;
+            let altModeId = null;
             for (const r of importResults) {
               if (r.status === "fulfilled") {
                 try {
                   const coll = await figma.variables.getVariableCollectionByIdAsync(r.value.variableCollectionId);
-                  if (coll) defaultModeId = coll.defaultModeId;
+                  if (coll) {
+                    defaultModeId = coll.defaultModeId;
+                    const otherModes = coll.modes.filter((m) => m.modeId !== coll.defaultModeId);
+                    if (otherModes.length >= 1) altModeId = otherModes[0].modeId;
+                  }
                 } catch (_) {
                 }
                 break;
               }
             }
-            for (const result2 of importResults) {
-              if (result2.status !== "fulfilled") continue;
-              const imported = result2.value;
-              const modeId = defaultModeId != null ? defaultModeId : Object.keys(imported.valuesByMode)[0];
+            const resolveModeValue = async (imported, modeId) => {
               let value = imported.valuesByMode[modeId];
+              if (value === void 0) return null;
               let depth = 0;
               while (value && typeof value === "object" && "type" in value && value.type === "VARIABLE_ALIAS" && depth < 5) {
                 try {
@@ -254,16 +257,41 @@ async function loadLibraryTokens() {
                 }
                 depth++;
               }
+              return value != null ? value : null;
+            };
+            for (const result2 of importResults) {
+              if (result2.status !== "fulfilled") continue;
+              const imported = result2.value;
+              const modeId = defaultModeId != null ? defaultModeId : Object.keys(imported.valuesByMode)[0];
+              const value = await resolveModeValue(imported, modeId);
               if (imported.resolvedType === "COLOR") {
                 if (value && typeof value === "object" && "r" in value) {
                   const color = value;
-                  colorVarMap.push({
+                  const lightAlpha = "a" in color ? color.a : 1;
+                  const alphaToHex = (a) => {
+                    const clamped = Math.max(0, Math.min(1, a));
+                    return Math.round(clamped * 255).toString(16).padStart(2, "0");
+                  };
+                  const lightHex = lightAlpha < 1 ? rgbToHex(color.r, color.g, color.b) + alphaToHex(lightAlpha) : rgbToHex(color.r, color.g, color.b);
+                  let darkHex;
+                  if (altModeId && altModeId in imported.valuesByMode) {
+                    try {
+                      const darkValue = await resolveModeValue(imported, altModeId);
+                      if (darkValue && typeof darkValue === "object" && "r" in darkValue) {
+                        const dc = darkValue;
+                        const darkAlpha = "a" in dc ? dc.a : 1;
+                        darkHex = darkAlpha < 1 ? rgbToHex(dc.r, dc.g, dc.b) + alphaToHex(darkAlpha) : rgbToHex(dc.r, dc.g, dc.b);
+                      }
+                    } catch (_) {
+                    }
+                  }
+                  colorVarMap.push(__spreadValues({
                     name: imported.name,
                     variable: imported,
-                    hex: rgbToHex(color.r, color.g, color.b),
-                    opacity: "a" in color ? color.a : 1,
+                    hex: lightHex,
+                    opacity: lightAlpha,
                     semanticRole: parseSemanticRole(imported.name)
-                  });
+                  }, darkHex !== void 0 ? { darkHex } : {}));
                 }
               } else if (imported.resolvedType === "FLOAT") {
                 if (typeof value === "number") {
@@ -370,6 +398,9 @@ function matchS2ATextStyle(node) {
 var NAME_SPACING = /spacing|layout|gap|margin|padding/i;
 var NAME_RADIUS = /radius|corner|border[\-\/]radius/i;
 var NAME_BLUR = /blur/i;
+var NAME_DIM_SPACING = /(?:^|\/)(?:spacing|layout|gap|margin|padding)(?=[-\/]|$)/i;
+var NAME_DIM_RADIUS = /(?:^|\/)(?:radius|corner)(?=[-\/]|$)|border[-\/]radius/i;
+var NAME_DIM_STROKE = /(?:border|stroke)[-\/](?:width|weight)/i;
 function matchSpacing(value) {
   const num = parseFloat(value);
   if (isNaN(num)) return null;
@@ -5167,17 +5198,18 @@ async function isS2AVariable(variableId) {
     const libraryName = coll.libraryName;
     const collName = coll.name;
     const isS2A = key !== void 0 && S2A_COLLECTION_KEYS.has(key) || libraryName === "S2A / Foundations" || collName.startsWith("S2A / ");
-    return { isS2A, variableName: v.name };
+    const qualified = libraryName ? `${libraryName} / ${collName} / ${v.name}` : `${collName} / ${v.name}`;
+    return { isS2A, variableName: qualified };
   } catch (_) {
     return { isS2A: false };
   }
 }
 function buildColorCandidates() {
-  return getColorVarMap().map((cv) => ({
+  return getColorVarMap().map((cv) => __spreadValues({
     tokenName: cv.name,
     variableId: cv.variable.id,
     value: cv.hex.toUpperCase()
-  }));
+  }, cv.darkHex !== void 0 ? { darkValue: cv.darkHex.toUpperCase() } : {}));
 }
 function pickBestColorMatch(hex, role, colorMap) {
   var _a, _b, _c;
@@ -5199,7 +5231,7 @@ async function auditColorPaint(node, paint, property, candidates) {
       nodeName: node.name,
       nodeType: node.type,
       property,
-      currentValue: variableName != null ? variableName : hex2.toUpperCase(),
+      currentValue: variableName ? `${variableName} (${hex2.toUpperCase()})` : hex2.toUpperCase(),
       source: "wrong-library",
       currentBindingName: variableName,
       suggestion: exact2 ? { tokenName: exact2.name, variableId: exact2.variable.id, isExactMatch: true } : null,
@@ -5243,8 +5275,14 @@ async function auditColors(node, candidates) {
   }
   return issues;
 }
+function dimNameMatchesScope(name, scope) {
+  if (scope === "GAP") return NAME_DIM_SPACING.test(name);
+  if (scope === "CORNER_RADIUS") return NAME_DIM_RADIUS.test(name);
+  if (scope === "STROKE_FLOAT") return NAME_DIM_STROKE.test(name);
+  return false;
+}
 function buildDimensionCandidates(scope) {
-  return getDimensionVarMap().filter((v) => v.scopes.some((s) => s === scope || s === "ALL_SCOPES")).map((v) => ({
+  return getDimensionVarMap().filter((v) => v.scopes.some((s) => s === scope || s === "ALL_SCOPES")).filter((v) => dimNameMatchesScope(v.name, scope)).map((v) => ({
     tokenName: v.name,
     variableId: v.variable.id,
     value: v.value
@@ -5253,7 +5291,7 @@ function buildDimensionCandidates(scope) {
 function findBestDimMatch(value, scope) {
   var _a;
   return (_a = getDimensionVarMap().find(
-    (v) => v.value === value && v.scopes.some((s) => s === scope || s === "ALL_SCOPES")
+    (v) => v.value === value && v.scopes.some((s) => s === scope || s === "ALL_SCOPES") && dimNameMatchesScope(v.name, scope)
   )) != null ? _a : null;
 }
 async function classifyDim(node, check, candidates) {
@@ -5269,7 +5307,7 @@ async function classifyDim(node, check, candidates) {
       nodeName: node.name,
       nodeType: node.type,
       property: check.property,
-      currentValue: variableName != null ? variableName : `${check.value}px`,
+      currentValue: variableName ? `${variableName} (${check.value}px)` : `${check.value}px`,
       source: "wrong-library",
       currentBindingName: variableName,
       suggestion: exact2 ? { tokenName: exact2.name, variableId: exact2.variable.id, isExactMatch: true } : null,
@@ -7099,7 +7137,7 @@ figma.ui.onmessage = async (msg) => {
     case "align-v2-window-resize": {
       const wide = !!msg.wide;
       if (wide) {
-        figma.ui.resize(800, 600);
+        figma.ui.resize(450, 600);
       } else {
         figma.ui.resize(300, 500);
       }
@@ -7253,7 +7291,22 @@ figma.ui.onmessage = async (msg) => {
         const target = await figma.getNodeByIdAsync(nodeId);
         if (target) {
           figma.currentPage.selection = [target];
-          figma.viewport.scrollAndZoomIntoView([target]);
+          const bbox = target.absoluteBoundingBox;
+          if (bbox && bbox.width > 0 && bbox.height > 0) {
+            const vw = figma.viewport.bounds.width;
+            const vh = figma.viewport.bounds.height;
+            const fitZoomX = vw * 0.25 / bbox.width;
+            const fitZoomY = vh * 0.5 / bbox.height;
+            const newZoom = Math.min(fitZoomX, fitZoomY, 1);
+            figma.viewport.zoom = Math.max(newZoom, 0.05);
+            const vwAfter = figma.viewport.bounds.width;
+            figma.viewport.center = {
+              x: bbox.x + bbox.width / 2 + vwAfter * 0.25,
+              y: bbox.y + bbox.height / 2
+            };
+          } else {
+            figma.viewport.scrollAndZoomIntoView([target]);
+          }
         }
       }
       break;

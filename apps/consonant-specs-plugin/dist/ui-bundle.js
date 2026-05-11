@@ -23,8 +23,17 @@
     activeTab: "colors",
     groups: { colors: [], dimensions: [], typography: [] },
     checkedGroupKeys: /* @__PURE__ */ new Set(),
-    chosenOverrides: /* @__PURE__ */ new Map()
+    chosenOverrides: /* @__PURE__ */ new Map(),
+    forceMatchedKeys: /* @__PURE__ */ new Set()
   };
+  var v2OpenPopover = null;
+  var v2ColorPopoverTab = "surface";
+  function closeOpenPopover() {
+    if (v2OpenPopover) {
+      v2OpenPopover.el.remove();
+      v2OpenPopover = null;
+    }
+  }
   function esc(s) {
     return String(s != null ? s : "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
@@ -57,12 +66,12 @@
   var CORNER_PROPS = /* @__PURE__ */ new Set(["Top-Left Radius", "Top-Right Radius", "Bottom-Left Radius", "Bottom-Right Radius"]);
   var CORNER_BINDING_KEYS = ["topLeftRadius", "topRightRadius", "bottomLeftRadius", "bottomRightRadius"];
   function groupIssues(issues) {
-    var _a31, _b2, _c, _d, _e;
+    var _a33, _b3, _c2, _d2, _e2;
     const cornersByNode = /* @__PURE__ */ new Map();
     const nonCornerIssues = [];
     for (const issue of issues) {
       if (CORNER_PROPS.has(issue.property)) {
-        const list = (_a31 = cornersByNode.get(issue.nodeId)) != null ? _a31 : [];
+        const list = (_a33 = cornersByNode.get(issue.nodeId)) != null ? _a33 : [];
         list.push(issue);
         cornersByNode.set(issue.nodeId, list);
       } else {
@@ -77,11 +86,11 @@
         continue;
       }
       const firstVal = corners[0].currentValue;
-      const firstToken = (_c = (_b2 = corners[0].suggestion) == null ? void 0 : _b2.tokenName) != null ? _c : null;
+      const firstToken = (_c2 = (_b3 = corners[0].suggestion) == null ? void 0 : _b3.tokenName) != null ? _c2 : null;
       const uniform = corners.every(
         (c) => {
-          var _a32, _b3;
-          return c.currentValue === firstVal && ((_b3 = (_a32 = c.suggestion) == null ? void 0 : _a32.tokenName) != null ? _b3 : null) === firstToken;
+          var _a34, _b4;
+          return c.currentValue === firstVal && ((_b4 = (_a34 = c.suggestion) == null ? void 0 : _a34.tokenName) != null ? _b4 : null) === firstToken;
         }
       );
       if (!uniform) {
@@ -104,7 +113,7 @@
     }
     const groupMap = /* @__PURE__ */ new Map();
     for (const issue of pass1) {
-      const tokenName = (_e = (_d = issue.suggestion) == null ? void 0 : _d.tokenName) != null ? _e : "none";
+      const tokenName = (_e2 = (_d2 = issue.suggestion) == null ? void 0 : _d2.tokenName) != null ? _e2 : "none";
       const gKey = `${issue.nodeType}|${issue.property}|${issue.currentValue}|${tokenName}`;
       let group = groupMap.get(gKey);
       if (!group) {
@@ -134,6 +143,166 @@
       });
     }
     return Array.from(groupMap.values());
+  }
+  function splitTokenPath(tokenName) {
+    const lastSlash = tokenName.lastIndexOf("/");
+    if (lastSlash === -1) return { group: "", leaf: tokenName };
+    const base = { group: tokenName.slice(0, lastSlash), leaf: tokenName.slice(lastSlash + 1) };
+    if (base.group === "s2a/typography") {
+      const dashIdx = base.leaf.indexOf("-");
+      const category = dashIdx === -1 ? base.leaf : base.leaf.slice(0, dashIdx);
+      return { group: `s2a/typography/${category}`, leaf: base.leaf };
+    }
+    return base;
+  }
+  function pickReadableTextColor(hex) {
+    const h = hex.replace("#", "");
+    if (h.length < 6) return "#000";
+    const r = parseInt(h.slice(0, 2), 16);
+    const g = parseInt(h.slice(2, 4), 16);
+    const b = parseInt(h.slice(4, 6), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.6 ? "#000" : "#fff";
+  }
+  function buildGroupedDropdownOptions(candidates, chosen) {
+    var _a33, _b3;
+    const groups = /* @__PURE__ */ new Map();
+    for (const c of candidates) {
+      const { group } = splitTokenPath(c.tokenName);
+      if (!groups.has(group)) groups.set(group, []);
+      groups.get(group).push(c);
+    }
+    const GROUP_PRIORITY = [
+      // Spacing / layout
+      "s2a/spacing",
+      "s2a/layout",
+      // Radii + stroke widths
+      "s2a/border/radius",
+      "s2a/border/width",
+      // Typography (custom typographic order)
+      "s2a/typography/super",
+      "s2a/typography/title",
+      "s2a/typography/body",
+      "s2a/typography/eyebrow",
+      "s2a/typography/label",
+      "s2a/typography/caption",
+      // Colors — canonical surfaces first, then utilities, then primary variants
+      "s2a/color/background",
+      "s2a/color/background/utility",
+      "s2a/color/content",
+      "s2a/color/content/utility",
+      "s2a/color/border",
+      "s2a/color/border/utility",
+      "s2a/color/background/primary",
+      "s2a/color/content/primary",
+      "s2a/color/border/primary"
+    ];
+    const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => {
+      const ai = GROUP_PRIORITY.indexOf(a);
+      const bi = GROUP_PRIORITY.indexOf(b);
+      if (ai !== -1 && bi !== -1) return ai - bi;
+      if (ai !== -1) return -1;
+      if (bi !== -1) return 1;
+      return a.localeCompare(b);
+    });
+    let out = "";
+    for (const groupKey of sortedGroupKeys) {
+      const items = groups.get(groupKey).slice().sort((a, b) => {
+        const an = typeof a.value === "number" ? a.value : NaN;
+        const bn = typeof b.value === "number" ? b.value : NaN;
+        if (!isNaN(an) && !isNaN(bn)) return an - bn;
+        return splitTokenPath(a.tokenName).leaf.localeCompare(splitTokenPath(b.tokenName).leaf, void 0, { numeric: true });
+      });
+      const groupLabel = groupKey || "(uncategorised)";
+      out += `<optgroup label="${esc(groupLabel)}">`;
+      for (const c of items) {
+        const id = (_b3 = (_a33 = c.variableId) != null ? _a33 : c.textStyleId) != null ? _b3 : "";
+        let valuePart = "";
+        if (typeof c.value === "number") valuePart = ` (${c.value}px)`;
+        else if (typeof c.value === "string" && c.value !== "") valuePart = ` (${c.value})`;
+        const optionLabel = `${c.tokenName}${valuePart}`;
+        const isHex = typeof c.value === "string" && c.value.startsWith("#");
+        const styleAttr = isHex ? ` style="background-color:${esc(c.value)};color:${pickReadableTextColor(c.value)}"` : "";
+        out += `<option value="${esc(id)}"${styleAttr} ${id === chosen ? "selected" : ""}>${esc(optionLabel)}</option>`;
+      }
+      out += `</optgroup>`;
+    }
+    return out;
+  }
+  function matchesColorPopoverTab(tokenName, tab) {
+    const n = tokenName.toLowerCase();
+    switch (tab) {
+      case "surface":
+        return n.startsWith("s2a/color/background/") || n.startsWith("s2a/color/border/") || n.startsWith("s2a/color/focus-ring/");
+      case "text":
+        return n.startsWith("s2a/color/content/");
+      case "component":
+        return n.startsWith("s2a/color/button/") || n.startsWith("s2a/color/iconbutton/");
+      case "overlay":
+        return n.startsWith("s2a/color/transparent/");
+      case "palette":
+        return n.startsWith("s2a/color/blue/") || n.startsWith("s2a/color/green/") || n.startsWith("s2a/color/red/") || n.startsWith("s2a/color/orange/") || n.startsWith("s2a/color/yellow/") || n.startsWith("s2a/color/gray/") || n.startsWith("s2a/color/brand/");
+      default:
+        return false;
+    }
+  }
+  function buildColorPopoverContent(candidates, chosen, tab = v2ColorPopoverTab) {
+    var _a33, _b3;
+    const filtered = candidates.filter((c) => matchesColorPopoverTab(c.tokenName, tab));
+    const groups = /* @__PURE__ */ new Map();
+    for (const c of filtered) {
+      const { group } = splitTokenPath(c.tokenName);
+      if (!groups.has(group)) groups.set(group, []);
+      groups.get(group).push(c);
+    }
+    const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => a.localeCompare(b));
+    const tabDefs = [
+      { id: "surface", label: "Surface" },
+      { id: "text", label: "Content" },
+      { id: "component", label: "Component" },
+      { id: "overlay", label: "Overlay" },
+      { id: "palette", label: "Palette" }
+    ];
+    let out = `<div class="v2-cp-tabs">`;
+    for (const t of tabDefs) {
+      out += `<button class="v2-cp-tab${t.id === tab ? " v2-cp-tab-active" : ""}" data-cptab="${esc(t.id)}">${esc(t.label)}</button>`;
+    }
+    out += `</div>`;
+    out += `<div class="v2-color-table-header">`;
+    out += `<span class="v2-cth-name">Name</span>`;
+    out += `<span class="v2-cth-hex">Light</span>`;
+    out += `<span class="v2-cth-hex">Dark</span>`;
+    out += `</div>`;
+    if (sortedGroupKeys.length === 0) {
+      out += `<div style="padding:10px 12px;font-size:11px;color:var(--text-secondary);">No tokens in this tab.</div>`;
+      return out;
+    }
+    for (const groupKey of sortedGroupKeys) {
+      const items = groups.get(groupKey).slice().sort(
+        (a, b) => splitTokenPath(a.tokenName).leaf.localeCompare(splitTokenPath(b.tokenName).leaf, void 0, { numeric: true })
+      );
+      const groupLabel = groupKey || "(uncategorised)";
+      out += `<div class="v2-color-group-header">${esc(groupLabel)}</div>`;
+      for (const c of items) {
+        const id = (_b3 = (_a33 = c.variableId) != null ? _a33 : c.textStyleId) != null ? _b3 : "";
+        const lightHex = typeof c.value === "string" && c.value.startsWith("#") ? c.value : "#cccccc";
+        const darkHex = typeof c.darkValue === "string" && c.darkValue.startsWith("#") ? c.darkValue : lightHex;
+        const { leaf } = splitTokenPath(c.tokenName);
+        const selectedAttr = id === chosen ? ' data-selected="1"' : "";
+        out += `<button class="v2-color-option${id === chosen ? " v2-color-option-selected" : ""}" data-id="${esc(id)}"${selectedAttr}>`;
+        out += `<span class="v2-color-option-label">${esc(leaf)}</span>`;
+        out += `<span class="v2-color-cell-hex">`;
+        out += `<span class="v2-mini-swatch" style="--swatch:${esc(lightHex)}"></span>`;
+        out += `${esc(lightHex)}`;
+        out += `</span>`;
+        out += `<span class="v2-color-cell-hex">`;
+        out += `<span class="v2-mini-swatch" style="--swatch:${esc(darkHex)}"></span>`;
+        out += `${esc(darkHex)}`;
+        out += `</span>`;
+        out += `</button>`;
+      }
+    }
+    return out;
   }
   var v2StyleInjected = false;
   function ensureV2Styles() {
@@ -183,7 +352,17 @@
 }
 .alignv2-group-line2 .v2-value {
   color: var(--text-secondary);
+  flex-grow: 0;
   flex-shrink: 0;
+  flex-basis: 140px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--bg-secondary, #f5f5f5);
+  border-radius: 4px;
+  padding: 3px 8px;
+  box-sizing: border-box;
 }
 .alignv2-group-line2 .v2-arrow {
   color: var(--text-secondary);
@@ -202,9 +381,206 @@
   border-radius: 8px;
   background: var(--success-bg, #e6f4ea);
   color: var(--success, #137333);
+  min-width: 44px;
+  text-align: center;
+  box-sizing: border-box;
+}
+.alignv2-group-line2 .v2-badge.v2-badge-muted {
+  background: var(--bg-secondary, #f0f0f0);
+  color: var(--text-secondary, #999);
+}
+.alignv2-group-line2 .v2-badge.v2-badge-force {
+  background: #ffe5e5;
+  color: #b00020;
+}
+.alignv2-group-line2 .v2-color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid var(--border, #e5e5e5);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+#alignV2ApplyBtn {
+  width: auto;
+  padding: 4px 10px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+#alignV2ApplyBtn .v2-apply-count {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.v2-color-dropdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  background: var(--bg-secondary, #fff);
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  text-align: left;
+}
+.v2-color-dropdown .v2-color-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.v2-color-dropdown .v2-color-caret {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.v2-color-popover {
+  position: fixed;
+  background: var(--bg, #fff);
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.14);
+  max-height: 380px;
+  overflow-y: auto;
+  z-index: 10000;
+  min-width: 380px;
+  max-width: 480px;
+  padding: 0 0 6px 0;
+  font-size: 12px;
+}
+/* Tab strip */
+.v2-cp-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border, #e5e5e5);
+  padding: 0 4px;
+  gap: 2px;
+  position: sticky;
+  top: 0;
+  background: var(--bg, #fff);
+  z-index: 1;
+  flex-shrink: 0;
+}
+.v2-cp-tab {
+  padding: 6px 10px;
+  font-size: 11px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  color: var(--text-secondary, #888);
+  white-space: nowrap;
+  margin-bottom: -1px;
+  border-radius: 0;
+}
+.v2-cp-tab:hover {
+  color: var(--text, #222);
+}
+.v2-cp-tab.v2-cp-tab-active {
+  color: var(--text, #222);
+  border-bottom-color: var(--accent, #0066cc);
+  font-weight: 500;
+}
+/* Table header row */
+.v2-color-table-header {
+  display: grid;
+  grid-template-columns: 1fr 90px 90px;
+  padding: 4px 12px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary, #888);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border, #f0f0f0);
+}
+/* Group header */
+.v2-color-popover .v2-color-group-header {
+  padding: 8px 12px 2px 12px;
+  color: var(--text-secondary, #888);
+  font-weight: 400;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+/* Option row \u2014 3-column grid: name | light | dark */
+.v2-color-popover .v2-color-option {
+  display: grid;
+  grid-template-columns: 1fr 90px 90px;
+  align-items: center;
+  width: 100%;
+  padding: 5px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text, #222);
+  font-size: 11px;
+  gap: 0;
+  box-sizing: border-box;
+}
+.v2-color-popover .v2-color-option:hover {
+  background: var(--hover-bg, #f5f5f5);
+}
+.v2-color-popover .v2-color-option.v2-color-option-selected {
+  background: var(--hover-bg, #f0f0f0);
+}
+.v2-color-popover .v2-color-option-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+}
+/* Hex cell with mini swatch */
+.v2-color-cell-hex {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--text-secondary, #666);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.v2-mini-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.12);
+  flex-shrink: 0;
+  /* Layered: solid color on top, checker pattern underneath \u2014 transparency in the color
+     reveals the checker so alpha tokens are visually obvious. */
+  background-image:
+    linear-gradient(var(--swatch, transparent), var(--swatch, transparent)),
+    linear-gradient(45deg, #ccc 25%, transparent 25%),
+    linear-gradient(-45deg, #ccc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ccc 75%),
+    linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: auto auto, 6px 6px, 6px 6px, 6px 6px, 6px 6px;
+  background-position: 0 0, 0 0, 0 3px, 3px -3px, -3px 0;
+  background-color: #fff;
 }
 `;
     document.head.appendChild(style);
+    document.addEventListener("click", (e) => {
+      if (!v2OpenPopover) return;
+      const target = e.target;
+      if (!v2OpenPopover.el.contains(target)) {
+        closeOpenPopover();
+      }
+    }, true);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && v2OpenPopover) {
+        closeOpenPopover();
+      }
+    });
   }
   function renderAlignV2ScanResult(result, selectionName, selectionType) {
     ensureV2Styles();
@@ -212,6 +588,7 @@
     v2State.activeTab = "colors";
     v2State.chosenOverrides = /* @__PURE__ */ new Map();
     v2State.checkedGroupKeys = /* @__PURE__ */ new Set();
+    v2State.forceMatchedKeys = /* @__PURE__ */ new Set();
     v2State.groups = {
       colors: groupIssues(result.colors),
       dimensions: groupIssues(result.dimensions),
@@ -224,6 +601,7 @@
     }
     document.getElementById("alignV2Selection").textContent = `${selectionName} (${selectionType})`;
     document.getElementById("alignV2Tabs").style.display = "";
+    document.getElementById("alignV2Toolbar").style.display = "flex";
     document.getElementById("alignV2Footer").style.display = "flex";
     document.getElementById("alignV2ColorsCount").textContent = String(v2State.groups.colors.length);
     document.getElementById("alignV2DimensionsCount").textContent = String(v2State.groups.dimensions.length);
@@ -231,6 +609,7 @@
     renderV2Body();
   }
   function renderV2Body() {
+    closeOpenPopover();
     const body = document.getElementById("alignV2Body");
     if (!v2State.result) {
       body.innerHTML = "";
@@ -243,23 +622,51 @@
       return;
     }
     body.innerHTML = groups.map((group) => {
-      var _a31, _b2, _c, _d, _e, _f, _g, _h;
+      var _a33, _b3, _c2, _d2, _e2, _f2, _g, _h, _i, _j, _k, _l, _m;
       const gk = esc(group.groupKey);
       const checked = v2State.checkedGroupKeys.has(group.groupKey);
       const disabled = group.suggestion === null;
-      const chosen = (_e = v2State.chosenOverrides.get(group.groupKey)) != null ? _e : (_d = (_c = (_a31 = group.suggestion) == null ? void 0 : _a31.variableId) != null ? _c : (_b2 = group.suggestion) == null ? void 0 : _b2.textStyleId) != null ? _d : "";
-      const dropdownOpts = group.allCandidates.map((c) => {
-        var _a32, _b3;
-        const id = (_b3 = (_a32 = c.variableId) != null ? _a32 : c.textStyleId) != null ? _b3 : "";
-        return `<option value="${esc(id)}" ${id === chosen ? "selected" : ""}>${esc(c.tokenName)}</option>`;
-      }).join("");
-      const suggestCell = disabled ? `<span style="color:var(--text-secondary)">No S2A token</span>` : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
-      const badge = !disabled && ((_f = group.suggestion) == null ? void 0 : _f.isExactMatch) ? `<span class="v2-badge">Match</span>` : "";
+      const chosen = (_e2 = v2State.chosenOverrides.get(group.groupKey)) != null ? _e2 : (_d2 = (_c2 = (_a33 = group.suggestion) == null ? void 0 : _a33.variableId) != null ? _c2 : (_b3 = group.suggestion) == null ? void 0 : _b3.textStyleId) != null ? _d2 : "";
+      const isColorRow = group.property === "Fill" || group.property === "Stroke";
+      let suggestCell;
+      if (isColorRow) {
+        if (group.allCandidates.length === 0) {
+          suggestCell = `<span style="color:var(--text-secondary)">No S2A token</span>`;
+        } else {
+          const chosenCandidate = group.allCandidates.find((c) => {
+            var _a34;
+            return ((_a34 = c.variableId) != null ? _a34 : c.textStyleId) === chosen;
+          });
+          const chosenHex = typeof (chosenCandidate == null ? void 0 : chosenCandidate.value) === "string" ? chosenCandidate.value : "";
+          const swatchStyle = `background-color:${esc(chosenHex || "#cccccc")}`;
+          const labelText = chosenCandidate ? esc(`${chosenCandidate.tokenName} (${chosenCandidate.value})`) : disabled ? "Select a color\u2026" : "Select a color\u2026";
+          const noSuggAttr = disabled ? ' data-no-suggestion="1"' : "";
+          suggestCell = `<button class="v2-color-dropdown" data-group-key="${gk}"${noSuggAttr}><span class="v2-color-swatch" style="${swatchStyle}"></span><span class="v2-color-label">${labelText}</span><span class="v2-color-caret">\u25BE</span></button>`;
+        }
+      } else {
+        const dropdownOpts = buildGroupedDropdownOptions(group.allCandidates, chosen);
+        const noSuggestionDropdown = disabled && group.allCandidates.length > 0 ? `<select data-group-key="${gk}" data-no-suggestion="1"><option value="" disabled ${!chosen ? "selected" : ""}>Select a token\u2026</option>${dropdownOpts}</select>` : null;
+        suggestCell = noSuggestionDropdown ? noSuggestionDropdown : disabled ? `<span style="color:var(--text-secondary)">No S2A token</span>` : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
+      }
+      const chosenValueId = (_j = (_i = (_g = v2State.chosenOverrides.get(group.groupKey)) != null ? _g : (_f2 = group.suggestion) == null ? void 0 : _f2.variableId) != null ? _i : (_h = group.suggestion) == null ? void 0 : _h.textStyleId) != null ? _j : null;
+      let badge;
+      if ((_k = group.suggestion) == null ? void 0 : _k.isExactMatch) {
+        badge = `<span class="v2-badge">Align</span>`;
+      } else if (chosenValueId) {
+        badge = `<span class="v2-badge v2-badge-force">Matched</span>`;
+      } else {
+        badge = `<span class="v2-badge v2-badge-muted">Select</span>`;
+      }
       const countBadge = group.items.length > 1 ? `<span class="v2-count">${group.items.length} items</span>` : "";
-      const firstNodeId = esc((_h = (_g = group.items[0]) == null ? void 0 : _g.nodeId) != null ? _h : "");
-      return `<div class="alignv2-group ${disabled ? "disabled" : ""}" data-group-key="${gk}" data-first-node-id="${firstNodeId}">
+      const firstNodeId = esc((_m = (_l = group.items[0]) == null ? void 0 : _l.nodeId) != null ? _m : "");
+      const noSuggestionHasCandidates = disabled && group.allCandidates.length > 0;
+      const isPickable = noSuggestionHasCandidates;
+      const hasOverride = isPickable && !!v2State.chosenOverrides.get(group.groupKey);
+      const cbChecked = isPickable ? hasOverride : checked;
+      const cbDisabled = isPickable ? !hasOverride : disabled;
+      return `<div class="alignv2-group ${disabled && !isPickable ? "disabled" : ""}" data-group-key="${gk}" data-first-node-id="${firstNodeId}">
   <div class="alignv2-group-line1">
-    <input type="checkbox" data-group-key="${gk}" ${checked ? "checked" : ""} ${disabled ? "disabled" : ""}>
+    <input type="checkbox" data-group-key="${gk}" ${cbChecked ? "checked" : ""} ${cbDisabled ? "disabled" : ""}>
     <span class="v2-meta">${esc(group.nodeType)} &middot; ${esc(group.property)}</span>
     ${countBadge}
   </div>
@@ -281,13 +688,142 @@
     });
     body.querySelectorAll("select[data-group-key]").forEach((sel) => {
       sel.addEventListener("change", () => {
-        v2State.chosenOverrides.set(sel.dataset.groupKey, sel.value);
+        const k = sel.dataset.groupKey;
+        const val = sel.value;
+        if (val) {
+          v2State.chosenOverrides.set(k, val);
+        } else {
+          v2State.chosenOverrides.delete(k);
+        }
+        v2State.forceMatchedKeys.delete(k);
+        if (sel.dataset.noSuggestion) {
+          const cb = body.querySelector(`input[type="checkbox"][data-group-key="${CSS.escape(k)}"]`);
+          if (cb) {
+            if (val) {
+              cb.disabled = false;
+              cb.checked = true;
+              v2State.checkedGroupKeys.add(k);
+            } else {
+              cb.disabled = true;
+              cb.checked = false;
+              v2State.checkedGroupKeys.delete(k);
+            }
+          }
+        }
+        updateV2Footer();
+      });
+    });
+    body.querySelectorAll("button.v2-color-dropdown[data-group-key]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        var _a33, _b3, _c2, _d2, _e2;
+        e.stopPropagation();
+        const k = btn.dataset.groupKey;
+        if (v2OpenPopover && v2OpenPopover.groupKey === k) {
+          closeOpenPopover();
+          return;
+        }
+        closeOpenPopover();
+        const groupArr = v2State.groups[v2State.activeTab];
+        const grp = groupArr.find((g) => g.groupKey === k);
+        if (!grp) return;
+        const chosenVal = (_e2 = v2State.chosenOverrides.get(k)) != null ? _e2 : (_d2 = (_c2 = (_a33 = grp.suggestion) == null ? void 0 : _a33.variableId) != null ? _c2 : (_b3 = grp.suggestion) == null ? void 0 : _b3.textStyleId) != null ? _d2 : "";
+        if (chosenVal) {
+          const chosenCandidate = grp.allCandidates.find((c) => {
+            var _a34;
+            return ((_a34 = c.variableId) != null ? _a34 : c.textStyleId) === chosenVal;
+          });
+          if (chosenCandidate) {
+            const tabsToCheck = ["surface", "text", "component", "overlay", "palette"];
+            for (const t of tabsToCheck) {
+              if (matchesColorPopoverTab(chosenCandidate.tokenName, t)) {
+                v2ColorPopoverTab = t;
+                break;
+              }
+            }
+          }
+        }
+        const popover = document.createElement("div");
+        popover.className = "v2-color-popover";
+        popover.dataset.forGroupKey = k;
+        popover.innerHTML = buildColorPopoverContent(grp.allCandidates, chosenVal, v2ColorPopoverTab);
+        const rect = btn.getBoundingClientRect();
+        popover.style.top = `${rect.bottom + 2}px`;
+        popover.style.left = `${rect.left}px`;
+        popover.style.minWidth = `${Math.max(rect.width, 380)}px`;
+        document.body.appendChild(popover);
+        v2OpenPopover = { groupKey: k, el: popover };
+        const PADDING = 8;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const pop = popover.getBoundingClientRect();
+        const roomBelow = vh - rect.bottom - PADDING;
+        const roomAbove = rect.top - PADDING;
+        if (pop.height > roomBelow && roomAbove > roomBelow) {
+          const maxH = Math.min(pop.height, roomAbove);
+          popover.style.top = `${rect.top - maxH - 2}px`;
+          popover.style.maxHeight = `${maxH}px`;
+        } else {
+          popover.style.maxHeight = `${Math.max(roomBelow, 120)}px`;
+        }
+        const popAfter = popover.getBoundingClientRect();
+        if (popAfter.right > vw - PADDING) {
+          const shift = popAfter.right - (vw - PADDING);
+          const newLeft = Math.max(PADDING, rect.left - shift);
+          popover.style.left = `${newLeft}px`;
+        }
+        const selectedOpt = popover.querySelector("button.v2-color-option.v2-color-option-selected");
+        if (selectedOpt) {
+          selectedOpt.scrollIntoView({ block: "nearest", behavior: "auto" });
+        }
+        function attachOptionListeners() {
+          popover.querySelectorAll("button.v2-color-option").forEach((opt) => {
+            opt.addEventListener("click", (ev) => {
+              ev.stopPropagation();
+              const val = opt.dataset.id;
+              if (!val) return;
+              v2State.chosenOverrides.set(k, val);
+              v2State.forceMatchedKeys.delete(k);
+              const cand = grp.allCandidates.find((c) => {
+                var _a34;
+                return ((_a34 = c.variableId) != null ? _a34 : c.textStyleId) === val;
+              });
+              const newHex = cand && typeof cand.value === "string" ? cand.value : "#cccccc";
+              const swatchInBtn = btn.querySelector(".v2-color-swatch");
+              if (swatchInBtn) swatchInBtn.style.backgroundColor = newHex;
+              const labelInBtn = btn.querySelector(".v2-color-label");
+              if (labelInBtn && cand) labelInBtn.textContent = `${cand.tokenName} (${cand.value})`;
+              if (btn.dataset.noSuggestion) {
+                const cb = body.querySelector(`input[type="checkbox"][data-group-key="${CSS.escape(k)}"]`);
+                if (cb) {
+                  cb.disabled = false;
+                  cb.checked = true;
+                  v2State.checkedGroupKeys.add(k);
+                }
+              }
+              updateV2Footer();
+              closeOpenPopover();
+            });
+          });
+        }
+        attachOptionListeners();
+        popover.addEventListener("click", (ev) => {
+          var _a34, _b4, _c3, _d3, _e3;
+          const tabBtn = ev.target.closest("button.v2-cp-tab[data-cptab]");
+          if (!tabBtn) return;
+          ev.stopPropagation();
+          const newTab = tabBtn.dataset.cptab;
+          if (!newTab || newTab === v2ColorPopoverTab) return;
+          v2ColorPopoverTab = newTab;
+          const currentChosen = (_e3 = v2State.chosenOverrides.get(k)) != null ? _e3 : (_d3 = (_c3 = (_a34 = grp.suggestion) == null ? void 0 : _a34.variableId) != null ? _c3 : (_b4 = grp.suggestion) == null ? void 0 : _b4.textStyleId) != null ? _d3 : "";
+          popover.innerHTML = buildColorPopoverContent(grp.allCandidates, currentChosen, v2ColorPopoverTab);
+          attachOptionListeners();
+        });
       });
     });
     body.querySelectorAll(".alignv2-group[data-first-node-id]").forEach((row) => {
       row.addEventListener("click", (e) => {
         const target = e.target;
-        if (target.tagName === "INPUT" || target.tagName === "SELECT" || target.tagName === "OPTION") return;
+        if (target.tagName === "INPUT" || target.tagName === "SELECT" || target.tagName === "OPTION" || target.closest("button.v2-color-dropdown") !== null) return;
         const nid = row.dataset.firstNodeId;
         if (nid) parent.postMessage({ pluginMessage: { type: "navigate-to-node", nodeId: nid } }, "*");
       });
@@ -301,7 +837,7 @@
     const itemCount = checkedGroups.reduce((sum, g) => sum + g.items.length, 0);
     document.getElementById("alignV2FooterCount").textContent = `Update ${groupCount} ${v2State.activeTab} across ${itemCount} item${itemCount !== 1 ? "s" : ""}.`;
     document.getElementById("alignV2ApplyBtn").disabled = groupCount === 0;
-    document.getElementById("alignV2ApplyBtn").textContent = `Apply ${groupCount}`;
+    document.getElementById("alignV2ApplyBtn").innerHTML = `Apply <span class="v2-apply-count">${groupCount}</span>`;
   }
   function setV2ActiveTab(tab) {
     v2State.activeTab = tab;
@@ -311,14 +847,15 @@
     renderV2Body();
   }
   function collectV2ApplySelections() {
-    var _a31, _b2, _c, _d, _e;
+    var _a33, _b3, _c2, _d2, _e2;
     const out = [];
     const groups = v2State.groups[v2State.activeTab];
     for (const group of groups) {
       if (!v2State.checkedGroupKeys.has(group.groupKey)) continue;
-      const chosen = (_d = v2State.chosenOverrides.get(group.groupKey)) != null ? _d : (_c = (_a31 = group.suggestion) == null ? void 0 : _a31.variableId) != null ? _c : (_b2 = group.suggestion) == null ? void 0 : _b2.textStyleId;
+      const chosen = (_d2 = v2State.chosenOverrides.get(group.groupKey)) != null ? _d2 : (_c2 = (_a33 = group.suggestion) == null ? void 0 : _a33.variableId) != null ? _c2 : (_b3 = group.suggestion) == null ? void 0 : _b3.textStyleId;
       if (!chosen) continue;
-      const isTextStyle = !!((_e = group.suggestion) == null ? void 0 : _e.textStyleId) || group.property === "Text Style";
+      const chosenAsTextStyle = group.suggestion === null ? group.allCandidates.some((c) => c.textStyleId === chosen) : false;
+      const isTextStyle = !!((_e2 = group.suggestion) == null ? void 0 : _e2.textStyleId) || group.property === "Text Style" || chosenAsTextStyle;
       for (const item of group.items) {
         if (group.property === "Fill" || group.property === "Stroke") {
           out.push(__spreadValues({
@@ -370,6 +907,121 @@
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3e3);
   }
+  var _a;
+  (_a = document.getElementById("alignV2CheckAllBtn")) == null ? void 0 : _a.addEventListener("click", () => {
+    var _a33;
+    const groups = v2State.groups[v2State.activeTab];
+    const allChecked = groups.length > 0 && groups.every((g) => v2State.checkedGroupKeys.has(g.groupKey));
+    if (allChecked) {
+      for (const g of groups) v2State.checkedGroupKeys.delete(g.groupKey);
+    } else {
+      for (const g of groups) {
+        const hasValue = g.suggestion !== null || v2State.chosenOverrides.has(g.groupKey);
+        if (!hasValue) {
+          const candidate = pickClosestByCategory(g);
+          if (candidate) {
+            const candidateId = (_a33 = candidate.variableId) != null ? _a33 : candidate.textStyleId;
+            if (candidateId) {
+              v2State.chosenOverrides.set(g.groupKey, candidateId);
+              v2State.forceMatchedKeys.add(g.groupKey);
+            } else {
+              continue;
+            }
+          } else {
+            continue;
+          }
+        }
+        v2State.checkedGroupKeys.add(g.groupKey);
+      }
+    }
+    renderV2Body();
+  });
+  function pickClosestByCategory(g) {
+    var _a33, _b3;
+    if (g.allCandidates.length === 0) return null;
+    const prop = g.property;
+    const currentValue = g.currentValue;
+    const isColorProp = prop === "Fill" || prop === "Stroke";
+    if (isColorProp) {
+      const hexMatch = currentValue.match(/#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g);
+      const lastHex = hexMatch ? hexMatch[hexMatch.length - 1] : null;
+      if (!lastHex) return null;
+      const parseHex = (h) => {
+        const clean = h.replace("#", "");
+        if (clean.length === 3) {
+          const r = parseInt(clean[0] + clean[0], 16);
+          const g2 = parseInt(clean[1] + clean[1], 16);
+          const b = parseInt(clean[2] + clean[2], 16);
+          return [r, g2, b];
+        }
+        if (clean.length === 6) {
+          return [parseInt(clean.slice(0, 2), 16), parseInt(clean.slice(2, 4), 16), parseInt(clean.slice(4, 6), 16)];
+        }
+        return null;
+      };
+      const srcRgb = parseHex(lastHex);
+      if (!srcRgb) return null;
+      let best2 = null;
+      let bestDist2 = Infinity;
+      for (const c of g.allCandidates) {
+        const hexVal = typeof c.value === "string" ? (_b3 = (_a33 = c.value.match(/#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/)) == null ? void 0 : _a33[0]) != null ? _b3 : null : null;
+        if (!hexVal) continue;
+        const rgb = parseHex(hexVal);
+        if (!rgb) continue;
+        const dist = (srcRgb[0] - rgb[0]) ** 2 + (srcRgb[1] - rgb[1]) ** 2 + (srcRgb[2] - rgb[2]) ** 2;
+        if (dist < bestDist2) {
+          bestDist2 = dist;
+          best2 = c;
+        }
+      }
+      return best2;
+    }
+    const isTypographyProp = prop === "Text Style" || prop === "Typography";
+    if (isTypographyProp) {
+      const sizeMatch = currentValue.match(/(\d+(?:\.\d+)?)px/);
+      const srcSize = sizeMatch ? parseFloat(sizeMatch[1]) : NaN;
+      if (isNaN(srcSize)) return null;
+      let best2 = null;
+      let bestDist2 = Infinity;
+      for (const c of g.allCandidates) {
+        let candSize = NaN;
+        if (typeof c.value === "number") {
+          candSize = c.value;
+        } else if (typeof c.value === "string") {
+          const m = c.value.match(/(\d+(?:\.\d+)?)px/);
+          if (m) candSize = parseFloat(m[1]);
+        }
+        if (isNaN(candSize)) continue;
+        const dist = Math.abs(srcSize - candSize);
+        if (dist < bestDist2) {
+          bestDist2 = dist;
+          best2 = c;
+        }
+      }
+      return best2;
+    }
+    const numMatch = currentValue.match(/(\d+(?:\.\d+)?)/);
+    const srcNum = numMatch ? parseFloat(numMatch[1]) : NaN;
+    if (isNaN(srcNum)) return null;
+    let best = null;
+    let bestDist = Infinity;
+    for (const c of g.allCandidates) {
+      let candNum = NaN;
+      if (typeof c.value === "number") {
+        candNum = c.value;
+      } else if (typeof c.value === "string") {
+        const m = c.value.match(/(\d+(?:\.\d+)?)/);
+        if (m) candNum = parseFloat(m[1]);
+      }
+      if (isNaN(candNum)) continue;
+      const dist = Math.abs(srcNum - candNum);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = c;
+      }
+    }
+    return best;
+  }
 
   // src/ui.ts
   function esc2(s) {
@@ -391,11 +1043,20 @@
     }
   }
   var a11yPanel = document.querySelector('.tab-panel[data-panel="a11y"]');
-  var _a, _b;
+  var _a2, _b;
   if (true) {
-    (_a = document.getElementById("menuA11yItem")) == null ? void 0 : _a.remove();
+    (_a2 = document.getElementById("menuA11yItem")) == null ? void 0 : _a2.remove();
     (_b = document.getElementById("hamburgerA11yItem")) == null ? void 0 : _b.remove();
     a11yPanel == null ? void 0 : a11yPanel.remove();
+  }
+  var _a3, _b2, _c, _d, _e, _f;
+  if (true) {
+    (_a3 = document.getElementById("menuAlignItem")) == null ? void 0 : _a3.remove();
+    (_b2 = document.getElementById("hamburgerAlignItem")) == null ? void 0 : _b2.remove();
+    (_c = document.getElementById("menuMatchItem")) == null ? void 0 : _c.remove();
+    (_d = document.getElementById("hamburgerMatchItem")) == null ? void 0 : _d.remove();
+    (_e = document.querySelector('.tab-panel[data-panel="align"]')) == null ? void 0 : _e.remove();
+    (_f = document.querySelector('.tab-panel[data-panel="match"]')) == null ? void 0 : _f.remove();
   }
   var panels = document.querySelectorAll(".tab-panel");
   function navigateTo(toolId, toolName) {
@@ -436,18 +1097,18 @@
   }
   document.querySelectorAll(".menu-item").forEach((item) => {
     item.addEventListener("click", () => {
-      var _a31, _b2, _c;
-      const tool = (_a31 = item.dataset.tool) != null ? _a31 : "";
-      const name = (_c = (_b2 = item.querySelector(".menu-item-name")) == null ? void 0 : _b2.textContent) != null ? _c : tool;
+      var _a33, _b3, _c2;
+      const tool = (_a33 = item.dataset.tool) != null ? _a33 : "";
+      const name = (_c2 = (_b3 = item.querySelector(".menu-item-name")) == null ? void 0 : _b3.textContent) != null ? _c2 : tool;
       navigateTo(tool, name);
     });
   });
   document.querySelectorAll(".hamburger-item").forEach((item) => {
     item.addEventListener("click", () => {
-      var _a31, _b2, _c;
-      const tool = (_a31 = item.dataset.tool) != null ? _a31 : "";
+      var _a33, _b3, _c2;
+      const tool = (_a33 = item.dataset.tool) != null ? _a33 : "";
       const menuItem = document.querySelector(`.menu-item[data-tool="${tool}"]`);
-      const name = (_c = (_b2 = menuItem == null ? void 0 : menuItem.querySelector(".menu-item-name")) == null ? void 0 : _b2.textContent) != null ? _c : tool;
+      const name = (_c2 = (_b3 = menuItem == null ? void 0 : menuItem.querySelector(".menu-item-name")) == null ? void 0 : _b3.textContent) != null ? _c2 : tool;
       navigateTo(tool, name);
     });
   });
@@ -460,10 +1121,10 @@
       }
     });
   });
-  var _a2;
-  (_a2 = document.getElementById("backBtn")) == null ? void 0 : _a2.addEventListener("click", navigateBack);
-  var _a3;
-  (_a3 = document.getElementById("hamburgerBtn")) == null ? void 0 : _a3.addEventListener("click", (e) => {
+  var _a4;
+  (_a4 = document.getElementById("backBtn")) == null ? void 0 : _a4.addEventListener("click", navigateBack);
+  var _a5;
+  (_a5 = document.getElementById("hamburgerBtn")) == null ? void 0 : _a5.addEventListener("click", (e) => {
     e.stopPropagation();
     const menu = document.getElementById("hamburgerMenu");
     const btn = document.getElementById("hamburgerBtn");
@@ -471,12 +1132,12 @@
     btn == null ? void 0 : btn.setAttribute("aria-expanded", String(!!isOpen));
   });
   document.addEventListener("click", () => {
-    var _a31, _b2;
-    (_a31 = document.getElementById("hamburgerMenu")) == null ? void 0 : _a31.classList.remove("open");
-    (_b2 = document.getElementById("hamburgerBtn")) == null ? void 0 : _b2.setAttribute("aria-expanded", "false");
+    var _a33, _b3;
+    (_a33 = document.getElementById("hamburgerMenu")) == null ? void 0 : _a33.classList.remove("open");
+    (_b3 = document.getElementById("hamburgerBtn")) == null ? void 0 : _b3.setAttribute("aria-expanded", "false");
   });
-  var _a4;
-  (_a4 = document.getElementById("s2aBannerDismiss")) == null ? void 0 : _a4.addEventListener("click", () => {
+  var _a6;
+  (_a6 = document.getElementById("s2aBannerDismiss")) == null ? void 0 : _a6.addEventListener("click", () => {
     const banner = document.getElementById("s2aBanner");
     if (banner) banner.style.display = "none";
   });
@@ -627,7 +1288,7 @@
     postToPlugin("navigate-to-node", { nodeId });
   }
   function renderAuditResult(result) {
-    var _a31;
+    var _a33;
     const list = document.getElementById("propertyList");
     if (!list) return;
     const pct = result.total > 0 ? Math.round(result.matched / result.total * 100) : 0;
@@ -657,7 +1318,7 @@
         if (nodeId) navigateToNode(nodeId);
       });
     });
-    (_a31 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a31.addEventListener("click", () => {
+    (_a33 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a33.addEventListener("click", () => {
       postToPlugin("annotate-audit-issues", { issues: result.issues });
     });
   }
@@ -709,24 +1370,24 @@
       });
     });
   }
-  var _a5;
-  (_a5 = document.getElementById("s2aAuditBtn")) == null ? void 0 : _a5.addEventListener("click", () => postToPlugin("s2a-audit"));
-  var _a6;
-  (_a6 = document.getElementById("fullAlignBtn")) == null ? void 0 : _a6.addEventListener("click", () => postToPlugin("full-align-s2a"));
   var _a7;
-  (_a7 = document.getElementById("textColorsAlignBtn")) == null ? void 0 : _a7.addEventListener("click", () => postToPlugin("text-colors-align"));
+  (_a7 = document.getElementById("s2aAuditBtn")) == null ? void 0 : _a7.addEventListener("click", () => postToPlugin("s2a-audit"));
   var _a8;
-  (_a8 = document.getElementById("gridBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+  (_a8 = document.getElementById("fullAlignBtn")) == null ? void 0 : _a8.addEventListener("click", () => postToPlugin("full-align-s2a"));
+  var _a9;
+  (_a9 = document.getElementById("textColorsAlignBtn")) == null ? void 0 : _a9.addEventListener("click", () => postToPlugin("text-colors-align"));
+  var _a10;
+  (_a10 = document.getElementById("gridBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
     postToPlugin("apply-grid");
     updateGridStatus("Applying grid...");
   });
-  var _a9;
-  (_a9 = document.getElementById("gridXlBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
+  var _a11;
+  (_a11 = document.getElementById("gridXlBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
     postToPlugin("apply-grid-xl");
     updateGridStatus("Applying XL grid...");
   });
-  var _a10;
-  (_a10 = document.getElementById("clearGridBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
+  var _a12;
+  (_a12 = document.getElementById("clearGridBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
     postToPlugin("clear-grids");
     updateGridStatus("Clearing grids...");
   });
@@ -734,8 +1395,8 @@
     const el = document.getElementById("gridStatus");
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc2(message)}</span>`;
   }
-  var _a11;
-  (_a11 = document.getElementById("matchCheckAll")) == null ? void 0 : _a11.addEventListener("click", () => {
+  var _a13;
+  (_a13 = document.getElementById("matchCheckAll")) == null ? void 0 : _a13.addEventListener("click", () => {
     const ids = ["matchTypography", "matchFillColors", "matchStrokeColors", "matchBorderRadius", "matchBorderWidth", "matchSpacing", "matchOpacity", "matchDropShadow", "matchBlur"];
     const boxes = ids.map((id) => document.getElementById(id)).filter(Boolean);
     const allChecked = boxes.every((cb) => cb.checked);
@@ -745,8 +1406,8 @@
     const btn = document.getElementById("matchCheckAll");
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
-  var _a12;
-  (_a12 = document.getElementById("matchBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
+  var _a14;
+  (_a14 = document.getElementById("matchBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
     const categories = [];
     if (document.getElementById("matchTypography").checked) categories.push("typography");
     if (document.getElementById("matchFillColors").checked) categories.push("fillColors");
@@ -766,21 +1427,21 @@
     if (!el) return;
     el.innerHTML = `<span style="color:var(--text-secondary)">${esc2(message)}</span>`;
   }
-  var _a13;
-  (_a13 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a13.addEventListener("click", () => {
+  var _a15;
+  (_a15 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a15.addEventListener("click", () => {
     postToPlugin("spec-it", { sections: ["anatomy", "layout", "typography", "components"] });
     updateSpecStatus("Generating full specs...");
   });
-  var _a14;
-  (_a14 = document.getElementById("specItBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
-    var _a31, _b2, _c, _d, _e, _f;
+  var _a16;
+  (_a16 = document.getElementById("specItBtn")) == null ? void 0 : _a16.addEventListener("click", () => {
+    var _a33, _b3, _c2, _d2, _e2, _f2;
     const sections = [];
-    if ((_a31 = document.getElementById("specAnatomy")) == null ? void 0 : _a31.checked) sections.push("anatomy");
-    if ((_b2 = document.getElementById("specCardGaps")) == null ? void 0 : _b2.checked) sections.push("cardGaps");
-    if ((_c = document.getElementById("specSpacingGeneral")) == null ? void 0 : _c.checked) sections.push("spacingGeneral");
-    if ((_d = document.getElementById("specSpacing")) == null ? void 0 : _d.checked) sections.push("spacing");
-    if ((_e = document.getElementById("specColors")) == null ? void 0 : _e.checked) sections.push("colors");
-    if ((_f = document.getElementById("specTextProps")) == null ? void 0 : _f.checked) sections.push("textProperties");
+    if ((_a33 = document.getElementById("specAnatomy")) == null ? void 0 : _a33.checked) sections.push("anatomy");
+    if ((_b3 = document.getElementById("specCardGaps")) == null ? void 0 : _b3.checked) sections.push("cardGaps");
+    if ((_c2 = document.getElementById("specSpacingGeneral")) == null ? void 0 : _c2.checked) sections.push("spacingGeneral");
+    if ((_d2 = document.getElementById("specSpacing")) == null ? void 0 : _d2.checked) sections.push("spacing");
+    if ((_e2 = document.getElementById("specColors")) == null ? void 0 : _e2.checked) sections.push("colors");
+    if ((_f2 = document.getElementById("specTextProps")) == null ? void 0 : _f2.checked) sections.push("textProperties");
     if (sections.length === 0) {
       updateSpecStatus("Select at least one section.");
       return;
@@ -802,8 +1463,8 @@
   }
   providerSelect == null ? void 0 : providerSelect.addEventListener("change", syncKeySection);
   syncKeySection();
-  var _a15;
-  (_a15 = document.getElementById("locCheckAll")) == null ? void 0 : _a15.addEventListener("click", () => {
+  var _a17;
+  (_a17 = document.getElementById("locCheckAll")) == null ? void 0 : _a17.addEventListener("click", () => {
     const ids = ["locDe", "locZh", "locTh", "locAr"];
     const boxes = ids.map((id) => document.getElementById(id)).filter(Boolean);
     const allChecked = boxes.every((b) => b.checked);
@@ -818,8 +1479,8 @@
   locAr == null ? void 0 : locAr.addEventListener("change", () => {
     if (locAr.checked && locRtl && !locRtl.checked) locRtl.checked = true;
   });
-  var _a16;
-  (_a16 = document.getElementById("localizeBtn")) == null ? void 0 : _a16.addEventListener("click", () => {
+  var _a18;
+  (_a18 = document.getElementById("localizeBtn")) == null ? void 0 : _a18.addEventListener("click", () => {
     const languages = [];
     if (document.getElementById("locDe").checked) languages.push("de");
     if (document.getElementById("locZh").checked) languages.push("zh");
@@ -834,8 +1495,8 @@
     postToPlugin("localize", { languages, applyRtl, provider });
     updateLocalizeStatus("Localizing \u2014 this may take a moment...");
   });
-  var _a17;
-  (_a17 = document.getElementById("saveKeyBtn")) == null ? void 0 : _a17.addEventListener("click", () => {
+  var _a19;
+  (_a19 = document.getElementById("saveKeyBtn")) == null ? void 0 : _a19.addEventListener("click", () => {
     const input = document.getElementById("apiKeyInput");
     const key = input.value.trim();
     if (!key) return;
@@ -843,8 +1504,8 @@
     postToPlugin("save-api-key", { key, provider });
     input.value = "";
   });
-  var _a18;
-  (_a18 = document.getElementById("clearKeyBtn")) == null ? void 0 : _a18.addEventListener("click", () => {
+  var _a20;
+  (_a20 = document.getElementById("clearKeyBtn")) == null ? void 0 : _a20.addEventListener("click", () => {
     const provider = (providerSelect == null ? void 0 : providerSelect.value) || "";
     postToPlugin("clear-api-key", { provider });
   });
@@ -854,7 +1515,7 @@
   }
   var LANG_NAMES = { de: "German", zh: "Chinese", th: "Thai", ar: "Arabic" };
   function showLocalizeBridgePrompt(data) {
-    var _a31;
+    var _a33;
     const langList = data.languages.map((l) => LANG_NAMES[l] || l).join(", ");
     const cmd = `Translate the frame "${data.frameName}" (${data.frameId}) into ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? " Apply RTL layout for Arabic." : ""}
 
@@ -869,7 +1530,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
         <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a31 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a31.addEventListener("click", async () => {
+      (_a33 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a33.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyLocalizeCmd");
         if (btn) {
@@ -934,7 +1595,7 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
     if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc2(message)}</span>`;
   }
   function showAiFillInstruction(mode, sections, frameName, frameId) {
-    var _a31;
+    var _a33;
     const categoryList = sections && sections.length > 0 ? sections.join(", ") : "all categories";
     const frame = frameName ? `"${frameName}"` : "the selected frame";
     const frameIdArg = frameId ? ` with frameId: "${frameId}"` : "";
@@ -986,7 +1647,7 @@ This updates the plugin panel so the designer can see results without hunting th
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Results will appear here when Claude finishes.</div>
       </div>`;
-      (_a31 = document.getElementById("copyFillCmd")) == null ? void 0 : _a31.addEventListener("click", async () => {
+      (_a33 = document.getElementById("copyFillCmd")) == null ? void 0 : _a33.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyFillCmd");
         if (btn) {
@@ -999,7 +1660,7 @@ This updates the plugin panel so the designer can see results without hunting th
     }
   }
   function renderA11yResults(data) {
-    var _a31;
+    var _a33;
     const el = document.getElementById("a11yStatus");
     if (!el) return;
     function section(title, cls, items, itemCls) {
@@ -1013,21 +1674,21 @@ This updates the plugin panel so the designer can see results without hunting th
     </div>`;
     }
     const issueItems = (Array.isArray(data.issues) ? data.issues : []).map((i) => {
-      var _a32, _b2;
-      return { label: (_a32 = i == null ? void 0 : i.category) != null ? _a32 : "", text: (_b2 = i == null ? void 0 : i.description) != null ? _b2 : "" };
+      var _a34, _b3;
+      return { label: (_a34 = i == null ? void 0 : i.category) != null ? _a34 : "", text: (_b3 = i == null ? void 0 : i.description) != null ? _b3 : "" };
     });
     const needsItems = (Array.isArray(data.needs_input) ? data.needs_input : []).map((i) => {
-      var _a32, _b2;
-      return { label: (_a32 = i == null ? void 0 : i.category) != null ? _a32 : "", text: (_b2 = i == null ? void 0 : i.question) != null ? _b2 : "" };
+      var _a34, _b3;
+      return { label: (_a34 = i == null ? void 0 : i.category) != null ? _a34 : "", text: (_b3 = i == null ? void 0 : i.question) != null ? _b3 : "" };
     });
     const suggItems = (Array.isArray(data.suggestions) ? data.suggestions : []).map((i) => {
-      var _a32, _b2;
-      return { label: (_a32 = i == null ? void 0 : i.category) != null ? _a32 : "", text: (_b2 = i == null ? void 0 : i.description) != null ? _b2 : "" };
+      var _a34, _b3;
+      return { label: (_a34 = i == null ? void 0 : i.category) != null ? _a34 : "", text: (_b3 = i == null ? void 0 : i.description) != null ? _b3 : "" };
     });
     const empty = issueItems.length === 0 && needsItems.length === 0 && suggItems.length === 0;
     el.innerHTML = `
     <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
-      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc2((_a31 = data.frameName) != null ? _a31 : "")}</div>
+      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc2((_a33 = data.frameName) != null ? _a33 : "")}</div>
       <div class="a11y-results">
         ${empty ? '<div class="a11y-results-empty">No issues or suggestions returned.</div>' : section("Issues", "issues", issueItems, "issue") + section("Needs your input", "needs-input", needsItems, "needs") + section("Suggestions", "suggestions", suggItems, "suggestion")}
       </div>
@@ -1050,7 +1711,7 @@ This updates the plugin panel so the designer can see results without hunting th
     }
   }
   function showPanelsFillInstruction(sections, frameName, sectionIds, frameId) {
-    var _a31;
+    var _a33;
     const sectionList = sections.join(", ");
     const frameIdArg = frameId ? ` with frameId: "${frameId}"` : "";
     const cmd = `Fill the blueline panels for the frame "${frameName}"${frameId ? ` (ID: ${frameId})` : ""}. Categories: ${sectionList}.
@@ -1072,7 +1733,7 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         <button class="btn btn-secondary" id="copyPanelsFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Paste into your current Claude Code session (Bridge must be connected)</div>
       </div>`;
-      (_a31 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a31.addEventListener("click", async () => {
+      (_a33 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a33.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyPanelsFillCmd");
         if (btn) {
@@ -1084,8 +1745,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       });
     }
   }
-  var _a19;
-  (_a19 = document.getElementById("a11yCheckAllAi")) == null ? void 0 : _a19.addEventListener("click", () => {
+  var _a21;
+  (_a21 = document.getElementById("a11yCheckAllAi")) == null ? void 0 : _a21.addEventListener("click", () => {
     if (!bridgeConnected) return;
     const aiIds = ["a11yFocusIndicators", "a11yFocusOrder", "a11yHeadings", "a11yLandmarksNav", "a11yNamesAlt", "a11yColorContrast", "a11yAriaKeyboard", "a11yTargetSize", "a11yPageSetup"];
     const boxes = aiIds.map((id) => document.getElementById(id)).filter(Boolean);
@@ -1096,8 +1757,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     const btn = document.getElementById("a11yCheckAllAi");
     if (btn) btn.textContent = allChecked ? "Check All" : "Uncheck All";
   });
-  var _a20;
-  (_a20 = document.getElementById("a11yShowMore")) == null ? void 0 : _a20.addEventListener("click", () => {
+  var _a22;
+  (_a22 = document.getElementById("a11yShowMore")) == null ? void 0 : _a22.addEventListener("click", () => {
     const section = document.getElementById("a11yConditionalSection");
     const btn = document.getElementById("a11yShowMore");
     if (!section || !btn) return;
@@ -1106,8 +1767,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     btn.textContent = isHidden ? "\u25BE Hide extra categories" : "\u25B8 Show more categories";
     btn.setAttribute("aria-expanded", String(isHidden));
   });
-  var _a21;
-  (_a21 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a21.addEventListener("click", () => {
+  var _a23;
+  (_a23 = document.getElementById("a11yCheckAllNotes")) == null ? void 0 : _a23.addEventListener("click", () => {
     if (!bridgeConnected) return;
     const noteIds = ["a11yForms", "a11yCarousel", "a11yDom", "a11yMotionMedia", "a11yScreenReader", "a11yReactNative", "a11yTvNote", "a11yGeneralNote"];
     const boxes = noteIds.map((id) => document.getElementById(id)).filter(Boolean);
@@ -1140,13 +1801,13 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
   function getCheckedA11yCheckboxIds() {
     return Object.keys(A11Y_LABELS).filter(
       (id) => {
-        var _a31;
-        return (_a31 = document.getElementById(id)) == null ? void 0 : _a31.checked;
+        var _a33;
+        return (_a33 = document.getElementById(id)) == null ? void 0 : _a33.checked;
       }
     );
   }
   function showConfirmPanel(checkedIds) {
-    var _a31, _b2;
+    var _a33, _b3;
     const categoryView = document.getElementById("a11yCategoryView");
     const statusEl = document.getElementById("a11yStatus");
     if (!statusEl) return;
@@ -1163,29 +1824,29 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
         <button class="btn" id="a11yConfirmGo">Confirm &amp; Create Cards</button>
       </div>
     </div>`;
-    (_a31 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a31.addEventListener("click", () => {
+    (_a33 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a33.addEventListener("click", () => {
       statusEl.innerHTML = "";
       if (categoryView) categoryView.style.display = "block";
     });
-    (_b2 = document.getElementById("a11yConfirmGo")) == null ? void 0 : _b2.addEventListener("click", () => {
+    (_b3 = document.getElementById("a11yConfirmGo")) == null ? void 0 : _b3.addEventListener("click", () => {
       statusEl.innerHTML = "";
       if (categoryView) categoryView.style.display = "block";
       postToPlugin("generate-blueline", { categories: getCheckedA11yCategories() });
     });
   }
   function getCheckedA11yCategories() {
-    var _a31, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
+    var _a33, _b3, _c2, _d2, _e2, _f2, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const categories = [];
-    if ((_a31 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a31.checked) categories.push("focusIndicators");
-    if ((_b2 = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b2.checked) categories.push("focusOrder");
-    if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) categories.push("headings");
-    if ((_d = document.getElementById("a11yLandmarksNav")) == null ? void 0 : _d.checked) {
+    if ((_a33 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a33.checked) categories.push("focusIndicators");
+    if ((_b3 = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b3.checked) categories.push("focusOrder");
+    if ((_c2 = document.getElementById("a11yHeadings")) == null ? void 0 : _c2.checked) categories.push("headings");
+    if ((_d2 = document.getElementById("a11yLandmarksNav")) == null ? void 0 : _d2.checked) {
       categories.push("landmarks", "skipNav", "consistentNav");
     }
-    if ((_e = document.getElementById("a11yNamesAlt")) == null ? void 0 : _e.checked) {
+    if ((_e2 = document.getElementById("a11yNamesAlt")) == null ? void 0 : _e2.checked) {
       categories.push("names", "altText");
     }
-    if ((_f = document.getElementById("a11yColorContrast")) == null ? void 0 : _f.checked) categories.push("colorContrast");
+    if ((_f2 = document.getElementById("a11yColorContrast")) == null ? void 0 : _f2.checked) categories.push("colorContrast");
     if ((_g = document.getElementById("a11yAriaKeyboard")) == null ? void 0 : _g.checked) {
       categories.push("aria", "keyboard");
     }
@@ -1207,8 +1868,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     if ((_q = document.getElementById("a11yGeneralNote")) == null ? void 0 : _q.checked) categories.push("generalNote");
     return categories;
   }
-  var _a22;
-  (_a22 = document.getElementById("a11yStartBtn")) == null ? void 0 : _a22.addEventListener("click", () => {
+  var _a24;
+  (_a24 = document.getElementById("a11yStartBtn")) == null ? void 0 : _a24.addEventListener("click", () => {
     const checkedIds = getCheckedA11yCheckboxIds();
     if (checkedIds.length === 0) {
       updateA11yStatus("Select at least one category.");
@@ -1228,12 +1889,12 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }
     postToPlugin("generate-blueline-panels", { categories });
   }
-  var _a23;
-  (_a23 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a23.addEventListener("click", () => triggerBluelinePanels());
+  var _a25;
+  (_a25 = document.getElementById("generateBluelinePanelsBtn")) == null ? void 0 : _a25.addEventListener("click", () => triggerBluelinePanels());
   var lastA11yCmd = "";
   var annotationMode = false;
-  var _a24;
-  (_a24 = document.getElementById("a11yAnnotateToggle")) == null ? void 0 : _a24.addEventListener("click", () => {
+  var _a26;
+  (_a26 = document.getElementById("a11yAnnotateToggle")) == null ? void 0 : _a26.addEventListener("click", () => {
     annotationMode = !annotationMode;
     const btn = document.getElementById("a11yAnnotateToggle");
     if (btn) {
@@ -1251,8 +1912,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       updateA11yStatus("Annotation mode off.");
     }
   });
-  var _a25;
-  (_a25 = document.getElementById("a11yCategoryView")) == null ? void 0 : _a25.addEventListener("change", (e) => {
+  var _a27;
+  (_a27 = document.getElementById("a11yCategoryView")) == null ? void 0 : _a27.addEventListener("change", (e) => {
     if (!annotationMode) return;
     const target = e.target;
     if (target.type !== "checkbox" || !target.checked || !target.closest(".a11y-item")) return;
@@ -1505,10 +2166,10 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }).catch(() => {
     });
     sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
-      var _a31, _b2;
+      var _a33, _b3;
       if (ws.readyState !== 1 || !result) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
-      appendBridgeLog("Variables synced: " + (((_b2 = (_a31 = result.data) == null ? void 0 : _a31.variables) == null ? void 0 : _b2.length) || 0) + " vars");
+      appendBridgeLog("Variables synced: " + (((_b3 = (_a33 = result.data) == null ? void 0 : _a33.variables) == null ? void 0 : _b3.length) || 0) + " vars");
     }).catch(() => {
     });
   }
@@ -1610,14 +2271,12 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       info.style.color = "";
     }
   }
-  var _a26;
-  (_a26 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a26.addEventListener("click", () => bridgeConnect());
-  var _a27;
-  (_a27 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a27.addEventListener("click", () => bridgeDisconnect());
+  var _a28;
+  (_a28 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a28.addEventListener("click", () => bridgeConnect());
+  var _a29;
+  (_a29 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a29.addEventListener("click", () => bridgeDisconnect());
   function enterAlignV2Mode() {
     document.body.classList.add("alignv2-active");
-    const menuView = document.getElementById("menuView");
-    if (menuView) menuView.style.display = "";
     parent.postMessage({ pluginMessage: { type: "align-v2-window-resize", wide: true } }, "*");
     const scan = document.getElementById("alignV2ScanBtn");
     if (scan) scan.disabled = false;
@@ -1633,10 +2292,10 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
   document.querySelectorAll('.menu-item:not([data-tool="alignv2"]), .hamburger-item:not([data-tool="alignv2"])').forEach((btn) => {
     btn.addEventListener("click", () => exitAlignV2Mode());
   });
-  var _a28;
-  (_a28 = document.getElementById("backBtn")) == null ? void 0 : _a28.addEventListener("click", () => exitAlignV2Mode());
-  var _a29;
-  (_a29 = document.getElementById("alignV2ScanBtn")) == null ? void 0 : _a29.addEventListener("click", () => {
+  var _a30;
+  (_a30 = document.getElementById("backBtn")) == null ? void 0 : _a30.addEventListener("click", () => exitAlignV2Mode());
+  var _a31;
+  (_a31 = document.getElementById("alignV2ScanBtn")) == null ? void 0 : _a31.addEventListener("click", () => {
     parent.postMessage({ pluginMessage: { type: "align-v2-scan" } }, "*");
   });
   document.querySelectorAll(".alignv2-tab").forEach((btn) => {
@@ -1645,8 +2304,8 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       if (tab) setV2ActiveTab(tab);
     });
   });
-  var _a30;
-  (_a30 = document.getElementById("alignV2ApplyBtn")) == null ? void 0 : _a30.addEventListener("click", () => {
+  var _a32;
+  (_a32 = document.getElementById("alignV2ApplyBtn")) == null ? void 0 : _a32.addEventListener("click", () => {
     const selections = collectV2ApplySelections();
     if (selections.length === 0) return;
     parent.postMessage({ pluginMessage: { type: "align-v2-apply", selections } }, "*");
