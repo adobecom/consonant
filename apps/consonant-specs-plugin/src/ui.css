@@ -530,7 +530,7 @@ body.alignv2-active #app {
     "banner   banner"
     "selection selection"
     "menu     content";
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 180px 1fr;
   grid-template-rows: auto auto auto 1fr;
   height: 100vh;
 }
