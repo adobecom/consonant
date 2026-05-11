@@ -327,6 +327,10 @@ function ensureV2Styles(): void {
   background: var(--success-bg, #e6f4ea);
   color: var(--success, #137333);
 }
+.alignv2-group-line2 .v2-badge.v2-badge-muted {
+  background: var(--bg-secondary, #f0f0f0);
+  color: var(--text-secondary, #999);
+}
 `;
   document.head.appendChild(style);
 }
@@ -399,9 +403,12 @@ function renderV2Body(): void {
         ? `<span style="color:var(--text-secondary)">No S2A token</span>`
         : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
 
+    // Always render a badge for consistent right-edge alignment.
+    // Green "Match" when the suggestion exactly matches the current value;
+    // muted/grayed placeholder otherwise.
     const badge = (!disabled && group.suggestion?.isExactMatch)
       ? `<span class="v2-badge">Match</span>`
-      : '';
+      : `<span class="v2-badge v2-badge-muted">Match</span>`;
 
     const countBadge = group.items.length > 1
       ? `<span class="v2-count">${group.items.length} items</span>`
