@@ -38,6 +38,8 @@ export interface LoadedColorVar {
   hex: string;
   opacity: number;
   semanticRole: ColorSemanticRole;
+  /** Hex value in the non-default (dark) mode. Undefined when there is only one mode or resolution fails. */
+  darkHex?: string;
 }
 
 /** Parse semantic role from S2A token name path */
@@ -145,28 +147,31 @@ export async function loadLibraryTokens(): Promise<void> {
               libVars.map(v => figma.variables.importVariableByKeyAsync(v.key))
             );
 
-            // Resolve the collection's defaultModeId once, using the first successful import.
+            // Resolve the collection's defaultModeId and alternate (dark) modeId once,
+            // using the first successful import.
             // Object.keys ordering is not guaranteed — defaultModeId ensures we always read
             // the correct (default/light) mode, not whichever mode V8 happens to enumerate first.
             let defaultModeId: string | null = null;
+            let altModeId: string | null = null; // second mode (dark) if the collection has exactly 2 modes
             for (const r of importResults) {
               if (r.status === 'fulfilled') {
                 try {
                   const coll = await figma.variables.getVariableCollectionByIdAsync(r.value.variableCollectionId);
-                  if (coll) defaultModeId = coll.defaultModeId;
+                  if (coll) {
+                    defaultModeId = coll.defaultModeId;
+                    // Find the one non-default mode (if any) to use as "dark"
+                    const otherModes = coll.modes.filter(m => m.modeId !== coll.defaultModeId);
+                    if (otherModes.length >= 1) altModeId = otherModes[0].modeId;
+                  }
                 } catch (_) {}
                 break;
               }
             }
 
-            for (const result of importResults) {
-              if (result.status !== 'fulfilled') continue;
-              const imported = result.value;
-              const modeId = defaultModeId ?? Object.keys(imported.valuesByMode)[0];
-              let value = imported.valuesByMode[modeId];
-
-              // Resolve aliases — inherently sequential (each step depends on the previous),
-              // bounded to depth 5 to prevent infinite loops in circular references.
+            /** Resolve a single mode value for a variable, following alias chains up to depth 5. */
+            const resolveModeValue = async (imported: Variable, modeId: string): Promise<VariableValue | null> => {
+              let value: VariableValue | undefined = imported.valuesByMode[modeId];
+              if (value === undefined) return null;
               let depth = 0;
               while (value && typeof value === 'object' && 'type' in value && (value as any).type === 'VARIABLE_ALIAS' && depth < 5) {
                 try {
@@ -183,16 +188,38 @@ export async function loadLibraryTokens(): Promise<void> {
                 } catch (_) { break; }
                 depth++;
               }
+              return value ?? null;
+            };
+
+            for (const result of importResults) {
+              if (result.status !== 'fulfilled') continue;
+              const imported = result.value;
+              const modeId = defaultModeId ?? Object.keys(imported.valuesByMode)[0];
+
+              // Resolve default (light) mode value
+              const value = await resolveModeValue(imported, modeId);
 
               if (imported.resolvedType === 'COLOR') {
                 if (value && typeof value === 'object' && 'r' in value) {
                   const color = value as RGBA;
+                  // Resolve dark mode value if an alternate mode exists
+                  let darkHex: string | undefined;
+                  if (altModeId && altModeId in imported.valuesByMode) {
+                    try {
+                      const darkValue = await resolveModeValue(imported, altModeId);
+                      if (darkValue && typeof darkValue === 'object' && 'r' in darkValue) {
+                        const dc = darkValue as RGBA;
+                        darkHex = rgbToHex(dc.r, dc.g, dc.b);
+                      }
+                    } catch (_) {}
+                  }
                   colorVarMap.push({
                     name: imported.name,
                     variable: imported,
                     hex: rgbToHex(color.r, color.g, color.b),
                     opacity: 'a' in color ? color.a : 1,
                     semanticRole: parseSemanticRole(imported.name),
+                    ...(darkHex !== undefined ? { darkHex } : {}),
                   });
                 }
               } else if (imported.resolvedType === 'FLOAT') {

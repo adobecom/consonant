@@ -14,7 +14,7 @@ interface V2Issue {
     textStyleId?: string;
     isExactMatch: boolean;
   } | null;
-  allCandidates: Array<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number }>;
+  allCandidates: Array<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number; darkValue?: string }>;
 }
 
 interface V2Result {
@@ -63,6 +63,11 @@ let v2State: {
 // ─── Color popover open state ────────────────────────────────────────────────
 
 let v2OpenPopover: { groupKey: string; el: HTMLElement } | null = null;
+
+// ─── Color popover tab state ─────────────────────────────────────────────────
+
+type ColorPopoverTab = 'surface' | 'text' | 'component' | 'overlay' | 'palette';
+let v2ColorPopoverTab: ColorPopoverTab = 'surface';
 
 function closeOpenPopover(): void {
   if (v2OpenPopover) {
@@ -310,76 +315,116 @@ function buildGroupedDropdownOptions(
   return out;
 }
 
+// ─── Tab filter helpers ───────────────────────────────────────────────────────
+
+const SURFACE_TEXT_LEAVES = new Set(['default', 'subtle', 'strong', 'brand', 'disabled', 'knockout', 'inverse']);
+const TEXT_LEAVES = new Set(['body-strong', 'body-subtle', 'label', 'caption', 'subheading', 'eyebrow', 'title']);
+
+function matchesColorPopoverTab(
+  tokenName: string,
+  tab: ColorPopoverTab,
+): boolean {
+  const n = tokenName.toLowerCase();
+  switch (tab) {
+    case 'surface':
+      if (n.startsWith('s2a/color/background/') || n.startsWith('s2a/color/border/') || n.startsWith('s2a/color/focus-ring/')) return true;
+      if (n.startsWith('s2a/color/content/')) {
+        // Only structural content tokens: check the leaf
+        const leaf = n.slice(n.lastIndexOf('/') + 1);
+        return SURFACE_TEXT_LEAVES.has(leaf);
+      }
+      return false;
+    case 'text':
+      if (n.startsWith('s2a/color/content/utility/')) return true;
+      if (n.startsWith('s2a/color/content/')) {
+        const leaf = n.slice(n.lastIndexOf('/') + 1);
+        return TEXT_LEAVES.has(leaf);
+      }
+      return false;
+    case 'component':
+      return n.startsWith('s2a/color/button/') || n.startsWith('s2a/color/iconbutton/');
+    case 'overlay':
+      return n.startsWith('s2a/color/transparent/');
+    case 'palette':
+      return n.startsWith('s2a/color/blue/') || n.startsWith('s2a/color/green/') ||
+             n.startsWith('s2a/color/red/') || n.startsWith('s2a/color/orange/') ||
+             n.startsWith('s2a/color/yellow/') || n.startsWith('s2a/color/gray/') ||
+             n.startsWith('s2a/color/brand/');
+    default:
+      return false;
+  }
+}
+
 /**
- * Build the inner HTML for a color popover (grouped buttons with swatches).
- * Uses the same group priority + sort logic as buildGroupedDropdownOptions.
+ * Build the inner HTML for a color popover — tab strip + Figma-style table layout.
+ * Columns: swatch/name | Light hex | Dark hex
  */
 function buildColorPopoverContent(
-  candidates: ReadonlyArray<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number }>,
+  candidates: ReadonlyArray<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number; darkValue?: string }>,
   chosen: string,
+  tab: ColorPopoverTab = v2ColorPopoverTab,
 ): string {
+  // Filter by tab
+  const filtered = candidates.filter(c => matchesColorPopoverTab(c.tokenName, tab));
+
   // Group by path prefix
-  const groups = new Map<string, Array<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number }>>();
-  for (const c of candidates) {
+  const groups = new Map<string, Array<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number; darkValue?: string }>>();
+  for (const c of filtered) {
     const { group } = splitTokenPath(c.tokenName);
     if (!groups.has(group)) groups.set(group, []);
     groups.get(group)!.push(c);
   }
 
-  const GROUP_PRIORITY: string[] = [
-    // Spacing / layout
-    's2a/spacing',
-    's2a/layout',
-    // Radii + stroke widths
-    's2a/border/radius',
-    's2a/border/width',
-    // Typography (custom typographic order)
-    's2a/typography/super',
-    's2a/typography/title',
-    's2a/typography/body',
-    's2a/typography/eyebrow',
-    's2a/typography/label',
-    's2a/typography/caption',
-    // Colors — canonical surfaces first, then utilities, then primary variants
-    's2a/color/background',
-    's2a/color/background/utility',
-    's2a/color/content',
-    's2a/color/content/utility',
-    's2a/color/border',
-    's2a/color/border/utility',
-    's2a/color/background/primary',
-    's2a/color/content/primary',
-    's2a/color/border/primary',
-  ];
-  const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => {
-    const ai = GROUP_PRIORITY.indexOf(a);
-    const bi = GROUP_PRIORITY.indexOf(b);
-    if (ai !== -1 && bi !== -1) return ai - bi;
-    if (ai !== -1) return -1;
-    if (bi !== -1) return 1;
-    return a.localeCompare(b);
-  });
+  const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => a.localeCompare(b));
 
-  let out = '';
+  // Tab strip
+  const tabDefs: Array<{ id: ColorPopoverTab; label: string }> = [
+    { id: 'surface',   label: 'Surface'   },
+    { id: 'text',      label: 'Text'      },
+    { id: 'component', label: 'Component' },
+    { id: 'overlay',   label: 'Overlay'   },
+    { id: 'palette',   label: 'Palette'   },
+  ];
+  let out = `<div class="v2-cp-tabs">`;
+  for (const t of tabDefs) {
+    out += `<button class="v2-cp-tab${t.id === tab ? ' v2-cp-tab-active' : ''}" data-cptab="${esc(t.id)}">${esc(t.label)}</button>`;
+  }
+  out += `</div>`;
+
+  // Table header
+  out += `<div class="v2-color-table-header">`;
+  out += `<span class="v2-cth-name">Name</span>`;
+  out += `<span class="v2-cth-hex">Light</span>`;
+  out += `<span class="v2-cth-hex">Dark</span>`;
+  out += `</div>`;
+
+  if (sortedGroupKeys.length === 0) {
+    out += `<div style="padding:10px 12px;font-size:11px;color:var(--text-secondary);">No tokens in this tab.</div>`;
+    return out;
+  }
+
   for (const groupKey of sortedGroupKeys) {
-    const items = groups.get(groupKey)!.slice().sort((a, b) => {
-      const an = typeof a.value === 'number' ? a.value : NaN;
-      const bn = typeof b.value === 'number' ? b.value : NaN;
-      if (!isNaN(an) && !isNaN(bn)) return an - bn;
-      return splitTokenPath(a.tokenName).leaf.localeCompare(splitTokenPath(b.tokenName).leaf, undefined, { numeric: true });
-    });
+    const items = groups.get(groupKey)!.slice().sort((a, b) =>
+      splitTokenPath(a.tokenName).leaf.localeCompare(splitTokenPath(b.tokenName).leaf, undefined, { numeric: true })
+    );
     const groupLabel = groupKey || '(uncategorised)';
     out += `<div class="v2-color-group-header">${esc(groupLabel)}</div>`;
     for (const c of items) {
       const id = c.variableId ?? c.textStyleId ?? '';
-      const isHex = typeof c.value === 'string' && (c.value as string).startsWith('#');
-      const hexVal = isHex ? (c.value as string) : '#cccccc';
+      const lightHex = (typeof c.value === 'string' && (c.value as string).startsWith('#')) ? (c.value as string) : '#cccccc';
+      const darkHex = (typeof c.darkValue === 'string' && c.darkValue.startsWith('#')) ? c.darkValue : lightHex;
       const { leaf } = splitTokenPath(c.tokenName);
-      // Figma-style: show just the leaf name; the swatch conveys the hex visually.
       const selectedAttr = id === chosen ? ' data-selected="1"' : '';
       out += `<button class="v2-color-option${id === chosen ? ' v2-color-option-selected' : ''}" data-id="${esc(id)}"${selectedAttr}>`;
-      out += `<span class="v2-color-swatch" style="background-color:${esc(hexVal)}"></span>`;
       out += `<span class="v2-color-option-label">${esc(leaf)}</span>`;
+      out += `<span class="v2-color-cell-hex">`;
+      out += `<span class="v2-mini-swatch" style="background:${esc(lightHex)}"></span>`;
+      out += `${esc(lightHex)}`;
+      out += `</span>`;
+      out += `<span class="v2-color-cell-hex">`;
+      out += `<span class="v2-mini-swatch" style="background:${esc(darkHex)}"></span>`;
+      out += `${esc(darkHex)}`;
+      out += `</span>`;
       out += `</button>`;
     }
   }
@@ -526,36 +571,82 @@ function ensureV2Styles(): void {
   border: 1px solid var(--border, #e5e5e5);
   border-radius: 6px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.14);
-  max-height: 360px;
+  max-height: 380px;
   overflow-y: auto;
   z-index: 10000;
-  min-width: 240px;
-  padding: 6px 0;
+  min-width: 380px;
+  max-width: 480px;
+  padding: 0 0 6px 0;
   font-size: 12px;
 }
+/* Tab strip */
+.v2-cp-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border, #e5e5e5);
+  padding: 0 4px;
+  gap: 2px;
+  position: sticky;
+  top: 0;
+  background: var(--bg, #fff);
+  z-index: 1;
+  flex-shrink: 0;
+}
+.v2-cp-tab {
+  padding: 6px 10px;
+  font-size: 11px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  color: var(--text-secondary, #888);
+  white-space: nowrap;
+  margin-bottom: -1px;
+  border-radius: 0;
+}
+.v2-cp-tab:hover {
+  color: var(--text, #222);
+}
+.v2-cp-tab.v2-cp-tab-active {
+  color: var(--text, #222);
+  border-bottom-color: var(--accent, #0066cc);
+  font-weight: 500;
+}
+/* Table header row */
+.v2-color-table-header {
+  display: grid;
+  grid-template-columns: 1fr 90px 90px;
+  padding: 4px 12px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary, #888);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border, #f0f0f0);
+}
+/* Group header */
 .v2-color-popover .v2-color-group-header {
-  padding: 10px 12px 4px 12px;
+  padding: 8px 12px 2px 12px;
   color: var(--text-secondary, #888);
   font-weight: 400;
-  font-size: 11px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
+/* Option row — 3-column grid: name | light | dark */
 .v2-color-popover .v2-color-option {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 90px 90px;
   align-items: center;
-  gap: 10px;
   width: 100%;
-  padding: 6px 12px;
+  padding: 5px 12px;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
   color: var(--text, #222);
-  font-size: 12px;
-}
-.v2-color-popover .v2-color-option .v2-color-swatch {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
+  font-size: 11px;
+  gap: 0;
+  box-sizing: border-box;
 }
 .v2-color-popover .v2-color-option:hover {
   background: var(--hover-bg, #f5f5f5);
@@ -564,10 +655,30 @@ function ensureV2Styles(): void {
   background: var(--hover-bg, #f0f0f0);
 }
 .v2-color-popover .v2-color-option-label {
-  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-right: 8px;
+}
+/* Hex cell with mini swatch */
+.v2-color-cell-hex {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--text-secondary, #666);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.v2-mini-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.12);
+  flex-shrink: 0;
 }
 `;
   document.head.appendChild(style);
@@ -790,13 +901,13 @@ function renderV2Body(): void {
       const popover = document.createElement('div');
       popover.className = 'v2-color-popover';
       popover.dataset.forGroupKey = k;
-      popover.innerHTML = buildColorPopoverContent(grp.allCandidates, chosenVal);
+      popover.innerHTML = buildColorPopoverContent(grp.allCandidates, chosenVal, v2ColorPopoverTab);
 
       // Initial position: below + left-aligned with the button.
       const rect = btn.getBoundingClientRect();
       popover.style.top = `${rect.bottom + 2}px`;
       popover.style.left = `${rect.left}px`;
-      popover.style.minWidth = `${Math.max(rect.width, 220)}px`;
+      popover.style.minWidth = `${Math.max(rect.width, 380)}px`;
 
       document.body.appendChild(popover);
       v2OpenPopover = { groupKey: k, el: popover };
@@ -831,36 +942,55 @@ function renderV2Body(): void {
         popover.style.left = `${newLeft}px`;
       }
 
-      // Option click listeners
-      popover.querySelectorAll<HTMLButtonElement>('button.v2-color-option').forEach(opt => {
-        opt.addEventListener('click', (ev) => {
-          ev.stopPropagation();
-          const val = opt.dataset.id!;
-          if (!val) return;
+      /** Attach option click listeners to .v2-color-option buttons inside the popover. */
+      function attachOptionListeners(): void {
+        popover.querySelectorAll<HTMLButtonElement>('button.v2-color-option').forEach(opt => {
+          opt.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            const val = opt.dataset.id!;
+            if (!val) return;
 
-          v2State.chosenOverrides.set(k, val);
+            v2State.chosenOverrides.set(k, val);
 
-          // Update the collapsed button's swatch and label
-          const cand = grp.allCandidates.find(c => (c.variableId ?? c.textStyleId) === val);
-          const newHex = (cand && typeof cand.value === 'string') ? cand.value : '#cccccc';
-          const swatchInBtn = btn.querySelector<HTMLElement>('.v2-color-swatch');
-          if (swatchInBtn) swatchInBtn.style.backgroundColor = newHex;
-          const labelInBtn = btn.querySelector<HTMLElement>('.v2-color-label');
-          if (labelInBtn && cand) labelInBtn.textContent = `${cand.tokenName} (${cand.value})`;
+            // Update the collapsed button's swatch and label
+            const cand = grp.allCandidates.find(c => (c.variableId ?? c.textStyleId) === val);
+            const newHex = (cand && typeof cand.value === 'string') ? cand.value : '#cccccc';
+            const swatchInBtn = btn.querySelector<HTMLElement>('.v2-color-swatch');
+            if (swatchInBtn) swatchInBtn.style.backgroundColor = newHex;
+            const labelInBtn = btn.querySelector<HTMLElement>('.v2-color-label');
+            if (labelInBtn && cand) labelInBtn.textContent = `${cand.tokenName} (${cand.value})`;
 
-          // For no-suggestion color rows, enable + check the paired checkbox
-          if (btn.dataset.noSuggestion) {
-            const cb = body.querySelector<HTMLInputElement>(`input[type="checkbox"][data-group-key="${CSS.escape(k)}"]`);
-            if (cb) {
-              cb.disabled = false;
-              cb.checked = true;
-              v2State.checkedGroupKeys.add(k);
+            // For no-suggestion color rows, enable + check the paired checkbox
+            if (btn.dataset.noSuggestion) {
+              const cb = body.querySelector<HTMLInputElement>(`input[type="checkbox"][data-group-key="${CSS.escape(k)}"]`);
+              if (cb) {
+                cb.disabled = false;
+                cb.checked = true;
+                v2State.checkedGroupKeys.add(k);
+              }
             }
-          }
 
-          updateV2Footer();
-          closeOpenPopover();
+            updateV2Footer();
+            closeOpenPopover();
+          });
         });
+      }
+
+      attachOptionListeners();
+
+      // Tab clicks — use event delegation on the popover to avoid re-attachment after innerHTML rebuilds
+      popover.addEventListener('click', (ev) => {
+        const tabBtn = (ev.target as HTMLElement).closest<HTMLButtonElement>('button.v2-cp-tab[data-cptab]');
+        if (!tabBtn) return;
+        ev.stopPropagation();
+        const newTab = tabBtn.dataset.cptab as ColorPopoverTab;
+        if (!newTab || newTab === v2ColorPopoverTab) return;
+        v2ColorPopoverTab = newTab;
+        const currentChosen = v2State.chosenOverrides.get(k)
+          ?? (grp.suggestion?.variableId ?? grp.suggestion?.textStyleId ?? '');
+        popover.innerHTML = buildColorPopoverContent(grp.allCandidates, currentChosen, v2ColorPopoverTab);
+        attachOptionListeners();
+        // Delegation listener persists on the popover element itself — no re-attachment needed
       });
     });
   });

@@ -10,6 +10,8 @@ export interface TokenCandidate {
   variableId?: string;
   textStyleId?: string;
   value: string | number;
+  /** Alternate (dark) mode hex value, present only on color candidates. */
+  darkValue?: string;
 }
 
 export interface AlignV2Issue {
@@ -88,6 +90,7 @@ function buildColorCandidates(): TokenCandidate[] {
     tokenName: cv.name,
     variableId: cv.variable.id,
     value: cv.hex.toUpperCase(),
+    ...(cv.darkHex !== undefined ? { darkValue: cv.darkHex.toUpperCase() } : {}),
   }));
 }
 
