@@ -209,7 +209,15 @@ function groupIssues(issues: V2Issue[]): V2Group[] {
 function splitTokenPath(tokenName: string): { group: string; leaf: string } {
   const lastSlash = tokenName.lastIndexOf('/');
   if (lastSlash === -1) return { group: '', leaf: tokenName };
-  return { group: tokenName.slice(0, lastSlash), leaf: tokenName.slice(lastSlash + 1) };
+  const base = { group: tokenName.slice(0, lastSlash), leaf: tokenName.slice(lastSlash + 1) };
+  // Typography sub-grouping: split "s2a/typography/title-1" into group "s2a/typography/title"
+  // so titles, body styles, etc. cluster under their own optgroup headers.
+  if (base.group === 's2a/typography') {
+    const dashIdx = base.leaf.indexOf('-');
+    const category = dashIdx === -1 ? base.leaf : base.leaf.slice(0, dashIdx);
+    return { group: `s2a/typography/${category}`, leaf: base.leaf };
+  }
+  return base;
 }
 
 /** Pick a readable text color (black or white) for max contrast against a hex background. */
@@ -242,6 +250,12 @@ function buildGroupedDropdownOptions(
     's2a/layout',
     's2a/border/radius',
     's2a/border/width',
+    's2a/typography/super',
+    's2a/typography/title',
+    's2a/typography/body',
+    's2a/typography/eyebrow',
+    's2a/typography/label',
+    's2a/typography/caption',
   ];
   const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => {
     const ai = GROUP_PRIORITY.indexOf(a);
@@ -304,6 +318,12 @@ function buildColorPopoverContent(
     's2a/layout',
     's2a/border/radius',
     's2a/border/width',
+    's2a/typography/super',
+    's2a/typography/title',
+    's2a/typography/body',
+    's2a/typography/eyebrow',
+    's2a/typography/label',
+    's2a/typography/caption',
   ];
   const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => {
     const ai = GROUP_PRIORITY.indexOf(a);
