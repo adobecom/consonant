@@ -349,13 +349,11 @@ function buildColorPopoverContent(
       const isHex = typeof c.value === 'string' && (c.value as string).startsWith('#');
       const hexVal = isHex ? (c.value as string) : '#cccccc';
       const { leaf } = splitTokenPath(c.tokenName);
-      let valuePart = '';
-      if (typeof c.value === 'string' && c.value !== '') valuePart = ` (${c.value})`;
-      const optLabel = `${leaf}${valuePart}`;
+      // Figma-style: show just the leaf name; the swatch conveys the hex visually.
       const selectedAttr = id === chosen ? ' data-selected="1"' : '';
       out += `<button class="v2-color-option${id === chosen ? ' v2-color-option-selected' : ''}" data-id="${esc(id)}"${selectedAttr}>`;
       out += `<span class="v2-color-swatch" style="background-color:${esc(hexVal)}"></span>`;
-      out += `<span class="v2-color-option-label">${esc(optLabel)}</span>`;
+      out += `<span class="v2-color-option-label">${esc(leaf)}</span>`;
       out += `</button>`;
     }
   }
@@ -500,36 +498,41 @@ function ensureV2Styles(): void {
   position: fixed;
   background: var(--bg, #fff);
   border: 1px solid var(--border, #e5e5e5);
-  border-radius: 4px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-  max-height: 320px;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.14);
+  max-height: 360px;
   overflow-y: auto;
   z-index: 10000;
-  min-width: 220px;
-  padding: 4px 0;
-  font-size: 11px;
+  min-width: 240px;
+  padding: 6px 0;
+  font-size: 12px;
 }
 .v2-color-popover .v2-color-group-header {
-  padding: 4px 10px;
-  color: var(--text-secondary);
-  font-weight: 600;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  padding: 10px 12px 4px 12px;
+  color: var(--text-secondary, #888);
+  font-weight: 400;
+  font-size: 11px;
 }
 .v2-color-popover .v2-color-option {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
-  padding: 4px 10px;
+  padding: 6px 12px;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
+  color: var(--text, #222);
+  font-size: 12px;
+}
+.v2-color-popover .v2-color-option .v2-color-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
 }
 .v2-color-popover .v2-color-option:hover {
-  background: var(--hover-bg, #f0f0f0);
+  background: var(--hover-bg, #f5f5f5);
 }
 .v2-color-popover .v2-color-option.v2-color-option-selected {
   background: var(--hover-bg, #f0f0f0);
