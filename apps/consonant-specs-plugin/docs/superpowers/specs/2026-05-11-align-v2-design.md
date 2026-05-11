@@ -49,7 +49,11 @@ DESIGN
   Specs
 ```
 
-Selecting `Align V2` opens a new full-pane screen analogous to how `Align` works today. Existing buttons (`s2aAuditBtn`, `fullAlignBtn`, etc.) and their handlers remain.
+Selecting `Align V2` **widens the plugin window** to ~800px and switches to a **split-pane layout**: the existing nav (DESIGN/COMPLIANCE/UTILITIES) remains visible on the left, and the Align V2 content (tabs + rows + apply) renders on the right. This approximates the visual feel of Check designs' side-by-side panel within the single-window constraint of the Figma plugin API. Existing buttons (`s2aAuditBtn`, `fullAlignBtn`, etc.) and their handlers remain untouched.
+
+Leaving Align V2 (clicking back, or clicking any other nav item) resizes the window back to the default width and restores the normal single-pane behavior.
+
+> **Why split-pane and not a separate window:** Figma plugins are limited to a single UI window per plugin (`UIAPI` is a singleton in `@figma/plugin-typings/plugin-api.d.ts:2615`; `figma.showUI` opens only one iframe). Check designs achieves its two-window look as a first-party Figma feature. Plugins cannot replicate this; the split-pane layout is the closest approximation.
 
 ## UI layout
 
