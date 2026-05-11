@@ -30,6 +30,9 @@ interface PropertyEntry {
 
 declare const FEATURE_A11Y: boolean;
 declare const FEATURE_LEGACY_ALIGN: boolean;
+declare const __PLUGIN_VERSION__: string;
+declare const __PLUGIN_BUILD_SHA__: string;
+declare const __PLUGIN_BUILD_TIME__: string;
 
 // Feature flag: remove A11y if disabled
 const a11yPanel = document.querySelector<HTMLElement>('.tab-panel[data-panel="a11y"]');
@@ -170,12 +173,28 @@ function updateSelectionInfo(data: { name: string; type: string; width: number; 
 function updateTokenStatus(count: number, version: string) {
   const el = document.getElementById('footer');
   if (!el) return;
-  el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span>`;
+  const buildMarker = `v${__PLUGIN_VERSION__} (${__PLUGIN_BUILD_SHA__} · ${__PLUGIN_BUILD_TIME__})`;
+  el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span> <span class="build-marker" style="opacity:0.55;font-size:10px;">${esc(buildMarker)}</span>`;
 }
 
 function postToPlugin(type: string, payload?: Record<string, unknown>) {
   parent.postMessage({ pluginMessage: { type, ...payload } }, 'https://www.figma.com');
 }
+
+// On plugin load, append the build marker to the footer even before tokens load,
+// so the user can verify which bundle is running at a glance.
+(function injectBuildMarker(): void {
+  const el = document.getElementById('footer');
+  if (!el) return;
+  const marker = `v${__PLUGIN_VERSION__} (${__PLUGIN_BUILD_SHA__} · ${__PLUGIN_BUILD_TIME__})`;
+  if (!el.querySelector('.build-marker')) {
+    const span = document.createElement('span');
+    span.className = 'build-marker';
+    span.style.cssText = 'opacity:0.55;font-size:10px;margin-left:8px;';
+    span.textContent = marker;
+    el.appendChild(span);
+  }
+})();
 
 window.addEventListener('message', (event) => {
   const msg = event.data.pluginMessage;

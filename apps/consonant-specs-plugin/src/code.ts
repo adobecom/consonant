@@ -8,6 +8,17 @@ import { runStructuralScan } from './a11y-structural-scan';
 import { generateFocusIndicators, collectFocusableElements } from './spec-focus-indicators';
 import { runAlignV2Scan, AlignV2Result } from './align-v2';
 
+// Bridge-readable build marker. Lets MCP probes confirm which bundle is loaded
+// via `globalThis.__PLUGIN_BUILD__` from inside figma_execute.
+declare const __PLUGIN_VERSION__: string;
+declare const __PLUGIN_BUILD_SHA__: string;
+declare const __PLUGIN_BUILD_TIME__: string;
+(globalThis as any).__PLUGIN_BUILD__ = {
+  version: __PLUGIN_VERSION__,
+  sha: __PLUGIN_BUILD_SHA__,
+  builtAt: __PLUGIN_BUILD_TIME__,
+};
+
 // Expose for eval/EXECUTE_CODE access
 (globalThis as any).__generateBlueline = generateBlueline;
 (globalThis as any).__generateBluelinePanels = generateBluelinePanels;

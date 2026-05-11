@@ -1,5 +1,6 @@
 import { build, context } from 'esbuild';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { execSync } from 'child_process';
 
 const isWatch = process.argv.includes('--watch');
 
@@ -19,9 +20,23 @@ function loadEnv() {
 }
 
 const env = loadEnv();
+
+// Read version from package.json and compute build metadata for the version marker
+// that lands in the plugin footer + globalThis.__PLUGIN_BUILD__ (bridge-readable).
+const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+const pluginVersion = pkg.version || '0.0.0';
+let buildSha = 'unknown';
+try {
+  buildSha = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+} catch (_) { /* not a git checkout; leave as 'unknown' */ }
+const buildTime = new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
+
 const featureDefines = {
   'FEATURE_A11Y': env.FEATURE_A11Y === 'true' ? 'true' : 'false',
   'FEATURE_LEGACY_ALIGN': env.FEATURE_LEGACY_ALIGN === 'true' ? 'true' : 'false',
+  '__PLUGIN_VERSION__': JSON.stringify(pluginVersion),
+  '__PLUGIN_BUILD_SHA__': JSON.stringify(buildSha),
+  '__PLUGIN_BUILD_TIME__': JSON.stringify(buildTime),
 };
 
 const codeConfig = {
@@ -31,6 +46,7 @@ const codeConfig = {
   format: 'cjs',
   target: 'es2017',
   sourcemap: false,
+  define: featureDefines,
 };
 
 const uiConfig = {
