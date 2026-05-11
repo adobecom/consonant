@@ -327,20 +327,13 @@ function matchesColorPopoverTab(
   const n = tokenName.toLowerCase();
   switch (tab) {
     case 'surface':
-      if (n.startsWith('s2a/color/background/') || n.startsWith('s2a/color/border/') || n.startsWith('s2a/color/focus-ring/')) return true;
-      if (n.startsWith('s2a/color/content/')) {
-        // Only structural content tokens: check the leaf
-        const leaf = n.slice(n.lastIndexOf('/') + 1);
-        return SURFACE_TEXT_LEAVES.has(leaf);
-      }
-      return false;
+      // Surface = background + border + focus-ring only. Content moved to its own tab.
+      return n.startsWith('s2a/color/background/')
+        || n.startsWith('s2a/color/border/')
+        || n.startsWith('s2a/color/focus-ring/');
     case 'text':
-      if (n.startsWith('s2a/color/content/utility/')) return true;
-      if (n.startsWith('s2a/color/content/')) {
-        const leaf = n.slice(n.lastIndexOf('/') + 1);
-        return TEXT_LEAVES.has(leaf);
-      }
-      return false;
+      // "Content" tab (formerly "Text"): everything under s2a/color/content/*
+      return n.startsWith('s2a/color/content/');
     case 'component':
       return n.startsWith('s2a/color/button/') || n.startsWith('s2a/color/iconbutton/');
     case 'overlay':
@@ -380,7 +373,7 @@ function buildColorPopoverContent(
   // Tab strip
   const tabDefs: Array<{ id: ColorPopoverTab; label: string }> = [
     { id: 'surface',   label: 'Surface'   },
-    { id: 'text',      label: 'Text'      },
+    { id: 'text',      label: 'Content'   },
     { id: 'component', label: 'Component' },
     { id: 'overlay',   label: 'Overlay'   },
     { id: 'palette',   label: 'Palette'   },
