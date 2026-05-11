@@ -1356,11 +1356,11 @@ function bridgeDisconnect() {
 document.getElementById('bridgeConnectBtn')?.addEventListener('click', () => bridgeConnect());
 document.getElementById('bridgeDisconnectBtn')?.addEventListener('click', () => bridgeDisconnect());
 
-// ── Align V2 split-pane mode toggle ───────────────────────────────────────
+// ── Align to S2A: resize iframe to give the table more room ───────────────
+// We rely on the existing navigateTo flow to swap menu → tab-content; only the
+// window resize and scan-button enable are alignv2-specific.
 function enterAlignV2Mode(): void {
   document.body.classList.add('alignv2-active');
-  const menuView = document.getElementById('menuView');
-  if (menuView) menuView.style.display = '';
   parent.postMessage({ pluginMessage: { type: 'align-v2-window-resize', wide: true } }, '*');
   const scan = document.getElementById('alignV2ScanBtn') as HTMLButtonElement | null;
   if (scan) scan.disabled = false;

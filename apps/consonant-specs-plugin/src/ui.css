@@ -522,22 +522,7 @@ body {
 .alignv2-row select { font-size: 11px; padding: 2px 4px; }
 .alignv2-row .v2-badge { font-size: 9px; padding: 1px 6px; border-radius: 8px; background: var(--success-bg, #e6f4ea); color: var(--success, #137333); }
 
-/* Split-pane mode: when body has .alignv2-active, lay #app out as CSS Grid so menu + tab-content sit side-by-side. */
-body.alignv2-active #app {
-  display: grid;
-  grid-template-areas:
-    "header   header"
-    "banner   banner"
-    "selection selection"
-    "menu     content";
-  grid-template-columns: 180px 1fr;
-  grid-template-rows: auto auto auto 1fr;
-  height: 100vh;
-}
-body.alignv2-active #pluginHeader { grid-area: header; }
-body.alignv2-active #s2aBanner { grid-area: banner; }
-body.alignv2-active #selectionInfo { grid-area: selection; }
-body.alignv2-active #menuView { grid-area: menu; display: block !important; border-right: 1px solid var(--border); overflow-y: auto; }
-body.alignv2-active #tabContent { grid-area: content; display: block !important; overflow-y: auto; }
-body.alignv2-active #headerMenu { display: none !important; }
-body.alignv2-active #headerDetail { display: flex !important; }
+/* Align to S2A wide-mode: the iframe is wider (set via figma.ui.resize)
+   so the tab content has room for the value/dropdown columns. The standard
+   navigateTo flow already hides #menuView and shows #tabContent on tool entry —
+   no grid override needed. */
