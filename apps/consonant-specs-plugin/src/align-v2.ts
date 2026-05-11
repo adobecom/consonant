@@ -1,6 +1,6 @@
 // apps/consonant-specs-plugin/src/align-v2.ts
 
-import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap } from './tokens';
+import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole } from './tokens';
 import { figmaColorToHex, getCornerRadius } from './utils';
 
 // ── Output types ─────────────────────────────────────────────────────────
@@ -86,6 +86,15 @@ function buildColorCandidates(): TokenCandidate[] {
   }));
 }
 
+/** Pick the best S2A color token for a given hex+role from the loaded map. */
+function pickBestColorMatch(hex: string, role: ColorPropertyRole, colorMap: ReadonlyArray<LoadedColorVar>): LoadedColorVar | null {
+  const matches = colorMap.filter(cv => cv.hex.toLowerCase() === hex.toLowerCase());
+  return matches.find(cv => cv.semanticRole === role)
+    ?? matches.find(cv => cv.semanticRole !== null)
+    ?? matches[0]
+    ?? null;
+}
+
 /**
  * For a single SOLID paint, classify and produce an issue if non-compliant.
  * Returns null if the paint is compliant (bound to S2A) or fully unhandleable.
@@ -97,15 +106,15 @@ async function auditColorPaint(
   candidates: TokenCandidate[],
 ): Promise<AlignV2Issue | null> {
   const boundId = paint.boundVariables?.color?.id;
+  const colorMap = getColorVarMap();
 
   if (boundId) {
     const { isS2A, variableName } = await isS2AVariable(boundId);
     if (isS2A) return null; // compliant
     // Wrong library — suggest by resolved hex
     const hex = figmaColorToHex(paint.color);
-    const role = detectNodeColorRole(node, property === 'Fill' ? 'fill' : 'border');
-    const matches = getColorVarMap().filter(cv => cv.hex.toLowerCase() === hex.toLowerCase());
-    const exact = matches.find(cv => cv.semanticRole === role) ?? matches.find(cv => cv.semanticRole !== null) ?? matches[0] ?? null;
+    const role = detectNodeColorRole(node, property === 'Fill' ? 'fill' : 'stroke');
+    const exact = pickBestColorMatch(hex, role, colorMap);
     return {
       nodeId: node.id,
       nodeName: node.name,
@@ -124,9 +133,8 @@ async function auditColorPaint(
   // Skip pure black/white — consistent with s2a-audit.ts:196
   if (hex.toLowerCase() === '#ffffff' || hex.toLowerCase() === '#000000') return null;
 
-  const role = detectNodeColorRole(node, property === 'Fill' ? 'fill' : 'border');
-  const matches = getColorVarMap().filter(cv => cv.hex.toLowerCase() === hex.toLowerCase());
-  const exact = matches.find(cv => cv.semanticRole === role) ?? matches.find(cv => cv.semanticRole !== null) ?? matches[0] ?? null;
+  const role = detectNodeColorRole(node, property === 'Fill' ? 'fill' : 'stroke');
+  const exact = pickBestColorMatch(hex, role, colorMap);
   return {
     nodeId: node.id,
     nodeName: node.name,
