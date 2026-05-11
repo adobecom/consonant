@@ -201,6 +201,17 @@ function splitTokenPath(tokenName: string): { group: string; leaf: string } {
   return { group: tokenName.slice(0, lastSlash), leaf: tokenName.slice(lastSlash + 1) };
 }
 
+/** Pick a readable text color (black or white) for max contrast against a hex background. */
+function pickReadableTextColor(hex: string): string {
+  const h = hex.replace('#', '');
+  if (h.length < 6) return '#000';
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.6 ? '#000' : '#fff';
+}
+
 function buildGroupedDropdownOptions(
   candidates: ReadonlyArray<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number }>,
   chosen: string,
@@ -249,7 +260,12 @@ function buildGroupedDropdownOptions(
       // Full path so the collapsed-select state shows the full token name; the optgroup
       // header still provides hierarchical grouping when the dropdown is open.
       const optionLabel = `${c.tokenName}${valuePart}`;
-      out += `<option value="${esc(id)}" ${id === chosen ? 'selected' : ''}>${esc(optionLabel)}</option>`;
+      // For color tokens (hex string value starting with #), apply inline background-color
+      // as a best-effort visual swatch in the dropdown list. Chromium honors this; the
+      // separate v2-color-swatch element below guarantees a visible swatch regardless.
+      const isHex = typeof c.value === 'string' && c.value.startsWith('#');
+      const styleAttr = isHex ? ` style="background-color:${esc(c.value)};color:${pickReadableTextColor(c.value as string)}"` : '';
+      out += `<option value="${esc(id)}"${styleAttr} ${id === chosen ? 'selected' : ''}>${esc(optionLabel)}</option>`;
     }
     out += `</optgroup>`;
   }
@@ -342,6 +358,15 @@ function ensureV2Styles(): void {
   background: var(--bg-secondary, #f0f0f0);
   color: var(--text-secondary, #999);
 }
+.alignv2-group-line2 .v2-color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid var(--border, #e5e5e5);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
 `;
   document.head.appendChild(style);
 }
@@ -408,11 +433,19 @@ function renderV2Body(): void {
       ? `<select data-group-key="${gk}" data-no-suggestion="1"><option value="" disabled ${!chosen ? 'selected' : ''}>Select a token…</option>${dropdownOpts}</select>`
       : null;
 
+    // For color rows (Fill/Stroke), prefix the dropdown with a swatch showing the chosen color.
+    const isColorRow = group.property === 'Fill' || group.property === 'Stroke';
+    const chosenCandidate = group.allCandidates.find(c => (c.variableId ?? c.textStyleId) === chosen);
+    const chosenHex = (isColorRow && typeof chosenCandidate?.value === 'string') ? chosenCandidate.value : '';
+    const swatchEl = isColorRow
+      ? `<span class="v2-color-swatch" data-swatch-for="${gk}" style="background-color:${esc(chosenHex || '#ffffff')}"></span>`
+      : '';
+
     const suggestCell = noSuggestionDropdown
-      ? noSuggestionDropdown
+      ? swatchEl + noSuggestionDropdown
       : disabled
         ? `<span style="color:var(--text-secondary)">No S2A token</span>`
-        : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
+        : swatchEl + `<select data-group-key="${gk}">${dropdownOpts}</select>`;
 
     // Always render a badge for consistent right-edge alignment.
     // Green "Match" when the suggestion exactly matches the current value;
@@ -468,6 +501,17 @@ function renderV2Body(): void {
         v2State.chosenOverrides.set(k, val);
       } else {
         v2State.chosenOverrides.delete(k);
+      }
+
+      // Update the color swatch (if present) to reflect the new selection
+      const swatch = body.querySelector<HTMLElement>(`.v2-color-swatch[data-swatch-for="${CSS.escape(k)}"]`);
+      if (swatch && val) {
+        const groupArr = v2State.groups[v2State.activeTab];
+        const grp = groupArr.find(g => g.groupKey === k);
+        const cand = grp?.allCandidates.find(c => (c.variableId ?? c.textStyleId) === val);
+        if (cand && typeof cand.value === 'string') {
+          swatch.style.backgroundColor = cand.value;
+        }
       }
 
       // For no-suggestion rows, sync the paired checkbox
