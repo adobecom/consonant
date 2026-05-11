@@ -1172,35 +1172,16 @@ export function renderAlignV2ApplyResult(results: Array<{ nodeId: string; proper
 
 document.getElementById('alignV2CheckAllBtn')?.addEventListener('click', () => {
   const groups = v2State.groups[v2State.activeTab];
-  // Toggle: if EVERY row is currently checked, uncheck all. Otherwise check all rows,
-  // running Force Match on any row that doesn't yet have a value so the check is meaningful.
-  const allChecked = groups.length > 0 &&
-    groups.every(g => v2State.checkedGroupKeys.has(g.groupKey));
-
-  if (allChecked) {
-    // Uncheck everything in this tab.
-    for (const g of groups) v2State.checkedGroupKeys.delete(g.groupKey);
-  } else {
-    for (const g of groups) {
-      // Ensure the row has a value to apply: if no suggestion and no override, force-match.
-      const hasValue = g.suggestion !== null || v2State.chosenOverrides.has(g.groupKey);
-      if (!hasValue) {
-        const candidate = pickClosestByCategory(g);
-        if (candidate) {
-          const candidateId = candidate.variableId ?? candidate.textStyleId;
-          if (candidateId) {
-            v2State.chosenOverrides.set(g.groupKey, candidateId);
-            v2State.forceMatchedKeys.add(g.groupKey);
-          } else {
-            // No usable candidate — skip; can't make this row applyable
-            continue;
-          }
-        } else {
-          continue; // nothing to match against
-        }
-      }
-      v2State.checkedGroupKeys.add(g.groupKey);
-    }
+  // A row is checkable only if it already has a value (exact suggestion or user pick).
+  // Grayed-out rows are NOT touched — use the separate Force Match button for those.
+  const checkableGroups = groups.filter(g =>
+    g.suggestion !== null || v2State.chosenOverrides.has(g.groupKey)
+  );
+  const allChecked = checkableGroups.length > 0 &&
+    checkableGroups.every(g => v2State.checkedGroupKeys.has(g.groupKey));
+  for (const g of checkableGroups) {
+    if (allChecked) v2State.checkedGroupKeys.delete(g.groupKey);
+    else v2State.checkedGroupKeys.add(g.groupKey);
   }
   renderV2Body();
 });
