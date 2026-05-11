@@ -21,6 +21,7 @@ function loadEnv() {
 const env = loadEnv();
 const featureDefines = {
   'FEATURE_A11Y': env.FEATURE_A11Y === 'true' ? 'true' : 'false',
+  'FEATURE_LEGACY_ALIGN': env.FEATURE_LEGACY_ALIGN === 'true' ? 'true' : 'false',
 };
 
 const codeConfig = {

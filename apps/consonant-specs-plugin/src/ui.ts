@@ -29,6 +29,7 @@ interface PropertyEntry {
 }
 
 declare const FEATURE_A11Y: boolean;
+declare const FEATURE_LEGACY_ALIGN: boolean;
 
 // Feature flag: remove A11y if disabled
 const a11yPanel = document.querySelector<HTMLElement>('.tab-panel[data-panel="a11y"]');
@@ -36,6 +37,17 @@ if (!FEATURE_A11Y) {
   document.getElementById('menuA11yItem')?.remove();
   document.getElementById('hamburgerA11yItem')?.remove();
   a11yPanel?.remove();
+}
+
+// Feature flag: remove legacy Align + Match (the V1 token-alignment tool and the closest-match tool)
+// when the new "Align to S2A" (data-tool="alignv2") replaces them.
+if (!FEATURE_LEGACY_ALIGN) {
+  document.getElementById('menuAlignItem')?.remove();
+  document.getElementById('hamburgerAlignItem')?.remove();
+  document.getElementById('menuMatchItem')?.remove();
+  document.getElementById('hamburgerMatchItem')?.remove();
+  document.querySelector<HTMLElement>('.tab-panel[data-panel="align"]')?.remove();
+  document.querySelector<HTMLElement>('.tab-panel[data-panel="match"]')?.remove();
 }
 
 const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
