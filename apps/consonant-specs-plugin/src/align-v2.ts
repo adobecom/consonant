@@ -310,11 +310,12 @@ export async function auditTypography(node: SceneNode): Promise<AlignV2Issue[]> 
   if (node.type !== 'TEXT') return [];
   const text = node as TextNode;
   if (text.fontName === figma.mixed) return []; // skip mixed-font text per edge-case spec
+  if (text.fontSize === figma.mixed) return []; // skip mixed-size text — would produce misleading "0px" value
 
   const candidates = buildTypographyCandidates();
   const fontFamily = (text.fontName as FontName).family;
   const fontStyle = (text.fontName as FontName).style;
-  const fontSize = typeof text.fontSize === 'number' ? text.fontSize : 0;
+  const fontSize = text.fontSize as number;
   const valueLabel = `${fontFamily} ${fontStyle} ${fontSize}px`;
 
   const styleId = text.textStyleId;
