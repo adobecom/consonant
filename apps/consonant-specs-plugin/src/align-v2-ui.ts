@@ -825,7 +825,7 @@ function renderV2Body(): void {
     let badge: string;
     if (chosenValueId && wasForceMatched) {
       // Force-matched (closest-value, not exact)
-      badge = `<span class="v2-badge v2-badge-force">Match</span>`;
+      badge = `<span class="v2-badge v2-badge-force">Matched</span>`;
     } else if (chosenValueId && group.suggestion?.isExactMatch) {
       // Exact match auto-suggestion accepted
       badge = `<span class="v2-badge">Align</span>`;
