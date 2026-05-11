@@ -189,7 +189,7 @@ async function loadLibraryTokens() {
           });
         }
       }
-      const S2A_COLLECTION_KEYS = /* @__PURE__ */ new Set([
+      const S2A_COLLECTION_KEYS2 = /* @__PURE__ */ new Set([
         "0eea5cc0320ff548eeb8c5bf34f6ede103b0df06",
         // Primitives / Dimension / Static
         "23dfb9688d347020258cb5a8b587fd4c5c7287bc",
@@ -209,7 +209,7 @@ async function loadLibraryTokens() {
         const allCollections = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
         let s2aCollections = allCollections.filter((c) => c.libraryName === "S2A / Foundations");
         if (s2aCollections.length === 0) {
-          s2aCollections = allCollections.filter((c) => S2A_COLLECTION_KEYS.has(c.key));
+          s2aCollections = allCollections.filter((c) => S2A_COLLECTION_KEYS2.has(c.key));
         }
         if (s2aCollections.length === 0) {
           s2aCollections = allCollections.filter((c) => c.name.startsWith("S2A / ") && !allCollections.some((o) => o !== c && o.libraryName !== c.libraryName && o.name === c.name));
@@ -307,6 +307,15 @@ function getTokenCount() {
 }
 function hasS2AVariables() {
   return colorVarMap.length > 0 || dimensionVarMap.length > 0;
+}
+function getColorVarMap() {
+  return colorVarMap;
+}
+function getDimensionVarMap() {
+  return dimensionVarMap;
+}
+function getTextStyleMap() {
+  return textStyleMap;
 }
 async function reloadLibraryTokens() {
   loadingPromise = null;
@@ -5131,6 +5140,272 @@ async function placeCategoryBadge(targetNodeId, index, categoryKey) {
   return { badgeId: badge.id };
 }
 
+// src/align-v2.ts
+var S2A_COLLECTION_KEYS = /* @__PURE__ */ new Set([
+  "0eea5cc0320ff548eeb8c5bf34f6ede103b0df06",
+  // Primitives / Dimension / Static
+  "23dfb9688d347020258cb5a8b587fd4c5c7287bc",
+  // Primitives / Color / Theme
+  "6c6b35ec4a5a89cf0598ba78e6c7482370d719ad",
+  // Semantic / Dimension / Static
+  "3659e0dcd09c2dca905bb94def94c5029e4d83ac",
+  // Semantic / Color / Theme
+  "ce424e312b8d55fff344955c7626321200e2bd3f",
+  // Responsive / Container / Grid
+  "d5b5966991929840c34a545607368bdf53922716",
+  // Min-Max
+  "385ccb572e36d571d2cf40d8310b862762468728"
+  // Design Guides
+]);
+async function isS2AVariable(variableId) {
+  try {
+    const v = await figma.variables.getVariableByIdAsync(variableId);
+    if (!v) return { isS2A: false };
+    const coll = await figma.variables.getVariableCollectionByIdAsync(v.variableCollectionId);
+    if (!coll) return { isS2A: false, variableName: v.name };
+    const key = coll.key;
+    const libraryName = coll.libraryName;
+    const collName = coll.name;
+    const isS2A = key !== void 0 && S2A_COLLECTION_KEYS.has(key) || libraryName === "S2A / Foundations" || collName.startsWith("S2A / ");
+    return { isS2A, variableName: v.name };
+  } catch (_) {
+    return { isS2A: false };
+  }
+}
+function buildColorCandidates() {
+  return getColorVarMap().map((cv) => ({
+    tokenName: cv.name,
+    variableId: cv.variable.id,
+    value: cv.hex.toUpperCase()
+  }));
+}
+function pickBestColorMatch(hex, role, colorMap) {
+  var _a, _b, _c;
+  const matches = colorMap.filter((cv) => cv.hex.toLowerCase() === hex.toLowerCase());
+  return (_c = (_b = (_a = matches.find((cv) => cv.semanticRole === role)) != null ? _a : matches.find((cv) => cv.semanticRole !== null)) != null ? _b : matches[0]) != null ? _c : null;
+}
+async function auditColorPaint(node, paint, property, candidates) {
+  var _a, _b;
+  const boundId = (_b = (_a = paint.boundVariables) == null ? void 0 : _a.color) == null ? void 0 : _b.id;
+  const colorMap = getColorVarMap();
+  if (boundId) {
+    const { isS2A, variableName } = await isS2AVariable(boundId);
+    if (isS2A) return null;
+    const hex2 = figmaColorToHex(paint.color);
+    const role2 = detectNodeColorRole(node, property === "Fill" ? "fill" : "stroke");
+    const exact2 = pickBestColorMatch(hex2, role2, colorMap);
+    return {
+      nodeId: node.id,
+      nodeName: node.name,
+      nodeType: node.type,
+      property,
+      currentValue: variableName != null ? variableName : hex2.toUpperCase(),
+      source: "wrong-library",
+      currentBindingName: variableName,
+      suggestion: exact2 ? { tokenName: exact2.name, variableId: exact2.variable.id, isExactMatch: true } : null,
+      allCandidates: candidates
+    };
+  }
+  const hex = figmaColorToHex(paint.color);
+  if (hex.toLowerCase() === "#ffffff" || hex.toLowerCase() === "#000000") return null;
+  const role = detectNodeColorRole(node, property === "Fill" ? "fill" : "stroke");
+  const exact = pickBestColorMatch(hex, role, colorMap);
+  return {
+    nodeId: node.id,
+    nodeName: node.name,
+    nodeType: node.type,
+    property,
+    currentValue: hex.toUpperCase(),
+    source: "hardcoded",
+    suggestion: exact ? { tokenName: exact.name, variableId: exact.variable.id, isExactMatch: true } : null,
+    allCandidates: candidates
+  };
+}
+async function auditColors(node, candidates) {
+  const issues = [];
+  if ("fills" in node && Array.isArray(node.fills)) {
+    const fills = node.fills;
+    for (const paint of fills) {
+      if (paint.type === "SOLID" && paint.visible !== false) {
+        const issue = await auditColorPaint(node, paint, "Fill", candidates);
+        if (issue) issues.push(issue);
+      }
+    }
+  }
+  if ("strokes" in node && Array.isArray(node.strokes)) {
+    const strokes = node.strokes;
+    for (const paint of strokes) {
+      if (paint.type === "SOLID" && paint.visible !== false) {
+        const issue = await auditColorPaint(node, paint, "Stroke", candidates);
+        if (issue) issues.push(issue);
+      }
+    }
+  }
+  return issues;
+}
+function buildDimensionCandidates(scope) {
+  return getDimensionVarMap().filter((v) => v.scopes.some((s) => s === scope || s === "ALL_SCOPES")).map((v) => ({
+    tokenName: v.name,
+    variableId: v.variable.id,
+    value: v.value
+  }));
+}
+function findBestDimMatch(value, scope) {
+  var _a;
+  return (_a = getDimensionVarMap().find(
+    (v) => v.value === value && v.scopes.some((s) => s === scope || s === "ALL_SCOPES")
+  )) != null ? _a : null;
+}
+async function classifyDim(node, check, candidates) {
+  var _a;
+  const bv = node.boundVariables;
+  const boundId = (_a = bv == null ? void 0 : bv[check.bindingKey]) == null ? void 0 : _a.id;
+  if (boundId) {
+    const { isS2A, variableName } = await isS2AVariable(boundId);
+    if (isS2A) return null;
+    const exact2 = findBestDimMatch(check.value, check.scope);
+    return {
+      nodeId: node.id,
+      nodeName: node.name,
+      nodeType: node.type,
+      property: check.property,
+      currentValue: variableName != null ? variableName : `${check.value}px`,
+      source: "wrong-library",
+      currentBindingName: variableName,
+      suggestion: exact2 ? { tokenName: exact2.name, variableId: exact2.variable.id, isExactMatch: true } : null,
+      allCandidates: candidates
+    };
+  }
+  const exact = findBestDimMatch(check.value, check.scope);
+  return {
+    nodeId: node.id,
+    nodeName: node.name,
+    nodeType: node.type,
+    property: check.property,
+    currentValue: `${check.value}px`,
+    source: "hardcoded",
+    suggestion: exact ? { tokenName: exact.name, variableId: exact.variable.id, isExactMatch: true } : null,
+    allCandidates: candidates
+  };
+}
+async function auditDimensions(node) {
+  const issues = [];
+  const radiusCandidates = buildDimensionCandidates("CORNER_RADIUS");
+  const gapCandidates = buildDimensionCandidates("GAP");
+  const strokeCandidates = buildDimensionCandidates("STROKE_FLOAT");
+  const radiusKeys = [
+    { prop: "Top-Left Radius", key: "topLeftRadius", get: (n) => n.topLeftRadius },
+    { prop: "Top-Right Radius", key: "topRightRadius", get: (n) => n.topRightRadius },
+    { prop: "Bottom-Left Radius", key: "bottomLeftRadius", get: (n) => n.bottomLeftRadius },
+    { prop: "Bottom-Right Radius", key: "bottomRightRadius", get: (n) => n.bottomRightRadius }
+  ];
+  for (const r of radiusKeys) {
+    const val = r.get(node);
+    if (typeof val === "number" && val > 0) {
+      const issue = await classifyDim(node, { property: r.prop, bindingKey: r.key, value: val, scope: "CORNER_RADIUS" }, radiusCandidates);
+      if (issue) issues.push(issue);
+    }
+  }
+  if ("layoutMode" in node && node.layoutMode !== "NONE") {
+    const f = node;
+    const padChecks = [
+      { property: "Padding Top", bindingKey: "paddingTop", value: f.paddingTop, scope: "GAP" },
+      { property: "Padding Right", bindingKey: "paddingRight", value: f.paddingRight, scope: "GAP" },
+      { property: "Padding Bottom", bindingKey: "paddingBottom", value: f.paddingBottom, scope: "GAP" },
+      { property: "Padding Left", bindingKey: "paddingLeft", value: f.paddingLeft, scope: "GAP" }
+    ];
+    for (const c of padChecks) {
+      if (c.value > 0) {
+        const issue = await classifyDim(node, c, gapCandidates);
+        if (issue) issues.push(issue);
+      }
+    }
+    const itemSpacing = f.itemSpacing;
+    if (itemSpacing > 0) {
+      const issue = await classifyDim(node, { property: "Item Spacing", bindingKey: "itemSpacing", value: itemSpacing, scope: "GAP" }, gapCandidates);
+      if (issue) issues.push(issue);
+    }
+  }
+  if ("strokeWeight" in node && typeof node.strokeWeight === "number" && node.strokeWeight > 0) {
+    const sw = node.strokeWeight;
+    const issue = await classifyDim(node, { property: "Stroke Weight", bindingKey: "strokeWeight", value: sw, scope: "STROKE_FLOAT" }, strokeCandidates);
+    if (issue) issues.push(issue);
+  }
+  return issues;
+}
+function buildTypographyCandidates() {
+  return getTextStyleMap().map((ts) => ({
+    tokenName: ts.name,
+    textStyleId: ts.styleId,
+    value: `${ts.fontFamily} ${ts.fontStyle} ${ts.fontSize}px`
+  }));
+}
+async function auditTypography(node) {
+  var _a;
+  if (node.type !== "TEXT") return [];
+  const text = node;
+  if (text.fontName === figma.mixed) return [];
+  if (text.fontSize === figma.mixed) return [];
+  const candidates = buildTypographyCandidates();
+  const fontFamily = text.fontName.family;
+  const fontStyle = text.fontName.style;
+  const fontSize = text.fontSize;
+  const valueLabel = `${fontFamily} ${fontStyle} ${fontSize}px`;
+  const styleId = text.textStyleId;
+  if (styleId && styleId !== "" && styleId !== figma.mixed) {
+    const s2aStyle = lookupTextStyleById(styleId);
+    if (s2aStyle) return [];
+    const matchResult2 = matchTypographyStrict(fontFamily, fontSize, fontStyle);
+    const suggestion2 = matchResult2.matched ? { tokenName: matchResult2.name, textStyleId: (_a = getTextStyleMap().find((ts) => ts.name === matchResult2.name)) == null ? void 0 : _a.styleId, isExactMatch: true } : null;
+    return [{
+      nodeId: node.id,
+      nodeName: node.name,
+      nodeType: node.type,
+      property: "Text Style",
+      currentValue: `bound: ${valueLabel}`,
+      source: "wrong-library",
+      currentBindingName: "(non-S2A text style)",
+      suggestion: suggestion2,
+      allCandidates: candidates
+    }];
+  }
+  const matchResult = matchTypographyStrict(fontFamily, fontSize, fontStyle);
+  if (matchResult.matched) return [];
+  const suggestion = null;
+  return [{
+    nodeId: node.id,
+    nodeName: node.name,
+    nodeType: node.type,
+    property: "Text Style",
+    currentValue: valueLabel,
+    source: "hardcoded",
+    suggestion,
+    allCandidates: candidates
+  }];
+}
+async function recurseAudit(node, colorCandidates, result2) {
+  if ("visible" in node && !node.visible) return;
+  const colors = await auditColors(node, colorCandidates);
+  result2.colors.push(...colors);
+  const dims = await auditDimensions(node);
+  result2.dimensions.push(...dims);
+  const text = await auditTypography(node);
+  result2.typography.push(...text);
+  if (node.type === "INSTANCE") return;
+  if ("children" in node) {
+    for (const child of node.children) {
+      await recurseAudit(child, colorCandidates, result2);
+    }
+  }
+}
+async function runAlignV2Scan(root) {
+  if (!isLoaded()) await loadLibraryTokens();
+  const colorCandidates = buildColorCandidates();
+  const result2 = { colors: [], dimensions: [], typography: [] };
+  await recurseAudit(root, colorCandidates, result2);
+  return result2;
+}
+
 // src/code.ts
 globalThis.__generateBlueline = generateBlueline;
 globalThis.__generateBluelinePanels = generateBluelinePanels;
@@ -6674,6 +6949,7 @@ async function drawA11yAnnotations(clone, originalFrame, categoryId, categoryLab
 }
 figma.showUI(__html__, { width: 300, height: 500, themeColors: true });
 figma.ui.onmessage = async (msg) => {
+  var _a, _b;
   switch (msg.type) {
     case "ui-ready":
       notifySelection();
@@ -6747,6 +7023,87 @@ figma.ui.onmessage = async (msg) => {
       }
       figma.notify(`Annotated ${annotated} of ${issues.length} issues`);
       break;
+    }
+    case "align-v2-scan": {
+      const sel = figma.currentPage.selection;
+      if (sel.length !== 1) {
+        figma.ui.postMessage({ type: "align-v2-scan-result", error: "Select exactly one frame." });
+        return;
+      }
+      const root = sel[0];
+      if (root.type !== "FRAME" && root.type !== "COMPONENT" && root.type !== "COMPONENT_SET") {
+        figma.ui.postMessage({ type: "align-v2-scan-result", error: "Selection must be a frame, component, or component set." });
+        return;
+      }
+      try {
+        const result2 = await runAlignV2Scan(root);
+        figma.ui.postMessage({ type: "align-v2-scan-result", result: result2, selectionName: root.name, selectionType: root.type });
+      } catch (e) {
+        figma.ui.postMessage({ type: "align-v2-scan-result", error: `Scan failed: ${(_a = e == null ? void 0 : e.message) != null ? _a : String(e)}` });
+      }
+      return;
+    }
+    case "align-v2-apply": {
+      const selections = msg.selections;
+      if (!Array.isArray(selections) || selections.length === 0) {
+        figma.ui.postMessage({ type: "align-v2-apply-result", results: [] });
+        return;
+      }
+      const results = [];
+      for (const s of selections) {
+        try {
+          const node = await figma.getNodeByIdAsync(s.nodeId);
+          if (!node) {
+            results.push({ nodeId: s.nodeId, property: s.property, success: false, error: "Node not found" });
+            continue;
+          }
+          if (s.textStyleId !== void 0 && node.type === "TEXT") {
+            await node.setTextStyleIdAsync(s.textStyleId);
+            results.push({ nodeId: s.nodeId, property: s.property, success: true });
+            continue;
+          }
+          if (s.variableId !== void 0) {
+            const variable = await figma.variables.getVariableByIdAsync(s.variableId);
+            if (!variable) {
+              results.push({ nodeId: s.nodeId, property: s.property, success: false, error: "Variable not found" });
+              continue;
+            }
+            if (s.property === "Fill" || s.property === "Stroke") {
+              const arrKey = s.property === "Fill" ? "fills" : "strokes";
+              const arr = node[arrKey];
+              if (!Array.isArray(arr) || arr.length === 0 || arr[0].type !== "SOLID") {
+                results.push({ nodeId: s.nodeId, property: s.property, success: false, error: "No solid paint to bind" });
+                continue;
+              }
+              const newPaint = figma.variables.setBoundVariableForPaint(arr[0], "color", variable);
+              node[arrKey] = [newPaint, ...arr.slice(1)];
+              results.push({ nodeId: s.nodeId, property: s.property, success: true });
+              continue;
+            }
+            if (s.bindingKey) {
+              node.setBoundVariable(s.bindingKey, variable);
+              results.push({ nodeId: s.nodeId, property: s.property, success: true });
+              continue;
+            }
+            results.push({ nodeId: s.nodeId, property: s.property, success: false, error: "No bindingKey provided for non-color property" });
+            continue;
+          }
+          results.push({ nodeId: s.nodeId, property: s.property, success: false, error: "No variableId or textStyleId in selection" });
+        } catch (e) {
+          results.push({ nodeId: s.nodeId, property: s.property, success: false, error: (_b = e == null ? void 0 : e.message) != null ? _b : String(e) });
+        }
+      }
+      figma.ui.postMessage({ type: "align-v2-apply-result", results });
+      return;
+    }
+    case "align-v2-window-resize": {
+      const wide = !!msg.wide;
+      if (wide) {
+        figma.ui.resize(800, 600);
+      } else {
+        figma.ui.resize(300, 500);
+      }
+      return;
     }
     case "full-align-s2a": {
       const sel = figma.currentPage.selection;

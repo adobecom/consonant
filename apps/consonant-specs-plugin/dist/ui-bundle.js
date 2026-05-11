@@ -17,8 +17,362 @@
     return a;
   };
 
-  // src/ui.ts
+  // src/align-v2-ui.ts
+  var v2State = {
+    result: null,
+    activeTab: "colors",
+    groups: { colors: [], dimensions: [], typography: [] },
+    checkedGroupKeys: /* @__PURE__ */ new Set(),
+    chosenOverrides: /* @__PURE__ */ new Map()
+  };
   function esc(s) {
+    return String(s != null ? s : "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function bindingKeyFor(property) {
+    switch (property) {
+      case "Top-Left Radius":
+        return "topLeftRadius";
+      case "Top-Right Radius":
+        return "topRightRadius";
+      case "Bottom-Left Radius":
+        return "bottomLeftRadius";
+      case "Bottom-Right Radius":
+        return "bottomRightRadius";
+      case "Padding Top":
+        return "paddingTop";
+      case "Padding Right":
+        return "paddingRight";
+      case "Padding Bottom":
+        return "paddingBottom";
+      case "Padding Left":
+        return "paddingLeft";
+      case "Item Spacing":
+        return "itemSpacing";
+      case "Stroke Weight":
+        return "strokeWeight";
+      default:
+        return void 0;
+    }
+  }
+  var CORNER_PROPS = /* @__PURE__ */ new Set(["Top-Left Radius", "Top-Right Radius", "Bottom-Left Radius", "Bottom-Right Radius"]);
+  var CORNER_BINDING_KEYS = ["topLeftRadius", "topRightRadius", "bottomLeftRadius", "bottomRightRadius"];
+  function groupIssues(issues) {
+    var _a31, _b2, _c, _d, _e;
+    const cornersByNode = /* @__PURE__ */ new Map();
+    const nonCornerIssues = [];
+    for (const issue of issues) {
+      if (CORNER_PROPS.has(issue.property)) {
+        const list = (_a31 = cornersByNode.get(issue.nodeId)) != null ? _a31 : [];
+        list.push(issue);
+        cornersByNode.set(issue.nodeId, list);
+      } else {
+        nonCornerIssues.push(issue);
+      }
+    }
+    const pass1 = [...nonCornerIssues];
+    for (const [, corners] of cornersByNode) {
+      const allFour = corners.length === 4 && corners.every((c) => CORNER_PROPS.has(c.property));
+      if (!allFour) {
+        pass1.push(...corners);
+        continue;
+      }
+      const firstVal = corners[0].currentValue;
+      const firstToken = (_c = (_b2 = corners[0].suggestion) == null ? void 0 : _b2.tokenName) != null ? _c : null;
+      const uniform = corners.every(
+        (c) => {
+          var _a32, _b3;
+          return c.currentValue === firstVal && ((_b3 = (_a32 = c.suggestion) == null ? void 0 : _a32.tokenName) != null ? _b3 : null) === firstToken;
+        }
+      );
+      if (!uniform) {
+        pass1.push(...corners);
+        continue;
+      }
+      const base = corners[0];
+      const collapsed = {
+        nodeId: base.nodeId,
+        nodeName: base.nodeName,
+        nodeType: base.nodeType,
+        property: "Corner Radius",
+        currentValue: base.currentValue,
+        source: base.source,
+        currentBindingName: base.currentBindingName,
+        suggestion: base.suggestion,
+        allCandidates: base.allCandidates
+      };
+      pass1.push(collapsed);
+    }
+    const groupMap = /* @__PURE__ */ new Map();
+    for (const issue of pass1) {
+      const tokenName = (_e = (_d = issue.suggestion) == null ? void 0 : _d.tokenName) != null ? _e : "none";
+      const gKey = `${issue.nodeType}|${issue.property}|${issue.currentValue}|${tokenName}`;
+      let group = groupMap.get(gKey);
+      if (!group) {
+        group = {
+          groupKey: gKey,
+          nodeType: issue.nodeType,
+          property: issue.property,
+          currentValue: issue.currentValue,
+          source: issue.source,
+          suggestion: issue.suggestion,
+          allCandidates: issue.allCandidates,
+          items: []
+        };
+        groupMap.set(gKey, group);
+      }
+      let bindingKeys;
+      if (issue.property === "Corner Radius") {
+        bindingKeys = CORNER_BINDING_KEYS.slice();
+      } else {
+        const bk = bindingKeyFor(issue.property);
+        bindingKeys = bk ? [bk] : [];
+      }
+      group.items.push({
+        nodeId: issue.nodeId,
+        nodeName: issue.nodeName,
+        bindingKeys
+      });
+    }
+    return Array.from(groupMap.values());
+  }
+  var v2StyleInjected = false;
+  function ensureV2Styles() {
+    if (v2StyleInjected) return;
+    v2StyleInjected = true;
+    const style = document.createElement("style");
+    style.textContent = `
+/* Align V2 group rows \u2014 two-line layout */
+.alignv2-group {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.alignv2-group.disabled { opacity: 0.5; cursor: default; }
+.alignv2-group-line1 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.alignv2-group-line1 input[type="checkbox"] {
+  flex-shrink: 0;
+  margin: 0;
+}
+.v2-meta {
+  flex: 1;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.v2-count {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--text-secondary);
+  background: var(--bg-secondary, #f5f5f5);
+  border-radius: 8px;
+  padding: 1px 6px;
+}
+.alignv2-group-line2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 24px;
+  margin-top: 2px;
+  font-size: 11px;
+}
+.alignv2-group-line2 .v2-value {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.alignv2-group-line2 .v2-arrow {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.alignv2-group-line2 select {
+  font-size: 11px;
+  padding: 2px 4px;
+  flex: 1;
+  min-width: 0;
+}
+.alignv2-group-line2 .v2-badge {
+  flex-shrink: 0;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: var(--success-bg, #e6f4ea);
+  color: var(--success, #137333);
+}
+`;
+    document.head.appendChild(style);
+  }
+  function renderAlignV2ScanResult(result, selectionName, selectionType) {
+    ensureV2Styles();
+    v2State.result = result;
+    v2State.activeTab = "colors";
+    v2State.chosenOverrides = /* @__PURE__ */ new Map();
+    v2State.checkedGroupKeys = /* @__PURE__ */ new Set();
+    v2State.groups = {
+      colors: groupIssues(result.colors),
+      dimensions: groupIssues(result.dimensions),
+      typography: groupIssues(result.typography)
+    };
+    for (const tab of ["colors", "dimensions", "typography"]) {
+      for (const group of v2State.groups[tab]) {
+        if (group.suggestion !== null) v2State.checkedGroupKeys.add(group.groupKey);
+      }
+    }
+    document.getElementById("alignV2Selection").textContent = `${selectionName} (${selectionType})`;
+    document.getElementById("alignV2Tabs").style.display = "";
+    document.getElementById("alignV2Footer").style.display = "flex";
+    document.getElementById("alignV2ColorsCount").textContent = String(v2State.groups.colors.length);
+    document.getElementById("alignV2DimensionsCount").textContent = String(v2State.groups.dimensions.length);
+    document.getElementById("alignV2TypographyCount").textContent = String(v2State.groups.typography.length);
+    renderV2Body();
+  }
+  function renderV2Body() {
+    const body = document.getElementById("alignV2Body");
+    if (!v2State.result) {
+      body.innerHTML = "";
+      return;
+    }
+    const groups = v2State.groups[v2State.activeTab];
+    if (groups.length === 0) {
+      body.innerHTML = `<div style="padding:12px;color:var(--text-secondary);font-size:11px;">No issues in this tab.</div>`;
+      updateV2Footer();
+      return;
+    }
+    body.innerHTML = groups.map((group) => {
+      var _a31, _b2, _c, _d, _e, _f, _g, _h;
+      const gk = esc(group.groupKey);
+      const checked = v2State.checkedGroupKeys.has(group.groupKey);
+      const disabled = group.suggestion === null;
+      const chosen = (_e = v2State.chosenOverrides.get(group.groupKey)) != null ? _e : (_d = (_c = (_a31 = group.suggestion) == null ? void 0 : _a31.variableId) != null ? _c : (_b2 = group.suggestion) == null ? void 0 : _b2.textStyleId) != null ? _d : "";
+      const dropdownOpts = group.allCandidates.map((c) => {
+        var _a32, _b3;
+        const id = (_b3 = (_a32 = c.variableId) != null ? _a32 : c.textStyleId) != null ? _b3 : "";
+        return `<option value="${esc(id)}" ${id === chosen ? "selected" : ""}>${esc(c.tokenName)}</option>`;
+      }).join("");
+      const suggestCell = disabled ? `<span style="color:var(--text-secondary)">No S2A token</span>` : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
+      const badge = !disabled && ((_f = group.suggestion) == null ? void 0 : _f.isExactMatch) ? `<span class="v2-badge">Match</span>` : "";
+      const countBadge = group.items.length > 1 ? `<span class="v2-count">${group.items.length} items</span>` : "";
+      const firstNodeId = esc((_h = (_g = group.items[0]) == null ? void 0 : _g.nodeId) != null ? _h : "");
+      return `<div class="alignv2-group ${disabled ? "disabled" : ""}" data-group-key="${gk}" data-first-node-id="${firstNodeId}">
+  <div class="alignv2-group-line1">
+    <input type="checkbox" data-group-key="${gk}" ${checked ? "checked" : ""} ${disabled ? "disabled" : ""}>
+    <span class="v2-meta">${esc(group.nodeType)} &middot; ${esc(group.property)}</span>
+    ${countBadge}
+  </div>
+  <div class="alignv2-group-line2">
+    <span class="v2-value">${esc(group.currentValue)}</span>
+    <span class="v2-arrow">\u2192</span>
+    ${suggestCell}
+    ${badge}
+  </div>
+</div>`;
+    }).join("");
+    body.querySelectorAll('input[type="checkbox"][data-group-key]').forEach((cb) => {
+      cb.addEventListener("change", () => {
+        const k = cb.dataset.groupKey;
+        if (cb.checked) v2State.checkedGroupKeys.add(k);
+        else v2State.checkedGroupKeys.delete(k);
+        updateV2Footer();
+      });
+    });
+    body.querySelectorAll("select[data-group-key]").forEach((sel) => {
+      sel.addEventListener("change", () => {
+        v2State.chosenOverrides.set(sel.dataset.groupKey, sel.value);
+      });
+    });
+    body.querySelectorAll(".alignv2-group[data-first-node-id]").forEach((row) => {
+      row.addEventListener("click", (e) => {
+        const target = e.target;
+        if (target.tagName === "INPUT" || target.tagName === "SELECT" || target.tagName === "OPTION") return;
+        const nid = row.dataset.firstNodeId;
+        if (nid) parent.postMessage({ pluginMessage: { type: "navigate-to-node", nodeId: nid } }, "*");
+      });
+    });
+    updateV2Footer();
+  }
+  function updateV2Footer() {
+    const groups = v2State.groups[v2State.activeTab];
+    const checkedGroups = groups.filter((g) => v2State.checkedGroupKeys.has(g.groupKey));
+    const groupCount = checkedGroups.length;
+    const itemCount = checkedGroups.reduce((sum, g) => sum + g.items.length, 0);
+    document.getElementById("alignV2FooterCount").textContent = `Update ${groupCount} ${v2State.activeTab} across ${itemCount} item${itemCount !== 1 ? "s" : ""}.`;
+    document.getElementById("alignV2ApplyBtn").disabled = groupCount === 0;
+    document.getElementById("alignV2ApplyBtn").textContent = `Apply ${groupCount}`;
+  }
+  function setV2ActiveTab(tab) {
+    v2State.activeTab = tab;
+    document.querySelectorAll(".alignv2-tab").forEach((b) => {
+      b.classList.toggle("active", b.dataset.v2tab === tab);
+    });
+    renderV2Body();
+  }
+  function collectV2ApplySelections() {
+    var _a31, _b2, _c, _d, _e;
+    const out = [];
+    const groups = v2State.groups[v2State.activeTab];
+    for (const group of groups) {
+      if (!v2State.checkedGroupKeys.has(group.groupKey)) continue;
+      const chosen = (_d = v2State.chosenOverrides.get(group.groupKey)) != null ? _d : (_c = (_a31 = group.suggestion) == null ? void 0 : _a31.variableId) != null ? _c : (_b2 = group.suggestion) == null ? void 0 : _b2.textStyleId;
+      if (!chosen) continue;
+      const isTextStyle = !!((_e = group.suggestion) == null ? void 0 : _e.textStyleId) || group.property === "Text Style";
+      for (const item of group.items) {
+        if (group.property === "Fill" || group.property === "Stroke") {
+          out.push(__spreadValues({
+            nodeId: item.nodeId,
+            property: group.property
+          }, isTextStyle ? { textStyleId: chosen } : { variableId: chosen }));
+        } else if (item.bindingKeys.length === 0) {
+          out.push({ nodeId: item.nodeId, property: group.property, textStyleId: chosen });
+        } else {
+          for (const bk of item.bindingKeys) {
+            out.push({ nodeId: item.nodeId, property: group.property, bindingKey: bk, variableId: chosen });
+          }
+        }
+      }
+    }
+    return out;
+  }
+  function renderAlignV2ApplyResult(results) {
+    const succeeded = results.filter((r) => r.success).length;
+    const failed = results.length - succeeded;
+    if (v2State.result) {
+      const successSet = new Set(
+        results.filter((r) => r.success).map((r) => `${r.nodeId}|${r.property}`)
+      );
+      const successNodeProp = new Set(results.filter((r) => r.success).map((r) => `${r.nodeId}|${r.property}`));
+      for (const tab of ["colors", "dimensions", "typography"]) {
+        v2State.groups[tab] = v2State.groups[tab].filter((group) => {
+          const allSucceeded = group.items.every(
+            (item) => successNodeProp.has(`${item.nodeId}|${group.property}`)
+          );
+          if (allSucceeded) {
+            v2State.checkedGroupKeys.delete(group.groupKey);
+            return false;
+          }
+          group.items = group.items.filter(
+            (item) => !successNodeProp.has(`${item.nodeId}|${group.property}`)
+          );
+          return true;
+        });
+      }
+      document.getElementById("alignV2ColorsCount").textContent = String(v2State.groups.colors.length);
+      document.getElementById("alignV2DimensionsCount").textContent = String(v2State.groups.dimensions.length);
+      document.getElementById("alignV2TypographyCount").textContent = String(v2State.groups.typography.length);
+      renderV2Body();
+    }
+    const toast = document.createElement("div");
+    toast.textContent = `${succeeded} updated${failed > 0 ? `, ${failed} failed` : ""}`;
+    toast.style.cssText = "position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:6px 12px;border-radius:4px;font-size:11px;z-index:9999;";
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3e3);
+  }
+
+  // src/ui.ts
+  function esc2(s) {
     return String(s != null ? s : "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
   async function copyToClipboard(text) {
@@ -82,16 +436,16 @@
   }
   document.querySelectorAll(".menu-item").forEach((item) => {
     item.addEventListener("click", () => {
-      var _a28, _b2, _c;
-      const tool = (_a28 = item.dataset.tool) != null ? _a28 : "";
+      var _a31, _b2, _c;
+      const tool = (_a31 = item.dataset.tool) != null ? _a31 : "";
       const name = (_c = (_b2 = item.querySelector(".menu-item-name")) == null ? void 0 : _b2.textContent) != null ? _c : tool;
       navigateTo(tool, name);
     });
   });
   document.querySelectorAll(".hamburger-item").forEach((item) => {
     item.addEventListener("click", () => {
-      var _a28, _b2, _c;
-      const tool = (_a28 = item.dataset.tool) != null ? _a28 : "";
+      var _a31, _b2, _c;
+      const tool = (_a31 = item.dataset.tool) != null ? _a31 : "";
       const menuItem = document.querySelector(`.menu-item[data-tool="${tool}"]`);
       const name = (_c = (_b2 = menuItem == null ? void 0 : menuItem.querySelector(".menu-item-name")) == null ? void 0 : _b2.textContent) != null ? _c : tool;
       navigateTo(tool, name);
@@ -117,8 +471,8 @@
     btn == null ? void 0 : btn.setAttribute("aria-expanded", String(!!isOpen));
   });
   document.addEventListener("click", () => {
-    var _a28, _b2;
-    (_a28 = document.getElementById("hamburgerMenu")) == null ? void 0 : _a28.classList.remove("open");
+    var _a31, _b2;
+    (_a31 = document.getElementById("hamburgerMenu")) == null ? void 0 : _a31.classList.remove("open");
     (_b2 = document.getElementById("hamburgerBtn")) == null ? void 0 : _b2.setAttribute("aria-expanded", "false");
   });
   var _a4;
@@ -141,12 +495,12 @@
       el.innerHTML = '<span class="selection-label">No selection</span>';
       return;
     }
-    el.innerHTML = `<span class="selection-label"><strong>${esc(data.name)}</strong> (${esc(data.type)}) &mdash; ${Math.round(data.width)} &times; ${Math.round(data.height)}</span>`;
+    el.innerHTML = `<span class="selection-label"><strong>${esc2(data.name)}</strong> (${esc2(data.type)}) &mdash; ${Math.round(data.width)} &times; ${Math.round(data.height)}</span>`;
   }
   function updateTokenStatus(count, version) {
     const el = document.getElementById("footer");
     if (!el) return;
-    el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span>`;
+    el.innerHTML = `<span class="token-status">Tokens: ${esc2(version)} &mdash; ${count} tokens loaded</span>`;
   }
   function postToPlugin(type, payload) {
     parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
@@ -191,6 +545,17 @@
         break;
       case "s2a-align-result":
         renderAlignResult(msg);
+        break;
+      case "align-v2-scan-result":
+        if (msg.error) {
+          const sel = document.getElementById("alignV2Selection");
+          if (sel) sel.textContent = String(msg.error);
+        } else {
+          renderAlignV2ScanResult(msg.result, msg.selectionName, msg.selectionType);
+        }
+        break;
+      case "align-v2-apply-result":
+        renderAlignV2ApplyResult(msg.results);
         break;
       case "match-result":
         updateMatchStatus(msg.message);
@@ -262,7 +627,7 @@
     postToPlugin("navigate-to-node", { nodeId });
   }
   function renderAuditResult(result) {
-    var _a28;
+    var _a31;
     const list = document.getElementById("propertyList");
     if (!list) return;
     const pct = result.total > 0 ? Math.round(result.matched / result.total * 100) : 0;
@@ -278,9 +643,9 @@
     if (result.issues.length > 0) {
       html += '<div class="section-title" style="margin-top:8px">Issues (click to navigate)</div>';
       html += result.issues.map(
-        (issue) => `<div class="property-row" data-node-id="${esc(issue.nodeId)}" style="cursor:pointer">
-        <span class="property-name">${esc(issue.nodeName)}</span>
-        <span class="property-value">${esc(issue.property)}: ${esc(issue.value)}</span>
+        (issue) => `<div class="property-row" data-node-id="${esc2(issue.nodeId)}" style="cursor:pointer">
+        <span class="property-name">${esc2(issue.nodeName)}</span>
+        <span class="property-value">${esc2(issue.property)}: ${esc2(issue.value)}</span>
         <span class="token-badge token-badge-miss">No token</span>
       </div>`
       ).join("");
@@ -292,7 +657,7 @@
         if (nodeId) navigateToNode(nodeId);
       });
     });
-    (_a28 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a28.addEventListener("click", () => {
+    (_a31 = document.getElementById("annotateAuditBtn")) == null ? void 0 : _a31.addEventListener("click", () => {
       postToPlugin("annotate-audit-issues", { issues: result.issues });
     });
   }
@@ -301,14 +666,14 @@
     if (!list) return;
     let html = `<div style="padding:8px 0;margin-bottom:8px;border-bottom:1px solid var(--border)">
     <strong style="font-size:13px;color:var(--success)">${result.aligned} bound to S2A</strong>
-    <span style="color:var(--text-secondary);font-size:10px;display:block">${result.scanned} nodes scanned \u2014 mode: ${esc(result.mode)}</span>
+    <span style="color:var(--text-secondary);font-size:10px;display:block">${result.scanned} nodes scanned \u2014 mode: ${esc2(result.mode)}</span>
   </div>`;
     if (result.unmatched.length > 0) {
       html += '<div class="section-title" style="margin-top:8px">Not Found in S2A (click to navigate)</div>';
       html += result.unmatched.map(
-        (item) => `<div class="property-row" data-node-id="${esc(item.nodeId)}" style="cursor:pointer">
-        <span class="property-name">${esc(item.nodeName)}</span>
-        <span class="property-value">${esc(item.property)}: ${esc(item.value)}</span>
+        (item) => `<div class="property-row" data-node-id="${esc2(item.nodeId)}" style="cursor:pointer">
+        <span class="property-name">${esc2(item.nodeName)}</span>
+        <span class="property-value">${esc2(item.property)}: ${esc2(item.value)}</span>
         <span class="token-badge token-badge-miss">No match</span>
       </div>`
       ).join("");
@@ -329,11 +694,11 @@
     list.innerHTML = properties.map((prop) => {
       const safeColor = prop.colorSwatch && CSS.supports("color", prop.colorSwatch) ? prop.colorSwatch : "";
       const swatch = safeColor ? `<span class="color-swatch" style="background:${safeColor}"></span>` : "";
-      const badge = prop.token ? `<span class="token-badge token-badge-match">${esc(prop.token)}</span>` : `<span class="token-badge token-badge-miss">No token</span>`;
+      const badge = prop.token ? `<span class="token-badge token-badge-match">${esc2(prop.token)}</span>` : `<span class="token-badge token-badge-miss">No token</span>`;
       const copyValue = prop.token ? `var(${prop.token})` : prop.value;
-      return `<div class="property-row" data-copy="${esc(copyValue)}" title="Click to copy">
-      <span class="property-name">${esc(prop.name)}</span>
-      <span class="property-value">${swatch}${esc(prop.value)}</span>
+      return `<div class="property-row" data-copy="${esc2(copyValue)}" title="Click to copy">
+      <span class="property-name">${esc2(prop.name)}</span>
+      <span class="property-value">${swatch}${esc2(prop.value)}</span>
       ${badge}
     </div>`;
     }).join("");
@@ -367,7 +732,7 @@
   });
   function updateGridStatus(message) {
     const el = document.getElementById("gridStatus");
-    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc2(message)}</span>`;
   }
   var _a11;
   (_a11 = document.getElementById("matchCheckAll")) == null ? void 0 : _a11.addEventListener("click", () => {
@@ -399,7 +764,7 @@
   function updateMatchStatus(message) {
     const el = document.getElementById("matchStatus");
     if (!el) return;
-    el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+    el.innerHTML = `<span style="color:var(--text-secondary)">${esc2(message)}</span>`;
   }
   var _a13;
   (_a13 = document.getElementById("fullSpecsBtn")) == null ? void 0 : _a13.addEventListener("click", () => {
@@ -408,9 +773,9 @@
   });
   var _a14;
   (_a14 = document.getElementById("specItBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
-    var _a28, _b2, _c, _d, _e, _f;
+    var _a31, _b2, _c, _d, _e, _f;
     const sections = [];
-    if ((_a28 = document.getElementById("specAnatomy")) == null ? void 0 : _a28.checked) sections.push("anatomy");
+    if ((_a31 = document.getElementById("specAnatomy")) == null ? void 0 : _a31.checked) sections.push("anatomy");
     if ((_b2 = document.getElementById("specCardGaps")) == null ? void 0 : _b2.checked) sections.push("cardGaps");
     if ((_c = document.getElementById("specSpacingGeneral")) == null ? void 0 : _c.checked) sections.push("spacingGeneral");
     if ((_d = document.getElementById("specSpacing")) == null ? void 0 : _d.checked) sections.push("spacing");
@@ -425,7 +790,7 @@
   });
   function updateSpecStatus(message) {
     const el = document.getElementById("specStatus");
-    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc2(message)}</span>`;
   }
   var KEYED_PROVIDERS = /* @__PURE__ */ new Set(["deepl", "google", "azure"]);
   var providerSelect = document.getElementById("providerSelect");
@@ -485,11 +850,11 @@
   });
   function updateLocalizeStatus(message) {
     const el = document.getElementById("localizeStatus");
-    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc2(message)}</span>`;
   }
   var LANG_NAMES = { de: "German", zh: "Chinese", th: "Thai", ar: "Arabic" };
   function showLocalizeBridgePrompt(data) {
-    var _a28;
+    var _a31;
     const langList = data.languages.map((l) => LANG_NAMES[l] || l).join(", ");
     const cmd = `Translate the frame "${data.frameName}" (${data.frameId}) into ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? " Apply RTL layout for Arabic." : ""}
 
@@ -500,11 +865,11 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
       <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
         <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Ready for translation &#x2714;</div>
         <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">Paste this in Claude Code to translate via bridge:</div>
-        <code id="localizeCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
+        <code id="localizeCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc2(cmd)}</code>
         <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
       </div>`;
-      (_a28 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a28.addEventListener("click", async () => {
+      (_a31 = document.getElementById("copyLocalizeCmd")) == null ? void 0 : _a31.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyLocalizeCmd");
         if (btn) {
@@ -566,10 +931,10 @@ Use figma_execute to: 1) get text nodes from the frame, 2) clone the frame with 
   }
   function updateA11yStatus(message) {
     const el = document.getElementById("a11yStatus");
-    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
+    if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc2(message)}</span>`;
   }
   function showAiFillInstruction(mode, sections, frameName, frameId) {
-    var _a28;
+    var _a31;
     const categoryList = sections && sections.length > 0 ? sections.join(", ") : "all categories";
     const frame = frameName ? `"${frameName}"` : "the selected frame";
     const frameIdArg = frameId ? ` with frameId: "${frameId}"` : "";
@@ -617,11 +982,11 @@ This updates the plugin panel so the designer can see results without hunting th
       <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
         <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Cards created &#x2714; \u2014 waiting for Claude</div>
         <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">Paste this in Claude Code to start the review:</div>
-        <code id="fillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;white-space:pre-wrap;">${esc(cmd)}</code>
+        <code id="fillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;white-space:pre-wrap;">${esc2(cmd)}</code>
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Results will appear here when Claude finishes.</div>
       </div>`;
-      (_a28 = document.getElementById("copyFillCmd")) == null ? void 0 : _a28.addEventListener("click", async () => {
+      (_a31 = document.getElementById("copyFillCmd")) == null ? void 0 : _a31.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyFillCmd");
         if (btn) {
@@ -634,13 +999,13 @@ This updates the plugin panel so the designer can see results without hunting th
     }
   }
   function renderA11yResults(data) {
-    var _a28;
+    var _a31;
     const el = document.getElementById("a11yStatus");
     if (!el) return;
     function section(title, cls, items, itemCls) {
       if (items.length === 0) return "";
       const rows = items.map(
-        (i) => `<div class="a11y-result-item ${itemCls}"><strong>${esc(i.label)}</strong> \u2014 ${esc(i.text)}</div>`
+        (i) => `<div class="a11y-result-item ${itemCls}"><strong>${esc2(i.label)}</strong> \u2014 ${esc2(i.text)}</div>`
       ).join("");
       return `<div class="a11y-results-section">
       <div class="a11y-results-section-title ${cls}">${title} (${items.length})</div>
@@ -648,21 +1013,21 @@ This updates the plugin panel so the designer can see results without hunting th
     </div>`;
     }
     const issueItems = (Array.isArray(data.issues) ? data.issues : []).map((i) => {
-      var _a29, _b2;
-      return { label: (_a29 = i == null ? void 0 : i.category) != null ? _a29 : "", text: (_b2 = i == null ? void 0 : i.description) != null ? _b2 : "" };
+      var _a32, _b2;
+      return { label: (_a32 = i == null ? void 0 : i.category) != null ? _a32 : "", text: (_b2 = i == null ? void 0 : i.description) != null ? _b2 : "" };
     });
     const needsItems = (Array.isArray(data.needs_input) ? data.needs_input : []).map((i) => {
-      var _a29, _b2;
-      return { label: (_a29 = i == null ? void 0 : i.category) != null ? _a29 : "", text: (_b2 = i == null ? void 0 : i.question) != null ? _b2 : "" };
+      var _a32, _b2;
+      return { label: (_a32 = i == null ? void 0 : i.category) != null ? _a32 : "", text: (_b2 = i == null ? void 0 : i.question) != null ? _b2 : "" };
     });
     const suggItems = (Array.isArray(data.suggestions) ? data.suggestions : []).map((i) => {
-      var _a29, _b2;
-      return { label: (_a29 = i == null ? void 0 : i.category) != null ? _a29 : "", text: (_b2 = i == null ? void 0 : i.description) != null ? _b2 : "" };
+      var _a32, _b2;
+      return { label: (_a32 = i == null ? void 0 : i.category) != null ? _a32 : "", text: (_b2 = i == null ? void 0 : i.description) != null ? _b2 : "" };
     });
     const empty = issueItems.length === 0 && needsItems.length === 0 && suggItems.length === 0;
     el.innerHTML = `
     <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
-      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc((_a28 = data.frameName) != null ? _a28 : "")}</div>
+      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete \u2014 ${esc2((_a31 = data.frameName) != null ? _a31 : "")}</div>
       <div class="a11y-results">
         ${empty ? '<div class="a11y-results-empty">No issues or suggestions returned.</div>' : section("Issues", "issues", issueItems, "issue") + section("Needs your input", "needs-input", needsItems, "needs") + section("Suggestions", "suggestions", suggItems, "suggestion")}
       </div>
@@ -685,7 +1050,7 @@ This updates the plugin panel so the designer can see results without hunting th
     }
   }
   function showPanelsFillInstruction(sections, frameName, sectionIds, frameId) {
-    var _a28;
+    var _a31;
     const sectionList = sections.join(", ");
     const frameIdArg = frameId ? ` with frameId: "${frameId}"` : "";
     const cmd = `Fill the blueline panels for the frame "${frameName}"${frameId ? ` (ID: ${frameId})` : ""}. Categories: ${sectionList}.
@@ -703,11 +1068,11 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
       <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
         <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Panels scaffolded &#x2714;</div>
         <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">To fill annotations, paste this in your current Claude session:</div>
-        <code id="panelsFillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;white-space:pre-wrap;">${esc(cmd)}</code>
+        <code id="panelsFillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;white-space:pre-wrap;">${esc2(cmd)}</code>
         <button class="btn btn-secondary" id="copyPanelsFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
         <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Paste into your current Claude Code session (Bridge must be connected)</div>
       </div>`;
-      (_a28 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a28.addEventListener("click", async () => {
+      (_a31 = document.getElementById("copyPanelsFillCmd")) == null ? void 0 : _a31.addEventListener("click", async () => {
         await copyToClipboard(cmd);
         const btn = document.getElementById("copyPanelsFillCmd");
         if (btn) {
@@ -775,13 +1140,13 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
   function getCheckedA11yCheckboxIds() {
     return Object.keys(A11Y_LABELS).filter(
       (id) => {
-        var _a28;
-        return (_a28 = document.getElementById(id)) == null ? void 0 : _a28.checked;
+        var _a31;
+        return (_a31 = document.getElementById(id)) == null ? void 0 : _a31.checked;
       }
     );
   }
   function showConfirmPanel(checkedIds) {
-    var _a28, _b2;
+    var _a31, _b2;
     const categoryView = document.getElementById("a11yCategoryView");
     const statusEl = document.getElementById("a11yStatus");
     if (!statusEl) return;
@@ -790,15 +1155,15 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     const frameLabel = "the selected frame";
     statusEl.innerHTML = `
     <div class="a11y-confirm-panel">
-      <h4>Create ${checkedIds.length} annotation card${checkedIds.length === 1 ? "" : "s"} for ${esc(frameLabel)}</h4>
-      <div class="a11y-confirm-categories">${esc(labels)}</div>
+      <h4>Create ${checkedIds.length} annotation card${checkedIds.length === 1 ? "" : "s"} for ${esc2(frameLabel)}</h4>
+      <div class="a11y-confirm-categories">${esc2(labels)}</div>
       <div class="a11y-confirm-note">Claude will ask you questions before filling any cards. Empty cards are normal \u2014 they mean Claude needs more information from you.</div>
       <div class="a11y-confirm-actions">
         <button class="btn btn-secondary" id="a11yConfirmBack">Back</button>
         <button class="btn" id="a11yConfirmGo">Confirm &amp; Create Cards</button>
       </div>
     </div>`;
-    (_a28 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a28.addEventListener("click", () => {
+    (_a31 = document.getElementById("a11yConfirmBack")) == null ? void 0 : _a31.addEventListener("click", () => {
       statusEl.innerHTML = "";
       if (categoryView) categoryView.style.display = "block";
     });
@@ -809,9 +1174,9 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     });
   }
   function getCheckedA11yCategories() {
-    var _a28, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
+    var _a31, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
     const categories = [];
-    if ((_a28 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a28.checked) categories.push("focusIndicators");
+    if ((_a31 = document.getElementById("a11yFocusIndicators")) == null ? void 0 : _a31.checked) categories.push("focusIndicators");
     if ((_b2 = document.getElementById("a11yFocusOrder")) == null ? void 0 : _b2.checked) categories.push("focusOrder");
     if ((_c = document.getElementById("a11yHeadings")) == null ? void 0 : _c.checked) categories.push("headings");
     if ((_d = document.getElementById("a11yLandmarksNav")) == null ? void 0 : _d.checked) {
@@ -1140,10 +1505,10 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
     }).catch(() => {
     });
     sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
-      var _a28, _b2;
+      var _a31, _b2;
       if (ws.readyState !== 1 || !result) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
-      appendBridgeLog("Variables synced: " + (((_b2 = (_a28 = result.data) == null ? void 0 : _a28.variables) == null ? void 0 : _b2.length) || 0) + " vars");
+      appendBridgeLog("Variables synced: " + (((_b2 = (_a31 = result.data) == null ? void 0 : _a31.variables) == null ? void 0 : _b2.length) || 0) + " vars");
     }).catch(() => {
     });
   }
@@ -1249,5 +1614,42 @@ Then call figma_render_blueline with mode: "panels" and all item JSON. The panel
   (_a26 = document.getElementById("bridgeConnectBtn")) == null ? void 0 : _a26.addEventListener("click", () => bridgeConnect());
   var _a27;
   (_a27 = document.getElementById("bridgeDisconnectBtn")) == null ? void 0 : _a27.addEventListener("click", () => bridgeDisconnect());
+  function enterAlignV2Mode() {
+    document.body.classList.add("alignv2-active");
+    const menuView = document.getElementById("menuView");
+    if (menuView) menuView.style.display = "";
+    parent.postMessage({ pluginMessage: { type: "align-v2-window-resize", wide: true } }, "*");
+    const scan = document.getElementById("alignV2ScanBtn");
+    if (scan) scan.disabled = false;
+  }
+  function exitAlignV2Mode() {
+    if (!document.body.classList.contains("alignv2-active")) return;
+    document.body.classList.remove("alignv2-active");
+    parent.postMessage({ pluginMessage: { type: "align-v2-window-resize", wide: false } }, "*");
+  }
+  document.querySelectorAll('.menu-item[data-tool="alignv2"], .hamburger-item[data-tool="alignv2"]').forEach((btn) => {
+    btn.addEventListener("click", () => enterAlignV2Mode());
+  });
+  document.querySelectorAll('.menu-item:not([data-tool="alignv2"]), .hamburger-item:not([data-tool="alignv2"])').forEach((btn) => {
+    btn.addEventListener("click", () => exitAlignV2Mode());
+  });
+  var _a28;
+  (_a28 = document.getElementById("backBtn")) == null ? void 0 : _a28.addEventListener("click", () => exitAlignV2Mode());
+  var _a29;
+  (_a29 = document.getElementById("alignV2ScanBtn")) == null ? void 0 : _a29.addEventListener("click", () => {
+    parent.postMessage({ pluginMessage: { type: "align-v2-scan" } }, "*");
+  });
+  document.querySelectorAll(".alignv2-tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.v2tab;
+      if (tab) setV2ActiveTab(tab);
+    });
+  });
+  var _a30;
+  (_a30 = document.getElementById("alignV2ApplyBtn")) == null ? void 0 : _a30.addEventListener("click", () => {
+    const selections = collectV2ApplySelections();
+    if (selections.length === 0) return;
+    parent.postMessage({ pluginMessage: { type: "align-v2-apply", selections } }, "*");
+  });
   postToPlugin("ui-ready");
 })();
