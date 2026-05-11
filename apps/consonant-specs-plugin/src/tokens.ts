@@ -336,6 +336,16 @@ export const NAME_RADIUS = /radius|corner|border[\-\/]radius/i;
 export const NAME_BLUR = /blur/i;
 export const NAME_TYPOGRAPHY = /typography|letter[-\/_]spacing|line[-\/_]height|font[-\/_]size|font[-\/_]weight|font[-\/_]family/i;
 
+// Tight POSITIVE segment-based filters for align-v2 dimension dropdowns.
+// The (?:^|\/) prefix ensures the keyword starts at a path-segment boundary,
+// preventing substring matches like "letter-spacing" matching as "spacing".
+/** Tight positive match for spacing/padding/gap/margin path segments. */
+export const NAME_DIM_SPACING = /(?:^|\/)(?:spacing|layout|gap|margin|padding)(?=[-\/]|$)/i;
+/** Tight positive match for radius/corner path segments. */
+export const NAME_DIM_RADIUS = /(?:^|\/)(?:radius|corner)(?=[-\/]|$)|border[-\/]radius/i;
+/** Tight positive match for border/stroke + width/weight combinations. */
+export const NAME_DIM_STROKE = /(?:border|stroke)[-\/](?:width|weight)/i;
+
 export function matchSpacing(value: string): string | null {
   const num = parseFloat(value);
   if (isNaN(num)) return null;
