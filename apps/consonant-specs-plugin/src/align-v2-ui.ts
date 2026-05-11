@@ -367,6 +367,21 @@ function ensureV2Styles(): void {
   flex-shrink: 0;
   box-sizing: border-box;
 }
+#alignV2ApplyBtn {
+  width: auto;
+  padding: 4px 10px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+#alignV2ApplyBtn .v2-apply-count {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
 `;
   document.head.appendChild(style);
 }
@@ -556,7 +571,7 @@ function updateV2Footer(): void {
   document.getElementById('alignV2FooterCount')!.textContent =
     `Update ${groupCount} ${v2State.activeTab} across ${itemCount} item${itemCount !== 1 ? 's' : ''}.`;
   (document.getElementById('alignV2ApplyBtn') as HTMLButtonElement).disabled = groupCount === 0;
-  (document.getElementById('alignV2ApplyBtn') as HTMLButtonElement).textContent = `Apply ${groupCount}`;
+  (document.getElementById('alignV2ApplyBtn') as HTMLButtonElement).innerHTML = `Apply <span class="v2-apply-count">${groupCount}</span>`;
 }
 
 export function setV2ActiveTab(tab: V2Tab): void {
