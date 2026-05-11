@@ -1,6 +1,6 @@
 // apps/consonant-specs-plugin/src/align-v2.ts
 
-import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole } from './tokens';
+import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap } from './tokens';
 import { figmaColorToHex, getCornerRadius } from './utils';
 
 // ── Output types ─────────────────────────────────────────────────────────
@@ -71,4 +71,99 @@ export async function isS2AVariable(variableId: string): Promise<{ isS2A: boolea
   } catch (_) {
     return { isS2A: false };
   }
+}
+
+// ── Color detection ──────────────────────────────────────────────────────
+
+/**
+ * Build TokenCandidate[] for the Colors dropdown — every loaded S2A color token.
+ */
+function buildColorCandidates(): TokenCandidate[] {
+  return getColorVarMap().map(cv => ({
+    tokenName: cv.name,
+    variableId: cv.variable.id,
+    value: cv.hex.toUpperCase(),
+  }));
+}
+
+/**
+ * For a single SOLID paint, classify and produce an issue if non-compliant.
+ * Returns null if the paint is compliant (bound to S2A) or fully unhandleable.
+ */
+async function auditColorPaint(
+  node: SceneNode,
+  paint: SolidPaint,
+  property: 'Fill' | 'Stroke',
+  candidates: TokenCandidate[],
+): Promise<AlignV2Issue | null> {
+  const boundId = paint.boundVariables?.color?.id;
+
+  if (boundId) {
+    const { isS2A, variableName } = await isS2AVariable(boundId);
+    if (isS2A) return null; // compliant
+    // Wrong library — suggest by resolved hex
+    const hex = figmaColorToHex(paint.color);
+    const role = detectNodeColorRole(node, property === 'Fill' ? 'fill' : 'border');
+    const matches = getColorVarMap().filter(cv => cv.hex.toLowerCase() === hex.toLowerCase());
+    const exact = matches.find(cv => cv.semanticRole === role) ?? matches.find(cv => cv.semanticRole !== null) ?? matches[0] ?? null;
+    return {
+      nodeId: node.id,
+      nodeName: node.name,
+      nodeType: node.type,
+      property,
+      currentValue: variableName ?? hex.toUpperCase(),
+      source: 'wrong-library',
+      currentBindingName: variableName,
+      suggestion: exact ? { tokenName: exact.name, variableId: exact.variable.id, isExactMatch: true } : null,
+      allCandidates: candidates,
+    };
+  }
+
+  // Hardcoded
+  const hex = figmaColorToHex(paint.color);
+  // Skip pure black/white — consistent with s2a-audit.ts:196
+  if (hex.toLowerCase() === '#ffffff' || hex.toLowerCase() === '#000000') return null;
+
+  const role = detectNodeColorRole(node, property === 'Fill' ? 'fill' : 'border');
+  const matches = getColorVarMap().filter(cv => cv.hex.toLowerCase() === hex.toLowerCase());
+  const exact = matches.find(cv => cv.semanticRole === role) ?? matches.find(cv => cv.semanticRole !== null) ?? matches[0] ?? null;
+  return {
+    nodeId: node.id,
+    nodeName: node.name,
+    nodeType: node.type,
+    property,
+    currentValue: hex.toUpperCase(),
+    source: 'hardcoded',
+    suggestion: exact ? { tokenName: exact.name, variableId: exact.variable.id, isExactMatch: true } : null,
+    allCandidates: candidates,
+  };
+}
+
+/**
+ * Audit all visible SOLID fills and strokes on a node.
+ */
+export async function auditColors(node: SceneNode, candidates: TokenCandidate[]): Promise<AlignV2Issue[]> {
+  const issues: AlignV2Issue[] = [];
+
+  if ('fills' in node && Array.isArray((node as any).fills)) {
+    const fills = (node as any).fills as ReadonlyArray<Paint>;
+    for (const paint of fills) {
+      if (paint.type === 'SOLID' && paint.visible !== false) {
+        const issue = await auditColorPaint(node, paint, 'Fill', candidates);
+        if (issue) issues.push(issue);
+      }
+    }
+  }
+
+  if ('strokes' in node && Array.isArray((node as any).strokes)) {
+    const strokes = (node as any).strokes as ReadonlyArray<Paint>;
+    for (const paint of strokes) {
+      if (paint.type === 'SOLID' && paint.visible !== false) {
+        const issue = await auditColorPaint(node, paint, 'Stroke', candidates);
+        if (issue) issues.push(issue);
+      }
+    }
+  }
+
+  return issues;
 }
