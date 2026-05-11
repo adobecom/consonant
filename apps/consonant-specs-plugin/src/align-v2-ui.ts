@@ -309,7 +309,7 @@ function ensureV2Styles(): void {
   color: var(--text-secondary);
   flex-shrink: 0;
   flex-grow: 0;
-  flex-basis: 140px;
+  flex-basis: 170px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
