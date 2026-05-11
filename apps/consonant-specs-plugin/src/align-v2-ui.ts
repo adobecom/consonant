@@ -212,12 +212,18 @@ function buildGroupedDropdownOptions(
     if (!groups.has(group)) groups.set(group, []);
     groups.get(group)!.push(c);
   }
-  // Sort groups alphabetically; within each group, preserve order
+  // Sort groups alphabetically; within each group, sort by numeric value when
+  // both items have numbers (dimensions), otherwise by leaf name alphabetically.
   const sortedGroupKeys = Array.from(groups.keys()).sort();
 
   let out = '';
   for (const groupKey of sortedGroupKeys) {
-    const items = groups.get(groupKey)!;
+    const items = groups.get(groupKey)!.slice().sort((a, b) => {
+      const an = typeof a.value === 'number' ? a.value : NaN;
+      const bn = typeof b.value === 'number' ? b.value : NaN;
+      if (!isNaN(an) && !isNaN(bn)) return an - bn;
+      return splitTokenPath(a.tokenName).leaf.localeCompare(splitTokenPath(b.tokenName).leaf, undefined, { numeric: true });
+    });
     const groupLabel = groupKey || '(uncategorised)';
     out += `<optgroup label="${esc(groupLabel)}">`;
     for (const c of items) {
