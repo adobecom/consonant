@@ -313,6 +313,10 @@ function ensureV2Styles(): void {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  background: var(--bg-secondary, #f5f5f5);
+  border-radius: 4px;
+  padding: 3px 8px;
+  box-sizing: border-box;
 }
 .alignv2-group-line2 .v2-arrow {
   color: var(--text-secondary);
