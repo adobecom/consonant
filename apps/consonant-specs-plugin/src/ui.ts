@@ -1,3 +1,5 @@
+import { renderAlignV2ScanResult, renderAlignV2ApplyResult, setV2ActiveTab, collectV2ApplySelections } from './align-v2-ui';
+
 function esc(s: unknown): string {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
@@ -204,6 +206,17 @@ window.addEventListener('message', (event) => {
       break;
     case 's2a-align-result':
       renderAlignResult(msg as any);
+      break;
+    case 'align-v2-scan-result':
+      if ((msg as any).error) {
+        const sel = document.getElementById('alignV2Selection');
+        if (sel) sel.textContent = String((msg as any).error);
+      } else {
+        renderAlignV2ScanResult((msg as any).result, (msg as any).selectionName, (msg as any).selectionType);
+      }
+      break;
+    case 'align-v2-apply-result':
+      renderAlignV2ApplyResult((msg as any).results);
       break;
     case 'match-result':
       updateMatchStatus(msg.message as string);
@@ -1330,5 +1343,48 @@ function bridgeDisconnect() {
 
 document.getElementById('bridgeConnectBtn')?.addEventListener('click', () => bridgeConnect());
 document.getElementById('bridgeDisconnectBtn')?.addEventListener('click', () => bridgeDisconnect());
+
+// ── Align V2 split-pane mode toggle ───────────────────────────────────────
+function enterAlignV2Mode(): void {
+  document.body.classList.add('alignv2-active');
+  const menuView = document.getElementById('menuView');
+  if (menuView) menuView.style.display = '';
+  parent.postMessage({ pluginMessage: { type: 'align-v2-window-resize', wide: true } }, '*');
+  const scan = document.getElementById('alignV2ScanBtn') as HTMLButtonElement | null;
+  if (scan) scan.disabled = false;
+}
+
+function exitAlignV2Mode(): void {
+  if (!document.body.classList.contains('alignv2-active')) return;
+  document.body.classList.remove('alignv2-active');
+  parent.postMessage({ pluginMessage: { type: 'align-v2-window-resize', wide: false } }, '*');
+}
+
+document.querySelectorAll<HTMLElement>('.menu-item[data-tool="alignv2"], .hamburger-item[data-tool="alignv2"]').forEach(btn => {
+  btn.addEventListener('click', () => enterAlignV2Mode());
+});
+
+document.querySelectorAll<HTMLElement>('.menu-item:not([data-tool="alignv2"]), .hamburger-item:not([data-tool="alignv2"])').forEach(btn => {
+  btn.addEventListener('click', () => exitAlignV2Mode());
+});
+document.getElementById('backBtn')?.addEventListener('click', () => exitAlignV2Mode());
+
+// ── Align V2 buttons ──────────────────────────────────────────────────────
+document.getElementById('alignV2ScanBtn')?.addEventListener('click', () => {
+  parent.postMessage({ pluginMessage: { type: 'align-v2-scan' } }, '*');
+});
+
+document.querySelectorAll<HTMLButtonElement>('.alignv2-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.v2tab as 'colors' | 'dimensions' | 'typography';
+    if (tab) setV2ActiveTab(tab);
+  });
+});
+
+document.getElementById('alignV2ApplyBtn')?.addEventListener('click', () => {
+  const selections = collectV2ApplySelections();
+  if (selections.length === 0) return;
+  parent.postMessage({ pluginMessage: { type: 'align-v2-apply', selections } }, '*');
+});
 
 postToPlugin('ui-ready');
