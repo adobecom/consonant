@@ -67,7 +67,12 @@ export async function isS2AVariable(variableId: string): Promise<{ isS2A: boolea
       (key !== undefined && S2A_COLLECTION_KEYS.has(key)) ||
       libraryName === 'S2A / Foundations' ||
       collName.startsWith('S2A / ');
-    return { isS2A, variableName: v.name };
+    // Build a qualified name: "LibraryName / Collection / variable/path" when both are known,
+    // falling back to just the variable name. Gives the user enough context to find the source.
+    const qualified = libraryName
+      ? `${libraryName} / ${collName} / ${v.name}`
+      : `${collName} / ${v.name}`;
+    return { isS2A, variableName: qualified };
   } catch (_) {
     return { isS2A: false };
   }
@@ -120,7 +125,7 @@ async function auditColorPaint(
       nodeName: node.name,
       nodeType: node.type,
       property,
-      currentValue: variableName ?? hex.toUpperCase(),
+      currentValue: variableName ? `${variableName} (${hex.toUpperCase()})` : hex.toUpperCase(),
       source: 'wrong-library',
       currentBindingName: variableName,
       suggestion: exact ? { tokenName: exact.name, variableId: exact.variable.id, isExactMatch: true } : null,
@@ -232,7 +237,7 @@ async function classifyDim(
       nodeName: node.name,
       nodeType: node.type,
       property: check.property,
-      currentValue: variableName ?? `${check.value}px`,
+      currentValue: variableName ? `${variableName} (${check.value}px)` : `${check.value}px`,
       source: 'wrong-library',
       currentBindingName: variableName,
       suggestion: exact ? { tokenName: exact.name, variableId: exact.variable.id, isExactMatch: true } : null,
