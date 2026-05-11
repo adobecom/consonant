@@ -356,3 +356,42 @@ export async function auditTypography(node: SceneNode): Promise<AlignV2Issue[]> 
     allCandidates: candidates,
   }];
 }
+
+// ── Scan orchestration ───────────────────────────────────────────────────
+
+async function recurseAudit(
+  node: SceneNode,
+  colorCandidates: TokenCandidate[],
+  result: AlignV2Result,
+): Promise<void> {
+  if ('visible' in node && !node.visible) return;
+
+  const colors = await auditColors(node, colorCandidates);
+  result.colors.push(...colors);
+
+  const dims = await auditDimensions(node);
+  result.dimensions.push(...dims);
+
+  const text = await auditTypography(node);
+  result.typography.push(...text);
+
+  // Don't recurse into instance children — consistent with s2a-audit.ts:131
+  if (node.type === 'INSTANCE') return;
+  if ('children' in node) {
+    for (const child of (node as any).children as SceneNode[]) {
+      await recurseAudit(child, colorCandidates, result);
+    }
+  }
+}
+
+/**
+ * Top-level entry point. Returns a fully populated AlignV2Result for the given root node.
+ * Loads S2A tokens first if not already loaded.
+ */
+export async function runAlignV2Scan(root: SceneNode): Promise<AlignV2Result> {
+  if (!isLoaded()) await loadLibraryTokens();
+  const colorCandidates = buildColorCandidates();
+  const result: AlignV2Result = { colors: [], dimensions: [], typography: [] };
+  await recurseAudit(root, colorCandidates, result);
+  return result;
+}
