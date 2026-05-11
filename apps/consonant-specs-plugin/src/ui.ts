@@ -174,7 +174,7 @@ function updateTokenStatus(count: number, version: string) {
   const el = document.getElementById('footer');
   if (!el) return;
   const buildMarker = `v${__PLUGIN_VERSION__} (${__PLUGIN_BUILD_SHA__} · ${__PLUGIN_BUILD_TIME__})`;
-  el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span> <span class="build-marker" style="opacity:0.55;font-size:10px;">${esc(buildMarker)}</span>`;
+  el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span><br><span class="build-marker" style="opacity:0.55;font-size:10px;">${esc(buildMarker)}</span>`;
 }
 
 function postToPlugin(type: string, payload?: Record<string, unknown>) {
@@ -188,9 +188,10 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
   if (!el) return;
   const marker = `v${__PLUGIN_VERSION__} (${__PLUGIN_BUILD_SHA__} · ${__PLUGIN_BUILD_TIME__})`;
   if (!el.querySelector('.build-marker')) {
+    el.appendChild(document.createElement('br'));
     const span = document.createElement('span');
     span.className = 'build-marker';
-    span.style.cssText = 'opacity:0.55;font-size:10px;margin-left:8px;';
+    span.style.cssText = 'opacity:0.55;font-size:10px;';
     span.textContent = marker;
     el.appendChild(span);
   }
