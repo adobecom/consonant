@@ -539,5 +539,5 @@ body.alignv2-active #s2aBanner { grid-area: banner; }
 body.alignv2-active #selectionInfo { grid-area: selection; }
 body.alignv2-active #menuView { grid-area: menu; display: block !important; border-right: 1px solid var(--border); overflow-y: auto; }
 body.alignv2-active #tabContent { grid-area: content; display: block !important; overflow-y: auto; }
-body.alignv2-active #headerMenu { display: flex !important; }
-body.alignv2-active #headerDetail { display: none !important; }
+body.alignv2-active #headerMenu { display: none !important; }
+body.alignv2-active #headerDetail { display: flex !important; }
