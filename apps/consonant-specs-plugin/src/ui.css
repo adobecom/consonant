@@ -507,3 +507,37 @@ body {
   opacity: 0.7;
 }
 .s2a-banner-dismiss:hover { opacity: 1; }
+
+/* Align V2 tab strip */
+.alignv2-tab { background: none; border: none; padding: 6px 12px; font-size: 11px; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; }
+.alignv2-tab.active { color: var(--text); border-bottom-color: var(--accent, #1473e6); }
+.alignv2-tab-count { background: var(--bg-secondary, #f5f5f5); border-radius: 8px; padding: 1px 6px; font-size: 10px; margin-left: 4px; }
+
+/* Align V2 result rows */
+.alignv2-row { display: grid; grid-template-columns: 18px 1fr 80px 1fr 24px 1fr 50px; gap: 6px; align-items: center; padding: 4px 0; font-size: 11px; border-bottom: 1px solid var(--border); cursor: pointer; }
+.alignv2-row.disabled { opacity: 0.5; cursor: default; }
+.alignv2-row .v2-name { color: var(--text); }
+.alignv2-row .v2-prop, .alignv2-row .v2-value { color: var(--text-secondary); }
+.alignv2-row .v2-arrow { color: var(--text-secondary); text-align: center; }
+.alignv2-row select { font-size: 11px; padding: 2px 4px; }
+.alignv2-row .v2-badge { font-size: 9px; padding: 1px 6px; border-radius: 8px; background: var(--success-bg, #e6f4ea); color: var(--success, #137333); }
+
+/* Split-pane mode: when body has .alignv2-active, lay #app out as CSS Grid so menu + tab-content sit side-by-side. */
+body.alignv2-active #app {
+  display: grid;
+  grid-template-areas:
+    "header   header"
+    "banner   banner"
+    "selection selection"
+    "menu     content";
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: auto auto auto 1fr;
+  height: 100vh;
+}
+body.alignv2-active #pluginHeader { grid-area: header; }
+body.alignv2-active #s2aBanner { grid-area: banner; }
+body.alignv2-active #selectionInfo { grid-area: selection; }
+body.alignv2-active #menuView { grid-area: menu; display: block !important; border-right: 1px solid var(--border); overflow-y: auto; }
+body.alignv2-active #tabContent { grid-area: content; display: block !important; overflow-y: auto; }
+body.alignv2-active #headerMenu { display: flex !important; }
+body.alignv2-active #headerDetail { display: none !important; }
