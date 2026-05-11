@@ -812,25 +812,22 @@ function renderV2Body(): void {
           : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
     }
 
-    // Three-state badge:
-    // Green "Align"  — exact-match auto-suggestion accepted
-    // Pink  "Match"  — force-matched (closest-value, not exact)
-    // Gray  "Select" — no selection yet
+    // Three-state badge — exact-match wins first, then force/manual pick, then empty.
+    // Green "Align"   — row originally had an exact-match suggestion (always wins)
+    // Pink  "Matched" — no exact match, but a value has been chosen (force-matched or
+    //                    manually picked from dropdown)
+    // Gray  "Select"  — no value chosen yet
     const chosenValueId = v2State.chosenOverrides.get(group.groupKey)
       ?? group.suggestion?.variableId
       ?? group.suggestion?.textStyleId
       ?? null;
-    const wasForceMatched = v2State.forceMatchedKeys?.has(group.groupKey) === true;
 
     let badge: string;
-    if (chosenValueId && wasForceMatched) {
-      // Force-matched (closest-value, not exact)
-      badge = `<span class="v2-badge v2-badge-force">Matched</span>`;
-    } else if (chosenValueId && group.suggestion?.isExactMatch) {
-      // Exact match auto-suggestion accepted
+    if (group.suggestion?.isExactMatch) {
       badge = `<span class="v2-badge">Align</span>`;
+    } else if (chosenValueId) {
+      badge = `<span class="v2-badge v2-badge-force">Matched</span>`;
     } else {
-      // No selection yet
       badge = `<span class="v2-badge v2-badge-muted">Select</span>`;
     }
 
