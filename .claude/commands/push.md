@@ -17,10 +17,13 @@ If there's nothing to commit, tell them:
 **Nothing to push** — no changes since your last save. You're all good.
 Then stop.
 
-### 2. Stage changes in the prototyping area
+### 2. Stage changes
+
+Stage all modified tracked files, plus any new files in the component and story areas:
 
 ```bash
-git add packages/components/src/prototyping/ apps/storybook/stories/prototyping/
+git add -u
+git add packages/components/src/prototyping/ apps/storybook/stories/prototyping/ 2>/dev/null || true
 ```
 
 If `$ARGUMENTS` was provided, use it as the commit message:

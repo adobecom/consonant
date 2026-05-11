@@ -2,13 +2,13 @@
   "mcpServers": {
     "figma-console": {
       "command": "node",
-      "args": ["/Users/mhuntsberry/Desktop/prototyping/consonant/node_modules/figma-console-mcp/dist/local.js"]
+      "args": ["./node_modules/figma-console-mcp/dist/local.js"]
     },
     "s2a-ds": {
       "command": "node",
-      "args": ["/Users/mhuntsberry/Desktop/prototyping/consonant/apps/s2a-ds-mcp/dist/local.js"],
+      "args": ["./apps/s2a-ds-mcp/dist/local.js"],
       "env": {
-        "DS_ROOT": "/Users/mhuntsberry/Desktop/prototyping/consonant"
+        "DS_ROOT": "."
       }
     },
     "design-systems": {
