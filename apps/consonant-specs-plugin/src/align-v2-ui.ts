@@ -307,9 +307,8 @@ function ensureV2Styles(): void {
 }
 .alignv2-group-line2 .v2-value {
   color: var(--text-secondary);
-  flex-shrink: 0;
-  flex-grow: 0;
-  flex-basis: 170px;
+  flex: 1;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
