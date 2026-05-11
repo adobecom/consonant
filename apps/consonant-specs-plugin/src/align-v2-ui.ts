@@ -60,6 +60,17 @@ let v2State: {
   chosenOverrides: new Map(),
 };
 
+// ─── Color popover open state ────────────────────────────────────────────────
+
+let v2OpenPopover: { groupKey: string; el: HTMLElement } | null = null;
+
+function closeOpenPopover(): void {
+  if (v2OpenPopover) {
+    v2OpenPopover.el.remove();
+    v2OpenPopover = null;
+  }
+}
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function esc(s: unknown): string {
@@ -272,6 +283,65 @@ function buildGroupedDropdownOptions(
   return out;
 }
 
+/**
+ * Build the inner HTML for a color popover (grouped buttons with swatches).
+ * Uses the same group priority + sort logic as buildGroupedDropdownOptions.
+ */
+function buildColorPopoverContent(
+  candidates: ReadonlyArray<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number }>,
+  chosen: string,
+): string {
+  // Group by path prefix
+  const groups = new Map<string, Array<{ tokenName: string; variableId?: string; textStyleId?: string; value: string | number }>>();
+  for (const c of candidates) {
+    const { group } = splitTokenPath(c.tokenName);
+    if (!groups.has(group)) groups.set(group, []);
+    groups.get(group)!.push(c);
+  }
+
+  const GROUP_PRIORITY: string[] = [
+    's2a/spacing',
+    's2a/layout',
+    's2a/border/radius',
+    's2a/border/width',
+  ];
+  const sortedGroupKeys = Array.from(groups.keys()).sort((a, b) => {
+    const ai = GROUP_PRIORITY.indexOf(a);
+    const bi = GROUP_PRIORITY.indexOf(b);
+    if (ai !== -1 && bi !== -1) return ai - bi;
+    if (ai !== -1) return -1;
+    if (bi !== -1) return 1;
+    return a.localeCompare(b);
+  });
+
+  let out = '';
+  for (const groupKey of sortedGroupKeys) {
+    const items = groups.get(groupKey)!.slice().sort((a, b) => {
+      const an = typeof a.value === 'number' ? a.value : NaN;
+      const bn = typeof b.value === 'number' ? b.value : NaN;
+      if (!isNaN(an) && !isNaN(bn)) return an - bn;
+      return splitTokenPath(a.tokenName).leaf.localeCompare(splitTokenPath(b.tokenName).leaf, undefined, { numeric: true });
+    });
+    const groupLabel = groupKey || '(uncategorised)';
+    out += `<div class="v2-color-group-header">${esc(groupLabel)}</div>`;
+    for (const c of items) {
+      const id = c.variableId ?? c.textStyleId ?? '';
+      const isHex = typeof c.value === 'string' && (c.value as string).startsWith('#');
+      const hexVal = isHex ? (c.value as string) : '#cccccc';
+      const { leaf } = splitTokenPath(c.tokenName);
+      let valuePart = '';
+      if (typeof c.value === 'string' && c.value !== '') valuePart = ` (${c.value})`;
+      const optLabel = `${leaf}${valuePart}`;
+      const selectedAttr = id === chosen ? ' data-selected="1"' : '';
+      out += `<button class="v2-color-option${id === chosen ? ' v2-color-option-selected' : ''}" data-id="${esc(id)}"${selectedAttr}>`;
+      out += `<span class="v2-color-swatch" style="background-color:${esc(hexVal)}"></span>`;
+      out += `<span class="v2-color-option-label">${esc(optLabel)}</span>`;
+      out += `</button>`;
+    }
+  }
+  return out;
+}
+
 // ─── CSS injection (one-time) ────────────────────────────────────────────────
 
 let v2StyleInjected = false;
@@ -382,8 +452,92 @@ function ensureV2Styles(): void {
   border-radius: 4px;
   font-weight: 600;
 }
+.v2-color-dropdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  background: var(--bg-secondary, #fff);
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  text-align: left;
+}
+.v2-color-dropdown .v2-color-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.v2-color-dropdown .v2-color-caret {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.v2-color-popover {
+  position: fixed;
+  background: var(--bg, #fff);
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 10000;
+  min-width: 220px;
+  padding: 4px 0;
+  font-size: 11px;
+}
+.v2-color-popover .v2-color-group-header {
+  padding: 4px 10px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.v2-color-popover .v2-color-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+.v2-color-popover .v2-color-option:hover {
+  background: var(--hover-bg, #f0f0f0);
+}
+.v2-color-popover .v2-color-option.v2-color-option-selected {
+  background: var(--hover-bg, #f0f0f0);
+}
+.v2-color-popover .v2-color-option-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 `;
   document.head.appendChild(style);
+
+  // Global click-outside listener: close popover when clicking outside it
+  document.addEventListener('click', (e) => {
+    if (!v2OpenPopover) return;
+    const target = e.target as Node;
+    if (!v2OpenPopover.el.contains(target)) {
+      closeOpenPopover();
+    }
+  }, true);
+
+  // Global Escape key listener: close popover
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && v2OpenPopover) {
+      closeOpenPopover();
+    }
+  });
 }
 
 // ─── Public API ──────────────────────────────────────────────────────────────
@@ -423,6 +577,9 @@ export function renderAlignV2ScanResult(result: V2Result, selectionName: string,
 }
 
 function renderV2Body(): void {
+  // Close any open popover before re-rendering
+  closeOpenPopover();
+
   const body = document.getElementById('alignV2Body')!;
   if (!v2State.result) { body.innerHTML = ''; return; }
 
@@ -441,26 +598,44 @@ function renderV2Body(): void {
     const chosen = v2State.chosenOverrides.get(group.groupKey)
       ?? (group.suggestion?.variableId ?? group.suggestion?.textStyleId ?? '');
 
-    const dropdownOpts = buildGroupedDropdownOptions(group.allCandidates, chosen);
-
-    // "No S2A token" rows: show a dropdown with a placeholder so the user can manually pick
-    const noSuggestionDropdown = disabled && group.allCandidates.length > 0
-      ? `<select data-group-key="${gk}" data-no-suggestion="1"><option value="" disabled ${!chosen ? 'selected' : ''}>Select a token…</option>${dropdownOpts}</select>`
-      : null;
-
-    // For color rows (Fill/Stroke), prefix the dropdown with a swatch showing the chosen color.
     const isColorRow = group.property === 'Fill' || group.property === 'Stroke';
-    const chosenCandidate = group.allCandidates.find(c => (c.variableId ?? c.textStyleId) === chosen);
-    const chosenHex = (isColorRow && typeof chosenCandidate?.value === 'string') ? chosenCandidate.value : '';
-    const swatchEl = isColorRow
-      ? `<span class="v2-color-swatch" data-swatch-for="${gk}" style="background-color:${esc(chosenHex || '#ffffff')}"></span>`
-      : '';
 
-    const suggestCell = noSuggestionDropdown
-      ? swatchEl + noSuggestionDropdown
-      : disabled
-        ? `<span style="color:var(--text-secondary)">No S2A token</span>`
-        : swatchEl + `<select data-group-key="${gk}">${dropdownOpts}</select>`;
+    let suggestCell: string;
+
+    if (isColorRow) {
+      // Color rows: use custom popover button (no external swatch, no native <select>)
+      if (group.allCandidates.length === 0) {
+        // No candidates at all — static text
+        suggestCell = `<span style="color:var(--text-secondary)">No S2A token</span>`;
+      } else {
+        // Has candidates: show the custom dropdown button
+        const chosenCandidate = group.allCandidates.find(c => (c.variableId ?? c.textStyleId) === chosen);
+        const chosenHex = (typeof chosenCandidate?.value === 'string') ? chosenCandidate.value : '';
+        const swatchStyle = `background-color:${esc(chosenHex || '#cccccc')}`;
+        const labelText = chosenCandidate
+          ? esc(`${chosenCandidate.tokenName} (${chosenCandidate.value})`)
+          : (disabled ? 'Select a color…' : 'Select a color…');
+        const noSuggAttr = disabled ? ' data-no-suggestion="1"' : '';
+        suggestCell = `<button class="v2-color-dropdown" data-group-key="${gk}"${noSuggAttr}>` +
+          `<span class="v2-color-swatch" style="${swatchStyle}"></span>` +
+          `<span class="v2-color-label">${labelText}</span>` +
+          `<span class="v2-color-caret">▾</span>` +
+          `</button>`;
+      }
+    } else {
+      // Dimension / Typography rows: keep native <select>
+      const dropdownOpts = buildGroupedDropdownOptions(group.allCandidates, chosen);
+
+      const noSuggestionDropdown = disabled && group.allCandidates.length > 0
+        ? `<select data-group-key="${gk}" data-no-suggestion="1"><option value="" disabled ${!chosen ? 'selected' : ''}>Select a token…</option>${dropdownOpts}</select>`
+        : null;
+
+      suggestCell = noSuggestionDropdown
+        ? noSuggestionDropdown
+        : disabled
+          ? `<span style="color:var(--text-secondary)">No S2A token</span>`
+          : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
+    }
 
     // Always render a badge for consistent right-edge alignment.
     // Green "Match" when the suggestion exactly matches the current value;
@@ -478,7 +653,8 @@ function renderV2Body(): void {
 
     // For no-suggestion rows that have candidates: checkbox starts disabled+unchecked,
     // but becomes enabled once the user picks a token from the dropdown.
-    const isPickable = disabled && noSuggestionDropdown !== null;
+    const noSuggestionHasCandidates = disabled && group.allCandidates.length > 0;
+    const isPickable = noSuggestionHasCandidates;
     const hasOverride = isPickable && !!v2State.chosenOverrides.get(group.groupKey);
     const cbChecked = isPickable ? hasOverride : checked;
     const cbDisabled = isPickable ? !hasOverride : disabled;
@@ -507,7 +683,7 @@ function renderV2Body(): void {
     });
   });
 
-  // Dropdown listeners
+  // Native <select> listeners (dimension / typography rows only)
   body.querySelectorAll<HTMLSelectElement>('select[data-group-key]').forEach(sel => {
     sel.addEventListener('change', () => {
       const k = sel.dataset.groupKey!;
@@ -516,17 +692,6 @@ function renderV2Body(): void {
         v2State.chosenOverrides.set(k, val);
       } else {
         v2State.chosenOverrides.delete(k);
-      }
-
-      // Update the color swatch (if present) to reflect the new selection
-      const swatch = body.querySelector<HTMLElement>(`.v2-color-swatch[data-swatch-for="${CSS.escape(k)}"]`);
-      if (swatch && val) {
-        const groupArr = v2State.groups[v2State.activeTab];
-        const grp = groupArr.find(g => g.groupKey === k);
-        const cand = grp?.allCandidates.find(c => (c.variableId ?? c.textStyleId) === val);
-        if (cand && typeof cand.value === 'string') {
-          swatch.style.backgroundColor = cand.value;
-        }
       }
 
       // For no-suggestion rows, sync the paired checkbox
@@ -549,11 +714,88 @@ function renderV2Body(): void {
     });
   });
 
+  // Color popover button listeners
+  body.querySelectorAll<HTMLButtonElement>('button.v2-color-dropdown[data-group-key]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const k = btn.dataset.groupKey!;
+
+      // If this popover is already open, close it and return
+      if (v2OpenPopover && v2OpenPopover.groupKey === k) {
+        closeOpenPopover();
+        return;
+      }
+
+      // Close any other open popover
+      closeOpenPopover();
+
+      // Find the group data for building popover content
+      const groupArr = v2State.groups[v2State.activeTab];
+      const grp = groupArr.find(g => g.groupKey === k);
+      if (!grp) return;
+
+      const chosenVal = v2State.chosenOverrides.get(k)
+        ?? (grp.suggestion?.variableId ?? grp.suggestion?.textStyleId ?? '');
+
+      // Build popover
+      const popover = document.createElement('div');
+      popover.className = 'v2-color-popover';
+      popover.dataset.forGroupKey = k;
+      popover.innerHTML = buildColorPopoverContent(grp.allCandidates, chosenVal);
+
+      // Position below the button
+      const rect = btn.getBoundingClientRect();
+      popover.style.top = `${rect.bottom + 2}px`;
+      popover.style.left = `${rect.left}px`;
+      popover.style.minWidth = `${Math.max(rect.width, 220)}px`;
+
+      document.body.appendChild(popover);
+      v2OpenPopover = { groupKey: k, el: popover };
+
+      // Option click listeners
+      popover.querySelectorAll<HTMLButtonElement>('button.v2-color-option').forEach(opt => {
+        opt.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          const val = opt.dataset.id!;
+          if (!val) return;
+
+          v2State.chosenOverrides.set(k, val);
+
+          // Update the collapsed button's swatch and label
+          const cand = grp.allCandidates.find(c => (c.variableId ?? c.textStyleId) === val);
+          const newHex = (cand && typeof cand.value === 'string') ? cand.value : '#cccccc';
+          const swatchInBtn = btn.querySelector<HTMLElement>('.v2-color-swatch');
+          if (swatchInBtn) swatchInBtn.style.backgroundColor = newHex;
+          const labelInBtn = btn.querySelector<HTMLElement>('.v2-color-label');
+          if (labelInBtn && cand) labelInBtn.textContent = `${cand.tokenName} (${cand.value})`;
+
+          // For no-suggestion color rows, enable + check the paired checkbox
+          if (btn.dataset.noSuggestion) {
+            const cb = body.querySelector<HTMLInputElement>(`input[type="checkbox"][data-group-key="${CSS.escape(k)}"]`);
+            if (cb) {
+              cb.disabled = false;
+              cb.checked = true;
+              v2State.checkedGroupKeys.add(k);
+            }
+          }
+
+          updateV2Footer();
+          closeOpenPopover();
+        });
+      });
+    });
+  });
+
   // Row click → navigate to the first node in the group
   body.querySelectorAll<HTMLElement>('.alignv2-group[data-first-node-id]').forEach(row => {
     row.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'OPTION') return;
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'SELECT' ||
+        target.tagName === 'OPTION' ||
+        target.closest('button.v2-color-dropdown') !== null
+      ) return;
       const nid = row.dataset.firstNodeId;
       if (nid) parent.postMessage({ pluginMessage: { type: 'navigate-to-node', nodeId: nid } }, '*');
     });
