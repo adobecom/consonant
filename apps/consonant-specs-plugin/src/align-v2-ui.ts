@@ -766,7 +766,7 @@ function renderV2Body(): void {
       popover.dataset.forGroupKey = k;
       popover.innerHTML = buildColorPopoverContent(grp.allCandidates, chosenVal);
 
-      // Position below the button
+      // Initial position: below + left-aligned with the button.
       const rect = btn.getBoundingClientRect();
       popover.style.top = `${rect.bottom + 2}px`;
       popover.style.left = `${rect.left}px`;
@@ -774,6 +774,36 @@ function renderV2Body(): void {
 
       document.body.appendChild(popover);
       v2OpenPopover = { groupKey: k, el: popover };
+
+      // Smart positioning: clamp inside the iframe viewport.
+      // 1) If popover overflows the bottom, flip above the button (or shrink to fit).
+      // 2) If popover overflows the right, shift left so it fits.
+      // Measured AFTER append so layout is real.
+      const PADDING = 8;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const pop = popover.getBoundingClientRect();
+
+      // Vertical: prefer below; if not enough room, try above; else clamp to viewport with scroll.
+      const roomBelow = vh - rect.bottom - PADDING;
+      const roomAbove = rect.top - PADDING;
+      if (pop.height > roomBelow && roomAbove > roomBelow) {
+        // Flip above
+        const maxH = Math.min(pop.height, roomAbove);
+        popover.style.top = `${rect.top - maxH - 2}px`;
+        popover.style.maxHeight = `${maxH}px`;
+      } else {
+        // Stay below, cap height to room below
+        popover.style.maxHeight = `${Math.max(roomBelow, 120)}px`;
+      }
+
+      // Horizontal: if right edge overflows, shift left so popover.right === vw - PADDING.
+      const popAfter = popover.getBoundingClientRect();
+      if (popAfter.right > vw - PADDING) {
+        const shift = popAfter.right - (vw - PADDING);
+        const newLeft = Math.max(PADDING, rect.left - shift);
+        popover.style.left = `${newLeft}px`;
+      }
 
       // Option click listeners
       popover.querySelectorAll<HTMLButtonElement>('button.v2-color-option').forEach(opt => {
