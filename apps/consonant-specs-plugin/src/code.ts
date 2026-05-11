@@ -1887,10 +1887,12 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
           if (bbox && bbox.width > 0 && bbox.height > 0) {
             const vw = figma.viewport.bounds.width;
             const vh = figma.viewport.bounds.height;
-            // Target: node occupies ~40% of viewport width and ~70% of height
-            const fitZoomX = (vw * 0.4) / bbox.width;
-            const fitZoomY = (vh * 0.7) / bbox.height;
-            const newZoom = Math.min(fitZoomX, fitZoomY, 2);
+            // Target: node occupies ~25% of viewport width and ~50% of height.
+            // Cap absolute zoom at 1x so small nodes are framed comfortably rather than
+            // blown up to pixel-art.
+            const fitZoomX = (vw * 0.25) / bbox.width;
+            const fitZoomY = (vh * 0.5) / bbox.height;
+            const newZoom = Math.min(fitZoomX, fitZoomY, 1);
             figma.viewport.zoom = Math.max(newZoom, 0.05);
             // After setting zoom, re-read viewport.bounds (width changes with zoom).
             // Then shift center: place node center at ~25% from left of viewport.
