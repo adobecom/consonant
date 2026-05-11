@@ -1,6 +1,6 @@
 // apps/consonant-specs-plugin/src/align-v2.ts
 
-import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole, getDimensionVarMap, LoadedDimensionVar, getTextStyleMap, NAME_SPACING, NAME_RADIUS, NAME_BLUR } from './tokens';
+import { isLoaded, loadLibraryTokens, lookupTextStyleById, matchTypographyStrict, detectNodeColorRole, getColorVarMap, LoadedColorVar, ColorPropertyRole, getDimensionVarMap, LoadedDimensionVar, getTextStyleMap, NAME_SPACING, NAME_RADIUS, NAME_BLUR, NAME_TYPOGRAPHY } from './tokens';
 import { figmaColorToHex, getCornerRadius } from './utils';
 
 // ── Output types ─────────────────────────────────────────────────────────
@@ -193,13 +193,13 @@ function buildDimensionCandidates(scope: DimScope): TokenCandidate[] {
       if (!v.scopes.some(s => s === scope || s === 'ALL_SCOPES')) return false;
       // Exclude tokens whose name belongs to a different category
       if (scope === 'GAP') {
-        return !NAME_RADIUS.test(v.name) && !NAME_BLUR.test(v.name);
+        return !NAME_RADIUS.test(v.name) && !NAME_BLUR.test(v.name) && !NAME_TYPOGRAPHY.test(v.name);
       }
       if (scope === 'CORNER_RADIUS') {
-        return !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name);
+        return !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name) && !NAME_TYPOGRAPHY.test(v.name);
       }
       if (scope === 'STROKE_FLOAT') {
-        return !NAME_RADIUS.test(v.name) && !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name);
+        return !NAME_RADIUS.test(v.name) && !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name) && !NAME_TYPOGRAPHY.test(v.name);
       }
       return true;
     })
@@ -215,9 +215,9 @@ function findBestDimMatch(value: number, scope: DimScope): LoadedDimensionVar | 
   return getDimensionVarMap().find(v => {
     if (v.value !== value) return false;
     if (!v.scopes.some(s => s === scope || s === 'ALL_SCOPES')) return false;
-    if (scope === 'GAP')          return !NAME_RADIUS.test(v.name) && !NAME_BLUR.test(v.name);
-    if (scope === 'CORNER_RADIUS') return !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name);
-    if (scope === 'STROKE_FLOAT') return !NAME_RADIUS.test(v.name) && !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name);
+    if (scope === 'GAP')          return !NAME_RADIUS.test(v.name) && !NAME_BLUR.test(v.name) && !NAME_TYPOGRAPHY.test(v.name);
+    if (scope === 'CORNER_RADIUS') return !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name) && !NAME_TYPOGRAPHY.test(v.name);
+    if (scope === 'STROKE_FLOAT') return !NAME_RADIUS.test(v.name) && !NAME_SPACING.test(v.name) && !NAME_BLUR.test(v.name) && !NAME_TYPOGRAPHY.test(v.name);
     return true;
   }) ?? null;
 }

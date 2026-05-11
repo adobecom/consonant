@@ -326,7 +326,8 @@ function renderV2Body(): void {
 
     const dropdownOpts = group.allCandidates.map(c => {
       const id = c.variableId ?? c.textStyleId ?? '';
-      return `<option value="${esc(id)}" ${id === chosen ? 'selected' : ''}>${esc(c.tokenName)}</option>`;
+      const label = c.value !== undefined && c.value !== '' ? `${c.tokenName}  (${c.value})` : c.tokenName;
+      return `<option value="${esc(id)}" ${id === chosen ? 'selected' : ''}>${esc(label)}</option>`;
     }).join('');
 
     // "No S2A token" rows: show a dropdown with a placeholder so the user can manually pick

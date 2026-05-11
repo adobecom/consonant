@@ -334,6 +334,7 @@ export function matchS2ATextStyle(node: SceneNode): string | null {
 export const NAME_SPACING = /spacing|layout|gap|margin|padding/i;
 export const NAME_RADIUS = /radius|corner|border[\-\/]radius/i;
 export const NAME_BLUR = /blur/i;
+export const NAME_TYPOGRAPHY = /typography|letter[-\/_]spacing|line[-\/_]height|font[-\/_]size|font[-\/_]weight|font[-\/_]family/i;
 
 export function matchSpacing(value: string): string | null {
   const num = parseFloat(value);
