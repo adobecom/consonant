@@ -23,7 +23,7 @@ import { spawn, spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { tmpdir, homedir } from 'os';
 import { WebSocket } from 'ws';
-import { globSync } from '/Users/mhuntsberry/Desktop/consonant-2/node_modules/glob/dist/esm/index.js';
+import { globSync } from 'glob';
 
 const __dirname   = dirname(fileURLToPath(import.meta.url));
 const ROOT        = resolve(__dirname, '..', '..', '..');
@@ -525,7 +525,7 @@ ${tokenTable(grouped.borderRadius)}
 
 const CLAUDE_BIN = (() => {
   for (const p of [
-    '/Users/mhuntsberry/.local/bin/claude',
+    `${process.env.HOME}/.local/bin/claude`,
     '/usr/local/bin/claude',
     process.env.CLAUDE_BIN,
   ]) { if (p && existsSync(p)) return p; }
@@ -542,7 +542,7 @@ function claudeEnv() {
     HOME:   process.env.HOME,
     USER:   process.env.USER,
     TMPDIR: process.env.TMPDIR || '/tmp',
-    PATH:   `${process.env.PATH}:/Users/mhuntsberry/.local/bin`,
+    PATH:   `${process.env.PATH}:${process.env.HOME}/.local/bin`,
   };
 }
 
