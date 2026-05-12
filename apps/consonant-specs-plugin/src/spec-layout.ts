@@ -5,16 +5,21 @@ import { matchSpacing, matchColor, detectNodeColorRole } from './tokens';
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function removeOverlays(node: SceneNode, overlayName: string): void {
-  if (!('children' in node)) return;
-  const toRemove = (node as FrameNode).children.filter(c => c.name === overlayName);
-  for (const child of toRemove) child.remove();
-  // Also check one level of children for stale overlays
-  for (const child of (node as FrameNode).children) {
-    if ('children' in child) {
-      const nested = (child as FrameNode).children.filter(c => c.name === overlayName);
-      for (const n of nested) n.remove();
+  // Legacy: overlays used to be parented inside the node.
+  if ('children' in node) {
+    const toRemove = (node as FrameNode).children.filter(c => c.name === overlayName);
+    for (const child of toRemove) child.remove();
+    // Also check one level of children for stale overlays
+    for (const child of (node as FrameNode).children) {
+      if ('children' in child) {
+        const nested = (child as FrameNode).children.filter(c => c.name === overlayName);
+        for (const n of nested) n.remove();
+      }
     }
   }
+  // New: overlays are now parented to the page so they work on instances.
+  const pageOverlays = figma.currentPage.children.filter(c => c.name === overlayName);
+  for (const o of pageOverlays) o.remove();
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -784,21 +789,22 @@ export async function generateSpacingSection(sourceNode: SceneNode): Promise<voi
   // Remove any existing overlays first
   removeOverlays(sourceNode, 'spacing-detailed-overlay');
 
-  // Overlay directly on the original node
+  // Overlay floats above the node — parented to the page so it works on
+  // instances (which reject appendChild). Coordinates are absolute.
   const overlay = figma.createFrame();
   overlay.name = 'spacing-detailed-overlay';
   overlay.resize(sourceNode.width, sourceNode.height);
   overlay.fills = [];
   overlay.clipsContent = false;
-  const savedClipsContent = 'clipsContent' in sourceNode ? (sourceNode as FrameNode).clipsContent : undefined;
-  if ('clipsContent' in sourceNode) (sourceNode as FrameNode).clipsContent = false;
-  (sourceNode as FrameNode).appendChild(overlay);
-  if ('layoutMode' in sourceNode && (sourceNode as FrameNode).layoutMode !== 'NONE') {
-    overlay.layoutPositioning = 'ABSOLUTE';
+  figma.currentPage.appendChild(overlay);
+  const abb = 'absoluteBoundingBox' in sourceNode ? (sourceNode as { absoluteBoundingBox: { x: number; y: number } | null }).absoluteBoundingBox : null;
+  if (abb) {
+    overlay.x = abb.x;
+    overlay.y = abb.y;
+  } else {
+    overlay.x = sourceNode.absoluteTransform[0][2];
+    overlay.y = sourceNode.absoluteTransform[1][2];
   }
-  overlay.resize(sourceNode.width, sourceNode.height);
-  overlay.x = 0;
-  overlay.y = 0;
 
   const scale = 1;
   const margin = 0;
@@ -825,8 +831,8 @@ export async function generateSpacingSection(sourceNode: SceneNode): Promise<voi
   }
   drawChildSpacing(sourceNode);
 
-  // Restore original clipsContent — don't permanently mutate the user's design
-  if (savedClipsContent !== undefined) (sourceNode as FrameNode).clipsContent = savedClipsContent;
+  // Select the overlay so the user can see where it landed in the layer panel.
+  figma.currentPage.selection = [overlay];
 }
 
 export async function generateLayoutSection(sourceNode: SceneNode): Promise<FrameNode | null> {
