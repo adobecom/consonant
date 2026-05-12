@@ -153,8 +153,9 @@ document.getElementById('s2aBannerDismiss')?.addEventListener('click', () => {
 let currentSelection: { count: number; hasAutoLayout: boolean } = { count: 0, hasAutoLayout: false };
 
 function updateTabControls(prefix: string) {
-  const placeholder = document.getElementById(`${prefix}Placeholder`) as HTMLElement;
-  const controls = document.getElementById(`${prefix}Controls`) as HTMLElement;
+  const placeholder = document.getElementById(`${prefix}Placeholder`);
+  const controls = document.getElementById(`${prefix}Controls`);
+  if (!placeholder || !controls) return;
   const empty = currentSelection.count === 0;
   placeholder.style.display = empty ? 'block' : 'none';
   controls.style.display = empty ? 'none' : 'block';
@@ -201,6 +202,7 @@ window.addEventListener('message', (event) => {
   const msg = event.data.pluginMessage;
   if (!msg) return;
 
+  try {
   switch (msg.type) {
     case 'selection-changed':
       updateSelectionInfo(msg.selection);
@@ -305,6 +307,9 @@ window.addEventListener('message', (event) => {
       }
       break;
     }
+  }
+  } catch (e) {
+    console.error('[plugin/ui] message handler threw for', msg.type, e);
   }
 });
 
@@ -600,8 +605,9 @@ function updateApiKeyUi(hasKey: boolean, masked?: string) {
 
 // A11y tab — controls visibility
 function updateA11yControls() {
-  const placeholder = document.getElementById('a11yPlaceholder') as HTMLElement;
-  const controls = document.getElementById('a11yControls') as HTMLElement;
+  const placeholder = document.getElementById('a11yPlaceholder');
+  const controls = document.getElementById('a11yControls');
+  if (!placeholder || !controls) return;
   if (currentSelection.count === 0) {
     placeholder.style.display = 'block';
     controls.style.display = 'none';
@@ -1311,8 +1317,8 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
             appendBridgeLog('\u2192 ' + message.method + ' ERR: ' + err.message);
           }
         });
-    } catch {
-      // ignore malformed messages
+    } catch (e) {
+      console.error('[plugin/ui] ws.onmessage threw:', e);
     }
   };
 

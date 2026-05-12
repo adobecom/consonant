@@ -1618,6 +1618,7 @@ async function drawA11yAnnotations(
 figma.showUI(__html__, { width: 300, height: 500, themeColors: true });
 
 figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
+  try {
   switch (msg.type) {
     case 'ui-ready':
       notifySelection();
@@ -2144,6 +2145,9 @@ case 'localize': {
       }
       break;
     }
+  }
+  } catch (e) {
+    console.error('[plugin/code] message handler threw for', msg?.type, e);
   }
 };
 
