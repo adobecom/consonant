@@ -120,13 +120,6 @@ export async function generateColorAnnotations(node: SceneNode, yOffset = 0): Pr
         }
       }
 
-      // Text nodes: use textStyleId if a style is bound, otherwise use fontFamily
-      if (n.type === 'TEXT') {
-        const textNode = n as TextNode;
-        const hasStyle = textNode.textStyleId && textNode.textStyleId !== '' && textNode.textStyleId !== figma.mixed;
-        properties.push({ type: hasStyle ? 'textStyleId' : 'fontFamily' });
-      }
-
       // Frames with effects get effects property
       if ('effects' in n) {
         const effects = (n as any).effects;

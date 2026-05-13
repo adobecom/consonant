@@ -22,27 +22,31 @@ interface CardBox {
 export async function generateCardGaps(node: SceneNode): Promise<void> {
   await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
 
-  // Remove any existing overlays first
+  // Remove any existing overlays — both legacy children of the node and
+  // page-level overlays from prior runs (matched by name).
   if ('children' in node) {
-    const old = (node as FrameNode).children.filter(c => c.name === 'spacing-in-between-overlay');
-    for (const o of old) o.remove();
+    const oldChildren = (node as FrameNode).children.filter(c => c.name === 'spacing-in-between-overlay');
+    for (const o of oldChildren) o.remove();
   }
+  const oldPageOverlays = figma.currentPage.children.filter(c => c.name === 'spacing-in-between-overlay');
+  for (const o of oldPageOverlays) o.remove();
 
-  // Overlay directly on the original node
+  // Overlay floats above the node — parented to the page so it works on
+  // instances (which reject appendChild). Coordinates are absolute.
   const overlay = figma.createFrame();
   overlay.name = 'spacing-in-between-overlay';
   overlay.resize(node.width, node.height);
   overlay.fills = [];
   overlay.clipsContent = false;
-  const savedClipsContent = 'clipsContent' in node ? (node as FrameNode).clipsContent : undefined;
-  if ('clipsContent' in node) (node as FrameNode).clipsContent = false;
-  (node as FrameNode).appendChild(overlay);
-  if ('layoutMode' in node && (node as FrameNode).layoutMode !== 'NONE') {
-    overlay.layoutPositioning = 'ABSOLUTE';
+  figma.currentPage.appendChild(overlay);
+  const abb = 'absoluteBoundingBox' in node ? (node as { absoluteBoundingBox: { x: number; y: number } | null }).absoluteBoundingBox : null;
+  if (abb) {
+    overlay.x = abb.x;
+    overlay.y = abb.y;
+  } else {
+    overlay.x = node.absoluteTransform[0][2];
+    overlay.y = node.absoluteTransform[1][2];
   }
-  overlay.resize(node.width, node.height);
-  overlay.x = 0;
-  overlay.y = 0;
 
   // Collect all card-like leaf containers: find groups of same-sized siblings
   const cards: CardBox[] = [];
@@ -51,7 +55,6 @@ export async function generateCardGaps(node: SceneNode): Promise<void> {
   if (cards.length < 2) {
     figma.ui.postMessage({ type: 'spec-it-status', message: 'No card gaps found.' });
     overlay.remove();
-    if (savedClipsContent !== undefined) (node as FrameNode).clipsContent = savedClipsContent;
     return;
   }
 
@@ -96,8 +99,8 @@ export async function generateCardGaps(node: SceneNode): Promise<void> {
 
   figma.ui.postMessage({ type: 'spec-it-status', message: `Found ${cards.length} cards, ${rows.length} rows` });
 
-  // Restore original clipsContent — don't permanently mutate the user's design
-  if (savedClipsContent !== undefined) (node as FrameNode).clipsContent = savedClipsContent;
+  // Select the overlay so the user can see where it landed in the layer panel.
+  figma.currentPage.selection = [overlay];
 }
 
 /**
