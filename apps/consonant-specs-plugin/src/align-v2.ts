@@ -394,8 +394,11 @@ async function recurseAudit(
   const text = await auditTypography(node);
   result.typography.push(...text);
 
-  // Don't recurse into instance children — consistent with s2a-audit.ts:131
-  if (node.type === 'INSTANCE') return;
+  // Recurse into instance children too. Designers can have per-instance
+  // overrides (color, text, stroke) that need flagging, and instances whose
+  // main component lives in a non-S2A library (e.g., S2AC) won't be caught
+  // unless we walk their resolved children. Diverges from s2a-audit.ts:131
+  // intentionally — Align to S2A is meant to catch everything non-S2A.
   if ('children' in node) {
     for (const child of (node as any).children as SceneNode[]) {
       await recurseAudit(child, colorCandidates, result);

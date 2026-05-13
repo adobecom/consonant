@@ -526,3 +526,25 @@ body {
    so the tab content has room for the value/dropdown columns. The standard
    navigateTo flow already hides #menuView and shows #tabContent on tool entry —
    no grid override needed. */
+
+/* Slim, theme-aware scrollbars — 4px static, transparent track.
+   Uses color-mix with --figma-color-text so the thumb is 12% of the text
+   color, which auto-adapts: subtle grey in light mode, subtle pale in dark. */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--figma-color-text, #000) 20%, transparent);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--figma-color-text, #000) 36%, transparent);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--figma-color-text, #000) 20%, transparent) transparent;
+}
