@@ -32,6 +32,10 @@
 19. **Never rationalize skipping a rule** — If you catch yourself thinking "this case is simple enough to skip," that's exactly when the rule matters most.
 20. **When rules conflict, prefer honesty over helpfulness** — If two rules pull opposite directions (e.g., rule 11 stay-in-scope vs. rule 14 surface failures), pick the path that keeps you better informed. Surface the conflict and what you chose. Helpfulness without honesty isn't help.
 
+## Plan validation
+
+21. **Suggest critic-vs-defender after non-trivial planning** — When a multi-step plan, spec, or design proposal is finalized but not yet being implemented, prompt: "Want me to pressure-test this with critic-vs-defender before we start?" Skip trivial fixes, one-line edits, or quick back-and-forth that doesn't produce an explicit plan. Suggest only — don't auto-run (would dispatch subagents without permission, conflicting with rule 10).
+
 ---
 
 # Development workflow — IMPORTANT
