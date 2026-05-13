@@ -127,8 +127,9 @@ function auditNode(node: SceneNode, issues: AuditIssue[], counters: { total: num
 function auditRecursive(node: SceneNode, issues: AuditIssue[], counters: { total: number; matched: number }): void {
   if ('visible' in node && !node.visible) return;
   auditNode(node, issues, counters);
-  // Don't descend into instance children — they're controlled by the component
-  if (node.type === 'INSTANCE') return;
+  // Recurse into instance children. Designers can have per-instance overrides
+  // and bindings inherited from non-S2A main components (e.g., S2AC) still
+  // count as non-compliant. Matches align-v2.ts behavior so both audits agree.
   if ('children' in node) {
     for (const child of (node as any).children) {
       auditRecursive(child, issues, counters);

@@ -25,7 +25,14 @@ export async function generateSpacingGeneral(node: SceneNode, yOffset = 0): Prom
 
   await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
 
-  const clone = node.clone();
+  // Clone the source. If it's an instance, detach the clone so we can
+  // appendChild the overlay into it. This only detaches the spec copy —
+  // the user's original instance is untouched.
+  const rawClone = node.clone();
+  const clone: FrameNode = rawClone.type === 'INSTANCE'
+    ? (rawClone as InstanceNode).detachInstance()
+    : (rawClone as FrameNode);
+
   const sourceX = node.absoluteTransform[0][2];
   const sourceY = node.absoluteTransform[1][2];
   figma.currentPage.appendChild(clone);
@@ -40,7 +47,7 @@ export async function generateSpacingGeneral(node: SceneNode, yOffset = 0): Prom
   overlay.y = 0;
   overlay.fills = [];
   overlay.clipsContent = false;
-  (clone as FrameNode).clipsContent = false;
+  clone.clipsContent = false;
   clone.appendChild(overlay);
   overlay.layoutPositioning = 'ABSOLUTE';
   overlay.resize(node.width, node.height);
@@ -85,6 +92,10 @@ export async function generateSpacingGeneral(node: SceneNode, yOffset = 0): Prom
 
 
   figma.ui.postMessage({ type: 'spec-it-status', message: 'Spacing general complete!' });
+
+  // Select the spec clone so the user can see where it landed in the layer panel.
+  figma.currentPage.selection = [clone];
+
   return clone.height + 40;
 }
 

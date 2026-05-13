@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Revised Scorecard</title>
+<style>
+  body { font-family: Inter, system-ui, sans-serif; background: #0f1117; margin: 0; padding: 40px 24px; color: #eee; }
+  h2 { color: #fff; font-size: 22px; margin-bottom: 6px; }
+  .subtitle { color: #888; font-size: 14px; margin-bottom: 36px; }
+  .assumption-banner {
+    max-width: 960px; margin: 0 auto 28px;
+    background: #0a2540; border: 1px solid #1a3f6f; border-radius: 8px;
+    padding: 14px 18px; font-size: 13px; color: #60a5fa; line-height: 1.6;
+  }
+  .assumption-banner strong { color: #93c5fd; }
+
+  .table { width: 100%; max-width: 960px; margin: 0 auto; border-collapse: collapse; }
+  .table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #666; padding: 0 12px 10px; }
+  .table td { padding: 10px 12px; border-top: 1px solid #1e2030; vertical-align: top; font-size: 13px; }
+
+  .purpose-name { font-weight: 600; color: #fff; font-size: 13px; }
+  .purpose-sub { color: #666; font-size: 11px; margin-top: 2px; }
+
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .fail    { background: #3d1515; color: #f87171; border: 1px solid #5c2020; }
+  .partial { background: #3d2f10; color: #fbbf24; border: 1px solid #5c4a1a; }
+  .good    { background: #0f3020; color: #4ade80; border: 1px solid #1a5035; }
+  .strong  { background: #0a2540; color: #60a5fa; border: 1px solid #1a3f6f; }
+
+  .verdict { font-size: 13px; color: #ccc; line-height: 1.5; }
+  .note { font-size: 12px; margin-top: 4px; font-style: italic; }
+  .note.gap { color: #f87171; }
+  .note.win { color: #4ade80; }
+  .note.info { color: #60a5fa; }
+
+  .row-highlight { background: rgba(255,255,255,0.02); }
+
+  .changed { font-size: 10px; color: #fbbf24; font-weight: 700; margin-left: 6px; }
+
+  .summary-box {
+    max-width: 960px; margin: 32px auto 0;
+    background: rgba(255,255,255,0.04); border-radius: 10px;
+    padding: 24px; border: 1px solid #1e2030;
+  }
+  .summary-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+  .summary-row { display: flex; gap: 16px; margin-bottom: 14px; }
+  .summary-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 90px; flex-shrink: 0; padding-top: 2px; }
+  .summary-tag.gap { color: #f87171; }
+  .summary-tag.win { color: #4ade80; }
+  .summary-tag.focus { color: #fbbf24; }
+  .summary-content { font-size: 13px; color: #ccc; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<h2>Revised Scorecard</h2>
+<p class="subtitle">With the assumption that designers are familiar with Claude Code</p>
+
+<div class="assumption-banner">
+  <strong>Assumption applied:</strong> Designer knows Claude Code. The terminal handoff is expected and comfortable — not a wall. This upgrades Purpose 5 significantly and validates the current architecture. The focus now shifts to making Claude Code's behavior actually conversational, not just a batch runner.
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th style="width:200px;">Purpose</th>
+      <th style="width:110px;">Before</th>
+      <th style="width:110px;">After redesign</th>
+      <th>Assessment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-highlight">
+      <td>
+        <div class="purpose-name">1. Analyze & flag</div>
+        <div class="purpose-sub">Scan design, identify WCAG issues</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill good">Good</span> <span class="changed">↑</span></td>
+      <td class="verdict">
+        Analysis in Claude Code is the expected workflow. Designer goes there anyway.
+        Plugin shows results back (State 3). The loop is complete.
+        <div class="note win">The architecture works. No redesign needed here.</div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="purpose-name">2. Annotate with confidence</div>
+        <div class="purpose-sub">Confident annotations; blanks where uncertain</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill strong">Strong</span> <span class="changed">↑</span></td>
+      <td class="verdict">
+        State 3 surfaces "needs designer input" items in the plugin. Designer sees exactly what Claude was uncertain about and can answer in Claude Code.
+        <div class="note win">This fully meets the purpose.</div>
+      </td>
+    </tr>
+    <tr class="row-highlight">
+      <td>
+        <div class="purpose-name">3. No hallucination</div>
+        <div class="purpose-sub">Uncertain = flag, not fill</div>
+      </td>
+      <td><span class="pill partial">Partial</span></td>
+      <td><span class="pill good">Good</span></td>
+      <td class="verdict">
+        Structural scan grounds Claude. State 3 shows flagged items. State 2 confirmation prevents committing wrong categories.
+        <div class="note gap">Remaining gap: designer could still tick "Carousel" on a frame with no carousel. A future improvement: Claude should skip cards where no relevant elements exist.</div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="purpose-name">4. Issues + suggestions</div>
+        <div class="purpose-sub">Problems AND what to do about them</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill strong">Strong</span></td>
+      <td class="verdict">
+        State 3 clearly separates issues, needs-input, and suggestions in the plugin. Designer sees the full picture without hunting the Figma canvas.
+        <div class="note win">Strongest improvement in the redesign.</div>
+      </td>
+    </tr>
+    <tr class="row-highlight">
+      <td>
+        <div class="purpose-name">5. Conversational</div>
+        <div class="purpose-sub">Two-way, Claude asks questions</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill strong">Strong</span> <span class="changed">↑↑ with assumption</span></td>
+      <td class="verdict">
+        Designer is comfortable in Claude Code. The conversation happens there naturally.
+        <div class="note info">The real work here isn't the plugin UI — it's the <strong>prompt the plugin generates</strong>. Today it says "fill these cards." It needs to say "ask questions first, flag uncertainty, treat this as a conversation." That's the missing piece.</div>
+        <div class="note gap">The plugin UI doesn't need to change. The generated command does.</div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="purpose-name">6. Designer-first UX</div>
+        <div class="purpose-sub">Plain language, simple, not overwhelming</div>
+      </td>
+      <td><span class="pill fail">Fails</span></td>
+      <td><span class="pill strong">Strong</span></td>
+      <td class="verdict">
+        Plain labels with descriptions. Smart defaults pre-checked. Advanced options hidden. One button. Confirmation screen. Results in plugin.
+        <div class="note win">Fully addressed in the redesign.</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="summary-box">
+  <div class="summary-title">Where to focus now</div>
+
+  <div class="summary-row">
+    <div class="summary-tag win">Done (UI)</div>
+    <div class="summary-content">The plugin UI redesign addresses Purposes 4 and 6 fully. Purposes 2 and 3 are solid. This is ready to build.</div>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-tag focus">Priority 1</div>
+    <div class="summary-content">
+      <strong>Redesign the generated prompt.</strong> The command the plugin sends to Claude Code must change from a batch instruction to a conversation opener:
+      <br><br>
+      <em>Today: "Fill ONLY these blueline categories for [frame]…"</em><br>
+      <em>Needed: "Start an A11y review conversation for [frame]. Use the structural scan. Ask the designer questions before filling any cards. Flag items where you're uncertain and leave them blank with a note explaining what you need. Separate your output into: issues found, suggestions, and items needing designer input."</em>
+    </div>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-tag focus">Priority 2</div>
+    <div class="summary-content"><strong>Bridge results loop-back.</strong> After Claude Code runs, send a summary message back to the plugin via bridge so State 3 (issues/suggestions/needs-input panel) appears automatically. This is new bridge messaging — doesn't exist yet.</div>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-tag focus">Priority 3</div>
+    <div class="summary-content"><strong>Smart category detection.</strong> Before committing cards, Claude should check whether each selected category actually applies to the frame (e.g., skip "Carousel" if no carousel exists). Prevents empty or irrelevant cards.</div>
+  </div>
+</div>
+
+</body>
+</html>

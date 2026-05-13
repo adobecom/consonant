@@ -1,5 +1,7 @@
-function esc(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+import { renderAlignV2ScanResult, renderAlignV2ApplyResult, setV2ActiveTab, collectV2ApplySelections } from './align-v2-ui';
+
+function esc(s: unknown): string {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 async function copyToClipboard(text: string): Promise<boolean> {
@@ -27,33 +29,133 @@ interface PropertyEntry {
 }
 
 declare const FEATURE_A11Y: boolean;
+declare const FEATURE_LEGACY_ALIGN: boolean;
+declare const __PLUGIN_VERSION__: string;
+declare const __PLUGIN_BUILD_SHA__: string;
+declare const __PLUGIN_BUILD_TIME__: string;
 
-const a11yTab = document.querySelector<HTMLButtonElement>('.tab[data-tab="a11y"]');
+// Feature flag: remove A11y if disabled
 const a11yPanel = document.querySelector<HTMLElement>('.tab-panel[data-panel="a11y"]');
 if (!FEATURE_A11Y) {
-  a11yTab?.remove();
+  document.getElementById('menuA11yItem')?.remove();
+  document.getElementById('hamburgerA11yItem')?.remove();
   a11yPanel?.remove();
 }
 
-const tabs = document.querySelectorAll<HTMLButtonElement>('.tab');
+// Feature flag: remove legacy Align + Match (the V1 token-alignment tool and the closest-match tool)
+// when the new "Align to S2A" (data-tool="alignv2") replaces them.
+if (!FEATURE_LEGACY_ALIGN) {
+  document.getElementById('menuAlignItem')?.remove();
+  document.getElementById('hamburgerAlignItem')?.remove();
+  document.getElementById('menuMatchItem')?.remove();
+  document.getElementById('hamburgerMatchItem')?.remove();
+  document.querySelector<HTMLElement>('.tab-panel[data-panel="align"]')?.remove();
+  document.querySelector<HTMLElement>('.tab-panel[data-panel="match"]')?.remove();
+}
+
 const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
 
-tabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    const target = tab.dataset.tab;
-    tabs.forEach((t) => t.classList.remove('active'));
-    panels.forEach((p) => p.classList.remove('active'));
-    tab.classList.add('active');
-    const panel = document.querySelector(`[data-panel="${target}"]`);
-    if (panel) panel.classList.add('active');
+function navigateTo(toolId: string, toolName: string) {
+  panels.forEach(p => p.classList.remove('active'));
+  const panel = document.querySelector(`[data-panel="${toolId}"]`);
+  if (panel) panel.classList.add('active');
+
+  const menuView = document.getElementById('menuView');
+  const tabContent = document.getElementById('tabContent');
+  const headerMenu = document.getElementById('headerMenu');
+  const headerDetail = document.getElementById('headerDetail');
+  const backLabel = document.getElementById('backLabel');
+  const hamburgerMenu = document.getElementById('hamburgerMenu');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+
+  if (menuView) menuView.style.display = 'none';
+  if (tabContent) tabContent.style.display = '';
+  if (headerMenu) headerMenu.style.display = 'none';
+  if (headerDetail) headerDetail.style.display = 'flex';
+  if (backLabel) backLabel.textContent = toolName;
+  if (hamburgerMenu) hamburgerMenu.classList.remove('open');
+  if (hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded', 'false');
+
+  document.querySelectorAll<HTMLElement>('.hamburger-item').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tool === toolId);
+  });
+}
+
+function navigateBack() {
+  const menuView = document.getElementById('menuView');
+  const tabContent = document.getElementById('tabContent');
+  const headerMenu = document.getElementById('headerMenu');
+  const headerDetail = document.getElementById('headerDetail');
+  const hamburgerMenu = document.getElementById('hamburgerMenu');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+
+  if (menuView) menuView.style.display = '';
+  if (tabContent) tabContent.style.display = 'none';
+  if (headerMenu) headerMenu.style.display = '';
+  if (headerDetail) headerDetail.style.display = 'none';
+  if (hamburgerMenu) hamburgerMenu.classList.remove('open');
+  if (hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded', 'false');
+}
+
+// Menu items
+document.querySelectorAll<HTMLButtonElement>('.menu-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const tool = item.dataset.tool ?? '';
+    const name = item.querySelector('.menu-item-name')?.textContent ?? tool;
+    navigateTo(tool, name);
   });
 });
+
+// Hamburger items
+document.querySelectorAll<HTMLButtonElement>('.hamburger-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const tool = item.dataset.tool ?? '';
+    const menuItem = document.querySelector<HTMLElement>(`.menu-item[data-tool="${tool}"]`);
+    const name = menuItem?.querySelector('.menu-item-name')?.textContent ?? tool;
+    navigateTo(tool, name);
+  });
+});
+
+// Bridge status pills — click to connect/disconnect (one on menu, one on tool header)
+document.querySelectorAll<HTMLButtonElement>('.bridge-status-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    if (bridgeConnected) {
+      bridgeDisconnect();
+    } else {
+      bridgeConnect();
+    }
+  });
+});
+
+// Back button
+document.getElementById('backBtn')?.addEventListener('click', navigateBack);
+
+// Hamburger toggle
+document.getElementById('hamburgerBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const menu = document.getElementById('hamburgerMenu');
+  const btn = document.getElementById('hamburgerBtn');
+  const isOpen = menu?.classList.toggle('open');
+  btn?.setAttribute('aria-expanded', String(!!isOpen));
+});
+
+document.addEventListener('click', () => {
+  document.getElementById('hamburgerMenu')?.classList.remove('open');
+  document.getElementById('hamburgerBtn')?.setAttribute('aria-expanded', 'false');
+});
+
+document.getElementById('s2aBannerDismiss')?.addEventListener('click', () => {
+  const banner = document.getElementById('s2aBanner');
+  if (banner) banner.style.display = 'none';
+});
+
 
 let currentSelection: { count: number; hasAutoLayout: boolean } = { count: 0, hasAutoLayout: false };
 
 function updateTabControls(prefix: string) {
-  const placeholder = document.getElementById(`${prefix}Placeholder`) as HTMLElement;
-  const controls = document.getElementById(`${prefix}Controls`) as HTMLElement;
+  const placeholder = document.getElementById(`${prefix}Placeholder`);
+  const controls = document.getElementById(`${prefix}Controls`);
+  if (!placeholder || !controls) return;
   const empty = currentSelection.count === 0;
   placeholder.style.display = empty ? 'block' : 'none';
   controls.style.display = empty ? 'none' : 'block';
@@ -72,17 +174,35 @@ function updateSelectionInfo(data: { name: string; type: string; width: number; 
 function updateTokenStatus(count: number, version: string) {
   const el = document.getElementById('footer');
   if (!el) return;
-  el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span>`;
+  const buildMarker = `v${__PLUGIN_VERSION__} (${__PLUGIN_BUILD_SHA__} · ${__PLUGIN_BUILD_TIME__})`;
+  el.innerHTML = `<span class="token-status">Tokens: ${esc(version)} &mdash; ${count} tokens loaded</span><br><span class="build-marker" style="opacity:0.55;font-size:10px;">${esc(buildMarker)}</span>`;
 }
 
 function postToPlugin(type: string, payload?: Record<string, unknown>) {
   parent.postMessage({ pluginMessage: { type, ...payload } }, 'https://www.figma.com');
 }
 
+// On plugin load, append the build marker to the footer even before tokens load,
+// so the user can verify which bundle is running at a glance.
+(function injectBuildMarker(): void {
+  const el = document.getElementById('footer');
+  if (!el) return;
+  const marker = `v${__PLUGIN_VERSION__} (${__PLUGIN_BUILD_SHA__} · ${__PLUGIN_BUILD_TIME__})`;
+  if (!el.querySelector('.build-marker')) {
+    el.appendChild(document.createElement('br'));
+    const span = document.createElement('span');
+    span.className = 'build-marker';
+    span.style.cssText = 'opacity:0.55;font-size:10px;';
+    span.textContent = marker;
+    el.appendChild(span);
+  }
+})();
+
 window.addEventListener('message', (event) => {
   const msg = event.data.pluginMessage;
   if (!msg) return;
 
+  try {
   switch (msg.type) {
     case 'selection-changed':
       updateSelectionInfo(msg.selection);
@@ -103,9 +223,12 @@ window.addEventListener('message', (event) => {
     case 'localize-bridge-prompt':
       showLocalizeBridgePrompt(msg as any);
       break;
-    case 'token-status':
-      updateTokenStatus(msg.count, msg.version);
+    case 'token-status': {
+      updateTokenStatus(msg.count as number, msg.version as string);
+      const banner = document.getElementById('s2aBanner');
+      if (banner) banner.style.display = msg.hasS2ALibrary === false ? 'flex' : 'none';
       break;
+    }
     case 'node-properties':
       renderPropertyList(msg.properties as PropertyEntry[]);
       break;
@@ -118,6 +241,17 @@ window.addEventListener('message', (event) => {
     case 's2a-align-result':
       renderAlignResult(msg as any);
       break;
+    case 'align-v2-scan-result':
+      if ((msg as any).error) {
+        const sel = document.getElementById('alignV2Selection');
+        if (sel) sel.textContent = String((msg as any).error);
+      } else {
+        renderAlignV2ScanResult((msg as any).result, (msg as any).selectionName, (msg as any).selectionType);
+      }
+      break;
+    case 'align-v2-apply-result':
+      renderAlignV2ApplyResult((msg as any).results);
+      break;
     case 'match-result':
       updateMatchStatus(msg.message as string);
       break;
@@ -127,11 +261,14 @@ window.addEventListener('message', (event) => {
     case 'a11y-status':
       updateA11yStatus(msg.message as string);
       break;
+    case 'a11y-annotate-status':
+      updateA11yStatus(msg.message as string);
+      break;
     case 'a11y-fill-request':
-      showAiFillInstruction(msg.mode as string, msg.sections as string[], msg.frameName as string);
+      showAiFillInstruction(msg.mode as string, msg.sections as string[], msg.frameName as string, msg.frameId as string | undefined);
       break;
     case 'a11y-panels-fill-request':
-      showPanelsFillInstruction(msg.sections as string[], msg.frameName as string, msg.sectionIds as string[]);
+      showPanelsFillInstruction(msg.sections as string[], msg.frameName as string, msg.sectionIds as string[], msg.frameId as string | undefined);
       break;
     // Unified bridge command result from code.ts
     case 'bridge:command-result': {
@@ -170,6 +307,9 @@ window.addEventListener('message', (event) => {
       }
       break;
     }
+  }
+  } catch (e) {
+    console.error('[plugin/ui] message handler threw for', msg.type, e);
   }
 });
 
@@ -465,8 +605,9 @@ function updateApiKeyUi(hasKey: boolean, masked?: string) {
 
 // A11y tab — controls visibility
 function updateA11yControls() {
-  const placeholder = document.getElementById('a11yPlaceholder') as HTMLElement;
-  const controls = document.getElementById('a11yControls') as HTMLElement;
+  const placeholder = document.getElementById('a11yPlaceholder');
+  const controls = document.getElementById('a11yControls');
+  if (!placeholder || !controls) return;
   if (currentSelection.count === 0) {
     placeholder.style.display = 'block';
     controls.style.display = 'none';
@@ -480,13 +621,21 @@ function updateA11yBridgeState() {
   const badge = document.getElementById('a11yBridgeBadge') as HTMLElement;
   const items = document.querySelectorAll('.a11y-item');
   const checkboxes = document.querySelectorAll('.a11y-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
-  const genBtn = document.getElementById('generateBluelineBtn') as HTMLButtonElement;
+  const genBtn = document.getElementById('a11yStartBtn') as HTMLButtonElement;
   // Generate buttons are always enabled (plugin-generated doesn't need bridge)
   if (genBtn) genBtn.disabled = false;
   if (bridgeConnected) {
     if (badge) { badge.textContent = '\u2713 bridge connected'; badge.classList.add('connected'); }
     items.forEach(el => el.classList.add('enabled'));
     checkboxes.forEach(cb => cb.disabled = false);
+    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+    if (!anyChecked) {
+      const defaults = ['a11yFocusIndicators', 'a11yFocusOrder', 'a11yColorContrast', 'a11yNamesAlt'];
+      defaults.forEach(id => {
+        const cb = document.getElementById(id) as HTMLInputElement;
+        if (cb) cb.checked = true;
+      });
+    }
   } else {
     if (badge) { badge.textContent = 'connect bridge'; badge.classList.remove('connected'); }
     items.forEach(el => el.classList.remove('enabled'));
@@ -499,25 +648,60 @@ function updateA11yStatus(message: string) {
   if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
 }
 
-function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string) {
+function showAiFillInstruction(mode?: string, sections?: string[], frameName?: string, frameId?: string) {
+  const categoryList = sections && sections.length > 0 ? sections.join(', ') : 'all categories';
+  const frame = frameName ? `"${frameName}"` : 'the selected frame';
+  const frameIdArg = frameId ? ` with frameId: "${frameId}"` : '';
+  const bridgeNote = bridgeConnected ? '' : '\n\n⚠ Bridge offline — paste this in Claude Code manually.';
+
   let cmd: string;
-  const agentNote = ' Call figma_get_blueline_data first — it returns structural data and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.';
   if (mode === 'sections') {
-    cmd = `Fill the blueline cards on the current Figma page.${agentNote}`;
+    cmd = `Fill the blueline cards for the frame "${frameName ?? 'selected'}" (ID: ${frameId ?? 'unknown'}). Call figma_get_blueline_data${frameIdArg} first — it returns structural data and orchestration instructions scoped to this frame. Then call figma_get_knowledge for each agent group to fetch expert knowledge. Dispatch parallel agents, then call figma_render_blueline with all card JSON.`;
   } else {
-    const categoryList = sections && sections.length > 0 ? sections.join(', ') : 'all categories';
-    const frame = frameName ? ` for "${frameName}"` : '';
-    cmd = `Fill ONLY these blueline categories${frame}: ${categoryList}.${agentNote} Do not fill cards from other categories or previous generations.`;
+    cmd = `Start an A11y review conversation for the frame ${frame}.
+
+Categories to review: ${categoryList}
+
+Step 1 — Ground yourself:
+Call figma_get_blueline_data${frameIdArg}. It returns the structural scan (a hidden text node named .structural-scan), a screenshot, and per-agent orchestration instructions — all scoped to this frame. Read the structural scan carefully. Do not infer elements that are not present in it.
+
+Step 2 — Ask questions first (REQUIRED before any rendering):
+Before calling figma_render_blueline, ask the designer 1–3 clarifying questions about things you genuinely need to know to be accurate — e.g. intended interaction pattern, whether a visual-only element is intentional, context of use. If you have no real questions, say so briefly and proceed.
+Wait for the designer's answers before continuing.
+
+Step 3 — Analyze:
+For each selected category, call figma_get_knowledge for its agent group. Use the structural scan + screenshot + designer answers to assess each category.
+Before filling a category, check whether the structural scan contains elements that match it:
+- "autoRotation" (Carousel) → skip if no carousel/slider elements in scan
+- "forms" → skip if no input/select/textarea elements in scan
+- "reducedMotion"/"media"/"reflow" → skip if no animation or media elements in scan
+If a category has no matching elements, skip it and note: "Skipped [category] — no matching elements found."
+
+Step 4 — Render:
+Call figma_render_blueline with the cards object. For confident items: write the issue or passing note, WCAG criterion, and a plain-language suggestion in desc. For uncertain items: pass an empty string for desc and put the open question in notes (e.g. "notes": "Need to know: is this button keyboard-only or also touch?").
+
+Step 5 — Send summary to plugin:
+After figma_render_blueline completes, call bridge_send_a11y_result with:
+{
+  "frameName": "${frameName ?? 'the selected frame'}",
+  "issues": [{ "category": "...", "description": "..." }],
+  "needs_input": [{ "category": "...", "question": "..." }],
+  "suggestions": [{ "category": "...", "description": "..." }]
+}
+This updates the plugin panel so the designer can see results without hunting the Figma canvas.${bridgeNote}`;
   }
+
+  lastA11yCmd = cmd;
+
   const el = document.getElementById('a11yStatus');
   if (el) {
     el.innerHTML = `
       <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
-        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Scaffolding done &#x2714;</div>
-        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">To fill AI sections, paste this in Claude Code:</div>
-        <code id="fillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
+        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Cards created &#x2714; — waiting for Claude</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">Paste this in Claude Code to start the review:</div>
+        <code id="fillCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;white-space:pre-wrap;">${esc(cmd)}</code>
         <button class="btn btn-secondary" id="copyFillCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
-        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
+        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Results will appear here when Claude finishes.</div>
       </div>`;
     document.getElementById('copyFillCmd')?.addEventListener('click', async () => {
       await copyToClipboard(cmd);
@@ -527,9 +711,69 @@ function showAiFillInstruction(mode?: string, sections?: string[], frameName?: s
   }
 }
 
-function showPanelsFillInstruction(sections: string[], frameName: string, sectionIds: string[]) {
+interface A11yResultItem { category: string; description: string; }
+interface A11yNeedsInputItem { category: string; question: string; }
+interface A11yResultPayload {
+  frameName: string;
+  issues: A11yResultItem[];
+  needs_input: A11yNeedsInputItem[];
+  suggestions: A11yResultItem[];
+}
+
+function renderA11yResults(data: A11yResultPayload) {
+  const el = document.getElementById('a11yStatus');
+  if (!el) return;
+
+  function section(title: string, cls: string, items: Array<{ label: string; text: string }>, itemCls: string) {
+    if (items.length === 0) return '';
+    const rows = items.map(i =>
+      `<div class="a11y-result-item ${itemCls}"><strong>${esc(i.label)}</strong> — ${esc(i.text)}</div>`
+    ).join('');
+    return `<div class="a11y-results-section">
+      <div class="a11y-results-section-title ${cls}">${title} (${items.length})</div>
+      ${rows}
+    </div>`;
+  }
+
+  const issueItems = (Array.isArray(data.issues) ? data.issues : []).map(i => ({ label: i?.category ?? '', text: i?.description ?? '' }));
+  const needsItems = (Array.isArray(data.needs_input) ? data.needs_input : []).map(i => ({ label: i?.category ?? '', text: i?.question ?? '' }));
+  const suggItems  = (Array.isArray(data.suggestions) ? data.suggestions : []).map(i => ({ label: i?.category ?? '', text: i?.description ?? '' }));
+
+  const empty = issueItems.length === 0 && needsItems.length === 0 && suggItems.length === 0;
+
+  el.innerHTML = `
+    <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
+      <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:8px;">Review complete — ${esc(data.frameName ?? '')}</div>
+      <div class="a11y-results">
+        ${empty
+          ? '<div class="a11y-results-empty">No issues or suggestions returned.</div>'
+          : section('Issues', 'issues', issueItems, 'issue') +
+            section('Needs your input', 'needs-input', needsItems, 'needs') +
+            section('Suggestions', 'suggestions', suggItems, 'suggestion')
+        }
+      </div>
+      <button class="btn btn-secondary" id="a11yContinueBtn" style="margin-top:8px;font-size:10px;width:100%;">Continue in Claude Code</button>
+    </div>`;
+
+  const continueBtn = document.getElementById('a11yContinueBtn') as HTMLButtonElement | null;
+  if (continueBtn) {
+    if (!lastA11yCmd) {
+      continueBtn.disabled = true;
+      continueBtn.title = 'Re-generate the blueline cards to restore this prompt.';
+    }
+    continueBtn.addEventListener('click', async () => {
+      if (!lastA11yCmd) return;
+      await copyToClipboard(lastA11yCmd);
+      continueBtn.textContent = 'Copied — paste in Claude Code';
+      setTimeout(() => { continueBtn.textContent = 'Continue in Claude Code'; }, 2000);
+    });
+  }
+}
+
+function showPanelsFillInstruction(sections: string[], frameName: string, sectionIds: string[], frameId?: string) {
   const sectionList = sections.join(', ');
-  const cmd = `Fill the blueline panels on the current Figma page for "${frameName}". Categories: ${sectionList}.\n\nCall figma_get_blueline_data first — it returns structural data (including nodeIds for all elements) and orchestration instructions. Then call figma_get_knowledge for each agent group to fetch expert knowledge.\n\nDispatch parallel agents. IMPORTANT: Each agent must return items with these additional fields:\n- nodeId (string|null): the node ID from the structural scan that this item refers to. Null if no element match.\n- annotationType ("element"|"region"|"none"): "element" for specific UI elements (buttons, links, inputs), "region" for area-level concepts (landmarks, sections), "none" for abstract/page-level items.\n\nThen call figma_render_blueline with mode: "panels" and all item JSON. The panels have already been scaffolded with cloned designs — the render call will place native Figma annotations on the clones.`;
+  const frameIdArg = frameId ? ` with frameId: "${frameId}"` : '';
+  const cmd = `Fill the blueline panels for the frame "${frameName}"${frameId ? ` (ID: ${frameId})` : ''}. Categories: ${sectionList}.\n\nCall figma_get_blueline_data${frameIdArg} first — it returns structural data (including nodeIds for all elements) and orchestration instructions scoped to this frame. Then call figma_get_knowledge for each agent group to fetch expert knowledge.\n\nDispatch parallel agents. IMPORTANT: Each agent must return items with these additional fields:\n- nodeId (string|null): the node ID from the structural scan that this item refers to. Null if no element match.\n- annotationType ("element"|"region"|"none"): "element" for specific UI elements (buttons, links, inputs), "region" for area-level concepts (landmarks, sections), "none" for abstract/page-level items.\n\nThen call figma_render_blueline with mode: "panels" and all item JSON. The panels have already been scaffolded with cloned designs — the render call will place native Figma annotations on the clones.`;
   const el = document.getElementById('a11yStatus');
   if (el) {
     el.innerHTML = `
@@ -559,6 +803,16 @@ document.getElementById('a11yCheckAllAi')?.addEventListener('click', () => {
   if (btn) btn.textContent = allChecked ? 'Check All' : 'Uncheck All';
 });
 
+document.getElementById('a11yShowMore')?.addEventListener('click', () => {
+  const section = document.getElementById('a11yConditionalSection');
+  const btn = document.getElementById('a11yShowMore') as HTMLButtonElement;
+  if (!section || !btn) return;
+  const isHidden = section.style.display === 'none';
+  section.style.display = isHidden ? '' : 'none';
+  btn.textContent = isHidden ? '▾ Hide extra categories' : '▸ Show more categories';
+  btn.setAttribute('aria-expanded', String(isHidden));
+});
+
 // Check All / Uncheck All — Accessibility Notes section
 document.getElementById('a11yCheckAllNotes')?.addEventListener('click', () => {
   if (!bridgeConnected) return;
@@ -569,6 +823,60 @@ document.getElementById('a11yCheckAllNotes')?.addEventListener('click', () => {
   const btn = document.getElementById('a11yCheckAllNotes');
   if (btn) btn.textContent = allChecked ? 'Check All' : 'Uncheck All';
 });
+
+const A11Y_LABELS: Record<string, string> = {
+  a11yFocusIndicators: 'Focus Indicators',
+  a11yFocusOrder: 'Focus Order',
+  a11yHeadings: 'Heading Hierarchy',
+  a11yLandmarksNav: 'Landmarks & Navigation',
+  a11yNamesAlt: 'Names & Alt-Text',
+  a11yColorContrast: 'Color Contrast',
+  a11yAriaKeyboard: 'ARIA & Keyboard',
+  a11yTargetSize: 'Target Size',
+  a11yPageSetup: 'Page Setup',
+  a11yForms: 'Forms',
+  a11yCarousel: 'Carousel',
+  a11yDom: 'DOM Strategy',
+  a11yMotionMedia: 'Motion & Media',
+  a11yScreenReader: 'Screen Reader Notes',
+  a11yReactNative: 'React Native',
+  a11yTvNote: 'TV Note',
+  a11yGeneralNote: 'General Note',
+};
+
+function getCheckedA11yCheckboxIds(): string[] {
+  return Object.keys(A11Y_LABELS).filter(
+    id => (document.getElementById(id) as HTMLInputElement)?.checked
+  );
+}
+
+function showConfirmPanel(checkedIds: string[]) {
+  const categoryView = document.getElementById('a11yCategoryView');
+  const statusEl = document.getElementById('a11yStatus');
+  if (!statusEl) return;
+  if (categoryView) categoryView.style.display = 'none';
+  const labels = checkedIds.map(id => A11Y_LABELS[id] || id).join(', ');
+  const frameLabel = 'the selected frame';
+  statusEl.innerHTML = `
+    <div class="a11y-confirm-panel">
+      <h4>Create ${checkedIds.length} annotation card${checkedIds.length === 1 ? '' : 's'} for ${esc(frameLabel)}</h4>
+      <div class="a11y-confirm-categories">${esc(labels)}</div>
+      <div class="a11y-confirm-note">Claude will ask you questions before filling any cards. Empty cards are normal — they mean Claude needs more information from you.</div>
+      <div class="a11y-confirm-actions">
+        <button class="btn btn-secondary" id="a11yConfirmBack">Back</button>
+        <button class="btn" id="a11yConfirmGo">Confirm &amp; Create Cards</button>
+      </div>
+    </div>`;
+  document.getElementById('a11yConfirmBack')?.addEventListener('click', () => {
+    statusEl.innerHTML = '';
+    if (categoryView) categoryView.style.display = 'block';
+  });
+  document.getElementById('a11yConfirmGo')?.addEventListener('click', () => {
+    statusEl.innerHTML = '';
+    if (categoryView) categoryView.style.display = 'block';
+    postToPlugin('generate-blueline', { categories: getCheckedA11yCategories() });
+  });
+}
 
 // Collect checked a11y categories
 function getCheckedA11yCategories(): string[] {
@@ -607,17 +915,14 @@ function getCheckedA11yCategories(): string[] {
   return categories;
 }
 
-function triggerBlueline() {
-  const categories = getCheckedA11yCategories();
-  if (categories.length === 0) {
-    updateA11yStatus('Select at least one option.');
+document.getElementById('a11yStartBtn')?.addEventListener('click', () => {
+  const checkedIds = getCheckedA11yCheckboxIds();
+  if (checkedIds.length === 0) {
+    updateA11yStatus('Select at least one category.');
     return;
   }
-  if (!bridgeConnected) { updateA11yStatus('Connect Bridge for AI-assisted categories.'); return; }
-  postToPlugin('generate-blueline', { categories });
-}
-
-document.getElementById('generateBluelineBtn')?.addEventListener('click', () => triggerBlueline());
+  showConfirmPanel(checkedIds);
+});
 
 function triggerBluelinePanels() {
   const categories = getCheckedA11yCategories();
@@ -631,6 +936,47 @@ function triggerBluelinePanels() {
 
 document.getElementById('generateBluelinePanelsBtn')?.addEventListener('click', () => triggerBluelinePanels());
 
+
+let lastA11yCmd = '';
+
+// ── Annotation mode ──────────────────────────────────────────────────────────
+let annotationMode = false;
+
+document.getElementById('a11yAnnotateToggle')?.addEventListener('click', () => {
+  annotationMode = !annotationMode;
+  const btn = document.getElementById('a11yAnnotateToggle') as HTMLButtonElement;
+  if (btn) {
+    btn.textContent = annotationMode ? 'Turn off annotation' : 'Turn on annotation';
+    btn.classList.toggle('active', annotationMode);
+  }
+  if (annotationMode) {
+    updateA11yStatus('Annotation mode on — select one category.');
+  } else {
+    // Uncheck all to reset single-select state
+    const allBoxes = document.querySelectorAll('.a11y-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+    allBoxes.forEach(cb => { cb.checked = false; });
+    postToPlugin('a11y-annotate-cleanup', {});
+    updateA11yStatus('Annotation mode off.');
+  }
+});
+
+// Single-select enforcement and annotation dispatch in annotation mode
+// Listener on the parent view so it covers both #a11yItemList and #a11yConditionalList
+document.getElementById('a11yCategoryView')?.addEventListener('change', (e) => {
+  if (!annotationMode) return;
+  const target = e.target as HTMLInputElement;
+  if (target.type !== 'checkbox' || !target.checked || !target.closest('.a11y-item')) return;
+
+  // Enforce single-select: uncheck all other a11y checkboxes
+  const allBoxes = document.querySelectorAll('.a11y-item input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+  allBoxes.forEach(cb => { if (cb !== target) cb.checked = false; });
+
+  // Dispatch annotation request to plugin
+  const categoryId = target.id;
+  const categoryLabel = A11Y_LABELS[categoryId] || categoryId;
+  postToPlugin('a11y-annotate-category', { categoryId, categoryLabel });
+  updateA11yStatus(`Annotating ${categoryLabel}…`);
+});
 
 // Bridge tab — WebSocket connection to figma-console MCP
 let bridgeConnected = false;
@@ -729,6 +1075,10 @@ function updateBridgeUi() {
     disconnected.style.display = 'block';
     connected.style.display = 'none';
   }
+  document.querySelectorAll<HTMLButtonElement>('.bridge-status-pill').forEach(pill => {
+    pill.disabled = false;
+    pill.classList.toggle('connected', bridgeConnected);
+  });
   updateA11yBridgeState();
 }
 
@@ -760,10 +1110,14 @@ function bridgeConnect() {
   bridgeUserDisconnected = false;
   if (bridgeReconnectTimer) { clearTimeout(bridgeReconnectTimer); bridgeReconnectTimer = null; }
 
+  document.querySelectorAll<HTMLButtonElement>('.bridge-status-pill').forEach(pill => {
+    pill.disabled = true;
+  });
+
   const btn = document.getElementById('bridgeConnectBtn') as HTMLButtonElement;
   if (btn) { btn.textContent = 'Connecting...'; btn.disabled = true; }
 
-  const WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+  const WS_PORTS = [9220, 9221, 9222];
   let found = false;
   let pending = WS_PORTS.length;
 
@@ -917,6 +1271,18 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
         return;
       }
 
+      // Handle A11y results loop-back from bridge_send_a11y_result MCP tool
+      if (message.type === 'A11Y_RESULT' && message.data && typeof message.data === 'object') {
+        const d = message.data as Record<string, unknown>;
+        const safe: A11yResultPayload = {
+          frameName: typeof d.frameName === 'string' ? d.frameName : '',
+          issues: Array.isArray(d.issues) ? d.issues : [],
+          needs_input: Array.isArray(d.needs_input) ? d.needs_input : [],
+          suggestions: Array.isArray(d.suggestions) ? d.suggestions : [],
+        };
+        renderA11yResults(safe);
+        return;
+      }
 
       // Ignore pong or other non-command messages
       if (!message.id || !message.method) return;
@@ -951,8 +1317,8 @@ function attachBridgeWsHandlers(ws: WebSocket, port: number) {
             appendBridgeLog('\u2192 ' + message.method + ' ERR: ' + err.message);
           }
         });
-    } catch {
-      // ignore malformed messages
+    } catch (e) {
+      console.error('[plugin/ui] ws.onmessage threw:', e);
     }
   };
 
@@ -1015,5 +1381,48 @@ function bridgeDisconnect() {
 
 document.getElementById('bridgeConnectBtn')?.addEventListener('click', () => bridgeConnect());
 document.getElementById('bridgeDisconnectBtn')?.addEventListener('click', () => bridgeDisconnect());
+
+// ── Align to S2A: resize iframe to give the table more room ───────────────
+// We rely on the existing navigateTo flow to swap menu → tab-content; only the
+// window resize and scan-button enable are alignv2-specific.
+function enterAlignV2Mode(): void {
+  document.body.classList.add('alignv2-active');
+  parent.postMessage({ pluginMessage: { type: 'align-v2-window-resize', wide: true } }, '*');
+  const scan = document.getElementById('alignV2ScanBtn') as HTMLButtonElement | null;
+  if (scan) scan.disabled = false;
+}
+
+function exitAlignV2Mode(): void {
+  if (!document.body.classList.contains('alignv2-active')) return;
+  document.body.classList.remove('alignv2-active');
+  parent.postMessage({ pluginMessage: { type: 'align-v2-window-resize', wide: false } }, '*');
+}
+
+document.querySelectorAll<HTMLElement>('.menu-item[data-tool="alignv2"], .hamburger-item[data-tool="alignv2"]').forEach(btn => {
+  btn.addEventListener('click', () => enterAlignV2Mode());
+});
+
+document.querySelectorAll<HTMLElement>('.menu-item:not([data-tool="alignv2"]), .hamburger-item:not([data-tool="alignv2"])').forEach(btn => {
+  btn.addEventListener('click', () => exitAlignV2Mode());
+});
+document.getElementById('backBtn')?.addEventListener('click', () => exitAlignV2Mode());
+
+// ── Align V2 buttons ──────────────────────────────────────────────────────
+document.getElementById('alignV2ScanBtn')?.addEventListener('click', () => {
+  parent.postMessage({ pluginMessage: { type: 'align-v2-scan' } }, '*');
+});
+
+document.querySelectorAll<HTMLButtonElement>('.alignv2-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.v2tab as 'colors' | 'dimensions' | 'typography';
+    if (tab) setV2ActiveTab(tab);
+  });
+});
+
+document.getElementById('alignV2ApplyBtn')?.addEventListener('click', () => {
+  const selections = collectV2ApplySelections();
+  if (selections.length === 0) return;
+  parent.postMessage({ pluginMessage: { type: 'align-v2-apply', selections } }, '*');
+});
 
 postToPlugin('ui-ready');

@@ -6,25 +6,64 @@
 </head>
 <body>
   <div id="app">
-    <header class="header">
-      <h1 class="header-title">Consonant Tools</h1>
+    <header class="plugin-header" id="pluginHeader">
+      <div id="headerMenu">
+        <h1 class="plugin-title">Consonant Tools</h1>
+        <button class="bridge-status-pill" id="bridgeStatusPill" aria-label="Bridge status">
+          <span class="bridge-status-dot"></span>
+          <span class="bridge-status-text">Bridge</span>
+        </button>
+      </div>
+      <div id="headerDetail" style="display:none;">
+        <button class="back-btn" id="backBtn"><span class="back-chevron">&#8249;</span><span id="backLabel"></span></button>
+        <button class="bridge-status-pill" id="bridgeStatusPillDetail" aria-label="Bridge status">
+          <span class="bridge-status-dot"></span>
+          <span class="bridge-status-text">Bridge</span>
+        </button>
+        <div class="hamburger-wrapper">
+          <button class="hamburger-btn" id="hamburgerBtn" aria-label="All tools" aria-expanded="false">&#9776;</button>
+          <div class="hamburger-menu" id="hamburgerMenu">
+            <button class="hamburger-item" data-tool="align" id="hamburgerAlignItem"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><line x1="1.5" y1="3.5" x2="10" y2="3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="8,1.8 10.2,3.5 8,5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="10.5" y1="8.5" x2="2" y2="8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="4,6.8 1.8,8.5 4,10.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Align</button>
+            <button class="hamburger-item" data-tool="alignv2"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><line x1="1.5" y1="3.5" x2="10" y2="3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="8,1.8 10.2,3.5 8,5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="10.5" y1="8.5" x2="2" y2="8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="4,6.8 1.8,8.5 4,10.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Align to S2A</button>
+            <button class="hamburger-item" data-tool="match" id="hamburgerMatchItem"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 1.5 H4.5 A1.5 1.5 0 0 0 7.5 1.5 H10.5 V4.5 A1.5 1.5 0 0 1 10.5 7.5 V10.5 H7.5 A1.5 1.5 0 0 0 4.5 10.5 H1.5 V7.5 A1.5 1.5 0 0 1 1.5 4.5 Z" stroke="currentColor" stroke-width="1"/></svg></span>Match</button>
+            <button class="hamburger-item" data-tool="design"><span class="hm-icon">&#x229E;</span>Grids</button>
+            <button class="hamburger-item" data-tool="specs"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1"/><line x1="7.8" y1="7.8" x2="10.5" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>Specs</button>
+            <button class="hamburger-item" data-tool="a11y" id="hamburgerA11yItem"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg></span>A11y</button>
+            <button class="hamburger-item" data-tool="localize"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><ellipse cx="6" cy="6" rx="2.2" ry="5" stroke="currentColor" stroke-width="1"/><line x1="1" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1"/><line x1="1" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1"/></svg></span>Localize</button>
+            <button class="hamburger-item" data-tool="variables"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 5V1.5H5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/><circle cx="8.8" cy="3.2" r="1.7" stroke="currentColor" stroke-width="1.1"/><path d="M3.2 7.5L1.5 9.2 3.2 10.9 4.9 9.2Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M10.5 7V10.5H7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/></svg></span>Variables</button>
+            <button class="hamburger-item" data-tool="select"><span class="hm-icon">&#x25CE;</span>Select</button>
+            <button class="hamburger-item" data-tool="bridge"><span class="hm-icon">&#x03DF;</span>Bridge</button>
+          </div>
+        </div>
+      </div>
     </header>
+
+    <div class="s2a-banner" id="s2aBanner" style="display:none;">
+      <span class="s2a-banner-text">S2A / Foundations library not found. Add it via Assets &rsaquo; Browse team libraries, then restart Figma.</span>
+      <button class="s2a-banner-dismiss" id="s2aBannerDismiss" aria-label="Dismiss">&#x2715;</button>
+    </div>
 
     <div class="selection-info" id="selectionInfo">
       <span class="selection-label">No selection</span>
     </div>
 
-    <nav class="tab-bar">
-      <button class="tab active" data-tab="align">Align</button>
-      <button class="tab" data-tab="match">Match</button>
-      <button class="tab" data-tab="design">Grids</button>
-      <button class="tab" data-tab="specs">Specs</button>
-      <button class="tab" data-tab="a11y">A11y</button>
-      <button class="tab" data-tab="localize">Localize</button>
-      <button class="tab" data-tab="bridge">Bridge</button>
-    </nav>
+    <div id="menuView" class="menu-view">
+      <div class="menu-section-label">Design</div>
+      <button class="menu-item" data-tool="align" id="menuAlignItem"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><line x1="1.5" y1="3.5" x2="10" y2="3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="8,1.8 10.2,3.5 8,5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="10.5" y1="8.5" x2="2" y2="8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="4,6.8 1.8,8.5 4,10.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="menu-item-name">Align</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="alignv2"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><line x1="1.5" y1="3.5" x2="10" y2="3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="8,1.8 10.2,3.5 8,5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="10.5" y1="8.5" x2="2" y2="8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="4,6.8 1.8,8.5 4,10.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="menu-item-name">Align to S2A</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="match" id="menuMatchItem"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 1.5 H4.5 A1.5 1.5 0 0 0 7.5 1.5 H10.5 V4.5 A1.5 1.5 0 0 1 10.5 7.5 V10.5 H7.5 A1.5 1.5 0 0 0 4.5 10.5 H1.5 V7.5 A1.5 1.5 0 0 1 1.5 4.5 Z" stroke="currentColor" stroke-width="1"/></svg></span><span class="menu-item-name">Match</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="design"><span class="menu-item-icon">&#x229E;</span><span class="menu-item-name">Grids</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="specs"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1"/><line x1="7.8" y1="7.8" x2="10.5" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span><span class="menu-item-name">Specs</span><span class="menu-item-chevron">&#8250;</span></button>
+      <div class="menu-section-label">Compliance</div>
+      <button class="menu-item" data-tool="a11y" id="menuA11yItem"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg></span><span class="menu-item-name">A11y</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="localize"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><ellipse cx="6" cy="6" rx="2.2" ry="5" stroke="currentColor" stroke-width="1"/><line x1="1" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1"/><line x1="1" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1"/></svg></span><span class="menu-item-name">Localize</span><span class="menu-item-chevron">&#8250;</span></button>
+      <div class="menu-section-label">Utilities</div>
+      <button class="menu-item" data-tool="variables"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 5V1.5H5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/><circle cx="8.8" cy="3.2" r="1.7" stroke="currentColor" stroke-width="1.1"/><path d="M3.2 7.5L1.5 9.2 3.2 10.9 4.9 9.2Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M10.5 7V10.5H7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/></svg></span><span class="menu-item-name">Variables</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="select"><span class="menu-item-icon">&#x25CE;</span><span class="menu-item-name">Select</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="bridge"><span class="menu-item-icon">&#x03DF;</span><span class="menu-item-name">Bridge</span><span class="menu-item-chevron">&#8250;</span></button>
+    </div>
 
-    <div class="tab-content" id="tabContent">
+    <div class="tab-content" id="tabContent" style="display:none;">
       <div class="tab-panel active" data-panel="align">
         <div id="alignContent">
           <p class="placeholder" id="alignPlaceholder">Select a node to inspect</p>
@@ -37,6 +76,27 @@
               <button class="btn" id="fullAlignBtn">Full Align S2A</button>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="alignv2">
+        <div id="alignV2Selection" style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">Select a frame to scan.</div>
+        <button class="btn btn-secondary" id="alignV2ScanBtn" disabled>Scan</button>
+
+        <div id="alignV2Tabs" style="display:none;margin-top:12px;border-bottom:1px solid var(--border);">
+          <button class="alignv2-tab active" data-v2tab="colors">Colors <span class="alignv2-tab-count" id="alignV2ColorsCount">0</span></button>
+          <button class="alignv2-tab" data-v2tab="dimensions">Dimensions <span class="alignv2-tab-count" id="alignV2DimensionsCount">0</span></button>
+          <button class="alignv2-tab" data-v2tab="typography">Typography <span class="alignv2-tab-count" id="alignV2TypographyCount">0</span></button>
+        </div>
+
+        <div id="alignV2Toolbar" style="display:none;margin-top:8px;gap:6px;justify-content:flex-end;">
+          <button class="btn btn-secondary" id="alignV2CheckAllBtn" style="width:auto;padding:4px 10px;font-size:11px;flex-shrink:0;">Force Match All</button>
+        </div>
+
+        <div id="alignV2Body" style="margin-top:8px;"></div>
+
+        <div id="alignV2Footer" style="display:none;padding-top:8px;margin-top:16px;justify-content:space-between;align-items:center;">
+          <span id="alignV2FooterCount" style="font-size:11px;color:var(--text-secondary);"></span>
+          <button class="btn" id="alignV2ApplyBtn">Apply</button>
         </div>
       </div>
       <div class="tab-panel" data-panel="match">
@@ -102,45 +162,51 @@
         <div id="a11yContent">
           <p class="placeholder" id="a11yPlaceholder">Select a frame to analyze</p>
           <div id="a11yControls" style="display:none;">
+            <div id="a11yCategoryView">
 
             <!-- AI-assisted (bridge-gated) -->
             <div style="display:flex;justify-content:space-between;align-items:center;">
               <span class="section-title" style="color:#7c3aed;margin-bottom:0;">AI-assisted</span>
               <span class="a11y-badge" id="a11yBridgeBadge">connect bridge</span>
             </div>
-            <div style="display:flex;justify-content:flex-end;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <button id="a11yAnnotateToggle" class="a11y-annotate-btn">Turn on annotation</button>
               <button id="a11yCheckAllAi" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
             </div>
             <div class="match-checklist" id="a11yItemList">
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusIndicators" disabled> Focus Indicators (AI)</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusOrder" disabled> Focus Order (AI)</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yHeadings" disabled> Heading Hierarchy</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yLandmarksNav" disabled> Landmarks &amp; Navigation</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yNamesAlt" disabled> Names &amp; Alt-Text</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yColorContrast" disabled> Color Contrast</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yAriaKeyboard" disabled> ARIA &amp; Keyboard</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yTargetSize" disabled> Target Size</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yPageSetup" disabled> Page Setup</label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusIndicators" disabled><span class="a11y-label-group">Focus Indicators<span class="a11y-desc">Do interactive elements have a visible focus ring?</span></span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yFocusOrder" disabled><span class="a11y-label-group">Focus Order<span class="a11y-desc">Does the keyboard tab order match the visual layout?</span></span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yHeadings" disabled><span class="a11y-label-group">Heading Hierarchy<span class="a11y-desc">Are headings structured so screen readers can navigate?</span></span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yLandmarksNav" disabled><span class="a11y-label-group">Landmarks &amp; Navigation<span class="a11y-desc">Are page regions labeled so screen readers can jump to them?</span></span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yNamesAlt" disabled><span class="a11y-label-group">Names &amp; Alt-Text<span class="a11y-desc">Do images and controls have clear names for assistive tech?</span></span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yColorContrast" disabled><span class="a11y-label-group">Color Contrast<span class="a11y-desc">Is text readable against its background?</span></span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yAriaKeyboard" disabled><span class="a11y-label-group">ARIA &amp; Keyboard<span class="a11y-desc">Are custom widgets correctly labeled and keyboard-operable?</span></span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yTargetSize" disabled><span class="a11y-label-group">Target Size<span class="a11y-desc">Are tap/click targets large enough for motor accessibility?</span></span></label>
+              <label class="match-option a11y-item"><input type="checkbox" id="a11yPageSetup" disabled><span class="a11y-label-group">Page Setup<span class="a11y-desc">Does the page have a title and language declared?</span></span></label>
             </div>
 
-            <!-- Accessibility Notes (bridge-gated) -->
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-              <span class="section-title" style="margin-bottom:0;">Accessibility Notes</span>
-              <button id="a11yCheckAllNotes" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
-            </div>
-            <div class="match-checklist" id="a11yConditionalList">
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yForms" disabled> Forms</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yCarousel" disabled> Carousel</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yDom" disabled> DOM Strategy</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yMotionMedia" disabled> Motion &amp; Media</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yScreenReader" disabled> Screen Reader Notes</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yReactNative" disabled> React Native</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yTvNote" disabled> TV Note</label>
-              <label class="match-option a11y-item"><input type="checkbox" id="a11yGeneralNote" disabled> General Note</label>
+            <!-- Group 2 toggle -->
+            <button class="a11y-show-more" id="a11yShowMore" aria-expanded="false" aria-controls="a11yConditionalSection" style="margin-top:8px;">▸ Show more categories</button>
+            <div id="a11yConditionalSection" style="display:none;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+                <span class="section-title" style="margin-bottom:0;">Accessibility Notes</span>
+                <button id="a11yCheckAllNotes" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+              </div>
+              <div class="match-checklist" id="a11yConditionalList">
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yForms" disabled><span class="a11y-label-group">Forms<span class="a11y-desc">Are inputs labeled and error messages clear?</span></span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yCarousel" disabled><span class="a11y-label-group">Carousel<span class="a11y-desc">Can users navigate slides with keyboard and screen reader?</span></span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yDom" disabled><span class="a11y-label-group">DOM Strategy<span class="a11y-desc">Does the DOM order support the correct reading sequence?</span></span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yMotionMedia" disabled><span class="a11y-label-group">Motion &amp; Media<span class="a11y-desc">Can users pause motion and is media accessible?</span></span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yScreenReader" disabled><span class="a11y-label-group">Screen Reader Notes<span class="a11y-desc">Platform-specific notes for VoiceOver, TalkBack, Narrator</span></span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yReactNative" disabled><span class="a11y-label-group">React Native<span class="a11y-desc">Accessibility notes specific to the React Native platform</span></span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yTvNote" disabled><span class="a11y-label-group">TV Note<span class="a11y-desc">Notes for TV/10-foot UI accessibility</span></span></label>
+                <label class="match-option a11y-item"><input type="checkbox" id="a11yGeneralNote" disabled><span class="a11y-label-group">General Note<span class="a11y-desc">Any other accessibility notes for this frame</span></span></label>
+              </div>
             </div>
 
-            <button class="btn" id="generateBluelineBtn" style="margin-top:12px;">Generate Blueline</button>
+            <button class="btn" id="a11yStartBtn" style="margin-top:12px;">Start A11y Review</button>
             <button class="btn btn-secondary" id="generateBluelinePanelsBtn" style="margin-top:4px;">Generate Blueline Panels</button>
+            </div>
             <div id="a11yStatus" style="margin-top:12px;"></div>
           </div>
         </div>
@@ -186,6 +252,38 @@
           </div>
         </div>
       </div>
+      <div class="tab-panel" data-panel="variables">
+        <div id="variablesContent">
+          <div id="variablesBridgeWarning" style="background:var(--bg-secondary,#f5f5f5);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text-secondary);margin-bottom:12px;">
+            Connect Bridge to push variables to Claude Code
+          </div>
+          <div class="section-title">Variable Collections</div>
+          <div id="variablesSummary" style="margin-bottom:12px;">
+            <p style="color:var(--text-secondary);font-size:11px;margin:0;">Click Refresh to load collections.</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn" id="variablesRefreshBtn" style="flex:1;">Refresh</button>
+            <button class="btn btn-secondary" id="variablesPushBtn" style="flex:1;" disabled>Push to Bridge</button>
+          </div>
+          <div id="variablesStatus" style="margin-top:10px;font-size:11px;color:var(--text-secondary);"></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-panel="select">
+        <div id="selectContent">
+          <p class="placeholder" id="selectPlaceholder">Select a component set to filter variants</p>
+          <div id="selectControls" style="display:none;">
+            <div class="section-title" id="selectSetName" style="margin-bottom:8px;"></div>
+            <div id="selectAxes"></div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button class="btn" id="selectApplyBtn" style="flex:1;">Select Variants</button>
+              <button class="btn btn-secondary" id="selectAllBtn" style="flex:1;">Select All</button>
+            </div>
+            <div id="selectStatus" style="margin-top:8px;font-size:11px;color:var(--text-secondary);"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="tab-panel" data-panel="bridge">
         <div id="bridgeContent">
           <div id="bridgeDisconnected">

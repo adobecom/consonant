@@ -1,0 +1,158 @@
+<h2>Collapsible Rails — Revised</h2>
+<p class="subtitle">Collapse triggers at the top of each rail. FABs move to top corners of the browser when collapsed — no interference with the live site below.</p>
+
+<div style="display:flex; flex-direction:column; gap:28px;">
+
+  <!-- STATE 1: Both expanded (default) -->
+  <div>
+    <div class="label" style="margin-bottom:8px;">Default — Both Expanded</div>
+    <div class="mockup">
+      <div class="mockup-header">Design Audit Tool</div>
+      <div class="mockup-body" style="padding:0;">
+        <div style="display:flex; height:300px; font-size:11px;">
+
+          <!-- Left rail -->
+          <div style="width:160px; background:#1e1e2e; border-right:1px solid #333; display:flex; flex-direction:column; flex-shrink:0;">
+            <!-- Collapse trigger at top -->
+            <div style="padding:8px 10px 6px; border-bottom:1px solid #2a2a3e; display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <span style="color:#6c47ff; font-size:14px; line-height:1;">‹</span>
+              <span style="color:#666; font-size:10px; text-transform:uppercase; letter-spacing:.06em;">Collapse</span>
+            </div>
+            <!-- Content -->
+            <div style="padding:10px; flex:1; overflow-y:auto;">
+              <div style="color:#888; font-size:9px; text-transform:uppercase; margin-bottom:6px;">Extract</div>
+              <div style="padding:5px 7px; background:#2a2a3e; border-radius:4px; color:#ccc; margin-bottom:3px;">🎨 Design System</div>
+              <div style="padding:5px 7px; border-radius:4px; color:#666; margin-bottom:3px;">🗺 DS Mapping</div>
+              <div style="padding:5px 7px; border-radius:4px; color:#666; margin-bottom:3px;">✏️ Design Style</div>
+              <div style="padding:5px 7px; border-radius:4px; color:#666; margin-bottom:3px;">📐 Principles</div>
+              <div style="padding:5px 7px; border-radius:4px; color:#666; margin-bottom:3px;">🎬 Animation</div>
+              <div style="padding:5px 7px; border-radius:4px; color:#666; margin-bottom:3px;">🌍 Localization</div>
+              <div style="padding:5px 7px; border-radius:4px; color:#666; margin-bottom:3px;">♿ A11y</div>
+            </div>
+          </div>
+
+          <!-- Center -->
+          <div style="flex:1; background:#f7f8fa; display:flex; flex-direction:column;">
+            <div style="background:#f0f0f0; border-bottom:1px solid #ddd; padding:5px 8px;">
+              <div style="background:#fff; border:1px solid #ccc; border-radius:3px; padding:2px 6px; font-size:10px; color:#555;">https://stripe.com/payments</div>
+            </div>
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">Live site</div>
+          </div>
+
+          <!-- Right rail -->
+          <div style="width:220px; background:#1a1a2e; border-left:1px solid #333; display:flex; flex-direction:column; flex-shrink:0;">
+            <!-- Collapse trigger at top right of header -->
+            <div style="padding:8px 10px; border-bottom:1px solid #333; display:flex; align-items:center; justify-content:space-between;">
+              <span style="color:#ccc; font-size:11px; font-weight:600;">Claude</span>
+              <div style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                <span style="color:#666; font-size:10px; text-transform:uppercase; letter-spacing:.06em;">Collapse</span>
+                <span style="color:#6c47ff; font-size:14px; line-height:1;">›</span>
+              </div>
+            </div>
+            <div style="flex:1; padding:10px; color:#666; font-size:11px;">Chat messages…</div>
+            <div style="padding:6px; border-top:1px solid #333; display:flex; gap:5px;">
+              <input style="flex:1; background:#2a2a3e; border:1px solid #444; border-radius:3px; padding:5px 7px; color:#ccc; font-size:10px;" placeholder="Ask Claude…" />
+              <button style="background:#6c47ff; color:#fff; border:none; border-radius:3px; padding:5px 8px; font-size:10px;">↑</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATE 2: Both collapsed — FABs at top corners -->
+  <div>
+    <div class="label" style="margin-bottom:8px;">Both Rails Collapsed — FABs at Top Corners</div>
+    <div class="mockup">
+      <div class="mockup-header">Design Audit Tool</div>
+      <div class="mockup-body" style="padding:0;">
+        <div style="height:300px; background:#f7f8fa; display:flex; flex-direction:column; position:relative;">
+          <div style="background:#f0f0f0; border-bottom:1px solid #ddd; padding:5px 8px;">
+            <div style="background:#fff; border:1px solid #ccc; border-radius:3px; padding:2px 6px; font-size:10px; color:#555;">https://stripe.com/payments</div>
+          </div>
+          <div style="flex:1; display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">Full browser — no rails</div>
+
+          <!-- Left FAB — top left -->
+          <div style="position:absolute; top:44px; left:10px; width:36px; height:36px; background:#6c47ff; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:15px; cursor:pointer; box-shadow:0 2px 10px rgba(108,71,255,0.5);" title="Open extract panel">☰</div>
+
+          <!-- Right FAB — top right -->
+          <div style="position:absolute; top:44px; right:10px; width:36px; height:36px; background:#6c47ff; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:15px; cursor:pointer; box-shadow:0 2px 10px rgba(108,71,255,0.5);" title="Open Claude">💬</div>
+
+        </div>
+      </div>
+    </div>
+    <p style="color:var(--text-secondary); font-size:12px; margin-top:6px;">FABs sit just below the URL bar — top of the live content area. No interference with anything below.</p>
+  </div>
+
+  <!-- STATE 3: Left only collapsed -->
+  <div>
+    <div class="label" style="margin-bottom:8px;">Left Collapsed Only</div>
+    <div class="mockup">
+      <div class="mockup-header">Design Audit Tool</div>
+      <div class="mockup-body" style="padding:0;">
+        <div style="display:flex; height:220px; font-size:11px;">
+          <div style="flex:1; background:#f7f8fa; display:flex; flex-direction:column; position:relative;">
+            <div style="background:#f0f0f0; border-bottom:1px solid #ddd; padding:5px 8px;">
+              <div style="background:#fff; border:1px solid #ccc; border-radius:3px; padding:2px 6px; font-size:10px; color:#555;">https://stripe.com/payments</div>
+            </div>
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">Wider browser view</div>
+            <!-- Left FAB only -->
+            <div style="position:absolute; top:36px; left:10px; width:32px; height:32px; background:#6c47ff; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; cursor:pointer; box-shadow:0 2px 8px rgba(108,71,255,0.5);">☰</div>
+          </div>
+          <div style="width:220px; background:#1a1a2e; border-left:1px solid #333; display:flex; flex-direction:column; flex-shrink:0;">
+            <div style="padding:8px 10px; border-bottom:1px solid #333; display:flex; align-items:center; justify-content:space-between;">
+              <span style="color:#ccc; font-size:11px; font-weight:600;">Claude</span>
+              <div style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+                <span style="color:#666; font-size:10px; text-transform:uppercase; letter-spacing:.06em;">Collapse</span>
+                <span style="color:#6c47ff; font-size:14px;">›</span>
+              </div>
+            </div>
+            <div style="flex:1; padding:10px; color:#666; font-size:11px;">Chat messages…</div>
+            <div style="padding:6px; border-top:1px solid #333; display:flex; gap:5px;">
+              <input style="flex:1; background:#2a2a3e; border:1px solid #444; border-radius:3px; padding:5px 7px; color:#ccc; font-size:10px;" placeholder="Ask Claude…" />
+              <button style="background:#6c47ff; color:#fff; border:none; border-radius:3px; padding:5px 8px; font-size:10px;">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Label vote -->
+<div class="section" style="margin-top:2rem">
+  <h3>Pick a label word for the collapse trigger</h3>
+  <p class="subtitle" style="margin-bottom:1rem">Used next to the ‹ and › chevrons. Should feel reversible — not permanent.</p>
+  <div class="options">
+    <div class="option" data-choice="hide" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Hide</h3>
+        <p>Simple, clean, universally understood. Implies "it's still there, just not visible." Familiar from most tools.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="collapse" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Collapse</h3>
+        <p>Standard panel terminology. Used in VS Code, Figma, and most IDEs. Most precise for what it does.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="minimize" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Minimize</h3>
+        <p>Borrowed from OS window management. Feels very familiar but implies shrinking, not sliding away.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="fold" onclick="toggleSelect(this)">
+      <div class="letter">D</div>
+      <div class="content">
+        <h3>Fold</h3>
+        <p>Directional and spatial — the panel "folds" to the edge. Unique, a little playful, still intuitive.</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -65,30 +65,33 @@ function walkLayoutOrder(
   // Determine child order based on layout mode
   let orderedChildren: SceneNode[];
 
-  if ('layoutMode' in container && container.layoutMode !== 'NONE') {
-    // Auto-layout: Figma stores children in layout order.
+  if ('layoutMode' in container &&
+      (container.layoutMode === 'HORIZONTAL' || container.layoutMode === 'VERTICAL')) {
+    // Auto-layout (linear): Figma stores children in layout order.
     // Check for reversed z-index ordering (itemReverseZIndex flips visual vs array order).
+    // GRID layout falls through to spatial sort — its array order is z-order, not reading order.
     orderedChildren = [...children];
     if ('itemReverseZIndex' in container && (container as any).itemReverseZIndex === true) {
       orderedChildren.reverse();
     }
   } else {
-    // No auto-layout: sort spatially by center point (top-to-bottom, then left-to-right)
+    // No auto-layout: sort spatially by bounding-box overlap (top-to-bottom, then left-to-right).
+    // Overlap-based row grouping handles cards with different heights but the same top edge —
+    // center-distance grouping broke when one card was much taller than its same-row neighbor.
     orderedChildren = [...children].sort((a, b) => {
       const aAbs = a.absoluteBoundingBox;
       const bAbs = b.absoluteBoundingBox;
       if (!aAbs || !bAbs) return 0;
-      const aCenterY = aAbs.y + aAbs.height / 2;
-      const bCenterY = bAbs.y + bAbs.height / 2;
-      const aCenterX = aAbs.x + aAbs.width / 2;
-      const bCenterX = bAbs.x + bAbs.width / 2;
 
-      // Row grouping: if vertical centers are within half the smaller element's height, same row
-      const rowThreshold = Math.min(aAbs.height, bAbs.height) * 0.5;
-      if (Math.abs(aCenterY - bCenterY) <= rowThreshold) {
-        return aCenterX - bCenterX; // same row — left to right
+      const aTop = aAbs.y, aBot = aAbs.y + aAbs.height;
+      const bTop = bAbs.y, bBot = bAbs.y + bAbs.height;
+      const overlap = Math.min(aBot, bBot) - Math.max(aTop, bTop);
+      const minHeight = Math.min(aAbs.height, bAbs.height);
+
+      if (overlap >= minHeight * 0.5) {
+        return aAbs.x - bAbs.x; // same row — sort by left edge
       }
-      return aCenterY - bCenterY; // different rows — top to bottom
+      return aTop - bTop; // different rows — sort by top edge
     });
   }
 

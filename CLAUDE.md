@@ -19,8 +19,9 @@ That creates a branch, opens a draft PR, and gives you a live Storybook preview 
 - Your PR preview: `https://adobecom.github.io/consonant/pr-preview/pr-<number>/` (posted automatically as a PR comment once CI runs)
 
 **MCP servers available (configured by setup script):**
-- `figma-dev-mode-mcp-server` — reads your open Figma file directly
-- `figma-console` — executes code in Figma, takes screenshots, reads variables
+- `consonant-specs` — **primary Figma bridge** for this repo, served by the `consonant-specs-plugin` running inside Figma. Use `mcp__consonant-specs__figma_*` tools by default for any Figma operation (status, navigate, selection, execute, screenshots, get_file_info, etc.). WebSocket bridge listens on `127.0.0.1:9220`.
+- `figma-console` — **secondary Figma bridge**, served by a separate "Figma Desktop Bridge" plugin (port `9223`). Usually not running. Only use `mcp__figma-console__*` tools if you've explicitly verified its plugin is up — don't default to it.
+- `figma-dev-mode-mcp-server` — reads your open Figma file directly (Figma's built-in MCP)
 - `s2a-ds` — looks up design tokens, component specs, and validates CSS
 
 ---
