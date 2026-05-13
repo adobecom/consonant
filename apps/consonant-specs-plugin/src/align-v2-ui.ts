@@ -53,6 +53,7 @@ let v2State: {
   checkedGroupKeys: Set<string>;
   chosenOverrides: Map<string, string>; // groupKey → variableId or textStyleId
   forceMatchedKeys: Set<string>;        // groupKey → was set via Force Match (closest-value, not exact)
+  clearedSuggestionKeys: Set<string>;   // groupKey → user explicitly opted out of the auto-suggestion (treat as no suggestion)
 } = {
   result: null,
   activeTab: 'colors',
@@ -60,6 +61,7 @@ let v2State: {
   checkedGroupKeys: new Set(),
   chosenOverrides: new Map(),
   forceMatchedKeys: new Set(),
+  clearedSuggestionKeys: new Set(),
 };
 
 // ─── Color popover open state ────────────────────────────────────────────────
@@ -386,6 +388,12 @@ function buildColorPopoverContent(
   }
   out += `</div>`;
 
+  // Clear-selection button — shown only when there's a current chosen value.
+  // Lets the user back out of a selection (auto-suggested OR manually picked).
+  if (chosen) {
+    out += `<button type="button" class="v2-color-clear-btn">× Clear selection</button>`;
+  }
+
   // Table header
   out += `<div class="v2-color-table-header">`;
   out += `<span class="v2-cth-name">Name</span>`;
@@ -478,17 +486,25 @@ function ensureV2Styles(): void {
 }
 .alignv2-group-line2 .v2-value {
   color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 140px;
   min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   background: var(--bg-secondary, #f5f5f5);
   border-radius: 4px;
   padding: 3px 8px;
   box-sizing: border-box;
+  overflow: hidden;
+}
+.alignv2-group-line2 .v2-value-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .alignv2-group-line2 .v2-arrow {
   color: var(--text-secondary);
@@ -502,13 +518,16 @@ function ensureV2Styles(): void {
 }
 .alignv2-group-line2 .v2-badge {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 18px;
   font-size: 9px;
-  padding: 1px 6px;
+  padding: 0 6px;
   border-radius: 8px;
   background: var(--success-bg, #e6f4ea);
   color: var(--success, #137333);
-  min-width: 44px;
-  text-align: center;
   box-sizing: border-box;
 }
 .alignv2-group-line2 .v2-badge.v2-badge-muted {
@@ -516,8 +535,35 @@ function ensureV2Styles(): void {
   color: var(--text-secondary, #999);
 }
 .alignv2-group-line2 .v2-badge.v2-badge-force {
-  background: #ffe5e5;
-  color: #b00020;
+  background: #fff1e0;
+  color: #b35900;
+}
+/* Clickable "Match" badge — same grey pill as Select but interactive.
+   Only override the bits of <button> chrome that differ from <span>; let all
+   pill sizing (padding, font-size, line-height, min-width) inherit from
+   .v2-badge so the dimensions match Align / Select / Matched exactly. */
+.alignv2-group-line2 button.v2-badge.v2-badge-match {
+  cursor: pointer;
+  border: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+}
+/* Hover state on the green (Align — click to clear) variant. Lower-specificity
+   rule applies only when neither -muted nor -force is on the element. */
+.alignv2-group-line2 button.v2-badge.v2-badge-match:hover {
+  background: #d0eedb;
+  color: #0c5224;
+}
+/* Hover state on the grey (force-match OR restore-align) variant. */
+.alignv2-group-line2 button.v2-badge.v2-badge-muted.v2-badge-match:hover {
+  background: var(--border, #e0e0e0);
+  color: var(--text);
+}
+/* Hover state on the orange (clear) variant. */
+.alignv2-group-line2 button.v2-badge.v2-badge-force.v2-badge-match:hover {
+  background: #ffe2c0;
+  color: #8a4400;
 }
 .alignv2-group-line2 .v2-color-swatch {
   display: inline-block;
@@ -566,6 +612,22 @@ function ensureV2Styles(): void {
 .v2-color-dropdown .v2-color-caret {
   color: var(--text-secondary);
   flex-shrink: 0;
+}
+.v2-color-popover .v2-color-clear-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 12px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border, #e5e5e5);
+  font-size: 11px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+}
+.v2-color-popover .v2-color-clear-btn:hover {
+  background: var(--bg-secondary, #f5f5f5);
 }
 .v2-color-popover {
   position: fixed;
@@ -723,6 +785,7 @@ export function renderAlignV2ScanResult(result: V2Result, selectionName: string,
   v2State.chosenOverrides = new Map();
   v2State.checkedGroupKeys = new Set();
   v2State.forceMatchedKeys = new Set();
+  v2State.clearedSuggestionKeys = new Set();
 
   // Build groups for all tabs upfront so counts are correct
   v2State.groups = {
@@ -769,11 +832,31 @@ function renderV2Body(): void {
   body.innerHTML = groups.map(group => {
     const gk = esc(group.groupKey);
     const checked = v2State.checkedGroupKeys.has(group.groupKey);
-    const disabled = group.suggestion === null;
+    // Effective suggestion: null when the user has explicitly cleared the
+    // auto-suggestion via the popover's "Clear selection" button. Treat the
+    // row as if no S2A suggestion existed in the first place.
+    const effectiveSuggestion = v2State.clearedSuggestionKeys.has(group.groupKey)
+      ? null
+      : group.suggestion;
+    const disabled = effectiveSuggestion === null;
     const chosen = v2State.chosenOverrides.get(group.groupKey)
-      ?? (group.suggestion?.variableId ?? group.suggestion?.textStyleId ?? '');
+      ?? (effectiveSuggestion?.variableId ?? effectiveSuggestion?.textStyleId ?? '');
 
     const isColorRow = group.property === 'Fill' || group.property === 'Stroke';
+
+    // Visual swatch for the LEFT (current) value on color rows so the designer can
+    // compare current vs. target at a glance. currentValue is either '#RRGGBB'
+    // (hardcoded) or 'libName / coll / name (#RRGGBB)' (wrong-library) — take the
+    // LAST hex match so wrong-library picks the trailing resolved hex, not a hex
+    // that happens to be inside a variable path.
+    let currentColorSwatch = '';
+    if (isColorRow) {
+      const hexMatches = group.currentValue.match(/#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g);
+      const currentHex = hexMatches ? hexMatches[hexMatches.length - 1] : '';
+      if (currentHex) {
+        currentColorSwatch = `<span class="v2-color-swatch" style="background-color:${esc(currentHex)}"></span>`;
+      }
+    }
 
     let suggestCell: string;
 
@@ -812,21 +895,29 @@ function renderV2Body(): void {
           : `<select data-group-key="${gk}">${dropdownOpts}</select>`;
     }
 
-    // Three-state badge — exact-match wins first, then force/manual pick, then empty.
-    // Green "Align"   — row originally had an exact-match suggestion (always wins)
-    // Pink  "Matched" — no exact match, but a value has been chosen (force-matched or
-    //                    manually picked from dropdown)
-    // Gray  "Select"  — no value chosen yet
+    // Five-state badge — color + label carry the meaning. All clickable variants
+    // share class .v2-badge-match and one click handler that figures out the
+    // action from current state.
+    // Green   "Align"  — exact-match S2A suggestion is active   → click CLEARS it
+    // Orange  "Match"  — value chosen (force-match or manual)   → click CLEARS it
+    // Gray    "Select" — Align suggestion exists but was cleared → click RESTORES it
+    // Gray    "Match"  — no suggestion ever, candidates exist   → click FORCE-MATCHES
+    // Gray    "Select" — no candidates, no action possible      → static span
     const chosenValueId = v2State.chosenOverrides.get(group.groupKey)
-      ?? group.suggestion?.variableId
-      ?? group.suggestion?.textStyleId
+      ?? effectiveSuggestion?.variableId
+      ?? effectiveSuggestion?.textStyleId
       ?? null;
+    const isClearedAlign = group.suggestion !== null && v2State.clearedSuggestionKeys.has(group.groupKey);
 
     let badge: string;
-    if (group.suggestion?.isExactMatch) {
-      badge = `<span class="v2-badge">Align</span>`;
+    if (effectiveSuggestion?.isExactMatch) {
+      badge = `<button type="button" class="v2-badge v2-badge-match" data-group-key="${gk}">Align</button>`;
     } else if (chosenValueId) {
-      badge = `<span class="v2-badge v2-badge-force">Matched</span>`;
+      badge = `<button type="button" class="v2-badge v2-badge-force v2-badge-match" data-group-key="${gk}">Match</button>`;
+    } else if (isClearedAlign) {
+      badge = `<button type="button" class="v2-badge v2-badge-muted v2-badge-match" data-group-key="${gk}">Select</button>`;
+    } else if (group.allCandidates.length > 0) {
+      badge = `<button type="button" class="v2-badge v2-badge-muted v2-badge-match" data-group-key="${gk}">Match</button>`;
     } else {
       badge = `<span class="v2-badge v2-badge-muted">Select</span>`;
     }
@@ -853,7 +944,7 @@ function renderV2Body(): void {
     ${countBadge}
   </div>
   <div class="alignv2-group-line2">
-    <span class="v2-value">${esc(group.currentValue)}</span>
+    <span class="v2-value">${currentColorSwatch}<span class="v2-value-text">${esc(group.currentValue)}</span></span>
     <span class="v2-arrow">→</span>
     ${suggestCell}
     ${badge}
@@ -867,6 +958,51 @@ function renderV2Body(): void {
       const k = cb.dataset.groupKey!;
       if (cb.checked) v2State.checkedGroupKeys.add(k); else v2State.checkedGroupKeys.delete(k);
       updateV2Footer();
+    });
+  });
+
+  // Clickable badge handler — every interactive pill (green Align, orange Match,
+  // grey Select-restore, grey Match-force) shares class .v2-badge-match. The
+  // handler figures out the action from current state.
+  body.querySelectorAll<HTMLButtonElement>('button.v2-badge-match[data-group-key]').forEach(btn => {
+    btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const k = btn.dataset.groupKey!;
+      const g = v2State.groups[v2State.activeTab].find(gg => gg.groupKey === k);
+      if (!g) return;
+
+      const isCleared = v2State.clearedSuggestionKeys.has(k);
+      const effSugg = isCleared ? null : g.suggestion;
+      const hasChosen = v2State.chosenOverrides.has(k);
+
+      if (effSugg?.isExactMatch) {
+        // Green Align → CLEAR. Mark the suggestion as cleared; row flips to grey Select.
+        v2State.clearedSuggestionKeys.add(k);
+        v2State.chosenOverrides.delete(k);
+        v2State.forceMatchedKeys.delete(k);
+        v2State.checkedGroupKeys.delete(k);
+      } else if (hasChosen) {
+        // Orange Match → CLEAR chosen value. Don't touch clearedSuggestionKeys
+        // so an Align-then-cleared-then-force-matched row goes back to grey Select,
+        // not back to green Align.
+        v2State.chosenOverrides.delete(k);
+        v2State.forceMatchedKeys.delete(k);
+        v2State.checkedGroupKeys.delete(k);
+      } else if (g.suggestion !== null && isCleared) {
+        // Grey Select on a previously-cleared Align row → RESTORE the Align suggestion.
+        v2State.clearedSuggestionKeys.delete(k);
+        v2State.checkedGroupKeys.add(k);
+      } else if (g.allCandidates.length > 0) {
+        // Grey Match on a row that never had a suggestion → FORCE-MATCH.
+        const candidate = pickClosestByCategory(g);
+        if (!candidate) return;
+        const candidateId = candidate.variableId ?? candidate.textStyleId;
+        if (!candidateId) return;
+        v2State.chosenOverrides.set(k, candidateId);
+        v2State.forceMatchedKeys.add(k);
+        v2State.checkedGroupKeys.add(k);
+      }
+      renderV2Body();
     });
   });
 
@@ -924,8 +1060,12 @@ function renderV2Body(): void {
       const grp = groupArr.find(g => g.groupKey === k);
       if (!grp) return;
 
+      // Honor the cleared-suggestion flag: if the user cleared the auto-suggestion,
+      // open the popover as if no suggestion existed (so chosenVal is '' and the
+      // Clear button is hidden until they pick something fresh).
+      const effSuggForPopover = v2State.clearedSuggestionKeys.has(k) ? null : grp.suggestion;
       const chosenVal = v2State.chosenOverrides.get(k)
-        ?? (grp.suggestion?.variableId ?? grp.suggestion?.textStyleId ?? '');
+        ?? (effSuggForPopover?.variableId ?? effSuggForPopover?.textStyleId ?? '');
 
       // Auto-switch the popover tab so it opens on the tab containing the
       // currently-chosen value (saves the user from hunting through tabs).
@@ -1031,6 +1171,25 @@ function renderV2Body(): void {
 
       attachOptionListeners();
 
+      // Clear-selection click — event delegation so it survives tab-change innerHTML rebuilds.
+      // Removes any chosen override + force-match flag for this row, unchecks the row's
+      // checkbox (user explicitly opted out of applying anything), closes the popover,
+      // and re-renders so the row's button + badge reflect the cleared state.
+      popover.addEventListener('click', (ev) => {
+        const clearBtn = (ev.target as HTMLElement).closest<HTMLButtonElement>('button.v2-color-clear-btn');
+        if (!clearBtn) return;
+        ev.stopPropagation();
+        v2State.chosenOverrides.delete(k);
+        v2State.forceMatchedKeys.delete(k);
+        v2State.checkedGroupKeys.delete(k);
+        // Mark the row's auto-suggestion as explicitly cleared. From now on this
+        // row is rendered as if no suggestion existed: badge becomes "Select",
+        // dropdown shows "Select a color…", checkbox stays unchecked.
+        v2State.clearedSuggestionKeys.add(k);
+        closeOpenPopover();
+        renderV2Body();
+      });
+
       // Tab clicks — use event delegation on the popover to avoid re-attachment after innerHTML rebuilds
       popover.addEventListener('click', (ev) => {
         const tabBtn = (ev.target as HTMLElement).closest<HTMLButtonElement>('button.v2-cp-tab[data-cptab]');
@@ -1039,8 +1198,9 @@ function renderV2Body(): void {
         const newTab = tabBtn.dataset.cptab as ColorPopoverTab;
         if (!newTab || newTab === v2ColorPopoverTab) return;
         v2ColorPopoverTab = newTab;
+        const effSuggForTab = v2State.clearedSuggestionKeys.has(k) ? null : grp.suggestion;
         const currentChosen = v2State.chosenOverrides.get(k)
-          ?? (grp.suggestion?.variableId ?? grp.suggestion?.textStyleId ?? '');
+          ?? (effSuggForTab?.variableId ?? effSuggForTab?.textStyleId ?? '');
         popover.innerHTML = buildColorPopoverContent(grp.allCandidates, currentChosen, v2ColorPopoverTab);
         attachOptionListeners();
         // Delegation listener persists on the popover element itself — no re-attachment needed
