@@ -10,7 +10,19 @@ A Figma plugin for measurements, annotations, and developer handoff with S2A tok
 4. In Figma Desktop: Plugins > Development > Import plugin from manifest
 5. Select `manifest.json` from this project
 
-**First time on a new machine?** The `.mcp.json` file has absolute paths that need to match your local clone location. Tell Claude Code: "Fix the `.mcp.json` paths for my machine" and it will update them automatically. See `docs/setup-guide.md` for full setup instructions.
+**First time on a new machine?** See `docs/setup-guide.md` for full setup instructions.
+
+## MCP server setup (one-time per machine)
+
+The plugin ships with an MCP server (`mcp/`) that lets Claude Code talk to Figma through this plugin. The built output is gitignored, so you need to build it once after cloning or pulling:
+
+```bash
+cd apps/consonant-specs-plugin/mcp
+npm install
+npm run build
+```
+
+After that, restart Claude Code to pick up the `consonant-specs` server. You only need to rebuild if you pull changes to `mcp/src/`.
 
 ## Development
 

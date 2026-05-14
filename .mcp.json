@@ -18,6 +18,10 @@
     "corp-jira": {
       "command": "node",
       "args": ["/Users/mhuntsberry/adobe-mcp-servers/src/corp-jira/dist/index.js"]
+    },
+    "consonant-specs": {
+      "command": "node",
+      "args": ["./apps/consonant-specs-plugin/mcp/dist/index.js"]
     }
   }
 }
