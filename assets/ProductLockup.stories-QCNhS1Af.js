@@ -1,4 +1,4 @@
-import{x as p}from"./iframe-BJutOslQ.js";import{P as b}from"./product-lockup-NQf28aS3.js";import{b as h}from"./app-icon-jmASRcT3.js";import"./preload-helper-BSds_FOV.js";const y=`.c-product-lockup {
+import{x as p}from"./iframe-DL_ZiOhC.js";import{P as b}from"./product-lockup-DyPpg7CP.js";import{b as h}from"./app-icon-W5FpP4q7.js";import"./preload-helper-BSds_FOV.js";const y=`.c-product-lockup {
   --c-product-lockup-gap: var(--s2a-spacing-md, 16px);
   --c-product-lockup-caret-size: calc(var(--s2a-spacing-sm, 12px) / 2);
   display: inline-flex;

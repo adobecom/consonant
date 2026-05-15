@@ -1,4 +1,4 @@
-import{x as n,E as i}from"./iframe-BJutOslQ.js";import{A as b}from"./app-icon-jmASRcT3.js";const v=()=>n`
+import{x as n,E as i}from"./iframe-DL_ZiOhC.js";import{A as b}from"./app-icon-W5FpP4q7.js";const v=()=>n`
   <svg
     width="6"
     height="6"

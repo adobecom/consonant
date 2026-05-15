@@ -1,4 +1,4 @@
-import{x as a}from"./iframe-BJutOslQ.js";import{B as r}from"./button-C8zKFBp9.js";import{t as s,I as x,s as y,o as w}from"./define-element-BBqFk53l.js";import"./preload-helper-BSds_FOV.js";const z=({width:t=24,height:e=24,hidden:n=!1,title:o="Download"}={})=>s`<svg
+import{x as a}from"./iframe-DL_ZiOhC.js";import{B as r}from"./button-DaLDLKpc.js";import{t as s,I as x,s as y,o as w}from"./define-element-BoECMPFp.js";import"./preload-helper-BSds_FOV.js";const z=({width:t=24,height:e=24,hidden:n=!1,title:o="Download"}={})=>s`<svg
     xmlns="http://www.w3.org/2000/svg"
     width="${t}"
     height="${e}"
