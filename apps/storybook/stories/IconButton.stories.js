@@ -32,77 +32,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: `
-<p>Icon-only action button. Pass any S2A icon name as the <code>icon</code> prop — icons are sourced from <code>packages/components/src/icons/</code> and rendered as inline SVG with <code>currentColor</code> so they inherit the button's tone automatically.</p>
-
-<details class="s2a-doc-accordion">
-  <summary>Preferred · Data-attribute HTML structure <span class="s2a-doc-badge">Recommended</span></summary>
-  <div class="s2a-doc-body">
-    <p>Map Figma axes to <code>data-*</code> attributes. Icon slots accept inline SVG, Spectrum Web Components, or Lit templates.</p>
-
-\`\`\`html
-<button
-  class="c-icon-button"
-  data-background="solid"
-  data-context="on-light"
-  data-size="lg"
-  aria-label="Pause playback"
->
-  <span class="c-icon-button__icon" aria-hidden="true">
-    <!-- inline SVG from packages/components/src/icons/pause.svg -->
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">…</svg>
-  </span>
-</button>
-\`\`\`
-
-\`\`\`css
-.c-icon-button[data-background="solid"][data-context="on-light"] {
-  background-color: var(--s2a-color-iconbutton-background-primary-solid-on-light-default);
-  color: var(--s2a-color-iconbutton-content-primary-solid-default);
-}
-
-.c-icon-button[data-background="outlined"][data-context="on-dark"] {
-  border: var(--s2a-border-width-sm) solid var(--s2a-color-iconbutton-border-primary-outlined-on-dark);
-  color: var(--s2a-color-iconbutton-content-primary-outlined-knockout);
-}
-\`\`\`
-  </div>
-</details>
-
-<details class="s2a-doc-accordion">
-  <summary>Alternative · BEM / utility classes <span class="s2a-doc-badge">Class-based</span></summary>
-  <div class="s2a-doc-body">
-    <p>Utility-heavy stacks can alias variant axes to class modifiers while keeping specificity flat.</p>
-
-\`\`\`html
-<button class="c-icon-button c-icon-button--solid c-icon-button--on-light c-icon-button--lg" aria-label="Play">
-  <span class="c-icon-button__icon" aria-hidden="true">
-    <!-- inline SVG from packages/components/src/icons/play.svg -->
-  </span>
-</button>
-
-<button class="c-icon-button c-icon-button--outlined c-icon-button--on-dark c-icon-button--md" aria-label="Close">
-  <span class="c-icon-button__icon" aria-hidden="true">
-    <!-- inline SVG from packages/components/src/icons/cross.svg -->
-  </span>
-</button>
-\`\`\`
-
-\`\`\`css
-.c-icon-button--solid.c-icon-button--on-light {
-  background-color: var(--s2a-color-iconbutton-background-primary-solid-on-light-default);
-  color: var(--s2a-color-iconbutton-content-primary-solid-default);
-}
-
-.c-icon-button--outlined.c-icon-button--on-dark {
-  border: var(--s2a-border-width-sm) solid var(--s2a-color-iconbutton-border-primary-outlined-on-dark);
-  color: var(--s2a-color-iconbutton-content-primary-outlined-knockout);
-}
-\`\`\`
-  </div>
-</details>
-
-        `,
+        component: `<p>Icon-only action button. Pass any S2A icon name as the <code>icon</code> prop — icons are sourced from <code>packages/components/src/icons/</code> and rendered as inline SVG with <code>currentColor</code> so they inherit the button's tone automatically.</p>`,
       },
       source: {
         language: "html",

@@ -45,58 +45,7 @@ export default {
         component: `
 <p>Adobe product badge used inside RouterMarquee/ProductLockup. The Figma component is <code>AppIcon</code> in S2A Foundations (<code>3582:130846</code>) with <code>Size=xs|sm|md|lg</code> and an <code>Icon</code> instance-swap sourced from the published App Icons Library.</p>
 <p>Storybook controls expose only verified CDN-backed slugs from the published library catalog plus existing S2A product aliases. The reference catalog still lists library-only entries, but those use an A4U placeholder until a verified CDN URL or internal package asset is wired in.</p>
-
-<details class="s2a-doc-accordion">
-  <summary>Preferred · Data-attribute markup <span class="s2a-doc-badge">Recommended</span></summary>
-  <div class="s2a-doc-body">
-    <p>Use the component wrapper (<code>c-app-icon</code>) with <code>data-size</code> to mirror Figma variants. Images are fixed square tiles; the component injects the CDN URL.</p>
-
-\`\`\`html
-<span class="c-app-icon" data-size="md" role="img" aria-hidden="true">
-  <img
-    class="c-app-icon__img"
-    src="https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg"
-    alt=""
-    width="24"
-    height="24"
-    loading="lazy"
-    decoding="async"
-  />
-</span>
-\`\`\`
-
-\`\`\`css
-.c-app-icon[data-size="xs"] { --c-app-icon-size: 16px; }
-.c-app-icon[data-size="sm"] { --c-app-icon-size: 18px; }
-.c-app-icon[data-size="md"] { --c-app-icon-size: 24px; }
-.c-app-icon[data-size="lg"] { --c-app-icon-size: 32px; }
-.c-app-icon { border-radius: calc(var(--c-app-icon-size) * 0.18); }
-\`\`\`
-  </div>
-</details>
-
-<details class="s2a-doc-accordion">
-  <summary>Alternative · BEM utility classes <span>Class-based</span></summary>
-  <div class="s2a-doc-body">
-    <p>Alias each size to a class modifier when consuming in utility-heavy stacks.</p>
-
-\`\`\`html
-<span class="c-app-icon c-app-icon--md" role="img" aria-label="Adobe Creative Cloud app icon">
-  <img class="c-app-icon__img" src=".../creative-cloud.svg" alt="" width="24" height="24" />
-</span>
-\`\`\`
-
-\`\`\`css
-.c-app-icon--xs { --c-app-icon-size: 16px; }
-.c-app-icon--sm { --c-app-icon-size: 18px; }
-.c-app-icon--md { --c-app-icon-size: 24px; }
-.c-app-icon--lg { --c-app-icon-size: 32px; }
-.c-app-icon { border-radius: calc(var(--c-app-icon-size) * 0.18); }
-\`\`\`
-  </div>
-</details>
-
-        `,
+`,
       },
       source: {
         language: "html",

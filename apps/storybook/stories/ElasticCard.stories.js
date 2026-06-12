@@ -40,63 +40,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: `
-<p>Media-forward tile used in Router hero carousels. Mirrors matt-atoms component set (<a href="https://www.figma.com/design/svi0B0G925V2XG0yX0DDaz/matt-atoms?node-id=4006-461133" target="_blank" rel="noreferrer">node 4006-461133</a>).</p>
-
-<details class="s2a-doc-accordion">
-  <summary>Preferred · Data-attribute markup <span class="s2a-doc-badge">Recommended</span></summary>
-  <div class="s2a-doc-body">
-    <p>Map <code>State</code>, media ratio, and copy treatments with <code>data-state</code>, <code>data-media-aspect</code>, and the data attributes on <code>.c-media</code> + <code>.c-rich-content</code>. The card itself can be a <code>&lt;button&gt;</code>, <code>&lt;a&gt;</code>, or <code>&lt;article&gt;</code> depending on routing semantics.</p>
-
-\`\`\`html
-<article class="c-elastic-card" data-state="resting" data-media-aspect="3:4">
-  <header class="c-elastic-card__header">
-    <span class="c-product-lockup" data-orientation="horizontal" data-style="label" data-context="on-light" data-width="fill">
-      <span class="c-product-lockup__icon" aria-hidden="true">…</span>
-      <span class="c-product-lockup__label">Creativity and design</span>
-    </span>
-    <span class="c-elastic-card__action c-elastic-card__action--caret" aria-hidden="true">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 3 7 6l-3 3" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </span>
-  </header>
-  <div class="c-elastic-card__media">
-    <figure class="c-media" data-aspect="3:4" data-fit="cover" data-position="center">
-      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" alt="" loading="lazy" decoding="async" />
-      <span class="c-media__overlay" aria-hidden="true"></span>
-    </figure>
-  </div>
-  <div class="c-elastic-card__body">
-    <div class="c-elastic-card__body-content">
-      <p class="c-elastic-card__title">Adobe Express</p>
-      <p class="c-elastic-card__body-text">Create standout content with quick actions and guided templates.</p>
-    </div>
-  </div>
-</article>
-\`\`\`
-  </div>
-</details>
-
-<details class="s2a-doc-accordion">
-  <summary>Alternative · Utility / BEM classes <span class="s2a-doc-badge">Class-based</span></summary>
-  <div class="s2a-doc-body">
-    <p>When data attributes aren't available, alias the same variant axes with modifier classes.</p>
-
-\`\`\`html
-<a class="c-elastic-card c-elastic-card--expanded c-elastic-card--aspect-16x9" href="#">
-  …
-</a>
-\`\`\`
-
-\`\`\`css
-.c-elastic-card--expanded { background-color: var(--s2a-color-background-knockout); color: var(--s2a-color-content-knockout); }
-.c-elastic-card--aspect-16x9 .c-media { aspect-ratio: 16 / 9; }
-\`\`\`
-  </div>
-</details>
-
-        `,
+        component: `<p>Media-forward tile used in Router hero carousels. Mirrors matt-atoms component set (<a href="https://www.figma.com/design/svi0B0G925V2XG0yX0DDaz/matt-atoms?node-id=4006-461133" target="_blank" rel="noreferrer">node 4006-461133</a>).</p>`,
       },
       source: {
         language: "html",
