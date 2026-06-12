@@ -2,7 +2,6 @@ import { html } from "lit";
 
 import { RichContent } from "./RichContent";
 import { Button } from "../../../packages/components/src/button/button.js";
-import richContentCss from "../../../packages/components/src/rich-content/rich-content.css?raw";
 
 // ——— Shared section wrapper ———
 // width: 100% so it fills the Storybook canvas at any viewport.
@@ -25,7 +24,7 @@ const section = (bg, content, { align = "flex-start" } = {}) => html`
 // ——— Story meta ———
 
 export default {
-  title: "Components/RichContent",
+  title: "Molecules/RichContent",
   tags: ["autodocs"],
   render: (args) => RichContent(args),
   parameters: {
@@ -41,11 +40,25 @@ Marketing text content block: eyebrow + title + body paragraph + optional Action
 - \`narrow\` → \`--s2a-grid-container-measure-narrow-_max-width\` (500px desktop / 327px mobile), title-4
 - \`wide\` → \`--s2a-grid-container-measure-wide-_max-width\` (736px desktop / unconstrained mobile), title-2
 - \`none\` → no max-width, title-1
-
-\`\`\`css
-${richContentCss}
-\`\`\`
         `,
+      },
+      source: {
+        language: "html",
+        code: `<div class="c-rich-content" data-theme="on-light" data-density="tight" data-justify="start" data-measure="narrow" data-has-actions="false">
+  <div class="c-rich-content__text">
+    <p class="c-rich-content__eyebrow">Eyebrow</p>
+    <h2 class="c-rich-content__title">Section heading.</h2>
+    <p class="c-rich-content__body">Supporting body copy that provides context for the section.</p>
+  </div>
+</div>
+
+<!-- With centered layout and wide measure (used in SectionHeader) -->
+<div class="c-rich-content" data-theme="on-light" data-density="tight" data-justify="center" data-measure="wide" data-has-actions="true">
+  <div class="c-rich-content__text">
+    <h2 class="c-rich-content__title">Everything you need to make anything.</h2>
+  </div>
+  <div class="c-rich-content__actions">…</div>
+</div>`,
       },
     },
   },

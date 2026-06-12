@@ -11,12 +11,27 @@ const menuItems = [
 ];
 
 export default {
-  title: "Navigation/Nav Card/Patterns",
+  title: "Organisms/NavCard/Patterns",
   tags: ["autodocs"],
   render: (args) =>
     html`<div style="padding: 32px; background: #f5f5f5; display: inline-flex;">${NavCardPattern(
       args
     )}</div>`,
+  parameters: {
+    docs: {
+      description: {
+        component: "Convenience wrapper that renders either the Promo (NavCard) or Menu (NavCardMenuItem) GNAV pattern from a single `pattern` prop.",
+      },
+      source: {
+        language: "html",
+        code: `<!-- Promo pattern -->
+<div class="c-nav-card">…</div>
+
+<!-- Menu pattern -->
+<div class="c-nav-card-menu-item">…</div>`,
+      },
+    },
+  },
   argTypes: {
     pattern: {
       control: "inline-radio",

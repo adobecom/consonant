@@ -1,6 +1,9 @@
 // Phosphor Icons (bold weight for button CaretDown, etc.)
 import "@phosphor-icons/web/bold";
 
+// Shared accordion styles for component documentation panels
+import "./docs-styles.css";
+
 import { withFigmaOverlay, figmaOverlayGlobals } from "./figma-overlay.js";
 
 // Normalize — must come first, before tokens
@@ -71,6 +74,9 @@ if (typeof document !== "undefined") {
         --s2a-font-family-adobe-clean: "Adobe Clean", adobe-clean, "Trebuchet MS", sans-serif;
         --s2a-font-family-adobe-clean-display: "Adobe Clean Display", adobe-clean-display, "Adobe Clean", adobe-clean, "Trebuchet MS", sans-serif;
       }
+      /* Prevent body horizontal scrollbar — stops hover feedback loop when
+         expanding components (e.g. ElasticCard) exceed the viewport width. */
+      body { overflow-x: hidden; }
     `;
   document.head.appendChild(adobeCleanOverrides);
 
@@ -114,6 +120,19 @@ const preview = {
           values: ["wcag2a", "wcag2aa", "wcag21aa"],
         },
       },
+    },
+
+    // S2A breakpoint presets — matches our responsive token breakpoints exactly
+    viewport: {
+      viewports: {
+        s2a_375:  { name: "375 — Mobile",       styles: { width: "375px",  height: "812px"  } },
+        s2a_768:  { name: "768 — Tablet",        styles: { width: "768px",  height: "1024px" } },
+        s2a_1024: { name: "1024 — Desktop sm",   styles: { width: "1024px", height: "768px"  } },
+        s2a_1280: { name: "1280 — Desktop md",   styles: { width: "1280px", height: "800px"  } },
+        s2a_1440: { name: "1440 — Desktop lg",   styles: { width: "1440px", height: "900px"  } },
+        s2a_1920: { name: "1920 — Desktop xl",   styles: { width: "1920px", height: "1080px" } },
+      },
+      defaultViewport: "s2a_1440",
     },
   },
   decorators: [

@@ -1,25 +1,10 @@
 import { html, nothing } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { AppIcon } from "../app-icon/app-icon.js";
 import "./product-lockup.css";
+import chevronRightSvg from "../icons/chevron-right.svg?raw";
 
-const CaretIcon = () => html`
-  <svg
-    width="6"
-    height="6"
-    viewBox="0 0 6 6"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <path
-      d="M2 1 4.25 3 2 5"
-      stroke="currentColor"
-      stroke-width="1.25"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-`;
+const CaretIcon = () => unsafeHTML(chevronRightSvg);
 
 const ICON_SIZES = new Set(["xs", "sm", "md", "lg"]);
 
@@ -60,14 +45,25 @@ export const ProductLockup = ({
   const resolvedShowIconStart =
     typeof showIcon === "boolean" ? showIcon : showIconStart;
   const resolvedIconSize = normalizeIconSize(iconSize, normalizedOrientation);
-  const shouldShowCaret = normalizedOrientation === "horizontal" && showIconEnd;
+  const showCaret = showIconEnd && caret !== null;
   const resolvedLabel = productName ?? label;
-  const caretTemplate =
-    shouldShowCaret && caret !== null
-      ? html`<span class="c-product-lockup__caret" aria-hidden="true">
-          ${typeof caret === "function" ? caret() : caret}
-        </span>`
-      : nothing;
+  const isVertical = normalizedOrientation === "vertical";
+
+  const caretSpan = showCaret
+    ? html`<span class="c-product-lockup__caret" aria-hidden="true"
+        >${typeof caret === "function" ? caret() : caret}</span
+      >`
+    : nothing;
+
+  // Vertical: label + caret sit in a horizontal label-row (gap 4px, per Figma Label Row frame)
+  const labelContent = isVertical && showCaret
+    ? html`<span class="c-product-lockup__label-row"
+        ><span class="c-product-lockup__label">${resolvedLabel}</span>${caretSpan}</span
+      >`
+    : html`<span class="c-product-lockup__label">${resolvedLabel}</span>`;
+
+  // Horizontal: caret trails the label as a sibling
+  const trailingCaret = !isVertical && showCaret ? caretSpan : nothing;
 
   return html`
     <span
@@ -77,15 +73,14 @@ export const ProductLockup = ({
       data-context=${normalizedContext}
       data-width=${normalizedWidth}
       data-has-icon-start=${resolvedShowIconStart ? "true" : "false"}
-      data-has-caret=${shouldShowCaret ? "true" : "false"}
+      data-has-caret=${showCaret ? "true" : "false"}
     >
       ${resolvedShowIconStart
         ? html`<span class="c-product-lockup__icon" aria-hidden="true">
             ${AppIcon({ app, size: resolvedIconSize })}
           </span>`
         : nothing}
-      <span class="c-product-lockup__label">${resolvedLabel}</span>
-      ${caretTemplate}
+      ${labelContent}${trailingCaret}
     </span>
   `;
 };

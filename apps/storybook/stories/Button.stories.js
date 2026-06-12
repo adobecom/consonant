@@ -26,41 +26,16 @@ const SpectrumChevronDownIcon = () =>
   ></sp-icon-chevron-down>`;
 
 export default {
-  title: "Components/Button",
+  title: "Atoms/Button",
   tags: ["autodocs"],
   render: (args) => Button(args),
   parameters: {
     docs: {
       description: {
         component: `
-<style>
-.doc-pattern {
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
-  margin: 12px 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,248,248,0.9));
-}
-.doc-collapse summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 18px 24px;
-  font-family: var(--s2a-font-family-label);
-  font-size: var(--s2a-font-size-sm);
-  font-weight: var(--s2a-font-weight-label);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.doc-collapse summary::-webkit-details-marker { display: none; }
-.doc-collapse summary span { color: #555; font-family: var(--s2a-font-family-label); font-size: var(--s2a-typography-font-size-caption); font-weight: var(--s2a-font-weight-label); }
-.doc-collapse[open] summary { border-bottom: 1px solid rgba(0,0,0,0.08); }
-.doc-body { padding: 20px 24px 24px; }
-.doc-body p { margin: 0 0 12px; font-family: var(--s2a-font-family-body); font-size: var(--s2a-typography-font-size-label); color: #333; }
-.doc-body code { font-family: var(--s2a-font-family-label); font-weight: var(--s2a-font-weight-label); }
-</style>
-<details class="doc-pattern doc-collapse">
-  <summary>Preferred · Data-attribute HTML structure <span>Recommended</span></summary>
-  <div class="doc-body">
+<details class="s2a-doc-accordion">
+  <summary>Preferred · Data-attribute HTML structure <span class="s2a-doc-badge">Recommended</span></summary>
+  <div class="s2a-doc-body">
     <p>Matches Figma <code>.Button/Core/Primary</code> node <code>141:53460</code>: <code>Background</code>, <code>Context</code>, <code>Size</code>, and <code>State</code> combine into 60 primary variants. The Figma component exposes a label plus optional start/end icon slots.</p>
     <p><code>intent="accent"</code> is an S2A extension for blue CTAs on light surfaces; it is not part of this primary Figma component set.</p>
 
@@ -103,9 +78,9 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Alternative · BEM / utility classes <span>Class-based</span></summary>
-  <div class="doc-body">
+<details class="s2a-doc-accordion">
+  <summary>Alternative · BEM / utility classes <span class="s2a-doc-badge">Class-based</span></summary>
+  <div class="s2a-doc-body">
     <p>Useful when the consuming stack already embraces class composition. Keep aliases 1:1 with the variant axes.</p>
 
 \`\`\`html
@@ -139,6 +114,28 @@ export default {
 
 <p>Source stylesheet: <code>packages/components/src/button/button.css</code>.</p>
         `,
+      },
+      source: {
+        language: "html",
+        code: `<!-- Solid / on-light (default) -->
+<button class="c-button" data-background="solid" data-intent="primary" data-context="on-light" data-size="md" type="button">
+  Label
+</button>
+
+<!-- Outlined / on-dark -->
+<button class="c-button" data-background="outlined" data-intent="primary" data-context="on-dark" data-size="md" type="button">
+  Label
+</button>
+
+<!-- Accent (blue CTA) -->
+<button class="c-button" data-background="solid" data-intent="accent" data-context="on-light" data-size="md" type="button">
+  Get started
+</button>
+
+<!-- Link variant -->
+<a class="c-button" data-background="solid" data-intent="primary" data-context="on-light" data-size="md" href="/destination">
+  Learn more
+</a>`,
       },
     },
   },

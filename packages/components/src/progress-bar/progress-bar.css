@@ -2,14 +2,10 @@
   position: relative;
   display: block;
   width: 100%;
-  height: var(--s2a-border-radius-sm, 4px);
-  border-radius: var(--s2a-border-radius-sm, 4px);
-  background-color: var(--s2a-color-transparent-white-16, rgba(255, 255, 255, 0.16));
+  height: 4px;
+  border-radius: 4px;
+  background-color: var(--s2a-color-transparent-white-00, transparent);
   overflow: hidden;
-}
-
-.c-progress-bar[data-tone="default"] {
-  background-color: var(--s2a-color-transparent-black-12, rgba(0, 0, 0, 0.12));
 }
 
 .c-progress-bar__fill {
@@ -17,10 +13,6 @@
   inset: 0;
   width: 0;
   border-radius: inherit;
-  background-color: var(--s2a-color-content-knockout, #ffffff);
+  background-color: var(--s2a-color-background-brand, #eb1000);
   transition: width 200ms ease;
-}
-
-.c-progress-bar[data-tone="default"] .c-progress-bar__fill {
-  background-color: var(--s2a-color-content-default, #000000);
 }

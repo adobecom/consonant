@@ -1,10 +1,8 @@
 .c-product-lockup {
-  --c-product-lockup-gap: var(--s2a-spacing-md, 16px);
-  --c-product-lockup-caret-size: calc(var(--s2a-spacing-sm, 12px) / 2);
   display: inline-flex;
   align-items: center;
-  gap: var(--s2a-product-lockup-gap-inline);
-  color: var(--s2a-color-content-default, #000000);
+  gap: var(--s2a-spacing-md, 16px);
+  color: var(--s2a-color-content-label, #000000);
   font-family: var(
     --s2a-font-family-default,
     "adobe-clean-display",
@@ -17,7 +15,11 @@
 .c-product-lockup[data-orientation="vertical"] {
   flex-direction: column;
   align-items: flex-start;
-  --c-product-lockup-gap: var(--s2a-spacing-sm, 12px);
+  gap: var(--s2a-spacing-sm, 12px);
+}
+
+.c-product-lockup[data-style="eyebrow"] {
+  color: var(--s2a-color-content-eyebrow, rgba(0, 0, 0, 0.64));
 }
 
 .c-product-lockup[data-context="on-dark"] {
@@ -36,12 +38,21 @@
   flex-shrink: 0;
 }
 
+/* Vertical layout: label + caret share a horizontal row (gap 4px per Figma Label Row) */
+.c-product-lockup__label-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
 .c-product-lockup__label {
   display: inline-flex;
   align-items: center;
   min-width: 0;
   color: inherit;
   font-weight: var(--s2a-font-weight-adobe-clean-bold, 700);
+  text-box: trim-both cap text;
 }
 
 .c-product-lockup[data-style="label"] .c-product-lockup__label {
@@ -53,8 +64,7 @@
 .c-product-lockup[data-style="eyebrow"] .c-product-lockup__label {
   font-size: var(--s2a-font-size-md, 16px);
   line-height: var(--s2a-font-line-height-sm, 1.25);
-  letter-spacing: -0.2px;
-  /* Primitive: eyebrow tracking requires -0.2px until semantic token exists */
+  letter-spacing: 0;
 }
 
 .c-product-lockup[data-orientation="horizontal"] .c-product-lockup__label {
@@ -72,6 +82,10 @@
   text-overflow: ellipsis;
 }
 
+.c-product-lockup[data-orientation="vertical"][data-width="fill"] .c-product-lockup__label-row {
+  width: 100%;
+}
+
 .c-product-lockup__caret {
   display: inline-flex;
   align-items: center;
@@ -81,8 +95,8 @@
 }
 
 .c-product-lockup__caret svg {
-  width: var(--c-product-lockup-caret-size);
-  height: var(--c-product-lockup-caret-size);
+  width: 6px;
+  height: 6px;
   display: block;
 }
 

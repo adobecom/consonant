@@ -2,54 +2,18 @@ import { html } from "lit";
 import { fn } from "storybook/test";
 
 import { IconButton } from "./IconButton";
-import iconButtonCss from "../../../packages/components/src/icon-button/icon-button.css?raw";
 
-import "@spectrum-web-components/icons-workflow/icons/sp-icon-play.js";
-import "@spectrum-web-components/icons-workflow/icons/sp-icon-pause.js";
-import "@spectrum-web-components/icons-workflow/icons/sp-icon-close.js";
-import "@spectrum-web-components/icons-workflow/icons/sp-icon-volume-mute.js";
-
-const iconBox = (size = "lg") =>
-  size === "lg"
-    ? "width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;"
-    : "width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;";
-
-const SpectrumPlayIcon = (size = "lg") =>
-  html`<sp-icon-play aria-hidden="true" style="${iconBox(size)}"></sp-icon-play>`;
-const SpectrumPauseIcon = (size = "lg") =>
-  html`<sp-icon-pause aria-hidden="true" style="${iconBox(size)}"></sp-icon-pause>`;
-const SpectrumCloseIcon = (size = "md") =>
-  html`<sp-icon-close aria-hidden="true" style="${iconBox(size)}"></sp-icon-close>`;
-const SpectrumMuteIcon = (size = "md") =>
-  html`<sp-icon-volume-mute aria-hidden="true" style="${iconBox(size)}"></sp-icon-volume-mute>`;
-
-const SPECTRUM_ICON_FACTORIES = {
-  pause: SpectrumPauseIcon,
-  play: SpectrumPlayIcon,
-  close: SpectrumCloseIcon,
-  "volume-mute": SpectrumMuteIcon,
-  mute: SpectrumMuteIcon,
+// S2A icons are resolved by the icon-button component's ICON_MAP —
+// pass the string name and the component renders the correct SVG.
+const normalizeStoryIcon = (icon) => {
+  if (typeof icon !== "string") return icon;
+  return icon;
 };
 
-const normalizeStoryIcon = (icon, size = "lg") => {
-  if (typeof icon !== "string") {
-    return icon;
-  }
-  const factory = SPECTRUM_ICON_FACTORIES[icon];
-  if (!factory) {
-    return icon;
-  }
-  return factory(size);
-};
-
-const forcedStateIcon = (state, size) => {
-  if (state === "active") {
-    return SpectrumPlayIcon(size);
-  }
-  if (state === "disabled") {
-    return SpectrumMuteIcon(size);
-  }
-  return SpectrumPauseIcon(size);
+const forcedStateIcon = (state) => {
+  if (state === "active") return "play";
+  if (state === "disabled") return "cross";
+  return "pause";
 };
 
 const renderIconButton = (args = {}) => {
@@ -57,47 +21,23 @@ const renderIconButton = (args = {}) => {
   return IconButton({
     ...args,
     size: resolvedSize,
-    icon: normalizeStoryIcon(args.icon, resolvedSize),
+    icon: normalizeStoryIcon(args.icon),
   });
 };
 
 export default {
-  title: "Components/IconButton",
+  title: "Atoms/IconButton",
   tags: ["autodocs"],
   render: (args) => renderIconButton(args),
   parameters: {
     docs: {
       description: {
         component: `
-<style>
-.doc-pattern {
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
-  margin: 12px 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,248,248,0.9));
-}
-.doc-collapse summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 18px 24px;
-  font-size: 15px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.doc-collapse summary::-webkit-details-marker { display: none; }
-.doc-collapse summary span { color: #555; font-size: 13px; font-weight: 600; }
-.doc-collapse[open] summary { border-bottom: 1px solid rgba(0,0,0,0.08); }
-.doc-body { padding: 20px 24px 24px; }
-.doc-body p { margin: 0 0 12px; font-size: 14px; color: #333; }
-.doc-body code { font-weight: 600; }
-</style>
-<p>Icon-only action button straight from matt-atoms. Icons below use Spectrum 2 Workflow icons—run <code>npm run icons:fetch Play Pause Close</code> to download raw SVGs into <code>packages/components/src/icon-button/assets/</code> when you need inline art.</p>
+<p>Icon-only action button. Pass any S2A icon name as the <code>icon</code> prop — icons are sourced from <code>packages/components/src/icons/</code> and rendered as inline SVG with <code>currentColor</code> so they inherit the button's tone automatically.</p>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Preferred · Data-attribute HTML structure <span>Recommended</span></summary>
-  <div class="doc-body">
+<details class="s2a-doc-accordion">
+  <summary>Preferred · Data-attribute HTML structure <span class="s2a-doc-badge">Recommended</span></summary>
+  <div class="s2a-doc-body">
     <p>Map Figma axes to <code>data-*</code> attributes. Icon slots accept inline SVG, Spectrum Web Components, or Lit templates.</p>
 
 \`\`\`html
@@ -109,7 +49,8 @@ export default {
   aria-label="Pause playback"
 >
   <span class="c-icon-button__icon" aria-hidden="true">
-    <sp-icon-pause style="width:24px;height:24px" aria-hidden="true"></sp-icon-pause>
+    <!-- inline SVG from packages/components/src/icons/pause.svg -->
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">…</svg>
   </span>
 </button>
 \`\`\`
@@ -128,21 +69,21 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Alternative · BEM / utility classes <span>Class-based</span></summary>
-  <div class="doc-body">
+<details class="s2a-doc-accordion">
+  <summary>Alternative · BEM / utility classes <span class="s2a-doc-badge">Class-based</span></summary>
+  <div class="s2a-doc-body">
     <p>Utility-heavy stacks can alias variant axes to class modifiers while keeping specificity flat.</p>
 
 \`\`\`html
 <button class="c-icon-button c-icon-button--solid c-icon-button--on-light c-icon-button--lg" aria-label="Play">
   <span class="c-icon-button__icon" aria-hidden="true">
-    <sp-icon-play style="width:24px;height:24px" aria-hidden="true"></sp-icon-play>
+    <!-- inline SVG from packages/components/src/icons/play.svg -->
   </span>
 </button>
 
-<button class="c-icon-button c-icon-button--outlined c-icon-button--on-dark c-icon-button--md" aria-label="Mute">
+<button class="c-icon-button c-icon-button--outlined c-icon-button--on-dark c-icon-button--md" aria-label="Close">
   <span class="c-icon-button__icon" aria-hidden="true">
-    <sp-icon-volume-mute style="width:16px;height:16px" aria-hidden="true"></sp-icon-volume-mute>
+    <!-- inline SVG from packages/components/src/icons/cross.svg -->
   </span>
 </button>
 \`\`\`
@@ -161,25 +102,33 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Full CSS reference <span>Source of truth</span></summary>
-  <div class="doc-body">
-    <p>Direct copy of <code>packages/components/src/icon-button/icon-button.css</code>.</p>
-
-\`\`\`css
-${iconButtonCss}
-\`\`\`
-  </div>
-</details>
         `,
+      },
+      source: {
+        language: "html",
+        code: `<!-- Solid / on-light -->
+<button class="c-icon-button" data-background="solid" data-context="on-light" data-size="lg" type="button" aria-label="Pause playback">
+  <span class="c-icon-button__icon" aria-hidden="true">…</span>
+</button>
+
+<!-- Solid / on-dark (media controls) -->
+<button class="c-icon-button" data-background="solid" data-context="on-dark" data-size="lg" type="button" aria-label="Play">
+  <span class="c-icon-button__icon" aria-hidden="true">…</span>
+</button>
+
+<!-- Outlined / on-dark -->
+<button class="c-icon-button" data-background="outlined" data-context="on-dark" data-size="md" type="button" aria-label="Mute">
+  <span class="c-icon-button__icon" aria-hidden="true">…</span>
+</button>`,
       },
     },
   },
   argTypes: {
     ariaLabel: { control: "text", description: "Accessible label (required)" },
     icon: {
-      control: "text",
-      description: "Phosphor icon name (pause, play) or pass a Lit template (e.g. <sp-icon-play>)",
+      control: { type: "select" },
+      options: ["pause", "play", "cross", "add", "chevron-right", "chevron-left", "chevron-down", "chevron-up", "arrow-right", "arrow-left", "link-out", "hamburger"],
+      description: "S2A icon name — resolved from packages/components/src/icons/",
     },
     context: {
       control: { type: "select" },
@@ -227,28 +176,17 @@ export const Disabled = {
   args: { state: "disabled" },
 };
 
-export const SpectrumIcons = {
+export const S2aIcons = {
+  name: "S2A Icons",
   render: () => html`
     <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
-      ${renderIconButton({
-        ariaLabel: "Play media",
-        icon: SpectrumPlayIcon("lg"),
-        size: "lg",
-        background: "solid",
-      })}
-      ${renderIconButton({
-        ariaLabel: "Mute audio",
-        icon: SpectrumMuteIcon("md"),
-        size: "md",
-        background: "outlined",
-      })}
-      <div style="background: #0b0b0b; padding: 12px; border-radius: 16px; display: inline-flex;">
-        ${renderIconButton({
-          ariaLabel: "Close dialog",
-          icon: SpectrumCloseIcon("md"),
-          context: "on-dark",
-          background: "transparent",
-        })}
+      ${renderIconButton({ ariaLabel: "Play media", icon: "play", size: "lg", background: "solid" })}
+      ${renderIconButton({ ariaLabel: "Pause media", icon: "pause", size: "lg", background: "solid" })}
+      ${renderIconButton({ ariaLabel: "Add", icon: "add", size: "lg", background: "outlined" })}
+      <div style="background: #0b0b0b; padding: 12px; border-radius: 16px; display: inline-flex; gap: 12px;">
+        ${renderIconButton({ ariaLabel: "Close", icon: "cross", size: "md", context: "on-dark", background: "transparent" })}
+        ${renderIconButton({ ariaLabel: "Navigate forward", icon: "chevron-right", size: "md", context: "on-dark", background: "outlined" })}
+        ${renderIconButton({ ariaLabel: "Link out", icon: "link-out", size: "md", context: "on-dark", background: "solid" })}
       </div>
     </div>
   `,
@@ -290,7 +228,7 @@ export const ForcedStates = {
       <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
         ${states.map((state) =>
           renderIconButton({
-            icon: forcedStateIcon(state, sizeValue),
+            icon: forcedStateIcon(state),
             ariaLabel: `${sizeLabel} icon button ${state}`,
             state,
             size: sizeValue,

@@ -12,7 +12,7 @@ const menuItems = [
 ];
 
 export default {
-  title: "Navigation/Nav Card/Overview",
+  title: "Organisms/NavCard/Overview",
 };
 
 const contentProps = {

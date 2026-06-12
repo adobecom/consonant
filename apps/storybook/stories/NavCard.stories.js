@@ -1,9 +1,8 @@
 import { html } from "lit";
 import { NavCard } from "../../../packages/components/src/navigation/nav-card/nav-card.js";
-import navCardCss from "../../../packages/components/src/navigation/nav-card/nav-card.css?raw";
 
 export default {
-  title: "Navigation/Nav Card/Promo",
+  title: "Organisms/NavCard/Promo",
   tags: ["autodocs"],
   render: (args) => html`
     <div style="padding: 32px; background: #f5f5f5; display: inline-flex;">
@@ -18,11 +17,28 @@ Promotional card used in Global Navigation to highlight an audience segment or p
 Default state is white; hovering transitions to a knockout black surface.
 
 Figma: [NavCard — Navigation A.com](https://www.figma.com/design/8CRIbATawRV1jWh8RAC5ZJ/Navigation-%E2%80%94-A.com?node-id=3872-5442)
-
-\`\`\`css
-${navCardCss}
-\`\`\`
         `,
+      },
+      source: {
+        language: "html",
+        code: `<div class="c-nav-card">
+  <div class="c-nav-card__top">
+    <p class="c-nav-card__eyebrow">Creative Professionals</p>
+    <div class="c-nav-card__content">
+      <h3 class="c-nav-card__title">Craft at the highest level of creative.</h3>
+      <div class="c-nav-card__body-area">
+        <p class="c-nav-card__body">Create designs, photo, video, and more with AI in Creative Cloud apps.</p>
+        <a class="c-nav-card__cta-link" href="#">
+          See plans
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="none" aria-hidden="true">…</svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="c-nav-card__bottom">
+    <a class="c-nav-card-button" href="#">Explore</a>
+  </div>
+</div>`,
       },
     },
   },

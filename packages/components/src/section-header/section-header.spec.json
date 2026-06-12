@@ -1,0 +1,39 @@
+{
+  "name": "SectionHeader",
+  "slug": "section-header",
+  "cssClass": "c-section-header",
+  "storybookId": "section-header",
+  "description": "Centered section-level heading block — eyebrow + heading-2 title + body. Composes RichContent with justifyContent=center and measure=wide locked in.",
+  "composedOf": ["RichContent"],
+  "variants": {
+    "theme": ["on-light", "on-dark"]
+  },
+  "props": [
+    { "name": "eyebrow", "type": "string", "defaultValue": "\"\"", "description": "Optional eyebrow label above the title" },
+    { "name": "showEyebrow", "type": "boolean", "defaultValue": "true" },
+    { "name": "title", "type": "string", "defaultValue": "\"\"" },
+    { "name": "body", "type": "string", "defaultValue": "\"\"", "description": "Optional body paragraph below title" },
+    { "name": "theme", "type": "string", "defaultValue": "\"on-light\"", "enum": ["on-light", "on-dark"] },
+    { "name": "showActions", "type": "boolean", "defaultValue": "false" },
+    { "name": "actions", "type": "TemplateResult", "description": "Optional CTA buttons rendered below body text" }
+  ],
+  "tokenBindings": {
+    "color:title": "--s2a-color-content-title",
+    "color:eyebrow": "--s2a-color-content-eyebrow",
+    "color:body": "--s2a-color-content-title",
+    "typography:title": "s2a/typography/heading-2",
+    "typography:eyebrow": "s2a/typography/eyebrow",
+    "typography:body": "s2a/typography/body-lg",
+    "gap:text": "--s2a-spacing-xs",
+    "gap:content": "--s2a-spacing-lg"
+  },
+  "a11y": {
+    "wcag": ["1.4.3", "1.4.11"],
+    "keyboard": [],
+    "notes": [
+      "Title renders as <h2> — ensure only one SectionHeader per page section.",
+      "Eyebrow is a <p>, not a heading — it is a decorative label only.",
+      "On-dark variant meets 4.5:1 only when placed on a sufficiently dark consumer background."
+    ]
+  }
+}

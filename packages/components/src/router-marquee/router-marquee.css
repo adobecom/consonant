@@ -1,0 +1,300 @@
+.c-router-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+  container-type: inline-size;
+}
+
+/* ─── Slides ──────────────────────────────────────────────────────────────── */
+
+.rm-slides {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  min-height: 480px;
+}
+
+.rm-slide {
+  position: absolute;
+  inset: 0;
+  transform: translateX(100%);
+  transition: transform 300ms cubic-bezier(0.42, 0, 0, 1);
+  pointer-events: none;
+}
+
+.rm-slide[data-state="active"] {
+  transform: translateX(0%);
+  pointer-events: auto;
+}
+
+/* ─── Background ──────────────────────────────────────────────────────────── */
+
+.rm-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #111;
+}
+
+.rm-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─── Overlay ─────────────────────────────────────────────────────────────── */
+
+.rm-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgb(0 0 0 / 72%) 0%,
+    rgb(0 0 0 / 40%) 55%,
+    rgb(0 0 0 / 0%) 100%
+  );
+}
+
+/* ─── Content ─────────────────────────────────────────────────────────────── */
+
+/* Bottom padding = row controls height: 24 top + 68 nav + 24 bottom = 116px */
+.rm-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  height: 100%;
+  padding: var(--s2a-spacing-4xl, 64px) var(--s2a-spacing-4xl, 64px)
+    calc(var(--s2a-spacing-lg, 24px) * 2 + 68px);
+}
+
+/* ─── Controls — column (mobile default); becomes row at ≥600px ─────────────── */
+
+.rm-controls {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--s2a-spacing-lg, 24px) var(--s2a-spacing-4xl, 64px);
+  gap: var(--s2a-spacing-lg, 24px);
+}
+
+.rm-nav-items {
+  display: flex;
+  gap: var(--s2a-spacing-xs, 8px);
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+/* ─── Play / Pause ────────────────────────────────────────────────────────── */
+
+.rm-play-pause {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--s2a-color-transparent-white-12, rgb(255 255 255 / 12%));
+  background: var(--s2a-color-transparent-black-48, rgb(0 0 0 / 48%));
+  color: var(--s2a-color-content-knockout, #fff);
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 150ms ease;
+}
+
+.rm-play-pause:hover {
+  background: var(--s2a-color-transparent-black-64, rgb(0 0 0 / 64%));
+}
+
+.rm-play-pause:focus-visible {
+  outline: 1px solid var(--s2a-color-focus-ring-default, #1473e6);
+  outline-offset: 2px;
+}
+
+.rm-play-pause .rm-icon-play {
+  display: none;
+}
+
+.c-router-marquee[data-state="paused"] .rm-play-pause .rm-icon-pause {
+  display: none;
+}
+
+.c-router-marquee[data-state="paused"] .rm-play-pause .rm-icon-play {
+  display: block;
+}
+
+/* ─── Desktop: row layout, play/pause right of nav items ──────────────────── */
+
+@container (min-width: 1024px) {
+  .rm-controls {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .rm-play-pause {
+    order: 2;
+  }
+
+  .rm-nav-items {
+    order: 1;
+    flex: 1;
+    width: auto;
+  }
+
+  .rm-controls .c-router-nav-item {
+    flex: 1;
+    max-width: 220px;
+    min-width: 165px;
+  }
+}
+
+/* ─── 1024–1279px: tighter side margins ──────────────────────────────────── */
+
+@container (min-width: 1024px) and (max-width: 1279px) {
+  .rm-controls {
+    padding-left: var(--s2a-spacing-2xl, 40px);
+    padding-right: var(--s2a-spacing-2xl, 40px);
+  }
+
+  .rm-content {
+    padding-left: var(--s2a-spacing-2xl, 40px);
+    padding-right: var(--s2a-spacing-2xl, 40px);
+  }
+}
+
+/* ─── Tablet / Mobile: inline scrollable rail, PP above nav ───────────────── */
+
+@container (max-width: 1023px) {
+  /* Controls: left inset only — right is open so nav items bleed to edge */
+  .rm-controls {
+    padding-left: var(--s2a-spacing-lg, 24px);
+    padding-right: 0;
+  }
+
+  .rm-content {
+    padding-left: var(--s2a-spacing-lg, 24px);
+    padding-right: var(--s2a-spacing-lg, 24px);
+    /* Column controls height: 24 top + 40 PP + 24 gap + 48 nav + 24 bottom = 160px */
+    padding-bottom: calc(var(--s2a-spacing-lg, 24px) * 3 + 40px + 48px);
+  }
+
+  /* Nav rail: horizontal scrollable, trailing padding so last item scrolls fully into view */
+  .rm-nav-items {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-right: var(--s2a-spacing-lg, 24px);
+  }
+
+  .rm-nav-items::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Nav items: force inline layout */
+  .rm-controls .c-router-nav-item {
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: center;
+    width: 192px;
+    max-height: 48px;
+    padding: var(--s2a-spacing-sm, 12px);
+  }
+
+  /* ProductLockup: switch from vertical to horizontal */
+  .rm-controls .c-product-lockup[data-orientation="vertical"] {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--s2a-spacing-xs, 8px);
+  }
+
+  .rm-controls .c-product-lockup[data-orientation="vertical"] .c-product-lockup__label-row {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .rm-controls .c-product-lockup[data-orientation="vertical"] .c-product-lockup__label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* ─── Mobile: smaller title, tighter padding, taller aspect ratio ─────────── */
+
+@container (max-width: 599px) {
+  .rm-slides {
+    aspect-ratio: 4 / 3;
+  }
+
+  .rm-content {
+    padding-left: var(--s2a-spacing-md, 16px);
+    padding-right: var(--s2a-spacing-md, 16px);
+    padding-top: var(--s2a-spacing-2xl, 40px);
+  }
+
+  /* Mobile: tighter insets */
+  .rm-controls {
+    padding-left: var(--s2a-spacing-md, 16px);
+    padding-right: 0;
+  }
+
+  .rm-nav-items {
+    padding-right: var(--s2a-spacing-md, 16px);
+  }
+}
+
+/* ─── Rich content column widths (heading-1 scale; measure="none" removes max-width) ── */
+/* Extra .c-router-marquee raises specificity to 0,3,0 to beat rich-content.css (0,2,0) */
+
+/* 768px+: tablet — copy 667px, body 450px */
+@media (min-width: 768px) {
+  .c-router-marquee .rm-content .c-rich-content__text {
+    max-width: 667px;
+  }
+
+  .c-router-marquee .rm-content .c-rich-content__body {
+    max-width: 450px;
+  }
+}
+
+/* 1280px+: desktop — copy 652px, body 500px */
+@media (min-width: 1280px) {
+  .c-router-marquee .rm-content .c-rich-content__text {
+    max-width: 652px;
+  }
+
+  .c-router-marquee .rm-content .c-rich-content__body {
+    max-width: 500px;
+  }
+}
+
+/* 1441px+: xl — copy 667px, body 500px */
+@media (min-width: 1441px) {
+  .c-router-marquee .rm-content .c-rich-content__text {
+    max-width: 667px;
+  }
+
+  .c-router-marquee .rm-content .c-rich-content__body {
+    max-width: 500px;
+  }
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-slide {
+    transition: none;
+  }
+
+  .c-router-nav-item__progress-fill {
+    transition: none !important;
+  }
+}

@@ -1,9 +1,10 @@
 import { html, nothing } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import "./button.css";
 
-/** Phosphor CaretDown icon - requires @phosphor-icons/web bold stylesheet to be loaded */
-const CaretDownIcon = () =>
-  html`<i class="ph-bold ph-caret-down" aria-hidden="true"></i>`;
+import chevronDownSvg from "../icons/chevron-down.svg?raw";
+
+const CaretDownIcon = () => unsafeHTML(chevronDownSvg);
 
 const normalizeIntent = (intent) =>
   intent === "accent" ? "accent" : "primary";

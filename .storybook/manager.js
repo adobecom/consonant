@@ -1,14 +1,51 @@
 /**
- * Storybook Manager — Figma Overlay toolbar controls
- *
- * Adds a toolbar toggle button and opacity slider to the Storybook UI.
- * Toggle: show/hide the Figma design overlay on the active story.
- * Slider: adjust overlay transparency (10–90%).
+ * Storybook Manager — S2A theme + Figma Overlay toolbar controls
  */
 
 import React, { useCallback } from "react";
 import { addons, types, useGlobals } from "storybook/manager-api";
+import { create } from "storybook/theming";
 import { IconButton } from "storybook/internal/components";
+
+addons.setConfig({
+  theme: create({
+    base: "light",
+    // Warm off-white brand surface — matches the plugin UI palette
+    colorPrimary: "#1a1a1a",
+    colorSecondary: "#e84830",   // Adobe brand red — used sparingly for active states
+
+    // UI chrome
+    appBg: "#faf9f7",
+    appContentBg: "#ffffff",
+    appBorderColor: "rgba(0,0,0,0.08)",
+    appBorderRadius: 10,
+
+    // Toolbar
+    barBg: "#faf9f7",
+    barTextColor: "#333333",
+    barSelectedColor: "#1a1a1a",
+    barHoverColor: "#1a1a1a",
+
+    // Typography
+    fontBase: '"Adobe Clean", adobe-clean, "Trebuchet MS", -apple-system, sans-serif',
+    fontCode: '"Fira Code", "JetBrains Mono", monospace',
+
+    // Text
+    textColor: "#1a1a1a",
+    textInverseColor: "#ffffff",
+    textMutedColor: "rgba(0,0,0,0.5)",
+
+    // Inputs
+    inputBg: "#ffffff",
+    inputBorder: "rgba(0,0,0,0.12)",
+    inputTextColor: "#1a1a1a",
+    inputBorderRadius: 6,
+
+    brandTitle: "S2A Design System",
+    brandUrl: "https://adobecom.github.io/consonant",
+    brandTarget: "_blank",
+  }),
+});
 
 const ADDON_ID = "figma-overlay";
 const TOOL_ID = `${ADDON_ID}/tool`;

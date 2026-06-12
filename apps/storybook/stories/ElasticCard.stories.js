@@ -4,7 +4,6 @@ import { fn } from "storybook/test";
 import { ElasticCard } from "./ElasticCard";
 import { Media } from "../../../packages/components/src/media/media.js";
 import { IconButton } from "./IconButton";
-import elasticCardCss from "../../../packages/components/src/elastic-card/elastic-card.css?raw";
 
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-more.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-right.js";
@@ -35,28 +34,18 @@ const elasticCardWithAction = (state = "expanded") =>
   });
 
 export default {
-  title: "Components/ElasticCard",
+  title: "Molecules/ElasticCard",
   tags: ["autodocs"],
   render: (args) => ElasticCard(args),
   parameters: {
     docs: {
       description: {
         component: `
-<style>
-.doc-pattern { border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; margin: 12px 0; background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,248,248,0.9)); }
-.doc-collapse summary { list-style: none; cursor: pointer; padding: 18px 24px; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
-.doc-collapse summary::-webkit-details-marker { display: none; }
-.doc-collapse summary span { color: #555; font-size: 13px; font-weight: 600; }
-.doc-collapse[open] summary { border-bottom: 1px solid rgba(0,0,0,0.08); }
-.doc-body { padding: 20px 24px 24px; }
-.doc-body p { margin: 0 0 12px; font-size: 14px; color: #333; }
-.doc-body code { font-weight: 600; }
-</style>
 <p>Media-forward tile used in Router hero carousels. Mirrors matt-atoms component set (<a href="https://www.figma.com/design/svi0B0G925V2XG0yX0DDaz/matt-atoms?node-id=4006-461133" target="_blank" rel="noreferrer">node 4006-461133</a>).</p>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Preferred · Data-attribute markup <span>Recommended</span></summary>
-  <div class="doc-body">
+<details class="s2a-doc-accordion">
+  <summary>Preferred · Data-attribute markup <span class="s2a-doc-badge">Recommended</span></summary>
+  <div class="s2a-doc-body">
     <p>Map <code>State</code>, media ratio, and copy treatments with <code>data-state</code>, <code>data-media-aspect</code>, and the data attributes on <code>.c-media</code> + <code>.c-rich-content</code>. The card itself can be a <code>&lt;button&gt;</code>, <code>&lt;a&gt;</code>, or <code>&lt;article&gt;</code> depending on routing semantics.</p>
 
 \`\`\`html
@@ -89,9 +78,9 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Alternative · Utility / BEM classes <span>Class-based</span></summary>
-  <div class="doc-body">
+<details class="s2a-doc-accordion">
+  <summary>Alternative · Utility / BEM classes <span class="s2a-doc-badge">Class-based</span></summary>
+  <div class="s2a-doc-body">
     <p>When data attributes aren't available, alias the same variant axes with modifier classes.</p>
 
 \`\`\`html
@@ -107,15 +96,33 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Full CSS reference <span>Source of truth</span></summary>
-  <div class="doc-body">
-\`\`\`css
-${elasticCardCss}
-\`\`\`
-  </div>
-</details>
         `,
+      },
+      source: {
+        language: "html",
+        code: `<!-- Resting state (default — all cards rest until hovered) -->
+<article class="c-elastic-card" data-state="resting" data-media-aspect="3:4">
+  <header class="c-elastic-card__header">
+    <div class="c-product-lockup" data-orientation="horizontal" data-style="label" data-context="on-light" data-width="fill">…</div>
+  </header>
+  <div class="c-elastic-card__media">
+    <figure class="c-media" data-aspect="3:4" data-fit="cover">
+      <video src="…" autoplay muted loop playsinline></video>
+      <span class="c-media__overlay" aria-hidden="true"></span>
+    </figure>
+  </div>
+  <div class="c-elastic-card__body">
+    <div class="c-elastic-card__body-content">
+      <p class="c-elastic-card__title">Adobe Express</p>
+      <p class="c-elastic-card__body-text">Create standout content with quick actions and guided templates.</p>
+    </div>
+  </div>
+</article>
+
+<!-- Expanded state (on hover — dark surface, full copy visible) -->
+<article class="c-elastic-card" data-state="expanded" data-media-aspect="3:4">
+  …
+</article>`,
       },
     },
   },
@@ -230,49 +237,61 @@ export const OverlayScrim = {
 
 export const RoutingCarousel = {
   name: "Routing Carousel (adobe.com live)",
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        story:
+          "Five cards in a centered overflow carousel — one pre-expanded, four resting. Hover any resting card to expand it. " +
+          "Mirrors the HubRouter organism; use HubRouter for the full page-level implementation.",
+      },
+    },
+  },
   render: () => html`
-    <div style="display:flex;gap:8px;align-items:stretch;background:#f5f5f5;padding:24px;border-radius:24px;overflow:auto;">
-      ${ElasticCard({
-        label: "Creativity and design",
-        app: "firefly",
-        title: "Create with the top tools.",
-        body: "Do it all with industry-leading apps for design, photo, video, and creative AI.",
-        state: "resting",
-        mediaTemplate: cardVideo(VID_CREATIVITY),
-      })}
-      ${ElasticCard({
-        label: "Content creation",
-        app: "creative-cloud",
-        title: "Generate stunning content easily.",
-        body: "Quickly create and edit images, video, and audio with creative AI.",
-        state: "expanded",
-        mediaTemplate: cardVideo(VID_CONTENT),
-        showCaret: false,
-      })}
-      ${ElasticCard({
-        label: "PDF and productivity",
-        app: "acrobat",
-        title: "Do it all in less time.",
-        body: "Create, edit, and share PDFs. Make edits and create presentations with AI.",
-        state: "resting",
-        mediaTemplate: cardVideo(VID_PDF),
-      })}
-      ${ElasticCard({
-        label: "Adobe for Business",
-        app: "genstudio",
-        title: "Orchestrate customer experiences.",
-        body: "Deliver business impact, move faster, and personalize at scale.",
-        state: "resting",
-        mediaTemplate: cardVideo(VID_BUSINESS),
-      })}
-      ${ElasticCard({
-        label: "Students and teachers",
-        app: "creative-cloud",
-        title: "Students and teachers save big.",
-        body: "Save a bundle on our biggest bundle of top industry creative tools.",
-        state: "resting",
-        mediaTemplate: cardVideo(VID_STUDENTS),
-      })}
+    <div style="overflow:hidden; padding-block:24px; background:#f5f5f5; border-radius:24px; width:100%">
+      <div style="display:flex; gap:8px; align-items:stretch; justify-content:center;">
+        ${ElasticCard({
+          label: "Creativity and design",
+          app: "firefly",
+          title: "Create with the top tools.",
+          body: "Do it all with industry-leading apps for design, photo, video, and creative AI.",
+          state: "resting",
+          mediaTemplate: cardVideo(VID_CREATIVITY),
+        })}
+        ${ElasticCard({
+          label: "Content creation",
+          app: "creative-cloud",
+          title: "Generate stunning content easily.",
+          body: "Quickly create and edit images, video, and audio with creative AI.",
+          state: "expanded",
+          mediaTemplate: cardVideo(VID_CONTENT),
+          showCaret: false,
+        })}
+        ${ElasticCard({
+          label: "PDF and productivity",
+          app: "acrobat",
+          title: "Do it all in less time.",
+          body: "Create, edit, and share PDFs. Make edits and create presentations with AI.",
+          state: "resting",
+          mediaTemplate: cardVideo(VID_PDF),
+        })}
+        ${ElasticCard({
+          label: "Adobe for Business",
+          app: "genstudio",
+          title: "Orchestrate customer experiences.",
+          body: "Deliver business impact, move faster, and personalize at scale.",
+          state: "resting",
+          mediaTemplate: cardVideo(VID_BUSINESS),
+        })}
+        ${ElasticCard({
+          label: "Students and teachers",
+          app: "creative-cloud",
+          title: "Students and teachers save big.",
+          body: "Save a bundle on our biggest bundle of top industry creative tools.",
+          state: "resting",
+          mediaTemplate: cardVideo(VID_STUDENTS),
+        })}
+      </div>
     </div>
   `,
 };

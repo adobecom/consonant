@@ -2,18 +2,39 @@ import { html, nothing } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import "./icon-button.css";
 
-// Pause icon from Figma matt-atoms (node 2142-53865) — uses currentColor for tone
-import pauseSvg from "./assets/pause.svg?raw";
+import pauseSvg from "../icons/pause.svg?raw";
+import playSvg from "../icons/play.svg?raw";
+import crossSvg from "../icons/cross.svg?raw";
+import addSvg from "../icons/add.svg?raw";
+import chevronDownSvg from "../icons/chevron-down.svg?raw";
+import chevronUpSvg from "../icons/chevron-up.svg?raw";
+import chevronLeftSvg from "../icons/chevron-left.svg?raw";
+import chevronRightSvg from "../icons/chevron-right.svg?raw";
+import arrowLeftSvg from "../icons/arrow-left.svg?raw";
+import arrowRightSvg from "../icons/arrow-right.svg?raw";
+import linkOutSvg from "../icons/link-out.svg?raw";
+import hamburgerSvg from "../icons/hamburger-menu.svg?raw";
 
-/** Pause icon from Figma (matt-atoms) */
-const PauseIcon = () => unsafeHTML(pauseSvg);
+const ICON_MAP = {
+  pause: pauseSvg,
+  play: playSvg,
+  cross: crossSvg,
+  close: crossSvg,
+  add: addSvg,
+  "chevron-down": chevronDownSvg,
+  "chevron-up": chevronUpSvg,
+  "chevron-left": chevronLeftSvg,
+  "chevron-right": chevronRightSvg,
+  "arrow-left": arrowLeftSvg,
+  "arrow-right": arrowRightSvg,
+  "link-out": linkOutSvg,
+  hamburger: hamburgerSvg,
+};
 
-/**
- * Phosphor icon helper - requires @phosphor-icons/web bold stylesheet to be loaded.
- * @param {string} name - Phosphor icon name (kebab-case, e.g. "play", "caret-down")
- */
-const PhosphorIcon = (name) =>
-  html`<i class="ph-bold ph-${name}" aria-hidden="true"></i>`;
+const S2aIcon = (name) => {
+  const svg = ICON_MAP[name];
+  return svg ? unsafeHTML(svg) : nothing;
+};
 
 /**
  * IconButton Component
@@ -49,11 +70,7 @@ export const IconButton = ({
   const forceState = state && state !== "default" ? state : null;
   const isDisabled = state === "disabled";
   const iconContent =
-    typeof icon === "string"
-      ? icon === "pause"
-        ? PauseIcon()
-        : PhosphorIcon(icon)
-      : icon;
+    typeof icon === "string" ? S2aIcon(icon) : icon;
 
   return html`
     <button

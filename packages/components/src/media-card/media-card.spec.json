@@ -1,0 +1,51 @@
+{
+  "name": "MediaCard",
+  "slug": "media-card",
+  "cssClass": "c-media-card",
+  "storybookId": "media-card",
+  "description": "Media-forward content card with two size variants. Card (4:3, column copy) is used in 3-up grids; Feature (16:7, row copy) spans full column width as a hero card. Both scale with their container via aspect-ratio — never fixed pixel dimensions.",
+  "variants": {
+    "size": ["card", "feature"]
+  },
+  "props": [
+    { "name": "size", "type": "string", "defaultValue": "\"card\"", "enum": ["card", "feature"] },
+    { "name": "app", "type": "string", "defaultValue": "\"experience-cloud\"", "description": "App slug passed to AppIcon for the top-left badge" },
+    { "name": "showIcon", "type": "boolean", "defaultValue": "true", "description": "Toggle the AppIcon badge" },
+    { "name": "mediaSrc", "type": "string", "description": "Image URL — fills the media zone" },
+    { "name": "mediaAlt", "type": "string", "defaultValue": "\"\"" },
+    { "name": "mediaTemplate", "type": "TemplateResult", "description": "Custom media — bypasses img element" },
+    { "name": "title", "type": "string", "defaultValue": "\"\"", "description": "Headline text — heading-5 scale" },
+    { "name": "body", "type": "string", "defaultValue": "\"\"", "description": "Body copy — body-md scale" },
+    { "name": "ctaLabel", "type": "string", "defaultValue": "\"\"", "description": "CTA link text — renders as <a> when ctaHref is set, <button> otherwise" },
+    { "name": "ctaHref", "type": "string" },
+    { "name": "onClick", "type": "function" }
+  ],
+  "tokenBindings": {
+    "border-radius": "--s2a-border-radius-lg",
+    "color:title": "--s2a-color-content-heading",
+    "color:body": "--s2a-color-content-body-subtle",
+    "color:cta": "--s2a-color-content-label",
+    "typography:title": "s2a/typography/heading-5",
+    "typography:body": "s2a/typography/body-md",
+    "typography:cta": "s2a/typography/label",
+    "padding:desktop": "--s2a-spacing-lg",
+    "padding:tablet": "--s2a-spacing-md",
+    "gap:copy": "--s2a-spacing-lg",
+    "gap:text": "--s2a-spacing-xs"
+  },
+  "responsive": {
+    "≥600px": "aspect-ratio media — card: 488/366, feature: 1480/670",
+    "<600px": "fixed 245px media height, feature copy collapses to column",
+    "≥1024px": "24px padding (--s2a-spacing-lg)",
+    "<1024px": "16px padding (--s2a-spacing-md)"
+  },
+  "a11y": {
+    "wcag": ["1.1.1", "1.4.3", "2.1.1", "2.4.4", "2.4.7"],
+    "notes": [
+      "CTA renders as <a> when ctaHref is provided, <button> for click handlers.",
+      "AppIcon badge is aria-hidden — decorative.",
+      "Provide meaningful mediaAlt when the image conveys information not in title/body.",
+      "Title renders as <p> not <h*> — heading level is the consumer's responsibility."
+    ]
+  }
+}

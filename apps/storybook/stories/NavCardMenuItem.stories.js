@@ -1,6 +1,5 @@
 import { html } from "lit";
 import { NavCardMenuItem } from "../../../packages/components/src/navigation/nav-card-menu-item/nav-card-menu-item.js";
-import navCardMenuItemCss from "../../../packages/components/src/navigation/nav-card-menu-item/nav-card-menu-item.css?raw";
 
 const sampleItems = [
   { label: "Creative Cloud", href: "#" },
@@ -12,14 +11,28 @@ const sampleItems = [
 ];
 
 export default {
-  title: "Navigation/Nav Card/Menu",
+  title: "Organisms/NavCard/Menu",
   tags: ["autodocs"],
   render: (args) =>
     html`<div style="padding: 32px; background: #f5f5f5; display: inline-flex;">${NavCardMenuItem(args)}</div>`,
   parameters: {
     docs: {
       description: {
-        component: `\nNavigation card (title + links + CTA).\n\n\`\`\`css\n${navCardMenuItemCss}\n\`\`\`\n        `,
+        component: "Navigation menu card — title heading, link list, and a bottom CTA.",
+      },
+      source: {
+        language: "html",
+        code: `<div class="c-nav-card-menu-item">
+  <h3 class="c-nav-card-menu-item__title">Browse</h3>
+  <ul class="c-nav-card-menu-item__list" role="list">
+    <li><a class="c-nav-card-menu-item__link" href="#">Creative Cloud</a></li>
+    <li><a class="c-nav-card-menu-item__link" href="#">Illustrator</a></li>
+    <li><a class="c-nav-card-menu-item__link" href="#">Photoshop</a></li>
+    <li><a class="c-nav-card-menu-item__link" href="#">Premiere Pro</a></li>
+    <!-- …more items -->
+  </ul>
+  <a class="c-nav-card-button" href="#">Explore</a>
+</div>`,
       },
     },
   },

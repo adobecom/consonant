@@ -8,17 +8,17 @@ const clamp = (value) => {
 };
 
 /**
- * ProgressBar atom used inside RouterMarquee and cards.
+ * ProgressBar atom — transparent track, brand-red fill.
+ * Matches Figma component set node 8931:7469.
  *
  * @param {Object} args
  * @param {string|number} args.progress - 0 → 100 percentage value
- * @param {"knockout"|"default"} args.tone - switches track + fill colors
  */
-export const ProgressBar = ({ progress = 0, tone = "knockout" } = {}) => {
+export const ProgressBar = ({ progress = 0 } = {}) => {
   const width = clamp(progress);
 
   return html`
-    <span class="c-progress-bar" data-tone=${tone}>
+    <span class="c-progress-bar">
       <span class="c-progress-bar__fill" style="width: ${width}%;"></span>
     </span>
   `;

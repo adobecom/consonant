@@ -1,7 +1,6 @@
 import { html } from "lit";
 import { ProductLockup } from "./ProductLockup";
 import { APP_OPTIONS } from "./AppIcon";
-import productLockupCss from "../../../packages/components/src/product-lockup/product-lockup.css?raw";
 
 const APP_SLUGS = APP_OPTIONS.map((app) => app.slug);
 
@@ -24,42 +23,18 @@ const renderLockup = (args, overrides = {}) => {
 };
 
 export default {
-  title: "Components/ProductLockup",
+  title: "Atoms/ProductLockup",
   tags: ["autodocs"],
   render: (args) => renderLockup(args),
   parameters: {
     docs: {
       description: {
         component: `
-<style>
-.doc-pattern {
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
-  margin: 12px 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,248,248,0.9));
-}
-.doc-collapse summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 18px 24px;
-  font-size: 15px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.doc-collapse summary::-webkit-details-marker { display: none; }
-.doc-collapse summary span { color: #555; font-size: 13px; font-weight: 600; }
-.doc-collapse[open] summary { border-bottom: 1px solid rgba(0,0,0,0.08); }
-.doc-body { padding: 20px 24px 24px; }
-.doc-body p { margin: 0 0 12px; font-size: 14px; color: #333; }
-.doc-body code { font-weight: 600; }
-</style>
 <p>App icon + label identifier used across RouterMarquee, hero tiles, and feature lists. Icons come from the AppIcon CDN (see <code>docs/component-audit/app-icons.md</code> for slug ↔︎ SVG mapping).</p>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Preferred · Data-attribute HTML structure <span>Recommended</span></summary>
-  <div class="doc-body">
+<details class="s2a-doc-accordion">
+  <summary>Preferred · Data-attribute HTML structure <span class="s2a-doc-badge">Recommended</span></summary>
+  <div class="s2a-doc-body">
     <p>Use <code>data-orientation</code>, <code>data-style</code>, and <code>data-context</code> to mirror the Figma component axes. App icons render via <code>&lt;span class="c-app-icon"&gt;</code> with the CDN URL.</p>
 
 \`\`\`html
@@ -104,9 +79,9 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Alternative · BEM / utility classes <span>Class-based</span></summary>
-  <div class="doc-body">
+<details class="s2a-doc-accordion">
+  <summary>Alternative · BEM / utility classes <span class="s2a-doc-badge">Class-based</span></summary>
+  <div class="s2a-doc-body">
     <p>Utility CSS can alias each variant axis to a modifier class without nesting.</p>
 
 \`\`\`html
@@ -128,16 +103,29 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Full CSS reference <span>Source of truth</span></summary>
-  <div class="doc-body">
-
-\`\`\`css
-${productLockupCss}
-\`\`\`
-  </div>
-</details>
         `,
+      },
+      source: {
+        language: "html",
+        code: `<!-- Horizontal (default) — used in RouterMarquee nav strip and MediaCard -->
+<div class="c-product-lockup" data-orientation="horizontal" data-style="label" data-context="on-light" data-width="hug">
+  <span class="c-product-lockup__icon" aria-hidden="true">
+    <span class="c-app-icon" data-size="md">…</span>
+  </span>
+  <span class="c-product-lockup__label">Adobe Photoshop</span>
+  <span class="c-product-lockup__caret" aria-hidden="true">…</span>
+</div>
+
+<!-- Vertical — used in RouterNavItem block tiles -->
+<div class="c-product-lockup" data-orientation="vertical" data-style="label" data-context="on-dark" data-width="fill">
+  <span class="c-product-lockup__icon" aria-hidden="true">
+    <span class="c-app-icon" data-size="md">…</span>
+  </span>
+  <span class="c-product-lockup__label-row">
+    <span class="c-product-lockup__label">Adobe Photoshop</span>
+    <span class="c-product-lockup__caret" aria-hidden="true">…</span>
+  </span>
+</div>`,
       },
     },
   },

@@ -1,0 +1,175 @@
+/* HubRouter — organism: SectionHeader + elastic card carousel
+ *
+ * Figma: elastic-card-updates
+ *   8278:188829 (1920)  ·  8278:189350 (1440)
+ *   8278:189867 (1024)  ·  8278:190405 (375 mobile)
+ *
+ * Layout overview:
+ *
+ *   Mobile (<1024px)
+ *     Horizontal snap-scroll, one card at a time, 24px section padding.
+ *
+ *   Overflow / centered (1024px+)
+ *     Carousel: full-viewport width, justify-center, section overflow:hidden clips.
+ *     Cards are fixed-width (flex-shrink:0) — 294px max in resting state at all sizes.
+ *       1024–1279px  resting=242px  expanded=409px
+ *       1280px+      resting=294px  expanded=496px
+ *
+ *     Resting: cards center across the viewport; at small viewports
+ *     the first/last card bleeds off screen slightly (intentional Figma design).
+ *     At ≥1502px the 5 resting cards (5×294+32=1502px) fit within the viewport.
+ *
+ *   Edge-card hover:
+ *     First card → justify-content:flex-start so expansion goes rightward.
+ *     Last card  → justify-content:flex-end   so expansion goes leftward.
+ *     padding = max(8px, (100vw − total_resting) / 2)
+ *       At overflow viewports: padding = 8px → card snaps to edge (breathing room).
+ *       At wide viewports: padding = resting position → ZERO snap, expands in place.
+ *
+ *   Section heading inset: var(--s2a-layout-lg, 124px) at all non-mobile breakpoints.
+ */
+
+/* ─── Section container ─────────────────────────────────────────────────────── */
+.c-hub-router {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2a-spacing-2xl, 40px);
+  padding-block: var(--s2a-spacing-2xl, 40px);
+  background-color: var(--s2a-color-background-default, #ffffff);
+  border-radius: var(--s2a-border-radius-xl, 32px) var(--s2a-border-radius-xl, 32px) 0 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ─── Heading zone ──────────────────────────────────────────────────────────── */
+.c-hub-router__heading {
+  width: 100%;
+  padding-inline: var(--s2a-spacing-lg, 24px); /* mobile */
+}
+
+/* ─── Carousel — BASE: mobile snap-scroll ────────────────────────────────────── */
+.c-hub-router__carousel {
+  display: flex;
+  gap: var(--s2a-spacing-xs, 8px);
+  align-items: flex-start;
+  width: 100%;
+  padding-inline: var(--s2a-spacing-lg, 24px);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.c-hub-router__carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.c-hub-router__carousel > [role="listitem"] {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+/* Card at its natural resting width on mobile */
+.c-hub-router__carousel .c-elastic-card {
+  inline-size: var(--s2a-elastic-card-width-resting, 294px);
+}
+
+/* ─── 1024–1279px: card size override (Figma: padding=16px, media=325px) ──────
+ * Sets CSS custom properties inherited by elastic-card component. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .c-hub-router {
+    --s2a-elastic-card-height-max: 475px; /* 56px header + 325px media + 94px body */
+    --s2a-elastic-card-padding: 16px;
+  }
+}
+
+/* ─── 1024px+: overflow mode ───────────────────────────────────────────────────
+ * Heading: 124px inset (Figma: px-[var(--s2a-layout-lg,124px)] on section).
+ * Carousel: full viewport width, cards centered — first/last may bleed off edges.
+ * Gap stays at 40px (s2a-spacing-2xl) up to 1279px — same as mobile base. */
+@media (min-width: 1024px) {
+  .c-hub-router__heading {
+    padding-inline: var(--s2a-layout-lg, 124px);
+  }
+
+  .c-hub-router__carousel {
+    padding-inline: 0;
+    justify-content: center;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .c-hub-router__carousel > [role="listitem"] {
+    flex: 0 0 242px;
+    flex-shrink: 0;
+    scroll-snap-align: none;
+    transition: flex-basis 280ms ease;
+  }
+
+  .c-hub-router__carousel > [role="listitem"]:has(.c-elastic-card:hover) {
+    flex-basis: 409px;
+  }
+
+  /* Elastic card fills its flex slot; hub-router owns the width */
+  .c-hub-router__carousel .c-elastic-card,
+  .c-hub-router__carousel .c-elastic-card[data-state="resting"]:hover {
+    inline-size: 100%;
+  }
+}
+
+/* ─── 1024–1279px edge-card (JS sets data-edge="first"/"last") ─────────────────
+ * Using JS mouseenter on listitems + mouseleave on the carousel (not individual
+ * cards) to avoid the CSS :has(:hover) feedback loop where layout changes move
+ * the card out from under the cursor, causing rapid flash/glitch.
+ *
+ * padding = max(8px, (100vw − 1242px) / 2):
+ *   < 1242px  →  8px (card snaps to edge with breathing room)
+ *   ≥ 1242px  →  resting x position (zero visible snap, card expands in place) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .c-hub-router__carousel[data-edge="first"] {
+    justify-content: flex-start;
+    padding-inline-start: max(8px, calc((100vw - 1242px) / 2));
+  }
+
+  .c-hub-router__carousel[data-edge="last"] {
+    justify-content: flex-end;
+    padding-inline-end: max(8px, calc((100vw - 1242px) / 2));
+  }
+}
+
+/* ─── 1280px+: wider cards, larger gap ────────────────────────────────────────
+ * Gap bumps to 64px (s2a-spacing-4xl) matching Figma 1440px frame.
+ * Cards stay fixed at 294px resting — no flex-grow at any viewport size.
+ * 5×294 + 4×8 = 1502px total resting. Cards overflow < 1502px, fit at ≥ 1502px. */
+@media (min-width: 1280px) {
+  .c-hub-router {
+    gap: var(--s2a-spacing-4xl, 64px);
+    padding-block: var(--s2a-spacing-4xl, 64px);
+  }
+
+  .c-hub-router__carousel > [role="listitem"] {
+    flex-basis: 294px;
+  }
+
+  .c-hub-router__carousel > [role="listitem"]:has(.c-elastic-card:hover) {
+    flex-basis: 496px;
+  }
+}
+
+/* ─── 1280px+ edge-card (JS sets data-edge="first"/"last") ─────────────────────
+ * padding = max(8px, (100vw − 1502px) / 2):
+ *   < 1502px  →  8px (card snaps to edge with breathing room)
+ *   ≥ 1502px  →  resting x position (zero visible snap, card expands in place) */
+@media (min-width: 1280px) {
+  .c-hub-router__carousel[data-edge="first"] {
+    justify-content: flex-start;
+    padding-inline-start: max(8px, calc((100vw - 1502px) / 2));
+  }
+
+  .c-hub-router__carousel[data-edge="last"] {
+    justify-content: flex-end;
+    padding-inline-end: max(8px, calc((100vw - 1502px) / 2));
+  }
+}

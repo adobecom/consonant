@@ -1,6 +1,5 @@
 import { html } from "lit";
 import { AppIcon, APP_LIBRARY_OPTIONS, APP_OPTIONS } from "./AppIcon";
-import appIconCss from "../../../packages/components/src/app-icon/app-icon.css?raw";
 
 const CATEGORY_ORDER = [
   "Cross Cloud",
@@ -37,42 +36,19 @@ const appsByCategory = CATEGORY_ORDER.map((category) => ({
 })).filter((group) => group.apps.length > 0);
 
 export default {
-  title: "Components/AppIcon",
+  title: "Atoms/AppIcon",
   tags: ["autodocs"],
   render: (args) => AppIcon(args),
   parameters: {
     docs: {
       description: {
         component: `
-<style>
-.doc-pattern {
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
-  margin: 12px 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,248,248,0.9));
-}
-.doc-collapse summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 18px 24px;
-  font-size: 15px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.doc-collapse summary::-webkit-details-marker { display: none; }
-.doc-collapse summary span { color: #555; font-size: 13px; font-weight: 600; }
-.doc-collapse[open] summary { border-bottom: 1px solid rgba(0,0,0,0.08); }
-.doc-body { padding: 20px 24px 24px; }
-.doc-body p { margin: 0 0 12px; font-size: 14px; color: #333; }
-</style>
 <p>Adobe product badge used inside RouterMarquee/ProductLockup. The Figma component is <code>AppIcon</code> in S2A Foundations (<code>3582:130846</code>) with <code>Size=xs|sm|md|lg</code> and an <code>Icon</code> instance-swap sourced from the published App Icons Library.</p>
 <p>Storybook controls expose only verified CDN-backed slugs from the published library catalog plus existing S2A product aliases. The reference catalog still lists library-only entries, but those use an A4U placeholder until a verified CDN URL or internal package asset is wired in.</p>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Preferred · Data-attribute markup <span>Recommended</span></summary>
-  <div class="doc-body">
+<details class="s2a-doc-accordion">
+  <summary>Preferred · Data-attribute markup <span class="s2a-doc-badge">Recommended</span></summary>
+  <div class="s2a-doc-body">
     <p>Use the component wrapper (<code>c-app-icon</code>) with <code>data-size</code> to mirror Figma variants. Images are fixed square tiles; the component injects the CDN URL.</p>
 
 \`\`\`html
@@ -99,9 +75,9 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
+<details class="s2a-doc-accordion">
   <summary>Alternative · BEM utility classes <span>Class-based</span></summary>
-  <div class="doc-body">
+  <div class="s2a-doc-body">
     <p>Alias each size to a class modifier when consuming in utility-heavy stacks.</p>
 
 \`\`\`html
@@ -120,15 +96,19 @@ export default {
   </div>
 </details>
 
-<details class="doc-pattern doc-collapse">
-  <summary>Full CSS reference <span>Source of truth</span></summary>
-  <div class="doc-body">
-\`\`\`css
-${appIconCss}
-\`\`\`
-  </div>
-</details>
         `,
+      },
+      source: {
+        language: "html",
+        code: `<!-- Medium (24px) — default, used in ProductLockup and MediaCard -->
+<span class="c-app-icon" data-size="md" role="img" aria-hidden="true">
+  <img class="c-app-icon__img" src="https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
+</span>
+
+<!-- Large (32px) -->
+<span class="c-app-icon" data-size="lg" role="img" aria-label="Adobe Firefly">
+  <img class="c-app-icon__img" src="…/firefly.svg" alt="" width="32" height="32" loading="lazy" decoding="async" />
+</span>`,
       },
     },
   },

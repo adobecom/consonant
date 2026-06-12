@@ -1,22 +1,19 @@
 import { html, nothing } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ProductLockup } from "../product-lockup/product-lockup.js";
 import { Media } from "../media/media.js";
 import "./elastic-card.css";
+import chevronRightSvg from "../icons/chevron-right.svg?raw";
+import arrowRightSvg from "../icons/arrow-right.svg?raw";
 
 const VALID_STATES = new Set(["resting", "expanded", "mobile"]);
 const MEDIA_ASPECTS = new Set(["3:4", "4:3", "16:9", "1:1"]);
 
-const ElasticCardCaret = () => html`
-  <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M1 1 5 5 1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-  </svg>
-`;
+const ElasticCardCaret = () => unsafeHTML(chevronRightSvg);
 
 const ElasticCardCTA = () => html`
   <span class="c-elastic-card__action c-elastic-card__action--button" aria-hidden="true">
-    <svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
-      <path transform="translate(1.926, 0.076)" d="M1.166 9.848C0.852 9.848 0.558 9.725 0.336 9.501C0.117 9.279-0.002 8.985 0 8.673C0.002 8.362 0.125 8.07 0.347 7.852L3.323 4.912L0.371 1.997C0.15 1.778 0.026 1.486 0.024 1.174C0.022 0.863 0.142 0.569 0.361 0.347C0.582 0.124 0.876 0 1.191 0C1.5 0 1.791 0.12 2.011 0.337L5.802 4.082C6.032 4.315 6.152 4.609 6.149 4.92C6.147 5.232 6.024 5.524 5.802 5.742L1.987 9.512C1.767 9.728 1.475 9.848 1.166 9.848Z" fill="currentColor"/>
-    </svg>
+    ${unsafeHTML(arrowRightSvg)}
   </span>
 `;
 

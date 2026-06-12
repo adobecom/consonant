@@ -1,0 +1,51 @@
+/* Shared accordion styles for component documentation panels in Storybook */
+
+.s2a-doc-accordion {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.s2a-doc-accordion > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #1a1a1a;
+  user-select: none;
+}
+
+.s2a-doc-accordion > summary::-webkit-details-marker { display: none; }
+
+.s2a-doc-accordion[open] > summary {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.s2a-doc-badge {
+  font-size: 11px;
+  font-weight: 500;
+  color: #666;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+
+.s2a-doc-body {
+  padding: 14px 18px 18px;
+}
+
+.s2a-doc-body p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.s2a-doc-body p:last-child { margin-bottom: 0; }
+
+.s2a-doc-body code { font-weight: 600; }
