@@ -1,0 +1,191 @@
+import{x as p}from"./iframe-_fPFkiU8.js";import{P as g}from"./product-lockup-B9A4xacT.js";import{b as h}from"./app-icon-BVeyA_W2.js";import"./preload-helper-BSds_FOV.js";import"./unsafe-html-Cu7DzaLd.js";import"./chevron-right-CnbUzkxe.js";const y=h.map(e=>e.slug),w=e=>{if(!(e==null||e==="auto"))return e},u=(e,m={})=>{const a={...e,...m},b=w(a.iconSize);return b?a.iconSize=b:delete a.iconSize,g(a)},S={title:"Atoms/ProductLockup",tags:["autodocs"],render:e=>u(e),parameters:{docs:{description:{component:`
+<p>App icon + label identifier used across RouterMarquee, hero tiles, and feature lists. Icons come from the AppIcon CDN (see <code>docs/component-audit/app-icons.md</code> for slug ↔︎ SVG mapping).</p>
+
+<details class="s2a-doc-accordion">
+  <summary>Preferred · Data-attribute HTML structure <span class="s2a-doc-badge">Recommended</span></summary>
+  <div class="s2a-doc-body">
+    <p>Use <code>data-orientation</code>, <code>data-style</code>, and <code>data-context</code> to mirror the Figma component axes. App icons render via <code>&lt;span class="c-app-icon"&gt;</code> with the CDN URL.</p>
+
+\`\`\`html
+<div
+  class="c-product-lockup"
+  data-orientation="horizontal"
+  data-style="label"
+  data-context="on-light"
+  data-width="hug"
+>
+  <span class="c-product-lockup__icon" aria-hidden="true">
+    <span class="c-app-icon" data-size="md" role="img" aria-hidden="true">
+      <img
+        class="c-app-icon__img"
+        src="https://www.adobe.com/content/dam/shared/images/product-icons/svg/experience-cloud.svg"
+        alt=""
+        width="24"
+        height="24"
+        loading="lazy"
+      />
+    </span>
+  </span>
+  <span class="c-product-lockup__label">Adobe Experience Cloud</span>
+  <span class="c-product-lockup__caret" aria-hidden="true">
+    <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 1 4.25 3 2 5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </span>
+</div>
+\`\`\`
+
+\`\`\`css
+.c-product-lockup[data-context="on-dark"] {
+  color: var(--s2a-color-content-knockout);
+}
+
+.c-product-lockup[data-style="eyebrow"] .c-product-lockup__label {
+  font-size: var(--s2a-font-size-md);
+  line-height: var(--s2a-font-line-height-sm);
+}
+\`\`\`
+  </div>
+</details>
+
+<details class="s2a-doc-accordion">
+  <summary>Alternative · BEM / utility classes <span class="s2a-doc-badge">Class-based</span></summary>
+  <div class="s2a-doc-body">
+    <p>Utility CSS can alias each variant axis to a modifier class without nesting.</p>
+
+\`\`\`html
+<div class="c-product-lockup c-product-lockup--vertical c-product-lockup--eyebrow c-product-lockup--on-dark" data-width="fill">
+  <span class="c-product-lockup__label">Customer journeys</span>
+</div>
+\`\`\`
+
+\`\`\`css
+.c-product-lockup--on-dark {
+  color: var(--s2a-color-content-knockout);
+}
+
+.c-product-lockup--vertical {
+  flex-direction: column;
+  gap: var(--s2a-spacing-sm);
+}
+\`\`\`
+  </div>
+</details>
+
+        `},source:{language:"html",code:`<!-- Horizontal (default) — used in RouterMarquee nav strip and MediaCard -->
+<div class="c-product-lockup" data-orientation="horizontal" data-style="label" data-context="on-light" data-width="hug">
+  <span class="c-product-lockup__icon" aria-hidden="true">
+    <span class="c-app-icon" data-size="md">…</span>
+  </span>
+  <span class="c-product-lockup__label">Adobe Photoshop</span>
+  <span class="c-product-lockup__caret" aria-hidden="true">…</span>
+</div>
+
+<!-- Vertical — used in RouterNavItem block tiles -->
+<div class="c-product-lockup" data-orientation="vertical" data-style="label" data-context="on-dark" data-width="fill">
+  <span class="c-product-lockup__icon" aria-hidden="true">
+    <span class="c-app-icon" data-size="md">…</span>
+  </span>
+  <span class="c-product-lockup__label-row">
+    <span class="c-product-lockup__label">Adobe Photoshop</span>
+    <span class="c-product-lockup__caret" aria-hidden="true">…</span>
+  </span>
+</div>`}}},argTypes:{label:{control:"text",description:"Product name text"},app:{control:{type:"select"},options:y,description:"AppIcon slug"},orientation:{control:{type:"select"},options:["horizontal","vertical"],description:"Layout axis"},styleVariant:{name:"styleVariant",control:{type:"select"},options:["label","eyebrow"],description:"Typography style"},context:{control:{type:"select"},options:["on-light","on-dark"],description:"Surface context (controls text color)"},width:{control:{type:"select"},options:["hug","fill"],description:'Layout width — "fill" lets the label truncate within its container'},showIconStart:{control:"boolean",description:"Toggle the leading AppIcon (matches Figma prop)"},showIconEnd:{control:"boolean",description:"Toggle the caret (horizontal only)"},iconSize:{control:{type:"select"},options:["auto","xs","sm","md","lg"],description:"Icon size override (auto defaults to the matt-atoms 24px tile)"}},args:{label:"Adobe Experience Cloud",app:"experience-cloud",orientation:"horizontal",styleVariant:"label",context:"on-light",width:"hug",showIconStart:!0,showIconEnd:!0,iconSize:"auto"}},o={},t={args:{label:"Workflow automation",styleVariant:"eyebrow"}},r={render:e=>p`
+    <div style="background: #f3f3f3; padding: 24px; width: 320px;">
+      ${u(e,{width:"fill"})}
+    </div>
+  `},n={render:e=>p`
+    <div style="background: #050505; padding: 24px; display: inline-flex;">
+      ${u(e,{context:"on-dark"})}
+    </div>
+  `},s={args:{orientation:"vertical",width:"hug",label:"Creative tools"}},c={args:{orientation:"vertical",styleVariant:"eyebrow",label:"Customer journeys"}},i={args:{showIconStart:!1,label:"Premium features"}},l={args:{showIconEnd:!1}},d={render:e=>p`
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;"
+      >
+        ${[{label:"Inline label",orientation:"horizontal",styleVariant:"label"},{label:"Inline eyebrow",orientation:"horizontal",styleVariant:"eyebrow"},{label:"Vertical label",orientation:"vertical",styleVariant:"label"},{label:"Vertical eyebrow",orientation:"vertical",styleVariant:"eyebrow"}].map(a=>p`
+            <div
+              style="padding: 16px; border: 1px solid #e1e1e1; border-radius: 12px; background: #fff; min-height: 96px;"
+            >
+              ${u(e,{...a,width:"fill"})}
+            </div>
+          `)}
+      </div>
+    `};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:"{}",...o.parameters?.docs?.source}}};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
+  args: {
+    label: "Workflow automation",
+    styleVariant: "eyebrow"
+  }
+}`,...t.parameters?.docs?.source}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  render: args => html\`
+    <div style="background: #f3f3f3; padding: 24px; width: 320px;">
+      \${renderLockup(args, {
+    width: "fill"
+  })}
+    </div>
+  \`
+}`,...r.parameters?.docs?.source}}};n.parameters={...n.parameters,docs:{...n.parameters?.docs,source:{originalSource:`{
+  render: args => html\`
+    <div style="background: #050505; padding: 24px; display: inline-flex;">
+      \${renderLockup(args, {
+    context: "on-dark"
+  })}
+    </div>
+  \`
+}`,...n.parameters?.docs?.source}}};s.parameters={...s.parameters,docs:{...s.parameters?.docs,source:{originalSource:`{
+  args: {
+    orientation: "vertical",
+    width: "hug",
+    label: "Creative tools"
+  }
+}`,...s.parameters?.docs?.source}}};c.parameters={...c.parameters,docs:{...c.parameters?.docs,source:{originalSource:`{
+  args: {
+    orientation: "vertical",
+    styleVariant: "eyebrow",
+    label: "Customer journeys"
+  }
+}`,...c.parameters?.docs?.source}}};i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:`{
+  args: {
+    showIconStart: false,
+    label: "Premium features"
+  }
+}`,...i.parameters?.docs?.source}}};l.parameters={...l.parameters,docs:{...l.parameters?.docs,source:{originalSource:`{
+  args: {
+    showIconEnd: false
+  }
+}`,...l.parameters?.docs?.source}}};d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`{
+  render: args => {
+    const combos = [{
+      label: "Inline label",
+      orientation: "horizontal",
+      styleVariant: "label"
+    }, {
+      label: "Inline eyebrow",
+      orientation: "horizontal",
+      styleVariant: "eyebrow"
+    }, {
+      label: "Vertical label",
+      orientation: "vertical",
+      styleVariant: "label"
+    }, {
+      label: "Vertical eyebrow",
+      orientation: "vertical",
+      styleVariant: "eyebrow"
+    }];
+    return html\`
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;"
+      >
+        \${combos.map(combo => html\`
+            <div
+              style="padding: 16px; border: 1px solid #e1e1e1; border-radius: 12px; background: #fff; min-height: 96px;"
+            >
+              \${renderLockup(args, {
+      ...combo,
+      width: "fill"
+    })}
+            </div>
+          \`)}
+      </div>
+    \`;
+  }
+}`,...d.parameters?.docs?.source}}};const V=["HorizontalLabel","HorizontalEyebrow","HorizontalFill","KnockoutOnDark","VerticalLabel","VerticalEyebrow","LabelOnly","NoCaret","AllVariants"];export{d as AllVariants,t as HorizontalEyebrow,r as HorizontalFill,o as HorizontalLabel,n as KnockoutOnDark,i as LabelOnly,l as NoCaret,c as VerticalEyebrow,s as VerticalLabel,V as __namedExportsOrder,S as default};
