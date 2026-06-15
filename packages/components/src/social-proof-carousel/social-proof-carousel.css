@@ -1,0 +1,99 @@
+.c-social-proof-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* --spc-slide-w and --spc-peek are set by the controller JS */
+}
+
+/* ─── Track (flex row of slides) ─────────────────────────────────────────── */
+
+.spc-track {
+  display: flex;
+  gap: 8px;
+  will-change: transform;
+  /* Initial state: translate = peek, so first slide is in view */
+  transform: translateX(var(--spc-peek, 11.46%));
+}
+
+/* ─── Slides ─────────────────────────────────────────────────────────────── */
+
+.spc-slide {
+  flex: 0 0 var(--spc-slide-w, calc(100% - 22.92% - 16px));
+  min-width: 0;
+}
+
+.spc-slide[data-state="inactive"] {
+  pointer-events: none;
+}
+
+/* ─── Nav buttons ────────────────────────────────────────────────────────── */
+
+.spc-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.spc-nav--prev { left: 40px; }
+.spc-nav--next { right: 40px; }
+
+/* Override icon-button so it's always on-light (white) on the dark slide bg */
+.spc-nav__btn.c-icon-button[data-background="solid"][data-context="on-light"] {
+  background-color: var(--s2a-color-background-default, #fff);
+  color: var(--s2a-color-content-default, #000);
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.spc-nav__btn.c-icon-button:disabled {
+  opacity: var(--s2a-opacity-disabled, 0.48);
+  pointer-events: none;
+}
+
+/* ─── Pagination dots ────────────────────────────────────────────────────── */
+
+.spc-pagination {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.spc-dot {
+  appearance: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: background 200ms ease, transform 200ms ease;
+}
+
+.spc-dot[aria-selected="true"] {
+  background: #fff;
+  transform: scale(1.25);
+}
+
+.spc-dot:focus-visible {
+  outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
+  outline-offset: 2px;
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .spc-track {
+    transition: none !important;
+  }
+
+  .spc-dot {
+    transition: none;
+  }
+}
