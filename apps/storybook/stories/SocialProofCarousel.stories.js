@@ -1,9 +1,12 @@
 import { html } from "lit";
 import { SocialProofCarousel, SocialProofCarouselController } from "./SocialProofCarousel";
+import slide1 from "./assets/carousel/slide-1.jpg";
+import slide2 from "./assets/carousel/slide-2.jpg";
+import slide3 from "./assets/carousel/slide-3.jpg";
 
 // Figma: elastic-card-updates, node 9428-48814
 // Full-bleed carousel of QuoteCards with peek, prev/next icon buttons, and pagination dots.
-// Images sourced from Figma node 9428-48963 and stored locally so they persist in Storybook/prod.
+// Images imported as Vite module assets so the base path is correct on GitHub Pages (/consonant/).
 
 const SAMPLE_SLIDES = [
   {
@@ -12,7 +15,7 @@ const SAMPLE_SLIDES = [
     attributionRole: "Creator",
     ctaLabel: "Learn more",
     ctaHref: "#",
-    imageSrc: "/assets/carousel/slide-1.jpg",
+    imageSrc: slide1,
   },
   {
     quote: `"Adobe tools have transformed the way I tell stories. There's no limit to what I can imagine."`,
@@ -20,7 +23,7 @@ const SAMPLE_SLIDES = [
     attributionRole: "Filmmaker",
     ctaLabel: "Watch now",
     ctaHref: "#",
-    imageSrc: "/assets/carousel/slide-2.jpg",
+    imageSrc: slide2,
   },
   {
     quote: `"From concept to final cut, Creative Cloud keeps everything connected. It's how I work every single day."`,
@@ -28,7 +31,7 @@ const SAMPLE_SLIDES = [
     attributionRole: "Motion Designer",
     ctaLabel: "Explore",
     ctaHref: "#",
-    imageSrc: "/assets/carousel/slide-3.jpg",
+    imageSrc: slide3,
   },
 ];
 

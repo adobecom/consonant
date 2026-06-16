@@ -20,7 +20,7 @@ export const QuoteCard = ({
             class="qc-media__img"
             src=${imageSrc}
             alt=${imageAlt}
-            loading="lazy"
+            loading="eager"
             decoding="async"
           />`
         : nothing}
