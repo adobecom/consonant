@@ -38,18 +38,6 @@
 .spc-nav--prev { left: 40px; }
 .spc-nav--next { right: 40px; }
 
-/* Override icon-button so it's always on-light (white) on the dark slide bg */
-.spc-nav__btn.c-icon-button[data-background="solid"][data-context="on-light"] {
-  background-color: var(--s2a-color-background-default, #fff);
-  color: var(--s2a-color-content-default, #000);
-  border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-}
-
-.spc-nav__btn.c-icon-button:disabled {
-  opacity: var(--s2a-opacity-disabled, 0.48);
-  pointer-events: none;
-}
 
 /* ─── Pagination dots ────────────────────────────────────────────────────── */
 

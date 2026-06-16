@@ -3,33 +3,32 @@ import { SocialProofCarousel, SocialProofCarouselController } from "./SocialProo
 
 // Figma: elastic-card-updates, node 9428-48814
 // Full-bleed carousel of QuoteCards with peek, prev/next icon buttons, and pagination dots.
-
-const SAMPLE_IMAGE = "https://www.figma.com/api/mcp/asset/3e068178-dbaf-423e-a9f6-cff0bf406f38";
+// Images sourced from Figma node 9428-48963 and stored locally so they persist in Storybook/prod.
 
 const SAMPLE_SLIDES = [
   {
-    quote: "“If it wasn’t for Creative Cloud, I don’t think I’d be here. I feel like I can create anything.”",
-    attributionName: "Michelle Phan",
-    attributionRole: "Creator",
-    ctaLabel: "Learn more",
-    ctaHref: "#",
-    imageSrc: SAMPLE_IMAGE,
+    quote: `“If it wasn’t for Creative Cloud, I don’t think I’d be here. I feel like I can create anything.”`,
+    attributionName: “Michelle Phan”,
+    attributionRole: “Creator”,
+    ctaLabel: “Learn more”,
+    ctaHref: “#”,
+    imageSrc: “/assets/carousel/slide-1.jpg”,
   },
   {
-    quote: "“Adobe tools have transformed the way I tell stories. There’s no limit to what I can imagine.”",
-    attributionName: "Jordan Lee",
-    attributionRole: "Filmmaker",
-    ctaLabel: "Watch now",
-    ctaHref: "#",
-    imageSrc: SAMPLE_IMAGE,
+    quote: `”Adobe tools have transformed the way I tell stories. There’s no limit to what I can imagine.”`,
+    attributionName: “Jordan Lee”,
+    attributionRole: “Filmmaker”,
+    ctaLabel: “Watch now”,
+    ctaHref: “#”,
+    imageSrc: “/assets/carousel/slide-2.jpg”,
   },
   {
-    quote: "“From concept to final cut, Creative Cloud keeps everything connected. It’s how I work every single day.”",
-    attributionName: "Priya Nair",
-    attributionRole: "Motion Designer",
-    ctaLabel: "Explore",
-    ctaHref: "#",
-    imageSrc: SAMPLE_IMAGE,
+    quote: `”From concept to final cut, Creative Cloud keeps everything connected. It’s how I work every single day.”`,
+    attributionName: “Priya Nair”,
+    attributionRole: “Motion Designer”,
+    ctaLabel: “Explore”,
+    ctaHref: “#”,
+    imageSrc: “/assets/carousel/slide-3.jpg”,
   },
 ];
 
@@ -69,12 +68,12 @@ export default {
     <div class="spc-slide" data-state="inactive" aria-hidden="true" inert><!-- QuoteCard --></div>
   </div>
   <div class="spc-nav spc-nav--prev">
-    <button class="spc-nav__btn c-icon-button" data-background="solid" data-context="on-light" data-size="lg" type="button" aria-label="Previous slide">
+    <button class="spc-nav__btn c-icon-button" data-style="solid" data-context="on-light" data-size="lg" type="button" aria-label="Previous slide">
       <span class="c-icon-button__icon" aria-hidden="true"><!-- arrow-left SVG --></span>
     </button>
   </div>
   <div class="spc-nav spc-nav--next">
-    <button class="spc-nav__btn c-icon-button" data-background="solid" data-context="on-light" data-size="lg" type="button" aria-label="Next slide">
+    <button class="spc-nav__btn c-icon-button" data-style="solid" data-context="on-light" data-size="lg" type="button" aria-label="Next slide">
       <span class="c-icon-button__icon" aria-hidden="true"><!-- arrow-right SVG --></span>
     </button>
   </div>

@@ -3,27 +3,13 @@ import { fn } from "storybook/test";
 
 import { IconButton } from "./IconButton";
 
-// S2A icons are resolved by the icon-button component's ICON_MAP —
-// pass the string name and the component renders the correct SVG.
-const normalizeStoryIcon = (icon) => {
-  if (typeof icon !== "string") return icon;
-  return icon;
-};
-
 const forcedStateIcon = (state) => {
   if (state === "active") return "play";
   if (state === "disabled") return "cross";
   return "pause";
 };
 
-const renderIconButton = (args = {}) => {
-  const resolvedSize = args.size === "md" ? "md" : "lg";
-  return IconButton({
-    ...args,
-    size: resolvedSize,
-    icon: normalizeStoryIcon(args.icon),
-  });
-};
+const renderIconButton = (args = {}) => IconButton(args);
 
 export default {
   title: "Atoms/IconButton",
@@ -37,17 +23,17 @@ export default {
       source: {
         language: "html",
         code: `<!-- Solid / on-light -->
-<button class="c-icon-button" data-background="solid" data-context="on-light" data-size="lg" type="button" aria-label="Pause playback">
+<button class="c-icon-button" data-style="solid" data-context="on-light" data-size="lg" type="button" aria-label="Pause playback">
   <span class="c-icon-button__icon" aria-hidden="true">…</span>
 </button>
 
 <!-- Solid / on-dark (media controls) -->
-<button class="c-icon-button" data-background="solid" data-context="on-dark" data-size="lg" type="button" aria-label="Play">
+<button class="c-icon-button" data-style="solid" data-context="on-dark" data-size="lg" type="button" aria-label="Play">
   <span class="c-icon-button__icon" aria-hidden="true">…</span>
 </button>
 
-<!-- Outlined / on-dark -->
-<button class="c-icon-button" data-background="outlined" data-context="on-dark" data-size="md" type="button" aria-label="Mute">
+<!-- Transparent / on-light -->
+<button class="c-icon-button" data-style="transparent" data-context="on-light" data-size="sm" type="button" aria-label="Close">
   <span class="c-icon-button__icon" aria-hidden="true">…</span>
 </button>`,
       },
@@ -65,15 +51,15 @@ export default {
       options: ["on-light", "on-dark"],
       description: "Surface context the icon button lives on",
     },
-    background: {
+    style: {
       control: { type: "select" },
-      options: ["solid", "outlined", "transparent"],
-      description: "Background variant",
+      options: ["solid", "transparent"],
+      description: "Style variant",
     },
     size: {
       control: { type: "select" },
-      options: ["md", "lg"],
-      description: "Size variant (lg = hero controls, md = compact toolbars)",
+      options: ["sm", "md", "lg"],
+      description: "Size variant (sm = 24px, md = 32px, lg = 40px)",
     },
     state: {
       control: { type: "select" },
@@ -86,7 +72,7 @@ export default {
     ariaLabel: "Pause",
     icon: "pause",
     context: "on-light",
-    background: "solid",
+    style: "solid",
     size: "lg",
     state: "default",
   },
@@ -94,12 +80,8 @@ export default {
 
 export const Solid = {};
 
-export const Outlined = {
-  args: { background: "outlined" },
-};
-
 export const Transparent = {
-  args: { background: "transparent" },
+  args: { style: "transparent" },
 };
 
 export const Disabled = {
@@ -110,13 +92,13 @@ export const S2aIcons = {
   name: "S2A Icons",
   render: () => html`
     <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
-      ${renderIconButton({ ariaLabel: "Play media", icon: "play", size: "lg", background: "solid" })}
-      ${renderIconButton({ ariaLabel: "Pause media", icon: "pause", size: "lg", background: "solid" })}
-      ${renderIconButton({ ariaLabel: "Add", icon: "add", size: "lg", background: "outlined" })}
+      ${renderIconButton({ ariaLabel: "Play media", icon: "play", size: "lg", style: "solid" })}
+      ${renderIconButton({ ariaLabel: "Pause media", icon: "pause", size: "lg", style: "solid" })}
+      ${renderIconButton({ ariaLabel: "Add", icon: "add", size: "lg", style: "transparent" })}
       <div style="background: #0b0b0b; padding: 12px; border-radius: 16px; display: inline-flex; gap: 12px;">
-        ${renderIconButton({ ariaLabel: "Close", icon: "cross", size: "md", context: "on-dark", background: "transparent" })}
-        ${renderIconButton({ ariaLabel: "Navigate forward", icon: "chevron-right", size: "md", context: "on-dark", background: "outlined" })}
-        ${renderIconButton({ ariaLabel: "Link out", icon: "link-out", size: "md", context: "on-dark", background: "solid" })}
+        ${renderIconButton({ ariaLabel: "Close", icon: "cross", size: "sm", context: "on-dark", style: "transparent" })}
+        ${renderIconButton({ ariaLabel: "Navigate forward", icon: "chevron-right", size: "md", context: "on-dark", style: "transparent" })}
+        ${renderIconButton({ ariaLabel: "Link out", icon: "link-out", size: "md", context: "on-dark", style: "solid" })}
       </div>
     </div>
   `,
@@ -125,6 +107,7 @@ export const S2aIcons = {
 export const Sizes = {
   render: () => html`
     <div style="display: flex; gap: 16px; align-items: center;">
+      ${renderIconButton({ ariaLabel: "Play (sm)", icon: "play", size: "sm" })}
       ${renderIconButton({ ariaLabel: "Play (md)", icon: "play", size: "md" })}
       ${renderIconButton({ ariaLabel: "Pause (lg)", icon: "pause", size: "lg" })}
     </div>
@@ -133,17 +116,17 @@ export const Sizes = {
 
 export const ContextGrid = {
   render: () => {
-    const backgrounds = ["solid", "outlined", "transparent"];
+    const styles = ["solid", "transparent"];
     return html`
       <div style="display: flex; flex-direction: column; gap: 24px;">
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-          ${backgrounds.map((background) =>
-            renderIconButton({ background, context: "on-light", ariaLabel: background, icon: "pause", size: "lg" }),
+          ${styles.map((s) =>
+            renderIconButton({ style: s, context: "on-light", ariaLabel: s, icon: "pause", size: "lg" }),
           )}
         </div>
         <div style="background: #0b0b0b; padding: 24px; border-radius: 24px; display: flex; gap: 16px; flex-wrap: wrap;">
-          ${backgrounds.map((background) =>
-            renderIconButton({ background, context: "on-dark", ariaLabel: `${background} on dark`, icon: "pause", size: "lg" }),
+          ${styles.map((s) =>
+            renderIconButton({ style: s, context: "on-dark", ariaLabel: `${s} on dark`, icon: "pause", size: "lg" }),
           )}
         </div>
       </div>
@@ -173,6 +156,8 @@ export const ForcedStates = {
         ${renderRow("Large", "lg")}
         <span style="font: 12px/1.4 var(--s2a-font-family-default, 'Adobe Clean', sans-serif); color: #5c5c5c;">Medium (md · 32px)</span>
         ${renderRow("Medium", "md")}
+        <span style="font: 12px/1.4 var(--s2a-font-family-default, 'Adobe Clean', sans-serif); color: #5c5c5c;">Small (sm · 24px)</span>
+        ${renderRow("Small", "sm")}
       </div>
     `;
   },
@@ -182,9 +167,8 @@ export const ForcedStates = {
 export const FocusStates = {
   render: () => html`
     <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 20px; align-items: center;">
-      ${renderIconButton({ background: "solid", ariaLabel: "Pause (tab to focus)", state: "focus", icon: "pause", size: "lg" })}
-      ${renderIconButton({ background: "outlined", ariaLabel: "Pause (tab to focus)", state: "focus", icon: "pause", size: "lg" })}
-      ${renderIconButton({ background: "transparent", ariaLabel: "Pause (tab to focus)", state: "focus", icon: "pause", size: "lg" })}
+      ${renderIconButton({ style: "solid", ariaLabel: "Pause (tab to focus)", state: "focus", icon: "pause", size: "lg" })}
+      ${renderIconButton({ style: "transparent", ariaLabel: "Pause (tab to focus)", state: "focus", icon: "pause", size: "lg" })}
     </div>
   `,
 };

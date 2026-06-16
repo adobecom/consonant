@@ -1,9 +1,7 @@
-import { html, nothing } from "lit";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { html } from "lit";
 import { QuoteCard } from "../quote-card/quote-card.js";
+import { IconButton } from "../icon-button/icon-button.js";
 import "./social-proof-carousel.css";
-import arrowLeftSvg from "../icons/arrow-left.svg?raw";
-import arrowRightSvg from "../icons/arrow-right.svg?raw";
 
 /**
  * SocialProofCarousel — full-bleed quote card slider.
@@ -32,29 +30,11 @@ export const SocialProofCarousel = ({ slides = [], activeIndex = 0 } = {}) => ht
     </div>
 
     <div class="spc-nav spc-nav--prev">
-      <button
-        class="spc-nav__btn c-icon-button"
-        data-background="solid"
-        data-context="on-light"
-        data-size="lg"
-        type="button"
-        aria-label="Previous slide"
-      >
-        <span class="c-icon-button__icon" aria-hidden="true">${unsafeHTML(arrowLeftSvg)}</span>
-      </button>
+      ${IconButton({ icon: "arrow-left", style: "solid", context: "on-dark", size: "lg", ariaLabel: "Previous slide" })}
     </div>
 
     <div class="spc-nav spc-nav--next">
-      <button
-        class="spc-nav__btn c-icon-button"
-        data-background="solid"
-        data-context="on-light"
-        data-size="lg"
-        type="button"
-        aria-label="Next slide"
-      >
-        <span class="c-icon-button__icon" aria-hidden="true">${unsafeHTML(arrowRightSvg)}</span>
-      </button>
+      ${IconButton({ icon: "arrow-right", style: "solid", context: "on-dark", size: "lg", ariaLabel: "Next slide" })}
     </div>
 
     <div class="spc-pagination" role="tablist" aria-label="Slide navigation">
@@ -88,8 +68,8 @@ export class SocialProofCarouselController {
     this.track = el.querySelector(".spc-track");
     this.slides = [...el.querySelectorAll(".spc-slide")];
     this.dots = [...el.querySelectorAll(".spc-dot")];
-    this.prevBtn = el.querySelector(".spc-nav--prev .spc-nav__btn");
-    this.nextBtn = el.querySelector(".spc-nav--next .spc-nav__btn");
+    this.prevBtn = el.querySelector(".spc-nav--prev .c-icon-button");
+    this.nextBtn = el.querySelector(".spc-nav--next .c-icon-button");
     this.activeIndex = Number(el.dataset.active ?? 0);
     this._ro = null;
 

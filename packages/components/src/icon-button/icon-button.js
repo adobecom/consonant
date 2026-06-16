@@ -38,45 +38,37 @@ const S2aIcon = (name) => {
 
 /**
  * IconButton Component
- * Implements matt-atoms IconButton from Figma (node 2142-53869).
+ * Implements S2A IconButton (Figma node 8465-449525).
  * Icon-only circular button; aria-label required.
  *
- * @param {Object} args - Component arguments
+ * @param {Object} args
  * @param {string} args.ariaLabel - Accessible label (required)
- * @param {string|import('lit').TemplateResult} args.icon - Phosphor icon name (e.g. "pause", "play") or custom TemplateResult
- * @param {string} args.background - "solid" | "outlined" | "transparent"
+ * @param {string|import('lit').TemplateResult} args.icon - Icon name or custom TemplateResult
+ * @param {string} args.style - "solid" | "transparent"
  * @param {string} args.context - "on-light" | "on-dark"
- * @param {string} args.size - "md" | "lg" ("xs" now maps to "md" for backwards compatibility)
+ * @param {string} args.size - "sm" | "md" | "lg"
  * @param {string} args.state - "default" | "hover" | "active" | "focus" | "disabled"
- * @param {string} args.tone - (deprecated) "default" | "knockout" — maps to context for backwards compatibility
  * @param {Function} args.onClick - Click handler
  */
 export const IconButton = ({
   ariaLabel,
   icon = "pause",
-  background = "solid",
-  context,
+  style = "solid",
+  context = "on-light",
   size = "lg",
   state = "default",
-  tone = "default",
   onClick,
 } = {}) => {
-  const resolvedContext = context ?? (tone === "knockout" ? "on-dark" : "on-light");
-  const resolvedSize = (() => {
-    if (size === "md" || size === "lg") return size;
-    if (size === "xs") return "md"; // legacy stories still reference xs
-    return "lg";
-  })();
+  const resolvedSize = size === "sm" || size === "md" || size === "lg" ? size : "lg";
   const forceState = state && state !== "default" ? state : null;
   const isDisabled = state === "disabled";
-  const iconContent =
-    typeof icon === "string" ? S2aIcon(icon) : icon;
+  const iconContent = typeof icon === "string" ? S2aIcon(icon) : icon;
 
   return html`
     <button
       class="c-icon-button"
-      data-background=${background}
-      data-context=${resolvedContext}
+      data-style=${style}
+      data-context=${context}
       data-size=${resolvedSize}
       data-force-state=${forceState ?? nothing}
       ?disabled=${isDisabled}
