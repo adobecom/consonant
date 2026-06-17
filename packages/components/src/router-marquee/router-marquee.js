@@ -1,6 +1,6 @@
 import { html, nothing } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import { Button } from "../button/button.js";
+import { createButton } from "../button/button.js";
 import { RichContent } from "../rich-content/rich-content.js";
 import { RouterNavItem } from "../router-nav-item/router-nav-item.js";
 import "./router-marquee.css";
@@ -52,7 +52,7 @@ export const RouterMarquee = ({ slides = [], activeIndex = 0 } = {}) => html`
                 body: slide.body ?? "",
                 showActions: Boolean(slide.ctaLabel),
                 actions: slide.ctaLabel
-                  ? Button({
+                  ? createButton({
                       label: slide.ctaLabel,
                       href: slide.ctaHref ?? "#",
                       background: "solid",

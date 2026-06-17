@@ -60,9 +60,15 @@
   font-size: var(--s2a-typography-font-size-heading-2, 80px);
   line-height: var(--s2a-typography-line-height-heading-2, 76px);
   letter-spacing: var(--s2a-typography-letter-spacing-heading-2, -3.2px);
-  /* Outdent opening quotation mark */
-  text-indent: -0.45em;
   color: var(--s2a-color-content-knockout, #fff);
+  position: relative;
+}
+
+/* Opening " hangs to the left of the text margin — only the punctuation
+   overhangs, so "If" aligns flush with every subsequent line. */
+.qc-open-quote {
+  position: absolute;
+  transform: translateX(-100%);
 }
 
 /* ─── Attribution ────────────────────────────────────────────────────────── */
@@ -116,7 +122,7 @@
 
   .qc-content {
     left: 0;
-    right: 0;
+    right: 35px;
     top: auto;
     bottom: 0;
     transform: none;

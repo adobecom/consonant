@@ -1,7 +1,7 @@
 import { html } from "lit";
 
 import { SectionHeader } from "./SectionHeader";
-import { Button } from "../../../packages/components/src/button/button.js";
+import { createButton as Button } from "../../../packages/components/src/button/button.js";
 
 const section = (bg, content) => html`
   <div style="

@@ -68,7 +68,7 @@
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a11;
+    var _a12;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -81,7 +81,7 @@
     }
     document.body.removeChild(ta);
     try {
-      (_a11 = navigator.clipboard) == null ? void 0 : _a11.writeText(text).catch(() => {
+      (_a12 = navigator.clipboard) == null ? void 0 : _a12.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -140,9 +140,9 @@
     formatSectionBtn.textContent = "\u2026";
     postToPlugin("format-section");
   });
-  var BRIDGE_MAX_RECONNECT = 20;
   var BRIDGE_RECONNECT_BASE_MS = 2e3;
-  var WS_PORTS = [9220, 9221, 9222, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+  var BRIDGE_RECONNECT_MAX_MS = 3e4;
+  var WS_PORTS = [9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
@@ -243,6 +243,7 @@
       if (ws.readyState !== 1 || !(result == null ? void 0 : result.data)) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
       renderVariables(result.data);
+      renderTokenGroups(result.data);
       setVarMeta(result.data.variables.length + " variables");
     }).catch(() => {
     });
@@ -276,9 +277,9 @@
     };
   }
   function scheduleReconnect(port) {
-    if (bridgeUserDisconnected || bridgeReconnectAttempts >= BRIDGE_MAX_RECONNECT) return;
+    if (bridgeUserDisconnected) return;
     bridgeReconnectAttempts++;
-    const delay = Math.min(BRIDGE_RECONNECT_BASE_MS * Math.pow(1.5, bridgeReconnectAttempts - 1), 3e4);
+    const delay = Math.min(BRIDGE_RECONNECT_BASE_MS * Math.pow(1.5, bridgeReconnectAttempts - 1), BRIDGE_RECONNECT_MAX_MS);
     bridgeReconnectTimer = setTimeout(() => {
       if (!bridgeUserDisconnected) reconnectToPort(port);
     }, delay);
@@ -384,6 +385,13 @@
     bridgeReconnectAttempts = 0;
     updateBridgeUi();
   }
+  function getTokenGroup(name) {
+    var _a12;
+    const parts = name.split("/").filter((p) => p !== "s2a");
+    if (parts.length >= 4 && parts[1] === "transparent") return parts[0] + " / " + parts[1] + " / " + parts[2];
+    if (parts.length >= 3) return parts[0] + " / " + parts[1];
+    return (_a12 = parts[0]) != null ? _a12 : name;
+  }
   var variablesCache = null;
   function setVarMeta(_text) {
   }
@@ -418,8 +426,71 @@
     ).join("");
     updateExportButtons();
   }
+  function renderTokenGroups(data) {
+    const labelEl = document.getElementById("tokenGroupLabel");
+    const listEl = document.getElementById("tokenGroupList");
+    if (!listEl) return;
+    const semanticColls = data.variableCollections.filter(
+      (c) => /Semantic|Responsive/.test(c.name) || /Primitives/.test(c.name) && /Color/.test(c.name) || /Primitives/.test(c.name) && /Dimension/.test(c.name)
+    );
+    if (semanticColls.length === 0) {
+      listEl.innerHTML = "";
+      if (labelEl) labelEl.classList.add("hidden");
+      return;
+    }
+    const collIdToName = /* @__PURE__ */ new Map();
+    for (const c of data.variableCollections) collIdToName.set(c.id, c.name);
+    const collSet = new Set(semanticColls.map((c) => c.id));
+    const groups = /* @__PURE__ */ new Map();
+    for (const v of data.variables) {
+      if (!collSet.has(v.variableCollectionId)) continue;
+      const collName = collIdToName.get(v.variableCollectionId) || "";
+      const grp = getTokenGroup(v.name);
+      if (/Primitives/.test(collName) && /Dimension/.test(collName) && grp !== "opacity") continue;
+      const key = v.variableCollectionId + "::" + grp;
+      if (!groups.has(key)) {
+        groups.set(key, { collectionId: v.variableCollectionId, collectionName: collName, group: grp, count: 0 });
+      }
+      groups.get(key).count++;
+    }
+    const sorted = [...groups.values()].sort((a, b) => {
+      if (a.collectionName !== b.collectionName) return a.collectionName.localeCompare(b.collectionName);
+      return a.group.localeCompare(b.group);
+    });
+    if (labelEl) labelEl.classList.remove("hidden");
+    listEl.innerHTML = sorted.map(
+      (g) => `<div class="collection-row token-group-row" data-col="${esc(g.collectionId)}" data-group="${esc(g.group)}">
+      <span class="collection-name">${esc(g.group)}</span>
+      <span class="collection-count">${g.count}</span>
+      <button class="gen-btn" title="Generate docs for ${esc(g.group)}">\u2192</button>
+    </div>`
+    ).join("");
+    listEl.insertAdjacentHTML(
+      "beforeend",
+      `<div class="collection-row token-group-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08)" data-col="text-styles" data-group="text-styles">
+      <span class="collection-name">Text Styles</span>
+      <span class="collection-count">\u2014</span>
+      <button class="gen-btn" title="Generate 4 breakpoint sections from native text styles">\u2192</button>
+    </div>`
+    );
+  }
   var _a;
-  (_a = document.getElementById("varRefreshBtn")) == null ? void 0 : _a.addEventListener("click", async () => {
+  (_a = document.getElementById("tokenGroupList")) == null ? void 0 : _a.addEventListener("click", (e) => {
+    var _a12;
+    const btn = e.target.closest(".gen-btn");
+    if (!btn || btn.disabled) return;
+    const row = btn.closest(".token-group-row");
+    if (!row) return;
+    btn.disabled = true;
+    btn.textContent = "\u2026";
+    setVarStatus("Generating " + ((_a12 = row.dataset.group) != null ? _a12 : "") + "\u2026");
+    postToPlugin("token-docs:generate", {
+      collectionId: row.dataset.col,
+      group: row.dataset.group
+    });
+  });
+  var _a2;
+  (_a2 = document.getElementById("varRefreshBtn")) == null ? void 0 : _a2.addEventListener("click", async () => {
     const btn = document.getElementById("varRefreshBtn");
     btn.textContent = "Refreshing\u2026";
     btn.disabled = true;
@@ -428,6 +499,7 @@
       const result = await sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4);
       if (result == null ? void 0 : result.data) {
         renderVariables(result.data);
+        renderTokenGroups(result.data);
         setVarStatus(result.data.variables.length + " variables loaded", "ok");
       } else {
         setVarStatus("No data returned", "err");
@@ -439,8 +511,8 @@
       btn.disabled = false;
     }
   });
-  var _a2;
-  (_a2 = document.getElementById("varExportLocalBtn")) == null ? void 0 : _a2.addEventListener("click", () => {
+  var _a3;
+  (_a3 = document.getElementById("varExportLocalBtn")) == null ? void 0 : _a3.addEventListener("click", () => {
     if (!variablesCache) {
       setVarStatus("No variables \u2014 hit Refresh first", "err");
       return;
@@ -461,8 +533,8 @@
       updateExportButtons();
     });
   });
-  var _a3;
-  (_a3 = document.getElementById("varExportGithubBtn")) == null ? void 0 : _a3.addEventListener("click", async () => {
+  var _a4;
+  (_a4 = document.getElementById("varExportGithubBtn")) == null ? void 0 : _a4.addEventListener("click", async () => {
     if (!variablesCache || !(githubSettings == null ? void 0 : githubSettings.token)) return;
     const btn = document.getElementById("varExportGithubBtn");
     btn.textContent = "Pushing\u2026";
@@ -512,8 +584,8 @@
     document.getElementById("ghFilePath").value = settings.filePath || "packages/toolkit-tokens/json/figma-export.json";
     updateExportButtons();
   }
-  var _a4;
-  (_a4 = document.getElementById("saveSettingsBtn")) == null ? void 0 : _a4.addEventListener("click", () => {
+  var _a5;
+  (_a5 = document.getElementById("saveSettingsBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
     const settings = {
       token: document.getElementById("ghToken").value.trim(),
       owner: document.getElementById("ghOwner").value.trim(),
@@ -561,8 +633,8 @@
     document.getElementById("selectEmpty").style.display = "block";
     document.getElementById("selectBody").style.display = "none";
   }
-  var _a5;
-  (_a5 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
+  var _a6;
+  (_a6 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
     if (!selectSetId) return;
     const filter = {};
     document.querySelectorAll(".chip.on[data-axis]").forEach((chip) => {
@@ -572,12 +644,12 @@
     });
     postToPlugin("select:apply-filter", { setId: selectSetId, filter });
   });
-  var _a6;
-  (_a6 = document.getElementById("selectAllBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
+  var _a7;
+  (_a7 = document.getElementById("selectAllBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
     document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.add("on"));
   });
-  var _a7;
-  (_a7 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
+  var _a8;
+  (_a8 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
     document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.remove("on"));
   });
   var annotateNodeId = null;
@@ -587,8 +659,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a11;
-    annotateNodeId = (_a11 = sel == null ? void 0 : sel.id) != null ? _a11 : null;
+    var _a12;
+    annotateNodeId = (_a12 = sel == null ? void 0 : sel.id) != null ? _a12 : null;
     const empty = document.getElementById("annotateSelectionEmpty");
     const info = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -609,8 +681,8 @@
   document.querySelectorAll("#annotateCats .chip").forEach((chip) => {
     chip.addEventListener("click", () => chip.classList.toggle("on"));
   });
-  var _a8;
-  (_a8 = document.getElementById("annotateApplyBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+  var _a9;
+  (_a9 = document.getElementById("annotateApplyBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
     if (!annotateNodeId) return;
     const categories = Array.from(
       document.querySelectorAll("#annotateCats .chip.on")
@@ -625,8 +697,8 @@
     setAnnotateStatus("");
     postToPlugin("annotate:apply", { nodeId: annotateNodeId, categories });
   });
-  var _a9;
-  (_a9 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
+  var _a10;
+  (_a10 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
     if (!annotateNodeId) return;
     const btn = document.getElementById("annotateClearBtn");
     btn.disabled = true;
@@ -640,19 +712,19 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateSpecSelection(sel) {
-    var _a11, _b;
-    const isSet = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
-    specSetId = isSet ? (_a11 = sel == null ? void 0 : sel.id) != null ? _a11 : null : null;
+    var _a12, _b;
+    const isValid = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT";
+    specSetId = isValid ? (_a12 = sel == null ? void 0 : sel.id) != null ? _a12 : null : null;
     const empty = document.getElementById("specSelectionEmpty");
     const info = document.getElementById("specSelectionInfo");
     const nameEl = document.getElementById("specSetName");
     const countEl = document.getElementById("specSetCount");
     const genBtn = document.getElementById("specGenerateBtn");
-    if (isSet && sel) {
+    if (isValid && sel) {
       empty.style.display = "none";
       info.style.display = "flex";
       nameEl.textContent = sel.name;
-      countEl.textContent = ((_b = sel.variantCount) != null ? _b : 0) + " variants";
+      countEl.textContent = sel.nodeType === "COMPONENT_SET" ? ((_b = sel.variantCount) != null ? _b : 0) + " variants" : "1 variant";
       genBtn.disabled = false;
     } else {
       empty.style.display = "block";
@@ -663,8 +735,8 @@
   document.querySelectorAll("#specOpts .chip").forEach((chip) => {
     chip.addEventListener("click", () => chip.classList.toggle("on"));
   });
-  var _a10;
-  (_a10 = document.getElementById("specGenerateBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
+  var _a11;
+  (_a11 = document.getElementById("specGenerateBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
     if (!specSetId) return;
     const on = new Set(
       Array.from(document.querySelectorAll("#specOpts .chip.on")).map((c) => c.dataset.opt)
@@ -683,7 +755,7 @@
     });
   });
   window.addEventListener("message", (event) => {
-    var _a11, _b;
+    var _a12, _b;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -751,7 +823,7 @@
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a11 = msg.sectionCount) != null ? _a11 : 0,
+            (_a12 = msg.sectionCount) != null ? _a12 : 0,
             (_b = msg.sectionName) != null ? _b : sel.name
           );
         } else {
@@ -761,6 +833,15 @@
           updateCopyBtn(null, null);
           updateSectionBar(false, 0, "");
         }
+        break;
+      }
+      case "token-docs:result": {
+        document.querySelectorAll(".gen-btn").forEach((b) => {
+          b.disabled = false;
+          b.textContent = "\u2192";
+        });
+        if (msg.error) setVarStatus("\u274C " + msg.error, "err");
+        else setVarStatus("\u2713 " + msg.count + " tokens documented", "ok");
         break;
       }
       case "format-section:done": {
@@ -802,4 +883,16 @@
   postToPlugin("ui-ready");
   postToPlugin("get-settings");
   postToPlugin("resize-for-view", { width: 320, height: 460 });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && !bridgeConnected && !bridgeUserDisconnected && !bridgeReconnectTimer) {
+      bridgeReconnectAttempts = 0;
+      bridgeConnect();
+    }
+  });
+  setInterval(() => {
+    if (!bridgeConnected && !bridgeUserDisconnected && !bridgeReconnectTimer) {
+      bridgeReconnectAttempts = 0;
+      bridgeConnect();
+    }
+  }, 45e3);
 })();

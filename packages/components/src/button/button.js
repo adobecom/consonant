@@ -1,134 +1,134 @@
-import { html, nothing } from "lit";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import "./button.css";
+import './button.css';
 
-import chevronDownSvg from "../icons/chevron-down.svg?raw";
+const CHEVRON_DOWN = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M0.642896 3.64278C0.642896 3.42347 0.726604 3.20417 0.894012 3.03676C1.22883 2.70194 1.77125 2.70194 2.10606 3.03676L6.00004 6.93073L9.89401 3.03676C10.2288 2.70194 10.7712 2.70194 11.1061 3.03676C11.4409 3.37157 11.4409 3.91399 11.1061 4.24881L6.60606 8.74881C6.27125 9.08363 5.72883 9.08363 5.39401 8.74881L0.894012 4.24881C0.726604 4.0814 0.642896 3.86209 0.642896 3.64278Z" fill="currentColor"/></svg>`;
 
-const CaretDownIcon = () => unsafeHTML(chevronDownSvg);
-
-const normalizeIntent = (intent) =>
-  intent === "accent" ? "accent" : "primary";
-
-const normalizeContext = (intent, context, tone) => {
-  if (intent === "accent") return "on-light";
-  if (context) return context;
-  if (!tone) return "on-light";
-  if (tone === "inverse" || tone === "knockout") return "on-dark";
-  return "on-light";
-};
-
-const resolveIcon = (icon) => (typeof icon === "function" ? icon() : icon);
+function makeIconSpan(modifier, content) {
+  const wrap = document.createElement('span');
+  wrap.className = `c-button__icon c-button__icon--${modifier}`;
+  wrap.setAttribute('aria-hidden', 'true');
+  if (content instanceof Node) {
+    wrap.append(content);
+  } else if (typeof content === 'string') {
+    wrap.innerHTML = content;
+  }
+  return wrap;
+}
 
 /**
- * Button Component
- * Implements matt-atoms Button from Figma (node 141-53460).
+ * Decorate an existing <a> or <button> in place.
+ * Milo pattern: the block hands you authored DOM, you reshape it.
  *
- * @param {Object} args - Component arguments
- * @param {string} args.label - Button label text
- * @param {string} args.background - "solid" | "outlined" | "transparent"
- * @param {string} args.intent - "primary" | "accent"
- * @param {string} args.context - "on-light" | "on-dark"
- * @param {string} args.size - "md" | "xs"
- * @param {string} args.state - "default" | "hover" | "active" | "focus" | "disabled"
- * @param {string} args.tone - (deprecated) "default" | "knockout" | "inverse" — maps to context
- * @param {boolean} args.showIconStart - show leading icon slot
- * @param {boolean} args.showIconEnd - show trailing icon slot
- * @param {unknown} args.iconStart - template/renderable for start icon
- * @param {unknown} args.iconEnd - template/renderable for end icon
- * @param {string} args.href - when present, renders a navigation CTA
- * @param {Function} args.onClick - Click handler
+ * @param {HTMLElement} el
+ * @param {object} opts
+ * @param {'solid'|'outlined'|'transparent'} opts.background
+ * @param {'on-light'|'on-dark'} opts.context
+ * @param {'primary'|'accent'} opts.intent
+ * @param {'md'|'xs'} opts.size
+ * @param {boolean} opts.disabled
  */
-export const Button = ({
-  label = "Label",
-  background = "solid",
-  intent,
-  context,
-  size = "md",
-  state = "default",
-  tone,
+export function decorateButton(el, {
+  background = 'solid',
+  context = 'on-light',
+  intent = 'primary',
+  size = 'md',
+  disabled = false,
+} = {}) {
+  el.classList.add('c-button');
+  el.dataset.background = background;
+  el.dataset.intent = intent;
+  el.dataset.context = context;
+  el.dataset.size = size;
+
+  if (!el.querySelector('.c-button__label')) {
+    const text = el.textContent.trim();
+    el.textContent = '';
+    const label = document.createElement('span');
+    label.className = 'c-button__label';
+    label.textContent = text;
+    el.append(label);
+  }
+
+  if (disabled) {
+    if (el.tagName === 'BUTTON') {
+      el.disabled = true;
+    } else {
+      el.setAttribute('aria-disabled', 'true');
+      el.setAttribute('tabindex', '-1');
+      el.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); }, { capture: true });
+    }
+  }
+
+  return el;
+}
+
+/**
+ * Create a new S2A button element from scratch.
+ * Storybook and programmatic use — when there's no authored DOM to decorate.
+ *
+ * @param {object} opts
+ * @param {string} opts.label
+ * @param {string} [opts.href]        - renders <a> when set, <button> otherwise
+ * @param {'solid'|'outlined'|'transparent'} opts.background
+ * @param {'on-light'|'on-dark'} opts.context
+ * @param {'primary'|'accent'} opts.intent
+ * @param {'md'|'xs'} opts.size
+ * @param {'default'|'hover'|'active'|'focus'|'disabled'} opts.state
+ * @param {boolean} opts.showIconStart
+ * @param {boolean} opts.showIconEnd
+ * @param {Node|string} opts.iconStart  - DOM node or HTML string
+ * @param {Node|string} opts.iconEnd    - DOM node or HTML string; defaults to caret
+ * @param {Function} opts.onClick
+ */
+export function createButton({
+  label = 'Label',
+  href,
+  background = 'solid',
+  context = 'on-light',
+  intent = 'primary',
+  size = 'md',
+  state = 'default',
   showIconStart = false,
   showIconEnd = false,
   iconStart,
   iconEnd,
-  showElementEnd,
-  href,
   onClick,
-} = {}) => {
-  const resolvedIntent = normalizeIntent(intent);
-  const resolvedContext = normalizeContext(resolvedIntent, context, tone);
-  const resolvedSize = size === "xs" ? "xs" : "md";
-  const finalShowIconEnd =
-    typeof showElementEnd === "boolean" ? showElementEnd : showIconEnd;
-  const forceState = state && state !== "default" ? state : null;
-  const isDisabled = state === "disabled";
-  const handleAnchorClick = (event) => {
-    if (isDisabled) {
-      event.preventDefault();
-      event.stopPropagation();
-      return;
-    }
+} = {}) {
+  const isDisabled = state === 'disabled';
+  const forceState = state !== 'default' ? state : null;
 
-    onClick?.(event);
-  };
-
-  // Lit 3+: dynamic tag names (<${tag}>) are not allowed with standard `html`.
-  // Use separate static <a> / <button> templates instead of lit/static-html.
-  const content = html`
-    ${showIconStart
-      ? html`<span
-          class="c-button__icon c-button__icon--start"
-          aria-hidden="true"
-        >
-          ${resolveIcon(iconStart) ?? nothing}
-        </span>`
-      : nothing}
-    <span class="c-button__label">${label}</span>
-    ${finalShowIconEnd
-      ? html`<span
-          class="c-button__icon c-button__icon--end"
-          aria-hidden="true"
-        >
-          ${resolveIcon(iconEnd) ?? CaretDownIcon()}
-        </span>`
-      : nothing}
-  `;
+  const el = document.createElement(href ? 'a' : 'button');
 
   if (href) {
-    return html`
-      <a
-        class="c-button"
-        data-background=${background}
-        data-intent=${resolvedIntent}
-        data-context=${resolvedContext}
-        data-size=${resolvedSize}
-        data-force-state=${forceState ?? nothing}
-        data-has-icon-start=${showIconStart ? "true" : "false"}
-        data-has-icon-end=${finalShowIconEnd ? "true" : "false"}
-        href=${isDisabled ? nothing : href}
-        aria-disabled=${isDisabled ? "true" : nothing}
-        tabindex=${isDisabled ? "-1" : nothing}
-        @click=${handleAnchorClick}
-      >
-        ${content}
-      </a>
-    `;
+    if (!isDisabled) el.href = href;
+    if (isDisabled) {
+      el.setAttribute('aria-disabled', 'true');
+      el.setAttribute('tabindex', '-1');
+      el.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); }, { capture: true });
+    }
+  } else {
+    el.type = 'button';
+    if (isDisabled) el.disabled = true;
   }
 
-  return html`
-    <button
-      class="c-button"
-      data-background=${background}
-      data-intent=${resolvedIntent}
-      data-context=${resolvedContext}
-      data-size=${resolvedSize}
-      data-force-state=${forceState ?? nothing}
-      data-has-icon-start=${showIconStart ? "true" : "false"}
-      data-has-icon-end=${finalShowIconEnd ? "true" : "false"}
-      ?disabled=${isDisabled}
-      type="button"
-      @click=${onClick}
-    >
-      ${content}
-    </button>
-  `;
-};
+  el.classList.add('c-button');
+  el.dataset.background = background;
+  el.dataset.intent = intent;
+  el.dataset.context = context;
+  el.dataset.size = size;
+  el.dataset.hasIconStart = String(showIconStart);
+  el.dataset.hasIconEnd = String(showIconEnd);
+  if (forceState) el.dataset.forceState = forceState;
+
+  if (onClick && !isDisabled) el.addEventListener('click', onClick);
+
+  if (showIconStart) el.append(makeIconSpan('start', iconStart));
+
+  const labelEl = document.createElement('span');
+  labelEl.className = 'c-button__label';
+  labelEl.textContent = label;
+  el.append(labelEl);
+
+  if (showIconEnd) el.append(makeIconSpan('end', iconEnd ?? CHEVRON_DOWN));
+
+  return el;
+}

@@ -1,5 +1,5 @@
 import { html, nothing } from "lit";
-import { Button } from "../button/button.js";
+import { createButton } from "../button/button.js";
 import "./quote-card.css";
 
 export const QuoteCard = ({
@@ -12,7 +12,13 @@ export const QuoteCard = ({
   showCta = true,
   imageSrc = "",
   imageAlt = "",
-} = {}) => html`
+} = {}) => {
+  // Hanging punctuation: pull the leading " out of flow so "If" aligns with all
+  // subsequent lines. Matches the Milo carousel-c2 opening-quote pattern.
+  const openQuote = quote.startsWith('“') || quote.startsWith('"') ? quote[0] : '';
+  const quoteBody = openQuote ? quote.slice(1) : quote;
+
+  return html`
   <div class="c-quote-card">
     <div class="qc-media" aria-hidden="true">
       ${imageSrc
@@ -28,7 +34,9 @@ export const QuoteCard = ({
     </div>
     <div class="qc-content">
       <div class="qc-quote">
-        <p class="qc-quote__text">${quote}</p>
+        <p class="qc-quote__text">
+          ${openQuote ? html`<span class="qc-open-quote" aria-hidden="true">${openQuote}</span>` : nothing}${quoteBody}
+        </p>
       </div>
       ${showAttribution
         ? html`
@@ -41,7 +49,7 @@ export const QuoteCard = ({
       ${showCta && ctaLabel
         ? html`
             <div class="qc-actions">
-              ${Button({
+              ${createButton({
                 label: ctaLabel,
                 href: ctaHref,
                 background: "solid",
@@ -53,3 +61,4 @@ export const QuoteCard = ({
     </div>
   </div>
 `;
+};

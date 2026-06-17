@@ -1,34 +1,22 @@
 import { html } from "lit";
 import { fn } from "storybook/test";
 
-import { Button } from "./Button";
+import { createButton } from "./Button";
 
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-download.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-folder.js";
-import "@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-down.js";
 
 const iconStyle =
   "width:12px;height:12px;display:inline-flex;align-items:center;justify-content:center;";
-const SpectrumDownloadIcon = () =>
-  html`<sp-icon-download
-    aria-hidden="true"
-    style="${iconStyle}"
-  ></sp-icon-download>`;
-const SpectrumFolderIcon = () =>
-  html`<sp-icon-folder
-    aria-hidden="true"
-    style="${iconStyle}"
-  ></sp-icon-folder>`;
-const SpectrumChevronDownIcon = () =>
-  html`<sp-icon-chevron-down
-    aria-hidden="true"
-    style="${iconStyle}"
-  ></sp-icon-chevron-down>`;
+
+// Return HTML strings so each createButton call gets a fresh DOM node
+const downloadIconHtml = `<sp-icon-download aria-hidden="true" style="${iconStyle}"></sp-icon-download>`;
+const folderIconHtml = `<sp-icon-folder aria-hidden="true" style="${iconStyle}"></sp-icon-folder>`;
 
 export default {
   title: "Atoms/Button",
   tags: ["autodocs"],
-  render: (args) => Button(args),
+  render: (args) => createButton(args),
   parameters: {
     docs: {
       description: {
@@ -38,22 +26,22 @@ export default {
         language: "html",
         code: `<!-- Solid / on-light (default) -->
 <button class="c-button" data-background="solid" data-intent="primary" data-context="on-light" data-size="md" type="button">
-  Label
+  <span class="c-button__label">Label</span>
 </button>
 
 <!-- Outlined / on-dark -->
 <button class="c-button" data-background="outlined" data-intent="primary" data-context="on-dark" data-size="md" type="button">
-  Label
+  <span class="c-button__label">Label</span>
 </button>
 
 <!-- Accent (blue CTA) -->
 <button class="c-button" data-background="solid" data-intent="accent" data-context="on-light" data-size="md" type="button">
-  Get started
+  <span class="c-button__label">Get started</span>
 </button>
 
 <!-- Link variant -->
 <a class="c-button" data-background="solid" data-intent="primary" data-context="on-light" data-size="md" href="/destination">
-  Learn more
+  <span class="c-button__label">Learn more</span>
 </a>`,
       },
     },
@@ -128,12 +116,11 @@ export const Accent = {
   args: { intent: "accent", background: "solid", label: "Get started" },
 };
 
-
 export const Sizes = {
   render: () => html`
     <div style="display: flex; gap: 16px; align-items: center;">
-      ${Button({ label: "Medium", size: "md", background: "solid" })}
-      ${Button({ label: "Compact", size: "xs", background: "solid" })}
+      ${createButton({ label: "Medium", size: "md", background: "solid" })}
+      ${createButton({ label: "Compact", size: "xs", background: "solid" })}
     </div>
   `,
 };
@@ -145,14 +132,14 @@ export const ContextGrid = {
       <div style="display: flex; flex-direction: column; gap: 24px;">
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
           ${backgrounds.map((background) =>
-            Button({ label: background, background, context: "on-light" }),
+            createButton({ label: background, background, context: "on-light" }),
           )}
         </div>
         <div
           style="background: #050505; padding: 24px; border-radius: 24px; display: flex; gap: 16px; flex-wrap: wrap;"
         >
           ${backgrounds.map((background) =>
-            Button({
+            createButton({
               label: `${background} on dark`,
               background,
               context: "on-dark",
@@ -167,18 +154,17 @@ export const ContextGrid = {
 export const IconSlots = {
   render: () => html`
     <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-      ${Button({
+      ${createButton({
         label: "Download presets",
         showIconStart: true,
-        iconStart: SpectrumDownloadIcon,
+        iconStart: downloadIconHtml,
         showIconEnd: true,
-        iconEnd: SpectrumChevronDownIcon,
       })}
-      ${Button({
+      ${createButton({
         intent: "accent",
         background: "solid",
         showIconStart: true,
-        iconStart: SpectrumFolderIcon,
+        iconStart: folderIconHtml,
         label: "Save to library",
       })}
     </div>
@@ -191,7 +177,7 @@ export const ForcedStates = {
     return html`
       <div style="display: flex; gap: 16px; flex-wrap: wrap;">
         ${states.map((state) =>
-          Button({
+          createButton({
             label: state,
             state,
             context: "on-light",
@@ -217,10 +203,10 @@ export const BackdropBlur = {
         align-items: center;
       "
     >
-      ${Button({ label: "outlined on-light", background: "outlined", context: "on-light" })}
-      ${Button({ label: "outlined on-dark", background: "outlined", context: "on-dark" })}
-      ${Button({ label: "transparent on-light", background: "transparent", context: "on-light" })}
-      ${Button({ label: "transparent on-dark", background: "transparent", context: "on-dark" })}
+      ${createButton({ label: "outlined on-light", background: "outlined", context: "on-light" })}
+      ${createButton({ label: "outlined on-dark", background: "outlined", context: "on-dark" })}
+      ${createButton({ label: "transparent on-light", background: "transparent", context: "on-light" })}
+      ${createButton({ label: "transparent on-dark", background: "transparent", context: "on-dark" })}
     </div>
   `,
 };
@@ -255,7 +241,7 @@ export const PrimaryMatrix = {
                             style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;"
                           >
                             ${states.map((state) =>
-                              Button({
+                              createButton({
                                 label: `${size} ${state}`,
                                 background,
                                 context,

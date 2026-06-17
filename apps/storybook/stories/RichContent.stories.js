@@ -1,7 +1,7 @@
 import { html } from "lit";
 
 import { RichContent } from "./RichContent";
-import { Button } from "../../../packages/components/src/button/button.js";
+import { createButton as Button } from "../../../packages/components/src/button/button.js";
 
 // ——— Shared section wrapper ———
 // width: 100% so it fills the Storybook canvas at any viewport.

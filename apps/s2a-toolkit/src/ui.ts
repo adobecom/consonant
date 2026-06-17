@@ -162,9 +162,11 @@ formatSectionBtn.addEventListener('click', () => {
 
 // ── Bridge ────────────────────────────────────────────────────────────────────
 
-const BRIDGE_MAX_RECONNECT    = 20;
 const BRIDGE_RECONNECT_BASE_MS = 2000;
-const WS_PORTS = [9220,9221,9222,9223,9224,9225,9226,9227,9228,9229,9230,9231,9232];
+const BRIDGE_RECONNECT_MAX_MS  = 30000;
+// Start at 9223 — aligns with figma-console MCP's preferred port range.
+// Avoids accidentally latching onto unrelated servers on 9220–9222.
+const WS_PORTS = [9223,9224,9225,9226,9227,9228,9229,9230,9231,9232];
 
 let bridgeConnected      = false;
 let bridgeWs: WebSocket | null = null;
@@ -260,6 +262,7 @@ function initBridgeConnection(ws: WebSocket) {
     if (ws.readyState !== 1 || !result?.data) return;
     ws.send(JSON.stringify({ type: 'VARIABLES_DATA', data: result.data }));
     renderVariables(result.data);
+    renderTokenGroups(result.data);
     setVarMeta(result.data.variables.length + ' variables');
   }).catch(() => {});
 }
@@ -286,9 +289,10 @@ function attachWsHandlers(ws: WebSocket, port: number) {
 }
 
 function scheduleReconnect(port: number) {
-  if (bridgeUserDisconnected || bridgeReconnectAttempts >= BRIDGE_MAX_RECONNECT) return;
+  if (bridgeUserDisconnected) return;
   bridgeReconnectAttempts++;
-  const delay = Math.min(BRIDGE_RECONNECT_BASE_MS * Math.pow(1.5, bridgeReconnectAttempts - 1), 30000);
+  // Exponential backoff, capped at 30s — no attempt limit, self-heals indefinitely.
+  const delay = Math.min(BRIDGE_RECONNECT_BASE_MS * Math.pow(1.5, bridgeReconnectAttempts - 1), BRIDGE_RECONNECT_MAX_MS);
   bridgeReconnectTimer = setTimeout(() => {
     if (!bridgeUserDisconnected) reconnectToPort(port);
   }, delay);
@@ -355,6 +359,16 @@ function bridgeDisconnect() {
   updateBridgeUi();
 }
 
+// ── Token group helpers ───────────────────────────────────────────────────────
+
+function getTokenGroup(name: string): string {
+  const parts = name.split('/').filter(p => p !== 's2a');
+  // Use 3 segments for transparent sub-groups (black/white alpha scales)
+  if (parts.length >= 4 && parts[1] === 'transparent') return parts[0] + ' / ' + parts[1] + ' / ' + parts[2];
+  if (parts.length >= 3) return parts[0] + ' / ' + parts[1];
+  return parts[0] ?? name;
+}
+
 // ── Variables ─────────────────────────────────────────────────────────────────
 
 let variablesCache: { variables: any[]; variableCollections: any[] } | null = null;
@@ -399,6 +413,79 @@ function renderVariables(data: { variables: any[]; variableCollections: any[] })
   updateExportButtons();
 }
 
+function renderTokenGroups(data: { variables: any[]; variableCollections: any[] }) {
+  const labelEl = document.getElementById('tokenGroupLabel') as HTMLElement;
+  const listEl  = document.getElementById('tokenGroupList') as HTMLElement;
+  if (!listEl) return;
+
+  // Semantic + Responsive always; Color primitives + Dimension primitives (opacity only)
+  const semanticColls = data.variableCollections.filter(c =>
+    /Semantic|Responsive/.test(c.name) ||
+    (/Primitives/.test(c.name) && /Color/.test(c.name)) ||
+    (/Primitives/.test(c.name) && /Dimension/.test(c.name))
+  );
+  if (semanticColls.length === 0) {
+    listEl.innerHTML = '';
+    if (labelEl) labelEl.classList.add('hidden');
+    return;
+  }
+
+  // Build a collId → collName lookup to avoid optional-chain temp-var issues in the loop
+  const collIdToName = new Map<string, string>();
+  for (const c of data.variableCollections) collIdToName.set(c.id, c.name);
+
+  const collSet = new Set(semanticColls.map((c: any) => c.id));
+  const groups = new Map<string, { collectionId: string; collectionName: string; group: string; count: number }>();
+  for (const v of data.variables) {
+    if (!collSet.has(v.variableCollectionId)) continue;
+    const collName: string = collIdToName.get(v.variableCollectionId) || '';
+    const grp = getTokenGroup(v.name);
+    // Primitives/Dimension: only expose the opacity group
+    if (/Primitives/.test(collName) && /Dimension/.test(collName) && grp !== 'opacity') continue;
+    const key = v.variableCollectionId + '::' + grp;
+    if (!groups.has(key)) {
+      groups.set(key, { collectionId: v.variableCollectionId, collectionName: collName, group: grp, count: 0 });
+    }
+    groups.get(key)!.count++;
+  }
+
+  const sorted = [...groups.values()].sort((a, b) => {
+    if (a.collectionName !== b.collectionName) return a.collectionName.localeCompare(b.collectionName);
+    return a.group.localeCompare(b.group);
+  });
+
+  if (labelEl) labelEl.classList.remove('hidden');
+  listEl.innerHTML = sorted.map(g =>
+    `<div class="collection-row token-group-row" data-col="${esc(g.collectionId)}" data-group="${esc(g.group)}">
+      <span class="collection-name">${esc(g.group)}</span>
+      <span class="collection-count">${g.count}</span>
+      <button class="gen-btn" title="Generate docs for ${esc(g.group)}">→</button>
+    </div>`
+  ).join('');
+  // Synthetic Text Styles entry — points at Figma's native text styles, not a variable collection
+  listEl.insertAdjacentHTML('beforeend',
+    `<div class="collection-row token-group-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08)" data-col="text-styles" data-group="text-styles">
+      <span class="collection-name">Text Styles</span>
+      <span class="collection-count">—</span>
+      <button class="gen-btn" title="Generate 4 breakpoint sections from native text styles">→</button>
+    </div>`
+  );
+}
+
+document.getElementById('tokenGroupList')?.addEventListener('click', (e) => {
+  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.gen-btn');
+  if (!btn || btn.disabled) return;
+  const row = btn.closest<HTMLElement>('.token-group-row');
+  if (!row) return;
+  btn.disabled = true;
+  btn.textContent = '…';
+  setVarStatus('Generating ' + (row.dataset.group ?? '') + '…');
+  postToPlugin('token-docs:generate', {
+    collectionId: row.dataset.col,
+    group: row.dataset.group,
+  });
+});
+
 document.getElementById('varRefreshBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('varRefreshBtn') as HTMLButtonElement;
   btn.textContent = 'Refreshing…'; btn.disabled = true;
@@ -407,6 +494,7 @@ document.getElementById('varRefreshBtn')?.addEventListener('click', async () => 
     const result = await sendBridgeCommand('REFRESH_VARIABLES', {}, 30000);
     if (result?.data) {
       renderVariables(result.data);
+      renderTokenGroups(result.data);
       setVarStatus(result.data.variables.length + ' variables loaded', 'ok');
     } else {
       setVarStatus('No data returned', 'err');
@@ -634,17 +722,19 @@ function setSpecStatus(msg: string, type: '' | 'ok' | 'err' = '') {
 }
 
 function updateSpecSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
-  const isSet = sel?.nodeType === 'COMPONENT_SET';
-  specSetId = isSet ? (sel?.id ?? null) : null;
+  const isValid = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT';
+  specSetId = isValid ? (sel?.id ?? null) : null;
   const empty   = document.getElementById('specSelectionEmpty') as HTMLElement;
   const info    = document.getElementById('specSelectionInfo')  as HTMLElement;
   const nameEl  = document.getElementById('specSetName')  as HTMLElement;
   const countEl = document.getElementById('specSetCount') as HTMLElement;
   const genBtn  = document.getElementById('specGenerateBtn') as HTMLButtonElement;
-  if (isSet && sel) {
+  if (isValid && sel) {
     empty.style.display = 'none'; info.style.display = 'flex';
     nameEl.textContent  = sel.name;
-    countEl.textContent = (sel.variantCount ?? 0) + ' variants';
+    countEl.textContent = sel.nodeType === 'COMPONENT_SET'
+      ? (sel.variantCount ?? 0) + ' variants'
+      : '1 variant';
     genBtn.disabled = false;
   } else {
     empty.style.display = 'block'; info.style.display = 'none';
@@ -749,6 +839,16 @@ window.addEventListener('message', (event) => {
       }
       break;
     }
+    case 'token-docs:result': {
+      document.querySelectorAll<HTMLButtonElement>('.gen-btn').forEach(b => {
+        b.disabled = false;
+        b.textContent = '→';
+      });
+      if (msg.error) setVarStatus('❌ ' + (msg.error as string), 'err');
+      else setVarStatus('✓ ' + (msg.count as number) + ' tokens documented', 'ok');
+      break;
+    }
+
     case 'format-section:done': {
       formatSectionBtn.disabled = false;
       formatSectionBtn.textContent = 'Format';
@@ -789,3 +889,19 @@ window.addEventListener('message', (event) => {
 postToPlugin('ui-ready');
 postToPlugin('get-settings');
 postToPlugin('resize-for-view', { width: 320, height: 460 });
+
+// Self-heal: reconnect when the Figma tab regains focus (catches MCP server restarts).
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && !bridgeConnected && !bridgeUserDisconnected && !bridgeReconnectTimer) {
+    bridgeReconnectAttempts = 0;
+    bridgeConnect();
+  }
+});
+
+// Heartbeat: every 45s, if disconnected and not already retrying, kick off a fresh scan.
+setInterval(() => {
+  if (!bridgeConnected && !bridgeUserDisconnected && !bridgeReconnectTimer) {
+    bridgeReconnectAttempts = 0;
+    bridgeConnect();
+  }
+}, 45000);
