@@ -19,3 +19,6 @@ export * from "./navigation/nav-card/index.js";
 export * from "./navigation/nav-card-button/index.js";
 export * from "./navigation/nav-card-menu-item/index.js";
 export * from "./navigation/nav-card-pattern/index.js";
+export * from "./control-button/index.js";
+export * from "./product-card/index.js";
+export * from "./immersive-card/index.js";

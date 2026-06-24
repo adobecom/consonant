@@ -9,67 +9,119 @@
 
   <!-- ── Header (always visible) ──────────────────────────────────────── -->
   <header class="header">
-
-    <!-- Logo mark — always shows -->
-    <div class="header-logo" aria-hidden="true">
-      <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-        <path d="M5.5 1L10 5.5L5.5 10L1 5.5L5.5 1Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/>
-      </svg>
+    <div class="header-brand">
+      <div class="header-logo" aria-hidden="true">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M5 1L9 5L5 9L1 5L5 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="header-title full-only">S2A Toolkit</span>
+      <span class="header-sel-name mini-only" id="headerSelName">—</span>
     </div>
-
-    <!-- Title — full mode only -->
-    <span class="header-title full-only">S2A Toolkit</span>
-
-    <!-- Selection strip — mini mode only, fills remaining space -->
-    <div class="header-sel mini-only" id="headerSel">
-      <span class="header-sel-name" id="headerSelName">—</span>
-    </div>
-
-    <div class="header-spacer full-only"></div>
-
     <div class="header-actions">
-      <!-- Copy Figma link (visible when a node is selected) -->
       <button class="icon-btn hidden" id="copyNodeBtn" title="Copy Figma link" aria-label="Copy Figma link">
-        <svg class="icon-copy" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <svg class="icon-copy" width="13" height="13" viewBox="0 0 14 14" fill="none">
           <rect x="5" y="5" width="7" height="7" rx="1.2" stroke="currentColor" stroke-width="1.3"/>
           <path d="M9 5V3.2A1.2 1.2 0 0 0 7.8 2H3.2A1.2 1.2 0 0 0 2 3.2v4.6C2 8.46 2.54 9 3.2 9H5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
         </svg>
-        <svg class="icon-check" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <svg class="icon-check" width="13" height="13" viewBox="0 0 14 14" fill="none">
           <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-
-      <!-- Bridge dot — mini mode only -->
-      <button class="bridge-mini-btn mini-only" id="bridgeMiniBtn" aria-label="Bridge status">
-        <span class="bridge-dot" id="bridgeDotMini"></span>
+      <button class="bridge-pill" id="bridgeTabBtn" aria-label="Claude Code bridge status">
+        <span class="bridge-dot" id="bridgeDot"></span>
+        <span class="bridge-label" id="bridgePillLabel">Connect</span>
       </button>
-
-      <!-- Minimize ↔ Expand -->
+      <button class="icon-btn full-only" id="settingsBtn" title="Settings" aria-label="Settings">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.25"/>
+          <path d="M7 1.5v1.2M7 11.3v1.2M1.5 7h1.2M11.3 7h1.2M3.2 3.2l.85.85M9.95 9.95l.85.85M3.2 10.8l.85-.85M9.95 4.05l.85-.85" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+        </svg>
+      </button>
       <button class="icon-btn" id="toggleMiniBtn" aria-label="Minimize plugin">
-        <svg class="icon-collapse" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <svg class="icon-collapse" width="13" height="13" viewBox="0 0 14 14" fill="none">
           <path d="M2 5h10M2 9h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
         </svg>
-        <svg class="icon-expand" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <svg class="icon-expand" width="13" height="13" viewBox="0 0 14 14" fill="none">
           <path d="M3 8.5l4-4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
     </div>
   </header>
 
-  <!-- ── Section context bar (shown when a Section node is selected) ──── -->
-  <div class="section-bar hidden" id="sectionBar">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="flex-shrink:0">
+  <!-- ── Bridge popover ───────────────────────────────────────────────── -->
+  <div class="bridge-popover" id="bridgePopover">
+    <div class="agent-header">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="agent-icon" aria-hidden="true">
+        <rect width="20" height="20" rx="5" fill="#D97559"/>
+        <path d="M10 4.5L14 14H12.2L11.2 11.5H8.8L7.8 14H6L10 4.5Z" fill="white"/>
+        <rect x="9" y="10" width="2" height="1.2" rx="0.6" fill="#D97559"/>
+      </svg>
+      <div class="agent-meta">
+        <span class="agent-name">Claude Code</span>
+        <span class="agent-port" id="bridgePortLabel">—</span>
+      </div>
+      <span class="bridge-dot" id="popoverDot"></span>
+    </div>
+    <button class="btn" id="bridgeToggleBtn" style="width:100%;margin-top:8px;">Connect</button>
+  </div>
+
+  <!-- ── Section context bar ──────────────────────────────────────────── -->
+  <div class="section-bar hidden full-only" id="sectionBar">
+    <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="flex-shrink:0">
       <rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2.5 1.5"/>
     </svg>
     <span class="section-bar-name" id="sectionBarName"></span>
-    <button class="btn btn-ghost section-bar-btn" id="formatSectionBtn">Style</button>
   </div>
+  <button id="formatSectionBtn" style="display:none" aria-hidden="true"></button>
+
+  <!-- ── Tab bar ──────────────────────────────────────────────────────── -->
+  <nav class="tab-bar full-only" id="tabBar" aria-label="Tools">
+    <!-- Home -->
+    <button class="tab active" data-panel="home" aria-label="Home">
+      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M2 7L7 2.5L12 7" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M3.5 5.5V11.5H5.5V9H8.5V11.5H10.5V5.5" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+      </svg>
+      <span class="tab-label">Home</span>
+    </button>
+    <!-- Tokens -->
+    <button class="tab" data-panel="tokens" aria-label="Tokens">
+      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <rect x="1.5" y="3" width="11" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.2"/>
+        <rect x="1.5" y="8" width="7.5" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.2"/>
+      </svg>
+      <span class="tab-label">Tokens</span>
+    </button>
+    <!-- Tools -->
+    <button class="tab" data-panel="tools" aria-label="Tools">
+      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M9.5 2.5L11.5 4.5L5 11H3V9L9.5 2.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M8 4L10 6" stroke="currentColor" stroke-width="1.2"/>
+      </svg>
+      <span class="tab-label">Tools</span>
+    </button>
+  </nav>
 
   <!-- ── Panels ───────────────────────────────────────────────────────── -->
   <div class="main-content" id="mainContent">
 
-    <!-- Variables -->
-    <div class="panel active" id="variablesPanel">
+    <!-- Home -->
+    <div class="panel active" id="homePanel">
+      <button class="palette-hint" id="paletteHintBtn" aria-label="Open command palette">
+        <span class="palette-hint-key">⌘K</span>
+        <span class="palette-hint-text">Search all actions…</span>
+      </button>
+      <div class="section-label" style="margin-top:14px;">Quick actions</div>
+      <div class="action-list" id="homeQuickActions"></div>
+      <div id="homeRecentsSection" style="display:none;">
+        <div class="section-label" style="margin-top:14px;">Recently used</div>
+        <div class="action-list" id="homeRecents"></div>
+      </div>
+    </div>
+
+    <!-- Tokens (was Variables) -->
+    <div class="panel" id="tokensPanel">
       <div class="section-label">Collections</div>
       <div id="varCollections">
         <div class="empty-state">Click Refresh to load collections</div>
@@ -84,9 +136,12 @@
       <div class="status" id="varStatus"></div>
     </div>
 
-    <!-- Select Variants -->
-    <div class="panel" id="selectPanel">
-      <div class="empty-state" id="selectEmpty">Select a component set on the canvas</div>
+    <!-- Tools — select + annotate + spec stacked -->
+    <div class="panel" id="toolsPanel">
+
+      <!-- ── Variant Filter ──────────────────────────────────────────── -->
+      <div class="section-label">Variant filter</div>
+      <div class="empty-state" id="selectEmpty" style="padding:16px 0 0;">Select a component set</div>
       <div id="selectBody" style="display:none;">
         <div class="set-name" id="selectSetName"></div>
         <div id="selectAxes"></div>
@@ -97,12 +152,12 @@
         </div>
         <div class="status" id="selectStatus"></div>
       </div>
-    </div>
 
-    <!-- Annotate -->
-    <div class="panel" id="annotatePanel">
-      <div class="section-label">Selection</div>
-      <div class="sel-card" id="annotateSelection">
+      <div class="tools-divider"></div>
+
+      <!-- ── Annotate ───────────────────────────────────────────────── -->
+      <div class="section-label">Annotate</div>
+      <div class="sel-card">
         <span class="sel-card-empty" id="annotateSelectionEmpty">Select an instance or frame</span>
         <div class="sel-card-info" id="annotateSelectionInfo" style="display:none;">
           <span class="sel-icon">◈</span>
@@ -112,8 +167,7 @@
           </div>
         </div>
       </div>
-      <div class="section-label" style="margin-top:14px;">Token categories</div>
-      <div class="chip-grid" id="annotateCats">
+      <div class="chip-grid" id="annotateCats" style="margin-top:10px;">
         <button class="chip on" data-cat="color-fg">Color Fg</button>
         <button class="chip on" data-cat="color-bg">Color Bg</button>
         <button class="chip on" data-cat="spacing">Spacing</button>
@@ -123,18 +177,18 @@
         <button class="chip on" data-cat="blur">Blur</button>
         <button class="chip on" data-cat="opacity">Opacity</button>
       </div>
-      <div class="btn-row" style="margin-top:12px;">
+      <div class="btn-row">
         <button class="btn btn-ghost" id="annotateClearBtn">Clear</button>
         <button class="btn" id="annotateApplyBtn" disabled style="flex:2;">Annotate</button>
       </div>
       <div class="status" id="annotateStatus"></div>
-    </div>
 
-    <!-- Spec Sheet -->
-    <div class="panel" id="specPanel">
-      <div class="section-label">Selection</div>
-      <div class="sel-card" id="specSelection">
-        <span class="sel-card-empty" id="specSelectionEmpty">Select a component or component set on the canvas</span>
+      <div class="tools-divider"></div>
+
+      <!-- ── Spec sheet ──────────────────────────────────────────────── -->
+      <div class="section-label">Spec sheet</div>
+      <div class="sel-card">
+        <span class="sel-card-empty" id="specSelectionEmpty">Select a component or set</span>
         <div class="sel-card-info" id="specSelectionInfo" style="display:none;">
           <span class="sel-icon">◈</span>
           <div class="sel-meta">
@@ -143,19 +197,21 @@
           </div>
         </div>
       </div>
-      <div class="section-label" style="margin-top:14px;">Include</div>
-      <div class="chip-grid" id="specOpts">
+      <div class="chip-grid" id="specOpts" style="margin-top:10px;">
         <button class="chip on" data-opt="variants">Variants</button>
         <button class="chip on" data-opt="tokens">Tokens</button>
         <button class="chip on" data-opt="children">Children</button>
       </div>
-      <div class="btn-row" style="margin-top:12px;">
+      <div class="btn-row">
         <button class="btn" id="specGenerateBtn" disabled style="flex:1;">Generate Spec</button>
       </div>
       <div class="status" id="specStatus"></div>
+
+      <!-- bottom padding for scroll clearance -->
+      <div style="height:16px;"></div>
     </div>
 
-    <!-- Settings -->
+    <!-- Settings (gear icon only) -->
     <div class="panel" id="settingsPanel">
       <div class="section-label">GitHub Export</div>
       <p class="settings-hint">Tokens commit directly to your repo. Needs a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> scope.</p>
@@ -189,69 +245,17 @@
 
   </div>
 
-  <!-- ── Tab bar ───────────────────────────────────────────────────────── -->
-  <nav class="tab-bar" id="tabBar" aria-label="Tools">
-    <button class="tab active" data-panel="variables" aria-label="Variables">
-      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
-        <rect x="1.5" y="3.5" width="12" height="3" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
-        <rect x="1.5" y="8.5" width="8" height="3" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
-      </svg>
-      <span class="tab-label">Variables</span>
-    </button>
-    <button class="tab" data-panel="select" aria-label="Select Variants">
-      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
-        <path d="M2 4h11M3.5 7.5h8M5.5 11h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-      </svg>
-      <span class="tab-label">Select</span>
-    </button>
-    <button class="tab" data-panel="annotate" aria-label="Annotate">
-      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
-        <circle cx="7.5" cy="6" r="3" stroke="currentColor" stroke-width="1.25"/>
-        <path d="M7.5 9v5M5.5 14h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-      </svg>
-      <span class="tab-label">Annotate</span>
-    </button>
-    <button class="tab" data-panel="spec" aria-label="Spec Sheet">
-      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
-        <rect x="1.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
-        <rect x="8.5" y="1.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
-        <rect x="1.5" y="8.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
-        <rect x="8.5" y="8.5" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.25"/>
-      </svg>
-      <span class="tab-label">Spec</span>
-    </button>
-    <button class="tab" data-panel="settings" aria-label="Settings">
-      <svg class="tab-icon" width="15" height="15" viewBox="0 0 15 15" fill="none">
-        <circle cx="7.5" cy="7.5" r="2.2" stroke="currentColor" stroke-width="1.25"/>
-        <path d="M7.5 1.5v1.6M7.5 11.9v1.6M1.5 7.5h1.6M11.9 7.5h1.6M3.4 3.4l1.1 1.1M10.5 10.5l1.1 1.1M3.4 11.6l1.1-1.1M10.5 4.5l1.1-1.1" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-      </svg>
-      <span class="tab-label">Settings</span>
-    </button>
-
-    <!-- Bridge status dot -->
-    <button class="tab-bridge" id="bridgeTabBtn" aria-label="Bridge status">
-      <span class="bridge-dot" id="bridgeDot"></span>
-    </button>
-  </nav>
-
-  <!-- Bridge popover (absolute) -->
-  <div class="bridge-popover" id="bridgePopover">
-    <div class="agent-card">
-      <div class="agent-header">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="agent-icon" aria-hidden="true">
-          <rect width="20" height="20" rx="5" fill="#D97559"/>
-          <path d="M10 4.5L14 14H12.2L11.2 11.5H8.8L7.8 14H6L10 4.5Z" fill="white"/>
-          <rect x="9" y="10" width="2" height="1.2" rx="0.6" fill="#D97559"/>
-        </svg>
-        <div class="agent-meta">
-          <span class="agent-name">Claude Code</span>
-          <span class="agent-port" id="bridgePortLabel">—</span>
-        </div>
-        <span class="bridge-dot" id="popoverDot"></span>
-      </div>
-      <button class="btn" id="bridgeToggleBtn" style="width:100%;margin-top:8px;">Connect</button>
+  <!-- ── Command palette overlay ──────────────────────────────────────── -->
+  <div class="palette-overlay" id="paletteOverlay" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="palette-box" id="paletteBox">
+      <input class="palette-input" id="paletteInput" type="text" placeholder="Search actions…" autocomplete="off" spellcheck="false" />
+      <div class="palette-list" id="paletteList"></div>
     </div>
   </div>
+
+  <!-- Hidden compat stubs -->
+  <span id="bridgeDotMini" style="display:none"></span>
+  <button id="bridgeMiniBtn" style="display:none" aria-hidden="true"></button>
 
 </div>
 <!-- INLINE_JS -->

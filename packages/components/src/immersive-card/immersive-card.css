@@ -1,0 +1,106 @@
+/* ─── Component token scaffold ───────────────────────────────────────────────── */
+/*                                                                                */
+/* s2a/cards/immersive/padding                                                    */
+/* Sourced from the Figma responsive collection (VariableCollectionId:6:178).     */
+/* Values confirmed via Figma variable inspector across 3 breakpoint instances.   */
+/*                                                                                */
+/* REMOVE these :root blocks when the token pipeline adds                         */
+/* s2a/cards/immersive/* to dist/packages/tokens/css/dev/tokens.responsive.*.css  */
+
+:root {
+  --s2a-cards-immersive-padding: var(--s2a-spacing-md, 16px); /* sm + md — confirmed 16px in Figma */
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --s2a-cards-immersive-padding: var(--s2a-spacing-2xl, 40px); /* lg — confirmed 40px in Figma */
+  }
+}
+
+@media (min-width: 1441px) {
+  :root {
+    --s2a-cards-immersive-padding: var(--s2a-spacing-xl, 32px); /* xl — confirmed 32px in Figma */
+  }
+}
+
+/* ─── Root ───────────────────────────────────────────────────────────────────── */
+
+.c-immersive-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  aspect-ratio: 259 / 300;
+  padding: var(--s2a-cards-immersive-padding);
+  border-radius: var(--s2a-border-radius-md, 16px);
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--s2a-color-background-default);
+}
+
+/* ─── Media (full-bleed background) ─────────────────────────────────────────── */
+
+.c-immersive-card__media {
+  position: absolute;
+  inset: 0;
+}
+
+.c-immersive-card__image,
+.c-immersive-card__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.c-immersive-card__overlay {
+  position: absolute;
+  inset: 0;
+  /* No overlay token exists yet — raw rgba required. Add s2a/cards/immersive/overlay-gradient when available. */
+  background: linear-gradient(129.1deg, rgba(0, 0, 0, 0.92) 12.2%, rgba(0, 0, 0, 0) 40.9%);
+  pointer-events: none;
+}
+
+/* ─── Text content (top) ─────────────────────────────────────────────────────── */
+
+.c-immersive-card__text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-sm, 12px);
+  width: 100%;
+  overflow: hidden;
+}
+
+.c-immersive-card__headline {
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
+  font-weight: 900;
+  font-size: var(--s2a-typography-font-size-heading-6, 18px);
+  line-height: var(--s2a-typography-line-height-heading-6, 18px);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-6, -0.2px);
+  /* ImmersiveCard is always a dark surface — knockout is always white */
+  color: var(--s2a-color-content-knockout, #fff);
+  margin: 0;
+}
+
+.c-immersive-card__body {
+  font-family: var(--s2a-font-family-body, "Adobe Clean");
+  font-weight: 400;
+  font-size: var(--s2a-typography-font-size-body-md, 16px);
+  line-height: var(--s2a-typography-line-height-body-md, 20px);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-md, 0px);
+  color: var(--s2a-color-content-knockout, #fff);
+  margin: 0;
+}
+
+/* ─── Control button (bottom-right, via ControlButton atom) ──────────────────── */
+
+.c-immersive-card > .c-control-button {
+  position: relative;
+  z-index: 1;
+}

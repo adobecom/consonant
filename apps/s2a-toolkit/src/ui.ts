@@ -8,32 +8,110 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
   parent.postMessage({ pluginMessage: { type, ...payload } }, 'https://www.figma.com');
 }
 
-// Stub — prototype chat panel removed
-function updateProtoSelection(_sel: { id: string; name: string; nodeType: string } | null) {}
+// ── Telemetry — UsageStore in localStorage ────────────────────────────────────
 
-// ── Tab navigation ────────────────────────────────────────────────────────────
+const USAGE_KEY = 's2a:usage';
 
-type Panel = 'variables' | 'select' | 'annotate' | 'spec' | 'settings';
+interface UsageStore {
+  events: { featureId: string; timestamp: number }[];
+  totals: Record<string, number>;
+  lastUsed: Record<string, number>;
+}
 
-const panels: Record<Panel, HTMLElement> = {
-  variables: document.getElementById('variablesPanel') as HTMLElement,
-  select:    document.getElementById('selectPanel')    as HTMLElement,
-  annotate:  document.getElementById('annotatePanel')  as HTMLElement,
-  spec:      document.getElementById('specPanel')      as HTMLElement,
-  settings:  document.getElementById('settingsPanel')  as HTMLElement,
+function loadUsage(): UsageStore {
+  try {
+    const raw = JSON.parse(localStorage.getItem(USAGE_KEY) || '{}');
+    return {
+      events:   Array.isArray(raw.events)   ? raw.events   : [],
+      totals:   raw.totals   && typeof raw.totals   === 'object' ? raw.totals   : {},
+      lastUsed: raw.lastUsed && typeof raw.lastUsed === 'object' ? raw.lastUsed : {},
+    };
+  } catch { return { events: [], totals: {}, lastUsed: {} }; }
+}
+
+function saveUsage(store: UsageStore) {
+  try { localStorage.setItem(USAGE_KEY, JSON.stringify(store)); } catch {}
+}
+
+function logEvent(featureId: string) {
+  const store = loadUsage();
+  store.events.push({ featureId, timestamp: Date.now() });
+  if (store.events.length > 500) store.events = store.events.slice(-500);
+  store.totals[featureId]   = (store.totals[featureId]   || 0) + 1;
+  store.lastUsed[featureId] = Date.now();
+  saveUsage(store);
+}
+
+function heatOf(featureId: string): 'hot' | 'warm' | 'cold' {
+  const { events } = loadUsage();
+  const now      = Date.now();
+  const weekAgo  = now - 7  * 24 * 3600 * 1000;
+  const monthAgo = now - 30 * 24 * 3600 * 1000;
+  if (events.some(e => e.featureId === featureId && e.timestamp >= weekAgo))  return 'hot';
+  if (events.some(e => e.featureId === featureId && e.timestamp >= monthAgo)) return 'warm';
+  return 'cold';
+}
+
+function recentlyUsed(n = 5): Feature[] {
+  const { lastUsed } = loadUsage();
+  return Object.entries(lastUsed)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, n)
+    .map(([id]) => FEATURES.find(f => f.id === id)!)
+    .filter(Boolean);
+}
+
+// ── State vars (declared early so FEATURES closures can reference them) ───────
+
+let annotateNodeId: string | null = null;
+let selectSetId:    string | null = null;
+let specSetId:      string | null = null;
+let variablesCache: { variables: any[]; variableCollections: any[] } | null = null;
+let githubSettings: GitHubSettings | null = null;
+let bridgeConnected      = false;
+let bridgeWs: WebSocket | null = null;
+let bridgeWsPort: number | null = null;
+let bridgeKeepaliveTimer: ReturnType<typeof setInterval>  | null = null;
+let bridgeReconnectTimer: ReturnType<typeof setTimeout>   | null = null;
+let bridgeReconnectAttempts = 0;
+let bridgeUserDisconnected  = false;
+let activePanel: Panel = 'home';
+let settingsOpen = false;
+let isMini = false;
+let popoverOpen = false;
+
+const pendingRequests = new Map<string, {
+  resolve: (v: any) => void;
+  reject:  (e: Error) => void;
+  timeoutId: ReturnType<typeof setTimeout>;
+}>();
+let requestCounter = 0;
+
+// ── Panel switching ───────────────────────────────────────────────────────────
+
+type Panel = 'home' | 'tokens' | 'tools' | 'settings';
+
+const panelEls: Record<Panel, HTMLElement> = {
+  home:     document.getElementById('homePanel')     as HTMLElement,
+  tokens:   document.getElementById('tokensPanel')   as HTMLElement,
+  tools:    document.getElementById('toolsPanel')    as HTMLElement,
+  settings: document.getElementById('settingsPanel') as HTMLElement,
 };
 
-let activePanel: Panel = 'variables';
-
 function switchPanel(panel: Panel) {
+  if (panel !== 'settings') {
+    settingsOpen = false;
+    settingsBtn?.classList.remove('active');
+  }
   activePanel = panel;
-  Object.entries(panels).forEach(([key, el]) => {
+  Object.entries(panelEls).forEach(([key, el]) => {
     el.classList.toggle('active', key === panel);
   });
   document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.panel === panel);
   });
   if (panel === 'settings') postToPlugin('get-settings');
+  if (panel === 'home') renderHomeView();
 }
 
 document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
@@ -43,26 +121,312 @@ document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => 
   });
 });
 
+const settingsBtn = document.getElementById('settingsBtn') as HTMLButtonElement;
+settingsBtn?.addEventListener('click', () => {
+  if (settingsOpen) {
+    settingsOpen = false;
+    settingsBtn.classList.remove('active');
+    switchPanel(activePanel === 'settings' ? 'home' : activePanel);
+  } else {
+    settingsOpen = true;
+    settingsBtn.classList.add('active');
+    switchPanel('settings');
+  }
+});
+
+// ── Feature registry ──────────────────────────────────────────────────────────
+
+interface Feature {
+  id: string;
+  name: string;
+  description: string;
+  category: 'Tokens' | 'Tools' | 'Bridge';
+  pluginAction?: string;
+  pluginPayload?: Record<string, unknown>;
+  uiAction?: () => void;
+}
+
+const FEATURES: Feature[] = [
+  // Tokens
+  {
+    id: 'tokens:refresh',
+    name: 'Refresh variables',
+    description: 'Re-fetch all Figma variables from the current file',
+    category: 'Tokens',
+    uiAction: () => (document.getElementById('varRefreshBtn') as HTMLButtonElement)?.click(),
+  },
+  {
+    id: 'tokens:export-local',
+    name: 'Export tokens locally',
+    description: 'Push token JSON to local dev server on port 9300',
+    category: 'Tokens',
+    uiAction: () => (document.getElementById('varExportLocalBtn') as HTMLButtonElement)?.click(),
+  },
+  {
+    id: 'tokens:export-github',
+    name: 'Push tokens to GitHub',
+    description: 'Commit token JSON to your configured repo',
+    category: 'Tokens',
+    uiAction: () => (document.getElementById('varExportGithubBtn') as HTMLButtonElement)?.click(),
+  },
+  {
+    id: 'tokens:doc-gen',
+    name: 'Generate token docs',
+    description: 'Build a Figma doc sheet for a token group',
+    category: 'Tokens',
+    uiAction: () => switchPanel('tokens'),
+  },
+
+  // Tools
+  {
+    id: 'tools:copy-link',
+    name: 'Copy Figma link',
+    description: 'Copy a shareable link for the selected node(s)',
+    category: 'Tools',
+    uiAction: () => (document.getElementById('copyNodeBtn') as HTMLButtonElement)?.click(),
+  },
+  {
+    id: 'tools:format-section',
+    name: 'Format section',
+    description: 'Reflow the selected section with consistent spacing',
+    category: 'Tools',
+    pluginAction: 'format-section',
+  },
+  {
+    id: 'tools:select-filter',
+    name: 'Filter variant set',
+    description: 'Select a subset of variants by axis value',
+    category: 'Tools',
+    uiAction: () => switchPanel('tools'),
+  },
+  {
+    id: 'tools:annotate',
+    name: 'Annotate selection',
+    description: 'Add token and a11y annotations to the selected node',
+    category: 'Tools',
+    uiAction: () => switchPanel('tools'),
+  },
+  {
+    id: 'tools:annotate-clear',
+    name: 'Clear annotations',
+    description: 'Remove all annotation layers from selection',
+    category: 'Tools',
+    uiAction: () => {
+      if (annotateNodeId) postToPlugin('annotate:clear', { nodeId: annotateNodeId });
+    },
+  },
+  {
+    id: 'tools:spec',
+    name: 'Generate spec sheet',
+    description: 'Scaffold a Figma spec doc for a component set',
+    category: 'Tools',
+    uiAction: () => switchPanel('tools'),
+  },
+
+  // Bridge
+  {
+    id: 'bridge:connect',
+    name: 'Connect Bridge',
+    description: 'Open WebSocket connection to Claude Code',
+    category: 'Bridge',
+    uiAction: () => bridgeConnect(),
+  },
+  {
+    id: 'bridge:disconnect',
+    name: 'Disconnect Bridge',
+    description: 'Close the Bridge WebSocket connection',
+    category: 'Bridge',
+    uiAction: () => bridgeDisconnect(),
+  },
+];
+
+const QUICK_ACTION_IDS = [
+  'tools:copy-link',
+  'tokens:refresh',
+  'tools:annotate',
+  'tools:select-filter',
+  'tokens:export-local',
+  'tools:spec',
+];
+
+// ── Fire a feature ────────────────────────────────────────────────────────────
+
+function fireFeature(feat: Feature) {
+  logEvent(feat.id);
+  closePalette();
+  if (feat.uiAction) {
+    feat.uiAction();
+  } else if (feat.pluginAction) {
+    postToPlugin(feat.pluginAction, feat.pluginPayload ?? {});
+  }
+  // Refresh home if it's visible (heat badges may change)
+  if (activePanel === 'home') renderHomeView();
+}
+
+// ── Home view ─────────────────────────────────────────────────────────────────
+
+function badgeHtml(heat: 'hot' | 'warm' | 'cold'): string {
+  if (heat === 'cold') return '';
+  return `<span class="badge badge-${heat}">${heat}</span>`;
+}
+
+function actionRowsHtml(feats: Feature[]): string {
+  return feats.map(f =>
+    `<button class="action-row" data-id="${esc(f.id)}">${esc(f.name)}${badgeHtml(heatOf(f.id))}</button>`
+  ).join('');
+}
+
+function bindActionList(el: HTMLElement) {
+  el.querySelectorAll<HTMLButtonElement>('.action-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const feat = FEATURES.find(f => f.id === row.dataset.id);
+      if (feat) fireFeature(feat);
+    });
+  });
+}
+
+function renderHomeView() {
+  const quickEl   = document.getElementById('homeQuickActions') as HTMLElement;
+  const recentsEl = document.getElementById('homeRecents') as HTMLElement;
+  const recentsSection = document.getElementById('homeRecentsSection') as HTMLElement;
+
+  const quickFeats = QUICK_ACTION_IDS
+    .map(id => FEATURES.find(f => f.id === id)!)
+    .filter(Boolean);
+  quickEl.innerHTML = actionRowsHtml(quickFeats);
+  bindActionList(quickEl);
+
+  const recents = recentlyUsed(5);
+  if (recents.length === 0) {
+    recentsSection.style.display = 'none';
+  } else {
+    recentsSection.style.display = 'block';
+    recentsEl.innerHTML = actionRowsHtml(recents);
+    bindActionList(recentsEl);
+  }
+}
+
+// ── Command palette ───────────────────────────────────────────────────────────
+
+let paletteOpen    = false;
+let paletteSelected = 0;
+let paletteFiltered: Feature[] = [];
+
+const paletteOverlay = document.getElementById('paletteOverlay') as HTMLElement;
+const paletteInput   = document.getElementById('paletteInput')   as HTMLInputElement;
+const paletteList    = document.getElementById('paletteList')    as HTMLElement;
+
+function openPalette() {
+  paletteOpen = true;
+  paletteInput.value = '';
+  filterPalette('');
+  paletteOverlay.classList.add('open');
+  requestAnimationFrame(() => paletteInput.focus());
+}
+
+function closePalette() {
+  paletteOpen = false;
+  paletteOverlay.classList.remove('open');
+}
+
+function filterPalette(q: string) {
+  const lower = q.toLowerCase();
+  paletteFiltered = q
+    ? FEATURES.filter(f =>
+        f.name.toLowerCase().includes(lower) ||
+        f.description.toLowerCase().includes(lower) ||
+        f.category.toLowerCase().includes(lower) ||
+        f.id.toLowerCase().includes(lower)
+      )
+    : FEATURES;
+  paletteSelected = 0;
+  renderPalette();
+}
+
+function renderPalette() {
+  const cats = [...new Set(paletteFiltered.map(f => f.category))];
+  let globalIdx = 0;
+
+  paletteList.innerHTML = cats.map(cat => {
+    const items = paletteFiltered.filter(f => f.category === cat);
+    const rows = items.map(f => {
+      const idx = globalIdx++;
+      const heat = heatOf(f.id);
+      return `<button class="palette-row" data-id="${esc(f.id)}" data-idx="${idx}" data-selected="${idx === paletteSelected}">
+        <span class="palette-name">${esc(f.name)}</span>${badgeHtml(heat)}
+        <span class="palette-desc">${esc(f.description)}</span>
+      </button>`;
+    }).join('');
+    return `<div class="palette-group"><div class="palette-group-label">${esc(cat)}</div>${rows}</div>`;
+  }).join('');
+
+  paletteList.querySelectorAll<HTMLButtonElement>('.palette-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const feat = FEATURES.find(f => f.id === row.dataset.id);
+      if (feat) fireFeature(feat);
+    });
+    row.addEventListener('mouseenter', () => {
+      paletteSelected = Number(row.dataset.idx);
+      paletteList.querySelectorAll('.palette-row').forEach((r, i) =>
+        r.setAttribute('data-selected', String(i === paletteSelected))
+      );
+    });
+  });
+}
+
+paletteInput.addEventListener('input', () => filterPalette(paletteInput.value));
+
+paletteInput.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
+    renderPalette();
+    paletteList.querySelector(`[data-selected="true"]`)?.scrollIntoView({ block: 'nearest' });
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    paletteSelected = Math.max(paletteSelected - 1, 0);
+    renderPalette();
+    paletteList.querySelector(`[data-selected="true"]`)?.scrollIntoView({ block: 'nearest' });
+  } else if (e.key === 'Enter') {
+    const feat = paletteFiltered[paletteSelected];
+    if (feat) fireFeature(feat);
+  } else if (e.key === 'Escape') {
+    closePalette();
+  }
+});
+
+// Close on backdrop click (but not on the box itself)
+paletteOverlay.addEventListener('click', (e) => {
+  if (e.target === paletteOverlay) closePalette();
+});
+
+// ⌘K / Ctrl+K global shortcut
+document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    paletteOpen ? closePalette() : openPalette();
+  }
+  if (e.key === 'Escape' && paletteOpen) closePalette();
+});
+
+// Palette hint button in Home panel
+document.getElementById('paletteHintBtn')?.addEventListener('click', () => openPalette());
+
 // ── Minimize / expand ─────────────────────────────────────────────────────────
 
-let isMini = false;
 const app = document.getElementById('app') as HTMLElement;
-
 const toggleMiniBtn = document.getElementById('toggleMiniBtn') as HTMLButtonElement;
 
 toggleMiniBtn.addEventListener('click', () => {
   isMini = !isMini;
   app.classList.toggle('mini', isMini);
-  postToPlugin('resize-for-view', {
-    width: 320,
-    height: isMini ? 36 : 460,
-  });
+  postToPlugin('resize-for-view', { width: 320, height: isMini ? 40 : 460 });
   if (isMini && popoverOpen) closePopover();
 });
 
 // ── Copy frame link ───────────────────────────────────────────────────────────
 
-const copyNodeBtn  = document.getElementById('copyNodeBtn')  as HTMLButtonElement;
+const copyNodeBtn   = document.getElementById('copyNodeBtn')   as HTMLButtonElement;
 const headerSelName = document.getElementById('headerSelName') as HTMLElement;
 
 let _copyFileKey:  string | null = null;
@@ -70,17 +434,13 @@ let _copyFileName: string | null = null;
 let _copyAllNodes: Array<{ id: string; name: string }> = [];
 
 function copyToClipboard(text: string) {
-  // execCommand is the reliable path inside Figma's sandboxed iframe —
-  // navigator.clipboard requires permissions that Figma doesn't grant.
   const ta = document.createElement('textarea');
   ta.value = text;
   ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
   document.body.appendChild(ta);
-  ta.focus();
-  ta.select();
+  ta.focus(); ta.select();
   try { document.execCommand('copy'); } catch {}
   document.body.removeChild(ta);
-  // Async API as a best-effort secondary write
   try { navigator.clipboard?.writeText(text).catch(() => {}); } catch {}
 }
 
@@ -94,7 +454,7 @@ function updateCopyBtn(
   _copyFileName = fileName ?? null;
   _copyAllNodes = allNodes ?? (sel ? [{ id: sel.id, name: sel.name }] : []);
 
-  const count = _copyAllNodes.length;
+  const count  = _copyAllNodes.length;
   const hasNode = !!(sel && fileKey);
   copyNodeBtn.classList.toggle('hidden', !hasNode);
 
@@ -106,7 +466,6 @@ function updateCopyBtn(
     copyNodeBtn.setAttribute('aria-label', 'Copy Figma link');
   }
 
-  // Mini header selection label
   if (sel) {
     headerSelName.textContent = count > 1 ? `${count} selected` : sel.name;
     headerSelName.classList.add('has-sel');
@@ -127,7 +486,6 @@ copyNodeBtn.addEventListener('click', () => {
     return `https://www.figma.com/design/${_copyFileKey}/${slug}?node-id=${nid}`;
   });
 
-  // Icon swap first — before any clipboard ops that could throw
   if (_copyResetTimer) clearTimeout(_copyResetTimer);
   copyNodeBtn.classList.add('copied');
   _copyResetTimer = setTimeout(() => {
@@ -136,7 +494,6 @@ copyNodeBtn.addEventListener('click', () => {
   }, 1500);
 
   copyToClipboard(urls.join('\n'));
-
   const msg = urls.length > 1 ? `Copied ${urls.length} links` : 'Copied link';
   postToPlugin('notify', { message: msg });
 });
@@ -164,24 +521,17 @@ formatSectionBtn.addEventListener('click', () => {
 
 const BRIDGE_RECONNECT_BASE_MS = 2000;
 const BRIDGE_RECONNECT_MAX_MS  = 30000;
-// Start at 9223 — aligns with figma-console MCP's preferred port range.
-// Avoids accidentally latching onto unrelated servers on 9220–9222.
 const WS_PORTS = [9223,9224,9225,9226,9227,9228,9229,9230,9231,9232];
 
-let bridgeConnected      = false;
-let bridgeWs: WebSocket | null = null;
-let bridgeWsPort: number | null = null;
-let bridgeKeepaliveTimer: ReturnType<typeof setInterval> | null = null;
-let bridgeReconnectTimer: ReturnType<typeof setTimeout>  | null = null;
-let bridgeReconnectAttempts = 0;
-let bridgeUserDisconnected  = false;
-
-const pendingRequests = new Map<string, {
-  resolve: (v: any) => void;
-  reject: (e: Error) => void;
-  timeoutId: ReturnType<typeof setTimeout>;
-}>();
-let requestCounter = 0;
+const bridgeDot       = document.getElementById('bridgeDot')       as HTMLElement;
+const bridgeDotMini   = document.getElementById('bridgeDotMini')   as HTMLElement;
+const popoverDot      = document.getElementById('popoverDot')      as HTMLElement;
+const bridgePortLabel = document.getElementById('bridgePortLabel') as HTMLElement;
+const bridgePillLabel = document.getElementById('bridgePillLabel') as HTMLElement;
+const bridgeToggleBtn = document.getElementById('bridgeToggleBtn') as HTMLButtonElement;
+const bridgePopover   = document.getElementById('bridgePopover')   as HTMLElement;
+const bridgeTabBtn    = document.getElementById('bridgeTabBtn')    as HTMLButtonElement;
+const bridgeMiniBtn   = document.getElementById('bridgeMiniBtn')   as HTMLButtonElement;
 
 function sendBridgeCommand(method: string, params: Record<string, unknown> = {}, timeoutMs = 15000): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -197,21 +547,11 @@ function sendBridgeCommand(method: string, params: Record<string, unknown> = {},
   });
 }
 
-const bridgeDot       = document.getElementById('bridgeDot')       as HTMLElement;
-const bridgeDotMini   = document.getElementById('bridgeDotMini')   as HTMLElement;
-const popoverDot      = document.getElementById('popoverDot')      as HTMLElement;
-const bridgePortLabel = document.getElementById('bridgePortLabel') as HTMLElement;
-const bridgeToggleBtn = document.getElementById('bridgeToggleBtn') as HTMLButtonElement;
-const bridgePopover   = document.getElementById('bridgePopover')   as HTMLElement;
-const bridgeTabBtn    = document.getElementById('bridgeTabBtn')    as HTMLButtonElement;
-const bridgeMiniBtn   = document.getElementById('bridgeMiniBtn')   as HTMLButtonElement;
-
-let popoverOpen = false;
 function openPopover()  { popoverOpen = true;  bridgePopover.classList.add('open'); }
 function closePopover() { popoverOpen = false; bridgePopover.classList.remove('open'); }
 
 bridgeTabBtn.addEventListener('click',  (e) => { e.stopPropagation(); popoverOpen ? closePopover() : openPopover(); });
-bridgeMiniBtn.addEventListener('click', (e) => { e.stopPropagation(); popoverOpen ? closePopover() : openPopover(); });
+bridgeMiniBtn?.addEventListener('click', (e) => { e.stopPropagation(); popoverOpen ? closePopover() : openPopover(); });
 document.addEventListener('click', () => { if (popoverOpen) closePopover(); });
 bridgePopover.addEventListener('click', e => e.stopPropagation());
 
@@ -229,12 +569,16 @@ function updateBridgeUi() {
     bridgePortLabel.textContent = 'Port ' + bridgeWsPort;
     bridgeToggleBtn.textContent = 'Disconnect';
     bridgeToggleBtn.className   = 'btn btn-ghost';
+    if (bridgePillLabel) bridgePillLabel.textContent = 'Connected';
+    bridgeTabBtn?.classList.add('connected');
   } else {
     setAllDots(false);
     bridgePortLabel.textContent = '—';
     bridgeToggleBtn.textContent = 'Connect';
     bridgeToggleBtn.className   = 'btn';
     bridgeToggleBtn.disabled    = false;
+    if (bridgePillLabel) bridgePillLabel.textContent = 'Connect';
+    bridgeTabBtn?.classList.remove('connected');
   }
 }
 
@@ -291,7 +635,6 @@ function attachWsHandlers(ws: WebSocket, port: number) {
 function scheduleReconnect(port: number) {
   if (bridgeUserDisconnected) return;
   bridgeReconnectAttempts++;
-  // Exponential backoff, capped at 30s — no attempt limit, self-heals indefinitely.
   const delay = Math.min(BRIDGE_RECONNECT_BASE_MS * Math.pow(1.5, bridgeReconnectAttempts - 1), BRIDGE_RECONNECT_MAX_MS);
   bridgeReconnectTimer = setTimeout(() => {
     if (!bridgeUserDisconnected) reconnectToPort(port);
@@ -363,17 +706,14 @@ function bridgeDisconnect() {
 
 function getTokenGroup(name: string): string {
   const parts = name.split('/').filter(p => p !== 's2a');
-  // Use 3 segments for transparent sub-groups (black/white alpha scales)
   if (parts.length >= 4 && parts[1] === 'transparent') return parts[0] + ' / ' + parts[1] + ' / ' + parts[2];
   if (parts.length >= 3) return parts[0] + ' / ' + parts[1];
   return parts[0] ?? name;
 }
 
-// ── Variables ─────────────────────────────────────────────────────────────────
+// ── Variables / Tokens panel ──────────────────────────────────────────────────
 
-let variablesCache: { variables: any[]; variableCollections: any[] } | null = null;
-
-function setVarMeta(_text: string) {}  // no meta field in new design
+function setVarMeta(_text: string) {}
 
 function setVarStatus(msg: string, type: '' | 'ok' | 'err' = '') {
   const el = document.getElementById('varStatus') as HTMLElement;
@@ -415,10 +755,9 @@ function renderVariables(data: { variables: any[]; variableCollections: any[] })
 
 function renderTokenGroups(data: { variables: any[]; variableCollections: any[] }) {
   const labelEl = document.getElementById('tokenGroupLabel') as HTMLElement;
-  const listEl  = document.getElementById('tokenGroupList') as HTMLElement;
+  const listEl  = document.getElementById('tokenGroupList')  as HTMLElement;
   if (!listEl) return;
 
-  // Semantic + Responsive always; Color primitives + Dimension primitives (opacity only)
   const semanticColls = data.variableCollections.filter(c =>
     /Semantic|Responsive/.test(c.name) ||
     (/Primitives/.test(c.name) && /Color/.test(c.name)) ||
@@ -430,7 +769,6 @@ function renderTokenGroups(data: { variables: any[]; variableCollections: any[] 
     return;
   }
 
-  // Build a collId → collName lookup to avoid optional-chain temp-var issues in the loop
   const collIdToName = new Map<string, string>();
   for (const c of data.variableCollections) collIdToName.set(c.id, c.name);
 
@@ -440,7 +778,6 @@ function renderTokenGroups(data: { variables: any[]; variableCollections: any[] 
     if (!collSet.has(v.variableCollectionId)) continue;
     const collName: string = collIdToName.get(v.variableCollectionId) || '';
     const grp = getTokenGroup(v.name);
-    // Primitives/Dimension: only expose the opacity group
     if (/Primitives/.test(collName) && /Dimension/.test(collName) && grp !== 'opacity') continue;
     const key = v.variableCollectionId + '::' + grp;
     if (!groups.has(key)) {
@@ -462,7 +799,6 @@ function renderTokenGroups(data: { variables: any[]; variableCollections: any[] 
       <button class="gen-btn" title="Generate docs for ${esc(g.group)}">→</button>
     </div>`
   ).join('');
-  // Synthetic Text Styles entry — points at Figma's native text styles, not a variable collection
   listEl.insertAdjacentHTML('beforeend',
     `<div class="collection-row token-group-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08)" data-col="text-styles" data-group="text-styles">
       <span class="collection-name">Text Styles</span>
@@ -480,10 +816,7 @@ document.getElementById('tokenGroupList')?.addEventListener('click', (e) => {
   btn.disabled = true;
   btn.textContent = '…';
   setVarStatus('Generating ' + (row.dataset.group ?? '') + '…');
-  postToPlugin('token-docs:generate', {
-    collectionId: row.dataset.col,
-    group: row.dataset.group,
-  });
+  postToPlugin('token-docs:generate', { collectionId: row.dataset.col, group: row.dataset.group });
 });
 
 document.getElementById('varRefreshBtn')?.addEventListener('click', async () => {
@@ -546,8 +879,6 @@ interface GitHubSettings {
   token: string; owner: string; repo: string; branch: string; filePath: string;
 }
 
-let githubSettings: GitHubSettings | null = null;
-
 async function pushToGitHub(data: any, settings: GitHubSettings): Promise<void> {
   const { token, owner, repo, branch, filePath } = settings;
   const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
@@ -601,27 +932,24 @@ document.getElementById('saveSettingsBtn')?.addEventListener('click', () => {
   postToPlugin('save-settings', { settings });
 });
 
-// ── Select ────────────────────────────────────────────────────────────────────
-
-let selectSetId: string | null = null;
+// ── Tools — Select ────────────────────────────────────────────────────────────
 
 function renderAxes(setId: string, setName: string, axes: Array<{ name: string; type: string; variantOptions?: string[] }>) {
   selectSetId = setId;
-  const empty  = document.getElementById('selectEmpty') as HTMLElement;
-  const body   = document.getElementById('selectBody')  as HTMLElement;
-  const nameEl = document.getElementById('selectSetName') as HTMLElement;
-  const axesEl = document.getElementById('selectAxes') as HTMLElement;
-  const status = document.getElementById('selectStatus') as HTMLElement;
+  const emptyEl  = document.getElementById('selectEmpty')  as HTMLElement;
+  const bodyEl   = document.getElementById('selectBody')   as HTMLElement;
+  const nameEl   = document.getElementById('selectSetName') as HTMLElement;
+  const axesEl   = document.getElementById('selectAxes')   as HTMLElement;
+  const statusEl = document.getElementById('selectStatus') as HTMLElement;
 
-  empty.style.display = 'none';
-  body.style.display = 'block';
+  emptyEl.style.display = 'none';
+  bodyEl.style.display  = 'block';
   nameEl.textContent = setName;
-  if (status) status.textContent = '';
+  if (statusEl) statusEl.textContent = '';
 
   const variantAxes = axes.filter(a => a.type === 'VARIANT');
-
   if (variantAxes.length === 0) {
-    axesEl.innerHTML = '<div class="empty-state">No variant axes found</div>';
+    axesEl.innerHTML = '<div class="empty-state" style="padding:12px 0 0;">No variant axes found</div>';
     return;
   }
 
@@ -663,9 +991,7 @@ document.getElementById('selectNoneBtn')?.addEventListener('click', () => {
   document.querySelectorAll<HTMLButtonElement>('#selectAxes .chip').forEach(c => c.classList.remove('on'));
 });
 
-// ── Annotate ──────────────────────────────────────────────────────────────────
-
-let annotateNodeId: string | null = null;
+// ── Tools — Annotate ──────────────────────────────────────────────────────────
 
 function setAnnotateStatus(msg: string, type: '' | 'ok' | 'err' = '') {
   const el = document.getElementById('annotateStatus') as HTMLElement;
@@ -674,17 +1000,17 @@ function setAnnotateStatus(msg: string, type: '' | 'ok' | 'err' = '') {
 
 function updateAnnotateSelection(sel: { id: string; name: string; nodeType: string } | null) {
   annotateNodeId = sel?.id ?? null;
-  const empty    = document.getElementById('annotateSelectionEmpty') as HTMLElement;
-  const info     = document.getElementById('annotateSelectionInfo') as HTMLElement;
+  const emptyEl  = document.getElementById('annotateSelectionEmpty') as HTMLElement;
+  const infoEl   = document.getElementById('annotateSelectionInfo')  as HTMLElement;
   const nameEl   = document.getElementById('annotateNodeName') as HTMLElement;
   const typeEl   = document.getElementById('annotateNodeType') as HTMLElement;
   const applyBtn = document.getElementById('annotateApplyBtn') as HTMLButtonElement;
   if (sel) {
-    empty.style.display = 'none'; info.style.display = 'flex';
+    emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
     nameEl.textContent = sel.name; typeEl.textContent = sel.nodeType;
     applyBtn.disabled = false;
   } else {
-    empty.style.display = 'block'; info.style.display = 'none';
+    emptyEl.style.display = 'block'; infoEl.style.display = 'none';
     applyBtn.disabled = true;
   }
 }
@@ -712,9 +1038,7 @@ document.getElementById('annotateClearBtn')?.addEventListener('click', () => {
   postToPlugin('annotate:clear', { nodeId: annotateNodeId });
 });
 
-// ── Spec ──────────────────────────────────────────────────────────────────────
-
-let specSetId: string | null = null;
+// ── Tools — Spec ──────────────────────────────────────────────────────────────
 
 function setSpecStatus(msg: string, type: '' | 'ok' | 'err' = '') {
   const el = document.getElementById('specStatus') as HTMLElement;
@@ -724,20 +1048,20 @@ function setSpecStatus(msg: string, type: '' | 'ok' | 'err' = '') {
 function updateSpecSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
   const isValid = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT';
   specSetId = isValid ? (sel?.id ?? null) : null;
-  const empty   = document.getElementById('specSelectionEmpty') as HTMLElement;
-  const info    = document.getElementById('specSelectionInfo')  as HTMLElement;
-  const nameEl  = document.getElementById('specSetName')  as HTMLElement;
-  const countEl = document.getElementById('specSetCount') as HTMLElement;
-  const genBtn  = document.getElementById('specGenerateBtn') as HTMLButtonElement;
+  const emptyEl  = document.getElementById('specSelectionEmpty') as HTMLElement;
+  const infoEl   = document.getElementById('specSelectionInfo')  as HTMLElement;
+  const nameEl   = document.getElementById('specSetName')   as HTMLElement;
+  const countEl  = document.getElementById('specSetCount')  as HTMLElement;
+  const genBtn   = document.getElementById('specGenerateBtn') as HTMLButtonElement;
   if (isValid && sel) {
-    empty.style.display = 'none'; info.style.display = 'flex';
+    emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
     nameEl.textContent  = sel.name;
     countEl.textContent = sel.nodeType === 'COMPONENT_SET'
       ? (sel.variantCount ?? 0) + ' variants'
       : '1 variant';
     genBtn.disabled = false;
   } else {
-    empty.style.display = 'block'; info.style.display = 'none';
+    emptyEl.style.display = 'block'; infoEl.style.display = 'none';
     genBtn.disabled = true;
   }
 }
@@ -817,21 +1141,17 @@ window.addEventListener('message', (event) => {
           id: msg.nodeId as string,
           name: msg.nodeName as string,
           nodeType: msg.nodeType as string,
-          width: msg.width as number | undefined,
-          height: msg.height as number | undefined,
           variantCount: msg.variantCount as number | undefined,
         };
-        updateProtoSelection(sel);
         updateAnnotateSelection(sel);
         updateSpecSelection(sel);
         updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
         updateSectionBar(
           !!(msg.isSection as boolean),
           (msg.sectionCount as number) ?? 0,
-          (msg.sectionName as string) ?? sel.name,
+          (msg.sectionName as string)  ?? sel.name,
         );
       } else {
-        updateProtoSelection(null);
         updateAnnotateSelection(null);
         updateSpecSelection(null);
         updateCopyBtn(null, null);
@@ -841,14 +1161,12 @@ window.addEventListener('message', (event) => {
     }
     case 'token-docs:result': {
       document.querySelectorAll<HTMLButtonElement>('.gen-btn').forEach(b => {
-        b.disabled = false;
-        b.textContent = '→';
+        b.disabled = false; b.textContent = '→';
       });
       if (msg.error) setVarStatus('❌ ' + (msg.error as string), 'err');
       else setVarStatus('✓ ' + (msg.count as number) + ' tokens documented', 'ok');
       break;
     }
-
     case 'format-section:done': {
       formatSectionBtn.disabled = false;
       formatSectionBtn.textContent = 'Format';
@@ -890,7 +1208,9 @@ postToPlugin('ui-ready');
 postToPlugin('get-settings');
 postToPlugin('resize-for-view', { width: 320, height: 460 });
 
-// Self-heal: reconnect when the Figma tab regains focus (catches MCP server restarts).
+renderHomeView();
+
+// Self-heal: reconnect when Figma tab regains focus
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && !bridgeConnected && !bridgeUserDisconnected && !bridgeReconnectTimer) {
     bridgeReconnectAttempts = 0;
@@ -898,7 +1218,7 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// Heartbeat: every 45s, if disconnected and not already retrying, kick off a fresh scan.
+// Heartbeat: every 45s kick off a fresh scan if disconnected
 setInterval(() => {
   if (!bridgeConnected && !bridgeUserDisconnected && !bridgeReconnectTimer) {
     bridgeReconnectAttempts = 0;

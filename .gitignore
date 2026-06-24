@@ -50,6 +50,9 @@ screenshots/
 charts/
 jira-tickets/
 
+# Portfolio case study cache — not for public distribution
+.cache/
+
 # AI tool workflow configs — skills and commands are tracked; machine-specific files are not
 .claude/settings.local.json
 .claude/memory/

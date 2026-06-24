@@ -1,0 +1,132 @@
+.c-promo-cta {
+  /* Component-level custom props */
+  --c-promo-cta-control-size: 48px;     /* xl default */
+  --c-promo-cta-control-radius: 6px;    /* Primitive: no semantic token for 6px yet */
+  --c-promo-cta-control-icon-size: 12px;
+
+  display: inline-flex;
+  align-items: center;
+  background: var(--s2a-color-background-knockout, #000);
+  border-radius: var(--s2a-border-radius-12, 12px); /* Primitive: no 12px semantic alias yet */
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 150ms ease;
+}
+
+/* fill width stretches edge-to-edge in its container */
+.c-promo-cta[data-width="fill"] {
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* ── Sizes ──────────────────────────────────────────────────────────────── */
+
+.c-promo-cta[data-size="lg"] {
+  --c-promo-cta-control-size: 32px;
+}
+
+/* ── Left wrapper: app icon + label ────────────────────────────────────── */
+
+.c-promo-cta__left {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: var(--s2a-spacing-sm, 12px);
+  flex-shrink: 0;
+}
+
+.c-promo-cta__app-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.c-promo-cta[data-show-app="false"] .c-promo-cta__app-icon {
+  display: none;
+}
+
+.c-promo-cta__label-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: var(--s2a-spacing-sm, 12px);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* when no app icon, remove the left padding on the label */
+.c-promo-cta[data-show-app="false"] .c-promo-cta__label-wrapper {
+  padding-left: 0;
+}
+
+.c-promo-cta__label {
+  font-family: var(--s2a-font-family-eyebrow, "Adobe Clean", sans-serif);
+  font-weight: var(--s2a-font-weight-eyebrow, 700);
+  font-size: var(--s2a-typography-font-size-eyebrow, 16px);
+  line-height: var(--s2a-typography-line-height-eyebrow, 20px);
+  letter-spacing: var(--s2a-typography-letter-spacing-eyebrow, 0px);
+  color: var(--s2a-color-content-knockout, #fff);
+  white-space: nowrap;
+}
+
+/* ── Right wrapper: caret control ──────────────────────────────────────── */
+
+.c-promo-cta__right {
+  display: flex;
+  align-items: center;
+  padding: var(--s2a-spacing-sm, 12px);
+  flex-shrink: 0;
+}
+
+.c-promo-cta[data-show-icon="false"] .c-promo-cta__right {
+  display: none;
+}
+
+.c-promo-cta__control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--c-promo-cta-control-size);
+  height: var(--c-promo-cta-control-size);
+  border-radius: var(--c-promo-cta-control-radius);
+  /* Default/hover: frosted glass over dark surface */
+  background: #292929; /* Primitive: --s2a-color-gray-800 — no on-media semantic alias yet */
+  border: var(--s2a-border-width-sm, 1px) solid #505050; /* Primitive: --s2a-color-gray-700 */
+  color: var(--s2a-color-content-knockout, #fff);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+  flex-shrink: 0;
+}
+
+.c-promo-cta__control-icon {
+  width: var(--c-promo-cta-control-icon-size);
+  height: var(--c-promo-cta-control-icon-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+/* ── States ─────────────────────────────────────────────────────────────── */
+
+.c-promo-cta:not(:disabled):is(:hover, [data-state="hover"]) .c-promo-cta__control {
+  background: #292929;
+  border-color: #505050;
+}
+
+.c-promo-cta:not(:disabled):is(:active, [data-state="active"]) .c-promo-cta__control {
+  background: var(--s2a-color-content-knockout, #fff);
+  border-color: var(--s2a-color-transparent-white-24, rgba(255, 255, 255, 0.24)); /* Primitive: no semantic alias yet */
+  color: var(--s2a-color-background-knockout, #000);
+}
+
+/* ── Focus ring ──────────────────────────────────────────────────────────── */
+
+.c-promo-cta:is(:focus-visible, [data-state="focus"]) {
+  outline: 2px solid var(--s2a-color-focus-ring-knockout, #fff);
+  outline-offset: 2px;
+}

@@ -1,0 +1,103 @@
+.c-product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 172px;
+  padding: var(--s2a-spacing-lg, 24px);
+  border-radius: var(--s2a-border-radius-md, 16px);
+  overflow: hidden;
+  background: var(--s2a-color-transparent-white-08, rgba(255, 255, 255, 0.08));
+  box-sizing: border-box;
+}
+
+.c-product-card[role="button"] {
+  cursor: pointer;
+}
+
+.c-product-card[role="button"]:focus-visible {
+  outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
+  outline-offset: 2px;
+}
+
+/* ─── Background image (hover reveal) ───────────────────────────────────────── */
+
+.c-product-card__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.c-product-card:hover .c-product-card__image,
+.c-product-card[data-has-image]:focus-visible .c-product-card__image {
+  opacity: 1;
+}
+
+/* ─── Gradient scrim (sits above image, below content) ──────────────────────── */
+
+.c-product-card__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 38.93%,
+    rgba(0, 0, 0, 0.79) 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.c-product-card:hover .c-product-card__scrim,
+.c-product-card[data-has-image]:focus-visible .c-product-card__scrim {
+  opacity: 1;
+}
+
+/* ─── App icon ───────────────────────────────────────────────────────────────── */
+
+.c-product-card__icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+/* ─── Text block ─────────────────────────────────────────────────────────────── */
+
+.c-product-card__text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-xs, 8px);
+}
+
+.c-product-card__heading {
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
+  font-weight: var(--s2a-font-weight-heading, 900);
+  font-size: var(--s2a-typography-font-size-heading-5, 24px);
+  line-height: var(--s2a-typography-line-height-heading-5, 24px);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-5, -0.48px);
+  color: var(--s2a-color-content-knockout, #fff);
+  margin: 0;
+}
+
+.c-product-card__body {
+  font-family: var(--s2a-font-family-body, "Adobe Clean");
+  font-weight: var(--s2a-font-weight-body, 400);
+  font-size: var(--s2a-typography-font-size-body-md, 16px);
+  line-height: var(--s2a-typography-line-height-body-md, 20px);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-md, 0);
+  color: var(--s2a-color-transparent-white-64, rgba(255, 255, 255, 0.64));
+  margin: 0;
+}
