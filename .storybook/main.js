@@ -1,4 +1,7 @@
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /** @type { import('@storybook/web-components-vite').StorybookConfig } */
 const config = {
@@ -29,7 +32,6 @@ const config = {
       config.base = process.env.STORYBOOK_BASE_PATH || "/consonant/";
     }
     // Story UI: Exclude from dependency optimization to handle CSS imports correctly
-    // d3: dedupe forces Vite/Rollup to resolve from workspace root in monorepo builds
     config.optimizeDeps = {
       ...config.optimizeDeps,
       exclude: [
@@ -37,9 +39,13 @@ const config = {
         '@tpitre/story-ui'
       ]
     };
+    // d3: alias to absolute path so Rollup finds it regardless of CI hoisting behavior
     config.resolve = {
       ...config.resolve,
-      dedupe: [...(config.resolve?.dedupe || []), 'd3'],
+      alias: {
+        ...(Array.isArray(config.resolve?.alias) ? {} : (config.resolve?.alias || {})),
+        'd3': resolve(__dirname, '../node_modules/d3/src/index.js'),
+      },
     };
     // Vite skips its build.outDir (default: "dist") in the file watcher.
     // Setting outDir explicitly to storybook-static removes "dist" from the
