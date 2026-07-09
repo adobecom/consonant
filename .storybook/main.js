@@ -44,7 +44,7 @@ const config = {
       ...config.resolve,
       alias: {
         ...(Array.isArray(config.resolve?.alias) ? {} : (config.resolve?.alias || {})),
-        'd3': resolve(__dirname, '../node_modules/d3/src/index.js'),
+        'd3': resolve(__dirname, '../node_modules/d3/dist/d3.js'),
       },
     };
     // Vite skips its build.outDir (default: "dist") in the file watcher.
