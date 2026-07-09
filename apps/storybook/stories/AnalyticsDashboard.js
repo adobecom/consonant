@@ -1,6 +1,14 @@
 import { html } from "lit";
 import { ref } from "lit/directives/ref.js";
-import * as d3 from "d3";
+import { select, pointer } from "d3-selection";
+import { scaleLinear, scaleBand, scaleTime } from "d3-scale";
+import { axisBottom, axisLeft } from "d3-axis";
+import { extent, max, bisector } from "d3-array";
+import { timeFormat, timeParse } from "d3-time-format";
+import { format } from "d3-format";
+import { hierarchy, treemap } from "d3-hierarchy";
+import { hsl } from "d3-color";
+import { curveMonotoneX, area, line } from "d3-shape";
 import "./AnalyticsDashboard.css";
 import snapshot from "./generated/analyticsSnapshot.js";
 
@@ -17,8 +25,8 @@ const COLOR = {
   gridline: "#DADADA", // s2a/color/gray/300
 };
 
-const fmt = d3.format(",");
-const fmtCompact = (n) => (n >= 1000 ? d3.format(".1~s")(n).replace("k", "K") : fmt(n));
+const fmt = format(",");
+const fmtCompact = (n) => (n >= 1000 ? format(".1~s")(n).replace("k", "K") : fmt(n));
 
 // ── Shared tooltip (one instance for the whole dashboard) ──────────────────
 
@@ -84,7 +92,7 @@ function drawTrendChart(container) {
   const data = snapshot.figmaTrend;
   if (!data.length) return;
 
-  const parseWeek = d3.timeParse("%Y-%m-%d");
+  const parseWeek = timeParse("%Y-%m-%d");
   const rows = data.map((d) => ({ ...d, date: parseWeek(d.week) }));
 
   const width = container.clientWidth || 720;
@@ -101,8 +109,8 @@ function drawTrendChart(container) {
 
   const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const x = d3.scaleTime(d3.extent(rows, (d) => d.date), [0, innerW]);
-  const y = d3.scaleLinear([0, d3.max(rows, (d) => d.insertions) || 1], [innerH, 0]).nice();
+  const x = scaleTime(extent(rows, (d) => d.date), [0, innerW]);
+  const y = scaleLinear([0, max(rows, (d) => d.insertions) || 1], [innerH, 0]).nice();
 
   // Recessive gridlines
   g.append("g")
@@ -118,39 +126,36 @@ function drawTrendChart(container) {
 
   g.append("g")
     .attr("transform", `translate(0,${innerH})`)
-    .call(d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%b %d")).tickSize(0))
+    .call(axisBottom(x).ticks(6).tickFormat(timeFormat("%b %d")).tickSize(0))
     .call((g) => g.select(".domain").remove())
     .selectAll("text")
     .attr("fill", "currentColor")
     .attr("font-size", 11);
 
   g.append("g")
-    .call(d3.axisLeft(y).ticks(4).tickFormat(fmtCompact).tickSize(0))
+    .call(axisLeft(y).ticks(4).tickFormat(fmtCompact).tickSize(0))
     .call((g) => g.select(".domain").remove())
     .selectAll("text")
     .attr("fill", "currentColor")
     .attr("font-size", 11);
 
-  const area = d3
-    .area()
+  const areaGen = area()
     .x((d) => x(d.date))
     .y0(innerH)
     .y1((d) => y(d.insertions))
-    .curve(d3.curveMonotoneX);
+    .curve(curveMonotoneX);
 
-  const insertionsLine = d3
-    .line()
+  const insertionsLine = line()
     .x((d) => x(d.date))
     .y((d) => y(d.insertions))
-    .curve(d3.curveMonotoneX);
+    .curve(curveMonotoneX);
 
-  const detachmentsLine = d3
-    .line()
+  const detachmentsLine = line()
     .x((d) => x(d.date))
     .y((d) => y(d.detachments))
-    .curve(d3.curveMonotoneX);
+    .curve(curveMonotoneX);
 
-  g.append("path").datum(rows).attr("d", area).attr("fill", COLOR.good).attr("fill-opacity", 0.1);
+  g.append("path").datum(rows).attr("d", areaGen).attr("fill", COLOR.good).attr("fill-opacity", 0.1);
   g.append("path")
     .datum(rows)
     .attr("d", insertionsLine)
@@ -189,7 +194,7 @@ function drawTrendChart(container) {
     .attr("stroke-width", 1)
     .style("opacity", 0);
 
-  const bisect = d3.bisector((d) => d.date).left;
+  const bisect = bisector((d) => d.date).left;
   svg
     .append("rect")
     .attr("x", margin.left)
@@ -198,7 +203,7 @@ function drawTrendChart(container) {
     .attr("height", innerH)
     .attr("fill", "transparent")
     .on("pointermove", (event) => {
-      const [px] = d3.pointer(event, g.node());
+      const [px] = pointer(event, g.node());
       const date = x.invert(px);
       const i = Math.min(rows.length - 1, Math.max(0, bisect(rows, date)));
       const d = rows[i];
@@ -209,7 +214,7 @@ function drawTrendChart(container) {
             tooltipRow(COLOR.good, "Insertions", fmt(d.insertions)),
             tooltipRow(COLOR.critical, "Detachments", fmt(d.detachments)),
           ],
-          d3.timeFormat("Week of %b %d, %Y")(d.date),
+          timeFormat("Week of %b %d, %Y")(d.date),
         ),
         event.clientX,
         event.clientY,
@@ -241,9 +246,9 @@ function drawAdoptionChart(container) {
     .attr("class", "s2a-panel__chart");
   const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const maxVal = d3.max(families, (f) => Math.max(f.deprecatedLive, f.currentLive)) || 1;
-  const x = d3.scaleLinear([0, maxVal], [0, innerW]);
-  const band = d3.scaleBand(
+  const maxVal = max(families, (f) => Math.max(f.deprecatedLive, f.currentLive)) || 1;
+  const x = scaleLinear([0, maxVal], [0, innerW]);
+  const band = scaleBand(
     families.map((f) => f.name),
     [0, families.length * rowHeight],
   ).paddingInner(0.35);
@@ -308,7 +313,7 @@ function drawAdoptionChart(container) {
 
 // ── Panel 3: Milo token fidelity treemap + drill-in ─────────────────────────
 
-const complianceScale = d3.scaleLinear().domain([0, 50, 100]).range([COLOR.critical, COLOR.neutral, COLOR.good]).clamp(true);
+const complianceScale = scaleLinear().domain([0, 50, 100]).range([COLOR.critical, COLOR.neutral, COLOR.good]).clamp(true);
 
 function chip(label, variant) {
   const span = document.createElement("span");
@@ -348,7 +353,7 @@ function renderBlockDetail(container, block) {
     const scoreBadge = document.createElement("span");
     scoreBadge.className = "s2a-chip";
     scoreBadge.style.background = complianceScale(f.complianceScore);
-    scoreBadge.style.color = d3.hsl(complianceScale(f.complianceScore)).l > 0.6 ? "#131313" : "#fff";
+    scoreBadge.style.color = hsl(complianceScale(f.complianceScore)).l > 0.6 ? "#131313" : "#fff";
     scoreBadge.textContent = `${f.complianceScore}/100`;
     const path = document.createElement("code");
     path.textContent = f.filePath;
@@ -413,10 +418,10 @@ function drawFidelityTreemap(container) {
   const detailHost = document.createElement("div");
   container.append(svgHost, detailHost);
 
-  const svg = d3.select(svgHost).append("svg").attr("viewBox", `0 0 ${width} ${height}`).attr("class", "s2a-panel__chart");
+  const svg = select(svgHost).append("svg").attr("viewBox", `0 0 ${width} ${height}`).attr("class", "s2a-panel__chart");
 
-  const root = d3.hierarchy({ children: blocks }).sum((d) => d.totalSignals);
-  d3.treemap().size([width, height]).paddingInner(2).round(true)(root);
+  const root = hierarchy({ children: blocks }).sum((d) => d.totalSignals);
+  treemap().size([width, height]).paddingInner(2).round(true)(root);
 
   const tooltip = getTooltip();
   let selectedBlock = null;
@@ -464,7 +469,7 @@ function drawFidelityTreemap(container) {
     .attr("y", 16)
     .attr("font-size", 10)
     .attr("font-weight", 700)
-    .attr("fill", (d) => (d3.hsl(complianceScale(d.data.avgScore)).l > 0.6 ? "#131313" : "#fff"))
+    .attr("fill", (d) => (hsl(complianceScale(d.data.avgScore)).l > 0.6 ? "#131313" : "#fff"))
     .style("pointer-events", "none")
     .text((d) => d.data.block);
 }
@@ -489,7 +494,7 @@ function drawConsumersChart(container) {
     .attr("class", "s2a-panel__chart");
   const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const x = d3.scaleLinear([0, d3.max(rows, (d) => d.usages) || 1], [0, innerW]);
+  const x = scaleLinear([0, max(rows, (d) => d.usages) || 1], [0, innerW]);
   const barHeight = Math.min(18, rowHeight - 8);
   const tooltip = getTooltip();
 
