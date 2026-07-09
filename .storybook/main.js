@@ -29,17 +29,17 @@ const config = {
       config.base = process.env.STORYBOOK_BASE_PATH || "/consonant/";
     }
     // Story UI: Exclude from dependency optimization to handle CSS imports correctly
-    // d3: pure ESM package — must be pre-bundled so Rollup can resolve it in build mode
+    // d3: dedupe forces Vite/Rollup to resolve from workspace root in monorepo builds
     config.optimizeDeps = {
       ...config.optimizeDeps,
-      include: [
-        ...(config.optimizeDeps?.include || []),
-        'd3'
-      ],
       exclude: [
         ...(config.optimizeDeps?.exclude || []),
         '@tpitre/story-ui'
       ]
+    };
+    config.resolve = {
+      ...config.resolve,
+      dedupe: [...(config.resolve?.dedupe || []), 'd3'],
     };
     // Vite skips its build.outDir (default: "dist") in the file watcher.
     // Setting outDir explicitly to storybook-static removes "dist" from the
