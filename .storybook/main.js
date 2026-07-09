@@ -29,8 +29,13 @@ const config = {
       config.base = process.env.STORYBOOK_BASE_PATH || "/consonant/";
     }
     // Story UI: Exclude from dependency optimization to handle CSS imports correctly
+    // d3: pure ESM package — must be pre-bundled so Rollup can resolve it in build mode
     config.optimizeDeps = {
       ...config.optimizeDeps,
+      include: [
+        ...(config.optimizeDeps?.include || []),
+        'd3'
+      ],
       exclude: [
         ...(config.optimizeDeps?.exclude || []),
         '@tpitre/story-ui'
