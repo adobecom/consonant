@@ -1,0 +1,272 @@
+.s2a-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-xl, 32px);
+  padding: var(--s2a-spacing-xl, 32px);
+  background: var(--s2a-color-background-default, #fff);
+  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
+  color: var(--s2a-color-content-default, #131313);
+  box-sizing: border-box;
+}
+
+.s2a-dashboard * {
+  box-sizing: border-box;
+}
+
+.s2a-dashboard__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-2xs, 4px);
+}
+
+.s2a-dashboard__title {
+  margin: 0;
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display", sans-serif);
+  font-weight: var(--s2a-font-weight-heading, 900);
+  font-size: var(--s2a-typography-font-size-heading-3, 32px);
+  color: var(--s2a-color-content-heading, #000);
+}
+
+.s2a-dashboard__subtitle {
+  margin: 0;
+  font-size: var(--s2a-typography-font-size-body-md, 16px);
+  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+}
+
+.s2a-dashboard__meta {
+  font-size: var(--s2a-typography-font-size-caption, 12px);
+  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+}
+
+/* ─── Stat tiles ───────────────────────────────────────────────────────── */
+
+.s2a-stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s2a-spacing-md, 16px);
+}
+
+.s2a-stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-2xs, 4px);
+  padding: var(--s2a-spacing-lg, 24px);
+  background: var(--s2a-color-background-subtle, #f8f8f8);
+  border-radius: var(--s2a-border-radius-md, 16px);
+}
+
+.s2a-stat-tile__value {
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display", sans-serif);
+  font-weight: var(--s2a-font-weight-heading, 900);
+  font-size: 40px;
+  font-variant-numeric: proportional-nums;
+  color: var(--s2a-color-content-heading, #000);
+}
+
+.s2a-stat-tile__label {
+  font-size: var(--s2a-typography-font-size-body-sm, 14px);
+  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+}
+
+/* ─── Panel card ───────────────────────────────────────────────────────── */
+
+.s2a-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-md, 16px);
+  padding: var(--s2a-spacing-lg, 24px);
+  border: 1px solid var(--s2a-color-border-subtle, #dadada);
+  border-radius: var(--s2a-border-radius-md, 16px);
+  position: relative;
+}
+
+.s2a-panel__title {
+  margin: 0;
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display", sans-serif);
+  font-weight: var(--s2a-font-weight-heading, 900);
+  font-size: var(--s2a-typography-font-size-heading-6, 18px);
+  color: var(--s2a-color-content-heading, #000);
+}
+
+.s2a-panel__note {
+  margin: 0;
+  font-size: var(--s2a-typography-font-size-caption, 12px);
+  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+}
+
+.s2a-panel__chart {
+  width: 100%;
+  overflow: visible;
+}
+
+/* ─── Legend ───────────────────────────────────────────────────────────── */
+
+.s2a-legend {
+  display: flex;
+  gap: var(--s2a-spacing-md, 16px);
+  flex-wrap: wrap;
+}
+
+.s2a-legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--s2a-spacing-2xs, 4px);
+  font-size: var(--s2a-typography-font-size-body-sm, 14px);
+  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+}
+
+.s2a-legend__swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex: none;
+}
+
+/* ─── Tooltip ──────────────────────────────────────────────────────────── */
+
+.s2a-tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10;
+  background: var(--s2a-color-content-default, #131313);
+  color: var(--s2a-color-background-default, #fff);
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+  max-width: 240px;
+}
+
+.s2a-tooltip strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.s2a-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.s2a-tooltip__key {
+  width: 8px;
+  height: 2px;
+  flex: none;
+}
+
+/* ─── Data table fallback ──────────────────────────────────────────────── */
+
+.s2a-panel__table-toggle {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: var(--s2a-typography-font-size-caption, 12px);
+  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.s2a-panel__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--s2a-typography-font-size-body-sm, 14px);
+  font-variant-numeric: tabular-nums;
+}
+
+.s2a-panel__table th,
+.s2a-panel__table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--s2a-color-border-subtle, #dadada);
+}
+
+/* ─── Panel tag badge ──────────────────────────────────────────────────── */
+
+.s2a-panel-tag {
+  display: inline-block;
+  margin-left: var(--s2a-spacing-xs, 8px);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
+  font-size: 11px;
+  font-weight: 400;
+  vertical-align: middle;
+  background: var(--s2a-color-background-subtle, #f8f8f8);
+  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+}
+
+.s2a-panel-tag--live {
+  background: #e7f3ed;
+  color: #05834e;
+}
+
+/* ─── Fidelity drill-in detail panel ───────────────────────────────────── */
+
+.s2a-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: var(--s2a-spacing-xs, 8px);
+}
+
+.s2a-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--s2a-color-background-subtle, #f8f8f8);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, monospace;
+}
+
+.s2a-chip--warn {
+  background: #fbe9e7;
+  color: #9c2113;
+}
+
+.s2a-detail-file {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--s2a-spacing-md, 16px);
+  border: 1px solid var(--s2a-color-border-subtle, #dadada);
+  border-radius: var(--s2a-border-radius-md, 16px);
+  margin-top: var(--s2a-spacing-sm, 12px);
+}
+
+.s2a-detail-file__header {
+  display: flex;
+  align-items: center;
+  gap: var(--s2a-spacing-xs, 8px);
+  font-size: 12px;
+}
+
+.s2a-detail-file__header code {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+}
+
+.s2a-hardcoded-list {
+  max-height: 160px;
+  overflow-y: auto;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+  background: var(--s2a-color-background-subtle, #f8f8f8);
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 4px;
+}
+
+.s2a-detail-links {
+  display: flex;
+  gap: var(--s2a-spacing-md, 16px);
+}
+
+.s2a-detail-link {
+  font-size: 12px;
+  color: var(--s2a-color-content-default, #131313);
+}
