@@ -25,6 +25,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Diagnose d3 install
+        run: |
+          echo "=== node_modules/d3 ===" && ls node_modules/d3/ 2>/dev/null || echo "d3 not found"
+          echo "=== node_modules/d3-selection ===" && ls node_modules/d3-selection/ 2>/dev/null || echo "d3-selection not found"
+          echo "=== node_modules/lit ===" && ls node_modules/lit/ 2>/dev/null || echo "lit not found"
+          echo "=== d3-selection package.json exports ===" && grep '"exports"' node_modules/d3-selection/package.json || true
+
       - name: Build tokens
         run: npm run tokens:build
 
