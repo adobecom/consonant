@@ -101,8 +101,7 @@ function drawTrendChart(container) {
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
 
-  const svg = d3
-    .select(container)
+  const svg = select(container)
     .append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
     .attr("class", "s2a-panel__chart");
@@ -239,8 +238,7 @@ function drawAdoptionChart(container) {
   const innerW = width - margin.left - margin.right;
   const height = families.length * rowHeight + margin.top + margin.bottom;
 
-  const svg = d3
-    .select(container)
+  const svg = select(container)
     .append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
     .attr("class", "s2a-panel__chart");
@@ -487,8 +485,7 @@ function drawConsumersChart(container) {
   const innerW = width - margin.left - margin.right;
   const height = rows.length * rowHeight + margin.top + margin.bottom;
 
-  const svg = d3
-    .select(container)
+  const svg = select(container)
     .append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
     .attr("class", "s2a-panel__chart");
