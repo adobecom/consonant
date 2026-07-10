@@ -27,10 +27,10 @@ jobs:
 
       - name: Diagnose d3 install
         run: |
-          echo "=== node_modules/d3 ===" && ls node_modules/d3/ 2>/dev/null || echo "d3 not found"
-          echo "=== node_modules/d3-selection ===" && ls node_modules/d3-selection/ 2>/dev/null || echo "d3-selection not found"
-          echo "=== node_modules/lit ===" && ls node_modules/lit/ 2>/dev/null || echo "lit not found"
-          echo "=== d3-selection package.json exports ===" && grep '"exports"' node_modules/d3-selection/package.json || true
+          echo "=== npm version ===" && npm --version
+          echo "=== find d3 anywhere in node_modules ===" && find node_modules -name "package.json" -path "*/d3/package.json" 2>/dev/null | head -5 || echo "d3 package.json not found anywhere"
+          echo "=== find d3-selection anywhere ===" && find node_modules -name "package.json" -path "*/d3-selection/package.json" 2>/dev/null | head -5 || echo "d3-selection not found anywhere"
+          echo "=== root node_modules count ===" && ls node_modules | wc -l
 
       - name: Build tokens
         run: npm run tokens:build
