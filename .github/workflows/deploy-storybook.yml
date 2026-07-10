@@ -23,14 +23,7 @@ jobs:
           node-version: "24"
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Diagnose d3 install
-        run: |
-          echo "=== npm version ===" && npm --version
-          echo "=== find d3 anywhere in node_modules ===" && find node_modules -name "package.json" -path "*/d3/package.json" 2>/dev/null | head -5 || echo "d3 package.json not found anywhere"
-          echo "=== find d3-selection anywhere ===" && find node_modules -name "package.json" -path "*/d3-selection/package.json" 2>/dev/null | head -5 || echo "d3-selection not found anywhere"
-          echo "=== root node_modules count ===" && ls node_modules | wc -l
+        run: npm install
 
       - name: Build tokens
         run: npm run tokens:build
