@@ -75,10 +75,31 @@ let bridgeKeepaliveTimer: ReturnType<typeof setInterval>  | null = null;
 let bridgeReconnectTimer: ReturnType<typeof setTimeout>   | null = null;
 let bridgeReconnectAttempts = 0;
 let bridgeUserDisconnected  = false;
+const BRIDGE_PREFERRED_PORT_KEY = 's2a:bridge:port';
+let bridgeRespondingPorts: number[] = [];
+let bridgeExecInFlight = 0;
+let bridgeExecStartTime: number | null = null;
+let bridgeExecTimer: ReturnType<typeof setInterval> | null = null;
 let activePanel: Panel = 'home';
 let settingsOpen = false;
 let isMini = false;
 let popoverOpen = false;
+
+interface ConnectedFile {
+  fileKey: string;
+  fileName: string;
+  currentPage: string;
+  isActive: boolean;
+}
+
+let connectedFiles: ConnectedFile[] = [];
+
+const pendingWsRequests = new Map<string, {
+  resolve: (v: any) => void;
+  reject:  (e: Error) => void;
+  timeoutId: ReturnType<typeof setTimeout>;
+}>();
+let wsRequestCounter = 0;
 
 const pendingRequests = new Map<string, {
   resolve: (v: any) => void;
@@ -89,12 +110,13 @@ let requestCounter = 0;
 
 // ── Panel switching ───────────────────────────────────────────────────────────
 
-type Panel = 'home' | 'tokens' | 'tools' | 'settings';
+type Panel = 'home' | 'tokens' | 'tools' | 'files' | 'settings';
 
 const panelEls: Record<Panel, HTMLElement> = {
   home:     document.getElementById('homePanel')     as HTMLElement,
   tokens:   document.getElementById('tokensPanel')   as HTMLElement,
   tools:    document.getElementById('toolsPanel')    as HTMLElement,
+  files:    document.getElementById('filesPanel')    as HTMLElement,
   settings: document.getElementById('settingsPanel') as HTMLElement,
 };
 
@@ -110,8 +132,9 @@ function switchPanel(panel: Panel) {
   document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.panel === panel);
   });
-  if (panel === 'settings') postToPlugin('get-settings');
+  if (panel === 'settings') { postToPlugin('get-settings'); postToPlugin('get-figma-token'); }
   if (panel === 'home') renderHomeView();
+  if (panel === 'files') refreshConnectedFiles();
 }
 
 document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
@@ -473,6 +496,7 @@ function updateCopyBtn(
     headerSelName.textContent = '—';
     headerSelName.classList.remove('has-sel');
   }
+  if (activePanel === 'files') updateActiveFileCard();
 }
 
 let _copyResetTimer: ReturnType<typeof setTimeout> | null = null;
@@ -521,7 +545,7 @@ formatSectionBtn.addEventListener('click', () => {
 
 const BRIDGE_RECONNECT_BASE_MS = 2000;
 const BRIDGE_RECONNECT_MAX_MS  = 30000;
-const WS_PORTS = [9223,9224,9225,9226,9227,9228,9229,9230,9231,9232];
+const WS_PORTS = [9223,9224,9225,9226,9227,9228,9230,9231,9232]; // 9229 excluded — Node.js debugger port
 
 const bridgeDot       = document.getElementById('bridgeDot')       as HTMLElement;
 const bridgeDotMini   = document.getElementById('bridgeDotMini')   as HTMLElement;
@@ -531,20 +555,68 @@ const bridgePillLabel = document.getElementById('bridgePillLabel') as HTMLElemen
 const bridgeToggleBtn = document.getElementById('bridgeToggleBtn') as HTMLButtonElement;
 const bridgePopover   = document.getElementById('bridgePopover')   as HTMLElement;
 const bridgeTabBtn    = document.getElementById('bridgeTabBtn')    as HTMLButtonElement;
-const bridgeMiniBtn   = document.getElementById('bridgeMiniBtn')   as HTMLButtonElement;
+const bridgeMiniBtn            = document.getElementById('bridgeMiniBtn')            as HTMLButtonElement;
+const bridgeMultiServerWarn    = document.getElementById('bridgeMultiServerWarn')    as HTMLElement;
+const bridgeMultiServerMsg     = document.getElementById('bridgeMultiServerMsg')     as HTMLElement;
+const bridgeMultiServerCopyBtn = document.getElementById('bridgeMultiServerCopy')    as HTMLButtonElement;
+const bridgeExecProgress       = document.getElementById('bridgeExecProgress')       as HTMLElement;
+const bridgeExecLabelEl        = document.getElementById('bridgeExecLabel')          as HTMLElement;
 
 function sendBridgeCommand(method: string, params: Record<string, unknown> = {}, timeoutMs = 15000): Promise<any> {
   return new Promise((resolve, reject) => {
     const requestId = method.toLowerCase() + '_' + (++requestCounter) + '_' + Date.now();
+    const isExec = method === 'EXECUTE_CODE';
+    if (isExec) startExecProgress();
     const timeoutId = setTimeout(() => {
       if (pendingRequests.has(requestId)) {
         pendingRequests.delete(requestId);
+        if (isExec) stopExecProgress();
         reject(new Error(method + ' timed out after ' + timeoutMs + 'ms'));
       }
     }, timeoutMs);
-    pendingRequests.set(requestId, { resolve, reject, timeoutId });
+    pendingRequests.set(requestId, {
+      resolve: (v: any) => { if (isExec) stopExecProgress(); resolve(v); },
+      reject:  (e: Error) => { if (isExec) stopExecProgress(); reject(e); },
+      timeoutId,
+    });
     postToPlugin('bridge:command', { requestId, method, params });
   });
+}
+
+function startExecProgress() {
+  bridgeExecInFlight++;
+  if (bridgeExecInFlight === 1) {
+    bridgeExecStartTime = Date.now();
+    if (bridgeExecTimer) clearInterval(bridgeExecTimer);
+    bridgeExecProgress.style.display = 'flex';
+    bridgeExecLabelEl.textContent = 'Running…';
+    bridgeExecTimer = setInterval(() => {
+      if (bridgeExecStartTime === null) return;
+      const elapsed = Math.floor((Date.now() - bridgeExecStartTime) / 1000);
+      bridgeExecLabelEl.textContent = 'Running… ' + elapsed + 's';
+    }, 1000);
+  }
+}
+
+function stopExecProgress() {
+  bridgeExecInFlight = Math.max(0, bridgeExecInFlight - 1);
+  if (bridgeExecInFlight === 0) {
+    if (bridgeExecTimer) { clearInterval(bridgeExecTimer); bridgeExecTimer = null; }
+    bridgeExecStartTime = null;
+    bridgeExecProgress.style.display = 'none';
+  }
+}
+
+function showMultiServerWarn(ports: number[]) {
+  const killCmd = 'kill $(lsof -ti :' + ports.join(' :') + ')';
+  bridgeMultiServerMsg.textContent = '⚠ ' + ports.length + ' MCP servers running — port conflict';
+  bridgeMultiServerWarn.dataset.kill = killCmd;
+  bridgeMultiServerWarn.style.display = 'block';
+}
+
+function hideMultiServerWarn() {
+  bridgeMultiServerWarn.style.display = 'none';
+  bridgeRespondingPorts = [];
 }
 
 function openPopover()  { popoverOpen = true;  bridgePopover.classList.add('open'); }
@@ -557,6 +629,14 @@ bridgePopover.addEventListener('click', e => e.stopPropagation());
 
 bridgeToggleBtn.addEventListener('click', () => {
   if (bridgeConnected) bridgeDisconnect(); else bridgeConnect();
+});
+
+bridgeMultiServerCopyBtn?.addEventListener('click', () => {
+  const cmd = bridgeMultiServerWarn?.dataset.kill || '';
+  if (!cmd) return;
+  copyToClipboard(cmd);
+  bridgeMultiServerCopyBtn.textContent = 'Copied!';
+  setTimeout(() => { bridgeMultiServerCopyBtn.textContent = 'Copy fix'; }, 1500);
 });
 
 function setAllDots(on: boolean) {
@@ -580,6 +660,7 @@ function updateBridgeUi() {
     if (bridgePillLabel) bridgePillLabel.textContent = 'Connect';
     bridgeTabBtn?.classList.remove('connected');
   }
+  if (activePanel === 'files') updateActiveFileCard();
 }
 
 function bridgeStartKeepalive() {
@@ -594,11 +675,27 @@ function bridgeStopKeepalive() {
 }
 
 function initBridgeConnection(ws: WebSocket) {
+  // Send FILE_INFO immediately with a fallback key so the server doesn't close
+  // the connection after its 30s pending timeout. We update with real file info
+  // once GET_FILE_INFO resolves.
+  const fallbackFileInfo = { fileKey: 'local-' + Date.now(), fileName: 'S2A Toolkit', pluginVersion: '0.3.0' };
+  console.log('[bridge] ws.readyState on open:', ws.readyState, 'sending FILE_INFO...');
+  try {
+    if (ws.readyState === 1) {
+      ws.send(JSON.stringify({ type: 'FILE_INFO', data: fallbackFileInfo }));
+      console.log('[bridge] FILE_INFO sent OK, fileKey=', fallbackFileInfo.fileKey);
+    } else {
+      console.log('[bridge] ws not OPEN, skipping FILE_INFO send. readyState=', ws.readyState);
+    }
+  } catch (e) {
+    console.error('[bridge] FILE_INFO send threw:', e);
+  }
+
   sendBridgeCommand('GET_FILE_INFO', {}).then(result => {
     if (ws.readyState !== 1 || !result) return;
     const info = result.fileInfo || result;
-    if (!info.fileKey) info.fileKey = 'local-' + Date.now();
-    info.pluginVersion = '0.2.0';
+    if (!info.fileKey) info.fileKey = fallbackFileInfo.fileKey;
+    info.pluginVersion = '0.3.0';
     ws.send(JSON.stringify({ type: 'FILE_INFO', data: info }));
   }).catch(() => {});
 
@@ -615,13 +712,32 @@ function attachWsHandlers(ws: WebSocket, port: number) {
   ws.onmessage = (event) => {
     try {
       const msg = JSON.parse(event.data);
+      // Server-pushed broadcasts (no id)
+      if (msg.type === 'CONNECTED_FILES_UPDATE' && msg.data) {
+        handleConnectedFilesUpdate(msg.data as { files: ConnectedFile[]; activeFileKey: string });
+        return;
+      }
+      if (msg.type === 'SERVER_HELLO' || msg.type === 'PLUGIN_UPDATE_AVAILABLE') return;
+      // Responses to plugin-initiated server requests (id present, no method)
+      if (msg.id && !msg.method) {
+        const pending = pendingWsRequests.get(msg.id as string);
+        if (pending) {
+          clearTimeout(pending.timeoutId);
+          pendingWsRequests.delete(msg.id as string);
+          if (msg.error) pending.reject(new Error(msg.error as string));
+          else pending.resolve(msg.result);
+          return;
+        }
+      }
+      // Claude's command requests (id + method)
       if (!msg.id || !msg.method) return;
       sendBridgeCommand(msg.method, msg.params || {}, 15000)
         .then(result => { if (ws.readyState === 1) ws.send(JSON.stringify({ id: msg.id, result })); })
         .catch(err  => { if (ws.readyState === 1) ws.send(JSON.stringify({ id: msg.id, error: err.message })); });
     } catch {}
   };
-  ws.onclose = () => {
+  ws.onclose = (e) => {
+    console.log('[bridge] attachWsHandlers.onclose port', port, 'code', e.code, e.reason);
     bridgeStopKeepalive();
     bridgeWs = null; bridgeConnected = false;
     for (const [, p] of pendingRequests) { clearTimeout(p.timeoutId); p.reject(new Error('Bridge disconnected')); }
@@ -629,7 +745,7 @@ function attachWsHandlers(ws: WebSocket, port: number) {
     updateBridgeUi();
     if (!bridgeUserDisconnected) scheduleReconnect(port);
   };
-  ws.onerror = () => {};
+  ws.onerror = (e) => { console.log('[bridge] attachWsHandlers.onerror port', port, e); };
 }
 
 function scheduleReconnect(port: number) {
@@ -642,17 +758,23 @@ function scheduleReconnect(port: number) {
 }
 
 function reconnectToPort(port: number) {
+  console.log('[bridge] reconnectToPort', port);
   try {
     const ws = new WebSocket('ws://localhost:' + port);
-    const t = setTimeout(() => { if (ws.readyState !== 1) ws.close(); }, 3000);
+    const t = setTimeout(() => {
+      console.log('[bridge] reconnectToPort timeout, readyState=', ws.readyState);
+      if (ws.readyState !== 1) ws.close();
+    }, 3000);
     ws.onopen = () => {
       clearTimeout(t);
+      console.log('[bridge] reconnectToPort.onopen port', port, 'readyState=', ws.readyState);
       bridgeWs = ws; bridgeWsPort = port; bridgeConnected = true; bridgeReconnectAttempts = 0;
+      try { localStorage.setItem(BRIDGE_PREFERRED_PORT_KEY, String(port)); } catch {}
       updateBridgeUi(); attachWsHandlers(ws, port); initBridgeConnection(ws); bridgeStartKeepalive();
     };
-    ws.onerror = () => { clearTimeout(t); };
-    ws.onclose = () => { clearTimeout(t); if (!bridgeConnected && !bridgeUserDisconnected) bridgeConnect(); };
-  } catch { if (!bridgeUserDisconnected) bridgeConnect(); }
+    ws.onerror = (e) => { clearTimeout(t); console.log('[bridge] reconnectToPort.onerror port', port, e); };
+    ws.onclose = (e) => { clearTimeout(t); console.log('[bridge] reconnectToPort.onclose port', port, 'code', e.code); if (!bridgeConnected && !bridgeUserDisconnected) bridgeConnect(); };
+  } catch (e) { console.log('[bridge] reconnectToPort threw', e); if (!bridgeUserDisconnected) bridgeConnect(); }
 }
 
 function bridgeConnect() {
@@ -660,36 +782,86 @@ function bridgeConnect() {
   if (bridgeReconnectTimer) { clearTimeout(bridgeReconnectTimer); bridgeReconnectTimer = null; }
   bridgeToggleBtn.textContent = 'Connecting…';
   bridgeToggleBtn.disabled = true;
+  hideMultiServerWarn();
 
+  // Hard fallback: Figma's plugin sandbox silently drops blocked WS connections
+  // without firing onerror/onclose, leaving fanOut permanently pending. If we're
+  // still not connected after 6s, reset the button so the user can see a failure.
+  const giveUpTimer = setTimeout(() => {
+    if (!bridgeConnected) {
+      bridgeToggleBtn.textContent = 'Connect';
+      bridgeToggleBtn.disabled = false;
+      bridgePortLabel.textContent = 'No server found';
+    }
+  }, 6000);
+
+  fanOutConnect(giveUpTimer);
+}
+
+function fanOutConnect(giveUpTimer?: ReturnType<typeof setTimeout>) {
+  if (bridgeConnected) { if (giveUpTimer) clearTimeout(giveUpTimer); return; }
+  const ports = WS_PORTS;
   let found = false;
-  let pending = WS_PORTS.length;
+  const done = new Set<number>();
+  const responding: number[] = [];
 
-  WS_PORTS.forEach(port => {
-    if (found) return;
+  const markDone = (port: number) => {
+    if (done.has(port)) return;
+    done.add(port);
+    if (done.size === ports.length) {
+      if (giveUpTimer) clearTimeout(giveUpTimer);
+      if (responding.length > 1) { bridgeRespondingPorts = [...responding]; showMultiServerWarn(responding); }
+      if (!found) { bridgeToggleBtn.textContent = 'Connect'; bridgeToggleBtn.disabled = false; bridgePortLabel.textContent = 'No server found'; }
+    }
+  };
+
+  ports.forEach(port => {
     try {
       const ws = new WebSocket('ws://localhost:' + port);
-      const t = setTimeout(() => { if (ws.readyState !== 1) ws.close(); }, 3000);
+      const t = setTimeout(() => {
+        // Figma may not fire onclose when we call close() on a CONNECTING socket —
+        // call markDone directly before attempting close to avoid a permanent hang.
+        markDone(port);
+        try { ws.close(); } catch {}
+      }, 3000);
       ws.onopen = () => {
         clearTimeout(t);
-        if (found) { ws.close(); return; }
-        found = true;
-        bridgeWs = ws; bridgeWsPort = port; bridgeConnected = true; bridgeReconnectAttempts = 0;
-        updateBridgeUi();
-        attachWsHandlers(ws, port); initBridgeConnection(ws); bridgeStartKeepalive();
-      };
-      ws.onerror = () => { clearTimeout(t); };
-      ws.onclose = () => {
-        clearTimeout(t);
+        responding.push(port);
+        console.log('[bridge] ws.onopen port', port, 'found=', found);
         if (!found) {
-          pending--;
-          if (pending <= 0) {
-            bridgeToggleBtn.textContent = 'Connect';
-            bridgeToggleBtn.disabled    = false;
-            bridgePortLabel.textContent = 'No server found';
-          }
+          found = true;
+          if (giveUpTimer) clearTimeout(giveUpTimer);
+          try { localStorage.setItem(BRIDGE_PREFERRED_PORT_KEY, String(port)); } catch {}
+          bridgeWs = ws; bridgeWsPort = port; bridgeConnected = true; bridgeReconnectAttempts = 0;
+          updateBridgeUi(); attachWsHandlers(ws, port); initBridgeConnection(ws); bridgeStartKeepalive();
+          markDone(port);
+        } else {
+          markDone(port);
+          try { ws.close(); } catch {}
         }
       };
-    } catch { pending--; if (pending <= 0 && !found) { bridgeToggleBtn.textContent = 'Connect'; bridgeToggleBtn.disabled = false; } }
+      ws.onerror = (e) => { clearTimeout(t); console.log('[bridge] ws.onerror port', port, e); markDone(port); };
+      ws.onclose = (e) => { clearTimeout(t); console.log('[bridge] ws.onclose port', port, 'code', e.code, e.reason); markDone(port); };
+    } catch { markDone(port); }
+  });
+}
+
+function probeForExtras(connectedPort: number) {
+  const otherPorts = WS_PORTS.filter(p => p !== connectedPort);
+  const extras: number[] = [];
+  otherPorts.forEach(port => {
+    try {
+      const ws = new WebSocket('ws://localhost:' + port);
+      const t = setTimeout(() => { try { ws.close(); } catch {} }, 1500);
+      ws.onopen = () => {
+        clearTimeout(t);
+        extras.push(port);
+        ws.close();
+        showMultiServerWarn([connectedPort, ...extras]);
+      };
+      ws.onerror = () => { clearTimeout(t); };
+      ws.onclose = () => { clearTimeout(t); };
+    } catch {}
   });
 }
 
@@ -932,6 +1104,104 @@ document.getElementById('saveSettingsBtn')?.addEventListener('click', () => {
   postToPlugin('save-settings', { settings });
 });
 
+// ── Files panel ───────────────────────────────────────────────────────────────
+
+let figmaApiToken = '';
+
+function sendServerRequest(type: string, data: Record<string, unknown> = {}, timeoutMs = 5000): Promise<any> {
+  return new Promise((resolve, reject) => {
+    if (!bridgeWs || bridgeWs.readyState !== 1) { reject(new Error('Not connected to bridge')); return; }
+    const id = 'sr_' + (++wsRequestCounter) + '_' + Date.now();
+    const timeoutId = setTimeout(() => {
+      pendingWsRequests.delete(id);
+      reject(new Error(type + ' timed out'));
+    }, timeoutMs);
+    pendingWsRequests.set(id, { resolve, reject, timeoutId });
+    try { bridgeWs.send(JSON.stringify({ type, id, data })); }
+    catch (e) { pendingWsRequests.delete(id); clearTimeout(timeoutId); reject(e); }
+  });
+}
+
+function handleConnectedFilesUpdate(data: { files: ConnectedFile[]; activeFileKey: string }) {
+  connectedFiles = data.files || [];
+  if (activePanel === 'files') renderConnectedFiles();
+}
+
+function setFilesStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('filesStatus') as HTMLElement;
+  if (el) { el.textContent = msg; el.className = 'status' + (type ? ' ' + type : ''); }
+}
+
+function renderConnectedFiles() {
+  const listEl = document.getElementById('connectedFilesList') as HTMLElement;
+  if (!listEl) return;
+
+  if (!bridgeConnected) {
+    listEl.innerHTML = '<div class="empty-state">Connect to bridge first</div>';
+    return;
+  }
+  if (connectedFiles.length === 0) {
+    listEl.innerHTML = '<div class="empty-state">Only this file is connected.<br>Open the plugin in another Figma file to see it here.</div>';
+    return;
+  }
+
+  listEl.innerHTML = connectedFiles.map(f =>
+    `<div class="file-card${f.isActive ? ' file-card--active' : ''}">
+      <div class="file-card-icon">${f.isActive ? '◉' : '○'}</div>
+      <div class="file-card-meta">
+        <span class="file-card-name">${esc(f.fileName)}</span>
+        <span class="file-card-sub">${f.currentPage ? esc(f.currentPage) + ' · ' : ''}${esc(f.fileKey)}</span>
+      </div>
+      ${f.isActive
+        ? '<span class="badge badge-hot" style="font-size:9px;margin-left:auto;">Active</span>'
+        : `<button class="btn btn-ghost btn-sm" data-switch="${esc(f.fileKey)}" style="margin-left:auto;">Switch</button>`
+      }
+    </div>`
+  ).join('');
+
+  listEl.querySelectorAll<HTMLButtonElement>('[data-switch]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const fileKey = btn.dataset.switch!;
+      btn.disabled = true; btn.textContent = '…';
+      try {
+        await sendServerRequest('SET_ACTIVE_FILE', { fileKey });
+        setFilesStatus('Active file switched', 'ok');
+      } catch (e: any) {
+        setFilesStatus('Switch failed: ' + (e.message || 'error'), 'err');
+        btn.disabled = false; btn.textContent = 'Switch';
+      }
+    });
+  });
+}
+
+async function refreshConnectedFiles() {
+  setFilesStatus('Scanning…');
+  try {
+    const result = await sendServerRequest('GET_CONNECTED_FILES', {}, 5000);
+    connectedFiles = result.files || [];
+    renderConnectedFiles();
+    setFilesStatus('');
+  } catch {
+    connectedFiles = [];
+    renderConnectedFiles();
+    if (!bridgeConnected) setFilesStatus('Connect to bridge first', 'err');
+    else setFilesStatus('Could not fetch file list', 'err');
+  }
+}
+
+document.getElementById('filesRefreshBtn')?.addEventListener('click', () => refreshConnectedFiles());
+
+// Figma token save (for GitHub export auth — kept in Settings)
+function setFigmaTokenStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('figmaTokenStatus') as HTMLElement;
+  if (el) { el.textContent = msg; el.className = 'status' + (type ? ' ' + type : ''); }
+}
+
+document.getElementById('saveFigmaTokenBtn')?.addEventListener('click', () => {
+  const token = ((document.getElementById('figmaApiToken') as HTMLInputElement)?.value || '').trim();
+  postToPlugin('save-figma-token', { token });
+});
+
 // ── Tools — Select ────────────────────────────────────────────────────────────
 
 function renderAxes(setId: string, setName: string, axes: Array<{ name: string; type: string; variantOptions?: string[] }>) {
@@ -1108,6 +1378,21 @@ window.addEventListener('message', (event) => {
       }
       break;
     }
+    case 'figma-token-loaded': {
+      figmaApiToken = (msg.token as string) || '';
+      const el = document.getElementById('figmaApiToken') as HTMLInputElement;
+      if (el) el.value = figmaApiToken;
+      break;
+    }
+    case 'figma-token-saved': {
+      if (msg.success) {
+        figmaApiToken = ((document.getElementById('figmaApiToken') as HTMLInputElement)?.value || '').trim();
+        setFigmaTokenStatus('Saved', 'ok');
+      } else {
+        setFigmaTokenStatus('Save failed: ' + (msg.error as string), 'err');
+      }
+      break;
+    }
     case 'settings-loaded': applySettings(msg.settings as GitHubSettings | null); break;
     case 'settings-saved': {
       if (msg.success) {
@@ -1206,9 +1491,13 @@ window.addEventListener('message', (event) => {
 
 postToPlugin('ui-ready');
 postToPlugin('get-settings');
+postToPlugin('get-figma-token');
 postToPlugin('resize-for-view', { width: 320, height: 460 });
 
 renderHomeView();
+
+// Auto-connect on startup — don't require user to click Connect
+bridgeConnect();
 
 // Self-heal: reconnect when Figma tab regains focus
 document.addEventListener('visibilitychange', () => {

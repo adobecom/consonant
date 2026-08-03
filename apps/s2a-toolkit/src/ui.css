@@ -667,3 +667,184 @@ body {
   background: var(--border);
   margin: 16px -12px;
 }
+
+/* ══ Bridge: multi-server warning ═══════════════════════════════════════════ */
+
+.bridge-multi-warn {
+  margin-top: 8px;
+  padding: 7px 9px;
+  background: rgba(217,153,0,0.10);
+  border: 1px solid rgba(217,153,0,0.30);
+  border-radius: 6px;
+}
+.bridge-multi-warn-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-2);
+}
+.bridge-multi-warn-copy {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  background: rgba(217,153,0,0.15);
+  border: 1px solid rgba(217,153,0,0.30);
+  border-radius: 4px;
+  color: var(--text-1);
+  font-size: 10px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--t-fast);
+}
+.bridge-multi-warn-copy:hover { background: rgba(217,153,0,0.28); }
+
+/* ══ Bridge: execution progress ══════════════════════════════════════════════ */
+
+.bridge-exec-progress {
+  margin-top: 8px;
+  padding: 6px 9px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-bdr);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--text-2);
+}
+.bridge-exec-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: execPulse 1.2s ease-in-out infinite;
+}
+@keyframes execPulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.4; transform: scale(0.72); }
+}
+
+/* ── Files panel ─────────────────────────────────────────────────────────── */
+
+.file-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg-raised);
+  margin-bottom: 6px;
+}
+.file-card--active {
+  border-color: var(--green-bdr);
+  background: var(--green-bg);
+}
+.file-card-icon {
+  font-size: 13px;
+  color: var(--text-3);
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+.file-card--active .file-card-icon { color: var(--green); }
+.file-card-meta { flex: 1; min-width: 0; }
+.file-card-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-1);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-card-sub {
+  font-size: 10px;
+  color: var(--text-3);
+  display: block;
+  margin-top: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-card-remove {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-3);
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+  transition: color var(--t-fast), background var(--t-fast);
+  font-family: inherit;
+}
+.file-card-remove:hover { color: var(--red); background: rgba(200,75,62,0.09); }
+
+.ref-add-row { display: flex; gap: 6px; align-items: center; }
+.ref-add-row .form-input { flex: 1; }
+
+.file-card-pages {
+  margin-top: 6px;
+  border-top: 1px solid var(--border);
+  padding-top: 4px;
+}
+.ref-page-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 0;
+  cursor: pointer;
+  user-select: none;
+}
+.ref-page-row:hover .ref-page-name { color: var(--text-1); }
+.ref-page-toggle { font-size: 8px; color: var(--text-3); flex-shrink: 0; width: 10px; text-align: center; }
+.ref-page-name {
+  font-size: 11px;
+  color: var(--text-2);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color var(--t-fast);
+}
+.ref-nodes-list { padding-left: 15px; padding-bottom: 2px; }
+.ref-node-row { display: flex; align-items: center; gap: 5px; padding: 2px 0; }
+.ref-node-link {
+  font-size: 10px;
+  color: var(--accent);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+.ref-node-link:hover { text-decoration: underline; }
+.ref-node-type { font-size: 9px; color: var(--text-3); flex-shrink: 0; }
+
+/* ── Files panel (connected-files switcher) ──────────────────────────────── */
+
+.files-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.files-panel-hint {
+  font-size: 10px;
+  color: var(--text-3);
+  line-height: 1.5;
+  margin: auto 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}

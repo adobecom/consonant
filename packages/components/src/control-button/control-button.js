@@ -5,13 +5,12 @@ export const ControlButton = ({
   icon,
   label = "",
   size = "md",
-  context = "on-media",
-  background = "transparent",
+  style = "media",
   disabled = false,
   onClick,
 } = {}) => html`
   <button
-    class="c-control-button c-control-button--${size} c-control-button--${context} c-control-button--bg-${background}"
+    class="c-control-button c-control-button--${size} c-control-button--${style}"
     type="button"
     aria-label=${label}
     ?disabled=${disabled}

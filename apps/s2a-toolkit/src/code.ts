@@ -142,7 +142,7 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
       const code = params.code as string;
       if (typeof code !== 'string') throw new Error('EXECUTE_CODE: params.code must be a string');
       if (code.length > 65536) throw new Error('EXECUTE_CODE: code exceeds 64KB limit');
-      const timeout = Math.min((params.timeout as number) || 5000, 30000);
+      const timeout = Math.min((params.timeout as number) || 5000, 60000);
       const wrappedCode = '(async function() {\n' + code + '\n})()';
       const timeoutPromise = new Promise((_r, reject) => {
         setTimeout(() => reject(new Error('Execution timed out after ' + timeout + 'ms')), timeout);
@@ -339,6 +339,26 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         figma.ui.postMessage({ type: 'settings-saved', success: true });
       } catch (e: any) {
         figma.ui.postMessage({ type: 'settings-saved', success: false, error: e.message || String(e) });
+      }
+      break;
+    }
+
+    case 'get-figma-token': {
+      try {
+        const token = await figma.clientStorage.getAsync('figma-api-token');
+        figma.ui.postMessage({ type: 'figma-token-loaded', token: token ?? '' });
+      } catch {
+        figma.ui.postMessage({ type: 'figma-token-loaded', token: '' });
+      }
+      break;
+    }
+
+    case 'save-figma-token': {
+      try {
+        await figma.clientStorage.setAsync('figma-api-token', msg.token as string);
+        figma.ui.postMessage({ type: 'figma-token-saved', success: true });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'figma-token-saved', success: false, error: e.message || String(e) });
       }
       break;
     }

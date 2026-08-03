@@ -64,6 +64,16 @@
       <span class="bridge-dot" id="popoverDot"></span>
     </div>
     <button class="btn" id="bridgeToggleBtn" style="width:100%;margin-top:8px;">Connect</button>
+    <div id="bridgeMultiServerWarn" class="bridge-multi-warn" style="display:none">
+      <div class="bridge-multi-warn-row">
+        <span id="bridgeMultiServerMsg">⚠ 3 servers</span>
+        <button id="bridgeMultiServerCopy" class="bridge-multi-warn-copy">Copy fix</button>
+      </div>
+    </div>
+    <div id="bridgeExecProgress" class="bridge-exec-progress" style="display:none">
+      <span class="bridge-exec-dot"></span>
+      <span id="bridgeExecLabel">Running…</span>
+    </div>
   </div>
 
   <!-- ── Section context bar ──────────────────────────────────────────── -->
@@ -100,6 +110,13 @@
         <path d="M8 4L10 6" stroke="currentColor" stroke-width="1.2"/>
       </svg>
       <span class="tab-label">Tools</span>
+    </button>
+    <!-- Files -->
+    <button class="tab" data-panel="files" aria-label="Files">
+      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M2.5 3a.8.8 0 0 1 .8-.8h3.5l2 2h3.2a.8.8 0 0 1 .8.8v5.8a.8.8 0 0 1-.8.8H3.3a.8.8 0 0 1-.8-.8V3Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+      </svg>
+      <span class="tab-label">Files</span>
     </button>
   </nav>
 
@@ -211,8 +228,33 @@
       <div style="height:16px;"></div>
     </div>
 
+    <!-- Files -->
+    <div class="panel" id="filesPanel">
+      <div class="files-panel-header">
+        <span class="section-label" style="margin:0;">Connected files</span>
+        <button class="btn btn-ghost btn-sm" id="filesRefreshBtn">Refresh</button>
+      </div>
+      <div id="connectedFilesList">
+        <div class="empty-state">Not connected to bridge</div>
+      </div>
+      <div class="status" id="filesStatus"></div>
+      <p class="files-panel-hint">Open the plugin in another Figma file to see it here. Claude's commands always go to the active file.</p>
+    </div>
+
     <!-- Settings (gear icon only) -->
     <div class="panel" id="settingsPanel">
+      <div class="section-label">Figma API</div>
+      <p class="settings-hint">Personal Access Token for reading reference files. <a href="https://help.figma.com/hc/en-us/articles/8085703771159-Manage-personal-access-tokens" target="_blank">Get a token</a></p>
+      <div class="form-field">
+        <label class="form-label" for="figmaApiToken">Token</label>
+        <input class="form-input" type="password" id="figmaApiToken" placeholder="figd_…" autocomplete="off" />
+      </div>
+      <div class="btn-row" style="margin-bottom:4px;">
+        <button class="btn" id="saveFigmaTokenBtn">Save</button>
+      </div>
+      <div class="status" id="figmaTokenStatus"></div>
+
+      <div style="height:16px;"></div>
       <div class="section-label">GitHub Export</div>
       <p class="settings-hint">Tokens commit directly to your repo. Needs a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> scope.</p>
       <div class="form-field">

@@ -44,94 +44,28 @@
   pointer-events: none;
 }
 
-/* ─── on-media / transparent ─────────────────────────────────────────────────── */
+/* ─── media ──────────────────────────────────────────────────────────────────── */
 
-.c-control-button--on-media.c-control-button--bg-transparent {
-  background: var(--s2a-color-transparent-black-64, rgba(0, 0, 0, 0.64));
-  border-color: var(--s2a-color-transparent-white-24, rgba(255, 255, 255, 0.24));
+.c-control-button--media {
+  background: var(--s2a-control-button-background-media-default, rgba(0, 0, 0, 0.64));
+  border-color: var(--s2a-control-button-border-media, rgba(255, 255, 255, 0.24));
   color: var(--s2a-color-content-knockout, #fff);
 }
 
-.c-control-button--on-media.c-control-button--bg-transparent:hover:not(:disabled) {
-  background: var(--s2a-color-transparent-black-80, rgba(0, 0, 0, 0.8));
+.c-control-button--media:hover:not(:disabled) {
+  background: var(--s2a-control-button-background-media-hover, rgba(0, 0, 0, 0.8));
 }
 
-.c-control-button--on-media.c-control-button--bg-transparent:active:not(:disabled) {
-  background: var(--s2a-color-background-knockout, #000);
+.c-control-button--media:active:not(:disabled) {
+  background: var(--s2a-control-button-background-media-active, rgba(0, 0, 0, 0.96));
   backdrop-filter: none;
 }
 
-.c-control-button--on-media.c-control-button--bg-transparent:disabled {
-  background: var(--s2a-color-transparent-black-32, rgba(0, 0, 0, 0.32));
+.c-control-button--media:focus-visible {
+  background: var(--s2a-control-button-background-media-focus, rgba(0, 0, 0, 0.64));
+}
+
+.c-control-button--media:disabled {
+  background: var(--s2a-control-button-background-media-disabled, rgba(0, 0, 0, 0.32));
   color: var(--s2a-color-transparent-white-48, rgba(255, 255, 255, 0.48));
-}
-
-/* ─── on-dark / transparent ──────────────────────────────────────────────────── */
-
-.c-control-button--on-dark.c-control-button--bg-transparent {
-  background: var(--s2a-color-transparent-white-32, rgba(255, 255, 255, 0.32));
-  border-color: var(--s2a-color-transparent-white-24, rgba(255, 255, 255, 0.24));
-  color: var(--s2a-color-content-knockout, #fff);
-}
-
-.c-control-button--on-dark.c-control-button--bg-transparent:hover:not(:disabled) {
-  background: var(--s2a-color-transparent-white-16, rgba(255, 255, 255, 0.16));
-}
-
-.c-control-button--on-dark.c-control-button--bg-transparent:active:not(:disabled) {
-  background: #fff;
-  backdrop-filter: none;
-  color: var(--s2a-color-content-default, #000);
-}
-
-.c-control-button--on-dark.c-control-button--bg-transparent:disabled {
-  background: var(--s2a-color-transparent-white-16, rgba(255, 255, 255, 0.16));
-  border-color: var(--s2a-color-transparent-white-16, rgba(255, 255, 255, 0.16));
-  color: var(--s2a-color-transparent-white-24, rgba(255, 255, 255, 0.24));
-}
-
-/* ─── on-dark / solid ────────────────────────────────────────────────────────── */
-
-.c-control-button--on-dark.c-control-button--bg-solid {
-  background: var(--s2a-color-gray-800, #292929);
-  border-color: var(--s2a-color-gray-700, #505050);
-  color: var(--s2a-color-content-knockout, #fff);
-}
-
-.c-control-button--on-dark.c-control-button--bg-solid:hover:not(:disabled) {
-  background: var(--s2a-color-gray-700, #505050);
-  border-color: var(--s2a-color-gray-500, #8f8f8f);
-}
-
-.c-control-button--on-dark.c-control-button--bg-solid:active:not(:disabled),
-.c-control-button--on-dark.c-control-button--bg-solid:focus-visible,
-.c-control-button--on-dark.c-control-button--bg-solid:disabled {
-  background: var(--s2a-color-transparent-white-16, rgba(255, 255, 255, 0.16));
-  border-color: var(--s2a-color-transparent-white-12, rgba(255, 255, 255, 0.12));
-}
-
-/* ─── on-light / solid ───────────────────────────────────────────────────────── */
-
-.c-control-button--on-light.c-control-button--bg-solid {
-  background: var(--s2a-color-gray-75, #f3f3f3);
-  border-color: var(--s2a-color-gray-200, #e1e1e1);
-  color: var(--s2a-color-content-default, #000);
-}
-
-.c-control-button--on-light.c-control-button--bg-solid:hover:not(:disabled) {
-  background: var(--s2a-color-gray-300, #dadada);
-  border-color: var(--s2a-color-gray-400, #c6c6c6);
-}
-
-.c-control-button--on-light.c-control-button--bg-solid:active:not(:disabled) {
-  background: var(--s2a-color-background-knockout, #000);
-  border-color: var(--s2a-color-gray-700, #505050);
-  color: var(--s2a-color-content-knockout, #fff);
-  backdrop-filter: none;
-}
-
-.c-control-button--on-light.c-control-button--bg-solid:focus-visible,
-.c-control-button--on-light.c-control-button--bg-solid:disabled {
-  background: var(--s2a-color-transparent-black-04, rgba(0, 0, 0, 0.04));
-  border-color: var(--s2a-color-transparent-black-08, rgba(0, 0, 0, 0.08));
 }

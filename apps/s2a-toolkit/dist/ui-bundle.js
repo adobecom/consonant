@@ -76,16 +76,25 @@
   var bridgeReconnectTimer = null;
   var bridgeReconnectAttempts = 0;
   var bridgeUserDisconnected = false;
+  var BRIDGE_PREFERRED_PORT_KEY = "s2a:bridge:port";
+  var bridgeRespondingPorts = [];
+  var bridgeExecInFlight = 0;
+  var bridgeExecStartTime = null;
+  var bridgeExecTimer = null;
   var activePanel = "home";
   var settingsOpen = false;
   var isMini = false;
   var popoverOpen = false;
+  var connectedFiles = [];
+  var pendingWsRequests = /* @__PURE__ */ new Map();
+  var wsRequestCounter = 0;
   var pendingRequests = /* @__PURE__ */ new Map();
   var requestCounter = 0;
   var panelEls = {
     home: document.getElementById("homePanel"),
     tokens: document.getElementById("tokensPanel"),
     tools: document.getElementById("toolsPanel"),
+    files: document.getElementById("filesPanel"),
     settings: document.getElementById("settingsPanel")
   };
   function switchPanel(panel) {
@@ -100,8 +109,12 @@
     document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
       tab.classList.toggle("active", tab.dataset.panel === panel);
     });
-    if (panel === "settings") postToPlugin("get-settings");
+    if (panel === "settings") {
+      postToPlugin("get-settings");
+      postToPlugin("get-figma-token");
+    }
     if (panel === "home") renderHomeView();
+    if (panel === "files") refreshConnectedFiles();
   }
   document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -129,8 +142,8 @@
       description: "Re-fetch all Figma variables from the current file",
       category: "Tokens",
       uiAction: () => {
-        var _a13;
-        return (_a13 = document.getElementById("varRefreshBtn")) == null ? void 0 : _a13.click();
+        var _a15;
+        return (_a15 = document.getElementById("varRefreshBtn")) == null ? void 0 : _a15.click();
       }
     },
     {
@@ -139,8 +152,8 @@
       description: "Push token JSON to local dev server on port 9300",
       category: "Tokens",
       uiAction: () => {
-        var _a13;
-        return (_a13 = document.getElementById("varExportLocalBtn")) == null ? void 0 : _a13.click();
+        var _a15;
+        return (_a15 = document.getElementById("varExportLocalBtn")) == null ? void 0 : _a15.click();
       }
     },
     {
@@ -149,8 +162,8 @@
       description: "Commit token JSON to your configured repo",
       category: "Tokens",
       uiAction: () => {
-        var _a13;
-        return (_a13 = document.getElementById("varExportGithubBtn")) == null ? void 0 : _a13.click();
+        var _a15;
+        return (_a15 = document.getElementById("varExportGithubBtn")) == null ? void 0 : _a15.click();
       }
     },
     {
@@ -167,8 +180,8 @@
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a13;
-        return (_a13 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a13.click();
+        var _a15;
+        return (_a15 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a15.click();
       }
     },
     {
@@ -233,13 +246,13 @@
     "tools:spec"
   ];
   function fireFeature(feat) {
-    var _a13;
+    var _a15;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a13 = feat.pluginPayload) != null ? _a13 : {});
+      postToPlugin(feat.pluginAction, (_a15 = feat.pluginPayload) != null ? _a15 : {});
     }
     if (activePanel === "home") renderHomeView();
   }
@@ -331,12 +344,12 @@
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a13, _b;
+    var _a15, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a13 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a13.scrollIntoView({ block: "nearest" });
+      (_a15 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a15.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -375,7 +388,7 @@
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a13;
+    var _a15;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -388,7 +401,7 @@
     }
     document.body.removeChild(ta);
     try {
-      (_a13 = navigator.clipboard) == null ? void 0 : _a13.writeText(text).catch(() => {
+      (_a15 = navigator.clipboard) == null ? void 0 : _a15.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -414,6 +427,7 @@
       headerSelName.textContent = "\u2014";
       headerSelName.classList.remove("has-sel");
     }
+    if (activePanel === "files") updateActiveFileCard();
   }
   var _copyResetTimer = null;
   copyNodeBtn.addEventListener("click", () => {
@@ -449,7 +463,7 @@
   });
   var BRIDGE_RECONNECT_BASE_MS = 2e3;
   var BRIDGE_RECONNECT_MAX_MS = 3e4;
-  var WS_PORTS = [9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+  var WS_PORTS = [9223, 9224, 9225, 9226, 9227, 9228, 9230, 9231, 9232];
   var bridgeDot = document.getElementById("bridgeDot");
   var bridgeDotMini = document.getElementById("bridgeDotMini");
   var popoverDot = document.getElementById("popoverDot");
@@ -459,18 +473,71 @@
   var bridgePopover = document.getElementById("bridgePopover");
   var bridgeTabBtn = document.getElementById("bridgeTabBtn");
   var bridgeMiniBtn = document.getElementById("bridgeMiniBtn");
+  var bridgeMultiServerWarn = document.getElementById("bridgeMultiServerWarn");
+  var bridgeMultiServerMsg = document.getElementById("bridgeMultiServerMsg");
+  var bridgeMultiServerCopyBtn = document.getElementById("bridgeMultiServerCopy");
+  var bridgeExecProgress = document.getElementById("bridgeExecProgress");
+  var bridgeExecLabelEl = document.getElementById("bridgeExecLabel");
   function sendBridgeCommand(method, params = {}, timeoutMs = 15e3) {
     return new Promise((resolve, reject) => {
       const requestId = method.toLowerCase() + "_" + ++requestCounter + "_" + Date.now();
+      const isExec = method === "EXECUTE_CODE";
+      if (isExec) startExecProgress();
       const timeoutId = setTimeout(() => {
         if (pendingRequests.has(requestId)) {
           pendingRequests.delete(requestId);
+          if (isExec) stopExecProgress();
           reject(new Error(method + " timed out after " + timeoutMs + "ms"));
         }
       }, timeoutMs);
-      pendingRequests.set(requestId, { resolve, reject, timeoutId });
+      pendingRequests.set(requestId, {
+        resolve: (v) => {
+          if (isExec) stopExecProgress();
+          resolve(v);
+        },
+        reject: (e) => {
+          if (isExec) stopExecProgress();
+          reject(e);
+        },
+        timeoutId
+      });
       postToPlugin("bridge:command", { requestId, method, params });
     });
+  }
+  function startExecProgress() {
+    bridgeExecInFlight++;
+    if (bridgeExecInFlight === 1) {
+      bridgeExecStartTime = Date.now();
+      if (bridgeExecTimer) clearInterval(bridgeExecTimer);
+      bridgeExecProgress.style.display = "flex";
+      bridgeExecLabelEl.textContent = "Running\u2026";
+      bridgeExecTimer = setInterval(() => {
+        if (bridgeExecStartTime === null) return;
+        const elapsed = Math.floor((Date.now() - bridgeExecStartTime) / 1e3);
+        bridgeExecLabelEl.textContent = "Running\u2026 " + elapsed + "s";
+      }, 1e3);
+    }
+  }
+  function stopExecProgress() {
+    bridgeExecInFlight = Math.max(0, bridgeExecInFlight - 1);
+    if (bridgeExecInFlight === 0) {
+      if (bridgeExecTimer) {
+        clearInterval(bridgeExecTimer);
+        bridgeExecTimer = null;
+      }
+      bridgeExecStartTime = null;
+      bridgeExecProgress.style.display = "none";
+    }
+  }
+  function showMultiServerWarn(ports) {
+    const killCmd = "kill $(lsof -ti :" + ports.join(" :") + ")";
+    bridgeMultiServerMsg.textContent = "\u26A0 " + ports.length + " MCP servers running \u2014 port conflict";
+    bridgeMultiServerWarn.dataset.kill = killCmd;
+    bridgeMultiServerWarn.style.display = "block";
+  }
+  function hideMultiServerWarn() {
+    bridgeMultiServerWarn.style.display = "none";
+    bridgeRespondingPorts = [];
   }
   function openPopover() {
     popoverOpen = true;
@@ -496,6 +563,15 @@
     if (bridgeConnected) bridgeDisconnect();
     else bridgeConnect();
   });
+  bridgeMultiServerCopyBtn == null ? void 0 : bridgeMultiServerCopyBtn.addEventListener("click", () => {
+    const cmd = (bridgeMultiServerWarn == null ? void 0 : bridgeMultiServerWarn.dataset.kill) || "";
+    if (!cmd) return;
+    copyToClipboard(cmd);
+    bridgeMultiServerCopyBtn.textContent = "Copied!";
+    setTimeout(() => {
+      bridgeMultiServerCopyBtn.textContent = "Copy fix";
+    }, 1500);
+  });
   function setAllDots(on) {
     [bridgeDot, bridgeDotMini, popoverDot].forEach((el) => el == null ? void 0 : el.classList.toggle("on", on));
   }
@@ -516,6 +592,7 @@
       if (bridgePillLabel) bridgePillLabel.textContent = "Connect";
       bridgeTabBtn == null ? void 0 : bridgeTabBtn.classList.remove("connected");
     }
+    if (activePanel === "files") updateActiveFileCard();
   }
   function bridgeStartKeepalive() {
     if (bridgeKeepaliveTimer) clearInterval(bridgeKeepaliveTimer);
@@ -533,11 +610,23 @@
     }
   }
   function initBridgeConnection(ws) {
+    const fallbackFileInfo = { fileKey: "local-" + Date.now(), fileName: "S2A Toolkit", pluginVersion: "0.3.0" };
+    console.log("[bridge] ws.readyState on open:", ws.readyState, "sending FILE_INFO...");
+    try {
+      if (ws.readyState === 1) {
+        ws.send(JSON.stringify({ type: "FILE_INFO", data: fallbackFileInfo }));
+        console.log("[bridge] FILE_INFO sent OK, fileKey=", fallbackFileInfo.fileKey);
+      } else {
+        console.log("[bridge] ws not OPEN, skipping FILE_INFO send. readyState=", ws.readyState);
+      }
+    } catch (e) {
+      console.error("[bridge] FILE_INFO send threw:", e);
+    }
     sendBridgeCommand("GET_FILE_INFO", {}).then((result) => {
       if (ws.readyState !== 1 || !result) return;
       const info = result.fileInfo || result;
-      if (!info.fileKey) info.fileKey = "local-" + Date.now();
-      info.pluginVersion = "0.2.0";
+      if (!info.fileKey) info.fileKey = fallbackFileInfo.fileKey;
+      info.pluginVersion = "0.3.0";
       ws.send(JSON.stringify({ type: "FILE_INFO", data: info }));
     }).catch(() => {
     });
@@ -554,6 +643,21 @@
     ws.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
+        if (msg.type === "CONNECTED_FILES_UPDATE" && msg.data) {
+          handleConnectedFilesUpdate(msg.data);
+          return;
+        }
+        if (msg.type === "SERVER_HELLO" || msg.type === "PLUGIN_UPDATE_AVAILABLE") return;
+        if (msg.id && !msg.method) {
+          const pending = pendingWsRequests.get(msg.id);
+          if (pending) {
+            clearTimeout(pending.timeoutId);
+            pendingWsRequests.delete(msg.id);
+            if (msg.error) pending.reject(new Error(msg.error));
+            else pending.resolve(msg.result);
+            return;
+          }
+        }
         if (!msg.id || !msg.method) return;
         sendBridgeCommand(msg.method, msg.params || {}, 15e3).then((result) => {
           if (ws.readyState === 1) ws.send(JSON.stringify({ id: msg.id, result }));
@@ -563,7 +667,8 @@
       } catch (e) {
       }
     };
-    ws.onclose = () => {
+    ws.onclose = (e) => {
+      console.log("[bridge] attachWsHandlers.onclose port", port, "code", e.code, e.reason);
       bridgeStopKeepalive();
       bridgeWs = null;
       bridgeConnected = false;
@@ -575,7 +680,8 @@
       updateBridgeUi();
       if (!bridgeUserDisconnected) scheduleReconnect(port);
     };
-    ws.onerror = () => {
+    ws.onerror = (e) => {
+      console.log("[bridge] attachWsHandlers.onerror port", port, e);
     };
   }
   function scheduleReconnect(port) {
@@ -587,30 +693,40 @@
     }, delay);
   }
   function reconnectToPort(port) {
+    console.log("[bridge] reconnectToPort", port);
     try {
       const ws = new WebSocket("ws://localhost:" + port);
       const t = setTimeout(() => {
+        console.log("[bridge] reconnectToPort timeout, readyState=", ws.readyState);
         if (ws.readyState !== 1) ws.close();
       }, 3e3);
       ws.onopen = () => {
         clearTimeout(t);
+        console.log("[bridge] reconnectToPort.onopen port", port, "readyState=", ws.readyState);
         bridgeWs = ws;
         bridgeWsPort = port;
         bridgeConnected = true;
         bridgeReconnectAttempts = 0;
+        try {
+          localStorage.setItem(BRIDGE_PREFERRED_PORT_KEY, String(port));
+        } catch (e) {
+        }
         updateBridgeUi();
         attachWsHandlers(ws, port);
         initBridgeConnection(ws);
         bridgeStartKeepalive();
       };
-      ws.onerror = () => {
+      ws.onerror = (e) => {
         clearTimeout(t);
+        console.log("[bridge] reconnectToPort.onerror port", port, e);
       };
-      ws.onclose = () => {
+      ws.onclose = (e) => {
         clearTimeout(t);
+        console.log("[bridge] reconnectToPort.onclose port", port, "code", e.code);
         if (!bridgeConnected && !bridgeUserDisconnected) bridgeConnect();
       };
     } catch (e) {
+      console.log("[bridge] reconnectToPort threw", e);
       if (!bridgeUserDisconnected) bridgeConnect();
     }
   }
@@ -622,51 +738,91 @@
     }
     bridgeToggleBtn.textContent = "Connecting\u2026";
     bridgeToggleBtn.disabled = true;
+    hideMultiServerWarn();
+    const giveUpTimer = setTimeout(() => {
+      if (!bridgeConnected) {
+        bridgeToggleBtn.textContent = "Connect";
+        bridgeToggleBtn.disabled = false;
+        bridgePortLabel.textContent = "No server found";
+      }
+    }, 6e3);
+    fanOutConnect(giveUpTimer);
+  }
+  function fanOutConnect(giveUpTimer) {
+    if (bridgeConnected) {
+      if (giveUpTimer) clearTimeout(giveUpTimer);
+      return;
+    }
+    const ports = WS_PORTS;
     let found = false;
-    let pending = WS_PORTS.length;
-    WS_PORTS.forEach((port) => {
-      if (found) return;
+    const done = /* @__PURE__ */ new Set();
+    const responding = [];
+    const markDone = (port) => {
+      if (done.has(port)) return;
+      done.add(port);
+      if (done.size === ports.length) {
+        if (giveUpTimer) clearTimeout(giveUpTimer);
+        if (responding.length > 1) {
+          bridgeRespondingPorts = [...responding];
+          showMultiServerWarn(responding);
+        }
+        if (!found) {
+          bridgeToggleBtn.textContent = "Connect";
+          bridgeToggleBtn.disabled = false;
+          bridgePortLabel.textContent = "No server found";
+        }
+      }
+    };
+    ports.forEach((port) => {
       try {
         const ws = new WebSocket("ws://localhost:" + port);
         const t = setTimeout(() => {
-          if (ws.readyState !== 1) ws.close();
+          markDone(port);
+          try {
+            ws.close();
+          } catch (e) {
+          }
         }, 3e3);
         ws.onopen = () => {
           clearTimeout(t);
-          if (found) {
-            ws.close();
-            return;
-          }
-          found = true;
-          bridgeWs = ws;
-          bridgeWsPort = port;
-          bridgeConnected = true;
-          bridgeReconnectAttempts = 0;
-          updateBridgeUi();
-          attachWsHandlers(ws, port);
-          initBridgeConnection(ws);
-          bridgeStartKeepalive();
-        };
-        ws.onerror = () => {
-          clearTimeout(t);
-        };
-        ws.onclose = () => {
-          clearTimeout(t);
+          responding.push(port);
+          console.log("[bridge] ws.onopen port", port, "found=", found);
           if (!found) {
-            pending--;
-            if (pending <= 0) {
-              bridgeToggleBtn.textContent = "Connect";
-              bridgeToggleBtn.disabled = false;
-              bridgePortLabel.textContent = "No server found";
+            found = true;
+            if (giveUpTimer) clearTimeout(giveUpTimer);
+            try {
+              localStorage.setItem(BRIDGE_PREFERRED_PORT_KEY, String(port));
+            } catch (e) {
+            }
+            bridgeWs = ws;
+            bridgeWsPort = port;
+            bridgeConnected = true;
+            bridgeReconnectAttempts = 0;
+            updateBridgeUi();
+            attachWsHandlers(ws, port);
+            initBridgeConnection(ws);
+            bridgeStartKeepalive();
+            markDone(port);
+          } else {
+            markDone(port);
+            try {
+              ws.close();
+            } catch (e) {
             }
           }
         };
+        ws.onerror = (e) => {
+          clearTimeout(t);
+          console.log("[bridge] ws.onerror port", port, e);
+          markDone(port);
+        };
+        ws.onclose = (e) => {
+          clearTimeout(t);
+          console.log("[bridge] ws.onclose port", port, "code", e.code, e.reason);
+          markDone(port);
+        };
       } catch (e) {
-        pending--;
-        if (pending <= 0 && !found) {
-          bridgeToggleBtn.textContent = "Connect";
-          bridgeToggleBtn.disabled = false;
-        }
+        markDone(port);
       }
     });
   }
@@ -688,11 +844,11 @@
     updateBridgeUi();
   }
   function getTokenGroup(name) {
-    var _a13;
+    var _a15;
     const parts = name.split("/").filter((p) => p !== "s2a");
     if (parts.length >= 4 && parts[1] === "transparent") return parts[0] + " / " + parts[1] + " / " + parts[2];
     if (parts.length >= 3) return parts[0] + " / " + parts[1];
-    return (_a13 = parts[0]) != null ? _a13 : name;
+    return (_a15 = parts[0]) != null ? _a15 : name;
   }
   function setVarMeta(_text) {
   }
@@ -777,14 +933,14 @@
   }
   var _a2;
   (_a2 = document.getElementById("tokenGroupList")) == null ? void 0 : _a2.addEventListener("click", (e) => {
-    var _a13;
+    var _a15;
     const btn = e.target.closest(".gen-btn");
     if (!btn || btn.disabled) return;
     const row = btn.closest(".token-group-row");
     if (!row) return;
     btn.disabled = true;
     btn.textContent = "\u2026";
-    setVarStatus("Generating " + ((_a13 = row.dataset.group) != null ? _a13 : "") + "\u2026");
+    setVarStatus("Generating " + ((_a15 = row.dataset.group) != null ? _a15 : "") + "\u2026");
     postToPlugin("token-docs:generate", { collectionId: row.dataset.col, group: row.dataset.group });
   });
   var _a3;
@@ -896,6 +1052,105 @@
     }
     postToPlugin("save-settings", { settings });
   });
+  var figmaApiToken = "";
+  function sendServerRequest(type, data = {}, timeoutMs = 5e3) {
+    return new Promise((resolve, reject) => {
+      if (!bridgeWs || bridgeWs.readyState !== 1) {
+        reject(new Error("Not connected to bridge"));
+        return;
+      }
+      const id = "sr_" + ++wsRequestCounter + "_" + Date.now();
+      const timeoutId = setTimeout(() => {
+        pendingWsRequests.delete(id);
+        reject(new Error(type + " timed out"));
+      }, timeoutMs);
+      pendingWsRequests.set(id, { resolve, reject, timeoutId });
+      try {
+        bridgeWs.send(JSON.stringify({ type, id, data }));
+      } catch (e) {
+        pendingWsRequests.delete(id);
+        clearTimeout(timeoutId);
+        reject(e);
+      }
+    });
+  }
+  function handleConnectedFilesUpdate(data) {
+    connectedFiles = data.files || [];
+    if (activePanel === "files") renderConnectedFiles();
+  }
+  function setFilesStatus(msg, type = "") {
+    const el = document.getElementById("filesStatus");
+    if (el) {
+      el.textContent = msg;
+      el.className = "status" + (type ? " " + type : "");
+    }
+  }
+  function renderConnectedFiles() {
+    const listEl = document.getElementById("connectedFilesList");
+    if (!listEl) return;
+    if (!bridgeConnected) {
+      listEl.innerHTML = '<div class="empty-state">Connect to bridge first</div>';
+      return;
+    }
+    if (connectedFiles.length === 0) {
+      listEl.innerHTML = '<div class="empty-state">Only this file is connected.<br>Open the plugin in another Figma file to see it here.</div>';
+      return;
+    }
+    listEl.innerHTML = connectedFiles.map(
+      (f) => `<div class="file-card${f.isActive ? " file-card--active" : ""}">
+      <div class="file-card-icon">${f.isActive ? "\u25C9" : "\u25CB"}</div>
+      <div class="file-card-meta">
+        <span class="file-card-name">${esc(f.fileName)}</span>
+        <span class="file-card-sub">${f.currentPage ? esc(f.currentPage) + " \xB7 " : ""}${esc(f.fileKey)}</span>
+      </div>
+      ${f.isActive ? '<span class="badge badge-hot" style="font-size:9px;margin-left:auto;">Active</span>' : `<button class="btn btn-ghost btn-sm" data-switch="${esc(f.fileKey)}" style="margin-left:auto;">Switch</button>`}
+    </div>`
+    ).join("");
+    listEl.querySelectorAll("[data-switch]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const fileKey = btn.dataset.switch;
+        btn.disabled = true;
+        btn.textContent = "\u2026";
+        try {
+          await sendServerRequest("SET_ACTIVE_FILE", { fileKey });
+          setFilesStatus("Active file switched", "ok");
+        } catch (e) {
+          setFilesStatus("Switch failed: " + (e.message || "error"), "err");
+          btn.disabled = false;
+          btn.textContent = "Switch";
+        }
+      });
+    });
+  }
+  async function refreshConnectedFiles() {
+    setFilesStatus("Scanning\u2026");
+    try {
+      const result = await sendServerRequest("GET_CONNECTED_FILES", {}, 5e3);
+      connectedFiles = result.files || [];
+      renderConnectedFiles();
+      setFilesStatus("");
+    } catch (e) {
+      connectedFiles = [];
+      renderConnectedFiles();
+      if (!bridgeConnected) setFilesStatus("Connect to bridge first", "err");
+      else setFilesStatus("Could not fetch file list", "err");
+    }
+  }
+  var _a7;
+  (_a7 = document.getElementById("filesRefreshBtn")) == null ? void 0 : _a7.addEventListener("click", () => refreshConnectedFiles());
+  function setFigmaTokenStatus(msg, type = "") {
+    const el = document.getElementById("figmaTokenStatus");
+    if (el) {
+      el.textContent = msg;
+      el.className = "status" + (type ? " " + type : "");
+    }
+  }
+  var _a8;
+  (_a8 = document.getElementById("saveFigmaTokenBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+    var _a15;
+    const token = (((_a15 = document.getElementById("figmaApiToken")) == null ? void 0 : _a15.value) || "").trim();
+    postToPlugin("save-figma-token", { token });
+  });
   function renderAxes(setId, setName, axes) {
     selectSetId = setId;
     const emptyEl = document.getElementById("selectEmpty");
@@ -929,8 +1184,8 @@
     document.getElementById("selectEmpty").style.display = "block";
     document.getElementById("selectBody").style.display = "none";
   }
-  var _a7;
-  (_a7 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
+  var _a9;
+  (_a9 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
     if (!selectSetId) return;
     const filter = {};
     document.querySelectorAll(".chip.on[data-axis]").forEach((chip) => {
@@ -940,12 +1195,12 @@
     });
     postToPlugin("select:apply-filter", { setId: selectSetId, filter });
   });
-  var _a8;
-  (_a8 = document.getElementById("selectAllBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+  var _a10;
+  (_a10 = document.getElementById("selectAllBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
     document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.add("on"));
   });
-  var _a9;
-  (_a9 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
+  var _a11;
+  (_a11 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
     document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.remove("on"));
   });
   function setAnnotateStatus(msg, type = "") {
@@ -954,8 +1209,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a13;
-    annotateNodeId = (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null;
+    var _a15;
+    annotateNodeId = (_a15 = sel == null ? void 0 : sel.id) != null ? _a15 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -976,8 +1231,8 @@
   document.querySelectorAll("#annotateCats .chip").forEach((chip) => {
     chip.addEventListener("click", () => chip.classList.toggle("on"));
   });
-  var _a10;
-  (_a10 = document.getElementById("annotateApplyBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
+  var _a12;
+  (_a12 = document.getElementById("annotateApplyBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
     if (!annotateNodeId) return;
     const categories = Array.from(
       document.querySelectorAll("#annotateCats .chip.on")
@@ -992,8 +1247,8 @@
     setAnnotateStatus("");
     postToPlugin("annotate:apply", { nodeId: annotateNodeId, categories });
   });
-  var _a11;
-  (_a11 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
+  var _a13;
+  (_a13 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a13.addEventListener("click", () => {
     if (!annotateNodeId) return;
     const btn = document.getElementById("annotateClearBtn");
     btn.disabled = true;
@@ -1006,9 +1261,9 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateSpecSelection(sel) {
-    var _a13, _b;
+    var _a15, _b;
     const isValid = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT";
-    specSetId = isValid ? (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null : null;
+    specSetId = isValid ? (_a15 = sel == null ? void 0 : sel.id) != null ? _a15 : null : null;
     const emptyEl = document.getElementById("specSelectionEmpty");
     const infoEl = document.getElementById("specSelectionInfo");
     const nameEl = document.getElementById("specSetName");
@@ -1029,8 +1284,8 @@
   document.querySelectorAll("#specOpts .chip").forEach((chip) => {
     chip.addEventListener("click", () => chip.classList.toggle("on"));
   });
-  var _a12;
-  (_a12 = document.getElementById("specGenerateBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
+  var _a14;
+  (_a14 = document.getElementById("specGenerateBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
     if (!specSetId) return;
     const on = new Set(
       Array.from(document.querySelectorAll("#specOpts .chip.on")).map((c) => c.dataset.opt)
@@ -1049,7 +1304,7 @@
     });
   });
   window.addEventListener("message", (event) => {
-    var _a13, _b;
+    var _a15, _b, _c;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -1066,6 +1321,21 @@
           } else {
             p.reject(new Error(msg.error || "Unknown error"));
           }
+        }
+        break;
+      }
+      case "figma-token-loaded": {
+        figmaApiToken = msg.token || "";
+        const el = document.getElementById("figmaApiToken");
+        if (el) el.value = figmaApiToken;
+        break;
+      }
+      case "figma-token-saved": {
+        if (msg.success) {
+          figmaApiToken = (((_a15 = document.getElementById("figmaApiToken")) == null ? void 0 : _a15.value) || "").trim();
+          setFigmaTokenStatus("Saved", "ok");
+        } else {
+          setFigmaTokenStatus("Save failed: " + msg.error, "err");
         }
         break;
       }
@@ -1114,8 +1384,8 @@
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a13 = msg.sectionCount) != null ? _a13 : 0,
-            (_b = msg.sectionName) != null ? _b : sel.name
+            (_b = msg.sectionCount) != null ? _b : 0,
+            (_c = msg.sectionName) != null ? _c : sel.name
           );
         } else {
           updateAnnotateSelection(null);
@@ -1172,8 +1442,10 @@
   });
   postToPlugin("ui-ready");
   postToPlugin("get-settings");
+  postToPlugin("get-figma-token");
   postToPlugin("resize-for-view", { width: 320, height: 460 });
   renderHomeView();
+  bridgeConnect();
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden && !bridgeConnected && !bridgeUserDisconnected && !bridgeReconnectTimer) {
       bridgeReconnectAttempts = 0;
