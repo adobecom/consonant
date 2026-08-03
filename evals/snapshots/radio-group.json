@@ -1,0 +1,22 @@
+{
+  "id": "11586:206653",
+  "name": "RadioGroup",
+  "kind": "COMPONENT_SET",
+  "slug": "radio-group",
+  "themeModes": { "light": "6:0", "dark": "6:1" },
+  "variantProps": [
+    { "name": "Orientation", "type": "VARIANT", "values": ["horizontal", "vertical"] }
+  ],
+  "otherProps": [{ "name": "Group Label", "type": "TEXT" }],
+  "modePins": [],
+  "paints": [
+    { "nodePath": "RadioGroup/horizontal", "kind": "fill", "token": "background/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#f8f8f8", "dark": "#505050" },
+    { "nodePath": "RadioGroup/horizontal/.group-label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "RadioGroup/horizontal/.items/Radio(sel)/_radio/.ring", "kind": "stroke", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "RadioGroup/horizontal/.items/Radio(sel)/_radio/.dot", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "RadioGroup/horizontal/.items/Radio(sel)/.label", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "RadioGroup/horizontal/.items/Radio/.label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "RadioGroup/vertical/.group-label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "RadioGroup/vertical/.items/Radio(sel)/.label", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" }
+  ]
+}

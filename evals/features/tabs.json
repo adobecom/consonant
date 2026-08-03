@@ -1,0 +1,21 @@
+{
+  "_note": "Fidelity feature vectors for Tabs. `reference` from Chip's Text-Tab-Group (in breakpoint frame 11471:197474); `candidate` from the rebuilt Tabs (11615:206787). The underline TOKEN is intentionally NOT compared here — the spec misuses IconButton/background/accent, the rebuild correctly uses the new border/accent — so only measurable geometry/type is diffed. Fidelity caught tabPadB 2 vs 0 pre-fix; candidate now 2.",
+  "reference": {
+    "labelSize": 36,
+    "labelWeight": "Black",
+    "labelStyle": "s2a/typography/heading-4",
+    "groupGap": 24,
+    "underlineHeight": 2,
+    "tabPadT": 2,
+    "tabPadB": 2
+  },
+  "candidate": {
+    "labelSize": 36,
+    "labelWeight": "Black",
+    "labelStyle": "s2a/typography/heading-4",
+    "groupGap": 24,
+    "underlineHeight": 2,
+    "tabPadT": 2,
+    "tabPadB": 2
+  }
+}

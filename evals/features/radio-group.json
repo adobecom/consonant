@@ -1,0 +1,35 @@
+{
+  "_note": "Fidelity feature vectors: `reference` extracted from Chip's spec (Segmentation-Radio-Buttons 11586:54470 / container 11586:54472), `candidate` extracted from the rebuilt RadioGroup (11586:206653) horizontal variant. Re-extract with evals/extract-features.figma.js when either changes. The Fidelity scorer diffs candidate against reference.",
+  "reference": {
+    "controlDiameter": 17.5,
+    "controlStroke": null,
+    "dotDiameter": 8,
+    "optionLabelSize": 14,
+    "optionLabelWeight": "Bold",
+    "optionLabelStyle": "s2a/typography/label",
+    "groupLabelSize": 14,
+    "padL": 16,
+    "padR": 16,
+    "padT": 12,
+    "padB": 12,
+    "groupGap": 16,
+    "cornerRadius": 999,
+    "itemGap": 16
+  },
+  "candidate": {
+    "controlDiameter": 18,
+    "controlStroke": 1.5,
+    "dotDiameter": 8,
+    "optionLabelSize": 14,
+    "optionLabelWeight": "Bold",
+    "optionLabelStyle": "s2a/typography/label",
+    "groupLabelSize": 14,
+    "padL": 16,
+    "padR": 16,
+    "padT": 12,
+    "padB": 12,
+    "groupGap": 16,
+    "cornerRadius": 999,
+    "itemGap": 16
+  }
+}

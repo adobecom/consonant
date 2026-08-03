@@ -1,0 +1,26 @@
+{
+  "id": "11586:206578",
+  "name": "_radio",
+  "kind": "COMPONENT_SET",
+  "slug": "radio-internal",
+  "themeModes": { "light": "6:0", "dark": "6:1" },
+  "variantProps": [
+    { "name": "Selected", "type": "VARIANT", "values": ["false", "true"] },
+    { "name": "State", "type": "VARIANT", "values": ["default", "hover", "focus", "disabled"] }
+  ],
+  "otherProps": [],
+  "modePins": [],
+  "paints": [
+    { "nodePath": "_radio/false,default/.ring", "kind": "stroke", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_radio/false,hover/[hover halo]", "kind": "fill", "token": "background/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#f8f8f8", "dark": "#505050" },
+    { "nodePath": "_radio/false,hover/.ring", "kind": "stroke", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_radio/false,focus/.ring", "kind": "stroke", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_radio/false,focus/[focus ring]", "kind": "stroke", "token": "focus-ring/default", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#8eb9fc" },
+    { "nodePath": "_radio/false,disabled/.ring", "kind": "stroke", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_radio/true,default/.ring", "kind": "stroke", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_radio/true,default/.dot", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_radio/true,focus/[focus ring]", "kind": "stroke", "token": "focus-ring/default", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#8eb9fc" },
+    { "nodePath": "_radio/true,disabled/.ring", "kind": "stroke", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_radio/true,disabled/.dot", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" }
+  ]
+}

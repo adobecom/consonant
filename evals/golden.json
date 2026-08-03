@@ -1,0 +1,118 @@
+{
+  "note": "Golden dataset for S2A component evals. Each case names a component set, the snapshot file to score, and the bar it must clear. Add a case per component; capture real corrections from sessions as new cases (the data flywheel). Fill figmaNode with a node id/link, then run the extractor to produce the snapshot.",
+  "cases": [
+    {
+      "id": "merch-card",
+      "slug": "merch-card",
+      "component": "MerchCard (current)",
+      "figmaNode": "10826:13312",
+      "difficulty": "hard",
+      "category": "organism",
+      "expectedCharacteristics": [
+        "All fills token-bound (no primitives, no raw hex)",
+        "Highlight variant inverts correctly across light/dark",
+        "Feature text uses on-inverse tokens on the highlight panel"
+      ],
+      "allowedModePins": [
+        {
+          "match": "Style=highlight/.body",
+          "reason": "Intentional: the featured card's body stays light (white surface + dark text) in both themes. Pinning .body to Light resolves its subtree to light-mode values. Definition-level only — never pin at the instance level."
+        }
+      ],
+      "gate": true
+    },
+    {
+      "id": "radio-internal",
+      "slug": "radio-internal",
+      "component": "_radio (internal atom)",
+      "figmaNode": "11586:206578",
+      "difficulty": "simple",
+      "category": "atom",
+      "expectedCharacteristics": [
+        "Ring + dot token-bound (no raw #ffffff like the old spec)",
+        "Selected × State variants; values lowercase-kebab",
+        "Modeless — no baked mode pins; adapts light/dark"
+      ],
+      "gate": true
+    },
+    {
+      "id": "radio",
+      "slug": "radio",
+      "component": "Radio (_radio + label)",
+      "figmaNode": "11586:206620",
+      "difficulty": "medium",
+      "category": "molecule",
+      "expectedCharacteristics": [
+        "Composed from _radio + a token-bound label",
+        "Label text property exposed; Selected/State variants",
+        "Modeless; all fills adapt light/dark"
+      ],
+      "gate": true
+    },
+    {
+      "id": "radio-group",
+      "slug": "radio-group",
+      "component": "RadioGroup",
+      "figmaNode": "11586:206653",
+      "difficulty": "medium",
+      "category": "organism",
+      "expectedCharacteristics": [
+        "Built from Radio instances + group label",
+        "Orientation variant (horizontal/vertical)",
+        "Background/label token-bound; modeless; adapts"
+      ],
+      "fidelity": true,
+      "fidelityReference": "Chip's Segmentation-Radio-Buttons spec (11586:54470)",
+      "gate": true
+    },
+    {
+      "id": "tab-internal",
+      "slug": "tab-internal",
+      "component": "_tab (internal atom)",
+      "figmaNode": "11615:206785",
+      "difficulty": "simple",
+      "category": "atom",
+      "expectedCharacteristics": [
+        "Label + accent underline; underline uses the new border/accent token (not IconButton's)",
+        "Selected × State variants; token-bound; modeless; adapts"
+      ],
+      "gate": true
+    },
+    {
+      "id": "tabs",
+      "slug": "tabs",
+      "component": "Tabs (Photo/Design/Video)",
+      "figmaNode": "11615:206787",
+      "difficulty": "medium",
+      "category": "molecule",
+      "expectedCharacteristics": [
+        "Built from _tab instances; selected uses content/default + border/accent underline",
+        "All fills token-bound; modeless; adapts light/dark"
+      ],
+      "fidelity": true,
+      "fidelityReference": "Chip's Text-Tab-Group in breakpoint frame 11471:197474",
+      "gate": true
+    },
+    {
+      "id": "merch-card-side-by-side",
+      "slug": "merch-card-side-by-side",
+      "component": "MerchCardSideBySide (MerchCard-parity rebuild)",
+      "figmaNode": "11679:207882",
+      "difficulty": "hard",
+      "category": "organism",
+      "expectedCharacteristics": [
+        "Cloned from MerchCard and flipped horizontal — reuses every real MerchCard sub-component (ProductLockup — v2, PricingDisplay, SelectPromo, Button — v2, TrustBadge w/ lock icon, FeatureSection + ListItem) and all its properties/slots",
+        "Featured-only (Style=default dropped); Features List variant values lowercase-kebab",
+        "Light/dark flip inherited from MerchCard highlight: card outer surface/inverse-subtle (#131313 light -> #f8f8f8 dark), .body stays light via a DEFINITION-level Theme pin",
+        "All fills token-bound; no instance-level Theme pins"
+      ],
+      "allowedModePins": [
+        {
+          "match": "/.body",
+          "reason": "Intentional definition-level pin inherited from MerchCard's highlight: the .body panel stays light (white surface + dark text) in both themes. Pinning .body to Light resolves its subtree to light values. Definition-level only — never an instance pin."
+        }
+      ],
+      "gate": true
+    }
+  ]
+}

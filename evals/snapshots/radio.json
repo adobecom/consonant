@@ -1,0 +1,24 @@
+{
+  "id": "11586:206620",
+  "name": "Radio",
+  "kind": "COMPONENT_SET",
+  "slug": "radio",
+  "themeModes": { "light": "6:0", "dark": "6:1" },
+  "variantProps": [
+    { "name": "Selected", "type": "VARIANT", "values": ["false", "true"] },
+    { "name": "State", "type": "VARIANT", "values": ["default", "hover", "focus", "disabled"] }
+  ],
+  "otherProps": [{ "name": "Label", "type": "TEXT" }],
+  "modePins": [],
+  "paints": [
+    { "nodePath": "Radio/false,default/_radio/.ring", "kind": "stroke", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "Radio/false,default/.label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "Radio/false,hover/_radio/[hover halo]", "kind": "fill", "token": "background/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#f8f8f8", "dark": "#505050" },
+    { "nodePath": "Radio/false,focus/_radio/[focus ring]", "kind": "stroke", "token": "focus-ring/default", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#8eb9fc" },
+    { "nodePath": "Radio/false,disabled/_radio/.ring", "kind": "stroke", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "Radio/true,default/_radio/.ring", "kind": "stroke", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "Radio/true,default/_radio/.dot", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "Radio/true,default/.label", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "Radio/true,disabled/_radio/.dot", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" }
+  ]
+}

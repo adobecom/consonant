@@ -1,0 +1,58 @@
+{
+  "id": "10826:13312",
+  "name": "MerchCard",
+  "kind": "COMPONENT_SET",
+  "slug": "merch-card",
+  "extractedAt": "2026-07-30T15:01:05.290Z",
+  "themeModes": { "light": "6:0", "dark": "6:1" },
+  "variantProps": [
+    { "name": "Features List", "type": "VARIANT", "values": ["default", "closed"] },
+    { "name": "Style", "type": "VARIANT", "values": ["default", "highlight"] }
+  ],
+  "otherProps": [
+    { "name": "Plan Name", "type": "TEXT" },
+    { "name": "Description", "type": "TEXT" },
+    { "name": "options", "type": "SLOT" },
+    { "name": "features", "type": "SLOT" },
+    { "name": "Show Options", "type": "BOOLEAN" },
+    { "name": "Show Pricing", "type": "BOOLEAN" },
+    { "name": "Show Secondary CTA", "type": "BOOLEAN" }
+  ],
+  "modePins": [
+    { "nodePath": "MerchCard/Features List=default, Style=highlight/.body", "collectionName": "S2A / Semantic / Color / Theme", "mode": "6:0" },
+    { "nodePath": "MerchCard/Features List=closed, Style=highlight/.body", "collectionName": "S2A / Semantic / Color / Theme", "mode": "6:0" }
+  ],
+  "paints": [
+    { "nodePath": "default/.body surface", "kind": "fill", "token": "surface/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#f8f8f8", "dark": "#131313" },
+    { "nodePath": "default/.body", "kind": "fill", "token": "surface/default", "primitive": false, "designOnly": false, "raw": null, "light": "#ffffff", "dark": "#000000" },
+    { "nodePath": "default/lockup label", "kind": "fill", "token": "content/label", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "default/.plan-name", "kind": "fill", "token": "content/heading", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "default/.description", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "default/pricing/.strikethrough", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "default/pricing/.price", "kind": "fill", "token": "content/heading", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "default/SelectPromo", "kind": "fill", "token": "background/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#f8f8f8", "dark": "#505050" },
+    { "nodePath": "default/SelectPromo/.trigger", "kind": "fill", "token": "background/default", "primitive": false, "designOnly": false, "raw": null, "light": "#ffffff", "dark": "#131313" },
+    { "nodePath": "default/SelectPromo/.trigger", "kind": "stroke", "token": "border/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#dadada", "dark": "#dadada" },
+    { "nodePath": "default/accent Button", "kind": "fill", "token": "button/background/accent/default", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#3b63fb" },
+    { "nodePath": "default/accent Button/Label", "kind": "fill", "token": "content/knockout", "primitive": false, "designOnly": false, "raw": null, "light": "#ffffff", "dark": "#ffffff" },
+    { "nodePath": "default/outlined Button", "kind": "fill", "token": "button/background/outlined/default", "primitive": false, "designOnly": false, "raw": null, "light": "#ffffff", "dark": "#ffffff" },
+    { "nodePath": "default/outlined Button", "kind": "stroke", "token": "border/knockout", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "default/TrustBadge/Secure transaction", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "default/features/Divider", "kind": "fill", "token": "divider/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "default/features/.title-text", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "default/features/ListItem", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "closed/features/Collapsible/.label", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "highlight/outer surface", "kind": "fill", "token": "surface/inverse-subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#131313", "dark": "#f8f8f8" },
+    { "nodePath": "highlight/.body", "kind": "fill", "token": "surface/default", "primitive": false, "designOnly": false, "raw": null, "light": "#ffffff", "dark": "#000000" },
+    { "nodePath": "highlight/.plan-name", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "highlight/accent Button", "kind": "fill", "token": "button/background/accent/solid/on-light/default", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#3b63fb" },
+    { "nodePath": "highlight/accent Button/Label", "kind": "fill", "token": "button/content/primary/solid/default", "primitive": false, "designOnly": false, "raw": null, "light": "#ffffff", "dark": "#000000" },
+    { "nodePath": "highlight/outlined Button", "kind": "fill", "token": "button/background/primary/outlined/on-light/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#000000" },
+    { "nodePath": "highlight/outlined Button", "kind": "stroke", "token": "button/border/primary/outlined/on-light/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#dadada" },
+    { "nodePath": "highlight/outlined Button/Label", "kind": "fill", "token": "button/content/primary/outlined/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#000000" },
+    { "nodePath": "highlight/features/.title-text", "kind": "fill", "token": "content/on-inverse", "primitive": false, "designOnly": false, "raw": null, "light": "#ffffff", "dark": "#000000" },
+    { "nodePath": "highlight/features/ListItem", "kind": "fill", "token": "content/on-inverse", "primitive": false, "designOnly": false, "raw": null, "light": "#ffffff", "dark": "#000000" },
+    { "nodePath": "highlight-closed/Collapsible/.label", "kind": "fill", "token": "content/on-inverse", "primitive": false, "designOnly": false, "raw": null, "light": "#ffffff", "dark": "#000000" }
+  ],
+  "_note": "Representative extract of the live MerchCard (10826:13312), condensed from 127 paints to the distinct token bindings. modePins are the full real set — the two baked Light pins on the highlight bodies are the genuine finding."
+}

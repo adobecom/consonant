@@ -1,0 +1,49 @@
+name: Component Evals
+
+# Hard gate: scores the committed component snapshots against the S2A rules
+# (token binding, naming conventions, light/dark adherence, and fidelity to the
+# reference specs). `npm run eval` exits non-zero on any gating failure, which
+# fails this check. See evals/README.md.
+#
+# Runs when anything under evals/ changes — the runner scores the committed
+# snapshots, so that's what needs re-checking. It has no dependencies, so no
+# install step is needed.
+
+on:
+  pull_request:
+    paths:
+      - "evals/**"
+      - ".github/workflows/component-evals.yml"
+  push:
+    branches: [main]
+    paths:
+      - "evals/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  eval:
+    name: Component Eval Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run component evals
+        shell: bash
+        run: |
+          code=0
+          npm run eval 2>&1 | tee eval.log || code=$?
+          {
+            echo "### 🎯 Component eval results"
+            echo ""
+            echo '```'
+            cat eval.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit $code

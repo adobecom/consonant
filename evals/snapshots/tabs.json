@@ -1,0 +1,16 @@
+{
+  "id": "11615:206787",
+  "name": "Tabs",
+  "kind": "COMPONENT",
+  "slug": "tabs",
+  "themeModes": { "light": "6:0", "dark": "6:1" },
+  "variantProps": [],
+  "otherProps": [],
+  "modePins": [],
+  "paints": [
+    { "nodePath": "Tabs/_tab(Photo,selected)/.label", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "Tabs/_tab(Photo,selected)/[underline]", "kind": "fill", "token": "border/accent", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#3b63fb" },
+    { "nodePath": "Tabs/_tab(Design)/.label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "Tabs/_tab(Video)/.label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" }
+  ]
+}

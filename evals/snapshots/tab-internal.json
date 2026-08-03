@@ -1,0 +1,29 @@
+{
+  "id": "11615:206785",
+  "name": "_tab",
+  "kind": "COMPONENT_SET",
+  "slug": "tab-internal",
+  "themeModes": { "light": "6:0", "dark": "6:1" },
+  "variantProps": [
+    { "name": "Selected", "type": "VARIANT", "values": ["false", "true"] },
+    { "name": "State", "type": "VARIANT", "values": ["default", "hover", "focus", "disabled"] }
+  ],
+  "otherProps": [{ "name": "Label", "type": "TEXT" }],
+  "modePins": [],
+  "paints": [
+    { "nodePath": "_tab/false,default/.label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_tab/false,hover/.label", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_tab/false,focus", "kind": "stroke", "token": "focus-ring/default", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#8eb9fc" },
+    { "nodePath": "_tab/false,focus/.label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_tab/false,disabled/.label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_tab/true,default/.label", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_tab/true,default/[underline]", "kind": "fill", "token": "border/accent", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#3b63fb" },
+    { "nodePath": "_tab/true,hover/.label", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_tab/true,hover/[underline]", "kind": "fill", "token": "border/accent", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#3b63fb" },
+    { "nodePath": "_tab/true,focus", "kind": "stroke", "token": "focus-ring/default", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#8eb9fc" },
+    { "nodePath": "_tab/true,focus/.label", "kind": "fill", "token": "content/default", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_tab/true,focus/[underline]", "kind": "fill", "token": "border/accent", "primitive": false, "designOnly": false, "raw": null, "light": "#3b63fb", "dark": "#3b63fb" },
+    { "nodePath": "_tab/true,disabled/.label", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" },
+    { "nodePath": "_tab/true,disabled/[underline]", "kind": "fill", "token": "content/subtle", "primitive": false, "designOnly": false, "raw": null, "light": "#000000", "dark": "#ffffff" }
+  ]
+}
