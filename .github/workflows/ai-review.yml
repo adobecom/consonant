@@ -1,0 +1,173 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  claude-review:
+    name: Claude Review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get diff
+        run: git diff origin/${{ github.base_ref }}...HEAD | head -c 60000 > pr.diff
+
+      - name: Skip if empty
+        id: check
+        run: |
+          if [ ! -s pr.diff ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Call Claude API
+        if: steps.check.outputs.skip == 'false'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 << 'PYTHON'
+          import os, json, urllib.request, urllib.error
+
+          diff = open('pr.diff').read()
+
+          payload = {
+            "model": "claude-sonnet-5",
+            "max_tokens": 4096,
+            "messages": [{
+              "role": "user",
+              "content": f"""You are a senior engineer reviewing a pull request for the S2A design system — a Figma/web component library for Adobe.
+
+Review this diff for:
+1. **Correctness bugs** — logic errors, broken component behavior, missing edge cases
+2. **Token violations** — primitive CSS tokens used instead of semantic tokens (e.g. `--s2a-spacing-16` instead of `--s2a-spacing-md`)
+3. **Figma API misuse** — awaiting inside loops, missing font loads, wrong sizing mode order, createInstance on a COMPONENT_SET
+4. **Simplifications** — unnecessary complexity, redundant code
+
+Format your response as markdown. Lead with the most critical finding. Be concise — skip praise and commentary on things that look fine. If there are no issues, say so in one sentence.
+
+Diff:
+```
+{diff}
+```"""
+            }]
+          }
+
+          req = urllib.request.Request(
+            'https://api.anthropic.com/v1/messages',
+            data=json.dumps(payload).encode(),
+            headers={
+              'x-api-key': os.environ['ANTHROPIC_API_KEY'],
+              'anthropic-version': '2023-06-01',
+              'content-type': 'application/json'
+            }
+          )
+
+          with urllib.request.urlopen(req) as r:
+            response = json.loads(r.read())
+
+          review = response['content'][0]['text']
+
+          with open('claude_review.md', 'w') as f:
+            f.write(f"## 🤖 Claude Review\n\n{review}\n\n---\n_Model: claude-sonnet-5_")
+
+          PYTHON
+
+      - name: Post Claude review
+        if: steps.check.outputs.skip == 'false'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: claude-review
+          path: claude_review.md
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  gpt-review:
+    name: GPT-4o Review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get diff
+        run: git diff origin/${{ github.base_ref }}...HEAD | head -c 60000 > pr.diff
+
+      - name: Skip if empty
+        id: check
+        run: |
+          if [ ! -s pr.diff ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Call OpenAI API
+        if: steps.check.outputs.skip == 'false'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python3 << 'PYTHON'
+          import os, json, urllib.request
+
+          diff = open('pr.diff').read()
+
+          payload = {
+            "model": "gpt-4o",
+            "max_tokens": 4096,
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are a senior engineer reviewing pull requests for the S2A design system — a Figma/web component library for Adobe. Be direct, concise, and critical. Skip praise."
+              },
+              {
+                "role": "user",
+                "content": f"""Review this diff for:
+1. **Correctness bugs** — logic errors, broken component behavior, missing edge cases
+2. **Token violations** — primitive CSS tokens used instead of semantic tokens (e.g. `--s2a-spacing-16` instead of `--s2a-spacing-md`)
+3. **Figma API misuse** — awaiting inside loops, missing font loads, wrong sizing mode order, createInstance on a COMPONENT_SET
+4. **Simplifications** — unnecessary complexity, redundant code
+
+Format as markdown. Lead with the most critical finding. If there are no issues, say so in one sentence.
+
+Diff:
+```
+{diff}
+```"""
+              }
+            ]
+          }
+
+          req = urllib.request.Request(
+            'https://api.openai.com/v1/chat/completions',
+            data=json.dumps(payload).encode(),
+            headers={
+              'Authorization': f"Bearer {os.environ['OPENAI_API_KEY']}",
+              'Content-Type': 'application/json'
+            }
+          )
+
+          with urllib.request.urlopen(req) as r:
+            response = json.loads(r.read())
+
+          review = response['choices'][0]['message']['content']
+
+          with open('gpt_review.md', 'w') as f:
+            f.write(f"## 🤖 GPT-4o Review\n\n{review}\n\n---\n_Model: gpt-4o_")
+
+          PYTHON
+
+      - name: Post GPT-4o review
+        if: steps.check.outputs.skip == 'false'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: gpt-review
+          path: gpt_review.md
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

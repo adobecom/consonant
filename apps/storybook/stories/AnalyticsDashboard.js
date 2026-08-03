@@ -527,6 +527,72 @@ function drawConsumersChart(container) {
   });
 }
 
+// ── Panel 5: detachment by component ────────────────────────────────────────
+
+function drawDetachmentChart(container) {
+  container.replaceChildren();
+  const rows = snapshot.detachmentByComponent || [];
+  if (!rows.length) return;
+
+  const width = container.clientWidth || 720;
+  const rowHeight = 28;
+  const margin = { top: 8, right: 96, bottom: 8, left: 160 };
+  const innerW = width - margin.left - margin.right;
+  const height = rows.length * rowHeight + margin.top + margin.bottom;
+
+  const svg = select(container)
+    .append("svg")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("class", "s2a-panel__chart");
+  const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+  const x = scaleLinear([0, max(rows, (d) => d.detachments) || 1], [0, innerW]);
+  const barHeight = Math.min(18, rowHeight - 8);
+  const tooltip = getTooltip();
+
+  rows.forEach((d, i) => {
+    const y = i * rowHeight + (rowHeight - barHeight) / 2;
+    const ratePct = `${(d.rate * 100).toFixed(1)}%`;
+
+    g.append("path")
+      .attr("d", roundedBarPath(0, y, x(d.detachments), barHeight))
+      .attr("fill", COLOR.critical)
+      .on("pointermove", (event) => {
+        tooltip.show(
+          tooltipBox(
+            [
+              tooltipRow(COLOR.critical, "Detachments", fmt(d.detachments)),
+              tooltipRow(COLOR.good, "Insertions", fmt(d.insertions)),
+              tooltipRow(COLOR.neutral, "Detach rate", ratePct),
+            ],
+            d.name,
+          ),
+          event.clientX,
+          event.clientY,
+        );
+      })
+      .on("pointerleave", () => tooltip.hide());
+
+    g.append("text")
+      .attr("x", x(d.detachments) + 6)
+      .attr("y", y + barHeight / 2)
+      .attr("dy", "0.35em")
+      .attr("font-size", 11)
+      .attr("font-weight", 700)
+      .attr("fill", "currentColor")
+      .text(`${fmtCompact(d.detachments)} · ${ratePct}`);
+
+    g.append("text")
+      .attr("x", -8)
+      .attr("y", y + barHeight / 2)
+      .attr("dy", "0.35em")
+      .attr("text-anchor", "end")
+      .attr("font-size", 11)
+      .attr("fill", "currentColor")
+      .text(d.name.length > 22 ? `${d.name.slice(0, 21)}…` : d.name);
+  });
+}
+
 // ── Table fallbacks (accessibility — every value reachable without hover) ──
 
 function trendTable() {
@@ -593,6 +659,19 @@ function consumersTable() {
       <tbody>
         ${snapshot.topConsumers.map(
           (c) => html`<tr><td>${c.team}</td><td>${c.file}</td><td>${fmt(c.usages)}</td></tr>`,
+        )}
+      </tbody>
+    </table>
+  `;
+}
+
+function detachmentTable() {
+  return html`
+    <table class="s2a-panel__table">
+      <thead><tr><th>Component</th><th>Detachments</th><th>Insertions</th><th>Detach rate</th></tr></thead>
+      <tbody>
+        ${(snapshot.detachmentByComponent || []).map(
+          (d) => html`<tr><td>${d.name}</td><td>${fmt(d.detachments)}</td><td>${fmt(d.insertions)}</td><td>${(d.rate * 100).toFixed(1)}%</td></tr>`,
         )}
       </tbody>
     </table>
@@ -673,6 +752,21 @@ export const AnalyticsDashboard = () => {
         </div>
         <div ${ref((el) => el && drawAdoptionChart(el))}></div>
         ${tableToggle(adoptionTable)}
+      </div>
+
+      <div class="s2a-panel">
+        <h2 class="s2a-panel__title">Detachment by component <span class="s2a-panel-tag">Figma design files</span></h2>
+        <p class="s2a-panel__note">
+          How often designers <strong>detach</strong> each component — breaking the link to the library instance to
+          override it freely. Bars are total detachments over the analytics window; the percentage is detachments as a
+          share of all actions (insertions + detachments) for that component. A high rate is a signal the component is
+          too rigid for how people actually use it (locked layers, missing props), not necessarily that it's broken.
+        </p>
+        <div class="s2a-legend">
+          <span class="s2a-legend__item"><span class="s2a-legend__swatch" style="background:${COLOR.critical}"></span>Detachments</span>
+        </div>
+        <div ${ref((el) => el && drawDetachmentChart(el))}></div>
+        ${tableToggle(detachmentTable)}
       </div>
 
       <div class="s2a-panel">

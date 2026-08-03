@@ -144,7 +144,29 @@ function buildFigmaData(actionRows, usageByComponentRows, usageByFileRows) {
       file: row.file_name || "File not visible",
     }));
 
-  return { figmaTrend, componentAdoption, topConsumers };
+  // Detachment by component family — designers breaking the link to the library
+  // component (detaching an instance). Aggregated from the same action rows,
+  // grouped by component-set name. `rate` is detachments as a share of all
+  // actions (insertions + detachments) for that family, so a small component
+  // with a high override rate surfaces alongside high-volume ones.
+  const detachAgg = new Map();
+  for (const row of actionRows) {
+    const name = row.component_set_name || row.component_name || "Unknown";
+    const entry = detachAgg.get(name) || { name, insertions: 0, detachments: 0 };
+    entry.insertions += row.insertions || 0;
+    entry.detachments += row.detachments || 0;
+    detachAgg.set(name, entry);
+  }
+  const detachmentByComponent = [...detachAgg.values()]
+    .filter((c) => c.detachments > 0)
+    .map((c) => ({
+      ...c,
+      rate: c.insertions + c.detachments > 0 ? c.detachments / (c.insertions + c.detachments) : 0,
+    }))
+    .sort((a, b) => b.detachments - a.detachments)
+    .slice(0, 15);
+
+  return { figmaTrend, componentAdoption, topConsumers, detachmentByComponent };
 }
 
 // ── Milo token fidelity ──────────────────────────────────────────────────
@@ -307,8 +329,9 @@ export const meta = ${serialise(snapshot.meta)};
 export const figmaTrend = ${serialise(snapshot.figmaTrend)};
 export const componentAdoption = ${serialise(snapshot.componentAdoption)};
 export const topConsumers = ${serialise(snapshot.topConsumers)};
+export const detachmentByComponent = ${serialise(snapshot.detachmentByComponent || [])};
 export const miloFidelity = ${serialise(snapshot.miloFidelity)};
-export default { meta, figmaTrend, componentAdoption, topConsumers, miloFidelity };
+export default { meta, figmaTrend, componentAdoption, topConsumers, detachmentByComponent, miloFidelity };
 `;
   fs.writeFileSync(OUTPUT_MODULE, contents);
 }
@@ -322,6 +345,7 @@ async function main() {
   let figmaTrend = [];
   let componentAdoption = [];
   let topConsumers = [];
+  let detachmentByComponent = [];
 
   if (!FIGMA_FILE_ID || !FIGMA_TOKEN) {
     console.warn(
@@ -334,7 +358,7 @@ async function main() {
         fetchAnalytics("component/usages", "component"),
         fetchAnalytics("component/usages", "file"),
       ]);
-      ({ figmaTrend, componentAdoption, topConsumers } = buildFigmaData(
+      ({ figmaTrend, componentAdoption, topConsumers, detachmentByComponent } = buildFigmaData(
         actionRows,
         usageByComponentRows,
         usageByFileRows,
@@ -348,7 +372,7 @@ async function main() {
   const miloFidelity = await buildMiloData();
   meta.miloFilesScanned = miloFidelity.byFile.length;
 
-  writeSnapshot({ meta, figmaTrend, componentAdoption, topConsumers, miloFidelity });
+  writeSnapshot({ meta, figmaTrend, componentAdoption, topConsumers, detachmentByComponent, miloFidelity });
   console.log(
     `✅ Generated stories/generated/analyticsSnapshot.js (figma: ${meta.figmaAvailable ? "live" : "unavailable"}, milo files scanned: ${meta.miloFilesScanned})`,
   );
@@ -366,6 +390,7 @@ main().catch((e) => {
     figmaTrend: [],
     componentAdoption: [],
     topConsumers: [],
+    detachmentByComponent: [],
     miloFidelity: { byFile: [], byBlock: [], builtVsShipped: { builtCount: 0, mirroredCount: 0, officialFiles: 0, unofficialFiles: 0 } },
   });
   process.exit(0);
