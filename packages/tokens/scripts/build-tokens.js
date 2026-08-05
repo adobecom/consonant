@@ -106,6 +106,10 @@ const PACKAGE_DIR = path.join(__dirname, "..");
 const FIGMA_TOKENS_DIR = path.join(PACKAGE_DIR, "json");
 const FIGMA_METADATA_PATH = path.join(FIGMA_TOKENS_DIR, "metadata.json");
 
+// Only run the build when this script is executed directly (node build-tokens.js).
+// Importing it for its utilities (e.g. in tests) must not kick off a build +
+// process.exit(1).
+if (require.main === module)
 (async () => {
   try {
     if (!(await hasFigmaTokens())) {
