@@ -113,6 +113,41 @@
         }
       ],
       "gate": true
+    },
+    {
+      "id": "button-v2",
+      "slug": "button-v2",
+      "component": "Button — v2 (canonical)",
+      "figmaNode": "10715:35477",
+      "difficulty": "medium",
+      "category": "atom",
+      "version": "2.0.0",
+      "status": "active",
+      "expectedCharacteristics": [
+        "Canonical Button — semver 2.0.0, active (VersionHygiene: clean)",
+        "Composes only active sub-components (icons) — NoDeprecatedDeps clean",
+        "Light/dark ready; Style = solid|outlined|transparent|accent|knockout|outline-inverse"
+      ],
+      "gate": false,
+      "gateNote": "Non-gating until a full token/light-dark audit of v2's 201 paints is run; VersionHygiene + NoDeprecatedDeps are the meaningful checks here today."
+    },
+    {
+      "id": "button-v1",
+      "slug": "button-v1",
+      "component": "Button (v1 — deprecated)",
+      "figmaNode": "8359:55686",
+      "difficulty": "medium",
+      "category": "atom",
+      "version": "1.0.0",
+      "status": "deprecated",
+      "removalDate": "2026-09-30",
+      "replacedBy": "Button — v2",
+      "expectedCharacteristics": [
+        "Deprecated in favor of Button — v2; carries a full retirement contract (version + removalDate + replacedBy)",
+        "Gates on VersionHygiene only — the quality scorers run but are relaxed while it's being retired",
+        "Appears in the deprecation burndown until removed on 2026-09-30"
+      ],
+      "gate": true
     }
   ]
 }

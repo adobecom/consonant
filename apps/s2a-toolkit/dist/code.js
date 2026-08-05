@@ -19,6 +19,465 @@ var __spreadValues = (a, b) => {
 };
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 
+// ../../evals/lib/version-meta.mjs
+var FENCE = "\u2014 s2a:meta \u2014";
+var SEMVER = /^\d+\.\d+\.\d+$/;
+function today() {
+  return (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+}
+var KNOWN_KEYS = /* @__PURE__ */ new Set(["version", "status", "updated", "replacedby", "removeby", "removaldate", "removal", "changelog"]);
+function readMeta(description) {
+  const text = description || "";
+  const lines = text.split(/\r?\n/);
+  const fenceIdx = lines.findIndex((l) => /s2a:meta/i.test(l) || /—\s*metadata\s*—/i.test(l));
+  if (fenceIdx === -1) return { prose: text.replace(/^\s+|\s+$/g, ""), meta: null };
+  const meta = { version: null, status: "active", updated: null, replacedBy: null, removeBy: null, changelog: [] };
+  let inChangelog = false;
+  let i = fenceIdx + 1;
+  for (; i < lines.length; i++) {
+    const raw = lines[i];
+    if (!raw.trim()) break;
+    const isIndented = /^\s/.test(raw);
+    const kv = raw.match(/^([A-Za-z][A-Za-z ]*?):\s*(.*)$/);
+    if (kv && !isIndented && KNOWN_KEYS.has(kv[1].toLowerCase().replace(/\s+/g, ""))) {
+      const key = kv[1].toLowerCase().replace(/\s+/g, "");
+      const val = kv[2].trim();
+      if (key === "changelog") {
+        inChangelog = true;
+        continue;
+      }
+      inChangelog = false;
+      if (key === "version") meta.version = val || null;
+      else if (key === "status") meta.status = /deprecat/i.test(val) ? "deprecated" : "active";
+      else if (key === "updated") meta.updated = val || null;
+      else if (key === "replacedby") meta.replacedBy = val || null;
+      else meta.removeBy = val || null;
+      continue;
+    }
+    if (inChangelog && isIndented) {
+      const m = raw.trim().match(/^(\S+)\s+(\S+)\s+(\S+)(?:\s+(.*))?$/);
+      if (m) {
+        meta.changelog.push({ version: m[1], date: m[2], level: m[3], summary: (m[4] || "").trim() });
+        continue;
+      }
+    }
+    break;
+  }
+  const before = lines.slice(0, fenceIdx).join("\n");
+  const after = lines.slice(i).join("\n");
+  const prose = [before, after].map((s) => s.replace(/^\s+|\s+$/g, "")).filter(Boolean).join("\n\n");
+  return { prose, meta };
+}
+function writeMeta(description, meta) {
+  const { prose } = readMeta(description || "");
+  return composeDescription(prose, meta);
+}
+function composeDescription(prose, meta) {
+  const pad = (k) => (k + ":").padEnd(12);
+  const lines = [FENCE];
+  lines.push(pad("version") + (meta.version || ""));
+  lines.push(pad("status") + (meta.status || "active"));
+  if (meta.updated) lines.push(pad("updated") + meta.updated);
+  if (meta.status === "deprecated") {
+    if (meta.replacedBy) lines.push(pad("replacedBy") + meta.replacedBy);
+    if (meta.removeBy) lines.push(pad("removeBy") + meta.removeBy);
+  }
+  if (meta.changelog && meta.changelog.length) {
+    lines.push("changelog:");
+    for (const e of meta.changelog) {
+      const cols = [String(e.version).padEnd(6), String(e.date).padEnd(10), String(e.level).padEnd(11)];
+      lines.push("  " + cols.join("  ") + "  " + (e.summary || ""));
+    }
+  }
+  const proseClean = (prose || "").replace(/^\s+|\s+$/g, "");
+  return lines.join("\n") + (proseClean ? "\n\n" + proseClean : "");
+}
+function bumpVersion(version, level) {
+  const [x, y, z] = String(version || "0.0.0").split(".").map((n) => parseInt(n, 10) || 0);
+  if (level === "major") return `${x + 1}.0.0`;
+  if (level === "minor") return `${x}.${y + 1}.0`;
+  return `${x}.${y}.${z + 1}`;
+}
+function initMeta(t = today()) {
+  return {
+    version: "1.0.0",
+    status: "active",
+    updated: t,
+    replacedBy: null,
+    removeBy: null,
+    changelog: [{ version: "1.0.0", date: t, level: "init", summary: "Initial release" }]
+  };
+}
+function applyBump(meta, level, summary, t = today()) {
+  if (!meta || !meta.version) return initMeta(t);
+  const version = bumpVersion(meta.version, level);
+  return __spreadProps(__spreadValues({}, meta), {
+    version,
+    status: "active",
+    updated: t,
+    changelog: [{ version, date: t, level, summary: summary || "\u2014" }, ...meta.changelog || []]
+  });
+}
+function deprecateMeta(meta, { replacedBy, removeBy, summary, t = today() } = {}) {
+  const base = meta && meta.version ? meta : initMeta(t);
+  return __spreadProps(__spreadValues({}, base), {
+    status: "deprecated",
+    updated: t,
+    replacedBy: replacedBy || base.replacedBy || null,
+    removeBy: removeBy || base.removeBy || null,
+    changelog: [
+      { version: base.version, date: t, level: "deprecated", summary: summary || (replacedBy ? `Deprecated \u2192 ${replacedBy}` : "Deprecated") },
+      ...base.changelog || []
+    ]
+  });
+}
+function reactivateMeta(meta, t = today()) {
+  const base = meta && meta.version ? meta : initMeta(t);
+  return __spreadProps(__spreadValues({}, base), {
+    status: "active",
+    updated: t,
+    replacedBy: null,
+    removeBy: null,
+    changelog: [{ version: base.version, date: t, level: "reactivated", summary: "Reactivated" }, ...base.changelog || []]
+  });
+}
+function hygiene(meta) {
+  const issues = [];
+  if (!meta || !SEMVER.test(meta.version || "")) issues.push("no valid semver version");
+  if (meta && meta.status === "deprecated") {
+    if (!meta.removeBy) issues.push("deprecated but no removeBy date");
+    if (!meta.replacedBy) issues.push("deprecated but no replacedBy pointer");
+  }
+  return { pass: issues.length === 0, issues };
+}
+
+// src/docs-generator.ts
+var TOK = {
+  bgDefault: "VariableID:6:49",
+  bgSubtle: "VariableID:6:47",
+  border: "VariableID:6:22",
+  title: "VariableID:2483:41398",
+  subhead: "VariableID:2483:41397",
+  default: "VariableID:6:82",
+  bodySub: "VariableID:2483:41396",
+  label: "VariableID:2483:41392",
+  caption: "VariableID:2483:41395"
+};
+var STYLE = {
+  title: "S:5cf014300bccf1230a6e660f60bd4f4252a72816,",
+  eyebrow: "S:152b1b57fb441ccfd288060043e1cd0a4365737f,",
+  body: "S:565931e51de6b933b7b1e79eec5803a05e080e86,",
+  label: "S:536bbf234b1a0a717cffe0e3c578fb0052669086,",
+  caption: "S:e572ca6995cb534da839d4c8bef75ec523efeb6f,"
+};
+function parseSections(prose) {
+  const sections = {};
+  let cur = "_intro";
+  sections[cur] = [];
+  for (const l of (prose || "").split("\n")) {
+    const h = l.match(/^##\s+(.+)$/);
+    if (h) {
+      cur = h[1].trim().toLowerCase();
+      sections[cur] = [];
+    } else sections[cur].push(l);
+  }
+  const shortDesc = (sections._intro.join("\n").trim().split(/\n\s*\n/)[0] || "").trim();
+  return { sections, shortDesc };
+}
+async function generateDocs(set) {
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+  await figma.loadFontAsync({ family: "Adobe Clean Display", style: "Black" });
+  await figma.loadFontAsync({ family: "Adobe Clean", style: "Regular" });
+  await figma.loadFontAsync({ family: "Adobe Clean", style: "Bold" });
+  await figma.loadAllPagesAsync();
+  let p = set;
+  while (p && p.type !== "PAGE") p = p.parent;
+  const pageNode = p;
+  await figma.setCurrentPageAsync(pageNode);
+  const [vBgDefault, vBgSubtle, vBorder, vTitle, , vDefault, vBodySub, , vCaption] = await Promise.all([
+    figma.variables.getVariableByIdAsync(TOK.bgDefault),
+    figma.variables.getVariableByIdAsync(TOK.bgSubtle),
+    figma.variables.getVariableByIdAsync(TOK.border),
+    figma.variables.getVariableByIdAsync(TOK.title),
+    figma.variables.getVariableByIdAsync(TOK.subhead),
+    figma.variables.getVariableByIdAsync(TOK.default),
+    figma.variables.getVariableByIdAsync(TOK.bodySub),
+    figma.variables.getVariableByIdAsync(TOK.label),
+    figma.variables.getVariableByIdAsync(TOK.caption)
+  ]);
+  const colls = await figma.variables.getLocalVariableCollectionsAsync();
+  const themeColl = colls.find((c) => /Semantic \/ Color \/ Theme/i.test(c.name)) || colls.find((c) => /Theme/i.test(c.name) && c.modes.some((m) => /dark/i.test(m.name)));
+  const darkMode = themeColl ? themeColl.modes.find((m) => /dark/i.test(m.name)) || null : null;
+  const allVars = await figma.variables.getLocalVariablesAsync();
+  const darkSurf = allVars.find((v) => /surface\/inverse-subtle/i.test(v.name)) || allVars.find((v) => /inverse.*subtle/i.test(v.name)) || allVars.find((v) => /background\/inverse/i.test(v.name)) || allVars.find((v) => /surface\/inverse/i.test(v.name));
+  const P = { type: "SOLID", color: { r: 0, g: 0, b: 0 } };
+  const sf = (node, v) => {
+    if (!v) return;
+    node.fills = [figma.variables.setBoundVariableForPaint(P, "color", v)];
+  };
+  const txt = async (chars, styleId, cv) => {
+    const t = figma.createText();
+    t.characters = String(chars);
+    await t.setTextStyleIdAsync(styleId);
+    t.textAutoResize = "HEIGHT";
+    sf(t, cv);
+    return t;
+  };
+  const parsed = readMeta(set.description || "");
+  const meta = parsed.meta;
+  const { sections, shortDesc } = parseSections(parsed.prose || "");
+  const frame = (name, dir) => {
+    const f = figma.createFrame();
+    f.name = name;
+    f.layoutMode = dir;
+    f.itemSpacing = 20;
+    f.fills = [];
+    f.clipsContent = false;
+    return f;
+  };
+  const tile = (name) => {
+    const t = figma.createFrame();
+    t.name = name;
+    t.layoutMode = "VERTICAL";
+    t.itemSpacing = 10;
+    t.paddingTop = t.paddingBottom = 24;
+    t.paddingLeft = t.paddingRight = 24;
+    t.cornerRadius = 16;
+    t.counterAxisSizingMode = "FIXED";
+    t.primaryAxisSizingMode = "AUTO";
+    t.strokes = [figma.variables.setBoundVariableForPaint(P, "color", vBorder)];
+    t.strokeWeight = 1;
+    sf(t, vBgDefault);
+    return t;
+  };
+  const addTitle = async (t, label) => {
+    const e = await txt(label.toUpperCase(), STYLE.caption, vCaption);
+    t.appendChild(e);
+    e.layoutSizingHorizontal = "FILL";
+  };
+  const row = () => {
+    const r = frame("row", "HORIZONTAL");
+    r.primaryAxisSizingMode = "FIXED";
+    r.counterAxisSizingMode = "AUTO";
+    return r;
+  };
+  const place = (parent, child, fill) => {
+    parent.appendChild(child);
+    child.layoutSizingHorizontal = fill === "fixed" ? "FIXED" : "FILL";
+    child.layoutAlign = "STRETCH";
+  };
+  const defs = set.componentPropertyDefinitions || {};
+  const axes = Object.entries(defs).filter(([, d]) => d.type === "VARIANT" && (d.variantOptions || []).length > 1).map(([k, d]) => ({ name: k.split("#")[0], options: d.variantOptions || [] }));
+  const colsAxis = axes.find((a) => /state/i.test(a.name)) || axes[0] || null;
+  const rowsAxis = axes.find((a) => /size/i.test(a.name)) || (axes[1] && axes[1].name !== (colsAxis && colsAxis.name) ? axes[1] : null);
+  const useMatrix = !!(rowsAxis && colsAxis && rowsAxis.name !== colsAxis.name);
+  const variants = set.children;
+  let maxW = 0, maxH = 0;
+  for (const v of variants) {
+    maxW = Math.max(maxW, v.width);
+    maxH = Math.max(maxH, v.height);
+  }
+  const stepX = maxW + 56, stepY = maxH + 56;
+  const posOf = (v) => {
+    if (!useMatrix) return null;
+    const vp = v.variantProperties || {};
+    const col = colsAxis.options.indexOf(vp[colsAxis.name]);
+    const rowI = rowsAxis.options.indexOf(vp[rowsAxis.name]);
+    if (col < 0 || rowI < 0) return null;
+    return { x: col * stepX, y: rowI * stepY };
+  };
+  const matrixW = useMatrix ? (colsAxis.options.length - 1) * stepX + maxW : 0;
+  const matrixH = useMatrix ? (rowsAxis.options.length - 1) * stepY + maxH : 0;
+  const bento = frame(`${set.name} \xB7 Docs`, "VERTICAL");
+  bento.paddingTop = bento.paddingBottom = bento.paddingLeft = bento.paddingRight = 32;
+  bento.itemSpacing = 20;
+  bento.counterAxisSizingMode = "FIXED";
+  bento.primaryAxisSizingMode = "AUTO";
+  sf(bento, vBgSubtle);
+  bento.cornerRadius = 24;
+  pageNode.appendChild(bento);
+  bento.resize(1680, 1200);
+  bento.primaryAxisSizingMode = "AUTO";
+  const bb = set.absoluteBoundingBox;
+  bento.x = (bb ? bb.x : set.x) + set.width + 240;
+  bento.y = bb ? bb.y : set.y;
+  let tiles = 0;
+  const defV = variants.find((c) => /State=default/i.test(c.name)) || variants[0];
+  const r1 = row();
+  bento.appendChild(r1);
+  r1.layoutSizingHorizontal = "FILL";
+  const hero = tile("Hero");
+  tiles++;
+  const eyebrow = await txt("COMPONENT", STYLE.caption, vCaption);
+  hero.appendChild(eyebrow);
+  eyebrow.layoutSizingHorizontal = "FILL";
+  const heroName = await txt(set.name, STYLE.title, vTitle);
+  hero.appendChild(heroName);
+  heroName.layoutSizingHorizontal = "FILL";
+  const heroDesc = await txt(shortDesc || "\u2014", STYLE.body, vBodySub);
+  hero.appendChild(heroDesc);
+  heroDesc.layoutSizingHorizontal = "FILL";
+  if (defV) {
+    const chip = figma.createFrame();
+    chip.layoutMode = "HORIZONTAL";
+    chip.primaryAxisAlignItems = "CENTER";
+    chip.counterAxisAlignItems = "CENTER";
+    chip.paddingTop = chip.paddingBottom = 20;
+    chip.paddingLeft = chip.paddingRight = 20;
+    chip.cornerRadius = 12;
+    chip.itemSpacing = 20;
+    if (darkSurf) sf(chip, darkSurf);
+    else chip.fills = [{ type: "SOLID", color: { r: 0.09, g: 0.09, b: 0.09 } }];
+    chip.appendChild(defV.createInstance());
+    hero.appendChild(chip);
+    chip.layoutSizingHorizontal = "HUG";
+  }
+  place(r1, hero, "fill");
+  const ver = tile("Versioning");
+  ver.resize(460, 10);
+  await addTitle(ver, "Versioning");
+  tiles++;
+  const verV = await txt("v" + ((meta == null ? void 0 : meta.version) || "?") + "  \xB7  " + ((meta == null ? void 0 : meta.status) || "?"), STYLE.body, vTitle);
+  ver.appendChild(verV);
+  verV.layoutSizingHorizontal = "FILL";
+  if (meta == null ? void 0 : meta.updated) {
+    const u = await txt("updated " + meta.updated, STYLE.caption, vCaption);
+    ver.appendChild(u);
+    u.layoutSizingHorizontal = "FILL";
+  }
+  for (const cl of ((meta == null ? void 0 : meta.changelog) || []).slice(0, 4)) {
+    const c = await txt(`\u2022 ${cl.version}  ${cl.date}  ${cl.level}  ${cl.summary}`, STYLE.caption, vBodySub);
+    ver.appendChild(c);
+    c.layoutSizingHorizontal = "FILL";
+  }
+  r1.appendChild(ver);
+  ver.layoutSizingHorizontal = "FIXED";
+  ver.layoutAlign = "STRETCH";
+  const r2 = row();
+  bento.appendChild(r2);
+  r2.layoutSizingHorizontal = "FILL";
+  const comp = tile("All variants");
+  await addTitle(comp, "The component \u2014 all variants");
+  tiles++;
+  place(r2, comp, "fill");
+  if (set.layoutMode && set.layoutMode !== "NONE") set.layoutMode = "NONE";
+  comp.appendChild(set);
+  if (useMatrix) {
+    for (const v of variants) {
+      const pos = posOf(v);
+      if (pos) {
+        v.x = pos.x;
+        v.y = pos.y;
+      }
+    }
+    set.resize(matrixW, matrixH);
+  }
+  const r3 = row();
+  bento.appendChild(r3);
+  r3.layoutSizingHorizontal = "FILL";
+  const anat = tile("Anatomy");
+  await addTitle(anat, "Anatomy");
+  tiles++;
+  const named = defV ? defV.findAll((n) => /^\./.test(n.name)).map((n) => n.name) : [];
+  let ai = 1;
+  for (const nm of named.slice(0, 8)) {
+    const l = await txt(ai++ + "  " + nm, STYLE.caption, vDefault);
+    anat.appendChild(l);
+    l.layoutSizingHorizontal = "FILL";
+  }
+  if (!named.length) {
+    const l = await txt("No dot-named layers found", STYLE.caption, vBodySub);
+    anat.appendChild(l);
+    l.layoutSizingHorizontal = "FILL";
+  }
+  place(r3, anat, "fill");
+  const props = tile("Properties");
+  await addTitle(props, "Properties & variant axes");
+  tiles++;
+  for (const [k, d] of Object.entries(defs)) {
+    const nm = k.split("#")[0];
+    const val = d.type === "VARIANT" ? (d.variantOptions || []).join(", ") : d.type.toLowerCase();
+    const l = await txt(nm + " \u2014 " + val, STYLE.caption, vDefault);
+    props.appendChild(l);
+    l.layoutSizingHorizontal = "FILL";
+  }
+  place(r3, props, "fill");
+  const r4 = row();
+  bento.appendChild(r4);
+  r4.layoutSizingHorizontal = "FILL";
+  const slots = tile("Slots");
+  await addTitle(slots, "Slots");
+  tiles++;
+  const slotProps = Object.entries(defs).filter(([, d]) => d.type === "SLOT" || d.type === "INSTANCE_SWAP").map(([k, d]) => k.split("#")[0] + (d.type === "SLOT" ? "  (slot)" : "  (swap)"));
+  const slotBody = await txt(slotProps.length ? slotProps.join("\n") : "No slots / swappable children", STYLE.caption, vDefault);
+  slots.appendChild(slotBody);
+  slotBody.layoutSizingHorizontal = "FILL";
+  place(r4, slots, "fill");
+  const r5 = row();
+  bento.appendChild(r5);
+  r5.layoutSizingHorizontal = "FILL";
+  const renderSection = async (name, key, placeholder) => {
+    const t = tile(name);
+    await addTitle(t, name);
+    tiles++;
+    const items = (sections[key] || []).filter((l) => l.trim().startsWith("- ")).map((l) => l.replace(/^\s*-\s*/, ""));
+    if (items.length) {
+      for (const it of items) {
+        const b = await txt("\u2022  " + it, STYLE.body, vDefault);
+        t.appendChild(b);
+        b.layoutSizingHorizontal = "FILL";
+      }
+    } else {
+      const b = await txt(placeholder, STYLE.body, vCaption);
+      t.appendChild(b);
+      b.layoutSizingHorizontal = "FILL";
+    }
+    return t;
+  };
+  place(r5, await renderSection("Good to know", "good to know", 'Add a "## Good to know" section to the description.'), "fill");
+  place(r5, await renderSection("Accessibility", "accessibility", 'Add a "## Accessibility" section to the description.'), "fill");
+  const darkTile = tile("Dark mode");
+  await addTitle(darkTile, "Dark mode");
+  tiles++;
+  bento.appendChild(darkTile);
+  darkTile.layoutSizingHorizontal = "FILL";
+  const panel = figma.createFrame();
+  panel.name = "dark-preview";
+  panel.clipsContent = false;
+  panel.cornerRadius = 12;
+  panel.layoutMode = "NONE";
+  panel.strokes = [figma.variables.setBoundVariableForPaint(P, "color", vBorder)];
+  panel.strokeWeight = 1;
+  sf(panel, vBgDefault);
+  if (themeColl && darkMode) panel.setExplicitVariableModeForCollection(themeColl, darkMode.modeId);
+  darkTile.appendChild(panel);
+  try {
+    panel.layoutSizingHorizontal = "FIXED";
+  } catch (e) {
+  }
+  try {
+    panel.layoutAlign = "INHERIT";
+  } catch (e) {
+  }
+  panel.resize(Math.max(set.width, 1), Math.max(set.height, 1));
+  for (const v of variants) {
+    const inst = v.createInstance();
+    panel.appendChild(inst);
+    inst.x = v.x;
+    inst.y = v.y;
+  }
+  bento.primaryAxisSizingMode = "AUTO";
+  const priorName = `${set.name} \xB7 Docs`;
+  for (const old of pageNode.findAll((n) => n.type === "FRAME" && n.name === priorName && n.id !== bento.id)) {
+    try {
+      old.remove();
+    } catch (e) {
+    }
+  }
+  return { bentoId: bento.id, tiles };
+}
+
 // src/code.ts
 function serializeVariable(v) {
   return {
@@ -209,12 +668,15 @@ function notifySelection() {
   }
   const first = sel[0];
   const sectionNodes = sel.filter((n) => n.type === "SECTION");
+  const isVersionable = first.type === "COMPONENT_SET" || first.type === "COMPONENT";
+  const versionMeta = isVersionable ? readMeta(first.description || "").meta : null;
   figma.ui.postMessage({
     type: "selection-changed",
     setId: first.type === "COMPONENT_SET" || first.type === "COMPONENT" ? first.id : null,
     nodeId: first.id,
     nodeName: first.name,
     nodeType: first.type,
+    versionMeta,
     fileKey: figma.fileKey || null,
     fileName: figma.root.name,
     width: "width" in first ? Math.round(first.width) : void 0,
@@ -344,6 +806,63 @@ figma.ui.onmessage = async (msg) => {
     }
     case "notify": {
       figma.notify(msg.message);
+      break;
+    }
+    case "version:apply": {
+      try {
+        const node = await figma.getNodeByIdAsync(msg.nodeId);
+        if (!node || node.type !== "COMPONENT_SET" && node.type !== "COMPONENT") {
+          figma.ui.postMessage({ type: "version:result", error: "Select a component or component set first" });
+          break;
+        }
+        const compNode = node;
+        const current = readMeta(compNode.description || "").meta;
+        const op = msg.op;
+        const summary = (msg.summary || "").trim();
+        let next;
+        let forkReminder = false;
+        if (op === "deprecate") {
+          next = deprecateMeta(current, {
+            replacedBy: (msg.replacedBy || "").trim() || void 0,
+            removeBy: (msg.removeBy || "").trim() || void 0,
+            summary: summary || void 0
+          });
+        } else if (op === "reactivate") {
+          next = reactivateMeta(current);
+        } else {
+          const level = op === "init" ? "patch" : op;
+          next = applyBump(current, level, summary);
+          forkReminder = op === "major";
+        }
+        compNode.description = writeMeta(compNode.description || "", next);
+        const h = hygiene(next);
+        figma.notify(`${compNode.name} \u2192 v${next.version} (${next.status})`);
+        figma.ui.postMessage({
+          type: "version:result",
+          nodeId: compNode.id,
+          meta: next,
+          hygiene: h,
+          forkReminder,
+          replacedByName: op === "major" ? `${compNode.name.replace(/\s*—\s*v\d+.*$/i, "")} \u2014 v${next.version.split(".")[0]}` : null
+        });
+      } catch (e) {
+        figma.ui.postMessage({ type: "version:result", error: e.message || String(e) });
+      }
+      break;
+    }
+    case "docs:generate": {
+      try {
+        const node = await figma.getNodeByIdAsync(msg.nodeId);
+        if (!node || node.type !== "COMPONENT_SET") {
+          figma.ui.postMessage({ type: "docs:result", error: "Select a component set first" });
+          break;
+        }
+        const { bentoId, tiles } = await generateDocs(node);
+        figma.notify(`Docs generated for ${node.name} \xB7 ${tiles} tiles`);
+        figma.ui.postMessage({ type: "docs:result", bentoId, tiles });
+      } catch (e) {
+        figma.ui.postMessage({ type: "docs:result", error: e.message || String(e) });
+      }
       break;
     }
     case "format-section": {

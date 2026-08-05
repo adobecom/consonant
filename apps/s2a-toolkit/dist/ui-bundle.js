@@ -67,6 +67,8 @@
   var annotateNodeId = null;
   var selectSetId = null;
   var specSetId = null;
+  var versionSetId = null;
+  var docsSetId = null;
   var variablesCache = null;
   var githubSettings = null;
   var bridgeConnected = false;
@@ -142,8 +144,8 @@
       description: "Re-fetch all Figma variables from the current file",
       category: "Tokens",
       uiAction: () => {
-        var _a15;
-        return (_a15 = document.getElementById("varRefreshBtn")) == null ? void 0 : _a15.click();
+        var _a22;
+        return (_a22 = document.getElementById("varRefreshBtn")) == null ? void 0 : _a22.click();
       }
     },
     {
@@ -152,8 +154,8 @@
       description: "Push token JSON to local dev server on port 9300",
       category: "Tokens",
       uiAction: () => {
-        var _a15;
-        return (_a15 = document.getElementById("varExportLocalBtn")) == null ? void 0 : _a15.click();
+        var _a22;
+        return (_a22 = document.getElementById("varExportLocalBtn")) == null ? void 0 : _a22.click();
       }
     },
     {
@@ -162,8 +164,8 @@
       description: "Commit token JSON to your configured repo",
       category: "Tokens",
       uiAction: () => {
-        var _a15;
-        return (_a15 = document.getElementById("varExportGithubBtn")) == null ? void 0 : _a15.click();
+        var _a22;
+        return (_a22 = document.getElementById("varExportGithubBtn")) == null ? void 0 : _a22.click();
       }
     },
     {
@@ -180,8 +182,8 @@
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a15;
-        return (_a15 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a15.click();
+        var _a22;
+        return (_a22 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a22.click();
       }
     },
     {
@@ -221,6 +223,20 @@
       category: "Tools",
       uiAction: () => switchPanel("tools")
     },
+    {
+      id: "tools:version",
+      name: "Version component",
+      description: "Bump (patch/minor/major) or deprecate the selected component",
+      category: "Tools",
+      uiAction: () => switchPanel("tools")
+    },
+    {
+      id: "tools:docs",
+      name: "Generate component docs",
+      description: "Scaffold the bento doc for the selected component set",
+      category: "Tools",
+      uiAction: () => switchPanel("tools")
+    },
     // Bridge
     {
       id: "bridge:connect",
@@ -246,13 +262,13 @@
     "tools:spec"
   ];
   function fireFeature(feat) {
-    var _a15;
+    var _a22;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a15 = feat.pluginPayload) != null ? _a15 : {});
+      postToPlugin(feat.pluginAction, (_a22 = feat.pluginPayload) != null ? _a22 : {});
     }
     if (activePanel === "home") renderHomeView();
   }
@@ -344,12 +360,12 @@
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a15, _b;
+    var _a22, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a15 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a15.scrollIntoView({ block: "nearest" });
+      (_a22 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a22.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -388,7 +404,7 @@
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a15;
+    var _a22;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -401,7 +417,7 @@
     }
     document.body.removeChild(ta);
     try {
-      (_a15 = navigator.clipboard) == null ? void 0 : _a15.writeText(text).catch(() => {
+      (_a22 = navigator.clipboard) == null ? void 0 : _a22.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -844,11 +860,11 @@
     updateBridgeUi();
   }
   function getTokenGroup(name) {
-    var _a15;
+    var _a22;
     const parts = name.split("/").filter((p) => p !== "s2a");
     if (parts.length >= 4 && parts[1] === "transparent") return parts[0] + " / " + parts[1] + " / " + parts[2];
     if (parts.length >= 3) return parts[0] + " / " + parts[1];
-    return (_a15 = parts[0]) != null ? _a15 : name;
+    return (_a22 = parts[0]) != null ? _a22 : name;
   }
   function setVarMeta(_text) {
   }
@@ -933,14 +949,14 @@
   }
   var _a2;
   (_a2 = document.getElementById("tokenGroupList")) == null ? void 0 : _a2.addEventListener("click", (e) => {
-    var _a15;
+    var _a22;
     const btn = e.target.closest(".gen-btn");
     if (!btn || btn.disabled) return;
     const row = btn.closest(".token-group-row");
     if (!row) return;
     btn.disabled = true;
     btn.textContent = "\u2026";
-    setVarStatus("Generating " + ((_a15 = row.dataset.group) != null ? _a15 : "") + "\u2026");
+    setVarStatus("Generating " + ((_a22 = row.dataset.group) != null ? _a22 : "") + "\u2026");
     postToPlugin("token-docs:generate", { collectionId: row.dataset.col, group: row.dataset.group });
   });
   var _a3;
@@ -1147,8 +1163,8 @@
   }
   var _a8;
   (_a8 = document.getElementById("saveFigmaTokenBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
-    var _a15;
-    const token = (((_a15 = document.getElementById("figmaApiToken")) == null ? void 0 : _a15.value) || "").trim();
+    var _a22;
+    const token = (((_a22 = document.getElementById("figmaApiToken")) == null ? void 0 : _a22.value) || "").trim();
     postToPlugin("save-figma-token", { token });
   });
   function renderAxes(setId, setName, axes) {
@@ -1209,8 +1225,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a15;
-    annotateNodeId = (_a15 = sel == null ? void 0 : sel.id) != null ? _a15 : null;
+    var _a22;
+    annotateNodeId = (_a22 = sel == null ? void 0 : sel.id) != null ? _a22 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -1261,9 +1277,9 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateSpecSelection(sel) {
-    var _a15, _b;
+    var _a22, _b;
     const isValid = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT";
-    specSetId = isValid ? (_a15 = sel == null ? void 0 : sel.id) != null ? _a15 : null : null;
+    specSetId = isValid ? (_a22 = sel == null ? void 0 : sel.id) != null ? _a22 : null : null;
     const emptyEl = document.getElementById("specSelectionEmpty");
     const infoEl = document.getElementById("specSelectionInfo");
     const nameEl = document.getElementById("specSetName");
@@ -1303,8 +1319,127 @@
       options: { variants: on.has("variants"), tokens: on.has("tokens"), children: on.has("children") }
     });
   });
+  function setVersionStatus(msg, type = "") {
+    const el = document.getElementById("versionStatus");
+    el.textContent = msg;
+    el.className = "status" + (type ? " " + type : "");
+  }
+  function updateVersionSelection(sel, meta) {
+    var _a22;
+    const isValid = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT";
+    versionSetId = isValid ? (_a22 = sel == null ? void 0 : sel.id) != null ? _a22 : null : null;
+    const emptyEl = document.getElementById("versionSelectionEmpty");
+    const infoEl = document.getElementById("versionSelectionInfo");
+    const nameEl = document.getElementById("versionSetName");
+    const curEl = document.getElementById("versionCurrent");
+    const badgeEl = document.getElementById("versionBadge");
+    const initRow = document.getElementById("versionInitRow");
+    const activeBox = document.getElementById("versionActiveBox");
+    const deprecatedBox = document.getElementById("versionDeprecatedBox");
+    const forkNote = document.getElementById("versionForkNote");
+    forkNote.style.display = "none";
+    setVersionStatus("");
+    if (!isValid || !sel) {
+      emptyEl.style.display = "block";
+      infoEl.style.display = "none";
+      initRow.style.display = activeBox.style.display = deprecatedBox.style.display = "none";
+      return;
+    }
+    emptyEl.style.display = "none";
+    infoEl.style.display = "flex";
+    nameEl.textContent = sel.name;
+    const versioned = !!(meta && meta.version);
+    if (!versioned) {
+      curEl.textContent = "unversioned";
+      badgeEl.textContent = "none";
+      badgeEl.className = "version-badge unversioned";
+      badgeEl.style.display = "inline-block";
+      initRow.style.display = "flex";
+      activeBox.style.display = deprecatedBox.style.display = "none";
+      return;
+    }
+    curEl.textContent = "v" + meta.version + (meta.updated ? " \xB7 " + meta.updated : "");
+    badgeEl.textContent = meta.status;
+    badgeEl.className = "version-badge " + meta.status;
+    badgeEl.style.display = "inline-block";
+    initRow.style.display = "none";
+    if (meta.status === "deprecated") {
+      activeBox.style.display = "none";
+      deprecatedBox.style.display = "block";
+      const contract = document.getElementById("versionContract");
+      contract.textContent = `status:     deprecated
+replacedBy: ${meta.replacedBy || "\u26A0 missing"}
+removeBy:   ${meta.removeBy || "\u26A0 missing"}`;
+    } else {
+      deprecatedBox.style.display = "none";
+      activeBox.style.display = "block";
+      document.getElementById("versionSummary").value = "";
+    }
+  }
+  function fireVersion(op, extra = {}) {
+    var _a22, _b;
+    if (!versionSetId) return;
+    const summary = (_b = (_a22 = document.getElementById("versionSummary")) == null ? void 0 : _a22.value) != null ? _b : "";
+    setVersionStatus("Applying\u2026");
+    postToPlugin("version:apply", __spreadValues({ nodeId: versionSetId, op, summary }, extra));
+  }
+  var _a15;
+  (_a15 = document.getElementById("versionInitBtn")) == null ? void 0 : _a15.addEventListener("click", () => fireVersion("init"));
+  var _a16;
+  (_a16 = document.getElementById("versionPatchBtn")) == null ? void 0 : _a16.addEventListener("click", () => fireVersion("patch"));
+  var _a17;
+  (_a17 = document.getElementById("versionMinorBtn")) == null ? void 0 : _a17.addEventListener("click", () => fireVersion("minor"));
+  var _a18;
+  (_a18 = document.getElementById("versionMajorBtn")) == null ? void 0 : _a18.addEventListener("click", () => fireVersion("major"));
+  var _a19;
+  (_a19 = document.getElementById("versionReactivateBtn")) == null ? void 0 : _a19.addEventListener("click", () => fireVersion("reactivate"));
+  var _a20;
+  (_a20 = document.getElementById("versionDeprecateBtn")) == null ? void 0 : _a20.addEventListener("click", () => {
+    const replacedBy = document.getElementById("versionReplacedBy").value.trim();
+    const removeBy = document.getElementById("versionRemoveBy").value.trim();
+    if (!replacedBy || !removeBy) {
+      setVersionStatus("Deprecating needs both a replacement and a remove-by date", "err");
+      return;
+    }
+    fireVersion("deprecate", { replacedBy, removeBy });
+  });
+  function setDocsStatus(msg, type = "") {
+    const el = document.getElementById("docsStatus");
+    el.textContent = msg;
+    el.className = "status" + (type ? " " + type : "");
+  }
+  function updateDocsSelection(sel) {
+    var _a22, _b;
+    const isValid = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
+    docsSetId = isValid ? (_a22 = sel == null ? void 0 : sel.id) != null ? _a22 : null : null;
+    const emptyEl = document.getElementById("docsSelectionEmpty");
+    const infoEl = document.getElementById("docsSelectionInfo");
+    const nameEl = document.getElementById("docsSetName");
+    const countEl = document.getElementById("docsSetCount");
+    const genBtn = document.getElementById("docsGenerateBtn");
+    if (isValid && sel) {
+      emptyEl.style.display = "none";
+      infoEl.style.display = "flex";
+      nameEl.textContent = sel.name;
+      countEl.textContent = ((_b = sel.variantCount) != null ? _b : 0) + " variants";
+      genBtn.disabled = false;
+    } else {
+      emptyEl.style.display = "block";
+      infoEl.style.display = "none";
+      genBtn.disabled = true;
+    }
+  }
+  var _a21;
+  (_a21 = document.getElementById("docsGenerateBtn")) == null ? void 0 : _a21.addEventListener("click", () => {
+    if (!docsSetId) return;
+    const btn = document.getElementById("docsGenerateBtn");
+    btn.disabled = true;
+    btn.textContent = "Generating\u2026";
+    setDocsStatus("");
+    postToPlugin("docs:generate", { nodeId: docsSetId });
+  });
   window.addEventListener("message", (event) => {
-    var _a15, _b, _c;
+    var _a22, _b, _c;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -1332,7 +1467,7 @@
       }
       case "figma-token-saved": {
         if (msg.success) {
-          figmaApiToken = (((_a15 = document.getElementById("figmaApiToken")) == null ? void 0 : _a15.value) || "").trim();
+          figmaApiToken = (((_a22 = document.getElementById("figmaApiToken")) == null ? void 0 : _a22.value) || "").trim();
           setFigmaTokenStatus("Saved", "ok");
         } else {
           setFigmaTokenStatus("Save failed: " + msg.error, "err");
@@ -1381,6 +1516,8 @@
           };
           updateAnnotateSelection(sel);
           updateSpecSelection(sel);
+          updateVersionSelection(sel, msg.versionMeta);
+          updateDocsSelection(sel);
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
@@ -1390,6 +1527,8 @@
         } else {
           updateAnnotateSelection(null);
           updateSpecSelection(null);
+          updateVersionSelection(null, null);
+          updateDocsSelection(null);
           updateCopyBtn(null, null);
           updateSectionBar(false, 0, "");
         }
@@ -1435,6 +1574,35 @@
         else {
           const vars = msg.variantCount;
           setSpecStatus(`\u2713 Spec generated \xB7 ${vars} variant${vars !== 1 ? "s" : ""}`, "ok");
+        }
+        break;
+      }
+      case "docs:result": {
+        const btn = document.getElementById("docsGenerateBtn");
+        btn.disabled = !docsSetId;
+        btn.textContent = "Generate Docs";
+        if (msg.error) setDocsStatus("\u274C " + msg.error, "err");
+        else {
+          const t = msg.tiles;
+          setDocsStatus(`\u2713 Docs generated \xB7 ${t} tile${t !== 1 ? "s" : ""}`, "ok");
+        }
+        break;
+      }
+      case "version:result": {
+        if (msg.error) {
+          setVersionStatus("\u274C " + msg.error, "err");
+          break;
+        }
+        const meta = msg.meta;
+        updateVersionSelection({ id: msg.nodeId, name: document.getElementById("versionSetName").textContent || "", nodeType: "COMPONENT_SET" }, meta);
+        const h = msg.hygiene;
+        if (h && !h.pass) setVersionStatus("\u26A0 v" + meta.version + " \u2014 " + h.issues.join("; "), "err");
+        else setVersionStatus("\u2713 v" + meta.version + " \xB7 " + meta.status, "ok");
+        if (msg.forkReminder) {
+          const note = document.getElementById("versionForkNote");
+          const forkName = msg.replacedByName || "a new \u2014 v" + meta.version.split(".")[0];
+          note.innerHTML = `<strong>Major = breaking.</strong> Duplicate this set as \u201C${forkName}\u201D, then deprecate this one pointing at it. The version metadata is stamped; the fork is yours to make.`;
+          note.style.display = "block";
         }
         break;
       }

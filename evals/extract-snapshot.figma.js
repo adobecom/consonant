@@ -36,6 +36,37 @@ async function colorInMode(varId, modeId) {
   return hex(val);
 }
 
+// ── version / status metadata (parsed from the component description) ────────
+// The s2a-toolkit plugin WRITES this block via evals/lib/version-meta.mjs; this
+// is an inline MIRROR of that module's readMeta() (the extractor is pasted into
+// figma_execute so it can't import). Keep it in sync — the format contract is
+// tested in evals/lib/version-meta.test.mjs. Reads the canonical "— s2a:meta —"
+// fence and tolerates the legacy "— metadata —" banner. `removeBy` maps to
+// `removalDate` (the field the scorers read).
+function parseMeta(desc) {
+  const KNOWN = ["version", "status", "updated", "replacedby", "removeby", "removaldate", "removal", "changelog"];
+  const lines = (desc || "").split(/\r?\n/);
+  const fi = lines.findIndex((l) => /s2a:meta/i.test(l) || /—\s*metadata\s*—/i.test(l));
+  const meta = { version: null, status: "active", removalDate: null, replacedBy: null };
+  if (fi === -1) return meta;
+  // Consume the contiguous block (block may sit at top or bottom); stop at a blank
+  // or the first non-key/non-changelog line so trailing prose isn't misread.
+  for (let i = fi + 1; i < lines.length; i++) {
+    const raw = lines[i];
+    if (!raw.trim()) break;
+    if (/^\s/.test(raw)) continue; // indented changelog row
+    const kv = raw.match(/^([A-Za-z][A-Za-z ]*?):\s*(.*)$/);
+    const key = kv && kv[1].toLowerCase().replace(/\s+/g, "");
+    if (!kv || !KNOWN.includes(key)) break; // prose started
+    const val = kv[2].trim();
+    if (key === "version") meta.version = val || null;
+    else if (key === "status") meta.status = /deprecat/i.test(val) ? "deprecated" : "active";
+    else if (key === "replacedby") meta.replacedBy = val || null;
+    else if (key === "removeby" || key === "removaldate" || key === "removal") meta.removalDate = val || null;
+  }
+  return meta;
+}
+
 // ── property / variant schema ────────────────────────────────────────────────
 const defs = root.componentPropertyDefinitions || {};
 const variantProps = [];
@@ -78,7 +109,21 @@ async function paintOf(node, arr, kind, path) {
   }
 }
 
+// ── dependencies — every child component instance + its own status ───────────
+// An active component that composes a deprecated sub-component fails NoDeprecatedDeps.
+const depsById = new Map(); // ownerId -> { name, componentId, deprecated }
+async function collectDep(node) {
+  if (node.type !== "INSTANCE") return;
+  const main = await node.getMainComponentAsync();
+  if (!main) return;
+  const owner = main.parent && main.parent.type === "COMPONENT_SET" ? main.parent : main;
+  if (owner.id === root.id || depsById.has(owner.id)) return;
+  const m = parseMeta(owner.description || "");
+  depsById.set(owner.id, { name: owner.name, componentId: owner.id, deprecated: m.status === "deprecated" });
+}
+
 async function walk(node, path, depth) {
+  await collectDep(node);
   if ("explicitVariableModes" in node && node.explicitVariableModes) {
     for (const [collId, modeId] of Object.entries(node.explicitVariableModes)) {
       modePins.push({ nodePath: path, collectionName: collNameById[collId] || collId, mode: modeId });
@@ -96,12 +141,19 @@ async function walk(node, path, depth) {
 }
 await walk(root, root.name, 0);
 
+const meta = parseMeta(root.description || "");
+
 return {
   id: root.id,
   name: root.name,
   kind: root.type,
   slug: root.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
   extractedAt: new Date().toISOString(),
+  version: meta.version,
+  status: meta.status,
+  removalDate: meta.removalDate,
+  replacedBy: meta.replacedBy,
+  dependencies: [...depsById.values()],
   themeModes: { light: lightMode, dark: darkMode, collection: themeCollId },
   variantProps,
   otherProps,

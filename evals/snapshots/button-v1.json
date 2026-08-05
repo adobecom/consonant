@@ -1,0 +1,2363 @@
+{
+  "id": "8359:55686",
+  "name": "Button",
+  "kind": "COMPONENT_SET",
+  "slug": "button-v1",
+  "extractedAt": "2026-08-04T16:32:56.540Z",
+  "version": "1.0.0",
+  "status": "deprecated",
+  "removalDate": "2026-09-30",
+  "replacedBy": "Button \u2014 v2",
+  "dependencies": [
+    {
+      "name": "S2_Icon_Circle_20_N",
+      "componentId": "14:11802",
+      "deprecated": false
+    },
+    {
+      "name": "S2a_Icon_Chevron_Right",
+      "componentId": "8873:23272",
+      "deprecated": false
+    },
+    {
+      "name": "S2_Icon_UIChevron_Size300_N",
+      "componentId": "6989:75924",
+      "deprecated": false
+    }
+  ],
+  "themeModes": {
+    "light": "6:0",
+    "dark": "6:1",
+    "collection": "VariableCollectionId:6:17"
+  },
+  "variantProps": [
+    {
+      "name": "Context",
+      "type": "VARIANT",
+      "values": [
+        "on-light",
+        "on-dark"
+      ]
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "values": [
+        "solid",
+        "outlined",
+        "transparent",
+        "accent"
+      ]
+    },
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "values": [
+        "md"
+      ]
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "values": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "focus"
+      ]
+    }
+  ],
+  "otherProps": [
+    {
+      "name": "Show Icon Start",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "Show Icon End",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "Label",
+      "type": "TEXT"
+    },
+    {
+      "name": "Icon Start",
+      "type": "INSTANCE_SWAP"
+    },
+    {
+      "name": "Icon End",
+      "type": "INSTANCE_SWAP"
+    }
+  ],
+  "paints": [
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=default",
+      "kind": "fill",
+      "token": "button/background/primary/outlined/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=default",
+      "kind": "stroke",
+      "token": "button/border/primary/outlined/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#dadada"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=default/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=default/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=default/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=default/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=default/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=default",
+      "kind": "stroke",
+      "token": "button/border/primary/outlined/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=default/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=default/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=default/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=default/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=default/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=default",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=default/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=default/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=default/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=default/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=default/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=default",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=default/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=default/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=default/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=default/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=default/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=hover",
+      "kind": "fill",
+      "token": "button/background/primary/outlined/on-light/hover",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=hover",
+      "kind": "stroke",
+      "token": "button/border/primary/outlined/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#dadada"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=hover/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=hover/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=hover/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=hover/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=hover/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=hover",
+      "kind": "fill",
+      "token": "button/background/primary/outlined/on-dark/hover",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=hover",
+      "kind": "stroke",
+      "token": "button/border/primary/outlined/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=hover/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=hover/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=hover/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=hover/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=hover/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=hover",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-light/hover",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=hover/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=hover/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=hover/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=hover/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=hover/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=hover",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-dark/hover",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=hover/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=hover/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=hover/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=hover/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=hover/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=active",
+      "kind": "fill",
+      "token": "button/background/primary/outlined/on-light/active",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=active/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=active/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=active/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=active/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=active/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=active",
+      "kind": "fill",
+      "token": "button/background/primary/outlined/on-dark/active",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=active/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=active/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=active/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=active/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=active/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=active",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-light/active",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=active/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=active/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=active/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=active/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=active/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=active",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-dark/active",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=active/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=active/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=active/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=active/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=active/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=disabled",
+      "kind": "fill",
+      "token": "button/background/primary/outlined/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=disabled",
+      "kind": "stroke",
+      "token": "button/border/primary/outlined/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#dadada"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=disabled/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=disabled/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=disabled/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=disabled/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=disabled/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=disabled",
+      "kind": "fill",
+      "token": "button/background/primary/outlined/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=disabled",
+      "kind": "stroke",
+      "token": "button/border/primary/outlined/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=disabled/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=disabled/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=disabled/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=disabled/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=disabled/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=disabled",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=disabled/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=disabled/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=disabled/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=disabled/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=disabled/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=disabled",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=disabled/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=disabled/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=disabled/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=disabled/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=disabled/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=focus",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=focus/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=focus/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=focus/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=focus/Focus Ring",
+      "kind": "stroke",
+      "token": "focus-ring/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#3b63fb",
+      "dark": "#8eb9fc"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=focus/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=focus/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=focus",
+      "kind": "fill",
+      "token": "button/background/primary/outlined/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=focus",
+      "kind": "stroke",
+      "token": "button/border/primary/outlined/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#dadada"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=focus/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=focus/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=focus/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=focus/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=focus/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=outlined, Size=md, State=focus/Focus Ring",
+      "kind": "stroke",
+      "token": "focus-ring/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#3b63fb",
+      "dark": "#8eb9fc"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=focus",
+      "kind": "fill",
+      "token": "button/background/primary/outlined/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=focus",
+      "kind": "stroke",
+      "token": "button/border/primary/outlined/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=focus/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=focus/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=focus/Label",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=focus/Focus Ring",
+      "kind": "stroke",
+      "token": "focus-ring/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#3b63fb",
+      "dark": "#8eb9fc"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=focus/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=outlined, Size=md, State=focus/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/outlined/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=focus",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=focus/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=focus/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=focus/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=focus/Focus Ring",
+      "kind": "stroke",
+      "token": "focus-ring/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#3b63fb",
+      "dark": "#8eb9fc"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=focus/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=transparent, Size=md, State=focus/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=focus",
+      "kind": "fill",
+      "token": "button/background/primary/transparent/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=focus/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=focus/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=focus/Label",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=focus/Focus Ring",
+      "kind": "stroke",
+      "token": "focus-ring/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#3b63fb",
+      "dark": "#8eb9fc"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=focus/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=transparent, Size=md, State=focus/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/transparent/knockout",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=hover",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-light/hover",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=hover",
+      "kind": "stroke",
+      "token": "button/border/primary/solid/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#dadada"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=hover/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=hover/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=hover/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=hover/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=hover/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=active",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-light/active",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=active/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=active/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=active/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=active/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=active/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=disabled",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=disabled/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=disabled/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=disabled/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=disabled/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=disabled/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=default",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=default/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=default/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=default/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=default/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=solid, Size=md, State=default/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=focus",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=focus/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=focus/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=focus/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=focus/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=focus/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=focus/Focus Ring",
+      "kind": "stroke",
+      "token": "focus-ring/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#3b63fb",
+      "dark": "#8eb9fc"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=hover",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-dark/hover",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=hover",
+      "kind": "stroke",
+      "token": "button/border/primary/solid/on-dark/hover",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=hover/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=hover/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=hover/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=hover/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=hover/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=active",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-dark/active",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=active/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=active/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=active/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=active/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=active/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=disabled",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=disabled/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=disabled/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=disabled/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=disabled/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=disabled/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=default",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-dark/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=default/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=default/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=default/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=default/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-dark, Style=solid, Size=md, State=default/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/inverse",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=default",
+      "kind": "fill",
+      "token": "button/background/accent/solid/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#3b63fb",
+      "dark": "#3b63fb"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=default/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=default/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=default/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=default/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=default/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=hover",
+      "kind": "fill",
+      "token": "button/background/accent/solid/on-light/hover",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#274dea",
+      "dark": "#274dea"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=hover/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=hover/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=hover/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=hover/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=hover/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=active",
+      "kind": "fill",
+      "token": "button/background/accent/solid/on-light/active",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#1d3ecf",
+      "dark": "#1d3ecf"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=active/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=active/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=active/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=active/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=active/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=disabled",
+      "kind": "fill",
+      "token": "button/background/primary/solid/on-light/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=disabled/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=disabled/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=disabled/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=disabled/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=disabled/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=focus",
+      "kind": "fill",
+      "token": "blue/1100",
+      "primitive": true,
+      "designOnly": false,
+      "raw": null,
+      "light": "#1d3ecf",
+      "dark": "#1d3ecf"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=focus/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": null,
+      "primitive": false,
+      "designOnly": false,
+      "raw": "#ffffff",
+      "light": null,
+      "dark": null
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=focus/Icon Start/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=focus/Label",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=focus/Focus Ring",
+      "kind": "stroke",
+      "token": "focus-ring/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#3b63fb",
+      "dark": "#8eb9fc"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=focus/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "kind": "fill",
+      "token": "content/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#000000",
+      "dark": "#ffffff"
+    },
+    {
+      "nodePath": "Button/Context=on-light, Style=accent, Size=md, State=focus/Icon End/Icon color",
+      "kind": "fill",
+      "token": "button/content/primary/solid/default",
+      "primitive": false,
+      "designOnly": false,
+      "raw": null,
+      "light": "#ffffff",
+      "dark": "#000000"
+    }
+  ],
+  "modePins": [
+    {
+      "nodePath": "Button",
+      "collectionName": "S2A / Semantic / Color / Theme",
+      "mode": "6:0"
+    }
+  ],
+  "contrastPairs": []
+}

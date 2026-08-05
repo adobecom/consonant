@@ -848,3 +848,55 @@ body {
   padding-top: 12px;
   border-top: 1px solid var(--border);
 }
+
+/* ── Versioning tool ─────────────────────────────────────────────────────── */
+.version-badge {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 2px 7px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  align-self: center;
+}
+.version-badge.active     { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bdr); }
+.version-badge.deprecated { background: rgba(200,75,62,0.10); color: var(--red); border: 1px solid rgba(200,75,62,0.24); }
+.version-badge.unversioned{ background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
+
+#versionCurrent { font-family: 'Menlo', monospace; }
+
+.version-deprecate {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+.version-contract {
+  font-family: 'Menlo', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--text-2);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-top: 8px;
+  white-space: pre-wrap;
+}
+
+.btn-danger { color: var(--red); }
+.btn-danger:hover { background: rgba(200,75,62,0.08); border-color: rgba(200,75,62,0.3); }
+
+.version-fork-note {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-bdr);
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-1);
+}
+.version-fork-note strong { color: var(--accent); }

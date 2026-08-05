@@ -224,6 +224,84 @@
       </div>
       <div class="status" id="specStatus"></div>
 
+      <div class="tools-divider"></div>
+
+      <!-- ── Versioning ──────────────────────────────────────────────── -->
+      <div class="section-label">Versioning</div>
+      <div class="sel-card">
+        <span class="sel-card-empty" id="versionSelectionEmpty">Select a component or set</span>
+        <div class="sel-card-info" id="versionSelectionInfo" style="display:none;">
+          <span class="sel-icon">◈</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="versionSetName">—</span>
+            <span class="sel-type" id="versionCurrent">—</span>
+          </div>
+          <span class="version-badge" id="versionBadge" style="display:none;"></span>
+        </div>
+      </div>
+
+      <!-- unversioned -->
+      <div class="btn-row" id="versionInitRow" style="margin-top:8px;display:none;">
+        <button class="btn" id="versionInitBtn" style="flex:1;">Initialize at 1.0.0</button>
+      </div>
+
+      <!-- versioned + active -->
+      <div id="versionActiveBox" style="display:none;">
+        <input class="form-input" id="versionSummary" type="text" placeholder="What changed? (changelog note)" style="margin-top:8px;" />
+        <div class="btn-row" style="margin-top:8px;">
+          <button class="btn btn-ghost" id="versionPatchBtn" style="flex:1;" title="Backwards-compatible fix — token retint, bug fix">Patch</button>
+          <button class="btn btn-ghost" id="versionMinorBtn" style="flex:1;" title="Additive — new variant, new optional prop">Minor</button>
+          <button class="btn btn-ghost" id="versionMajorBtn" style="flex:1;" title="Breaking change — forks a new named component">Major</button>
+        </div>
+        <div class="version-deprecate">
+          <div class="form-row">
+            <div class="form-field">
+              <label class="form-label" for="versionReplacedBy">Replaced by</label>
+              <input class="form-input" type="text" id="versionReplacedBy" placeholder="e.g. Button — v2" />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="versionRemoveBy">Remove by</label>
+              <input class="form-input" type="text" id="versionRemoveBy" placeholder="YYYY-MM-DD" />
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top:6px;">
+            <button class="btn btn-ghost btn-danger" id="versionDeprecateBtn" style="flex:1;">Deprecate</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- versioned + deprecated -->
+      <div id="versionDeprecatedBox" style="display:none;">
+        <div class="version-contract" id="versionContract"></div>
+        <div class="btn-row" style="margin-top:8px;">
+          <button class="btn btn-ghost" id="versionReactivateBtn" style="flex:1;">Reactivate</button>
+        </div>
+      </div>
+
+      <!-- fork reminder after a major bump -->
+      <div class="version-fork-note" id="versionForkNote" style="display:none;"></div>
+
+      <div class="status" id="versionStatus"></div>
+
+      <div class="tools-divider"></div>
+
+      <!-- ── Component docs ───────────────────────────────────────────── -->
+      <div class="section-label">Component docs</div>
+      <div class="sel-card">
+        <span class="sel-card-empty" id="docsSelectionEmpty">Select a component set</span>
+        <div class="sel-card-info" id="docsSelectionInfo" style="display:none;">
+          <span class="sel-icon">◈</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="docsSetName">—</span>
+            <span class="sel-type" id="docsSetCount">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="docsGenerateBtn" disabled style="flex:1;">Generate Docs</button>
+      </div>
+      <div class="status" id="docsStatus"></div>
+
       <!-- bottom padding for scroll clearance -->
       <div style="height:16px;"></div>
     </div>

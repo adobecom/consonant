@@ -1,3 +1,10 @@
+// Shared version/lifecycle metadata — the SAME module the eval harness reads with,
+// so the plugin's writes and the harness's reads can never drift. (esbuild bundles it.)
+import {
+  readMeta, writeMeta, applyBump, deprecateMeta, reactivateMeta, hygiene, today,
+} from "../../../evals/lib/version-meta.mjs";
+import { generateDocs } from "./docs-generator";
+
 // ── Serializers ──────────────────────────────────────────────────────────────
 
 function serializeVariable(v: Variable): Record<string, unknown> {
@@ -214,12 +221,17 @@ function notifySelection() {
 
   const sectionNodes = sel.filter(n => n.type === 'SECTION');
 
+  // Version tool — parse the lifecycle metadata off a selected component (set).
+  const isVersionable = first.type === 'COMPONENT_SET' || first.type === 'COMPONENT';
+  const versionMeta = isVersionable ? readMeta((first as ComponentSetNode).description || '').meta : null;
+
   figma.ui.postMessage({
     type: 'selection-changed',
     setId: (first.type === 'COMPONENT_SET' || first.type === 'COMPONENT') ? first.id : null,
     nodeId: first.id,
     nodeName: first.name,
     nodeType: first.type,
+    versionMeta,
     fileKey: figma.fileKey || null,
     fileName: figma.root.name,
     width: 'width' in first ? Math.round((first as FrameNode).width) : undefined,
@@ -365,6 +377,70 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
 
     case 'notify': {
       figma.notify(msg.message as string);
+      break;
+    }
+
+    case 'version:apply': {
+      // Deterministically stamp/bump/deprecate a component's version metadata.
+      // The plugin is the ONLY writer; it uses the shared version-meta module so
+      // the block always matches what the eval harness reads.
+      try {
+        const node = await figma.getNodeByIdAsync(msg.nodeId as string);
+        if (!node || (node.type !== 'COMPONENT_SET' && node.type !== 'COMPONENT')) {
+          figma.ui.postMessage({ type: 'version:result', error: 'Select a component or component set first' });
+          break;
+        }
+        const compNode = node as ComponentSetNode;
+        const current = readMeta(compNode.description || '').meta;
+        const op = msg.op as string;              // init | patch | minor | major | deprecate | reactivate
+        const summary = (msg.summary as string || '').trim();
+        let next;
+        let forkReminder = false;
+        if (op === 'deprecate') {
+          next = deprecateMeta(current, {
+            replacedBy: (msg.replacedBy as string || '').trim() || undefined,
+            removeBy:   (msg.removeBy   as string || '').trim() || undefined,
+            summary:    summary || undefined,
+          });
+        } else if (op === 'reactivate') {
+          next = reactivateMeta(current);
+        } else {
+          // init | patch | minor | major all route through applyBump
+          const level = op === 'init' ? 'patch' : op; // init on unversioned yields 1.0.0
+          next = applyBump(current, level, summary);
+          forkReminder = op === 'major';
+        }
+        compNode.description = writeMeta(compNode.description || '', next);
+        const h = hygiene(next);
+        figma.notify(`${compNode.name} → v${next.version} (${next.status})`);
+        figma.ui.postMessage({
+          type: 'version:result',
+          nodeId: compNode.id,
+          meta: next,
+          hygiene: h,
+          forkReminder,
+          replacedByName: op === 'major' ? `${compNode.name.replace(/\s*—\s*v\d+.*$/i, '')} — v${next.version.split('.')[0]}` : null,
+        });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'version:result', error: e.message || String(e) });
+      }
+      break;
+    }
+
+    case 'docs:generate': {
+      // Deterministically scaffold the bento component-doc for the selected set.
+      try {
+        const node = await figma.getNodeByIdAsync(msg.nodeId as string);
+        if (!node || node.type !== 'COMPONENT_SET') {
+          figma.ui.postMessage({ type: 'docs:result', error: 'Select a component set first' });
+          break;
+        }
+        const { bentoId, tiles } = await generateDocs(node as ComponentSetNode);
+        figma.notify(`Docs generated for ${node.name} · ${tiles} tiles`);
+        figma.ui.postMessage({ type: 'docs:result', bentoId, tiles });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'docs:result', error: e.message || String(e) });
+      }
       break;
     }
 

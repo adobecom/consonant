@@ -66,6 +66,8 @@ function recentlyUsed(n = 5): Feature[] {
 let annotateNodeId: string | null = null;
 let selectSetId:    string | null = null;
 let specSetId:      string | null = null;
+let versionSetId:   string | null = null;
+let docsSetId:      string | null = null;
 let variablesCache: { variables: any[]; variableCollections: any[] } | null = null;
 let githubSettings: GitHubSettings | null = null;
 let bridgeConnected      = false;
@@ -242,6 +244,20 @@ const FEATURES: Feature[] = [
     id: 'tools:spec',
     name: 'Generate spec sheet',
     description: 'Scaffold a Figma spec doc for a component set',
+    category: 'Tools',
+    uiAction: () => switchPanel('tools'),
+  },
+  {
+    id: 'tools:version',
+    name: 'Version component',
+    description: 'Bump (patch/minor/major) or deprecate the selected component',
+    category: 'Tools',
+    uiAction: () => switchPanel('tools'),
+  },
+  {
+    id: 'tools:docs',
+    name: 'Generate component docs',
+    description: 'Scaffold the bento doc for the selected component set',
     category: 'Tools',
     uiAction: () => switchPanel('tools'),
   },
@@ -1356,6 +1372,141 @@ document.getElementById('specGenerateBtn')?.addEventListener('click', () => {
   });
 });
 
+// ── Tools — Versioning ─────────────────────────────────────────────────────────
+
+interface VersionMeta {
+  version: string | null;
+  status: 'active' | 'deprecated';
+  updated: string | null;
+  replacedBy: string | null;
+  removeBy: string | null;
+  changelog: Array<{ version: string; date: string; level: string; summary: string }>;
+}
+
+function setVersionStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('versionStatus') as HTMLElement;
+  el.textContent = msg; el.className = 'status' + (type ? ' ' + type : '');
+}
+
+function updateVersionSelection(
+  sel: { id: string; name: string; nodeType: string } | null,
+  meta: VersionMeta | null,
+) {
+  const isValid = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT';
+  versionSetId = isValid ? (sel?.id ?? null) : null;
+
+  const emptyEl = document.getElementById('versionSelectionEmpty') as HTMLElement;
+  const infoEl  = document.getElementById('versionSelectionInfo')  as HTMLElement;
+  const nameEl  = document.getElementById('versionSetName')  as HTMLElement;
+  const curEl   = document.getElementById('versionCurrent')  as HTMLElement;
+  const badgeEl = document.getElementById('versionBadge')    as HTMLElement;
+  const initRow = document.getElementById('versionInitRow')  as HTMLElement;
+  const activeBox = document.getElementById('versionActiveBox') as HTMLElement;
+  const deprecatedBox = document.getElementById('versionDeprecatedBox') as HTMLElement;
+  const forkNote = document.getElementById('versionForkNote') as HTMLElement;
+
+  forkNote.style.display = 'none';
+  setVersionStatus('');
+
+  if (!isValid || !sel) {
+    emptyEl.style.display = 'block';
+    infoEl.style.display = 'none';
+    initRow.style.display = activeBox.style.display = deprecatedBox.style.display = 'none';
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+  infoEl.style.display = 'flex';
+  nameEl.textContent = sel.name;
+
+  const versioned = !!(meta && meta.version);
+  if (!versioned) {
+    curEl.textContent = 'unversioned';
+    badgeEl.textContent = 'none';
+    badgeEl.className = 'version-badge unversioned';
+    badgeEl.style.display = 'inline-block';
+    initRow.style.display = 'flex';
+    activeBox.style.display = deprecatedBox.style.display = 'none';
+    return;
+  }
+
+  curEl.textContent = 'v' + meta!.version + (meta!.updated ? ' · ' + meta!.updated : '');
+  badgeEl.textContent = meta!.status;
+  badgeEl.className = 'version-badge ' + meta!.status;
+  badgeEl.style.display = 'inline-block';
+  initRow.style.display = 'none';
+
+  if (meta!.status === 'deprecated') {
+    activeBox.style.display = 'none';
+    deprecatedBox.style.display = 'block';
+    const contract = document.getElementById('versionContract') as HTMLElement;
+    contract.textContent =
+      `status:     deprecated\n` +
+      `replacedBy: ${meta!.replacedBy || '⚠ missing'}\n` +
+      `removeBy:   ${meta!.removeBy || '⚠ missing'}`;
+  } else {
+    deprecatedBox.style.display = 'none';
+    activeBox.style.display = 'block';
+    (document.getElementById('versionSummary') as HTMLInputElement).value = '';
+  }
+}
+
+function fireVersion(op: string, extra: Record<string, unknown> = {}) {
+  if (!versionSetId) return;
+  const summary = (document.getElementById('versionSummary') as HTMLInputElement)?.value ?? '';
+  setVersionStatus('Applying…');
+  postToPlugin('version:apply', { nodeId: versionSetId, op, summary, ...extra });
+}
+
+document.getElementById('versionInitBtn')?.addEventListener('click', () => fireVersion('init'));
+document.getElementById('versionPatchBtn')?.addEventListener('click', () => fireVersion('patch'));
+document.getElementById('versionMinorBtn')?.addEventListener('click', () => fireVersion('minor'));
+document.getElementById('versionMajorBtn')?.addEventListener('click', () => fireVersion('major'));
+document.getElementById('versionReactivateBtn')?.addEventListener('click', () => fireVersion('reactivate'));
+document.getElementById('versionDeprecateBtn')?.addEventListener('click', () => {
+  const replacedBy = (document.getElementById('versionReplacedBy') as HTMLInputElement).value.trim();
+  const removeBy   = (document.getElementById('versionRemoveBy')   as HTMLInputElement).value.trim();
+  if (!replacedBy || !removeBy) {
+    setVersionStatus('Deprecating needs both a replacement and a remove-by date', 'err');
+    return;
+  }
+  fireVersion('deprecate', { replacedBy, removeBy });
+});
+
+// ── Tools — Component docs ──────────────────────────────────────────────────────
+
+function setDocsStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('docsStatus') as HTMLElement;
+  el.textContent = msg; el.className = 'status' + (type ? ' ' + type : '');
+}
+
+function updateDocsSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
+  const isValid = sel?.nodeType === 'COMPONENT_SET';
+  docsSetId = isValid ? (sel?.id ?? null) : null;
+  const emptyEl = document.getElementById('docsSelectionEmpty') as HTMLElement;
+  const infoEl  = document.getElementById('docsSelectionInfo')  as HTMLElement;
+  const nameEl  = document.getElementById('docsSetName')  as HTMLElement;
+  const countEl = document.getElementById('docsSetCount') as HTMLElement;
+  const genBtn  = document.getElementById('docsGenerateBtn') as HTMLButtonElement;
+  if (isValid && sel) {
+    emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
+    nameEl.textContent = sel.name;
+    countEl.textContent = (sel.variantCount ?? 0) + ' variants';
+    genBtn.disabled = false;
+  } else {
+    emptyEl.style.display = 'block'; infoEl.style.display = 'none';
+    genBtn.disabled = true;
+  }
+}
+
+document.getElementById('docsGenerateBtn')?.addEventListener('click', () => {
+  if (!docsSetId) return;
+  const btn = document.getElementById('docsGenerateBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Generating…';
+  setDocsStatus('');
+  postToPlugin('docs:generate', { nodeId: docsSetId });
+});
+
 // ── Plugin messages ───────────────────────────────────────────────────────────
 
 window.addEventListener('message', (event) => {
@@ -1430,6 +1581,8 @@ window.addEventListener('message', (event) => {
         };
         updateAnnotateSelection(sel);
         updateSpecSelection(sel);
+        updateVersionSelection(sel, msg.versionMeta as VersionMeta | null);
+        updateDocsSelection(sel);
         updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
         updateSectionBar(
           !!(msg.isSection as boolean),
@@ -1439,6 +1592,8 @@ window.addEventListener('message', (event) => {
       } else {
         updateAnnotateSelection(null);
         updateSpecSelection(null);
+        updateVersionSelection(null, null);
+        updateDocsSelection(null);
         updateCopyBtn(null, null);
         updateSectionBar(false, 0, '');
       }
@@ -1481,6 +1636,36 @@ window.addEventListener('message', (event) => {
       else {
         const vars = msg.variantCount as number;
         setSpecStatus(`✓ Spec generated · ${vars} variant${vars !== 1 ? 's' : ''}`, 'ok');
+      }
+      break;
+    }
+    case 'docs:result': {
+      const btn = document.getElementById('docsGenerateBtn') as HTMLButtonElement;
+      btn.disabled = !docsSetId; btn.textContent = 'Generate Docs';
+      if (msg.error) setDocsStatus('❌ ' + (msg.error as string), 'err');
+      else {
+        const t = msg.tiles as number;
+        setDocsStatus(`✓ Docs generated · ${t} tile${t !== 1 ? 's' : ''}`, 'ok');
+      }
+      break;
+    }
+    case 'version:result': {
+      if (msg.error) { setVersionStatus('❌ ' + (msg.error as string), 'err'); break; }
+      const meta = msg.meta as VersionMeta;
+      // Re-render the panel to the new state (keeps the selection id).
+      updateVersionSelection({ id: msg.nodeId as string, name: (document.getElementById('versionSetName') as HTMLElement).textContent || '', nodeType: 'COMPONENT_SET' }, meta);
+      const h = msg.hygiene as { pass: boolean; issues: string[] } | undefined;
+      if (h && !h.pass) setVersionStatus('⚠ v' + meta.version + ' — ' + h.issues.join('; '), 'err');
+      else setVersionStatus('✓ v' + meta.version + ' · ' + meta.status, 'ok');
+      // After a major bump, surface the fork reminder (you do the clone).
+      if (msg.forkReminder) {
+        const note = document.getElementById('versionForkNote') as HTMLElement;
+        const forkName = (msg.replacedByName as string) || 'a new — v' + meta.version.split('.')[0];
+        note.innerHTML =
+          `<strong>Major = breaking.</strong> Duplicate this set as ` +
+          `“${forkName}”, then deprecate this one pointing at it. ` +
+          `The version metadata is stamped; the fork is yours to make.`;
+        note.style.display = 'block';
       }
       break;
     }
