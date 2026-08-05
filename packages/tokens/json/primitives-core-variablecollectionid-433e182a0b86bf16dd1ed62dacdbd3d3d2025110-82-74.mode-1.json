@@ -37,9 +37,33 @@
           }
         }
       },
+      "12": {
+        "$type": "number",
+        "$value": 12,
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [],
+            "codeSyntax": {}
+          }
+        }
+      },
       "16": {
         "$type": "number",
         "$value": 16,
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "22": {
+        "$type": "number",
+        "$value": 22,
         "$description": "",
         "$extensions": {
           "com.figma": {

@@ -84,9 +84,25 @@
             }
           }
         },
-        "2xs": {
+        "3xs": {
           "$type": "number",
           "$value": "{border.radius.2}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "CORNER_RADIUS"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-border-radius-3xs)"
+              }
+            }
+          }
+        },
+        "2xs": {
+          "$type": "number",
+          "$value": "{border.radius.4}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -102,7 +118,7 @@
         },
         "xs": {
           "$type": "number",
-          "$value": "{border.radius.4}",
+          "$value": "{border.radius.8}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -118,7 +134,7 @@
         },
         "sm": {
           "$type": "number",
-          "$value": "{border.radius.8}",
+          "$value": "{border.radius.12}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -150,7 +166,7 @@
         },
         "lg": {
           "$type": "number",
-          "$value": "{border.radius.32}",
+          "$value": "{border.radius.22}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -160,6 +176,22 @@
               ],
               "codeSyntax": {
                 "WEB": "var(--s2a-border-radius-lg)"
+              }
+            }
+          }
+        },
+        "xl": {
+          "$type": "number",
+          "$value": "{border.radius.32}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "CORNER_RADIUS"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-border-radius-xl)"
               }
             }
           }

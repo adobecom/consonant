@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.19] - 2026-08-05
+
+### ✨ Added
+
+- **`--s2a-border-radius-22` primitive (22px)**
+  New design-vetted radius primitive that backs the retuned `lg` rung.
+- **`--s2a-border-radius-3xs` (2px) and `--s2a-border-radius-xl` (32px) semantic rungs**
+  Extend the border-radius t-shirt scale from 7 to 9 steps.
+
+### ♻️ Changed
+
+- **Border-radius t-shirt scale refactored.**
+  `md` (16px) is held as the anchor; rungs below it shift up one primitive step, and `lg` retargets from 32px to the new 22px. Corner radii across the system change — consumers must re-verify.
+
+  | Token | 0.0.18 | 0.0.19 |
+  |---|---|---|
+  | `--s2a-border-radius-3xs` | — | `2px` (new) |
+  | `--s2a-border-radius-2xs` | `2px` | `4px` |
+  | `--s2a-border-radius-xs` | `4px` | `8px` |
+  | `--s2a-border-radius-sm` | `8px` | `12px` |
+  | `--s2a-border-radius-md` | `16px` | `16px` (unchanged) |
+  | `--s2a-border-radius-lg` | `32px` | `22px` |
+  | `--s2a-border-radius-xl` | — | `32px` (new) |
+
+  Anything relying on the old `lg = 32px` must move to `xl`. Sub-`md` rungs (`2xs`, `xs`, `sm`) render larger and require a refactor pass in Milo / blocks. (MWPW-203041)
+
+---
+
 ## [0.0.18] - 2026-08-03
 
 ### ✨ Added
