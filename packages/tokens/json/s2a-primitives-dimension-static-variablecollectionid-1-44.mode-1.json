@@ -894,7 +894,7 @@
       "124": {
         "$type": "number",
         "$value": 124,
-        "$description": "",
+        "$description": "DEPRECATED - use spacing/128 instead. Retained temporarily because Milo still references 124px; do not use in new work. Remove once Milo migrates off it. (MWPW-202891)",
         "$extensions": {
           "com.figma": {
             "hiddenFromPublishing": true,
@@ -903,6 +903,22 @@
             ],
             "codeSyntax": {
               "WEB": "var(--s2a-spacing-124)"
+            }
+          }
+        }
+      },
+      "128": {
+        "$type": "number",
+        "$value": 128,
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-spacing-128)"
             }
           }
         }

@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.18] - 2026-08-03
+
+### ✨ Added
+
+- **`--s2a-spacing-128` primitive (128px)**
+  New design-vetted spacing primitive that replaces `124` in the semantic layout chain.
+
+### ♻️ Changed
+
+- **`--s2a-layout-lg` remapped `124px` → `128px`**
+  `--s2a-layout-lg` now aliases `var(--s2a-spacing-128)` instead of `var(--s2a-spacing-124)`. Consumers of `--s2a-layout-lg` (section / hero / footer vertical padding) render **4px larger**.
+
+  | Token | 0.0.17 | 0.0.18 |
+  |---|---|---|
+  | `--s2a-layout-lg` | `var(--s2a-spacing-124)` (124px) | `var(--s2a-spacing-128)` (128px) |
+
+### ⚠️ Deprecated
+
+- **`--s2a-spacing-124` deprecated (retained)**
+  `--s2a-spacing-124` (124px) is deprecated in favor of `--s2a-spacing-128`, but **retained** for backward compatibility while downstream consumers (Milo) migrate off it. Do not use in new work; it will be removed in a future release once all references are updated. (MWPW-202891)
+
+---
+
 ## [0.0.17] - 2026-05-06
 
 ### ♻️ Changed
