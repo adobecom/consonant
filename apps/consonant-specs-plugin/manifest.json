@@ -12,11 +12,7 @@
     "allowedDomains": [
       "https://api.anthropic.com",
       "https://api.mymemory.translated.net",
-      "https://lingva.ml",
-      "https://lingva.thedaviddelta.com",
-      "https://api-free.deepl.com",
-      "https://translation.googleapis.com",
-      "https://api.cognitive.microsofttranslator.com",
+      "https://translate.googleapis.com",
       "http://localhost:9300",
       "ws://localhost:9220",
       "ws://localhost:9221",
@@ -32,6 +28,6 @@
       "ws://localhost:9231",
       "ws://localhost:9232"
     ],
-    "reasoning": "Localize tab calls translation APIs. Bridge tab connects to consonant-mcp HTTP on port 9300. WebSocket ports 9220-9222 connect to consonant-mcp, 9223-9232 to figma-console MCP (fallback)."
+    "reasoning": "Localize tab calls translation APIs (Google gtx endpoint, MyMemory). Bridge tab connects to consonant-mcp HTTP on port 9300. WebSocket ports 9220-9222 connect to consonant-mcp, 9223-9232 to figma-console MCP (fallback)."
   }
 }
