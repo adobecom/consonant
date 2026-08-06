@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.20] - 2026-08-06
+
+### ✨ Added
+
+- **`--s2a-section-spacing-*` — section spacing scale (14 rungs: `5xs`–`5xl` + `none`)** across all breakpoints (`xl` / `lg` / `md` / `sm`). Section top/bottom padding for the responsive reflow rig; values differ per breakpoint (`xl`/`lg` share a scale, `md`/`sm` step down), emitted in size order (`none` → `5xl`). Publishes the scale Rares implemented manually for GWP.
+
+  **Additive** — the existing `--s2a-viewport-vertical-padding-*` tokens are left unchanged; they'll be deprecated later.
+
+---
+
 ## [0.0.19] - 2026-08-05
 
 ### ✨ Added

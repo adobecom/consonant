@@ -1393,6 +1393,9 @@ async function minifyAllCssFiles() {
       ) {
         sorted = sortSemanticThemeCssVars(css);
       }
+      // The per-file sorters above alphabetize; keep the section-padding scale in
+      // size order (none → 5xl) in the dev copies too (no-op for other files).
+      sorted = reorderSectionPadding(sorted);
       if (sorted !== css) {
         await fs.writeFile(devPath, sorted, "utf8");
         await fs.unlink(filePath);
@@ -1418,6 +1421,34 @@ async function minifyAllCssFiles() {
       `✓ Created consolidated minified file: tokens.min.css (${allCssContent.length} files combined)`,
     );
   }
+}
+
+// Style Dictionary emits CSS custom properties alphabetically. For the
+// section-padding scale we want size order (none → 5xl) instead. Scoped to
+// these tokens only — every other token keeps its existing (alphabetical) order.
+const SECTION_PADDING_SCALE_ORDER = [
+  "none", "5xs", "4xs", "3xs", "2xs", "xs", "sm",
+  "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl",
+];
+function reorderSectionPadding(css) {
+  const prefix = "--s2a-section-spacing-";
+  const lines = css.split("\n");
+  const idxs = [];
+  lines.forEach((l, i) => {
+    if (l.includes(prefix)) idxs.push(i);
+  });
+  if (idxs.length < 2) return css;
+  const rank = (line) => {
+    const after = line.split(prefix)[1] || "";
+    const rung = after.split(":")[0].trim();
+    const r = SECTION_PADDING_SCALE_ORDER.indexOf(rung);
+    return r === -1 ? 999 : r;
+  };
+  const block = idxs.map((i) => lines[i]).sort((a, b) => rank(a) - rank(b));
+  const first = idxs[0];
+  for (let k = idxs.length - 1; k >= 0; k--) lines.splice(idxs[k], 1);
+  lines.splice(first, 0, ...block);
+  return lines.join("\n");
 }
 
 async function buildCssFromTokens(
@@ -1513,6 +1544,8 @@ async function buildCssFromTokens(
     css = modernizeColorSyntax(css);
     // Remove units from zero values (0px → 0, 0rem → 0)
     css = dropZeroUnits(css);
+    // Emit the section-padding scale in size order (none → 5xl), not alphabetical
+    css = reorderSectionPadding(css);
 
     // If mediaQuery is provided, wrap the output in a media query
     if (mediaQuery) {
