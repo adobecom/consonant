@@ -1598,7 +1598,7 @@ async function drawA11yAnnotations(
   container.locked = true;
 }
 
-figma.showUI(__html__, { width: 300, height: 500, themeColors: true });
+figma.showUI(__html__, { width: 360, height: 500, themeColors: true });
 
 figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
   try {
@@ -1750,7 +1750,7 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       if (wide) {
         figma.ui.resize(450, 600);
       } else {
-        figma.ui.resize(300, 500);  // restores the default set in showUI at code.ts:1606
+        figma.ui.resize(360, 500);  // restores the default set in showUI at code.ts:1601
       }
       return;
     }
