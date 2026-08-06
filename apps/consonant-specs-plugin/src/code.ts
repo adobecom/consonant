@@ -2,7 +2,8 @@ import { getTokenVersion, getTokenCount, hasS2AVariables, loadLibraryTokens, rel
 import { getNodeProperties } from './annotations';
 import { specIt } from './spec-it';
 import { runS2AAudit, runFullAlign, runTextColorsAlign } from './s2a-audit';
-import { localize, collectSourceText, TranslationProvider } from './localize';
+import { localizeViaApi, collectSourceText, applyTranslationsToClones } from './localize';
+import type { ApiProvider } from './localize-languages';
 import { generateBlueline, generateBluelinePanels, placeCategoryBadge } from './a11y-blueline';
 import { runStructuralScan } from './a11y-structural-scan';
 import { generateFocusIndicators, collectFocusableElements } from './spec-focus-indicators';
@@ -1297,24 +1298,6 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
   }
 }
 
-function apiKeyStorageKey(provider: string): string {
-  return `api-key-${provider}`;
-}
-
-function maskKey(key: string): string {
-  if (key.length <= 8) return '••••';
-  return `${key.slice(0, 6)}…${key.slice(-4)}`;
-}
-
-async function postApiKeyState(provider: string): Promise<void> {
-  const key = await figma.clientStorage.getAsync(apiKeyStorageKey(provider));
-  figma.ui.postMessage({
-    type: 'api-key-state',
-    hasKey: typeof key === 'string' && key.length > 0,
-    masked: typeof key === 'string' && key.length > 0 ? maskKey(key) : undefined,
-  });
-}
-
 // ── A11y annotation mode drawing ─────────────────────────────────────────────
 
 let annotateRunning = false;
@@ -2061,25 +2044,13 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       }
       break;
     }
-    case 'get-api-key': {
-      const provider = typeof msg.provider === 'string' ? msg.provider : 'mymemory';
-      await postApiKeyState(provider);
+    case 'get-email': {
+      const email = (await figma.clientStorage.getAsync('mymemory-email')) || '';
+      figma.ui.postMessage({ type: 'email-state', email });
       break;
     }
-    case 'save-api-key': {
-      const key = typeof msg.key === 'string' ? msg.key.trim() : '';
-      const provider = typeof msg.provider === 'string' ? msg.provider : 'mymemory';
-      if (!key) { figma.notify('Empty API key', { error: true }); break; }
-      await figma.clientStorage.setAsync(apiKeyStorageKey(provider), key);
-      await postApiKeyState(provider);
-      figma.notify('API key saved');
-      break;
-    }
-    case 'clear-api-key': {
-      const provider = typeof msg.provider === 'string' ? msg.provider : 'mymemory';
-      await figma.clientStorage.deleteAsync(apiKeyStorageKey(provider));
-      await postApiKeyState(provider);
-      figma.notify('API key cleared');
+    case 'save-email': {
+      await figma.clientStorage.setAsync('mymemory-email', String(msg.email ?? ''));
       break;
     }
     // ── Bridge unified command handler (figma-console MCP protocol) ──────
@@ -2097,51 +2068,71 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
     }
 case 'localize': {
       const sel = figma.currentPage.selection;
-      if (sel.length === 0) { figma.notify('Select a frame first'); break; }
-      const provider = (typeof msg.provider === 'string' ? msg.provider : 'mymemory') as TranslationProvider;
+      if (sel.length !== 1) { figma.notify('Select exactly one frame'); break; }
+      const provider = msg.provider as ApiProvider;
       const languages = Array.isArray(msg.languages) ? (msg.languages as string[]) : [];
-      const applyRtl = Boolean(msg.applyRtl);
       if (languages.length === 0) {
         figma.ui.postMessage({ type: 'localize-status', message: 'Select at least one language.' });
         break;
       }
-
-      // Bridge provider — collect text and send to UI for prompt generation
-      if (provider === 'bridge') {
-        const sourceTexts = collectSourceText(sel[0]);
-        if (sourceTexts.length === 0) {
-          figma.ui.postMessage({ type: 'localize-status', message: 'No text found in selection.' });
-          break;
-        }
-        figma.ui.postMessage({
-          type: 'localize-bridge-prompt',
-          frameName: sel[0].name,
-          frameId: sel[0].id,
-          languages,
-          applyRtl,
-          sourceTexts,
-        });
-        break;
-      }
-
-      const needsKey = ['deepl', 'google', 'azure'].includes(provider);
-      let apiKey = '';
-      if (needsKey) {
-        apiKey = await figma.clientStorage.getAsync(apiKeyStorageKey(provider)) || '';
-        if (!apiKey) {
-          figma.ui.postMessage({ type: 'localize-status', message: `Add your ${provider} API key first.` });
-          break;
-        }
-      }
+      const email = (await figma.clientStorage.getAsync('mymemory-email')) || '';
       try {
-        const result = await localize(sel[0], languages, applyRtl, provider, apiKey);
-        const errTail = result.errors.length > 0 ? ` (errors: ${result.errors.join('; ')})` : '';
-        figma.ui.postMessage({ type: 'localize-status', message: `Created ${result.created} localized frame(s).${errTail}` });
-        figma.notify(`Localized ${result.created} frame(s)`);
+        const result = await localizeViaApi(
+          sel[0],
+          languages,
+          Boolean(msg.applyRtl),
+          provider,
+          email,
+          (message) => figma.ui.postMessage({ type: 'localize-status', message }),
+        );
+        figma.ui.postMessage({ type: 'localize-done', created: result.created, errors: result.errors });
+        if (result.created === 0 && result.errors.length > 0) {
+          figma.notify('Localize failed — see plugin window for details', { error: true });
+        } else if (result.created > 0 && result.errors.length > 0) {
+          figma.notify(`Localized ${result.created} frame(s), ${result.errors.length} language(s) failed`);
+        } else {
+          figma.notify(`Localized ${result.created} frame(s)`);
+        }
       } catch (e: any) {
         const errorMsg = e instanceof Error ? e.message : 'Unknown error';
         figma.ui.postMessage({ type: 'localize-status', message: `Error: ${errorMsg}` });
         figma.notify(`Localize failed: ${errorMsg}`, { error: true });
+      }
+      break;
+    }
+    case 'paste-collect': {
+      const sel = figma.currentPage.selection;
+      if (sel.length !== 1) { figma.notify('Select exactly one frame'); break; }
+      const strings = collectSourceText(sel[0]);
+      if (strings.length === 0) {
+        figma.ui.postMessage({ type: 'localize-status', message: 'No text found in selection.' });
+        break;
+      }
+      figma.ui.postMessage({ type: 'paste-source', frameName: sel[0].name, strings });
+      break;
+    }
+    case 'paste-apply': {
+      const sel = figma.currentPage.selection;
+      if (sel.length !== 1) { figma.notify('Select exactly one frame'); break; }
+      const translations = msg.translations as Record<string, string[]>;
+      try {
+        const result = await applyTranslationsToClones(
+          sel[0],
+          translations,
+          Boolean(msg.applyRtl),
+          (message) => figma.ui.postMessage({ type: 'localize-status', message }),
+        );
+        figma.ui.postMessage({ type: 'localize-done', created: result.created, errors: result.errors });
+        if (result.created === 0 && result.errors.length > 0) {
+          figma.notify('Localize failed — see plugin window for details', { error: true });
+        } else if (result.created > 0 && result.errors.length > 0) {
+          figma.notify(`Localized ${result.created} frame(s), ${result.errors.length} language(s) failed`);
+        } else {
+          figma.notify(`Localized ${result.created} frame(s)`);
+        }
+      } catch (e: any) {
+        const errorMsg = e instanceof Error ? e.message : 'Unknown error';
+        figma.ui.postMessage({ type: 'localize-status', message: `Error: ${errorMsg}` });
       }
       break;
     }

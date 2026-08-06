@@ -289,6 +289,18 @@ body {
   margin-bottom: 8px;
 }
 
+/* Localize tab — provider/language checklist + paste-mode markup */
+.lang-header { display: flex; justify-content: space-between; align-items: center; }
+.link-btn { background: none; border: none; color: var(--text-tertiary, #999); font-size: 11px; cursor: pointer; padding: 2px 0; }
+.lang-group { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary, #999); margin: 8px 0 2px; }
+.lang-note { color: var(--text-tertiary, #999); font-size: 11px; }
+.rtl-row { margin-top: 8px; }
+#localizeContent textarea {
+  width: 100%; box-sizing: border-box; padding: 6px 8px; margin-top: 8px; margin-bottom: 8px;
+  border: 1px solid var(--border, #e5e5e5); border-radius: 4px;
+  font-family: var(--font-mono, monospace); font-size: 11px; resize: vertical;
+}
+
 .property-row {
   display: flex;
   justify-content: space-between;
