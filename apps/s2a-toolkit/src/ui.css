@@ -346,47 +346,6 @@ body {
   line-height: 1.7;
 }
 
-/* ── Variables / Tokens ─────────────────────────────────────────────────── */
-
-.collection-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-  gap: 8px;
-}
-.collection-row:last-child { border-bottom: none; }
-.collection-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-1); font-size: 12px; }
-.collection-count {
-  font-size: 10px;
-  color: var(--text-3);
-  font-variant-numeric: tabular-nums;
-  flex-shrink: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1px 6px;
-}
-
-.gen-btn {
-  flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  font-size: 12px;
-  background: transparent;
-  color: var(--text-3);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.1s, border-color 0.1s;
-}
-.gen-btn:hover:not(:disabled) { color: var(--text-1); border-color: var(--border-md); }
-.gen-btn:disabled { opacity: 0.35; cursor: default; }
 
 /* ── Select ─────────────────────────────────────────────────────────────── */
 
@@ -449,10 +408,6 @@ body {
 
 /* ── Settings ───────────────────────────────────────────────────────────── */
 
-.settings-hint { font-size: 11px; color: var(--text-2); margin-bottom: 14px; line-height: 1.5; }
-.settings-hint a { color: var(--accent); text-decoration: none; }
-.settings-hint a:hover { text-decoration: underline; }
-.settings-hint code { font-family: 'Menlo', monospace; font-size: 10px; background: var(--bg); padding: 1px 4px; border-radius: 3px; border: 1px solid var(--border); }
 
 .form-field { margin-bottom: 10px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -472,6 +427,12 @@ body {
 }
 .form-input:focus { border-color: var(--accent); }
 .form-input::placeholder { color: var(--text-3); }
+.form-textarea {
+  min-height: 68px;
+  resize: vertical;
+  line-height: 1.45;
+}
+.llm-field { margin-top: 10px; margin-bottom: 0; }
 
 /* ── Section bar btn ─────────────────────────────────────────────────────── */
 
@@ -486,7 +447,6 @@ body {
 
 /* ── Settings gear active ───────────────────────────────────────────────── */
 
-#settingsBtn.active { color: var(--accent); background: var(--accent-bg); }
 
 .hidden { display: none !important; }
 
@@ -667,3 +627,4 @@ body {
   background: var(--border);
   margin: 16px -12px;
 }
+

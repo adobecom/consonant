@@ -65,10 +65,9 @@
     return Object.entries(lastUsed).sort((a, b) => b[1] - a[1]).slice(0, n).map(([id]) => FEATURES.find((f) => f.id === id)).filter(Boolean);
   }
   var annotateNodeId = null;
+  var llmCaptureNodeId = null;
   var selectSetId = null;
-  var specSetId = null;
-  var variablesCache = null;
-  var githubSettings = null;
+  var bentoSetId = null;
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
@@ -77,22 +76,15 @@
   var bridgeReconnectAttempts = 0;
   var bridgeUserDisconnected = false;
   var activePanel = "home";
-  var settingsOpen = false;
   var isMini = false;
   var popoverOpen = false;
   var pendingRequests = /* @__PURE__ */ new Map();
   var requestCounter = 0;
   var panelEls = {
     home: document.getElementById("homePanel"),
-    tokens: document.getElementById("tokensPanel"),
-    tools: document.getElementById("toolsPanel"),
-    settings: document.getElementById("settingsPanel")
+    tools: document.getElementById("toolsPanel")
   };
   function switchPanel(panel) {
-    if (panel !== "settings") {
-      settingsOpen = false;
-      settingsBtn == null ? void 0 : settingsBtn.classList.remove("active");
-    }
     activePanel = panel;
     Object.entries(panelEls).forEach(([key, el]) => {
       el.classList.toggle("active", key === panel);
@@ -100,7 +92,6 @@
     document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
       tab.classList.toggle("active", tab.dataset.panel === panel);
     });
-    if (panel === "settings") postToPlugin("get-settings");
     if (panel === "home") renderHomeView();
   }
   document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
@@ -109,57 +100,7 @@
       if (p) switchPanel(p);
     });
   });
-  var settingsBtn = document.getElementById("settingsBtn");
-  settingsBtn == null ? void 0 : settingsBtn.addEventListener("click", () => {
-    if (settingsOpen) {
-      settingsOpen = false;
-      settingsBtn.classList.remove("active");
-      switchPanel(activePanel === "settings" ? "home" : activePanel);
-    } else {
-      settingsOpen = true;
-      settingsBtn.classList.add("active");
-      switchPanel("settings");
-    }
-  });
   var FEATURES = [
-    // Tokens
-    {
-      id: "tokens:refresh",
-      name: "Refresh variables",
-      description: "Re-fetch all Figma variables from the current file",
-      category: "Tokens",
-      uiAction: () => {
-        var _a13;
-        return (_a13 = document.getElementById("varRefreshBtn")) == null ? void 0 : _a13.click();
-      }
-    },
-    {
-      id: "tokens:export-local",
-      name: "Export tokens locally",
-      description: "Push token JSON to local dev server on port 9300",
-      category: "Tokens",
-      uiAction: () => {
-        var _a13;
-        return (_a13 = document.getElementById("varExportLocalBtn")) == null ? void 0 : _a13.click();
-      }
-    },
-    {
-      id: "tokens:export-github",
-      name: "Push tokens to GitHub",
-      description: "Commit token JSON to your configured repo",
-      category: "Tokens",
-      uiAction: () => {
-        var _a13;
-        return (_a13 = document.getElementById("varExportGithubBtn")) == null ? void 0 : _a13.click();
-      }
-    },
-    {
-      id: "tokens:doc-gen",
-      name: "Generate token docs",
-      description: "Build a Figma doc sheet for a token group",
-      category: "Tokens",
-      uiAction: () => switchPanel("tokens")
-    },
     // Tools
     {
       id: "tools:copy-link",
@@ -167,9 +108,16 @@
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a13;
-        return (_a13 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a13.click();
+        var _a9;
+        return (_a9 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a9.click();
       }
+    },
+    {
+      id: "tools:llm-capture",
+      name: "Send screenshot to LLM",
+      description: "Capture the selected node and send image + metadata to the local LLM bridge",
+      category: "Tools",
+      uiAction: () => switchPanel("tools")
     },
     {
       id: "tools:format-section",
@@ -202,9 +150,9 @@
       }
     },
     {
-      id: "tools:spec",
-      name: "Generate spec sheet",
-      description: "Scaffold a Figma spec doc for a component set",
+      id: "tools:bento",
+      name: "Generate bento doc",
+      description: "Build a full bento documentation page for the selected component set",
       category: "Tools",
       uiAction: () => switchPanel("tools")
     },
@@ -225,21 +173,20 @@
     }
   ];
   var QUICK_ACTION_IDS = [
+    "tools:llm-capture",
     "tools:copy-link",
-    "tokens:refresh",
     "tools:annotate",
     "tools:select-filter",
-    "tokens:export-local",
-    "tools:spec"
+    "tools:bento"
   ];
   function fireFeature(feat) {
-    var _a13;
+    var _a9;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a13 = feat.pluginPayload) != null ? _a13 : {});
+      postToPlugin(feat.pluginAction, (_a9 = feat.pluginPayload) != null ? _a9 : {});
     }
     if (activePanel === "home") renderHomeView();
   }
@@ -331,12 +278,12 @@
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a13, _b;
+    var _a9, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a13 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a13.scrollIntoView({ block: "nearest" });
+      (_a9 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a9.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -375,7 +322,7 @@
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a13;
+    var _a9;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -388,7 +335,7 @@
     }
     document.body.removeChild(ta);
     try {
-      (_a13 = navigator.clipboard) == null ? void 0 : _a13.writeText(text).catch(() => {
+      (_a9 = navigator.clipboard) == null ? void 0 : _a9.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -432,6 +379,51 @@
     copyToClipboard(urls.join("\n"));
     const msg = urls.length > 1 ? `Copied ${urls.length} links` : "Copied link";
     postToPlugin("notify", { message: msg });
+  });
+  function setLlmCaptureStatus(msg, type = "") {
+    const el = document.getElementById("llmCaptureStatus");
+    el.textContent = msg;
+    el.className = "status" + (type ? " " + type : "");
+  }
+  function updateLlmCaptureSelection(sel) {
+    var _a9;
+    llmCaptureNodeId = (_a9 = sel == null ? void 0 : sel.id) != null ? _a9 : null;
+    const emptyEl = document.getElementById("llmCaptureSelectionEmpty");
+    const infoEl = document.getElementById("llmCaptureSelectionInfo");
+    const nameEl = document.getElementById("llmCaptureNodeName");
+    const typeEl = document.getElementById("llmCaptureNodeType");
+    const sendBtn = document.getElementById("llmCaptureSendBtn");
+    if (sel) {
+      emptyEl.style.display = "none";
+      infoEl.style.display = "flex";
+      nameEl.textContent = sel.name;
+      typeEl.textContent = sel.nodeType;
+      sendBtn.disabled = false;
+    } else {
+      emptyEl.style.display = "block";
+      infoEl.style.display = "none";
+      sendBtn.disabled = true;
+    }
+  }
+  async function pollLlmCaptureJob(jobId) {
+    for (; ; ) {
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      const res = await fetch(`http://localhost:4002/jobs/${encodeURIComponent(jobId)}`);
+      if (!res.ok) throw new Error(`Job status failed (${res.status})`);
+      const job = await res.json();
+      if (job.phase) setLlmCaptureStatus(job.phase);
+      if (job.status === "done") return job.result;
+      if (job.status === "error") throw new Error(job.error || "LLM job failed");
+    }
+  }
+  var _a2;
+  (_a2 = document.getElementById("llmCaptureSendBtn")) == null ? void 0 : _a2.addEventListener("click", () => {
+    if (!llmCaptureNodeId) return;
+    const btn = document.getElementById("llmCaptureSendBtn");
+    btn.disabled = true;
+    btn.textContent = "Capturing\u2026";
+    setLlmCaptureStatus("Capturing selected node\u2026");
+    postToPlugin("llm-capture:selection", { maxDimension: 2048 });
   });
   var sectionBar = document.getElementById("sectionBar");
   var sectionBarName = document.getElementById("sectionBarName");
@@ -544,9 +536,6 @@
     sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4).then((result) => {
       if (ws.readyState !== 1 || !(result == null ? void 0 : result.data)) return;
       ws.send(JSON.stringify({ type: "VARIABLES_DATA", data: result.data }));
-      renderVariables(result.data);
-      renderTokenGroups(result.data);
-      setVarMeta(result.data.variables.length + " variables");
     }).catch(() => {
     });
   }
@@ -687,215 +676,6 @@
     bridgeReconnectAttempts = 0;
     updateBridgeUi();
   }
-  function getTokenGroup(name) {
-    var _a13;
-    const parts = name.split("/").filter((p) => p !== "s2a");
-    if (parts.length >= 4 && parts[1] === "transparent") return parts[0] + " / " + parts[1] + " / " + parts[2];
-    if (parts.length >= 3) return parts[0] + " / " + parts[1];
-    return (_a13 = parts[0]) != null ? _a13 : name;
-  }
-  function setVarMeta(_text) {
-  }
-  function setVarStatus(msg, type = "") {
-    const el = document.getElementById("varStatus");
-    el.textContent = msg;
-    el.className = "status" + (type ? " " + type : "");
-  }
-  function updateExportButtons() {
-    const localBtn = document.getElementById("varExportLocalBtn");
-    const githubBtn = document.getElementById("varExportGithubBtn");
-    const hasVars = !!variablesCache;
-    const hasGhSettings = !!((githubSettings == null ? void 0 : githubSettings.token) && (githubSettings == null ? void 0 : githubSettings.owner) && (githubSettings == null ? void 0 : githubSettings.repo));
-    if (localBtn) localBtn.disabled = !hasVars;
-    if (githubBtn) githubBtn.disabled = !hasVars || !hasGhSettings;
-  }
-  function renderVariables(data) {
-    variablesCache = data;
-    const el = document.getElementById("varCollections");
-    if (!el) return;
-    if (data.variableCollections.length === 0) {
-      el.innerHTML = '<div class="empty-state">No collections found</div>';
-      return;
-    }
-    const byCol = {};
-    for (const v of data.variables) byCol[v.variableCollectionId] = (byCol[v.variableCollectionId] || 0) + 1;
-    el.innerHTML = data.variableCollections.map(
-      (c) => `<div class="collection-row">
-      <span class="collection-name">${esc(c.name)}</span>
-      <span class="collection-count">${byCol[c.id] || 0}</span>
-    </div>`
-    ).join("");
-    updateExportButtons();
-  }
-  function renderTokenGroups(data) {
-    const labelEl = document.getElementById("tokenGroupLabel");
-    const listEl = document.getElementById("tokenGroupList");
-    if (!listEl) return;
-    const semanticColls = data.variableCollections.filter(
-      (c) => /Semantic|Responsive/.test(c.name) || /Primitives/.test(c.name) && /Color/.test(c.name) || /Primitives/.test(c.name) && /Dimension/.test(c.name)
-    );
-    if (semanticColls.length === 0) {
-      listEl.innerHTML = "";
-      if (labelEl) labelEl.classList.add("hidden");
-      return;
-    }
-    const collIdToName = /* @__PURE__ */ new Map();
-    for (const c of data.variableCollections) collIdToName.set(c.id, c.name);
-    const collSet = new Set(semanticColls.map((c) => c.id));
-    const groups = /* @__PURE__ */ new Map();
-    for (const v of data.variables) {
-      if (!collSet.has(v.variableCollectionId)) continue;
-      const collName = collIdToName.get(v.variableCollectionId) || "";
-      const grp = getTokenGroup(v.name);
-      if (/Primitives/.test(collName) && /Dimension/.test(collName) && grp !== "opacity") continue;
-      const key = v.variableCollectionId + "::" + grp;
-      if (!groups.has(key)) {
-        groups.set(key, { collectionId: v.variableCollectionId, collectionName: collName, group: grp, count: 0 });
-      }
-      groups.get(key).count++;
-    }
-    const sorted = [...groups.values()].sort((a, b) => {
-      if (a.collectionName !== b.collectionName) return a.collectionName.localeCompare(b.collectionName);
-      return a.group.localeCompare(b.group);
-    });
-    if (labelEl) labelEl.classList.remove("hidden");
-    listEl.innerHTML = sorted.map(
-      (g) => `<div class="collection-row token-group-row" data-col="${esc(g.collectionId)}" data-group="${esc(g.group)}">
-      <span class="collection-name">${esc(g.group)}</span>
-      <span class="collection-count">${g.count}</span>
-      <button class="gen-btn" title="Generate docs for ${esc(g.group)}">\u2192</button>
-    </div>`
-    ).join("");
-    listEl.insertAdjacentHTML(
-      "beforeend",
-      `<div class="collection-row token-group-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08)" data-col="text-styles" data-group="text-styles">
-      <span class="collection-name">Text Styles</span>
-      <span class="collection-count">\u2014</span>
-      <button class="gen-btn" title="Generate 4 breakpoint sections from native text styles">\u2192</button>
-    </div>`
-    );
-  }
-  var _a2;
-  (_a2 = document.getElementById("tokenGroupList")) == null ? void 0 : _a2.addEventListener("click", (e) => {
-    var _a13;
-    const btn = e.target.closest(".gen-btn");
-    if (!btn || btn.disabled) return;
-    const row = btn.closest(".token-group-row");
-    if (!row) return;
-    btn.disabled = true;
-    btn.textContent = "\u2026";
-    setVarStatus("Generating " + ((_a13 = row.dataset.group) != null ? _a13 : "") + "\u2026");
-    postToPlugin("token-docs:generate", { collectionId: row.dataset.col, group: row.dataset.group });
-  });
-  var _a3;
-  (_a3 = document.getElementById("varRefreshBtn")) == null ? void 0 : _a3.addEventListener("click", async () => {
-    const btn = document.getElementById("varRefreshBtn");
-    btn.textContent = "Refreshing\u2026";
-    btn.disabled = true;
-    setVarStatus("Loading\u2026");
-    try {
-      const result = await sendBridgeCommand("REFRESH_VARIABLES", {}, 3e4);
-      if (result == null ? void 0 : result.data) {
-        renderVariables(result.data);
-        renderTokenGroups(result.data);
-        setVarStatus(result.data.variables.length + " variables loaded", "ok");
-      } else {
-        setVarStatus("No data returned", "err");
-      }
-    } catch (e) {
-      setVarStatus(e.message || "Error", "err");
-    } finally {
-      btn.textContent = "Refresh";
-      btn.disabled = false;
-    }
-  });
-  var _a4;
-  (_a4 = document.getElementById("varExportLocalBtn")) == null ? void 0 : _a4.addEventListener("click", () => {
-    if (!variablesCache) {
-      setVarStatus("No variables \u2014 hit Refresh first", "err");
-      return;
-    }
-    const btn = document.getElementById("varExportLocalBtn");
-    btn.textContent = "Exporting\u2026";
-    btn.disabled = true;
-    setVarStatus("Sending to dev-server\u2026");
-    fetch("http://localhost:9300/export", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(variablesCache)
-    }).then((r) => r.json()).then((data) => {
-      if (data.ok) setVarStatus(`\u2713 ${data.variables} vars \u2192 dist/css/`, "ok");
-      else setVarStatus("\u274C " + (data.error || "Build failed"), "err");
-    }).catch(() => setVarStatus("\u274C Dev server not running \u2014 run: npm run dev-server", "err")).finally(() => {
-      btn.textContent = "Local";
-      updateExportButtons();
-    });
-  });
-  var _a5;
-  (_a5 = document.getElementById("varExportGithubBtn")) == null ? void 0 : _a5.addEventListener("click", async () => {
-    if (!variablesCache || !(githubSettings == null ? void 0 : githubSettings.token)) return;
-    const btn = document.getElementById("varExportGithubBtn");
-    btn.textContent = "Pushing\u2026";
-    btn.disabled = true;
-    setVarStatus("Pushing to GitHub\u2026");
-    try {
-      await pushToGitHub(variablesCache, githubSettings);
-      setVarStatus("\u2713 Committed to " + githubSettings.repo + " / " + githubSettings.branch, "ok");
-    } catch (e) {
-      setVarStatus("\u274C " + (e.message || "GitHub push failed"), "err");
-    } finally {
-      btn.textContent = "\u2191 GitHub";
-      updateExportButtons();
-    }
-  });
-  async function pushToGitHub(data, settings) {
-    const { token, owner, repo, branch, filePath } = settings;
-    const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
-    const headers = {
-      Authorization: `token ${token}`,
-      Accept: "application/vnd.github.v3+json",
-      "Content-Type": "application/json"
-    };
-    let sha;
-    const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
-    if (getRes.ok) sha = (await getRes.json()).sha;
-    else if (getRes.status !== 404) throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-    const body = { message: "chore: sync tokens from Figma", content, branch };
-    if (sha) body.sha = sha;
-    const putRes = await fetch(apiBase, { method: "PUT", headers, body: JSON.stringify(body) });
-    if (!putRes.ok) throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
-  }
-  function setSettingsStatus(msg, type = "") {
-    const el = document.getElementById("settingsStatus");
-    el.textContent = msg;
-    el.className = "status" + (type ? " " + type : "");
-  }
-  function applySettings(settings) {
-    githubSettings = settings;
-    if (!settings) return;
-    document.getElementById("ghToken").value = settings.token || "";
-    document.getElementById("ghOwner").value = settings.owner || "";
-    document.getElementById("ghRepo").value = settings.repo || "";
-    document.getElementById("ghBranch").value = settings.branch || "main";
-    document.getElementById("ghFilePath").value = settings.filePath || "packages/toolkit-tokens/json/figma-export.json";
-    updateExportButtons();
-  }
-  var _a6;
-  (_a6 = document.getElementById("saveSettingsBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
-    const settings = {
-      token: document.getElementById("ghToken").value.trim(),
-      owner: document.getElementById("ghOwner").value.trim(),
-      repo: document.getElementById("ghRepo").value.trim(),
-      branch: document.getElementById("ghBranch").value.trim() || "main",
-      filePath: document.getElementById("ghFilePath").value.trim() || "packages/toolkit-tokens/json/figma-export.json"
-    };
-    if (!settings.token || !settings.owner || !settings.repo) {
-      setSettingsStatus("Token, owner, and repo are required", "err");
-      return;
-    }
-    postToPlugin("save-settings", { settings });
-  });
   function renderAxes(setId, setName, axes) {
     selectSetId = setId;
     const emptyEl = document.getElementById("selectEmpty");
@@ -929,8 +709,8 @@
     document.getElementById("selectEmpty").style.display = "block";
     document.getElementById("selectBody").style.display = "none";
   }
-  var _a7;
-  (_a7 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
+  var _a3;
+  (_a3 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a3.addEventListener("click", () => {
     if (!selectSetId) return;
     const filter = {};
     document.querySelectorAll(".chip.on[data-axis]").forEach((chip) => {
@@ -940,12 +720,12 @@
     });
     postToPlugin("select:apply-filter", { setId: selectSetId, filter });
   });
-  var _a8;
-  (_a8 = document.getElementById("selectAllBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+  var _a4;
+  (_a4 = document.getElementById("selectAllBtn")) == null ? void 0 : _a4.addEventListener("click", () => {
     document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.add("on"));
   });
-  var _a9;
-  (_a9 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
+  var _a5;
+  (_a5 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
     document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.remove("on"));
   });
   function setAnnotateStatus(msg, type = "") {
@@ -954,8 +734,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a13;
-    annotateNodeId = (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null;
+    var _a9;
+    annotateNodeId = (_a9 = sel == null ? void 0 : sel.id) != null ? _a9 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -976,8 +756,8 @@
   document.querySelectorAll("#annotateCats .chip").forEach((chip) => {
     chip.addEventListener("click", () => chip.classList.toggle("on"));
   });
-  var _a10;
-  (_a10 = document.getElementById("annotateApplyBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
+  var _a6;
+  (_a6 = document.getElementById("annotateApplyBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
     if (!annotateNodeId) return;
     const categories = Array.from(
       document.querySelectorAll("#annotateCats .chip.on")
@@ -992,64 +772,51 @@
     setAnnotateStatus("");
     postToPlugin("annotate:apply", { nodeId: annotateNodeId, categories });
   });
-  var _a11;
-  (_a11 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
+  var _a7;
+  (_a7 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
     if (!annotateNodeId) return;
     const btn = document.getElementById("annotateClearBtn");
     btn.disabled = true;
     setAnnotateStatus("Clearing\u2026");
     postToPlugin("annotate:clear", { nodeId: annotateNodeId });
   });
-  function setSpecStatus(msg, type = "") {
-    const el = document.getElementById("specStatus");
+  function setBentoStatus(msg, type = "") {
+    const el = document.getElementById("bentoStatus");
     el.textContent = msg;
     el.className = "status" + (type ? " " + type : "");
   }
-  function updateSpecSelection(sel) {
-    var _a13, _b;
-    const isValid = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT";
-    specSetId = isValid ? (_a13 = sel == null ? void 0 : sel.id) != null ? _a13 : null : null;
-    const emptyEl = document.getElementById("specSelectionEmpty");
-    const infoEl = document.getElementById("specSelectionInfo");
-    const nameEl = document.getElementById("specSetName");
-    const countEl = document.getElementById("specSetCount");
-    const genBtn = document.getElementById("specGenerateBtn");
-    if (isValid && sel) {
+  function updateBentoSelection(sel) {
+    var _a9, _b;
+    const isSet = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
+    bentoSetId = isSet ? (_a9 = sel == null ? void 0 : sel.id) != null ? _a9 : null : null;
+    const emptyEl = document.getElementById("bentoSelectionEmpty");
+    const infoEl = document.getElementById("bentoSelectionInfo");
+    const nameEl = document.getElementById("bentoSetName");
+    const countEl = document.getElementById("bentoSetCount");
+    const btn = document.getElementById("bentoGenerateBtn");
+    if (isSet && sel) {
       emptyEl.style.display = "none";
       infoEl.style.display = "flex";
       nameEl.textContent = sel.name;
-      countEl.textContent = sel.nodeType === "COMPONENT_SET" ? ((_b = sel.variantCount) != null ? _b : 0) + " variants" : "1 variant";
-      genBtn.disabled = false;
+      countEl.textContent = ((_b = sel.variantCount) != null ? _b : 0) + " variants";
+      btn.disabled = false;
     } else {
       emptyEl.style.display = "block";
       infoEl.style.display = "none";
-      genBtn.disabled = true;
+      btn.disabled = true;
     }
   }
-  document.querySelectorAll("#specOpts .chip").forEach((chip) => {
-    chip.addEventListener("click", () => chip.classList.toggle("on"));
-  });
-  var _a12;
-  (_a12 = document.getElementById("specGenerateBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
-    if (!specSetId) return;
-    const on = new Set(
-      Array.from(document.querySelectorAll("#specOpts .chip.on")).map((c) => c.dataset.opt)
-    );
-    if (on.size === 0) {
-      setSpecStatus("Select at least one section to include", "err");
-      return;
-    }
-    const btn = document.getElementById("specGenerateBtn");
+  var _a8;
+  (_a8 = document.getElementById("bentoGenerateBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+    if (!bentoSetId) return;
+    const btn = document.getElementById("bentoGenerateBtn");
     btn.disabled = true;
     btn.textContent = "Generating\u2026";
-    setSpecStatus("");
-    postToPlugin("spec:generate", {
-      setId: specSetId,
-      options: { variants: on.has("variants"), tokens: on.has("tokens"), children: on.has("children") }
-    });
+    setBentoStatus("");
+    postToPlugin("bento:generate", { setId: bentoSetId });
   });
   window.addEventListener("message", (event) => {
-    var _a13, _b;
+    var _a9, _b, _c;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -1066,25 +833,6 @@
           } else {
             p.reject(new Error(msg.error || "Unknown error"));
           }
-        }
-        break;
-      }
-      case "settings-loaded":
-        applySettings(msg.settings);
-        break;
-      case "settings-saved": {
-        if (msg.success) {
-          githubSettings = {
-            token: document.getElementById("ghToken").value.trim(),
-            owner: document.getElementById("ghOwner").value.trim(),
-            repo: document.getElementById("ghRepo").value.trim(),
-            branch: document.getElementById("ghBranch").value.trim() || "main",
-            filePath: document.getElementById("ghFilePath").value.trim() || "packages/toolkit-tokens/json/figma-export.json"
-          };
-          setSettingsStatus("Saved", "ok");
-          updateExportButtons();
-        } else {
-          setSettingsStatus("Save failed: " + msg.error, "err");
         }
         break;
       }
@@ -1109,29 +857,60 @@
             nodeType: msg.nodeType,
             variantCount: msg.variantCount
           };
+          updateLlmCaptureSelection(sel);
           updateAnnotateSelection(sel);
-          updateSpecSelection(sel);
+          updateBentoSelection(sel);
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a13 = msg.sectionCount) != null ? _a13 : 0,
+            (_a9 = msg.sectionCount) != null ? _a9 : 0,
             (_b = msg.sectionName) != null ? _b : sel.name
           );
         } else {
+          updateLlmCaptureSelection(null);
           updateAnnotateSelection(null);
-          updateSpecSelection(null);
+          updateBentoSelection(null);
           updateCopyBtn(null, null);
           updateSectionBar(false, 0, "");
         }
         break;
       }
-      case "token-docs:result": {
-        document.querySelectorAll(".gen-btn").forEach((b) => {
-          b.disabled = false;
-          b.textContent = "\u2192";
+      case "llm-capture:result": {
+        const btn = document.getElementById("llmCaptureSendBtn");
+        const resetBtn = () => {
+          btn.disabled = !llmCaptureNodeId;
+          btn.textContent = "Send Screenshot";
+        };
+        if (msg.error) {
+          resetBtn();
+          setLlmCaptureStatus("\u274C " + msg.error, "err");
+          break;
+        }
+        const capture = msg.capture;
+        const prompt = (((_c = document.getElementById("llmCapturePrompt")) == null ? void 0 : _c.value) || "").trim();
+        setLlmCaptureStatus("Sending image + metadata to local LLM bridge\u2026");
+        btn.textContent = "Sending\u2026";
+        fetch("http://localhost:4002/llm/capture", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            capture,
+            prompt: prompt || "Inspect this Figma selection and summarize the layout, visual system, tokens, and implementation notes."
+          })
+        }).then(async (res) => {
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || `LLM bridge returned ${res.status}`);
+          if (data.jobId) return pollLlmCaptureJob(data.jobId);
+          return data;
+        }).then((result) => {
+          const label = (result == null ? void 0 : result.fileName) ? `\u2713 Sent \xB7 ${result.fileName}` : (result == null ? void 0 : result.title) ? `\u2713 Sent \xB7 ${result.title}` : "\u2713 Sent to LLM";
+          setLlmCaptureStatus(label, "ok");
+          resetBtn();
+        }).catch((e) => {
+          const hint = /Failed to fetch|NetworkError|Load failed/i.test(e.message || "") ? "Local LLM bridge is not running. Run: npm run figma-story" : e.message || "Capture failed";
+          setLlmCaptureStatus("\u274C " + hint, "err");
+          resetBtn();
         });
-        if (msg.error) setVarStatus("\u274C " + msg.error, "err");
-        else setVarStatus("\u2713 " + msg.count + " tokens documented", "ok");
         break;
       }
       case "format-section:done": {
@@ -1157,21 +936,21 @@
         setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? "s" : ""}` : "Nothing to clear", "ok");
         break;
       }
-      case "spec:result": {
-        const btn = document.getElementById("specGenerateBtn");
-        btn.disabled = !specSetId;
-        btn.textContent = "Generate Spec";
-        if (msg.error) setSpecStatus("\u274C " + msg.error, "err");
+      case "bento:result": {
+        const btn = document.getElementById("bentoGenerateBtn");
+        btn.disabled = !bentoSetId;
+        btn.textContent = "Generate bento doc";
+        if (msg.error) setBentoStatus("\u274C " + msg.error, "err");
         else {
           const vars = msg.variantCount;
-          setSpecStatus(`\u2713 Spec generated \xB7 ${vars} variant${vars !== 1 ? "s" : ""}`, "ok");
+          const warn = msg.warning ? " \xB7 \u26A0 " + msg.warning : "";
+          setBentoStatus(`\u2713 Bento doc generated \xB7 ${vars} variant${vars !== 1 ? "s" : ""}${warn}`, "ok");
         }
         break;
       }
     }
   });
   postToPlugin("ui-ready");
-  postToPlugin("get-settings");
   postToPlugin("resize-for-view", { width: 320, height: 460 });
   renderHomeView();
   document.addEventListener("visibilitychange", () => {

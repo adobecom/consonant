@@ -45,12 +45,16 @@ const CORS = {
 // ── Figma URL parser ──────────────────────────────────────────────────────────
 
 function parseFigmaUrl(url) {
-  const fileMatch = url.match(/figma\.com\/(?:design|file)\/([^/?#]+)/);
-  if (!fileMatch) throw new Error('Not a valid Figma URL — must contain /design/ or /file/');
-  const fileKey = fileMatch[1];
-  const nodeParam = new URL(url).searchParams.get('node-id');
+  const urlObj = new URL(url);
+  const branchPathMatch = urlObj.pathname.match(/\/(?:design|file|board|slides)\/([a-zA-Z0-9]+)\/branch\/([a-zA-Z0-9]+)/);
+  const fileMatch = urlObj.pathname.match(/\/(?:design|file|board|slides)\/([a-zA-Z0-9]+)/);
+  if (!fileMatch) throw new Error('Not a valid Figma URL — must contain /design/, /file/, /board/, or /slides/');
+  const mainFileKey = fileMatch[1];
+  const branchKey = branchPathMatch?.[2] || urlObj.searchParams.get('branch-id') || null;
+  const fileKey = branchKey || mainFileKey;
+  const nodeParam = urlObj.searchParams.get('node-id');
   const nodeId = nodeParam ? nodeParam.replace(/-/g, ':') : null;
-  return { fileKey, nodeId };
+  return { fileKey, mainFileKey, branchKey, nodeId };
 }
 
 // ── HTTP helpers ──────────────────────────────────────────────────────────────
@@ -327,11 +331,11 @@ async function extractFigmaStructure(nodeId) {
 }
 
 /** Calls Story UI's stream endpoint, collects all chunks, returns final result */
-async function generateViaStoryUI({ prompt, imageBase64, considerations = buildLiveContext() }) {
+async function generateViaStoryUI({ prompt, imageBase64, mediaType = 'image/png', considerations = buildLiveContext() }) {
   const body = {
     prompt,
     visionMode: true,
-    images: [`data:image/png;base64,${imageBase64}`],
+    images: [`data:${mediaType};base64,${imageBase64}`],
     considerations,
     framework: 'web-components',
     autoDetectFramework: false,
@@ -1832,6 +1836,66 @@ Rewrite the complete story file incorporating the changes above. Keep everything
     return;
   }
 
+  // Plugin endpoint — screenshot + shallow metadata sent directly from Figma
+  if (req.method === 'POST' && req.url === '/llm/capture') {
+    let body = '';
+    req.on('data', c => { body += c; });
+    req.on('end', () => {
+      let capture, prompt;
+      try { ({ capture, prompt } = JSON.parse(body)); }
+      catch { res.writeHead(400, CORS); res.end(JSON.stringify({ error: 'Invalid JSON' })); return; }
+
+      if (!capture?.imageBase64) {
+        res.writeHead(400, { ...CORS, 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Missing capture.imageBase64' }));
+        return;
+      }
+
+      const nodeName = capture.node?.name || 'selected Figma node';
+      const jobId = createJob();
+      res.writeHead(202, { ...CORS, 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, jobId }));
+
+      (async () => {
+        try {
+          updateJob(jobId, { status: 'running', phase: 'Sending screenshot to LLM…' });
+          console.log(`[llm-capture] "${nodeName}" jobId=${jobId}, ${Math.round((capture.byteLength || 0) / 1024)}KB`);
+          const metadata = {
+            fileName: capture.fileName,
+            fileKey: capture.fileKey,
+            page: capture.page,
+            node: capture.node,
+            export: {
+              mediaType: capture.mediaType || 'image/jpeg',
+              scale: capture.scale,
+              maxDimension: capture.maxDimension,
+              byteLength: capture.byteLength,
+            },
+          };
+          const fullPrompt = `${prompt || 'Inspect this Figma selection and summarize what matters for implementation.'}
+
+Use the screenshot as the visual source of truth. Use this Figma metadata for structure and provenance:
+
+${JSON.stringify(metadata, null, 2)}
+
+Return concise implementation notes. If generating a Storybook story, use S2A components and semantic tokens only.`;
+
+          const result = await generateViaStoryUI({
+            prompt: fullPrompt,
+            imageBase64: capture.imageBase64,
+            mediaType: capture.mediaType || 'image/jpeg',
+          });
+          updateJob(jobId, { status: 'done', phase: 'Done', result });
+          console.log(`[llm-capture] job ${jobId} done`);
+        } catch (e) {
+          console.error(`[llm-capture] job ${jobId} error:`, e.message);
+          updateJob(jobId, { status: 'error', phase: 'Failed', error: e.message });
+        }
+      })();
+    });
+    return;
+  }
+
   // Poll job status
   if (req.method === 'GET' && req.url?.startsWith('/jobs/')) {
     const jobId = req.url.slice('/jobs/'.length);
@@ -1945,6 +2009,7 @@ server.listen(PORT, 'localhost', () => {
   console.log(`\n[Figma→Story] http://localhost:${PORT}`);
   console.log(`  GET  /                     — chat UI`);
   console.log(`  POST /prototype/generate   — plugin: selection + prompt + branch → story + PR (no API key needed)`);
+  console.log(`  POST /llm/capture          — plugin: screenshot + metadata → Story UI vision`);
   console.log(`  POST /figma/generate       — screenshot via Figma REST API`);
   console.log(`  POST /figma/generate-deep  — deep extraction via Desktop Bridge (ws:${bridgePort})`);
   console.log(`  POST /prompt/generate      — text-only generation`);

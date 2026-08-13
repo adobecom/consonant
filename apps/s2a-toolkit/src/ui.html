@@ -32,12 +32,6 @@
         <span class="bridge-dot" id="bridgeDot"></span>
         <span class="bridge-label" id="bridgePillLabel">Connect</span>
       </button>
-      <button class="icon-btn full-only" id="settingsBtn" title="Settings" aria-label="Settings">
-        <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-          <circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.25"/>
-          <path d="M7 1.5v1.2M7 11.3v1.2M1.5 7h1.2M11.3 7h1.2M3.2 3.2l.85.85M9.95 9.95l.85.85M3.2 10.8l.85-.85M9.95 4.05l.85-.85" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-        </svg>
-      </button>
       <button class="icon-btn" id="toggleMiniBtn" aria-label="Minimize plugin">
         <svg class="icon-collapse" width="13" height="13" viewBox="0 0 14 14" fill="none">
           <path d="M2 5h10M2 9h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
@@ -85,14 +79,6 @@
       </svg>
       <span class="tab-label">Home</span>
     </button>
-    <!-- Tokens -->
-    <button class="tab" data-panel="tokens" aria-label="Tokens">
-      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
-        <rect x="1.5" y="3" width="11" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.2"/>
-        <rect x="1.5" y="8" width="7.5" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.2"/>
-      </svg>
-      <span class="tab-label">Tokens</span>
-    </button>
     <!-- Tools -->
     <button class="tab" data-panel="tools" aria-label="Tools">
       <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
@@ -120,24 +106,31 @@
       </div>
     </div>
 
-    <!-- Tokens (was Variables) -->
-    <div class="panel" id="tokensPanel">
-      <div class="section-label">Collections</div>
-      <div id="varCollections">
-        <div class="empty-state">Click Refresh to load collections</div>
-      </div>
-      <div class="section-label hidden" id="tokenGroupLabel" style="margin-top:14px;">Token groups</div>
-      <div id="tokenGroupList"></div>
-      <div class="btn-row">
-        <button class="btn btn-ghost" id="varRefreshBtn">Refresh</button>
-        <button class="btn btn-ghost" id="varExportLocalBtn" disabled>Local</button>
-        <button class="btn" id="varExportGithubBtn" disabled>↑ GitHub</button>
-      </div>
-      <div class="status" id="varStatus"></div>
-    </div>
-
     <!-- Tools — select + annotate + spec stacked -->
     <div class="panel" id="toolsPanel">
+
+      <!-- ── LLM capture ─────────────────────────────────────────────── -->
+      <div class="section-label">LLM capture</div>
+      <div class="sel-card">
+        <span class="sel-card-empty" id="llmCaptureSelectionEmpty">Select a frame or section</span>
+        <div class="sel-card-info" id="llmCaptureSelectionInfo" style="display:none;">
+          <span class="sel-icon">◈</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="llmCaptureNodeName">—</span>
+            <span class="sel-type" id="llmCaptureNodeType">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-field llm-field">
+        <label class="form-label" for="llmCapturePrompt">Prompt</label>
+        <textarea class="form-input form-textarea" id="llmCapturePrompt" rows="3" placeholder="Ask the LLM what to inspect or generate from this selection."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="llmCaptureSendBtn" disabled style="flex:1;">Send Screenshot</button>
+      </div>
+      <div class="status" id="llmCaptureStatus"></div>
+
+      <div class="tools-divider"></div>
 
       <!-- ── Variant Filter ──────────────────────────────────────────── -->
       <div class="section-label">Variant filter</div>
@@ -185,62 +178,25 @@
 
       <div class="tools-divider"></div>
 
-      <!-- ── Spec sheet ──────────────────────────────────────────────── -->
-      <div class="section-label">Spec sheet</div>
+      <!-- ── Bento doc ───────────────────────────────────────────────── -->
+      <div class="section-label">Bento doc</div>
       <div class="sel-card">
-        <span class="sel-card-empty" id="specSelectionEmpty">Select a component or set</span>
-        <div class="sel-card-info" id="specSelectionInfo" style="display:none;">
-          <span class="sel-icon">◈</span>
+        <span class="sel-card-empty" id="bentoSelectionEmpty">Select a component set</span>
+        <div class="sel-card-info" id="bentoSelectionInfo" style="display:none;">
+          <span class="sel-icon">▤</span>
           <div class="sel-meta">
-            <span class="sel-name" id="specSetName">—</span>
-            <span class="sel-type" id="specSetCount">—</span>
+            <span class="sel-name" id="bentoSetName">—</span>
+            <span class="sel-type" id="bentoSetCount">—</span>
           </div>
         </div>
       </div>
-      <div class="chip-grid" id="specOpts" style="margin-top:10px;">
-        <button class="chip on" data-opt="variants">Variants</button>
-        <button class="chip on" data-opt="tokens">Tokens</button>
-        <button class="chip on" data-opt="children">Children</button>
-      </div>
       <div class="btn-row">
-        <button class="btn" id="specGenerateBtn" disabled style="flex:1;">Generate Spec</button>
+        <button class="btn" id="bentoGenerateBtn" disabled style="flex:1;">Generate bento doc</button>
       </div>
-      <div class="status" id="specStatus"></div>
+      <div class="status" id="bentoStatus"></div>
 
       <!-- bottom padding for scroll clearance -->
       <div style="height:16px;"></div>
-    </div>
-
-    <!-- Settings (gear icon only) -->
-    <div class="panel" id="settingsPanel">
-      <div class="section-label">GitHub Export</div>
-      <p class="settings-hint">Tokens commit directly to your repo. Needs a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> scope.</p>
-      <div class="form-field">
-        <label class="form-label" for="ghToken">Token</label>
-        <input class="form-input" type="password" id="ghToken" placeholder="ghp_…" autocomplete="off" />
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label class="form-label" for="ghOwner">Owner</label>
-          <input class="form-input" type="text" id="ghOwner" placeholder="adobecom" />
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="ghRepo">Repo</label>
-          <input class="form-input" type="text" id="ghRepo" placeholder="consonant-2" />
-        </div>
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="ghBranch">Branch</label>
-        <input class="form-input" type="text" id="ghBranch" placeholder="main" />
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="ghFilePath">File path</label>
-        <input class="form-input" type="text" id="ghFilePath" placeholder="packages/toolkit-tokens/json/figma-export.json" />
-      </div>
-      <div class="btn-row">
-        <button class="btn" id="saveSettingsBtn">Save</button>
-      </div>
-      <div class="status" id="settingsStatus"></div>
     </div>
 
   </div>
