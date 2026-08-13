@@ -1,0 +1,165 @@
+{
+  "$schema": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/manifest.schema.json",
+  "name": "@adobecom/s2a-tokens",
+  "version": "0.0.20",
+  "released": "2026-08-13",
+  "spec": "w3c-design-tokens",
+  "semver": true,
+  "cssVarPrefix": "--s2a-",
+  "artifact": {
+    "tarball": {
+      "url": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/adobecom-s2a-tokens-0.0.20.tgz",
+      "integrity": "sha256-YbMY1gjXYZ4VhnGGigHJEdeRceAYWxVSqBXl5M4qn9w=",
+      "bytes": 22472
+    },
+    "css": {
+      "primitives": "css/tokens.primitives.css",
+      "semantic": "css/tokens.semantic.css",
+      "semanticLight": "css/tokens.semantic.light.css",
+      "semanticDark": "css/tokens.semantic.dark.css",
+      "responsive": [
+        "css/tokens.responsive.xl.css",
+        "css/tokens.responsive.lg.css",
+        "css/tokens.responsive.md.css",
+        "css/tokens.responsive.sm.css"
+      ]
+    }
+  },
+  "source": {
+    "spec": "w3c-design-tokens",
+    "dir": "https://github.com/adobecom/consonant/tree/main/packages/tokens/json"
+  },
+  "collections": [
+    {
+      "name": "S2A / Responsive / Container / Grid",
+      "slug": "s2a-responsive-container-grid",
+      "modes": [
+        "xl",
+        "lg",
+        "md",
+        "sm"
+      ]
+    },
+    {
+      "name": "S2A / Design Guides",
+      "slug": "s2a-design-guides",
+      "modes": [
+        "hide-all",
+        "show-all",
+        "show-spacers",
+        "show-text",
+        "show-instance-swaps",
+        "show-layouts",
+        "show-corner-radius"
+      ]
+    },
+    {
+      "name": "S2A / Semantic / Dimension / Static",
+      "slug": "s2a-semantic-dimension-static",
+      "modes": [
+        "value",
+        "token"
+      ]
+    },
+    {
+      "name": "Primitives / Color / Theme",
+      "slug": "primitives-color-theme",
+      "modes": [
+        "light"
+      ]
+    },
+    {
+      "name": "S2A / Primitives / Color / Theme",
+      "slug": "s2a-primitives-color-theme",
+      "modes": [
+        "light"
+      ]
+    },
+    {
+      "name": "Semantic",
+      "slug": "semantic",
+      "modes": [
+        "mode-1"
+      ]
+    },
+    {
+      "name": "Primitives / Dimension / Static",
+      "slug": "primitives-dimension-static",
+      "modes": [
+        "mode-1"
+      ]
+    },
+    {
+      "name": "Semantic / Dimension / Static",
+      "slug": "semantic-dimension-static",
+      "modes": [
+        "mode-1"
+      ]
+    },
+    {
+      "name": "S2A / Semantic / Color / Theme",
+      "slug": "s2a-semantic-color-theme",
+      "modes": [
+        "light",
+        "dark"
+      ]
+    },
+    {
+      "name": "S2A / Primitives / Dimension / Static",
+      "slug": "s2a-primitives-dimension-static",
+      "modes": [
+        "mode-1"
+      ]
+    },
+    {
+      "name": "Typography",
+      "slug": "typography",
+      "modes": [
+        "modeless"
+      ]
+    },
+    {
+      "name": "S2A / Min-Max",
+      "slug": "s2a-min-max",
+      "modes": [
+        "min",
+        "max"
+      ]
+    },
+    {
+      "name": "S2A / Responsive / Grid / Typography",
+      "slug": "s2a-responsive-grid-typography",
+      "modes": [
+        "xl",
+        "lg",
+        "md",
+        "sm"
+      ]
+    },
+    {
+      "name": "•S Typography",
+      "slug": "s-typography",
+      "modes": [
+        "mode-1"
+      ]
+    },
+    {
+      "name": "Primitives (Core)",
+      "slug": "primitives-core",
+      "modes": [
+        "mode-1"
+      ]
+    },
+    {
+      "name": "Semantic / Color / Theme",
+      "slug": "semantic-color-theme",
+      "modes": [
+        "light",
+        "dark"
+      ]
+    }
+  ],
+  "tokenCount": 476,
+  "changelog": "https://github.com/adobecom/consonant/blob/main/packages/tokens/CHANGELOG.md",
+  "generatedBy": "build-release-manifest.js"
+}

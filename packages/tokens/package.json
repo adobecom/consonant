@@ -15,6 +15,7 @@
   "scripts": {
     "build": "nx build tokens",
     "package": "nx package tokens",
+    "manifest": "node scripts/build-release-manifest.js",
     "sync": "nx sync-figma tokens",
     "minify": "nx minify tokens",
     "clean": "nx clean tokens",
