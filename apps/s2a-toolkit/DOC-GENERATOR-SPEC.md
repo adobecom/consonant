@@ -1,6 +1,6 @@
-# In‑Plugin Bento Doc Generator — Build Spec
+# In‑Plugin Component Doc Generator — Build Spec
 
-**Goal:** anyone selects a component set, clicks one button, and gets a fully‑populated bento doc in the current house style — no Claude, no bridge. Turns "ask Matt to run the doc script" into "click Generate."
+**Goal:** anyone selects a component set, clicks one button, and gets a fully‑populated component doc in the current house style — no Claude, no bridge. Turns "ask Matt to run the doc script" into "click Generate."
 
 Status: spec / not built. Supersedes the plugin's old **Spec sheet** (dark‑section) generator.
 
@@ -9,9 +9,9 @@ Status: spec / not built. Supersedes the plugin's old **Spec sheet** (dark‑sec
 ## 1. User flow
 
 1. Select a `COMPONENT_SET` on canvas.
-2. Tools → **Docs → Generate bento doc**.
+2. Tools → **Docs → Generate component doc**.
 3. Panel shows what was detected (name, version/status from the meta fence, axes for the variant grid) with smart defaults; author can tweak or just hit **Generate**.
-4. A complete bento doc appears to the right of the set on the same page; canvas zooms to it.
+4. A complete component doc appears to the right of the set on the same page; canvas zooms to it.
 
 Re‑running on a set that already has a `… · Docs` frame → **Update in place** vs **New version**.
 
@@ -42,9 +42,9 @@ Re‑running on a set that already has a `… · Docs` frame → **Update in pla
 
 ---
 
-## 4. Output — the bento layout
+## 4. Output — the doc layout
 
-The generator **clones a canonical Bento Template** (a real frame in the file) and only swaps *content*, never structure. Sections (rows), each shown/hidden based on what the set actually has:
+The generator **clones a canonical Doc Template** (a real frame in the file) and only swaps *content*, never structure. Sections (rows), each shown/hidden based on what the set actually has:
 
 1. **Hero + Versioning** — default‑variant instance + name; version/status/updated/changelog from the fence.
 2. **All variants** — the variant grid **+ axis labels** (row = one axis, columns = another).
@@ -63,7 +63,7 @@ The generator **clones a canonical Bento Template** (a real frame in the file) a
 Mirrors the clone‑and‑repopulate recipe we already run via the bridge:
 
 1. **Validate** selection is a `COMPONENT_SET`; parse the meta fence.
-2. **Clone** the Bento Template; rename `{Set} · Docs`; place right of the set on its page.
+2. **Clone** the Doc Template; rename `{Set} · Docs`; place right of the set on its page.
 3. **Hero** — `createInstance()` on the default `COMPONENT` variant; set the name text (Adobe Clean Display Bold).
 4. **Versioning card** — fill version / status / updated / changelog from the fence.
 5. **All variants** — remove template placeholders; place one instance per variant; run the **axis‑labeler**:
@@ -95,9 +95,9 @@ The only genuinely non‑automatable content is the *prose* — and even that is
 
 ## 7. Architecture
 
-- **`code.ts`** — `bento:generate` message handler containing the algorithm (pure Figma API). Reuses existing token‑binding / annotate helpers.
-- **`ui.ts`** — a **Docs** tool: "Generate bento doc" button + detected‑axes confirmation + optional config fields.
-- **Bento Template** — a clean, dedicated template frame on a `📐 Templates` page, referenced by a stable name. **Prerequisite:** build this as a *placeholder* template (no embedded real component set), unlike today's `Button — v2 · Docs` which embeds the real Button set and is fragile to clone.
+- **`code.ts`** — `doc:generate` message handler containing the algorithm (pure Figma API). Reuses existing token‑binding / annotate helpers.
+- **`ui.ts`** — a **Docs** tool: "Generate component doc" button + detected‑axes confirmation + optional config fields.
+- **Doc Template** — a clean, dedicated template frame on a `📐 Templates` page, referenced by a stable name. **Prerequisite:** build this as a *placeholder* template (no embedded real component set), unlike today's `Button — v2 · Docs` which embeds the real Button set and is fragile to clone.
 
 ---
 

@@ -252,7 +252,7 @@ function bytesToBase64(bytes: Uint8Array): string {
   return btoa(bin);
 }
 
-// ── Bento doc generator helpers ────────────────────────────────────────────────
+// ── Component doc generator helpers ────────────────────────────────────────────────
 
 function parseVariantProps(name: string): Record<string, string> {
   const props: Record<string, string> = {};
@@ -263,15 +263,15 @@ function parseVariantProps(name: string): Record<string, string> {
   return props;
 }
 
-interface BentoMeta {
+interface DocMeta {
   version: string; status: string; updated: string; changelog: string;
   goodToKnow: string; accessibility: string; description: string; hadFence: boolean;
 }
 
 // Parse the `— s2a:meta —` fence plus the `## Good to know` / `## Accessibility`
 // prose blocks out of a component set's description. Tolerates a missing fence.
-function parseMetaFence(desc: string): BentoMeta {
-  const out: BentoMeta = {
+function parseMetaFence(desc: string): DocMeta {
+  const out: DocMeta = {
     version: '', status: '', updated: '', changelog: '',
     goodToKnow: '', accessibility: '', description: '', hadFence: false,
   };
@@ -330,7 +330,7 @@ function pickDefaultVariant(variants: ComponentNode[]): ComponentNode | undefine
   return best;
 }
 
-function clearBentoSlot(frame: FrameNode): void {
+function clearDocSlot(frame: FrameNode): void {
   for (const c of [...frame.children]) c.remove();
 }
 
@@ -677,12 +677,12 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       break;
     }
 
-    case 'bento:generate': {
+    case 'doc:generate': {
       try {
         const setId = msg.setId as string;
         const node = await figma.getNodeByIdAsync(setId);
         if (!node || node.type !== 'COMPONENT_SET') {
-          figma.ui.postMessage({ type: 'bento:result', error: 'Select a component set first' });
+          figma.ui.postMessage({ type: 'doc:result', error: 'Select a component set first' });
           break;
         }
         const set = node as ComponentSetNode;
@@ -697,9 +697,9 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         // loadAllPagesAsync required before root/page traversal in dynamic-page mode.
         await figma.loadAllPagesAsync();
         const tplPage  = figma.root.children.find(p => p.name === '📐 Templates') as PageNode | undefined;
-        const template = tplPage?.children.find(c => c.name === 'Bento Doc Template') as FrameNode | undefined;
+        const template = tplPage?.children.find(c => c.name === 'Doc Template') as FrameNode | undefined;
         if (!template) {
-          figma.ui.postMessage({ type: 'bento:result', error: 'Template not found — add "Bento Doc Template" to the "📐 Templates" page' });
+          figma.ui.postMessage({ type: 'doc:result', error: 'Template not found — add "Doc Template" to the "📐 Templates" page' });
           break;
         }
 
@@ -751,7 +751,7 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         // Hero slot — a live instance of the default variant.
         const heroSlot = find('@slot-hero') as FrameNode | null;
         if (heroSlot && defaultVariant) {
-          clearBentoSlot(heroSlot);
+          clearDocSlot(heroSlot);
           heroSlot.clipsContent = false;
           heroSlot.paddingTop = 20; heroSlot.paddingBottom = 20;
           heroSlot.counterAxisSizingMode = 'AUTO'; // hug the instance height
@@ -764,7 +764,7 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         // Properties — one stacked row per property definition.
         const propsSlot = find('@properties') as FrameNode | null;
         if (propsSlot) {
-          clearBentoSlot(propsSlot);
+          clearDocSlot(propsSlot);
           propsSlot.strokes = []; propsSlot.dashPattern = []; propsSlot.fills = [];
           propsSlot.layoutMode = 'VERTICAL';
           propsSlot.primaryAxisAlignItems = 'MIN';
@@ -797,7 +797,7 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         // RouterNavItem — readable since headers follow the row that defines x).
         const gridSlot = find('@slot-all-variants') as FrameNode | null;
         if (gridSlot && variants.length) {
-          clearBentoSlot(gridSlot);
+          clearDocSlot(gridSlot);
           gridSlot.strokes = []; gridSlot.dashPattern = []; gridSlot.fills = [];
           gridSlot.layoutMode = 'NONE'; gridSlot.clipsContent = false;
 
@@ -869,7 +869,7 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         // Dark-mode preview — clone the finished grid and pin the clone to Dark.
         const darkSlot = find('@slot-dark-preview') as FrameNode | null;
         if (darkSlot && gridSlot) {
-          clearBentoSlot(darkSlot);
+          clearDocSlot(darkSlot);
           darkSlot.strokes = []; darkSlot.dashPattern = []; darkSlot.fills = [];
           darkSlot.layoutMode = 'NONE'; darkSlot.clipsContent = false;
           const gclone = gridSlot.clone();
@@ -896,14 +896,14 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         figma.viewport.scrollAndZoomIntoView([doc]);
 
         figma.ui.postMessage({
-          type: 'bento:result',
+          type: 'doc:result',
           nodeId: doc.id,
           variantCount: variants.length,
           warning: meta.hadFence ? undefined
             : 'No s2a:meta fence in the set description — used placeholders for version / changelog / prose',
         });
       } catch (e: any) {
-        figma.ui.postMessage({ type: 'bento:result', error: e.message || String(e) });
+        figma.ui.postMessage({ type: 'doc:result', error: e.message || String(e) });
       }
       break;
     }

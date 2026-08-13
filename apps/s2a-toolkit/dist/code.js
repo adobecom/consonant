@@ -330,7 +330,7 @@ function pickDefaultVariant(variants) {
   }
   return best;
 }
-function clearBentoSlot(frame) {
+function clearDocSlot(frame) {
   for (const c of [...frame.children]) c.remove();
 }
 function anatomyList(comp) {
@@ -650,12 +650,12 @@ figma.ui.onmessage = async (msg) => {
       }
       break;
     }
-    case "bento:generate": {
+    case "doc:generate": {
       try {
         const setId = msg.setId;
         const node = await figma.getNodeByIdAsync(setId);
         if (!node || node.type !== "COMPONENT_SET") {
-          figma.ui.postMessage({ type: "bento:result", error: "Select a component set first" });
+          figma.ui.postMessage({ type: "doc:result", error: "Select a component set first" });
           break;
         }
         const set = node;
@@ -666,9 +666,9 @@ figma.ui.onmessage = async (msg) => {
         ]);
         await figma.loadAllPagesAsync();
         const tplPage = figma.root.children.find((p) => p.name === "\u{1F4D0} Templates");
-        const template = tplPage == null ? void 0 : tplPage.children.find((c) => c.name === "Bento Doc Template");
+        const template = tplPage == null ? void 0 : tplPage.children.find((c) => c.name === "Doc Template");
         if (!template) {
-          figma.ui.postMessage({ type: "bento:result", error: 'Template not found \u2014 add "Bento Doc Template" to the "\u{1F4D0} Templates" page' });
+          figma.ui.postMessage({ type: "doc:result", error: 'Template not found \u2014 add "Doc Template" to the "\u{1F4D0} Templates" page' });
           break;
         }
         const bColls = await figma.variables.getLocalVariableCollectionsAsync();
@@ -710,7 +710,7 @@ figma.ui.onmessage = async (msg) => {
         const defaultVariant = pickDefaultVariant(variants);
         const heroSlot = find("@slot-hero");
         if (heroSlot && defaultVariant) {
-          clearBentoSlot(heroSlot);
+          clearDocSlot(heroSlot);
           heroSlot.clipsContent = false;
           heroSlot.paddingTop = 20;
           heroSlot.paddingBottom = 20;
@@ -720,7 +720,7 @@ figma.ui.onmessage = async (msg) => {
         if (defaultVariant) await setText("@anatomy", anatomyList(defaultVariant));
         const propsSlot = find("@properties");
         if (propsSlot) {
-          clearBentoSlot(propsSlot);
+          clearDocSlot(propsSlot);
           propsSlot.strokes = [];
           propsSlot.dashPattern = [];
           propsSlot.fills = [];
@@ -749,7 +749,7 @@ figma.ui.onmessage = async (msg) => {
         }
         const gridSlot = find("@slot-all-variants");
         if (gridSlot && variants.length) {
-          clearBentoSlot(gridSlot);
+          clearDocSlot(gridSlot);
           gridSlot.strokes = [];
           gridSlot.dashPattern = [];
           gridSlot.fills = [];
@@ -823,7 +823,7 @@ figma.ui.onmessage = async (msg) => {
         if (slotsRow) slotsRow.visible = setUsesNativeSlots(set);
         const darkSlot = find("@slot-dark-preview");
         if (darkSlot && gridSlot) {
-          clearBentoSlot(darkSlot);
+          clearDocSlot(darkSlot);
           darkSlot.strokes = [];
           darkSlot.dashPattern = [];
           darkSlot.fills = [];
@@ -849,13 +849,13 @@ figma.ui.onmessage = async (msg) => {
         figma.currentPage.selection = [doc];
         figma.viewport.scrollAndZoomIntoView([doc]);
         figma.ui.postMessage({
-          type: "bento:result",
+          type: "doc:result",
           nodeId: doc.id,
           variantCount: variants.length,
           warning: meta.hadFence ? void 0 : "No s2a:meta fence in the set description \u2014 used placeholders for version / changelog / prose"
         });
       } catch (e) {
-        figma.ui.postMessage({ type: "bento:result", error: e.message || String(e) });
+        figma.ui.postMessage({ type: "doc:result", error: e.message || String(e) });
       }
       break;
     }

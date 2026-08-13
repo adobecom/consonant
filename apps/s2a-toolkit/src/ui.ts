@@ -66,7 +66,7 @@ function recentlyUsed(n = 5): Feature[] {
 let annotateNodeId: string | null = null;
 let llmCaptureNodeId: string | null = null;
 let selectSetId:    string | null = null;
-let bentoSetId:     string | null = null;
+let docSetId:     string | null = null;
 let bridgeConnected      = false;
 let bridgeWs: WebSocket | null = null;
 let bridgeWsPort: number | null = null;
@@ -171,9 +171,9 @@ const FEATURES: Feature[] = [
     },
   },
   {
-    id: 'tools:bento',
-    name: 'Generate bento doc',
-    description: 'Build a full bento documentation page for the selected component set',
+    id: 'tools:doc',
+    name: 'Generate component doc',
+    description: 'Build a full component documentation page for the selected component set',
     category: 'Tools',
     uiAction: () => switchPanel('tools'),
   },
@@ -200,7 +200,7 @@ const QUICK_ACTION_IDS = [
   'tools:copy-link',
   'tools:annotate',
   'tools:select-filter',
-  'tools:bento',
+  'tools:doc',
 ];
 
 // ── Fire a feature ────────────────────────────────────────────────────────────
@@ -808,22 +808,22 @@ document.getElementById('annotateClearBtn')?.addEventListener('click', () => {
   postToPlugin('annotate:clear', { nodeId: annotateNodeId });
 });
 
-// ── Tools — Bento ─────────────────────────────────────────────────────────────
+// ── Tools — Doc ─────────────────────────────────────────────────────────────
 
-function setBentoStatus(msg: string, type: '' | 'ok' | 'err' = '') {
-  const el = document.getElementById('bentoStatus') as HTMLElement;
+function setDocStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('docStatus') as HTMLElement;
   el.textContent = msg; el.className = 'status' + (type ? ' ' + type : '');
 }
 
-// Bento generation needs a full COMPONENT_SET (not a single COMPONENT).
-function updateBentoSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
+// Doc generation needs a full COMPONENT_SET (not a single COMPONENT).
+function updateDocSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
   const isSet = sel?.nodeType === 'COMPONENT_SET';
-  bentoSetId = isSet ? (sel?.id ?? null) : null;
-  const emptyEl = document.getElementById('bentoSelectionEmpty') as HTMLElement;
-  const infoEl  = document.getElementById('bentoSelectionInfo')  as HTMLElement;
-  const nameEl  = document.getElementById('bentoSetName')  as HTMLElement;
-  const countEl = document.getElementById('bentoSetCount') as HTMLElement;
-  const btn     = document.getElementById('bentoGenerateBtn') as HTMLButtonElement;
+  docSetId = isSet ? (sel?.id ?? null) : null;
+  const emptyEl = document.getElementById('docSelectionEmpty') as HTMLElement;
+  const infoEl  = document.getElementById('docSelectionInfo')  as HTMLElement;
+  const nameEl  = document.getElementById('docSetName')  as HTMLElement;
+  const countEl = document.getElementById('docSetCount') as HTMLElement;
+  const btn     = document.getElementById('docGenerateBtn') as HTMLButtonElement;
   if (isSet && sel) {
     emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
     nameEl.textContent  = sel.name;
@@ -835,12 +835,12 @@ function updateBentoSelection(sel: { id: string; name: string; nodeType: string;
   }
 }
 
-document.getElementById('bentoGenerateBtn')?.addEventListener('click', () => {
-  if (!bentoSetId) return;
-  const btn = document.getElementById('bentoGenerateBtn') as HTMLButtonElement;
+document.getElementById('docGenerateBtn')?.addEventListener('click', () => {
+  if (!docSetId) return;
+  const btn = document.getElementById('docGenerateBtn') as HTMLButtonElement;
   btn.disabled = true; btn.textContent = 'Generating…';
-  setBentoStatus('');
-  postToPlugin('bento:generate', { setId: bentoSetId });
+  setDocStatus('');
+  postToPlugin('doc:generate', { setId: docSetId });
 });
 
 // ── Plugin messages ───────────────────────────────────────────────────────────
@@ -885,7 +885,7 @@ window.addEventListener('message', (event) => {
         };
         updateLlmCaptureSelection(sel);
         updateAnnotateSelection(sel);
-        updateBentoSelection(sel);
+        updateDocSelection(sel);
         updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
         updateSectionBar(
           !!(msg.isSection as boolean),
@@ -895,7 +895,7 @@ window.addEventListener('message', (event) => {
       } else {
         updateLlmCaptureSelection(null);
         updateAnnotateSelection(null);
-        updateBentoSelection(null);
+        updateDocSelection(null);
         updateCopyBtn(null, null);
         updateSectionBar(false, 0, '');
       }
@@ -970,14 +970,14 @@ window.addEventListener('message', (event) => {
       setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? 's' : ''}` : 'Nothing to clear', 'ok');
       break;
     }
-    case 'bento:result': {
-      const btn = document.getElementById('bentoGenerateBtn') as HTMLButtonElement;
-      btn.disabled = !bentoSetId; btn.textContent = 'Generate bento doc';
-      if (msg.error) setBentoStatus('❌ ' + (msg.error as string), 'err');
+    case 'doc:result': {
+      const btn = document.getElementById('docGenerateBtn') as HTMLButtonElement;
+      btn.disabled = !docSetId; btn.textContent = 'Generate component doc';
+      if (msg.error) setDocStatus('❌ ' + (msg.error as string), 'err');
       else {
         const vars = msg.variantCount as number;
         const warn = msg.warning ? ' · ⚠ ' + (msg.warning as string) : '';
-        setBentoStatus(`✓ Bento doc generated · ${vars} variant${vars !== 1 ? 's' : ''}${warn}`, 'ok');
+        setDocStatus(`✓ Component doc generated · ${vars} variant${vars !== 1 ? 's' : ''}${warn}`, 'ok');
       }
       break;
     }
