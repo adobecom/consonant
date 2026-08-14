@@ -64,10 +64,9 @@ function recentlyUsed(n = 5): Feature[] {
 // ── State vars (declared early so FEATURES closures can reference them) ───────
 
 let annotateNodeId: string | null = null;
+let llmCaptureNodeId: string | null = null;
 let selectSetId:    string | null = null;
-let specSetId:      string | null = null;
-let variablesCache: { variables: any[]; variableCollections: any[] } | null = null;
-let githubSettings: GitHubSettings | null = null;
+let docSetId:     string | null = null;
 let bridgeConnected      = false;
 let bridgeWs: WebSocket | null = null;
 let bridgeWsPort: number | null = null;
@@ -76,7 +75,6 @@ let bridgeReconnectTimer: ReturnType<typeof setTimeout>   | null = null;
 let bridgeReconnectAttempts = 0;
 let bridgeUserDisconnected  = false;
 let activePanel: Panel = 'home';
-let settingsOpen = false;
 let isMini = false;
 let popoverOpen = false;
 
@@ -89,20 +87,14 @@ let requestCounter = 0;
 
 // ── Panel switching ───────────────────────────────────────────────────────────
 
-type Panel = 'home' | 'tokens' | 'tools' | 'settings';
+type Panel = 'home' | 'tools';
 
 const panelEls: Record<Panel, HTMLElement> = {
   home:     document.getElementById('homePanel')     as HTMLElement,
-  tokens:   document.getElementById('tokensPanel')   as HTMLElement,
   tools:    document.getElementById('toolsPanel')    as HTMLElement,
-  settings: document.getElementById('settingsPanel') as HTMLElement,
 };
 
 function switchPanel(panel: Panel) {
-  if (panel !== 'settings') {
-    settingsOpen = false;
-    settingsBtn?.classList.remove('active');
-  }
   activePanel = panel;
   Object.entries(panelEls).forEach(([key, el]) => {
     el.classList.toggle('active', key === panel);
@@ -110,7 +102,6 @@ function switchPanel(panel: Panel) {
   document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.panel === panel);
   });
-  if (panel === 'settings') postToPlugin('get-settings');
   if (panel === 'home') renderHomeView();
 }
 
@@ -119,19 +110,6 @@ document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => 
     const p = tab.dataset.panel as Panel;
     if (p) switchPanel(p);
   });
-});
-
-const settingsBtn = document.getElementById('settingsBtn') as HTMLButtonElement;
-settingsBtn?.addEventListener('click', () => {
-  if (settingsOpen) {
-    settingsOpen = false;
-    settingsBtn.classList.remove('active');
-    switchPanel(activePanel === 'settings' ? 'home' : activePanel);
-  } else {
-    settingsOpen = true;
-    settingsBtn.classList.add('active');
-    switchPanel('settings');
-  }
 });
 
 // ── Feature registry ──────────────────────────────────────────────────────────
@@ -147,36 +125,6 @@ interface Feature {
 }
 
 const FEATURES: Feature[] = [
-  // Tokens
-  {
-    id: 'tokens:refresh',
-    name: 'Refresh variables',
-    description: 'Re-fetch all Figma variables from the current file',
-    category: 'Tokens',
-    uiAction: () => (document.getElementById('varRefreshBtn') as HTMLButtonElement)?.click(),
-  },
-  {
-    id: 'tokens:export-local',
-    name: 'Export tokens locally',
-    description: 'Push token JSON to local dev server on port 9300',
-    category: 'Tokens',
-    uiAction: () => (document.getElementById('varExportLocalBtn') as HTMLButtonElement)?.click(),
-  },
-  {
-    id: 'tokens:export-github',
-    name: 'Push tokens to GitHub',
-    description: 'Commit token JSON to your configured repo',
-    category: 'Tokens',
-    uiAction: () => (document.getElementById('varExportGithubBtn') as HTMLButtonElement)?.click(),
-  },
-  {
-    id: 'tokens:doc-gen',
-    name: 'Generate token docs',
-    description: 'Build a Figma doc sheet for a token group',
-    category: 'Tokens',
-    uiAction: () => switchPanel('tokens'),
-  },
-
   // Tools
   {
     id: 'tools:copy-link',
@@ -184,6 +132,13 @@ const FEATURES: Feature[] = [
     description: 'Copy a shareable link for the selected node(s)',
     category: 'Tools',
     uiAction: () => (document.getElementById('copyNodeBtn') as HTMLButtonElement)?.click(),
+  },
+  {
+    id: 'tools:llm-capture',
+    name: 'Send screenshot to LLM',
+    description: 'Capture the selected node and send image + metadata to the local LLM bridge',
+    category: 'Tools',
+    uiAction: () => switchPanel('tools'),
   },
   {
     id: 'tools:format-section',
@@ -216,9 +171,9 @@ const FEATURES: Feature[] = [
     },
   },
   {
-    id: 'tools:spec',
-    name: 'Generate spec sheet',
-    description: 'Scaffold a Figma spec doc for a component set',
+    id: 'tools:doc',
+    name: 'Generate component doc',
+    description: 'Build a full component documentation page for the selected component set',
     category: 'Tools',
     uiAction: () => switchPanel('tools'),
   },
@@ -241,12 +196,11 @@ const FEATURES: Feature[] = [
 ];
 
 const QUICK_ACTION_IDS = [
+  'tools:llm-capture',
   'tools:copy-link',
-  'tokens:refresh',
   'tools:annotate',
   'tools:select-filter',
-  'tokens:export-local',
-  'tools:spec',
+  'tools:doc',
 ];
 
 // ── Fire a feature ────────────────────────────────────────────────────────────
@@ -498,6 +452,55 @@ copyNodeBtn.addEventListener('click', () => {
   postToPlugin('notify', { message: msg });
 });
 
+// ── LLM capture ──────────────────────────────────────────────────────────────
+
+function setLlmCaptureStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('llmCaptureStatus') as HTMLElement;
+  el.textContent = msg;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+function updateLlmCaptureSelection(sel: { id: string; name: string; nodeType: string } | null) {
+  llmCaptureNodeId = sel?.id ?? null;
+  const emptyEl = document.getElementById('llmCaptureSelectionEmpty') as HTMLElement;
+  const infoEl  = document.getElementById('llmCaptureSelectionInfo')  as HTMLElement;
+  const nameEl  = document.getElementById('llmCaptureNodeName') as HTMLElement;
+  const typeEl  = document.getElementById('llmCaptureNodeType') as HTMLElement;
+  const sendBtn = document.getElementById('llmCaptureSendBtn') as HTMLButtonElement;
+  if (sel) {
+    emptyEl.style.display = 'none';
+    infoEl.style.display = 'flex';
+    nameEl.textContent = sel.name;
+    typeEl.textContent = sel.nodeType;
+    sendBtn.disabled = false;
+  } else {
+    emptyEl.style.display = 'block';
+    infoEl.style.display = 'none';
+    sendBtn.disabled = true;
+  }
+}
+
+async function pollLlmCaptureJob(jobId: string) {
+  for (;;) {
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    const res = await fetch(`http://localhost:4002/jobs/${encodeURIComponent(jobId)}`);
+    if (!res.ok) throw new Error(`Job status failed (${res.status})`);
+    const job = await res.json();
+    if (job.phase) setLlmCaptureStatus(job.phase);
+    if (job.status === 'done') return job.result;
+    if (job.status === 'error') throw new Error(job.error || 'LLM job failed');
+  }
+}
+
+document.getElementById('llmCaptureSendBtn')?.addEventListener('click', () => {
+  if (!llmCaptureNodeId) return;
+  const btn = document.getElementById('llmCaptureSendBtn') as HTMLButtonElement;
+  btn.disabled = true;
+  btn.textContent = 'Capturing…';
+  setLlmCaptureStatus('Capturing selected node…');
+  postToPlugin('llm-capture:selection', { maxDimension: 2048 });
+});
+
 // ── Section bar ───────────────────────────────────────────────────────────────
 
 const sectionBar      = document.getElementById('sectionBar')      as HTMLElement;
@@ -605,9 +608,6 @@ function initBridgeConnection(ws: WebSocket) {
   sendBridgeCommand('REFRESH_VARIABLES', {}, 30000).then(result => {
     if (ws.readyState !== 1 || !result?.data) return;
     ws.send(JSON.stringify({ type: 'VARIABLES_DATA', data: result.data }));
-    renderVariables(result.data);
-    renderTokenGroups(result.data);
-    setVarMeta(result.data.variables.length + ' variables');
   }).catch(() => {});
 }
 
@@ -701,236 +701,6 @@ function bridgeDisconnect() {
   bridgeWs = null; bridgeWsPort = null; bridgeConnected = false; bridgeReconnectAttempts = 0;
   updateBridgeUi();
 }
-
-// ── Token group helpers ───────────────────────────────────────────────────────
-
-function getTokenGroup(name: string): string {
-  const parts = name.split('/').filter(p => p !== 's2a');
-  if (parts.length >= 4 && parts[1] === 'transparent') return parts[0] + ' / ' + parts[1] + ' / ' + parts[2];
-  if (parts.length >= 3) return parts[0] + ' / ' + parts[1];
-  return parts[0] ?? name;
-}
-
-// ── Variables / Tokens panel ──────────────────────────────────────────────────
-
-function setVarMeta(_text: string) {}
-
-function setVarStatus(msg: string, type: '' | 'ok' | 'err' = '') {
-  const el = document.getElementById('varStatus') as HTMLElement;
-  el.textContent = msg;
-  el.className = 'status' + (type ? ' ' + type : '');
-}
-
-function updateExportButtons() {
-  const localBtn  = document.getElementById('varExportLocalBtn')  as HTMLButtonElement;
-  const githubBtn = document.getElementById('varExportGithubBtn') as HTMLButtonElement;
-  const hasVars = !!variablesCache;
-  const hasGhSettings = !!(githubSettings?.token && githubSettings?.owner && githubSettings?.repo);
-  if (localBtn)  localBtn.disabled  = !hasVars;
-  if (githubBtn) githubBtn.disabled = !hasVars || !hasGhSettings;
-}
-
-function renderVariables(data: { variables: any[]; variableCollections: any[] }) {
-  variablesCache = data;
-  const el = document.getElementById('varCollections') as HTMLElement;
-  if (!el) return;
-
-  if (data.variableCollections.length === 0) {
-    el.innerHTML = '<div class="empty-state">No collections found</div>';
-    return;
-  }
-
-  const byCol: Record<string, number> = {};
-  for (const v of data.variables) byCol[v.variableCollectionId] = (byCol[v.variableCollectionId] || 0) + 1;
-
-  el.innerHTML = data.variableCollections.map((c: any) =>
-    `<div class="collection-row">
-      <span class="collection-name">${esc(c.name)}</span>
-      <span class="collection-count">${byCol[c.id] || 0}</span>
-    </div>`
-  ).join('');
-
-  updateExportButtons();
-}
-
-function renderTokenGroups(data: { variables: any[]; variableCollections: any[] }) {
-  const labelEl = document.getElementById('tokenGroupLabel') as HTMLElement;
-  const listEl  = document.getElementById('tokenGroupList')  as HTMLElement;
-  if (!listEl) return;
-
-  const semanticColls = data.variableCollections.filter(c =>
-    /Semantic|Responsive/.test(c.name) ||
-    (/Primitives/.test(c.name) && /Color/.test(c.name)) ||
-    (/Primitives/.test(c.name) && /Dimension/.test(c.name))
-  );
-  if (semanticColls.length === 0) {
-    listEl.innerHTML = '';
-    if (labelEl) labelEl.classList.add('hidden');
-    return;
-  }
-
-  const collIdToName = new Map<string, string>();
-  for (const c of data.variableCollections) collIdToName.set(c.id, c.name);
-
-  const collSet = new Set(semanticColls.map((c: any) => c.id));
-  const groups = new Map<string, { collectionId: string; collectionName: string; group: string; count: number }>();
-  for (const v of data.variables) {
-    if (!collSet.has(v.variableCollectionId)) continue;
-    const collName: string = collIdToName.get(v.variableCollectionId) || '';
-    const grp = getTokenGroup(v.name);
-    if (/Primitives/.test(collName) && /Dimension/.test(collName) && grp !== 'opacity') continue;
-    const key = v.variableCollectionId + '::' + grp;
-    if (!groups.has(key)) {
-      groups.set(key, { collectionId: v.variableCollectionId, collectionName: collName, group: grp, count: 0 });
-    }
-    groups.get(key)!.count++;
-  }
-
-  const sorted = [...groups.values()].sort((a, b) => {
-    if (a.collectionName !== b.collectionName) return a.collectionName.localeCompare(b.collectionName);
-    return a.group.localeCompare(b.group);
-  });
-
-  if (labelEl) labelEl.classList.remove('hidden');
-  listEl.innerHTML = sorted.map(g =>
-    `<div class="collection-row token-group-row" data-col="${esc(g.collectionId)}" data-group="${esc(g.group)}">
-      <span class="collection-name">${esc(g.group)}</span>
-      <span class="collection-count">${g.count}</span>
-      <button class="gen-btn" title="Generate docs for ${esc(g.group)}">→</button>
-    </div>`
-  ).join('');
-  listEl.insertAdjacentHTML('beforeend',
-    `<div class="collection-row token-group-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08)" data-col="text-styles" data-group="text-styles">
-      <span class="collection-name">Text Styles</span>
-      <span class="collection-count">—</span>
-      <button class="gen-btn" title="Generate 4 breakpoint sections from native text styles">→</button>
-    </div>`
-  );
-}
-
-document.getElementById('tokenGroupList')?.addEventListener('click', (e) => {
-  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.gen-btn');
-  if (!btn || btn.disabled) return;
-  const row = btn.closest<HTMLElement>('.token-group-row');
-  if (!row) return;
-  btn.disabled = true;
-  btn.textContent = '…';
-  setVarStatus('Generating ' + (row.dataset.group ?? '') + '…');
-  postToPlugin('token-docs:generate', { collectionId: row.dataset.col, group: row.dataset.group });
-});
-
-document.getElementById('varRefreshBtn')?.addEventListener('click', async () => {
-  const btn = document.getElementById('varRefreshBtn') as HTMLButtonElement;
-  btn.textContent = 'Refreshing…'; btn.disabled = true;
-  setVarStatus('Loading…');
-  try {
-    const result = await sendBridgeCommand('REFRESH_VARIABLES', {}, 30000);
-    if (result?.data) {
-      renderVariables(result.data);
-      renderTokenGroups(result.data);
-      setVarStatus(result.data.variables.length + ' variables loaded', 'ok');
-    } else {
-      setVarStatus('No data returned', 'err');
-    }
-  } catch (e: any) {
-    setVarStatus(e.message || 'Error', 'err');
-  } finally {
-    btn.textContent = 'Refresh'; btn.disabled = false;
-  }
-});
-
-document.getElementById('varExportLocalBtn')?.addEventListener('click', () => {
-  if (!variablesCache) { setVarStatus('No variables — hit Refresh first', 'err'); return; }
-  const btn = document.getElementById('varExportLocalBtn') as HTMLButtonElement;
-  btn.textContent = 'Exporting…'; btn.disabled = true;
-  setVarStatus('Sending to dev-server…');
-  fetch('http://localhost:9300/export', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(variablesCache),
-  })
-    .then(r => r.json())
-    .then((data: any) => {
-      if (data.ok) setVarStatus(`✓ ${data.variables} vars → dist/css/`, 'ok');
-      else setVarStatus('❌ ' + (data.error || 'Build failed'), 'err');
-    })
-    .catch(() => setVarStatus('❌ Dev server not running — run: npm run dev-server', 'err'))
-    .finally(() => { btn.textContent = 'Local'; updateExportButtons(); });
-});
-
-document.getElementById('varExportGithubBtn')?.addEventListener('click', async () => {
-  if (!variablesCache || !githubSettings?.token) return;
-  const btn = document.getElementById('varExportGithubBtn') as HTMLButtonElement;
-  btn.textContent = 'Pushing…'; btn.disabled = true;
-  setVarStatus('Pushing to GitHub…');
-  try {
-    await pushToGitHub(variablesCache, githubSettings);
-    setVarStatus('✓ Committed to ' + githubSettings.repo + ' / ' + githubSettings.branch, 'ok');
-  } catch (e: any) {
-    setVarStatus('❌ ' + (e.message || 'GitHub push failed'), 'err');
-  } finally {
-    btn.textContent = '↑ GitHub'; updateExportButtons();
-  }
-});
-
-// ── GitHub API ────────────────────────────────────────────────────────────────
-
-interface GitHubSettings {
-  token: string; owner: string; repo: string; branch: string; filePath: string;
-}
-
-async function pushToGitHub(data: any, settings: GitHubSettings): Promise<void> {
-  const { token, owner, repo, branch, filePath } = settings;
-  const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
-  const headers = {
-    Authorization: `token ${token}`,
-    Accept: 'application/vnd.github.v3+json',
-    'Content-Type': 'application/json',
-  };
-  let sha: string | undefined;
-  const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
-  if (getRes.ok) sha = (await getRes.json()).sha;
-  else if (getRes.status !== 404) throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-  const body: Record<string, any> = { message: 'chore: sync tokens from Figma', content, branch };
-  if (sha) body.sha = sha;
-  const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
-  if (!putRes.ok) throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
-}
-
-// ── Settings ──────────────────────────────────────────────────────────────────
-
-function setSettingsStatus(msg: string, type: '' | 'ok' | 'err' = '') {
-  const el = document.getElementById('settingsStatus') as HTMLElement;
-  el.textContent = msg;
-  el.className = 'status' + (type ? ' ' + type : '');
-}
-
-function applySettings(settings: GitHubSettings | null) {
-  githubSettings = settings;
-  if (!settings) return;
-  (document.getElementById('ghToken')    as HTMLInputElement).value = settings.token    || '';
-  (document.getElementById('ghOwner')    as HTMLInputElement).value = settings.owner    || '';
-  (document.getElementById('ghRepo')     as HTMLInputElement).value = settings.repo     || '';
-  (document.getElementById('ghBranch')   as HTMLInputElement).value = settings.branch   || 'main';
-  (document.getElementById('ghFilePath') as HTMLInputElement).value = settings.filePath || 'packages/toolkit-tokens/json/figma-export.json';
-  updateExportButtons();
-}
-
-document.getElementById('saveSettingsBtn')?.addEventListener('click', () => {
-  const settings: GitHubSettings = {
-    token:    (document.getElementById('ghToken')    as HTMLInputElement).value.trim(),
-    owner:    (document.getElementById('ghOwner')    as HTMLInputElement).value.trim(),
-    repo:     (document.getElementById('ghRepo')     as HTMLInputElement).value.trim(),
-    branch:   (document.getElementById('ghBranch')   as HTMLInputElement).value.trim() || 'main',
-    filePath: (document.getElementById('ghFilePath') as HTMLInputElement).value.trim() || 'packages/toolkit-tokens/json/figma-export.json',
-  };
-  if (!settings.token || !settings.owner || !settings.repo) {
-    setSettingsStatus('Token, owner, and repo are required', 'err');
-    return;
-  }
-  postToPlugin('save-settings', { settings });
-});
 
 // ── Tools — Select ────────────────────────────────────────────────────────────
 
@@ -1038,52 +808,39 @@ document.getElementById('annotateClearBtn')?.addEventListener('click', () => {
   postToPlugin('annotate:clear', { nodeId: annotateNodeId });
 });
 
-// ── Tools — Spec ──────────────────────────────────────────────────────────────
+// ── Tools — Doc ─────────────────────────────────────────────────────────────
 
-function setSpecStatus(msg: string, type: '' | 'ok' | 'err' = '') {
-  const el = document.getElementById('specStatus') as HTMLElement;
+function setDocStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('docStatus') as HTMLElement;
   el.textContent = msg; el.className = 'status' + (type ? ' ' + type : '');
 }
 
-function updateSpecSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
-  const isValid = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT';
-  specSetId = isValid ? (sel?.id ?? null) : null;
-  const emptyEl  = document.getElementById('specSelectionEmpty') as HTMLElement;
-  const infoEl   = document.getElementById('specSelectionInfo')  as HTMLElement;
-  const nameEl   = document.getElementById('specSetName')   as HTMLElement;
-  const countEl  = document.getElementById('specSetCount')  as HTMLElement;
-  const genBtn   = document.getElementById('specGenerateBtn') as HTMLButtonElement;
-  if (isValid && sel) {
+// Doc generation needs a full COMPONENT_SET (not a single COMPONENT).
+function updateDocSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
+  const isSet = sel?.nodeType === 'COMPONENT_SET';
+  docSetId = isSet ? (sel?.id ?? null) : null;
+  const emptyEl = document.getElementById('docSelectionEmpty') as HTMLElement;
+  const infoEl  = document.getElementById('docSelectionInfo')  as HTMLElement;
+  const nameEl  = document.getElementById('docSetName')  as HTMLElement;
+  const countEl = document.getElementById('docSetCount') as HTMLElement;
+  const btn     = document.getElementById('docGenerateBtn') as HTMLButtonElement;
+  if (isSet && sel) {
     emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
     nameEl.textContent  = sel.name;
-    countEl.textContent = sel.nodeType === 'COMPONENT_SET'
-      ? (sel.variantCount ?? 0) + ' variants'
-      : '1 variant';
-    genBtn.disabled = false;
+    countEl.textContent = (sel.variantCount ?? 0) + ' variants';
+    btn.disabled = false;
   } else {
     emptyEl.style.display = 'block'; infoEl.style.display = 'none';
-    genBtn.disabled = true;
+    btn.disabled = true;
   }
 }
 
-document.querySelectorAll<HTMLButtonElement>('#specOpts .chip').forEach(chip => {
-  chip.addEventListener('click', () => chip.classList.toggle('on'));
-});
-
-document.getElementById('specGenerateBtn')?.addEventListener('click', () => {
-  if (!specSetId) return;
-  const on = new Set(
-    Array.from(document.querySelectorAll<HTMLButtonElement>('#specOpts .chip.on'))
-      .map(c => c.dataset.opt!)
-  );
-  if (on.size === 0) { setSpecStatus('Select at least one section to include', 'err'); return; }
-  const btn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
+document.getElementById('docGenerateBtn')?.addEventListener('click', () => {
+  if (!docSetId) return;
+  const btn = document.getElementById('docGenerateBtn') as HTMLButtonElement;
   btn.disabled = true; btn.textContent = 'Generating…';
-  setSpecStatus('');
-  postToPlugin('spec:generate', {
-    setId: specSetId,
-    options: { variants: on.has('variants'), tokens: on.has('tokens'), children: on.has('children') },
-  });
+  setDocStatus('');
+  postToPlugin('doc:generate', { setId: docSetId });
 });
 
 // ── Plugin messages ───────────────────────────────────────────────────────────
@@ -1108,23 +865,6 @@ window.addEventListener('message', (event) => {
       }
       break;
     }
-    case 'settings-loaded': applySettings(msg.settings as GitHubSettings | null); break;
-    case 'settings-saved': {
-      if (msg.success) {
-        githubSettings = {
-          token:    (document.getElementById('ghToken')    as HTMLInputElement).value.trim(),
-          owner:    (document.getElementById('ghOwner')    as HTMLInputElement).value.trim(),
-          repo:     (document.getElementById('ghRepo')     as HTMLInputElement).value.trim(),
-          branch:   (document.getElementById('ghBranch')   as HTMLInputElement).value.trim() || 'main',
-          filePath: (document.getElementById('ghFilePath') as HTMLInputElement).value.trim() || 'packages/toolkit-tokens/json/figma-export.json',
-        };
-        setSettingsStatus('Saved', 'ok');
-        updateExportButtons();
-      } else {
-        setSettingsStatus('Save failed: ' + (msg.error as string), 'err');
-      }
-      break;
-    }
     case 'select:axes': {
       if (msg.setId) renderAxes(msg.setId as string, msg.setName as string, msg.axes as any[]);
       else clearSelect();
@@ -1143,8 +883,9 @@ window.addEventListener('message', (event) => {
           nodeType: msg.nodeType as string,
           variantCount: msg.variantCount as number | undefined,
         };
+        updateLlmCaptureSelection(sel);
         updateAnnotateSelection(sel);
-        updateSpecSelection(sel);
+        updateDocSelection(sel);
         updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
         updateSectionBar(
           !!(msg.isSection as boolean),
@@ -1152,19 +893,59 @@ window.addEventListener('message', (event) => {
           (msg.sectionName as string)  ?? sel.name,
         );
       } else {
+        updateLlmCaptureSelection(null);
         updateAnnotateSelection(null);
-        updateSpecSelection(null);
+        updateDocSelection(null);
         updateCopyBtn(null, null);
         updateSectionBar(false, 0, '');
       }
       break;
     }
-    case 'token-docs:result': {
-      document.querySelectorAll<HTMLButtonElement>('.gen-btn').forEach(b => {
-        b.disabled = false; b.textContent = '→';
-      });
-      if (msg.error) setVarStatus('❌ ' + (msg.error as string), 'err');
-      else setVarStatus('✓ ' + (msg.count as number) + ' tokens documented', 'ok');
+    case 'llm-capture:result': {
+      const btn = document.getElementById('llmCaptureSendBtn') as HTMLButtonElement;
+      const resetBtn = () => {
+        btn.disabled = !llmCaptureNodeId;
+        btn.textContent = 'Send Screenshot';
+      };
+      if (msg.error) {
+        resetBtn();
+        setLlmCaptureStatus('❌ ' + (msg.error as string), 'err');
+        break;
+      }
+      const capture = msg.capture as Record<string, any>;
+      const prompt = ((document.getElementById('llmCapturePrompt') as HTMLTextAreaElement)?.value || '').trim();
+      setLlmCaptureStatus('Sending image + metadata to local LLM bridge…');
+      btn.textContent = 'Sending…';
+      fetch('http://localhost:4002/llm/capture', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          capture,
+          prompt: prompt || 'Inspect this Figma selection and summarize the layout, visual system, tokens, and implementation notes.',
+        }),
+      })
+        .then(async res => {
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || `LLM bridge returned ${res.status}`);
+          if (data.jobId) return pollLlmCaptureJob(data.jobId as string);
+          return data;
+        })
+        .then((result: any) => {
+          const label = result?.fileName
+            ? `✓ Sent · ${result.fileName}`
+            : result?.title
+              ? `✓ Sent · ${result.title}`
+              : '✓ Sent to LLM';
+          setLlmCaptureStatus(label, 'ok');
+          resetBtn();
+        })
+        .catch((e: any) => {
+          const hint = /Failed to fetch|NetworkError|Load failed/i.test(e.message || '')
+            ? 'Local LLM bridge is not running. Run: npm run figma-story'
+            : (e.message || 'Capture failed');
+          setLlmCaptureStatus('❌ ' + hint, 'err');
+          resetBtn();
+        });
       break;
     }
     case 'format-section:done': {
@@ -1189,13 +970,14 @@ window.addEventListener('message', (event) => {
       setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? 's' : ''}` : 'Nothing to clear', 'ok');
       break;
     }
-    case 'spec:result': {
-      const btn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
-      btn.disabled = !specSetId; btn.textContent = 'Generate Spec';
-      if (msg.error) setSpecStatus('❌ ' + (msg.error as string), 'err');
+    case 'doc:result': {
+      const btn = document.getElementById('docGenerateBtn') as HTMLButtonElement;
+      btn.disabled = !docSetId; btn.textContent = 'Generate component doc';
+      if (msg.error) setDocStatus('❌ ' + (msg.error as string), 'err');
       else {
         const vars = msg.variantCount as number;
-        setSpecStatus(`✓ Spec generated · ${vars} variant${vars !== 1 ? 's' : ''}`, 'ok');
+        const warn = msg.warning ? ' · ⚠ ' + (msg.warning as string) : '';
+        setDocStatus(`✓ Component doc generated · ${vars} variant${vars !== 1 ? 's' : ''}${warn}`, 'ok');
       }
       break;
     }
@@ -1205,7 +987,6 @@ window.addEventListener('message', (event) => {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 postToPlugin('ui-ready');
-postToPlugin('get-settings');
 postToPlugin('resize-for-view', { width: 320, height: 460 });
 
 renderHomeView();
