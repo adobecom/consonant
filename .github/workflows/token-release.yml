@@ -1,0 +1,108 @@
+name: Token Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump type"
+        required: true
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Sync variables from Figma (main file — never a branch)
+        env:
+          FIGMA_REST_API: ${{ secrets.FIGMA_REST_API }}
+          FIGMA_FILE_ID: ${{ vars.FIGMA_FILE_ID }}
+        run: npx nx sync-figma tokens
+
+      - name: Check for variable changes
+        id: diff
+        run: |
+          if git diff --quiet -- packages/tokens/json/ && [ -z "$(git ls-files --others --exclude-standard -- packages/tokens/json/)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Nothing to release — Figma variables unchanged since last sync."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build CSS
+        if: steps.diff.outputs.changed == 'true'
+        run: npx nx build tokens
+
+      - name: Spot-check output
+        if: steps.diff.outputs.changed == 'true'
+        run: node .github/scripts/token-release/spot-check.js
+
+      - name: Bump version
+        if: steps.diff.outputs.changed == 'true'
+        id: version
+        run: |
+          node packages/tokens/scripts/version.js ${{ inputs.bump }}
+          echo "version=$(node -p "require('./packages/tokens/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare CHANGELOG + PR body
+        if: steps.diff.outputs.changed == 'true'
+        run: node .github/scripts/token-release/prepare-release.js "${{ steps.version.outputs.version }}" "${{ inputs.bump }}"
+
+      - name: Package tarball
+        if: steps.diff.outputs.changed == 'true'
+        run: npx nx package tokens
+
+      - name: Move release artifacts
+        if: steps.diff.outputs.changed == 'true'
+        run: node .github/scripts/token-release/finalize-package.js "${{ steps.version.outputs.version }}"
+
+      - name: Build release manifest
+        if: steps.diff.outputs.changed == 'true'
+        run: node packages/tokens/scripts/build-release-manifest.js
+
+      - name: Commit, push, and open PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          BRANCH="release/s2a-tokens-${VERSION}"
+          git config user.name "s2a-release-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add packages/tokens/package.json packages/tokens/CHANGELOG.md packages/tokens/json dist releases
+          git commit -m "chore(tokens): release @adobecom/s2a-tokens@${VERSION}"
+          git push -u origin "$BRANCH"
+          gh pr create \
+            --title "release(tokens): ${VERSION}" \
+            --body-file .github/scripts/token-release/.pr-body.md \
+            --label release \
+            --head "$BRANCH" \
+            --base main
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ "${{ steps.diff.outputs.changed }}" = "true" ]; then
+            echo "### ✅ Released s2a-tokens ${{ steps.version.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### Nothing to release — Figma unchanged since last sync" >> "$GITHUB_STEP_SUMMARY"
+          fi

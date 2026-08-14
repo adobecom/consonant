@@ -108,8 +108,8 @@
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a9;
-        return (_a9 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a9.click();
+        var _a10;
+        return (_a10 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a10.click();
       }
     },
     {
@@ -180,13 +180,13 @@
     "tools:doc"
   ];
   function fireFeature(feat) {
-    var _a9;
+    var _a10;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a9 = feat.pluginPayload) != null ? _a9 : {});
+      postToPlugin(feat.pluginAction, (_a10 = feat.pluginPayload) != null ? _a10 : {});
     }
     if (activePanel === "home") renderHomeView();
   }
@@ -278,12 +278,12 @@
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a9, _b;
+    var _a10, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a9 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a9.scrollIntoView({ block: "nearest" });
+      (_a10 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a10.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -322,7 +322,7 @@
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a9;
+    var _a10;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -335,7 +335,7 @@
     }
     document.body.removeChild(ta);
     try {
-      (_a9 = navigator.clipboard) == null ? void 0 : _a9.writeText(text).catch(() => {
+      (_a10 = navigator.clipboard) == null ? void 0 : _a10.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -386,8 +386,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateLlmCaptureSelection(sel) {
-    var _a9;
-    llmCaptureNodeId = (_a9 = sel == null ? void 0 : sel.id) != null ? _a9 : null;
+    var _a10;
+    llmCaptureNodeId = (_a10 = sel == null ? void 0 : sel.id) != null ? _a10 : null;
     const emptyEl = document.getElementById("llmCaptureSelectionEmpty");
     const infoEl = document.getElementById("llmCaptureSelectionInfo");
     const nameEl = document.getElementById("llmCaptureNodeName");
@@ -734,8 +734,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a9;
-    annotateNodeId = (_a9 = sel == null ? void 0 : sel.id) != null ? _a9 : null;
+    var _a10;
+    annotateNodeId = (_a10 = sel == null ? void 0 : sel.id) != null ? _a10 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -786,9 +786,9 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateDocSelection(sel) {
-    var _a9, _b;
+    var _a10, _b;
     const isSet = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
-    docSetId = isSet ? (_a9 = sel == null ? void 0 : sel.id) != null ? _a9 : null : null;
+    docSetId = isSet ? (_a10 = sel == null ? void 0 : sel.id) != null ? _a10 : null : null;
     const emptyEl = document.getElementById("docSelectionEmpty");
     const infoEl = document.getElementById("docSelectionInfo");
     const nameEl = document.getElementById("docSetName");
@@ -816,7 +816,7 @@
     postToPlugin("doc:generate", { setId: docSetId });
   });
   window.addEventListener("message", (event) => {
-    var _a9, _b, _c;
+    var _a10, _b, _c;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -863,7 +863,7 @@
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a9 = msg.sectionCount) != null ? _a9 : 0,
+            (_a10 = msg.sectionCount) != null ? _a10 : 0,
             (_b = msg.sectionName) != null ? _b : sel.name
           );
         } else {
@@ -948,6 +948,59 @@
         }
         break;
       }
+    }
+  });
+  var tokenReleaseBump = "patch";
+  document.querySelectorAll("#tokenReleaseBump .chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#tokenReleaseBump .chip").forEach((c) => c.classList.remove("on"));
+      chip.classList.add("on");
+      tokenReleaseBump = chip.dataset.bump;
+    });
+  });
+  function setTokenReleaseStatus(msg, type = "") {
+    const el = document.getElementById("tokenReleaseStatus");
+    el.innerHTML = msg;
+    el.className = "status" + (type ? " " + type : "");
+  }
+  async function pollTokenReleaseJob(jobId) {
+    for (; ; ) {
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      const res = await fetch(`http://localhost:9401/jobs/${encodeURIComponent(jobId)}`);
+      if (!res.ok) throw new Error(`Job status failed (${res.status})`);
+      const job = await res.json();
+      if (job.phase) setTokenReleaseStatus(job.phase);
+      if (job.status === "done") return job;
+      if (job.status === "error") throw new Error(job.error || "Token release failed");
+    }
+  }
+  var _a9;
+  (_a9 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a9.addEventListener("click", async () => {
+    const btn = document.getElementById("tokenReleaseBtn");
+    btn.disabled = true;
+    btn.textContent = "Releasing\u2026";
+    setTokenReleaseStatus("Starting release pipeline\u2026");
+    try {
+      const res = await fetch("http://localhost:9401/tokens/release", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bump: tokenReleaseBump })
+      });
+      if (!res.ok) throw new Error(`Server returned ${res.status} \u2014 is the token-release trigger running? (npm run token-release)`);
+      const { jobId } = await res.json();
+      const job = await pollTokenReleaseJob(jobId);
+      const r = job.result;
+      const runLink = `<a href="${r.runUrl}" target="_blank">Actions run \u2192</a>`;
+      if (r.prUrl) {
+        setTokenReleaseStatus(`\u2713 ${r.prTitle} \xB7 <a href="${r.prUrl}" target="_blank">Review PR \u2192</a> \xB7 ${runLink}`, "ok");
+      } else {
+        setTokenReleaseStatus(`Run succeeded, no PR opened \u2014 likely nothing to release (Figma unchanged since last sync). ${runLink}`, "ok");
+      }
+    } catch (err) {
+      setTokenReleaseStatus("\u274C " + (err instanceof Error ? err.message : String(err)), "err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Release Tokens";
     }
   });
   postToPlugin("ui-ready");
