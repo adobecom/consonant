@@ -984,6 +984,71 @@ window.addEventListener('message', (event) => {
   }
 });
 
+// ── Token release ────────────────────────────────────────────────────────────
+// Runs the full sync → build → bump → changelog → package → manifest → PR
+// pipeline against the MAIN Figma file via the local token-release-server (9401).
+// See apps/s2a-toolkit/server/token-release-server.js and
+// .codex/skills/token-release.skill.md for the pipeline this mirrors.
+
+let tokenReleaseBump: 'patch' | 'minor' | 'major' = 'patch';
+
+document.querySelectorAll<HTMLButtonElement>('#tokenReleaseBump .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll<HTMLButtonElement>('#tokenReleaseBump .chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+    tokenReleaseBump = chip.dataset.bump as 'patch' | 'minor' | 'major';
+  });
+});
+
+function setTokenReleaseStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('tokenReleaseStatus') as HTMLElement;
+  el.innerHTML = msg;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+async function pollTokenReleaseJob(jobId: string) {
+  for (;;) {
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    const res = await fetch(`http://localhost:9401/jobs/${encodeURIComponent(jobId)}`);
+    if (!res.ok) throw new Error(`Job status failed (${res.status})`);
+    const job = await res.json();
+    if (job.phase) setTokenReleaseStatus(job.phase);
+    if (job.status === 'done') return job;
+    if (job.status === 'error') throw new Error(job.error || 'Token release failed');
+  }
+}
+
+document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('tokenReleaseBtn') as HTMLButtonElement;
+  btn.disabled = true;
+  btn.textContent = 'Releasing…';
+  setTokenReleaseStatus('Starting release pipeline…');
+
+  try {
+    const res = await fetch('http://localhost:9401/tokens/release', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bump: tokenReleaseBump }),
+    });
+    if (!res.ok) throw new Error(`Server returned ${res.status} — is the token-release trigger running? (npm run token-release)`);
+    const { jobId } = await res.json();
+
+    const job = await pollTokenReleaseJob(jobId);
+    const r = job.result as { runUrl: string; prUrl: string | null; prTitle: string | null };
+    const runLink = `<a href="${r.runUrl}" target="_blank">Actions run →</a>`;
+    if (r.prUrl) {
+      setTokenReleaseStatus(`✓ ${r.prTitle} · <a href="${r.prUrl}" target="_blank">Review PR →</a> · ${runLink}`, 'ok');
+    } else {
+      setTokenReleaseStatus(`Run succeeded, no PR opened — likely nothing to release (Figma unchanged since last sync). ${runLink}`, 'ok');
+    }
+  } catch (err) {
+    setTokenReleaseStatus('❌ ' + (err instanceof Error ? err.message : String(err)), 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Release Tokens';
+  }
+});
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 postToPlugin('ui-ready');
