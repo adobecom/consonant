@@ -17,6 +17,10 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Gate: this job pauses until a required reviewer approves the run.
+    # Configure reviewers in repo Settings → Environments → "token-release".
+    # (Inert until reviewers are added — reference alone does not gate.)
+    environment: token-release
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -154,6 +154,19 @@ async function buildFromFigma() {
   const responsiveFiles = new Map(); // mobile, tablet, desktop, desktop-wide
   const breakpointFiles = [];
   const typographyCoreFiles = new Map(); // mobile, desktop, etc.
+  // Any collection the sync exported but the categorization below has no bucket
+  // for — e.g. a brand-new token category (motion, elevation, blur…). Collected
+  // so we can FAIL LOUDLY instead of silently dropping it (see check after loop).
+  const uncategorizedFiles = [];
+
+  // Collections we intentionally do NOT emit to CSS. These fall through the
+  // categorization on purpose and must be listed here so the fail-loud guard
+  // doesn't trip on them. Anything NOT in this set that also matches no bucket
+  // is treated as an accidental drop and fails the build.
+  const KNOWN_UNBUILT_COLLECTIONS = new Set([
+    "s2a-design-guides", // DESIGN ONLY — Figma-canvas annotation/guide colors, never shipped
+    "s2a-min-max",       // not currently emitted; wire a bucket here if these should ship
+  ]);
 
   for (const entry of files) {
     if (!entry || !entry.fileName) {
@@ -322,6 +335,34 @@ async function buildFromFigma() {
       }
       responsiveFiles.get(modeSlug).push(normalizedEntry);
     }
+    // No bucket matched. If it's a known intentional skip, ignore it; otherwise
+    // record it so we fail the build below rather than drop it silently.
+    else if (!KNOWN_UNBUILT_COLLECTIONS.has(collectionSlug)) {
+      uncategorizedFiles.push(normalizedEntry);
+    }
+  }
+
+  // Fail loudly on any collection the pipeline can't build. Without this, a new
+  // token category (e.g. "S2A / Motion / Easing") would be synced to JSON but
+  // never emitted to CSS, and the release would "succeed" while silently losing
+  // it. If this fires, add a categorization bucket for the collection above.
+  if (uncategorizedFiles.length > 0) {
+    const offenders = [
+      ...new Map(
+        uncategorizedFiles.map((e) => [
+          e.collection.slug,
+          `${e.collection.name || "(unnamed)"}  (slug: ${e.collection.slug || "?"})`,
+        ]),
+      ).values(),
+    ];
+    throw new Error(
+      "build-tokens: unrecognized token collection(s) — synced to JSON but no CSS " +
+        "output bucket matched, so they would be silently dropped:\n" +
+        offenders.map((o) => `  • ${o}`).join("\n") +
+        "\n\nAdd a categorization branch for these in build-tokens.js " +
+        "(the if/else chain that sorts collections into primitives / semantic / " +
+        "component / typography / responsive / etc.), then re-run the build.",
+    );
   }
 
   const buildPath = path.join(
