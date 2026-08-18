@@ -64,7 +64,6 @@ function recentlyUsed(n = 5): Feature[] {
 // ── State vars (declared early so FEATURES closures can reference them) ───────
 
 let annotateNodeId: string | null = null;
-let llmCaptureNodeId: string | null = null;
 let selectSetId:    string | null = null;
 let docSetId:     string | null = null;
 let bridgeConnected      = false;
@@ -134,13 +133,6 @@ const FEATURES: Feature[] = [
     uiAction: () => (document.getElementById('copyNodeBtn') as HTMLButtonElement)?.click(),
   },
   {
-    id: 'tools:llm-capture',
-    name: 'Send screenshot to LLM',
-    description: 'Capture the selected node and send image + metadata to the local LLM bridge',
-    category: 'Tools',
-    uiAction: () => switchPanel('tools'),
-  },
-  {
     id: 'tools:format-section',
     name: 'Format section',
     description: 'Reflow the selected section with consistent spacing',
@@ -196,7 +188,6 @@ const FEATURES: Feature[] = [
 ];
 
 const QUICK_ACTION_IDS = [
-  'tools:llm-capture',
   'tools:copy-link',
   'tools:annotate',
   'tools:select-filter',
@@ -371,11 +362,45 @@ document.getElementById('paletteHintBtn')?.addEventListener('click', () => openP
 const app = document.getElementById('app') as HTMLElement;
 const toggleMiniBtn = document.getElementById('toggleMiniBtn') as HTMLButtonElement;
 
+// Current full-view size — the single source of truth so a drag-resize persists
+// across the minimize toggle and re-expands to whatever the user last set.
+const MIN_W = 300, MIN_H = 360, MAX_W = 1400, MAX_H = 1400;
+const winSize = { width: 320, height: 460 };
+
+function applySize() {
+  postToPlugin('resize-for-view', { width: winSize.width, height: isMini ? 40 : winSize.height });
+}
+
 toggleMiniBtn.addEventListener('click', () => {
   isMini = !isMini;
   app.classList.toggle('mini', isMini);
-  postToPlugin('resize-for-view', { width: 320, height: isMini ? 40 : 460 });
+  applySize();
   if (isMini && popoverOpen) closePopover();
+});
+
+// ── Drag-to-resize (bottom-right grip) ─────────────────────────────────────────
+
+const resizeGrip = document.getElementById('resizeGrip') as HTMLElement;
+
+resizeGrip?.addEventListener('pointerdown', (e: PointerEvent) => {
+  if (isMini) return;
+  e.preventDefault();
+  resizeGrip.setPointerCapture(e.pointerId);
+
+  const onMove = (ev: PointerEvent) => {
+    // The grip sits at the window's bottom-right, so the pointer's client
+    // coordinates are the new width/height. +4 keeps the cursor over the grip.
+    winSize.width = Math.max(MIN_W, Math.min(MAX_W, Math.round(ev.clientX + 4)));
+    winSize.height = Math.max(MIN_H, Math.min(MAX_H, Math.round(ev.clientY + 4)));
+    applySize();
+  };
+  const onUp = (ev: PointerEvent) => {
+    resizeGrip.releasePointerCapture(ev.pointerId);
+    resizeGrip.removeEventListener('pointermove', onMove);
+    resizeGrip.removeEventListener('pointerup', onUp);
+  };
+  resizeGrip.addEventListener('pointermove', onMove);
+  resizeGrip.addEventListener('pointerup', onUp);
 });
 
 // ── Copy frame link ───────────────────────────────────────────────────────────
@@ -452,54 +477,6 @@ copyNodeBtn.addEventListener('click', () => {
   postToPlugin('notify', { message: msg });
 });
 
-// ── LLM capture ──────────────────────────────────────────────────────────────
-
-function setLlmCaptureStatus(msg: string, type: '' | 'ok' | 'err' = '') {
-  const el = document.getElementById('llmCaptureStatus') as HTMLElement;
-  el.textContent = msg;
-  el.className = 'status' + (type ? ' ' + type : '');
-}
-
-function updateLlmCaptureSelection(sel: { id: string; name: string; nodeType: string } | null) {
-  llmCaptureNodeId = sel?.id ?? null;
-  const emptyEl = document.getElementById('llmCaptureSelectionEmpty') as HTMLElement;
-  const infoEl  = document.getElementById('llmCaptureSelectionInfo')  as HTMLElement;
-  const nameEl  = document.getElementById('llmCaptureNodeName') as HTMLElement;
-  const typeEl  = document.getElementById('llmCaptureNodeType') as HTMLElement;
-  const sendBtn = document.getElementById('llmCaptureSendBtn') as HTMLButtonElement;
-  if (sel) {
-    emptyEl.style.display = 'none';
-    infoEl.style.display = 'flex';
-    nameEl.textContent = sel.name;
-    typeEl.textContent = sel.nodeType;
-    sendBtn.disabled = false;
-  } else {
-    emptyEl.style.display = 'block';
-    infoEl.style.display = 'none';
-    sendBtn.disabled = true;
-  }
-}
-
-async function pollLlmCaptureJob(jobId: string) {
-  for (;;) {
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    const res = await fetch(`http://localhost:4002/jobs/${encodeURIComponent(jobId)}`);
-    if (!res.ok) throw new Error(`Job status failed (${res.status})`);
-    const job = await res.json();
-    if (job.phase) setLlmCaptureStatus(job.phase);
-    if (job.status === 'done') return job.result;
-    if (job.status === 'error') throw new Error(job.error || 'LLM job failed');
-  }
-}
-
-document.getElementById('llmCaptureSendBtn')?.addEventListener('click', () => {
-  if (!llmCaptureNodeId) return;
-  const btn = document.getElementById('llmCaptureSendBtn') as HTMLButtonElement;
-  btn.disabled = true;
-  btn.textContent = 'Capturing…';
-  setLlmCaptureStatus('Capturing selected node…');
-  postToPlugin('llm-capture:selection', { maxDimension: 2048 });
-});
 
 // ── Section bar ───────────────────────────────────────────────────────────────
 
@@ -883,7 +860,6 @@ window.addEventListener('message', (event) => {
           nodeType: msg.nodeType as string,
           variantCount: msg.variantCount as number | undefined,
         };
-        updateLlmCaptureSelection(sel);
         updateAnnotateSelection(sel);
         updateDocSelection(sel);
         updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
@@ -893,59 +869,11 @@ window.addEventListener('message', (event) => {
           (msg.sectionName as string)  ?? sel.name,
         );
       } else {
-        updateLlmCaptureSelection(null);
         updateAnnotateSelection(null);
         updateDocSelection(null);
         updateCopyBtn(null, null);
         updateSectionBar(false, 0, '');
       }
-      break;
-    }
-    case 'llm-capture:result': {
-      const btn = document.getElementById('llmCaptureSendBtn') as HTMLButtonElement;
-      const resetBtn = () => {
-        btn.disabled = !llmCaptureNodeId;
-        btn.textContent = 'Send Screenshot';
-      };
-      if (msg.error) {
-        resetBtn();
-        setLlmCaptureStatus('❌ ' + (msg.error as string), 'err');
-        break;
-      }
-      const capture = msg.capture as Record<string, any>;
-      const prompt = ((document.getElementById('llmCapturePrompt') as HTMLTextAreaElement)?.value || '').trim();
-      setLlmCaptureStatus('Sending image + metadata to local LLM bridge…');
-      btn.textContent = 'Sending…';
-      fetch('http://localhost:4002/llm/capture', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          capture,
-          prompt: prompt || 'Inspect this Figma selection and summarize the layout, visual system, tokens, and implementation notes.',
-        }),
-      })
-        .then(async res => {
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || `LLM bridge returned ${res.status}`);
-          if (data.jobId) return pollLlmCaptureJob(data.jobId as string);
-          return data;
-        })
-        .then((result: any) => {
-          const label = result?.fileName
-            ? `✓ Sent · ${result.fileName}`
-            : result?.title
-              ? `✓ Sent · ${result.title}`
-              : '✓ Sent to LLM';
-          setLlmCaptureStatus(label, 'ok');
-          resetBtn();
-        })
-        .catch((e: any) => {
-          const hint = /Failed to fetch|NetworkError|Load failed/i.test(e.message || '')
-            ? 'Local LLM bridge is not running. Run: npm run figma-story'
-            : (e.message || 'Capture failed');
-          setLlmCaptureStatus('❌ ' + hint, 'err');
-          resetBtn();
-        });
       break;
     }
     case 'format-section:done': {
@@ -1121,7 +1049,7 @@ document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () =
 
 postToPlugin('ui-ready');
 postToPlugin('gh-token:get');
-postToPlugin('resize-for-view', { width: 320, height: 460 });
+applySize();
 
 renderHomeView();
 

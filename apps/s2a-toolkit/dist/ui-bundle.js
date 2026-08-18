@@ -68,7 +68,6 @@
     return Object.entries(lastUsed).sort((a, b) => b[1] - a[1]).slice(0, n).map(([id]) => FEATURES.find((f) => f.id === id)).filter(Boolean);
   }
   var annotateNodeId = null;
-  var llmCaptureNodeId = null;
   var selectSetId = null;
   var docSetId = null;
   var bridgeConnected = false;
@@ -111,16 +110,9 @@
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a12;
-        return (_a12 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a12.click();
+        var _a11;
+        return (_a11 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a11.click();
       }
-    },
-    {
-      id: "tools:llm-capture",
-      name: "Send screenshot to LLM",
-      description: "Capture the selected node and send image + metadata to the local LLM bridge",
-      category: "Tools",
-      uiAction: () => switchPanel("tools")
     },
     {
       id: "tools:format-section",
@@ -176,20 +168,19 @@
     }
   ];
   var QUICK_ACTION_IDS = [
-    "tools:llm-capture",
     "tools:copy-link",
     "tools:annotate",
     "tools:select-filter",
     "tools:doc"
   ];
   function fireFeature(feat) {
-    var _a12;
+    var _a11;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a12 = feat.pluginPayload) != null ? _a12 : {});
+      postToPlugin(feat.pluginAction, (_a11 = feat.pluginPayload) != null ? _a11 : {});
     }
     if (activePanel === "home") renderHomeView();
   }
@@ -281,12 +272,12 @@
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a12, _b;
+    var _a11, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a12 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a12.scrollIntoView({ block: "nearest" });
+      (_a11 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a11.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -313,11 +304,37 @@
   (_a = document.getElementById("paletteHintBtn")) == null ? void 0 : _a.addEventListener("click", () => openPalette());
   var app = document.getElementById("app");
   var toggleMiniBtn = document.getElementById("toggleMiniBtn");
+  var MIN_W = 300;
+  var MIN_H = 360;
+  var MAX_W = 1400;
+  var MAX_H = 1400;
+  var winSize = { width: 320, height: 460 };
+  function applySize() {
+    postToPlugin("resize-for-view", { width: winSize.width, height: isMini ? 40 : winSize.height });
+  }
   toggleMiniBtn.addEventListener("click", () => {
     isMini = !isMini;
     app.classList.toggle("mini", isMini);
-    postToPlugin("resize-for-view", { width: 320, height: isMini ? 40 : 460 });
+    applySize();
     if (isMini && popoverOpen) closePopover();
+  });
+  var resizeGrip = document.getElementById("resizeGrip");
+  resizeGrip == null ? void 0 : resizeGrip.addEventListener("pointerdown", (e) => {
+    if (isMini) return;
+    e.preventDefault();
+    resizeGrip.setPointerCapture(e.pointerId);
+    const onMove = (ev) => {
+      winSize.width = Math.max(MIN_W, Math.min(MAX_W, Math.round(ev.clientX + 4)));
+      winSize.height = Math.max(MIN_H, Math.min(MAX_H, Math.round(ev.clientY + 4)));
+      applySize();
+    };
+    const onUp = (ev) => {
+      resizeGrip.releasePointerCapture(ev.pointerId);
+      resizeGrip.removeEventListener("pointermove", onMove);
+      resizeGrip.removeEventListener("pointerup", onUp);
+    };
+    resizeGrip.addEventListener("pointermove", onMove);
+    resizeGrip.addEventListener("pointerup", onUp);
   });
   var copyNodeBtn = document.getElementById("copyNodeBtn");
   var headerSelName = document.getElementById("headerSelName");
@@ -325,7 +342,7 @@
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a12;
+    var _a11;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -338,7 +355,7 @@
     }
     document.body.removeChild(ta);
     try {
-      (_a12 = navigator.clipboard) == null ? void 0 : _a12.writeText(text).catch(() => {
+      (_a11 = navigator.clipboard) == null ? void 0 : _a11.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -382,51 +399,6 @@
     copyToClipboard(urls.join("\n"));
     const msg = urls.length > 1 ? `Copied ${urls.length} links` : "Copied link";
     postToPlugin("notify", { message: msg });
-  });
-  function setLlmCaptureStatus(msg, type = "") {
-    const el = document.getElementById("llmCaptureStatus");
-    el.textContent = msg;
-    el.className = "status" + (type ? " " + type : "");
-  }
-  function updateLlmCaptureSelection(sel) {
-    var _a12;
-    llmCaptureNodeId = (_a12 = sel == null ? void 0 : sel.id) != null ? _a12 : null;
-    const emptyEl = document.getElementById("llmCaptureSelectionEmpty");
-    const infoEl = document.getElementById("llmCaptureSelectionInfo");
-    const nameEl = document.getElementById("llmCaptureNodeName");
-    const typeEl = document.getElementById("llmCaptureNodeType");
-    const sendBtn = document.getElementById("llmCaptureSendBtn");
-    if (sel) {
-      emptyEl.style.display = "none";
-      infoEl.style.display = "flex";
-      nameEl.textContent = sel.name;
-      typeEl.textContent = sel.nodeType;
-      sendBtn.disabled = false;
-    } else {
-      emptyEl.style.display = "block";
-      infoEl.style.display = "none";
-      sendBtn.disabled = true;
-    }
-  }
-  async function pollLlmCaptureJob(jobId) {
-    for (; ; ) {
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-      const res = await fetch(`http://localhost:4002/jobs/${encodeURIComponent(jobId)}`);
-      if (!res.ok) throw new Error(`Job status failed (${res.status})`);
-      const job = await res.json();
-      if (job.phase) setLlmCaptureStatus(job.phase);
-      if (job.status === "done") return job.result;
-      if (job.status === "error") throw new Error(job.error || "LLM job failed");
-    }
-  }
-  var _a2;
-  (_a2 = document.getElementById("llmCaptureSendBtn")) == null ? void 0 : _a2.addEventListener("click", () => {
-    if (!llmCaptureNodeId) return;
-    const btn = document.getElementById("llmCaptureSendBtn");
-    btn.disabled = true;
-    btn.textContent = "Capturing\u2026";
-    setLlmCaptureStatus("Capturing selected node\u2026");
-    postToPlugin("llm-capture:selection", { maxDimension: 2048 });
   });
   var sectionBar = document.getElementById("sectionBar");
   var sectionBarName = document.getElementById("sectionBarName");
@@ -712,8 +684,8 @@
     document.getElementById("selectEmpty").style.display = "block";
     document.getElementById("selectBody").style.display = "none";
   }
-  var _a3;
-  (_a3 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a3.addEventListener("click", () => {
+  var _a2;
+  (_a2 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a2.addEventListener("click", () => {
     if (!selectSetId) return;
     const filter = {};
     document.querySelectorAll(".chip.on[data-axis]").forEach((chip) => {
@@ -723,12 +695,12 @@
     });
     postToPlugin("select:apply-filter", { setId: selectSetId, filter });
   });
-  var _a4;
-  (_a4 = document.getElementById("selectAllBtn")) == null ? void 0 : _a4.addEventListener("click", () => {
+  var _a3;
+  (_a3 = document.getElementById("selectAllBtn")) == null ? void 0 : _a3.addEventListener("click", () => {
     document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.add("on"));
   });
-  var _a5;
-  (_a5 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
+  var _a4;
+  (_a4 = document.getElementById("selectNoneBtn")) == null ? void 0 : _a4.addEventListener("click", () => {
     document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.remove("on"));
   });
   function setAnnotateStatus(msg, type = "") {
@@ -737,8 +709,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a12;
-    annotateNodeId = (_a12 = sel == null ? void 0 : sel.id) != null ? _a12 : null;
+    var _a11;
+    annotateNodeId = (_a11 = sel == null ? void 0 : sel.id) != null ? _a11 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -759,8 +731,8 @@
   document.querySelectorAll("#annotateCats .chip").forEach((chip) => {
     chip.addEventListener("click", () => chip.classList.toggle("on"));
   });
-  var _a6;
-  (_a6 = document.getElementById("annotateApplyBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
+  var _a5;
+  (_a5 = document.getElementById("annotateApplyBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
     if (!annotateNodeId) return;
     const categories = Array.from(
       document.querySelectorAll("#annotateCats .chip.on")
@@ -775,8 +747,8 @@
     setAnnotateStatus("");
     postToPlugin("annotate:apply", { nodeId: annotateNodeId, categories });
   });
-  var _a7;
-  (_a7 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
+  var _a6;
+  (_a6 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
     if (!annotateNodeId) return;
     const btn = document.getElementById("annotateClearBtn");
     btn.disabled = true;
@@ -789,9 +761,9 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateDocSelection(sel) {
-    var _a12, _b;
+    var _a11, _b;
     const isSet = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
-    docSetId = isSet ? (_a12 = sel == null ? void 0 : sel.id) != null ? _a12 : null : null;
+    docSetId = isSet ? (_a11 = sel == null ? void 0 : sel.id) != null ? _a11 : null : null;
     const emptyEl = document.getElementById("docSelectionEmpty");
     const infoEl = document.getElementById("docSelectionInfo");
     const nameEl = document.getElementById("docSetName");
@@ -809,8 +781,8 @@
       btn.disabled = true;
     }
   }
-  var _a8;
-  (_a8 = document.getElementById("docGenerateBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+  var _a7;
+  (_a7 = document.getElementById("docGenerateBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
     if (!docSetId) return;
     const btn = document.getElementById("docGenerateBtn");
     btn.disabled = true;
@@ -819,7 +791,7 @@
     postToPlugin("doc:generate", { setId: docSetId });
   });
   window.addEventListener("message", (event) => {
-    var _a12, _b, _c;
+    var _a11, _b;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -860,60 +832,20 @@
             nodeType: msg.nodeType,
             variantCount: msg.variantCount
           };
-          updateLlmCaptureSelection(sel);
           updateAnnotateSelection(sel);
           updateDocSelection(sel);
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a12 = msg.sectionCount) != null ? _a12 : 0,
+            (_a11 = msg.sectionCount) != null ? _a11 : 0,
             (_b = msg.sectionName) != null ? _b : sel.name
           );
         } else {
-          updateLlmCaptureSelection(null);
           updateAnnotateSelection(null);
           updateDocSelection(null);
           updateCopyBtn(null, null);
           updateSectionBar(false, 0, "");
         }
-        break;
-      }
-      case "llm-capture:result": {
-        const btn = document.getElementById("llmCaptureSendBtn");
-        const resetBtn = () => {
-          btn.disabled = !llmCaptureNodeId;
-          btn.textContent = "Send Screenshot";
-        };
-        if (msg.error) {
-          resetBtn();
-          setLlmCaptureStatus("\u274C " + msg.error, "err");
-          break;
-        }
-        const capture = msg.capture;
-        const prompt = (((_c = document.getElementById("llmCapturePrompt")) == null ? void 0 : _c.value) || "").trim();
-        setLlmCaptureStatus("Sending image + metadata to local LLM bridge\u2026");
-        btn.textContent = "Sending\u2026";
-        fetch("http://localhost:4002/llm/capture", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            capture,
-            prompt: prompt || "Inspect this Figma selection and summarize the layout, visual system, tokens, and implementation notes."
-          })
-        }).then(async (res) => {
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || `LLM bridge returned ${res.status}`);
-          if (data.jobId) return pollLlmCaptureJob(data.jobId);
-          return data;
-        }).then((result) => {
-          const label = (result == null ? void 0 : result.fileName) ? `\u2713 Sent \xB7 ${result.fileName}` : (result == null ? void 0 : result.title) ? `\u2713 Sent \xB7 ${result.title}` : "\u2713 Sent to LLM";
-          setLlmCaptureStatus(label, "ok");
-          resetBtn();
-        }).catch((e) => {
-          const hint = /Failed to fetch|NetworkError|Load failed/i.test(e.message || "") ? "Local LLM bridge is not running. Run: npm run figma-story" : e.message || "Capture failed";
-          setLlmCaptureStatus("\u274C " + hint, "err");
-          resetBtn();
-        });
         break;
       }
       case "format-section:done": {
@@ -982,8 +914,8 @@
     setup.style.display = hasToken ? "none" : "block";
     release.style.display = hasToken ? "block" : "none";
   }
-  var _a9;
-  (_a9 = document.getElementById("ghTokenSaveBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
+  var _a8;
+  (_a8 = document.getElementById("ghTokenSaveBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
     const input = document.getElementById("ghTokenInput");
     const value = input.value.trim();
     if (!value) return;
@@ -993,8 +925,8 @@
     syncTokenReleaseAuthUi();
     setTokenReleaseStatus("Token saved to Figma client storage.", "ok");
   });
-  var _a10;
-  (_a10 = document.getElementById("ghTokenClearBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
+  var _a9;
+  (_a9 = document.getElementById("ghTokenClearBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
     ghToken = null;
     postToPlugin("gh-token:set", { token: "" });
     syncTokenReleaseAuthUi();
@@ -1012,9 +944,9 @@
     if (!res.ok) throw new Error(`GitHub API ${res.status} on ${path}`);
     return res.json();
   }
-  var _a11;
-  (_a11 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a11.addEventListener("click", async () => {
-    var _a12;
+  var _a10;
+  (_a10 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
+    var _a11;
     if (!ghToken) return;
     const btn = document.getElementById("tokenReleaseBtn");
     btn.disabled = true;
@@ -1036,9 +968,9 @@
       for (let i = 0; i < 15 && !run; i++) {
         await new Promise((r) => setTimeout(r, 2e3));
         const data = await ghJson(`/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`);
-        run = (_a12 = (data.workflow_runs || []).find(
+        run = (_a11 = (data.workflow_runs || []).find(
           (r) => new Date(r.created_at).getTime() >= dispatchedAt - 5e3
-        )) != null ? _a12 : null;
+        )) != null ? _a11 : null;
       }
       if (!run) throw new Error("Dispatched, but no run appeared within 30s \u2014 check the Actions tab.");
       const runLink = `<a href="${run.html_url}" target="_blank">Actions run \u2192</a>`;
@@ -1073,7 +1005,7 @@
   });
   postToPlugin("ui-ready");
   postToPlugin("gh-token:get");
-  postToPlugin("resize-for-view", { width: 320, height: 460 });
+  applySize();
   renderHomeView();
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden && !bridgeConnected && !bridgeUserDisconnected && !bridgeReconnectTimer) {

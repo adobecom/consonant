@@ -236,15 +236,6 @@ function serializeNodeForProto(node, depth = 0) {
   }
   return base;
 }
-function bytesToBase64(bytes) {
-  let bin = "";
-  const chunkSize = 8192;
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    const chunk = bytes.subarray(i, Math.min(i + chunkSize, bytes.length));
-    bin += String.fromCharCode.apply(null, Array.from(chunk));
-  }
-  return btoa(bin);
-}
 function parseVariantProps(name) {
   const props = {};
   for (const part of name.split(",")) {
@@ -464,42 +455,6 @@ figma.ui.onmessage = async (msg) => {
       const w = msg.width || 320;
       const h = msg.height || 480;
       figma.ui.resize(w, h);
-      break;
-    }
-    case "llm-capture:selection": {
-      const node = figma.currentPage.selection[0];
-      if (!node) {
-        figma.ui.postMessage({ type: "llm-capture:result", error: "Select a frame, section, component, or instance first" });
-        break;
-      }
-      if (!("exportAsync" in node)) {
-        figma.ui.postMessage({ type: "llm-capture:result", error: `${node.type} cannot be exported as an image` });
-        break;
-      }
-      try {
-        const maxDimension = Math.max(256, Math.min(msg.maxDimension || 2048, 4096));
-        const width = "width" in node ? node.width : maxDimension;
-        const height = "height" in node ? node.height : maxDimension;
-        const scale = Math.min(1, maxDimension / Math.max(width, height));
-        const bytes = await node.exportAsync({
-          format: "JPG",
-          constraint: { type: "SCALE", value: scale }
-        });
-        const capture = {
-          imageBase64: bytesToBase64(bytes),
-          mediaType: "image/jpeg",
-          scale,
-          maxDimension,
-          byteLength: bytes.length,
-          node: serializeNodeForProto(node),
-          fileKey: figma.fileKey || null,
-          fileName: figma.root.name,
-          page: { id: figma.currentPage.id, name: figma.currentPage.name }
-        };
-        figma.ui.postMessage({ type: "llm-capture:result", capture });
-      } catch (e) {
-        figma.ui.postMessage({ type: "llm-capture:result", error: e.message || String(e) });
-      }
       break;
     }
     case "annotate:apply": {

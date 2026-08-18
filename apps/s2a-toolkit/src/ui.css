@@ -1,23 +1,32 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Warm minimal palette — hardcoded, no Figma CSS vars */
-  --bg:         #F7F6F4;
-  --bg-raised:  #FFFFFF;
-  --bg-hover:   #EEECEA;
-  --border:     #DDD9D3;
-  --border-md:  #C9C4BC;
-  --text-1:     #1C1B19;
-  --text-2:     #6B6860;
-  --text-3:     #A8A49E;
-  --accent:     #D97559;
-  --accent-bg:  rgba(217,117,89,0.09);
-  --accent-bdr: rgba(217,117,89,0.24);
-  --accent-btn: #C4613E;
-  --green:      #2D9B6E;
-  --green-bg:   rgba(45,155,110,0.10);
-  --green-bdr:  rgba(45,155,110,0.22);
-  --red:        #C84B3E;
+  /* Clean Light — Figma-native palette (hardcoded, no Figma CSS vars) */
+  --bg:         #FBFBFC;   /* panel body — whisper of cool gray so white cards lift */
+  --bg-raised:  #FFFFFF;   /* header, tab bar, cards */
+  --bg-hover:   #F1F3F5;   /* hover fills */
+  --border:     #E4E6EB;
+  --border-md:  #D3D6DB;
+  --text-1:     #1A1C1E;
+  --text-2:     #5B6472;
+  --text-3:     #9AA1AC;
+  --accent:     #4B5CF0;   /* indigo-blue */
+  --accent-bg:  rgba(75,92,240,0.08);
+  --accent-bdr: rgba(75,92,240,0.28);
+  --accent-btn:       #4B5CF0;
+  --accent-btn-hover: #3B49D6;
+  --green:      #16A46B;
+  --green-bg:   rgba(22,164,107,0.10);
+  --green-bdr:  rgba(22,164,107,0.24);
+  --red:        #E5484D;
+
+  /* Radii */
+  --r-sm: 6px; --r-md: 8px; --r-lg: 10px;
+
+  /* Elevation + focus ring */
+  --shadow-sm:  0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.05);
+  --shadow-btn: 0 1px 2px rgba(75,92,240,0.28);
+  --ring:       0 0 0 3px rgba(75,92,240,0.18);
 
   /* 4px grid */
   --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;
@@ -294,26 +303,31 @@ body {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  padding: 6px 13px;
-  border-radius: 6px;
+  padding: 7px 13px;
+  border-radius: var(--r-sm);
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   border: 1px solid transparent;
   background: var(--accent-btn);
   color: #fff;
-  transition: opacity 0.15s;
+  box-shadow: var(--shadow-btn);
+  transition: background var(--t-fast), box-shadow var(--t-fast), transform var(--t-fast);
   font-family: inherit;
 }
-.btn:hover:not(:disabled) { opacity: 0.87; }
-.btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn:hover:not(:disabled) { background: var(--accent-btn-hover); }
+.btn:active:not(:disabled) { transform: translateY(0.5px); }
+.btn:focus-visible { outline: none; box-shadow: var(--shadow-btn), var(--ring); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 
 .btn-ghost {
   background: transparent;
   color: var(--text-1);
   border-color: var(--border);
+  box-shadow: none;
 }
-.btn-ghost:hover:not(:disabled) { background: var(--bg-hover); opacity: 1; border-color: var(--border-md); }
+.btn-ghost:hover:not(:disabled) { background: var(--bg-hover); border-color: var(--border-md); }
+.btn-ghost:focus-visible { box-shadow: var(--ring); }
 
 .btn-sm { padding: 3px 8px; font-size: 10px; }
 .btn-row { display: flex; gap: 6px; margin-top: 12px; }
@@ -391,9 +405,10 @@ body {
 /* ── Selection card ─────────────────────────────────────────────────────── */
 
 .sel-card {
-  background: var(--bg);
+  background: var(--bg-raised);
   border: 1px solid var(--border);
-  border-radius: 7px;
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
   padding: 9px 11px;
   min-height: 40px;
   display: flex;
@@ -425,14 +440,33 @@ body {
   outline: none;
   transition: border-color 0.15s;
 }
-.form-input:focus { border-color: var(--accent); }
+.form-input:focus { border-color: var(--accent); box-shadow: var(--ring); }
 .form-input::placeholder { color: var(--text-3); }
 .form-textarea {
   min-height: 68px;
   resize: vertical;
   line-height: 1.45;
 }
-.llm-field { margin-top: 10px; margin-bottom: 0; }
+
+/* ── Resize grip ────────────────────────────────────────────────────────── */
+
+.resize-grip {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 2px;
+  color: var(--text-3);
+  cursor: nwse-resize;
+  z-index: 200;
+  touch-action: none;
+}
+.resize-grip:hover { color: var(--text-1); }
+#app.mini .resize-grip { display: none !important; }
 
 /* ── Section bar btn ─────────────────────────────────────────────────────── */
 
