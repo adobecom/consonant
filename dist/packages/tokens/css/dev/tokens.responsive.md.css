@@ -19,13 +19,13 @@
   --s2a-section-spacing-3xl: var(--s2a-spacing-4xl); /** Milo-specific declarations */
   --s2a-section-spacing-4xl: var(--s2a-layout-sm); /** Milo-specific declarations */
   --s2a-section-spacing-5xl: var(--s2a-layout-xl); /** Milo-specific declarations */
-  --s2a-viewport-vertical-padding-xl: var(--s2a-layout-xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it. */
-  --s2a-viewport-vertical-padding-lg: var(--s2a-layout-lg); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it. */
-  --s2a-viewport-vertical-padding-md: var(--s2a-layout-sm); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it. */
-  --s2a-viewport-vertical-padding-sm: var(--s2a-spacing-4xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it. */
-  --s2a-viewport-vertical-padding-xs: var(--s2a-spacing-2xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it. */
-  --s2a-viewport-vertical-padding-2xs: var(--s2a-spacing-xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it. */
-  --s2a-viewport-vertical-padding-none: var(--s2a-spacing-none); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it. */
+  --s2a-viewport-vertical-padding-xl: var(--s2a-layout-xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
+  --s2a-viewport-vertical-padding-lg: var(--s2a-layout-lg); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
+  --s2a-viewport-vertical-padding-md: var(--s2a-layout-sm); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
+  --s2a-viewport-vertical-padding-sm: var(--s2a-spacing-4xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
+  --s2a-viewport-vertical-padding-xs: var(--s2a-spacing-2xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
+  --s2a-viewport-vertical-padding-2xs: var(--s2a-spacing-xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
+  --s2a-viewport-vertical-padding-none: var(--s2a-spacing-none); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
 
   /* Layout */
   --s2a-layout-guide-gap: var(--s2a-spacing-xs);
@@ -79,8 +79,11 @@
   --s2a-typography-line-height-heading-6: var(--s2a-font-line-height-xs);
 
   /* Other */
+  --s2a-cards-immersive-padding: var(--s2a-spacing-lg);
   --s2a-hover-list-number-container-width: 32px;
   --s2a-hover-list-padding-vertical: var(--s2a-spacing-lg);
+  --s2a-segmented-control-segment-padding-x: var(--s2a-spacing-20);
+  --s2a-segmented-control-track-radius: var(--s2a-border-radius-16);
   --s2a-side-by-side-max-width-overlay: 250px;
   --s2a-side-by-side-padding-overlay: var(--s2a-spacing-lg);
   --s2a-side-by-side-padding-underlay: var(--s2a-spacing-md);

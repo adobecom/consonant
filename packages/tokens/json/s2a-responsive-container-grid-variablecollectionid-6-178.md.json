@@ -1956,11 +1956,29 @@
         }
       }
     },
+    "cards": {
+      "immersive": {
+        "padding": {
+          "$type": "number",
+          "$value": "{s2a.spacing.lg}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      }
+    },
     "viewport-vertical-padding": {
       "xl": {
         "$type": "number",
         "$value": "{s2a.layout.xl}",
-        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it.",
+        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first.",
         "$extensions": {
           "com.figma": {
             "hiddenFromPublishing": false,
@@ -1978,7 +1996,7 @@
       "lg": {
         "$type": "number",
         "$value": "{s2a.layout.lg}",
-        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it.",
+        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first.",
         "$extensions": {
           "com.figma": {
             "hiddenFromPublishing": false,
@@ -1996,7 +2014,7 @@
       "md": {
         "$type": "number",
         "$value": "{s2a.layout.sm}",
-        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it.",
+        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first.",
         "$extensions": {
           "com.figma": {
             "hiddenFromPublishing": false,
@@ -2014,7 +2032,7 @@
       "sm": {
         "$type": "number",
         "$value": "{s2a.spacing.4xl}",
-        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it.",
+        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first.",
         "$extensions": {
           "com.figma": {
             "hiddenFromPublishing": false,
@@ -2032,7 +2050,7 @@
       "xs": {
         "$type": "number",
         "$value": "{s2a.spacing.2xl}",
-        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it.",
+        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first.",
         "$extensions": {
           "com.figma": {
             "hiddenFromPublishing": false,
@@ -2050,7 +2068,7 @@
       "2xs": {
         "$type": "number",
         "$value": "{s2a.spacing.xl}",
-        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it.",
+        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first.",
         "$extensions": {
           "com.figma": {
             "hiddenFromPublishing": false,
@@ -2068,7 +2086,7 @@
       "none": {
         "$type": "number",
         "$value": "{s2a.spacing.none}",
-        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Restored 2026-08 after being accidentally dropped from a Figma export; keeping bound until we confirm nothing else still consumes it.",
+        "$description": "Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first.",
         "$extensions": {
           "com.figma": {
             "hiddenFromPublishing": false,
@@ -2080,6 +2098,36 @@
             "codeSyntax": {
               "WEB": "var(--s2a-viewport-vertical-padding-none)"
             }
+          }
+        }
+      }
+    },
+    "segmented-control": {
+      "track-radius": {
+        "$type": "number",
+        "$value": "{s2a.border.radius.16}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "segment-padding-x": {
+        "$type": "number",
+        "$value": "{s2a.spacing.20}",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {}
           }
         }
       }

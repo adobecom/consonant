@@ -13,6 +13,7 @@
   --s2a-color-background-utility-error: var(--s2a-color-red-900);
 
   /* Color / Border */
+  --s2a-color-border-accent: #3b63fb; /** Accent border/indicator color (Adobe accent blue). Used for selected-state borders like the tab underline. Fills the gap where S2A had no semantic accent — the blue previously only lived in button/icon-button component tokens. */
   --s2a-color-border-brand: var(--s2a-color-brand-adobe-red);
   --s2a-color-border-default: var(--s2a-color-gray-300);
   --s2a-color-border-disabled: var(--s2a-color-gray-400);
@@ -31,9 +32,11 @@
   --s2a-color-content-disabled: var(--s2a-color-gray-400);
   --s2a-color-content-eyebrow: var(--s2a-color-transparent-white-48);
   --s2a-color-content-heading: var(--s2a-color-content-knockout);
-  --s2a-color-content-inverse: var(--s2a-color-gray-1000);
+  --s2a-color-content-inverse: var(--s2a-color-gray-25); /** Text and icon color for content on always-light surfaces — surfaces that stay light regardless of page or section mode (e.g. active state pills, surface-default cards used in a dark context). Resolves to the same dark value in both Light and Dark modes. Counterpart to content/knockout, which is always white for always-dark surfaces. */
   --s2a-color-content-knockout: var(--s2a-color-gray-25);
   --s2a-color-content-label: var(--s2a-color-content-knockout);
+  --s2a-color-content-on-inverse: var(--s2a-color-gray-1000); /** Text and icon color for content on always-light surfaces — surfaces that stay light regardless of page or section mode (e.g. active state pills, surface-default cards used in a dark context). Resolves to the same dark value in both Light and Dark modes. Counterpart to content/knockout, which is always white for always-dark surfaces. */
+  --s2a-color-content-on-inverse-subtle: var(--s2a-color-transparent-black-64); /** Text and icon color for content on always-light surfaces — surfaces that stay light regardless of page or section mode (e.g. active state pills, surface-default cards used in a dark context). Resolves to the same dark value in both Light and Dark modes. Counterpart to content/knockout, which is always white for always-dark surfaces. */
   --s2a-color-content-strong: var(--s2a-color-gray-600);
   --s2a-color-content-subheading: var(--s2a-color-content-knockout);
   --s2a-color-content-subtle: var(--s2a-color-transparent-white-64);
@@ -44,67 +47,161 @@
   --s2a-color-focus-ring-knockout: var(--s2a-color-gray-25);
 
   /* Other */
-  --s2a-color-button-background-accent-solid-on-light-active: var(--s2a-color-blue-1100);
-  --s2a-color-button-background-accent-solid-on-light-default: var(--s2a-color-blue-900);
-  --s2a-color-button-background-accent-solid-on-light-hover: var(--s2a-color-blue-1000);
-  --s2a-color-button-background-primary-outlined-on-dark-active: var(--s2a-color-gray-25);
-  --s2a-color-button-background-primary-outlined-on-dark-hover: var(--s2a-color-transparent-white-64);
-  --s2a-color-button-background-primary-outlined-on-light-active: var(--s2a-color-gray-25);
-  --s2a-color-button-background-primary-outlined-on-light-default: var(--s2a-color-transparent-black-00);
-  --s2a-color-button-background-primary-outlined-on-light-hover: var(--s2a-color-transparent-black-08);
-  --s2a-color-button-background-primary-solid-on-dark-active: var(--s2a-color-gray-25);
-  --s2a-color-button-background-primary-solid-on-dark-default: var(--s2a-color-gray-25);
-  --s2a-color-button-background-primary-solid-on-dark-hover: var(--s2a-color-transparent-white-64);
-  --s2a-color-button-background-primary-solid-on-light-active: var(--s2a-color-gray-25);
-  --s2a-color-button-background-primary-solid-on-light-default: var(--s2a-color-gray-25);
-  --s2a-color-button-background-primary-solid-on-light-hover: var(--s2a-color-transparent-white-64);
-  --s2a-color-button-background-primary-transparent-on-dark-active: var(--s2a-color-transparent-white-00);
-  --s2a-color-button-background-primary-transparent-on-dark-default: var(--s2a-color-transparent-white-00);
-  --s2a-color-button-background-primary-transparent-on-dark-hover: var(--s2a-color-transparent-white-00);
-  --s2a-color-button-background-primary-transparent-on-light-active: var(--s2a-color-transparent-white-24);
-  --s2a-color-button-background-primary-transparent-on-light-default: var(--s2a-color-transparent-white-00);
-  --s2a-color-button-background-primary-transparent-on-light-hover: var(--s2a-color-transparent-white-12);
-  --s2a-color-button-border-primary-outlined-on-dark-default: var(--s2a-color-gray-25);
-  --s2a-color-button-border-primary-outlined-on-light-default: var(--s2a-color-gray-300);
-  --s2a-color-button-border-primary-solid-on-dark-default: var(--s2a-color-gray-25);
-  --s2a-color-button-border-primary-solid-on-dark-hover: var(--s2a-color-gray-25);
-  --s2a-color-button-border-primary-solid-on-light-default: var(--s2a-color-gray-300);
-  --s2a-color-button-content-primary-outlined-default: var(--s2a-color-gray-1000);
-  --s2a-color-button-content-primary-outlined-knockout: var(--s2a-color-gray-25);
-  --s2a-color-button-content-primary-solid-default: var(--s2a-color-gray-1000);
-  --s2a-color-button-content-primary-solid-inverse: var(--s2a-color-gray-1000);
-  --s2a-color-button-content-primary-transparent-default: var(--s2a-color-gray-25);
-  --s2a-color-button-content-primary-transparent-knockout: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-background-accent-solid-on-light-active: var(--s2a-color-blue-1100);
-  --s2a-color-iconbutton-background-accent-solid-on-light-default: var(--s2a-color-blue-900);
-  --s2a-color-iconbutton-background-accent-solid-on-light-hover: var(--s2a-color-blue-1000);
-  --s2a-color-iconbutton-background-primary-outlined-on-dark-active: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-background-primary-outlined-on-dark-default: var(--s2a-color-transparent-white-24);
-  --s2a-color-iconbutton-background-primary-outlined-on-dark-hover: var(--s2a-color-transparent-white-64);
-  --s2a-color-iconbutton-background-primary-outlined-on-light-active: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-background-primary-outlined-on-light-default: var(--s2a-color-transparent-white-00);
-  --s2a-color-iconbutton-background-primary-outlined-on-light-hover: var(--s2a-color-transparent-white-12);
-  --s2a-color-iconbutton-background-primary-solid-on-dark-active: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-background-primary-solid-on-dark-default: var(--s2a-color-transparent-white-64);
-  --s2a-color-iconbutton-background-primary-solid-on-dark-hover: var(--s2a-color-transparent-white-64);
-  --s2a-color-iconbutton-background-primary-solid-on-light-active: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-background-primary-solid-on-light-default: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-background-primary-solid-on-light-hover: var(--s2a-color-transparent-white-64);
-  --s2a-color-iconbutton-background-primary-transparent-on-dark-active: var(--s2a-color-transparent-white-00);
-  --s2a-color-iconbutton-background-primary-transparent-on-dark-default: var(--s2a-color-transparent-white-00);
-  --s2a-color-iconbutton-background-primary-transparent-on-dark-hover: var(--s2a-color-transparent-white-00);
-  --s2a-color-iconbutton-background-primary-transparent-on-light-active: var(--s2a-color-transparent-white-24);
-  --s2a-color-iconbutton-background-primary-transparent-on-light-default: var(--s2a-color-transparent-white-00);
-  --s2a-color-iconbutton-background-primary-transparent-on-light-hover: var(--s2a-color-transparent-white-12);
-  --s2a-color-iconbutton-border-primary-outlined-default: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-border-primary-outlined-on-dark-default: var(--s2a-color-gray-700);
-  --s2a-color-iconbutton-border-primary-solid-on-dark-default: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-border-primary-solid-on-light-default: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-content-primary-outlined-default: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-content-primary-outlined-knockout: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-content-primary-solid-default: var(--s2a-color-gray-1000);
-  --s2a-color-iconbutton-content-primary-solid-inverse: var(--s2a-color-gray-1000);
-  --s2a-color-iconbutton-content-primary-transparent-default: var(--s2a-color-gray-25);
-  --s2a-color-iconbutton-content-primary-transparent-knockout: var(--s2a-color-gray-25);
-  --s2a-color-promo-cta-button-background-neutral-on-image-on-dark-active: var(--s2a-color-background-inverse);
+  --s2a-color-button-background-accent-active: var(--s2a-color-blue-1100); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-accent-default: var(--s2a-color-blue-900); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-accent-hover: var(--s2a-color-blue-1000); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-accent-solid-on-light-active: var(--s2a-color-blue-1100); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-accent-solid-on-light-default: var(--s2a-color-blue-900); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-accent-solid-on-light-hover: var(--s2a-color-blue-1000); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-knockout-active: var(--s2a-color-gray-100); /** Knockout style — always-white/light bg for use on dark/colored surfaces. */
+  --s2a-color-button-background-knockout-default: var(--s2a-color-gray-25); /** Knockout style — always-white/light bg for use on dark/colored surfaces. */
+  --s2a-color-button-background-knockout-hover: var(--s2a-color-gray-50); /** Knockout style — always-white/light bg for use on dark/colored surfaces. */
+  --s2a-color-button-background-outline-inverse-active: var(--s2a-color-transparent-black-24); /** outline-inverse style — static white values for use on dark/colored surfaces. */
+  --s2a-color-button-background-outline-inverse-default: var(--s2a-color-transparent-black-00); /** outline-inverse style — static white values for use on dark/colored surfaces. */
+  --s2a-color-button-background-outline-inverse-hover: var(--s2a-color-transparent-black-08); /** outline-inverse style — static white values for use on dark/colored surfaces. */
+  --s2a-color-button-background-outlined-active: var(--s2a-color-gray-25); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-outlined-default: var(--s2a-color-transparent-white-00); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-outlined-hover: var(--s2a-color-transparent-white-12); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-primary-outlined-on-dark-active: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-outlined-on-dark-hover: var(--s2a-color-transparent-white-64); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-outlined-on-light-active: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-outlined-on-light-default: var(--s2a-color-transparent-black-00); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-outlined-on-light-hover: var(--s2a-color-transparent-black-08); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-solid-on-dark-active: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-solid-on-dark-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-solid-on-dark-hover: var(--s2a-color-transparent-white-64); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-solid-on-light-active: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-solid-on-light-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-solid-on-light-hover: var(--s2a-color-transparent-white-64); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-transparent-on-dark-active: var(--s2a-color-transparent-white-00); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-transparent-on-dark-default: var(--s2a-color-transparent-white-00); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-transparent-on-dark-hover: var(--s2a-color-transparent-white-00); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-transparent-on-light-active: var(--s2a-color-transparent-white-24); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-transparent-on-light-default: var(--s2a-color-transparent-white-00); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-primary-transparent-on-light-hover: var(--s2a-color-transparent-white-12); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-background-solid-active: var(--s2a-color-gray-25); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-solid-default: var(--s2a-color-gray-25); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-solid-hover: var(--s2a-color-transparent-white-64); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-transparent-active: var(--s2a-color-transparent-white-24); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-transparent-default: var(--s2a-color-transparent-white-00); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-background-transparent-hover: var(--s2a-color-transparent-white-12); /** Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants. */
+  --s2a-color-button-border-knockout-default: var(--s2a-color-gray-25); /** Knockout button border — always white. White border on white bg for knockout style. */
+  --s2a-color-button-border-outline-inverse-default: var(--s2a-color-gray-25); /** outline-inverse style — static white values for use on dark/colored surfaces. */
+  --s2a-color-button-border-outlined-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by s2a/color/border/knockout (same primitives, gray/1000 Light / gray/25 Dark). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-border-primary-outlined-on-dark-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-border-primary-outlined-on-light-default: var(--s2a-color-gray-300); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-border-primary-solid-on-dark-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-border-primary-solid-on-dark-hover: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-border-primary-solid-on-light-default: var(--s2a-color-gray-300); /** DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-border-solid-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by s2a/color/border/knockout (same primitives, gray/1000 Light / gray/25 Dark). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-accent-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-knockout: var(--s2a-color-gray-1000); /** Knockout button text — always near-black. Pairs with white button bg on dark surfaces. */
+  --s2a-color-button-content-outline-inverse: var(--s2a-color-gray-25); /** outline-inverse button text — always white. For use on dark/colored surfaces. */
+  --s2a-color-button-content-outlined-active: var(--s2a-color-gray-1000); /** DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-outlined-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-primary-outlined-default: var(--s2a-color-gray-1000); /** DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-primary-outlined-knockout: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-primary-solid-default: var(--s2a-color-gray-1000); /** DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-primary-solid-inverse: var(--s2a-color-gray-1000); /** DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-primary-transparent-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-primary-transparent-knockout: var(--s2a-color-gray-25); /** DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-solid-default: var(--s2a-color-gray-1000); /** DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-button-content-transparent-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release. */
+  --s2a-color-control-button-background-media-active: var(--s2a-color-transparent-black-96);
+  --s2a-color-control-button-background-media-default: var(--s2a-color-transparent-black-64);
+  --s2a-color-control-button-background-media-disabled: var(--s2a-color-transparent-black-32);
+  --s2a-color-control-button-background-media-focus: var(--s2a-color-transparent-black-64);
+  --s2a-color-control-button-background-media-hover: var(--s2a-color-transparent-black-80);
+  --s2a-color-control-button-background-solid-active: var(--s2a-color-gray-1000);
+  --s2a-color-control-button-background-solid-default: var(--s2a-color-gray-800);
+  --s2a-color-control-button-background-solid-disabled: var(--s2a-color-transparent-white-04);
+  --s2a-color-control-button-background-solid-focus: var(--s2a-color-transparent-white-04);
+  --s2a-color-control-button-background-solid-hover: var(--s2a-color-gray-700);
+  --s2a-color-control-button-background-transparent-active: var(--s2a-color-transparent-white-08);
+  --s2a-color-control-button-background-transparent-default: var(--s2a-color-transparent-white-32);
+  --s2a-color-control-button-background-transparent-disabled: var(--s2a-color-transparent-white-16);
+  --s2a-color-control-button-background-transparent-focus: var(--s2a-color-transparent-white-32);
+  --s2a-color-control-button-background-transparent-hover: var(--s2a-color-transparent-white-16);
+  --s2a-color-control-button-border-media: var(--s2a-color-transparent-white-24);
+  --s2a-color-control-button-border-solid-active: var(--s2a-color-transparent-white-24);
+  --s2a-color-control-button-border-solid-default: var(--s2a-color-gray-700);
+  --s2a-color-control-button-border-solid-disabled: var(--s2a-color-transparent-white-08);
+  --s2a-color-control-button-border-solid-focus: var(--s2a-color-transparent-white-08);
+  --s2a-color-control-button-border-solid-hover: var(--s2a-color-gray-500);
+  --s2a-color-control-button-border-transparent-disabled: var(--s2a-color-transparent-white-16);
+  --s2a-color-divider-default: var(--s2a-color-gray-300);
+  --s2a-color-divider-inverse: var(--s2a-color-gray-1000);
+  --s2a-color-divider-knockout: var(--s2a-color-gray-25);
+  --s2a-color-divider-strong: var(--s2a-color-gray-25);
+  --s2a-color-divider-subtle: var(--s2a-color-transparent-white-24);
+  --s2a-color-divider-subtle-inverse: var(--s2a-color-transparent-black-16);
+  --s2a-color-icon-button-background-accent-solid-on-light-active: var(--s2a-color-blue-1100); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-accent-solid-on-light-default: var(--s2a-color-blue-900); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-accent-solid-on-light-hover: var(--s2a-color-blue-1000); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-knockout-active: var(--s2a-color-gray-100); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-background-knockout-default: var(--s2a-color-gray-25); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-background-knockout-hover: var(--s2a-color-gray-50); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-background-primary-outlined-on-dark-active: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-outlined-on-dark-default: var(--s2a-color-transparent-white-24); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-outlined-on-dark-hover: var(--s2a-color-transparent-white-64); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-outlined-on-light-active: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-outlined-on-light-default: var(--s2a-color-transparent-white-00); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-outlined-on-light-hover: var(--s2a-color-transparent-white-12); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-solid-on-dark-active: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-solid-on-dark-default: var(--s2a-color-transparent-white-64); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-solid-on-dark-hover: var(--s2a-color-transparent-white-64); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-solid-on-light-active: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-solid-on-light-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-solid-on-light-hover: var(--s2a-color-transparent-white-64); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-transparent-on-dark-active: var(--s2a-color-transparent-white-00); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-transparent-on-dark-default: var(--s2a-color-transparent-white-00); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-transparent-on-dark-hover: var(--s2a-color-transparent-white-00); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-transparent-on-light-active: var(--s2a-color-transparent-white-24); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-transparent-on-light-default: var(--s2a-color-transparent-white-00); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-primary-transparent-on-light-hover: var(--s2a-color-transparent-white-12); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-background-solid-active: var(--s2a-color-gray-25); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-background-solid-default: var(--s2a-color-gray-25); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-background-solid-hover: var(--s2a-color-transparent-white-64); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-background-transparent-active: var(--s2a-color-transparent-white-24); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-background-transparent-default: var(--s2a-color-transparent-white-00); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-background-transparent-hover: var(--s2a-color-transparent-white-12); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-border-primary-outlined-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-border-primary-outlined-on-dark-default: var(--s2a-color-gray-700); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-border-primary-solid-on-dark-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-border-primary-solid-on-light-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-content-knockout: var(--s2a-color-gray-1000); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-content-primary-outlined-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-content-primary-outlined-knockout: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-content-primary-solid-default: var(--s2a-color-gray-1000); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-content-primary-solid-inverse: var(--s2a-color-gray-1000); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-content-primary-transparent-default: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-content-primary-transparent-knockout: var(--s2a-color-gray-25); /** DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release. */
+  --s2a-color-icon-button-content-solid: var(--s2a-color-gray-1000); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-icon-button-content-transparent: var(--s2a-color-gray-25); /** Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens. */
+  --s2a-color-merch-card-highlight-features-background: var(--s2a-color-surface-inverse-subtle); /** Dark features panel on the MerchCard highlight style. Aliases surface/inverse-subtle: dark (gray/900) in Light theme, subtle light (gray/50) in Dark theme. */
+  --s2a-color-merch-card-highlight-features-content: var(--s2a-color-content-on-inverse); /** Readable text/icon on the MerchCard highlight features panel. Aliases content/on-inverse: white in Light theme, near-black in Dark theme. Pairs with merch-card/highlight/features/background. */
+  --s2a-color-merch-card-highlight-features-content-subtle: var(--s2a-color-content-on-inverse-subtle); /** Secondary text on the MerchCard highlight features panel. Aliases content/on-inverse-subtle. */
+  --s2a-color-merch-card-pro-surface: var(--s2a-color-surface-inverse-subtle);
+  --s2a-color-page-default: var(--s2a-color-gray-1000);
+  --s2a-color-page-inverse: var(--s2a-color-gray-25);
+  --s2a-color-page-subtle: var(--s2a-color-gray-900);
+  --s2a-color-promo-cta-background: var(--s2a-color-gray-25);
+  --s2a-color-promo-cta-button-background-active: var(--s2a-color-gray-1000);
+  --s2a-color-promo-cta-button-background-default: var(--s2a-color-gray-75);
+  --s2a-color-promo-cta-button-background-hover: var(--s2a-color-gray-300);
+  --s2a-color-promo-cta-button-background-neutral-on-image-on-dark-active: var(--s2a-color-background-inverse); /** Deprecated — superseded by promo-cta/button/* tokens (light/dark mode-responsive). Do not use. */
+  --s2a-color-promo-cta-button-border-active: var(--s2a-color-transparent-white-24);
+  --s2a-color-promo-cta-button-border-default: var(--s2a-color-gray-200);
+  --s2a-color-promo-cta-button-border-hover: var(--s2a-color-gray-400);
+  --s2a-color-promo-cta-button-icon-active: var(--s2a-color-gray-25);
+  --s2a-color-promo-cta-label: var(--s2a-color-gray-1000);
+  --s2a-color-router-nav-item-background-active: var(--s2a-color-gray-25);
+  --s2a-color-router-nav-item-content-active: var(--s2a-color-gray-1000);
+  --s2a-color-section-default: var(--s2a-color-gray-1000);
+  --s2a-color-surface-default: var(--s2a-color-gray-1000);
+  --s2a-color-surface-inverse: var(--s2a-color-gray-25); /** Background for surfaces that invert relative to the current page mode — dark in light mode, light in dark mode. Use for expanded or active states where the component flips to contrast against the page (e.g. ElasticCard expanded state). Zero blast radius — safe to evolve. Counterpart: surface/subtle for the resting state. */
+  --s2a-color-surface-inverse-subtle: var(--s2a-color-gray-50); /** Background for surfaces that invert relative to the current page mode — dark in light mode, light in dark mode. Use for expanded or active states where the component flips to contrast against the page (e.g. ElasticCard expanded state). Zero blast radius — safe to evolve. Counterpart: surface/subtle for the resting state. */
+  --s2a-color-surface-knockout: var(--s2a-color-gray-25);
+  --s2a-color-surface-strong: #444;
+  --s2a-color-surface-subtle: var(--s2a-color-gray-900);
 }
