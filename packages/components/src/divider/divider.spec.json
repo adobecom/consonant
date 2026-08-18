@@ -1,0 +1,40 @@
+{
+  "name": "Divider",
+  "slug": "divider",
+  "cssClass": "c-divider",
+  "storybookId": "divider",
+  "description": "1px horizontal rule separating content regions. Style follows the surface it sits on — default/subtle for light surfaces, knockout/inverse/subtle-inverse for dark or media surfaces.",
+  "figmaNode": "10910:17760",
+  "variants": {
+    "style": ["default", "subtle", "knockout", "inverse", "subtle-inverse"]
+  },
+  "props": [
+    {
+      "name": "style",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "enum": ["default", "subtle", "knockout", "inverse", "subtle-inverse"],
+      "description": "Divider color for the surface context. default = standard border on light, subtle = low-emphasis on light, knockout = always-black, inverse = always-white, subtle-inverse = low-emphasis on dark."
+    }
+  ],
+  "tokenBindings": {
+    "background-color:default": "--s2a-color-border-default",
+    "background-color:subtle": "--s2a-color-border-subtle",
+    "background-color:knockout": "--s2a-color-border-knockout",
+    "background-color:inverse": "--s2a-color-border-inverse",
+    "background-color:subtle-inverse": "--s2a-color-transparent-white-16"
+  },
+  "tokenNotes": [
+    "Figma binds all fills to s2a/color/divider/* variables which have not shipped in @adobecom/s2a-tokens yet — the CSS uses each variable's declared codeSyntax.WEB (border tokens) until they do.",
+    "subtle-inverse has no shipped semantic equivalent (known border/subtle-inverse gap); --s2a-color-transparent-white-16 is the exact resolved value from Figma (white @ 16%)."
+  ],
+  "a11y": {
+    "role": "separator",
+    "requiredAriaAttrs": [],
+    "wcag": ["1.3.1"],
+    "notes": [
+      "Rendered as <hr> with role='separator' — announced as a thematic break by screen readers.",
+      "Purely decorative separators inside tightly-grouped composites may instead use aria-hidden='true' at the usage site."
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "name": "MerchCard",
+  "slug": "merch-card",
+  "cssClass": "c-merch-card",
+  "storybookId": "cards-merchcard",
+  "figmaNode": "10826:13312",
+  "figmaPage": "   ↳ MerchCard (11878:220865)",
+  "description": "A merchandising card for a product plan — plan name, pricing, a feature list, and CTAs — used in pricing tables and plan comparisons. The highlight variant is the featured / recommended plan.",
+  "variants": {
+    "style": ["default", "highlight"],
+    "featuresList": ["default", "closed"]
+  },
+  "props": [
+    { "name": "style", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "highlight"], "description": "highlight = featured / recommended plan. Outer surface flips to surface/inverse-subtle; the card body intentionally stays a light surface in both themes (definition-level pin in Figma)." },
+    { "name": "featuresList", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "closed"], "description": "default shows the feature list below the body; closed collapses it to the empty apron." },
+    { "name": "planName", "type": "string", "defaultValue": "\"Plan Name\"", "description": "TEXT prop `Plan Name`. Rendered as a heading — the card's accessible name." },
+    { "name": "description", "type": "string", "defaultValue": "\"Plan description goes here.\"", "description": "TEXT prop `Description`." },
+    { "name": "app", "type": "string", "defaultValue": "\"acrobat\"", "description": "AppIcon slug for the ProductLockup header." },
+    { "name": "planLabel", "type": "string", "defaultValue": "\"\"", "description": "ProductLockup label text (e.g. \"Standard PDF toolset\")." },
+    { "name": "price", "type": "string", "defaultValue": "\"\"", "description": "Main price line (e.g. \"US$49.99/mo\")." },
+    { "name": "comparePrice", "type": "string", "defaultValue": "\"\"", "description": "Annual/compare price line above the main price (e.g. \"US$599.88/yr\")." },
+    { "name": "priceNote", "type": "string", "defaultValue": "\"\"", "description": "Billing note under the price (e.g. \"Billed monthly, cancel anytime\")." },
+    { "name": "priceTerms", "type": "string", "defaultValue": "\"\"", "description": "Terms line (e.g. \"Offer terms apply\")." },
+    { "name": "showPricing", "type": "boolean", "defaultValue": "true", "description": "BOOLEAN prop `Show Pricing`." },
+    { "name": "showOptions", "type": "boolean", "defaultValue": "true", "description": "BOOLEAN prop `Show Options` — toggles the options slot region." },
+    { "name": "options", "type": "lit template | null", "defaultValue": "null", "description": "SLOT `options`. When null and showOptions, renders the default SelectPromo block from optionLabel/optionPromo." },
+    { "name": "optionLabel", "type": "string", "defaultValue": "\"\"", "description": "Default options-slot select label (e.g. \"1 License\")." },
+    { "name": "optionPromo", "type": "string", "defaultValue": "\"\"", "description": "Default options-slot promo caption (e.g. \"Save 7.5%… See terms\")." },
+    { "name": "features", "type": "string[]", "defaultValue": "[]", "description": "SLOT `features` default content — feature list items (rendered as a real <ul>)." },
+    { "name": "featuresTitle", "type": "string", "defaultValue": "\"\"", "description": "Section title above the feature list." },
+    { "name": "primaryCtaLabel", "type": "string", "defaultValue": "\"\"", "description": "Primary (accent) CTA label." },
+    { "name": "secondaryCtaLabel", "type": "string", "defaultValue": "\"\"", "description": "Secondary (outlined) CTA label. Hidden when empty — BOOLEAN prop `Show Secondary CTA`." },
+    { "name": "trustLabel", "type": "string", "defaultValue": "\"\"", "description": "TrustBadge text under the CTAs (e.g. \"Secure transaction\")." }
+  ],
+  "tokenBindings": {
+    "background:root:default": "--s2a-color-surface-subtle",
+    "background:root:highlight": "--s2a-color-surface-inverse-subtle",
+    "background:body": "--s2a-color-surface-default",
+    "background:option": "--s2a-color-background-subtle",
+    "border-radius:root": "--s2a-border-radius-md",
+    "border-radius:body": "--s2a-border-radius-sm",
+    "border-radius:option": "--s2a-border-radius-xs",
+    "padding:root": "--s2a-spacing-2xs",
+    "gap:body": "--s2a-spacing-lg",
+    "gap:content": "--s2a-spacing-md",
+    "gap:plan-header": "--s2a-spacing-lg",
+    "gap:name-area": "--s2a-spacing-2xs",
+    "gap:pricing": "--s2a-spacing-3xs",
+    "gap:actions": "--s2a-spacing-xs",
+    "padding:features": "--s2a-spacing-lg / --s2a-spacing-3xl (bottom)",
+    "gap:features-list": "--s2a-spacing-md",
+    "color:plan-name": "--s2a-color-content-heading",
+    "color:description": "--s2a-color-content-default",
+    "color:price": "--s2a-color-content-heading",
+    "color:price-notes": "--s2a-color-content-subtle",
+    "color:lockup-label": "--s2a-color-content-label",
+    "color:features:default": "--s2a-color-content-subtle",
+    "color:features:highlight": "--s2a-color-content-inverse",
+    "background:cta-primary": "--s2a-color-button-background-accent-default",
+    "border:cta-secondary": "--s2a-color-border-knockout",
+    "focus": "--s2a-color-focus-ring-default"
+  },
+  "knownTokenGaps": [
+    "Body padding is 28px in Figma with no bound variable and no matching spacing token (scale jumps 24→32). Hardcoded 28px pending a Figma rebind or new token.",
+    "CTA pill radius bound to primitive --s2a-border-radius-999 in Figma; no semantic full-radius token exists yet.",
+    "--s2a-color-surface-* and --s2a-color-button-background-accent-* ship with the elastic-card-updates branch token release; fallbacks cover older token versions."
+  ],
+  "a11y": {
+    "wcag": ["1.3.1", "1.1.1", "1.4.1", "1.4.3", "2.4.4", "2.4.6"],
+    "notes": [
+      "Plan Name renders as an <h3> heading — the plan is announced and navigable by structure.",
+      "Feature list is a real <ul> so assistive tech announces item count.",
+      "Pricing is exposed as text, never an image.",
+      "Primary and secondary CTAs are distinct focusable actions with clear names.",
+      "Highlight is paired with structure/text, not signaled by color alone — provide a text label (e.g. 'Most popular') in content when using highlight.",
+      "Highlight body intentionally stays a light surface in both themes (Figma definition-level Light pin); verify default-card text clears 4.5:1 in both modes."
+    ]
+  }
+}

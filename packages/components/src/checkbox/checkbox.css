@@ -1,0 +1,115 @@
+/**
+ * Checkbox atom — S2A
+ * Source of truth: Figma "Checkbox" (10559:113870), ".checkbox" core (10559:113849),
+ * and "CheckboxTile" (10559:114252) on the ↳ Checkbox page.
+ *
+ * The 20×20 control is monochrome content-default in both states (Figma binds the
+ * Spectrum box icon's iconPrimary to s2a/color/content/default), so it flips
+ * automatically with the page theme mode.
+ */
+
+.c-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2a-spacing-xs);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Real input, visually hidden but focusable */
+.c-checkbox__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 20×20 drawn box (Figma: S2 checkbox icon, 20px, content/default) */
+.c-checkbox__box {
+  position: relative;
+  box-sizing: border-box;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border: var(--s2a-border-width-md, 2px) solid var(--s2a-color-content-default);
+  border-radius: var(--s2a-border-radius-2xs);
+  background-color: transparent;
+  transition:
+    background-color 130ms ease,
+    border-color 130ms ease;
+}
+
+.c-checkbox__check {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--s2a-color-background-default);
+  opacity: 0;
+  transition: opacity 130ms ease;
+}
+
+.c-checkbox__input:checked + .c-checkbox__box {
+  background-color: var(--s2a-color-content-default);
+}
+
+.c-checkbox__input:checked + .c-checkbox__box .c-checkbox__check {
+  opacity: 1;
+}
+
+/* Label — s2a/typography/label, content/default (Figma Label instance) */
+.c-checkbox__label {
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  color: var(--s2a-color-content-default);
+}
+
+/* Focus — repo convention (button.css): 2xs focus ring via box-shadow */
+.c-checkbox__input:focus-visible + .c-checkbox__box,
+.c-checkbox[data-force-state="focus"] .c-checkbox__box {
+  box-shadow: 0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
+}
+
+/* Disabled */
+.c-checkbox[data-disabled] {
+  cursor: not-allowed;
+}
+
+.c-checkbox[data-disabled] .c-checkbox__box {
+  border-color: var(--s2a-color-content-disabled);
+}
+
+.c-checkbox[data-disabled] .c-checkbox__input:checked + .c-checkbox__box {
+  background-color: var(--s2a-color-content-disabled);
+}
+
+.c-checkbox[data-disabled] .c-checkbox__label {
+  color: var(--s2a-color-content-disabled);
+}
+
+/* ── Tile chrome (Figma: CheckboxTile 10559:114252) ────────────────────────── */
+
+.c-checkbox[data-tile] {
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--s2a-spacing-md) var(--s2a-spacing-sm);
+  border: var(--s2a-border-width-sm, 1px) solid var(--s2a-color-border-subtle);
+  border-radius: var(--s2a-border-radius-xs);
+  background-color: var(--s2a-color-background-default);
+}
+
+.c-checkbox[data-tile] .c-checkbox__icon {
+  display: inline-flex;
+  margin-inline-start: auto;
+  color: var(--s2a-color-content-default);
+}

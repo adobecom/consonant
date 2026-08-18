@@ -382,11 +382,24 @@ figma.on("currentpagechange", () => {
 });
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
 figma.ui.onmessage = async (msg) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
   switch (msg.type) {
     case "ui-ready":
       notifySelection();
       break;
+    // GitHub PAT for the Token Release feature — persisted in clientStorage
+    // (local to this user's Figma install; never written into the document).
+    case "gh-token:get": {
+      const token = (_a = await figma.clientStorage.getAsync("gh-token")) != null ? _a : "";
+      figma.ui.postMessage({ type: "gh-token:value", token });
+      break;
+    }
+    case "gh-token:set": {
+      const token = msg.token || "";
+      if (token) await figma.clientStorage.setAsync("gh-token", token);
+      else await figma.clientStorage.deleteAsync("gh-token");
+      break;
+    }
     case "select:apply-filter": {
       let parseProps2 = function(name) {
         const props = {};
@@ -498,7 +511,7 @@ figma.ui.onmessage = async (msg) => {
         return id ? (_b2 = varNames.get(id)) != null ? _b2 : "" : "";
       };
       var bvLabel = bvLabel2;
-      const categories = new Set((_a = msg.categories) != null ? _a : []);
+      const categories = new Set((_b = msg.categories) != null ? _b : []);
       const selection = figma.currentPage.selection;
       if (!selection.length) {
         figma.ui.postMessage({ type: "annotate:result", error: "No selection" });
@@ -512,7 +525,7 @@ figma.ui.onmessage = async (msg) => {
       }
       const varIdSet = /* @__PURE__ */ new Set();
       for (const n of allNodes) {
-        const bv = (_b = n.boundVariables) != null ? _b : {};
+        const bv = (_c = n.boundVariables) != null ? _c : {};
         for (const key of Object.keys(bv)) {
           const val = bv[key];
           if (!val) continue;
@@ -532,19 +545,19 @@ figma.ui.onmessage = async (msg) => {
       }));
       let annotated = 0;
       for (const n of allNodes) {
-        const bv = (_c = n.boundVariables) != null ? _c : {};
+        const bv = (_d = n.boundVariables) != null ? _d : {};
         const anns = [];
-        const pdVar = (_e = (_d = n.getPluginData) == null ? void 0 : _d.call(n, "s2aTokenVar")) != null ? _e : "";
-        const pdProp = (_g = (_f = n.getPluginData) == null ? void 0 : _f.call(n, "s2aTokenProp")) != null ? _g : "";
+        const pdVar = (_f = (_e = n.getPluginData) == null ? void 0 : _e.call(n, "s2aTokenVar")) != null ? _f : "";
+        const pdProp = (_h = (_g = n.getPluginData) == null ? void 0 : _g.call(n, "s2aTokenProp")) != null ? _h : "";
         if (categories.has("color-fg") && n.type === "TEXT") {
-          if (((_i = (_h = bv.fills) == null ? void 0 : _h.length) != null ? _i : 0) > 0) {
+          if (((_j = (_i = bv.fills) == null ? void 0 : _i.length) != null ? _j : 0) > 0) {
             anns.push({ label: bvLabel2(bv, "fills") || "color-fg", properties: [{ type: "fills" }] });
           } else if (pdVar && pdProp === "fills") {
             anns.push({ label: pdVar, properties: [{ type: "fills" }] });
           }
         }
         if (categories.has("color-bg") && n.type !== "TEXT") {
-          if (((_k = (_j = bv.fills) == null ? void 0 : _j.length) != null ? _k : 0) > 0) {
+          if (((_l = (_k = bv.fills) == null ? void 0 : _k.length) != null ? _l : 0) > 0) {
             anns.push({ label: bvLabel2(bv, "fills") || "color-bg", properties: [{ type: "fills" }] });
           } else if (pdVar && pdProp === "fills") {
             anns.push({ label: pdVar, properties: [{ type: "fills" }] });
@@ -580,15 +593,15 @@ figma.ui.onmessage = async (msg) => {
         }
         if (categories.has("typography") && n.type === "TEXT") {
           const tp = [];
-          if (((_m = (_l = bv.fontFamily) == null ? void 0 : _l.length) != null ? _m : 0) > 0) tp.push({ type: "fontFamily" });
-          if (((_o = (_n = bv.fontSize) == null ? void 0 : _n.length) != null ? _o : 0) > 0) tp.push({ type: "fontSize" });
-          if (((_q = (_p = bv.lineHeight) == null ? void 0 : _p.length) != null ? _q : 0) > 0) tp.push({ type: "lineHeight" });
-          if (((_s = (_r = bv.letterSpacing) == null ? void 0 : _r.length) != null ? _s : 0) > 0) tp.push({ type: "letterSpacing" });
+          if (((_n = (_m = bv.fontFamily) == null ? void 0 : _m.length) != null ? _n : 0) > 0) tp.push({ type: "fontFamily" });
+          if (((_p = (_o = bv.fontSize) == null ? void 0 : _o.length) != null ? _p : 0) > 0) tp.push({ type: "fontSize" });
+          if (((_r = (_q = bv.lineHeight) == null ? void 0 : _q.length) != null ? _r : 0) > 0) tp.push({ type: "lineHeight" });
+          if (((_t = (_s = bv.letterSpacing) == null ? void 0 : _s.length) != null ? _t : 0) > 0) tp.push({ type: "letterSpacing" });
           if (tp.length) {
             const lbl = bvLabel2(bv, "fontSize") || bvLabel2(bv, "fontFamily") || "typography";
             anns.push({ label: lbl, properties: tp });
           }
-          if (((_u = (_t = bv.fontStyle) == null ? void 0 : _t.length) != null ? _u : 0) > 0) {
+          if (((_v = (_u = bv.fontStyle) == null ? void 0 : _u.length) != null ? _v : 0) > 0) {
             const lbl = bvLabel2(bv, "fontStyle");
             anns.push({ label: lbl || "font-weight", properties: [{ type: "fontWeight" }] });
           }
@@ -628,7 +641,7 @@ figma.ui.onmessage = async (msg) => {
       let cleared = 0;
       for (const n of all) {
         try {
-          if (((_v = n.annotations) == null ? void 0 : _v.length) > 0) {
+          if (((_w = n.annotations) == null ? void 0 : _w.length) > 0) {
             n.annotations = [];
             cleared++;
           }
@@ -673,7 +686,7 @@ figma.ui.onmessage = async (msg) => {
         }
         const bColls = await figma.variables.getLocalVariableCollectionsAsync();
         const themeColl = bColls.find((c) => c.id === "VariableCollectionId:6:17");
-        const darkModeId = (_w = themeColl == null ? void 0 : themeColl.modes.find((m) => m.name === "Dark")) == null ? void 0 : _w.modeId;
+        const darkModeId = (_x = themeColl == null ? void 0 : themeColl.modes.find((m) => m.name === "Dark")) == null ? void 0 : _x.modeId;
         const [cLabel, cCaption, cBody] = await Promise.all([
           figma.variables.getVariableByIdAsync("VariableID:2483:41392"),
           // content/label

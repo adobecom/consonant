@@ -1,0 +1,50 @@
+{
+  "name": "List",
+  "slug": "list",
+  "cssClass": "c-list",
+  "storybookId": "list",
+  "description": "Stacked feature sections, each with an optional divider, an icon + bold title row, and an indented list of supporting items. Used inside MerchCard to show what's included in a plan.",
+  "figma": {
+    "listComponentId": "10320:102094",
+    "listItemComponentId": "10320:102025",
+    "sectionComponentId": "10320:102040",
+    "page": "   ↳ List"
+  },
+  "variants": {},
+  "props": [
+    { "name": "sections", "type": "Array<{ title: string, icon?: TemplateResult, divider?: boolean, items: string[] }>", "defaultValue": "[]", "description": "Section descriptors. title = Figma TEXT prop, icon = Figma INSTANCE_SWAP prop (20x20), divider = Figma 'Show Divider' BOOLEAN prop, items = Figma .items SLOT of ListItem instances." }
+  ],
+  "tokenBindings": {
+    "gap:root": "--s2a-spacing-md",
+    "gap:section": "--s2a-spacing-sm",
+    "background-color:divider": "--s2a-color-border-subtle",
+    "gap:title": "--s2a-spacing-xs",
+    "color:title": "--s2a-color-content-default",
+    "font-family:title": "--s2a-font-family-label",
+    "font-weight:title": "--s2a-font-weight-label",
+    "font-size:title": "--s2a-font-size-sm",
+    "line-height:title": "--s2a-font-line-height-xs",
+    "gap:items": "--s2a-spacing-xs",
+    "padding-left:items": "--s2a-spacing-xl",
+    "padding-block:item": "--s2a-spacing-3xs",
+    "color:item": "--s2a-color-content-subtle",
+    "font-family:item": "--s2a-font-family-body",
+    "font-weight:item": "--s2a-font-weight-body",
+    "font-size:item": "--s2a-font-size-sm",
+    "line-height:item": "--s2a-font-line-height-xs"
+  },
+  "notes": [
+    "Figma binds primitive spacing variables (s2a/spacing/2, /8, /12, /16, /32); CSS uses the semantic aliases at the same px values (3xs=2, xs=8, sm=12, md=16, xl=32) per the repo's semantic-tokens-only rule.",
+    "The Figma divider is a Divider/Style=subtle instance whose fill token s2a/color/divider/subtle emits codeSyntax var(--s2a-color-border-subtle); rendered here as a self-contained <hr> bound to that same custom property.",
+    "The --s2a-hover-list-* tokens from tokens 0.0.21 belong to a different hover-list pattern and are NOT used by this Figma component; none are bound here."
+  ],
+  "a11y": {
+    "role": "list semantics via native <ul>/<li>",
+    "requiredAriaAttrs": [],
+    "wcag": ["1.3.1"],
+    "notes": [
+      "Items render as <li> inside a <ul> with list-style removed via CSS; each section is a <section> landmark grouping divider, title, and items.",
+      "Section icons are decorative and wrapped in a span with aria-hidden='true'."
+    ]
+  }
+}

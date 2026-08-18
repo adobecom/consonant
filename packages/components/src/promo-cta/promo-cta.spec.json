@@ -1,0 +1,60 @@
+{
+  "name": "PromoCta",
+  "slug": "promo-cta",
+  "cssClass": "c-promo-cta",
+  "storybookId": "promo-cta",
+  "version": "2.0.0",
+  "figmaNode": "11223:203954",
+  "description": "v2 — dark promotional pill: app icon + eyebrow label + 32px arrow button (Figma sub-set PromoCTA/Arrow Button, 11223:211366). Always-knockout surface, theme-invariant by design. v1's xl size is retired (maps to lg).",
+  "composedOf": ["AppIcon (CDN img)"],
+  "variants": {
+    "state": ["default", "hover", "active"],
+    "width": ["hug", "fill"],
+    "size": ["lg"]
+  },
+  "props": [
+    { "name": "size", "type": "string", "defaultValue": "\"lg\"", "enum": ["lg"], "description": "v2 is lg-only; the deprecated v1 \"xl\" value is normalized to lg" },
+    { "name": "state", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "hover", "active"], "description": "Force a visual state for QA; real states come from :hover/:active" },
+    { "name": "width", "type": "string", "defaultValue": "\"hug\"", "enum": ["hug", "fill"] },
+    { "name": "label", "type": "string", "defaultValue": "\"Learn more\"" },
+    { "name": "showApp", "type": "boolean", "defaultValue": "true", "description": "Figma: Show App Icon" },
+    { "name": "showIconEnd", "type": "boolean", "defaultValue": "true", "description": "Figma: Show Icon End (arrow button). v1 alias showIcon still accepted." },
+    { "name": "app", "type": "string", "defaultValue": "\"creative-cloud\"", "description": "AppIcon library slug" }
+  ],
+  "tokenBindings": {
+    "background": "--s2a-color-promo-cta-background",
+    "color:label": "--s2a-color-promo-cta-label",
+    "background:arrow:default": "--s2a-color-promo-cta-button-background-default",
+    "background:arrow:hover": "--s2a-color-promo-cta-button-background-hover",
+    "background:arrow:active": "--s2a-color-promo-cta-button-background-active",
+    "border:arrow:default": "--s2a-color-promo-cta-button-border-default",
+    "border:arrow:hover": "--s2a-color-promo-cta-button-border-hover",
+    "border:arrow:active": "--s2a-color-promo-cta-button-border-active",
+    "color:arrow-icon": "--s2a-color-promo-cta-button-icon",
+    "radius:pill": "--s2a-border-radius-12",
+    "radius:arrow": "--s2a-border-radius-6"
+  },
+  "knownTokenGaps": {
+    "note": "The s2a/color/promo-cta/* family is bound in Figma (merged from elastic-card-updates) but has not shipped in a tokens release yet. Every reference fallback-chains to the shipped invariant token with the same resolved value (background-knockout, content-knockout, gray-800/700/600, gray-25). When the family ships, the first var in each chain takes over — no code change needed.",
+    "awaiting": [
+      "--s2a-color-promo-cta-background",
+      "--s2a-color-promo-cta-label",
+      "--s2a-color-promo-cta-button-background-default",
+      "--s2a-color-promo-cta-button-background-hover",
+      "--s2a-color-promo-cta-button-background-active",
+      "--s2a-color-promo-cta-button-border-default",
+      "--s2a-color-promo-cta-button-border-hover",
+      "--s2a-color-promo-cta-button-border-active",
+      "--s2a-color-promo-cta-button-icon",
+      "--s2a-color-promo-cta-button-icon-active"
+    ]
+  },
+  "a11y": {
+    "wcag": ["2.4.7", "1.4.3"],
+    "notes": [
+      "Renders a real <button type=\"button\">; the label text is the accessible name.",
+      "Focus ring uses --s2a-color-focus-ring-knockout (white) — the pill is always on a dark surface.",
+      "The arrow button is decorative (part of the same tap target), not a nested interactive element."
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Collapsible",
+  "slug": "collapsible",
+  "cssClass": "c-collapsible",
+  "storybookId": "collapsible",
+  "description": "Disclosure row with a bold label trigger and an expandable content region. Used inside cards (e.g. MerchCard) to reveal a feature list.",
+  "figma": {
+    "componentSetId": "10564:116547",
+    "page": "   ↳ Collapsible"
+  },
+  "variants": {
+    "state": ["open", "closed"]
+  },
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"See what's included:\"", "description": "Trigger label text (Figma TEXT prop on .label)" },
+    { "name": "open", "type": "boolean", "defaultValue": "false", "description": "Whether the content region starts expanded (Figma State variant)" },
+    { "name": "content", "type": "TemplateResult", "defaultValue": "nothing", "description": "Slotted content shown when open (Figma .content SLOT prop)" }
+  ],
+  "tokenBindings": {
+    "color:label": "--s2a-color-content-default",
+    "color:chevron": "--s2a-color-content-default",
+    "font-family:label": "--s2a-font-family-label",
+    "font-weight:label": "--s2a-font-weight-label",
+    "font-size:label": "--s2a-font-size-sm",
+    "line-height:label": "--s2a-font-line-height-xs",
+    "gap:trigger": "--s2a-spacing-xs",
+    "margin-top:content(open)": "--s2a-spacing-sm"
+  },
+  "notes": [
+    "Figma binds root itemSpacing to s2a/spacing/sm (12) when open and s2a/spacing/2xs (4) when closed; in CSS this is a single margin-top on the content region, which only renders when open — so only the 12px open value applies.",
+    "Chevron is an inline SVG (S2 chevron shape) rotated 180deg via CSS on [open], replacing the Figma ChevronDown/ChevronUp instance swap."
+  ],
+  "a11y": {
+    "role": "native <details>/<summary> disclosure",
+    "requiredAriaAttrs": [],
+    "wcag": ["4.1.2", "2.1.1"],
+    "notes": [
+      "Native <details>/<summary> was chosen over button+aria-expanded because the design is a plain disclosure row — the platform element provides the expanded/collapsed semantics and keyboard interaction (Enter/Space) natively.",
+      "The chevron SVG carries aria-hidden='true'; the summary's accessible name comes from the label text."
+    ]
+  }
+}

@@ -1,169 +1,66 @@
 {
   "name": "Button",
   "slug": "button",
-  "figmaNodeId": "141-53460",
   "cssClass": "c-button",
-  "storybookId": "button",
-  "description": "Primary action trigger matching Figma .Button/Core/Primary. Supports solid, outlined, and transparent backgrounds across on-light and on-dark contexts. Use accent intent for the S2A blue CTA extension on light surfaces only.",
+  "storybookId": "atoms-button",
+  "description": "Primary action button. Matches Figma \"Button — v2\" component set (node 10715:35477). No Context axis — light/dark theming flows from the S2A variable modes (:root[data-theme]); knockout and outline-inverse are the styles for always-dark media surfaces.",
+  "figma": {
+    "componentSet": "Button — v2",
+    "nodeId": "10715:35477"
+  },
   "variants": {
-    "background": ["solid", "outlined", "transparent"],
-    "intent": ["primary", "accent"],
-    "context": ["on-light", "on-dark"],
-    "size": ["md", "xs"],
+    "style": ["solid", "outlined", "transparent", "accent", "knockout", "outline-inverse"],
+    "size": ["md"],
     "state": ["default", "hover", "active", "focus", "disabled"]
   },
-  "forbiddenCombinations": [{ "intent": "accent", "context": "on-dark" }],
   "props": [
-    {
-      "name": "label",
-      "type": "string",
-      "defaultValue": "\"Label\"",
-      "description": "Visible button text"
-    },
-    {
-      "name": "background",
-      "type": "string",
-      "defaultValue": "\"solid\"",
-      "enum": ["solid", "outlined", "transparent"],
-      "description": "Fill style"
-    },
-    {
-      "name": "intent",
-      "type": "string",
-      "enum": ["primary", "accent"],
-      "description": "Color intent. accent = blue, on-light only"
-    },
-    {
-      "name": "context",
-      "type": "string",
-      "enum": ["on-light", "on-dark"],
-      "description": "Surface context. Inferred from tone if omitted."
-    },
-    {
-      "name": "size",
-      "type": "string",
-      "defaultValue": "\"md\"",
-      "enum": ["md", "xs"]
-    },
-    {
-      "name": "state",
-      "type": "string",
-      "defaultValue": "\"default\"",
-      "enum": ["default", "hover", "active", "focus", "disabled"],
-      "description": "Forces a visual state for testing/docs"
-    },
-    {
-      "name": "tone",
-      "type": "string",
-      "enum": ["default", "knockout", "inverse"],
-      "deprecated": true,
-      "deprecatedReason": "Use context instead. knockout/inverse → on-dark"
-    },
-    { "name": "showIconStart", "type": "boolean", "defaultValue": "false" },
-    { "name": "showIconEnd", "type": "boolean", "defaultValue": "false" },
-    { "name": "iconStart", "type": "TemplateResult | function" },
-    { "name": "iconEnd", "type": "TemplateResult | function" },
-    {
-      "name": "showElementEnd",
-      "type": "boolean",
-      "description": "Overrides showIconEnd when set"
-    },
-    {
-      "name": "href",
-      "type": "string",
-      "description": "When provided, renders as <a> instead of <button>. Use for navigation CTAs."
-    },
-    { "name": "onClick", "type": "function" }
+    { "name": "label", "type": "string", "defaultValue": "\"Label\"", "description": "Button label text (Figma Label text prop)" },
+    { "name": "href", "type": "string", "description": "Renders <a> when set, <button> otherwise" },
+    { "name": "style", "type": "string", "defaultValue": "\"solid\"", "enum": ["solid", "outlined", "transparent", "accent", "knockout", "outline-inverse"], "description": "Visual style (Figma Style axis)" },
+    { "name": "size", "type": "string", "defaultValue": "\"md\"", "enum": ["md"], "description": "Size (v2 ships md only)" },
+    { "name": "state", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "hover", "active", "focus", "disabled"], "description": "Forced visual state for docs; interactive states come from CSS pseudo-classes" },
+    { "name": "showIconStart", "type": "boolean", "defaultValue": "false", "description": "Show leading icon (Figma Show Icon Start)" },
+    { "name": "showIconEnd", "type": "boolean", "defaultValue": "false", "description": "Show trailing icon (Figma Show Icon End; defaults to caret)" },
+    { "name": "iconStart", "type": "Node | string", "description": "Leading icon content (Figma Icon Start instance swap)" },
+    { "name": "iconEnd", "type": "Node | string", "description": "Trailing icon content (Figma Icon End instance swap)" },
+    { "name": "onClick", "type": "function", "description": "Click handler" }
   ],
-  "tokenBindings": {
-    "background-color:primary+solid+on-light+default": "--s2a-color-button-background-primary-solid-on-light-default",
-    "background-color:primary+solid+on-light+hover": "--s2a-color-button-background-primary-solid-on-light-hover",
-    "background-color:primary+solid+on-light+active": "--s2a-color-button-background-primary-solid-on-light-active",
-    "background-color:primary+solid+on-dark+default": "--s2a-color-button-background-primary-solid-on-dark-default",
-    "background-color:primary+solid+on-dark+hover": "--s2a-color-button-background-primary-solid-on-dark-hover",
-    "background-color:primary+solid+on-dark+active": "--s2a-color-button-background-primary-solid-on-dark-active",
-    "background-color:accent+solid+default": "--s2a-color-button-background-accent-solid-on-light-default",
-    "background-color:accent+solid+hover": "--s2a-color-button-background-accent-solid-on-light-hover",
-    "background-color:accent+solid+active": "--s2a-color-button-background-accent-solid-on-light-active",
-    "background-color:primary+outlined+on-light+default": "--s2a-color-button-background-primary-outlined-on-light-default",
-    "background-color:primary+outlined+on-light+hover": "--s2a-color-button-background-primary-outlined-on-light-hover",
-    "background-color:primary+outlined+on-light+active": "--s2a-color-button-background-primary-outlined-on-light-active",
-    "background-color:primary+outlined+on-dark+hover": "--s2a-color-button-background-primary-outlined-on-dark-hover",
-    "background-color:primary+outlined+on-dark+active": "--s2a-color-button-background-primary-outlined-on-dark-active",
-    "background-color:primary+transparent+on-light+default": "--s2a-color-button-background-primary-transparent-on-light-default",
-    "background-color:primary+transparent+on-light+hover": "--s2a-color-button-background-primary-transparent-on-light-hover",
-    "background-color:primary+transparent+on-light+active": "--s2a-color-button-background-primary-transparent-on-light-active",
-    "background-color:primary+transparent+on-dark+default": "--s2a-color-button-background-primary-transparent-on-dark-default",
-    "background-color:primary+transparent+on-dark+hover": "--s2a-color-button-background-primary-transparent-on-dark-hover",
-    "background-color:primary+transparent+on-dark+active": "--s2a-color-button-background-primary-transparent-on-dark-active",
-    "color:primary+solid+on-light": "--s2a-color-button-content-primary-solid-default",
-    "color:primary+solid+on-dark": "--s2a-color-button-content-primary-solid-inverse",
-    "color:primary+outlined+on-light": "--s2a-color-button-content-primary-outlined-default",
-    "color:primary+outlined+on-dark": "--s2a-color-button-content-primary-outlined-knockout",
-    "color:primary+transparent+on-light": "--s2a-color-button-content-primary-transparent-default",
-    "color:primary+transparent+on-dark": "--s2a-color-button-content-primary-transparent-knockout",
-    "border-color:primary+solid+on-light": "--s2a-color-button-border-primary-solid-on-light-default",
-    "border-color:primary+solid+on-dark+default": "--s2a-color-button-border-primary-solid-on-dark-default",
-    "border-color:primary+solid+on-dark+hover": "--s2a-color-button-border-primary-solid-on-dark-hover",
-    "border-color:primary+outlined+on-light": "--s2a-color-button-border-primary-outlined-on-light-default",
-    "border-color:primary+outlined+on-dark": "--s2a-color-button-border-primary-outlined-on-dark-default",
-    "backdrop-filter:outlined": "--s2a-blur-md",
-    "backdrop-filter:transparent": "--s2a-blur-md",
-    "opacity:disabled": "--s2a-opacity-disabled",
-    "border-radius": "--s2a-border-radius-round",
-    "border-width:sm": "--s2a-border-width-sm",
-    "border-width:md": "--s2a-border-width-md",
-    "padding-x:md": "--s2a-spacing-lg",
-    "padding-x:xs": "--s2a-spacing-sm",
-    "gap:md": "--s2a-spacing-xs",
-    "gap:xs": "--s2a-spacing-xs",
-    "icon-size": "--s2a-font-size-xs",
-    "font-family": "--s2a-font-family-label",
-    "font-weight": "--s2a-font-weight-label",
-    "font-size:label": "--s2a-typography-font-size-label",
-    "line-height:label": "--s2a-typography-line-height-label",
-    "letter-spacing:label": "--s2a-typography-letter-spacing-label",
-    "focus-ring": "--s2a-color-focus-ring-default",
-    "focus-inner:on-light": "--s2a-color-background-default",
-    "focus-inner:on-dark": "--s2a-color-background-knockout",
-    "base-color": "--s2a-color-content-default",
-    "focus-inner-width": "--s2a-spacing-3xs",
-    "focus-outer-width": "--s2a-spacing-2xs"
+  "legacyPropMapping": {
+    "description": "v1 props are still accepted and mapped for older call sites: intent=accent → style=accent; background=solid+context=on-dark → style=knockout; background=outlined+context=on-dark → style=outline-inverse; background otherwise maps to the same-named style. The context prop itself no longer exists — page theme comes from :root[data-theme].",
+    "removed": ["context", "background", "intent"]
   },
-  "primitiveExceptions": [
-    {
-      "property": "padding-y:md",
-      "value": "14px",
-      "reason": "Figma Button/Core/Primary md vertical padding is 14px and no semantic spacing alias exists yet."
-    },
-    {
-      "property": "padding-y:xs",
-      "value": "6px",
-      "reason": "Figma Button/Core/Primary xs vertical padding is 6px and no semantic spacing alias exists yet."
-    },
-    {
-      "property": "height:md",
-      "value": "40px",
-      "reason": "Figma Button/Core/Primary md height is 40px and no semantic size token exists yet."
-    },
-    {
-      "property": "height:xs",
-      "value": "24px",
-      "reason": "Figma Button/Core/Primary xs height is 24px and no semantic size token exists yet."
-    }
+  "tokenBindings": {
+    "background:solid:default": "--s2a-color-button-background-solid-default → fallback --s2a-color-background-inverse",
+    "background:solid:hover": "--s2a-color-button-background-solid-hover → fallback --s2a-color-iconbutton-background-primary-solid-on-light-hover",
+    "background:solid:active": "--s2a-color-button-background-solid-active → fallback --s2a-color-background-inverse",
+    "content:solid": "--s2a-color-button-content-solid-default → fallback --s2a-color-button-content-primary-solid-default",
+    "background:outlined:hover": "--s2a-color-button-background-outlined-hover → fallback --s2a-color-button-background-primary-transparent-on-light-hover",
+    "background:outlined:active": "--s2a-color-button-background-outlined-active → fallback --s2a-color-background-inverse",
+    "content:outlined": "--s2a-color-content-default (Figma binding)",
+    "content:outlined:active": "--s2a-color-button-content-outlined-active → fallback --s2a-color-content-inverse",
+    "border:outlined": "--s2a-color-border-knockout (Figma binding; light gray-1000 / dark gray-25)",
+    "background:transparent:*": "--s2a-color-button-background-transparent-{default,hover,active} → fallback --s2a-color-button-background-primary-transparent-on-light-{default,hover,active}",
+    "background:accent:*": "--s2a-color-button-background-accent-{default,hover,active} → fallback --s2a-color-button-background-accent-solid-on-light-{default,hover,active}",
+    "content:accent": "--s2a-color-content-knockout (Figma binding)",
+    "background:knockout:*": "--s2a-color-button-background-knockout-{default,hover,active} → fallback --s2a-color-gray-{25,50,100} (theme-invariant by design)",
+    "content:knockout": "--s2a-color-button-content-knockout → fallback --s2a-color-button-content-primary-solid-inverse",
+    "background:outline-inverse:*": "--s2a-color-button-background-outline-inverse-{default,hover,active} → fallback --s2a-color-transparent-white-{00,08,16}",
+    "content:outline-inverse": "--s2a-color-button-content-outline-inverse → fallback --s2a-color-content-knockout",
+    "focus-ring": "--s2a-color-focus-ring-default; knockout/outline-inverse use --s2a-color-focus-ring-knockout with a --s2a-color-background-knockout gap ring"
+  },
+  "knownTokenGaps": [
+    "All v2 button token names (s2a/color/button/{background,content,border}/{style}/{state}) are bound in Figma but not yet in the shipped tokens release — CSS chains each to a shipped var with identical light/dark resolution and upgrades automatically when they ship.",
+    "outline-inverse hover/active resolve white/08–16 in Light but black/08–24 in Dark in Figma; no shipped var flips that direction, so the invariant white fallbacks are used until the v2 tokens ship (visually subtle: 8–16% overlays on media surfaces).",
+    "md height 40px and vertical padding 14px are unbound in Figma with no matching semantic tokens."
   ],
   "a11y": {
-    "role": "button",
-    "wcag": ["1.4.3", "2.1.1", "2.4.7"],
-    "keyboard": [
-      { "key": "Enter", "action": "Activates the button" },
-      { "key": "Space", "action": "Activates the button" },
-      { "key": "Tab", "action": "Moves focus to the button" }
-    ],
+    "role": "button (native <button>) or link (<a href>)",
+    "requiredAriaAttrs": [],
+    "wcag": ["2.1.1", "2.4.7", "1.4.3"],
     "notes": [
-      "Always provide a visible label. Icon-only buttons should use aria-label.",
-      "Disabled native buttons use the disabled attribute. Disabled link CTAs render aria-disabled and suppress href to avoid keyboard navigation.",
-      "Focus ring uses double-ring pattern: inner matches surface, outer is --s2a-color-focus-ring-default."
+      "Disabled <a> buttons get aria-disabled='true', tabindex='-1', and a click interceptor.",
+      "Focus ring is a two-layer box-shadow using --s2a-color-focus-ring-default (or -knockout on media styles).",
+      "Icon spans are aria-hidden; the label text carries the accessible name."
     ]
   }
 }

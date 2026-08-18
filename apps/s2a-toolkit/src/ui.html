@@ -199,13 +199,28 @@
 
       <!-- ── Token release ────────────────────────────────────────────── -->
       <div class="section-label">Token release</div>
-      <div class="chip-grid" id="tokenReleaseBump" style="margin-bottom:10px;">
-        <button class="chip on" data-bump="patch">Patch</button>
-        <button class="chip" data-bump="minor">Minor</button>
-        <button class="chip" data-bump="major">Major</button>
+
+      <!-- One-time GitHub token setup (shown until a token is saved) -->
+      <div id="ghTokenSetup" style="display:none;">
+        <div class="form-field">
+          <label class="form-label" for="ghTokenInput">GitHub token</label>
+          <input class="form-input" id="ghTokenInput" type="password" placeholder="Fine-grained PAT — Actions read/write on adobecom/consonant" />
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="ghTokenSaveBtn" style="flex:1;">Save token</button>
+        </div>
       </div>
-      <div class="btn-row">
-        <button class="btn" id="tokenReleaseBtn" style="flex:1;">Release Tokens</button>
+
+      <div id="tokenReleaseControls" style="display:none;">
+        <div class="chip-grid" id="tokenReleaseBump" style="margin-bottom:10px;">
+          <button class="chip on" data-bump="patch">Patch</button>
+          <button class="chip" data-bump="minor">Minor</button>
+          <button class="chip" data-bump="major">Major</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="tokenReleaseBtn" style="flex:1;">Release Tokens</button>
+          <button class="btn btn-ghost" id="ghTokenClearBtn" title="Forget the saved GitHub token">Clear token</button>
+        </div>
       </div>
       <div class="status" id="tokenReleaseStatus"></div>
 

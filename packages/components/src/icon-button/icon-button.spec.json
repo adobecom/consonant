@@ -1,46 +1,53 @@
 {
   "name": "IconButton",
   "slug": "icon-button",
-  "figmaNodeId": "2142-53869",
   "cssClass": "c-icon-button",
-  "storybookId": "icon-button",
-  "description": "Icon-only action trigger. Requires aria-label. Supports solid, outlined, and transparent backgrounds in on-light and on-dark contexts.",
+  "storybookId": "atoms-iconbutton",
+  "description": "Icon-only circular button. Matches Figma \"IconButton — v2\" component set (node 11174:146275). No Context axis — light/dark theming flows from the S2A variable modes (:root[data-theme]); knockout is the always-light circle for dark/media surfaces.",
+  "figma": {
+    "componentSet": "IconButton — v2",
+    "nodeId": "11174:146275"
+  },
   "variants": {
-    "background": ["solid", "outlined", "transparent"],
-    "context": ["on-light", "on-dark"],
-    "size": ["md", "lg"],
+    "style": ["solid", "transparent", "knockout"],
+    "size": ["sm", "md", "lg"],
     "state": ["default", "hover", "active", "focus", "disabled"]
   },
   "props": [
-    { "name": "ariaLabel", "type": "string", "required": true, "description": "Accessible label — required since there is no visible text" },
-    { "name": "icon", "type": "string | TemplateResult", "defaultValue": "\"pause\"", "description": "Phosphor icon name (e.g. 'play') or a Lit TemplateResult. 'pause' renders the built-in SVG." },
-    { "name": "background", "type": "string", "defaultValue": "\"solid\"", "enum": ["solid", "outlined", "transparent"] },
-    { "name": "context", "type": "string", "enum": ["on-light", "on-dark"], "description": "Surface context. Inferred from tone if omitted." },
-    { "name": "size", "type": "string", "defaultValue": "\"lg\"", "enum": ["md", "lg"] },
-    { "name": "state", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "hover", "active", "focus", "disabled"] },
-    { "name": "tone", "type": "string", "enum": ["default", "knockout"], "deprecated": true, "deprecatedReason": "Use context instead. knockout → on-dark" },
-    { "name": "onClick", "type": "function" }
+    { "name": "ariaLabel", "type": "string", "description": "Accessible label (required — icon-only control)" },
+    { "name": "icon", "type": "string | TemplateResult", "defaultValue": "\"pause\"", "description": "Named icon from the built-in map, or a custom lit template (Figma Icon instance swap)" },
+    { "name": "style", "type": "string", "defaultValue": "\"solid\"", "enum": ["solid", "transparent", "knockout"], "description": "Visual style (Figma Style axis)" },
+    { "name": "size", "type": "string", "defaultValue": "\"lg\"", "enum": ["sm", "md", "lg"], "description": "sm 24px/12px icon · md 32px/16px icon · lg 40px/16px icon" },
+    { "name": "state", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "hover", "active", "focus", "disabled"], "description": "Forced visual state for docs" },
+    { "name": "onClick", "type": "function", "description": "Click handler" }
   ],
-  "tokenBindings": {
-    "background-color:solid+on-light+default": "--s2a-color-background-knockout",
-    "background-color:solid+on-dark+default": "--s2a-color-background-default",
-    "color:solid+on-light": "--s2a-color-content-knockout",
-    "color:solid+on-dark": "--s2a-color-content-default",
-    "opacity:disabled": "--s2a-opacity-disabled",
-    "border-radius": "--s2a-border-radius-round",
-    "border-width": "--s2a-border-width-sm"
+  "legacyPropMapping": {
+    "description": "v1's context prop is still accepted and mapped: context=on-dark with style=solid (or unset) → style=knockout. The context prop itself no longer exists — page theme comes from :root[data-theme].",
+    "removed": ["context"]
   },
+  "tokenBindings": {
+    "background:solid:default": "--s2a-color-icon-button-background-solid-default → fallback --s2a-color-background-inverse",
+    "background:solid:hover": "--s2a-color-icon-button-background-solid-hover → fallback --s2a-color-iconbutton-background-primary-solid-on-light-hover",
+    "background:solid:active": "--s2a-color-icon-button-background-solid-active → fallback --s2a-color-background-inverse",
+    "content:solid": "--s2a-color-icon-button-content-solid → fallback --s2a-color-iconbutton-content-primary-solid-default",
+    "border:solid": "--s2a-color-border-knockout at --s2a-border-width-sm (Figma binding)",
+    "background:transparent:*": "--s2a-color-icon-button-background-transparent-{default,hover,active} → fallback --s2a-color-iconbutton-background-primary-transparent-on-light-{default,hover,active}",
+    "content:transparent": "--s2a-color-icon-button-content-transparent → fallback --s2a-color-content-default",
+    "background:knockout:*": "--s2a-color-icon-button-background-knockout-{default,hover,active} → fallback --s2a-color-gray-{25,50,100} (theme-invariant by design)",
+    "content:knockout": "--s2a-color-icon-button-content-knockout → fallback --s2a-color-iconbutton-content-primary-solid-inverse",
+    "focus-ring": "--s2a-color-focus-ring-default; knockout uses --s2a-color-focus-ring-knockout"
+  },
+  "knownTokenGaps": [
+    "All v2 icon-button token names (s2a/color/icon-button/…, hyphenated) are bound in Figma but not yet in the shipped tokens release (shipped names use the old un-hyphenated 'iconbutton' path) — CSS chains each to a shipped var with identical light/dark resolution.",
+    "Sizes 24/32/40 map to primitives; sm 24px has no semantic spacing alias."
+  ],
   "a11y": {
     "role": "button",
     "requiredAriaAttrs": ["aria-label"],
-    "wcag": ["1.1.1", "1.4.3", "2.1.1", "2.4.7"],
-    "keyboard": [
-      { "key": "Enter", "action": "Activates the button" },
-      { "key": "Space", "action": "Activates the button" }
-    ],
+    "wcag": ["2.1.1", "2.4.7", "1.1.1", "2.5.8"],
     "notes": [
-      "aria-label is required — there is no visible text label.",
-      "Icon SVG content carries aria-hidden='true' — the button label comes only from aria-label."
+      "Icon-only — aria-label is mandatory; the icon span is aria-hidden.",
+      "sm (24px) meets WCAG 2.5.8 minimum target size exactly; avoid placing sm buttons flush against other targets."
     ]
   }
 }

@@ -1,0 +1,48 @@
+{
+  "name": "Radio",
+  "slug": "radio",
+  "cssClass": "c-radio",
+  "storybookId": "radio",
+  "description": "Single-choice selection control. 20×20 ring + 8px dot with label; label color promotes from content/subtle to content/default when selected. Sourced from Figma Radio (11586:206620), 8 variants (Selected × State).",
+  "variants": {
+    "selected": ["false", "true"],
+    "state": ["default", "hover", "focus", "disabled"]
+  },
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"Individuals\"", "description": "Visible label text (Figma TEXT prop Label)" },
+    { "name": "checked", "type": "boolean", "defaultValue": "false", "description": "Selected state (Figma: Selected)" },
+    { "name": "disabled", "type": "boolean", "defaultValue": "false", "description": "Disabled state (Figma: State=disabled)" },
+    { "name": "name", "type": "string", "defaultValue": "\"radio-group\"", "description": "Native radio group name" },
+    { "name": "value", "type": "string", "defaultValue": "undefined", "description": "Native form field value" }
+  ],
+  "tokenBindings": {
+    "border-color:ring": "--s2a-color-content-default",
+    "border-color:ring:disabled": "--s2a-color-content-subtle",
+    "background-color:dot": "--s2a-color-content-default",
+    "background-color:dot:disabled": "--s2a-color-content-subtle",
+    "background-color:halo:hover": "--s2a-color-background-subtle",
+    "box-shadow:focus": "--s2a-color-focus-ring-default",
+    "color:label:unselected": "--s2a-color-content-subtle",
+    "color:label:selected": "--s2a-color-content-default",
+    "gap:root": "--s2a-spacing-xs",
+    "font:label": "s2a/typography/label (--s2a-font-family-label et al.)"
+  },
+  "a11y": {
+    "role": "native <input type=\"radio\"> inside <label>",
+    "requiredAriaAttrs": [],
+    "wcag": ["1.3.1", "2.1.1", "2.4.7", "4.1.2"],
+    "notes": [
+      "Real radio inputs sharing a name attribute get native arrow-key group navigation.",
+      "Hover halo and focus ring reproduce the Figma [hover halo] / [focus ring] layers via CSS states.",
+      "Disabled dims ring/dot to content/subtle per Figma; label color mapping intentionally follows Selected, not disabled."
+    ]
+  },
+  "figma": {
+    "fileKey": "oXIFqtnrYNdTIjqb1sbJau",
+    "page": "   ↳ Radio",
+    "componentSets": {
+      "Radio": "11586:206620",
+      "_radio": "11586:206578"
+    }
+  }
+}

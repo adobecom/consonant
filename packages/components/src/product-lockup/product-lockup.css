@@ -1,8 +1,14 @@
+/**
+ * ProductLockup — v2 (Figma set 11272:217527)
+ * v2 replaces the v1 Context axis with a Style axis: label | eyebrow | knockout | inverse.
+ * Theme (light/dark) flows from variable modes on :root[data-theme] — no on-dark variant.
+ */
+
 .c-product-lockup {
   display: inline-flex;
   align-items: center;
   gap: var(--s2a-spacing-md, 16px);
-  color: var(--s2a-color-content-label, #000000);
+  color: var(--s2a-color-content-label);
   font-family: var(
     --s2a-font-family-default,
     "adobe-clean-display",
@@ -18,17 +24,32 @@
   gap: var(--s2a-spacing-sm, 12px);
 }
 
+/* ── Style axis — ink per Figma v2 bindings ──────────────────────────────── */
+
 .c-product-lockup[data-style="eyebrow"] {
-  color: var(--s2a-color-content-eyebrow, rgba(0, 0, 0, 0.64));
+  color: var(--s2a-color-content-eyebrow);
 }
 
-.c-product-lockup[data-context="on-dark"] {
-  color: var(--s2a-color-content-knockout, #ffffff);
+.c-product-lockup[data-style="knockout"] {
+  color: var(--s2a-color-content-knockout);
+}
+
+.c-product-lockup[data-style="inverse"] {
+  color: var(--s2a-color-content-inverse);
 }
 
 .c-product-lockup[data-width="fill"] {
   display: flex;
   width: 100%;
+}
+
+/* ── Icons (one or two AppIcons, gap 2 per Figma .icons frame) ───────────── */
+
+.c-product-lockup__icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
 }
 
 .c-product-lockup__icon {
@@ -55,7 +76,10 @@
   text-box: trim-both cap text;
 }
 
-.c-product-lockup[data-style="label"] .c-product-lockup__label {
+/* label / knockout / inverse styles share the label type ramp; eyebrow uses eyebrow ramp */
+.c-product-lockup[data-style="label"] .c-product-lockup__label,
+.c-product-lockup[data-style="knockout"] .c-product-lockup__label,
+.c-product-lockup[data-style="inverse"] .c-product-lockup__label {
   font-size: var(--s2a-font-size-sm, 14px);
   line-height: var(--s2a-font-line-height-2xs, 1.285714);
   letter-spacing: 0;

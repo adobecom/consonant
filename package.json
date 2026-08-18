@@ -27,8 +27,7 @@
     "predev": "node scripts/kill-dev-ports.js",
     "dev": "concurrently -n \"storybook,tokens\" -c \"blue,green\" \"npm run storybook\" \"npm run tokens:watch\"",
     "icons:fetch": "node scripts/fetch-spectrum-icons.js",
-    "prototype-server": "node apps/s2a-toolkit/server/prototype-server.js",
-    "token-release": "node --env-file=.env apps/s2a-toolkit/server/token-release-server.js"
+    "prototype-server": "node apps/s2a-toolkit/server/prototype-server.js"
   },
   "keywords": [],
   "author": "",

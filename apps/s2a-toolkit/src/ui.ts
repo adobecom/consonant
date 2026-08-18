@@ -970,6 +970,12 @@ window.addEventListener('message', (event) => {
       setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? 's' : ''}` : 'Nothing to clear', 'ok');
       break;
     }
+    case 'gh-token:value': {
+      ghToken = (msg.token as string) || null;
+      syncTokenReleaseAuthUi();
+      break;
+    }
+
     case 'doc:result': {
       const btn = document.getElementById('docGenerateBtn') as HTMLButtonElement;
       btn.disabled = !docSetId; btn.textContent = 'Generate component doc';
@@ -985,12 +991,17 @@ window.addEventListener('message', (event) => {
 });
 
 // ── Token release ────────────────────────────────────────────────────────────
-// Runs the full sync → build → bump → changelog → package → manifest → PR
-// pipeline against the MAIN Figma file via the local token-release-server (9401).
-// See apps/s2a-toolkit/server/token-release-server.js and
-// .codex/skills/token-release.skill.md for the pipeline this mirrors.
+// Dispatches .github/workflows/token-release.yml on GitHub Actions DIRECTLY via
+// the GitHub REST API — no local server. Auth is a fine-grained PAT the user
+// pastes once, persisted in figma.clientStorage (main thread) — never written
+// to the Figma file. The workflow does all real work (sync → build → PR).
+
+const GH_REPO = 'adobecom/consonant';
+const GH_WORKFLOW = 'token-release.yml';
+const GH_API = `https://api.github.com/repos/${GH_REPO}`;
 
 let tokenReleaseBump: 'patch' | 'minor' | 'major' = 'patch';
+let ghToken: string | null = null;
 
 document.querySelectorAll<HTMLButtonElement>('#tokenReleaseBump .chip').forEach(chip => {
   chip.addEventListener('click', () => {
@@ -1006,38 +1017,95 @@ function setTokenReleaseStatus(msg: string, type: '' | 'ok' | 'err' = '') {
   el.className = 'status' + (type ? ' ' + type : '');
 }
 
-async function pollTokenReleaseJob(jobId: string) {
-  for (;;) {
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    const res = await fetch(`http://localhost:9401/jobs/${encodeURIComponent(jobId)}`);
-    if (!res.ok) throw new Error(`Job status failed (${res.status})`);
-    const job = await res.json();
-    if (job.phase) setTokenReleaseStatus(job.phase);
-    if (job.status === 'done') return job;
-    if (job.status === 'error') throw new Error(job.error || 'Token release failed');
-  }
+function syncTokenReleaseAuthUi() {
+  const setup = document.getElementById('ghTokenSetup') as HTMLElement;
+  const release = document.getElementById('tokenReleaseControls') as HTMLElement;
+  const hasToken = Boolean(ghToken);
+  setup.style.display = hasToken ? 'none' : 'block';
+  release.style.display = hasToken ? 'block' : 'none';
+}
+
+document.getElementById('ghTokenSaveBtn')?.addEventListener('click', () => {
+  const input = document.getElementById('ghTokenInput') as HTMLInputElement;
+  const value = input.value.trim();
+  if (!value) return;
+  ghToken = value;
+  input.value = '';
+  postToPlugin('gh-token:set', { token: value });
+  syncTokenReleaseAuthUi();
+  setTokenReleaseStatus('Token saved to Figma client storage.', 'ok');
+});
+
+document.getElementById('ghTokenClearBtn')?.addEventListener('click', () => {
+  ghToken = null;
+  postToPlugin('gh-token:set', { token: '' });
+  syncTokenReleaseAuthUi();
+  setTokenReleaseStatus('Token cleared.');
+});
+
+function ghHeaders(): Record<string, string> {
+  return {
+    Authorization: `Bearer ${ghToken}`,
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+}
+
+async function ghJson(path: string) {
+  const res = await fetch(`${GH_API}${path}`, { headers: ghHeaders() });
+  if (!res.ok) throw new Error(`GitHub API ${res.status} on ${path}`);
+  return res.json();
 }
 
 document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () => {
+  if (!ghToken) return;
   const btn = document.getElementById('tokenReleaseBtn') as HTMLButtonElement;
   btn.disabled = true;
   btn.textContent = 'Releasing…';
-  setTokenReleaseStatus('Starting release pipeline…');
+  const dispatchedAt = Date.now();
 
   try {
-    const res = await fetch('http://localhost:9401/tokens/release', {
+    setTokenReleaseStatus('Dispatching GitHub Actions workflow…');
+    const res = await fetch(`${GH_API}/actions/workflows/${GH_WORKFLOW}/dispatches`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ bump: tokenReleaseBump }),
+      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: 'main', inputs: { bump: tokenReleaseBump } }),
     });
-    if (!res.ok) throw new Error(`Server returned ${res.status} — is the token-release trigger running? (npm run token-release)`);
-    const { jobId } = await res.json();
+    if (res.status === 401 || res.status === 403) {
+      throw new Error(`GitHub rejected the token (${res.status}). It needs Actions read/write on ${GH_REPO} — and for an org repo, SSO/org authorization. Clear and re-save a valid token.`);
+    }
+    if (res.status !== 204) throw new Error(`Dispatch failed (${res.status}).`);
 
-    const job = await pollTokenReleaseJob(jobId);
-    const r = job.result as { runUrl: string; prUrl: string | null; prTitle: string | null };
-    const runLink = `<a href="${r.runUrl}" target="_blank">Actions run →</a>`;
-    if (r.prUrl) {
-      setTokenReleaseStatus(`✓ ${r.prTitle} · <a href="${r.prUrl}" target="_blank">Review PR →</a> · ${runLink}`, 'ok');
+    setTokenReleaseStatus('Dispatched — waiting for the run to start…');
+    let run: { id: number; status: string; conclusion: string | null; html_url: string } | null = null;
+    for (let i = 0; i < 15 && !run; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const data = await ghJson(`/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`);
+      run = (data.workflow_runs || []).find(
+        (r: { created_at: string }) => new Date(r.created_at).getTime() >= dispatchedAt - 5000,
+      ) ?? null;
+    }
+    if (!run) throw new Error('Dispatched, but no run appeared within 30s — check the Actions tab.');
+
+    const runLink = `<a href="${run.html_url}" target="_blank">Actions run →</a>`;
+    setTokenReleaseStatus(`Running in GitHub Actions… ${runLink}`);
+    for (;;) {
+      await new Promise(r => setTimeout(r, 4000));
+      const current = await ghJson(`/actions/runs/${run.id}`);
+      if (current.status === 'completed') { run = current; break; }
+    }
+
+    if (run!.conclusion !== 'success') {
+      throw new Error(`Workflow run ${run!.conclusion} — see ${run!.html_url}`);
+    }
+
+    setTokenReleaseStatus(`Run succeeded — looking for the release PR… ${runLink}`);
+    const prs = await ghJson('/pulls?state=open&sort=created&direction=desc&per_page=10');
+    const pr = (prs as Array<{ title: string; html_url: string; created_at: string }>).find(
+      p => p.title.startsWith('release(tokens):') && new Date(p.created_at).getTime() >= dispatchedAt - 5000,
+    );
+    if (pr) {
+      setTokenReleaseStatus(`✓ ${pr.title} · <a href="${pr.html_url}" target="_blank">Review PR →</a> · ${runLink}`, 'ok');
     } else {
       setTokenReleaseStatus(`Run succeeded, no PR opened — likely nothing to release (Figma unchanged since last sync). ${runLink}`, 'ok');
     }
@@ -1052,6 +1120,7 @@ document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () =
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 postToPlugin('ui-ready');
+postToPlugin('gh-token:get');
 postToPlugin('resize-for-view', { width: 320, height: 460 });
 
 renderHomeView();

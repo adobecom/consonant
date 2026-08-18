@@ -398,6 +398,21 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       notifySelection();
       break;
 
+    // GitHub PAT for the Token Release feature — persisted in clientStorage
+    // (local to this user's Figma install; never written into the document).
+    case 'gh-token:get': {
+      const token = (await figma.clientStorage.getAsync('gh-token')) ?? '';
+      figma.ui.postMessage({ type: 'gh-token:value', token });
+      break;
+    }
+
+    case 'gh-token:set': {
+      const token = (msg.token as string) || '';
+      if (token) await figma.clientStorage.setAsync('gh-token', token);
+      else await figma.clientStorage.deleteAsync('gh-token');
+      break;
+    }
+
     case 'select:apply-filter': {
       const setNode = await figma.getNodeByIdAsync(msg.setId as string);
       if (!setNode || setNode.type !== 'COMPONENT_SET') {
