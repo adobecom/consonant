@@ -11,7 +11,7 @@ const darkSurface = (content) => html`
 `;
 
 export default {
-  title: 'Atoms/PromoCta',
+  title: "Molecules/PromoCta",
   tags: ['autodocs'],
   render: (args) => darkSurface(PromoCta(args)),
   parameters: {
@@ -20,13 +20,13 @@ export default {
     docs: {
       description: {
         component: `
-Compact promotional pill for hero and marquee zones. Pairs an app icon, a label, and a directional caret on a knockout-black surface. Dark context only — an on-light variant is tracked for a future sprint.
+**v2** — matches Figma "PromoCTA — v2" (arrow button is its own sub-component set). Compact promotional pill for hero and marquee zones: app icon, label, and a 32px arrow button on a knockout-black surface (theme-invariant by design). Colors bind the \`s2a/color/promo-cta/*\` token family, fallback-chained to shipped equivalents until it lands in a tokens release.
 
 **Props:**
-- \`size\` — \`xl\` (48px caret, default) · \`lg\` (32px caret)
+- \`size\` — \`lg\` only in v2 (the v1 \`xl\` maps to \`lg\`)
 - \`width\` — \`hug\` (wraps content) · \`fill\` (stretches to parent)
 - \`showApp\` — toggles the app icon slot
-- \`showIcon\` — toggles the caret control
+- \`showIconEnd\` — toggles the arrow button
 - \`app\` — any slug from the AppIcon library (e.g. \`creative-cloud\`, \`photoshop\`)
 
 **Accessibility note:** A visible focus ring is present via \`:focus-visible\`. A dedicated Focused state matching WCAG 2.2 SC 2.4.11 (Focus Appearance) is tracked for a follow-up sprint.
@@ -34,10 +34,10 @@ Compact promotional pill for hero and marquee zones. Pairs an app icon, a label,
       },
       source: {
         language: 'html',
-        code: `<button class="c-promo-cta" data-size="xl" data-state="default" data-width="hug" data-show-app="true" data-show-icon="true" type="button">
+        code: `<button class="c-promo-cta" data-size="lg" data-state="default" data-width="hug" data-show-app="true" data-show-icon-end="true" type="button">
   <span class="c-promo-cta__left">
     <span class="c-promo-cta__app-icon">
-      <img src="https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg" alt="Adobe Creative Cloud" width="24" height="24" style="border-radius:18%;display:block;" decoding="async" draggable="false" />
+      <img src="https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg" alt="Adobe Creative Cloud" width="32" height="32" style="border-radius:18%;display:block;" decoding="async" draggable="false" />
     </span>
     <span class="c-promo-cta__label-wrapper">
       <span class="c-promo-cta__label">Learn more</span>
@@ -54,9 +54,8 @@ Compact promotional pill for hero and marquee zones. Pairs an app icon, a label,
   },
   argTypes: {
     size: {
-      control: { type: 'inline-radio' },
-      options: ['xl', 'lg'],
-      description: 'xl → 48px caret · lg → 32px caret',
+      control: false,
+      description: 'v2 is lg-only (32px arrow button)',
     },
     state: {
       control: { type: 'inline-radio' },
@@ -76,9 +75,9 @@ Compact promotional pill for hero and marquee zones. Pairs an app icon, a label,
       control: 'boolean',
       description: 'Show / hide the app icon slot',
     },
-    showIcon: {
+    showIconEnd: {
       control: 'boolean',
-      description: 'Show / hide the caret control',
+      description: 'Show / hide the arrow button',
     },
     app: {
       control: { type: 'select' },
@@ -87,12 +86,12 @@ Compact promotional pill for hero and marquee zones. Pairs an app icon, a label,
     },
   },
   args: {
-    size: 'xl',
+    size: 'lg',
     state: 'default',
     width: 'hug',
     label: 'Learn more',
     showApp: true,
-    showIcon: true,
+    showIconEnd: true,
     app: 'creative-cloud',
   },
 };
@@ -100,11 +99,6 @@ Compact promotional pill for hero and marquee zones. Pairs an app icon, a label,
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
 export const Default = {};
-
-export const SizeLg = {
-  name: 'Size · lg',
-  args: { size: 'lg' },
-};
 
 export const StateHover = {
   name: 'State · hover',
@@ -121,14 +115,14 @@ export const NoAppIcon = {
   args: { showApp: false },
 };
 
-export const NoIcon = {
-  name: 'No caret',
-  args: { showIcon: false },
+export const NoIconEnd = {
+  name: 'No arrow button',
+  args: { showIconEnd: false },
 };
 
 export const LabelOnly = {
   name: 'Label only',
-  args: { showApp: false, showIcon: false },
+  args: { showApp: false, showIconEnd: false },
 };
 
 export const FillWidth = {

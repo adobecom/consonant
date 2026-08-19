@@ -9,7 +9,7 @@ const IMG_CARD_2 = "https://images.unsplash.com/photo-1601342630314-8427c38bf5e6
 const IMG_CARD_3 = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=488&q=80";
 
 export default {
-  title: "Molecules/MediaCard",
+  title: "Cards/MediaCard",
   tags: ["autodocs"],
   render: (args) => html`
     <div style="max-width: 488px; padding: 24px;">

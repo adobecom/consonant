@@ -36,7 +36,7 @@ const SAMPLE_SLIDES = [
 ];
 
 export default {
-  title: "Organisms/QuoteCard",
+  title: "Cards/QuoteCard",
   tags: ["autodocs"],
   render: (args) => QuoteCard(args),
   parameters: {
@@ -61,7 +61,7 @@ export default {
       <span class="qc-attribution__role">Creator</span>
     </div>
     <div class="qc-actions">
-      <a class="c-button" data-background="solid" data-context="on-dark" data-size="md" href="#">Learn more</a>
+      <a class="c-button" data-style="knockout" data-size="md" href="#">Learn more</a>
     </div>
   </div>
 </div>`,

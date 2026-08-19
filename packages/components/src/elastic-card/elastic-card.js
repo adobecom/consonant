@@ -7,6 +7,7 @@ import chevronRightSvg from "../icons/chevron-right.svg?raw";
 import arrowRightSvg from "../icons/arrow-right.svg?raw";
 
 const VALID_STATES = new Set(["resting", "expanded", "mobile"]);
+const VALID_TYPES = new Set(["standard", "featured"]);
 const MEDIA_ASPECTS = new Set(["3:4", "4:3", "16:9", "1:1"]);
 
 const ElasticCardCaret = () => unsafeHTML(chevronRightSvg);
@@ -26,15 +27,30 @@ const resolveTag = (tag, href, onClick) => {
 
 const normalize = (value, allowed, fallback) => (allowed.has(value) ? value : fallback);
 
+/**
+ * ElasticCard — v2 (Figma component set 11280:224039, "↳ ElasticCard" page).
+ *
+ * Axes: State (resting | expanded | mobile) × Type (standard | featured).
+ *   - standard: header carries a ProductLockup (app icon + label + chevron)
+ *   - featured: header carries a heading (s2a heading-6 ramp) instead
+ *
+ * Theming: v2 has no Context axis. Dark surfaces come from inverse tokens
+ * (background/inverse, content/inverse), which resolve per the active
+ * variable mode (:root[data-theme]) — never from an on-dark prop.
+ */
 export const ElasticCard = ({
-  /* Content */
+  /* Variants */
+  state = "resting",
+  type = "standard",
+  /* Content — standard header */
   label = "Creativity and design",
   app = "experience-cloud",
   product = {},
+  /* Content — featured header */
+  heading,
+  /* Content — footer */
   title = "Card title",
   body = "Card description goes here and can wrap to multiple lines.",
-  /* State */
-  state = "resting",
   /* Media */
   mediaSrc,
   mediaAlt = "",
@@ -55,23 +71,35 @@ export const ElasticCard = ({
   tag,
 } = {}) => {
   const normalizedState = normalize(state, VALID_STATES, "resting");
+  const normalizedType = normalize(type, VALID_TYPES, "standard");
   const normalizedAspect = normalize(mediaAspect, MEDIA_ASPECTS, "3:4");
   const elementTag = resolveTag(tag, href, onClick);
 
-  /* ProductLockup — on-light for resting, on-dark for expanded/mobile */
-  const lockupContext = normalizedState === "resting" ? "on-light" : "on-dark";
+  /* Standard header — ProductLockup. v2: no context prop; the card's dark
+     states recolor the lockup label via CSS (content/inverse). */
   const lockupProps = {
     width: normalizedState === "resting" ? (product.width ?? "hug") : "fill",
     showIconEnd: product.showIconEnd ?? false,
-    context: product.context ?? lockupContext,
     orientation: product.orientation ?? "horizontal",
     styleVariant: product.styleVariant ?? product.style ?? "label",
     ...product,
     label: product.label ?? label,
     app: product.app ?? app,
   };
+  delete lockupProps.context;
 
-  /* Header action — caret (resting) or CTA puck (mobile); none for expanded */
+  /* Featured header — heading text (falls back to label for convenience) */
+  const headingText = heading ?? label;
+
+  const headerContent =
+    normalizedType === "featured"
+      ? html`<p class="c-elastic-card__heading">${headingText}</p>`
+      : ProductLockup(lockupProps);
+
+  /* Header action — caret (resting) or CTA puck (mobile); none for expanded.
+     Note: Figma's mobile/featured variant embeds a deprecated ControlButton — v1
+     instance in the footer; code keeps the header puck for both types instead
+     (documented in elastic-card.spec.json deviations). */
   const hasCustomAction = actionTemplate !== undefined && actionTemplate !== null;
   const caretVisible = showCaret ?? false;
 
@@ -85,7 +113,7 @@ export const ElasticCard = ({
           </span>`
         : nothing;
 
-  /* Body action — CTA puck in body for resting (hover) + expanded; not mobile (puck is in header) */
+  /* Footer action — CTA puck for resting (hover reveal) + expanded; not mobile */
   const bodyAction = hasCustomAction
     ? nothing
     : normalizedState === "mobile"
@@ -110,7 +138,7 @@ export const ElasticCard = ({
       mediaTemplate: fallbackMedia,
     });
 
-  /* Body content — eyebrow (title) + body text */
+  /* Footer content — card-title (eyebrow ramp) + body-text (body-md ramp) */
   const bodyContent = bodyTemplate ?? html`
     <p class="c-elastic-card__title">${title}</p>
     ${body ? html`<p class="c-elastic-card__body-text">${body}</p>` : nothing}
@@ -119,7 +147,7 @@ export const ElasticCard = ({
 
   const cardContent = html`
     <div class="c-elastic-card__header">
-      ${ProductLockup(lockupProps)}
+      ${headerContent}
       ${headerAction}
     </div>
     <div class="c-elastic-card__media">${mediaNode}</div>
@@ -131,17 +159,12 @@ export const ElasticCard = ({
     </div>
   `;
 
-  const attrs = {
-    class: "c-elastic-card",
-    "data-state": normalizedState,
-    "data-media-aspect": normalizedAspect,
-  };
-
   if (elementTag === "a") {
     return html`
       <a
         class="c-elastic-card"
         data-state=${normalizedState}
+        data-type=${normalizedType}
         data-media-aspect=${normalizedAspect}
         href=${href ?? nothing}
         aria-label=${ariaLabel ?? nothing}
@@ -155,6 +178,7 @@ export const ElasticCard = ({
       <button
         class="c-elastic-card"
         data-state=${normalizedState}
+        data-type=${normalizedType}
         data-media-aspect=${normalizedAspect}
         aria-label=${ariaLabel ?? nothing}
         @click=${onClick ?? nothing}
@@ -167,6 +191,7 @@ export const ElasticCard = ({
     <article
       class="c-elastic-card"
       data-state=${normalizedState}
+      data-type=${normalizedType}
       data-media-aspect=${normalizedAspect}
       aria-label=${ariaLabel ?? nothing}
       @click=${onClick ?? nothing}

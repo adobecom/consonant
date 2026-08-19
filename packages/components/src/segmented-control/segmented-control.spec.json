@@ -1,0 +1,46 @@
+{
+  "name": "SegmentedControl",
+  "slug": "segmented-control",
+  "cssClass": "c-segmented-control",
+  "storybookId": "segmented-control",
+  "description": "Pill switcher on a transparent-black-04 wash; the active segment is a fully-rounded knockout-black pill inset 4px with a white label. Figma ships a fixed 3-up; code generalizes to any segment count.",
+  "figma": {
+    "componentSets": ["SegmentItem (10104:100998)", "SegmentedControl/3-up (10104:101023)"],
+    "page": "↳ SegmentedControl (10152:54495)"
+  },
+  "variants": {
+    "state": ["default", "active"]
+  },
+  "props": [
+    { "name": "segments", "type": "string[]", "defaultValue": "[\"Individuals\", \"Businesses\", \"AI Pro\"]", "description": "Segment labels (Figma Seg 1/2/3 text props, generalized)" },
+    { "name": "selected", "type": "number", "defaultValue": "0", "description": "Index of the active segment (Figma Selected=1|2|3, 0-based here)" },
+    { "name": "ariaLabel", "type": "string", "defaultValue": "\"Audience\"", "description": "Accessible name for the tablist" }
+  ],
+  "tokenBindings": {
+    "background-color:container": "--s2a-color-transparent-black-04",
+    "border-radius:container": "--s2a-border-radius-md",
+    "height:item": "--s2a-spacing-2xl",
+    "padding-inline:cta": "--s2a-spacing-20 (primitive — Figma uses raw 20px, no semantic rung exists at 20)",
+    "padding-block:active-item": "--s2a-spacing-3xs",
+    "border-radius:active-pill": "--s2a-border-radius-round",
+    "background-color:active-pill": "--s2a-color-background-knockout",
+    "color:label:default": "--s2a-color-transparent-black-64",
+    "color:label:active": "--s2a-color-content-knockout",
+    "font:label": "--s2a-typography-*-label + --s2a-font-family-label",
+    "box-shadow:focus-ring": "--s2a-color-focus-ring-default"
+  },
+  "a11y": {
+    "role": "tablist / tab",
+    "requiredAriaAttrs": ["aria-selected", "aria-label (on container)"],
+    "wcag": ["1.4.1", "2.1.1", "2.4.7", "4.1.2"],
+    "notes": [
+      "Modeled as a tablist (content switcher: Individuals/Businesses/AI Pro switches displayed content) rather than a radiogroup — Figma has no form-input affordance and usage context is view switching. Swap to radiogroup semantics if used to capture a form value.",
+      "Active state is signaled by the pill shape + inversion, not color alone (1.4.1).",
+      "Roving tabindex: active segment tabbable, others -1; arrow-key navigation must be wired by the consumer (pure HTML/CSS package).",
+      "Figma defines no hover/focus/disabled variants; hover darkens inactive labels and focus uses the standard --s2a-color-focus-ring-default ring as sensible defaults."
+    ]
+  },
+  "knownGaps": [
+    "Item inline padding is 20px in Figma with no bound token and no semantic rung at 20 — uses primitive --s2a-spacing-20 with a 20px fallback."
+  ]
+}

@@ -15,7 +15,7 @@ clicking it jumps to that slide and the progress bar at the bottom fills over 5 
 indicate autoplay timing.
 
 **Data attributes:**
-- \`data-orientation="block"\` — 220×68px vertical layout, 24px icon (desktop default)
+- \`data-orientation="block"\` — 220×68px vertical layout, 18px icon (desktop default)
 - \`data-orientation="inline"\` — 192×48px horizontal layout, 18px icon (compact)
 - \`data-state="default"\` — dark glass background, progress bar hidden
 - \`data-state="active"\` — white background, progress bar visible and animating
@@ -25,7 +25,7 @@ indicate autoplay timing.
         language: "html",
         code: `<!-- Block orientation (desktop default) -->
 <button class="c-router-nav-item" data-orientation="block" data-state="default" type="button" aria-pressed="false">
-  <div class="c-product-lockup" data-orientation="vertical" data-context="on-dark" data-width="fill">…</div>
+  <div class="c-product-lockup" data-orientation="vertical" data-style="knockout" data-width="fill">…</div>
   <span class="c-router-nav-item__progress" aria-hidden="true">
     <span class="c-router-nav-item__progress-fill"></span>
   </span>

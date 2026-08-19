@@ -1,0 +1,41 @@
+{
+  "name": "Surface",
+  "slug": "surface",
+  "cssClass": "c-surface",
+  "storybookId": "surface",
+  "description": "Themed container atom providing the default background, radius, and padding for slotted content. Because every color is a semantic token, the surface re-themes automatically under a dark variable mode.",
+  "figmaNode": "10559:113877",
+  "variants": {
+    "border": ["true", "false"]
+  },
+  "props": [
+    {
+      "name": "border",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Show the 1px subtle border around the surface (Figma variant default: true)."
+    },
+    {
+      "name": "content",
+      "type": "TemplateResult | string",
+      "defaultValue": "nothing",
+      "description": "Slotted content rendered inside the surface (Figma .content SLOT)."
+    }
+  ],
+  "tokenBindings": {
+    "background-color": "--s2a-color-background-default",
+    "border-color": "--s2a-color-border-subtle",
+    "border-radius": "--s2a-border-radius-xs",
+    "padding-block": "--s2a-spacing-md",
+    "padding-inline": "--s2a-spacing-sm"
+  },
+  "a11y": {
+    "role": null,
+    "requiredAriaAttrs": [],
+    "wcag": ["1.4.3"],
+    "notes": [
+      "Purely presentational container — no implicit role. Landmark/heading semantics belong to the slotted content.",
+      "Token-bound background/content pairings keep text contrast AA in both light and dark modes."
+    ]
+  }
+}

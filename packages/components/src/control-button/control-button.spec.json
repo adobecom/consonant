@@ -1,0 +1,53 @@
+{
+  "name": "ControlButton",
+  "slug": "control-button",
+  "cssClass": "c-control-button",
+  "storybookId": "control-button",
+  "description": "Icon-only media-overlay control (play/pause, next, close). v2 architecture: a single `media` style whose scrim background reads on any surface — the v1 Context and background axes were removed; page theming flows from variable modes, not props.",
+  "figma": {
+    "componentSet": "ControlButton — v2",
+    "nodeId": "11180:181592",
+    "page": "   ↳ ControlButton"
+  },
+  "variants": {
+    "style": ["media"],
+    "size": ["md", "xl"],
+    "state": ["default", "hover", "active", "disabled", "focus"]
+  },
+  "props": [
+    { "name": "icon", "type": "TemplateResult", "description": "16×16 icon slot content (Figma: Icon INSTANCE_SWAP)" },
+    { "name": "label", "type": "string", "defaultValue": "\"\"", "description": "Accessible name — rendered as aria-label; the button is icon-only" },
+    { "name": "size", "type": "string", "defaultValue": "\"md\"", "enum": ["md", "xl"], "description": "md = 32px, xl = 48px square" },
+    { "name": "disabled", "type": "boolean", "defaultValue": "false" },
+    { "name": "forceState", "type": "string", "enum": ["hover", "active", "focus"], "description": "Docs-only state pinning via data-force-state (mirrors Button convention)" },
+    { "name": "onClick", "type": "Function" }
+  ],
+  "tokenBindings": {
+    "background:default": "--s2a-color-control-button-background-media-default → --s2a-color-transparent-black-64",
+    "background:hover": "--s2a-color-control-button-background-media-hover → --s2a-color-transparent-black-80",
+    "background:active": "--s2a-color-control-button-background-media-active → --s2a-color-transparent-black-96",
+    "background:disabled": "--s2a-color-control-button-background-media-disabled → --s2a-color-transparent-black-32",
+    "border": "--s2a-color-control-button-border-media → --s2a-color-transparent-white-24",
+    "icon:default": "--s2a-color-content-knockout",
+    "icon:disabled": "--s2a-color-transparent-white-48",
+    "focus-ring": "--s2a-color-focus-ring-default",
+    "radius": "--s2a-border-radius-6",
+    "border-width": "--s2a-border-width-sm",
+    "backdrop-blur": "--s2a-blur-8"
+  },
+  "knownTokenGaps": [
+    "--s2a-color-control-button-* component tokens are bound in Figma (collection S2A/Semantic/Color/Theme) but not yet emitted by the shipped tokens release — CSS chains each to the shipped primitive it resolves to today. Remove the fallback chains when they ship.",
+    "Sizes (32/48) and the 16px icon rig use spacing tokens of identical value (--s2a-spacing-xl/-3xl/-md); Figma binds no dimension variables on the variant frames themselves."
+  ],
+  "a11y": {
+    "role": "button",
+    "requiredAriaAttrs": ["aria-label"],
+    "wcag": ["1.1.1", "2.1.1", "2.4.7", "2.5.8"],
+    "notes": [
+      "Icon-only control: `label` is mandatory in practice — it becomes aria-label (WCAG 1.1.1 / 4.1.2).",
+      "Focus state renders a 1px focus-ring/default outline at the button bounds, matching the v2 Figma Focus Ring layer (2.4.7).",
+      "md size is 32×32 — meets WCAG 2.5.8 minimum target size (24px); xl comfortably exceeds it.",
+      "Figma's focus variant stroke alignment was assumed outline-at-bounds (outline-offset: 0)."
+    ]
+  }
+}

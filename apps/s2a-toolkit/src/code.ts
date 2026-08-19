@@ -242,16 +242,6 @@ function serializeNodeForProto(node: SceneNode, depth = 0): Record<string, unkno
   return base;
 }
 
-function bytesToBase64(bytes: Uint8Array): string {
-  let bin = '';
-  const chunkSize = 8192;
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    const chunk = bytes.subarray(i, Math.min(i + chunkSize, bytes.length));
-    bin += String.fromCharCode.apply(null, Array.from(chunk));
-  }
-  return btoa(bin);
-}
-
 // ── Component doc generator helpers ────────────────────────────────────────────────
 
 function parseVariantProps(name: string): Record<string, string> {
@@ -398,6 +388,21 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       notifySelection();
       break;
 
+    // GitHub PAT for the Token Release feature — persisted in clientStorage
+    // (local to this user's Figma install; never written into the document).
+    case 'gh-token:get': {
+      const token = (await figma.clientStorage.getAsync('gh-token')) ?? '';
+      figma.ui.postMessage({ type: 'gh-token:value', token });
+      break;
+    }
+
+    case 'gh-token:set': {
+      const token = (msg.token as string) || '';
+      if (token) await figma.clientStorage.setAsync('gh-token', token);
+      else await figma.clientStorage.deleteAsync('gh-token');
+      break;
+    }
+
     case 'select:apply-filter': {
       const setNode = await figma.getNodeByIdAsync(msg.setId as string);
       if (!setNode || setNode.type !== 'COMPONENT_SET') {
@@ -469,43 +474,6 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       break;
     }
 
-    case 'llm-capture:selection': {
-      const node = figma.currentPage.selection[0];
-      if (!node) {
-        figma.ui.postMessage({ type: 'llm-capture:result', error: 'Select a frame, section, component, or instance first' });
-        break;
-      }
-      if (!('exportAsync' in node)) {
-        figma.ui.postMessage({ type: 'llm-capture:result', error: `${node.type} cannot be exported as an image` });
-        break;
-      }
-
-      try {
-        const maxDimension = Math.max(256, Math.min((msg.maxDimension as number) || 2048, 4096));
-        const width = 'width' in node ? (node as any).width : maxDimension;
-        const height = 'height' in node ? (node as any).height : maxDimension;
-        const scale = Math.min(1, maxDimension / Math.max(width, height));
-        const bytes = await (node as any).exportAsync({
-          format: 'JPG',
-          constraint: { type: 'SCALE', value: scale },
-        });
-        const capture = {
-          imageBase64: bytesToBase64(bytes),
-          mediaType: 'image/jpeg',
-          scale,
-          maxDimension,
-          byteLength: bytes.length,
-          node: serializeNodeForProto(node),
-          fileKey: figma.fileKey || null,
-          fileName: figma.root.name,
-          page: { id: figma.currentPage.id, name: figma.currentPage.name },
-        };
-        figma.ui.postMessage({ type: 'llm-capture:result', capture });
-      } catch (e: any) {
-        figma.ui.postMessage({ type: 'llm-capture:result', error: e.message || String(e) });
-      }
-      break;
-    }
 
     case 'annotate:apply': {
       const categories = new Set((msg.categories as string[]) ?? []);

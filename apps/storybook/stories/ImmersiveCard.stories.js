@@ -14,7 +14,7 @@ const wrap = (width, content) => html`
 `;
 
 export default {
-  title: 'Molecules/ImmersiveCard',
+  title: "Cards/ImmersiveCard",
   tags: ['autodocs'],
   render: (args) => {
     const [{ playing }, updateArgs] = useArgs();

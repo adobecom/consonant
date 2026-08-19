@@ -64,7 +64,6 @@ function recentlyUsed(n = 5): Feature[] {
 // ── State vars (declared early so FEATURES closures can reference them) ───────
 
 let annotateNodeId: string | null = null;
-let llmCaptureNodeId: string | null = null;
 let selectSetId:    string | null = null;
 let docSetId:     string | null = null;
 let bridgeConnected      = false;
@@ -134,13 +133,6 @@ const FEATURES: Feature[] = [
     uiAction: () => (document.getElementById('copyNodeBtn') as HTMLButtonElement)?.click(),
   },
   {
-    id: 'tools:llm-capture',
-    name: 'Send screenshot to LLM',
-    description: 'Capture the selected node and send image + metadata to the local LLM bridge',
-    category: 'Tools',
-    uiAction: () => switchPanel('tools'),
-  },
-  {
     id: 'tools:format-section',
     name: 'Format section',
     description: 'Reflow the selected section with consistent spacing',
@@ -196,7 +188,6 @@ const FEATURES: Feature[] = [
 ];
 
 const QUICK_ACTION_IDS = [
-  'tools:llm-capture',
   'tools:copy-link',
   'tools:annotate',
   'tools:select-filter',
@@ -371,11 +362,45 @@ document.getElementById('paletteHintBtn')?.addEventListener('click', () => openP
 const app = document.getElementById('app') as HTMLElement;
 const toggleMiniBtn = document.getElementById('toggleMiniBtn') as HTMLButtonElement;
 
+// Current full-view size — the single source of truth so a drag-resize persists
+// across the minimize toggle and re-expands to whatever the user last set.
+const MIN_W = 300, MIN_H = 360, MAX_W = 1400, MAX_H = 1400;
+const winSize = { width: 320, height: 460 };
+
+function applySize() {
+  postToPlugin('resize-for-view', { width: winSize.width, height: isMini ? 40 : winSize.height });
+}
+
 toggleMiniBtn.addEventListener('click', () => {
   isMini = !isMini;
   app.classList.toggle('mini', isMini);
-  postToPlugin('resize-for-view', { width: 320, height: isMini ? 40 : 460 });
+  applySize();
   if (isMini && popoverOpen) closePopover();
+});
+
+// ── Drag-to-resize (bottom-right grip) ─────────────────────────────────────────
+
+const resizeGrip = document.getElementById('resizeGrip') as HTMLElement;
+
+resizeGrip?.addEventListener('pointerdown', (e: PointerEvent) => {
+  if (isMini) return;
+  e.preventDefault();
+  resizeGrip.setPointerCapture(e.pointerId);
+
+  const onMove = (ev: PointerEvent) => {
+    // The grip sits at the window's bottom-right, so the pointer's client
+    // coordinates are the new width/height. +4 keeps the cursor over the grip.
+    winSize.width = Math.max(MIN_W, Math.min(MAX_W, Math.round(ev.clientX + 4)));
+    winSize.height = Math.max(MIN_H, Math.min(MAX_H, Math.round(ev.clientY + 4)));
+    applySize();
+  };
+  const onUp = (ev: PointerEvent) => {
+    resizeGrip.releasePointerCapture(ev.pointerId);
+    resizeGrip.removeEventListener('pointermove', onMove);
+    resizeGrip.removeEventListener('pointerup', onUp);
+  };
+  resizeGrip.addEventListener('pointermove', onMove);
+  resizeGrip.addEventListener('pointerup', onUp);
 });
 
 // ── Copy frame link ───────────────────────────────────────────────────────────
@@ -452,54 +477,6 @@ copyNodeBtn.addEventListener('click', () => {
   postToPlugin('notify', { message: msg });
 });
 
-// ── LLM capture ──────────────────────────────────────────────────────────────
-
-function setLlmCaptureStatus(msg: string, type: '' | 'ok' | 'err' = '') {
-  const el = document.getElementById('llmCaptureStatus') as HTMLElement;
-  el.textContent = msg;
-  el.className = 'status' + (type ? ' ' + type : '');
-}
-
-function updateLlmCaptureSelection(sel: { id: string; name: string; nodeType: string } | null) {
-  llmCaptureNodeId = sel?.id ?? null;
-  const emptyEl = document.getElementById('llmCaptureSelectionEmpty') as HTMLElement;
-  const infoEl  = document.getElementById('llmCaptureSelectionInfo')  as HTMLElement;
-  const nameEl  = document.getElementById('llmCaptureNodeName') as HTMLElement;
-  const typeEl  = document.getElementById('llmCaptureNodeType') as HTMLElement;
-  const sendBtn = document.getElementById('llmCaptureSendBtn') as HTMLButtonElement;
-  if (sel) {
-    emptyEl.style.display = 'none';
-    infoEl.style.display = 'flex';
-    nameEl.textContent = sel.name;
-    typeEl.textContent = sel.nodeType;
-    sendBtn.disabled = false;
-  } else {
-    emptyEl.style.display = 'block';
-    infoEl.style.display = 'none';
-    sendBtn.disabled = true;
-  }
-}
-
-async function pollLlmCaptureJob(jobId: string) {
-  for (;;) {
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    const res = await fetch(`http://localhost:4002/jobs/${encodeURIComponent(jobId)}`);
-    if (!res.ok) throw new Error(`Job status failed (${res.status})`);
-    const job = await res.json();
-    if (job.phase) setLlmCaptureStatus(job.phase);
-    if (job.status === 'done') return job.result;
-    if (job.status === 'error') throw new Error(job.error || 'LLM job failed');
-  }
-}
-
-document.getElementById('llmCaptureSendBtn')?.addEventListener('click', () => {
-  if (!llmCaptureNodeId) return;
-  const btn = document.getElementById('llmCaptureSendBtn') as HTMLButtonElement;
-  btn.disabled = true;
-  btn.textContent = 'Capturing…';
-  setLlmCaptureStatus('Capturing selected node…');
-  postToPlugin('llm-capture:selection', { maxDimension: 2048 });
-});
 
 // ── Section bar ───────────────────────────────────────────────────────────────
 
@@ -883,7 +860,6 @@ window.addEventListener('message', (event) => {
           nodeType: msg.nodeType as string,
           variantCount: msg.variantCount as number | undefined,
         };
-        updateLlmCaptureSelection(sel);
         updateAnnotateSelection(sel);
         updateDocSelection(sel);
         updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
@@ -893,59 +869,11 @@ window.addEventListener('message', (event) => {
           (msg.sectionName as string)  ?? sel.name,
         );
       } else {
-        updateLlmCaptureSelection(null);
         updateAnnotateSelection(null);
         updateDocSelection(null);
         updateCopyBtn(null, null);
         updateSectionBar(false, 0, '');
       }
-      break;
-    }
-    case 'llm-capture:result': {
-      const btn = document.getElementById('llmCaptureSendBtn') as HTMLButtonElement;
-      const resetBtn = () => {
-        btn.disabled = !llmCaptureNodeId;
-        btn.textContent = 'Send Screenshot';
-      };
-      if (msg.error) {
-        resetBtn();
-        setLlmCaptureStatus('❌ ' + (msg.error as string), 'err');
-        break;
-      }
-      const capture = msg.capture as Record<string, any>;
-      const prompt = ((document.getElementById('llmCapturePrompt') as HTMLTextAreaElement)?.value || '').trim();
-      setLlmCaptureStatus('Sending image + metadata to local LLM bridge…');
-      btn.textContent = 'Sending…';
-      fetch('http://localhost:4002/llm/capture', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          capture,
-          prompt: prompt || 'Inspect this Figma selection and summarize the layout, visual system, tokens, and implementation notes.',
-        }),
-      })
-        .then(async res => {
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || `LLM bridge returned ${res.status}`);
-          if (data.jobId) return pollLlmCaptureJob(data.jobId as string);
-          return data;
-        })
-        .then((result: any) => {
-          const label = result?.fileName
-            ? `✓ Sent · ${result.fileName}`
-            : result?.title
-              ? `✓ Sent · ${result.title}`
-              : '✓ Sent to LLM';
-          setLlmCaptureStatus(label, 'ok');
-          resetBtn();
-        })
-        .catch((e: any) => {
-          const hint = /Failed to fetch|NetworkError|Load failed/i.test(e.message || '')
-            ? 'Local LLM bridge is not running. Run: npm run figma-story'
-            : (e.message || 'Capture failed');
-          setLlmCaptureStatus('❌ ' + hint, 'err');
-          resetBtn();
-        });
       break;
     }
     case 'format-section:done': {
@@ -970,6 +898,12 @@ window.addEventListener('message', (event) => {
       setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? 's' : ''}` : 'Nothing to clear', 'ok');
       break;
     }
+    case 'gh-token:value': {
+      ghToken = (msg.token as string) || null;
+      syncTokenReleaseAuthUi();
+      break;
+    }
+
     case 'doc:result': {
       const btn = document.getElementById('docGenerateBtn') as HTMLButtonElement;
       btn.disabled = !docSetId; btn.textContent = 'Generate component doc';
@@ -985,12 +919,17 @@ window.addEventListener('message', (event) => {
 });
 
 // ── Token release ────────────────────────────────────────────────────────────
-// Runs the full sync → build → bump → changelog → package → manifest → PR
-// pipeline against the MAIN Figma file via the local token-release-server (9401).
-// See apps/s2a-toolkit/server/token-release-server.js and
-// .codex/skills/token-release.skill.md for the pipeline this mirrors.
+// Dispatches .github/workflows/token-release.yml on GitHub Actions DIRECTLY via
+// the GitHub REST API — no local server. Auth is a fine-grained PAT the user
+// pastes once, persisted in figma.clientStorage (main thread) — never written
+// to the Figma file. The workflow does all real work (sync → build → PR).
+
+const GH_REPO = 'adobecom/consonant';
+const GH_WORKFLOW = 'token-release.yml';
+const GH_API = `https://api.github.com/repos/${GH_REPO}`;
 
 let tokenReleaseBump: 'patch' | 'minor' | 'major' = 'patch';
+let ghToken: string | null = null;
 
 document.querySelectorAll<HTMLButtonElement>('#tokenReleaseBump .chip').forEach(chip => {
   chip.addEventListener('click', () => {
@@ -1006,38 +945,95 @@ function setTokenReleaseStatus(msg: string, type: '' | 'ok' | 'err' = '') {
   el.className = 'status' + (type ? ' ' + type : '');
 }
 
-async function pollTokenReleaseJob(jobId: string) {
-  for (;;) {
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    const res = await fetch(`http://localhost:9401/jobs/${encodeURIComponent(jobId)}`);
-    if (!res.ok) throw new Error(`Job status failed (${res.status})`);
-    const job = await res.json();
-    if (job.phase) setTokenReleaseStatus(job.phase);
-    if (job.status === 'done') return job;
-    if (job.status === 'error') throw new Error(job.error || 'Token release failed');
-  }
+function syncTokenReleaseAuthUi() {
+  const setup = document.getElementById('ghTokenSetup') as HTMLElement;
+  const release = document.getElementById('tokenReleaseControls') as HTMLElement;
+  const hasToken = Boolean(ghToken);
+  setup.style.display = hasToken ? 'none' : 'block';
+  release.style.display = hasToken ? 'block' : 'none';
+}
+
+document.getElementById('ghTokenSaveBtn')?.addEventListener('click', () => {
+  const input = document.getElementById('ghTokenInput') as HTMLInputElement;
+  const value = input.value.trim();
+  if (!value) return;
+  ghToken = value;
+  input.value = '';
+  postToPlugin('gh-token:set', { token: value });
+  syncTokenReleaseAuthUi();
+  setTokenReleaseStatus('Token saved to Figma client storage.', 'ok');
+});
+
+document.getElementById('ghTokenClearBtn')?.addEventListener('click', () => {
+  ghToken = null;
+  postToPlugin('gh-token:set', { token: '' });
+  syncTokenReleaseAuthUi();
+  setTokenReleaseStatus('Token cleared.');
+});
+
+function ghHeaders(): Record<string, string> {
+  return {
+    Authorization: `Bearer ${ghToken}`,
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+}
+
+async function ghJson(path: string) {
+  const res = await fetch(`${GH_API}${path}`, { headers: ghHeaders() });
+  if (!res.ok) throw new Error(`GitHub API ${res.status} on ${path}`);
+  return res.json();
 }
 
 document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () => {
+  if (!ghToken) return;
   const btn = document.getElementById('tokenReleaseBtn') as HTMLButtonElement;
   btn.disabled = true;
   btn.textContent = 'Releasing…';
-  setTokenReleaseStatus('Starting release pipeline…');
+  const dispatchedAt = Date.now();
 
   try {
-    const res = await fetch('http://localhost:9401/tokens/release', {
+    setTokenReleaseStatus('Dispatching GitHub Actions workflow…');
+    const res = await fetch(`${GH_API}/actions/workflows/${GH_WORKFLOW}/dispatches`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ bump: tokenReleaseBump }),
+      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: 'main', inputs: { bump: tokenReleaseBump } }),
     });
-    if (!res.ok) throw new Error(`Server returned ${res.status} — is the token-release trigger running? (npm run token-release)`);
-    const { jobId } = await res.json();
+    if (res.status === 401 || res.status === 403) {
+      throw new Error(`GitHub rejected the token (${res.status}). It needs Actions read/write on ${GH_REPO} — and for an org repo, SSO/org authorization. Clear and re-save a valid token.`);
+    }
+    if (res.status !== 204) throw new Error(`Dispatch failed (${res.status}).`);
 
-    const job = await pollTokenReleaseJob(jobId);
-    const r = job.result as { runUrl: string; prUrl: string | null; prTitle: string | null };
-    const runLink = `<a href="${r.runUrl}" target="_blank">Actions run →</a>`;
-    if (r.prUrl) {
-      setTokenReleaseStatus(`✓ ${r.prTitle} · <a href="${r.prUrl}" target="_blank">Review PR →</a> · ${runLink}`, 'ok');
+    setTokenReleaseStatus('Dispatched — waiting for the run to start…');
+    let run: { id: number; status: string; conclusion: string | null; html_url: string } | null = null;
+    for (let i = 0; i < 15 && !run; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const data = await ghJson(`/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`);
+      run = (data.workflow_runs || []).find(
+        (r: { created_at: string }) => new Date(r.created_at).getTime() >= dispatchedAt - 5000,
+      ) ?? null;
+    }
+    if (!run) throw new Error('Dispatched, but no run appeared within 30s — check the Actions tab.');
+
+    const runLink = `<a href="${run.html_url}" target="_blank">Actions run →</a>`;
+    setTokenReleaseStatus(`Running in GitHub Actions… ${runLink}`);
+    for (;;) {
+      await new Promise(r => setTimeout(r, 4000));
+      const current = await ghJson(`/actions/runs/${run.id}`);
+      if (current.status === 'completed') { run = current; break; }
+    }
+
+    if (run!.conclusion !== 'success') {
+      throw new Error(`Workflow run ${run!.conclusion} — see ${run!.html_url}`);
+    }
+
+    setTokenReleaseStatus(`Run succeeded — looking for the release PR… ${runLink}`);
+    const prs = await ghJson('/pulls?state=open&sort=created&direction=desc&per_page=10');
+    const pr = (prs as Array<{ title: string; html_url: string; created_at: string }>).find(
+      p => p.title.startsWith('release(tokens):') && new Date(p.created_at).getTime() >= dispatchedAt - 5000,
+    );
+    if (pr) {
+      setTokenReleaseStatus(`✓ ${pr.title} · <a href="${pr.html_url}" target="_blank">Review PR →</a> · ${runLink}`, 'ok');
     } else {
       setTokenReleaseStatus(`Run succeeded, no PR opened — likely nothing to release (Figma unchanged since last sync). ${runLink}`, 'ok');
     }
@@ -1052,7 +1048,8 @@ document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () =
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 postToPlugin('ui-ready');
-postToPlugin('resize-for-view', { width: 320, height: 460 });
+postToPlugin('gh-token:get');
+applySize();
 
 renderHomeView();
 

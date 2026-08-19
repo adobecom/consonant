@@ -29,25 +29,24 @@ const elasticCardWithAction = (state = "expanded") =>
     ariaLabel: "Open router context",
     icon: actionIconOnDark,
     size: "md",
-    background: "outlined",
-    context: state === "resting" ? "on-light" : "on-dark",
+    style: state === "resting" ? "solid" : "knockout",
   });
 
 export default {
-  title: "Molecules/ElasticCard",
+  title: "Cards/ElasticCard",
   tags: ["autodocs"],
   render: (args) => ElasticCard(args),
   parameters: {
     docs: {
       description: {
-        component: `<p>Media-forward tile used in Router hero carousels. Mirrors matt-atoms component set (<a href="https://www.figma.com/design/svi0B0G925V2XG0yX0DDaz/matt-atoms?node-id=4006-461133" target="_blank" rel="noreferrer">node 4006-461133</a>).</p>`,
+        component: `<p>Media-forward tile used in Router hero carousels. Mirrors the <strong>ElasticCard — v2</strong> component set (<a href="https://www.figma.com/design/oXIFqtnrYNdTIjqb1sbJau/elastic-card-updates?node-id=11280-224039" target="_blank" rel="noreferrer">node 11280-224039</a>): State × Type axes, inverse-token dark surfaces — no Context axis.</p>`,
       },
       source: {
         language: "html",
         code: `<!-- Resting state (default — all cards rest until hovered) -->
-<article class="c-elastic-card" data-state="resting" data-media-aspect="3:4">
+<article class="c-elastic-card" data-state="resting" data-type="standard" data-media-aspect="3:4">
   <header class="c-elastic-card__header">
-    <div class="c-product-lockup" data-orientation="horizontal" data-style="label" data-context="on-light" data-width="fill">…</div>
+    <div class="c-product-lockup" data-orientation="horizontal" data-style="label" data-width="fill">…</div>
   </header>
   <div class="c-elastic-card__media">
     <figure class="c-media" data-aspect="3:4" data-fit="cover">
@@ -63,8 +62,16 @@ export default {
   </div>
 </article>
 
-<!-- Expanded state (on hover — dark surface, full copy visible) -->
-<article class="c-elastic-card" data-state="expanded" data-media-aspect="3:4">
+<!-- Expanded state (on hover — dark surface via inverse tokens) -->
+<article class="c-elastic-card" data-state="expanded" data-type="standard" data-media-aspect="3:4">
+  …
+</article>
+
+<!-- Featured type — heading header instead of ProductLockup -->
+<article class="c-elastic-card" data-state="resting" data-type="featured" data-media-aspect="3:4">
+  <header class="c-elastic-card__header">
+    <p class="c-elastic-card__heading">Featured heading</p>
+  </header>
   …
 </article>`,
       },
@@ -78,8 +85,14 @@ export default {
     state: {
       control: { type: "select" },
       options: ["resting", "expanded", "mobile"],
-      description: "Matches the Figma State property (node 4006-461133)",
+      description: "Matches the Figma State axis (ElasticCard — v2, node 11280-224039)",
     },
+    type: {
+      control: { type: "select" },
+      options: ["standard", "featured"],
+      description: "v2 Type axis — standard (ProductLockup header) or featured (heading header)",
+    },
+    heading: { control: "text", description: "Featured header text (falls back to label)" },
     mediaSrc: { control: "text", description: "Image URL — fills the card full-bleed" },
     mediaAspect: {
       control: { type: "select" },
@@ -98,6 +111,7 @@ export default {
     title: "Create with the top tools.",
     body: "Do it all with industry-leading apps for design, photo, video, and creative AI.",
     state: "resting",
+    type: "standard",
     mediaAspect: "3:4",
     mediaOverlay: true,
     onClick: fn(),
@@ -144,6 +158,28 @@ export const Mobile = {
       fileKey: "svi0B0G925V2XG0yX0DDaz",
       nodeId: "4274:30919",
     },
+  },
+};
+
+export const Featured = {
+  render: (args) => ElasticCard({ ...args, mediaTemplate: cardVideo(VID_STUDENTS) }),
+  args: {
+    type: "featured",
+    heading: "Students and teachers",
+    title: "Students and teachers save big.",
+    body: "Save a bundle on our biggest bundle of top industry creative tools.",
+  },
+};
+
+export const FeaturedExpanded = {
+  render: (args) => ElasticCard({ ...args, mediaTemplate: cardVideo(VID_STUDENTS) }),
+  args: {
+    type: "featured",
+    state: "expanded",
+    heading: "Students and teachers",
+    title: "Students and teachers save 71%.",
+    body: "Save a bundle on our biggest bundle of top industry creative tools.",
+    showCaret: false,
   },
 };
 
@@ -213,7 +249,7 @@ export const RoutingCarousel = {
         })}
         ${ElasticCard({
           label: "PDF and productivity",
-          app: "acrobat",
+          app: "acrobat-pro",
           title: "Do it all in less time.",
           body: "Create, edit, and share PDFs. Make edits and create presentations with AI.",
           state: "resting",

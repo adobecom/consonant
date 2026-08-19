@@ -17,7 +17,7 @@ const darkSurface = (content) => html`
 `;
 
 export default {
-  title: 'Molecules/ProductCard',
+  title: "Cards/ProductCard",
   tags: ['autodocs'],
   render: (args) => darkSurface(ProductCard(args)),
   parameters: {

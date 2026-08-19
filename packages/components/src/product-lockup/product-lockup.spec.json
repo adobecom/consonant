@@ -3,39 +3,44 @@
   "slug": "product-lockup",
   "cssClass": "c-product-lockup",
   "storybookId": "product-lockup",
-  "description": "Adobe product identity unit: app icon + product name label + optional caret. Used in ElasticCard headers, RouterMarqueeItem, and anywhere a product name with icon is needed.",
+  "version": "2.0.0",
+  "figmaNode": "11272:217527",
+  "description": "v2 — Adobe product identity unit: app icon(s) + product name label + optional caret. Used in ElasticCard headers, RouterNavItem tiles, and anywhere a product name with icon is needed. The v1 Context axis (on-light/on-dark) is retired: theme flows from variable modes (:root[data-theme]); per-instance surface treatment is the Style axis.",
   "composedOf": ["AppIcon"],
   "variants": {
     "orientation": ["horizontal", "vertical"],
-    "styleVariant": ["label", "eyebrow"],
-    "context": ["on-light", "on-dark"],
+    "styleVariant": ["label", "eyebrow", "knockout", "inverse"],
     "width": ["hug", "fill"]
   },
   "props": [
-    { "name": "label", "type": "string", "defaultValue": "\"Product label\"", "description": "Product name text" },
+    { "name": "label", "type": "string", "defaultValue": "\"Product label\"", "description": "Product name text (Figma: Label)" },
     { "name": "productName", "type": "string", "description": "Alias for label. Takes precedence when set." },
     { "name": "app", "type": "string", "defaultValue": "\"experience-cloud\"", "description": "App slug passed to AppIcon" },
+    { "name": "secondApp", "type": "string", "defaultValue": "\"experience-cloud\"", "description": "App slug for the optional second icon" },
+    { "name": "showSecondIcon", "type": "boolean", "defaultValue": "false", "description": "Figma: Show Second App Icon" },
     { "name": "orientation", "type": "string", "defaultValue": "\"horizontal\"", "enum": ["horizontal", "vertical"] },
-    { "name": "styleVariant", "type": "string", "defaultValue": "\"label\"", "enum": ["label", "eyebrow"], "description": "label = default text treatment, eyebrow = smaller subdued style" },
-    { "name": "context", "type": "string", "defaultValue": "\"on-light\"", "enum": ["on-light", "on-dark"] },
+    { "name": "styleVariant", "type": "string", "defaultValue": "\"label\"", "enum": ["label", "eyebrow", "knockout", "inverse"], "description": "label = content/label ink · eyebrow = content/eyebrow ink + eyebrow ramp · knockout = always-white for dark/media surfaces · inverse = flips opposite the theme" },
+    { "name": "context", "type": "string", "deprecated": true, "description": "DEPRECATED v1 alias — \"on-dark\" maps to styleVariant \"knockout\" when styleVariant is unset. Remove usages; theme comes from variable modes." },
     { "name": "width", "type": "string", "defaultValue": "\"hug\"", "enum": ["hug", "fill"] },
-    { "name": "showIconStart", "type": "boolean", "defaultValue": "true" },
+    { "name": "showIconStart", "type": "boolean", "defaultValue": "true", "description": "Figma: Show App Icon" },
     { "name": "showIcon", "type": "boolean", "description": "Overrides showIconStart when set" },
-    { "name": "showIconEnd", "type": "boolean", "defaultValue": "true", "description": "Shows caret in horizontal orientation only" },
-    { "name": "iconSize", "type": "string", "defaultValue": "\"auto\"", "description": "auto = size derived from orientation. Or explicit AppIcon size: xs/sm/md/lg/xl" },
+    { "name": "showIconEnd", "type": "boolean", "defaultValue": "true", "description": "Figma: Show Icon End (chevron)" },
+    { "name": "iconSize", "type": "string", "defaultValue": "\"auto\"", "description": "auto = md (24px, Figma v2 default). Or explicit AppIcon size: xs/sm/md/lg" },
     { "name": "caret", "type": "function | TemplateResult | null", "description": "Custom caret template. null = no caret." }
   ],
   "tokenBindings": {
-    "color:on-light": "--s2a-color-content-default",
-    "color:on-dark": "--s2a-color-content-knockout",
+    "color:label": "--s2a-color-content-label",
+    "color:eyebrow": "--s2a-color-content-eyebrow",
+    "color:knockout": "--s2a-color-content-knockout",
+    "color:inverse": "--s2a-color-content-inverse",
     "font-family": "--s2a-font-family-default",
-    "gap:horizontal": "--s2a-spacing-xs",
-    "gap:vertical": "--s2a-spacing-2xs"
+    "gap:horizontal": "--s2a-spacing-md",
+    "gap:vertical": "--s2a-spacing-sm"
   },
   "a11y": {
     "wcag": ["1.1.1", "1.4.3"],
     "notes": [
-      "The AppIcon inside is aria-hidden by default — the visible label provides the accessible name.",
+      "The AppIcon(s) inside are aria-hidden by default — the visible label provides the accessible name.",
       "When used as a link or button header, the parent element should supply the accessible name for the interactive region."
     ]
   }

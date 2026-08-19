@@ -1,0 +1,40 @@
+{
+  "name": "Logo",
+  "slug": "logo",
+  "cssClass": "c-logo",
+  "storybookId": "logo",
+  "description": "Adobe logo atom in three versions (default wordmark 67×22, legacy lockup 50×24, abbreviated A-mark 24×24), themed per surface context via currentColor. Matches Figma component set 2956:2421 on the ↳ Logo page.",
+  "figma": {
+    "componentSetId": "2956:2421",
+    "fileKey": "oXIFqtnrYNdTIjqb1sbJau"
+  },
+  "variants": {
+    "version": ["default", "legacy", "abbreviated"],
+    "context": ["on-light", "on-dark"]
+  },
+  "props": [
+    { "name": "version", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "legacy", "abbreviated"], "description": "Which mark to render" },
+    { "name": "context", "type": "string", "defaultValue": "\"on-light\"", "enum": ["on-light", "on-dark"], "description": "Surface context — drives the color token" },
+    { "name": "label", "type": "string", "defaultValue": "\"Adobe\"", "description": "Accessible name (role='img' aria-label)" }
+  ],
+  "tokenBindings": {
+    "color:default/abbreviated:on-light": "--s2a-color-content-default",
+    "color:default/abbreviated:on-dark": "--s2a-color-content-knockout",
+    "color:legacy:on-light": "--s2a-color-transparent-black-64",
+    "color:legacy:on-dark": "--s2a-color-transparent-white-48"
+  },
+  "a11y": {
+    "role": "img",
+    "requiredAriaAttrs": ["aria-label"],
+    "wcag": ["1.1.1"],
+    "notes": [
+      "Rendered as role='img' with aria-label; inner SVGs are aria-hidden.",
+      "When used as a home link, wrap in an <a> and move the accessible name to the link."
+    ]
+  },
+  "notes": [
+    "SVG paths exported 1:1 from Figma variants with fills swapped to currentColor; color tokens applied in CSS exactly as bound per variant in Figma.",
+    "Legacy variant binds transparent-black-64 / transparent-white-48 (primitives) because that is what Figma binds — unusual vs the semantic content/* pair on the other versions.",
+    "Figma's SVG export of the legacy mark includes three zero-area line subpaths (the 'A' frame drawn as strokes); they do not render with fill and are preserved as exported — verify against Figma visually before shipping this variant anywhere prominent."
+  ]
+}
