@@ -32,9 +32,25 @@ on whether your project can authenticate to GitHub Packages.
 
 ## Option A — npm (GitHub Packages)
 
-**1. Create a token** — a classic PAT with the `read:packages` scope (for an org
-repo you may need to authorize it for `adobecom` via SSO). In GitHub Actions CI,
-the built-in `GITHUB_TOKEN` already has package read, so no PAT is needed there.
+**1. Create a token** — a classic PAT with the `read:packages` scope.
+
+> **Shortcut:** [this link](https://github.com/settings/tokens/new?scopes=read:packages&description=s2a-tokens)
+> opens the classic-token page with the scope pre-checked and the token pre-named.
+
+Click-by-click:
+
+1. GitHub → avatar → **Settings** → **Developer settings** (bottom of sidebar)
+2. **Personal access tokens → Tokens (classic)** → **Generate new token (classic)**
+3. **Note:** `s2a-tokens read`. **Expiration:** 90 days (`adobecom` caps lifetime at 366 days).
+4. **Scopes:** check **`read:packages`** only — that's the whole requirement.
+5. **Generate token**, then **copy it now** (shown once, starts with `ghp_`).
+6. **⚠️ Authorize SSO — the step people miss:** on the tokens list, click
+   **Configure SSO** next to your token and **Authorize** it for **`adobecom`**.
+   Skip this and the token returns **401** on an org package even with the right scope.
+
+A PAT is browser-only and shown once — you have to create it yourself; no agent can
+mint one. If that's a blocker, **Option B below needs no token at all**. In GitHub
+Actions CI, the built-in `GITHUB_TOKEN` already has package read, so no PAT is needed there.
 
 **2. Point the `@adobecom` scope at GitHub Packages** in your project's `.npmrc`:
 

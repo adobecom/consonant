@@ -19,8 +19,35 @@ Current published version: **0.0.21** (486 tokens).
 
 **1. Create a token.** A classic PAT with the `read:packages` scope is the
 reliable choice. (Fine-grained tokens can work too, but classic `read:packages`
-is the best-supported path for the npm registry.) For an org repo you may need to
-authorize the token for `adobecom` (SSO).
+is the best-supported path for the npm registry.)
+
+> **Shortcut:** this link opens the classic-token page with the right scope
+> already checked and the token pre-named:
+> <https://github.com/settings/tokens/new?scopes=read:packages&description=s2a-tokens>
+
+Click-by-click, if you'd rather do it by hand:
+
+1. GitHub → your avatar (top-right) → **Settings**
+2. Bottom of the left sidebar → **Developer settings**
+3. **Personal access tokens → Tokens (classic)**
+4. **Generate new token → Generate new token (classic)** (you may be asked to
+   re-enter your password)
+5. **Note:** name it something like `s2a-tokens read`
+6. **Expiration:** 90 days is fine. The `adobecom` org caps token lifetime at
+   **366 days** — anything longer is rejected.
+7. **Scopes:** check **`read:packages`** only. That is the entire requirement to
+   install; leave everything else unchecked.
+8. **Generate token**, then **copy it immediately** — it starts with `ghp_` and
+   is shown exactly once.
+9. **⚠️ Authorize SSO — this is the step people miss.** Back on the tokens list,
+   find your new token, click **Configure SSO**, and **Authorize** it for
+   **`adobecom`**. Without this the token returns **401** on an org package even
+   though the scope is correct.
+
+> **Note:** a PAT is a browser-only, log-in-required, shown-once secret — no
+> agent or script can mint one for you; you have to create it yourself. If that's
+> a blocker, **[Option B](#option-b--registry-free--no-token) needs no token at
+> all.**
 
 **2. Point the `@adobecom` scope at GitHub Packages.** In the consuming project's
 `.npmrc`:
