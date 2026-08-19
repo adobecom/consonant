@@ -1,0 +1,24 @@
+{
+  "name": "@adobecom/s2a-toolkit-bridge",
+  "version": "0.1.0",
+  "description": "Blessed launcher for the S2A Toolkit Bridge — runs a pinned figma-console-mcp so teammates connect Claude Code to Figma with one command.",
+  "type": "module",
+  "bin": {
+    "s2a-toolkit-bridge": "./bin/s2a-toolkit-bridge.mjs"
+  },
+  "files": ["bin", "README.md"],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adobecom/consonant.git",
+    "directory": "apps/s2a-toolkit-bridge"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "figma-console-mcp": "1.34.0"
+  }
+}
