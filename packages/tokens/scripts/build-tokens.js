@@ -165,6 +165,7 @@ async function buildFromFigma() {
   // is treated as an accidental drop and fails the build.
   const KNOWN_UNBUILT_COLLECTIONS = new Set([
     "s2a-design-guides", // DESIGN ONLY — Figma-canvas annotation/guide colors, never shipped
+    "c2-design-guides",  // DESIGN ONLY — Figma-canvas layout guides (hide-all/show-all/show-spacers), never shipped
     "s2a-min-max",       // not currently emitted; wire a bucket here if these should ship
   ]);
 
