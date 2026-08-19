@@ -1,0 +1,75 @@
+name: Publish Toolkit Bridge
+
+# Publishes @adobecom/s2a-toolkit-bridge to GitHub Packages when its version
+# bumps on main. Mirrors publish-mcp.yml / publish-tokens.yml: gated by CODEOWNERS
+# review on merge, plus an environment reviewer on the registry push.
+#
+# The package is a plain launcher (no build step) — it publishes bin/ + README and
+# declares a pinned figma-console-mcp as a dependency.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/s2a-toolkit-bridge/package.json" # version bump = a release
+  workflow_dispatch: # manual re-publish of the current version
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish-toolkit-bridge
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: token-release
+    defaults:
+      run:
+        working-directory: apps/s2a-toolkit-bridge
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node (GitHub Packages)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@adobecom"
+
+      - name: Read package version
+        id: v
+        run: echo "version=$(npm pkg get version | tr -d '\"')" >> "$GITHUB_OUTPUT"
+
+      - name: Publish (skip if the version already exists)
+        id: publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          OUT=$(npm publish 2>&1); CODE=$?
+          echo "$OUT"
+          if [ $CODE -eq 0 ]; then
+            echo "result=published" >> "$GITHUB_OUTPUT"
+          elif echo "$OUT" | grep -qiE "cannot publish over|already exists|E409|EPUBLISHCONFLICT|conflict"; then
+            echo "::notice::@adobecom/s2a-toolkit-bridge@${{ steps.v.outputs.version }} is already on the registry — skipping."
+            echo "result=skipped" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Publish failed for a reason other than a version conflict."
+            exit $CODE
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          V="${{ steps.v.outputs.version }}"
+          case "${{ steps.publish.outputs.result }}" in
+            published) echo "### 📦 Published @adobecom/s2a-toolkit-bridge@$V to GitHub Packages" >> "$GITHUB_STEP_SUMMARY" ;;
+            skipped)   echo "### ⏭️ @adobecom/s2a-toolkit-bridge@$V was already published — nothing to do" >> "$GITHUB_STEP_SUMMARY" ;;
+            *)         echo "### ⚠️ Publish did not complete for @adobecom/s2a-toolkit-bridge@$V" >> "$GITHUB_STEP_SUMMARY" ;;
+          esac
