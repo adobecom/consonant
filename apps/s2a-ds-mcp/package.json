@@ -13,6 +13,7 @@
     "build": "tsc -p tsconfig.local.json",
     "type-check": "tsc --noEmit",
     "copy-data": "node scripts/copy-data.mjs",
+    "check-data": "node scripts/check-data-fresh.mjs",
     "build:vercel": "node scripts/copy-data.mjs"
   },
   "dependencies": {
