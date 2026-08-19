@@ -40,6 +40,7 @@ import { registerComponentTools } from "./tools/components.js";
 import { registerValidateTools } from "./tools/validate.js";
 import { registerSpecTools } from "./tools/spec.js";
 import { registerAuditTools } from "./tools/audit.js";
+import { instrument, telemetryEnabled } from "./telemetry.js";
 
 // ── Resolve DS_ROOT ───────────────────────────────────────────────────────
 const __filename = fileURLToPath(import.meta.url);
@@ -84,6 +85,10 @@ const server = new McpServer({
   version: "0.1.0",
 });
 
+// Usage telemetry (opt-out via S2A_TELEMETRY=0 / DO_NOT_TRACK). Must run BEFORE
+// tools are registered so it can wrap each handler. No-op when opted out.
+instrument(server);
+
 // Register all tool groups
 registerTokenTools(server, DS_ROOT);
 registerComponentTools(server, DS_ROOT);
@@ -94,4 +99,8 @@ registerAuditTools(server, DS_ROOT);
 // ── Start ─────────────────────────────────────────────────────────────────
 const transport = new StdioServerTransport();
 await server.connect(transport);
-process.stderr.write("[s2a-ds-mcp] Ready.\n");
+process.stderr.write(
+  `[s2a-ds-mcp] Ready. Usage telemetry: ${telemetryEnabled() ? "on" : "off"}` +
+    (telemetryEnabled() ? " (anonymous; set S2A_TELEMETRY=0 to disable)" : "") +
+    ".\n"
+);
