@@ -7,14 +7,23 @@
   "bin": {
     "s2a-ds-mcp": "./dist/local.js"
   },
-  "files": ["dist", "README.md"],
+  "files": ["dist", "data", "README.md"],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adobecom/consonant.git",
+    "directory": "apps/s2a-ds-mcp"
+  },
   "scripts": {
     "dev": "tsx src/local.ts",
     "build": "tsc -p tsconfig.local.json",
     "type-check": "tsc --noEmit",
     "copy-data": "node scripts/copy-data.mjs",
     "check-data": "node scripts/check-data-fresh.mjs",
-    "build:vercel": "node scripts/copy-data.mjs"
+    "build:vercel": "node scripts/copy-data.mjs",
+    "prepack": "node scripts/copy-data.mjs && tsc -p tsconfig.local.json"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
