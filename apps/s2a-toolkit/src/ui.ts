@@ -17,7 +17,7 @@ const PLUGIN_VERSION = '0.1.0';
 // Set to your collector to enable, e.g. 'http://localhost:8787' (dev) or the
 // deployed Worker URL. Empty string = telemetry disabled. The chosen host must
 // also be listed in manifest.json → networkAccess.allowedDomains.
-const TELEMETRY_ENDPOINT = '';
+const TELEMETRY_ENDPOINT = 'https://s2a-telemetry-collector.mmhuntsberry.workers.dev';
 let telemetryAnonId = '';
 let telemetryOptOut = false;
 
@@ -494,6 +494,7 @@ let _copyResetTimer: ReturnType<typeof setTimeout> | null = null;
 
 copyNodeBtn.addEventListener('click', () => {
   if (!_copyFileKey || _copyAllNodes.length === 0) return;
+  sendTelemetry('action:copy-link');
   const slug = (_copyFileName || 'file')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const urls = _copyAllNodes.map(n => {
@@ -528,6 +529,7 @@ function updateSectionBar(hasSection: boolean, sectionCount: number, firstName: 
 }
 
 formatSectionBtn.addEventListener('click', () => {
+  sendTelemetry('action:format-section');
   formatSectionBtn.disabled = true;
   formatSectionBtn.textContent = '…';
   postToPlugin('format-section');
@@ -758,6 +760,7 @@ function clearSelect() {
 
 document.getElementById('selectApplyBtn')?.addEventListener('click', () => {
   if (!selectSetId) return;
+  sendTelemetry('action:apply-filter');
   const filter: Record<string, string[]> = {};
   document.querySelectorAll<HTMLButtonElement>('.chip.on[data-axis]').forEach(chip => {
     const axis = chip.dataset.axis!;
@@ -804,6 +807,7 @@ document.querySelectorAll<HTMLButtonElement>('#annotateCats .chip').forEach(chip
 
 document.getElementById('annotateApplyBtn')?.addEventListener('click', () => {
   if (!annotateNodeId) return;
+  sendTelemetry('action:annotate');
   const categories = Array.from(
     document.querySelectorAll<HTMLButtonElement>('#annotateCats .chip.on')
   ).map(c => c.dataset.cat!);
@@ -816,6 +820,7 @@ document.getElementById('annotateApplyBtn')?.addEventListener('click', () => {
 
 document.getElementById('annotateClearBtn')?.addEventListener('click', () => {
   if (!annotateNodeId) return;
+  sendTelemetry('action:annotate-clear');
   const btn = document.getElementById('annotateClearBtn') as HTMLButtonElement;
   btn.disabled = true; setAnnotateStatus('Clearing…');
   postToPlugin('annotate:clear', { nodeId: annotateNodeId });
@@ -850,6 +855,7 @@ function updateDocSelection(sel: { id: string; name: string; nodeType: string; v
 
 document.getElementById('docGenerateBtn')?.addEventListener('click', () => {
   if (!docSetId) return;
+  sendTelemetry('action:doc-generate');
   const btn = document.getElementById('docGenerateBtn') as HTMLButtonElement;
   btn.disabled = true; btn.textContent = 'Generating…';
   setDocStatus('');
@@ -1028,6 +1034,7 @@ async function ghJson(path: string) {
 
 document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () => {
   if (!ghToken) return;
+  sendTelemetry('action:token-release');
   const btn = document.getElementById('tokenReleaseBtn') as HTMLButtonElement;
   btn.disabled = true;
   btn.textContent = 'Releasing…';

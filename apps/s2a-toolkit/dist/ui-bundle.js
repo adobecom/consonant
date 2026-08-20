@@ -28,7 +28,7 @@
     parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
   }
   var PLUGIN_VERSION = "0.1.0";
-  var TELEMETRY_ENDPOINT = "";
+  var TELEMETRY_ENDPOINT = "https://s2a-telemetry-collector.mmhuntsberry.workers.dev";
   var telemetryAnonId = "";
   var telemetryOptOut = false;
   function sendTelemetry(action, status = "ok") {
@@ -411,6 +411,7 @@
   var _copyResetTimer = null;
   copyNodeBtn.addEventListener("click", () => {
     if (!_copyFileKey || _copyAllNodes.length === 0) return;
+    sendTelemetry("action:copy-link");
     const slug = (_copyFileName || "file").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     const urls = _copyAllNodes.map((n) => {
       const nid = n.id.replace(":", "-");
@@ -436,6 +437,7 @@
     }
   }
   formatSectionBtn.addEventListener("click", () => {
+    sendTelemetry("action:format-section");
     formatSectionBtn.disabled = true;
     formatSectionBtn.textContent = "\u2026";
     postToPlugin("format-section");
@@ -713,6 +715,7 @@
   var _a2;
   (_a2 = document.getElementById("selectApplyBtn")) == null ? void 0 : _a2.addEventListener("click", () => {
     if (!selectSetId) return;
+    sendTelemetry("action:apply-filter");
     const filter = {};
     document.querySelectorAll(".chip.on[data-axis]").forEach((chip) => {
       const axis = chip.dataset.axis;
@@ -760,6 +763,7 @@
   var _a5;
   (_a5 = document.getElementById("annotateApplyBtn")) == null ? void 0 : _a5.addEventListener("click", () => {
     if (!annotateNodeId) return;
+    sendTelemetry("action:annotate");
     const categories = Array.from(
       document.querySelectorAll("#annotateCats .chip.on")
     ).map((c) => c.dataset.cat);
@@ -776,6 +780,7 @@
   var _a6;
   (_a6 = document.getElementById("annotateClearBtn")) == null ? void 0 : _a6.addEventListener("click", () => {
     if (!annotateNodeId) return;
+    sendTelemetry("action:annotate-clear");
     const btn = document.getElementById("annotateClearBtn");
     btn.disabled = true;
     setAnnotateStatus("Clearing\u2026");
@@ -810,6 +815,7 @@
   var _a7;
   (_a7 = document.getElementById("docGenerateBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
     if (!docSetId) return;
+    sendTelemetry("action:doc-generate");
     const btn = document.getElementById("docGenerateBtn");
     btn.disabled = true;
     btn.textContent = "Generating\u2026";
@@ -979,6 +985,7 @@
   (_a10 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
     var _a11;
     if (!ghToken) return;
+    sendTelemetry("action:token-release");
     const btn = document.getElementById("tokenReleaseBtn");
     btn.disabled = true;
     btn.textContent = "Releasing\u2026";
