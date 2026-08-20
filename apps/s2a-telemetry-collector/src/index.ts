@@ -192,7 +192,7 @@ const DASHBOARD = `<!doctype html><html><head><meta charset="utf-8">
   .muted { color: #999; }
 </style></head><body>
   <h1>S2A DS MCP — usage</h1>
-  <div class="sub">Live from the Durable Object · refreshes every 3s</div>
+  <div class="sub">Live from the Durable Object · refreshes every 30s</div>
   <div class="cards" id="cards"></div>
   <table><thead><tr><th>Tool</th><th class="num">Calls</th><th class="num">Errors</th><th class="num">Avg ms</th></tr></thead>
   <tbody id="rows"></tbody></table>
@@ -210,5 +210,5 @@ async function tick(){
   }catch(e){}
 }
 function card(n,l){ return '<div class="card"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
-tick(); setInterval(tick, 3000);
+tick(); setInterval(tick, 30000);
 </script></body></html>`;
