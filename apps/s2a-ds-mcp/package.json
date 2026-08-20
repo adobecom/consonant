@@ -1,13 +1,17 @@
 {
   "name": "@adobecom/s2a-ds-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "S2A Design System MCP — queryable design tokens, components, and validation for AI agents and IDEs",
   "type": "module",
   "main": "dist/local.js",
   "bin": {
     "s2a-ds-mcp": "./dist/local.js"
   },
-  "files": ["dist", "data", "README.md"],
+  "files": [
+    "dist",
+    "data",
+    "README.md"
+  ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },

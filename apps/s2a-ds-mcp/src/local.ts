@@ -82,7 +82,7 @@ process.stderr.write(`[s2a-ds-mcp] Starting. DS_ROOT=${DS_ROOT}\n`);
 // ── Server setup ──────────────────────────────────────────────────────────
 const server = new McpServer({
   name: "s2a-ds",
-  version: "0.1.0",
+  version: "0.1.1",
 });
 
 // Usage telemetry (opt-out via S2A_TELEMETRY=0 / DO_NOT_TRACK). Must run BEFORE
