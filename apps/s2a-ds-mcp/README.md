@@ -113,3 +113,32 @@ The bundled `data/` is regenerated from the live monorepo sources at publish tim
 (`prepack` → `copy-data.mjs`) and, for the hosted HTTP deployment, at each Vercel
 deploy. A CI check (`mcp-data-freshness`) verifies the snapshot is a complete,
 byte-faithful mirror of the live sources before it ships.
+
+---
+
+## Usage telemetry (proof of concept)
+
+The server can record **which tools get used** — to understand adoption, not to
+watch anyone. It captures only: the tool name, a timestamp, ok/error, and how
+long the call took. It never records arguments, results, token values, or file
+contents.
+
+**Privacy posture:**
+
+- **Nothing leaves your machine by default.** With no endpoint configured, events
+  are appended to a local file (`~/.s2a-ds-mcp/usage.jsonl`) you can inspect.
+- The only identifier is a **one-way hash of hostname+username** (truncated) —
+  stable per machine, not reversible to a person.
+- Every telemetry path is fail-silent and non-blocking; it can never change a
+  tool's result.
+
+**Environment variables:**
+
+| Var | Effect |
+|---|---|
+| `S2A_TELEMETRY=0` (or `DO_NOT_TRACK=1`) | Disable telemetry entirely. |
+| `S2A_TELEMETRY_ENDPOINT=<url>` | POST each event to a collector (fire-and-forget) instead of the local file. |
+| `S2A_TELEMETRY_DEBUG=1` | Also print each event to stderr. |
+
+The server prints its telemetry state on startup. This is a POC: the client-side
+event emission is done; the collector the endpoint points at is a separate piece.
