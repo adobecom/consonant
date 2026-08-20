@@ -75,3 +75,17 @@ drive your Figma file.
 - Version pinning is deliberate: this package tracks a `figma-console-mcp` build
   verified against the current toolkit plugin. Bumping it is how the team ships a
   new validated Bridge.
+
+## Usage telemetry (proof of concept)
+
+The launcher can record that the Bridge was used — a **session start** and its
+**duration** — so you can see adoption. Nothing sensitive: just the event, a
+timestamp, an anonymous machine id (a one-way hash of hostname+username), and the
+version.
+
+- **Off by default** — set `S2A_TELEMETRY_ENDPOINT=<collector-url>` to enable.
+- Opt out with `S2A_TELEMETRY=0` or `DO_NOT_TRACK=1`.
+- Fail-silent and time-bounded; never delays startup or shutdown.
+
+Same event schema and env vars as `@adobecom/s2a-ds-mcp`, so both report into one
+collector/dashboard.
