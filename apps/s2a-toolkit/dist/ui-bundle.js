@@ -27,6 +27,31 @@
   function postToPlugin(type, payload) {
     parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
   }
+  var PLUGIN_VERSION = "0.1.0";
+  var TELEMETRY_ENDPOINT = "";
+  var telemetryAnonId = "";
+  var telemetryOptOut = false;
+  function sendTelemetry(action, status = "ok") {
+    if (!TELEMETRY_ENDPOINT || telemetryOptOut) return;
+    try {
+      fetch(TELEMETRY_ENDPOINT, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          tool: action,
+          status,
+          durationMs: 0,
+          ts: (/* @__PURE__ */ new Date()).toISOString(),
+          anonId: telemetryAnonId || "unknown",
+          version: PLUGIN_VERSION,
+          server: "s2a-toolkit"
+        }),
+        keepalive: true
+      }).catch(() => {
+      });
+    } catch (e) {
+    }
+  }
   var USAGE_KEY = "s2a:usage";
   function loadUsage() {
     try {
@@ -53,6 +78,7 @@
     store.totals[featureId] = (store.totals[featureId] || 0) + 1;
     store.lastUsed[featureId] = Date.now();
     saveUsage(store);
+    sendTelemetry(featureId);
   }
   function heatOf(featureId) {
     const { events } = loadUsage();
@@ -795,6 +821,11 @@
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
+      case "telemetry:config": {
+        telemetryAnonId = msg.anonId || "";
+        telemetryOptOut = msg.optOut === true;
+        break;
+      }
       case "bridge:command-result": {
         const p = pendingRequests.get(msg.requestId);
         if (p) {
@@ -1019,4 +1050,5 @@
       bridgeConnect();
     }
   }, 45e3);
+  postToPlugin("telemetry:init");
 })();

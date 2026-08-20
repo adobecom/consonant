@@ -382,11 +382,32 @@ figma.on('currentpagechange', () => {
 
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
 
+// Anonymous, random per-install id for usage telemetry. Not tied to identity —
+// generated once and persisted in this user's clientStorage.
+function genAnonId(): string {
+  const rnd = () => Math.floor(Math.random() * 0xffffffff).toString(16).padStart(8, '0');
+  return (rnd() + rnd()).slice(0, 16);
+}
+
 figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
   switch (msg.type) {
     case 'ui-ready':
       notifySelection();
       break;
+
+    // Provision the anonymous telemetry id (and opt-out flag) for the UI.
+    case 'telemetry:init': {
+      let anonId = (await figma.clientStorage.getAsync('telemetry-anon-id')) as
+        | string
+        | undefined;
+      if (!anonId) {
+        anonId = genAnonId();
+        await figma.clientStorage.setAsync('telemetry-anon-id', anonId);
+      }
+      const optOut = (await figma.clientStorage.getAsync('telemetry-opt-out')) === true;
+      figma.ui.postMessage({ type: 'telemetry:config', anonId, optOut });
+      break;
+    }
 
     // GitHub PAT for the Token Release feature — persisted in clientStorage
     // (local to this user's Figma install; never written into the document).

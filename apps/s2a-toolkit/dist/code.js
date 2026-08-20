@@ -372,12 +372,27 @@ figma.on("currentpagechange", () => {
   });
 });
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
+function genAnonId() {
+  const rnd = () => Math.floor(Math.random() * 4294967295).toString(16).padStart(8, "0");
+  return (rnd() + rnd()).slice(0, 16);
+}
 figma.ui.onmessage = async (msg) => {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
   switch (msg.type) {
     case "ui-ready":
       notifySelection();
       break;
+    // Provision the anonymous telemetry id (and opt-out flag) for the UI.
+    case "telemetry:init": {
+      let anonId = await figma.clientStorage.getAsync("telemetry-anon-id");
+      if (!anonId) {
+        anonId = genAnonId();
+        await figma.clientStorage.setAsync("telemetry-anon-id", anonId);
+      }
+      const optOut = await figma.clientStorage.getAsync("telemetry-opt-out") === true;
+      figma.ui.postMessage({ type: "telemetry:config", anonId, optOut });
+      break;
+    }
     // GitHub PAT for the Token Release feature — persisted in clientStorage
     // (local to this user's Figma install; never written into the document).
     case "gh-token:get": {
