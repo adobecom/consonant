@@ -8,6 +8,41 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
   parent.postMessage({ pluginMessage: { type, ...payload } }, 'https://www.figma.com');
 }
 
+// ── Usage telemetry (network) — POC ───────────────────────────────────────────
+// Emits one anonymized event per action to a collector. OFF unless an endpoint is
+// set below. Nothing sensitive is sent — just the action id, timestamp, ok/error,
+// an anonymous per-install id (from clientStorage, provisioned by code.ts), and
+// the plugin version. Every path is fail-silent and never blocks the UI.
+const PLUGIN_VERSION = '0.1.0';
+// Set to your collector to enable, e.g. 'http://localhost:8787' (dev) or the
+// deployed Worker URL. Empty string = telemetry disabled. The chosen host must
+// also be listed in manifest.json → networkAccess.allowedDomains.
+const TELEMETRY_ENDPOINT = '';
+let telemetryAnonId = '';
+let telemetryOptOut = false;
+
+function sendTelemetry(action: string, status: 'ok' | 'error' = 'ok') {
+  if (!TELEMETRY_ENDPOINT || telemetryOptOut) return;
+  try {
+    fetch(TELEMETRY_ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        tool: action,
+        status,
+        durationMs: 0,
+        ts: new Date().toISOString(),
+        anonId: telemetryAnonId || 'unknown',
+        version: PLUGIN_VERSION,
+        server: 's2a-toolkit',
+      }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    /* best-effort */
+  }
+}
+
 // ── Telemetry — UsageStore in localStorage ────────────────────────────────────
 
 const USAGE_KEY = 's2a:usage';
@@ -40,6 +75,7 @@ function logEvent(featureId: string) {
   store.totals[featureId]   = (store.totals[featureId]   || 0) + 1;
   store.lastUsed[featureId] = Date.now();
   saveUsage(store);
+  sendTelemetry(featureId); // network emit alongside the local UsageStore
 }
 
 function heatOf(featureId: string): 'hot' | 'warm' | 'cold' {
@@ -827,6 +863,11 @@ window.addEventListener('message', (event) => {
   if (!msg) return;
 
   switch (msg.type) {
+    case 'telemetry:config': {
+      telemetryAnonId = (msg.anonId as string) || '';
+      telemetryOptOut = msg.optOut === true;
+      break;
+    }
     case 'bridge:command-result': {
       const p = pendingRequests.get(msg.requestId as string);
       if (p) {
@@ -1068,3 +1109,6 @@ setInterval(() => {
     bridgeConnect();
   }
 }, 45000);
+
+// Ask code.ts for the anonymous telemetry id (provisioned in clientStorage).
+postToPlugin('telemetry:init');
