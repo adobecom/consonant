@@ -13,7 +13,7 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
 // set below. Nothing sensitive is sent — just the action id, timestamp, ok/error,
 // an anonymous per-install id (from clientStorage, provisioned by code.ts), and
 // the plugin version. Every path is fail-silent and never blocks the UI.
-const PLUGIN_VERSION = '0.1.0';
+const PLUGIN_VERSION = '0.2.0';
 // Set to your collector to enable, e.g. 'http://localhost:8787' (dev) or the
 // deployed Worker URL. Empty string = telemetry disabled. The chosen host must
 // also be listed in manifest.json → networkAccess.allowedDomains.
@@ -122,11 +122,12 @@ let requestCounter = 0;
 
 // ── Panel switching ───────────────────────────────────────────────────────────
 
-type Panel = 'home' | 'tools';
+type Panel = 'home' | 'tools' | 'request';
 
 const panelEls: Record<Panel, HTMLElement> = {
   home:     document.getElementById('homePanel')     as HTMLElement,
   tools:    document.getElementById('toolsPanel')    as HTMLElement,
+  request:  document.getElementById('requestPanel')  as HTMLElement,
 };
 
 function switchPanel(panel: Panel) {
@@ -138,6 +139,7 @@ function switchPanel(panel: Panel) {
     tab.classList.toggle('active', tab.dataset.panel === panel);
   });
   if (panel === 'home') renderHomeView();
+  if (panel === 'request') postToPlugin('request:capture'); // refresh the context card
 }
 
 document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
@@ -205,6 +207,13 @@ const FEATURES: Feature[] = [
     category: 'Tools',
     uiAction: () => switchPanel('tools'),
   },
+  {
+    id: 'tools:request',
+    name: 'Request a change',
+    description: 'File a token/component/change request as a triage-ready GitHub issue',
+    category: 'Tools',
+    uiAction: () => switchPanel('request'),
+  },
 
   // Bridge
   {
@@ -228,6 +237,7 @@ const QUICK_ACTION_IDS = [
   'tools:annotate',
   'tools:select-filter',
   'tools:doc',
+  'tools:request',
 ];
 
 // ── Fire a feature ────────────────────────────────────────────────────────────
@@ -921,6 +931,7 @@ window.addEventListener('message', (event) => {
         updateCopyBtn(null, null);
         updateSectionBar(false, 0, '');
       }
+      if (activePanel === 'request') postToPlugin('request:capture');
       break;
     }
     case 'format-section:done': {
@@ -948,6 +959,20 @@ window.addEventListener('message', (event) => {
     case 'gh-token:value': {
       ghToken = (msg.token as string) || null;
       syncTokenReleaseAuthUi();
+      break;
+    }
+
+    case 'request:context': {
+      requestCtx = {
+        user:      (msg.user as string) ?? null,
+        node:      (msg.node as { id: string; name: string; type: string } | null) ?? null,
+        fileKey:   (msg.fileKey as string) ?? null,
+        fileName:  (msg.fileName as string) ?? '',
+        page:      (msg.page as string) ?? '',
+        tokenName: (msg.tokenName as string) ?? '',
+      };
+      renderRequestCtx(requestCtx);
+      if (_reqCtxResolve) { const r = _reqCtxResolve; _reqCtxResolve = null; r(requestCtx); }
       break;
     }
 
@@ -1090,6 +1115,227 @@ document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () =
   } finally {
     btn.disabled = false;
     btn.textContent = 'Release Tokens';
+  }
+});
+
+// ── Request tab ────────────────────────────────────────────────────────────
+// Files a triage-ready request as a GitHub issue, matching the merged issue
+// form (.github/ISSUE_TEMPLATE/s2a-request.yml): labels s2a-request + needs-triage,
+// the Type/Priority/summary/use-case body, plus the auto-captured Figma context.
+//
+// Two submit paths:
+//   • Worker mode  — POST to the intake Worker (no GitHub account needed). Set
+//     REQUEST_ENDPOINT once the Worker is deployed + add its host to manifest
+//     networkAccess.allowedDomains. This is the self-serve path.
+//   • Direct mode  — reuse the saved GitHub PAT (Tools → Token release) to POST
+//     the issue straight to the API. Works today; the token needs Issues:write.
+// REQUEST_ENDPOINT empty ⇒ direct mode.
+const REQUEST_ENDPOINT = '';
+
+interface RequestCtx {
+  user: string | null;
+  node: { id: string; name: string; type: string } | null;
+  fileKey: string | null;
+  fileName: string;
+  page: string;
+  tokenName: string;
+}
+let requestCtx: RequestCtx | null = null;
+let reqKind = 'New token';
+let reqPriority = 'Nice to have';
+
+// Ask code.ts for a fresh context snapshot and resolve when it answers (or on a
+// short timeout, falling back to the last known context). Used both to refresh
+// the card and — critically — at submit, so the issue never carries stale/empty
+// context because of a missed round-trip.
+let _reqCtxResolve: ((c: RequestCtx | null) => void) | null = null;
+function captureContext(timeoutMs = 1500): Promise<RequestCtx | null> {
+  return new Promise(resolve => {
+    _reqCtxResolve = resolve;
+    postToPlugin('request:capture');
+    setTimeout(() => {
+      if (_reqCtxResolve === resolve) { _reqCtxResolve = null; resolve(requestCtx); }
+    }, timeoutMs);
+  });
+}
+
+function renderRequestCtx(ctx: RequestCtx | null) {
+  const nodeEl  = document.getElementById('reqCtxNode')  as HTMLElement;
+  const tokenEl = document.getElementById('reqCtxToken') as HTMLElement;
+  const fileEl  = document.getElementById('reqCtxFile')  as HTMLElement;
+  const userEl  = document.getElementById('reqCtxUser')  as HTMLElement;
+  if (!ctx) return;
+
+  if (ctx.node) {
+    nodeEl.textContent = `${ctx.node.name} · ${ctx.node.type.toLowerCase().replace(/_/g, ' ')}`;
+    nodeEl.classList.remove('muted');
+  } else {
+    nodeEl.textContent = '— none selected (file & page still captured)';
+    nodeEl.classList.add('muted');
+  }
+
+  if (ctx.tokenName) {
+    tokenEl.textContent = ctx.tokenName;
+    tokenEl.classList.remove('muted');
+  } else {
+    tokenEl.textContent = '—';
+    tokenEl.classList.add('muted');
+  }
+
+  fileEl.textContent = ctx.fileName ? `${ctx.fileName} › ${ctx.page}` : '—';
+  fileEl.classList.toggle('muted', !ctx.fileName);
+  userEl.textContent = ctx.user || '(unknown)';
+  userEl.classList.toggle('muted', !ctx.user);
+}
+
+// Build the deep-link to the selected node — same shape as the copy-link button.
+function figmaNodeUrl(ctx: RequestCtx): string {
+  if (!ctx.fileKey || !ctx.node) return '';
+  const slug = (ctx.fileName || 'file').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return `https://www.figma.com/design/${ctx.fileKey}/${slug}?node-id=${ctx.node.id.replace(':', '-')}`;
+}
+
+function setReqStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('reqStatus') as HTMLElement;
+  el.innerHTML = msg;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+// Single-select chip group (radio-style), like the token-release bump chips.
+function bindReqChips(containerId: string, dataKey: 'kind' | 'priority', onPick: (v: string) => void) {
+  document.querySelectorAll<HTMLButtonElement>(`#${containerId} .chip`).forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>(`#${containerId} .chip`).forEach(c => c.classList.remove('on'));
+      chip.classList.add('on');
+      onPick(chip.dataset[dataKey]!);
+    });
+  });
+}
+bindReqChips('reqKind', 'kind', v => { reqKind = v; });
+bindReqChips('reqPriority', 'priority', v => { reqPriority = v; });
+
+// ── Image attachments ────────────────────────────────────────────────────────
+// Read to data URLs in the UI thread and carried in the submit payload. Hosting
+// is the Worker's job (uploads to object storage, embeds the URLs) — a PAT can't
+// attach binaries to an issue, so direct mode files the issue without them.
+interface ReqImage { name: string; type: string; dataUrl: string; size: number; }
+let reqImages: ReqImage[] = [];
+const MAX_IMAGES = 4;
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // 4MB each
+
+function renderReqImages() {
+  const wrap = document.getElementById('reqImages') as HTMLElement;
+  wrap.innerHTML = reqImages.map((img, i) =>
+    `<div class="req-thumb"><img src="${img.dataUrl}" alt="${esc(img.name)}"><button class="req-thumb-rm" data-i="${i}" title="Remove image" type="button">×</button></div>`
+  ).join('');
+  wrap.querySelectorAll<HTMLButtonElement>('.req-thumb-rm').forEach(b => {
+    b.addEventListener('click', () => { reqImages.splice(Number(b.dataset.i), 1); renderReqImages(); });
+  });
+  const addBtn = document.getElementById('reqAddImageBtn') as HTMLButtonElement | null;
+  if (addBtn) addBtn.style.display = reqImages.length >= MAX_IMAGES ? 'none' : '';
+}
+
+document.getElementById('reqAddImageBtn')?.addEventListener('click', () => {
+  (document.getElementById('reqImageInput') as HTMLInputElement).click();
+});
+
+document.getElementById('reqImageInput')?.addEventListener('change', (e) => {
+  const input = e.target as HTMLInputElement;
+  const files = Array.from(input.files || []);
+  input.value = ''; // let the same file be re-picked later
+  for (const file of files) {
+    if (reqImages.length >= MAX_IMAGES) { setReqStatus(`Up to ${MAX_IMAGES} images.`, 'err'); break; }
+    if (file.size > MAX_IMAGE_BYTES) { setReqStatus(`"${file.name}" is over 4MB — skipped.`, 'err'); continue; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      reqImages.push({ name: file.name, type: file.type, dataUrl: String(reader.result), size: file.size });
+      renderReqImages();
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+document.getElementById('reqSubmitBtn')?.addEventListener('click', async () => {
+  const summaryEl = document.getElementById('reqSummary') as HTMLInputElement;
+  const useCaseEl = document.getElementById('reqUseCase') as HTMLTextAreaElement;
+  const summary = summaryEl.value.trim();
+  const useCase = useCaseEl.value.trim();
+  if (!summary) { setReqStatus('Add a one-line summary first.', 'err'); summaryEl.focus(); return; }
+  if (!useCase) { setReqStatus('Add a use case — it helps triage.', 'err'); useCaseEl.focus(); return; }
+
+  sendTelemetry('action:request-submit');
+  const btn = document.getElementById('reqSubmitBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  setReqStatus('');
+
+  const ctx = await captureContext(); // fresh snapshot — never a stale cache
+  const figmaUrl = ctx ? figmaNodeUrl(ctx) : '';
+  const bodyLines = [
+    `**Requested by:** ${ctx?.user || '(unknown)'}`,
+    `**Type:** ${reqKind} · **Priority:** ${reqPriority}`,
+    '',
+    '### What', summary,
+    '',
+    '### Use case', useCase,
+    '',
+  ];
+  if (figmaUrl)        bodyLines.push(`**Figma:** ${figmaUrl}`);
+  if (ctx?.tokenName)  bodyLines.push(`**Token:** \`${ctx.tokenName}\``);
+  if (ctx?.fileName)   bodyLines.push(`**File / page:** ${ctx.fileName} › ${ctx.page}` + (ctx.node ? ` · **Node:** ${ctx.node.name}` : ''));
+  bodyLines.push('', '<sub>Filed from the S2A Toolkit plugin · Request tab.</sub>');
+  const issueBody = bodyLines.join('\n');
+  const title  = `[Request] ${summary.slice(0, 70)}`;
+  const labels = ['s2a-request', 'needs-triage'];
+
+  try {
+    let issueUrl = '';
+    let issueNumber = 0;
+
+    if (REQUEST_ENDPOINT) {
+      // Worker mode — the endpoint holds the GitHub credential.
+      const res = await fetch(REQUEST_ENDPOINT, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          kind: reqKind, priority: reqPriority, summary, useCase, figmaUrl,
+          fileName: ctx?.fileName, page: ctx?.page, nodeName: ctx?.node?.name,
+          tokenName: ctx?.tokenName, requester: ctx?.user,
+          images: reqImages.map(i => ({ name: i.name, type: i.type, dataUrl: i.dataUrl })),
+        }),
+      });
+      if (!res.ok) throw new Error(`Intake endpoint returned ${res.status}.`);
+      const data = await res.json();
+      issueUrl = data.url; issueNumber = data.number;
+    } else if (ghToken) {
+      // Direct mode — reuse the saved PAT (needs Issues: read/write).
+      const res = await fetch(`${GH_API}/issues`, {
+        method: 'POST',
+        headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, body: issueBody, labels }),
+      });
+      if (res.status === 401 || res.status === 403) {
+        throw new Error(`GitHub rejected the token (${res.status}). The Request tab needs Issues: read/write on ${GH_REPO} added to your fine-grained PAT (and SSO/org authorization).`);
+      }
+      if (res.status !== 201) throw new Error(`Create failed (${res.status}).`);
+      const data = await res.json();
+      issueUrl = data.html_url; issueNumber = data.number;
+    } else {
+      throw new Error('No intake endpoint set and no GitHub token saved. Save a PAT in Tools → Token release (add Issues: read/write), or configure the intake Worker.');
+    }
+
+    // Direct mode (no Worker) can't host images — say so instead of dropping them silently.
+    const imgNote = (!REQUEST_ENDPOINT && reqImages.length)
+      ? ` · ⚠ ${reqImages.length} image${reqImages.length !== 1 ? 's' : ''} not attached (needs the intake Worker)`
+      : '';
+    setReqStatus(`✓ Filed as <a href="${issueUrl}" target="_blank">#${issueNumber} →</a> — triage will pick it up.${imgNote}`, 'ok');
+    summaryEl.value = '';
+    useCaseEl.value = '';
+    reqImages = [];
+    renderReqImages();
+  } catch (err) {
+    setReqStatus('❌ ' + (err instanceof Error ? err.message : String(err)), 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Submit request';
   }
 });
 

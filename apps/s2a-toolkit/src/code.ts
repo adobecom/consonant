@@ -424,6 +424,51 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       break;
     }
 
+    // Gather the Figma context the Request tab attaches to an intake issue:
+    // the requester, the selected node, the file/page, and the first S2A token
+    // bound to that node (if any). Sent on demand — the UI asks when the Request
+    // tab opens and again on each selection change while it's active.
+    case 'request:capture': {
+      // Each field is guarded on its own — a throw on one (e.g. currentUser
+      // without the manifest permission) must never sink the whole context.
+      let user: string | null = null;
+      try { user = figma.currentUser?.name ?? null; } catch { /* no currentuser access */ }
+
+      const sel = figma.currentPage.selection[0] ?? null;
+      let tokenName = '';
+      if (sel) {
+        try {
+          const bv = (sel as any).boundVariables ?? {};
+          let firstId = '';
+          for (const k of Object.keys(bv)) {
+            const val = (bv as any)[k];
+            if (!val) continue;
+            const id = Array.isArray(val) ? (val.find((v: any) => v?.id) ?? {}).id : val?.id;
+            if (id) { firstId = id; break; }
+          }
+          if (firstId) {
+            const v = await figma.variables.getVariableByIdAsync(firstId);
+            if (v) tokenName = v.name;
+          }
+        } catch { /* variable not resolvable — leave blank */ }
+      }
+
+      let fileName = '';
+      let fileKey: string | null = null;
+      let page = '';
+      try { fileName = figma.root.name; } catch { /* ignore */ }
+      try { fileKey  = figma.fileKey ?? null; } catch { /* ignore */ }
+      try { page     = figma.currentPage.name; } catch { /* ignore */ }
+
+      figma.ui.postMessage({
+        type: 'request:context',
+        user,
+        node: sel ? { id: sel.id, name: sel.name, type: sel.type } : null,
+        fileKey, fileName, page, tokenName,
+      });
+      break;
+    }
+
     case 'select:apply-filter': {
       const setNode = await figma.getNodeByIdAsync(msg.setId as string);
       if (!setNode || setNode.type !== 'COMPONENT_SET') {

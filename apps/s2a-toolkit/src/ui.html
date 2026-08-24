@@ -86,6 +86,13 @@
       </svg>
       <span class="tab-label">Tools</span>
     </button>
+    <!-- Request -->
+    <button class="tab" data-panel="request" aria-label="Request">
+      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M12.5 1.5L6.5 7.5M12.5 1.5L8.5 12.5L6.5 7.5L1.5 5.5L12.5 1.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+      </svg>
+      <span class="tab-label">Request</span>
+    </button>
   </nav>
 
   <!-- ── Panels ───────────────────────────────────────────────────────── -->
@@ -201,6 +208,64 @@
       <div class="status" id="tokenReleaseStatus"></div>
 
       <!-- bottom padding for scroll clearance -->
+      <div style="height:16px;"></div>
+    </div>
+
+    <!-- Request — file a triage-ready request from inside Figma -->
+    <div class="panel" id="requestPanel">
+      <div class="section-label">Request a change</div>
+      <p class="req-intro">Ask for a token, component, or change. Files a triage-ready GitHub issue — the design-system team reviews weekly.</p>
+
+      <!-- Auto-captured Figma context -->
+      <div class="req-ctx" id="reqCtx">
+        <div class="req-ctx-row"><span class="req-ctx-k">Node</span><span class="req-ctx-v muted" id="reqCtxNode">— none selected</span></div>
+        <div class="req-ctx-row"><span class="req-ctx-k">Token</span><span class="req-ctx-v muted" id="reqCtxToken">—</span></div>
+        <div class="req-ctx-row"><span class="req-ctx-k">File</span><span class="req-ctx-v muted" id="reqCtxFile">—</span></div>
+        <div class="req-ctx-row"><span class="req-ctx-k">By</span><span class="req-ctx-v muted" id="reqCtxUser">—</span></div>
+      </div>
+
+      <div class="form-field" style="margin-top:12px;">
+        <label class="form-label">Type</label>
+        <div class="chip-grid" id="reqKind">
+          <button class="chip on" data-kind="New token">New token</button>
+          <button class="chip" data-kind="Token change">Token change</button>
+          <button class="chip" data-kind="New component">New component</button>
+          <button class="chip" data-kind="Component change">Component change</button>
+          <button class="chip" data-kind="Bug">Bug</button>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="reqSummary">What do you need?</label>
+        <input class="form-input" id="reqSummary" type="text" placeholder="One line — e.g. a subtle elevation shadow token for cards" />
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="reqUseCase">Use case — why / where</label>
+        <textarea class="form-input form-textarea" id="reqUseCase" placeholder="Where is it used, and why? Name the page or surface if you can."></textarea>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Priority</label>
+        <div class="chip-grid" id="reqPriority">
+          <button class="chip on" data-priority="Nice to have">Nice to have</button>
+          <button class="chip" data-priority="Needed soon">Needed soon</button>
+          <button class="chip" data-priority="Blocking">Blocking</button>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Images <span class="req-optional">(optional)</span></label>
+        <div class="req-images" id="reqImages"></div>
+        <button class="btn btn-ghost btn-sm" id="reqAddImageBtn" type="button">+ Add image</button>
+        <input type="file" id="reqImageInput" accept="image/png,image/jpeg,image/gif,image/webp" multiple hidden />
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="reqSubmitBtn" style="flex:1;">Submit request</button>
+      </div>
+      <div class="status" id="reqStatus"></div>
+
       <div style="height:16px;"></div>
     </div>
 
