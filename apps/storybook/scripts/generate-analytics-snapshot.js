@@ -180,10 +180,12 @@ function scanCssFile(absPath, tokenIndex) {
     for (const m of line.matchAll(TOKEN_VAR_RE)) {
       const cssProp = m[1].trim();
       if (!usedTokens.has(cssProp)) {
-        const entries = tokenIndex.byProp.get(cssProp);
+        // Validators TokenIndex: `known` = every shipped --s2a-* var, `primitive`
+        // = the design-only ones. (More accurate than the old MCP loader, which
+        // over-flagged semantic tokens via hiddenFromPublishing.)
         usedTokens.set(cssProp, {
-          found: !!entries,
-          designOnly: entries?.[0]?.designOnly ?? false,
+          found: tokenIndex.known.has(cssProp),
+          designOnly: tokenIndex.primitive.has(cssProp),
         });
       }
     }
@@ -214,20 +216,21 @@ function scanCssFile(absPath, tokenIndex) {
 }
 
 async function buildMiloData() {
-  // The token-compliance audit needs the s2a-ds MCP's compiled token-loader.
-  // In CI that dist isn't built, so degrade gracefully (like the Figma section
-  // above) instead of aborting the whole snapshot: skip the CSS scan, still
-  // report component built-vs-shipped counts.
+  // The token-compliance audit uses @adobecom/s2a-validators — the one
+  // authoritative token index (built from the shipped token CSS), shared with the
+  // eval scorers. It reads dist/packages/tokens/css/dev, which `tokens:build`
+  // produces, so it works in CI. If it's unavailable, degrade gracefully (like the
+  // Figma section) and skip only the CSS scan.
   let tokenIndex = null;
   try {
-    const { loadTokens } = await import(
-      path.join(REPO_ROOT, "apps/s2a-ds-mcp/dist/loaders/token-loader.js")
+    const { loadTokenIndex } = await import(
+      path.join(REPO_ROOT, "packages/validators/dist/index.js")
     );
-    tokenIndex = loadTokens(REPO_ROOT);
+    tokenIndex = loadTokenIndex(REPO_ROOT);
   } catch {
     console.warn(
-      "⚠️  s2a-ds-mcp token-loader not built — skipping the Milo token-compliance audit. " +
-        "Build the MCP (cd apps/s2a-ds-mcp && npm run build) to populate it.",
+      "⚠️  @adobecom/s2a-validators token index unavailable — skipping the Milo token-compliance audit. " +
+        "Run `npm run tokens:build` (and build packages/validators) to populate it.",
     );
   }
 
