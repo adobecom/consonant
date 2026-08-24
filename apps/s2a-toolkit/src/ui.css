@@ -662,3 +662,46 @@ body {
   margin: 16px -12px;
 }
 
+/* ══ NEW: Request panel ═════════════════════════════════════════════════════ */
+
+.req-intro {
+  font-size: 11px;
+  color: var(--text-2);
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+
+.req-ctx {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.req-ctx-row { display: flex; align-items: baseline; gap: 8px; }
+.req-ctx-k {
+  flex-shrink: 0;
+  width: 34px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+.req-ctx-v {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--text-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.req-ctx-v.muted { color: var(--text-3); }
+.req-ctx-v a { color: var(--accent); text-decoration: none; }
+.req-ctx-v a:hover { text-decoration: underline; }
+.status a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.status a:hover { text-decoration: underline; }
+

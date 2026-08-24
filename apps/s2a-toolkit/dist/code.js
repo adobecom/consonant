@@ -377,7 +377,7 @@ function genAnonId() {
   return (rnd() + rnd()).slice(0, 16);
 }
 figma.ui.onmessage = async (msg) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D;
   switch (msg.type) {
     case "ui-ready":
       notifySelection();
@@ -404,6 +404,44 @@ figma.ui.onmessage = async (msg) => {
       const token = msg.token || "";
       if (token) await figma.clientStorage.setAsync("gh-token", token);
       else await figma.clientStorage.deleteAsync("gh-token");
+      break;
+    }
+    // Gather the Figma context the Request tab attaches to an intake issue:
+    // the requester, the selected node, the file/page, and the first S2A token
+    // bound to that node (if any). Sent on demand — the UI asks when the Request
+    // tab opens and again on each selection change while it's active.
+    case "request:capture": {
+      const sel = (_b = figma.currentPage.selection[0]) != null ? _b : null;
+      let tokenName = "";
+      if (sel) {
+        const bv = (_c = sel.boundVariables) != null ? _c : {};
+        let firstId = "";
+        for (const k of Object.keys(bv)) {
+          const val = bv[k];
+          if (!val) continue;
+          const id = Array.isArray(val) ? ((_d = val.find((v) => v == null ? void 0 : v.id)) != null ? _d : {}).id : val == null ? void 0 : val.id;
+          if (id) {
+            firstId = id;
+            break;
+          }
+        }
+        if (firstId) {
+          try {
+            const v = await figma.variables.getVariableByIdAsync(firstId);
+            if (v) tokenName = v.name;
+          } catch (e) {
+          }
+        }
+      }
+      figma.ui.postMessage({
+        type: "request:context",
+        user: (_f = (_e = figma.currentUser) == null ? void 0 : _e.name) != null ? _f : null,
+        node: sel ? { id: sel.id, name: sel.name, type: sel.type } : null,
+        fileKey: (_g = figma.fileKey) != null ? _g : null,
+        fileName: figma.root.name,
+        page: figma.currentPage.name,
+        tokenName
+      });
       break;
     }
     case "select:apply-filter": {
@@ -481,7 +519,7 @@ figma.ui.onmessage = async (msg) => {
         return id ? (_b2 = varNames.get(id)) != null ? _b2 : "" : "";
       };
       var bvLabel = bvLabel2;
-      const categories = new Set((_b = msg.categories) != null ? _b : []);
+      const categories = new Set((_h = msg.categories) != null ? _h : []);
       const selection = figma.currentPage.selection;
       if (!selection.length) {
         figma.ui.postMessage({ type: "annotate:result", error: "No selection" });
@@ -495,7 +533,7 @@ figma.ui.onmessage = async (msg) => {
       }
       const varIdSet = /* @__PURE__ */ new Set();
       for (const n of allNodes) {
-        const bv = (_c = n.boundVariables) != null ? _c : {};
+        const bv = (_i = n.boundVariables) != null ? _i : {};
         for (const key of Object.keys(bv)) {
           const val = bv[key];
           if (!val) continue;
@@ -515,19 +553,19 @@ figma.ui.onmessage = async (msg) => {
       }));
       let annotated = 0;
       for (const n of allNodes) {
-        const bv = (_d = n.boundVariables) != null ? _d : {};
+        const bv = (_j = n.boundVariables) != null ? _j : {};
         const anns = [];
-        const pdVar = (_f = (_e = n.getPluginData) == null ? void 0 : _e.call(n, "s2aTokenVar")) != null ? _f : "";
-        const pdProp = (_h = (_g = n.getPluginData) == null ? void 0 : _g.call(n, "s2aTokenProp")) != null ? _h : "";
+        const pdVar = (_l = (_k = n.getPluginData) == null ? void 0 : _k.call(n, "s2aTokenVar")) != null ? _l : "";
+        const pdProp = (_n = (_m = n.getPluginData) == null ? void 0 : _m.call(n, "s2aTokenProp")) != null ? _n : "";
         if (categories.has("color-fg") && n.type === "TEXT") {
-          if (((_j = (_i = bv.fills) == null ? void 0 : _i.length) != null ? _j : 0) > 0) {
+          if (((_p = (_o = bv.fills) == null ? void 0 : _o.length) != null ? _p : 0) > 0) {
             anns.push({ label: bvLabel2(bv, "fills") || "color-fg", properties: [{ type: "fills" }] });
           } else if (pdVar && pdProp === "fills") {
             anns.push({ label: pdVar, properties: [{ type: "fills" }] });
           }
         }
         if (categories.has("color-bg") && n.type !== "TEXT") {
-          if (((_l = (_k = bv.fills) == null ? void 0 : _k.length) != null ? _l : 0) > 0) {
+          if (((_r = (_q = bv.fills) == null ? void 0 : _q.length) != null ? _r : 0) > 0) {
             anns.push({ label: bvLabel2(bv, "fills") || "color-bg", properties: [{ type: "fills" }] });
           } else if (pdVar && pdProp === "fills") {
             anns.push({ label: pdVar, properties: [{ type: "fills" }] });
@@ -563,15 +601,15 @@ figma.ui.onmessage = async (msg) => {
         }
         if (categories.has("typography") && n.type === "TEXT") {
           const tp = [];
-          if (((_n = (_m = bv.fontFamily) == null ? void 0 : _m.length) != null ? _n : 0) > 0) tp.push({ type: "fontFamily" });
-          if (((_p = (_o = bv.fontSize) == null ? void 0 : _o.length) != null ? _p : 0) > 0) tp.push({ type: "fontSize" });
-          if (((_r = (_q = bv.lineHeight) == null ? void 0 : _q.length) != null ? _r : 0) > 0) tp.push({ type: "lineHeight" });
-          if (((_t = (_s = bv.letterSpacing) == null ? void 0 : _s.length) != null ? _t : 0) > 0) tp.push({ type: "letterSpacing" });
+          if (((_t = (_s = bv.fontFamily) == null ? void 0 : _s.length) != null ? _t : 0) > 0) tp.push({ type: "fontFamily" });
+          if (((_v = (_u = bv.fontSize) == null ? void 0 : _u.length) != null ? _v : 0) > 0) tp.push({ type: "fontSize" });
+          if (((_x = (_w = bv.lineHeight) == null ? void 0 : _w.length) != null ? _x : 0) > 0) tp.push({ type: "lineHeight" });
+          if (((_z = (_y = bv.letterSpacing) == null ? void 0 : _y.length) != null ? _z : 0) > 0) tp.push({ type: "letterSpacing" });
           if (tp.length) {
             const lbl = bvLabel2(bv, "fontSize") || bvLabel2(bv, "fontFamily") || "typography";
             anns.push({ label: lbl, properties: tp });
           }
-          if (((_v = (_u = bv.fontStyle) == null ? void 0 : _u.length) != null ? _v : 0) > 0) {
+          if (((_B = (_A = bv.fontStyle) == null ? void 0 : _A.length) != null ? _B : 0) > 0) {
             const lbl = bvLabel2(bv, "fontStyle");
             anns.push({ label: lbl || "font-weight", properties: [{ type: "fontWeight" }] });
           }
@@ -611,7 +649,7 @@ figma.ui.onmessage = async (msg) => {
       let cleared = 0;
       for (const n of all) {
         try {
-          if (((_w = n.annotations) == null ? void 0 : _w.length) > 0) {
+          if (((_C = n.annotations) == null ? void 0 : _C.length) > 0) {
             n.annotations = [];
             cleared++;
           }
@@ -656,7 +694,7 @@ figma.ui.onmessage = async (msg) => {
         }
         const bColls = await figma.variables.getLocalVariableCollectionsAsync();
         const themeColl = bColls.find((c) => c.id === "VariableCollectionId:6:17");
-        const darkModeId = (_x = themeColl == null ? void 0 : themeColl.modes.find((m) => m.name === "Dark")) == null ? void 0 : _x.modeId;
+        const darkModeId = (_D = themeColl == null ? void 0 : themeColl.modes.find((m) => m.name === "Dark")) == null ? void 0 : _D.modeId;
         const [cLabel, cCaption, cBody] = await Promise.all([
           figma.variables.getVariableByIdAsync("VariableID:2483:41392"),
           // content/label

@@ -27,7 +27,7 @@
   function postToPlugin(type, payload) {
     parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
   }
-  var PLUGIN_VERSION = "0.1.0";
+  var PLUGIN_VERSION = "0.2.0";
   var TELEMETRY_ENDPOINT = "https://s2a-telemetry-collector.mmhuntsberry.workers.dev";
   var telemetryAnonId = "";
   var telemetryOptOut = false;
@@ -110,7 +110,8 @@
   var requestCounter = 0;
   var panelEls = {
     home: document.getElementById("homePanel"),
-    tools: document.getElementById("toolsPanel")
+    tools: document.getElementById("toolsPanel"),
+    request: document.getElementById("requestPanel")
   };
   function switchPanel(panel) {
     activePanel = panel;
@@ -121,6 +122,7 @@
       tab.classList.toggle("active", tab.dataset.panel === panel);
     });
     if (panel === "home") renderHomeView();
+    if (panel === "request") postToPlugin("request:capture");
   }
   document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -136,8 +138,8 @@
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a11;
-        return (_a11 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a11.click();
+        var _a12;
+        return (_a12 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a12.click();
       }
     },
     {
@@ -177,6 +179,13 @@
       category: "Tools",
       uiAction: () => switchPanel("tools")
     },
+    {
+      id: "tools:request",
+      name: "Request a change",
+      description: "File a token/component/change request as a triage-ready GitHub issue",
+      category: "Tools",
+      uiAction: () => switchPanel("request")
+    },
     // Bridge
     {
       id: "bridge:connect",
@@ -197,16 +206,17 @@
     "tools:copy-link",
     "tools:annotate",
     "tools:select-filter",
-    "tools:doc"
+    "tools:doc",
+    "tools:request"
   ];
   function fireFeature(feat) {
-    var _a11;
+    var _a12;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a11 = feat.pluginPayload) != null ? _a11 : {});
+      postToPlugin(feat.pluginAction, (_a12 = feat.pluginPayload) != null ? _a12 : {});
     }
     if (activePanel === "home") renderHomeView();
   }
@@ -298,12 +308,12 @@
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a11, _b;
+    var _a12, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a11 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a11.scrollIntoView({ block: "nearest" });
+      (_a12 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a12.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -368,7 +378,7 @@
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a11;
+    var _a12;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -381,7 +391,7 @@
     }
     document.body.removeChild(ta);
     try {
-      (_a11 = navigator.clipboard) == null ? void 0 : _a11.writeText(text).catch(() => {
+      (_a12 = navigator.clipboard) == null ? void 0 : _a12.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -738,8 +748,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a11;
-    annotateNodeId = (_a11 = sel == null ? void 0 : sel.id) != null ? _a11 : null;
+    var _a12;
+    annotateNodeId = (_a12 = sel == null ? void 0 : sel.id) != null ? _a12 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -792,9 +802,9 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateDocSelection(sel) {
-    var _a11, _b;
+    var _a12, _b;
     const isSet = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
-    docSetId = isSet ? (_a11 = sel == null ? void 0 : sel.id) != null ? _a11 : null : null;
+    docSetId = isSet ? (_a12 = sel == null ? void 0 : sel.id) != null ? _a12 : null : null;
     const emptyEl = document.getElementById("docSelectionEmpty");
     const infoEl = document.getElementById("docSelectionInfo");
     const nameEl = document.getElementById("docSetName");
@@ -823,7 +833,7 @@
     postToPlugin("doc:generate", { setId: docSetId });
   });
   window.addEventListener("message", (event) => {
-    var _a11, _b;
+    var _a12, _b, _c, _d, _e, _f, _g, _h;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -874,7 +884,7 @@
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a11 = msg.sectionCount) != null ? _a11 : 0,
+            (_a12 = msg.sectionCount) != null ? _a12 : 0,
             (_b = msg.sectionName) != null ? _b : sel.name
           );
         } else {
@@ -883,6 +893,7 @@
           updateCopyBtn(null, null);
           updateSectionBar(false, 0, "");
         }
+        if (activePanel === "request") postToPlugin("request:capture");
         break;
       }
       case "format-section:done": {
@@ -911,6 +922,18 @@
       case "gh-token:value": {
         ghToken = msg.token || null;
         syncTokenReleaseAuthUi();
+        break;
+      }
+      case "request:context": {
+        requestCtx = {
+          user: (_c = msg.user) != null ? _c : null,
+          node: (_d = msg.node) != null ? _d : null,
+          fileKey: (_e = msg.fileKey) != null ? _e : null,
+          fileName: (_f = msg.fileName) != null ? _f : "",
+          page: (_g = msg.page) != null ? _g : "",
+          tokenName: (_h = msg.tokenName) != null ? _h : ""
+        };
+        renderRequestCtx(requestCtx);
         break;
       }
       case "doc:result": {
@@ -983,7 +1006,7 @@
   }
   var _a10;
   (_a10 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
-    var _a11;
+    var _a12;
     if (!ghToken) return;
     sendTelemetry("action:token-release");
     const btn = document.getElementById("tokenReleaseBtn");
@@ -1006,9 +1029,9 @@
       for (let i = 0; i < 15 && !run; i++) {
         await new Promise((r) => setTimeout(r, 2e3));
         const data = await ghJson(`/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`);
-        run = (_a11 = (data.workflow_runs || []).find(
+        run = (_a12 = (data.workflow_runs || []).find(
           (r) => new Date(r.created_at).getTime() >= dispatchedAt - 5e3
-        )) != null ? _a11 : null;
+        )) != null ? _a12 : null;
       }
       if (!run) throw new Error("Dispatched, but no run appeared within 30s \u2014 check the Actions tab.");
       const runLink = `<a href="${run.html_url}" target="_blank">Actions run \u2192</a>`;
@@ -1039,6 +1062,152 @@
     } finally {
       btn.disabled = false;
       btn.textContent = "Release Tokens";
+    }
+  });
+  var REQUEST_ENDPOINT = "";
+  var requestCtx = null;
+  var reqKind = "New token";
+  var reqPriority = "Nice to have";
+  function renderRequestCtx(ctx) {
+    const nodeEl = document.getElementById("reqCtxNode");
+    const tokenEl = document.getElementById("reqCtxToken");
+    const fileEl = document.getElementById("reqCtxFile");
+    const userEl = document.getElementById("reqCtxUser");
+    if (!ctx) return;
+    if (ctx.node) {
+      nodeEl.textContent = `${ctx.node.name} \xB7 ${ctx.node.type.toLowerCase().replace(/_/g, " ")}`;
+      nodeEl.classList.remove("muted");
+    } else {
+      nodeEl.textContent = "\u2014 none selected (file & page still captured)";
+      nodeEl.classList.add("muted");
+    }
+    if (ctx.tokenName) {
+      tokenEl.textContent = ctx.tokenName;
+      tokenEl.classList.remove("muted");
+    } else {
+      tokenEl.textContent = "\u2014";
+      tokenEl.classList.add("muted");
+    }
+    fileEl.textContent = ctx.fileName ? `${ctx.fileName} \u203A ${ctx.page}` : "\u2014";
+    fileEl.classList.toggle("muted", !ctx.fileName);
+    userEl.textContent = ctx.user || "(unknown)";
+    userEl.classList.toggle("muted", !ctx.user);
+  }
+  function figmaNodeUrl(ctx) {
+    if (!ctx.fileKey || !ctx.node) return "";
+    const slug = (ctx.fileName || "file").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    return `https://www.figma.com/design/${ctx.fileKey}/${slug}?node-id=${ctx.node.id.replace(":", "-")}`;
+  }
+  function setReqStatus(msg, type = "") {
+    const el = document.getElementById("reqStatus");
+    el.innerHTML = msg;
+    el.className = "status" + (type ? " " + type : "");
+  }
+  function bindReqChips(containerId, dataKey, onPick) {
+    document.querySelectorAll(`#${containerId} .chip`).forEach((chip) => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(`#${containerId} .chip`).forEach((c) => c.classList.remove("on"));
+        chip.classList.add("on");
+        onPick(chip.dataset[dataKey]);
+      });
+    });
+  }
+  bindReqChips("reqKind", "kind", (v) => {
+    reqKind = v;
+  });
+  bindReqChips("reqPriority", "priority", (v) => {
+    reqPriority = v;
+  });
+  var _a11;
+  (_a11 = document.getElementById("reqSubmitBtn")) == null ? void 0 : _a11.addEventListener("click", async () => {
+    var _a12;
+    const summaryEl = document.getElementById("reqSummary");
+    const useCaseEl = document.getElementById("reqUseCase");
+    const summary = summaryEl.value.trim();
+    const useCase = useCaseEl.value.trim();
+    if (!summary) {
+      setReqStatus("Add a one-line summary first.", "err");
+      summaryEl.focus();
+      return;
+    }
+    if (!useCase) {
+      setReqStatus("Add a use case \u2014 it helps triage.", "err");
+      useCaseEl.focus();
+      return;
+    }
+    sendTelemetry("action:request-submit");
+    const btn = document.getElementById("reqSubmitBtn");
+    btn.disabled = true;
+    btn.textContent = "Submitting\u2026";
+    setReqStatus("");
+    const ctx = requestCtx;
+    const figmaUrl = ctx ? figmaNodeUrl(ctx) : "";
+    const bodyLines = [
+      `**Requested by:** ${(ctx == null ? void 0 : ctx.user) || "(unknown)"}`,
+      `**Type:** ${reqKind} \xB7 **Priority:** ${reqPriority}`,
+      "",
+      "### What",
+      summary,
+      "",
+      "### Use case",
+      useCase,
+      ""
+    ];
+    if (figmaUrl) bodyLines.push(`**Figma:** ${figmaUrl}`);
+    if (ctx == null ? void 0 : ctx.tokenName) bodyLines.push(`**Token:** \`${ctx.tokenName}\``);
+    if (ctx == null ? void 0 : ctx.fileName) bodyLines.push(`**File / page:** ${ctx.fileName} \u203A ${ctx.page}` + (ctx.node ? ` \xB7 **Node:** ${ctx.node.name}` : ""));
+    bodyLines.push("", "<sub>Filed from the S2A Toolkit plugin \xB7 Request tab.</sub>");
+    const issueBody = bodyLines.join("\n");
+    const title = `[Request] ${summary.slice(0, 70)}`;
+    const labels = ["s2a-request", "needs-triage"];
+    try {
+      let issueUrl = "";
+      let issueNumber = 0;
+      if (REQUEST_ENDPOINT) {
+        const res = await fetch(REQUEST_ENDPOINT, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            kind: reqKind,
+            priority: reqPriority,
+            summary,
+            useCase,
+            figmaUrl,
+            fileName: ctx == null ? void 0 : ctx.fileName,
+            page: ctx == null ? void 0 : ctx.page,
+            nodeName: (_a12 = ctx == null ? void 0 : ctx.node) == null ? void 0 : _a12.name,
+            tokenName: ctx == null ? void 0 : ctx.tokenName,
+            requester: ctx == null ? void 0 : ctx.user
+          })
+        });
+        if (!res.ok) throw new Error(`Intake endpoint returned ${res.status}.`);
+        const data = await res.json();
+        issueUrl = data.url;
+        issueNumber = data.number;
+      } else if (ghToken) {
+        const res = await fetch(`${GH_API}/issues`, {
+          method: "POST",
+          headers: __spreadProps(__spreadValues({}, ghHeaders()), { "Content-Type": "application/json" }),
+          body: JSON.stringify({ title, body: issueBody, labels })
+        });
+        if (res.status === 401 || res.status === 403) {
+          throw new Error(`GitHub rejected the token (${res.status}). The Request tab needs Issues: read/write on ${GH_REPO} added to your fine-grained PAT (and SSO/org authorization).`);
+        }
+        if (res.status !== 201) throw new Error(`Create failed (${res.status}).`);
+        const data = await res.json();
+        issueUrl = data.html_url;
+        issueNumber = data.number;
+      } else {
+        throw new Error("No intake endpoint set and no GitHub token saved. Save a PAT in Tools \u2192 Token release (add Issues: read/write), or configure the intake Worker.");
+      }
+      setReqStatus(`\u2713 Filed as <a href="${issueUrl}" target="_blank">#${issueNumber} \u2192</a> \u2014 triage will pick it up.`, "ok");
+      summaryEl.value = "";
+      useCaseEl.value = "";
+    } catch (err) {
+      setReqStatus("\u274C " + (err instanceof Error ? err.message : String(err)), "err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Submit request";
     }
   });
   postToPlugin("ui-ready");
