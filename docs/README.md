@@ -3,6 +3,7 @@
 Use this index to find the right reference quickly. Each subdirectory focuses on a distinct slice of the system.
 
 - `component-audit/` – Current state of component coverage (accordion, cards, layout containers, etc.)
+- `evals/` – The eval discipline: golden datasets, the two generation directions (design→code, contract→design), deterministic-first scoring, and the scorer toolbox (`eval-discipline.md`)
 - `future-notes/` – Forward-looking plans and decisions (e.g., Consonant 1 deprecation, upcoming Figma plugins)
 - `how-tos/` – Task-focused guides and runbooks (`runbook-token-pipeline.md`, `token-pipeline-steps-figjam.md`)
 - `workflows/` – End-to-end process diagrams like `figma-to-code-workflow.md`, plus reusable audit/roadmap frameworks
