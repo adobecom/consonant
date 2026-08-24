@@ -402,50 +402,12 @@ Milo uses vanilla HTML/CSS/JS with no build step. To supply components for copy-
 3. Include the exact HTML structure and full CSS in markdown code blocks so authors can copy-paste into Milo pages or blocks.
 4. See `apps/storybook/stories/Button.stories.js` for the pattern (HTML variants + CSS with `--s2a-*` tokens and fallbacks).
 
-#### 7.2 Prototyping in `apps/prototyping/`
+#### 7.2 Prototyping (Storybook)
 
-Once a component exists in `packages/components/src` and is wired to tokens, you can build and share prototypes from `apps/prototyping/`.
-
-**Why prototyping over Story UI**: Working directly in the repo gives Claude Code access to the real token MCP, component specs, and Figma Desktop Bridge — producing token-accurate output on the first pass without a separate server or API key.
-
-**Scaffold a new prototype:**
-
-```bash
-cd apps/prototyping
-npm run new
-```
-
-Enter your name and a feature name. The script creates:
-
-```
-apps/prototyping/{name}/{feature}/
-  index.html   ← tokens already imported
-  styles.css   ← semantic token reference in comments
-  script.js    ← commented component import examples
-```
-
-**Start the dev server** (from your prototype folder):
-
-```bash
-cd apps/prototyping/{name}/{feature}
-npx vite
-```
-
-Opens at `http://localhost:5173` with live reload.
-
-**Describe what you want to Claude:**
-
-> “Build a dark hero section for Adobe Firefly. Use the product lockup component, a title-1 headline, body-md subtitle, and two buttons — one accent solid, one ghost. Use knockout tokens for text and background.”
-
-Claude uses the `s2a-ds` MCP to look up real `--s2a-*` token names and component props. See `docs/guardrails/story-ui-considerations.md` for the full token rules.
-
-**Save and share:**
-
-```bash
-/push “prototype: {feature-name}”
-```
-
-See `docs/setup-guides/prototyping-setup.md` for the full setup guide.
+Prototype new features as **Storybook stories**, not a separate app. Run `/start-feature`
+to scaffold a component under `packages/components/src/prototyping/<you>/<feature>/` plus a
+Storybook story, then iterate in Storybook (`npm run storybook`). The PR preview deploys
+Storybook automatically — a shareable link appears on the PR once CI runs.
 
 ---
 
