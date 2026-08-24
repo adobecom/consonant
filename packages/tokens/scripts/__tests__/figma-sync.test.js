@@ -386,7 +386,7 @@ describe('transformVariables', () => {
     const collections = [
       {
         id: 'coll1',
-        name: 'Colors',
+        name: 'S2A / Semantic / Color',
         modes: [
           { modeId: 'mode1', name: 'Light' },
         ],
@@ -447,7 +447,7 @@ describe('transformVariables', () => {
     const collections = [
       {
         id: 'coll1',
-        name: 'Colors',
+        name: 'S2A / Semantic / Color',
         modes: [
           { modeId: 'mode1', name: 'Light' },
           { modeId: 'mode2', name: 'Dark' },
@@ -488,7 +488,7 @@ describe('transformVariables', () => {
     const collections = [
       {
         id: 'coll1',
-        name: 'Colors',
+        name: 'S2A / Semantic / Color',
         modes: [
           { modeId: 'mode1', name: 'Light' },
         ],
@@ -518,7 +518,7 @@ describe('transformVariables', () => {
     const collections = [
       {
         id: 'coll1',
-        name: 'Colors',
+        name: 'S2A / Semantic / Color',
         modes: [
           { modeId: 'mode1', name: 'Light' },
         ],
@@ -550,7 +550,7 @@ describe('transformVariables', () => {
     const collections = [
       {
         id: 'coll1',
-        name: 'Colors',
+        name: 'S2A / Semantic / Color',
         modes: [
           { modeId: 'mode1', name: 'Light' },
         ],
@@ -579,7 +579,7 @@ describe('transformVariables', () => {
     const collections = [
       {
         id: 'coll1',
-        name: 'Colors',
+        name: 'S2A / Semantic / Color',
         modes: [
           { modeId: 'mode1', name: 'Light' },
         ],
@@ -589,8 +589,8 @@ describe('transformVariables', () => {
     const result = transformVariables({ variables, collections });
 
     const file = result.files[0];
-    expect(file.fileName).toContain('colors');
-    expect(file.collection.name).toBe('Colors');
+    expect(file.fileName).toContain('color');
+    expect(file.collection.name).toBe('S2A / Semantic / Color');
     expect(file.mode.name).toBe('Light');
   });
 
