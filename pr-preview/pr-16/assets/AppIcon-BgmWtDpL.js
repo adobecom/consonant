@@ -1,1 +1,0 @@
-import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{i as t}from"./app-icon-kJOUm1g_.js";function n(){return(n=e((()=>{t()})))()}function r(){return(r=e((()=>{n()})))()}export{r as t};
