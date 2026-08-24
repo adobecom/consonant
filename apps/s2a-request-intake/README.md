@@ -4,14 +4,14 @@ A **Cloudflare Worker** that turns S2A plugin requests into **triage-ready GitHu
 
 Why a Worker (vs. the plugin posting to GitHub directly):
 - **No per-user GitHub account.** The Worker holds one GitHub credential server-side, so any designer can file a request — the self-serve path.
-- **Image hosting.** A PAT can't attach binaries to an issue. The Worker stores uploaded images in **R2** and embeds them in the issue body. Images are served back through the Worker itself (`GET /asset/<key>`) — no public-bucket config needed.
+- **Image hosting.** A PAT can't attach binaries to an issue. The Worker stores uploaded images in **Workers KV** (free tier, no payment method) with a **TTL** so storage auto-expires, and serves them back through the Worker itself (`GET /asset/<key>`). Images use KV instead of R2 specifically because R2 requires a card on file; KV does not.
 
 ## Endpoints
 
 | Route | What |
 |---|---|
 | `POST /` | File a request. Body = the plugin's JSON payload. Returns `{ url, number, images }`. |
-| `GET /asset/<key>` | Serve an uploaded image from R2 (public, immutable-cached — this is what GitHub fetches). |
+| `GET /asset/<key>` | Serve an uploaded image from KV (public, immutable-cached — this is what GitHub fetches). Note: KV is eventually consistent, so a brand-new image can 404 for up to ~60s before it propagates. |
 | `GET /` | One-line health string. |
 
 Every issue is created with the `s2a-request` + `needs-triage` labels — identical to the [issue form](../../docs/contributing.md#requesting-a-token-component-or-change) and the direct-mode plugin path, so all three feed one triage queue.
@@ -28,15 +28,15 @@ Every issue is created with the `s2a-request` + `needs-triage` labels — identi
   "images": [{ "name": "mock.png", "type": "image/png", "dataUrl": "data:image/png;base64,…" }]
 }
 ```
-`summary` and `useCase` are required. Up to 4 images, ≤5MB each; anything else is skipped, never blocking the issue.
+`summary` and `useCase` are required. Up to 4 images, ≤5MB each; anything else is skipped, never blocking the issue. Images are stored in KV with a 90-day TTL, so storage self-expires and stays a rounding error against the free tier.
 
 ## Setup & deploy
 
 ```bash
 npm install
 
-# 1. Create the R2 bucket (matches wrangler.toml binding)
-wrangler r2 bucket create s2a-request-intake
+# 1. Create the KV namespace (paste the returned id into wrangler.toml)
+wrangler kv namespace create INTAKE_KV
 
 # 2. Set secrets
 wrangler secret put GH_TOKEN        # a PAT with Issues: read/write on adobecom/consonant
@@ -45,6 +45,8 @@ wrangler secret put INTAKE_SECRET   # optional — a long random string the plug
 # 3. Ship it
 npm run deploy                      # → https://s2a-request-intake.<your-subdomain>.workers.dev
 ```
+
+> Already deployed at `https://s2a-request-intake.mmhuntsberry.workers.dev` (KV namespace `INTAKE_KV` = `8ad4542426ab44e4970978c3b2c7a67e`). Only `GH_TOKEN` remains to be set for it to file issues.
 
 Local dev: copy `.dev.vars.example` → `.dev.vars`, then `npm run dev` (→ `http://localhost:8787`).
 
