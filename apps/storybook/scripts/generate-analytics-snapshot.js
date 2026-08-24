@@ -214,31 +214,45 @@ function scanCssFile(absPath, tokenIndex) {
 }
 
 async function buildMiloData() {
-  const { loadTokens } = await import(
-    path.join(REPO_ROOT, "apps/s2a-ds-mcp/dist/loaders/token-loader.js")
-  );
-  const tokenIndex = loadTokens(REPO_ROOT);
-
-  const cssFiles = walkCssFiles(MILO_ROOT);
-  const byFile = [];
-  for (const absPath of cssFiles) {
-    const relPath = path.relative(REPO_ROOT, absPath).split(path.sep).join("/");
-    if (isSystemFile(relPath)) continue;
-    const scanned = scanCssFile(absPath, tokenIndex);
-    if (!scanned) continue;
-    const pathWithinMilo = path.relative(MILO_ROOT, absPath).split(path.sep).join("/");
-    byFile.push({
-      filePath: relPath,
-      block: path.basename(path.dirname(absPath)),
-      official: relPath.includes("libs/ui/s2a/"),
-      githubUrl: MILO_COMMIT_SHA
-        ? `https://github.com/${MILO_GITHUB_REPO}/blob/${MILO_COMMIT_SHA}/${pathWithinMilo}`
-        : null,
-      editorUri: `cursor://file${absPath}`,
-      ...scanned,
-    });
+  // The token-compliance audit needs the s2a-ds MCP's compiled token-loader.
+  // In CI that dist isn't built, so degrade gracefully (like the Figma section
+  // above) instead of aborting the whole snapshot: skip the CSS scan, still
+  // report component built-vs-shipped counts.
+  let tokenIndex = null;
+  try {
+    const { loadTokens } = await import(
+      path.join(REPO_ROOT, "apps/s2a-ds-mcp/dist/loaders/token-loader.js")
+    );
+    tokenIndex = loadTokens(REPO_ROOT);
+  } catch {
+    console.warn(
+      "⚠️  s2a-ds-mcp token-loader not built — skipping the Milo token-compliance audit. " +
+        "Build the MCP (cd apps/s2a-ds-mcp && npm run build) to populate it.",
+    );
   }
-  byFile.sort((a, b) => a.complianceScore - b.complianceScore);
+
+  const byFile = [];
+  if (tokenIndex) {
+    const cssFiles = walkCssFiles(MILO_ROOT);
+    for (const absPath of cssFiles) {
+      const relPath = path.relative(REPO_ROOT, absPath).split(path.sep).join("/");
+      if (isSystemFile(relPath)) continue;
+      const scanned = scanCssFile(absPath, tokenIndex);
+      if (!scanned) continue;
+      const pathWithinMilo = path.relative(MILO_ROOT, absPath).split(path.sep).join("/");
+      byFile.push({
+        filePath: relPath,
+        block: path.basename(path.dirname(absPath)),
+        official: relPath.includes("libs/ui/s2a/"),
+        githubUrl: MILO_COMMIT_SHA
+          ? `https://github.com/${MILO_GITHUB_REPO}/blob/${MILO_COMMIT_SHA}/${pathWithinMilo}`
+          : null,
+        editorUri: `cursor://file${absPath}`,
+        ...scanned,
+      });
+    }
+    byFile.sort((a, b) => a.complianceScore - b.complianceScore);
+  }
 
   const builtComponents = fs
     .readdirSync(COMPONENTS_SRC, { withFileTypes: true })
