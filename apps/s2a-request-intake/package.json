@@ -1,0 +1,17 @@
+{
+  "name": "@adobecom/s2a-request-intake",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker that turns S2A plugin requests into triage-ready GitHub issues, hosting attached images in R2.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260820.1",
+    "typescript": "^5.6.0",
+    "wrangler": "^4.124.0"
+  }
+}

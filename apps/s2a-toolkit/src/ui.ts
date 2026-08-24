@@ -1129,8 +1129,10 @@ document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () =
 //     networkAccess.allowedDomains. This is the self-serve path.
 //   • Direct mode  — reuse the saved GitHub PAT (Tools → Token release) to POST
 //     the issue straight to the API. Works today; the token needs Issues:write.
-// REQUEST_ENDPOINT empty ⇒ direct mode.
+// REQUEST_ENDPOINT empty ⇒ direct mode. After deploying apps/s2a-request-intake,
+// set REQUEST_ENDPOINT to its URL (and REQUEST_SECRET if you set an INTAKE_SECRET).
 const REQUEST_ENDPOINT = '';
+const REQUEST_SECRET = ''; // optional — sent as x-intake-secret when set
 
 interface RequestCtx {
   user: string | null;
@@ -1295,7 +1297,9 @@ document.getElementById('reqSubmitBtn')?.addEventListener('click', async () => {
       // Worker mode — the endpoint holds the GitHub credential.
       const res = await fetch(REQUEST_ENDPOINT, {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: REQUEST_SECRET
+          ? { 'content-type': 'application/json', 'x-intake-secret': REQUEST_SECRET }
+          : { 'content-type': 'application/json' },
         body: JSON.stringify({
           kind: reqKind, priority: reqPriority, summary, useCase, figmaUrl,
           fileName: ctx?.fileName, page: ctx?.page, nodeName: ctx?.node?.name,

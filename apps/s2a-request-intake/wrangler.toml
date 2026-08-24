@@ -1,0 +1,16 @@
+name = "s2a-request-intake"
+main = "src/index.ts"
+compatibility_date = "2025-07-01"
+
+# R2 bucket for uploaded images. Create it once:
+#   wrangler r2 bucket create s2a-request-intake
+[[r2_buckets]]
+binding = "INTAKE_BUCKET"
+bucket_name = "s2a-request-intake"
+
+[vars]
+GH_REPO = "adobecom/consonant"
+
+# Secrets (never commit these) — set with:
+#   wrangler secret put GH_TOKEN        # PAT with Issues: read/write on GH_REPO
+#   wrangler secret put INTAKE_SECRET   # optional shared secret the plugin sends

@@ -1070,6 +1070,7 @@
     }
   });
   var REQUEST_ENDPOINT = "";
+  var REQUEST_SECRET = "";
   var requestCtx = null;
   var reqKind = "New token";
   var reqPriority = "Nice to have";
@@ -1227,7 +1228,7 @@
       if (REQUEST_ENDPOINT) {
         const res = await fetch(REQUEST_ENDPOINT, {
           method: "POST",
-          headers: { "content-type": "application/json" },
+          headers: REQUEST_SECRET ? { "content-type": "application/json", "x-intake-secret": REQUEST_SECRET } : { "content-type": "application/json" },
           body: JSON.stringify({
             kind: reqKind,
             priority: reqPriority,

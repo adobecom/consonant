@@ -1,0 +1,4 @@
+# Copy to `.dev.vars` for local `wrangler dev` (gitignored). In production these
+# are Wrangler secrets (`wrangler secret put …`), not this file.
+GH_TOKEN=github_pat_or_ghp_with_issues_write
+INTAKE_SECRET=some-long-random-string
