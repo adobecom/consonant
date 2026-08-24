@@ -39,11 +39,11 @@
     "@figma/plugin-typings": "^1.124.0",
     "@nx/js": "^22.7.8",
     "@nx/workspace": "^22.7.8",
-    "@storybook/addon-a11y": "10.2.0",
-    "@storybook/addon-docs": "10.2.0",
-    "@storybook/addon-vitest": "10.2.0",
-    "@storybook/react": "10.2.0",
-    "@storybook/web-components-vite": "10.2.0",
+    "@storybook/addon-a11y": "10.5.10",
+    "@storybook/addon-docs": "10.5.10",
+    "@storybook/addon-vitest": "10.5.10",
+    "@storybook/react": "10.5.10",
+    "@storybook/web-components-vite": "10.5.10",
     "@vitest/browser-playwright": "^4.0.3",
     "@vitest/coverage-v8": "^4.0.3",
     "chromatic": "^15.2.0",
@@ -55,9 +55,12 @@
     "playwright": "^1.56.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "storybook": "10.2.0",
+    "storybook": "10.5.10",
     "style-dictionary": "^5.4.4",
     "vitest": "^4.0.3"
+  },
+  "overrides": {
+    "typescript": "^5.9.3"
   },
   "optionalDependencies": {
     "@rollup/rollup-darwin-arm64": "^4.52.5",
