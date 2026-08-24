@@ -31,9 +31,6 @@ jobs:
       - name: Build Storybook
         run: npm run storybook:build
 
-      - name: Copy prototypes into build
-        run: cp -r apps/prototyping storybook-static/prototyping
-
       - name: Disable Jekyll (allow _-prefixed assets to be served)
         run: touch storybook-static/.nojekyll
 
