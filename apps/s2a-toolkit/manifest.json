@@ -6,7 +6,7 @@
   "main": "dist/code.js",
   "ui": "dist/ui.html",
   "enablePrivatePluginApi": true,
-  "permissions": ["teamlibrary"],
+  "permissions": ["teamlibrary", "currentuser"],
   "documentAccess": "dynamic-page",
   "networkAccess": {
     "allowedDomains": [

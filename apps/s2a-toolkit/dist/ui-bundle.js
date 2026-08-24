@@ -934,6 +934,11 @@
           tokenName: (_h = msg.tokenName) != null ? _h : ""
         };
         renderRequestCtx(requestCtx);
+        if (_reqCtxResolve) {
+          const r = _reqCtxResolve;
+          _reqCtxResolve = null;
+          r(requestCtx);
+        }
         break;
       }
       case "doc:result": {
@@ -1068,6 +1073,19 @@
   var requestCtx = null;
   var reqKind = "New token";
   var reqPriority = "Nice to have";
+  var _reqCtxResolve = null;
+  function captureContext(timeoutMs = 1500) {
+    return new Promise((resolve) => {
+      _reqCtxResolve = resolve;
+      postToPlugin("request:capture");
+      setTimeout(() => {
+        if (_reqCtxResolve === resolve) {
+          _reqCtxResolve = null;
+          resolve(requestCtx);
+        }
+      }, timeoutMs);
+    });
+  }
   function renderRequestCtx(ctx) {
     const nodeEl = document.getElementById("reqCtxNode");
     const tokenEl = document.getElementById("reqCtxToken");
@@ -1140,7 +1158,7 @@
     btn.disabled = true;
     btn.textContent = "Submitting\u2026";
     setReqStatus("");
-    const ctx = requestCtx;
+    const ctx = await captureContext();
     const figmaUrl = ctx ? figmaNodeUrl(ctx) : "";
     const bodyLines = [
       `**Requested by:** ${(ctx == null ? void 0 : ctx.user) || "(unknown)"}`,

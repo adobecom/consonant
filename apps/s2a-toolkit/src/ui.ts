@@ -972,6 +972,7 @@ window.addEventListener('message', (event) => {
         tokenName: (msg.tokenName as string) ?? '',
       };
       renderRequestCtx(requestCtx);
+      if (_reqCtxResolve) { const r = _reqCtxResolve; _reqCtxResolve = null; r(requestCtx); }
       break;
     }
 
@@ -1143,6 +1144,21 @@ let requestCtx: RequestCtx | null = null;
 let reqKind = 'New token';
 let reqPriority = 'Nice to have';
 
+// Ask code.ts for a fresh context snapshot and resolve when it answers (or on a
+// short timeout, falling back to the last known context). Used both to refresh
+// the card and — critically — at submit, so the issue never carries stale/empty
+// context because of a missed round-trip.
+let _reqCtxResolve: ((c: RequestCtx | null) => void) | null = null;
+function captureContext(timeoutMs = 1500): Promise<RequestCtx | null> {
+  return new Promise(resolve => {
+    _reqCtxResolve = resolve;
+    postToPlugin('request:capture');
+    setTimeout(() => {
+      if (_reqCtxResolve === resolve) { _reqCtxResolve = null; resolve(requestCtx); }
+    }, timeoutMs);
+  });
+}
+
 function renderRequestCtx(ctx: RequestCtx | null) {
   const nodeEl  = document.getElementById('reqCtxNode')  as HTMLElement;
   const tokenEl = document.getElementById('reqCtxToken') as HTMLElement;
@@ -1211,7 +1227,7 @@ document.getElementById('reqSubmitBtn')?.addEventListener('click', async () => {
   btn.disabled = true; btn.textContent = 'Submitting…';
   setReqStatus('');
 
-  const ctx = requestCtx;
+  const ctx = await captureContext(); // fresh snapshot — never a stale cache
   const figmaUrl = ctx ? figmaNodeUrl(ctx) : '';
   const bodyLines = [
     `**Requested by:** ${ctx?.user || '(unknown)'}`,

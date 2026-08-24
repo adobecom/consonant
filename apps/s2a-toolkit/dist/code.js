@@ -411,35 +411,55 @@ figma.ui.onmessage = async (msg) => {
     // bound to that node (if any). Sent on demand — the UI asks when the Request
     // tab opens and again on each selection change while it's active.
     case "request:capture": {
-      const sel = (_b = figma.currentPage.selection[0]) != null ? _b : null;
+      let user = null;
+      try {
+        user = (_c = (_b = figma.currentUser) == null ? void 0 : _b.name) != null ? _c : null;
+      } catch (e) {
+      }
+      const sel = (_d = figma.currentPage.selection[0]) != null ? _d : null;
       let tokenName = "";
       if (sel) {
-        const bv = (_c = sel.boundVariables) != null ? _c : {};
-        let firstId = "";
-        for (const k of Object.keys(bv)) {
-          const val = bv[k];
-          if (!val) continue;
-          const id = Array.isArray(val) ? ((_d = val.find((v) => v == null ? void 0 : v.id)) != null ? _d : {}).id : val == null ? void 0 : val.id;
-          if (id) {
-            firstId = id;
-            break;
+        try {
+          const bv = (_e = sel.boundVariables) != null ? _e : {};
+          let firstId = "";
+          for (const k of Object.keys(bv)) {
+            const val = bv[k];
+            if (!val) continue;
+            const id = Array.isArray(val) ? ((_f = val.find((v) => v == null ? void 0 : v.id)) != null ? _f : {}).id : val == null ? void 0 : val.id;
+            if (id) {
+              firstId = id;
+              break;
+            }
           }
-        }
-        if (firstId) {
-          try {
+          if (firstId) {
             const v = await figma.variables.getVariableByIdAsync(firstId);
             if (v) tokenName = v.name;
-          } catch (e) {
           }
+        } catch (e) {
         }
+      }
+      let fileName = "";
+      let fileKey = null;
+      let page = "";
+      try {
+        fileName = figma.root.name;
+      } catch (e) {
+      }
+      try {
+        fileKey = (_g = figma.fileKey) != null ? _g : null;
+      } catch (e) {
+      }
+      try {
+        page = figma.currentPage.name;
+      } catch (e) {
       }
       figma.ui.postMessage({
         type: "request:context",
-        user: (_f = (_e = figma.currentUser) == null ? void 0 : _e.name) != null ? _f : null,
+        user,
         node: sel ? { id: sel.id, name: sel.name, type: sel.type } : null,
-        fileKey: (_g = figma.fileKey) != null ? _g : null,
-        fileName: figma.root.name,
-        page: figma.currentPage.name,
+        fileKey,
+        fileName,
+        page,
         tokenName
       });
       break;
