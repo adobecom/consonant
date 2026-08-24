@@ -1214,6 +1214,47 @@ function bindReqChips(containerId: string, dataKey: 'kind' | 'priority', onPick:
 bindReqChips('reqKind', 'kind', v => { reqKind = v; });
 bindReqChips('reqPriority', 'priority', v => { reqPriority = v; });
 
+// ── Image attachments ────────────────────────────────────────────────────────
+// Read to data URLs in the UI thread and carried in the submit payload. Hosting
+// is the Worker's job (uploads to object storage, embeds the URLs) — a PAT can't
+// attach binaries to an issue, so direct mode files the issue without them.
+interface ReqImage { name: string; type: string; dataUrl: string; size: number; }
+let reqImages: ReqImage[] = [];
+const MAX_IMAGES = 4;
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // 4MB each
+
+function renderReqImages() {
+  const wrap = document.getElementById('reqImages') as HTMLElement;
+  wrap.innerHTML = reqImages.map((img, i) =>
+    `<div class="req-thumb"><img src="${img.dataUrl}" alt="${esc(img.name)}"><button class="req-thumb-rm" data-i="${i}" title="Remove image" type="button">×</button></div>`
+  ).join('');
+  wrap.querySelectorAll<HTMLButtonElement>('.req-thumb-rm').forEach(b => {
+    b.addEventListener('click', () => { reqImages.splice(Number(b.dataset.i), 1); renderReqImages(); });
+  });
+  const addBtn = document.getElementById('reqAddImageBtn') as HTMLButtonElement | null;
+  if (addBtn) addBtn.style.display = reqImages.length >= MAX_IMAGES ? 'none' : '';
+}
+
+document.getElementById('reqAddImageBtn')?.addEventListener('click', () => {
+  (document.getElementById('reqImageInput') as HTMLInputElement).click();
+});
+
+document.getElementById('reqImageInput')?.addEventListener('change', (e) => {
+  const input = e.target as HTMLInputElement;
+  const files = Array.from(input.files || []);
+  input.value = ''; // let the same file be re-picked later
+  for (const file of files) {
+    if (reqImages.length >= MAX_IMAGES) { setReqStatus(`Up to ${MAX_IMAGES} images.`, 'err'); break; }
+    if (file.size > MAX_IMAGE_BYTES) { setReqStatus(`"${file.name}" is over 4MB — skipped.`, 'err'); continue; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      reqImages.push({ name: file.name, type: file.type, dataUrl: String(reader.result), size: file.size });
+      renderReqImages();
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
 document.getElementById('reqSubmitBtn')?.addEventListener('click', async () => {
   const summaryEl = document.getElementById('reqSummary') as HTMLInputElement;
   const useCaseEl = document.getElementById('reqUseCase') as HTMLTextAreaElement;
@@ -1259,6 +1300,7 @@ document.getElementById('reqSubmitBtn')?.addEventListener('click', async () => {
           kind: reqKind, priority: reqPriority, summary, useCase, figmaUrl,
           fileName: ctx?.fileName, page: ctx?.page, nodeName: ctx?.node?.name,
           tokenName: ctx?.tokenName, requester: ctx?.user,
+          images: reqImages.map(i => ({ name: i.name, type: i.type, dataUrl: i.dataUrl })),
         }),
       });
       if (!res.ok) throw new Error(`Intake endpoint returned ${res.status}.`);
@@ -1281,9 +1323,15 @@ document.getElementById('reqSubmitBtn')?.addEventListener('click', async () => {
       throw new Error('No intake endpoint set and no GitHub token saved. Save a PAT in Tools → Token release (add Issues: read/write), or configure the intake Worker.');
     }
 
-    setReqStatus(`✓ Filed as <a href="${issueUrl}" target="_blank">#${issueNumber} →</a> — triage will pick it up.`, 'ok');
+    // Direct mode (no Worker) can't host images — say so instead of dropping them silently.
+    const imgNote = (!REQUEST_ENDPOINT && reqImages.length)
+      ? ` · ⚠ ${reqImages.length} image${reqImages.length !== 1 ? 's' : ''} not attached (needs the intake Worker)`
+      : '';
+    setReqStatus(`✓ Filed as <a href="${issueUrl}" target="_blank">#${issueNumber} →</a> — triage will pick it up.${imgNote}`, 'ok');
     summaryEl.value = '';
     useCaseEl.value = '';
+    reqImages = [];
+    renderReqImages();
   } catch (err) {
     setReqStatus('❌ ' + (err instanceof Error ? err.message : String(err)), 'err');
   } finally {

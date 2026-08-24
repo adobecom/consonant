@@ -138,8 +138,8 @@
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a12;
-        return (_a12 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a12.click();
+        var _a14;
+        return (_a14 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a14.click();
       }
     },
     {
@@ -210,13 +210,13 @@
     "tools:request"
   ];
   function fireFeature(feat) {
-    var _a12;
+    var _a14;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a12 = feat.pluginPayload) != null ? _a12 : {});
+      postToPlugin(feat.pluginAction, (_a14 = feat.pluginPayload) != null ? _a14 : {});
     }
     if (activePanel === "home") renderHomeView();
   }
@@ -308,12 +308,12 @@
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a12, _b;
+    var _a14, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a12 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a12.scrollIntoView({ block: "nearest" });
+      (_a14 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a14.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -378,7 +378,7 @@
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a12;
+    var _a14;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -391,7 +391,7 @@
     }
     document.body.removeChild(ta);
     try {
-      (_a12 = navigator.clipboard) == null ? void 0 : _a12.writeText(text).catch(() => {
+      (_a14 = navigator.clipboard) == null ? void 0 : _a14.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -748,8 +748,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a12;
-    annotateNodeId = (_a12 = sel == null ? void 0 : sel.id) != null ? _a12 : null;
+    var _a14;
+    annotateNodeId = (_a14 = sel == null ? void 0 : sel.id) != null ? _a14 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -802,9 +802,9 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateDocSelection(sel) {
-    var _a12, _b;
+    var _a14, _b;
     const isSet = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
-    docSetId = isSet ? (_a12 = sel == null ? void 0 : sel.id) != null ? _a12 : null : null;
+    docSetId = isSet ? (_a14 = sel == null ? void 0 : sel.id) != null ? _a14 : null : null;
     const emptyEl = document.getElementById("docSelectionEmpty");
     const infoEl = document.getElementById("docSelectionInfo");
     const nameEl = document.getElementById("docSetName");
@@ -833,7 +833,7 @@
     postToPlugin("doc:generate", { setId: docSetId });
   });
   window.addEventListener("message", (event) => {
-    var _a12, _b, _c, _d, _e, _f, _g, _h;
+    var _a14, _b, _c, _d, _e, _f, _g, _h;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -884,7 +884,7 @@
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a12 = msg.sectionCount) != null ? _a12 : 0,
+            (_a14 = msg.sectionCount) != null ? _a14 : 0,
             (_b = msg.sectionName) != null ? _b : sel.name
           );
         } else {
@@ -1011,7 +1011,7 @@
   }
   var _a10;
   (_a10 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
-    var _a12;
+    var _a14;
     if (!ghToken) return;
     sendTelemetry("action:token-release");
     const btn = document.getElementById("tokenReleaseBtn");
@@ -1034,9 +1034,9 @@
       for (let i = 0; i < 15 && !run; i++) {
         await new Promise((r) => setTimeout(r, 2e3));
         const data = await ghJson(`/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`);
-        run = (_a12 = (data.workflow_runs || []).find(
+        run = (_a14 = (data.workflow_runs || []).find(
           (r) => new Date(r.created_at).getTime() >= dispatchedAt - 5e3
-        )) != null ? _a12 : null;
+        )) != null ? _a14 : null;
       }
       if (!run) throw new Error("Dispatched, but no run appeared within 30s \u2014 check the Actions tab.");
       const runLink = `<a href="${run.html_url}" target="_blank">Actions run \u2192</a>`;
@@ -1136,9 +1136,52 @@
   bindReqChips("reqPriority", "priority", (v) => {
     reqPriority = v;
   });
+  var reqImages = [];
+  var MAX_IMAGES = 4;
+  var MAX_IMAGE_BYTES = 4 * 1024 * 1024;
+  function renderReqImages() {
+    const wrap = document.getElementById("reqImages");
+    wrap.innerHTML = reqImages.map(
+      (img, i) => `<div class="req-thumb"><img src="${img.dataUrl}" alt="${esc(img.name)}"><button class="req-thumb-rm" data-i="${i}" title="Remove image" type="button">\xD7</button></div>`
+    ).join("");
+    wrap.querySelectorAll(".req-thumb-rm").forEach((b) => {
+      b.addEventListener("click", () => {
+        reqImages.splice(Number(b.dataset.i), 1);
+        renderReqImages();
+      });
+    });
+    const addBtn = document.getElementById("reqAddImageBtn");
+    if (addBtn) addBtn.style.display = reqImages.length >= MAX_IMAGES ? "none" : "";
+  }
   var _a11;
-  (_a11 = document.getElementById("reqSubmitBtn")) == null ? void 0 : _a11.addEventListener("click", async () => {
-    var _a12;
+  (_a11 = document.getElementById("reqAddImageBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
+    document.getElementById("reqImageInput").click();
+  });
+  var _a12;
+  (_a12 = document.getElementById("reqImageInput")) == null ? void 0 : _a12.addEventListener("change", (e) => {
+    const input = e.target;
+    const files = Array.from(input.files || []);
+    input.value = "";
+    for (const file of files) {
+      if (reqImages.length >= MAX_IMAGES) {
+        setReqStatus(`Up to ${MAX_IMAGES} images.`, "err");
+        break;
+      }
+      if (file.size > MAX_IMAGE_BYTES) {
+        setReqStatus(`"${file.name}" is over 4MB \u2014 skipped.`, "err");
+        continue;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        reqImages.push({ name: file.name, type: file.type, dataUrl: String(reader.result), size: file.size });
+        renderReqImages();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  var _a13;
+  (_a13 = document.getElementById("reqSubmitBtn")) == null ? void 0 : _a13.addEventListener("click", async () => {
+    var _a14;
     const summaryEl = document.getElementById("reqSummary");
     const useCaseEl = document.getElementById("reqUseCase");
     const summary = summaryEl.value.trim();
@@ -1193,9 +1236,10 @@
             figmaUrl,
             fileName: ctx == null ? void 0 : ctx.fileName,
             page: ctx == null ? void 0 : ctx.page,
-            nodeName: (_a12 = ctx == null ? void 0 : ctx.node) == null ? void 0 : _a12.name,
+            nodeName: (_a14 = ctx == null ? void 0 : ctx.node) == null ? void 0 : _a14.name,
             tokenName: ctx == null ? void 0 : ctx.tokenName,
-            requester: ctx == null ? void 0 : ctx.user
+            requester: ctx == null ? void 0 : ctx.user,
+            images: reqImages.map((i) => ({ name: i.name, type: i.type, dataUrl: i.dataUrl }))
           })
         });
         if (!res.ok) throw new Error(`Intake endpoint returned ${res.status}.`);
@@ -1218,9 +1262,12 @@
       } else {
         throw new Error("No intake endpoint set and no GitHub token saved. Save a PAT in Tools \u2192 Token release (add Issues: read/write), or configure the intake Worker.");
       }
-      setReqStatus(`\u2713 Filed as <a href="${issueUrl}" target="_blank">#${issueNumber} \u2192</a> \u2014 triage will pick it up.`, "ok");
+      const imgNote = !REQUEST_ENDPOINT && reqImages.length ? ` \xB7 \u26A0 ${reqImages.length} image${reqImages.length !== 1 ? "s" : ""} not attached (needs the intake Worker)` : "";
+      setReqStatus(`\u2713 Filed as <a href="${issueUrl}" target="_blank">#${issueNumber} \u2192</a> \u2014 triage will pick it up.${imgNote}`, "ok");
       summaryEl.value = "";
       useCaseEl.value = "";
+      reqImages = [];
+      renderReqImages();
     } catch (err) {
       setReqStatus("\u274C " + (err instanceof Error ? err.message : String(err)), "err");
     } finally {
