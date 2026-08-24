@@ -362,6 +362,18 @@ async function main() {
   const miloFidelity = await buildMiloData();
   meta.miloFilesScanned = miloFidelity.byFile.length;
 
+  // Never overwrite a good committed snapshot with an empty one. In CI there are
+  // no Figma creds and the Milo submodule isn't checked out, so a fresh run has
+  // no data — keep the last committed snapshot so the deployed dashboard doesn't
+  // go blank. Only write when we actually produced data (or nothing is committed).
+  const hasData = meta.figmaAvailable || miloFidelity.byFile.length > 0;
+  if (!hasData && fs.existsSync(OUTPUT_MODULE)) {
+    console.warn(
+      "⚠️  No fresh Figma or Milo data (CI without creds/submodule) — keeping the existing committed analyticsSnapshot.js so the dashboard keeps its last good data.",
+    );
+    process.exit(0);
+  }
+
   writeSnapshot({ meta, figmaTrend, componentAdoption, topConsumers, miloFidelity });
   console.log(
     `✅ Generated stories/generated/analyticsSnapshot.js (figma: ${meta.figmaAvailable ? "live" : "unavailable"}, milo files scanned: ${meta.miloFilesScanned})`,
