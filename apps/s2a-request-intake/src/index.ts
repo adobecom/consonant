@@ -2,23 +2,28 @@
 //
 // s2a-request-intake — a Cloudflare Worker that turns S2A plugin requests into
 // triage-ready GitHub issues. It holds the GitHub credential server-side, so
-// requesters need no GitHub account (the self-serve path), and it hosts any
-// attached images in R2 and embeds them in the issue.
+// requesters need no GitHub account (the self-serve path), and it stores any
+// attached images in Workers KV (free tier, no payment method) and embeds them.
 //
-//   POST /            file a request  → { url, number }
-//   GET  /asset/<key> serve an uploaded image from R2 (public, for GitHub)
+//   POST /            file a request  → { url, number, images }
+//   GET  /asset/<key> serve an uploaded image from KV (public, for GitHub)
 //   GET  /            a one-line health/info string
 //
-// Deploy:  npm install && npm run deploy   (see README for R2 + secret setup)
+// Images live in KV with a TTL, so storage self-expires and usage stays a
+// rounding error against the free tier. KV is eventually consistent, so a
+// freshly-uploaded image can 404 for up to ~60s before it propagates to the
+// edge GitHub fetches from — fine for triage, and GitHub re-fetches.
+//
+// Deploy:  npm install && npm run deploy   (see README for KV + secret setup)
 // Local:   npm run dev                     → http://localhost:8787
 
 export interface Env {
-  // R2 bucket that stores uploaded images. Served back via GET /asset/<key>.
-  INTAKE_BUCKET: R2Bucket;
+  // KV namespace that stores uploaded images. Served back via GET /asset/<key>.
+  INTAKE_KV: KVNamespace;
   // GitHub PAT with Issues: read/write on GH_REPO. Set as a Wrangler secret.
   GH_TOKEN: string;
   // Optional shared secret. If set (as a Wrangler secret), POSTs must send a
-  // matching `x-intake-secret` header. Unset = open (fine for a quick trial).
+  // matching `x-intake-secret` header. Unset = open.
   INTAKE_SECRET?: string;
   // Target repo, e.g. "adobecom/consonant".
   GH_REPO: string;
@@ -46,7 +51,8 @@ const CORS: Record<string, string> = {
 };
 
 const MAX_IMAGES = 4;
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5MB per image (base64 inflates ~33%)
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5MB per image (KV value limit is 25MB)
+const IMAGE_TTL_SECONDS = 90 * 24 * 60 * 60; // auto-expire after 90 days
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body, null, 2), {
@@ -118,12 +124,17 @@ export default {
     // ── Serve an uploaded image (public — GitHub fetches these at render) ──────
     if (req.method === "GET" && url.pathname.startsWith("/asset/")) {
       const key = decodeURIComponent(url.pathname.slice("/asset/".length));
-      const obj = await env.INTAKE_BUCKET.get(key);
-      if (!obj) return new Response("Not found", { status: 404 });
-      const headers = new Headers();
-      obj.writeHttpMetadata(headers);
-      headers.set("cache-control", "public, max-age=31536000, immutable");
-      return new Response(obj.body, { headers });
+      const { value, metadata } = await env.INTAKE_KV.getWithMetadata<{ contentType: string }>(
+        key,
+        "arrayBuffer",
+      );
+      if (!value) return new Response("Not found", { status: 404 });
+      return new Response(value, {
+        headers: {
+          "content-type": metadata?.contentType || "application/octet-stream",
+          "cache-control": "public, max-age=31536000, immutable",
+        },
+      });
     }
 
     if (req.method === "GET") {
@@ -149,7 +160,7 @@ export default {
       return json({ error: "summary and useCase are required" }, 422);
     }
 
-    // ── Upload images to R2 → markdown embeds served from this Worker ──────────
+    // ── Store images in KV (with TTL) → markdown served from this Worker ───────
     const imageMd: string[] = [];
     const images = Array.isArray(p.images) ? p.images.slice(0, MAX_IMAGES) : [];
     for (const img of images) {
@@ -161,8 +172,9 @@ export default {
       const ext = EXT_BY_TYPE[decoded.contentType] || "bin";
       const key = `intake/${crypto.randomUUID()}.${ext}`;
       try {
-        await env.INTAKE_BUCKET.put(key, decoded.bytes, {
-          httpMetadata: { contentType: decoded.contentType },
+        await env.INTAKE_KV.put(key, decoded.bytes, {
+          expirationTtl: IMAGE_TTL_SECONDS,
+          metadata: { contentType: decoded.contentType },
         });
         imageMd.push(`![${escapeMd(img.name || "attachment")}](${url.origin}/asset/${key})`);
       } catch {

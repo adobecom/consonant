@@ -1129,10 +1129,10 @@ document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () =
 //     networkAccess.allowedDomains. This is the self-serve path.
 //   • Direct mode  — reuse the saved GitHub PAT (Tools → Token release) to POST
 //     the issue straight to the API. Works today; the token needs Issues:write.
-// REQUEST_ENDPOINT empty ⇒ direct mode. After deploying apps/s2a-request-intake,
-// set REQUEST_ENDPOINT to its URL (and REQUEST_SECRET if you set an INTAKE_SECRET).
-const REQUEST_ENDPOINT = '';
-const REQUEST_SECRET = ''; // optional — sent as x-intake-secret when set
+// REQUEST_ENDPOINT empty ⇒ direct mode. Set to the deployed intake Worker for
+// the self-serve path (no per-user GitHub token; images hosted server-side).
+const REQUEST_ENDPOINT = 'https://s2a-request-intake.mmhuntsberry.workers.dev';
+const REQUEST_SECRET = ''; // optional — sent as x-intake-secret when the Worker has INTAKE_SECRET set
 
 interface RequestCtx {
   user: string | null;

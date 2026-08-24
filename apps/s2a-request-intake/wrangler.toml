@@ -2,11 +2,12 @@ name = "s2a-request-intake"
 main = "src/index.ts"
 compatibility_date = "2025-07-01"
 
-# R2 bucket for uploaded images. Create it once:
-#   wrangler r2 bucket create s2a-request-intake
-[[r2_buckets]]
-binding = "INTAKE_BUCKET"
-bucket_name = "s2a-request-intake"
+# Images are stored in Workers KV (free tier, no payment method) with a TTL, and
+# served back via GET /asset/<key>. Namespace created with:
+#   wrangler kv namespace create INTAKE_KV
+[[kv_namespaces]]
+binding = "INTAKE_KV"
+id = "8ad4542426ab44e4970978c3b2c7a67e"
 
 [vars]
 GH_REPO = "adobecom/consonant"

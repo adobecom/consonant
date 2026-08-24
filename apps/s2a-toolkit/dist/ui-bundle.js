@@ -1069,7 +1069,7 @@
       btn.textContent = "Release Tokens";
     }
   });
-  var REQUEST_ENDPOINT = "";
+  var REQUEST_ENDPOINT = "https://s2a-request-intake.mmhuntsberry.workers.dev";
   var REQUEST_SECRET = "";
   var requestCtx = null;
   var reqKind = "New token";
