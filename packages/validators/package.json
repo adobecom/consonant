@@ -1,15 +1,23 @@
 {
   "name": "@adobecom/s2a-validators",
   "version": "0.1.0",
-  "private": true,
   "description": "Authoritative S2A token/spec validators — one source of truth for the MCP, CI, and evals.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": { "s2a-validate-css": "./dist/cli.js" },
   "files": ["dist"],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adobecom/consonant.git",
+    "directory": "packages/validators"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "prepack": "tsc -p tsconfig.json",
     "demo": "tsx demo.ts",
     "validate:css": "tsx src/cli.ts"
   },
