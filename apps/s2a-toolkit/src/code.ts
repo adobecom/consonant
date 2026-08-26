@@ -714,11 +714,17 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
     case 'doc:generate': {
       try {
         const setId = msg.setId as string;
-        const node = await figma.getNodeByIdAsync(setId);
-        if (!node || node.type !== 'COMPONENT_SET') {
-          figma.ui.postMessage({ type: 'doc:result', error: 'Select a component set first' });
+        let node = await figma.getNodeByIdAsync(setId);
+        // A selected variant (COMPONENT inside a SET) documents the whole set.
+        if (node && node.type === 'COMPONENT' && node.parent && node.parent.type === 'COMPONENT_SET') {
+          node = node.parent;
+        }
+        if (!node || (node.type !== 'COMPONENT_SET' && node.type !== 'COMPONENT')) {
+          figma.ui.postMessage({ type: 'doc:result', error: 'Select a component or component set first' });
           break;
         }
+        // Works for both: a standalone COMPONENT is documented as a single variant.
+        const isSingle = node.type === 'COMPONENT';
         const set = node as ComponentSetNode;
 
         await Promise.all([
@@ -779,7 +785,9 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         if (meta.goodToKnow)    await setText('@good-to-know', meta.goodToKnow);
         if (meta.accessibility) await setText('@accessibility', meta.accessibility);
 
-        const variants = set.children.filter(c => c.type === 'COMPONENT') as ComponentNode[];
+        const variants = isSingle
+          ? [node as ComponentNode]
+          : (set.children.filter(c => c.type === 'COMPONENT') as ComponentNode[]);
         const defaultVariant = pickDefaultVariant(variants);
 
         // Hero slot — a live instance of the default variant.
@@ -898,7 +906,11 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
 
         // Slots row — hide unless the set actually uses native slots.
         const slotsRow = doc.findOne(n => n.name === 'row: slots');
-        if (slotsRow) slotsRow.visible = setUsesNativeSlots(set);
+        if (slotsRow) {
+          let usesSlots = false;
+          try { usesSlots = !!variants[0]?.findOne(n => (n.type as string) === 'SLOT'); } catch { /* older API */ }
+          slotsRow.visible = usesSlots;
+        }
 
         // Dark-mode preview — clone the finished grid and pin the clone to Dark.
         const darkSlot = find('@slot-dark-preview') as FrameNode | null;
