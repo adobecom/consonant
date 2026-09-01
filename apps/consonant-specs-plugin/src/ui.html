@@ -218,35 +218,27 @@
             <div id="localizeMain">
               <div class="section-title">Translation Provider</div>
               <select id="providerSelect" style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--border,#e5e5e5);border-radius:4px;font-size:12px;margin-bottom:12px;">
-                <option value="bridge">Claude via Bridge (no key)</option>
+                <option value="google">Google (free, no key)</option>
                 <option value="mymemory">MyMemory (free, no key)</option>
-                <option value="lingva">Lingva (free, no key)</option>
-                <option value="deepl">DeepL Free (key required)</option>
-                <option value="google">Google Cloud (key required)</option>
-                <option value="azure">Microsoft Azure (key required)</option>
+                <option value="paste">AI paste mode (any LLM)</option>
               </select>
-              <div id="apiKeySection" style="display:none;margin-bottom:12px;">
-                <input type="password" id="apiKeyInput" placeholder="API key..." style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--border,#e5e5e5);border-radius:4px;font-family:monospace;font-size:11px;" />
-                <div id="apiKeyStatus" style="color:var(--text-secondary);font-size:11px;margin-top:4px;"></div>
-                <div style="display:flex;gap:8px;margin-top:6px;">
-                  <button class="btn btn-secondary" id="saveKeyBtn" style="flex:1;">Save Key</button>
-                  <button class="btn btn-secondary" id="clearKeyBtn" style="flex:1;">Clear</button>
-                </div>
+              <div id="emailSection" style="display:none;margin-bottom:12px;">
+                <input type="email" id="emailInput" placeholder="Optional email — raises free quota 5k → 50k chars/day" style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--border,#e5e5e5);border-radius:4px;font-size:12px;" />
               </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div class="lang-header">
                 <div class="section-title">Languages</div>
-                <button id="locCheckAll" style="background:none;border:none;color:var(--text-tertiary,#999);font-size:11px;cursor:pointer;padding:2px 0;">Check All</button>
+                <button id="locCheckAll" class="link-btn">Check All</button>
               </div>
-              <div class="match-checklist">
-                <label class="match-option"><input type="checkbox" id="locDe"> German <span style="color:var(--text-tertiary,#999);font-size:11px;">— long-word wrapping, 1.5× text</span></label>
-                <label class="match-option"><input type="checkbox" id="locZh"> Chinese <span style="color:var(--text-tertiary,#999);font-size:11px;">— short sentences</span></label>
-                <label class="match-option"><input type="checkbox" id="locTh"> Thai <span style="color:var(--text-tertiary,#999);font-size:11px;">— extra line-height for ligatures</span></label>
-                <label class="match-option"><input type="checkbox" id="locAr"> Arabic <span style="color:var(--text-tertiary,#999);font-size:11px;">— RTL</span></label>
-              </div>
-              <div class="match-checklist" style="margin-top:8px;">
+              <div class="match-checklist" id="langList"></div>
+              <div class="match-checklist rtl-row">
                 <label class="match-option"><input type="checkbox" id="locRtl"> Apply RTL layout</label>
               </div>
               <button class="btn" id="localizeBtn" style="margin-top:12px;">Localize Selection</button>
+              <div id="pasteSection" style="display:none;">
+                <button class="btn" id="copyPromptBtn">Copy prompt for AI chat</button>
+                <textarea id="pasteInput" rows="6" placeholder="Paste the JSON response here..."></textarea>
+                <button class="btn" id="applyPasteBtn">Apply translations</button>
+              </div>
               <div id="localizeStatus" style="margin-top:12px;"></div>
             </div>
           </div>
