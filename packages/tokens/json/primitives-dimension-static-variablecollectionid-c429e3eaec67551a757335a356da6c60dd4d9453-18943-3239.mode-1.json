@@ -1,6 +1,18 @@
 {
   "font": {
     "family": {
+      "adobe-clean": {
+        "$type": "string",
+        "$value": "Adobe Clean",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [],
+            "codeSyntax": {}
+          }
+        }
+      },
       "adobe-clean-display": {
         "$type": "string",
         "$value": "Adobe Clean Display",
@@ -15,6 +27,32 @@
       }
     },
     "weight": {
+      "adobe-clean": {
+        "bold": {
+          "$type": "string",
+          "$value": "Bold",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "regular": {
+          "$type": "string",
+          "$value": "Regular",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
       "adobe-clean-display": {
         "black": {
           "$type": "string",
