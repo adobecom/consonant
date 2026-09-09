@@ -2,7 +2,7 @@
   "fileId": "eGSyBcD5XdFXR8rJXJmVNY",
   "branchKey": null,
   "apiBase": "https://api.figma.com",
-  "generatedAt": "2026-08-14T21:48:14.565Z",
+  "generatedAt": "2026-08-18T15:39:41.701Z",
   "files": [
     {
       "fileName": "s2a-primitives-color-theme-variablecollectionid-1-138.light.json",
@@ -103,20 +103,6 @@
       }
     },
     {
-      "fileName": "primitives-color-theme-variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841.light.json",
-      "collection": {
-        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/18953:841",
-        "name": "Primitives / Color / Theme",
-        "slug": "primitives-color-theme",
-        "idSlug": "variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841"
-      },
-      "mode": {
-        "id": "17135:0",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
       "fileName": "s2a-responsive-container-grid-variablecollectionid-6-178.xl.json",
       "collection": {
         "id": "VariableCollectionId:6:178",
@@ -173,6 +159,20 @@
       }
     },
     {
+      "fileName": "primitives-color-theme-variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841.light.json",
+      "collection": {
+        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/18953:841",
+        "name": "Primitives / Color / Theme",
+        "slug": "primitives-color-theme",
+        "idSlug": "variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841"
+      },
+      "mode": {
+        "id": "17135:0",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
       "fileName": "primitives-dimension-static-variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239.mode-1.json",
       "collection": {
         "id": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
@@ -201,6 +201,34 @@
       }
     },
     {
+      "fileName": "s2a-primitives-color-theme-variablecollectionid-23dfb9688d347020258cb5a8b587fd4c5c7287bc-2073-2569.light.json",
+      "collection": {
+        "id": "VariableCollectionId:23dfb9688d347020258cb5a8b587fd4c5c7287bc/2073:2569",
+        "name": "S2A / Primitives / Color / Theme",
+        "slug": "s2a-primitives-color-theme",
+        "idSlug": "variablecollectionid-23dfb9688d347020258cb5a8b587fd4c5c7287bc-2073-2569"
+      },
+      "mode": {
+        "id": "1:6",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "s2a-semantic-dimension-static-variablecollectionid-6c6b35ec4a5a89cf0598ba78e6c7482370d719ad-2073-2682.value.json",
+      "collection": {
+        "id": "VariableCollectionId:6c6b35ec4a5a89cf0598ba78e6c7482370d719ad/2073:2682",
+        "name": "S2A / Semantic / Dimension / Static",
+        "slug": "s2a-semantic-dimension-static",
+        "idSlug": "variablecollectionid-6c6b35ec4a5a89cf0598ba78e6c7482370d719ad-2073-2682"
+      },
+      "mode": {
+        "id": "1:7",
+        "name": "Value",
+        "slug": "value"
+      }
+    },
+    {
       "fileName": "s2a-semantic-color-theme-variablecollectionid-3659e0dcd09c2dca905bb94def94c5029e4d83ac-2073-2735.light.json",
       "collection": {
         "id": "VariableCollectionId:3659e0dcd09c2dca905bb94def94c5029e4d83ac/2073:2735",
@@ -226,20 +254,6 @@
         "id": "6:1",
         "name": "Dark",
         "slug": "dark"
-      }
-    },
-    {
-      "fileName": "s-typography-variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:dbeda2c7fb4dab171973418e8101f01785b5e6e2/27101:21627",
-        "name": "•S Typography",
-        "slug": "s-typography",
-        "idSlug": "variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627"
-      },
-      "mode": {
-        "id": "19458:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
       }
     },
     {
@@ -313,20 +327,6 @@
       }
     },
     {
-      "fileName": "s2a-semantic-dimension-static-variablecollectionid-6c6b35ec4a5a89cf0598ba78e6c7482370d719ad-2073-2682.value.json",
-      "collection": {
-        "id": "VariableCollectionId:6c6b35ec4a5a89cf0598ba78e6c7482370d719ad/2073:2682",
-        "name": "S2A / Semantic / Dimension / Static",
-        "slug": "s2a-semantic-dimension-static",
-        "idSlug": "variablecollectionid-6c6b35ec4a5a89cf0598ba78e6c7482370d719ad-2073-2682"
-      },
-      "mode": {
-        "id": "1:7",
-        "name": "Value",
-        "slug": "value"
-      }
-    },
-    {
       "fileName": "s-typography-variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627.mode-1.json",
       "collection": {
         "id": "VariableCollectionId:df621fb21582d7e499c45bf908fe7ea44b7c9c01/27101:21627",
@@ -341,17 +341,45 @@
       }
     },
     {
-      "fileName": "s2a-primitives-color-theme-variablecollectionid-23dfb9688d347020258cb5a8b587fd4c5c7287bc-2073-2569.light.json",
+      "fileName": "s-typography-variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627.mode-1.json",
       "collection": {
-        "id": "VariableCollectionId:23dfb9688d347020258cb5a8b587fd4c5c7287bc/2073:2569",
-        "name": "S2A / Primitives / Color / Theme",
-        "slug": "s2a-primitives-color-theme",
-        "idSlug": "variablecollectionid-23dfb9688d347020258cb5a8b587fd4c5c7287bc-2073-2569"
+        "id": "VariableCollectionId:dbeda2c7fb4dab171973418e8101f01785b5e6e2/27101:21627",
+        "name": "•S Typography",
+        "slug": "s-typography",
+        "idSlug": "variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627"
       },
       "mode": {
-        "id": "1:6",
-        "name": "Light",
-        "slug": "light"
+        "id": "19458:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "specs-layout-variablecollectionid-abc78739bb2cbaac96283da4e10d74ed6e05c27d-5821-5.default.json",
+      "collection": {
+        "id": "VariableCollectionId:abc78739bb2cbaac96283da4e10d74ed6e05c27d/5821:5",
+        "name": "Specs Layout",
+        "slug": "specs-layout",
+        "idSlug": "variablecollectionid-abc78739bb2cbaac96283da4e10d74ed6e05c27d-5821-5"
+      },
+      "mode": {
+        "id": "5821:2",
+        "name": "Default",
+        "slug": "default"
+      }
+    },
+    {
+      "fileName": "typography-variablecollectionid-214cb9a95fbbbe442c1390e1bc725ebb88b830b1-51-15.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:214cb9a95fbbbe442c1390e1bc725ebb88b830b1/51:15",
+        "name": "Typography",
+        "slug": "typography",
+        "idSlug": "variablecollectionid-214cb9a95fbbbe442c1390e1bc725ebb88b830b1-51-15"
+      },
+      "mode": {
+        "id": "3:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
       }
     },
     {

@@ -1185,7 +1185,7 @@ async function buildFromFigma() {
   // S2A Responsive collection modes (from Figma): xs → sm → md → lg → xl (order for cascade)
   const RESPONSIVE_GRID_MODES = [
     { modeSlug: "sm", shortName: "sm", minWidth: null },
-    { modeSlug: "md", shortName: "md", minWidth: 1024 },
+    { modeSlug: "md", shortName: "md", minWidth: 768 },
     { modeSlug: "lg", shortName: "lg", minWidth: 1280 },
     { modeSlug: "xl", shortName: "xl", minWidth: 1441 },
   ];
@@ -1233,8 +1233,10 @@ async function buildFromFigma() {
       );
       rewriteSemanticRefsToS2a(mergedResponsive);
 
+      // Modern CSS range syntax — matches Milo's own convention
+      // (context/milo/libs/c2/styles/styles.css), not the legacy min-width form.
       const mediaQuery =
-        minWidth != null ? `@media (min-width: ${minWidth}px)` : null;
+        minWidth != null ? `@media (width >= ${minWidth}px)` : null;
 
       await buildCssFromTokens(mergedResponsive, {
         destination: `tokens.responsive.${shortName}.css`,

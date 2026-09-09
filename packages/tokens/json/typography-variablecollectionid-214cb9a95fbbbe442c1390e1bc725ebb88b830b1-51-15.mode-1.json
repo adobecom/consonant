@@ -1,0 +1,36 @@
+{
+  "font": {
+    "family": {
+      "default": {
+        "$type": "string",
+        "$value": "Adobe Clean Spectrum VF",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [
+              "FONT_FAMILY"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      }
+    },
+    "weight": {
+      "heading": {
+        "$type": "string",
+        "$value": "ExtraBold",
+        "$description": "",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": true,
+            "scopes": [
+              "FONT_STYLE"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      }
+    }
+  }
+}
