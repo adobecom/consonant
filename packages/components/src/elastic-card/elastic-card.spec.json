@@ -2,53 +2,64 @@
   "name": "ElasticCard",
   "slug": "elastic-card",
   "cssClass": "c-elastic-card",
-  "storybookId": "elastic-card",
-  "description": "Navigation card with three states: resting (compact, on-light header), expanded (full-bleed media, on-dark overlay), and mobile (stacked layout with CTA puck). Composes ProductLockup and Media.",
-  "composedOf": ["ProductLockup", "Media"],
+  "storybookId": "cards-elasticcard",
+  "description": "Router card that expands from a resting column to a wide dark state. v2 architecture: State × Type axes, inverse-token dark surfaces (no Context axis).",
+  "figma": {
+    "fileKey": "oXIFqtnrYNdTIjqb1sbJau",
+    "componentSet": "ElasticCard — v2",
+    "nodeId": "11280:224039",
+    "page": "↳ ElasticCard"
+  },
   "variants": {
     "state": ["resting", "expanded", "mobile"],
-    "mediaAspect": ["3:4", "4:3", "16:9", "1:1"]
+    "type": ["standard", "featured"]
   },
   "props": [
-    { "name": "label", "type": "string", "defaultValue": "\"Creativity and design\"", "description": "Product category label passed to ProductLockup" },
-    { "name": "app", "type": "string", "defaultValue": "\"experience-cloud\"", "description": "App slug passed to ProductLockup → AppIcon" },
-    { "name": "product", "type": "object", "description": "ProductLockup prop overrides. Merged with label/app defaults." },
-    { "name": "title", "type": "string", "defaultValue": "\"Card title\"" },
-    { "name": "body", "type": "string" },
-    { "name": "state", "type": "string", "defaultValue": "\"resting\"", "enum": ["resting", "expanded", "mobile"] },
-    { "name": "mediaSrc", "type": "string" },
-    { "name": "mediaAlt", "type": "string", "defaultValue": "\"\"" },
-    { "name": "mediaTemplate", "type": "TemplateResult", "description": "Custom media — bypasses Media component" },
-    { "name": "mediaAspect", "type": "string", "defaultValue": "\"3:4\"", "enum": ["3:4", "4:3", "16:9", "1:1"] },
-    { "name": "mediaOverlay", "type": "boolean", "defaultValue": "true" },
-    { "name": "bodyTemplate", "type": "TemplateResult", "description": "Replaces default title+body+action rendering" },
-    { "name": "children", "type": "TemplateResult" },
-    { "name": "showCaret", "type": "boolean" },
-    { "name": "actionTemplate", "type": "TemplateResult" },
-    { "name": "actionLabel", "type": "string" },
-    { "name": "href", "type": "string", "description": "Makes root element an <a> tag" },
-    { "name": "ariaLabel", "type": "string" },
-    { "name": "onClick", "type": "function" },
-    { "name": "tag", "type": "string", "description": "Force a specific root element tag" }
+    { "name": "state", "type": "string", "defaultValue": "\"resting\"", "enum": ["resting", "expanded", "mobile"], "description": "Card state. resting = light column; expanded/mobile = dark inverse surface." },
+    { "name": "type", "type": "string", "defaultValue": "\"standard\"", "enum": ["standard", "featured"], "description": "standard = ProductLockup header; featured = heading-6 text header. (Figma set default is featured; code defaults to standard for backward compatibility.)" },
+    { "name": "label", "type": "string", "defaultValue": "\"Creativity and design\"", "description": "ProductLockup label (standard type)." },
+    { "name": "heading", "type": "string", "description": "Featured header text; falls back to label." },
+    { "name": "app", "type": "string", "defaultValue": "\"experience-cloud\"", "description": "AppIcon key for the lockup." },
+    { "name": "product", "type": "object", "description": "ProductLockup prop overrides. context is ignored (v2 has no Context axis)." },
+    { "name": "title", "type": "string", "description": "Footer card-title (eyebrow ramp)." },
+    { "name": "body", "type": "string", "description": "Footer body text (body-md ramp, 2-line clamp)." },
+    { "name": "mediaSrc / mediaAlt / mediaTemplate / mediaAspect / mediaOverlay", "type": "mixed", "description": "Media zone content, same contract as v1." },
+    { "name": "showCaret / actionTemplate / actionLabel", "type": "mixed", "description": "Header action overrides." },
+    { "name": "href / onClick / tag / ariaLabel", "type": "mixed", "description": "Root element semantics (a / button / article)." }
   ],
   "tokenBindings": {
-    "background-color:resting": "--s2a-color-background-default",
-    "background-color:expanded": "--s2a-color-background-knockout",
-    "color:resting:header": "--s2a-color-content-default",
-    "color:expanded:header": "--s2a-color-content-knockout",
-    "border-radius": "--s2a-border-radius-lg",
-    "padding": "--s2a-spacing-md"
+    "background:resting": "--s2a-color-surface-subtle → fallback --s2a-color-background-subtle",
+    "background:expanded:standard": "--s2a-color-surface-inverse-subtle → fallback --s2a-color-background-inverse",
+    "background:expanded:featured": "--s2a-color-background-inverse",
+    "background:mobile": "--s2a-color-background-inverse",
+    "color:title": "--s2a-color-content-default (dark states: --s2a-color-content-inverse)",
+    "color:body-text": "--s2a-color-content-subtle (dark: content-inverse; expanded+featured: --s2a-color-transparent-white-64)",
+    "color:heading": "--s2a-color-content-default / --s2a-color-content-inverse (dark)",
+    "typography:title": "eyebrow ramp (--s2a-typography-*-eyebrow)",
+    "typography:body": "body-md ramp",
+    "typography:heading": "heading-6 ramp (--s2a-typography-*-heading-6)",
+    "radius:card": "--s2a-border-radius-md",
+    "radius:media:mobile": "--s2a-border-radius-sm",
+    "padding:zones": "--s2a-router-card-padding → fallback 24px",
+    "height:resting": "--s2a-router-card-height-max → fallback 576px",
+    "background:cta-puck": "--s2a-color-surface-default → fallback --s2a-color-background-default",
+    "focus": "--s2a-color-focus-ring-default"
   },
+  "knownTokenGaps": [
+    "--s2a-color-surface-subtle / --s2a-color-surface-inverse-subtle / --s2a-color-surface-default — bound in Figma, not yet in the shipped tokens release; CSS chains to shipped background/* equivalents",
+    "--s2a-router-card-padding / --s2a-router-card-height-max — bound in Figma, not yet shipped; px fallbacks",
+    "Card widths (294 / 496 / 360) are unbound in Figma v2 — literals in CSS"
+  ],
+  "deviations": [
+    "Figma's State=mobile, Type=featured variant embeds a deprecated 48px 'ControlButton — v1' instance in the footer; code keeps the 24px header CTA puck for both types until that Figma inconsistency is resolved.",
+    "Hover on a resting card mirrors the expanded-state visuals (coded interaction; Figma models the states as separate variants)."
+  ],
   "a11y": {
-    "wcag": ["1.4.3", "2.1.1", "2.4.4", "2.4.7"],
-    "keyboard": [
-      { "key": "Enter", "action": "Activates card link/button" },
-      { "key": "Tab", "action": "Moves focus into/out of card" }
-    ],
     "notes": [
-      "Root element is <a>, <button>, or <div> depending on href/onClick/tag props.",
-      "When rendered as <div> it gets role='presentation' — ensure interactive children have their own accessible names.",
-      "Media images should have meaningful alt text when the image provides content not described elsewhere."
-    ]
+      "Root renders as <a> (href), <button> (onClick), or <article>.",
+      "Focus ring via --s2a-color-focus-ring-default, 2px outline + 2px offset.",
+      "Decorative caret/CTA icons are aria-hidden; provide ariaLabel for interactive cards."
+    ],
+    "wcag": ["1.4.3", "2.4.7", "4.1.2"]
   }
 }

@@ -1,8 +1,8 @@
 .c-rich-content {
   --c-rich-content-gap: var(--s2a-spacing-lg, 24px);
   --c-rich-content-text-gap: var(--s2a-spacing-xs, 8px);
-  --c-rich-content-color-title: var(--s2a-color-content-title, #000000);
-  --c-rich-content-color-body: var(--s2a-color-content-title, #000000);
+  --c-rich-content-color-title: var(--s2a-color-content-heading, #000000);
+  --c-rich-content-color-body: var(--s2a-color-content-heading, #000000);
   --c-rich-content-color-eyebrow: var(--s2a-color-content-eyebrow, rgba(0, 0, 0, 0.64));
 
   display: flex;

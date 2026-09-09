@@ -146,8 +146,8 @@ export const Example_3063_5190 = {
       body: "Create, edit, share, and sign documents with Acrobat Studio. Edit PDFs, collaborate securely, and move work forward with built-in AI and powerful document tools.",
       showActions: true,
       actions: html`
-        ${Button({ label: "Learn more", background: "solid", context: "on-light" })}
-        ${Button({ label: "Explore plans", background: "outlined", context: "on-light" })}
+        ${Button({ label: "Learn more", style: "solid" })}
+        ${Button({ label: "Explore plans", style: "outlined" })}
       `,
     })
   ),
@@ -176,7 +176,7 @@ export const Example_3119_9377 = {
       metaRole: "Digital Creator, Studio Spence",
       showActions: true,
       actions: html`
-        ${Button({ label: "Create with Firefly", background: "solid", context: "on-dark" })}
+        ${Button({ label: "Create with Firefly", style: "knockout" })}
       `,
     })
   ),
@@ -204,7 +204,7 @@ export const Example_3135_4661 = {
       body: "Bring any idea to life with products for creators, businesses, and beyond.",
       showActions: true,
       actions: html`
-        ${Button({ label: "See all products", background: "outlined", context: "on-dark" })}
+        ${Button({ label: "See all products", style: "outline-inverse" })}
       `,
     }),
     { align: "center" }
@@ -274,8 +274,8 @@ export const AllExamples = {
           body: "Create, edit, share, and sign documents with Acrobat Studio. Edit PDFs, collaborate securely, and move work forward with built-in AI and powerful document tools.",
           showActions: true,
           actions: html`
-            ${Button({ label: "Learn more", background: "solid", context: "on-light" })}
-            ${Button({ label: "Explore plans", background: "outlined", context: "on-light" })}
+            ${Button({ label: "Learn more", style: "solid" })}
+            ${Button({ label: "Explore plans", style: "outlined" })}
           `,
         })}
       </div>
@@ -291,7 +291,7 @@ export const AllExamples = {
           metaRole: "Digital Creator, Studio Spence",
           showActions: true,
           actions: html`
-            ${Button({ label: "Create with Firefly", background: "solid", context: "on-dark" })}
+            ${Button({ label: "Create with Firefly", style: "knockout" })}
           `,
         })}
       </div>
@@ -306,7 +306,7 @@ export const AllExamples = {
           body: "Bring any idea to life with products for creators, businesses, and beyond.",
           showActions: true,
           actions: html`
-            ${Button({ label: "See all products", background: "outlined", context: "on-dark" })}
+            ${Button({ label: "See all products", style: "outline-inverse" })}
           `,
         })}
       </div>

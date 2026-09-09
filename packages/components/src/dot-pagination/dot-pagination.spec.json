@@ -1,0 +1,46 @@
+{
+  "name": "DotPagination",
+  "slug": "dot-pagination",
+  "cssClass": "c-dot-pagination",
+  "storybookId": "dot-pagination",
+  "description": "Row of round dots indicating carousel/slideshow position. Knockout styling (white dots) — designed for dark or media surfaces.",
+  "figma": {
+    "componentId": "8350:234686",
+    "dotSetId": "8350:234693",
+    "page": "   ↳ DotPagination",
+    "version": "1.0.0"
+  },
+  "variants": {
+    "dotState": ["active", "inactive"]
+  },
+  "props": [
+    { "name": "count", "type": "string | number", "defaultValue": "3", "description": "Number of dots, clamped 1–5 (mirrors Figma's Show Dot 1–5 booleans; defaults match Figma: dots 1–3 on)" },
+    { "name": "activeIndex", "type": "string | number", "defaultValue": "0", "description": "Zero-based index of the active dot, clamped to count" },
+    { "name": "ariaLabel", "type": "string", "defaultValue": "\"Slide navigation\"", "description": "Accessible name for the nav landmark" },
+    { "name": "onSelect", "type": "Function", "defaultValue": "undefined", "description": "Optional click handler receiving the selected dot index" }
+  ],
+  "tokenBindings": {
+    "gap": "--s2a-spacing-xs",
+    "width:dot": "--s2a-spacing-xs",
+    "height:dot": "--s2a-spacing-xs",
+    "border-radius:dot": "--s2a-border-radius-round",
+    "background-color:dot:active": "--s2a-color-content-knockout",
+    "background-color:dot:inactive": "--s2a-color-transparent-white-64",
+    "outline-color:dot:focus": "--s2a-color-focus-ring-knockout"
+  },
+  "a11y": {
+    "role": "navigation",
+    "requiredAriaAttrs": ["aria-label", "aria-current"],
+    "wcag": ["2.1.1", "2.4.7", "4.1.2"],
+    "notes": [
+      "Dots are real <button> elements inside a <nav> landmark — keyboard operable (2.1.1).",
+      "Active dot carries aria-current='true'; each dot has an aria-label naming its slide (4.1.2).",
+      "Focus ring uses focus-ring/knockout for visibility on the dark surfaces this component targets (2.4.7).",
+      "8px hit area is below the 24px target-size guideline (2.5.8 AA) — acceptable as an inline indicator, but pair with adjacent prev/next controls for primary navigation."
+    ]
+  },
+  "notes": [
+    "Figma component is knockout-only (white dots on dark) — no on-light variant exists in the set; do not invent one.",
+    "Figma caps at 5 dots via Show Dot 1–5 booleans; the count prop mirrors that clamp."
+  ]
+}

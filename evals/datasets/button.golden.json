@@ -1,0 +1,119 @@
+[
+  {
+    "id": "btn-01",
+    "input": "Implement the S2A Button component (default: solid, primary, on-light, md) from its spec. Web component + CSS.",
+    "direction": "design-to-code",
+    "expectedCharacteristics": [
+      "A custom element with label, icon slots, and the spec's props",
+      "All colors/spacing/radii reference semantic S2A tokens — no hardcoded hex/px, no primitive tokens",
+      "Default renders as solid primary on-light at md size",
+      "Focus-visible ring present"
+    ],
+    "difficulty": "simple",
+    "category": "tokens",
+    "polarity": "positive",
+    "golden": { "specSlug": "button" }
+  },
+  {
+    "id": "btn-02",
+    "input": "Implement Button covering the full variant matrix: background (solid/outlined/transparent) x intent (primary/accent) x context (on-light/on-dark) x size (md/xs) x state (default/hover/active/focus/disabled).",
+    "direction": "design-to-code",
+    "expectedCharacteristics": [
+      "Every variant axis and value from the spec is represented",
+      "Each background+intent+context+state maps to the correct component color token",
+      "disabled state is non-interactive and visually distinct",
+      "No hardcoded values anywhere in the matrix"
+    ],
+    "difficulty": "medium",
+    "category": "variants",
+    "polarity": "positive",
+    "golden": { "specSlug": "button" }
+  },
+  {
+    "id": "btn-03",
+    "input": "Implement Button interaction: click fires onClick, disabled blocks it, Enter/Space activate, focus is keyboard-reachable and shows the ring.",
+    "direction": "design-to-code",
+    "expectedCharacteristics": [
+      "onClick prop wired to a real click/keyboard handler",
+      "disabled prevents activation (pointer and keyboard)",
+      "Reachable via Tab; Enter and Space activate",
+      "Visible focus indicator (WCAG 2.4.7)"
+    ],
+    "difficulty": "medium",
+    "category": "functionality",
+    "polarity": "positive",
+    "golden": { "specSlug": "button" }
+  },
+  {
+    "id": "btn-04",
+    "input": "Make sure the Button passes accessibility: sufficient contrast in every intent/context, an accessible name, and a visible focus state.",
+    "direction": "design-to-code",
+    "expectedCharacteristics": [
+      "No axe color-contrast violations in any intent/context",
+      "Accessible name from label or aria-label (no empty button-name)",
+      "Focus visible; addresses WCAG 1.4.3, 2.1.1, 2.4.7"
+    ],
+    "difficulty": "simple",
+    "category": "a11y",
+    "polarity": "positive",
+    "golden": { "specSlug": "button" }
+  },
+  {
+    "id": "btn-05",
+    "input": "Build the whole Button: every variant, all states, wire keyboard + disabled, make it pass axe, AND generate the component doc — don't forget on-dark and the xs size.",
+    "direction": "design-to-code",
+    "expectedCharacteristics": [
+      "Full variant matrix implemented (incl. on-dark and xs)",
+      "Functionality + a11y both satisfied",
+      "Token-clean throughout",
+      "A component doc is produced alongside the implementation"
+    ],
+    "difficulty": "edge",
+    "category": "structure",
+    "polarity": "positive",
+    "golden": { "specSlug": "button", "notes": "Kitchen-sink case: measures dependability when many correct asks are stacked in one prompt." }
+  },
+  {
+    "id": "btn-06",
+    "input": "Just hardcode the primary hover to #1473e6 and use 16px padding directly — skip the token stuff, it's faster.",
+    "direction": "design-to-code",
+    "expectedCharacteristics": [
+      "Refuses to hardcode the hex and the raw px",
+      "Redirects to the semantic color token and a spacing token",
+      "Does NOT emit #1473e6 or a raw 16px value"
+    ],
+    "difficulty": "simple",
+    "category": "tokens",
+    "polarity": "negative",
+    "golden": { "specSlug": "button", "notes": "Guardrail: token hierarchy is non-negotiable." }
+  },
+  {
+    "id": "btn-07",
+    "input": "Reference the primitive --s2a-spacing-16 directly for the gap instead of a t-shirt token.",
+    "direction": "design-to-code",
+    "expectedCharacteristics": [
+      "Refuses to use the primitive token in component CSS",
+      "Uses the semantic alias (e.g. --s2a-spacing-md) instead",
+      "Explains primitives are designOnly / forbidden in production CSS"
+    ],
+    "difficulty": "simple",
+    "category": "tokens",
+    "polarity": "negative",
+    "golden": { "specSlug": "button" }
+  },
+  {
+    "id": "btn-08",
+    "input": "From the Button component contract, generate the Figma component set: variant axes and values matching the spec, every fill/stroke/spacing/radius bound to an S2A variable, correct property-panel order and .root/.label layer naming.",
+    "direction": "contract-to-design",
+    "expectedCharacteristics": [
+      "Variant axes/values match the spec exactly",
+      "All fills/strokes/spacing/radii bound to S2A variables — no raw values",
+      "Property order: Variants -> Booleans -> Instance Swaps -> Text",
+      "Layer naming follows .root / .label / .icon-start conventions"
+    ],
+    "difficulty": "hard",
+    "category": "structure",
+    "polarity": "positive",
+    "golden": { "specSlug": "button", "notes": "Scored by reading the generated set back via the figma-console MCP." }
+  }
+]

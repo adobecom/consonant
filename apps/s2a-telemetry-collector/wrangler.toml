@@ -1,0 +1,14 @@
+name = "s2a-telemetry-collector"
+main = "src/index.ts"
+compatibility_date = "2025-07-01"
+
+# Single global aggregator Durable Object.
+[[durable_objects.bindings]]
+name = "AGG"
+class_name = "Aggregator"
+
+# SQLite-backed DO (required on the Workers free plan). The KV storage API used
+# in the code works the same on SQLite-backed objects.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Aggregator"]

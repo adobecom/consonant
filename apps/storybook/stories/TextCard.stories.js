@@ -27,7 +27,7 @@ const SAMPLE_CARDS = [
 ];
 
 export default {
-  title: "Organisms/TextCard",
+  title: "Cards/TextCard",
   tags: ["autodocs"],
   render: (args) => TextCard(args),
   parameters: {

@@ -1,0 +1,55 @@
+{
+  "name": "Checkbox",
+  "slug": "checkbox",
+  "cssClass": "c-checkbox",
+  "storybookId": "checkbox",
+  "description": "Binary selection control. 20×20 monochrome box + label; optional tile chrome for bordered selection rows. Sourced from Figma Checkbox (10559:113870), .checkbox core (10559:113849), CheckboxTile (10559:114252).",
+  "variants": {
+    "state": ["unchecked", "checked"],
+    "presentation": ["default", "tile"]
+  },
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"Label\"", "description": "Visible label text" },
+    { "name": "checked", "type": "boolean", "defaultValue": "false", "description": "Checked state (Figma: State=checked)" },
+    { "name": "disabled", "type": "boolean", "defaultValue": "false", "description": "Disabled state (code-side extension; no Figma variant)" },
+    { "name": "tile", "type": "boolean", "defaultValue": "false", "description": "CheckboxTile chrome: full-width bordered row (Figma: CheckboxTile)" },
+    { "name": "icon", "type": "lit template", "defaultValue": "null", "description": "Optional trailing icon, tile mode only (Figma: Show Icon + Icon instance-swap)" },
+    { "name": "name", "type": "string", "defaultValue": "undefined", "description": "Native form field name" },
+    { "name": "value", "type": "string", "defaultValue": "undefined", "description": "Native form field value" }
+  ],
+  "tokenBindings": {
+    "border-color:box": "--s2a-color-content-default",
+    "background-color:box:checked": "--s2a-color-content-default",
+    "color:checkmark": "--s2a-color-background-default",
+    "color:label": "--s2a-color-content-default",
+    "gap:root": "--s2a-spacing-xs",
+    "border-radius:box": "--s2a-border-radius-2xs",
+    "box-shadow:focus": "--s2a-color-focus-ring-default",
+    "border-color:box:disabled": "--s2a-color-content-disabled",
+    "color:label:disabled": "--s2a-color-content-disabled",
+    "background-color:tile": "--s2a-color-background-default",
+    "border-color:tile": "--s2a-color-border-subtle",
+    "border-radius:tile": "--s2a-border-radius-xs",
+    "padding:tile": "--s2a-spacing-md / --s2a-spacing-sm",
+    "font:label": "s2a/typography/label (--s2a-font-family-label et al.)"
+  },
+  "a11y": {
+    "role": "native <input type=\"checkbox\"> inside <label>",
+    "requiredAriaAttrs": [],
+    "wcag": ["1.3.1", "2.1.1", "2.4.7", "4.1.2"],
+    "notes": [
+      "Uses a real checkbox input wrapped in a label — name, state, and keyboard support come for free.",
+      "Focus ring uses --s2a-color-focus-ring-default via :focus-visible, matching Button.",
+      "The 20×20 box is monochrome content/default so it passes contrast and flips with theme mode."
+    ]
+  },
+  "figma": {
+    "fileKey": "oXIFqtnrYNdTIjqb1sbJau",
+    "page": "   ↳ Checkbox",
+    "componentSets": {
+      "Checkbox": "10559:113870",
+      ".checkbox": "10559:113849",
+      "CheckboxTile": "10559:114252"
+    }
+  }
+}

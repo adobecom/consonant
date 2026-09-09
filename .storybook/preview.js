@@ -7,7 +7,7 @@ import "./docs-styles.css";
 import { withFigmaOverlay, figmaOverlayGlobals } from "./figma-overlay.js";
 
 // Normalize — must come first, before tokens
-import "../apps/prototyping/_shared/normalize.css";
+import "./shared/normalize.css";
 
 // Import design tokens CSS files in the correct order
 // 1. Primitives (non-color)
@@ -26,7 +26,7 @@ import "../dist/packages/tokens/css/dev/tokens.responsive.xl.css";
 // Component color tokens are emitted through the semantic light/dark theme files.
 
 // Base reset — after tokens so token references in base.css resolve correctly
-import "../apps/prototyping/_shared/base.css";
+import "./shared/base.css";
 
 // Font Loading
 // Adobe Clean is an Adobe-internal typeface (not for external distribution), so we mirror Milo
@@ -103,8 +103,34 @@ if (typeof window !== "undefined") {
 
 /** @type { import('@storybook/web-components-vite').Preview } */
 const preview = {
-  globalTypes: figmaOverlayGlobals,
+  globalTypes: {
+    ...figmaOverlayGlobals,
+    theme: {
+      description: "S2A color theme (variable mode)",
+      toolbar: {
+        title: "Theme",
+        icon: "mirror",
+        items: [
+          { value: "light", title: "Light", icon: "sun" },
+          { value: "dark", title: "Dark", icon: "moon" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: {
+    theme: "light",
+  },
   parameters: {
+    // Sidebar order mirrors the Figma file taxonomy: 🧱 Foundations → 🧩 Atoms → 🧬 Molecules → 🧫 Organisms → 🃏 Cards
+    // Components and stories within each group sort alphabetically.
+    options: {
+      storySort: {
+        method: "alphabetical",
+        order: ["Foundations", "Atoms", "Molecules", "Organisms", "Cards"],
+      },
+    },
+
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -137,13 +163,15 @@ const preview = {
   },
   decorators: [
     withFigmaOverlay,
-    (story) => {
-      // Set the theme attribute so semantic and component color tokens are available
-      // Semantic tokens: --s2a-color-content-knockout, etc.
-      // Component tokens: --s2a-button-color-background-accent-solid-default, etc.
-      // These are scoped to :root[data-theme="light"] or :root[data-theme="dark"]
+    (story, context) => {
+      // Semantic + component color tokens are scoped to :root[data-theme="light"] or
+      // :root[data-theme="dark"] — the toolbar Theme global drives which one applies,
+      // and the page background follows the resolved background token so the flip is visible.
+      const theme = context.globals.theme === "dark" ? "dark" : "light";
       if (typeof document !== "undefined" && document.documentElement) {
-        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        document.body.style.backgroundColor = "var(--s2a-color-background-default)";
+        document.body.style.transition = "background-color 150ms ease";
       }
 
       // Ensure fonts are loaded before rendering

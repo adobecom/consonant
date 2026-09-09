@@ -30,11 +30,11 @@ export const SocialProofCarousel = ({ slides = [], activeIndex = 0 } = {}) => ht
     </div>
 
     <div class="spc-nav spc-nav--prev">
-      ${IconButton({ icon: "arrow-left", style: "solid", context: "on-dark", size: "lg", ariaLabel: "Previous slide" })}
+      ${IconButton({ icon: "arrow-left", style: "knockout", size: "lg", ariaLabel: "Previous slide" })}
     </div>
 
     <div class="spc-nav spc-nav--next">
-      ${IconButton({ icon: "arrow-right", style: "solid", context: "on-dark", size: "lg", ariaLabel: "Next slide" })}
+      ${IconButton({ icon: "arrow-right", style: "knockout", size: "lg", ariaLabel: "Next slide" })}
     </div>
 
     <div class="spc-pagination" role="tablist" aria-label="Slide navigation">

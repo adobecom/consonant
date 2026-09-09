@@ -1,0 +1,58 @@
+name: MCP data freshness
+
+# The S2A DS MCP serves a bundled `data/` snapshot (gitignored, rebuilt by
+# copy-data.mjs at deploy) rather than live tokens/components. This workflow
+# guards the two ways that snapshot can go stale:
+#   1. Fidelity  — verify copy-data produces a complete, byte-faithful mirror of
+#                  the live sources (a partial/broken snapshot serves partial data).
+#   2. Deploy lag — when tokens/components land on main, redeploy the hosted MCP so
+#                  it doesn't keep serving the previous snapshot.
+
+on:
+  pull_request:
+    paths:
+      - "packages/tokens/**"
+      - "packages/components/**"
+      - "dist/packages/tokens/**"
+      - "apps/s2a-ds-mcp/**"
+      - ".github/workflows/mcp-data-freshness.yml"
+  push:
+    branches: [main]
+    paths:
+      - "packages/tokens/**"
+      - "packages/components/**"
+      - "dist/packages/tokens/**"
+      - "apps/s2a-ds-mcp/**"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-snapshot:
+    name: Verify snapshot mirrors live sources
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      # No install needed — the check and copy-data use only Node built-ins.
+      - name: Check data snapshot freshness
+        run: node apps/s2a-ds-mcp/scripts/check-data-fresh.mjs
+
+  redeploy-mcp:
+    name: Redeploy hosted MCP
+    needs: verify-snapshot
+    # Only after a real merge to main — PRs just verify, they don't deploy.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel redeploy of s2a-ds-mcp
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK_S2A_MCP }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::warning title=Hosted MCP not redeployed::VERCEL_DEPLOY_HOOK_S2A_MCP secret is not set. The hosted MCP will keep serving its previous snapshot until its next deploy. Add the secret to close the deploy-lag gap."
+            exit 0
+          fi
+          curl -fsS -X POST "$HOOK" > /dev/null && echo "Triggered Vercel redeploy of s2a-ds-mcp — hosted snapshot will refresh from the merged sources."

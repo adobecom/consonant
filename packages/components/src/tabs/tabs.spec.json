@@ -1,0 +1,48 @@
+{
+  "name": "Tabs",
+  "slug": "tabs",
+  "cssClass": "c-tabs",
+  "storybookId": "tabs",
+  "description": "Text tabs with an accent underline on the selected tab. Single size — each tab is exactly 40px tall with a heading-4 label. TabGroup arranges Tabs horizontally with a 24px gap.",
+  "figma": {
+    "componentSet": "_tab (11615:206785)",
+    "wrapper": "Tabs (11615:206787)",
+    "page": "↳ Tabs (11978:224550)"
+  },
+  "variants": {
+    "selected": ["false", "true"],
+    "state": ["default", "hover", "focus", "disabled"]
+  },
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"Tab\"", "description": "Tab text (Figma Label text property)" },
+    { "name": "selected", "type": "boolean", "defaultValue": "false", "description": "Selected tab — accent underline + full-strength label" },
+    { "name": "disabled", "type": "boolean", "defaultValue": "false", "description": "Disabled — label stays subtle, underline drops to subtle when selected" },
+    { "name": "forceState", "type": "string", "defaultValue": "undefined", "enum": ["hover", "focus"], "description": "Docs-only visual state forcing, mirrors Figma State axis" }
+  ],
+  "tokenBindings": {
+    "color:label:default": "--s2a-color-content-subtle",
+    "color:label:hover": "--s2a-color-content-default",
+    "color:label:selected": "--s2a-color-content-default",
+    "color:label:disabled": "--s2a-color-content-subtle",
+    "background-color:underline:selected": "--s2a-color-border-accent (NOT YET SHIPPED — Figma binds s2a/color/border/accent, #3b63fb fallback)",
+    "background-color:underline:selected-disabled": "--s2a-color-content-subtle",
+    "box-shadow:focus-ring": "--s2a-color-focus-ring-default",
+    "font:label": "--s2a-typography-*-heading-4 + --s2a-font-family-heading",
+    "gap:group": "--s2a-spacing-lg",
+    "gap:label-underline": "--s2a-spacing-3xs"
+  },
+  "a11y": {
+    "role": "tablist / tab",
+    "requiredAriaAttrs": ["aria-selected", "aria-label (on tablist)"],
+    "wcag": ["1.4.1", "2.1.1", "2.4.7", "4.1.2"],
+    "notes": [
+      "Selection is signaled by both color AND the underline shape — not color alone (1.4.1).",
+      "Roving tabindex: selected tab is tabbable (0), others -1. Arrow-key navigation between tabs must be wired by the consumer (this is a pure HTML/CSS package).",
+      "Selected+disabled underline uses content-subtle so state stays visible without implying interactivity.",
+      "Focus ring uses --s2a-color-focus-ring-default at 2px, same convention as Button (2.4.7)."
+    ]
+  },
+  "knownGaps": [
+    "--s2a-color-border-accent is bound in Figma (s2a/color/border/accent) but not yet published in @adobecom/s2a-tokens — CSS carries a #3b63fb fallback until the token ships."
+  ]
+}

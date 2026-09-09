@@ -18,9 +18,9 @@
     { "name": "actions", "type": "TemplateResult", "description": "Optional CTA buttons rendered below body text" }
   ],
   "tokenBindings": {
-    "color:title": "--s2a-color-content-title",
+    "color:title": "--s2a-color-content-heading",
     "color:eyebrow": "--s2a-color-content-eyebrow",
-    "color:body": "--s2a-color-content-title",
+    "color:body": "--s2a-color-content-heading",
     "typography:title": "s2a/typography/heading-2",
     "typography:eyebrow": "s2a/typography/eyebrow",
     "typography:body": "s2a/typography/body-lg",

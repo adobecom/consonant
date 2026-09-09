@@ -50,6 +50,22 @@
             }
           }
         },
+        "6": {
+          "$type": "number",
+          "$value": 6,
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-border-radius-6)"
+              }
+            }
+          }
+        },
         "8": {
           "$type": "number",
           "$value": 8,
@@ -910,7 +926,7 @@
       "124": {
         "$type": "number",
         "$value": 124,
-        "$description": "DEPRECATED - use spacing/128 instead. Retained temporarily because Milo still references 124px; do not use in new work. Remove once Milo migrates off it. (MWPW-202891)",
+        "$description": "DEPRECATED — use spacing/128 instead. Retained temporarily because Milo still references 124px; do not use in new work. Remove once Milo migrates off it. (MWPW-202891)",
         "$extensions": {
           "com.figma": {
             "hiddenFromPublishing": true,
@@ -1112,7 +1128,9 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-letter-spacing-neg-1)"
+              }
             }
           }
         },
@@ -1174,7 +1192,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-letter-spacing-neg-0_16)"
+              }
             }
           }
         }
@@ -1238,7 +1258,9 @@
               "scopes": [
                 "ALL_SCOPES"
               ],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-line-height-21)"
+              }
             }
           }
         },
@@ -1492,7 +1514,9 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [],
-              "codeSyntax": {}
+              "codeSyntax": {
+                "WEB": "var(--s2a-font-size-36)"
+              }
             }
           }
         },
@@ -1756,7 +1780,7 @@
               "ALL_SCOPES"
             ],
             "codeSyntax": {
-              "WEB": "var(--s2a-blur-16)"
+              "WEB": "var(--s2a-blur-24)"
             }
           }
         }
@@ -1804,7 +1828,7 @@
               "ALL_SCOPES"
             ],
             "codeSyntax": {
-              "WEB": "var(--s2a-blur-64)"
+              "WEB": "var(--s2a-blur-128)"
             }
           }
         }

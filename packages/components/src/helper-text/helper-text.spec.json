@@ -1,0 +1,34 @@
+{
+  "name": "HelperText",
+  "slug": "helper-text",
+  "cssClass": "c-helper-text",
+  "storybookId": "helper-text",
+  "description": "Supporting hint or error text rendered under a form field, in caption type.",
+  "figmaNode": "10243:101699",
+  "variants": {
+    "intent": ["neutral", "error"]
+  },
+  "props": [
+    { "name": "text", "type": "string", "defaultValue": "\"Helpful hint about this field.\"", "description": "Helper text content." },
+    { "name": "intent", "type": "string", "defaultValue": "\"neutral\"", "enum": ["neutral", "error"], "description": "neutral = subtle hint color, error = utility error color." },
+    { "name": "id", "type": "string", "defaultValue": "\"\"", "description": "id so the paired control can reference this text via aria-describedby." }
+  ],
+  "tokenBindings": {
+    "color:neutral": "--s2a-color-content-subtle",
+    "color:error": "--s2a-color-content-utility-error",
+    "font-family": "--s2a-font-family-caption",
+    "font-weight": "--s2a-font-weight-caption",
+    "font-size": "--s2a-typography-font-size-caption",
+    "line-height": "--s2a-typography-line-height-caption",
+    "letter-spacing": "--s2a-typography-letter-spacing-caption"
+  },
+  "a11y": {
+    "role": "none (plain text)",
+    "requiredAriaAttrs": [],
+    "wcag": ["1.3.1", "3.3.1", "3.3.2"],
+    "notes": [
+      "Give HelperText an id and reference it from the paired control with aria-describedby.",
+      "For error intent, the paired control should also set aria-invalid='true'; color alone must not be the only error signal (WCAG 1.4.1)."
+    ]
+  }
+}

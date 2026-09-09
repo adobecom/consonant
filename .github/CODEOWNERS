@@ -2,3 +2,16 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 * @matthewhuntsberry
+
+# ── Token release gate ────────────────────────────────────────────────────────
+# A release(tokens) PR (and the release pipeline itself) can only be approved /
+# merged by a designated owner. Enable branch protection on `main` with "Require
+# review from Code Owners" so these paths cannot merge without one of these
+# owners approving.
+# NOTE: @wb-adobe must accept the pending repo collaborator invite before GitHub
+#       will route reviews to them. @willpowerx and @matthewhuntsberry already
+#       have access and are effective immediately.
+packages/tokens/**                        @matthewhuntsberry @willpowerx @wb-adobe
+releases/**                               @matthewhuntsberry @willpowerx @wb-adobe
+.github/workflows/token-release.yml       @matthewhuntsberry @willpowerx @wb-adobe
+.github/scripts/token-release/**          @matthewhuntsberry @willpowerx @wb-adobe

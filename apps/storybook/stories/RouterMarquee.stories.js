@@ -95,7 +95,7 @@ navigation tiles, and a play/pause control.
         <h2 class="c-rich-content__title">Slide heading</h2>
         <p class="c-rich-content__body">Slide description.</p>
         <div class="c-rich-content__actions">
-          <a class="c-button" data-intent="primary" data-background="solid" data-context="on-dark" href="#">CTA</a>
+          <a class="c-button" data-style="knockout" data-size="md" href="#">CTA</a>
         </div>
       </div>
     </div>

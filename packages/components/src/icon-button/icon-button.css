@@ -1,6 +1,19 @@
+/**
+ * IconButton — v2. Matches Figma "IconButton — v2" component set (node 11174:146275).
+ * Axes: Style (solid | transparent | knockout) × Size (sm 24 | md 32 | lg 40) × State.
+ *
+ * No Context axis — light/dark comes from the S2A variable modes
+ * (:root[data-theme]); knockout is the always-light circle for dark/media
+ * surfaces.
+ *
+ * The v2 icon-button tokens (--s2a-color-icon-button-background-solid-default
+ * etc.) are bound in Figma but not yet in the shipped tokens release; each use
+ * chains to the shipped var with the same light/dark resolution.
+ */
+
 .c-icon-button {
   --c-icon-button-size: var(--s2a-spacing-2xl, 40px);
-  --c-icon-button-icon-size: 14px;
+  --c-icon-button-icon-size: 16px;
   --c-icon-button-border-width: 0px;
 
   position: relative;
@@ -17,7 +30,7 @@
   border-radius: var(--s2a-border-radius-round, 999px);
   border: var(--c-icon-button-border-width) solid transparent;
   background-color: transparent;
-  color: var(--s2a-color-content-default, #000000);
+  color: var(--s2a-color-content-default);
   cursor: pointer;
   transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease,
     opacity 120ms ease;
@@ -25,6 +38,7 @@
 
 .c-icon-button[data-size="sm"] {
   --c-icon-button-size: 24px;
+  --c-icon-button-icon-size: 12px;
 }
 
 .c-icon-button[data-size="md"] {
@@ -50,70 +64,57 @@
 
 /* Focus ring — 2px ring sitting 2px outside the visual button edge */
 .c-icon-button:is(:focus-visible, [data-force-state="focus"]) {
-  outline: 2px solid var(--s2a-color-focus-ring-default, #3b63fb);
+  outline: 2px solid var(--s2a-color-focus-ring-default);
   outline-offset: 2px;
 }
 
-/* ─── Solid · on-light ──────────────────────────────────────────────────── */
-
-.c-icon-button[data-style="solid"][data-context="on-light"] {
-  --c-icon-button-border-width: var(--s2a-border-width-md, 2px);
-  background-color: var(--s2a-color-iconbutton-background-primary-solid-default, #000);
-  color: var(--s2a-color-iconbutton-content-primary-solid-default, #fff);
-  border-color: var(--s2a-color-iconbutton-border-primary-solid-default, rgba(255, 255, 255, 0.12));
+.c-icon-button[data-style="knockout"]:is(:focus-visible, [data-force-state="focus"]) {
+  outline-color: var(--s2a-color-focus-ring-knockout);
 }
 
-.c-icon-button[data-style="solid"][data-context="on-light"]:not(:disabled):is(:hover, [data-force-state="hover"]) {
-  background-color: var(--s2a-color-iconbutton-background-primary-solid-hover, rgba(0, 0, 0, 0.64));
+/* ─── solid ─────────────────────────────────────────────────────────────── */
+
+.c-icon-button[data-style="solid"] {
+  --c-icon-button-border-width: var(--s2a-border-width-sm, 1px);
+  background-color: var(--s2a-color-icon-button-background-solid-default, var(--s2a-color-background-inverse));
+  color: var(--s2a-color-icon-button-content-solid, var(--s2a-color-iconbutton-content-primary-solid-default));
+  border-color: var(--s2a-color-border-knockout);
 }
 
-.c-icon-button[data-style="solid"][data-context="on-light"]:not(:disabled):is(:active, [data-force-state="active"]) {
-  background-color: var(--s2a-color-iconbutton-background-primary-solid-active, #000);
+.c-icon-button[data-style="solid"]:not(:disabled):is(:hover, [data-force-state="hover"]) {
+  background-color: var(--s2a-color-icon-button-background-solid-hover, var(--s2a-color-iconbutton-background-primary-solid-on-light-hover));
 }
 
-/* ─── Solid · on-dark ───────────────────────────────────────────────────── */
-
-.c-icon-button[data-style="solid"][data-context="on-dark"] {
-  --c-icon-button-border-width: var(--s2a-border-width-md, 2px);
-  background-color: var(--s2a-color-iconbutton-background-primary-solid-on-dark, #fff);
-  color: var(--s2a-color-iconbutton-content-primary-solid-inverse, #000);
-  border-color: var(--s2a-color-iconbutton-border-primary-solid-default, rgba(255, 255, 255, 0.12));
+.c-icon-button[data-style="solid"]:not(:disabled):is(:active, [data-force-state="active"]) {
+  background-color: var(--s2a-color-icon-button-background-solid-active, var(--s2a-color-background-inverse));
 }
 
-.c-icon-button[data-style="solid"][data-context="on-dark"]:not(:disabled):is(:hover, [data-force-state="hover"]) {
-  background-color: var(--s2a-color-iconbutton-background-primary-solid-on-dark-hover, rgba(255, 255, 255, 0.64));
+/* ─── transparent ───────────────────────────────────────────────────────── */
+
+.c-icon-button[data-style="transparent"] {
+  background-color: var(--s2a-color-icon-button-background-transparent-default, var(--s2a-color-iconbutton-background-primary-transparent-on-light-default));
+  color: var(--s2a-color-icon-button-content-transparent, var(--s2a-color-content-default));
 }
 
-.c-icon-button[data-style="solid"][data-context="on-dark"]:not(:disabled):is(:active, [data-force-state="active"]) {
-  background-color: var(--s2a-color-iconbutton-background-primary-solid-on-dark-active, #fff);
+.c-icon-button[data-style="transparent"]:not(:disabled):is(:hover, [data-force-state="hover"]) {
+  background-color: var(--s2a-color-icon-button-background-transparent-hover, var(--s2a-color-iconbutton-background-primary-transparent-on-light-hover));
 }
 
-/* ─── Transparent · on-light ────────────────────────────────────────────── */
-
-.c-icon-button[data-style="transparent"][data-context="on-light"] {
-  background-color: var(--s2a-color-iconbutton-background-primary-transparent-default, rgba(0, 0, 0, 0));
-  color: var(--s2a-color-iconbutton-content-primary-transparent-default, #000);
+.c-icon-button[data-style="transparent"]:not(:disabled):is(:active, [data-force-state="active"]) {
+  background-color: var(--s2a-color-icon-button-background-transparent-active, var(--s2a-color-iconbutton-background-primary-transparent-on-light-active));
 }
 
-.c-icon-button[data-style="transparent"][data-context="on-light"]:not(:disabled):is(:hover, [data-force-state="hover"]) {
-  background-color: var(--s2a-color-iconbutton-background-primary-transparent-hover, rgba(0, 0, 0, 0.08));
+/* ─── knockout (always-light circle for dark/media surfaces) ────────────── */
+
+.c-icon-button[data-style="knockout"] {
+  background-color: var(--s2a-color-icon-button-background-knockout-default, var(--s2a-color-gray-25));
+  color: var(--s2a-color-icon-button-content-knockout, var(--s2a-color-iconbutton-content-primary-solid-inverse));
 }
 
-.c-icon-button[data-style="transparent"][data-context="on-light"]:not(:disabled):is(:active, [data-force-state="active"]) {
-  background-color: var(--s2a-color-iconbutton-background-primary-transparent-active, rgba(0, 0, 0, 0.12));
+.c-icon-button[data-style="knockout"]:not(:disabled):is(:hover, [data-force-state="hover"]) {
+  background-color: var(--s2a-color-icon-button-background-knockout-hover, var(--s2a-color-gray-50));
 }
 
-/* ─── Transparent · on-dark ─────────────────────────────────────────────── */
-
-.c-icon-button[data-style="transparent"][data-context="on-dark"] {
-  background-color: var(--s2a-color-iconbutton-background-primary-transparent-on-dark, rgba(255, 255, 255, 0));
-  color: var(--s2a-color-iconbutton-content-primary-transparent-knockout, #fff);
-}
-
-.c-icon-button[data-style="transparent"][data-context="on-dark"]:not(:disabled):is(:hover, [data-force-state="hover"]) {
-  background-color: var(--s2a-color-iconbutton-background-primary-transparent-on-dark-hover, rgba(255, 255, 255, 0.12));
-}
-
-.c-icon-button[data-style="transparent"][data-context="on-dark"]:not(:disabled):is(:active, [data-force-state="active"]) {
-  background-color: var(--s2a-color-iconbutton-background-primary-transparent-on-dark-active, rgba(255, 255, 255, 0.16));
+.c-icon-button[data-style="knockout"]:not(:disabled):is(:active, [data-force-state="active"]) {
+  background-color: var(--s2a-color-icon-button-background-knockout-active, var(--s2a-color-gray-100));
 }

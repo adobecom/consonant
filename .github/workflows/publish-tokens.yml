@@ -1,0 +1,78 @@
+name: Publish Tokens
+
+# Publishes @adobecom/s2a-tokens to GitHub Packages when a token release lands
+# on main. The release pipeline (token-release.yml) opens a PR that bumps the
+# version and commits the built dist/ + tarball; merging that PR trips this
+# workflow, which publishes the already-built, already-reviewed package.
+#
+# Publishing runs on GitHub's own GITHUB_TOKEN (packages: write) — no personal
+# token, nothing on anyone's machine. It is idempotent: a version already on the
+# registry is skipped, not re-published (registries are immutable per version).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/tokens/package.json" # version bump = a release merged
+  workflow_dispatch: # manual re-publish of the current version
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish-tokens
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # The merge to main is already gated (CODEOWNERS review). This second gate
+    # makes the actual registry push — which is irreversible — require a
+    # reviewer's approval too. Remove this line to auto-publish on merge.
+    environment: token-release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node (GitHub Packages)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@adobecom"
+
+      - name: Read package version
+        id: v
+        run: echo "version=$(node -p "require('./dist/packages/tokens/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Publish (skip if the version already exists)
+        id: publish
+        working-directory: dist/packages/tokens
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          OUT=$(npm publish 2>&1); CODE=$?
+          echo "$OUT"
+          if [ $CODE -eq 0 ]; then
+            echo "result=published" >> "$GITHUB_OUTPUT"
+          elif echo "$OUT" | grep -qiE "cannot publish over|already exists|E409|EPUBLISHCONFLICT|conflict"; then
+            echo "::notice::@adobecom/s2a-tokens@${{ steps.v.outputs.version }} is already on the registry — skipping."
+            echo "result=skipped" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Publish failed for a reason other than a version conflict."
+            exit $CODE
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          V="${{ steps.v.outputs.version }}"
+          case "${{ steps.publish.outputs.result }}" in
+            published) echo "### 📦 Published @adobecom/s2a-tokens@$V to GitHub Packages" >> "$GITHUB_STEP_SUMMARY" ;;
+            skipped)   echo "### ⏭️ @adobecom/s2a-tokens@$V was already published — nothing to do" >> "$GITHUB_STEP_SUMMARY" ;;
+            *)         echo "### ⚠️ Publish did not complete for @adobecom/s2a-tokens@$V" >> "$GITHUB_STEP_SUMMARY" ;;
+          esac

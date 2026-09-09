@@ -1,0 +1,30 @@
+{
+  "name": "Label",
+  "slug": "label",
+  "cssClass": "c-label",
+  "storybookId": "label",
+  "description": "Form field label atom. Renders a native <label> in body-md type, bound to a control via the for prop.",
+  "figmaNode": "10559:113852",
+  "variants": {},
+  "props": [
+    { "name": "text", "type": "string", "defaultValue": "\"Label\"", "description": "Label text content." },
+    { "name": "for", "type": "string", "defaultValue": "\"\"", "description": "id of the form control this label describes (native label/for association)." }
+  ],
+  "tokenBindings": {
+    "color": "--s2a-color-content-default",
+    "font-family": "--s2a-font-family-body",
+    "font-weight": "--s2a-font-weight-body",
+    "font-size": "--s2a-typography-font-size-body-md",
+    "line-height": "--s2a-typography-line-height-body-md",
+    "letter-spacing": "--s2a-typography-letter-spacing-body-md"
+  },
+  "a11y": {
+    "role": "none (native <label>)",
+    "requiredAriaAttrs": [],
+    "wcag": ["1.3.1", "3.3.2"],
+    "notes": [
+      "Always pair with a form control via the for attribute so clicking the label focuses the control.",
+      "Do not use Label for non-form headings — it renders a native <label> element."
+    ]
+  }
+}

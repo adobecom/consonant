@@ -1,0 +1,50 @@
+{
+  "name": "Link",
+  "slug": "link",
+  "cssClass": "c-link",
+  "storybookId": "link",
+  "description": "Standalone text link atom. Two kinds: action (label-ramp CTA link with chevron) and text (body-md inline link). Matches Figma component set 2609:873 on the ↳ Link page.",
+  "figma": {
+    "componentSetId": "2609:873",
+    "fileKey": "oXIFqtnrYNdTIjqb1sbJau"
+  },
+  "variants": {
+    "kind": ["action", "text"],
+    "emphasis": ["default", "subtle"],
+    "context": ["on-light", "on-dark"]
+  },
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"Label\"", "description": "Link text (Figma TEXT prop Label)" },
+    { "name": "href", "type": "string", "defaultValue": "\"#\"", "description": "Destination URL" },
+    { "name": "kind", "type": "string", "defaultValue": "\"action\"", "enum": ["action", "text"], "description": "action = 14px Bold label ramp; text = 16px Regular body-md ramp" },
+    { "name": "emphasis", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "subtle"], "description": "text kind only — subtle uses content/body-subtle" },
+    { "name": "context", "type": "string", "defaultValue": "\"on-light\"", "enum": ["on-light", "on-dark"], "description": "on-dark switches to content/knockout" },
+    { "name": "underline", "type": "boolean", "defaultValue": "false", "description": "Persistent underline (Figma BOOLEAN prop Underline)" },
+    { "name": "showIconEnd", "type": "boolean", "defaultValue": "true", "description": "Trailing 12px chevron (Figma Show Icon End)" }
+  ],
+  "tokenBindings": {
+    "color:action:on-light": "--s2a-color-button-content-primary-solid-inverse",
+    "color:text:on-light": "--s2a-color-content-default",
+    "color:text-subtle:on-light": "--s2a-color-content-body-subtle",
+    "color:on-dark": "--s2a-color-content-knockout",
+    "outline-color:focus": "--s2a-color-focus-ring-default",
+    "outline-color:focus:on-dark": "--s2a-color-focus-ring-knockout",
+    "gap": "--s2a-spacing-xs",
+    "typography:action": "label ramp (--s2a-*-label)",
+    "typography:text": "body-md ramp (--s2a-typography-*-body-md)"
+  },
+  "a11y": {
+    "role": "link (native <a>)",
+    "wcag": ["2.4.4", "2.4.7", "1.4.1"],
+    "notes": [
+      "Rendered as a native <a href> — no ARIA needed.",
+      "Focus ring is 1px focus-ring/default at 3px offset via :focus-visible.",
+      "Per Figma, hover/active states carry no visual change; when the link sits in body copy, set underline=true so color is not the only affordance (WCAG 1.4.1)."
+    ]
+  },
+  "notes": [
+    "Figma's on-light text/default variant has an unbound raw #000 fill; code binds --s2a-color-content-default as the semantic equivalent.",
+    "Block padding (6px action / 2px text) is structural — no spacing token rung exists for 6px.",
+    "on-light action binds --s2a-color-button-content-primary-solid-inverse exactly as Figma does, even though a content/* token might seem more natural."
+  ]
+}

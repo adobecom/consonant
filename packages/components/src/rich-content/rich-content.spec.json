@@ -27,7 +27,7 @@
     { "name": "actions", "type": "TemplateResult", "description": "Action slot — typically Button components" }
   ],
   "tokenBindings": {
-    "color:title:on-light": "--s2a-color-content-title",
+    "color:title:on-light": "--s2a-color-content-heading",
     "color:title:on-dark": "--s2a-color-content-knockout",
     "color:eyebrow:on-light": "--s2a-color-content-subheading",
     "color:body:on-light": "--s2a-color-content-body-subtle",

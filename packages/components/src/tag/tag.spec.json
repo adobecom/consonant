@@ -1,0 +1,44 @@
+{
+  "name": "Tag",
+  "slug": "tag",
+  "cssClass": "c-tag",
+  "storybookId": "tag",
+  "description": "Compact eyebrow-style label chip on a subtle surface. Used for category labels and metadata badges.",
+  "figma": {
+    "componentSetId": "10051:102892",
+    "page": "   ↳ Tag",
+    "version": "1.0.0"
+  },
+  "variants": {
+    "state": ["default"]
+  },
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"Tag label\"", "description": "Visible tag text" }
+  ],
+  "tokenBindings": {
+    "background-color": "--s2a-color-background-subtle",
+    "color": "--s2a-color-content-label",
+    "padding-block": "--s2a-spacing-2xs",
+    "padding-inline": "--s2a-spacing-xs",
+    "border-radius": "--s2a-border-radius-2xs",
+    "font-family": "--s2a-font-family-eyebrow",
+    "font-size": "--s2a-typography-font-size-eyebrow",
+    "font-weight": "--s2a-font-weight-eyebrow",
+    "line-height": "--s2a-typography-line-height-eyebrow",
+    "letter-spacing": "--s2a-typography-letter-spacing-eyebrow"
+  },
+  "a11y": {
+    "role": "none",
+    "requiredAriaAttrs": [],
+    "wcag": ["1.4.3"],
+    "notes": [
+      "Rendered as a static span — purely presentational text, no interactive semantics.",
+      "content/label on background/subtle meets WCAG 1.4.3 contrast in both themes.",
+      "If used to convey status alone, pair with visible text elsewhere — color/shape must not be the only signal."
+    ]
+  },
+  "notes": [
+    "Figma binds padding/radius to primitives (spacing-4/8, radius-4); CSS uses the semantic equivalents --s2a-spacing-2xs/-xs and --s2a-border-radius-2xs which resolve to the same values.",
+    "Single-variant set in Figma (State=Default) — no data-attribute variants needed yet."
+  ]
+}

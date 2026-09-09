@@ -26,14 +26,6 @@ const config = {
     if (process.env.GITHUB_PAGES === "true") {
       config.base = process.env.STORYBOOK_BASE_PATH || "/consonant/";
     }
-    // Story UI: Exclude from dependency optimization to handle CSS imports correctly
-    config.optimizeDeps = {
-      ...config.optimizeDeps,
-      exclude: [
-        ...(config.optimizeDeps?.exclude || []),
-        '@tpitre/story-ui'
-      ]
-    };
     // Vite skips its build.outDir (default: "dist") in the file watcher.
     // Setting outDir explicitly to storybook-static removes "dist" from the
     // ignored list so changes to dist/packages/tokens/css/dev/ trigger HMR.

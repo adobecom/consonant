@@ -180,10 +180,12 @@ function scanCssFile(absPath, tokenIndex) {
     for (const m of line.matchAll(TOKEN_VAR_RE)) {
       const cssProp = m[1].trim();
       if (!usedTokens.has(cssProp)) {
-        const entries = tokenIndex.byProp.get(cssProp);
+        // Validators TokenIndex: `known` = every shipped --s2a-* var, `primitive`
+        // = the design-only ones. (More accurate than the old MCP loader, which
+        // over-flagged semantic tokens via hiddenFromPublishing.)
         usedTokens.set(cssProp, {
-          found: !!entries,
-          designOnly: entries?.[0]?.designOnly ?? false,
+          found: tokenIndex.known.has(cssProp),
+          designOnly: tokenIndex.primitive.has(cssProp),
         });
       }
     }
@@ -214,31 +216,46 @@ function scanCssFile(absPath, tokenIndex) {
 }
 
 async function buildMiloData() {
-  const { loadTokens } = await import(
-    path.join(REPO_ROOT, "apps/s2a-ds-mcp/dist/loaders/token-loader.js")
-  );
-  const tokenIndex = loadTokens(REPO_ROOT);
-
-  const cssFiles = walkCssFiles(MILO_ROOT);
-  const byFile = [];
-  for (const absPath of cssFiles) {
-    const relPath = path.relative(REPO_ROOT, absPath).split(path.sep).join("/");
-    if (isSystemFile(relPath)) continue;
-    const scanned = scanCssFile(absPath, tokenIndex);
-    if (!scanned) continue;
-    const pathWithinMilo = path.relative(MILO_ROOT, absPath).split(path.sep).join("/");
-    byFile.push({
-      filePath: relPath,
-      block: path.basename(path.dirname(absPath)),
-      official: relPath.includes("libs/ui/s2a/"),
-      githubUrl: MILO_COMMIT_SHA
-        ? `https://github.com/${MILO_GITHUB_REPO}/blob/${MILO_COMMIT_SHA}/${pathWithinMilo}`
-        : null,
-      editorUri: `cursor://file${absPath}`,
-      ...scanned,
-    });
+  // The token-compliance audit uses @adobecom/s2a-validators — the one
+  // authoritative token index (built from the shipped token CSS), shared with the
+  // eval scorers. It reads dist/packages/tokens/css/dev, which `tokens:build`
+  // produces, so it works in CI. If it's unavailable, degrade gracefully (like the
+  // Figma section) and skip only the CSS scan.
+  let tokenIndex = null;
+  try {
+    const { loadTokenIndex } = await import(
+      path.join(REPO_ROOT, "packages/validators/dist/index.js")
+    );
+    tokenIndex = loadTokenIndex(REPO_ROOT);
+  } catch {
+    console.warn(
+      "⚠️  @adobecom/s2a-validators token index unavailable — skipping the Milo token-compliance audit. " +
+        "Run `npm run tokens:build` (and build packages/validators) to populate it.",
+    );
   }
-  byFile.sort((a, b) => a.complianceScore - b.complianceScore);
+
+  const byFile = [];
+  if (tokenIndex) {
+    const cssFiles = walkCssFiles(MILO_ROOT);
+    for (const absPath of cssFiles) {
+      const relPath = path.relative(REPO_ROOT, absPath).split(path.sep).join("/");
+      if (isSystemFile(relPath)) continue;
+      const scanned = scanCssFile(absPath, tokenIndex);
+      if (!scanned) continue;
+      const pathWithinMilo = path.relative(MILO_ROOT, absPath).split(path.sep).join("/");
+      byFile.push({
+        filePath: relPath,
+        block: path.basename(path.dirname(absPath)),
+        official: relPath.includes("libs/ui/s2a/"),
+        githubUrl: MILO_COMMIT_SHA
+          ? `https://github.com/${MILO_GITHUB_REPO}/blob/${MILO_COMMIT_SHA}/${pathWithinMilo}`
+          : null,
+        editorUri: `cursor://file${absPath}`,
+        ...scanned,
+      });
+    }
+    byFile.sort((a, b) => a.complianceScore - b.complianceScore);
+  }
 
   const builtComponents = fs
     .readdirSync(COMPONENTS_SRC, { withFileTypes: true })
@@ -347,6 +364,18 @@ async function main() {
 
   const miloFidelity = await buildMiloData();
   meta.miloFilesScanned = miloFidelity.byFile.length;
+
+  // Never overwrite a good committed snapshot with an empty one. In CI there are
+  // no Figma creds and the Milo submodule isn't checked out, so a fresh run has
+  // no data — keep the last committed snapshot so the deployed dashboard doesn't
+  // go blank. Only write when we actually produced data (or nothing is committed).
+  const hasData = meta.figmaAvailable || miloFidelity.byFile.length > 0;
+  if (!hasData && fs.existsSync(OUTPUT_MODULE)) {
+    console.warn(
+      "⚠️  No fresh Figma or Milo data (CI without creds/submodule) — keeping the existing committed analyticsSnapshot.js so the dashboard keeps its last good data.",
+    );
+    process.exit(0);
+  }
 
   writeSnapshot({ meta, figmaTrend, componentAdoption, topConsumers, miloFidelity });
   console.log(

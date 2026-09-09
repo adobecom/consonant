@@ -52,8 +52,7 @@ export const QuoteCard = ({
               ${createButton({
                 label: ctaLabel,
                 href: ctaHref,
-                background: "solid",
-                context: "on-dark",
+                style: "knockout",
               })}
             </div>
           `

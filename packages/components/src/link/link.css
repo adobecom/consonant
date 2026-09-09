@@ -1,0 +1,76 @@
+/**
+ * Link atom — Figma component set 2609:873 (↳ Link page).
+ * Axes: Kind (action | text) · Emphasis (default | subtle) · Context (on-light | on-dark).
+ * States: default / hover / focus / active — per Figma, hover and active carry no
+ * visual delta from default; only focus adds the 1px focus ring.
+ */
+
+.c-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2a-spacing-xs, 8px);
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+/* ── Kind: action — label ramp (14 Bold), 6px block padding ─────────────── */
+.c-link[data-kind="action"] {
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  padding-block: 6px;
+  color: var(--s2a-color-button-content-primary-solid-inverse, #000);
+}
+
+/* ── Kind: text — body-md ramp (16 Regular), 2px block padding ──────────── */
+.c-link[data-kind="text"] {
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-body-md);
+  line-height: var(--s2a-typography-line-height-body-md);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-md);
+  padding-block: 2px;
+  color: var(--s2a-color-content-default, #000);
+}
+
+.c-link[data-kind="text"][data-emphasis="subtle"] {
+  color: var(--s2a-color-content-body-subtle, rgba(0, 0, 0, 0.64));
+}
+
+/* ── Context: on-dark ────────────────────────────────────────────────────── */
+.c-link[data-context="on-dark"] {
+  color: var(--s2a-color-content-knockout, #fff);
+}
+
+/* ── Underline prop ──────────────────────────────────────────────────────── */
+.c-link[data-underline] {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Focus ring — 1px, ~3px offset (Figma "Focus Ring Background") ──────── */
+.c-link:focus-visible {
+  outline: 1px solid var(--s2a-color-focus-ring-default, #3b63fb);
+  outline-offset: 3px;
+}
+
+.c-link[data-context="on-dark"]:focus-visible {
+  outline-color: var(--s2a-color-focus-ring-knockout, #fff);
+}
+
+/* ── End icon (12×12 chevron) ────────────────────────────────────────────── */
+.c-link__icon-end {
+  display: inline-flex;
+  flex: none;
+  width: 12px;
+  height: 12px;
+}
+
+.c-link__icon-end svg {
+  width: 100%;
+  height: 100%;
+}

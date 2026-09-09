@@ -319,7 +319,9 @@ function transformVariables({ variables, collections }) {
   }
 
   for (const variable of variables) {
-    if (!variable || variable.deletedButReferenced) {
+    // Skip remote (library-imported) and deleted variables — only local
+    // variables belong in the generated token files.
+    if (!variable || variable.deletedButReferenced || variable.remote) {
       continue;
     }
 
@@ -539,10 +541,9 @@ function toSlug(value) {
   const normalized = String(value || "")
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9_]+/g, "-")
+    .replace(/[^a-z0-9]+/g, "-")
     .replace(/-+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .replace(/_+/g, "_");
+    .replace(/^-+|-+$/g, "");
   return normalized || "token";
 }
 
@@ -555,8 +556,14 @@ async function safeParseJson(response) {
   }
 }
 
-// Export functions for testing
+if (require.main === module) {
+  main();
+}
+
+// Single export block — a prior duplicate module.exports overwrote this one at
+// runtime, dropping splitVariablePath/parseEnv/stripQuotes/hydrateEnv.
 module.exports = {
+  main,
   normalizeVariables,
   normalizeCollections,
   parseEnv,
@@ -564,15 +571,4 @@ module.exports = {
   splitVariablePath,
   transformVariables,
   hydrateEnv,
-};
-
-if (require.main === module) {
-  main();
-}
-
-module.exports = {
-  main,
-  normalizeVariables,
-  normalizeCollections,
-  transformVariables,
 };

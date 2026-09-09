@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/manifest.schema.json",
+  "title": "S2A Tokens Release Manifest",
+  "description": "The consumption contract for an S2A design-tokens release. latest.json always describes the current release; releases/<version>/manifest.json is immutable.",
+  "type": "object",
+  "required": ["name", "version", "spec", "cssVarPrefix", "artifact", "collections"],
+  "additionalProperties": true,
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": { "type": "string", "description": "Package name, e.g. @adobecom/s2a-tokens" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$" },
+    "released": { "type": "string", "format": "date" },
+    "spec": { "type": "string", "enum": ["w3c-design-tokens"] },
+    "semver": { "type": "boolean" },
+    "cssVarPrefix": { "type": "string" },
+    "artifact": {
+      "type": "object",
+      "required": ["tarball"],
+      "properties": {
+        "tarball": {
+          "type": "object",
+          "required": ["url", "integrity"],
+          "properties": {
+            "url": { "type": "string", "format": "uri" },
+            "integrity": { "type": "string", "pattern": "^sha256-" },
+            "bytes": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "css": {
+          "type": "object",
+          "description": "Paths inside the unpacked package to the built CSS custom properties.",
+          "properties": {
+            "primitives": { "type": "string" },
+            "semantic": { "type": "string" },
+            "semanticLight": { "type": "string" },
+            "semanticDark": { "type": "string" },
+            "responsive": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "spec": { "type": "string" },
+        "dir": { "type": "string", "format": "uri" }
+      }
+    },
+    "collections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "slug"],
+        "properties": {
+          "name": { "type": "string" },
+          "slug": { "type": "string" },
+          "modes": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "tokenCount": { "type": ["integer", "null"], "minimum": 0 },
+    "changelog": { "type": "string" },
+    "generatedBy": { "type": "string" }
+  }
+}

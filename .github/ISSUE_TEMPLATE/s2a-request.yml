@@ -1,0 +1,66 @@
+name: S2A Request
+description: Request a token, component, or change to the S2A design system.
+title: "[Request]: "
+labels: ["s2a-request", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping shape S2A. Fill this out and the design-system team triages it
+        weekly — you don't need to know how it's built, just tell us what you need and where.
+        Not sure if it's a request? See **[how requests work](../../blob/main/docs/contributing.md#requesting-a-token-component-or-change)** first.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What are you requesting?
+      options:
+        - New token
+        - Token change
+        - New component
+        - Component change
+        - Bug / something's broken
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: What do you need?
+      description: One or two sentences.
+      placeholder: A subtle elevation shadow token for cards resting on a colored surface.
+    validations:
+      required: true
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case — why do you need it, and where is it used?
+      description: A real usage helps us design it right. Name the page, surface, or flow if you can.
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Nice to have
+        - Needed soon
+        - Blocking my work
+    validations:
+      required: true
+  - type: input
+    id: figma
+    attributes:
+      label: Figma link
+      description: In Figma, right-click the node → **Copy link to selection**, then paste it here.
+      placeholder: https://www.figma.com/design/…?node-id=…
+  - type: textarea
+    id: context
+    attributes:
+      label: Screenshot or extra context
+      description: Drag an image in, or add anything else that helps us understand the ask.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you file
+      options:
+        - label: I checked that an existing S2A token or component doesn't already cover this.
+        - label: I searched open requests for a duplicate.

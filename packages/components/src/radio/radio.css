@@ -1,0 +1,110 @@
+/**
+ * Radio atom — S2A
+ * Source of truth: Figma "Radio" (11586:206620) on the ↳ Radio page.
+ * 8 variants: Selected {false,true} × State {default,hover,focus,disabled}.
+ *
+ * Figma anatomy per variant:
+ *   .ring        18×18 ellipse, 1.5px stroke content/default (disabled: content/subtle)
+ *   .dot         8×8 fill content/default when Selected (disabled: content/subtle)
+ *   [hover halo] 20×20 fill background/subtle behind the ring on hover
+ *   [focus ring] 20×20 2px stroke focus-ring/default
+ *   .label       s2a/typography/label; content/subtle unselected → content/default selected
+ */
+
+.c-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2a-spacing-xs);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.c-radio__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 20×20 hit/halo area; the 18×18 ring is drawn 1px inset via the border box */
+.c-radio__control {
+  position: relative;
+  box-sizing: border-box;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--s2a-border-radius-round, 50%);
+  transition: background-color 130ms ease;
+}
+
+/* .ring — 18×18, 1.5px content/default stroke */
+.c-radio__control::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--s2a-color-content-default);
+  border-radius: inherit;
+  transition: border-color 130ms ease;
+}
+
+/* .dot — 8×8, content/default, only when checked */
+.c-radio__control::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: inherit;
+  background-color: var(--s2a-color-content-default);
+  opacity: 0;
+  transition: opacity 130ms ease;
+}
+
+.c-radio__input:checked + .c-radio__control::after {
+  opacity: 1;
+}
+
+/* [hover halo] — background/subtle fill behind the ring */
+.c-radio:hover:not([data-disabled]) .c-radio__control,
+.c-radio[data-force-state="hover"] .c-radio__control {
+  background-color: var(--s2a-color-background-subtle);
+}
+
+/* [focus ring] — 2px focus-ring/default */
+.c-radio__input:focus-visible + .c-radio__control,
+.c-radio[data-force-state="focus"] .c-radio__control {
+  box-shadow: 0 0 0 var(--s2a-border-width-md, 2px) var(--s2a-color-focus-ring-default);
+}
+
+/* .label — subtle when unselected, default when selected (per Figma) */
+.c-radio__label {
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  color: var(--s2a-color-content-subtle);
+  transition: color 130ms ease;
+}
+
+.c-radio__input:checked ~ .c-radio__label {
+  color: var(--s2a-color-content-default);
+}
+
+/* Disabled — ring and dot drop to content/subtle; label mapping unchanged (per Figma) */
+.c-radio[data-disabled] {
+  cursor: not-allowed;
+}
+
+.c-radio[data-disabled] .c-radio__control::before {
+  border-color: var(--s2a-color-content-subtle);
+}
+
+.c-radio[data-disabled] .c-radio__control::after {
+  background-color: var(--s2a-color-content-subtle);
+}

@@ -1,0 +1,77 @@
+/**
+ * SegmentedControl — pill switcher with a knockout-black active segment.
+ * Matches Figma sets `SegmentItem` (10104:100998) and `SegmentedControl/3-up`
+ * (10104:101023), page "↳ SegmentedControl" in S2A Foundations.
+ *
+ * Container: 40px tall, 16px radius, transparent-black-04 wash.
+ * Active segment: 32px black pill (fully rounded) inset by 4px, knockout label.
+ */
+
+.c-segmented-control {
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: var(--s2a-border-radius-md, 16px);
+  background-color: var(--s2a-color-transparent-black-04, rgb(0 0 0 / 0.04));
+}
+
+.c-segmented-control__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--s2a-spacing-2xl, 40px);
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.c-segmented-control__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 20px inline padding per Figma — no semantic rung at 20; primitive keeps it pipeline-bound */
+  padding-inline: var(--s2a-spacing-20, 20px);
+  height: 100%;
+  border-radius: var(--s2a-border-radius-round, 999px);
+  font-family: var(--s2a-font-family-label, "Adobe Clean");
+  font-weight: var(--s2a-font-weight-adobe-clean-bold, 700);
+  font-size: var(--s2a-typography-font-size-label, 14px);
+  line-height: var(--s2a-typography-line-height-label, 18px);
+  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
+  color: var(--s2a-color-transparent-black-64, rgb(0 0 0 / 0.64));
+  white-space: nowrap;
+}
+
+/* Active segment — black pill inset 4px top/bottom, white label */
+.c-segmented-control__item[aria-selected="true"] {
+  padding-block: var(--s2a-spacing-3xs, 4px);
+}
+
+.c-segmented-control__item[aria-selected="true"] .c-segmented-control__cta {
+  background-color: var(--s2a-color-background-knockout, #000);
+  color: var(--s2a-color-content-knockout, #fff);
+}
+
+/* Hover on inactive segments — full-strength label (no Figma hover variant; minimal affordance) */
+.c-segmented-control__item:not([aria-selected="true"]):hover .c-segmented-control__cta {
+  color: var(--s2a-color-content-default, #000);
+}
+
+/* Focus ring — same convention as .c-button */
+.c-segmented-control__item:focus-visible {
+  outline: none;
+}
+
+.c-segmented-control__item:focus-visible .c-segmented-control__cta {
+  box-shadow: 0 0 0 var(--s2a-spacing-2xs, 2px) var(--s2a-color-focus-ring-default, #3b63fb);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .c-segmented-control__cta {
+    transition:
+      color 130ms ease-out,
+      background-color 130ms ease-out;
+  }
+}

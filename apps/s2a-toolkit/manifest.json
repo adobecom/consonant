@@ -1,18 +1,21 @@
 {
   "name": "S2A Toolkit",
-  "id": "s2a-toolkit-internal-2",
+  "id": "1672001342733547591",
   "api": "1.0.0",
   "editorType": ["figma"],
   "main": "dist/code.js",
   "ui": "dist/ui.html",
   "enablePrivatePluginApi": true,
-  "permissions": ["teamlibrary"],
+  "permissions": ["teamlibrary", "currentuser"],
   "documentAccess": "dynamic-page",
   "networkAccess": {
     "allowedDomains": [
       "http://localhost:6006",
+      "http://localhost:4002",
       "http://localhost:9300",
       "http://localhost:9400",
+      "http://localhost:8787",
+      "https://s2a-telemetry-collector.mmhuntsberry.workers.dev",
       "https://api.github.com",
       "ws://localhost:9220",
       "ws://localhost:9221",

@@ -63,8 +63,6 @@ export const ImmersiveCard = ({
           icon: playing ? IconPause() : IconPlay(),
           label: playing ? "Pause" : "Play",
           size: "md",
-          context: "on-dark",
-          background: "solid",
           onClick: onControlClick,
         })
       : nothing}

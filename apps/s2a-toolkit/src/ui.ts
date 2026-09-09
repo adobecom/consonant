@@ -8,6 +8,41 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
   parent.postMessage({ pluginMessage: { type, ...payload } }, 'https://www.figma.com');
 }
 
+// ── Usage telemetry (network) — POC ───────────────────────────────────────────
+// Emits one anonymized event per action to a collector. OFF unless an endpoint is
+// set below. Nothing sensitive is sent — just the action id, timestamp, ok/error,
+// an anonymous per-install id (from clientStorage, provisioned by code.ts), and
+// the plugin version. Every path is fail-silent and never blocks the UI.
+const PLUGIN_VERSION = '0.2.0';
+// Set to your collector to enable, e.g. 'http://localhost:8787' (dev) or the
+// deployed Worker URL. Empty string = telemetry disabled. The chosen host must
+// also be listed in manifest.json → networkAccess.allowedDomains.
+const TELEMETRY_ENDPOINT = 'https://s2a-telemetry-collector.mmhuntsberry.workers.dev';
+let telemetryAnonId = '';
+let telemetryOptOut = false;
+
+function sendTelemetry(action: string, status: 'ok' | 'error' = 'ok') {
+  if (!TELEMETRY_ENDPOINT || telemetryOptOut) return;
+  try {
+    fetch(TELEMETRY_ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        tool: action,
+        status,
+        durationMs: 0,
+        ts: new Date().toISOString(),
+        anonId: telemetryAnonId || 'unknown',
+        version: PLUGIN_VERSION,
+        server: 's2a-toolkit',
+      }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    /* best-effort */
+  }
+}
+
 // ── Telemetry — UsageStore in localStorage ────────────────────────────────────
 
 const USAGE_KEY = 's2a:usage';
@@ -40,6 +75,7 @@ function logEvent(featureId: string) {
   store.totals[featureId]   = (store.totals[featureId]   || 0) + 1;
   store.lastUsed[featureId] = Date.now();
   saveUsage(store);
+  sendTelemetry(featureId); // network emit alongside the local UsageStore
 }
 
 function heatOf(featureId: string): 'hot' | 'warm' | 'cold' {
@@ -65,9 +101,7 @@ function recentlyUsed(n = 5): Feature[] {
 
 let annotateNodeId: string | null = null;
 let selectSetId:    string | null = null;
-let specSetId:      string | null = null;
-let variablesCache: { variables: any[]; variableCollections: any[] } | null = null;
-let githubSettings: GitHubSettings | null = null;
+let docSetId:     string | null = null;
 let bridgeConnected      = false;
 let bridgeWs: WebSocket | null = null;
 let bridgeWsPort: number | null = null;
@@ -76,7 +110,6 @@ let bridgeReconnectTimer: ReturnType<typeof setTimeout>   | null = null;
 let bridgeReconnectAttempts = 0;
 let bridgeUserDisconnected  = false;
 let activePanel: Panel = 'home';
-let settingsOpen = false;
 let isMini = false;
 let popoverOpen = false;
 
@@ -89,20 +122,15 @@ let requestCounter = 0;
 
 // ── Panel switching ───────────────────────────────────────────────────────────
 
-type Panel = 'home' | 'tokens' | 'tools' | 'settings';
+type Panel = 'home' | 'tools' | 'request';
 
 const panelEls: Record<Panel, HTMLElement> = {
   home:     document.getElementById('homePanel')     as HTMLElement,
-  tokens:   document.getElementById('tokensPanel')   as HTMLElement,
   tools:    document.getElementById('toolsPanel')    as HTMLElement,
-  settings: document.getElementById('settingsPanel') as HTMLElement,
+  request:  document.getElementById('requestPanel')  as HTMLElement,
 };
 
 function switchPanel(panel: Panel) {
-  if (panel !== 'settings') {
-    settingsOpen = false;
-    settingsBtn?.classList.remove('active');
-  }
   activePanel = panel;
   Object.entries(panelEls).forEach(([key, el]) => {
     el.classList.toggle('active', key === panel);
@@ -110,8 +138,8 @@ function switchPanel(panel: Panel) {
   document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.panel === panel);
   });
-  if (panel === 'settings') postToPlugin('get-settings');
   if (panel === 'home') renderHomeView();
+  if (panel === 'request') postToPlugin('request:capture'); // refresh the context card
 }
 
 document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
@@ -119,19 +147,6 @@ document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => 
     const p = tab.dataset.panel as Panel;
     if (p) switchPanel(p);
   });
-});
-
-const settingsBtn = document.getElementById('settingsBtn') as HTMLButtonElement;
-settingsBtn?.addEventListener('click', () => {
-  if (settingsOpen) {
-    settingsOpen = false;
-    settingsBtn.classList.remove('active');
-    switchPanel(activePanel === 'settings' ? 'home' : activePanel);
-  } else {
-    settingsOpen = true;
-    settingsBtn.classList.add('active');
-    switchPanel('settings');
-  }
 });
 
 // ── Feature registry ──────────────────────────────────────────────────────────
@@ -147,36 +162,6 @@ interface Feature {
 }
 
 const FEATURES: Feature[] = [
-  // Tokens
-  {
-    id: 'tokens:refresh',
-    name: 'Refresh variables',
-    description: 'Re-fetch all Figma variables from the current file',
-    category: 'Tokens',
-    uiAction: () => (document.getElementById('varRefreshBtn') as HTMLButtonElement)?.click(),
-  },
-  {
-    id: 'tokens:export-local',
-    name: 'Export tokens locally',
-    description: 'Push token JSON to local dev server on port 9300',
-    category: 'Tokens',
-    uiAction: () => (document.getElementById('varExportLocalBtn') as HTMLButtonElement)?.click(),
-  },
-  {
-    id: 'tokens:export-github',
-    name: 'Push tokens to GitHub',
-    description: 'Commit token JSON to your configured repo',
-    category: 'Tokens',
-    uiAction: () => (document.getElementById('varExportGithubBtn') as HTMLButtonElement)?.click(),
-  },
-  {
-    id: 'tokens:doc-gen',
-    name: 'Generate token docs',
-    description: 'Build a Figma doc sheet for a token group',
-    category: 'Tokens',
-    uiAction: () => switchPanel('tokens'),
-  },
-
   // Tools
   {
     id: 'tools:copy-link',
@@ -216,11 +201,18 @@ const FEATURES: Feature[] = [
     },
   },
   {
-    id: 'tools:spec',
-    name: 'Generate spec sheet',
-    description: 'Scaffold a Figma spec doc for a component set',
+    id: 'tools:doc',
+    name: 'Generate component doc',
+    description: 'Build a full component documentation page for the selected component set',
     category: 'Tools',
     uiAction: () => switchPanel('tools'),
+  },
+  {
+    id: 'tools:request',
+    name: 'Request a change',
+    description: 'File a token/component/change request as a triage-ready GitHub issue',
+    category: 'Tools',
+    uiAction: () => switchPanel('request'),
   },
 
   // Bridge
@@ -242,11 +234,10 @@ const FEATURES: Feature[] = [
 
 const QUICK_ACTION_IDS = [
   'tools:copy-link',
-  'tokens:refresh',
   'tools:annotate',
   'tools:select-filter',
-  'tokens:export-local',
-  'tools:spec',
+  'tools:doc',
+  'tools:request',
 ];
 
 // ── Fire a feature ────────────────────────────────────────────────────────────
@@ -417,11 +408,45 @@ document.getElementById('paletteHintBtn')?.addEventListener('click', () => openP
 const app = document.getElementById('app') as HTMLElement;
 const toggleMiniBtn = document.getElementById('toggleMiniBtn') as HTMLButtonElement;
 
+// Current full-view size — the single source of truth so a drag-resize persists
+// across the minimize toggle and re-expands to whatever the user last set.
+const MIN_W = 300, MIN_H = 360, MAX_W = 1400, MAX_H = 1400;
+const winSize = { width: 320, height: 460 };
+
+function applySize() {
+  postToPlugin('resize-for-view', { width: winSize.width, height: isMini ? 40 : winSize.height });
+}
+
 toggleMiniBtn.addEventListener('click', () => {
   isMini = !isMini;
   app.classList.toggle('mini', isMini);
-  postToPlugin('resize-for-view', { width: 320, height: isMini ? 40 : 460 });
+  applySize();
   if (isMini && popoverOpen) closePopover();
+});
+
+// ── Drag-to-resize (bottom-right grip) ─────────────────────────────────────────
+
+const resizeGrip = document.getElementById('resizeGrip') as HTMLElement;
+
+resizeGrip?.addEventListener('pointerdown', (e: PointerEvent) => {
+  if (isMini) return;
+  e.preventDefault();
+  resizeGrip.setPointerCapture(e.pointerId);
+
+  const onMove = (ev: PointerEvent) => {
+    // The grip sits at the window's bottom-right, so the pointer's client
+    // coordinates are the new width/height. +4 keeps the cursor over the grip.
+    winSize.width = Math.max(MIN_W, Math.min(MAX_W, Math.round(ev.clientX + 4)));
+    winSize.height = Math.max(MIN_H, Math.min(MAX_H, Math.round(ev.clientY + 4)));
+    applySize();
+  };
+  const onUp = (ev: PointerEvent) => {
+    resizeGrip.releasePointerCapture(ev.pointerId);
+    resizeGrip.removeEventListener('pointermove', onMove);
+    resizeGrip.removeEventListener('pointerup', onUp);
+  };
+  resizeGrip.addEventListener('pointermove', onMove);
+  resizeGrip.addEventListener('pointerup', onUp);
 });
 
 // ── Copy frame link ───────────────────────────────────────────────────────────
@@ -479,6 +504,7 @@ let _copyResetTimer: ReturnType<typeof setTimeout> | null = null;
 
 copyNodeBtn.addEventListener('click', () => {
   if (!_copyFileKey || _copyAllNodes.length === 0) return;
+  sendTelemetry('action:copy-link');
   const slug = (_copyFileName || 'file')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const urls = _copyAllNodes.map(n => {
@@ -498,6 +524,7 @@ copyNodeBtn.addEventListener('click', () => {
   postToPlugin('notify', { message: msg });
 });
 
+
 // ── Section bar ───────────────────────────────────────────────────────────────
 
 const sectionBar      = document.getElementById('sectionBar')      as HTMLElement;
@@ -512,6 +539,7 @@ function updateSectionBar(hasSection: boolean, sectionCount: number, firstName: 
 }
 
 formatSectionBtn.addEventListener('click', () => {
+  sendTelemetry('action:format-section');
   formatSectionBtn.disabled = true;
   formatSectionBtn.textContent = '…';
   postToPlugin('format-section');
@@ -605,9 +633,6 @@ function initBridgeConnection(ws: WebSocket) {
   sendBridgeCommand('REFRESH_VARIABLES', {}, 30000).then(result => {
     if (ws.readyState !== 1 || !result?.data) return;
     ws.send(JSON.stringify({ type: 'VARIABLES_DATA', data: result.data }));
-    renderVariables(result.data);
-    renderTokenGroups(result.data);
-    setVarMeta(result.data.variables.length + ' variables');
   }).catch(() => {});
 }
 
@@ -702,236 +727,6 @@ function bridgeDisconnect() {
   updateBridgeUi();
 }
 
-// ── Token group helpers ───────────────────────────────────────────────────────
-
-function getTokenGroup(name: string): string {
-  const parts = name.split('/').filter(p => p !== 's2a');
-  if (parts.length >= 4 && parts[1] === 'transparent') return parts[0] + ' / ' + parts[1] + ' / ' + parts[2];
-  if (parts.length >= 3) return parts[0] + ' / ' + parts[1];
-  return parts[0] ?? name;
-}
-
-// ── Variables / Tokens panel ──────────────────────────────────────────────────
-
-function setVarMeta(_text: string) {}
-
-function setVarStatus(msg: string, type: '' | 'ok' | 'err' = '') {
-  const el = document.getElementById('varStatus') as HTMLElement;
-  el.textContent = msg;
-  el.className = 'status' + (type ? ' ' + type : '');
-}
-
-function updateExportButtons() {
-  const localBtn  = document.getElementById('varExportLocalBtn')  as HTMLButtonElement;
-  const githubBtn = document.getElementById('varExportGithubBtn') as HTMLButtonElement;
-  const hasVars = !!variablesCache;
-  const hasGhSettings = !!(githubSettings?.token && githubSettings?.owner && githubSettings?.repo);
-  if (localBtn)  localBtn.disabled  = !hasVars;
-  if (githubBtn) githubBtn.disabled = !hasVars || !hasGhSettings;
-}
-
-function renderVariables(data: { variables: any[]; variableCollections: any[] }) {
-  variablesCache = data;
-  const el = document.getElementById('varCollections') as HTMLElement;
-  if (!el) return;
-
-  if (data.variableCollections.length === 0) {
-    el.innerHTML = '<div class="empty-state">No collections found</div>';
-    return;
-  }
-
-  const byCol: Record<string, number> = {};
-  for (const v of data.variables) byCol[v.variableCollectionId] = (byCol[v.variableCollectionId] || 0) + 1;
-
-  el.innerHTML = data.variableCollections.map((c: any) =>
-    `<div class="collection-row">
-      <span class="collection-name">${esc(c.name)}</span>
-      <span class="collection-count">${byCol[c.id] || 0}</span>
-    </div>`
-  ).join('');
-
-  updateExportButtons();
-}
-
-function renderTokenGroups(data: { variables: any[]; variableCollections: any[] }) {
-  const labelEl = document.getElementById('tokenGroupLabel') as HTMLElement;
-  const listEl  = document.getElementById('tokenGroupList')  as HTMLElement;
-  if (!listEl) return;
-
-  const semanticColls = data.variableCollections.filter(c =>
-    /Semantic|Responsive/.test(c.name) ||
-    (/Primitives/.test(c.name) && /Color/.test(c.name)) ||
-    (/Primitives/.test(c.name) && /Dimension/.test(c.name))
-  );
-  if (semanticColls.length === 0) {
-    listEl.innerHTML = '';
-    if (labelEl) labelEl.classList.add('hidden');
-    return;
-  }
-
-  const collIdToName = new Map<string, string>();
-  for (const c of data.variableCollections) collIdToName.set(c.id, c.name);
-
-  const collSet = new Set(semanticColls.map((c: any) => c.id));
-  const groups = new Map<string, { collectionId: string; collectionName: string; group: string; count: number }>();
-  for (const v of data.variables) {
-    if (!collSet.has(v.variableCollectionId)) continue;
-    const collName: string = collIdToName.get(v.variableCollectionId) || '';
-    const grp = getTokenGroup(v.name);
-    if (/Primitives/.test(collName) && /Dimension/.test(collName) && grp !== 'opacity') continue;
-    const key = v.variableCollectionId + '::' + grp;
-    if (!groups.has(key)) {
-      groups.set(key, { collectionId: v.variableCollectionId, collectionName: collName, group: grp, count: 0 });
-    }
-    groups.get(key)!.count++;
-  }
-
-  const sorted = [...groups.values()].sort((a, b) => {
-    if (a.collectionName !== b.collectionName) return a.collectionName.localeCompare(b.collectionName);
-    return a.group.localeCompare(b.group);
-  });
-
-  if (labelEl) labelEl.classList.remove('hidden');
-  listEl.innerHTML = sorted.map(g =>
-    `<div class="collection-row token-group-row" data-col="${esc(g.collectionId)}" data-group="${esc(g.group)}">
-      <span class="collection-name">${esc(g.group)}</span>
-      <span class="collection-count">${g.count}</span>
-      <button class="gen-btn" title="Generate docs for ${esc(g.group)}">→</button>
-    </div>`
-  ).join('');
-  listEl.insertAdjacentHTML('beforeend',
-    `<div class="collection-row token-group-row" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08)" data-col="text-styles" data-group="text-styles">
-      <span class="collection-name">Text Styles</span>
-      <span class="collection-count">—</span>
-      <button class="gen-btn" title="Generate 4 breakpoint sections from native text styles">→</button>
-    </div>`
-  );
-}
-
-document.getElementById('tokenGroupList')?.addEventListener('click', (e) => {
-  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.gen-btn');
-  if (!btn || btn.disabled) return;
-  const row = btn.closest<HTMLElement>('.token-group-row');
-  if (!row) return;
-  btn.disabled = true;
-  btn.textContent = '…';
-  setVarStatus('Generating ' + (row.dataset.group ?? '') + '…');
-  postToPlugin('token-docs:generate', { collectionId: row.dataset.col, group: row.dataset.group });
-});
-
-document.getElementById('varRefreshBtn')?.addEventListener('click', async () => {
-  const btn = document.getElementById('varRefreshBtn') as HTMLButtonElement;
-  btn.textContent = 'Refreshing…'; btn.disabled = true;
-  setVarStatus('Loading…');
-  try {
-    const result = await sendBridgeCommand('REFRESH_VARIABLES', {}, 30000);
-    if (result?.data) {
-      renderVariables(result.data);
-      renderTokenGroups(result.data);
-      setVarStatus(result.data.variables.length + ' variables loaded', 'ok');
-    } else {
-      setVarStatus('No data returned', 'err');
-    }
-  } catch (e: any) {
-    setVarStatus(e.message || 'Error', 'err');
-  } finally {
-    btn.textContent = 'Refresh'; btn.disabled = false;
-  }
-});
-
-document.getElementById('varExportLocalBtn')?.addEventListener('click', () => {
-  if (!variablesCache) { setVarStatus('No variables — hit Refresh first', 'err'); return; }
-  const btn = document.getElementById('varExportLocalBtn') as HTMLButtonElement;
-  btn.textContent = 'Exporting…'; btn.disabled = true;
-  setVarStatus('Sending to dev-server…');
-  fetch('http://localhost:9300/export', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(variablesCache),
-  })
-    .then(r => r.json())
-    .then((data: any) => {
-      if (data.ok) setVarStatus(`✓ ${data.variables} vars → dist/css/`, 'ok');
-      else setVarStatus('❌ ' + (data.error || 'Build failed'), 'err');
-    })
-    .catch(() => setVarStatus('❌ Dev server not running — run: npm run dev-server', 'err'))
-    .finally(() => { btn.textContent = 'Local'; updateExportButtons(); });
-});
-
-document.getElementById('varExportGithubBtn')?.addEventListener('click', async () => {
-  if (!variablesCache || !githubSettings?.token) return;
-  const btn = document.getElementById('varExportGithubBtn') as HTMLButtonElement;
-  btn.textContent = 'Pushing…'; btn.disabled = true;
-  setVarStatus('Pushing to GitHub…');
-  try {
-    await pushToGitHub(variablesCache, githubSettings);
-    setVarStatus('✓ Committed to ' + githubSettings.repo + ' / ' + githubSettings.branch, 'ok');
-  } catch (e: any) {
-    setVarStatus('❌ ' + (e.message || 'GitHub push failed'), 'err');
-  } finally {
-    btn.textContent = '↑ GitHub'; updateExportButtons();
-  }
-});
-
-// ── GitHub API ────────────────────────────────────────────────────────────────
-
-interface GitHubSettings {
-  token: string; owner: string; repo: string; branch: string; filePath: string;
-}
-
-async function pushToGitHub(data: any, settings: GitHubSettings): Promise<void> {
-  const { token, owner, repo, branch, filePath } = settings;
-  const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
-  const headers = {
-    Authorization: `token ${token}`,
-    Accept: 'application/vnd.github.v3+json',
-    'Content-Type': 'application/json',
-  };
-  let sha: string | undefined;
-  const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
-  if (getRes.ok) sha = (await getRes.json()).sha;
-  else if (getRes.status !== 404) throw new Error((await getRes.json()).message || `GitHub ${getRes.status}`);
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-  const body: Record<string, any> = { message: 'chore: sync tokens from Figma', content, branch };
-  if (sha) body.sha = sha;
-  const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
-  if (!putRes.ok) throw new Error((await putRes.json()).message || `GitHub ${putRes.status}`);
-}
-
-// ── Settings ──────────────────────────────────────────────────────────────────
-
-function setSettingsStatus(msg: string, type: '' | 'ok' | 'err' = '') {
-  const el = document.getElementById('settingsStatus') as HTMLElement;
-  el.textContent = msg;
-  el.className = 'status' + (type ? ' ' + type : '');
-}
-
-function applySettings(settings: GitHubSettings | null) {
-  githubSettings = settings;
-  if (!settings) return;
-  (document.getElementById('ghToken')    as HTMLInputElement).value = settings.token    || '';
-  (document.getElementById('ghOwner')    as HTMLInputElement).value = settings.owner    || '';
-  (document.getElementById('ghRepo')     as HTMLInputElement).value = settings.repo     || '';
-  (document.getElementById('ghBranch')   as HTMLInputElement).value = settings.branch   || 'main';
-  (document.getElementById('ghFilePath') as HTMLInputElement).value = settings.filePath || 'packages/toolkit-tokens/json/figma-export.json';
-  updateExportButtons();
-}
-
-document.getElementById('saveSettingsBtn')?.addEventListener('click', () => {
-  const settings: GitHubSettings = {
-    token:    (document.getElementById('ghToken')    as HTMLInputElement).value.trim(),
-    owner:    (document.getElementById('ghOwner')    as HTMLInputElement).value.trim(),
-    repo:     (document.getElementById('ghRepo')     as HTMLInputElement).value.trim(),
-    branch:   (document.getElementById('ghBranch')   as HTMLInputElement).value.trim() || 'main',
-    filePath: (document.getElementById('ghFilePath') as HTMLInputElement).value.trim() || 'packages/toolkit-tokens/json/figma-export.json',
-  };
-  if (!settings.token || !settings.owner || !settings.repo) {
-    setSettingsStatus('Token, owner, and repo are required', 'err');
-    return;
-  }
-  postToPlugin('save-settings', { settings });
-});
-
 // ── Tools — Select ────────────────────────────────────────────────────────────
 
 function renderAxes(setId: string, setName: string, axes: Array<{ name: string; type: string; variantOptions?: string[] }>) {
@@ -975,6 +770,7 @@ function clearSelect() {
 
 document.getElementById('selectApplyBtn')?.addEventListener('click', () => {
   if (!selectSetId) return;
+  sendTelemetry('action:apply-filter');
   const filter: Record<string, string[]> = {};
   document.querySelectorAll<HTMLButtonElement>('.chip.on[data-axis]').forEach(chip => {
     const axis = chip.dataset.axis!;
@@ -1021,6 +817,7 @@ document.querySelectorAll<HTMLButtonElement>('#annotateCats .chip').forEach(chip
 
 document.getElementById('annotateApplyBtn')?.addEventListener('click', () => {
   if (!annotateNodeId) return;
+  sendTelemetry('action:annotate');
   const categories = Array.from(
     document.querySelectorAll<HTMLButtonElement>('#annotateCats .chip.on')
   ).map(c => c.dataset.cat!);
@@ -1033,57 +830,46 @@ document.getElementById('annotateApplyBtn')?.addEventListener('click', () => {
 
 document.getElementById('annotateClearBtn')?.addEventListener('click', () => {
   if (!annotateNodeId) return;
+  sendTelemetry('action:annotate-clear');
   const btn = document.getElementById('annotateClearBtn') as HTMLButtonElement;
   btn.disabled = true; setAnnotateStatus('Clearing…');
   postToPlugin('annotate:clear', { nodeId: annotateNodeId });
 });
 
-// ── Tools — Spec ──────────────────────────────────────────────────────────────
+// ── Tools — Doc ─────────────────────────────────────────────────────────────
 
-function setSpecStatus(msg: string, type: '' | 'ok' | 'err' = '') {
-  const el = document.getElementById('specStatus') as HTMLElement;
+function setDocStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('docStatus') as HTMLElement;
   el.textContent = msg; el.className = 'status' + (type ? ' ' + type : '');
 }
 
-function updateSpecSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
-  const isValid = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT';
-  specSetId = isValid ? (sel?.id ?? null) : null;
-  const emptyEl  = document.getElementById('specSelectionEmpty') as HTMLElement;
-  const infoEl   = document.getElementById('specSelectionInfo')  as HTMLElement;
-  const nameEl   = document.getElementById('specSetName')   as HTMLElement;
-  const countEl  = document.getElementById('specSetCount')  as HTMLElement;
-  const genBtn   = document.getElementById('specGenerateBtn') as HTMLButtonElement;
-  if (isValid && sel) {
+// Doc generation needs a full COMPONENT_SET (not a single COMPONENT).
+function updateDocSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
+  const isSet = sel?.nodeType === 'COMPONENT_SET';
+  docSetId = isSet ? (sel?.id ?? null) : null;
+  const emptyEl = document.getElementById('docSelectionEmpty') as HTMLElement;
+  const infoEl  = document.getElementById('docSelectionInfo')  as HTMLElement;
+  const nameEl  = document.getElementById('docSetName')  as HTMLElement;
+  const countEl = document.getElementById('docSetCount') as HTMLElement;
+  const btn     = document.getElementById('docGenerateBtn') as HTMLButtonElement;
+  if (isSet && sel) {
     emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
     nameEl.textContent  = sel.name;
-    countEl.textContent = sel.nodeType === 'COMPONENT_SET'
-      ? (sel.variantCount ?? 0) + ' variants'
-      : '1 variant';
-    genBtn.disabled = false;
+    countEl.textContent = (sel.variantCount ?? 0) + ' variants';
+    btn.disabled = false;
   } else {
     emptyEl.style.display = 'block'; infoEl.style.display = 'none';
-    genBtn.disabled = true;
+    btn.disabled = true;
   }
 }
 
-document.querySelectorAll<HTMLButtonElement>('#specOpts .chip').forEach(chip => {
-  chip.addEventListener('click', () => chip.classList.toggle('on'));
-});
-
-document.getElementById('specGenerateBtn')?.addEventListener('click', () => {
-  if (!specSetId) return;
-  const on = new Set(
-    Array.from(document.querySelectorAll<HTMLButtonElement>('#specOpts .chip.on'))
-      .map(c => c.dataset.opt!)
-  );
-  if (on.size === 0) { setSpecStatus('Select at least one section to include', 'err'); return; }
-  const btn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
+document.getElementById('docGenerateBtn')?.addEventListener('click', () => {
+  if (!docSetId) return;
+  sendTelemetry('action:doc-generate');
+  const btn = document.getElementById('docGenerateBtn') as HTMLButtonElement;
   btn.disabled = true; btn.textContent = 'Generating…';
-  setSpecStatus('');
-  postToPlugin('spec:generate', {
-    setId: specSetId,
-    options: { variants: on.has('variants'), tokens: on.has('tokens'), children: on.has('children') },
-  });
+  setDocStatus('');
+  postToPlugin('doc:generate', { setId: docSetId });
 });
 
 // ── Plugin messages ───────────────────────────────────────────────────────────
@@ -1093,6 +879,11 @@ window.addEventListener('message', (event) => {
   if (!msg) return;
 
   switch (msg.type) {
+    case 'telemetry:config': {
+      telemetryAnonId = (msg.anonId as string) || '';
+      telemetryOptOut = msg.optOut === true;
+      break;
+    }
     case 'bridge:command-result': {
       const p = pendingRequests.get(msg.requestId as string);
       if (p) {
@@ -1105,23 +896,6 @@ window.addEventListener('message', (event) => {
         } else {
           p.reject(new Error((msg.error as string) || 'Unknown error'));
         }
-      }
-      break;
-    }
-    case 'settings-loaded': applySettings(msg.settings as GitHubSettings | null); break;
-    case 'settings-saved': {
-      if (msg.success) {
-        githubSettings = {
-          token:    (document.getElementById('ghToken')    as HTMLInputElement).value.trim(),
-          owner:    (document.getElementById('ghOwner')    as HTMLInputElement).value.trim(),
-          repo:     (document.getElementById('ghRepo')     as HTMLInputElement).value.trim(),
-          branch:   (document.getElementById('ghBranch')   as HTMLInputElement).value.trim() || 'main',
-          filePath: (document.getElementById('ghFilePath') as HTMLInputElement).value.trim() || 'packages/toolkit-tokens/json/figma-export.json',
-        };
-        setSettingsStatus('Saved', 'ok');
-        updateExportButtons();
-      } else {
-        setSettingsStatus('Save failed: ' + (msg.error as string), 'err');
       }
       break;
     }
@@ -1144,7 +918,7 @@ window.addEventListener('message', (event) => {
           variantCount: msg.variantCount as number | undefined,
         };
         updateAnnotateSelection(sel);
-        updateSpecSelection(sel);
+        updateDocSelection(sel);
         updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
         updateSectionBar(
           !!(msg.isSection as boolean),
@@ -1153,18 +927,11 @@ window.addEventListener('message', (event) => {
         );
       } else {
         updateAnnotateSelection(null);
-        updateSpecSelection(null);
+        updateDocSelection(null);
         updateCopyBtn(null, null);
         updateSectionBar(false, 0, '');
       }
-      break;
-    }
-    case 'token-docs:result': {
-      document.querySelectorAll<HTMLButtonElement>('.gen-btn').forEach(b => {
-        b.disabled = false; b.textContent = '→';
-      });
-      if (msg.error) setVarStatus('❌ ' + (msg.error as string), 'err');
-      else setVarStatus('✓ ' + (msg.count as number) + ' tokens documented', 'ok');
+      if (activePanel === 'request') postToPlugin('request:capture');
       break;
     }
     case 'format-section:done': {
@@ -1189,24 +956,394 @@ window.addEventListener('message', (event) => {
       setAnnotateStatus(n > 0 ? `Cleared ${n} annotation${n !== 1 ? 's' : ''}` : 'Nothing to clear', 'ok');
       break;
     }
-    case 'spec:result': {
-      const btn = document.getElementById('specGenerateBtn') as HTMLButtonElement;
-      btn.disabled = !specSetId; btn.textContent = 'Generate Spec';
-      if (msg.error) setSpecStatus('❌ ' + (msg.error as string), 'err');
+    case 'gh-token:value': {
+      ghToken = (msg.token as string) || null;
+      syncTokenReleaseAuthUi();
+      break;
+    }
+
+    case 'request:context': {
+      requestCtx = {
+        user:      (msg.user as string) ?? null,
+        node:      (msg.node as { id: string; name: string; type: string } | null) ?? null,
+        fileKey:   (msg.fileKey as string) ?? null,
+        fileName:  (msg.fileName as string) ?? '',
+        page:      (msg.page as string) ?? '',
+        tokenName: (msg.tokenName as string) ?? '',
+      };
+      renderRequestCtx(requestCtx);
+      if (_reqCtxResolve) { const r = _reqCtxResolve; _reqCtxResolve = null; r(requestCtx); }
+      break;
+    }
+
+    case 'doc:result': {
+      const btn = document.getElementById('docGenerateBtn') as HTMLButtonElement;
+      btn.disabled = !docSetId; btn.textContent = 'Generate component doc';
+      if (msg.error) setDocStatus('❌ ' + (msg.error as string), 'err');
       else {
         const vars = msg.variantCount as number;
-        setSpecStatus(`✓ Spec generated · ${vars} variant${vars !== 1 ? 's' : ''}`, 'ok');
+        const warn = msg.warning ? ' · ⚠ ' + (msg.warning as string) : '';
+        setDocStatus(`✓ Component doc generated · ${vars} variant${vars !== 1 ? 's' : ''}${warn}`, 'ok');
       }
       break;
     }
   }
 });
 
+// ── Token release ────────────────────────────────────────────────────────────
+// Dispatches .github/workflows/token-release.yml on GitHub Actions DIRECTLY via
+// the GitHub REST API — no local server. Auth is a fine-grained PAT the user
+// pastes once, persisted in figma.clientStorage (main thread) — never written
+// to the Figma file. The workflow does all real work (sync → build → PR).
+
+const GH_REPO = 'adobecom/consonant';
+const GH_WORKFLOW = 'token-release.yml';
+const GH_API = `https://api.github.com/repos/${GH_REPO}`;
+
+let tokenReleaseBump: 'patch' | 'minor' | 'major' = 'patch';
+let ghToken: string | null = null;
+
+document.querySelectorAll<HTMLButtonElement>('#tokenReleaseBump .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll<HTMLButtonElement>('#tokenReleaseBump .chip').forEach(c => c.classList.remove('on'));
+    chip.classList.add('on');
+    tokenReleaseBump = chip.dataset.bump as 'patch' | 'minor' | 'major';
+  });
+});
+
+function setTokenReleaseStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('tokenReleaseStatus') as HTMLElement;
+  el.innerHTML = msg;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+function syncTokenReleaseAuthUi() {
+  const setup = document.getElementById('ghTokenSetup') as HTMLElement;
+  const release = document.getElementById('tokenReleaseControls') as HTMLElement;
+  const hasToken = Boolean(ghToken);
+  setup.style.display = hasToken ? 'none' : 'block';
+  release.style.display = hasToken ? 'block' : 'none';
+}
+
+document.getElementById('ghTokenSaveBtn')?.addEventListener('click', () => {
+  const input = document.getElementById('ghTokenInput') as HTMLInputElement;
+  const value = input.value.trim();
+  if (!value) return;
+  ghToken = value;
+  input.value = '';
+  postToPlugin('gh-token:set', { token: value });
+  syncTokenReleaseAuthUi();
+  setTokenReleaseStatus('Token saved to Figma client storage.', 'ok');
+});
+
+document.getElementById('ghTokenClearBtn')?.addEventListener('click', () => {
+  ghToken = null;
+  postToPlugin('gh-token:set', { token: '' });
+  syncTokenReleaseAuthUi();
+  setTokenReleaseStatus('Token cleared.');
+});
+
+function ghHeaders(): Record<string, string> {
+  return {
+    Authorization: `Bearer ${ghToken}`,
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+}
+
+async function ghJson(path: string) {
+  const res = await fetch(`${GH_API}${path}`, { headers: ghHeaders() });
+  if (!res.ok) throw new Error(`GitHub API ${res.status} on ${path}`);
+  return res.json();
+}
+
+document.getElementById('tokenReleaseBtn')?.addEventListener('click', async () => {
+  if (!ghToken) return;
+  sendTelemetry('action:token-release');
+  const btn = document.getElementById('tokenReleaseBtn') as HTMLButtonElement;
+  btn.disabled = true;
+  btn.textContent = 'Releasing…';
+  const dispatchedAt = Date.now();
+
+  try {
+    setTokenReleaseStatus('Dispatching GitHub Actions workflow…');
+    const res = await fetch(`${GH_API}/actions/workflows/${GH_WORKFLOW}/dispatches`, {
+      method: 'POST',
+      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: 'main', inputs: { bump: tokenReleaseBump } }),
+    });
+    if (res.status === 401 || res.status === 403) {
+      throw new Error(`GitHub rejected the token (${res.status}). It needs Actions read/write on ${GH_REPO} — and for an org repo, SSO/org authorization. Clear and re-save a valid token.`);
+    }
+    if (res.status !== 204) throw new Error(`Dispatch failed (${res.status}).`);
+
+    setTokenReleaseStatus('Dispatched — waiting for the run to start…');
+    let run: { id: number; status: string; conclusion: string | null; html_url: string } | null = null;
+    for (let i = 0; i < 15 && !run; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const data = await ghJson(`/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`);
+      run = (data.workflow_runs || []).find(
+        (r: { created_at: string }) => new Date(r.created_at).getTime() >= dispatchedAt - 5000,
+      ) ?? null;
+    }
+    if (!run) throw new Error('Dispatched, but no run appeared within 30s — check the Actions tab.');
+
+    const runLink = `<a href="${run.html_url}" target="_blank">Actions run →</a>`;
+    setTokenReleaseStatus(`Running in GitHub Actions… ${runLink}`);
+    for (;;) {
+      await new Promise(r => setTimeout(r, 4000));
+      const current = await ghJson(`/actions/runs/${run.id}`);
+      if (current.status === 'completed') { run = current; break; }
+    }
+
+    if (run!.conclusion !== 'success') {
+      throw new Error(`Workflow run ${run!.conclusion} — see ${run!.html_url}`);
+    }
+
+    setTokenReleaseStatus(`Run succeeded — looking for the release PR… ${runLink}`);
+    const prs = await ghJson('/pulls?state=open&sort=created&direction=desc&per_page=10');
+    const pr = (prs as Array<{ title: string; html_url: string; created_at: string }>).find(
+      p => p.title.startsWith('release(tokens):') && new Date(p.created_at).getTime() >= dispatchedAt - 5000,
+    );
+    if (pr) {
+      setTokenReleaseStatus(`✓ ${pr.title} · <a href="${pr.html_url}" target="_blank">Review PR →</a> · ${runLink}`, 'ok');
+    } else {
+      setTokenReleaseStatus(`Run succeeded, no PR opened — likely nothing to release (Figma unchanged since last sync). ${runLink}`, 'ok');
+    }
+  } catch (err) {
+    setTokenReleaseStatus('❌ ' + (err instanceof Error ? err.message : String(err)), 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Release Tokens';
+  }
+});
+
+// ── Request tab ────────────────────────────────────────────────────────────
+// Files a triage-ready request as a GitHub issue, matching the merged issue
+// form (.github/ISSUE_TEMPLATE/s2a-request.yml): labels s2a-request + needs-triage,
+// the Type/Priority/summary/use-case body, plus the auto-captured Figma context.
+//
+// Two submit paths:
+//   • Worker mode  — POST to the intake Worker (no GitHub account needed). Set
+//     REQUEST_ENDPOINT once the Worker is deployed + add its host to manifest
+//     networkAccess.allowedDomains. This is the self-serve path.
+//   • Direct mode  — reuse the saved GitHub PAT (Tools → Token release) to POST
+//     the issue straight to the API. Works today; the token needs Issues:write.
+// REQUEST_ENDPOINT empty ⇒ direct mode.
+const REQUEST_ENDPOINT = '';
+
+interface RequestCtx {
+  user: string | null;
+  node: { id: string; name: string; type: string } | null;
+  fileKey: string | null;
+  fileName: string;
+  page: string;
+  tokenName: string;
+}
+let requestCtx: RequestCtx | null = null;
+let reqKind = 'New token';
+let reqPriority = 'Nice to have';
+
+// Ask code.ts for a fresh context snapshot and resolve when it answers (or on a
+// short timeout, falling back to the last known context). Used both to refresh
+// the card and — critically — at submit, so the issue never carries stale/empty
+// context because of a missed round-trip.
+let _reqCtxResolve: ((c: RequestCtx | null) => void) | null = null;
+function captureContext(timeoutMs = 1500): Promise<RequestCtx | null> {
+  return new Promise(resolve => {
+    _reqCtxResolve = resolve;
+    postToPlugin('request:capture');
+    setTimeout(() => {
+      if (_reqCtxResolve === resolve) { _reqCtxResolve = null; resolve(requestCtx); }
+    }, timeoutMs);
+  });
+}
+
+function renderRequestCtx(ctx: RequestCtx | null) {
+  const nodeEl  = document.getElementById('reqCtxNode')  as HTMLElement;
+  const tokenEl = document.getElementById('reqCtxToken') as HTMLElement;
+  const fileEl  = document.getElementById('reqCtxFile')  as HTMLElement;
+  const userEl  = document.getElementById('reqCtxUser')  as HTMLElement;
+  if (!ctx) return;
+
+  if (ctx.node) {
+    nodeEl.textContent = `${ctx.node.name} · ${ctx.node.type.toLowerCase().replace(/_/g, ' ')}`;
+    nodeEl.classList.remove('muted');
+  } else {
+    nodeEl.textContent = '— none selected (file & page still captured)';
+    nodeEl.classList.add('muted');
+  }
+
+  if (ctx.tokenName) {
+    tokenEl.textContent = ctx.tokenName;
+    tokenEl.classList.remove('muted');
+  } else {
+    tokenEl.textContent = '—';
+    tokenEl.classList.add('muted');
+  }
+
+  fileEl.textContent = ctx.fileName ? `${ctx.fileName} › ${ctx.page}` : '—';
+  fileEl.classList.toggle('muted', !ctx.fileName);
+  userEl.textContent = ctx.user || '(unknown)';
+  userEl.classList.toggle('muted', !ctx.user);
+}
+
+// Build the deep-link to the selected node — same shape as the copy-link button.
+function figmaNodeUrl(ctx: RequestCtx): string {
+  if (!ctx.fileKey || !ctx.node) return '';
+  const slug = (ctx.fileName || 'file').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return `https://www.figma.com/design/${ctx.fileKey}/${slug}?node-id=${ctx.node.id.replace(':', '-')}`;
+}
+
+function setReqStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('reqStatus') as HTMLElement;
+  el.innerHTML = msg;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+// Single-select chip group (radio-style), like the token-release bump chips.
+function bindReqChips(containerId: string, dataKey: 'kind' | 'priority', onPick: (v: string) => void) {
+  document.querySelectorAll<HTMLButtonElement>(`#${containerId} .chip`).forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>(`#${containerId} .chip`).forEach(c => c.classList.remove('on'));
+      chip.classList.add('on');
+      onPick(chip.dataset[dataKey]!);
+    });
+  });
+}
+bindReqChips('reqKind', 'kind', v => { reqKind = v; });
+bindReqChips('reqPriority', 'priority', v => { reqPriority = v; });
+
+// ── Image attachments ────────────────────────────────────────────────────────
+// Read to data URLs in the UI thread and carried in the submit payload. Hosting
+// is the Worker's job (uploads to object storage, embeds the URLs) — a PAT can't
+// attach binaries to an issue, so direct mode files the issue without them.
+interface ReqImage { name: string; type: string; dataUrl: string; size: number; }
+let reqImages: ReqImage[] = [];
+const MAX_IMAGES = 4;
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // 4MB each
+
+function renderReqImages() {
+  const wrap = document.getElementById('reqImages') as HTMLElement;
+  wrap.innerHTML = reqImages.map((img, i) =>
+    `<div class="req-thumb"><img src="${img.dataUrl}" alt="${esc(img.name)}"><button class="req-thumb-rm" data-i="${i}" title="Remove image" type="button">×</button></div>`
+  ).join('');
+  wrap.querySelectorAll<HTMLButtonElement>('.req-thumb-rm').forEach(b => {
+    b.addEventListener('click', () => { reqImages.splice(Number(b.dataset.i), 1); renderReqImages(); });
+  });
+  const addBtn = document.getElementById('reqAddImageBtn') as HTMLButtonElement | null;
+  if (addBtn) addBtn.style.display = reqImages.length >= MAX_IMAGES ? 'none' : '';
+}
+
+document.getElementById('reqAddImageBtn')?.addEventListener('click', () => {
+  (document.getElementById('reqImageInput') as HTMLInputElement).click();
+});
+
+document.getElementById('reqImageInput')?.addEventListener('change', (e) => {
+  const input = e.target as HTMLInputElement;
+  const files = Array.from(input.files || []);
+  input.value = ''; // let the same file be re-picked later
+  for (const file of files) {
+    if (reqImages.length >= MAX_IMAGES) { setReqStatus(`Up to ${MAX_IMAGES} images.`, 'err'); break; }
+    if (file.size > MAX_IMAGE_BYTES) { setReqStatus(`"${file.name}" is over 4MB — skipped.`, 'err'); continue; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      reqImages.push({ name: file.name, type: file.type, dataUrl: String(reader.result), size: file.size });
+      renderReqImages();
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+document.getElementById('reqSubmitBtn')?.addEventListener('click', async () => {
+  const summaryEl = document.getElementById('reqSummary') as HTMLInputElement;
+  const useCaseEl = document.getElementById('reqUseCase') as HTMLTextAreaElement;
+  const summary = summaryEl.value.trim();
+  const useCase = useCaseEl.value.trim();
+  if (!summary) { setReqStatus('Add a one-line summary first.', 'err'); summaryEl.focus(); return; }
+  if (!useCase) { setReqStatus('Add a use case — it helps triage.', 'err'); useCaseEl.focus(); return; }
+
+  sendTelemetry('action:request-submit');
+  const btn = document.getElementById('reqSubmitBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  setReqStatus('');
+
+  const ctx = await captureContext(); // fresh snapshot — never a stale cache
+  const figmaUrl = ctx ? figmaNodeUrl(ctx) : '';
+  const bodyLines = [
+    `**Requested by:** ${ctx?.user || '(unknown)'}`,
+    `**Type:** ${reqKind} · **Priority:** ${reqPriority}`,
+    '',
+    '### What', summary,
+    '',
+    '### Use case', useCase,
+    '',
+  ];
+  if (figmaUrl)        bodyLines.push(`**Figma:** ${figmaUrl}`);
+  if (ctx?.tokenName)  bodyLines.push(`**Token:** \`${ctx.tokenName}\``);
+  if (ctx?.fileName)   bodyLines.push(`**File / page:** ${ctx.fileName} › ${ctx.page}` + (ctx.node ? ` · **Node:** ${ctx.node.name}` : ''));
+  bodyLines.push('', '<sub>Filed from the S2A Toolkit plugin · Request tab.</sub>');
+  const issueBody = bodyLines.join('\n');
+  const title  = `[Request] ${summary.slice(0, 70)}`;
+  const labels = ['s2a-request', 'needs-triage'];
+
+  try {
+    let issueUrl = '';
+    let issueNumber = 0;
+
+    if (REQUEST_ENDPOINT) {
+      // Worker mode — the endpoint holds the GitHub credential.
+      const res = await fetch(REQUEST_ENDPOINT, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          kind: reqKind, priority: reqPriority, summary, useCase, figmaUrl,
+          fileName: ctx?.fileName, page: ctx?.page, nodeName: ctx?.node?.name,
+          tokenName: ctx?.tokenName, requester: ctx?.user,
+          images: reqImages.map(i => ({ name: i.name, type: i.type, dataUrl: i.dataUrl })),
+        }),
+      });
+      if (!res.ok) throw new Error(`Intake endpoint returned ${res.status}.`);
+      const data = await res.json();
+      issueUrl = data.url; issueNumber = data.number;
+    } else if (ghToken) {
+      // Direct mode — reuse the saved PAT (needs Issues: read/write).
+      const res = await fetch(`${GH_API}/issues`, {
+        method: 'POST',
+        headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, body: issueBody, labels }),
+      });
+      if (res.status === 401 || res.status === 403) {
+        throw new Error(`GitHub rejected the token (${res.status}). The Request tab needs Issues: read/write on ${GH_REPO} added to your fine-grained PAT (and SSO/org authorization).`);
+      }
+      if (res.status !== 201) throw new Error(`Create failed (${res.status}).`);
+      const data = await res.json();
+      issueUrl = data.html_url; issueNumber = data.number;
+    } else {
+      throw new Error('No intake endpoint set and no GitHub token saved. Save a PAT in Tools → Token release (add Issues: read/write), or configure the intake Worker.');
+    }
+
+    // Direct mode (no Worker) can't host images — say so instead of dropping them silently.
+    const imgNote = (!REQUEST_ENDPOINT && reqImages.length)
+      ? ` · ⚠ ${reqImages.length} image${reqImages.length !== 1 ? 's' : ''} not attached (needs the intake Worker)`
+      : '';
+    setReqStatus(`✓ Filed as <a href="${issueUrl}" target="_blank">#${issueNumber} →</a> — triage will pick it up.${imgNote}`, 'ok');
+    summaryEl.value = '';
+    useCaseEl.value = '';
+    reqImages = [];
+    renderReqImages();
+  } catch (err) {
+    setReqStatus('❌ ' + (err instanceof Error ? err.message : String(err)), 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Submit request';
+  }
+});
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 postToPlugin('ui-ready');
-postToPlugin('get-settings');
-postToPlugin('resize-for-view', { width: 320, height: 460 });
+postToPlugin('gh-token:get');
+applySize();
 
 renderHomeView();
 
@@ -1225,3 +1362,6 @@ setInterval(() => {
     bridgeConnect();
   }
 }, 45000);
+
+// Ask code.ts for the anonymous telemetry id (provisioned in clientStorage).
+postToPlugin('telemetry:init');

@@ -568,7 +568,7 @@ describe("convertNumberTokens", () => {
     expect(tokens.typography["line-height"]["20"].$value).toBe("20px");
   });
 
-  it("converts opacity values from 0-100 to 0-1", () => {
+  it("converts opacity values from 0-100 to a CSS percentage string", () => {
     const maps = {
       fontSize: { valueByKey: new Map(), keyByValue: new Map() },
       lineHeight: { valueByKey: new Map(), keyByValue: new Map() },
@@ -586,12 +586,13 @@ describe("convertNumberTokens", () => {
 
     convertNumberTokens(tokens, [], maps);
 
-    expect(tokens.opacity.disabled.$value).toBe(0.48);
-    expect(tokens.opacity.hidden.$value).toBe(0);
-    expect(tokens.opacity.full.$value).toBe(1);
+    // Opacity is emitted as a CSS percentage string (Figma stores 0–100).
+    expect(tokens.opacity.disabled.$value).toBe("48%");
+    expect(tokens.opacity.hidden.$value).toBe("0%");
+    expect(tokens.opacity.full.$value).toBe("100%");
   });
 
-  it("clamps opacity values to 0-1 range", () => {
+  it("clamps opacity values to 0-100% range", () => {
     const maps = {
       fontSize: { valueByKey: new Map(), keyByValue: new Map() },
       lineHeight: { valueByKey: new Map(), keyByValue: new Map() },
@@ -608,8 +609,8 @@ describe("convertNumberTokens", () => {
 
     convertNumberTokens(tokens, [], maps);
 
-    expect(tokens.opacity.negative.$value).toBe(0);
-    expect(tokens.opacity.over.$value).toBe(1);
+    expect(tokens.opacity.negative.$value).toBe("0%");
+    expect(tokens.opacity.over.$value).toBe("100%");
   });
 
   it("converts other numeric values to px", () => {

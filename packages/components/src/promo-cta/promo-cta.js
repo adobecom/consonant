@@ -11,38 +11,46 @@ const ARROW_SVG = html`
 `;
 
 /**
- * PromoCta — dark promotional pill with app icon, label, and caret.
- * Matches Figma node 6886:70102.
+ * PromoCta — v2. Dark promotional pill with app icon, label, and arrow button.
+ * Matches Figma set "PromoCTA — v2" (11223:203954) + "PromoCTA/Arrow Button" (11223:211366).
+ *
+ * v2 architecture changes vs v1:
+ *  - Size axis is lg-only (32px arrow button); the v1 xl size is retired ("xl" maps to "lg")
+ *  - Colors bind the dedicated s2a/color/promo-cta/* token family (fallback-chained to
+ *    shipped equivalents until that family lands in a tokens release)
+ *  - Active arrow: black fill + white border (v1 inverted to white fill)
  *
  * @param {object} opts
- * @param {'xl'|'lg'} opts.size         - xl (48px caret) or lg (32px caret)
+ * @param {'lg'} opts.size              - lg only in v2 ('xl' accepted as deprecated alias)
  * @param {'default'|'hover'|'active'} opts.state
  * @param {'hug'|'fill'} opts.width     - hug wraps content; fill stretches to container
  * @param {string} opts.label           - CTA copy
- * @param {boolean} opts.showApp        - show/hide the app icon slot
- * @param {boolean} opts.showIcon       - show/hide the caret control
+ * @param {boolean} opts.showApp        - Figma "Show App Icon"
+ * @param {boolean} opts.showIconEnd    - Figma "Show Icon End" (arrow button)
  * @param {string} opts.app             - app slug from APP_LIBRARY (e.g. 'creative-cloud')
  */
 export function PromoCta({
-  size = 'xl',
+  size = 'lg',
   state = 'default',
   width = 'hug',
   label = 'Learn more',
   showApp = true,
-  showIcon = true,
+  showIconEnd,
+  showIcon,
   app = 'creative-cloud',
 } = {}) {
+  const resolvedShowIconEnd = showIconEnd ?? showIcon ?? true;
   const appEntry = APP_OPTIONS.find((o) => o.slug === app) ?? APP_OPTIONS[0];
   const iconSrc = `${CDN}/${appEntry.filename}`;
 
   return html`
     <button
       class="c-promo-cta"
-      data-size=${size}
+      data-size="lg"
       data-state=${state}
       data-width=${width}
       data-show-app=${String(showApp)}
-      data-show-icon=${String(showIcon)}
+      data-show-icon-end=${String(resolvedShowIconEnd)}
       type="button"
     >
       <span class="c-promo-cta__left">
@@ -51,8 +59,8 @@ export function PromoCta({
             <img
               src=${iconSrc}
               alt=${appEntry.label}
-              width="24"
-              height="24"
+              width="32"
+              height="32"
               style="border-radius:18%;display:block;"
               decoding="async"
               draggable="false"
@@ -63,7 +71,7 @@ export function PromoCta({
           <span class="c-promo-cta__label">${label}</span>
         </span>
       </span>
-      ${showIcon ? html`
+      ${resolvedShowIconEnd ? html`
         <span class="c-promo-cta__right">
           <span class="c-promo-cta__control">
             <span class="c-promo-cta__control-icon">${ARROW_SVG}</span>
@@ -81,18 +89,19 @@ export function PromoCta({
  * @param {object} opts
  */
 export function decoratePromoCta(el, {
-  size = 'xl',
   width = 'hug',
   label,
   showApp = true,
-  showIcon = true,
+  showIconEnd,
+  showIcon,
   app = 'creative-cloud',
 } = {}) {
+  const resolvedShowIconEnd = showIconEnd ?? showIcon ?? true;
   el.classList.add('c-promo-cta');
-  el.dataset.size = size;
+  el.dataset.size = 'lg';
   el.dataset.width = width;
   el.dataset.showApp = String(showApp);
-  el.dataset.showIcon = String(showIcon);
+  el.dataset.showIconEnd = String(resolvedShowIconEnd);
 
   const text = label ?? el.textContent.trim();
   el.textContent = '';
@@ -108,8 +117,8 @@ export function decoratePromoCta(el, {
     const img = document.createElement('img');
     img.src = `${CDN}/${appEntry.filename}`;
     img.alt = appEntry.label;
-    img.width = 24;
-    img.height = 24;
+    img.width = 32;
+    img.height = 32;
     img.style.cssText = 'border-radius:18%;display:block;';
     img.decoding = 'async';
     iconWrap.append(img);
@@ -125,7 +134,7 @@ export function decoratePromoCta(el, {
   left.append(labelWrap);
   el.append(left);
 
-  if (showIcon) {
+  if (resolvedShowIconEnd) {
     const right = document.createElement('span');
     right.className = 'c-promo-cta__right';
     const control = document.createElement('span');

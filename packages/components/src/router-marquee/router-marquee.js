@@ -55,8 +55,7 @@ export const RouterMarquee = ({ slides = [], activeIndex = 0 } = {}) => html`
                   ? createButton({
                       label: slide.ctaLabel,
                       href: slide.ctaHref ?? "#",
-                      background: "solid",
-                      context: "on-dark",
+                      style: "knockout",
                     })
                   : nothing,
               })}

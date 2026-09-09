@@ -1,0 +1,40 @@
+.c-collapsible {
+  display: block;
+  width: 100%;
+}
+
+.c-collapsible__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2a-spacing-xs, 8px);
+  cursor: pointer;
+  list-style: none;
+  color: var(--s2a-color-content-default);
+}
+
+.c-collapsible__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.c-collapsible__label {
+  font-family: var(--s2a-font-family-label, "Adobe Clean", sans-serif);
+  font-weight: var(--s2a-font-weight-label, 700);
+  font-size: var(--s2a-font-size-sm, 14px);
+  line-height: var(--s2a-font-line-height-xs, 18px);
+  color: var(--s2a-color-content-default);
+}
+
+.c-collapsible__chevron {
+  flex-shrink: 0;
+  color: var(--s2a-color-content-default);
+  transition: transform 200ms ease;
+}
+
+.c-collapsible[open] .c-collapsible__chevron {
+  transform: rotate(180deg);
+}
+
+.c-collapsible__content {
+  margin-top: var(--s2a-spacing-sm, 12px);
+}

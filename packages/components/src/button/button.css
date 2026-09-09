@@ -1,13 +1,28 @@
+/**
+ * Button — v2. Matches Figma "Button — v2" component set (node 10715:35477).
+ * Axes: Style (solid | outlined | transparent | accent | knockout | outline-inverse)
+ *       × Size (md) × State (default | hover | active | focus | disabled).
+ *
+ * No Context axis — light/dark comes from the S2A variable modes
+ * (:root[data-theme]). knockout / outline-inverse are for always-dark media
+ * surfaces regardless of theme.
+ *
+ * The v2 button tokens (--s2a-color-button-background-solid-default etc.) are
+ * bound in Figma but not yet in the shipped tokens release; each use below
+ * chains to the shipped var with the same light/dark resolution so behavior
+ * is correct today and upgrades automatically when the v2 names ship.
+ */
+
 .c-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--s2a-spacing-xs);
   min-width: 0;
-  /* Primitive: Figma Button/Core/Primary md height is 40px and no semantic size token exists yet. */
+  /* Primitive: Figma Button v2 md height is 40px and no semantic size token exists yet. */
   height: 40px;
   box-sizing: border-box;
-  /* Primitive: Figma Button/Core/Primary md vertical padding is 14px and no semantic spacing alias exists yet. */
+  /* Primitive: Figma Button v2 md vertical padding is 14px and no semantic spacing alias exists yet. */
   padding: 14px var(--s2a-spacing-lg);
   border: none;
   border-radius: var(--s2a-border-radius-round);
@@ -28,13 +43,6 @@
     box-shadow 200ms ease,
     opacity 120ms ease;
   position: relative;
-}
-
-.c-button[data-size="xs"] {
-  /* Primitive: Figma Button/Core/Primary xs height is 24px and no semantic size token exists yet. */
-  height: 24px;
-  /* Primitive: Figma Button/Core/Primary xs vertical padding is 6px and no semantic spacing alias exists yet. */
-  padding: 6px var(--s2a-spacing-sm);
 }
 
 .c-button:disabled,
@@ -59,172 +67,128 @@
   font-size: var(--s2a-font-size-xs);
 }
 
-/* ---------- Primary · solid ---------- */
+/* ---------- Backdrop blur — all glassy styles ---------- */
 
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"] {
-  background-color: var(--s2a-color-button-background-primary-solid-on-light-default);
-  color: var(--s2a-color-button-content-primary-solid-default);
-}
-
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"][data-size="md"] {
-  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-solid-on-light-default);
-}
-
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"][data-force-state="hover"] {
-  background-color: var(--s2a-color-button-background-primary-solid-on-light-hover);
-  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-solid-on-light-default);
-}
-
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):active,
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"][data-force-state="active"] {
-  background-color: var(--s2a-color-button-background-primary-solid-on-light-active);
-  box-shadow: none;
-}
-
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"] {
-  background-color: var(--s2a-color-button-background-primary-solid-on-dark-default);
-  color: var(--s2a-color-button-content-primary-solid-inverse);
-}
-
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-size="md"] {
-  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-solid-on-dark-default);
-}
-
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-force-state="hover"] {
-  background-color: var(--s2a-color-button-background-primary-solid-on-dark-hover);
-}
-
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-size="md"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-size="md"][data-force-state="hover"] {
-  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-solid-on-dark-hover);
-}
-
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):active,
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"][data-force-state="active"] {
-  background-color: var(--s2a-color-button-background-primary-solid-on-dark-active);
-  box-shadow: none;
-}
-
-/* ---------- Backdrop blur — outlined & transparent ---------- */
-
-.c-button[data-intent="primary"][data-background="outlined"],
-.c-button[data-intent="primary"][data-background="transparent"] {
+.c-button[data-style="outlined"],
+.c-button[data-style="transparent"],
+.c-button[data-style="knockout"],
+.c-button[data-style="outline-inverse"] {
   backdrop-filter: blur(var(--s2a-blur-md));
 }
 
-/* ---------- Primary · outlined ---------- */
+/* ---------- solid ---------- */
 
-.c-button[data-intent="primary"][data-background="outlined"] {
-  box-shadow: inset 0 0 0 var(--s2a-border-width-md) currentColor;
+.c-button[data-style="solid"] {
+  background-color: var(--s2a-color-button-background-solid-default, var(--s2a-color-background-inverse));
+  color: var(--s2a-color-button-content-solid-default, var(--s2a-color-button-content-primary-solid-default));
 }
 
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-size="xs"] {
-  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-outlined-on-light-default);
+.c-button[data-style="solid"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-style="solid"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-solid-hover, var(--s2a-color-iconbutton-background-primary-solid-on-light-hover));
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-border-knockout);
 }
 
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"] {
-  background-color: var(--s2a-color-button-background-primary-outlined-on-light-default);
-  color: var(--s2a-color-button-content-primary-outlined-default);
-  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-light-default);
-}
-
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-force-state="hover"] {
-  background-color: var(--s2a-color-button-background-primary-outlined-on-light-hover);
-  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-light-default);
-}
-
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-size="xs"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-size="xs"][data-force-state="hover"] {
-  background-color: var(--s2a-color-button-background-primary-solid-on-light-hover);
-  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-light-default);
-}
-
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):active,
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-light"][data-force-state="active"] {
-  background-color: var(--s2a-color-button-background-primary-outlined-on-light-active);
-  color: var(--s2a-color-button-content-primary-outlined-knockout);
-  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-outlined-on-light-default);
-}
-
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"] {
-  color: var(--s2a-color-button-content-primary-outlined-knockout);
-  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-dark-default);
-}
-
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"][data-force-state="hover"] {
-  background-color: var(--s2a-color-button-background-primary-outlined-on-dark-hover);
-  color: var(--s2a-color-button-content-primary-outlined-default);
-}
-
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"][data-size="xs"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"][data-size="xs"][data-force-state="hover"] {
-  background-color: var(--s2a-color-background-default);
-}
-
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):active,
-.c-button[data-intent="primary"][data-background="outlined"][data-context="on-dark"][data-force-state="active"] {
-  background-color: var(--s2a-color-button-background-primary-outlined-on-dark-active);
-  color: var(--s2a-color-button-content-primary-outlined-default);
-}
-
-/* ---------- Primary · transparent ---------- */
-
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"] {
-  background-color: var(--s2a-color-button-background-primary-transparent-on-light-default);
-  color: var(--s2a-color-button-content-primary-transparent-default);
-}
-
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"][data-force-state="hover"] {
-  background-color: var(--s2a-color-button-background-primary-transparent-on-light-hover);
-}
-
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"]:not(:disabled):not([data-force-state="disabled"]):active,
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-light"][data-force-state="active"] {
-  background-color: var(--s2a-color-button-background-primary-transparent-on-light-active);
-}
-
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"] {
-  background-color: var(--s2a-color-button-background-primary-transparent-on-dark-default);
-  color: var(--s2a-color-button-content-primary-transparent-knockout);
-}
-
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"][data-force-state="hover"] {
-  background-color: var(--s2a-color-button-background-primary-transparent-on-dark-hover);
-}
-
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"]:not(:disabled):not([data-force-state="disabled"]):active,
-.c-button[data-intent="primary"][data-background="transparent"][data-context="on-dark"][data-force-state="active"] {
-  background-color: var(--s2a-color-button-background-primary-transparent-on-dark-active);
-}
-
-/* ---------- Accent · solid (on-light only) ---------- */
-
-.c-button[data-intent="accent"][data-background="solid"] {
-  background-color: var(--s2a-color-button-background-accent-solid-on-light-default);
-  color: var(--s2a-color-button-content-primary-solid-default);
-}
-
-.c-button[data-intent="accent"][data-background="solid"]:not(:disabled):not([data-force-state="disabled"]):hover,
-.c-button[data-intent="accent"][data-background="solid"][data-force-state="hover"] {
-  background-color: var(--s2a-color-button-background-accent-solid-on-light-hover);
-}
-
-.c-button[data-intent="accent"][data-background="solid"]:not(:disabled):not([data-force-state="disabled"]):active,
-.c-button[data-intent="accent"][data-background="solid"][data-force-state="active"] {
-  background-color: var(--s2a-color-button-background-accent-solid-on-light-active);
-}
-
-/* ---------- Disabled ---------- */
-
-.c-button[data-background="solid"]:disabled,
-.c-button[data-background="solid"][data-force-state="disabled"] {
+.c-button[data-style="solid"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-style="solid"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-solid-active, var(--s2a-color-background-inverse));
   box-shadow: none;
+}
+
+/* ---------- outlined ---------- */
+
+.c-button[data-style="outlined"] {
+  background-color: var(--s2a-color-button-background-outlined-default, var(--s2a-color-transparent-white-00));
+  color: var(--s2a-color-content-default);
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-border-knockout);
+}
+
+.c-button[data-style="outlined"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-style="outlined"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-outlined-hover, var(--s2a-color-button-background-primary-transparent-on-light-hover));
+}
+
+.c-button[data-style="outlined"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-style="outlined"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-outlined-active, var(--s2a-color-background-inverse));
+  color: var(--s2a-color-button-content-outlined-active, var(--s2a-color-content-inverse));
+  box-shadow: none;
+}
+
+/* ---------- transparent ---------- */
+
+.c-button[data-style="transparent"] {
+  background-color: var(--s2a-color-button-background-transparent-default, var(--s2a-color-button-background-primary-transparent-on-light-default));
+  color: var(--s2a-color-content-default);
+}
+
+.c-button[data-style="transparent"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-style="transparent"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-transparent-hover, var(--s2a-color-button-background-primary-transparent-on-light-hover));
+}
+
+.c-button[data-style="transparent"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-style="transparent"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-transparent-active, var(--s2a-color-button-background-primary-transparent-on-light-active));
+}
+
+/* ---------- accent ---------- */
+
+.c-button[data-style="accent"] {
+  background-color: var(--s2a-color-button-background-accent-default, var(--s2a-color-button-background-accent-solid-on-light-default));
+  color: var(--s2a-color-button-content-accent-default, var(--s2a-color-content-knockout));
+}
+
+.c-button[data-style="accent"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-style="accent"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-accent-hover, var(--s2a-color-button-background-accent-solid-on-light-hover));
+}
+
+.c-button[data-style="accent"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-style="accent"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-accent-active, var(--s2a-color-button-background-accent-solid-on-light-active));
+}
+
+/* ---------- knockout (always-light button for dark/media surfaces) ---------- */
+
+.c-button[data-style="knockout"] {
+  background-color: var(--s2a-color-button-background-knockout-default, var(--s2a-color-gray-25));
+  color: var(--s2a-color-button-content-knockout, var(--s2a-color-button-content-primary-solid-inverse));
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-knockout-default, var(--s2a-color-content-knockout));
+}
+
+.c-button[data-style="knockout"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-style="knockout"][data-force-state="hover"] {
+  background-color: var(--s2a-color-button-background-knockout-hover, var(--s2a-color-gray-50));
+}
+
+.c-button[data-style="knockout"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-style="knockout"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-knockout-active, var(--s2a-color-gray-100));
+  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-knockout-default, var(--s2a-color-content-knockout));
+}
+
+/* ---------- outline-inverse (always-light outline for dark/media surfaces) ---------- */
+
+.c-button[data-style="outline-inverse"] {
+  /* Figma: transparent-white/00 light · transparent-black/00 dark — both fully
+     transparent, so the invariant white/00 fallback is exact until tokens ship. */
+  background-color: var(--s2a-color-button-background-outline-inverse-default, var(--s2a-color-transparent-white-00));
+  color: var(--s2a-color-button-content-outline-inverse, var(--s2a-color-content-knockout));
+  box-shadow: inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-outline-inverse-default, var(--s2a-color-content-knockout));
+}
+
+.c-button[data-style="outline-inverse"]:not(:disabled):not([data-force-state="disabled"]):hover,
+.c-button[data-style="outline-inverse"][data-force-state="hover"] {
+  /* Figma: white/08 light · black/08 dark — no shipped var flips that direction;
+     white/08 fallback documented in button.spec.json knownTokenGaps. */
+  background-color: var(--s2a-color-button-background-outline-inverse-hover, var(--s2a-color-transparent-white-08));
+}
+
+.c-button[data-style="outline-inverse"]:not(:disabled):not([data-force-state="disabled"]):active,
+.c-button[data-style="outline-inverse"][data-force-state="active"] {
+  background-color: var(--s2a-color-button-background-outline-inverse-active, var(--s2a-color-transparent-white-16));
+  box-shadow: inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-outline-inverse-default, var(--s2a-color-content-knockout));
 }
 
 /* ---------- Focus ring ---------- */
@@ -236,46 +200,22 @@
     0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
 }
 
-.c-button[data-context="on-dark"]:is(:focus-visible, [data-force-state="focus"]) {
+.c-button:is([data-style="knockout"], [data-style="outline-inverse"]):is(:focus-visible, [data-force-state="focus"]) {
   box-shadow:
     0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-knockout),
-    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
+    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-knockout);
 }
 
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-light"]:is(
-    :focus-visible,
-    [data-force-state="focus"]
-  ) {
+.c-button[data-style="outlined"]:is(:focus-visible, [data-force-state="focus"]) {
   box-shadow:
+    inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-border-knockout),
     0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-default),
     0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
 }
 
-.c-button[data-intent="primary"][data-background="solid"][data-context="on-dark"]:is(
-    :focus-visible,
-    [data-force-state="focus"]
-  ) {
+.c-button[data-style="outline-inverse"]:is(:focus-visible, [data-force-state="focus"]) {
   box-shadow:
+    inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-outline-inverse-default, var(--s2a-color-content-knockout)),
     0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-knockout),
-    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
-}
-
-.c-button[data-background="outlined"][data-context="on-light"]:is(
-    :focus-visible,
-    [data-force-state="focus"]
-  ) {
-  box-shadow:
-    inset 0 0 0 var(--s2a-border-width-sm) var(--s2a-color-button-border-primary-outlined-on-light-default),
-    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-default),
-    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
-}
-
-.c-button[data-background="outlined"][data-context="on-dark"]:is(
-    :focus-visible,
-    [data-force-state="focus"]
-  ) {
-  box-shadow:
-    inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-button-border-primary-outlined-on-dark-default),
-    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-knockout),
-    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
+    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-knockout);
 }

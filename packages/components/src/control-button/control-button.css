@@ -1,4 +1,12 @@
-/* ─── Base ───────────────────────────────────────────────────────────────────── */
+/**
+ * ControlButton — v2 (Figma set 11180:181592, single `media` style).
+ *
+ * The --s2a-color-control-button-* component tokens are bound in Figma but not
+ * yet in the shipped tokens release; each chains to its shipped primitive
+ * equivalent (the exact value Figma resolves to) until they land.
+ */
+
+/* ─── Base (Style=media, State=default) ─────────────────────────────────── */
 
 .c-control-button {
   display: flex;
@@ -7,131 +15,62 @@
   flex-shrink: 0;
   padding: 0;
   border-radius: var(--s2a-border-radius-6, 6px);
-  border-width: var(--s2a-border-width-sm, 1px);
-  border-style: solid;
-  backdrop-filter: blur(4px);
+  border: var(--s2a-border-width-sm, 1px) solid
+    var(--s2a-color-control-button-border-media, var(--s2a-color-transparent-white-24));
+  background: var(--s2a-color-control-button-background-media-default, var(--s2a-color-transparent-black-64));
+  color: var(--s2a-color-content-knockout);
+  backdrop-filter: blur(var(--s2a-blur-8, 8px));
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
-.c-control-button:disabled {
-  cursor: not-allowed;
+/* ─── Sizes (icon rig is 16×16 in both) ─────────────────────────────────── */
+
+.c-control-button[data-size="md"] {
+  width: var(--s2a-spacing-xl, 32px);
+  height: var(--s2a-spacing-xl, 32px);
 }
 
-.c-control-button:focus-visible {
-  outline: 2px solid var(--s2a-color-focus-ring-default, #3b63fb);
-  outline-offset: 2px;
+.c-control-button[data-size="xl"] {
+  width: var(--s2a-spacing-3xl, 48px);
+  height: var(--s2a-spacing-3xl, 48px);
 }
-
-/* ─── Sizes ──────────────────────────────────────────────────────────────────── */
-
-.c-control-button--md {
-  width: 32px;
-  height: 32px;
-}
-
-.c-control-button--xl {
-  width: 48px;
-  height: 48px;
-}
-
-/* ─── Icon ───────────────────────────────────────────────────────────────────── */
 
 .c-control-button__icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: var(--s2a-spacing-md, 16px);
+  height: var(--s2a-spacing-md, 16px);
   pointer-events: none;
 }
 
-/* ─── on-media / transparent ─────────────────────────────────────────────────── */
+/* ─── States ────────────────────────────────────────────────────────────── */
 
-.c-control-button--on-media.c-control-button--bg-transparent {
-  background: var(--s2a-color-transparent-black-64, rgba(0, 0, 0, 0.64));
-  border-color: var(--s2a-color-transparent-white-24, rgba(255, 255, 255, 0.24));
-  color: var(--s2a-color-content-knockout, #fff);
+.c-control-button:hover:not(:disabled),
+.c-control-button[data-force-state="hover"] {
+  background: var(--s2a-color-control-button-background-media-hover, var(--s2a-color-transparent-black-80));
 }
 
-.c-control-button--on-media.c-control-button--bg-transparent:hover:not(:disabled) {
-  background: var(--s2a-color-transparent-black-80, rgba(0, 0, 0, 0.8));
-}
-
-.c-control-button--on-media.c-control-button--bg-transparent:active:not(:disabled) {
-  background: var(--s2a-color-background-knockout, #000);
+/* Active drops the backdrop blur in Figma (effects removed on State=active). */
+.c-control-button:active:not(:disabled),
+.c-control-button[data-force-state="active"] {
+  background: var(--s2a-color-control-button-background-media-active, var(--s2a-color-transparent-black-96));
   backdrop-filter: none;
 }
 
-.c-control-button--on-media.c-control-button--bg-transparent:disabled {
-  background: var(--s2a-color-transparent-black-32, rgba(0, 0, 0, 0.32));
-  color: var(--s2a-color-transparent-white-48, rgba(255, 255, 255, 0.48));
+/* Focus ring is a 1px focus-ring/default stroke at the button bounds. */
+.c-control-button:focus-visible,
+.c-control-button[data-force-state="focus"] {
+  outline: var(--s2a-border-width-sm, 1px) solid var(--s2a-color-focus-ring-default);
+  outline-offset: 0;
 }
 
-/* ─── on-dark / transparent ──────────────────────────────────────────────────── */
-
-.c-control-button--on-dark.c-control-button--bg-transparent {
-  background: var(--s2a-color-transparent-white-32, rgba(255, 255, 255, 0.32));
-  border-color: var(--s2a-color-transparent-white-24, rgba(255, 255, 255, 0.24));
-  color: var(--s2a-color-content-knockout, #fff);
-}
-
-.c-control-button--on-dark.c-control-button--bg-transparent:hover:not(:disabled) {
-  background: var(--s2a-color-transparent-white-16, rgba(255, 255, 255, 0.16));
-}
-
-.c-control-button--on-dark.c-control-button--bg-transparent:active:not(:disabled) {
-  background: #fff;
-  backdrop-filter: none;
-  color: var(--s2a-color-content-default, #000);
-}
-
-.c-control-button--on-dark.c-control-button--bg-transparent:disabled {
-  background: var(--s2a-color-transparent-white-16, rgba(255, 255, 255, 0.16));
-  border-color: var(--s2a-color-transparent-white-16, rgba(255, 255, 255, 0.16));
-  color: var(--s2a-color-transparent-white-24, rgba(255, 255, 255, 0.24));
-}
-
-/* ─── on-dark / solid ────────────────────────────────────────────────────────── */
-
-.c-control-button--on-dark.c-control-button--bg-solid {
-  background: var(--s2a-color-gray-800, #292929);
-  border-color: var(--s2a-color-gray-700, #505050);
-  color: var(--s2a-color-content-knockout, #fff);
-}
-
-.c-control-button--on-dark.c-control-button--bg-solid:hover:not(:disabled) {
-  background: var(--s2a-color-gray-700, #505050);
-  border-color: var(--s2a-color-gray-500, #8f8f8f);
-}
-
-.c-control-button--on-dark.c-control-button--bg-solid:active:not(:disabled),
-.c-control-button--on-dark.c-control-button--bg-solid:focus-visible,
-.c-control-button--on-dark.c-control-button--bg-solid:disabled {
-  background: var(--s2a-color-transparent-white-16, rgba(255, 255, 255, 0.16));
-  border-color: var(--s2a-color-transparent-white-12, rgba(255, 255, 255, 0.12));
-}
-
-/* ─── on-light / solid ───────────────────────────────────────────────────────── */
-
-.c-control-button--on-light.c-control-button--bg-solid {
-  background: var(--s2a-color-gray-75, #f3f3f3);
-  border-color: var(--s2a-color-gray-200, #e1e1e1);
-  color: var(--s2a-color-content-default, #000);
-}
-
-.c-control-button--on-light.c-control-button--bg-solid:hover:not(:disabled) {
-  background: var(--s2a-color-gray-300, #dadada);
-  border-color: var(--s2a-color-gray-400, #c6c6c6);
-}
-
-.c-control-button--on-light.c-control-button--bg-solid:active:not(:disabled) {
-  background: var(--s2a-color-background-knockout, #000);
-  border-color: var(--s2a-color-gray-700, #505050);
-  color: var(--s2a-color-content-knockout, #fff);
-  backdrop-filter: none;
-}
-
-.c-control-button--on-light.c-control-button--bg-solid:focus-visible,
-.c-control-button--on-light.c-control-button--bg-solid:disabled {
-  background: var(--s2a-color-transparent-black-04, rgba(0, 0, 0, 0.04));
-  border-color: var(--s2a-color-transparent-black-08, rgba(0, 0, 0, 0.08));
+.c-control-button:disabled {
+  background: var(--s2a-color-control-button-background-media-disabled, var(--s2a-color-transparent-black-32));
+  color: var(--s2a-color-transparent-white-48);
+  cursor: not-allowed;
 }

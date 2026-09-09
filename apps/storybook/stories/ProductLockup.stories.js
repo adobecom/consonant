@@ -23,18 +23,18 @@ const renderLockup = (args, overrides = {}) => {
 };
 
 export default {
-  title: "Atoms/ProductLockup",
+  title: "Molecules/ProductLockup",
   tags: ["autodocs"],
   render: (args) => renderLockup(args),
   parameters: {
     docs: {
       description: {
-        component: `<p>App icon + label identifier used across RouterMarquee, hero tiles, and feature lists. Icons come from the AppIcon CDN (see <code>docs/component-audit/app-icons.md</code> for slug ↔︎ SVG mapping).</p>`,
+        component: `<p><strong>v2</strong> — the v1 Context axis is retired; theme flows from variable modes and surface treatment is the <code>styleVariant</code> prop (<code>label · eyebrow · knockout · inverse</code>). App icon + label identifier used across RouterMarquee, hero tiles, and feature lists. Icons come from the AppIcon CDN (see <code>docs/component-audit/app-icons.md</code> for slug ↔︎ SVG mapping).</p>`,
       },
       source: {
         language: "html",
         code: `<!-- Horizontal (default) — used in RouterMarquee nav strip and MediaCard -->
-<div class="c-product-lockup" data-orientation="horizontal" data-style="label" data-context="on-light" data-width="hug">
+<div class="c-product-lockup" data-orientation="horizontal" data-style="label" data-width="hug">
   <span class="c-product-lockup__icon" aria-hidden="true">
     <span class="c-app-icon" data-size="md">…</span>
   </span>
@@ -43,7 +43,7 @@ export default {
 </div>
 
 <!-- Vertical — used in RouterNavItem block tiles -->
-<div class="c-product-lockup" data-orientation="vertical" data-style="label" data-context="on-dark" data-width="fill">
+<div class="c-product-lockup" data-orientation="vertical" data-style="knockout" data-width="fill">
   <span class="c-product-lockup__icon" aria-hidden="true">
     <span class="c-app-icon" data-size="md">…</span>
   </span>
@@ -73,13 +73,8 @@ export default {
     styleVariant: {
       name: "styleVariant",
       control: { type: "select" },
-      options: ["label", "eyebrow"],
+      options: ["label", "eyebrow", "knockout", "inverse"],
       description: "Typography style",
-    },
-    context: {
-      control: { type: "select" },
-      options: ["on-light", "on-dark"],
-      description: "Surface context (controls text color)",
     },
     width: {
       control: { type: "select" },
@@ -107,7 +102,6 @@ export default {
     app: "experience-cloud",
     orientation: "horizontal",
     styleVariant: "label",
-    context: "on-light",
     width: "hug",
     showIconStart: true,
     showIconEnd: true,
@@ -132,10 +126,18 @@ export const HorizontalFill = {
   `,
 };
 
-export const KnockoutOnDark = {
+export const Knockout = {
   render: (args) => html`
     <div style="background: #050505; padding: 24px; display: inline-flex;">
-      ${renderLockup(args, { context: "on-dark" })}
+      ${renderLockup(args, { styleVariant: "knockout" })}
+    </div>
+  `,
+};
+
+export const Inverse = {
+  render: (args) => html`
+    <div style="border: 1px dashed #ccc; padding: 24px; display: inline-flex;">
+      ${renderLockup(args, { styleVariant: "inverse" })}
     </div>
   `,
 };
@@ -191,6 +193,11 @@ export const AllVariants = {
         label: "Vertical eyebrow",
         orientation: "vertical",
         styleVariant: "eyebrow",
+      },
+      {
+        label: "Inline inverse",
+        orientation: "horizontal",
+        styleVariant: "inverse",
       },
     ];
 

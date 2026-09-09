@@ -94,8 +94,8 @@ export const WithActions = {
         ...args,
         showActions: true,
         actions: html`
-          ${Button({ label: "Get started", background: "solid", context: "on-light" })}
-          ${Button({ label: "Learn more", background: "outlined", context: "on-light" })}
+          ${Button({ label: "Get started", style: "solid" })}
+          ${Button({ label: "Learn more", style: "outlined" })}
         `,
       })
     ),
@@ -111,8 +111,8 @@ export const OnDarkWithActions = {
         theme: "on-dark",
         showActions: true,
         actions: html`
-          ${Button({ label: "Get started", background: "solid", context: "on-dark" })}
-          ${Button({ label: "Learn more", background: "outlined", context: "on-dark" })}
+          ${Button({ label: "Get started", style: "knockout" })}
+          ${Button({ label: "Learn more", style: "outline-inverse" })}
         `,
       })
     ),

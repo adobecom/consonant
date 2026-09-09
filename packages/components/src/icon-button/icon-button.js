@@ -36,29 +36,44 @@ const S2aIcon = (name) => {
   return svg ? unsafeHTML(svg) : nothing;
 };
 
+const STYLES = ["solid", "transparent", "knockout"];
+
 /**
- * IconButton Component
- * Implements S2A IconButton (Figma node 8465-449525).
- * Icon-only circular button; aria-label required.
+ * Map v1 props (style + context) to a v2 style.
+ * v2 has no Context axis — the old solid/on-dark (white circle) became the
+ * first-class knockout style; transparent theming flows from the variable modes.
+ */
+function resolveStyle({ style, context } = {}) {
+  if (context === "on-dark" && (style === "solid" || style === undefined)) return "knockout";
+  if (STYLES.includes(style)) return style;
+  return "solid";
+}
+
+/**
+ * IconButton — v2.
+ * Matches Figma "IconButton — v2" component set (node 11174:146275):
+ * Style (solid | transparent | knockout) × Size (sm | md | lg) × State.
+ * Icon-only circular button; aria-label required. No context prop — light/dark
+ * theming flows from the S2A variable modes (:root[data-theme]); knockout is
+ * the always-light style for dark/media surfaces.
  *
  * @param {Object} args
  * @param {string} args.ariaLabel - Accessible label (required)
  * @param {string|import('lit').TemplateResult} args.icon - Icon name or custom TemplateResult
- * @param {string} args.style - "solid" | "transparent"
- * @param {string} args.context - "on-light" | "on-dark"
+ * @param {string} args.style - "solid" | "transparent" | "knockout"
  * @param {string} args.size - "sm" | "md" | "lg"
  * @param {string} args.state - "default" | "hover" | "active" | "focus" | "disabled"
  * @param {Function} args.onClick - Click handler
  */
-export const IconButton = ({
-  ariaLabel,
-  icon = "pause",
-  style = "solid",
-  context = "on-light",
-  size = "lg",
-  state = "default",
-  onClick,
-} = {}) => {
+export const IconButton = (args = {}) => {
+  const {
+    ariaLabel,
+    icon = "pause",
+    size = "lg",
+    state = "default",
+    onClick,
+  } = args;
+
   const resolvedSize = size === "sm" || size === "md" || size === "lg" ? size : "lg";
   const forceState = state && state !== "default" ? state : null;
   const isDisabled = state === "disabled";
@@ -67,8 +82,7 @@ export const IconButton = ({
   return html`
     <button
       class="c-icon-button"
-      data-style=${style}
-      data-context=${context}
+      data-style=${resolveStyle(args)}
       data-size=${resolvedSize}
       data-force-state=${forceState ?? nothing}
       ?disabled=${isDisabled}

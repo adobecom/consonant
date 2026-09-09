@@ -1,0 +1,52 @@
+/**
+ * Logo atom — Figma component set 2956:2421 (↳ Logo page).
+ * Axes: Version (default | legacy | abbreviated) · Context (on-light | on-dark).
+ * Single-path marks colored via currentColor; per-version/context color comes
+ * from the same tokens Figma binds on each variant's vector fill.
+ */
+
+.c-logo {
+  display: inline-flex;
+  flex: none;
+}
+
+.c-logo svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Version intrinsic sizes (from Figma variants) ───────────────────────── */
+.c-logo[data-version="default"] {
+  width: 67px;
+  height: 22px;
+}
+
+.c-logo[data-version="legacy"] {
+  width: 50px;
+  height: 24px;
+}
+
+.c-logo[data-version="abbreviated"] {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── Color bindings (exactly as bound in Figma per variant) ──────────────── */
+.c-logo[data-version="default"],
+.c-logo[data-version="abbreviated"] {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.c-logo[data-version="default"][data-context="on-dark"],
+.c-logo[data-version="abbreviated"][data-context="on-dark"] {
+  color: var(--s2a-color-content-knockout, #fff);
+}
+
+.c-logo[data-version="legacy"] {
+  color: var(--s2a-color-transparent-black-64, rgba(0, 0, 0, 0.64));
+}
+
+.c-logo[data-version="legacy"][data-context="on-dark"] {
+  color: var(--s2a-color-transparent-white-48, rgba(255, 255, 255, 0.48));
+}
