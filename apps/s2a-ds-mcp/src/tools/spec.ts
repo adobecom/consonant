@@ -7,6 +7,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { loadComponents } from "../loaders/component-loader.js";
+import { fetchFigmaComponentVariants } from "../loaders/figma-loader.js";
 
 export function registerSpecTools(server: McpServer, dsRoot: string) {
 
@@ -62,9 +63,9 @@ export function registerSpecTools(server: McpServer, dsRoot: string) {
   // ── validate_spec ───────────────────────────────────────────────────────
   server.tool(
     "validate_spec",
-    "Compare a component's spec.json against its live source files and report drift — missing props, extra props, token mismatches, and Figma node ID presence.",
+    "Compare a component's spec.json against its live source files AND its live Figma component (when FIGMA_REST_API + FIGMA_FILE_ID are configured) and report drift — missing props, extra props, token mismatches, Figma node ID presence, and variant-axis mismatches between spec.json and the actual Figma component set.",
     { name: z.string().describe("Component name, slug, or CSS class") },
-    ({ name }) => {
+    async ({ name }) => {
       const components = loadComponents(dsRoot);
       const q = name.toLowerCase().replace(/^c-/, "");
       const comp = components.find(
@@ -131,9 +132,53 @@ export function registerSpecTools(server: McpServer, dsRoot: string) {
         warnings.push(`${undocumentedTokens.length} tokens in CSS not mapped in spec: ${undocumentedTokens.slice(0, 5).join(", ")}${undocumentedTokens.length > 5 ? "…" : ""}`);
       }
 
-      // 3. Figma node ID
+      // 3. Figma node ID + live variant-axis drift
+      let figmaCheck: { attempted: boolean; skipped?: string; nodeFound?: boolean } = { attempted: false };
       if (!comp.spec.figmaNodeId) {
         warnings.push("Spec has no figmaNodeId — add the Figma component set node ID");
+      } else {
+        const figma = await fetchFigmaComponentVariants(comp.spec.figmaNodeId);
+        figmaCheck = { attempted: figma.attempted, nodeFound: figma.nodeFound };
+
+        if (!figma.attempted) {
+          warnings.push(figma.skippedReason ?? "Figma drift check skipped");
+        } else if (figma.error) {
+          warnings.push(`Figma drift check failed: ${figma.error}`);
+        } else if (!figma.nodeFound) {
+          issues.push(
+            `Spec figmaNodeId "${comp.spec.figmaNodeId}" does not resolve to a component in Figma — it may have been deleted, or the ID may point at a stale/orphaned duplicate`
+          );
+        } else {
+          const specAxes = Object.keys(comp.spec.variants);
+          const figmaAxes = Object.keys(figma.variants);
+
+          for (const axis of specAxes) {
+            if (!(axis in figma.variants)) {
+              issues.push(`Spec declares variant axis "${axis}" but Figma's live component has no such axis`);
+              continue;
+            }
+            const specValues = new Set(comp.spec.variants[axis]);
+            const figmaValues = new Set(figma.variants[axis]);
+            const missingInFigma = [...specValues].filter((v) => !figmaValues.has(v));
+            const missingInSpec = [...figmaValues].filter((v) => !specValues.has(v));
+            if (missingInFigma.length > 0) {
+              issues.push(
+                `Variant axis "${axis}": spec has ${JSON.stringify(missingInFigma)} but Figma's live component does not — spec is stale`
+              );
+            }
+            if (missingInSpec.length > 0) {
+              warnings.push(
+                `Variant axis "${axis}": Figma has ${JSON.stringify(missingInSpec)} not yet documented in spec`
+              );
+            }
+          }
+
+          for (const axis of figmaAxes) {
+            if (!specAxes.includes(axis)) {
+              warnings.push(`Figma's live component has variant axis "${axis}" not documented in spec`);
+            }
+          }
+        }
       }
 
       // 4. CSS class match
@@ -150,6 +195,7 @@ export function registerSpecTools(server: McpServer, dsRoot: string) {
           status,
           issues,
           warnings,
+          figmaCheck,
           summary: `${issues.length} issue(s), ${warnings.length} warning(s)`,
         }) }],
       };

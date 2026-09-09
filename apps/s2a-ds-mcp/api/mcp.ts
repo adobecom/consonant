@@ -32,6 +32,7 @@ import { registerComponentTools } from "../src/tools/components.js";
 import { registerValidateTools } from "../src/tools/validate.js";
 import { registerSpecTools } from "../src/tools/spec.js";
 import { registerAuditTools } from "../src/tools/audit.js";
+import { registerFigmaHealthTools } from "../src/tools/figma-health.js";
 
 // ── Resolve DS_ROOT ───────────────────────────────────────────────────────────
 // Priority:
@@ -97,6 +98,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   registerValidateTools(server, DS_ROOT);
   registerSpecTools(server, DS_ROOT);
   registerAuditTools(server, DS_ROOT);
+  registerFigmaHealthTools(server, DS_ROOT);
 
   const transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: undefined, // stateless — required for serverless
