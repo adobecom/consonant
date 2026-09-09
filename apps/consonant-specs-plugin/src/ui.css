@@ -69,6 +69,43 @@ body {
 }
 .bridge-status-pill.connected .bridge-status-dot { background: #16a34a; }
 
+/* Header actions (pill + collapse toggle) */
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Collapse / expand toggle next to the Bridge pill */
+.collapse-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+}
+.collapse-btn:hover { background: var(--border); color: var(--text); }
+.collapse-btn svg { transition: transform 0.15s ease; }
+body.panel-collapsed .collapse-btn svg { transform: rotate(180deg); }
+
+/* Collapsed panel: header row only */
+body.panel-collapsed .selection-info,
+body.panel-collapsed .menu-view,
+body.panel-collapsed .tab-content,
+body.panel-collapsed .footer,
+body.panel-collapsed .hamburger-wrapper { display: none !important; }
+body.panel-collapsed .plugin-header { border-bottom: none; }
+body.panel-collapsed .back-btn { flex: none; }
+/* Applied only while measuring the intrinsic header width */
+.plugin-header.measuring { width: max-content; }
+
 #headerMenu {
   flex: 1;
   display: flex;
@@ -548,3 +585,105 @@ body {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--figma-color-text, #000) 20%, transparent) transparent;
 }
+
+/* ── Aspect Ratio tab ─────────────────────────────────────────────────── */
+.seg {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.seg-btn {
+  flex: 1;
+  padding: 6px 0;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: none;
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+}
+.seg-btn + .seg-btn { border-left: 1px solid var(--border); }
+.seg-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+.ratio-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+  text-align: left;
+}
+.ratio-label { font-weight: 600; }
+.ratio-note {
+  color: var(--text-tertiary, #999);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+/* ── Color study (Block build) — Figma right-rail style ─────────────────── */
+.cs-status { font-size: 10px; color: var(--success); margin-top: 6px; }
+.cs-empty { font-size: 11px; color: var(--text-secondary); padding: 8px 0; }
+.cs-section { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.cs-section:last-child { border-bottom: none; }
+.cs-section-head { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.cs-section-toggle { width: 100%; background: none; border: none; padding: 0; margin-bottom: 0; font-family: var(--font); cursor: pointer; text-align: left; }
+.cs-section-toggle.open { margin-bottom: 6px; }
+.cs-section-toggle > span:first-child { flex: 1; }
+.cs-section-toggle .cs-chev { color: var(--text-secondary); font-size: 14px; line-height: 1; }
+.cs-section-toggle.open .cs-chev { transform: rotate(90deg); }
+.cs-section-toggle:hover .cs-chev { color: var(--text); }
+.cs-preview { display: inline-flex; align-items: center; gap: 3px; margin-right: 4px; }
+.cs-preview .cs-swatch { width: 14px; height: 14px; }
+.cs-preview-more { font-size: 10px; font-weight: 500; color: var(--text-secondary); margin-left: 3px; }
+.cs-section-count { font-size: 9px; font-weight: 500; color: var(--text-secondary); background: var(--bg-secondary); border-radius: 8px; padding: 1px 6px; }
+.cs-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; min-width: 0; }
+.cs-chip { flex: 1; min-width: 0; display: inline-flex; align-items: center; gap: 6px; padding: 3px 6px 3px 3px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; font-family: var(--font); color: var(--text); text-align: left; cursor: pointer; }
+.cs-chip:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--bg-secondary)); }
+.cs-chip-static { cursor: default; }
+.cs-chip-static:hover { border-color: var(--border); background: var(--bg-secondary); }
+.cs-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: var(--swatch); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15); flex-shrink: 0; }
+.cs-swatch-lg { width: 16px; height: 16px; border-radius: 3px; }
+.cs-swatch-none { background: repeating-linear-gradient(45deg, var(--border) 0 2px, transparent 2px 5px); }
+.cs-token { flex: 1; min-width: 0; font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-token-foreign { color: var(--warning); }
+.cs-unbound { color: var(--warning); font-family: var(--font-mono); font-size: 10px; }
+.cs-effect-label { flex: 1; min-width: 0; font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-modes { display: inline-flex; gap: 3px; flex-shrink: 0; }
+.cs-modes-empty { font-size: 10px; color: var(--text-secondary); width: 27px; justify-content: center; }
+.cs-uses-toggle { display: inline-flex; align-items: center; gap: 2px; background: var(--bg-secondary); border: none; border-radius: 8px; padding: 1px 6px; font-family: var(--font); font-size: 9px; color: var(--text-secondary); cursor: pointer; flex-shrink: 0; }
+.cs-uses-toggle:hover { background: var(--border); color: var(--text); }
+.cs-chev { display: inline-block; transition: transform 0.12s ease; }
+.cs-uses-toggle.open .cs-chev { transform: rotate(90deg); }
+.cs-uses { margin: 0 0 6px 26px; border-left: 2px solid var(--border); padding-left: 8px; }
+.cs-use { display: flex; align-items: center; gap: 6px; font-size: 10px; padding: 2px 0; min-width: 0; }
+.cs-use-prop { font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-secondary); width: 38px; flex-shrink: 0; }
+.cs-use-name { flex: 1; min-width: 0; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-layer-path { color: var(--text-secondary); margin-right: 3px; }
+.cs-badge { font-size: 9px; padding: 1px 5px; border-radius: 8px; background: var(--border); color: var(--text-secondary); flex-shrink: 0; }
+.cs-see-all { display: block; background: none; border: none; padding: 6px 0 0 26px; font-family: var(--font); font-size: 10px; color: var(--text-secondary); cursor: pointer; }
+.cs-see-all:hover { color: var(--accent); }
+
+.cs-picker { position: fixed; inset: 0; z-index: 200; background: var(--bg); flex-direction: column; padding: 10px 12px; gap: 8px; }
+.cs-picker-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.cs-picker-title { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 12px; font-weight: 600; }
+.cs-picker-layer { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.cs-picker-sub { font-size: 10px; font-weight: 500; color: var(--text-secondary); flex-shrink: 0; }
+.cs-picker-close { background: var(--bg-secondary); border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 16px; line-height: 1; color: var(--text-secondary); cursor: pointer; flex-shrink: 0; }
+.cs-picker-close:hover { background: var(--border); color: var(--text); }
+.cs-picker-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.cs-picker-tab { background: none; border: none; padding: 6px 8px; font-family: var(--font); font-size: 11px; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; text-transform: capitalize; }
+.cs-picker-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.cs-picker-tabs { overflow-x: auto; }
+.cs-picker-search { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-family: var(--font); font-size: 11px; color: var(--text); background: var(--bg); }
+.cs-picker-modes { display: grid; grid-template-columns: 1fr 104px 104px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-secondary); padding: 0 8px; }
+.cs-picker-modes-name { padding-left: 0; }
+.cs-group-head { font-size: 9px; font-weight: 600; letter-spacing: 0.5px; color: var(--text-secondary); padding: 8px 8px 3px; background: var(--bg); position: sticky; top: 0; }
+.cs-picker-list { flex: 1; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; }
+.cs-option { display: grid; grid-template-columns: 1fr 104px 104px; align-items: center; gap: 6px; width: 100%; padding: 6px 8px; background: none; border: none; border-bottom: 1px solid var(--border); font-family: var(--font); font-size: 11px; color: var(--text); text-align: left; cursor: pointer; }
+.cs-option:last-child { border-bottom: none; }
+.cs-option:hover { background: color-mix(in srgb, var(--accent) 8%, var(--bg)); }
+.cs-option-current { background: color-mix(in srgb, var(--accent) 12%, var(--bg)); }
+.cs-option-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.cs-option-mode { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 9px; color: var(--text-secondary); white-space: nowrap; }

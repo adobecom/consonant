@@ -1,4 +1,6 @@
 import { renderAlignV2ScanResult, renderAlignV2ApplyResult, setV2ActiveTab, collectV2ApplySelections } from './align-v2-ui';
+import { RATIOS, swapLabel } from './ratio';
+import { initColorStudyUi, updateColorStudySelection, renderColorStudyResult, renderColorStudyApplyResult } from './color-study-ui';
 
 function esc(s: unknown): string {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -79,6 +81,7 @@ function navigateTo(toolId: string, toolName: string) {
   document.querySelectorAll<HTMLElement>('.hamburger-item').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tool === toolId);
   });
+  syncCollapsedSize();
 }
 
 function navigateBack() {
@@ -95,6 +98,7 @@ function navigateBack() {
   if (headerDetail) headerDetail.style.display = 'none';
   if (hamburgerMenu) hamburgerMenu.classList.remove('open');
   if (hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded', 'false');
+  syncCollapsedSize();
 }
 
 // Menu items
@@ -129,6 +133,49 @@ document.querySelectorAll<HTMLButtonElement>('.bridge-status-pill').forEach(pill
 
 // Back button
 document.getElementById('backBtn')?.addEventListener('click', navigateBack);
+
+// ── Collapse / expand panel ───────────────────────────────────────────────
+// Collapsed = header row only; the iframe is resized to fit the header's
+// intrinsic width/height. Expanding restores the size code.ts last set.
+let panelCollapsed = false;
+
+function measureHeaderSize(): { width: number; height: number } {
+  const header = document.getElementById('pluginHeader');
+  if (!header) return { width: 300, height: 40 };
+  header.classList.add('measuring');
+  const width = Math.ceil(header.getBoundingClientRect().width);
+  header.classList.remove('measuring');
+  const height = Math.ceil(header.getBoundingClientRect().height);
+  return { width, height };
+}
+
+function syncCollapsedSize(): void {
+  if (!panelCollapsed) return;
+  const { width, height } = measureHeaderSize();
+  parent.postMessage({ pluginMessage: { type: 'panel-collapse', collapsed: true, width, height } }, '*');
+}
+
+function setPanelCollapsed(collapsed: boolean): void {
+  panelCollapsed = collapsed;
+  document.body.classList.toggle('panel-collapsed', collapsed);
+  document.querySelectorAll<HTMLButtonElement>('[data-collapse-toggle]').forEach(btn => {
+    btn.setAttribute('aria-expanded', String(!collapsed));
+    const label = collapsed ? 'Expand panel' : 'Collapse panel';
+    btn.setAttribute('aria-label', label);
+    btn.title = label;
+  });
+  if (collapsed) {
+    document.getElementById('hamburgerMenu')?.classList.remove('open');
+    document.getElementById('hamburgerBtn')?.setAttribute('aria-expanded', 'false');
+    syncCollapsedSize();
+  } else {
+    parent.postMessage({ pluginMessage: { type: 'panel-collapse', collapsed: false } }, '*');
+  }
+}
+
+document.querySelectorAll<HTMLButtonElement>('[data-collapse-toggle]').forEach(btn => {
+  btn.addEventListener('click', () => setPanelCollapsed(!panelCollapsed));
+});
 
 // Hamburger toggle
 document.getElementById('hamburgerBtn')?.addEventListener('click', (e) => {
@@ -182,6 +229,44 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
   parent.postMessage({ pluginMessage: { type, ...payload } }, 'https://www.figma.com');
 }
 
+// ── Aspect Ratio tab (ported from the Adobe.com Design Tools plugin) ───────
+let ratioOrientation: 'landscape' | 'portrait' = 'landscape';
+
+function renderRatios(): void {
+  const list = document.getElementById('ratioList');
+  if (!list) return;
+  list.replaceChildren();
+  for (const r of RATIOS) {
+    const portrait = ratioOrientation === 'portrait';
+    const rw = portrait ? r.h : r.w;
+    const rh = portrait ? r.w : r.h;
+    const label = portrait ? swapLabel(r.label) : r.label;
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-secondary ratio-btn';
+    btn.innerHTML = `<span class="ratio-label">${esc(label)}</span><span class="ratio-note">${esc(r.note)}</span>`;
+    btn.addEventListener('click', () => postToPlugin('apply-ratio', { rw, rh, label }));
+    list.appendChild(btn);
+  }
+}
+
+function setRatioOrientation(o: 'landscape' | 'portrait'): void {
+  ratioOrientation = o;
+  document.getElementById('segLandscape')?.classList.toggle('active', o === 'landscape');
+  document.getElementById('segPortrait')?.classList.toggle('active', o === 'portrait');
+  renderRatios();
+}
+document.getElementById('segLandscape')?.addEventListener('click', () => setRatioOrientation('landscape'));
+document.getElementById('segPortrait')?.addEventListener('click', () => setRatioOrientation('portrait'));
+renderRatios();
+
+function updateRatioHint(resizableCount: number, total: number): void {
+  const hint = document.getElementById('ratioHint');
+  if (!hint) return;
+  if (total === 0) hint.textContent = 'Select something resizable';
+  else if (resizableCount === 0) hint.textContent = 'Selection has no resizable items (lines and text are excluded)';
+  else hint.textContent = `Applies to ${resizableCount} of ${total} selected item(s)`;
+}
+
 // On plugin load, append the build marker to the footer even before tokens load,
 // so the user can verify which bundle is running at a glance.
 (function injectBuildMarker(): void {
@@ -213,6 +298,15 @@ window.addEventListener('message', (event) => {
       updateTabControls('specs');
       updateTabControls('localize');
       updateA11yControls();
+      updateRatioHint(Number(msg.resizableCount ?? 0), Number(msg.count ?? 0));
+      updateColorStudySelection(msg.selection ?? null, Number(msg.count ?? 0));
+      break;
+    case 'color-study-result':
+      renderColorStudyResult(msg.result ?? null, msg.error as string | undefined);
+      break;
+    case 'color-study-apply-result':
+      renderColorStudyApplyResult(msg.results ?? []);
+      postToPlugin('color-study-scan'); // refresh bindings in place
       break;
     case 'api-key-state':
       updateApiKeyUi(msg.hasKey as boolean, msg.masked as string | undefined);
@@ -1424,5 +1518,7 @@ document.getElementById('alignV2ApplyBtn')?.addEventListener('click', () => {
   if (selections.length === 0) return;
   parent.postMessage({ pluginMessage: { type: 'align-v2-apply', selections } }, '*');
 });
+
+initColorStudyUi(postToPlugin);
 
 postToPlugin('ui-ready');
