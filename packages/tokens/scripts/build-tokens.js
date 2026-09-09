@@ -1187,8 +1187,10 @@ async function buildFromFigma() {
       );
       rewriteSemanticRefsToS2a(mergedResponsive);
 
+      // Modern CSS range syntax — matches Milo's own convention
+      // (context/milo/libs/c2/styles/styles.css), not the legacy min-width form.
       const mediaQuery =
-        minWidth != null ? `@media (min-width: ${minWidth}px)` : null;
+        minWidth != null ? `@media (width >= ${minWidth}px)` : null;
 
       await buildCssFromTokens(mergedResponsive, {
         destination: `tokens.responsive.${shortName}.css`,
