@@ -2,15 +2,15 @@
   "$schema": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/manifest.schema.json",
   "name": "@adobecom/s2a-tokens",
   "version": "0.0.22",
-  "released": "2026-08-18",
+  "released": "2026-09-09",
   "spec": "w3c-design-tokens",
   "semver": true,
   "cssVarPrefix": "--s2a-",
   "artifact": {
     "tarball": {
       "url": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/adobecom-s2a-tokens-0.0.22.tgz",
-      "integrity": "sha256-0Yjf352zY000pjNiQRNWX3Ui5MZLFB3bp2gxZYnzjMg=",
-      "bytes": 29216
+      "integrity": "sha256-/4RsuRB/8xpGi8mHvyY+Dq44FTAwJrMI1yB5rThUhuo=",
+      "bytes": 29436
     },
     "css": {
       "primitives": "css/tokens.primitives.css",
