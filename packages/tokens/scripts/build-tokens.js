@@ -1139,7 +1139,7 @@ async function buildFromFigma() {
   // S2A Responsive collection modes (from Figma): xs → sm → md → lg → xl (order for cascade)
   const RESPONSIVE_GRID_MODES = [
     { modeSlug: "sm", shortName: "sm", minWidth: null },
-    { modeSlug: "md", shortName: "md", minWidth: 1024 },
+    { modeSlug: "md", shortName: "md", minWidth: 768 },
     { modeSlug: "lg", shortName: "lg", minWidth: 1280 },
     { modeSlug: "xl", shortName: "xl", minWidth: 1441 },
   ];
