@@ -1,0 +1,63 @@
+{
+  "name": "JumpLink",
+  "slug": "jump-link",
+  "cssClass": "c-jump-link",
+  "storybookId": "jump-link",
+  "figmaNodeId": "13360:188611",
+  "description": "Single in-page anchor link: a ControlButton (media style, md) paired with a heading-5 label. JumpLinkNav arranges N JumpLinks in a row with a 32px gap. Used in rich-content sections to jump down to further sections on the same page.",
+  "composedOf": ["ControlButton (visual parity only — shares control-button.css, rendered as a non-interactive span so the whole JumpLink stays a single <a>, never a <button> nested inside a link)"],
+  "figma": {
+    "component": "JumpLink",
+    "nodeId": "13360:188611",
+    "wrapper": "JumpLinkNav",
+    "wrapperComponentSetId": "13371:188842",
+    "wrapperVariantNodeIds": { "horizontal": "13360:188643", "vertical": "13371:188841" },
+    "page": "   ↳ JumpLink",
+    "sourcePattern": "Rich-content-jump-link-Desktop_Enhancement (13027:189213), CPro — Hub and docementation cleanup file"
+  },
+  "variants": {
+    "orientation": ["horizontal", "vertical"]
+  },
+  "props": [
+    { "name": "label", "type": "string", "defaultValue": "\"Section\"", "description": "Link text (Figma TEXT prop Label)" },
+    { "name": "href", "type": "string", "defaultValue": "\"#\"", "description": "In-page anchor destination, e.g. \"#photography\"" },
+    { "name": "onClick", "type": "Function" },
+    { "name": "orientation", "type": "string", "defaultValue": "\"horizontal\"", "enum": ["horizontal", "vertical"], "description": "JumpLinkNav only (Figma VARIANT prop Orientation, component set 13371:188842) — matches the Orientation name/values/default already used by Card and ProductLockup" }
+  ],
+  "tokenBindings": {
+    "gap:item": "--s2a-spacing-xs",
+    "gap:nav:horizontal": "--s2a-spacing-xl",
+    "gap:nav:vertical": "--s2a-spacing-md",
+    "color:label": "--s2a-color-content-knockout",
+    "font-family:label": "--s2a-font-family-heading",
+    "font-weight:label": "--s2a-font-weight-heading",
+    "font-size:label": "--s2a-typography-font-size-heading-5",
+    "line-height:label": "--s2a-typography-line-height-heading-5",
+    "letter-spacing:label": "--s2a-typography-letter-spacing-heading-5",
+    "focus-ring": "--s2a-color-focus-ring-default",
+    "focus-ring-radius": "--s2a-border-radius-3xs",
+    "focus-ring-offset": "--s2a-spacing-2xs"
+  },
+  "knownTokenGaps": [
+    "--s2a-spacing-xs is bound in Figma (s2a/spacing/xs) but marked hiddenFromPublishing — not in shipped CSS output yet. CSS carries an 8px fallback until it ships.",
+    "--s2a-font-weight-heading resolves to the design-only --s2a-font-weight-adobe-clean-display-black in Figma; CSS uses the shipped semantic alias with a 900 fallback (same convention as Tabs)."
+  ],
+  "a11y": {
+    "role": "link (native <a>)",
+    "requiredAriaAttrs": ["aria-hidden=\"true\" (on the decorative icon chip)"],
+    "wcag": ["2.4.4", "2.4.7", "1.4.1"],
+    "notes": [
+      "Renders as a native <a href=\"#section-id\"> wrapping both the icon and the label — the whole item is one link target, not two separate controls.",
+      "The icon chip reuses ControlButton's CSS class for visual parity but is a non-interactive <span aria-hidden=\"true\">, not a nested <button> — a <button> inside an <a> would be invalid, ambiguous-focus markup.",
+      "The link's accessible name comes entirely from the visible label text.",
+      "Focus ring is 1px focus-ring/default, same convention as Link and Tabs.",
+      "Color is not the only affordance — label text is always present alongside the icon (1.4.1)."
+    ]
+  },
+  "notes": [
+    "Source composition (13027:189213) used the legacy ControlButton v1 (Context=on-media, Background=transparent) — JumpLink instead uses the current ControlButton v2 default variant (Style=media, Size=md, State=default), matching the already-shipped control-button code component.",
+    "JumpLinkNav is a fixed 3-item example composition per Orientation variant in Figma (mirrors the Tabs/TabGroup precedent); the code JumpLinkNav takes an array of {label, href} and renders N JumpLinks.",
+    "Orientation added as a Figma VARIANT prop (Title Case name, lowercase-kebab values, default horizontal) — same name/values/default as Card and ProductLockup, so orientation is a single system-wide concept rather than a per-component convention.",
+    "Vertical gap (--s2a-spacing-md, 16px) is tighter than the horizontal gap (--s2a-spacing-xl, 32px) — a deliberate choice (no source design to measure against) so a stacked list reads like a compact nav list rather than a spread-out row; mirrors ProductLockup's own horizontal/vertical gap tightening."
+  ]
+}

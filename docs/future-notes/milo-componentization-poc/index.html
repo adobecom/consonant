@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <title>S2A Button — Milo componentization PoC</title>
+  <!-- Zero-build-step consumption, exactly the "Option B / registry-free" path
+       documented in docs/how-tos/install-s2a-tokens.md — no npm install, no
+       bundler. Just <link>/<script type="module"> pointed at the unpacked
+       release tarball, the same way Milo loads everything at runtime. -->
+  <link rel="stylesheet" href="./tokens.min.css" />
+  <link rel="stylesheet" href="./s2a-components/css/button.css" />
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 48px auto; padding: 0 24px; }
+    section { margin-bottom: 40px; }
+    h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: #666; }
+    .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>S2A Button, decorated the Milo way</h1>
+  <p>
+    Authored markup below is plain <code>&lt;p&gt;&lt;strong&gt;&lt;a&gt;</code> /
+    <code>&lt;em&gt;&lt;a&gt;</code> — the exact shape Milo's own
+    <code>decorateButtons(el, size)</code> (<code>libs/utils/decorate.js</code>)
+    already looks for. This page runs a drop-in replacement
+    (<code>milo-button-adapter.js</code>) that calls S2A's
+    <code>decorateButton()</code> instead of applying Milo's
+    <code>con-button</code>/<code>blue</code>/<code>outline</code> classes.
+    No Lit, no bundler, no npm install — <code>button.js</code> is the exact
+    file <code>npm pack</code> produced from <code>dist/packages/components</code>.
+  </p>
+
+  <section>
+    <h2>Before decoration (authored content)</h2>
+    <p id="authored">
+      <strong><a href="#solid">Get started</a></strong>
+      &nbsp;&nbsp;
+      <em><a href="#outlined">Learn more</a></em>
+    </p>
+  </section>
+
+  <section>
+    <h2>After decoration (live, in this page)</h2>
+    <div class="row" id="decorated-target"></div>
+  </section>
+
+  <script type="module">
+    import { decorateS2AButtons } from './milo-button-adapter.js';
+
+    // Clone the authored markup into its own container so both states are
+    // visible on the page at once — in a real Milo page this would decorate
+    // in place, once, during the block's normal decorate() lifecycle.
+    const target = document.getElementById('decorated-target');
+    target.innerHTML = document.getElementById('authored').innerHTML;
+    decorateS2AButtons(target);
+  </script>
+</body>
+</html>

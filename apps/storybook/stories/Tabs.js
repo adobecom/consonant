@@ -1,1 +1,1 @@
-export { Tab, TabGroup } from "../../../packages/components/src/tabs/tabs.js";
+export { createTab, createTabGroup } from "../../../packages/components/src/tabs/tabs.js";

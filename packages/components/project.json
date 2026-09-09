@@ -3,5 +3,29 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/components/src",
   "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node packages/components/scripts/build-components.js",
+        "outputs": ["{workspaceRoot}/dist/packages/components"]
+      }
+    },
+    "package": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "npm pack ./dist/packages/components",
+        "outputs": ["{workspaceRoot}/*.tgz"]
+      }
+    },
+    "manifest": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["package"],
+      "options": {
+        "command": "node packages/components/scripts/build-release-manifest.js"
+      }
+    }
+  },
   "tags": ["scope:components", "type:package"]
 }

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/components/manifest.schema.json",
+  "name": "@adobecom/s2a-components",
+  "version": "0.0.1",
+  "released": "2026-09-01",
+  "runtime": "none",
+  "artifact": {
+    "tarball": {
+      "url": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/components/adobecom-s2a-components-0.0.1.tgz",
+      "integrity": "sha256-OpXuzIIFVnGyLnRbiuYuYIBioFpxVFkl4g2ursexjHs=",
+      "bytes": 7380
+    },
+    "entries": [
+      {
+        "slug": "button",
+        "js": "js/button.js",
+        "css": "css/button.css"
+      },
+      {
+        "slug": "jump-link",
+        "js": "js/jump-link.js",
+        "css": "css/jump-link.css"
+      },
+      {
+        "slug": "tabs",
+        "js": "js/tabs.js",
+        "css": "css/tabs.css"
+      }
+    ]
+  },
+  "requires": {
+    "tokens": "@adobecom/s2a-tokens (CSS custom properties, --s2a- prefix)"
+  },
+  "source": {
+    "dir": "https://github.com/adobecom/consonant/blob/main/packages/components/src"
+  },
+  "changelog": "https://github.com/adobecom/consonant/blob/main/packages/components/CHANGELOG.md",
+  "generatedBy": "build-release-manifest.js"
+}
