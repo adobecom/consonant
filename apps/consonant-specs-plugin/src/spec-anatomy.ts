@@ -718,7 +718,10 @@ export async function generateAnatomySection(sourceNode: SceneNode): Promise<Fra
     if (!tp) return null;
     const fills = getNodeFills(label);
     const colorHex = fills[0]?.hex ?? '';
-    return `${tp.fontFamily}|${tp.fontWeight}|${tp.fontSize}|${label.textDecoration}|${colorHex}`;
+    // textDecoration can be figma.mixed (a symbol) on mixed-decoration text;
+    // interpolating a symbol into a template literal throws at runtime.
+    const deco = label.textDecoration === figma.mixed ? 'mixed' : label.textDecoration;
+    return `${tp.fontFamily}|${tp.fontWeight}|${tp.fontSize}|${deco}|${colorHex}`;
   };
   const ctaEntries = rawEntries
     .filter(e => ctaFlags.get(e.node))

@@ -154,6 +154,11 @@ async function translateStrings(
     case 'deepl': return translateDeepL(strings, langCode, apiKey);
     case 'google': return translateGoogle(strings, langCode, apiKey);
     case 'azure': return translateAzure(strings, langCode, apiKey);
+    // 'bridge' is handled upstream in code.ts (localize-bridge-prompt) and never
+    // reaches this HTTP dispatcher; guard so a future refactor can't silently
+    // return undefined and crash the caller.
+    case 'bridge': throw new Error("'bridge' provider is translated via the Claude bridge prompt, not translateStrings");
+    default: throw new Error(`Unknown translation provider: ${provider}`);
   }
 }
 

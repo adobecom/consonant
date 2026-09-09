@@ -1162,16 +1162,30 @@ server.tool(
 
 server.tool(
   'figma_set_image_fill',
-  'Set an image fill on one or more nodes from base64-encoded image data.',
+  'Set an image fill on one or more nodes from a local file path (preferred), a URL, or base64-encoded image data.',
   {
-    imageData: z.string().describe('Base64-encoded image data'),
+    imageData: z.string().optional().describe('Base64-encoded image data'),
+    imagePath: z.string().optional().describe('Absolute path to a local image file — preferred, no payload passes through the model'),
+    imageUrl: z.string().optional().describe('URL to fetch server-side (not subject to plugin CORS/allowlist limits)'),
     nodeId: z.string().optional().describe('Single node ID'),
     nodeIds: z.array(z.string()).optional().describe('Multiple node IDs'),
     scaleMode: z.enum(['FILL', 'FIT', 'CROP', 'TILE']).optional().describe('Image scale mode (default FILL)'),
   },
   async (params) => {
-    // Convert base64 to byte array — code.ts expects imageBytes as number[]
-    const imageBytes = Array.from(Buffer.from(params.imageData, 'base64'));
+    let buf: Buffer;
+    if (params.imageData) {
+      buf = Buffer.from(params.imageData, 'base64');
+    } else if (params.imagePath) {
+      buf = readFileSync(params.imagePath);
+    } else if (params.imageUrl) {
+      const res = await fetch(params.imageUrl);
+      if (!res.ok) throw new Error(`Image fetch failed: ${res.status} ${res.statusText}`);
+      buf = Buffer.from(await res.arrayBuffer());
+    } else {
+      throw new Error('Provide one of imagePath, imageUrl, or imageData');
+    }
+    // Convert to byte array — code.ts expects imageBytes as number[]
+    const imageBytes = Array.from(buf);
     const result = await sendCommand('SET_IMAGE_FILL', {
       imageBytes,
       nodeId: params.nodeId,

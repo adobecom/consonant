@@ -28,13 +28,18 @@ export async function generateCardGaps(node: SceneNode): Promise<void> {
     const oldChildren = (node as FrameNode).children.filter(c => c.name === 'spacing-in-between-overlay');
     for (const o of oldChildren) o.remove();
   }
-  const oldPageOverlays = figma.currentPage.children.filter(c => c.name === 'spacing-in-between-overlay');
+  // Scope removal to the overlay belonging to this specific node (tagged via
+  // pluginData) so regenerating one node's gaps doesn't wipe another's.
+  const oldPageOverlays = figma.currentPage.children.filter(c =>
+    c.name === 'spacing-in-between-overlay' && c.getPluginData('specTarget') === node.id
+  );
   for (const o of oldPageOverlays) o.remove();
 
   // Overlay floats above the node — parented to the page so it works on
   // instances (which reject appendChild). Coordinates are absolute.
   const overlay = figma.createFrame();
   overlay.name = 'spacing-in-between-overlay';
+  overlay.setPluginData('specTarget', node.id);
   overlay.resize(node.width, node.height);
   overlay.fills = [];
   overlay.clipsContent = false;

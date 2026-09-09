@@ -7,6 +7,14 @@ import { generateBlueline, generateBluelinePanels, placeCategoryBadge } from './
 import { runStructuralScan } from './a11y-structural-scan';
 import { generateFocusIndicators, collectFocusableElements } from './spec-focus-indicators';
 import { runAlignV2Scan, AlignV2Result } from './align-v2';
+import { heightFor, isRatioApplicableType } from './ratio';
+import { runColorStudy, applyColorStudy, ColorStudyTarget } from './color-study';
+
+// One predicate shared by the selection broadcast and apply-ratio — the UI can
+// never show ratio controls for a selection the apply would refuse.
+function ratioTarget(n: SceneNode): n is SceneNode & { resize(w: number, h: number): void } {
+  return 'resize' in n && 'width' in n && isRatioApplicableType(n.type);
+}
 
 // Bridge-readable build marker. Lets MCP probes confirm which bundle is loaded
 // via `globalThis.__PLUGIN_BUILD__` from inside figma_execute.
@@ -1615,7 +1623,20 @@ async function drawA11yAnnotations(
   container.locked = true;
 }
 
-figma.showUI(__html__, { width: 300, height: 500, themeColors: true });
+const DEFAULT_UI_SIZE = { width: 300, height: 500 };
+figma.showUI(__html__, { ...DEFAULT_UI_SIZE, themeColors: true });
+
+// ── UI window sizing ──────────────────────────────────────────────────────
+// expandedUiSize is the size the window returns to when the panel is expanded.
+// While collapsed, tools may still change their preferred expanded size
+// (e.g. Align to S2A); we record it and apply it on expand.
+let expandedUiSize = { ...DEFAULT_UI_SIZE };
+let uiCollapsed = false;
+
+function setExpandedUiSize(width: number, height: number): void {
+  expandedUiSize = { width, height };
+  if (!uiCollapsed) figma.ui.resize(width, height);
+}
 
 figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
   try {
@@ -1706,6 +1727,33 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       }
       return;
     }
+    case 'apply-ratio': {
+      const rw = Number(msg.rw);
+      const rh = Number(msg.rh);
+      if (!Number.isFinite(rw) || !Number.isFinite(rh) || rw <= 0 || rh <= 0) return;
+      const targets = figma.currentPage.selection.filter(ratioTarget);
+      if (targets.length === 0) {
+        figma.notify('Select something resizable first');
+        return;
+      }
+      // Empirically verified 2026-08-14 (live Plugin API test): resize() wins
+      // even on FILL children and HUG frames — Figma converts the vertical
+      // sizing to FIXED, exactly like a manual drag. No skip needed.
+      let applied = 0;
+      for (const node of targets) {
+        try {
+          node.resize(node.width, heightFor(node.width, rw, rh));
+          applied++;
+        } catch (e) {
+          figma.notify(`Could not resize "${node.name}": ${e instanceof Error ? e.message : String(e)}`, { error: true });
+        }
+      }
+      if (applied > 0) {
+        figma.notify(`${String(msg.label ?? `${rw}:${rh}`)} applied to ${applied} item(s) — width kept`);
+        notifySelection(); // refresh the dims in the selection bar
+      }
+      return;
+    }
     case 'align-v2-apply': {
       const selections = msg.selections as Array<{ nodeId: string; property: string; bindingKey?: string; variableId?: string; textStyleId?: string }> | undefined;
       if (!Array.isArray(selections) || selections.length === 0) {
@@ -1762,12 +1810,48 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       figma.ui.postMessage({ type: 'align-v2-apply-result', results });
       return;
     }
+    case 'color-study-scan': {
+      const sel = figma.currentPage.selection;
+      if (sel.length === 0) { figma.ui.postMessage({ type: 'color-study-result', result: null, error: 'Select a frame, group, or layer first.' }); return; }
+      try {
+        const result = await runColorStudy(sel);
+        figma.ui.postMessage({ type: 'color-study-result', result });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'color-study-result', result: null, error: e?.message ?? String(e) });
+      }
+      return;
+    }
+    case 'color-study-window': {
+      // Picker needs room for the light/dark columns; restore the default when it closes.
+      if (msg.wide) setExpandedUiSize(450, 600);
+      else setExpandedUiSize(DEFAULT_UI_SIZE.width, DEFAULT_UI_SIZE.height);
+      return;
+    }
+    case 'color-study-apply': {
+      const targets = Array.isArray(msg.targets) ? (msg.targets as ColorStudyTarget[]) : [];
+      const variableId = typeof msg.variableId === 'string' ? msg.variableId : '';
+      if (targets.length === 0 || !variableId) { figma.ui.postMessage({ type: 'color-study-apply-result', results: [] }); return; }
+      const results = await applyColorStudy(targets, variableId);
+      figma.ui.postMessage({ type: 'color-study-apply-result', results });
+      return;
+    }
     case 'align-v2-window-resize': {
       const wide = !!msg.wide;
       if (wide) {
-        figma.ui.resize(450, 600);
+        setExpandedUiSize(450, 600);
       } else {
-        figma.ui.resize(300, 500);  // restores the default set in showUI at code.ts:1606
+        setExpandedUiSize(DEFAULT_UI_SIZE.width, DEFAULT_UI_SIZE.height);
+      }
+      return;
+    }
+    case 'panel-collapse': {
+      uiCollapsed = !!msg.collapsed;
+      if (uiCollapsed) {
+        const w = typeof msg.width === 'number' ? msg.width : expandedUiSize.width;
+        const h = typeof msg.height === 'number' ? msg.height : 40;
+        figma.ui.resize(w, h);
+      } else {
+        figma.ui.resize(expandedUiSize.width, expandedUiSize.height);
       }
       return;
     }
@@ -2165,7 +2249,7 @@ figma.on('currentpagechange', () => {
 function notifySelection() {
   const sel = figma.currentPage.selection;
   if (sel.length === 0) {
-    figma.ui.postMessage({ type: 'selection-changed', selection: null, count: 0, hasAutoLayout: false });
+    figma.ui.postMessage({ type: 'selection-changed', selection: null, count: 0, hasAutoLayout: false, resizableCount: 0 });
     figma.ui.postMessage({ type: 'bridge:selection-changed', selection: [] });
     return;
   }
@@ -2181,6 +2265,7 @@ function notifySelection() {
     },
     count: sel.length,
     hasAutoLayout,
+    resizableCount: sel.filter(ratioTarget).length,
   });
 
   // Forward selection event for bridge

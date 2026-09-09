@@ -9,10 +9,13 @@
     <header class="plugin-header" id="pluginHeader">
       <div id="headerMenu">
         <h1 class="plugin-title">Consonant Tools</h1>
-        <button class="bridge-status-pill" id="bridgeStatusPill" aria-label="Bridge status">
-          <span class="bridge-status-dot"></span>
-          <span class="bridge-status-text">Bridge</span>
-        </button>
+        <div class="header-actions">
+          <button class="bridge-status-pill" id="bridgeStatusPill" aria-label="Bridge status">
+            <span class="bridge-status-dot"></span>
+            <span class="bridge-status-text">Bridge</span>
+          </button>
+          <button class="collapse-btn" id="collapseBtn" data-collapse-toggle aria-label="Collapse panel" aria-expanded="true" title="Collapse panel"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polyline points="2,6.5 5,3.5 8,6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
       </div>
       <div id="headerDetail" style="display:none;">
         <button class="back-btn" id="backBtn"><span class="back-chevron">&#8249;</span><span id="backLabel"></span></button>
@@ -20,6 +23,7 @@
           <span class="bridge-status-dot"></span>
           <span class="bridge-status-text">Bridge</span>
         </button>
+        <button class="collapse-btn" id="collapseBtnDetail" data-collapse-toggle aria-label="Collapse panel" aria-expanded="true" title="Collapse panel"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polyline points="2,6.5 5,3.5 8,6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <div class="hamburger-wrapper">
           <button class="hamburger-btn" id="hamburgerBtn" aria-label="All tools" aria-expanded="false">&#9776;</button>
           <div class="hamburger-menu" id="hamburgerMenu">
@@ -28,6 +32,8 @@
             <button class="hamburger-item" data-tool="match" id="hamburgerMatchItem"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 1.5 H4.5 A1.5 1.5 0 0 0 7.5 1.5 H10.5 V4.5 A1.5 1.5 0 0 1 10.5 7.5 V10.5 H7.5 A1.5 1.5 0 0 0 4.5 10.5 H1.5 V7.5 A1.5 1.5 0 0 1 1.5 4.5 Z" stroke="currentColor" stroke-width="1"/></svg></span>Match</button>
             <button class="hamburger-item" data-tool="design"><span class="hm-icon">&#x229E;</span>Grids</button>
             <button class="hamburger-item" data-tool="specs"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1"/><line x1="7.8" y1="7.8" x2="10.5" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>Specs</button>
+            <button class="hamburger-item" data-tool="ratio"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect x="1" y="2.5" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1"/><path d="M4 9.5V6.5H8" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Aspect Ratio</button>
+            <button class="hamburger-item" data-tool="colorstudy"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="4.75" stroke="currentColor" stroke-width="1"/><path d="M6 1.25 A4.75 4.75 0 0 1 6 10.75 Z" fill="currentColor"/></svg></span>Color study</button>
             <button class="hamburger-item" data-tool="a11y" id="hamburgerA11yItem"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg></span>A11y</button>
             <button class="hamburger-item" data-tool="localize"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><ellipse cx="6" cy="6" rx="2.2" ry="5" stroke="currentColor" stroke-width="1"/><line x1="1" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1"/><line x1="1" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1"/></svg></span>Localize</button>
             <button class="hamburger-item" data-tool="variables"><span class="hm-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 5V1.5H5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/><circle cx="8.8" cy="3.2" r="1.7" stroke="currentColor" stroke-width="1.1"/><path d="M3.2 7.5L1.5 9.2 3.2 10.9 4.9 9.2Z" stroke="currentColor" stroke-width="1" stroke-linejoin="miter"/><path d="M10.5 7V10.5H7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="miter"/></svg></span>Variables</button>
@@ -53,7 +59,10 @@
       <button class="menu-item" data-tool="alignv2"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><line x1="1.5" y1="3.5" x2="10" y2="3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="8,1.8 10.2,3.5 8,5.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="10.5" y1="8.5" x2="2" y2="8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polyline points="4,6.8 1.8,8.5 4,10.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="menu-item-name">Align to S2A</span><span class="menu-item-chevron">&#8250;</span></button>
       <button class="menu-item" data-tool="match" id="menuMatchItem"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1.5 1.5 H4.5 A1.5 1.5 0 0 0 7.5 1.5 H10.5 V4.5 A1.5 1.5 0 0 1 10.5 7.5 V10.5 H7.5 A1.5 1.5 0 0 0 4.5 10.5 H1.5 V7.5 A1.5 1.5 0 0 1 1.5 4.5 Z" stroke="currentColor" stroke-width="1"/></svg></span><span class="menu-item-name">Match</span><span class="menu-item-chevron">&#8250;</span></button>
       <button class="menu-item" data-tool="design"><span class="menu-item-icon">&#x229E;</span><span class="menu-item-name">Grids</span><span class="menu-item-chevron">&#8250;</span></button>
+      <button class="menu-item" data-tool="ratio"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect x="1" y="2.5" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1"/><path d="M4 9.5V6.5H8" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="menu-item-name">Aspect Ratio</span><span class="menu-item-chevron">&#8250;</span></button>
       <button class="menu-item" data-tool="specs"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1"/><line x1="7.8" y1="7.8" x2="10.5" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span><span class="menu-item-name">Specs</span><span class="menu-item-chevron">&#8250;</span></button>
+      <div class="menu-section-label">Block build</div>
+      <button class="menu-item" data-tool="colorstudy"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="4.75" stroke="currentColor" stroke-width="1"/><path d="M6 1.25 A4.75 4.75 0 0 1 6 10.75 Z" fill="currentColor"/></svg></span><span class="menu-item-name">Color study</span><span class="menu-item-chevron">&#8250;</span></button>
       <div class="menu-section-label">Compliance</div>
       <button class="menu-item" data-tool="a11y" id="menuA11yItem"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg></span><span class="menu-item-name">A11y</span><span class="menu-item-chevron">&#8250;</span></button>
       <button class="menu-item" data-tool="localize"><span class="menu-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><ellipse cx="6" cy="6" rx="2.2" ry="5" stroke="currentColor" stroke-width="1"/><line x1="1" y1="4" x2="11" y2="4" stroke="currentColor" stroke-width="1"/><line x1="1" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1"/></svg></span><span class="menu-item-name">Localize</span><span class="menu-item-chevron">&#8250;</span></button>
@@ -77,6 +86,11 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="tab-panel" data-panel="colorstudy">
+        <div id="colorStudyStatus" class="cs-status" style="display:none;"></div>
+        <div id="colorStudyBody" style="margin-top:12px;"></div>
+        <div id="colorStudyPicker" class="cs-picker" style="display:none;"></div>
       </div>
       <div class="tab-panel" data-panel="alignv2">
         <div id="alignV2Selection" style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">Select a frame to scan.</div>
@@ -210,6 +224,16 @@
             <div id="a11yStatus" style="margin-top:12px;"></div>
           </div>
         </div>
+      </div>
+      <div class="tab-panel" data-panel="ratio">
+        <div class="section-title">Orientation</div>
+        <div class="seg" id="ratioSeg">
+          <button class="seg-btn active" id="segLandscape">Landscape</button>
+          <button class="seg-btn" id="segPortrait">Portrait</button>
+        </div>
+        <div class="section-title" style="margin-top:12px;">Apply Ratio <span style="font-weight:normal;color:var(--text-tertiary,#999);">— width kept, height changes</span></div>
+        <div id="ratioList"></div>
+        <p class="placeholder" id="ratioHint" style="margin-top:8px;">Select something resizable</p>
       </div>
       <div class="tab-panel" data-panel="localize">
         <div id="localizeContent">
