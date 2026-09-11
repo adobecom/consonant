@@ -1,10 +1,10 @@
 import { html } from "lit";
-import { Tab, TabGroup } from "./Tabs";
+import { createTab, createTabGroup } from "./Tabs";
 
 export default {
   title: "Atoms/Tabs",
   tags: ["autodocs"],
-  render: (args) => TabGroup(args),
+  render: (args) => createTabGroup(args),
   parameters: {
     layout: "centered",
     docs: {
@@ -77,10 +77,10 @@ export const AllStates = {
       ${[false, true].map(
         (selected) => html`
           <div style="display: flex; gap: 40px; align-items: center;">
-            ${Tab({ label: "Default", selected })}
-            ${Tab({ label: "Hover", selected, forceState: "hover" })}
-            ${Tab({ label: "Focus", selected, forceState: "focus" })}
-            ${Tab({ label: "Disabled", selected, disabled: true })}
+            ${createTab({ label: "Default", selected })}
+            ${createTab({ label: "Hover", selected, forceState: "hover" })}
+            ${createTab({ label: "Focus", selected, forceState: "focus" })}
+            ${createTab({ label: "Disabled", selected, disabled: true })}
           </div>
         `,
       )}

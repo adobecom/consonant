@@ -13,7 +13,7 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
 // set below. Nothing sensitive is sent — just the action id, timestamp, ok/error,
 // an anonymous per-install id (from clientStorage, provisioned by code.ts), and
 // the plugin version. Every path is fail-silent and never blocks the UI.
-const PLUGIN_VERSION = '0.2.0';
+const PLUGIN_VERSION = '0.2.1';
 // Set to your collector to enable, e.g. 'http://localhost:8787' (dev) or the
 // deployed Worker URL. Empty string = telemetry disabled. The chosen host must
 // also be listed in manifest.json → networkAccess.allowedDomains.
@@ -203,7 +203,7 @@ const FEATURES: Feature[] = [
   {
     id: 'tools:doc',
     name: 'Generate component doc',
-    description: 'Build a full component documentation page for the selected component set',
+    description: 'Build a full documentation page for the selected component or component set',
     category: 'Tools',
     uiAction: () => switchPanel('tools'),
   },
@@ -843,19 +843,22 @@ function setDocStatus(msg: string, type: '' | 'ok' | 'err' = '') {
   el.textContent = msg; el.className = 'status' + (type ? ' ' + type : '');
 }
 
-// Doc generation needs a full COMPONENT_SET (not a single COMPONENT).
+// Doc generation accepts a COMPONENT_SET or a single COMPONENT (a selected
+// variant is resolved to its set in code.ts).
 function updateDocSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
-  const isSet = sel?.nodeType === 'COMPONENT_SET';
-  docSetId = isSet ? (sel?.id ?? null) : null;
+  const isDocable = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT';
+  docSetId = isDocable ? (sel?.id ?? null) : null;
   const emptyEl = document.getElementById('docSelectionEmpty') as HTMLElement;
   const infoEl  = document.getElementById('docSelectionInfo')  as HTMLElement;
   const nameEl  = document.getElementById('docSetName')  as HTMLElement;
   const countEl = document.getElementById('docSetCount') as HTMLElement;
   const btn     = document.getElementById('docGenerateBtn') as HTMLButtonElement;
-  if (isSet && sel) {
+  if (isDocable && sel) {
     emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
     nameEl.textContent  = sel.name;
-    countEl.textContent = (sel.variantCount ?? 0) + ' variants';
+    countEl.textContent = sel.nodeType === 'COMPONENT_SET'
+      ? (sel.variantCount ?? 0) + ' variants'
+      : 'single component';
     btn.disabled = false;
   } else {
     emptyEl.style.display = 'block'; infoEl.style.display = 'none';

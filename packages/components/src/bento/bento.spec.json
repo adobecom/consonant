@@ -1,0 +1,51 @@
+{
+  "name": "Bento",
+  "slug": "bento",
+  "cssClass": "c-bento",
+  "storybookId": "bento",
+  "description": "Full-bleed media tile with a top-left app icon and a bottom-left headline/body/CTA lockup. Light/dark is token-driven — the text uses theme-aware content tokens that flip with :root[data-theme], so there is no light/dark variant. `width` sets the proportion: full (wide row hero) or third (squarer tile for a 3-up grid). Scales with its container via aspect-ratio — never fixed pixel dimensions.",
+  "variants": {
+    "width": ["full", "third"]
+  },
+  "props": [
+    { "name": "width", "type": "string", "defaultValue": "\"full\"", "enum": ["full", "third"], "description": "Tile proportion — full: 1392/711 wide hero · third: 692/711 squarer grid tile" },
+    { "name": "app", "type": "string", "defaultValue": "\"creative-cloud\"", "description": "App slug passed to AppIcon for the top-left badge" },
+    { "name": "showIcon", "type": "boolean", "defaultValue": "true", "description": "Toggle the AppIcon badge" },
+    { "name": "imageSrc", "type": "string", "description": "Image URL — fills the media as a full-bleed background" },
+    { "name": "imageAlt", "type": "string", "defaultValue": "\"\"", "description": "Alt text; leave empty when the media is decorative (default)" },
+    { "name": "headline", "type": "string", "defaultValue": "\"\"", "description": "Headline text — heading-5 scale" },
+    { "name": "body", "type": "string", "defaultValue": "\"\"", "description": "Body copy — body-md scale" },
+    { "name": "ctaLabel", "type": "string", "defaultValue": "\"Learn more\"", "description": "CTA link text" },
+    { "name": "ctaHref", "type": "string", "defaultValue": "\"#\"" },
+    { "name": "showCta", "type": "boolean", "defaultValue": "true", "description": "Toggle the CTA link" }
+  ],
+  "tokenBindings": {
+    "border-radius": "--s2a-border-radius-lg",
+    "background": "--s2a-color-background-subtle",
+    "color:headline": "--s2a-color-content-heading",
+    "color:body": "--s2a-color-content-body-subtle",
+    "color:cta": "--s2a-color-content-heading",
+    "typography:headline": "s2a/typography/heading-5",
+    "typography:body": "s2a/typography/body-md",
+    "typography:cta": "s2a/typography/label",
+    "padding": "--s2a-spacing-xl",
+    "icon-inset": "--s2a-spacing-xl",
+    "gap:text": "--s2a-spacing-lg",
+    "gap:headline-body": "--s2a-spacing-xs"
+  },
+  "responsive": {
+    "full": "aspect-ratio 1392/711 (wide row hero)",
+    "third": "aspect-ratio 692/711 (squarer 3-up tile)",
+    "<600px": "both collapse to a 327/469 portrait so the lockup keeps room"
+  },
+  "a11y": {
+    "wcag": ["1.1.1", "1.4.3", "2.1.1", "2.4.4", "2.4.7"],
+    "notes": [
+      "Media is decorative (aria-hidden); the headline/body carry the meaning — provide imageAlt only when the image conveys information not in the copy.",
+      "AppIcon badge is aria-hidden — decorative.",
+      "No scrim: text legibility depends on image selection. Verify 4.5:1 contrast (WCAG 1.4.3) against the region of the image the text overlays, in both themes.",
+      "CTA renders as a real <a>; keyboard focus shows a visible focus ring (WCAG 2.4.7).",
+      "Headline renders as <p> not <h*> — heading level is the consumer's responsibility."
+    ]
+  }
+}

@@ -33,18 +33,46 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 
 import { registerTokenTools } from "./tools/tokens.js";
 import { registerComponentTools } from "./tools/components.js";
 import { registerValidateTools } from "./tools/validate.js";
 import { registerSpecTools } from "./tools/spec.js";
 import { registerAuditTools } from "./tools/audit.js";
+import { registerFigmaHealthTools } from "./tools/figma-health.js";
 import { instrument, telemetryEnabled } from "./telemetry.js";
 
 // ── Resolve DS_ROOT ───────────────────────────────────────────────────────
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Best-effort .env loader for the Figma health checks (FIGMA_REST_API,
+// FIGMA_FILE_ID, FIGMA_BRANCH_KEY, FIGMA_API_BASE_URL). .mcp.json is checked
+// into the repo and must never carry secrets, so those vars can't live in its
+// `env` block — this reads the gitignored repo-root .env instead, same file
+// packages/tokens/scripts/sync-figma-variables.js expects to already be
+// exported. Never overwrites a var the launching process already set.
+function loadDotEnvBestEffort(): void {
+  for (const candidate of [resolve(__dirname, "../../.."), process.cwd()]) {
+    const envPath = resolve(candidate, ".env");
+    if (!existsSync(envPath)) continue;
+    try {
+      const text = readFileSync(envPath, "utf8");
+      for (const line of text.split("\n")) {
+        const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
+        if (!m) continue;
+        const [, key, rawValue] = m;
+        if (process.env[key] !== undefined) continue;
+        process.env[key] = rawValue.replace(/^["']|["']$/g, "");
+      }
+    } catch {
+      // best-effort only — a broken .env should never block server startup
+    }
+    return; // first candidate found wins
+  }
+}
+loadDotEnvBestEffort();
 
 // A directory is a valid data root if it contains the token metadata index.
 const hasData = (root: string): boolean =>
@@ -95,6 +123,7 @@ registerComponentTools(server, DS_ROOT);
 registerValidateTools(server, DS_ROOT);
 registerSpecTools(server, DS_ROOT);
 registerAuditTools(server, DS_ROOT);
+registerFigmaHealthTools(server, DS_ROOT);
 
 // ── Start ─────────────────────────────────────────────────────────────────
 const transport = new StdioServerTransport();

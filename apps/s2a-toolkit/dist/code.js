@@ -377,7 +377,7 @@ function genAnonId() {
   return (rnd() + rnd()).slice(0, 16);
 }
 figma.ui.onmessage = async (msg) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E;
   switch (msg.type) {
     case "ui-ready":
       notifySelection();
@@ -694,11 +694,15 @@ figma.ui.onmessage = async (msg) => {
     case "doc:generate": {
       try {
         const setId = msg.setId;
-        const node = await figma.getNodeByIdAsync(setId);
-        if (!node || node.type !== "COMPONENT_SET") {
-          figma.ui.postMessage({ type: "doc:result", error: "Select a component set first" });
+        let node = await figma.getNodeByIdAsync(setId);
+        if (node && node.type === "COMPONENT" && node.parent && node.parent.type === "COMPONENT_SET") {
+          node = node.parent;
+        }
+        if (!node || node.type !== "COMPONENT_SET" && node.type !== "COMPONENT") {
+          figma.ui.postMessage({ type: "doc:result", error: "Select a component or component set first" });
           break;
         }
+        const isSingle = node.type === "COMPONENT";
         const set = node;
         await Promise.all([
           figma.loadFontAsync({ family: "Adobe Clean Display", style: "Bold" }),
@@ -747,7 +751,7 @@ figma.ui.onmessage = async (msg) => {
         await setText("@changelog", meta.changelog || "changelog\n  \u2014");
         if (meta.goodToKnow) await setText("@good-to-know", meta.goodToKnow);
         if (meta.accessibility) await setText("@accessibility", meta.accessibility);
-        const variants = set.children.filter((c) => c.type === "COMPONENT");
+        const variants = isSingle ? [node] : set.children.filter((c) => c.type === "COMPONENT");
         const defaultVariant = pickDefaultVariant(variants);
         const heroSlot = find("@slot-hero");
         if (heroSlot && defaultVariant) {
@@ -861,7 +865,14 @@ figma.ui.onmessage = async (msg) => {
           gridSlot.resize(Math.max(maxRight + 24, gridSlot.width), maxBottom + 24);
         }
         const slotsRow = doc.findOne((n) => n.name === "row: slots");
-        if (slotsRow) slotsRow.visible = setUsesNativeSlots(set);
+        if (slotsRow) {
+          let usesSlots = false;
+          try {
+            usesSlots = !!((_E = variants[0]) == null ? void 0 : _E.findOne((n) => n.type === "SLOT"));
+          } catch (e) {
+          }
+          slotsRow.visible = usesSlots;
+        }
         const darkSlot = find("@slot-dark-preview");
         if (darkSlot && gridSlot) {
           clearDocSlot(darkSlot);

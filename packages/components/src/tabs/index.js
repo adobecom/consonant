@@ -1,1 +1,1 @@
-export { Tab, TabGroup } from "./tabs.js";
+export { createTab, createTabGroup } from "./tabs.js";

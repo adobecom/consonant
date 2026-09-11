@@ -27,7 +27,7 @@
   function postToPlugin(type, payload) {
     parent.postMessage({ pluginMessage: __spreadValues({ type }, payload) }, "https://www.figma.com");
   }
-  var PLUGIN_VERSION = "0.2.0";
+  var PLUGIN_VERSION = "0.2.1";
   var TELEMETRY_ENDPOINT = "https://s2a-telemetry-collector.mmhuntsberry.workers.dev";
   var telemetryAnonId = "";
   var telemetryOptOut = false;
@@ -175,7 +175,7 @@
     {
       id: "tools:doc",
       name: "Generate component doc",
-      description: "Build a full component documentation page for the selected component set",
+      description: "Build a full documentation page for the selected component or component set",
       category: "Tools",
       uiAction: () => switchPanel("tools")
     },
@@ -803,18 +803,18 @@
   }
   function updateDocSelection(sel) {
     var _a14, _b;
-    const isSet = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET";
-    docSetId = isSet ? (_a14 = sel == null ? void 0 : sel.id) != null ? _a14 : null : null;
+    const isDocable = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT";
+    docSetId = isDocable ? (_a14 = sel == null ? void 0 : sel.id) != null ? _a14 : null : null;
     const emptyEl = document.getElementById("docSelectionEmpty");
     const infoEl = document.getElementById("docSelectionInfo");
     const nameEl = document.getElementById("docSetName");
     const countEl = document.getElementById("docSetCount");
     const btn = document.getElementById("docGenerateBtn");
-    if (isSet && sel) {
+    if (isDocable && sel) {
       emptyEl.style.display = "none";
       infoEl.style.display = "flex";
       nameEl.textContent = sel.name;
-      countEl.textContent = ((_b = sel.variantCount) != null ? _b : 0) + " variants";
+      countEl.textContent = sel.nodeType === "COMPONENT_SET" ? ((_b = sel.variantCount) != null ? _b : 0) + " variants" : "single component";
       btn.disabled = false;
     } else {
       emptyEl.style.display = "block";

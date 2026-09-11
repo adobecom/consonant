@@ -1,4 +1,3 @@
-import { html, nothing } from "lit";
 import "./tabs.css";
 
 /**
@@ -9,30 +8,43 @@ import "./tabs.css";
  * Hover/focus are CSS-driven; `forceState` exists for docs/visual QA parity
  * with the Figma State axis (same convention as Button's data-force-state).
  *
+ * Framework-free: builds a real <button> via the DOM API, no runtime
+ * dependency (matches the Button component's createButton/decorateButton
+ * convention, so it can ship in the no-build-step components package).
+ *
  * @param {Object} args
  * @param {string} args.label - Tab text
  * @param {boolean} args.selected - Selected (accent underline + full-strength label)
  * @param {boolean} args.disabled - Disabled state
  * @param {string} [args.forceState] - "hover" | "focus" for docs only
  */
-export const Tab = ({
+export function createTab({
   label = "Tab",
   selected = false,
   disabled = false,
-  forceState = undefined,
-} = {}) => html`
-  <button
-    class="c-tab"
-    role="tab"
-    aria-selected="${selected ? "true" : "false"}"
-    ?disabled=${disabled}
-    tabindex=${selected ? "0" : "-1"}
-    data-force-state=${forceState ?? nothing}
-  >
-    <span class="c-tab__label">${label}</span>
-    <span class="c-tab__underline" aria-hidden="true"></span>
-  </button>
-`;
+  forceState,
+} = {}) {
+  const el = document.createElement("button");
+  el.className = "c-tab";
+  el.type = "button";
+  el.setAttribute("role", "tab");
+  el.setAttribute("aria-selected", selected ? "true" : "false");
+  el.tabIndex = selected ? 0 : -1;
+  if (disabled) el.disabled = true;
+  if (forceState) el.dataset.forceState = forceState;
+
+  const labelEl = document.createElement("span");
+  labelEl.className = "c-tab__label";
+  labelEl.textContent = label;
+  el.append(labelEl);
+
+  const underline = document.createElement("span");
+  underline.className = "c-tab__underline";
+  underline.setAttribute("aria-hidden", "true");
+  el.append(underline);
+
+  return el;
+}
 
 /**
  * TabGroup — horizontal tablist of Tabs, 24px gap.
@@ -42,15 +54,18 @@ export const Tab = ({
  * @param {Array<{label: string, selected?: boolean, disabled?: boolean}>} args.tabs
  * @param {string} [args.ariaLabel] - Accessible name for the tablist
  */
-export const TabGroup = ({
+export function createTabGroup({
   tabs = [
     { label: "Photo", selected: true },
     { label: "Design" },
     { label: "Video" },
   ],
   ariaLabel = "Content tabs",
-} = {}) => html`
-  <div class="c-tabs" role="tablist" aria-label="${ariaLabel}">
-    ${tabs.map((tab) => Tab(tab))}
-  </div>
-`;
+} = {}) {
+  const el = document.createElement("div");
+  el.className = "c-tabs";
+  el.setAttribute("role", "tablist");
+  el.setAttribute("aria-label", ariaLabel);
+  tabs.forEach((tab) => el.append(createTab(tab)));
+  return el;
+}

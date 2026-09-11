@@ -1,0 +1,41 @@
+/**
+ * JumpLink — in-page anchor link (ControlButton + heading-5 label).
+ * Matches Figma component `JumpLink` (13360:188611) + wrapper `JumpLinkNav`
+ * (13360:188643), page "↳ JumpLink".
+ */
+
+.c-jump-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2a-spacing-xs, 8px);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.c-jump-link__label {
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
+  font-weight: var(--s2a-font-weight-heading, 900);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  line-height: var(--s2a-typography-line-height-heading-5);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-5);
+  color: var(--s2a-color-content-knockout);
+  white-space: nowrap;
+}
+
+.c-jump-link:is(:focus-visible) {
+  outline: none;
+  border-radius: var(--s2a-border-radius-3xs, 2px);
+  box-shadow: 0 0 0 var(--s2a-spacing-2xs, 2px) var(--s2a-color-focus-ring-default, #3b63fb);
+}
+
+.c-jump-link-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2a-spacing-xl);
+}
+
+.c-jump-link-nav[data-orientation="vertical"] {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s2a-spacing-md, 16px);
+}

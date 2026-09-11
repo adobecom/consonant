@@ -1,10 +1,41 @@
 {
-  "name": "s2a-components",
+  "name": "@adobecom/s2a-components",
   "version": "0.0.1",
-  "description": "Component library for Consonant design system",
-  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobecom/consonant.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "description": "Framework-free component build output for S2A. Pure DOM/CSS — no runtime dependencies (Lit is a source-side authoring tool only; it is stripped out at build time).",
+  "license": "ISC",
+  "main": "js/button.js",
   "type": "module",
+  "scripts": {
+    "build": "nx build components",
+    "package": "nx package components",
+    "manifest": "node scripts/build-release-manifest.js"
+  },
+  "exports": {
+    "./button.js": "./js/button.js",
+    "./button.css": "./css/button.css",
+    "./tabs.js": "./js/tabs.js",
+    "./tabs.css": "./css/tabs.css",
+    "./jump-link.js": "./js/jump-link.js",
+    "./jump-link.css": "./css/jump-link.css",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "src/**/*"
-  ]
+    "js/",
+    "css/",
+    "README.md"
+  ],
+  "keywords": [
+    "components",
+    "consonant",
+    "s2a",
+    "milo"
+  ],
+  "private": false
 }
