@@ -1,3 +1,6 @@
+import { extractEvidence, hashableBody, canonicalJson } from './contract-extract';
+import { buildSetFromPlan } from './contract-build';
+
 // ── Serializers ──────────────────────────────────────────────────────────────
 
 function serializeVariable(v: Variable): Record<string, unknown> {
@@ -380,6 +383,8 @@ figma.on('currentpagechange', () => {
 
 // ── Message handler ──────────────────────────────────────────────────────────
 
+const PLUGIN_VERSION = '0.2.1';
+
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
 
 // Anonymous, random per-install id for usage telemetry. Not tied to identity —
@@ -414,6 +419,22 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
     case 'gh-token:get': {
       const token = (await figma.clientStorage.getAsync('gh-token')) ?? '';
       figma.ui.postMessage({ type: 'gh-token:value', token });
+      break;
+    }
+
+    // Contract sync endpoint: localhost:9410 in development, the relay when
+    // published. Per user, never in the document. The relay key is optional.
+    case 'contract-endpoint:get': {
+      const endpoint = ((await figma.clientStorage.getAsync('contract-endpoint')) as string | undefined) || 'http://localhost:9410';
+      const relayKey = ((await figma.clientStorage.getAsync('contract-relay-key')) as string | undefined) || '';
+      figma.ui.postMessage({ type: 'contract-endpoint:value', endpoint, relayKey });
+      break;
+    }
+    case 'contract-endpoint:set': {
+      const endpoint = ((msg.endpoint as string) || '').trim();
+      const relayKey = ((msg.relayKey as string) || '').trim();
+      if (endpoint) await figma.clientStorage.setAsync('contract-endpoint', endpoint); else await figma.clientStorage.deleteAsync('contract-endpoint');
+      if (relayKey) await figma.clientStorage.setAsync('contract-relay-key', relayKey); else await figma.clientStorage.deleteAsync('contract-relay-key');
       break;
     }
 
@@ -508,6 +529,61 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
 
     case 'notify': {
       figma.notify(msg.message as string);
+      break;
+    }
+
+    // Build a component set from a contract's figma.plan.json (see contract-build.ts).
+    case 'contract:build-set': {
+      try {
+        const report = await buildSetFromPlan(msg.plan as any);
+        figma.notify(`Built ${report.set}: ${report.variants} variants, ${report.layers} layers`);
+        figma.ui.postMessage({ type: 'contract:build-set:done', report });
+      } catch (err: any) {
+        figma.ui.postMessage({ type: 'contract:build-set:done', error: (err?.message || String(err)) + (err?.stack ? ' @ ' + String(err.stack).split('\n')[1]?.trim() : '') });
+      }
+      break;
+    }
+
+    // Contract evidence: a deterministic walk of the selected component set
+    // (or the set behind a selected variant / instance). No judgment here; the
+    // UI hashes and publishes the result to the sync server.
+    case 'contract:extract': {
+      const startedAt = Date.now();
+      try {
+        let node: BaseNode | null = msg.setId ? await figma.getNodeByIdAsync(msg.setId as string) : (figma.currentPage.selection[0] ?? null);
+        if (node && node.type === 'INSTANCE') node = await (node as InstanceNode).getMainComponentAsync();
+        const EXTRACTABLE = ['COMPONENT_SET', 'COMPONENT', 'FRAME', 'SECTION', 'GROUP'];
+        if (!node || !EXTRACTABLE.includes(node.type)) {
+          figma.ui.postMessage({ type: 'contract:evidence', error: 'Select a component set, a variant, an instance, or a frame to extract as a candidate' });
+          break;
+        }
+        const candidateName = ((msg.name as string) || '').trim();
+        const isFrameLike = node.type === 'FRAME' || node.type === 'SECTION' || node.type === 'GROUP';
+        if (candidateName && isFrameLike && msg.rename) node.name = candidateName;
+        const evidence = await extractEvidence({
+          fileKey: figma.fileKey ?? null,
+          fileName: figma.root.name,
+          pluginVersion: PLUGIN_VERSION,
+          getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
+          getVariableCollectionByIdAsync: (id) => figma.variables.getVariableCollectionByIdAsync(id),
+          getStyleByIdAsync: (id) => figma.getStyleByIdAsync(id),
+        }, node as any);
+        if (candidateName && isFrameLike) {
+          // The layer name stays on record; the candidate name is what the
+          // contract, the slug and the proposal use.
+          (evidence.set as any).layerName = msg.rename ? candidateName : node.name;
+          evidence.set.name = candidateName;
+        }
+        figma.ui.postMessage({
+          type: 'contract:evidence',
+          evidence,
+          hashInput: hashableBody(evidence),
+          canonical: canonicalJson(evidence),
+          durationMs: Date.now() - startedAt,
+        });
+      } catch (err: any) {
+        figma.ui.postMessage({ type: 'contract:evidence', error: (err?.message || String(err)) + (err?.stack ? ' @ ' + String(err.stack).split('\n')[1]?.trim() : '') });
+      }
       break;
     }
 

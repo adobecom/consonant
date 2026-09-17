@@ -198,10 +198,8 @@
   --s2a-color-router-nav-item-background-active: var(--s2a-color-gray-25);
   --s2a-color-router-nav-item-content-active: var(--s2a-color-gray-1000);
   --s2a-color-section-default: var(--s2a-color-gray-1000);
-  --s2a-color-surface-default: var(--s2a-color-gray-1000);
-  --s2a-color-surface-inverse: var(--s2a-color-gray-25); /** Background for surfaces that invert relative to the current page mode — dark in light mode, light in dark mode. Use for expanded or active states where the component flips to contrast against the page (e.g. ElasticCard expanded state). Zero blast radius — safe to evolve. Counterpart: surface/subtle for the resting state. */
-  --s2a-color-surface-inverse-subtle: var(--s2a-color-gray-50); /** Background for surfaces that invert relative to the current page mode — dark in light mode, light in dark mode. Use for expanded or active states where the component flips to contrast against the page (e.g. ElasticCard expanded state). Zero blast radius — safe to evolve. Counterpart: surface/subtle for the resting state. */
-  --s2a-color-surface-knockout: var(--s2a-color-gray-25);
-  --s2a-color-surface-strong: #444;
-  --s2a-color-surface-subtle: var(--s2a-color-gray-900);
+  --s2a-color-surface-default: var(--s2a-color-gray-1000); /** Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme. */
+  --s2a-color-surface-inverse: var(--s2a-color-gray-25); /** Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme. */
+  --s2a-color-surface-inverse-subtle: var(--s2a-color-gray-50); /** Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme. */
+  --s2a-color-surface-subtle: var(--s2a-color-gray-900); /** Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme. */
 }

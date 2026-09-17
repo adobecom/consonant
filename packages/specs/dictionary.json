@@ -1,0 +1,122 @@
+{
+  "$schema": "s2a-spec-dictionary/1",
+  "description": "The spec dictionary: how S2A names, structures, tokenizes and makes accessible each role a design can play. specs:scaffold reads extracted Figma evidence (roles, axes, layers) through this file to draft a <slug>.defs.json in the library's conventions, so every component enters the contract system the same way. Tokens here must be shipped semantic tokens (npm run defs:validate checks).",
+  "naming": {
+    "set": "PascalCase component name; the Figma set and the code export share it",
+    "slug": "lowercase-kebab of the name; folder, file and story ids",
+    "rootClass": "c-{slug}",
+    "partClass": "{abbr}-{part} where abbr is the slug's initials (quote-card → qc)",
+    "figmaRoot": ".root",
+    "figmaPart": ".{part} (dot-prefixed, kebab-case; text layers match the text property name)",
+    "values": "lowercase-kebab for every variant value"
+  },
+  "roles": {
+    "eyebrow": {
+      "part": "eyebrow", "element": "p", "order": 10,
+      "lever": { "name": "eyebrow", "type": "string" },
+      "tokens": { "font-family": "{s2a.font-family.eyebrow}", "font-weight": "{s2a.font-weight.eyebrow}", "font-size": "{s2a.typography.font-size.label}", "line-height": "{s2a.typography.line-height.label}", "letter-spacing": "{s2a.typography.letter-spacing.label}", "color": "{s2a.color.content.eyebrow}" }
+    },
+    "media": {
+      "part": "media", "element": "div[aria-hidden]", "order": 20,
+      "lever": { "name": "mediaSrc", "type": "string", "notes": "Decorative art; aria-hidden. Use a real Media instance in Figma so the swap is a property, not raw layers." },
+      "slot": { "name": "Media", "accepts": ["Media"], "acceptsMode": "restrict" }
+    },
+    "icon": {
+      "part": "icon", "element": "span[aria-hidden]", "order": 25,
+      "lever": { "name": "icon", "type": "string", "notes": "Icon name resolved by the AppIcon / icon set; decorative unless it is the only content." },
+      "slot": { "name": "Icon", "accepts": ["AppIcon"], "acceptsMode": "restrict" }
+    },
+    "heading": {
+      "part": "headline", "element": "h3", "order": 30,
+      "lever": { "name": "headline", "type": "string", "notes": "The card's accessible name when the whole card is a link." },
+      "tokens": { "font-family": "{s2a.font-family.heading}", "font-weight": "{s2a.font-weight.heading}", "font-size": "{s2a.typography.font-size.heading-4}", "line-height": "{s2a.typography.line-height.heading-4}", "letter-spacing": "{s2a.typography.letter-spacing.heading-4}", "color": "{s2a.color.content.heading}" }
+    },
+    "body": {
+      "part": "description", "element": "p", "order": 40,
+      "lever": { "name": "description", "type": "string" },
+      "tokens": { "font-family": "{s2a.font-family.body}", "font-weight": "{s2a.font-weight.body}", "font-size": "{s2a.typography.font-size.body-md}", "line-height": "{s2a.typography.line-height.body-md}", "letter-spacing": "{s2a.typography.letter-spacing.body-md}", "color": "{s2a.color.content.default}" }
+    },
+    "divider": {
+      "part": "divider", "element": "hr", "order": 50,
+      "tokens": { "border-color": "{s2a.color.border.subtle}", "border-width": "raw:1px" },
+      "notes": "1px is a Primitive exception recorded in decisions; Divider is also an S2A component if the rule needs its own props."
+    },
+    "cta": {
+      "part": "cta", "element": "span", "order": 60,
+      "lever": { "name": "ctaLabel", "type": "string", "notes": "Visible label of the action; empty when the affordance is a chevron alone (then the headline carries the accessible name)." },
+      "tokens": { "font-family": "{s2a.font-family.label}", "font-weight": "{s2a.font-weight.label}", "font-size": "{s2a.typography.font-size.label}", "line-height": "{s2a.typography.line-height.label}", "color": "{s2a.color.content.default}" },
+      "parts": {
+        "chevron": { "element": "svg[aria-hidden]", "tokens": { "color": "{s2a.color.content.default}" }, "notes": "Decorative arrow; never the only indication of the link (WCAG 1.4.1)." }
+      }
+    },
+    "pagination": {
+      "part": "pagination", "element": "div", "order": 70,
+      "slot": { "name": "Pagination", "accepts": ["DotPagination"], "acceptsMode": "restrict" }
+    },
+    "text": {
+      "decisionOnly": true,
+      "question": "A text layer carries no recognisable role (not heading, body, eyebrow or label). Is it content (add a lever) or part of the illustration (fold into media)?"
+    }
+  },
+  "archetypes": {
+    "link-card": {
+      "description": "A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+      "when": "roles include heading and cta and the frame does not repeat a unit",
+      "root": {
+        "element": "a",
+        "tokens": { "background-color": "{s2a.color.background.subtle}", "border-radius": "{s2a.border-radius.md}", "padding": "{s2a.spacing.xl}", "gap": "{s2a.spacing.md}" },
+        "notes": "Block-level link; content stacks vertically and the CTA row pins to the bottom. Hover and focus change the surface, never only the colour of the arrow."
+      },
+      "props": [
+        { "name": "href", "lever": true, "type": "string", "figma": "NONE", "code": { "prop": "href" }, "notes": "Destination; authoring validates it." },
+        { "name": "target", "lever": false, "type": "string", "figma": "NONE", "code": { "prop": "target" }, "notes": "Integration detail; new-window links append an accessible hint." }
+      ],
+      "states": [
+        { "name": "State", "figma": { "kind": "VARIANT", "property": "State", "notes": "default | hover | focused (design only)" }, "code": { "mechanism": ":hover and :focus-visible on the root link" }, "notes": "Runtime states, never authored props." }
+      ],
+      "a11y": {
+        "role": "link",
+        "wcag": ["1.1.1", "1.4.1", "1.4.3", "1.4.11", "2.1.1", "2.4.4", "2.4.7", "2.5.8"],
+        "keyboard": [{ "key": "Tab", "action": "moves focus to the card as one stop" }, { "key": "Enter", "action": "follows the link" }],
+        "notes": [
+          "One link, one accessible name: the headline text. Media, icon and chevron are aria-hidden so the name is not padded with noise.",
+          "No interactive element may be nested inside the card (a link inside a link is invalid HTML and unreachable by keyboard).",
+          "Focus ring is drawn on the whole card surface (2.4.7) and the target is at least 24×24 (2.5.8).",
+          "Headline and description meet 4.5:1 on the card surface; the chevron and any border meet 3:1 (1.4.3, 1.4.11).",
+          "The arrow is decorative: link purpose comes from the headline text (2.4.4), not from the glyph alone (1.4.1)."
+        ]
+      }
+    },
+    "card": {
+      "description": "A non-interactive content card; actions live in a slot.",
+      "when": "roles include heading and the frame does not repeat a unit; no cta role",
+      "root": { "element": "article", "tokens": { "background-color": "{s2a.color.background.subtle}", "border-radius": "{s2a.border-radius.md}", "padding": "{s2a.spacing.xl}", "gap": "{s2a.spacing.md}" } },
+      "props": [],
+      "states": [],
+      "a11y": { "wcag": ["1.1.1", "1.4.3", "1.4.10"], "notes": ["Actions inside the card are native links or buttons; the card itself has no role."] }
+    },
+    "collection": {
+      "description": "A row, grid or scroller of one repeated unit.",
+      "when": "the frame repeats a unit",
+      "root": { "element": "ul", "tokens": { "gap": "{s2a.spacing.xs}" } },
+      "props": [
+        { "name": "layout", "lever": true, "type": "string", "enum": ["row", "grid", "scroll"], "default": "row", "figma": { "kind": "VARIANT", "property": "Layout" }, "code": { "prop": "layout", "attr": "data-layout" }, "notes": "row at wide viewports, scroll on phones; grid when the count exceeds one row." }
+      ],
+      "states": [
+        { "name": "Breakpoint", "figma": { "kind": "VARIANT", "property": "Breakpoint" }, "code": { "mechanism": "container queries switch row → scroll" }, "notes": "A layout response, not an authored prop." }
+      ],
+      "a11y": {
+        "wcag": ["1.3.1", "1.4.10", "2.1.1", "2.4.3"],
+        "notes": ["List semantics: ul/li so the count is announced.", "Horizontal scroll must be reachable by keyboard and must not trap focus; content reflows at 320px without two-dimensional scrolling."]
+      }
+    }
+  },
+  "decisions": {
+    "unboundPaint": "{count} painted layers carry no variable ({list}). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+    "genericLayers": "{count} layers carry Figma-generated names ({list}). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+    "codePending": "No code exists yet. Generate {importPath} from the spec (/spec-to-html), run npm run evidence:code -- --slug={slug}, then remove anchors.code.pending.",
+    "archetype": "Scaffolded as {archetype} ({why}). Confirm, or re-run npm run specs:scaffold -- --slug={slug} --archetype=<link-card|card|collection>.",
+    "levers": "Levers were derived from roles ({roles}), not from component properties. Confirm names and which are authored (lever true) versus integration (lever false).",
+    "match": "Structural match says {verdict}: closest existing contract is {name} (score {score}). Extend it instead of adding a component?"
+  }
+}

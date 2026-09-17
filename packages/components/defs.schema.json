@@ -1,0 +1,460 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "s2a-defs/1",
+  "title": "S2A component defs (curation)",
+  "description": "The judgment layer of a component contract: which extracted props are design levers, what each slot accepts, which design axes are props versus runtime states, per-part token bindings, and the questions extraction cannot answer. Generated files (spec.json) are built from defs + evidence; defs are written by people and reviewed in PRs.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "component",
+    "slug",
+    "status",
+    "anchors",
+    "props",
+    "anatomy",
+    "decisions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "const": "s2a-defs/1"
+    },
+    "component": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "status": {
+      "enum": [
+        "curated-draft",
+        "reviewed",
+        "approved"
+      ]
+    },
+    "curated": {
+      "type": "object",
+      "properties": {
+        "by": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        }
+      }
+    },
+    "description": {
+      "type": "string"
+    },
+    "anchors": {
+      "type": "object",
+      "required": [
+        "figma",
+        "code"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "figma": {
+          "type": "object",
+          "required": [
+            "fileKey",
+            "kind"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "fileKey": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "component-set",
+                "pattern-frame",
+                "none"
+              ]
+            },
+            "nodeId": {
+              "type": "string"
+            },
+            "nodeName": {
+              "type": "string"
+            },
+            "componentSetKey": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "deprecated": {
+              "type": "boolean"
+            },
+            "successorNodeId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "usages": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "code": {
+          "type": "object",
+          "required": [
+            "importPath",
+            "export",
+            "cssClass"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "importPath": {
+              "type": "string"
+            },
+            "export": {
+              "type": "string"
+            },
+            "controller": {
+              "type": "string"
+            },
+            "cssClass": {
+              "type": "string"
+            },
+            "pending": {
+              "type": "boolean",
+              "description": "true while the component has no code yet (scaffolded from design evidence): code-conformance checks are skipped and reported as warnings until the code exists and its evidence is extracted."
+            }
+          }
+        }
+      }
+    },
+    "props": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/prop"
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/state"
+      }
+    },
+    "anatomy": {
+      "type": "object",
+      "required": [
+        "root"
+      ],
+      "properties": {
+        "root": {
+          "$ref": "#/definitions/part"
+        }
+      }
+    },
+    "forbiddenCombinations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/decision"
+      }
+    },
+    "a11y": {
+      "type": "object",
+      "required": [
+        "wcag"
+      ],
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "requiredAriaAttrs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "wcag": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "keyboard": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "key",
+              "action"
+            ],
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "action": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "The accessibility contract (WCAG 2.2 AA criteria, keyboard map, notes). Judgment, so it lives here and is copied into the generated spec."
+    }
+  },
+  "definitions": {
+    "figmaBinding": {
+      "oneOf": [
+        {
+          "const": "NONE"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "property"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "VARIANT",
+                "BOOLEAN",
+                "TEXT",
+                "INSTANCE_SWAP",
+                "SLOT",
+                "INSTANCE",
+                "LAYER"
+              ]
+            },
+            "property": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "layer": {
+              "type": "string",
+              "description": "Layer path (anatomy names) the property drives when Figma has no direct link, e.g. \".content/.actions\" for a boolean toggle or \".media\" for an instance swap. Used by the plugin Build set to wire the property."
+            }
+          }
+        }
+      ]
+    },
+    "prop": {
+      "type": "object",
+      "required": [
+        "name",
+        "lever",
+        "figma",
+        "code"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "lever": {
+          "type": "boolean",
+          "description": "true = a design decision an author makes; false = an integration/runtime detail kept out of the contract's curated surface"
+        },
+        "type": {
+          "type": "string"
+        },
+        "enum": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "default": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        "figma": {
+          "$ref": "#/definitions/figmaBinding"
+        },
+        "code": {
+          "type": "object",
+          "required": [
+            "prop"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "prop": {
+              "type": "string"
+            },
+            "attr": {
+              "type": "string"
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "required": [
+        "name",
+        "figma",
+        "code"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "figma": {
+          "$ref": "#/definitions/figmaBinding"
+        },
+        "code": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "attr": {
+              "type": "string"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "mechanism": {
+              "type": "string"
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "part": {
+      "type": "object",
+      "required": [
+        "selector"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "selector": {
+          "type": "string"
+        },
+        "figma": {
+          "type": "string",
+          "description": "layer name in the anchored set, e.g. .content"
+        },
+        "element": {
+          "type": "string"
+        },
+        "tokens": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^(raw:.+|\\{s2a\\.[a-z0-9.-]+\\}( \\{s2a\\.[a-z0-9.-]+\\})*)$"
+          },
+          "description": "CSS property → {s2a.path.to.token} (Figma variable name with slashes as dots; shorthands may list several, space-separated) or raw:<value> with the reason in decisions"
+        },
+        "slot": {
+          "type": "object",
+          "required": [
+            "name",
+            "accepts",
+            "acceptsMode"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "accepts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "acceptsMode": {
+              "enum": [
+                "restrict",
+                "prefer",
+                "open"
+              ]
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "parts": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/part"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "id",
+        "question",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "open",
+            "decided"
+          ]
+        },
+        "owner": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -6,7 +6,9 @@
   "scripts": {
     "build": "node esbuild.config.mjs",
     "watch": "node esbuild.config.mjs --watch",
-    "prototype-server": "node server/prototype-server.js"
+    "prototype-server": "node server/prototype-server.js",
+    "contract-sync": "node server/contract-sync-server.cjs",
+    "test": "node --import tsx --test test/*.test.ts"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.100.0",

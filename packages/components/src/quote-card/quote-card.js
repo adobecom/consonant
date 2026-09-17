@@ -12,6 +12,9 @@ export const QuoteCard = ({
   showCta = true,
   imageSrc = "",
   imageAlt = "",
+  imageSrcset = "",
+  imageSizes = "100vw",
+  imageLoading = "eager",
 } = {}) => {
   // Hanging punctuation: pull the leading " out of flow so "If" aligns with all
   // subsequent lines. Matches the Milo carousel-c2 opening-quote pattern.
@@ -25,8 +28,10 @@ export const QuoteCard = ({
         ? html`<img
             class="qc-media__img"
             src=${imageSrc}
+            srcset=${imageSrcset || nothing}
+            sizes=${imageSrcset ? imageSizes : nothing}
             alt=${imageAlt}
-            loading="eager"
+            loading=${imageLoading}
             decoding="async"
           />`
         : nothing}

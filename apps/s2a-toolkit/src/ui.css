@@ -740,3 +740,20 @@ body {
 }
 .req-thumb-rm:hover { background: var(--red); }
 
+/* ── Contract evidence summary ─────────────────────────────────────────────── */
+.contract-summary {
+  margin: 8px 0 0;
+  padding: 8px;
+  font: 10px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--text-2);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  white-space: pre-wrap;
+  max-height: 160px;
+  overflow: auto;
+}
+.contract-settings { margin-top: 8px; font-size: 11px; color: var(--text-2); }
+.contract-settings summary { cursor: pointer; padding: 2px 0; }
+.contract-settings .form-field { margin-top: 8px; }
+.contract-match { border-color: var(--accent); }

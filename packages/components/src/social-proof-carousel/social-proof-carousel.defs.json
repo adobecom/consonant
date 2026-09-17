@@ -1,0 +1,242 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "SocialProofCarousel",
+  "slug": "social-proof-carousel",
+  "status": "curated-draft",
+  "curated": {
+    "by": "Claude, from social-proof-carousel.code.evidence.json and the Figma metadata of 12102:175374 / 8278:190566",
+    "date": "2026-09-17",
+    "reviewer": "Matt"
+  },
+  "description": "Full-bleed slider of QuoteCards: the active slide centered with equal peeks of its neighbours, knockout IconButton arrows, native toggle-button pagination. No autoplay.",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "pattern-frame",
+      "nodeId": "12102:175374",
+      "nodeName": "Section - Social Proof",
+      "componentSetKey": null,
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [
+        "12102:175100 (Home 1441+ v2 Dark)",
+        "8278:190566 (Home 375: Slide / Active Slide / Slide)"
+      ],
+      "notes": "There is no carousel component set: the section frame composes .slide-left/.slide-active/.slide-right (.QuoteCard instances), a Global / Carousel nav instance on each side, an IconButton — v2, and three pagination ellipses. Axes below are therefore layer-level, not variant properties."
+    },
+    "code": {
+      "importPath": "packages/components/src/social-proof-carousel/social-proof-carousel.js",
+      "export": "SocialProofCarousel",
+      "controller": "SocialProofCarouselController",
+      "cssClass": "c-social-proof-carousel"
+    }
+  },
+  "props": [
+    {
+      "name": "slides",
+      "lever": true,
+      "type": "QuoteCard[]",
+      "default": null,
+      "figma": {
+        "kind": "INSTANCE",
+        "property": ".slide-left / .slide-active / .slide-right",
+        "notes": "three .QuoteCard instances in the frame; the design shows exactly three"
+      },
+      "code": {
+        "prop": "slides"
+      },
+      "notes": "Each entry is a QuoteCard props object; the Homepage carries one verified testimonial and hides inactive controls (data-single)."
+    },
+    {
+      "name": "activeIndex",
+      "lever": false,
+      "type": "number",
+      "default": 0,
+      "figma": "NONE",
+      "code": {
+        "prop": "activeIndex",
+        "attr": "data-active"
+      },
+      "notes": "Initial position; runtime state after mount."
+    }
+  ],
+  "states": [
+    {
+      "name": "slide",
+      "figma": {
+        "kind": "LAYER",
+        "property": ".slide-active vs .slide-left/.slide-right"
+      },
+      "code": {
+        "attr": "data-state",
+        "values": [
+          "active",
+          "inactive"
+        ],
+        "mechanism": "controller sets data-state, aria-hidden and inert per slide"
+      }
+    },
+    {
+      "name": "single",
+      "figma": "NONE",
+      "code": {
+        "attr": "data-single",
+        "values": [
+          "true",
+          "false"
+        ],
+        "mechanism": "hides arrows and pagination when fewer than two slides"
+      },
+      "notes": "Homepage state; the design always shows three slides."
+    },
+    {
+      "name": "breakpoint",
+      "figma": {
+        "kind": "LAYER",
+        "property": "Home 375 frame: 327px slide at x=24",
+        "notes": "peek geometry per breakpoint"
+      },
+      "code": {
+        "mechanism": "controller: peek 11.46% ≥1600px, 8.6% below, 16px under 600px; 8px gaps; active slide at peek + gap"
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-social-proof-carousel",
+      "figma": "Section - Social Proof",
+      "parts": {
+        "track": {
+          "selector": ".spc-track",
+          "figma": "Frame 2147230860",
+          "tokens": {
+            "gap": "{s2a.spacing.xs}"
+          },
+          "parts": {
+            "slide": {
+              "selector": ".spc-slide",
+              "figma": ".slide-active",
+              "slot": {
+                "name": "slide",
+                "accepts": [
+                  "QuoteCard"
+                ],
+                "acceptsMode": "restrict",
+                "notes": "One QuoteCard per slide; inactive slides are inert."
+              }
+            }
+          }
+        },
+        "nav": {
+          "selector": ".spc-nav",
+          "figma": "Nav items",
+          "tokens": {
+            "left": "raw:40px",
+            "right": "raw:40px"
+          },
+          "slot": {
+            "name": "control",
+            "accepts": [
+              "IconButton"
+            ],
+            "acceptsMode": "restrict",
+            "notes": "IconButton style=knockout size=lg, arrow-left / arrow-right, aria-label Previous slide / Next slide. Figma shows both a Global / Carousel instance and IconButton — v2 (see decisions)."
+          },
+          "notes": "40px from each edge (Figma Nav items: 40 inset); mobile drops to the bottom edge."
+        },
+        "pagination": {
+          "selector": ".spc-pagination",
+          "figma": "Carousel Pagination",
+          "element": "div[role=group]",
+          "tokens": {
+            "bottom": "raw:32px",
+            "gap": "raw:8px"
+          },
+          "parts": {
+            "dot": {
+              "selector": ".spc-dot",
+              "element": "button[aria-pressed]",
+              "tokens": {
+                "width": "{s2a.spacing.xs}",
+                "height": "{s2a.spacing.xs}",
+                "border-radius": "{s2a.border-radius.round}",
+                "background": "{s2a.color.transparent-white.64}",
+                "outline": "{s2a.color.focus-ring.default}"
+              },
+              "notes": "Active dot: content/knockout, scale 1.25. Bindings taken from the .QuoteCard DotPagination instance (dot-1 active content/knockout; dot-2..5 transparent/white/64; radius/round; height spacing/xs)."
+            }
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "2.1.1",
+      "2.2.2",
+      "2.4.7"
+    ],
+    "keyboard": [
+      {
+        "key": "ArrowLeft",
+        "action": "Previous slide except inside editable fields"
+      },
+      {
+        "key": "ArrowRight",
+        "action": "Next slide except inside editable fields"
+      },
+      {
+        "key": "Tab",
+        "action": "Move through enabled native controls and the active slide's CTA"
+      }
+    ],
+    "notes": [
+      "No autoplay. Transform transition is 500 ms and disabled by prefers-reduced-motion.",
+      "Inactive slides are inert and aria-hidden; pagination uses native toggle buttons, not incomplete tabs.",
+      "Call destroy() before replacing the DOM; it aborts event listeners and disconnects the ResizeObserver."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "spc-nav-component",
+      "question": "The section frame carries both a 'Global / Carousel' nav instance and an 'IconButton — v2'. Which is the arrow control of record?",
+      "decision": "Code uses IconButton — v2 (knockout, lg), matching the icon-button bindings on the section (icon-button/background/knockout/default, content/knockout). Confirm and remove the Global / Carousel instances from the frame.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "get_metadata 12102:175374; get_variable_defs binds s2a/color/icon-button/* knockout."
+    },
+    {
+      "id": "spc-dot-tokens",
+      "question": "Pagination dots used raw white at 40% and pure white with nothing bound in the section frame.",
+      "status": "decided",
+      "owner": "Claude",
+      "evidence": "quote-card.figma.evidence.json .pagination/.dot-* bindings.",
+      "decision": "Bound to the tokens the .QuoteCard DotPagination instance binds: inactive transparent/white/64, active content/knockout, radius/round, size spacing/xs. Applied in social-proof-carousel.css 2026-09-17."
+    },
+    {
+      "id": "spc-nav-inset",
+      "question": "Arrow inset is 40px on desktop; spacing/2xl is 40px. Bind it?",
+      "decision": "Bind to {s2a.spacing.2xl} in the spec transform; the value matches and the Figma inset is 40.",
+      "status": "decided",
+      "owner": "Claude",
+      "evidence": "Figma Nav items x=40 / 512+40; social-proof-carousel.css lines 38–39."
+    },
+    {
+      "id": "spc-peek-geometry",
+      "question": "Peek fractions and gaps per breakpoint.",
+      "decision": "1920: 220px (11.46%), 1440: 124px (8.6%), 375: 16px; 8px gaps; active slide at peek + gap so both neighbours peek equally.",
+      "status": "decided",
+      "owner": "Claude",
+      "evidence": "Figma 12102:175386 Active Slide x=220; 8278:190566 Active Slide x=24 w=327; e2e + visual eval 2026-09-15."
+    },
+    {
+      "id": "spc-autoplay",
+      "question": "Does the carousel autoplay?",
+      "decision": "No. Arrow keys, arrows and dots only; transition 500ms on the shared curve, off under reduced motion.",
+      "status": "decided",
+      "owner": "Claude",
+      "evidence": "spec a11y notes; motion eval contracts."
+    }
+  ]
+}

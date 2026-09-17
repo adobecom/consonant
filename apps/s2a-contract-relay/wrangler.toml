@@ -1,0 +1,9 @@
+name = "s2a-contract-relay"
+main = "src/worker.mjs"
+compatibility_date = "2025-07-01"
+
+[vars]
+REPO = "adobecom/consonant"
+BASE_BRANCH = "main"
+WORKFLOW = "contract-sync.yml"
+# Secrets (wrangler secret put): GITHUB_TOKEN, optionally RELAY_KEY

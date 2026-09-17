@@ -1,0 +1,552 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-09-17T20:25:31.473Z",
+  "extractor": {
+    "plugin": "s2a-toolkit",
+    "version": "0.2.1"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": {
+      "id": "13:1685",
+      "name": "   ↳ Playground"
+    }
+  },
+  "set": {
+    "id": "13999:205827",
+    "key": "",
+    "name": "ActionCard",
+    "type": "FRAME",
+    "description": "",
+    "meta": {
+      "version": "",
+      "status": "",
+      "updated": "",
+      "changelog": ""
+    },
+    "documentationLinks": [],
+    "layerName": "ActionCard"
+  },
+  "axes": [],
+  "variants": [
+    {
+      "id": "13999:205827",
+      "key": "",
+      "name": "ActionCard",
+      "props": {},
+      "width": 313,
+      "height": 326
+    }
+  ],
+  "anatomy": {
+    "variant": "ActionCard",
+    "tree": {
+      "name": "ActionCard",
+      "type": "FRAME",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "FIXED"
+      },
+      "children": [
+        {
+          "name": "Copy >",
+          "type": "FRAME",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Headline",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": "Chevron",
+              "type": "FRAME",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "children": [
+                {
+                  "name": "Vector",
+                  "type": "VECTOR",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 2087327847",
+          "type": "GROUP",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Abc",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Line 87474",
+          "type": "LINE",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          }
+        },
+        {
+          "name": "Group 2085666331",
+          "type": "GROUP",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Rectangle 2147231707",
+              "type": "RECTANGLE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": "Ellipse 36325",
+              "type": "ELLIPSE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": "Ellipse 36326",
+              "type": "ELLIPSE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": "Ellipse 36327",
+              "type": "ELLIPSE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": "Ellipse 36329",
+              "type": "ELLIPSE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": "Ellipse 36328",
+              "type": "ELLIPSE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": "Rotate handle",
+              "type": "FRAME",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "children": [
+                {
+                  "name": "Node connector",
+                  "type": "VECTOR",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                },
+                {
+                  "name": "Edit nodes",
+                  "type": "FRAME",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                },
+                {
+                  "name": "Rotate node",
+                  "type": "FRAME",
+                  "layoutMode": "HORIZONTAL",
+                  "sizing": {
+                    "horizontal": "HUG",
+                    "vertical": "HUG"
+                  },
+                  "children": [
+                    {
+                      "name": "S_RotateCCWBold_18_N",
+                      "type": "INSTANCE",
+                      "layoutMode": "HORIZONTAL",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      },
+                      "children": [
+                        {
+                          "name": "Frame",
+                          "type": "FRAME",
+                          "sizing": {
+                            "horizontal": "FILL",
+                            "vertical": "FILL"
+                          },
+                          "children": [
+                            {
+                              "name": "iconFill",
+                              "type": "VECTOR",
+                              "sizing": {
+                                "horizontal": "FIXED",
+                                "vertical": "FIXED"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "ActionCard",
+      "node": "/Copy >/Headline",
+      "nodeId": "13999:205829",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:531f62dda6ffaa7e790201397d4b5cf9cc51b20f/1513:39"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Copy >/Headline",
+      "nodeId": "13999:205829",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:13a63861670c9e9d8529afb5e089639de5e4bf45/18955:181"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Copy >/Headline",
+      "nodeId": "13999:205829",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:1472a1f2140b1cb50d997353ef2be2d5dcf54df8/18955:498"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Copy >/Chevron/Vector",
+      "nodeId": "13999:205831",
+      "nodeType": "VECTOR",
+      "property": "strokes",
+      "variable": "VariableID:531f62dda6ffaa7e790201397d4b5cf9cc51b20f/1513:39"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Rotate handle/Edit nodes",
+      "nodeId": "13999:205844",
+      "nodeType": "FRAME",
+      "property": "fills",
+      "variable": "VariableID:7086fedca54a9efc298143939fc26923f60c171d/327:248"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Rotate handle/Rotate node/S_RotateCCWBold_18_N/Frame/iconFill",
+      "nodeId": "I13999:205846;202:3326",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:7086fedca54a9efc298143939fc26923f60c171d/327:248"
+    }
+  ],
+  "variables": {
+    "VariableID:13a63861670c9e9d8529afb5e089639de5e4bf45/18955:181": {
+      "name": "font/family/adobe-clean-display",
+      "key": "13a63861670c9e9d8529afb5e089639de5e4bf45",
+      "collection": "Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
+      "resolvedType": "STRING",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Mode 1": "Adobe Clean Display"
+      },
+      "resolved": {
+        "Mode 1": "Adobe Clean Display"
+      }
+    },
+    "VariableID:1472a1f2140b1cb50d997353ef2be2d5dcf54df8/18955:498": {
+      "name": "font/weight/adobe-clean-display/black",
+      "key": "1472a1f2140b1cb50d997353ef2be2d5dcf54df8",
+      "collection": "Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
+      "resolvedType": "STRING",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Mode 1": "Black"
+      },
+      "resolved": {
+        "Mode 1": "Black"
+      }
+    },
+    "VariableID:531f62dda6ffaa7e790201397d4b5cf9cc51b20f/1513:39": {
+      "name": "Black",
+      "key": "531f62dda6ffaa7e790201397d4b5cf9cc51b20f",
+      "collection": "Color",
+      "collectionId": "VariableCollectionId:42e9986e9f29f025a8192fbf4725edacad24f163/1513:29",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:7086fedca54a9efc298143939fc26923f60c171d/327:248": {
+      "name": "Palette/white",
+      "key": "7086fedca54a9efc298143939fc26923f60c171d",
+      "collection": "S.Color-theme",
+      "collectionId": "VariableCollectionId:bb0e8b7ac1e1f9c1e0f4f3a41f49af4e202401a6/109:3225",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "darkest": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "wireframe": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      },
+      "resolved": {
+        "light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "darkest": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "wireframe": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    }
+  },
+  "textStyles": {},
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Rotate handle/Rotate node/S_RotateCCWBold_18_N",
+      "nodeId": "13999:205846",
+      "mainComponent": {
+        "id": "11065:32506",
+        "key": "b22b0b648f4838319a52c42caefe2d8b6cb8262d",
+        "name": "S_RotateCCWBold_18_N"
+      },
+      "set": null
+    }
+  ],
+  "counts": {
+    "variants": 1,
+    "nodes": 22,
+    "bindings": 6,
+    "unboundPaintNodes": 11
+  },
+  "unboundPaint": [
+    {
+      "variant": "ActionCard",
+      "node": "",
+      "nodeId": "13999:205827",
+      "nodeType": "FRAME",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2087327847/Abc",
+      "nodeId": "13999:205833",
+      "nodeType": "TEXT",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Line 87474",
+      "nodeId": "13999:205834",
+      "nodeType": "LINE",
+      "properties": [
+        "strokes"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Rectangle 2147231707",
+      "nodeId": "13999:205836",
+      "nodeType": "RECTANGLE",
+      "properties": [
+        "strokes"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Ellipse 36325",
+      "nodeId": "13999:205837",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills",
+        "strokes"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Ellipse 36326",
+      "nodeId": "13999:205838",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills",
+        "strokes"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Ellipse 36327",
+      "nodeId": "13999:205839",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills",
+        "strokes"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Ellipse 36329",
+      "nodeId": "13999:205840",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills",
+        "strokes"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Ellipse 36328",
+      "nodeId": "13999:205841",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills",
+        "strokes"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Rotate handle/Node connector",
+      "nodeId": "13999:205843",
+      "nodeType": "VECTOR",
+      "properties": [
+        "strokes"
+      ]
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/Group 2085666331/Rotate handle/Rotate node",
+      "nodeId": "13999:205845",
+      "nodeType": "FRAME",
+      "properties": [
+        "fills"
+      ]
+    }
+  ],
+  "pattern": {
+    "kind": "frame",
+    "repeats": [],
+    "genericLayers": 11,
+    "namedLayers": 11,
+    "roles": [
+      "cta",
+      "divider",
+      "heading",
+      "icon",
+      "media",
+      "text"
+    ],
+    "instancedSets": [
+      "S_RotateCCWBold_18_N"
+    ]
+  },
+  "provenance": {
+    "hash": "sha256:f64c85fbd287159ac8ca41d0853efb266ce4cd81f308b247cfbf5602c29a6bb6"
+  }
+}

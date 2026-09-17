@@ -18,7 +18,7 @@ import playSvg from "../icons/play.svg?raw";
  * @param {number} opts.activeIndex — initially active slide index
  */
 export const RouterMarquee = ({ slides = [], activeIndex = 0 } = {}) => html`
-  <div class="c-router-marquee" data-state="playing">
+  <div class="c-router-marquee" data-state="paused" data-single=${String(slides.length < 2)}>
     <div class="rm-slides">
       ${slides.map(
         (slide, i) => html`
@@ -29,9 +29,17 @@ export const RouterMarquee = ({ slides = [], activeIndex = 0 } = {}) => html`
             ?inert=${i !== activeIndex}
           >
             <div class="rm-background">
+              ${slide.imageSrc
+                ? i === activeIndex
+                  ? html`<img class="rm-image" src=${slide.imageSrc} srcset=${slide.imageSrcset || nothing} sizes="100vw" alt=${slide.imageAlt || ""} width="1920" height="960" loading="eager" fetchpriority="high" decoding="async" />`
+                  : /* Inactive stills carry no src until the controller activates or
+                       prefetches them, so they never contend with the hero image. */
+                    html`<img class="rm-image" data-lazy-src=${slide.imageSrc} data-lazy-srcset=${slide.imageSrcset || nothing} sizes="100vw" alt=${slide.imageAlt || ""} width="1920" height="960" decoding="async" />`
+                : nothing}
               ${slide.videoSrc
                 ? html`<video
                     class="rm-video"
+                    aria-hidden="true"
                     muted
                     loop
                     playsinline
@@ -69,7 +77,7 @@ export const RouterMarquee = ({ slides = [], activeIndex = 0 } = {}) => html`
       <button
         class="rm-play-pause"
         type="button"
-        aria-label="Pause autoplay"
+        aria-label="Play autoplay"
       >
         <span class="rm-icon-pause" aria-hidden="true">${unsafeHTML(pauseSvg)}</span>
         <span class="rm-icon-play" aria-hidden="true">${unsafeHTML(playSvg)}</span>
@@ -104,40 +112,91 @@ const STAGGER_DURATION = 700;
 const STAGGER_EASE = "cubic-bezier(0.42, 0, 0, 1)";
 
 export class RouterMarqueeController {
-  constructor(el) {
+  constructor(el, { autoplay = true } = {}) {
     this.el = el;
     this.slides = [...el.querySelectorAll(".rm-slide")];
     this.navItems = [...el.querySelectorAll(".c-router-nav-item")];
     this.fills = [...el.querySelectorAll(".c-router-nav-item__progress-fill")];
     this.playPauseBtn = el.querySelector(".rm-play-pause");
-    this.activeIndex = 0;
-    this.paused = false;
+    this.activeIndex = Math.max(0, this.slides.findIndex((slide) => slide.dataset.state === "active"));
+    this.abort = new AbortController();
+    this.reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    this.paused = !autoplay || this.reducedMotion.matches || this.slides.length < 2 || document.documentElement.dataset.editing === "true";
+    // Pauses caused by the environment (hidden tab, scrolled away, focus inside)
+    // resume on their own; pauses the user asked for stay put (Milo's
+    // USER_PAUSED sentinel).
+    // Created while authoring: an environment pause, so Preview mode can resume it.
+    this.autoPaused = autoplay && document.documentElement.dataset.editing === "true";
+    this.userPaused = !autoplay;
+    this.destroyed = false;
     this.timer = null;
 
     this._bindEvents();
-    this._goTo(0, true);
+    this._updatePlayPauseUI();
+    this._goTo(this.activeIndex, true);
   }
 
   _bindEvents() {
+    const options = { signal: this.abort.signal };
     this.navItems.forEach((item, i) => {
-      item.addEventListener("mouseenter", () => {
-        this._goTo(i);
-      });
-
       item.addEventListener("click", () => {
         this.paused = true;
+        this.userPaused = true;
         this._updatePlayPauseUI();
         clearTimeout(this.timer);
         this._goTo(i);
-      });
+      }, options);
+      item.addEventListener("keydown", (event) => {
+        const index = event.key === "Home" ? 0 : event.key === "End" ? this.slides.length - 1 : event.key === "ArrowRight" ? (i + 1) % this.slides.length : event.key === "ArrowLeft" ? (i - 1 + this.slides.length) % this.slides.length : -1;
+        if (index < 0) return;
+        event.preventDefault();
+        this.paused = true;
+        this.userPaused = true;
+        this._updatePlayPauseUI();
+        this._goTo(index, true);
+        this.navItems[index].focus({ preventScroll: true });
+      }, options);
     });
 
     this.playPauseBtn?.addEventListener("click", () =>
-      this._togglePlayPause()
+      this._togglePlayPause(), options
     );
+    const stop = () => this.pause();
+    this.reducedMotion.addEventListener("change", stop, options);
+    this.visible = !document.hidden;
+    this.inView = true;
+    this.focusWithin = false;
+    document.addEventListener("visibilitychange", () => {
+      this.visible = !document.hidden;
+      if (document.hidden) this._autoPause();
+      else this._autoResume();
+    }, options);
+    this.el.addEventListener("focusin", (event) => {
+      if (event.target === this.playPauseBtn) return;
+      this.focusWithin = true;
+      this._autoPause();
+    }, options);
+    this.el.addEventListener("focusout", (event) => {
+      if (this.el.contains(event.relatedTarget)) return;
+      this.focusWithin = false;
+      this._autoResume();
+    }, options);
+    this.observer = new IntersectionObserver(([entry]) => {
+      this.inView = entry.isIntersecting;
+      if (!entry.isIntersecting) this._autoPause();
+      else this._autoResume();
+    });
+    this.observer.observe(this.el);
   }
 
   _goTo(index, instant = false) {
+    if (this.destroyed || !this.slides.length) return;
+    index = Math.max(0, Math.min(index, this.slides.length - 1));
+    if (document.documentElement.dataset.editing === "true") {
+      this.paused = true;
+      this._updatePlayPauseUI();
+    }
+    instant ||= this.reducedMotion.matches;
     // Slides
     this.slides.forEach((slide, i) => {
       const isActive = i === index;
@@ -145,12 +204,15 @@ export class RouterMarqueeController {
       slide.setAttribute("aria-hidden", isActive ? "false" : "true");
       if (isActive) {
         slide.removeAttribute("inert");
+        this._loadImage(slide);
         this._loadAndPlayVideo(slide);
       } else {
         slide.setAttribute("inert", "");
         this._pauseVideo(slide);
       }
     });
+
+    if (this.slides.length > 1) this._prefetchNextImage(index);
 
     // Nav items
     this.navItems.forEach((item, i) => {
@@ -159,13 +221,20 @@ export class RouterMarqueeController {
     });
 
     // Scroll active item into view in the scrollable rail (tablet/mobile)
-    this.navItems[index]?.scrollIntoView({ inline: "nearest", behavior: "smooth" });
+    const rail = this.el.querySelector(".rm-nav-items");
+    const item = this.navItems[index];
+    if (rail && item) {
+      const left = item.offsetLeft - rail.offsetLeft;
+      if (left < rail.scrollLeft) rail.scrollLeft = left;
+      else if (left + item.offsetWidth > rail.scrollLeft + rail.clientWidth) rail.scrollLeft = left + item.offsetWidth - rail.clientWidth;
+    }
 
     // Progress fill
     this._resetFill(index);
     if (!this.paused) {
       // Defer one frame so the reset transition:none is committed first
-      requestAnimationFrame(() => this._startFill(index));
+      cancelAnimationFrame(this.frame);
+      this.frame = requestAnimationFrame(() => { if (!this.destroyed && !this.paused) this._startFill(index); });
     }
 
     // Content stagger
@@ -226,9 +295,31 @@ export class RouterMarqueeController {
     });
   }
 
+  _loadImage(slide) {
+    const image = slide?.querySelector(".rm-image[data-lazy-src]");
+    if (!image) return;
+    if (image.dataset.lazySrcset) image.srcset = image.dataset.lazySrcset;
+    image.src = image.dataset.lazySrc;
+    delete image.dataset.lazySrc;
+    delete image.dataset.lazySrcset;
+  }
+
+  // Fetch the next slide's still only after the active still has landed, so the
+  // advance never shows an empty background and the hero paint is never delayed.
+  _prefetchNextImage(index) {
+    const next = this.slides[(index + 1) % this.slides.length];
+    const active = this.slides[index]?.querySelector(".rm-image");
+    const load = () => { if (!this.destroyed) this._loadImage(next); };
+    if (!active || active.complete) load();
+    else active.addEventListener("load", load, { once: true, signal: this.abort.signal });
+  }
+
   _loadAndPlayVideo(slide) {
     const video = slide.querySelector(".rm-video");
     if (!video) return;
+    // Do not fetch video bytes while paused (reduced motion, authoring mode,
+    // explicit pause): the still image remains the background until play.
+    if (this.paused && !video.dataset.loaded) return;
     if (!video.dataset.loaded) {
       const src = video.dataset.lazySrc;
       if (src) {
@@ -241,9 +332,11 @@ export class RouterMarqueeController {
       }
     }
     if (!this.paused) video.play().catch(() => {});
+    else video.pause();
   }
 
   _pauseVideo(slide) {
+    if (!slide) return;
     const video = slide.querySelector(".rm-video");
     if (!video) return;
     video.pause();
@@ -251,7 +344,10 @@ export class RouterMarqueeController {
   }
 
   _togglePlayPause() {
+    if (this.slides.length < 2 || document.documentElement.dataset.editing === "true") return;
     this.paused = !this.paused;
+    this.userPaused = this.paused;
+    this.autoPaused = false;
     this._updatePlayPauseUI();
 
     if (this.paused) {
@@ -270,6 +366,40 @@ export class RouterMarqueeController {
     }
   }
 
+  /** Host hook: authoring mode (and reduced-motion changes) stop playback. */
+  pause() {
+    if (this.destroyed) return;
+    if (!this.paused) this.autoPaused = true;
+    this.paused = true;
+    this._updatePlayPauseUI();
+    this._goTo(this.activeIndex, true);
+  }
+
+  /** Host hook: leaving authoring mode resumes an environment pause. */
+  resume() {
+    if (this.destroyed) return;
+    if (!this.autoPaused && this.paused && !this.userPaused) this.autoPaused = true;
+    this._autoResume();
+  }
+
+  _autoPause() {
+    if (this.destroyed || this.paused) return;
+    this.paused = true;
+    this.autoPaused = true;
+    this._updatePlayPauseUI();
+    this._goTo(this.activeIndex, true);
+  }
+
+  _autoResume() {
+    if (this.destroyed || !this.autoPaused || this.userPaused) return;
+    if (!this.visible || !this.inView || this.focusWithin) return;
+    if (this.reducedMotion.matches || document.documentElement.dataset.editing === "true" || this.slides.length < 2) return;
+    this.autoPaused = false;
+    this.paused = false;
+    this._updatePlayPauseUI();
+    this._goTo(this.activeIndex, true);
+  }
+
   _updatePlayPauseUI() {
     this.el.dataset.state = this.paused ? "paused" : "playing";
     const label = this.paused ? "Play autoplay" : "Pause autoplay";
@@ -277,6 +407,11 @@ export class RouterMarqueeController {
   }
 
   destroy() {
+    this.destroyed = true;
     clearTimeout(this.timer);
+    cancelAnimationFrame(this.frame);
+    this.abort.abort();
+    this.observer.disconnect();
+    this.slides.forEach((slide) => this._pauseVideo(slide));
   }
 }

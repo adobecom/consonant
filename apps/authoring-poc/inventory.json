@@ -1,0 +1,180 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-09-14",
+  "evidence": "Source files and live Figma get_metadata on September 14, 2026. The alternate official connection verified all four roots after Desktop Bridge failed. Metadata does not expose all instance descendants, paint/image content, tokens or motion; leaf/component parity remains unverified. Node counts include hidden layers.",
+  "figmaFileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+  "pages": [
+    {
+      "name": "Homepage",
+      "plannedNodeId": "12102:175099",
+      "structure": {
+        "status": "verified-metadata",
+        "pageFrameId": "12102:175100",
+        "pageWidth": 1920,
+        "metadataNodes": 408,
+        "opaqueInstances": 70,
+        "observedSections": [
+          { "id": "12102:175104", "name": "Hero", "hidden": false },
+          { "id": "12102:175264", "name": "Hub Router", "hidden": false },
+          { "id": "12102:175303", "name": "What's New (older branch)", "hidden": true },
+          { "id": "12102:175360", "name": "What's New (MediaCard branch)", "hidden": false },
+          { "id": "12102:175374", "name": "Social Proof", "hidden": false },
+          { "id": "12102:175420", "name": "News", "hidden": false },
+          { "id": "12102:175517", "name": "Agentic Search", "hidden": true },
+          { "id": "12102:175539", "name": "Footer", "hidden": false }
+        ]
+      },
+      "status": "unverified",
+      "leaves": null
+    },
+    {
+      "name": "BizPro",
+      "plannedNodeId": "11333:235687",
+      "structure": {
+        "status": "verified-metadata",
+        "pageFrameId": "11333:235688",
+        "pageWidth": 2560,
+        "metadataNodes": 1708,
+        "opaqueInstances": 206,
+        "observedSections": [
+          { "id": "11333:235874", "name": "Offer", "hidden": false, "childNodes": 0, "paintContent": "unverified" },
+          { "id": "11333:235968", "name": "Try it", "hidden": false, "childNodes": 0 },
+          { "id": "11333:237046", "name": "What's New", "hidden": false },
+          { "id": "11333:237438", "name": "Agentic Search", "hidden": false },
+          { "id": "11333:237460", "name": "Footer", "hidden": false }
+        ]
+      },
+      "status": "unverified",
+      "leaves": null
+    },
+    {
+      "name": "CPro hub",
+      "plannedNodeId": "12164:44174",
+      "structure": {
+        "status": "verified-metadata",
+        "pageFrameId": "12164:44175",
+        "pageWidth": 1920,
+        "metadataNodes": 377,
+        "opaqueInstances": 95,
+        "observedSections": [
+          { "id": "12164:44178", "name": "Hero", "hidden": false },
+          { "id": "12164:44444", "name": "Offer", "hidden": false },
+          { "id": "12164:44512", "name": "Globe", "hidden": false },
+          { "id": "12164:44516", "name": "Typographic Social Proof", "hidden": false },
+          { "id": "12164:44539", "name": "Agentic Search", "hidden": false },
+          { "id": "12164:44562", "name": "Footer", "hidden": false }
+        ]
+      },
+      "status": "unverified",
+      "leaves": null
+    },
+    {
+      "name": "CPro offer",
+      "plannedNodeId": "13027:189173",
+      "structure": {
+        "status": "verified-metadata",
+        "pageFrameId": "13027:189173",
+        "pageWidth": 2560,
+        "metadataNodes": 160,
+        "opaqueInstances": 52,
+        "observedSections": [
+          { "id": "13027:189174", "name": "PromoCTA", "hidden": true },
+          { "id": "13027:189183", "name": "Hero", "hidden": false },
+          { "id": "13387:188845", "name": "Rich-content-jump-link-Desktop_Enhancement", "hidden": false },
+          { "id": "13027:189342", "name": "Footer", "hidden": false }
+        ]
+      },
+      "status": "unverified",
+      "leaves": null
+    }
+  ],
+  "sectionFamilies": [
+    {
+      "name": "Hero",
+      "status": "needs-adapter",
+      "components": ["rich-content", "media", "button", "product-lockup"]
+    },
+    {
+      "name": "Hub Router",
+      "status": "needs-spec",
+      "components": ["hub-router", "elastic-card", "section-header", "media"]
+    },
+    {
+      "name": "Social Proof",
+      "status": "verified-reuse",
+      "verification": "Source API, browser render and authoring adapter only; not Figma parity",
+      "components": ["social-proof-carousel", "quote-card", "icon-button"]
+    },
+    {
+      "name": "What's New",
+      "status": "unverified",
+      "components": ["bento", "media-card", "text-card"]
+    },
+    {
+      "name": "News",
+      "status": "needs-adapter",
+      "components": ["text-card", "media-card", "link"]
+    },
+    {
+      "name": "Product Router",
+      "status": "needs-spec",
+      "components": [
+        "product-card",
+        "app-icon",
+        "product-lockup",
+        "rich-content",
+        "media"
+      ]
+    },
+    {
+      "name": "Hub Merch",
+      "status": "new-section",
+      "components": ["merch-card", "rich-content"]
+    },
+    {
+      "name": "Typographic Social Proof",
+      "status": "new-section",
+      "components": []
+    },
+    {
+      "name": "Flow - Grid to UI",
+      "status": "needs-adapter",
+      "components": ["media"]
+    },
+    {
+      "name": "Globe/photo/use case",
+      "status": "unverified",
+      "components": ["media"]
+    },
+    {
+      "name": "Offer",
+      "status": "needs-adapter",
+      "components": ["merch-card"]
+    },
+    { "name": "Agentic Search", "status": "new-section", "components": [] },
+    {
+      "name": "Footer/region nav",
+      "status": "new-section",
+      "components": ["logo", "link", "product-lockup"]
+    },
+    {
+      "name": "PromoCTA/JumpLink",
+      "status": "needs-adapter",
+      "components": ["promo-cta", "jump-link"]
+    }
+  ],
+  "exceptions": [
+    {
+      "page": "BizPro",
+      "section": "Offer",
+      "status": "design-exception",
+      "decision": "Prior plan records an empty Offer. Omit from initial fixture; invent no pricing. Reconfirm against live Figma before full-page implementation."
+    }
+  ],
+  "ownership": {
+    "implementation": "Monorepo authoring-poc project",
+    "designApproval": "unassigned",
+    "contentApproval": "unassigned",
+    "productionPlatform": "unassigned"
+  }
+}

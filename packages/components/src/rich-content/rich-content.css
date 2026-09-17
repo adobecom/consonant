@@ -68,6 +68,7 @@
 }
 
 .c-rich-content__eyebrow {
+  margin: 0;
   font-family: var(--s2a-font-family-eyebrow, "Adobe Clean");
   font-size: var(--s2a-typography-font-size-eyebrow, 16px);
   line-height: var(--s2a-typography-line-height-eyebrow, 20px);
@@ -77,6 +78,7 @@
 }
 
 .c-rich-content__title {
+  margin: 0;
   font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
   font-weight: var(--s2a-font-weight-heading, 900);
   color: var(--c-rich-content-color-title);
@@ -105,6 +107,7 @@
 
 /* body-lg scale: 16px (sm) → 18px (md) → 20px (xl) */
 .c-rich-content__body {
+  margin: 0;
   font-family: var(--s2a-font-family-body, "Adobe Clean");
   font-size: var(--s2a-typography-font-size-body-lg, 16px);
   line-height: var(--s2a-typography-line-height-body-lg, 20px);

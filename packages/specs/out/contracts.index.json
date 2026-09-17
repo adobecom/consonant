@@ -1,0 +1,393 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "count": 37,
+  "items": [
+    {
+      "slug": "action-card",
+      "name": "ActionCard",
+      "figmaNodeId": "13999:205827",
+      "specPath": "packages/components/src/action-card/action-card.spec.json",
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:f64c85fbd287159ac8ca41d0853efb266ce4cd81f308b247cfbf5602c29a6bb6",
+        "extractedAt": "2026-09-17T20:25:31.473Z",
+        "setId": "13999:205827"
+      },
+      "codeEvidence": null
+    },
+    {
+      "slug": "app-icon",
+      "name": "AppIcon",
+      "figmaNodeId": "3582-130846",
+      "specPath": "packages/components/src/app-icon/app-icon.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "bento",
+      "name": "Bento",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/bento/bento.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "button",
+      "name": "Button",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/button/button.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": {
+        "hash": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7"
+      }
+    },
+    {
+      "slug": "card",
+      "name": "Card",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/card/card.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "checkbox",
+      "name": "Checkbox",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/checkbox/checkbox.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "collapsible",
+      "name": "Collapsible",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/collapsible/collapsible.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "control-button",
+      "name": "ControlButton",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/control-button/control-button.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "divider",
+      "name": "Divider",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/divider/divider.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "dot-pagination",
+      "name": "DotPagination",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/dot-pagination/dot-pagination.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "elastic-card",
+      "name": "ElasticCard",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/elastic-card/elastic-card.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "global-navigation",
+      "name": "GlobalNavigation",
+      "figmaNodeId": "5011:275645",
+      "specPath": "packages/components/src/global-navigation/global-navigation.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "helper-text",
+      "name": "HelperText",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/helper-text/helper-text.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "icon-button",
+      "name": "IconButton",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/icon-button/icon-button.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "jump-link",
+      "name": "JumpLink",
+      "figmaNodeId": "13360:188611",
+      "specPath": "packages/components/src/jump-link/jump-link.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "label",
+      "name": "Label",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/label/label.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "link",
+      "name": "Link",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/link/link.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "list",
+      "name": "List",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/list/list.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "logo",
+      "name": "Logo",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/logo/logo.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "media",
+      "name": "Media",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/media/media.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "media-card",
+      "name": "MediaCard",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/media-card/media-card.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "merch-card",
+      "name": "MerchCard",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/merch-card/merch-card.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "nav-filter",
+      "name": "NavFilter",
+      "figmaNodeId": "4726:4096",
+      "specPath": "packages/components/src/nav-filter/nav-filter.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "product-card",
+      "name": "ProductCard",
+      "figmaNodeId": "11370:245496",
+      "specPath": "packages/components/src/product-card/product-card.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "product-lockup",
+      "name": "ProductLockup",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/product-lockup/product-lockup.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "progress-bar",
+      "name": "ProgressBar",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/progress-bar/progress-bar.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "promo-cta",
+      "name": "PromoCta",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/promo-cta/promo-cta.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "quote-card",
+      "name": "QuoteCard",
+      "figmaNodeId": "9334:3814",
+      "specPath": "packages/components/src/quote-card/quote-card.spec.json",
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:1514272a63e6ce5a860c03dd92a4f9cc44b744ac1f52f9ae6a70c83051404327",
+        "extractedAt": "2026-09-17T16:52:26.957Z",
+        "setId": "9334:3814"
+      },
+      "codeEvidence": {
+        "hash": "sha256:54759300b02463c7cb780dba82725572758af914b4d0c10e927e021cb579e6ee"
+      }
+    },
+    {
+      "slug": "radio",
+      "name": "Radio",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/radio/radio.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "rich-content",
+      "name": "RichContent",
+      "figmaNodeId": "3069-5302",
+      "specPath": "packages/components/src/rich-content/rich-content.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "section-header",
+      "name": "SectionHeader",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/section-header/section-header.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "segmented-control",
+      "name": "SegmentedControl",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/segmented-control/segmented-control.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "social-proof-carousel",
+      "name": "SocialProofCarousel",
+      "figmaNodeId": "12102:175374",
+      "specPath": "packages/components/src/social-proof-carousel/social-proof-carousel.spec.json",
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": null,
+      "codeEvidence": {
+        "hash": "sha256:1fb7be7580d481700553d6af9c62d6b5b8e76abe472aa0ab416a02c6f5d78484"
+      }
+    },
+    {
+      "slug": "surface",
+      "name": "Surface",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/surface/surface.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "tabs",
+      "name": "Tabs",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/tabs/tabs.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "tag",
+      "name": "Tag",
+      "figmaNodeId": null,
+      "specPath": "packages/components/src/tag/tag.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    },
+    {
+      "slug": "text-card",
+      "name": "TextCard",
+      "figmaNodeId": "11362:245184",
+      "specPath": "packages/components/src/text-card/text-card.spec.json",
+      "generated": false,
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
+    }
+  ]
+}

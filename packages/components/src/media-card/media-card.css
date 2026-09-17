@@ -41,6 +41,17 @@
   pointer-events: none;
 }
 
+/* Hover zoom mirrors Milo's base-card media (scale 1.03 over 750ms). Only for
+   hover-capable pointers and only when motion is allowed. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .c-media-card__media img {
+    transition: transform 750ms cubic-bezier(0.42, 0, 0, 1);
+  }
+  .c-media-card:hover .c-media-card__media img {
+    transform: scale(1.03);
+  }
+}
+
 .c-media-card__media-placeholder {
   position: absolute;
   inset: 0;
@@ -76,6 +87,11 @@
   gap: var(--s2a-spacing-lg, 24px);
   padding: var(--s2a-spacing-lg, 24px) var(--s2a-spacing-lg, 24px) 0;
 }
+.c-media-card[data-density="compact"] .c-media-card__copy {
+  gap: var(--s2a-spacing-md, 16px);
+  padding: var(--s2a-spacing-md, 16px) var(--s2a-spacing-md, 16px) 0;
+}
+.c-media-card :is(h3, p) { margin: 0; overflow-wrap: anywhere; }
 
 /* Feature: headline left (flex-1), CTA right — row layout */
 .c-media-card[data-size="feature"] .c-media-card__copy {
@@ -113,7 +129,7 @@
   font-weight: var(--s2a-font-weight-heading, 900);
   font-size: var(--s2a-typography-font-size-heading-5, 24px);
   line-height: var(--s2a-typography-line-height-heading-5, 24px);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-5, -0.48px);
+  letter-spacing: 0;
   color: var(--s2a-color-content-heading, #000);
 }
 
@@ -131,6 +147,7 @@
 .c-media-card__cta {
   display: inline-flex;
   align-items: center;
+  min-height: var(--s2a-spacing-lg, 24px); /* WCAG 2.2 target size */
   gap: var(--s2a-spacing-xs, 8px);
   text-decoration: none;
   background: none;
@@ -161,7 +178,7 @@
   line-height: var(--s2a-typography-line-height-label, 18px);
   letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
   color: var(--s2a-color-content-label, #000);
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .c-media-card__cta-arrow {

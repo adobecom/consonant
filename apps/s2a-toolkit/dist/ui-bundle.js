@@ -96,6 +96,9 @@
   var annotateNodeId = null;
   var selectSetId = null;
   var docSetId = null;
+  var contractSetId = null;
+  var contractEvidence = null;
+  var contractIndexCache = null;
   var bridgeConnected = false;
   var bridgeWs = null;
   var bridgeWsPort = null;
@@ -138,8 +141,8 @@
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a14;
-        return (_a14 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a14.click();
+        var _a19;
+        return (_a19 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a19.click();
       }
     },
     {
@@ -180,6 +183,16 @@
       uiAction: () => switchPanel("tools")
     },
     {
+      id: "tools:contract",
+      name: "Extract contract",
+      description: "Record the selected component set as design evidence (axes, variants, token bindings per mode) and publish it",
+      category: "Tools",
+      uiAction: () => {
+        switchPanel("tools");
+        if (contractSetId) runContractExtract();
+      }
+    },
+    {
       id: "tools:request",
       name: "Request a change",
       description: "File a token/component/change request as a triage-ready GitHub issue",
@@ -210,13 +223,13 @@
     "tools:request"
   ];
   function fireFeature(feat) {
-    var _a14;
+    var _a19;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a14 = feat.pluginPayload) != null ? _a14 : {});
+      postToPlugin(feat.pluginAction, (_a19 = feat.pluginPayload) != null ? _a19 : {});
     }
     if (activePanel === "home") renderHomeView();
   }
@@ -308,12 +321,12 @@
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a14, _b;
+    var _a19, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a14 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a14.scrollIntoView({ block: "nearest" });
+      (_a19 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a19.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -378,7 +391,7 @@
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a14;
+    var _a19;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -391,7 +404,7 @@
     }
     document.body.removeChild(ta);
     try {
-      (_a14 = navigator.clipboard) == null ? void 0 : _a14.writeText(text).catch(() => {
+      (_a19 = navigator.clipboard) == null ? void 0 : _a19.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -748,8 +761,8 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a14;
-    annotateNodeId = (_a14 = sel == null ? void 0 : sel.id) != null ? _a14 : null;
+    var _a19;
+    annotateNodeId = (_a19 = sel == null ? void 0 : sel.id) != null ? _a19 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -802,9 +815,9 @@
     el.className = "status" + (type ? " " + type : "");
   }
   function updateDocSelection(sel) {
-    var _a14, _b;
+    var _a19, _b;
     const isDocable = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT";
-    docSetId = isDocable ? (_a14 = sel == null ? void 0 : sel.id) != null ? _a14 : null : null;
+    docSetId = isDocable ? (_a19 = sel == null ? void 0 : sel.id) != null ? _a19 : null : null;
     const emptyEl = document.getElementById("docSelectionEmpty");
     const infoEl = document.getElementById("docSelectionInfo");
     const nameEl = document.getElementById("docSetName");
@@ -832,8 +845,311 @@
     setDocStatus("");
     postToPlugin("doc:generate", { setId: docSetId });
   });
+  var contractEndpoint = "http://localhost:9410";
+  var contractRelayKey = "";
+  var contractHeaders = () => __spreadValues({ "Content-Type": "application/json" }, contractRelayKey ? { "x-s2a-relay-key": contractRelayKey } : {});
+  function setContractStatus(msg, type = "") {
+    const el = document.getElementById("contractStatus");
+    el.innerHTML = msg;
+    el.className = "status" + (type ? " " + type : "");
+  }
+  function contractSlug(name) {
+    return name.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, "").replace(/\s*[—–-]\s*v\d+(\.\d+)*\s*$/i, "").replace(/\(.*?\)/g, "").trim().replace(/([a-z0-9])([A-Z])/g, "$1-$2").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "").toLowerCase();
+  }
+  async function contractIndex() {
+    if (contractIndexCache && Date.now() - contractIndexCache.at < 3e4) return contractIndexCache.slugs;
+    try {
+      const res = await fetch(`${contractEndpoint.replace(/\/$/, "")}/contracts`, { headers: contractHeaders() });
+      if (!res.ok) return null;
+      const data = await res.json();
+      const slugs = /* @__PURE__ */ new Map();
+      for (const item of data.items) slugs.set(item.slug, item.figmaEvidence ? "evidence" : "spec");
+      contractIndexCache = { at: Date.now(), slugs };
+      return slugs;
+    } catch (e) {
+      return null;
+    }
+  }
+  var contractIsFrame = false;
+  async function updateContractSelection(sel) {
+    var _a19;
+    const setLike = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT" || (sel == null ? void 0 : sel.nodeType) === "INSTANCE";
+    contractIsFrame = (sel == null ? void 0 : sel.nodeType) === "FRAME" || (sel == null ? void 0 : sel.nodeType) === "SECTION" || (sel == null ? void 0 : sel.nodeType) === "GROUP";
+    const ok = setLike || contractIsFrame;
+    document.getElementById("contractNameField").style.display = contractIsFrame ? "block" : "none";
+    document.getElementById("contractMatch").style.display = "none";
+    document.getElementById("contractBuildRow").style.display = "none";
+    if (contractIsFrame && sel) document.getElementById("contractNameInput").placeholder = contractSlug(sel.name) || "candidate-name";
+    contractSetId = ok ? (_a19 = sel == null ? void 0 : sel.id) != null ? _a19 : null : null;
+    contractEvidence = null;
+    const emptyEl = document.getElementById("contractSelectionEmpty");
+    const infoEl = document.getElementById("contractSelectionInfo");
+    const nameEl = document.getElementById("contractSetName");
+    const statusEl = document.getElementById("contractSetStatus");
+    const extract = document.getElementById("contractExtractBtn");
+    const copy = document.getElementById("contractCopyBtn");
+    const publish = document.getElementById("contractPublishBtn");
+    const summary = document.getElementById("contractSummary");
+    summary.style.display = "none";
+    copy.disabled = true;
+    publish.disabled = true;
+    if (!ok || !sel) {
+      emptyEl.style.display = "block";
+      infoEl.style.display = "none";
+      extract.disabled = true;
+      return;
+    }
+    emptyEl.style.display = "none";
+    infoEl.style.display = "flex";
+    nameEl.textContent = sel.name;
+    extract.disabled = false;
+    statusEl.textContent = "checking\u2026";
+    const slugs = await contractIndex();
+    if (contractSetId !== sel.id) return;
+    const slug = contractSlug(sel.name);
+    if (contractIsFrame) {
+      statusEl.textContent = `${sel.nodeType.toLowerCase()} \xB7 candidate; Extract to see repeats and the closest contracts`;
+      return;
+    }
+    if (!slugs) statusEl.textContent = `${slug} \xB7 status unknown (${contractEndpoint} unreachable)`;
+    else if (slugs.get(slug) === "evidence") {
+      statusEl.textContent = `\u2713 ${slug} \xB7 contract + evidence`;
+      document.getElementById("contractBuildRow").style.display = "flex";
+    } else if (slugs.get(slug) === "spec") {
+      statusEl.textContent = `\u2713 ${slug} \xB7 has a contract, no evidence yet`;
+      document.getElementById("contractBuildRow").style.display = "flex";
+    } else statusEl.textContent = `\u25CB ${slug} \xB7 new`;
+  }
+  function sha256Sync(text) {
+    const K = [1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221, 3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580, 3835390401, 4022224774, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, 2554220882, 2821834349, 2952996808, 3210313671, 3336571891, 3584528711, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, 2177026350, 2456956037, 2730485921, 2820302411, 3259730800, 3345764771, 3516065817, 3600352804, 4094571909, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, 2227730452, 2361852424, 2428436474, 2756734187, 3204031479, 3329325298];
+    const bytes = new TextEncoder().encode(text);
+    const bitLen = bytes.length * 8;
+    const padded = new Uint8Array(bytes.length + 9 + 63 >> 6 << 6);
+    padded.set(bytes);
+    padded[bytes.length] = 128;
+    const dv = new DataView(padded.buffer);
+    dv.setUint32(padded.length - 8, Math.floor(bitLen / 4294967296));
+    dv.setUint32(padded.length - 4, bitLen >>> 0);
+    let h0 = 1779033703, h1 = 3144134277, h2 = 1013904242, h3 = 2773480762, h4 = 1359893119, h5 = 2600822924, h6 = 528734635, h7 = 1541459225;
+    const w = new Uint32Array(64);
+    const rotr = (x, n) => x >>> n | x << 32 - n;
+    for (let off = 0; off < padded.length; off += 64) {
+      for (let i = 0; i < 16; i++) w[i] = dv.getUint32(off + i * 4);
+      for (let i = 16; i < 64; i++) {
+        const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ w[i - 15] >>> 3;
+        const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ w[i - 2] >>> 10;
+        w[i] = w[i - 16] + s0 + w[i - 7] + s1 >>> 0;
+      }
+      let a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7;
+      for (let i = 0; i < 64; i++) {
+        const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+        const ch = e & f ^ ~e & g;
+        const t1 = h + S1 + ch + K[i] + w[i] >>> 0;
+        const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+        const maj = a & b ^ a & c ^ b & c;
+        const t2 = S0 + maj >>> 0;
+        h = g;
+        g = f;
+        f = e;
+        e = d + t1 >>> 0;
+        d = c;
+        c = b;
+        b = a;
+        a = t1 + t2 >>> 0;
+      }
+      h0 = h0 + a >>> 0;
+      h1 = h1 + b >>> 0;
+      h2 = h2 + c >>> 0;
+      h3 = h3 + d >>> 0;
+      h4 = h4 + e >>> 0;
+      h5 = h5 + f >>> 0;
+      h6 = h6 + g >>> 0;
+      h7 = h7 + h >>> 0;
+    }
+    return [h0, h1, h2, h3, h4, h5, h6, h7].map((x) => x.toString(16).padStart(8, "0")).join("");
+  }
+  async function sha256Hex(text) {
+    var _a19;
+    try {
+      if ((_a19 = globalThis.crypto) == null ? void 0 : _a19.subtle) {
+        const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+        return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+      }
+    } catch (e) {
+    }
+    return sha256Sync(text);
+  }
+  function contractLog(event, detail) {
+    try {
+      fetch(`${contractEndpoint.replace(/\/$/, "")}/log`, { method: "POST", headers: contractHeaders(), body: JSON.stringify({ event, detail, at: (/* @__PURE__ */ new Date()).toISOString() }), keepalive: true }).catch(() => {
+      });
+    } catch (e) {
+    }
+  }
+  function runContractExtract() {
+    if (!contractSetId) return;
+    sendTelemetry("action:contract-extract");
+    const name = contractIsFrame ? document.getElementById("contractNameInput").value.trim() : "";
+    const rename = contractIsFrame && document.getElementById("contractRenameLayer").checked;
+    contractLog("extract:start", { setId: contractSetId, name: name || void 0 });
+    const btn = document.getElementById("contractExtractBtn");
+    btn.disabled = true;
+    btn.textContent = "Extracting\u2026";
+    setContractStatus("");
+    postToPlugin("contract:extract", { setId: contractSetId, name, rename });
+  }
+  var _a8;
+  (_a8 = document.getElementById("contractExtractBtn")) == null ? void 0 : _a8.addEventListener("click", runContractExtract);
+  var _a9;
+  (_a9 = document.getElementById("contractCopyBtn")) == null ? void 0 : _a9.addEventListener("click", async () => {
+    if (!contractEvidence) return;
+    const text = JSON.stringify(__spreadProps(__spreadValues({}, contractEvidence.evidence), { provenance: { hash: contractEvidence.hash } }), null, 2);
+    try {
+      await navigator.clipboard.writeText(text);
+      setContractStatus("Evidence JSON copied", "ok");
+    } catch (e) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      const done = document.execCommand("copy");
+      ta.remove();
+      setContractStatus(done ? "Evidence JSON copied" : "Copy failed", done ? "ok" : "err");
+    }
+  });
+  var _a10;
+  (_a10 = document.getElementById("contractPublishBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
+    if (!contractEvidence) return;
+    sendTelemetry("action:contract-publish");
+    contractLog("publish:start", { hash: contractEvidence.hash, endpoint: contractEndpoint });
+    const btn = document.getElementById("contractPublishBtn");
+    btn.disabled = true;
+    btn.textContent = "Publishing\u2026";
+    try {
+      const res = await fetch(`${contractEndpoint.replace(/\/$/, "")}/evidence`, {
+        method: "POST",
+        headers: contractHeaders(),
+        body: JSON.stringify(__spreadValues({ evidence: contractEvidence.evidence, hash: contractEvidence.hash }, contractIsFrame ? { slug: document.getElementById("contractNameInput").value.trim() || void 0 } : {}))
+      });
+      const out = await res.json();
+      if (!res.ok) throw new Error(out.error || `Sync endpoint returned ${res.status}`);
+      contractIndexCache = null;
+      const note = out.status === "in-sync" ? "Already in sync" : out.status === "dispatched" ? "Published to CI" : out.status === "new" ? "Written (new)" : "Updated";
+      const where = out.branch ? `branch <code>${esc(out.branch)}</code>${out.actions ? ` \xB7 <a href="${esc(out.actions)}" target="_blank">Actions \u2192</a>` : ""}` : `<code>${esc(out.path || "")}</code>`;
+      setContractStatus(`${note}: ${where}${out.proposal ? "<br>" + esc(out.proposal) : ""}${out.note && out.status === "dispatched" ? "<br>" + esc(out.note) : ""}`, "ok");
+    } catch (err) {
+      contractLog("publish:error", (err == null ? void 0 : err.message) || String(err));
+      setContractStatus(`Publish failed: ${esc((err == null ? void 0 : err.message) || String(err))}. Local: <code>npm run contract-sync</code> in apps/s2a-toolkit; or set the relay URL under Sync endpoint.`, "err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Publish";
+    }
+  });
+  async function onContractEvidence(msg) {
+    var _a19, _b;
+    const btn = document.getElementById("contractExtractBtn");
+    btn.disabled = !contractSetId;
+    btn.textContent = "Extract contract";
+    if (msg.error) {
+      contractLog("extract:error", msg.error);
+      setContractStatus("\u274C " + esc(msg.error), "err");
+      return;
+    }
+    try {
+      const evidence = msg.evidence;
+      const hash = "sha256:" + await sha256Hex(msg.hashInput);
+      const setInfo = evidence.set;
+      if ((setInfo == null ? void 0 : setInfo.layerName) && setInfo.layerName !== setInfo.name) document.getElementById("contractSetName").textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
+      contractLog("extract:ok", { set: (_a19 = evidence.set) == null ? void 0 : _a19.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
+      contractEvidence = { evidence, canonical: msg.canonical, hash };
+      const counts = evidence.counts;
+      const axes = evidence.axes;
+      const variables = Object.values(evidence.variables);
+      const collections = [...new Set(variables.map((v) => v.collection))];
+      const instances = evidence.instances;
+      const nested = [...new Set(instances.map((i) => {
+        var _a20;
+        return (_a20 = i.set) == null ? void 0 : _a20.name;
+      }).filter(Boolean))];
+      const meta = evidence.set.meta;
+      const pattern = evidence.pattern;
+      const summary = document.getElementById("contractSummary");
+      summary.textContent = [
+        `${meta.version ? "v" + meta.version + (meta.status ? " \xB7 " + meta.status : "") : "no s2a:meta version"}`,
+        `${counts.variants} variants \xB7 ${counts.nodes} nodes \xB7 ${counts.bindings} bindings in ${(_b = msg.durationMs) != null ? _b : 0}ms`,
+        `axes: ${axes.map((a) => a.name + (a.options ? `[${a.options.length}]` : ":" + a.type.toLowerCase())).join(", ") || "none"}`,
+        `variables: ${variables.length} across ${collections.join(", ") || "none"}`,
+        `nested sets: ${nested.join(", ") || "none"}`,
+        counts.unboundPaintNodes ? `\u26A0 ${counts.unboundPaintNodes} painted nodes with no variable` : "all painted nodes bound",
+        ...pattern ? [
+          pattern.repeats.length ? `repeats: ${pattern.repeats[0].count}\xD7 "${pattern.repeats[0].unit.name}" (shared: ${pattern.repeats[0].sharedLayers.join(", ") || "none named"})` : "repeats: none",
+          `roles: ${pattern.roles.join(", ") || "none"} \xB7 S2A instances inside: ${pattern.instancedSets.join(", ") || "none"}`,
+          `${pattern.genericLayers} of ${pattern.genericLayers + pattern.namedLayers} layers have generated names`
+        ] : [],
+        hash
+      ].join("\n");
+      summary.style.display = "block";
+      void showContractMatch(evidence);
+      document.getElementById("contractCopyBtn").disabled = false;
+      document.getElementById("contractPublishBtn").disabled = false;
+      setContractStatus("Extracted. Publish sends it to the sync server; Copy puts the JSON on the clipboard.", "ok");
+    } catch (err) {
+      contractLog("extract:ui-error", (err == null ? void 0 : err.message) || String(err));
+      setContractStatus("\u274C Could not summarize the evidence: " + esc((err == null ? void 0 : err.message) || String(err)), "err");
+    }
+  }
+  async function showContractMatch(evidence) {
+    const el = document.getElementById("contractMatch");
+    try {
+      const res = await fetch(`${contractEndpoint.replace(/\/$/, "")}/match`, { method: "POST", headers: contractHeaders(), body: JSON.stringify({ evidence }) });
+      if (!res.ok) {
+        el.style.display = "none";
+        return;
+      }
+      const m = await res.json();
+      contractLog("match", { verdict: m.verdict, top: m.unit.slice(0, 3).map((u) => `${u.slug}:${u.score}`) });
+      el.textContent = [
+        `${m.verdict === "extend" ? "\u2194 extend" : m.verdict === "new" ? "\uFF0B new contract" : "\u2194 extend or \uFF0B new"}: ${m.summary}`,
+        ...m.unit.slice(0, 3).map((u) => `  ${u.name} ${u.score}${u.missing.length ? ` \xB7 would need ${u.missing.join(", ")}` : ""}${u.verified ? " \xB7 evidence \u2713" : ""}`),
+        ...m.candidate.repeats ? [`  organism (${m.candidate.repeats.count}\xD7 unit): ${m.organism.length ? m.organism.map((o) => `${o.name} ${o.score}${o.acceptsBest ? " \u2713 accepts" : ""}`).join(" \xB7 ") : "no collection contract yet"}`] : []
+      ].join("\n");
+      el.style.display = "block";
+    } catch (e) {
+      el.style.display = "none";
+    }
+  }
+  var _a11;
+  (_a11 = document.getElementById("contractBuildBtn")) == null ? void 0 : _a11.addEventListener("click", async () => {
+    const btn = document.getElementById("contractBuildBtn");
+    const name = document.getElementById("contractSetName").textContent || "";
+    const slug = contractSlug(name);
+    btn.disabled = true;
+    btn.textContent = "Building\u2026";
+    try {
+      const res = await fetch(`${contractEndpoint.replace(/\/$/, "")}/plan/${encodeURIComponent(slug)}`, { headers: contractHeaders() });
+      if (!res.ok) throw new Error((await res.json()).error || `no plan for ${slug}`);
+      const plan = await res.json();
+      contractLog("build-set:start", { slug });
+      postToPlugin("contract:build-set", { plan, slug });
+    } catch (err) {
+      contractLog("build-set:error", (err == null ? void 0 : err.message) || String(err));
+      setContractStatus(`Build failed: ${esc((err == null ? void 0 : err.message) || String(err))}`, "err");
+      btn.disabled = false;
+      btn.textContent = "Build set from contract";
+    }
+  });
+  var _a12;
+  (_a12 = document.getElementById("contractEndpointSaveBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
+    const endpoint = document.getElementById("contractEndpointInput").value.trim() || "http://localhost:9410";
+    const relayKey = document.getElementById("contractRelayKeyInput").value.trim();
+    contractEndpoint = endpoint;
+    contractRelayKey = relayKey;
+    contractIndexCache = null;
+    postToPlugin("contract-endpoint:set", { endpoint, relayKey });
+    setContractStatus(`Sync endpoint: <code>${esc(endpoint)}</code>`, "ok");
+  });
   window.addEventListener("message", (event) => {
-    var _a14, _b, _c, _d, _e, _f, _g, _h;
+    var _a19, _b, _c, _d, _e, _f, _g, _h, _i;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -881,19 +1197,46 @@
           };
           updateAnnotateSelection(sel);
           updateDocSelection(sel);
+          void updateContractSelection(sel);
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a14 = msg.sectionCount) != null ? _a14 : 0,
+            (_a19 = msg.sectionCount) != null ? _a19 : 0,
             (_b = msg.sectionName) != null ? _b : sel.name
           );
         } else {
           updateAnnotateSelection(null);
           updateDocSelection(null);
+          void updateContractSelection(null);
           updateCopyBtn(null, null);
           updateSectionBar(false, 0, "");
         }
         if (activePanel === "request") postToPlugin("request:capture");
+        break;
+      }
+      case "contract-endpoint:value": {
+        contractEndpoint = msg.endpoint || "http://localhost:9410";
+        contractRelayKey = msg.relayKey || "";
+        document.getElementById("contractEndpointInput").value = contractEndpoint;
+        document.getElementById("contractRelayKeyInput").value = contractRelayKey;
+        break;
+      }
+      case "contract:evidence": {
+        void onContractEvidence(msg);
+        break;
+      }
+      case "contract:build-set:done": {
+        const btn = document.getElementById("contractBuildBtn");
+        btn.disabled = false;
+        btn.textContent = "Build set from contract";
+        if (msg.error) {
+          contractLog("build-set:error", msg.error);
+          setContractStatus("\u274C Build failed: " + esc(msg.error), "err");
+          break;
+        }
+        const r = msg.report;
+        contractLog("build-set:done", r);
+        setContractStatus(`Built <code>${esc(r.set)}</code>: ${r.variants} variants, ${r.layers} layers, ${r.boundVariables} variables bound, ${r.stylesApplied} text styles, ${r.properties} properties${r.unresolvedVariables.length ? `; ${r.unresolvedVariables.length} variables not found locally (${esc(r.unresolvedVariables.slice(0, 4).join(", "))}\u2026)` : ""}${r.stylesMissing.length ? `; styles missing: ${esc(r.stylesMissing.join(", "))}` : ""}${((_c = r.notes) == null ? void 0 : _c.length) ? `; ${r.notes.length} notes in the log` : ""}`, r.unresolvedVariables.length || r.stylesMissing.length ? "" : "ok");
         break;
       }
       case "format-section:done": {
@@ -926,12 +1269,12 @@
       }
       case "request:context": {
         requestCtx = {
-          user: (_c = msg.user) != null ? _c : null,
-          node: (_d = msg.node) != null ? _d : null,
-          fileKey: (_e = msg.fileKey) != null ? _e : null,
-          fileName: (_f = msg.fileName) != null ? _f : "",
-          page: (_g = msg.page) != null ? _g : "",
-          tokenName: (_h = msg.tokenName) != null ? _h : ""
+          user: (_d = msg.user) != null ? _d : null,
+          node: (_e = msg.node) != null ? _e : null,
+          fileKey: (_f = msg.fileKey) != null ? _f : null,
+          fileName: (_g = msg.fileName) != null ? _g : "",
+          page: (_h = msg.page) != null ? _h : "",
+          tokenName: (_i = msg.tokenName) != null ? _i : ""
         };
         renderRequestCtx(requestCtx);
         if (_reqCtxResolve) {
@@ -979,8 +1322,8 @@
     setup.style.display = hasToken ? "none" : "block";
     release.style.display = hasToken ? "block" : "none";
   }
-  var _a8;
-  (_a8 = document.getElementById("ghTokenSaveBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
+  var _a13;
+  (_a13 = document.getElementById("ghTokenSaveBtn")) == null ? void 0 : _a13.addEventListener("click", () => {
     const input = document.getElementById("ghTokenInput");
     const value = input.value.trim();
     if (!value) return;
@@ -990,8 +1333,8 @@
     syncTokenReleaseAuthUi();
     setTokenReleaseStatus("Token saved to Figma client storage.", "ok");
   });
-  var _a9;
-  (_a9 = document.getElementById("ghTokenClearBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
+  var _a14;
+  (_a14 = document.getElementById("ghTokenClearBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
     ghToken = null;
     postToPlugin("gh-token:set", { token: "" });
     syncTokenReleaseAuthUi();
@@ -1009,9 +1352,9 @@
     if (!res.ok) throw new Error(`GitHub API ${res.status} on ${path}`);
     return res.json();
   }
-  var _a10;
-  (_a10 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
-    var _a14;
+  var _a15;
+  (_a15 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a15.addEventListener("click", async () => {
+    var _a19;
     if (!ghToken) return;
     sendTelemetry("action:token-release");
     const btn = document.getElementById("tokenReleaseBtn");
@@ -1034,9 +1377,9 @@
       for (let i = 0; i < 15 && !run; i++) {
         await new Promise((r) => setTimeout(r, 2e3));
         const data = await ghJson(`/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`);
-        run = (_a14 = (data.workflow_runs || []).find(
+        run = (_a19 = (data.workflow_runs || []).find(
           (r) => new Date(r.created_at).getTime() >= dispatchedAt - 5e3
-        )) != null ? _a14 : null;
+        )) != null ? _a19 : null;
       }
       if (!run) throw new Error("Dispatched, but no run appeared within 30s \u2014 check the Actions tab.");
       const runLink = `<a href="${run.html_url}" target="_blank">Actions run \u2192</a>`;
@@ -1153,12 +1496,12 @@
     const addBtn = document.getElementById("reqAddImageBtn");
     if (addBtn) addBtn.style.display = reqImages.length >= MAX_IMAGES ? "none" : "";
   }
-  var _a11;
-  (_a11 = document.getElementById("reqAddImageBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
+  var _a16;
+  (_a16 = document.getElementById("reqAddImageBtn")) == null ? void 0 : _a16.addEventListener("click", () => {
     document.getElementById("reqImageInput").click();
   });
-  var _a12;
-  (_a12 = document.getElementById("reqImageInput")) == null ? void 0 : _a12.addEventListener("change", (e) => {
+  var _a17;
+  (_a17 = document.getElementById("reqImageInput")) == null ? void 0 : _a17.addEventListener("change", (e) => {
     const input = e.target;
     const files = Array.from(input.files || []);
     input.value = "";
@@ -1179,9 +1522,9 @@
       reader.readAsDataURL(file);
     }
   });
-  var _a13;
-  (_a13 = document.getElementById("reqSubmitBtn")) == null ? void 0 : _a13.addEventListener("click", async () => {
-    var _a14;
+  var _a18;
+  (_a18 = document.getElementById("reqSubmitBtn")) == null ? void 0 : _a18.addEventListener("click", async () => {
+    var _a19;
     const summaryEl = document.getElementById("reqSummary");
     const useCaseEl = document.getElementById("reqUseCase");
     const summary = summaryEl.value.trim();
@@ -1236,7 +1579,7 @@
             figmaUrl,
             fileName: ctx == null ? void 0 : ctx.fileName,
             page: ctx == null ? void 0 : ctx.page,
-            nodeName: (_a14 = ctx == null ? void 0 : ctx.node) == null ? void 0 : _a14.name,
+            nodeName: (_a19 = ctx == null ? void 0 : ctx.node) == null ? void 0 : _a19.name,
             tokenName: ctx == null ? void 0 : ctx.tokenName,
             requester: ctx == null ? void 0 : ctx.user,
             images: reqImages.map((i) => ({ name: i.name, type: i.type, dataUrl: i.dataUrl }))
@@ -1276,6 +1619,7 @@
     }
   });
   postToPlugin("ui-ready");
+  postToPlugin("contract-endpoint:get");
   postToPlugin("gh-token:get");
   applySize();
   renderHomeView();

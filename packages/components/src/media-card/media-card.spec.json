@@ -5,9 +5,11 @@
   "storybookId": "media-card",
   "description": "Media-forward content card with two size variants. Card (4:3, column copy) is used in 3-up grids; Feature (16:7, row copy) spans full column width as a hero card. Both scale with their container via aspect-ratio — never fixed pixel dimensions.",
   "variants": {
-    "size": ["card", "feature"]
+    "size": ["card", "feature"],
+    "density": ["comfortable", "compact"]
   },
   "props": [
+    { "name": "density", "type": "string", "defaultValue": "\"comfortable\"", "enum": ["comfortable", "compact"], "description": "MediaCard 1.1.0 density axis from Figma 9171:34388." },
     { "name": "size", "type": "string", "defaultValue": "\"card\"", "enum": ["card", "feature"] },
     { "name": "app", "type": "string", "defaultValue": "\"experience-cloud\"", "description": "App slug passed to AppIcon for the top-left badge" },
     { "name": "showIcon", "type": "boolean", "defaultValue": "true", "description": "Toggle the AppIcon badge" },
@@ -45,7 +47,7 @@
       "CTA renders as <a> when ctaHref is provided, <button> for click handlers.",
       "AppIcon badge is aria-hidden — decorative.",
       "Provide meaningful mediaAlt when the image conveys information not in title/body.",
-      "Title renders as <p> not <h*> — heading level is the consumer's responsibility."
+      "Title is an h3 under the section's h2."
     ]
   }
 }

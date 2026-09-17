@@ -180,6 +180,53 @@
 
       <div class="tools-divider"></div>
 
+      <!-- ── Contract ───────────────────────────────────────────────── -->
+      <div class="section-label">Contract</div>
+      <div class="sel-card">
+        <span class="sel-card-empty" id="contractSelectionEmpty">Select a component set, variant or instance</span>
+        <div class="sel-card-info" id="contractSelectionInfo" style="display:none;">
+          <span class="sel-icon">⎘</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="contractSetName">—</span>
+            <span class="sel-type" id="contractSetStatus">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-field" id="contractNameField" style="display:none; margin-top:8px;">
+        <label class="form-label" for="contractNameInput">Name this candidate before you extract</label>
+        <input class="form-input" id="contractNameInput" type="text" placeholder="e.g. FeatureTile or FeatureTileRow" />
+        <label class="form-check" style="display:flex; gap:6px; align-items:center; margin-top:6px; font-size:11px;">
+          <input type="checkbox" id="contractRenameLayer" checked /> Rename the layer in Figma to match
+        </label>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="contractExtractBtn" disabled style="flex:2;">Extract contract</button>
+        <button class="btn btn-ghost" id="contractCopyBtn" disabled title="Copy the evidence JSON">Copy</button>
+        <button class="btn btn-ghost" id="contractPublishBtn" disabled title="Send to the sync endpoint">Publish</button>
+      </div>
+      <div class="status" id="contractStatus"></div>
+      <pre class="contract-summary" id="contractSummary" style="display:none;"></pre>
+      <pre class="contract-summary contract-match" id="contractMatch" style="display:none;"></pre>
+      <div class="btn-row" id="contractBuildRow" style="display:none;">
+        <button class="btn btn-ghost" id="contractBuildBtn" title="Build a component set on this page from the contract's figma.plan.json">Build set from contract</button>
+      </div>
+      <details class="contract-settings">
+        <summary>Sync endpoint</summary>
+        <div class="form-field">
+          <label class="form-label" for="contractEndpointInput">Endpoint</label>
+          <input class="form-input" id="contractEndpointInput" type="url" placeholder="http://localhost:9410 (dev) or the relay URL" />
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="contractRelayKeyInput">Relay key (optional)</label>
+          <input class="form-input" id="contractRelayKeyInput" type="password" placeholder="x-s2a-relay-key" />
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="contractEndpointSaveBtn">Save</button>
+        </div>
+      </details>
+
+      <div class="tools-divider"></div>
+
       <!-- ── Token release ────────────────────────────────────────────── -->
       <div class="section-label">Token release</div>
 

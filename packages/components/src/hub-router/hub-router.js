@@ -61,6 +61,7 @@ export const DEFAULT_HUB_ROUTER_CARDS = [
   },
 ];
 
+/** @param {{heading?: string, body?: string, eyebrow?: string, showEyebrow?: boolean, theme?: string, cards?: {label: string, app: string, title: string, body: string, href: string, mediaSrc?: string, mediaTemplate?: import('lit').TemplateResult}[]}} [options] */
 export const HubRouter = ({
   heading = "Everything you need to make anything.",
   body = "Whether you're a student, social influencer, creative professional, performance marketer, or global brand—Adobe has the apps you need to make it happen.",
@@ -81,17 +82,23 @@ export const HubRouter = ({
         return html`
           <div role="listitem"
             @mouseenter=${(e) => {
-              e.currentTarget.querySelector("video")?.play();
+              if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+                e.currentTarget.querySelector("video")?.play()?.catch(() => {});
               const carousel = e.currentTarget.parentElement;
               if (edge) carousel.dataset.edge = edge;
               else carousel.removeAttribute("data-edge");
             }}
             @mouseleave=${pauseCardVideo}
+            @focusin=${(e) => {
+              if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+                e.currentTarget.querySelector("video")?.play()?.catch(() => {});
+            }}
+            @focusout=${pauseCardVideo}
           >
             ${ElasticCard({
               ...card,
               state: "resting",
-              mediaTemplate: card.mediaSrc ? buildVideoMedia(card.mediaSrc) : undefined,
+              mediaTemplate: card.mediaTemplate ?? (card.mediaSrc ? buildVideoMedia(card.mediaSrc) : undefined),
             })}
           </div>
         `;

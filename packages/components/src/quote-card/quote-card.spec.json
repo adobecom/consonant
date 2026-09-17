@@ -1,0 +1,795 @@
+{
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
+  "name": "QuoteCard",
+  "slug": "quote-card",
+  "cssClass": "c-quote-card",
+  "figmaNodeId": "9334:3814",
+  "storybookId": "cards-quotecard",
+  "description": "Full-bleed testimonial card: decorative media with a scrim, a heading-2 quote, attribution, and one CTA. Lives inside SocialProofCarousel on the Homepage.",
+  "variants": {},
+  "props": [
+    {
+      "name": "quote",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Leading straight or curly quote hangs outside the text margin.",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "LAYER",
+          "property": ".content/.quote/{heading}",
+          "notes": "text inside the nested Heading instance; not exposed as a TEXT property",
+          "verified": null
+        },
+        "code": {
+          "prop": "quote",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "attributionName",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "LAYER",
+          "property": ".content/.attribution/Meta/Name/{metaname}",
+          "notes": "text inside the nested Meta/Name instance",
+          "verified": null
+        },
+        "code": {
+          "prop": "attributionName",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "attributionRole",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "LAYER",
+          "property": ".content/.attribution/Meta/Role/{metarole}",
+          "notes": "text inside the nested Meta/Role instance",
+          "verified": null
+        },
+        "code": {
+          "prop": "attributionRole",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "showAttribution",
+      "type": "boolean",
+      "defaultValue": "true",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Attribution#9435:0",
+          "layer": ".content/.attribution",
+          "verified": true
+        },
+        "code": {
+          "prop": "showAttribution",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "ctaLabel",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "LAYER",
+          "property": ".content/.actions/Children/Button — v1/Label",
+          "notes": "the slotted Button's label",
+          "verified": null
+        },
+        "code": {
+          "prop": "ctaLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "ctaHref",
+      "type": "string",
+      "defaultValue": "\"#\"",
+      "description": "Destination is content, not design; authoring validates it.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "ctaHref",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "showCta",
+      "type": "boolean",
+      "defaultValue": "true",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show CTA#9334:0",
+          "layer": ".content/.actions",
+          "verified": true
+        },
+        "code": {
+          "prop": "showCta",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "imageSrc",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Media#9435:3",
+          "notes": "Media instance (Aspect Ratio=16:9, Type=image); the image is the instance's fill",
+          "layer": ".media",
+          "verified": true
+        },
+        "code": {
+          "prop": "imageSrc",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "imageAlt",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Media is decorative and aria-hidden; alt is kept for the img element only.",
+      "lever": false,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "imageAlt",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "imageSrcset",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Delivery detail.",
+      "lever": false,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "imageSrcset",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "imageSizes",
+      "type": "string",
+      "defaultValue": "\"100vw\"",
+      "description": "Delivery detail.",
+      "lever": false,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "imageSizes",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "imageLoading",
+      "type": "string",
+      "defaultValue": "\"eager\"",
+      "description": "Performance detail; the Homepage sets eager for the active slide only.",
+      "enum": [
+        "eager",
+        "lazy"
+      ],
+      "lever": false,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "imageLoading",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
+  ],
+  "tokenBindings": {
+    "root-border-radius": "--s2a-border-radius-md",
+    "content-margin": "--s2a-spacing-4xl",
+    "content-gap": "--s2a-spacing-lg",
+    "content-padding": "--s2a-spacing-4xl",
+    "quote-font-family": "--s2a-font-family-heading",
+    "quote-font-weight": "--s2a-font-weight-heading",
+    "quote-font-size": "--s2a-typography-font-size-heading-2",
+    "quote-line-height": "--s2a-typography-line-height-heading-2",
+    "quote-color": "--s2a-color-content-knockout",
+    "name-font-family": "--s2a-font-family-eyebrow",
+    "name-font-weight": "--s2a-font-weight-eyebrow",
+    "name-font-size": "--s2a-typography-font-size-eyebrow",
+    "name-line-height": "--s2a-typography-line-height-eyebrow",
+    "name-letter-spacing": "--s2a-typography-letter-spacing-eyebrow",
+    "name-color": "--s2a-color-content-knockout",
+    "role-font-family": "--s2a-font-family-body",
+    "role-font-weight": "--s2a-font-weight-body",
+    "role-font-size": "--s2a-typography-font-size-body-md",
+    "role-line-height": "--s2a-typography-line-height-body-md",
+    "role-letter-spacing": "--s2a-typography-letter-spacing-body-md",
+    "role-color": "--s2a-color-content-knockout"
+  },
+  "composedOf": [
+    "button"
+  ],
+  "a11y": {
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10",
+      "2.1.1"
+    ],
+    "notes": [
+      "CTA is a native link; authoring validates its URL.",
+      "Decorative media is aria-hidden. Do not use this component for meaningful diagrams or images requiring an accessible description.",
+      "Content remains in flow so longer copy can grow the card rather than being clipped."
+    ]
+  },
+  "states": [
+    {
+      "name": "Breakpoint",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Breakpoint",
+        "notes": "Desktop | Mobile"
+      },
+      "code": {
+        "mechanism": "container queries on .c-quote-card: ≤1279px tightens type, ≤599px stacks content at the bottom"
+      },
+      "notes": "A layout response, not an authored prop."
+    },
+    {
+      "name": "Context",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Context",
+        "notes": "on-dark only"
+      },
+      "code": {
+        "mechanism": "none: ink is always content/knockout over the media scrim, in both page themes"
+      },
+      "notes": "v2 drops the Context axis (theme-invariant surface); nothing to bind in code."
+    }
+  ],
+  "anatomy": {
+    "selector": ".c-quote-card",
+    "figma": "Context=on-dark, Breakpoint=Desktop",
+    "element": "div",
+    "tokens": {
+      "border-radius": {
+        "value": "{s2a.border-radius.md}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.border-radius.md}",
+            "cssVar": "--s2a-border-radius-md",
+            "figma": "s2a/border-radius/md",
+            "shipped": true,
+            "value": "16px"
+          }
+        ]
+      }
+    },
+    "notes": "aspect-ratio 1480/824 desktop, 375/620 mobile, from the two Figma variants; overflow clip so long copy grows the card.",
+    "parts": {
+      "media": {
+        "selector": ".qc-media",
+        "figma": ".media",
+        "element": "div[aria-hidden]",
+        "parts": {
+          "img": {
+            "selector": ".qc-media__img",
+            "element": "img"
+          },
+          "overlay": {
+            "selector": ".qc-media__overlay",
+            "figma": ".media/Overlay",
+            "tokens": {
+              "background": {
+                "value": "raw:linear-gradient(139.85deg, {s2a.color.transparent-black.64} 0%, {s2a.color.transparent-black.16} 100%)",
+                "raw": true,
+                "tokens": [
+                  {
+                    "ref": "{s2a.color.transparent-black.64}",
+                    "cssVar": "--s2a-color-transparent-black-64",
+                    "figma": "s2a/color/transparent-black/64",
+                    "shipped": true,
+                    "value": "rgb(0 0 0 / 64%)"
+                  },
+                  {
+                    "ref": "{s2a.color.transparent-black.16}",
+                    "cssVar": "--s2a-color-transparent-black-16",
+                    "figma": "s2a/color/transparent-black/16",
+                    "shipped": true,
+                    "value": "rgb(0 0 0 / 16%)"
+                  }
+                ]
+              }
+            },
+            "notes": "Figma: Overlay instance (Scrim=content-left-medium) binds transparent/black/16 and /64; the gradient itself is a Primitive exception."
+          }
+        }
+      },
+      "content": {
+        "selector": ".qc-content",
+        "figma": ".content",
+        "tokens": {
+          "margin": {
+            "value": "{s2a.spacing.4xl}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.4xl}",
+                "cssVar": "--s2a-spacing-4xl",
+                "figma": "s2a/spacing/4xl",
+                "shipped": true,
+                "value": "64px"
+              }
+            ]
+          },
+          "gap": {
+            "value": "{s2a.spacing.lg}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.lg}",
+                "cssVar": "--s2a-spacing-lg",
+                "figma": "s2a/spacing/lg",
+                "shipped": true,
+                "value": "24px"
+              }
+            ]
+          },
+          "padding": {
+            "value": "{s2a.spacing.4xl} {s2a.spacing.lg}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.4xl}",
+                "cssVar": "--s2a-spacing-4xl",
+                "figma": "s2a/spacing/4xl",
+                "shipped": true,
+                "value": "64px"
+              },
+              {
+                "ref": "{s2a.spacing.lg}",
+                "cssVar": "--s2a-spacing-lg",
+                "figma": "s2a/spacing/lg",
+                "shipped": true,
+                "value": "24px"
+              }
+            ]
+          }
+        },
+        "notes": "Desktop: 64px inset, 532px measure (Figma .content 532 wide). Mobile: padding 64/24, stacked to the bottom edge.",
+        "parts": {
+          "quote": {
+            "selector": ".qc-quote__text",
+            "figma": ".content/.quote/{heading}",
+            "element": "p",
+            "tokens": {
+              "font-family": {
+                "value": "{s2a.font-family.heading}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.font-family.heading}",
+                    "cssVar": "--s2a-font-family-heading",
+                    "figma": "s2a/font-family/heading",
+                    "shipped": true,
+                    "value": "\"Adobe Clean Display\""
+                  }
+                ]
+              },
+              "font-weight": {
+                "value": "{s2a.font-weight.heading}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.font-weight.heading}",
+                    "cssVar": "--s2a-font-weight-heading",
+                    "figma": "s2a/font-weight/heading",
+                    "shipped": true,
+                    "value": "900"
+                  }
+                ]
+              },
+              "font-size": {
+                "value": "{s2a.typography.font-size.heading-2}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.font-size.heading-2}",
+                    "cssVar": "--s2a-typography-font-size-heading-2",
+                    "figma": "s2a/typography/font-size/heading-2",
+                    "shipped": true,
+                    "value": "3.5rem",
+                    "sm": "2rem"
+                  }
+                ]
+              },
+              "line-height": {
+                "value": "{s2a.typography.line-height.heading-2}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.line-height.heading-2}",
+                    "cssVar": "--s2a-typography-line-height-heading-2",
+                    "figma": "s2a/typography/line-height/heading-2",
+                    "shipped": true,
+                    "value": "56px",
+                    "sm": "32px"
+                  }
+                ]
+              },
+              "color": {
+                "value": "{s2a.color.content.knockout}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.color.content.knockout}",
+                    "cssVar": "--s2a-color-content-knockout",
+                    "figma": "s2a/color/content/knockout",
+                    "shipped": true,
+                    "value": "#fff"
+                  }
+                ]
+              }
+            },
+            "notes": "Figma binds heading-2 per breakpoint mode: xl 56, lg 56, md 48, sm 32. Code steps to 48px below 1280px and keeps 48 on phones (see decisions). Figma binds the quote's fill to content/default; code uses content/knockout (see decisions)."
+          },
+          "attribution": {
+            "selector": ".qc-attribution",
+            "figma": ".attribution",
+            "parts": {
+              "name": {
+                "selector": ".qc-attribution__name",
+                "figma": ".content/.attribution/Meta/Name/{metaname}",
+                "tokens": {
+                  "font-family": {
+                    "value": "{s2a.font-family.eyebrow}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.font-family.eyebrow}",
+                        "cssVar": "--s2a-font-family-eyebrow",
+                        "figma": "s2a/font-family/eyebrow",
+                        "shipped": true,
+                        "value": "\"Adobe Clean\""
+                      }
+                    ]
+                  },
+                  "font-weight": {
+                    "value": "{s2a.font-weight.eyebrow}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.font-weight.eyebrow}",
+                        "cssVar": "--s2a-font-weight-eyebrow",
+                        "figma": "s2a/font-weight/eyebrow",
+                        "shipped": true,
+                        "value": "700"
+                      }
+                    ]
+                  },
+                  "font-size": {
+                    "value": "{s2a.typography.font-size.eyebrow}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.typography.font-size.eyebrow}",
+                        "cssVar": "--s2a-typography-font-size-eyebrow",
+                        "figma": "s2a/typography/font-size/eyebrow",
+                        "shipped": true,
+                        "value": "1rem"
+                      }
+                    ]
+                  },
+                  "line-height": {
+                    "value": "{s2a.typography.line-height.eyebrow}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.typography.line-height.eyebrow}",
+                        "cssVar": "--s2a-typography-line-height-eyebrow",
+                        "figma": "s2a/typography/line-height/eyebrow",
+                        "shipped": true,
+                        "value": "20px"
+                      }
+                    ]
+                  },
+                  "letter-spacing": {
+                    "value": "{s2a.typography.letter-spacing.eyebrow}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.typography.letter-spacing.eyebrow}",
+                        "cssVar": "--s2a-typography-letter-spacing-eyebrow",
+                        "figma": "s2a/typography/letter-spacing/eyebrow",
+                        "shipped": true,
+                        "value": "0"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "value": "{s2a.color.content.knockout}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.color.content.knockout}",
+                        "cssVar": "--s2a-color-content-knockout",
+                        "figma": "s2a/color/content/knockout",
+                        "shipped": true,
+                        "value": "#fff"
+                      }
+                    ]
+                  }
+                }
+              },
+              "role": {
+                "selector": ".qc-attribution__role",
+                "figma": ".content/.attribution/Meta/Role/{metarole}",
+                "tokens": {
+                  "font-family": {
+                    "value": "{s2a.font-family.body}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.font-family.body}",
+                        "cssVar": "--s2a-font-family-body",
+                        "figma": "s2a/font-family/body",
+                        "shipped": true,
+                        "value": "\"Adobe Clean\""
+                      }
+                    ]
+                  },
+                  "font-weight": {
+                    "value": "{s2a.font-weight.body}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.font-weight.body}",
+                        "cssVar": "--s2a-font-weight-body",
+                        "figma": "s2a/font-weight/body",
+                        "shipped": true,
+                        "value": "400"
+                      }
+                    ]
+                  },
+                  "font-size": {
+                    "value": "{s2a.typography.font-size.body-md}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.typography.font-size.body-md}",
+                        "cssVar": "--s2a-typography-font-size-body-md",
+                        "figma": "s2a/typography/font-size/body-md",
+                        "shipped": true,
+                        "value": "1rem"
+                      }
+                    ]
+                  },
+                  "line-height": {
+                    "value": "{s2a.typography.line-height.body-md}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.typography.line-height.body-md}",
+                        "cssVar": "--s2a-typography-line-height-body-md",
+                        "figma": "s2a/typography/line-height/body-md",
+                        "shipped": true,
+                        "value": "20px"
+                      }
+                    ]
+                  },
+                  "letter-spacing": {
+                    "value": "{s2a.typography.letter-spacing.body-md}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.typography.letter-spacing.body-md}",
+                        "cssVar": "--s2a-typography-letter-spacing-body-md",
+                        "figma": "s2a/typography/letter-spacing/body-md",
+                        "shipped": true,
+                        "value": "0"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "value": "{s2a.color.content.knockout}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.color.content.knockout}",
+                        "cssVar": "--s2a-color-content-knockout",
+                        "figma": "s2a/color/content/knockout",
+                        "shipped": true,
+                        "value": "#fff"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "actions": {
+            "selector": ".qc-actions",
+            "figma": ".actions",
+            "slot": {
+              "name": "Children",
+              "accepts": [
+                "Button"
+              ],
+              "acceptsMode": "restrict",
+              "notes": "Figma slot \"Children\" (gap spacing/xs) holds one Button — v1 in this set, Button — v2 in the successor; code renders one knockout Button from ctaLabel/ctaHref."
+            }
+          }
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "9334:3814",
+        "nodeName": ".QuoteCard",
+        "componentSetKey": "15162ddb44ecc838d25c5d791891ae0eb74b6308",
+        "deprecated": true,
+        "successorNodeId": "13549:190801",
+        "usages": [
+          "12102:175374 (Section - Social Proof: .slide-left / .slide-active / .slide-right)",
+          "8278:190566 (Home 375: Active Slide 327×542)"
+        ]
+      },
+      "evidence": {
+        "hash": "sha256:1514272a63e6ce5a860c03dd92a4f9cc44b744ac1f52f9ae6a70c83051404327",
+        "extractedAt": "2026-09-17T16:52:26.957Z",
+        "meta": {
+          "version": "1.0.0",
+          "status": "deprecated",
+          "updated": "2026-09-03",
+          "changelog": "1.0.0   2026-09-03  init         First versioned stamp. Restored to its original, pre-existing shape (Context=on-dark axis, slotted Button v1, tight MIN-aligned .content layout) after a same-session experiment altered it in place — this component turned out to be live in an external file's homepage carousel, so the in-place edit was reverted rather than risk breaking that usage. Status set to deprecated: \"QuoteCard — v2\" (2.0.0) is the version for new work; this v1 is kept fully functional for existing consumers only. Do not use in new work."
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/quote-card/quote-card.js",
+        "export": "QuoteCard",
+        "controller": null,
+        "cssClass": "c-quote-card"
+      },
+      "evidence": {
+        "hash": "sha256:54759300b02463c7cb780dba82725572758af914b4d0c10e927e021cb579e6ee"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "qc-v2-anchor",
+      "question": "Which Figma set is the QuoteCard v2 successor, and when do the contract anchors move to it?",
+      "status": "decided",
+      "owner": "Matt",
+      "evidence": "quote-card.figma.evidence.json set.meta.changelog; get_metadata 11878:222771.",
+      "decision": "Located: QuoteCard — v2 is 13549:190801 (Breakpoint=Desktop|Mobile, no Context axis, Button — v2 in the slot, .footer wraps attribution + actions). Anchors stay on v1 (9334:3814) until the Homepage frames migrate; extract v2 evidence next so both are on file."
+    },
+    {
+      "id": "qc-tablet-type-step",
+      "question": "The 48px quote size below 1280px is a raw value because the responsive heading tokens are viewport-scoped and the card sizes by container query. Add a container-scoped type token, or accept the Primitive exception?",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "quote-card.css @container (max-width: 1279px); code evidence raw: line 119."
+    },
+    {
+      "id": "qc-mobile-geometry",
+      "question": "Mobile card is 327×542 at x=24 with a 16px peek and 8px gaps.",
+      "decision": "Decided from Home 375 spec 8278:190566; implemented 2026-09-15.",
+      "status": "decided",
+      "owner": "Claude",
+      "evidence": "evals/visual 375-light/social-proof-carousel; e2e mobile slide assertion."
+    },
+    {
+      "id": "qc-cta-style",
+      "question": "The CTA is always Button style=knockout. Should the style be a lever?",
+      "decision": "No: the card sits on media in both themes; knockout is the only readable style. Slot restricts to Button; style is fixed in code.",
+      "status": "decided",
+      "owner": "Claude",
+      "evidence": "quote-card.js createButton({ style: 'knockout' }); Figma .actions holds Button — v1 knockout."
+    },
+    {
+      "id": "qc-button-tokens",
+      "question": "Button tokens: the slotted Button — v1 binds the shipped names (button/background/primary/solid/on-dark/default, button/content/primary/solid/inverse) while the code Button v2 references button-background-knockout-* names that are unshipped.",
+      "status": "open",
+      "owner": "token pipeline",
+      "evidence": "quote-card.figma.evidence.json bindings on .content/.actions/Children/Button — v1; evals/tokens/out/homepage-tokens.json pipeline list."
+    },
+    {
+      "id": "qc-quote-ink",
+      "question": "The quote text binds content/default (theme-dependent) while the attribution binds content/knockout (invariant); on the media scrim both must read white. Code uses knockout for both. Should the design bind knockout on the quote too?",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "quote-card.figma.evidence.json: .content/.quote/{heading} fills=s2a/color/content/default; Meta/Name and Meta/Role fills=s2a/color/content/knockout; explicit Dark mode only on the Mobile variant's .content."
+    },
+    {
+      "id": "qc-mobile-type",
+      "question": "At sm the component's heading-2 token resolves to 32px (five lines in the 292px mobile column), while the Home 375 page frame shows the quote near 48px and the code keeps 48. Which is the phone size of record?",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "quote-card.figma.evidence.json variables heading-2 resolved {xl:56, lg:56, md:48, sm:32}; Home 375 8278:190566 crop; quote-card.css @container (max-width: 599px)."
+    },
+    {
+      "id": "qc-show-pagination",
+      "question": "The Figma card carries a Show Pagination boolean and a DotPagination instance (five dots: active content/knockout, inactive transparent/white/64, radius/round, size spacing/xs); in code the carousel owns pagination and the card has none.",
+      "decision": "Keep pagination in the carousel (one control for the track) and bind its dots to the same tokens the card's DotPagination uses. Show Pagination has no card-level code counterpart; recorded here rather than as a prop.",
+      "status": "decided",
+      "owner": "Claude",
+      "evidence": "quote-card.figma.evidence.json axes Show Pagination#9517:0 and .pagination bindings; social-proof-carousel.defs.json spc-dot-tokens."
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:dc3fbf5ac2d7c4f045f8ac2da9eb5cf81fb1d611c14729c46555744c9034e454",
+    "codeEvidence": "sha256:54759300b02463c7cb780dba82725572758af914b4d0c10e927e021cb579e6ee",
+    "figmaEvidence": "sha256:1514272a63e6ce5a860c03dd92a4f9cc44b744ac1f52f9ae6a70c83051404327",
+    "generator": "s2a-spec-transform@1"
+  }
+}

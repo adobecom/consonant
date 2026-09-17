@@ -102,6 +102,9 @@ function recentlyUsed(n = 5): Feature[] {
 let annotateNodeId: string | null = null;
 let selectSetId:    string | null = null;
 let docSetId:     string | null = null;
+let contractSetId: string | null = null;
+let contractEvidence: { evidence: Record<string, unknown>; canonical: string; hash: string } | null = null;
+let contractIndexCache: { at: number; slugs: Map<string, string> } | null = null;
 let bridgeConnected      = false;
 let bridgeWs: WebSocket | null = null;
 let bridgeWsPort: number | null = null;
@@ -206,6 +209,13 @@ const FEATURES: Feature[] = [
     description: 'Build a full documentation page for the selected component or component set',
     category: 'Tools',
     uiAction: () => switchPanel('tools'),
+  },
+  {
+    id: 'tools:contract',
+    name: 'Extract contract',
+    description: 'Record the selected component set as design evidence (axes, variants, token bindings per mode) and publish it',
+    category: 'Tools',
+    uiAction: () => { switchPanel('tools'); if (contractSetId) runContractExtract(); },
   },
   {
     id: 'tools:request',
@@ -875,6 +885,272 @@ document.getElementById('docGenerateBtn')?.addEventListener('click', () => {
   postToPlugin('doc:generate', { setId: docSetId });
 });
 
+// ── Contract evidence ─────────────────────────────────────────────────────────
+// Extract runs in the sandbox (contract-extract.ts); this side hashes, shows a
+// summary, and talks to the local sync server. Badge: ✓ has a contract when a
+// spec.json exists for the set's slug, ○ new when none does, unknown offline.
+
+// Per-user sync endpoint (clientStorage via code.ts): localhost in
+// development, the contract relay when published. Same request body either way.
+let contractEndpoint = 'http://localhost:9410';
+let contractRelayKey = '';
+const contractHeaders = (): Record<string, string> => ({ 'Content-Type': 'application/json', ...(contractRelayKey ? { 'x-s2a-relay-key': contractRelayKey } : {}) });
+
+function setContractStatus(msg: string, type: '' | 'ok' | 'err' = '') {
+  const el = document.getElementById('contractStatus') as HTMLElement;
+  el.innerHTML = msg; el.className = 'status' + (type ? ' ' + type : '');
+}
+
+function contractSlug(name: string): string {
+  return name
+    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '')
+    .replace(/\s*[—–-]\s*v\d+(\.\d+)*\s*$/i, '')
+    .replace(/\(.*?\)/g, '')
+    .trim()
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/[^A-Za-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toLowerCase();
+}
+
+async function contractIndex(): Promise<Map<string, string> | null> {
+  if (contractIndexCache && Date.now() - contractIndexCache.at < 30000) return contractIndexCache.slugs;
+  try {
+    const res = await fetch(`${contractEndpoint.replace(/\/$/, '')}/contracts`, { headers: contractHeaders() });
+    if (!res.ok) return null;
+    const data = await res.json() as { items: Array<{ slug: string; name: string; figmaEvidence: { hash: string } | null }> };
+    const slugs = new Map<string, string>();
+    for (const item of data.items) slugs.set(item.slug, item.figmaEvidence ? 'evidence' : 'spec');
+    contractIndexCache = { at: Date.now(), slugs };
+    return slugs;
+  } catch { return null; }
+}
+
+let contractIsFrame = false;
+async function updateContractSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
+  const setLike = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT' || sel?.nodeType === 'INSTANCE';
+  contractIsFrame = sel?.nodeType === 'FRAME' || sel?.nodeType === 'SECTION' || sel?.nodeType === 'GROUP';
+  const ok = setLike || contractIsFrame;
+  (document.getElementById('contractNameField') as HTMLElement).style.display = contractIsFrame ? 'block' : 'none';
+  (document.getElementById('contractMatch') as HTMLElement).style.display = 'none';
+  (document.getElementById('contractBuildRow') as HTMLElement).style.display = 'none';
+  if (contractIsFrame && sel) (document.getElementById('contractNameInput') as HTMLInputElement).placeholder = contractSlug(sel.name) || 'candidate-name';
+  contractSetId = ok ? (sel?.id ?? null) : null;
+  contractEvidence = null;
+  const emptyEl  = document.getElementById('contractSelectionEmpty') as HTMLElement;
+  const infoEl   = document.getElementById('contractSelectionInfo')  as HTMLElement;
+  const nameEl   = document.getElementById('contractSetName')   as HTMLElement;
+  const statusEl = document.getElementById('contractSetStatus') as HTMLElement;
+  const extract  = document.getElementById('contractExtractBtn') as HTMLButtonElement;
+  const copy     = document.getElementById('contractCopyBtn')    as HTMLButtonElement;
+  const publish  = document.getElementById('contractPublishBtn') as HTMLButtonElement;
+  const summary  = document.getElementById('contractSummary')    as HTMLElement;
+  summary.style.display = 'none';
+  copy.disabled = true; publish.disabled = true;
+  if (!ok || !sel) { emptyEl.style.display = 'block'; infoEl.style.display = 'none'; extract.disabled = true; return; }
+  emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
+  nameEl.textContent = sel.name;
+  extract.disabled = false;
+  statusEl.textContent = 'checking…';
+  const slugs = await contractIndex();
+  if (contractSetId !== sel.id) return; // selection moved on
+  const slug = contractSlug(sel.name);
+  if (contractIsFrame) { statusEl.textContent = `${sel.nodeType.toLowerCase()} · candidate; Extract to see repeats and the closest contracts`; return; }
+  if (!slugs) statusEl.textContent = `${slug} · status unknown (${contractEndpoint} unreachable)`;
+  else if (slugs.get(slug) === 'evidence') { statusEl.textContent = `✓ ${slug} · contract + evidence`; (document.getElementById('contractBuildRow') as HTMLElement).style.display = 'flex'; }
+  else if (slugs.get(slug) === 'spec') { statusEl.textContent = `✓ ${slug} · has a contract, no evidence yet`; (document.getElementById('contractBuildRow') as HTMLElement).style.display = 'flex'; }
+  else statusEl.textContent = `○ ${slug} · new`;
+}
+
+// SHA-256 without WebCrypto: the plugin UI iframe is not a secure context in
+// Figma, so crypto.subtle is unavailable there. Pure JS, same digest.
+function sha256Sync(text: string): string {
+  const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  const bytes = new TextEncoder().encode(text);
+  const bitLen = bytes.length * 8;
+  const padded = new Uint8Array(((bytes.length + 9 + 63) >> 6) << 6);
+  padded.set(bytes); padded[bytes.length] = 0x80;
+  const dv = new DataView(padded.buffer);
+  dv.setUint32(padded.length - 8, Math.floor(bitLen / 0x100000000)); dv.setUint32(padded.length - 4, bitLen >>> 0);
+  let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
+  const w = new Uint32Array(64);
+  const rotr = (x: number, n: number) => (x >>> n) | (x << (32 - n));
+  for (let off = 0; off < padded.length; off += 64) {
+    for (let i = 0; i < 16; i++) w[i] = dv.getUint32(off + i * 4);
+    for (let i = 16; i < 64; i++) { const s0 = rotr(w[i-15],7) ^ rotr(w[i-15],18) ^ (w[i-15] >>> 3); const s1 = rotr(w[i-2],17) ^ rotr(w[i-2],19) ^ (w[i-2] >>> 10); w[i] = (w[i-16] + s0 + w[i-7] + s1) >>> 0; }
+    let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
+    for (let i = 0; i < 64; i++) { const S1 = rotr(e,6) ^ rotr(e,11) ^ rotr(e,25); const ch = (e & f) ^ (~e & g); const t1 = (h + S1 + ch + K[i] + w[i]) >>> 0; const S0 = rotr(a,2) ^ rotr(a,13) ^ rotr(a,22); const maj = (a & b) ^ (a & c) ^ (b & c); const t2 = (S0 + maj) >>> 0; h=g; g=f; f=e; e=(d + t1) >>> 0; d=c; c=b; b=a; a=(t1 + t2) >>> 0; }
+    h0=(h0+a)>>>0; h1=(h1+b)>>>0; h2=(h2+c)>>>0; h3=(h3+d)>>>0; h4=(h4+e)>>>0; h5=(h5+f)>>>0; h6=(h6+g)>>>0; h7=(h7+h)>>>0;
+  }
+  return [h0,h1,h2,h3,h4,h5,h6,h7].map(x => x.toString(16).padStart(8, '0')).join('');
+}
+
+async function sha256Hex(text: string): Promise<string> {
+  try {
+    if (globalThis.crypto?.subtle) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+  } catch { /* fall through */ }
+  return sha256Sync(text);
+}
+
+// Best-effort debug line to the sync endpoint (POST /log), so what happens
+// inside Figma is readable from the terminal that runs the server.
+function contractLog(event: string, detail?: unknown) {
+  try {
+    fetch(`${contractEndpoint.replace(/\/$/, '')}/log`, { method: 'POST', headers: contractHeaders(), body: JSON.stringify({ event, detail, at: new Date().toISOString() }), keepalive: true }).catch(() => {});
+  } catch { /* ignore */ }
+}
+
+function runContractExtract() {
+  if (!contractSetId) return;
+  sendTelemetry('action:contract-extract');
+  // Frames rarely carry a usable layer name; the candidate name given here
+  // becomes the evidence's set name (and, if ticked, the layer's name).
+  const name = contractIsFrame ? (document.getElementById('contractNameInput') as HTMLInputElement).value.trim() : '';
+  const rename = contractIsFrame && (document.getElementById('contractRenameLayer') as HTMLInputElement).checked;
+  contractLog('extract:start', { setId: contractSetId, name: name || undefined });
+  const btn = document.getElementById('contractExtractBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Extracting…';
+  setContractStatus('');
+  postToPlugin('contract:extract', { setId: contractSetId, name, rename });
+}
+
+document.getElementById('contractExtractBtn')?.addEventListener('click', runContractExtract);
+
+document.getElementById('contractCopyBtn')?.addEventListener('click', async () => {
+  if (!contractEvidence) return;
+  const text = JSON.stringify({ ...contractEvidence.evidence, provenance: { hash: contractEvidence.hash } }, null, 2);
+  try {
+    await navigator.clipboard.writeText(text);
+    setContractStatus('Evidence JSON copied', 'ok');
+  } catch {
+    // Figma's iframe can refuse the async clipboard; fall back to a hidden textarea.
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    const done = document.execCommand('copy'); ta.remove();
+    setContractStatus(done ? 'Evidence JSON copied' : 'Copy failed', done ? 'ok' : 'err');
+  }
+});
+
+document.getElementById('contractPublishBtn')?.addEventListener('click', async () => {
+  if (!contractEvidence) return;
+  sendTelemetry('action:contract-publish');
+  contractLog('publish:start', { hash: contractEvidence.hash, endpoint: contractEndpoint });
+  const btn = document.getElementById('contractPublishBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Publishing…';
+  try {
+    const res = await fetch(`${contractEndpoint.replace(/\/$/, '')}/evidence`, {
+      method: 'POST',
+      headers: contractHeaders(),
+      body: JSON.stringify({ evidence: contractEvidence.evidence, hash: contractEvidence.hash, ...(contractIsFrame ? { slug: (document.getElementById('contractNameInput') as HTMLInputElement).value.trim() || undefined } : {}) }),
+    });
+    const out = await res.json() as { status?: string; path?: string; branch?: string; actions?: string; error?: string; proposal?: string | null; note?: string };
+    if (!res.ok) throw new Error(out.error || `Sync endpoint returned ${res.status}`);
+    contractIndexCache = null;
+    // Local server: new | updated | in-sync with a path. Relay: dispatched with a branch.
+    const note = out.status === 'in-sync' ? 'Already in sync' : out.status === 'dispatched' ? 'Published to CI' : out.status === 'new' ? 'Written (new)' : 'Updated';
+    const where = out.branch ? `branch <code>${esc(out.branch)}</code>${out.actions ? ` · <a href="${esc(out.actions)}" target="_blank">Actions →</a>` : ''}` : `<code>${esc(out.path || '')}</code>`;
+    setContractStatus(`${note}: ${where}${out.proposal ? '<br>' + esc(out.proposal) : ''}${out.note && out.status === 'dispatched' ? '<br>' + esc(out.note) : ''}`, 'ok');
+  } catch (err: any) {
+    contractLog('publish:error', err?.message || String(err));
+    setContractStatus(`Publish failed: ${esc(err?.message || String(err))}. Local: <code>npm run contract-sync</code> in apps/s2a-toolkit; or set the relay URL under Sync endpoint.`, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Publish';
+  }
+});
+
+async function onContractEvidence(msg: Record<string, unknown>) {
+  const btn = document.getElementById('contractExtractBtn') as HTMLButtonElement;
+  btn.disabled = !contractSetId; btn.textContent = 'Extract contract';
+  if (msg.error) { contractLog('extract:error', msg.error); setContractStatus('❌ ' + esc(msg.error as string), 'err'); return; }
+  try {
+  const evidence = msg.evidence as Record<string, unknown>;
+  const hash = 'sha256:' + await sha256Hex(msg.hashInput as string);
+  const setInfo = evidence.set as { name: string; layerName?: string };
+  if (setInfo?.layerName && setInfo.layerName !== setInfo.name) (document.getElementById('contractSetName') as HTMLElement).textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
+  contractLog('extract:ok', { set: (evidence.set as any)?.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
+  contractEvidence = { evidence, canonical: msg.canonical as string, hash };
+  const counts = evidence.counts as { variants: number; nodes: number; bindings: number; unboundPaintNodes: number };
+  const axes = evidence.axes as Array<{ name: string; type: string; options?: string[] }>;
+  const variables = Object.values(evidence.variables as Record<string, { name: string; collection: string }>);
+  const collections = [...new Set(variables.map(v => v.collection))];
+  const instances = evidence.instances as Array<{ set: { name: string } | null }>;
+  const nested = [...new Set(instances.map(i => i.set?.name).filter(Boolean))];
+  const meta = (evidence.set as { meta: { version: string; status: string } }).meta;
+  const pattern = evidence.pattern as { repeats: Array<{ count: number; unit: { name: string }; sharedLayers: string[] }>; genericLayers: number; namedLayers: number; roles: string[]; instancedSets: string[] } | undefined;
+  const summary = document.getElementById('contractSummary') as HTMLElement;
+  summary.textContent = [
+    `${meta.version ? 'v' + meta.version + (meta.status ? ' · ' + meta.status : '') : 'no s2a:meta version'}`,
+    `${counts.variants} variants · ${counts.nodes} nodes · ${counts.bindings} bindings in ${(msg.durationMs as number) ?? 0}ms`,
+    `axes: ${axes.map(a => a.name + (a.options ? `[${a.options.length}]` : ':' + a.type.toLowerCase())).join(', ') || 'none'}`,
+    `variables: ${variables.length} across ${collections.join(', ') || 'none'}`,
+    `nested sets: ${nested.join(', ') || 'none'}`,
+    counts.unboundPaintNodes ? `⚠ ${counts.unboundPaintNodes} painted nodes with no variable` : 'all painted nodes bound',
+    ...(pattern ? [
+      pattern.repeats.length ? `repeats: ${pattern.repeats[0].count}× "${pattern.repeats[0].unit.name}" (shared: ${pattern.repeats[0].sharedLayers.join(', ') || 'none named'})` : 'repeats: none',
+      `roles: ${pattern.roles.join(', ') || 'none'} · S2A instances inside: ${pattern.instancedSets.join(', ') || 'none'}`,
+      `${pattern.genericLayers} of ${pattern.genericLayers + pattern.namedLayers} layers have generated names`,
+    ] : []),
+    hash,
+  ].join('\n');
+  summary.style.display = 'block';
+  void showContractMatch(evidence);
+  (document.getElementById('contractCopyBtn') as HTMLButtonElement).disabled = false;
+  (document.getElementById('contractPublishBtn') as HTMLButtonElement).disabled = false;
+  setContractStatus('Extracted. Publish sends it to the sync server; Copy puts the JSON on the clipboard.', 'ok');
+  } catch (err: any) {
+    contractLog('extract:ui-error', err?.message || String(err));
+    setContractStatus('❌ Could not summarize the evidence: ' + esc(err?.message || String(err)), 'err');
+  }
+}
+
+// Structural match against the contract index: does this already exist, can
+// it be extended, or is it new? Computed by the sync endpoint from roles.
+async function showContractMatch(evidence: Record<string, unknown>) {
+  const el = document.getElementById('contractMatch') as HTMLElement;
+  try {
+    const res = await fetch(`${contractEndpoint.replace(/\/$/, '')}/match`, { method: 'POST', headers: contractHeaders(), body: JSON.stringify({ evidence }) });
+    if (!res.ok) { el.style.display = 'none'; return; }
+    const m = await res.json() as { verdict: string; summary: string; unit: Array<{ name: string; slug: string; score: number; missing: string[]; verified: boolean }>; organism: Array<{ name: string; score: number; acceptsBest: boolean }>; candidate: { repeats: { count: number } | null } };
+    contractLog('match', { verdict: m.verdict, top: m.unit.slice(0, 3).map(u => `${u.slug}:${u.score}`) });
+    el.textContent = [
+      `${m.verdict === 'extend' ? '↔ extend' : m.verdict === 'new' ? '＋ new contract' : '↔ extend or ＋ new'}: ${m.summary}`,
+      ...m.unit.slice(0, 3).map(u => `  ${u.name} ${u.score}${u.missing.length ? ` · would need ${u.missing.join(', ')}` : ''}${u.verified ? ' · evidence ✓' : ''}`),
+      ...(m.candidate.repeats ? [`  organism (${m.candidate.repeats.count}× unit): ${m.organism.length ? m.organism.map(o => `${o.name} ${o.score}${o.acceptsBest ? ' ✓ accepts' : ''}`).join(' · ') : 'no collection contract yet'}`] : []),
+    ].join('\n');
+    el.style.display = 'block';
+  } catch { el.style.display = 'none'; }
+}
+
+// Build a component set on the current page from the contract's figma.plan.json.
+document.getElementById('contractBuildBtn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('contractBuildBtn') as HTMLButtonElement;
+  const name = (document.getElementById('contractSetName') as HTMLElement).textContent || '';
+  const slug = contractSlug(name);
+  btn.disabled = true; btn.textContent = 'Building…';
+  try {
+    const res = await fetch(`${contractEndpoint.replace(/\/$/, '')}/plan/${encodeURIComponent(slug)}`, { headers: contractHeaders() });
+    if (!res.ok) throw new Error((await res.json()).error || `no plan for ${slug}`);
+    const plan = await res.json();
+    contractLog('build-set:start', { slug });
+    postToPlugin('contract:build-set', { plan, slug });
+  } catch (err: any) {
+    contractLog('build-set:error', err?.message || String(err));
+    setContractStatus(`Build failed: ${esc(err?.message || String(err))}`, 'err');
+    btn.disabled = false; btn.textContent = 'Build set from contract';
+  }
+});
+
+document.getElementById('contractEndpointSaveBtn')?.addEventListener('click', () => {
+  const endpoint = (document.getElementById('contractEndpointInput') as HTMLInputElement).value.trim() || 'http://localhost:9410';
+  const relayKey = (document.getElementById('contractRelayKeyInput') as HTMLInputElement).value.trim();
+  contractEndpoint = endpoint; contractRelayKey = relayKey; contractIndexCache = null;
+  postToPlugin('contract-endpoint:set', { endpoint, relayKey });
+  setContractStatus(`Sync endpoint: <code>${esc(endpoint)}</code>`, 'ok');
+});
+
 // ── Plugin messages ───────────────────────────────────────────────────────────
 
 window.addEventListener('message', (event) => {
@@ -922,6 +1198,7 @@ window.addEventListener('message', (event) => {
         };
         updateAnnotateSelection(sel);
         updateDocSelection(sel);
+        void updateContractSelection(sel);
         updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
         updateSectionBar(
           !!(msg.isSection as boolean),
@@ -931,10 +1208,31 @@ window.addEventListener('message', (event) => {
       } else {
         updateAnnotateSelection(null);
         updateDocSelection(null);
+        void updateContractSelection(null);
         updateCopyBtn(null, null);
         updateSectionBar(false, 0, '');
       }
       if (activePanel === 'request') postToPlugin('request:capture');
+      break;
+    }
+    case 'contract-endpoint:value': {
+      contractEndpoint = (msg.endpoint as string) || 'http://localhost:9410';
+      contractRelayKey = (msg.relayKey as string) || '';
+      (document.getElementById('contractEndpointInput') as HTMLInputElement).value = contractEndpoint;
+      (document.getElementById('contractRelayKeyInput') as HTMLInputElement).value = contractRelayKey;
+      break;
+    }
+    case 'contract:evidence': {
+      void onContractEvidence(msg as Record<string, unknown>);
+      break;
+    }
+    case 'contract:build-set:done': {
+      const btn = document.getElementById('contractBuildBtn') as HTMLButtonElement;
+      btn.disabled = false; btn.textContent = 'Build set from contract';
+      if (msg.error) { contractLog('build-set:error', msg.error); setContractStatus('❌ Build failed: ' + esc(msg.error as string), 'err'); break; }
+      const r = msg.report as { set: string; variants: number; layers: number; boundVariables: number; unresolvedVariables: string[]; stylesApplied: number; stylesMissing: string[]; properties: number; notes: string[] };
+      contractLog('build-set:done', r);
+      setContractStatus(`Built <code>${esc(r.set)}</code>: ${r.variants} variants, ${r.layers} layers, ${r.boundVariables} variables bound, ${r.stylesApplied} text styles, ${r.properties} properties${r.unresolvedVariables.length ? `; ${r.unresolvedVariables.length} variables not found locally (${esc(r.unresolvedVariables.slice(0, 4).join(', '))}…)` : ''}${r.stylesMissing.length ? `; styles missing: ${esc(r.stylesMissing.join(', '))}` : ''}${r.notes?.length ? `; ${r.notes.length} notes in the log` : ''}`, r.unresolvedVariables.length || r.stylesMissing.length ? '' : 'ok');
       break;
     }
     case 'format-section:done': {
@@ -1345,6 +1643,7 @@ document.getElementById('reqSubmitBtn')?.addEventListener('click', async () => {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 postToPlugin('ui-ready');
+postToPlugin('contract-endpoint:get');
 postToPlugin('gh-token:get');
 applySize();
 
