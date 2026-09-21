@@ -32,6 +32,8 @@ interface PropertyEntry {
 
 declare const FEATURE_A11Y: boolean;
 declare const FEATURE_LEGACY_ALIGN: boolean;
+declare const FEATURE_VARIABLES: boolean;
+declare const FEATURE_SELECT: boolean;
 declare const __PLUGIN_VERSION__: string;
 declare const __PLUGIN_BUILD_SHA__: string;
 declare const __PLUGIN_BUILD_TIME__: string;
@@ -53,6 +55,19 @@ if (!FEATURE_LEGACY_ALIGN) {
   document.getElementById('hamburgerMatchItem')?.remove();
   document.querySelector<HTMLElement>('.tab-panel[data-panel="align"]')?.remove();
   document.querySelector<HTMLElement>('.tab-panel[data-panel="match"]')?.remove();
+}
+
+// Feature flags: Variables and Select panels are unwired placeholders (markup only,
+// no handlers) — hidden until they get real logic.
+if (!FEATURE_VARIABLES) {
+  document.getElementById('menuVariablesItem')?.remove();
+  document.getElementById('hamburgerVariablesItem')?.remove();
+  document.querySelector<HTMLElement>('.tab-panel[data-panel="variables"]')?.remove();
+}
+if (!FEATURE_SELECT) {
+  document.getElementById('menuSelectItem')?.remove();
+  document.getElementById('hamburgerSelectItem')?.remove();
+  document.querySelector<HTMLElement>('.tab-panel[data-panel="select"]')?.remove();
 }
 
 const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
