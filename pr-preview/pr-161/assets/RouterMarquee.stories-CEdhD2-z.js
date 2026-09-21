@@ -1,4 +1,4 @@
-import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{i as t,s as n,t as r}from"./lit-UMo5x0iS.js";import{n as i,t as a}from"./button-mrx1M3M1.js";import{r as o,t as s}from"./unsafe-html-K3HXmifv.js";import{i as c,n as l,r as u,t as d}from"./play-CAmK-qpW.js";import{n as f,t as p}from"./rich-content-C6e_ugTM.js";import{n as m,t as h}from"./router-nav-item-BdMnZcUa.js";var g,_,v,y,b,x,S,C;function w(){return(w=e((()=>{r(),s(),i(),f(),m(),u(),d(),g=({slides:e=[],activeIndex:r=0}={})=>n`
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{i as t,s as n,t as r}from"./lit-UMo5x0iS.js";import{r as i,t as a}from"./unsafe-html-K3HXmifv.js";import{n as o,t as s}from"./button-mrx1M3M1.js";import{i as c,n as l,r as u,t as d}from"./play-CAmK-qpW.js";import{n as f,t as p}from"./rich-content-C6e_ugTM.js";import{n as m,t as h}from"./router-nav-item-BdMnZcUa.js";var g,_,v,y,b,x,S,C;function w(){return(w=e((()=>{r(),a(),o(),f(),m(),u(),d(),g=({slides:e=[],activeIndex:r=0}={})=>n`
   <div class="c-router-marquee" data-state="playing">
     <div class="rm-slides">
       ${e.map((e,i)=>n`
@@ -20,7 +20,7 @@ import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{i as t,s as n,t as r}f
             </div>
             <div class="rm-overlay"></div>
             <div class="rm-content">
-              ${p({theme:`on-dark`,density:`tight`,measure:`none`,eyebrow:e.eyebrow??``,showEyebrow:!!e.eyebrow,title:e.title??``,body:e.body??``,showActions:!!e.ctaLabel,actions:e.ctaLabel?a({label:e.ctaLabel,href:e.ctaHref??`#`,style:`knockout`}):t})}
+              ${p({theme:`on-dark`,density:`tight`,measure:`none`,eyebrow:e.eyebrow??``,showEyebrow:!!e.eyebrow,title:e.title??``,body:e.body??``,showActions:!!e.ctaLabel,actions:e.ctaLabel?s({label:e.ctaLabel,href:e.ctaHref??`#`,style:`knockout`}):t})}
             </div>
           </div>
         `)}
@@ -32,8 +32,8 @@ import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{i as t,s as n,t as r}f
         type="button"
         aria-label="Pause autoplay"
       >
-        <span class="rm-icon-pause" aria-hidden="true">${o(c)}</span>
-        <span class="rm-icon-play" aria-hidden="true">${o(l)}</span>
+        <span class="rm-icon-pause" aria-hidden="true">${i(c)}</span>
+        <span class="rm-icon-play" aria-hidden="true">${i(l)}</span>
       </button>
       <div class="rm-nav-items">
         ${e.map((e,t)=>h({label:e.product,app:e.app??`experience-cloud`,orientation:`block`,state:t===r?`active`:`default`}))}
