@@ -24330,9 +24330,15 @@
   var studioSel = null;
   var studioValidateTimer;
   var $s = (id) => document.getElementById(id);
-  function studioApi(path, init) {
+  var SYNC_DOWN = `No sync server at ${"{endpoint}"}. Start it: npm run contract-sync (in apps/s2a-toolkit).`;
+  var syncDownMessage = () => SYNC_DOWN.replace("{endpoint}", contractEndpoint);
+  async function studioApi(path, init) {
     var _a28;
-    return fetch(`${contractEndpoint}${path}`, __spreadProps(__spreadValues({}, init), { headers: __spreadValues({ "content-type": "application/json" }, (_a28 = init == null ? void 0 : init.headers) != null ? _a28 : {}) }));
+    try {
+      return await fetch(`${contractEndpoint}${path}`, __spreadProps(__spreadValues({}, init), { headers: __spreadValues({ "content-type": "application/json" }, (_a28 = init == null ? void 0 : init.headers) != null ? _a28 : {}) }));
+    } catch (e) {
+      throw new Error(syncDownMessage());
+    }
   }
   function studioSetSelection(sel) {
     var _a28;
@@ -24387,7 +24393,7 @@
         host.appendChild(row);
       }
     } catch (e) {
-      host.innerHTML = `<div class="studio-empty">Sync server unreachable at ${contractEndpoint}. Start it with npm run contract:relay.</div>`;
+      host.innerHTML = `<div class="studio-empty">${esc(syncDownMessage())}</div>`;
     }
   }
   function studioShow(view) {
@@ -24440,12 +24446,13 @@
     studioResult = null;
     window.clearTimeout(studioValidateTimer);
     studioValidateTimer = window.setTimeout(async () => {
+      var _a28;
       if (!studio.def) return;
       try {
         const res = await studioApi("/validate", { method: "POST", body: JSON.stringify({ def: studio.def }) });
         studio.validation = res.ok ? await res.json() : { valid: false, errors: [res.status === 404 ? "sync server is running older code \u2014 restart it" : `validate returned ${res.status}`], warnings: [] };
-      } catch (e) {
-        studio.validation = { valid: false, errors: ["sync server unreachable \u2014 cannot validate"], warnings: [] };
+      } catch (err) {
+        studio.validation = { valid: false, errors: [String((_a28 = err == null ? void 0 : err.message) != null ? _a28 : syncDownMessage())], warnings: [] };
       }
       studioRenderFooter();
     }, 400);

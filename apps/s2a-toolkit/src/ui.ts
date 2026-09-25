@@ -935,8 +935,18 @@ let studioValidateTimer: number | undefined;
 
 const $s = (id: string) => document.getElementById(id) as HTMLElement;
 
-function studioApi(path: string, init?: RequestInit) {
-  return fetch(`${contractEndpoint}${path}`, { ...init, headers: { 'content-type': 'application/json', ...(init?.headers ?? {}) } });
+// "Failed to fetch" is what the browser says when nothing is listening. It tells
+// a designer nothing, so every studio call turns it into the one instruction
+// that fixes it.
+const SYNC_DOWN = `No sync server at ${'{endpoint}'}. Start it: npm run contract-sync (in apps/s2a-toolkit).`;
+const syncDownMessage = () => SYNC_DOWN.replace('{endpoint}', contractEndpoint);
+
+async function studioApi(path: string, init?: RequestInit) {
+  try {
+    return await fetch(`${contractEndpoint}${path}`, { ...init, headers: { 'content-type': 'application/json', ...(init?.headers ?? {}) } });
+  } catch {
+    throw new Error(syncDownMessage());
+  }
 }
 
 function studioSetSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
@@ -985,7 +995,7 @@ async function studioRefreshIndex() {
       host.appendChild(row);
     }
   } catch {
-    host.innerHTML = `<div class="studio-empty">Sync server unreachable at ${contractEndpoint}. Start it with npm run contract:relay.</div>`;
+    host.innerHTML = `<div class="studio-empty">${esc(syncDownMessage())}</div>`;
   }
 }
 
@@ -1056,9 +1066,9 @@ function studioValidate() {
       studio.validation = res.ok
         ? await res.json()
         : { valid: false, errors: [res.status === 404 ? 'sync server is running older code — restart it' : `validate returned ${res.status}`], warnings: [] };
-    } catch {
+    } catch (err: any) {
       // Unknown is not valid. A checker that cannot run must not report a pass.
-      studio.validation = { valid: false, errors: ['sync server unreachable — cannot validate'], warnings: [] };
+      studio.validation = { valid: false, errors: [String(err?.message ?? syncDownMessage())], warnings: [] };
     }
     studioRenderFooter();
   }, 400) as unknown as number;
