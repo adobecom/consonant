@@ -41,11 +41,6 @@
   color: var(--s2a-color-content-body-subtle, rgba(0, 0, 0, 0.64));
 }
 
-/* ── Context: on-dark ────────────────────────────────────────────────────── */
-.c-link[data-context="on-dark"] {
-  color: var(--s2a-color-content-knockout, #fff);
-}
-
 /* ── Underline prop ──────────────────────────────────────────────────────── */
 .c-link[data-underline] {
   text-decoration: underline;
@@ -56,10 +51,6 @@
 .c-link:focus-visible {
   outline: 1px solid var(--s2a-color-focus-ring-default, #3b63fb);
   outline-offset: 3px;
-}
-
-.c-link[data-context="on-dark"]:focus-visible {
-  outline-color: var(--s2a-color-focus-ring-knockout, #fff);
 }
 
 /* ── End icon (12×12 chevron) ────────────────────────────────────────────── */

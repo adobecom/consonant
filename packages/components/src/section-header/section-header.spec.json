@@ -13,7 +13,6 @@
     { "name": "showEyebrow", "type": "boolean", "defaultValue": "true" },
     { "name": "title", "type": "string", "defaultValue": "\"\"" },
     { "name": "body", "type": "string", "defaultValue": "\"\"", "description": "Optional body paragraph below title" },
-    { "name": "theme", "type": "string", "defaultValue": "\"on-light\"", "enum": ["on-light", "on-dark"] },
     { "name": "showActions", "type": "boolean", "defaultValue": "false" },
     { "name": "actions", "type": "TemplateResult", "description": "Optional CTA buttons rendered below body text" }
   ],

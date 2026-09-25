@@ -33,7 +33,13 @@ export function markdown(ir) {
   L.push("");
   if (ir.decisions.length) {
     L.push("## Decisions", "");
-    for (const d of [...ir.decisions].sort((a, b) => (a.status === "open" ? -1 : 1) - (b.status === "open" ? -1 : 1))) L.push(`- ${d.status === "open" ? "⏳ **open**" : "✅ decided"} \`${d.id}\` (${d.owner ?? "unowned"}): ${d.question}${d.decision ? ` → ${d.decision}` : ""}${d.evidence ? ` _Evidence: ${d.evidence}_` : ""}`);
+    for (const d of [...ir.decisions].sort((a, b) => (a.status === "open" ? -1 : 1) - (b.status === "open" ? -1 : 1))) {
+      const conf = d.confidence ? ` \`${d.confidence} confidence\`` : "";
+      L.push(`- ${d.status === "open" ? "⏳ **open**" : "✅ decided"} \`${d.id}\`${conf} (${d.owner ?? "unowned"}): ${d.question}${d.decision ? ` → ${d.decision}` : ""}${d.evidence ? ` _Evidence: ${d.evidence}_` : ""}`);
+      if (d.chose) L.push(`  - The draft chose: ${d.chose}`);
+      if (d.alternatives?.length) L.push(`  - Alternatives: ${d.alternatives.join("; ")}`);
+      if (d.fix) L.push(`  - If wrong: ${d.fix}`);
+    }
     L.push("");
   }
   if (ir.a11y) {

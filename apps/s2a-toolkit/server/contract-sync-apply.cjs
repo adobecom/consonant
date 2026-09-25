@@ -63,7 +63,19 @@ for (const file of files) {
       if (build.status !== 0) red = true;
       const defsPath = path.join(REPO_ROOT, "packages", "components", "src", slug, `${slug}.defs.json`);
       const open = fs.existsSync(defsPath) ? JSON.parse(fs.readFileSync(defsPath, "utf8")).decisions.filter((d) => d.status === "open") : [];
-      if (open.length) summary.push("", `#### Decisions to review (${open.length})`, "", ...open.map((d) => `- [ ] **${d.id}** — ${d.question}`));
+      if (open.length) {
+        // Least trustworthy first: approving this PR is the curation, so the
+        // guesses have to be the part that is hardest to skim past.
+        const band = { low: 0, medium: 1, high: 2 };
+        const sorted = [...open].sort((a, b) => (band[a.confidence] ?? 1) - (band[b.confidence] ?? 1));
+        const n = (c) => open.filter((d) => d.confidence === c).length;
+        summary.push("", `#### Decisions to review (${open.length}: ${n("low")} low · ${n("medium")} medium · ${n("high")} high confidence)`, "", "Each is a one-line edit if the draft got it wrong.", "");
+        for (const d of sorted) {
+          summary.push(`- [ ] **${d.id}**${d.confidence ? ` \`${d.confidence}\`` : ""} — ${d.question}`);
+          if (d.chose) summary.push(`      - Draft chose: ${d.chose}`);
+          if (d.fix) summary.push(`      - If wrong: ${d.fix}`);
+        }
+      }
       summary.push("", "<details><summary>Extraction proposal</summary>", "", proposalFor(evidence, slug).markdown, "", "</details>");
     } else {
       summary.push(`- scaffold FAILED: ${(scaffold.stderr || scaffold.stdout).trim().split("\n").slice(-3).join(" ")}`, "", `- no defs.json yet: this PR is the curation request.`, "", proposalFor(evidence, slug).markdown);

@@ -45,9 +45,9 @@ export const MediaSection = ({
   items = [],
   theme = "on-light",
 } = {}) => html`
-  <div class="c-media-section home-section">
+  <div class="c-media-section home-section" data-theme=${theme === "on-dark" || theme === "dark" ? "dark" : nothing}>
     <div class="home-reveal">
-      ${SectionHeader({ eyebrow, showEyebrow: Boolean(eyebrow), title, body, theme })}
+      ${SectionHeader({ eyebrow, showEyebrow: Boolean(eyebrow), title, body })}
     </div>
     <div class="home-media-grid home-reveal-stagger">
       ${items.map(
@@ -86,8 +86,8 @@ export const ProductRouter = ({
   <div class="c-product-router">
     <div class="home-product-hero">
       ${imageSrc ? html`<img src=${imageSrc} srcset=${imageSrcset || nothing} sizes="100vw" alt=${imageAlt} loading="lazy" decoding="async" width="1920" height="1040" />` : nothing}
-      <div class="home-product-copy home-reveal">
-        ${SectionHeader({ title, body, showEyebrow: false, theme: "on-dark", showActions: Boolean(ctaLabel), actions: createButton({ label: ctaLabel, href: ctaHref, style: "outline-inverse" }) })}
+      <div class="home-product-copy home-reveal" data-theme="dark">
+        ${SectionHeader({ title, body, showEyebrow: false, showActions: Boolean(ctaLabel), actions: createButton({ label: ctaLabel, href: ctaHref, style: "outline-inverse" }) })}
       </div>
     </div>
     <div class="home-product-grid home-section home-reveal-stagger">
@@ -119,8 +119,8 @@ export const SiteFooter = ({
     <div class="home-footer-legal home-section">
       <small>${copyright}</small>
     </div>
-    <a class="home-footer-wordmark" href=${brandHref} aria-label="Adobe home"
-      >${Logo({ context: "on-dark" })}</a
+    <a class="home-footer-wordmark" href=${brandHref} aria-label="Adobe home" data-theme="dark"
+      >${Logo()}</a
     >
   </footer>`;
 };

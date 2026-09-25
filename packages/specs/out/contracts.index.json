@@ -8,14 +8,14 @@
     {
       "slug": "action-card",
       "name": "ActionCard",
-      "figmaNodeId": "13999:205827",
+      "figmaNodeId": "14226:196789",
       "specPath": "packages/components/src/action-card/action-card.spec.json",
       "generated": true,
       "hasDefs": true,
       "figmaEvidence": {
-        "hash": "sha256:f64c85fbd287159ac8ca41d0853efb266ce4cd81f308b247cfbf5602c29a6bb6",
-        "extractedAt": "2026-09-17T20:25:31.473Z",
-        "setId": "13999:205827"
+        "hash": "sha256:59b5d8393c34c47549a299c08c860ec4f340c0844ed6a74328d1073e0590a7d6",
+        "extractedAt": "2026-09-21T16:13:12.776Z",
+        "setId": "14226:196789"
       },
       "codeEvidence": null
     },
@@ -42,11 +42,15 @@
     {
       "slug": "button",
       "name": "Button",
-      "figmaNodeId": null,
+      "figmaNodeId": "10715:35477",
       "specPath": "packages/components/src/button/button.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:7cc116068e4427e60712c6bc0222a0b3fad278c3374d48a0024b11a00cc2dc62",
+        "extractedAt": "2026-09-25T16:25:39.053Z",
+        "setId": "10715:35477"
+      },
       "codeEvidence": {
         "hash": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7"
       }

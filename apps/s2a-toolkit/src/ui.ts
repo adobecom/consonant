@@ -1,3 +1,4 @@
+import { emptyStudio, mutateDef, slotsOf, rootTokens, unboundAxes, acceptNames, propFromAxis, verdictOf, canPublish, STATE_NAMES, ACCEPTS_MODES, type StudioState } from './studio';
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function esc(s: string): string {
@@ -125,11 +126,12 @@ let requestCounter = 0;
 
 // ── Panel switching ───────────────────────────────────────────────────────────
 
-type Panel = 'home' | 'tools' | 'request';
+type Panel = 'home' | 'tools' | 'contract' | 'request';
 
 const panelEls: Record<Panel, HTMLElement> = {
   home:     document.getElementById('homePanel')     as HTMLElement,
   tools:    document.getElementById('toolsPanel')    as HTMLElement,
+  contract: document.getElementById('contractPanel') as HTMLElement,
   request:  document.getElementById('requestPanel')  as HTMLElement,
 };
 
@@ -143,6 +145,7 @@ function switchPanel(panel: Panel) {
   });
   if (panel === 'home') renderHomeView();
   if (panel === 'request') postToPlugin('request:capture'); // refresh the context card
+  if (panel === 'contract') studioRefreshIndex();
 }
 
 document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
@@ -636,7 +639,7 @@ function initBridgeConnection(ws: WebSocket) {
     if (ws.readyState !== 1 || !result) return;
     const info = result.fileInfo || result;
     if (!info.fileKey) info.fileKey = 'local-' + Date.now();
-    info.pluginVersion = '0.2.0';
+    info.pluginVersion = '0.3.0';
     ws.send(JSON.stringify({ type: 'FILE_INFO', data: info }));
   }).catch(() => {});
 
@@ -876,6 +879,40 @@ function updateDocSelection(sel: { id: string; name: string; nodeType: string; v
   }
 }
 
+// Doc readability runs against a documentation FRAME — the page-level card, not
+// a component. Reports only; it never edits the frame.
+let docCheckId: string | null = null;
+function updateDocCheckSelection(sel: { id: string; name: string; nodeType: string; width?: number; height?: number } | null) {
+  const ok = sel?.nodeType === 'FRAME';
+  docCheckId = ok ? (sel?.id ?? null) : null;
+  const emptyEl = document.getElementById('docCheckSelectionEmpty') as HTMLElement;
+  const infoEl  = document.getElementById('docCheckSelectionInfo')  as HTMLElement;
+  const nameEl  = document.getElementById('docCheckName') as HTMLElement;
+  const metaEl  = document.getElementById('docCheckMeta') as HTMLElement;
+  const btn     = document.getElementById('docCheckBtn') as HTMLButtonElement;
+  if (ok && sel) {
+    emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
+    nameEl.textContent = sel.name;
+    metaEl.textContent = sel.width && sel.height ? `${Math.round(sel.width)} × ${Math.round(sel.height)}` : 'frame';
+    btn.disabled = false;
+  } else {
+    emptyEl.style.display = 'block'; infoEl.style.display = 'none';
+    btn.disabled = true;
+    const issues = document.getElementById('docCheckIssues') as HTMLElement;
+    issues.style.display = 'none'; issues.innerHTML = '';
+  }
+}
+
+document.getElementById('docCheckBtn')?.addEventListener('click', () => {
+  if (!docCheckId) return;
+  sendTelemetry('action:docs-check');
+  const btn = document.getElementById('docCheckBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Checking…';
+  const status = document.getElementById('docCheckStatus') as HTMLElement;
+  status.textContent = '';
+  postToPlugin('docs:check', { nodeId: docCheckId });
+});
+
 document.getElementById('docGenerateBtn')?.addEventListener('click', () => {
   if (!docSetId) return;
   sendTelemetry('action:doc-generate');
@@ -883,6 +920,538 @@ document.getElementById('docGenerateBtn')?.addEventListener('click', () => {
   btn.disabled = true; btn.textContent = 'Generating…';
   setDocStatus('');
   postToPlugin('doc:generate', { setId: docSetId });
+});
+
+
+// ── Contract Studio ───────────────────────────────────────────────────────────
+// Curation, done by the person who drew the component. See src/studio.ts for
+// the two rules this UI exists to enforce: the GUI offers only what exists, and
+// nothing lands without going through the gate.
+
+let studio: StudioState = emptyStudio();
+let studioSel: { id: string; name: string; nodeType: string; variantCount?: number } | null = null;
+let studioValidateTimer: number | undefined;
+
+const $s = (id: string) => document.getElementById(id) as HTMLElement;
+
+function studioApi(path: string, init?: RequestInit) {
+  return fetch(`${contractEndpoint}${path}`, { ...init, headers: { 'content-type': 'application/json', ...(init?.headers ?? {}) } });
+}
+
+function studioSetSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
+  const usable = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT' || sel?.nodeType === 'FRAME';
+  studioSel = usable ? sel : null;
+  const empty = $s('studioSelEmpty'), info = $s('studioSelInfo');
+  const btn = $s('studioOpenBtn') as HTMLButtonElement;
+  if (usable && sel) {
+    empty.style.display = 'none'; info.style.display = 'flex';
+    $s('studioSelName').textContent = sel.name;
+    $s('studioSelMeta').textContent = sel.nodeType === 'COMPONENT_SET' ? `${sel.variantCount ?? 0} variants` : sel.nodeType.toLowerCase();
+    btn.disabled = false;
+  } else {
+    empty.style.display = 'block'; info.style.display = 'none';
+    btn.disabled = true;
+  }
+}
+
+async function studioRefreshIndex() {
+  const host = $s('studioIndex');
+  host.innerHTML = '<div style="font-size:10.5px; opacity:.6; padding:4px 0;">loading…</div>';
+  try {
+    const res = await studioApi('/contracts');
+    if (!res.ok) throw new Error(`sync server returned ${res.status}`);
+    // The endpoint answers { count, items: [...] }. Treating it as a keyed map
+    // silently yields [count, items] and renders two "undefined" rows.
+    const index = await res.json();
+    studio.index = index;
+    const rows: any[] = Array.isArray(index?.items) ? index.items : [];
+    if (!rows.length) { host.innerHTML = '<div class="studio-empty">No contracts yet — extract one in the Tools tab.</div>'; return; }
+    host.innerHTML = '';
+    for (const c of [...rows].sort((a, b) => String(a.name ?? a.slug).localeCompare(String(b.name ?? b.slug)))) {
+      const row = document.createElement('button');
+      row.className = 'studio-row';
+      const name = document.createElement('span');
+      name.className = 'studio-row-name';
+      name.textContent = String(c.name ?? c.slug);
+      const badge = document.createElement('span');
+      badge.className = `badge ${c.hasDefs ? 'badge-hot' : 'badge-cold'}`;
+      badge.textContent = c.hasDefs ? 'curated' : 'evidence only';
+      const slug = document.createElement('span');
+      slug.className = 'studio-row-slug';
+      slug.textContent = String(c.slug);
+      row.append(name, badge, slug);
+      row.addEventListener('click', () => studioOpen(String(c.slug)));
+      host.appendChild(row);
+    }
+  } catch {
+    host.innerHTML = `<div class="studio-empty">Sync server unreachable at ${contractEndpoint}. Start it with npm run contract:relay.</div>`;
+  }
+}
+
+function studioShow(view: 'list' | 'editor') {
+  $s('studioList').style.display = view === 'list' ? 'block' : 'none';
+  $s('studioEditor').style.display = view === 'editor' ? 'block' : 'none';
+}
+
+async function studioOpen(ref: string, by: 'slug' | 'name' = 'slug') {
+  studio = { ...emptyStudio(), slug: by === 'slug' ? ref : null, busy: true };
+  studioResult = null;
+  studioShow('editor');
+  $s('studioId').textContent = ref;
+  $s('studioSub').textContent = 'loading…';
+  $s('studioGui').innerHTML = '';
+  $s('studioDraftNotes').style.display = 'none';
+  try {
+    const res = await studioApi(`/def-context?${by}=${encodeURIComponent(ref)}`);
+    // A 404 here means the sync server predates this endpoint. Reading the body
+    // anyway yields hasDef undefined, which renders as "no contract yet" — a
+    // wrong answer dressed as a real one. Unknown is not an empty state.
+    if (!res.ok) {
+      const hint = res.status === 404
+        ? 'Sync server is running older code. Restart it: npm run contract-sync (in apps/s2a-toolkit).'
+        : `Sync server returned ${res.status}.`;
+      throw new Error(hint);
+    }
+    const ctx = await res.json();
+    studio.slug = ctx.slug ?? studio.slug;
+    studio.def = ctx.def;
+    studio.evidence = ctx.evidence;
+    studio.freeAxes = ctx.freeAxes ?? [];
+    studio.index = ctx.index ?? {};
+    studio.busy = false;
+    if (!ctx.hasDef) {
+      // No curated definition yet. Say so once, give the footer a real verdict —
+      // leaving it on "validating…" reads as a hung panel — and offer the one
+      // action that moves this forward, when there is evidence to draft from.
+      studio.validation = { valid: false, errors: ['no curated definition for this set yet'], warnings: [] };
+      studioRender();
+      studioRenderEmpty(Boolean(ctx.evidence?.axes?.length));
+      return;
+    }
+    studioRender();
+    studioValidate();
+    // Ask the canvas what each swap points at; the answer arrives asynchronously
+    // and re-renders the slots section when it does.
+    if (studioSel && slotsOf(studio.def ?? {}).length) postToPlugin('studio:swap-targets', { setId: studioSel.id });
+  } catch (err: any) {
+    studio.busy = false;
+    studio.validation = { valid: false, errors: [String(err?.message ?? err)], warnings: [] };
+    $s('studioSub').textContent = studio.slug ?? ref;
+    $s('studioGui').innerHTML = '';
+    $s('studioGui').appendChild(el('div', 'studio-empty', String(err?.message ?? err)));
+    $s('studioDraftNotes').style.display = 'none';
+    studioRenderFooter();
+  }
+}
+
+function studioValidate() {
+  studioResult = null;
+  window.clearTimeout(studioValidateTimer);
+  studioValidateTimer = window.setTimeout(async () => {
+    if (!studio.def) return;
+    try {
+      const res = await studioApi('/validate', { method: 'POST', body: JSON.stringify({ def: studio.def }) });
+      studio.validation = res.ok
+        ? await res.json()
+        : { valid: false, errors: [res.status === 404 ? 'sync server is running older code — restart it' : `validate returned ${res.status}`], warnings: [] };
+    } catch {
+      // Unknown is not valid. A checker that cannot run must not report a pass.
+      studio.validation = { valid: false, errors: ['sync server unreachable — cannot validate'], warnings: [] };
+    }
+    studioRenderFooter();
+  }, 400) as unknown as number;
+}
+
+function studioEdit(fn: (def: any) => void) {
+  studioResult = null;
+  studio.def = mutateDef(studio, fn);
+  studio.dirty = true;
+  studio.validation = null;
+  if (studio.jsonMode) $s('studioJson').textContent = JSON.stringify(studio.def, null, 2);
+  studioRender();
+  studioValidate();
+}
+
+let studioResult: { tone: 'ok' | 'bad'; text: string } | null = null;
+
+function studioRenderFooter() {
+  const v = studioResult ?? verdictOf(studio);
+  const node = $s('studioVerdict');
+  node.className = `studio-verdict ${v.tone}`;
+  node.textContent = v.text;
+  const warn = (studio.validation?.warnings ?? []).map((w) => `⚠ ${w}`).join('\n');
+  $s('studioWarnings').textContent = warn;
+  $s('studioWarnings').style.display = warn ? 'block' : 'none';
+  ($s('studioPublishBtn') as HTMLButtonElement).disabled = !canPublish(studio);
+}
+
+// ── GUI mode ──────────────────────────────────────────────────────────────────
+const el = (tag: string, cls?: string, text?: string) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text !== undefined) n.textContent = text;
+  return n;
+};
+
+function studioSection(title: string, add?: HTMLElement) {
+  const sec = el('div', 'studio-sec');
+  const head = el('div', 'studio-sec-head');
+  const h = el('div', 'section-label', title);
+  h.style.margin = '0';
+  head.appendChild(h);
+  if (add) head.appendChild(add);
+  sec.appendChild(head);
+  return sec;
+}
+
+function studioAddButton(label: string, options: Array<{ value: string; text: string }>, onPick: (v: string) => void) {
+  if (!options.length) return undefined;
+  const wrap = el('div');
+  wrap.style.cssText = 'position:relative;';
+  const btn = el('button', 'studio-add', label) as HTMLButtonElement;
+  const menu = el('select') as HTMLSelectElement;
+  menu.style.cssText = 'position:absolute; inset:0; opacity:0; cursor:pointer; width:100%;';
+  menu.innerHTML = '<option value=""></option>' + options.map((o) => `<option value="${esc(o.value)}">${esc(o.text)}</option>`).join('');
+  menu.addEventListener('change', () => { if (menu.value) { onPick(menu.value); menu.value = ''; } });
+  wrap.append(btn, menu);
+  return wrap;
+}
+
+const stripHash = (n: string) => String(n).split('#')[0].trim();
+const kebabish = (n: string) => String(n).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+function studioRenderGui() {
+  const host = $s('studioGui');
+  host.innerHTML = '';
+  const d = studio.def;
+  if (!d) {
+    host.appendChild(el('div', 'studio-empty', 'No curated definition for this set yet. Extract its evidence in the Tools tab, and the draft will appear here with every judgment call listed.'));
+    return;
+  }
+
+  // Props — offered only from axes nothing has bound yet.
+  const free = unboundAxes(studio);
+  const props = studioSection(`Props · ${(d.props ?? []).length}`,
+    studioAddButton('+ from an axis', free.map((a: any) => ({ value: a.name, text: `${a.name} · ${a.type}` })),
+      (name) => studioEdit((def) => {
+        const axis = (studio.evidence?.axes ?? []).find((a: any) => a.name === name);
+        if (axis) (def.props = def.props ?? []).push(propFromAxis(axis));
+      })));
+  for (const [i, prop] of (d.props ?? []).entries()) {
+    const row = el('div', 'studio-item');
+    row.appendChild(el('span', 'studio-item-name', prop.name));
+    row.appendChild(el('span', 'studio-item-bind', prop.figma?.property ? `${prop.figma.kind} · ${prop.figma.property}` : 'no design counterpart'));
+    const lever = el('input') as HTMLInputElement;
+    lever.type = 'checkbox'; lever.checked = Boolean(prop.lever);
+    lever.title = 'Lever: authored by a designer. Unchecked means integration-only.';
+    lever.addEventListener('change', () => studioEdit((def) => { def.props[i].lever = lever.checked; }));
+    row.appendChild(lever);
+    const del = el('button', 'studio-del', '×') as HTMLButtonElement;
+    del.title = `Remove ${prop.name}`;
+    del.addEventListener('click', () => studioEdit((def) => { def.props.splice(i, 1); }));
+    row.appendChild(del);
+    props.appendChild(row);
+  }
+  if (!(d.props ?? []).length) props.appendChild(el('div', 'studio-empty', free.length ? 'No props curated yet — add one from a real axis.' : 'No props, and no unbound axes to add from.'));
+  host.appendChild(props);
+
+  // States — the schema's four, never an invented one.
+  const used: string[] = (d.states ?? []).map((x: any) => (typeof x === 'string' ? x : x.name)).filter(Boolean);
+  const states = studioSection('States',
+    studioAddButton('+ add', STATE_NAMES.filter((n) => !used.includes(n)).map((n) => ({ value: n, text: n })),
+      (n) => studioEdit((def) => { (def.states = def.states ?? []).push(n); })));
+  const chips = el('div');
+  for (const [i, st] of used.entries()) {
+    const c = el('button', 'studio-toggle on', st) as HTMLButtonElement;
+    c.title = `Remove ${st}`;
+    c.addEventListener('click', () => studioEdit((def) => { def.states.splice(i, 1); if (!def.states.length) delete def.states; }));
+    chips.appendChild(c);
+  }
+  if (!used.length) chips.appendChild(el('div', 'studio-empty', 'No runtime states declared.'));
+  states.appendChild(chips);
+  host.appendChild(states);
+
+  // Slots — accepts comes from the contract index, so a slot cannot accept a
+  // component the repo has no contract for.
+  const slots = slotsOf(d);
+  if (slots.length) {
+    const sec = studioSection(`Slots · ${slots.length}`);
+    for (const { path, node } of slots) {
+      const box = el('div', 'studio-item');
+      box.style.cssText = 'flex-direction:column; align-items:stretch; gap:var(--s-2);';
+      const head = el('div');
+      head.style.cssText = 'display:flex; align-items:center; gap:var(--s-2);';
+      const label = el('span', 'studio-item-name', path);
+      const mode = el('select', 'form-input') as HTMLSelectElement;
+      mode.style.cssText = 'width:auto; font-size:10px; padding:2px 4px;';
+      mode.innerHTML = ACCEPTS_MODES.map((m) => `<option ${node.slot.acceptsMode === m ? 'selected' : ''}>${m}</option>`).join('');
+      mode.addEventListener('change', () => studioEdit((def) => {
+        const t = slotsOf(def).find((x) => x.path === path); if (t) t.node.slot.acceptsMode = mode.value;
+      }));
+      head.append(label, mode);
+      box.appendChild(head);
+      const names = acceptNames(studio);
+      const acc = el('div');
+      for (const n of names) {
+        const on = (node.slot.accepts ?? []).includes(n);
+        const b = el('button', `studio-toggle${on ? ' on' : ''}`, n) as HTMLButtonElement;
+        b.addEventListener('click', () => studioEdit((def) => {
+          const t = slotsOf(def).find((x) => x.path === path); if (!t) return;
+          const a = (t.node.slot.accepts = t.node.slot.accepts ?? []);
+          const at = a.indexOf(n); if (at >= 0) a.splice(at, 1); else a.push(n);
+        }));
+        acc.appendChild(b);
+      }
+      if (!names.length) acc.appendChild(el('div', 'studio-empty', 'No other contracts to accept yet.'));
+      box.appendChild(acc);
+
+      // What the set itself points this swap at. If that component has no
+      // contract it cannot be accepted yet — say which one, and why, instead of
+      // leaving a list of 37 unrelated names as the only hint.
+      const swapProp = (d.props ?? []).find((p: any) => p.figma?.kind === 'INSTANCE_SWAP' && kebabish(stripHash(p.figma.property)) === path.split('.').pop());
+      const declared = swapProp ? (studioSwapTargets[swapProp.figma.property] ?? []) : [];
+      if (declared.length) {
+        const hint = el('div', 'studio-swap-hint');
+        for (const t of declared) {
+          const known = names.includes(t.name);
+          const line = el('div', 'studio-swap-line');
+          line.appendChild(el('span', 'studio-note-conf', t.role));
+          if (known) {
+            const b = el('button', 'studio-toggle', `accept ${t.name}`) as HTMLButtonElement;
+            b.addEventListener('click', () => studioEdit((def) => {
+              const tgt = slotsOf(def).find((x) => x.path === path); if (!tgt) return;
+              const a = (tgt.node.slot.accepts = tgt.node.slot.accepts ?? []);
+              if (!a.includes(t.name)) a.push(t.name);
+            }));
+            line.appendChild(b);
+          } else {
+            line.appendChild(el('span', undefined, `${t.name} — no contract yet, so it cannot be accepted. Extract it first.`));
+          }
+          hint.appendChild(line);
+        }
+        box.appendChild(hint);
+      }
+      sec.appendChild(box);
+    }
+    host.appendChild(sec);
+  }
+
+  // Root tokens — read-only. Retargeting a binding is a design edit, made in
+  // Figma and re-extracted, not typed into a panel.
+  const toks = rootTokens(d);
+  const tokens = studioSection(`Root tokens · ${Object.keys(toks).length}`);
+  for (const [prop, ref] of Object.entries(toks)) {
+    const row = el('div', 'studio-kv');
+    row.append(el('span', 'studio-kv-key', prop), el('span', 'studio-kv-val', String(ref)));
+    tokens.appendChild(row);
+  }
+  if (!Object.keys(toks).length) tokens.appendChild(el('div', 'studio-empty', 'No root token bindings.'));
+  host.appendChild(tokens);
+}
+
+let studioAwaitingExtract = false;
+// Figma's own answer to "what goes in this swap", per INSTANCE_SWAP property.
+let studioSwapTargets: Record<string, Array<{ role: string; name: string }>> = {};
+
+// Extraction from the Contract tab. Telling someone to go to another tab to get
+// the thing this tab is named after is the kind of seam a person reads as broken.
+function studioExtract(btn: HTMLButtonElement, name = '', rename = false) {
+  if (!studioSel) return;
+  sendTelemetry('action:studio-extract');
+  studioAwaitingExtract = true;
+  btn.disabled = true; btn.textContent = 'Reading the set…';
+  postToPlugin('contract:extract', { setId: studioSel.id, name, rename });
+}
+
+// Extract → publish → reopen. One press, because on its own a published
+// evidence file is not something a designer wanted; a contract is.
+async function studioOnEvidence(msg: Record<string, unknown>) {
+  const reset = () => { const b = document.querySelector('#studioGui .btn') as HTMLButtonElement | null; if (b) { b.disabled = false; b.textContent = 'Extract this set'; } };
+  const fail = (text: string) => { $s('studioVerdict').className = 'studio-verdict bad'; $s('studioVerdict').textContent = text; reset(); };
+  if (msg.error) return fail(`Extract failed: ${msg.error}`);
+  try {
+    const evidence = msg.evidence as Record<string, unknown>;
+    const hash = 'sha256:' + await sha256Hex(msg.hashInput as string);
+    const res = await fetch(`${contractEndpoint.replace(/\/$/, '')}/evidence`, {
+      method: 'POST', headers: contractHeaders(), body: JSON.stringify({ evidence, hash }),
+    });
+    const out = await res.json();
+    if (!res.ok) throw new Error(out.error || `sync endpoint returned ${res.status}`);
+    contractIndexCache = null;
+    // Reopen on the slug the server resolved, so the panel and the repo agree.
+    studioOpen(String(out.slug ?? studio.slug ?? (evidence.set as any)?.name), out.slug ? 'slug' : 'name');
+  } catch (err: any) {
+    fail(`Could not publish the evidence: ${err?.message ?? err}`);
+  }
+}
+
+// The state 34 of our 37 sets are in: evidence, no curation. A panel that only
+// says "nothing here" is a dead end, so it offers the step that ends it.
+function studioRenderEmpty(hasEvidence: boolean) {
+  const host = $s('studioGui');
+  host.innerHTML = '';
+  if (!hasEvidence) {
+    host.appendChild(el('div', 'studio-empty', 'Nothing published for this set yet. Extracting reads its real variant axes, token bindings and structure, and records only what is there — it never infers an API.'));
+    // A frame's layer name is rarely the component's name, and the name given
+    // here becomes the evidence's identity. Ask rather than inherit "Frame 412".
+    const isFrame = studioSel?.nodeType === 'FRAME';
+    let nameInput: HTMLInputElement | undefined;
+    let renameBox: HTMLInputElement | undefined;
+    if (isFrame) {
+      const field = el('div', 'form-field');
+      field.style.marginTop = 'var(--s-3)';
+      const label = el('label', 'form-label', 'Name this candidate');
+      nameInput = el('input', 'form-input') as HTMLInputElement;
+      nameInput.type = 'text';
+      nameInput.placeholder = 'e.g. FeatureTile';
+      const check = el('label', 'form-label');
+      check.style.cssText = 'display:flex; gap:6px; align-items:center; margin-top:var(--s-2); font-weight:400;';
+      renameBox = el('input') as HTMLInputElement;
+      renameBox.type = 'checkbox'; renameBox.checked = true;
+      check.append(renameBox, document.createTextNode('Rename the layer in Figma to match'));
+      field.append(label, nameInput, check);
+      host.appendChild(field);
+    }
+    const row = el('div', 'btn-row');
+    const btn = el('button', 'btn', 'Extract this set') as HTMLButtonElement;
+    btn.style.flex = '1';
+    btn.disabled = !studioSel;
+    if (!studioSel) btn.title = 'Select the component set in Figma first';
+    btn.addEventListener('click', () => {
+      const name = nameInput?.value.trim() ?? '';
+      if (isFrame && !name) {
+        nameInput?.focus();
+        $s('studioVerdict').className = 'studio-verdict bad';
+        $s('studioVerdict').textContent = 'A frame needs a name before it can be extracted.';
+        return;
+      }
+      studioExtract(btn, name, Boolean(renameBox?.checked));
+    });
+    row.appendChild(btn);
+    host.appendChild(row);
+    return;
+  }
+  host.appendChild(el('div', 'studio-empty', 'Evidence is published for this set but nobody has curated it yet. Drafting reads the real axes and proposes a definition — every judgment call it makes is listed for you to review before anything is published.'));
+  const row = el('div', 'btn-row');
+  const btn = el('button', 'btn', 'Draft a contract from the evidence') as HTMLButtonElement;
+  btn.style.flex = '1';
+  btn.addEventListener('click', async () => {
+    btn.disabled = true; btn.textContent = 'Drafting…';
+    try {
+      const res = await studioApi('/draft', { method: 'POST', body: JSON.stringify({ slug: studio.slug, name: studioSel?.name }) });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out.error ?? (res.status === 404
+        ? 'Sync server is running older code. Restart it: npm run contract-sync (in apps/s2a-toolkit).'
+        : `draft failed (${res.status})`));
+      studio.def = out.def;
+      studio.dirty = true;
+      studio.validation = null;
+      studioRender();
+      studioValidate();
+    } catch (err: any) {
+      btn.disabled = false; btn.textContent = 'Draft a contract from the evidence';
+      $s('studioVerdict').className = 'studio-verdict bad';
+      $s('studioVerdict').textContent = `Could not draft: ${err.message ?? err}`;
+    }
+  });
+  row.appendChild(btn);
+  host.appendChild(row);
+}
+
+function studioRenderNotes() {
+  const host = $s('studioDraftNotes');
+  const notes = (studio.def?.decisions ?? []).filter((n: any) => n.status === 'open');
+  if (!notes.length) { host.style.display = 'none'; host.innerHTML = ''; return; }
+  const low = notes.filter((n: any) => n.confidence === 'low').length;
+  host.innerHTML = '';
+  host.appendChild(el('div', 'studio-notes-head',
+    `${notes.length} judgment call${notes.length === 1 ? '' : 's'} to review${low ? ` · ${low} low confidence` : ''}`));
+  const band = (c: string) => (c === 'low' ? 0 : c === 'medium' ? 1 : 2);
+  for (const n of [...notes].sort((a: any, b: any) => band(a.confidence) - band(b.confidence)).slice(0, 6)) {
+    const row = el('div', 'studio-note');
+    const conf = el('span', `studio-note-conf${n.confidence === 'low' ? ' low' : ''}`, n.confidence ?? '—');
+    const body = el('span', undefined, n.chose ? n.chose : n.question);
+    if (n.fix) row.title = `If wrong: ${n.fix}`;
+    row.append(conf, body);
+    host.appendChild(row);
+  }
+  host.style.display = 'block';
+}
+
+function studioRender() {
+  const d = studio.def;
+  $s('studioId').textContent = d?.component ? `${d.component} · ${studio.slug}` : (studio.slug ?? '—');
+  const set = studio.evidence?.set;
+  $s('studioSub').textContent = set ? `${set.name ?? ''} · ${studio.evidence?.axes?.length ?? 0} axes` : (studio.slug ?? '');
+  $s('studioDraftChip').style.display = d?.status === 'curated-draft' ? 'inline-block' : 'none';
+  studioRenderNotes();
+  if (studio.jsonMode) { studioRenderFooter(); return; }
+  studioRenderGui();
+  studioRenderFooter();
+}
+
+function studioSetMode(json: boolean) {
+  // Refuse to leave JSON mode while it is unparseable — switching would silently
+  // discard whatever the person was in the middle of typing.
+  if (!json && studio.jsonMode && studio.jsonError) return;
+  studio.jsonMode = json;
+  $s('studioModeGui').classList.toggle('active', !json);
+  $s('studioModeJson').classList.toggle('active', json);
+  $s('studioGui').style.display = json ? 'none' : 'block';
+  $s('studioJson').style.display = json ? 'block' : 'none';
+  if (json) ($s('studioJson') as HTMLTextAreaElement).value = JSON.stringify(studio.def, null, 2);
+  studioRender();
+}
+
+document.getElementById('studioOpenBtn')?.addEventListener('click', () => {
+  if (!studioSel) return;
+  sendTelemetry('action:studio-open');
+  // Send the set's name and let the server resolve it. A client-side kebab turns
+  // "Button — v2" into a slug that does not exist; resolveSlug knows it is Button.
+  studioOpen(studioSel.name, 'name');
+});
+document.getElementById('studioBackBtn')?.addEventListener('click', () => { studioShow('list'); studioRefreshIndex(); });
+document.getElementById('studioModeGui')?.addEventListener('click', () => studioSetMode(false));
+document.getElementById('studioModeJson')?.addEventListener('click', () => studioSetMode(true));
+
+document.getElementById('studioJson')?.addEventListener('input', (e) => {
+  const text = (e.target as HTMLTextAreaElement).value;
+  try {
+    studio.def = JSON.parse(text);
+    studio.jsonError = null;
+    studio.validation = null;
+    studio.dirty = true;
+    studioValidate();
+  } catch (err: any) {
+    studio.jsonError = String(err.message ?? err);
+    studio.validation = null;
+  }
+  studioRenderFooter();
+});
+
+document.getElementById('studioPublishBtn')?.addEventListener('click', async () => {
+  if (!canPublish(studio) || !studio.def) return;
+  sendTelemetry('action:studio-publish');
+  const btn = $s('studioPublishBtn') as HTMLButtonElement;
+  studio.busy = true; btn.disabled = true; btn.textContent = 'Publishing…';
+  try {
+    // Same endpoint every other change uses: regenerate, gate, PR. The editor
+    // has no privileged path in.
+    const res = await studioApi('/evidence', { method: 'POST', body: JSON.stringify({ defEdits: [studio.def], slug: studio.slug }) });
+    const out = await res.json();
+    studioResult = res.ok
+      ? { tone: 'ok', text: `Saved to ${out.defs?.[0]?.path ?? 'the repo'} — regenerate and run the gate.` }
+      : { tone: 'bad', text: `Failed: ${(out.errors ?? [out.error ?? res.status]).slice(0, 2).join(' · ')}` };
+    studio.dirty = !res.ok;
+  } catch (err: any) {
+    studioResult = { tone: 'bad', text: `Failed: ${err.message ?? err}` };
+  } finally {
+    studio.busy = false; btn.textContent = 'Publish contract →';
+    // studioRenderFooter() re-derives the verdict from state, so the result has
+    // to live in state too — otherwise the success message is overwritten by the
+    // stale verdict the instant it is shown.
+    studioRenderFooter();
+  }
 });
 
 // ── Contract evidence ─────────────────────────────────────────────────────────
@@ -1062,6 +1631,9 @@ document.getElementById('contractPublishBtn')?.addEventListener('click', async (
 });
 
 async function onContractEvidence(msg: Record<string, unknown>) {
+  // The Contract tab can start an extraction too. Route the reply back there
+  // rather than into the Tools panel the person is not looking at.
+  if (studioAwaitingExtract) { studioAwaitingExtract = false; void studioOnEvidence(msg); return; }
   const btn = document.getElementById('contractExtractBtn') as HTMLButtonElement;
   btn.disabled = !contractSetId; btn.textContent = 'Extract contract';
   if (msg.error) { contractLog('extract:error', msg.error); setContractStatus('❌ ' + esc(msg.error as string), 'err'); return; }
@@ -1198,6 +1770,8 @@ window.addEventListener('message', (event) => {
         };
         updateAnnotateSelection(sel);
         updateDocSelection(sel);
+        updateDocCheckSelection({ ...sel, width: msg.width as number | undefined, height: msg.height as number | undefined });
+        studioSetSelection(sel);
         void updateContractSelection(sel);
         updateCopyBtn(sel, msg.fileKey as string | null, msg.fileName as string | null, msg.allNodes as Array<{ id: string; name: string }> | undefined);
         updateSectionBar(
@@ -1224,6 +1798,15 @@ window.addEventListener('message', (event) => {
     }
     case 'contract:evidence': {
       void onContractEvidence(msg as Record<string, unknown>);
+      break;
+    }
+    // Sandbox → sync server file drop (PNG goldens, diffs): bytes never pass
+    // through the console. Sent by code.ts with figma.ui.postMessage.
+    case 'contract:artifact': {
+      fetch(`${contractEndpoint.replace(/\/$/, '')}/artifact`, { method: 'POST', headers: contractHeaders(), body: JSON.stringify({ name: msg.name, b64: msg.b64 }) })
+        .then(r => r.json())
+        .then(r => { contractLog('artifact:saved', r); parent.postMessage({ pluginMessage: { type: 'contract:artifact:saved', name: msg.name, result: r } }, '*'); })
+        .catch(err => contractLog('artifact:error', err?.message || String(err)));
       break;
     }
     case 'contract:build-set:done': {
@@ -1274,6 +1857,39 @@ window.addEventListener('message', (event) => {
       };
       renderRequestCtx(requestCtx);
       if (_reqCtxResolve) { const r = _reqCtxResolve; _reqCtxResolve = null; r(requestCtx); }
+      break;
+    }
+
+    case 'studio:swap-targets-result': {
+      studioSwapTargets = (msg.targets ?? {}) as Record<string, Array<{ role: string; name: string }>>;
+      if (studio.def && !studio.jsonMode) studioRenderGui();
+      break;
+    }
+
+    case 'docs:check-result': {
+      const btn = document.getElementById('docCheckBtn') as HTMLButtonElement;
+      btn.disabled = false; btn.textContent = 'Check readability';
+      const status = document.getElementById('docCheckStatus') as HTMLElement;
+      const list = document.getElementById('docCheckIssues') as HTMLElement;
+      if (msg.error) { status.textContent = String(msg.error); list.style.display = 'none'; list.innerHTML = ''; break; }
+      const fails = msg.fails as number, warns = msg.warns as number;
+      status.textContent = fails === 0 && warns === 0
+        ? `Pass — ${msg.textNodes} text nodes, theme ${msg.theme ?? '?'}`
+        : `${fails} to fix, ${warns} to look at — ${msg.textNodes} text nodes`;
+      const issues = (msg.issues ?? []) as Array<{ level: string; code: string; message: string; nodeId?: string }>;
+      if (!issues.length) { list.style.display = 'none'; list.innerHTML = ''; break; }
+      // Least-forgiving first, so the things that actually break reading are on top.
+      const order = (l: string) => (l === 'fail' ? 0 : 1);
+      list.innerHTML = '';
+      for (const i of [...issues].sort((a, b) => order(a.level) - order(b.level))) {
+        const row = document.createElement('div');
+        row.style.cssText = 'font-size:10.5px; line-height:1.45; padding:4px 6px; margin-bottom:3px; border-left:2px solid ' +
+          (i.level === 'fail' ? '#d4594a' : '#b8862b') + '; cursor:' + (i.nodeId ? 'pointer' : 'default') + ';';
+        row.textContent = `${i.level === 'fail' ? 'fix' : 'look'} · ${i.code} — ${i.message}`;
+        if (i.nodeId) row.addEventListener('click', () => postToPlugin('docs:reveal', { nodeId: i.nodeId }));
+        list.appendChild(row);
+      }
+      list.style.display = 'block';
       break;
     }
 

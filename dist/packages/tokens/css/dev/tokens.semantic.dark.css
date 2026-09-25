@@ -2,7 +2,7 @@
  * Do not edit directly, this file was auto-generated.
  */
 
-:root[data-theme="dark"] {
+:root[data-theme="dark"], [data-theme="dark"] {
   /* Color / Background */
   --s2a-color-background-brand: var(--s2a-color-brand-adobe-red);
   --s2a-color-background-default: var(--s2a-color-gray-900);

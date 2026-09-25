@@ -7,6 +7,7 @@
   "setName": ".QuoteCard",
   "anatomy": {
     "name": ".root",
+    "source": "Context=on-dark, Breakpoint=Desktop",
     "element": "div",
     "bindings": {
       "border-radius": [
@@ -17,12 +18,14 @@
     "children": [
       {
         "name": ".media",
+        "source": ".media",
         "element": "div[aria-hidden]",
         "bindings": {},
         "slot": null,
         "children": [
           {
             "name": ".img",
+            "source": null,
             "element": "img",
             "bindings": {},
             "slot": null,
@@ -30,6 +33,7 @@
           },
           {
             "name": ".overlay",
+            "source": ".media/Overlay",
             "element": null,
             "bindings": {},
             "slot": null,
@@ -39,6 +43,7 @@
       },
       {
         "name": ".content",
+        "source": ".content",
         "element": null,
         "bindings": {
           "margin": [
@@ -56,6 +61,7 @@
         "children": [
           {
             "name": ".quote",
+            "source": ".content/.quote/{heading}",
             "element": "p",
             "bindings": {
               "font-family": [
@@ -79,12 +85,14 @@
           },
           {
             "name": ".attribution",
+            "source": ".attribution",
             "element": null,
             "bindings": {},
             "slot": null,
             "children": [
               {
                 "name": ".name",
+                "source": ".content/.attribution/Meta/Name/{metaname}",
                 "element": null,
                 "bindings": {
                   "font-family": [
@@ -111,6 +119,7 @@
               },
               {
                 "name": ".role",
+                "source": ".content/.attribution/Meta/Role/{metarole}",
                 "element": null,
                 "bindings": {
                   "font-family": [
@@ -139,6 +148,7 @@
           },
           {
             "name": ".actions",
+            "source": ".actions",
             "element": null,
             "bindings": {},
             "slot": {

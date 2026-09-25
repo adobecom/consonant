@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-figma-evidence/1",
-  "extractedAt": "2026-09-17T20:25:31.473Z",
+  "extractedAt": "2026-09-21T16:13:12.776Z",
   "extractor": {
     "plugin": "s2a-toolkit",
     "version": "0.2.1"
@@ -14,10 +14,10 @@
     }
   },
   "set": {
-    "id": "13999:205827",
-    "key": "",
+    "id": "14226:196789",
+    "key": "242365cbd00ab8a07d044f4a62608b99692a9aa3",
     "name": "ActionCard",
-    "type": "FRAME",
+    "type": "COMPONENT",
     "description": "",
     "meta": {
       "version": "",
@@ -25,207 +25,118 @@
       "updated": "",
       "changelog": ""
     },
-    "documentationLinks": [],
-    "layerName": "ActionCard"
+    "documentationLinks": []
   },
-  "axes": [],
+  "axes": [
+    {
+      "name": "Headline#14226:1",
+      "type": "TEXT",
+      "defaultValue": "Headline"
+    },
+    {
+      "name": "Media#14226:2",
+      "type": "INSTANCE_SWAP",
+      "defaultValue": "3240:7620",
+      "preferredValues": []
+    }
+  ],
   "variants": [
     {
-      "id": "13999:205827",
-      "key": "",
+      "id": "14226:196789",
+      "key": "242365cbd00ab8a07d044f4a62608b99692a9aa3",
       "name": "ActionCard",
       "props": {},
       "width": 313,
-      "height": 326
+      "height": 299
     }
   ],
   "anatomy": {
     "variant": "ActionCard",
     "tree": {
       "name": "ActionCard",
-      "type": "FRAME",
+      "type": "COMPONENT",
+      "layoutMode": "VERTICAL",
       "sizing": {
         "horizontal": "FIXED",
-        "vertical": "FIXED"
+        "vertical": "HUG"
       },
       "children": [
         {
-          "name": "Copy >",
+          "name": ".media",
+          "type": "INSTANCE",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Asset",
+              "type": "FRAME",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": "Overlay",
+              "type": "INSTANCE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            }
+          ]
+        },
+        {
+          "name": ".copy",
           "type": "FRAME",
+          "layoutMode": "HORIZONTAL",
           "sizing": {
-            "horizontal": "FIXED",
-            "vertical": "FIXED"
+            "horizontal": "FILL",
+            "vertical": "HUG"
           },
           "children": [
             {
-              "name": "Headline",
+              "name": ".headline",
               "type": "TEXT",
               "sizing": {
-                "horizontal": "FIXED",
-                "vertical": "FIXED"
+                "horizontal": "FILL",
+                "vertical": "HUG"
               }
             },
             {
-              "name": "Chevron",
-              "type": "FRAME",
+              "name": ".chevron",
+              "type": "INSTANCE",
+              "layoutMode": "HORIZONTAL",
               "sizing": {
                 "horizontal": "FIXED",
                 "vertical": "FIXED"
               },
               "children": [
                 {
-                  "name": "Vector",
-                  "type": "VECTOR",
-                  "sizing": {
-                    "horizontal": "FIXED",
-                    "vertical": "FIXED"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "Group 2087327847",
-          "type": "GROUP",
-          "sizing": {
-            "horizontal": "FIXED",
-            "vertical": "FIXED"
-          },
-          "children": [
-            {
-              "name": "Abc",
-              "type": "TEXT",
-              "sizing": {
-                "horizontal": "FIXED",
-                "vertical": "FIXED"
-              }
-            }
-          ]
-        },
-        {
-          "name": "Line 87474",
-          "type": "LINE",
-          "sizing": {
-            "horizontal": "FIXED",
-            "vertical": "FIXED"
-          }
-        },
-        {
-          "name": "Group 2085666331",
-          "type": "GROUP",
-          "sizing": {
-            "horizontal": "FIXED",
-            "vertical": "FIXED"
-          },
-          "children": [
-            {
-              "name": "Rectangle 2147231707",
-              "type": "RECTANGLE",
-              "sizing": {
-                "horizontal": "FIXED",
-                "vertical": "FIXED"
-              }
-            },
-            {
-              "name": "Ellipse 36325",
-              "type": "ELLIPSE",
-              "sizing": {
-                "horizontal": "FIXED",
-                "vertical": "FIXED"
-              }
-            },
-            {
-              "name": "Ellipse 36326",
-              "type": "ELLIPSE",
-              "sizing": {
-                "horizontal": "FIXED",
-                "vertical": "FIXED"
-              }
-            },
-            {
-              "name": "Ellipse 36327",
-              "type": "ELLIPSE",
-              "sizing": {
-                "horizontal": "FIXED",
-                "vertical": "FIXED"
-              }
-            },
-            {
-              "name": "Ellipse 36329",
-              "type": "ELLIPSE",
-              "sizing": {
-                "horizontal": "FIXED",
-                "vertical": "FIXED"
-              }
-            },
-            {
-              "name": "Ellipse 36328",
-              "type": "ELLIPSE",
-              "sizing": {
-                "horizontal": "FIXED",
-                "vertical": "FIXED"
-              }
-            },
-            {
-              "name": "Rotate handle",
-              "type": "FRAME",
-              "sizing": {
-                "horizontal": "FIXED",
-                "vertical": "FIXED"
-              },
-              "children": [
-                {
-                  "name": "Node connector",
-                  "type": "VECTOR",
-                  "sizing": {
-                    "horizontal": "FIXED",
-                    "vertical": "FIXED"
-                  }
-                },
-                {
-                  "name": "Edit nodes",
-                  "type": "FRAME",
-                  "sizing": {
-                    "horizontal": "FIXED",
-                    "vertical": "FIXED"
-                  }
-                },
-                {
-                  "name": "Rotate node",
-                  "type": "FRAME",
+                  "name": "S2_Icon_UIChevron_Size300_N",
+                  "type": "INSTANCE",
                   "layoutMode": "HORIZONTAL",
                   "sizing": {
-                    "horizontal": "HUG",
-                    "vertical": "HUG"
+                    "horizontal": "FILL",
+                    "vertical": "FIXED"
                   },
                   "children": [
                     {
-                      "name": "S_RotateCCWBold_18_N",
-                      "type": "INSTANCE",
-                      "layoutMode": "HORIZONTAL",
+                      "name": "Frame",
+                      "type": "FRAME",
                       "sizing": {
-                        "horizontal": "FIXED",
-                        "vertical": "FIXED"
+                        "horizontal": "FILL",
+                        "vertical": "FILL"
                       },
                       "children": [
                         {
-                          "name": "Frame",
-                          "type": "FRAME",
+                          "name": "iconPrimary",
+                          "type": "VECTOR",
                           "sizing": {
-                            "horizontal": "FILL",
-                            "vertical": "FILL"
-                          },
-                          "children": [
-                            {
-                              "name": "iconFill",
-                              "type": "VECTOR",
-                              "sizing": {
-                                "horizontal": "FIXED",
-                                "vertical": "FIXED"
-                              }
-                            }
-                          ]
+                            "horizontal": "FIXED",
+                            "vertical": "FIXED"
+                          }
                         }
                       ]
                     }
@@ -241,95 +152,197 @@
   "bindings": [
     {
       "variant": "ActionCard",
-      "node": "/Copy >/Headline",
-      "nodeId": "13999:205829",
-      "nodeType": "TEXT",
-      "property": "fills",
-      "variable": "VariableID:531f62dda6ffaa7e790201397d4b5cf9cc51b20f/1513:39"
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:2:95"
     },
     {
       "variant": "ActionCard",
-      "node": "/Copy >/Headline",
-      "nodeId": "13999:205829",
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:6:47"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:57"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:55"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:55"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "paddingRight",
+      "variable": "VariableID:3:55"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "variable": "VariableID:3:55"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "",
+      "nodeId": "14226:196789",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.media",
+      "nodeId": "14226:196790",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.media/Overlay",
+      "nodeId": "I14226:196790;3271:2277",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:233"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.media/Overlay",
+      "nodeId": "I14226:196790;3271:2277",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:237"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.copy",
+      "nodeId": "14226:196793",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:57"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.copy/.headline",
+      "nodeId": "14226:196794",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41398"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.copy/.headline",
+      "nodeId": "14226:196794",
       "nodeType": "TEXT",
       "property": "fontFamily",
-      "variable": "VariableID:13a63861670c9e9d8529afb5e089639de5e4bf45/18955:181"
+      "variable": "VariableID:1:259"
     },
     {
       "variant": "ActionCard",
-      "node": "/Copy >/Headline",
-      "nodeId": "13999:205829",
+      "node": "/.copy/.headline",
+      "nodeId": "14226:196794",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:5353:2797"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.copy/.headline",
+      "nodeId": "14226:196794",
       "nodeType": "TEXT",
       "property": "fontStyle",
-      "variable": "VariableID:1472a1f2140b1cb50d997353ef2be2d5dcf54df8/18955:498"
+      "variable": "VariableID:5388:44675"
     },
     {
       "variant": "ActionCard",
-      "node": "/Copy >/Chevron/Vector",
-      "nodeId": "13999:205831",
+      "node": "/.copy/.headline",
+      "nodeId": "14226:196794",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:5353:2800"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.copy/.headline",
+      "nodeId": "14226:196794",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:5353:2804"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.copy/.headline",
+      "nodeId": "14226:196794",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:a8587648befe9e8bec946e78ca5e8fe4d0810bbc,"
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.copy/.chevron/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I14226:196795;8873:23273;214:92",
       "nodeType": "VECTOR",
-      "property": "strokes",
-      "variable": "VariableID:531f62dda6ffaa7e790201397d4b5cf9cc51b20f/1513:39"
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Rotate handle/Edit nodes",
-      "nodeId": "13999:205844",
-      "nodeType": "FRAME",
       "property": "fills",
-      "variable": "VariableID:7086fedca54a9efc298143939fc26923f60c171d/327:248"
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Rotate handle/Rotate node/S_RotateCCWBold_18_N/Frame/iconFill",
-      "nodeId": "I13999:205846;202:3326",
-      "nodeType": "VECTOR",
-      "property": "fills",
-      "variable": "VariableID:7086fedca54a9efc298143939fc26923f60c171d/327:248"
+      "variable": "VariableID:6:82"
     }
   ],
   "variables": {
-    "VariableID:13a63861670c9e9d8529afb5e089639de5e4bf45/18955:181": {
-      "name": "font/family/adobe-clean-display",
-      "key": "13a63861670c9e9d8529afb5e089639de5e4bf45",
-      "collection": "Primitives / Dimension / Static",
-      "collectionId": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
-      "resolvedType": "STRING",
-      "codeSyntax": {},
-      "valuesByMode": {
-        "Mode 1": "Adobe Clean Display"
-      },
-      "resolved": {
-        "Mode 1": "Adobe Clean Display"
-      }
-    },
-    "VariableID:1472a1f2140b1cb50d997353ef2be2d5dcf54df8/18955:498": {
-      "name": "font/weight/adobe-clean-display/black",
-      "key": "1472a1f2140b1cb50d997353ef2be2d5dcf54df8",
-      "collection": "Primitives / Dimension / Static",
-      "collectionId": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
-      "resolvedType": "STRING",
-      "codeSyntax": {},
-      "valuesByMode": {
-        "Mode 1": "Black"
-      },
-      "resolved": {
-        "Mode 1": "Black"
-      }
-    },
-    "VariableID:531f62dda6ffaa7e790201397d4b5cf9cc51b20f/1513:39": {
-      "name": "Black",
-      "key": "531f62dda6ffaa7e790201397d4b5cf9cc51b20f",
-      "collection": "Color",
-      "collectionId": "VariableCollectionId:42e9986e9f29f025a8192fbf4725edacad24f163/1513:29",
+    "VariableID:1:233": {
+      "name": "s2a/color/transparent/black/16",
+      "key": "ca2c5cc5fb44882c758f7c99ea06d0b44c08b0c2",
+      "collection": "S2A / Primitives / Color / Theme",
+      "collectionId": "VariableCollectionId:1:138",
       "resolvedType": "COLOR",
-      "codeSyntax": {},
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-transparent-black-16)"
+      },
       "valuesByMode": {
         "Light": {
           "r": 0,
           "g": 0,
           "b": 0,
-          "a": 1
+          "a": 0.1599999964237213
         }
       },
       "resolved": {
@@ -337,63 +350,323 @@
           "r": 0,
           "g": 0,
           "b": 0,
+          "a": 0.1599999964237213
+        }
+      }
+    },
+    "VariableID:1:237": {
+      "name": "s2a/color/transparent/black/64",
+      "key": "a8fd1ada48014daa66be1ebc812370ce26b43bbe",
+      "collection": "S2A / Primitives / Color / Theme",
+      "collectionId": "VariableCollectionId:1:138",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-transparent-black-64)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        }
+      }
+    },
+    "VariableID:1:259": {
+      "name": "s2a/font/family/heading",
+      "key": "71540b0418d40a4f8979c1fa5eb545fe1a3e15df",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-heading)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean-display"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean Display"
+      }
+    },
+    "VariableID:2483:41398": {
+      "name": "s2a/color/content/heading",
+      "key": "165c4f7ba8944fa758c1ba553080a7fb7640e84a",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-heading)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/content/default"
+        },
+        "Dark": {
+          "alias": "s2a/color/content/knockout"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
           "a": 1
         }
       }
     },
-    "VariableID:7086fedca54a9efc298143939fc26923f60c171d/327:248": {
-      "name": "Palette/white",
-      "key": "7086fedca54a9efc298143939fc26923f60c171d",
-      "collection": "S.Color-theme",
-      "collectionId": "VariableCollectionId:bb0e8b7ac1e1f9c1e0f4f3a41f49af4e202401a6/109:3225",
-      "resolvedType": "COLOR",
-      "codeSyntax": {},
+    "VariableID:2:95": {
+      "name": "s2a/border/radius/md",
+      "key": "b7a63f64b32ce539ee4d777c44f1d5cb304d334e",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-radius-md)"
+      },
       "valuesByMode": {
-        "light": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
-          "a": 1
-        },
-        "dark": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
-          "a": 1
-        },
-        "darkest": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
-          "a": 1
-        },
-        "wireframe": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
-          "a": 1
+        "Value": {
+          "alias": "s2a/border/radius/16"
         }
       },
       "resolved": {
-        "light": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
+        "Value": 16
+      }
+    },
+    "VariableID:3:55": {
+      "name": "s2a/spacing/xl",
+      "key": "5470e8857904e76c7d03f7287745c3851b80caad",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-xl)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/32"
+        }
+      },
+      "resolved": {
+        "Value": 32
+      }
+    },
+    "VariableID:3:57": {
+      "name": "s2a/spacing/md",
+      "key": "42a796ba25bfc3a3f194b982cc14c76bcc8febb2",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-md)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/16"
+        }
+      },
+      "resolved": {
+        "Value": 16
+      }
+    },
+    "VariableID:3:61": {
+      "name": "s2a/spacing/none",
+      "key": "773c30f631ac69028e160f46e4dfefdb7daa184d",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-none)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/0"
+        }
+      },
+      "resolved": {
+        "Value": 0
+      }
+    },
+    "VariableID:5353:2797": {
+      "name": "s2a/typography/font-size/heading-4",
+      "key": "ea51072a239d9306a6703dd2070a6c54e146bfc9",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-heading-4)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/4xl"
+        },
+        "md": {
+          "alias": "s2a/font/size/2xl"
+        },
+        "sm": {
+          "alias": "s2a/font/size/xl"
+        },
+        "xl": {
+          "alias": "s2a/font/size/4xl"
+        }
+      },
+      "resolved": {
+        "lg": 36,
+        "md": 24,
+        "sm": 20,
+        "xl": 36
+      }
+    },
+    "VariableID:5353:2800": {
+      "name": "s2a/typography/letter-spacing/heading-4",
+      "key": "617aba195ac51b6f057643143efec53c67c5b87b",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-heading-4)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/2xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/4xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/4xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/2xl"
+        }
+      },
+      "resolved": {
+        "lg": -1,
+        "md": -0.47999998927116394,
+        "sm": -0.47999998927116394,
+        "xl": -1
+      }
+    },
+    "VariableID:5353:2804": {
+      "name": "s2a/typography/line-height/heading-4",
+      "key": "e5bb28a1921dd81a0348db348f0d7a66b5f4460c",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-heading-4)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/lg"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/md"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/lg"
+        }
+      },
+      "resolved": {
+        "lg": 32,
+        "md": 24,
+        "sm": 20,
+        "xl": 32
+      }
+    },
+    "VariableID:5388:44675": {
+      "name": "s2a/font/weight/heading",
+      "key": "a07570623563c5699282555898a260eb980bf644",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-heading)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean-display/black"
+        }
+      },
+      "resolved": {
+        "Value": "Black"
+      }
+    },
+    "VariableID:6:47": {
+      "name": "s2a/color/background/subtle",
+      "key": "7843571399ab3b22066ffbb37e6f05208ccd6aba",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-background-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/50"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/700"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0.9725490212440491,
+          "g": 0.9725490212440491,
+          "b": 0.9725490212440491,
           "a": 1
         },
-        "dark": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
+        "Dark": {
+          "r": 0.3137255012989044,
+          "g": 0.3137255012989044,
+          "b": 0.3137255012989044,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:6:82": {
+      "name": "s2a/color/content/default",
+      "key": "37e4aab70c1b4e190e04c4945427869636094364",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
           "a": 1
         },
-        "darkest": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
-          "a": 1
-        },
-        "wireframe": {
+        "Dark": {
           "r": 1,
           "g": 1,
           "b": 1,
@@ -402,151 +675,85 @@
       }
     }
   },
-  "textStyles": {},
+  "textStyles": {
+    "S:a8587648befe9e8bec946e78ca5e8fe4d0810bbc,": {
+      "name": "s2a/typography/heading-4",
+      "key": "a8587648befe9e8bec946e78ca5e8fe4d0810bbc"
+    }
+  },
   "explicitModes": [],
   "instances": [
     {
       "variant": "ActionCard",
-      "node": "/Group 2085666331/Rotate handle/Rotate node/S_RotateCCWBold_18_N",
-      "nodeId": "13999:205846",
+      "node": "/.media",
+      "nodeId": "14226:196790",
       "mainComponent": {
-        "id": "11065:32506",
-        "key": "b22b0b648f4838319a52c42caefe2d8b6cb8262d",
-        "name": "S_RotateCCWBold_18_N"
+        "id": "3240:7620",
+        "key": "aadcf0f79e96b3c9407af57a360950fe59b6905d",
+        "name": "Aspect Ratio=4:3, Radii=none, Type=image"
+      },
+      "set": {
+        "id": "3240:7621",
+        "key": "0a5a12c0db994e5f4729cff3cf1e1b08e3f551c5",
+        "name": "Media"
+      }
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.media/Overlay",
+      "nodeId": "I14226:196790;3271:2277",
+      "mainComponent": {
+        "id": "3271:2265",
+        "key": "235fa22e864c98e7cadc09022701de2b6ba9d255",
+        "name": "Scrim=content-left-medium"
+      },
+      "set": {
+        "id": "3271:2266",
+        "key": "c67ecd806384347e938de1e4f2042e9cbd5b288c",
+        "name": "Overlay"
+      }
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.copy/.chevron",
+      "nodeId": "14226:196795",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "898b40541dd33b417fd3827d5f824d80859a2967",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "ActionCard",
+      "node": "/.copy/.chevron/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I14226:196795;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
       },
       "set": null
     }
   ],
   "counts": {
     "variants": 1,
-    "nodes": 22,
-    "bindings": 6,
-    "unboundPaintNodes": 11
+    "nodes": 10,
+    "bindings": 22,
+    "unboundPaintNodes": 1
   },
   "unboundPaint": [
     {
       "variant": "ActionCard",
-      "node": "",
-      "nodeId": "13999:205827",
-      "nodeType": "FRAME",
-      "properties": [
-        "fills"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2087327847/Abc",
-      "nodeId": "13999:205833",
-      "nodeType": "TEXT",
-      "properties": [
-        "fills"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Line 87474",
-      "nodeId": "13999:205834",
-      "nodeType": "LINE",
-      "properties": [
-        "strokes"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Rectangle 2147231707",
-      "nodeId": "13999:205836",
-      "nodeType": "RECTANGLE",
-      "properties": [
-        "strokes"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Ellipse 36325",
-      "nodeId": "13999:205837",
-      "nodeType": "ELLIPSE",
-      "properties": [
-        "fills",
-        "strokes"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Ellipse 36326",
-      "nodeId": "13999:205838",
-      "nodeType": "ELLIPSE",
-      "properties": [
-        "fills",
-        "strokes"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Ellipse 36327",
-      "nodeId": "13999:205839",
-      "nodeType": "ELLIPSE",
-      "properties": [
-        "fills",
-        "strokes"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Ellipse 36329",
-      "nodeId": "13999:205840",
-      "nodeType": "ELLIPSE",
-      "properties": [
-        "fills",
-        "strokes"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Ellipse 36328",
-      "nodeId": "13999:205841",
-      "nodeType": "ELLIPSE",
-      "properties": [
-        "fills",
-        "strokes"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Rotate handle/Node connector",
-      "nodeId": "13999:205843",
-      "nodeType": "VECTOR",
-      "properties": [
-        "strokes"
-      ]
-    },
-    {
-      "variant": "ActionCard",
-      "node": "/Group 2085666331/Rotate handle/Rotate node",
-      "nodeId": "13999:205845",
+      "node": "/.media/Asset",
+      "nodeId": "I14226:196790;3252:2171",
       "nodeType": "FRAME",
       "properties": [
         "fills"
       ]
     }
   ],
-  "pattern": {
-    "kind": "frame",
-    "repeats": [],
-    "genericLayers": 11,
-    "namedLayers": 11,
-    "roles": [
-      "cta",
-      "divider",
-      "heading",
-      "icon",
-      "media",
-      "text"
-    ],
-    "instancedSets": [
-      "S_RotateCCWBold_18_N"
-    ]
-  },
   "provenance": {
-    "hash": "sha256:f64c85fbd287159ac8ca41d0853efb266ce4cd81f308b247cfbf5602c29a6bb6"
+    "hash": "sha256:59b5d8393c34c47549a299c08c860ec4f340c0844ed6a74328d1073e0590a7d6"
   }
 }

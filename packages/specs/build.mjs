@@ -20,6 +20,8 @@ import { canonicalJson, hashOf } from "./lib/canonical.mjs";
 import { loadShippedTokens } from "./lib/tokens.mjs";
 import { buildIR } from "./lib/ir.mjs";
 import { specJson } from "./lib/formats/spec-json.mjs";
+import { contractJson } from "./lib/formats/contract-json.mjs";
+import catalogAdapter from "./adapters/catalog.mjs";
 import { markdown } from "./lib/formats/markdown.mjs";
 import { storiesManifest } from "./lib/formats/stories.mjs";
 import { figmaPlan } from "./lib/formats/figma-plan.mjs";
@@ -54,10 +56,14 @@ export function buildOne(slug, { tokens = loadShippedTokens(TOKENS), slugOf = sl
   const figma = readJson(join(dir, `${slug}.figma.evidence.json`));
   const ir = buildIR({ defs, code, figma, tokens, generator: GENERATOR });
   const spec = specJson(ir, { slugOf });
+  const contract = contractJson(ir, { id: `s2a.${slug}` });
+  const catalog = catalogAdapter.artifacts(ir)[0].data;
   return {
     slug, ir,
     outputs: {
       [join(dir, `${slug}.spec.json`)]: JSON.stringify(spec, null, 2) + "\n",
+      [join(dir, `${slug}.contract.json`)]: JSON.stringify(contract, null, 2) + "\n",
+      [join(dir, `${slug}.catalog.json`)]: JSON.stringify(catalog, null, 2) + "\n",
       [join(dir, `${slug}.spec.md`)]: markdown(ir) + "\n",
       [join(OUT, slug, "stories.manifest.json")]: JSON.stringify({ $generated: GENERATOR, ...storiesManifest(ir) }, null, 2) + "\n",
       [join(OUT, slug, "figma.plan.json")]: JSON.stringify({ $generated: GENERATOR, ...figmaPlan(ir) }, null, 2) + "\n",
@@ -126,7 +132,7 @@ function main() {
     if (onDisk !== indexContent) { console.log(`STALE  contracts.index.json\n       packages/specs/out/contracts.index.json: ${onDisk === null ? "missing" : "differs from a fresh build"}`); failures++; } else console.log("FRESH  contracts.index.json");
   } else { mkdirSync(OUT, { recursive: true }); writeFileSync(indexFile, indexContent); }
   if (args.includes("--index-only")) { console.log(`contracts.index.json rebuilt (${contractsIndex().count} items).`); return; }
-  console.log(check ? `${slugs.length - failures}/${slugs.length} fresh.` : `${slugs.length - failures}/${slugs.length} built. Outputs: spec.json + spec.md beside each component, stories.manifest.json + figma.plan.json under packages/specs/out/.`);
+  console.log(check ? `${slugs.length - failures}/${slugs.length} fresh.` : `${slugs.length - failures}/${slugs.length} built. Outputs: spec.json + contract.json + catalog.json + spec.md beside each component, stories.manifest.json + figma.plan.json under packages/specs/out/.`);
   process.exitCode = failures ? 1 : 0;
 }
 

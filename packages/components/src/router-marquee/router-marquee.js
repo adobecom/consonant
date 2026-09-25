@@ -49,9 +49,8 @@ export const RouterMarquee = ({ slides = [], activeIndex = 0 } = {}) => html`
                 : nothing}
             </div>
             <div class="rm-overlay"></div>
-            <div class="rm-content">
+            <div class="rm-content" data-theme="dark">
               ${RichContent({
-                theme: "on-dark",
                 density: "tight",
                 measure: "none",
                 eyebrow: slide.eyebrow ?? "",

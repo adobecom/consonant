@@ -86,6 +86,15 @@
       </svg>
       <span class="tab-label">Tools</span>
     </button>
+    <!-- Contract -->
+    <button class="tab" data-panel="contract" aria-label="Contract">
+      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M3.5 1.5H8L11 4.5V12.5H3.5V1.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M8 1.5V4.5H11" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M5.5 7H9M5.5 9.5H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <span class="tab-label">Contract</span>
+    </button>
     <!-- Request -->
     <button class="tab" data-panel="request" aria-label="Request">
       <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
@@ -180,6 +189,26 @@
 
       <div class="tools-divider"></div>
 
+      <!-- ── Doc readability ─────────────────────────────────────────── -->
+      <div class="section-label">Doc readability</div>
+      <div class="sel-card">
+        <span class="sel-card-empty" id="docCheckSelectionEmpty">Select a documentation frame</span>
+        <div class="sel-card-info" id="docCheckSelectionInfo" style="display:none;">
+          <span class="sel-icon">¶</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="docCheckName">—</span>
+            <span class="sel-type" id="docCheckMeta">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="docCheckBtn" disabled style="flex:1;">Check readability</button>
+      </div>
+      <div class="status" id="docCheckStatus"></div>
+      <div id="docCheckIssues" style="display:none; margin-top:6px; max-height:200px; overflow-y:auto;"></div>
+
+      <div class="tools-divider"></div>
+
       <!-- ── Contract ───────────────────────────────────────────────── -->
       <div class="section-label">Contract</div>
       <div class="sel-card">
@@ -259,6 +288,60 @@
     </div>
 
     <!-- Request — file a triage-ready request from inside Figma -->
+    <!-- Contract Studio -->
+    <div class="panel" id="contractPanel">
+
+      <!-- List: what is selected, and what the repo already has -->
+      <div id="studioList">
+        <div class="sel-card">
+          <span class="sel-card-empty" id="studioSelEmpty">Select a component set or frame in Figma</span>
+          <div class="sel-card-info" id="studioSelInfo" style="display:none;">
+            <span class="sel-icon">⎘</span>
+            <div class="sel-meta">
+              <span class="sel-name" id="studioSelName">—</span>
+              <span class="sel-type" id="studioSelMeta">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="studioOpenBtn" disabled style="flex:1;">Open contract</button>
+        </div>
+        <div class="status" id="studioListStatus"></div>
+
+        <div class="section-label" style="margin-top:var(--s-4);">Contracts in the repo</div>
+        <div id="studioIndex" class="studio-index"></div>
+      </div>
+
+      <!-- Editor -->
+      <div id="studioEditor" style="display:none;">
+        <div class="studio-head">
+          <button class="icon-btn" id="studioBackBtn" title="Back to the list" aria-label="Back">←</button>
+          <div class="studio-head-meta">
+            <div class="studio-head-id" id="studioId">—</div>
+            <div class="studio-head-sub" id="studioSub">—</div>
+          </div>
+          <span class="badge badge-warm" id="studioDraftChip" style="display:none;">draft</span>
+          <div class="studio-modes" role="tablist" aria-label="Editor mode">
+            <button class="studio-mode active" id="studioModeGui" role="tab" aria-selected="true">GUI</button>
+            <button class="studio-mode" id="studioModeJson" role="tab" aria-selected="false">JSON</button>
+          </div>
+        </div>
+
+        <div class="studio-body">
+          <div id="studioDraftNotes" class="studio-notes" style="display:none;"></div>
+          <div id="studioGui"></div>
+          <textarea id="studioJson" class="form-textarea studio-json" spellcheck="false" style="display:none;"></textarea>
+        </div>
+
+        <!-- sticky verdict + publish, visible the whole time you edit -->
+        <div class="studio-footer" id="studioFooter">
+          <div class="studio-verdict" id="studioVerdict">—</div>
+          <div class="studio-warnings" id="studioWarnings" style="display:none;"></div>
+          <button class="btn" id="studioPublishBtn" disabled style="width:100%;">Publish contract →</button>
+        </div>
+      </div>
+    </div>
+
     <div class="panel" id="requestPanel">
       <div class="section-label">Request a change</div>
       <p class="req-intro">Ask for a token, component, or change. Files a triage-ready GitHub issue — the design-system team reviews weekly.</p>

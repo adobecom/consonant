@@ -55,7 +55,7 @@ function combos(axes: Array<{ name: string; options: string[] }>): Array<Record<
 }
 
 const cleanName = (n: string): string => n.replace(/^\./, '');
-const toTitle = (n: string): string => cleanName(n).replace(/[-_]/g, ' ').replace(/^./, c => c.toUpperCase());
+const toTitle = (n: string): string => cleanName(n).replace(/[-_]/g, ' ').replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/^./, c => c.toUpperCase());
 
 export async function buildSetFromPlan(plan: FigmaPlan): Promise<BuildReport> {
   const report: BuildReport = { set: '', setId: '', variants: 0, layers: 0, boundVariables: 0, unresolvedVariables: [], stylesApplied: 0, stylesMissing: [], properties: 0, notes: [] };
@@ -197,6 +197,29 @@ export async function buildSetFromPlan(plan: FigmaPlan): Promise<BuildReport> {
       r.fills = [{ type: 'SOLID', color: { r: 0.85, g: 0.85, b: 0.85 } }];
       parent.appendChild(r);
       node = r;
+    } else if (layer.element === 'hr' || /^(divider|rule|separator)$/i.test(cleanName(layer.name))) {
+      // A rule: 1px high, full width, stroke bound (border-color) — not an empty 100×100 frame.
+      const f = figma.createFrame();
+      f.name = layer.name;
+      f.fills = [];
+      f.resize(320, 1);
+      f.strokeWeight = 1;
+      f.strokes = [{ type: 'SOLID', color: { r: 0.8, g: 0.8, b: 0.8 } }];
+      parent.appendChild(f);
+      bindLayer(f, layer.bindings);
+      node = f;
+    } else if (/^svg|^i$/.test(layer.element ?? '') || /icon|chevron|arrow|caret|glyph/i.test(cleanName(layer.name))) {
+      // An icon placeholder: a fixed 24×24 frame the designer swaps for the real glyph.
+      const f = figma.createFrame();
+      f.name = layer.name;
+      f.resize(24, 24);
+      f.fills = [{ type: 'SOLID', color: { r: 0.6, g: 0.6, b: 0.6 } }];
+      f.cornerRadius = 4;
+      parent.appendChild(f);
+      bindLayer(f, layer.bindings);
+      node = f;
+      report.layers++;
+      return node;   // fixed size: never FILL
     } else {
       const f = figma.createFrame();
       f.name = layer.name;
@@ -232,7 +255,8 @@ export async function buildSetFromPlan(plan: FigmaPlan): Promise<BuildReport> {
     }
     report.layers++;
     // Children of an auto-layout parent fill the cross axis (after appendChild).
-    try { if (parent.layoutMode !== 'NONE' && node.type !== 'TEXT') (node as any).layoutSizingHorizontal = parent.layoutMode === 'VERTICAL' ? 'FILL' : 'HUG'; } catch { /* not applicable */ }
+    // Text included: a text node left at HUG wraps at ~50px in a vertical stack.
+    try { if (parent.layoutMode !== 'NONE') (node as any).layoutSizingHorizontal = parent.layoutMode === 'VERTICAL' ? 'FILL' : 'HUG'; } catch { /* not applicable */ }
     return node;
   }
 
@@ -292,9 +316,14 @@ export async function buildSetFromPlan(plan: FigmaPlan): Promise<BuildReport> {
     const head = fp.replace(/[A-Z].*$/, '');           // ctaLabel → cta
     const cands = [...fromPath, fp.replace(/^show/i, ''), tail, head, fp].map(key).filter(Boolean);
     const all = 'findAll' in root ? (root as any).findAll(() => true) as SceneNode[] : [];
+    // A TEXT property wants a layer with text in it: skip candidates that have none
+    // (the chevron sits on the CTA's path, but the label is the text).
+    const want = (prop as any).type === 'TEXT' ? (n: SceneNode) => n.type === 'TEXT' || ('findOne' in n && Boolean((n as any).findOne((x: SceneNode) => x.type === 'TEXT'))) : () => true;
+    for (const c of cands) { const hit = all.find(n => key(n.name) === c && want(n)); if (hit) return hit; }
     for (const c of cands) { const hit = all.find(n => key(n.name) === c); if (hit) return hit; }
     return null;
   };
+  const insideInstance = (n: SceneNode): boolean => { let p: BaseNode | null = n.parent; while (p && p.type !== 'COMPONENT' && p.type !== 'COMPONENT_SET' && p.type !== 'PAGE') { if (p.type === 'INSTANCE') return true; p = p.parent; } return false; };
   // A TEXT property that lands on a container wires to the first text inside it
   // (.cta → .cta/.label); an INSTANCE_SWAP that lands on a slot frame wires to
   // the instance inside it.
@@ -316,6 +345,9 @@ export async function buildSetFromPlan(plan: FigmaPlan): Promise<BuildReport> {
         if (prop.type === 'TEXT') {
           const text = descend(target, 'TEXT');
           if (!text) { report.notes.push(`property ${name}: layer ${target.name} is a ${target.type} with no text inside; wire it by hand`); continue; }
+          // Text inside a slotted instance belongs to that component: Figma
+          // forbids wiring it here. The panel exposes the nested property instead.
+          if (insideInstance(text)) { report.notes.push(`property ${name}: text lives inside the slotted instance; expose the instance's own text property (nested property) instead of a card-level one`); continue; }
           text.componentPropertyReferences = { ...(text.componentPropertyReferences || {}), characters: propKey };
         } else if (prop.type === 'BOOLEAN') {
           target.componentPropertyReferences = { ...(target.componentPropertyReferences || {}), visible: propKey };

@@ -17,12 +17,6 @@
   --c-rich-content-text-gap: var(--s2a-spacing-md, 16px);
 }
 
-.c-rich-content[data-theme="on-dark"] {
-  --c-rich-content-color-title: var(--s2a-color-content-knockout, #ffffff);
-  --c-rich-content-color-body: var(--s2a-color-content-knockout, #ffffff);
-  --c-rich-content-color-eyebrow: var(--s2a-color-content-knockout, #ffffff);
-}
-
 .c-rich-content[data-justify="center"] {
   align-items: center;
 }

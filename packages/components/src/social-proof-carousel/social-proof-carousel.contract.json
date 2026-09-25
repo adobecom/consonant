@@ -1,0 +1,150 @@
+{
+  "$schema": "../../../specs/southleft/contract.schema.json",
+  "id": "s2a.social-proof-carousel",
+  "name": "SocialProofCarousel",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "Full-bleed slider of QuoteCards: the active slide centered with equal peeks of its neighbours, knockout IconButton arrows, native toggle-button pagination. No autoplay.",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "slides",
+      "type": "text",
+      "description": "Each entry is a QuoteCard props object; the Homepage carries one verified testimonial and hides inactive controls (data-single).",
+      "default": "null",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": ".slide-left / .slide-active / .slide-right"
+        },
+        "code": {
+          "prop": "slides"
+        }
+      }
+    },
+    {
+      "name": "activeIndex",
+      "type": "number",
+      "description": "Initial position; runtime state after mount.",
+      "default": "0",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "activeIndex"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "parts": {
+        "track": {
+          "tokens": {
+            "gap": "{s2a.spacing.xs}"
+          },
+          "parts": {
+            "slide": {
+              "slot": {
+                "name": "slide",
+                "accepts": [
+                  "QuoteCard"
+                ],
+                "acceptsMode": "restrict"
+              }
+            }
+          }
+        },
+        "nav": {
+          "description": "40px from each edge (Figma Nav items: 40 inset); mobile drops to the bottom edge.",
+          "literals": {
+            "left": "40px",
+            "right": "40px"
+          },
+          "slot": {
+            "name": "control",
+            "accepts": [
+              "IconButton"
+            ],
+            "acceptsMode": "restrict"
+          }
+        },
+        "pagination": {
+          "element": "div[role=group]",
+          "literals": {
+            "bottom": "32px",
+            "gap": "8px"
+          },
+          "parts": {
+            "dot": {
+              "description": "Active dot: content/knockout, scale 1.25. Bindings taken from the .QuoteCard DotPagination instance (dot-1 active content/knockout; dot-2..5 transparent/white/64; radius/round; height spacing/xs).",
+              "element": "button[aria-pressed]",
+              "tokens": {
+                "width": "{s2a.spacing.xs}",
+                "height": "{s2a.spacing.xs}",
+                "border-radius": "{s2a.border-radius.round}",
+                "background": "{s2a.color.transparent-white.64}",
+                "outline": "{s2a.color.focus-ring.default}"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "2.1.1",
+      "2.2.2",
+      "2.4.7"
+    ],
+    "keyboard": [
+      {
+        "key": "ArrowLeft",
+        "action": "Previous slide except inside editable fields"
+      },
+      {
+        "key": "ArrowRight",
+        "action": "Next slide except inside editable fields"
+      },
+      {
+        "key": "Tab",
+        "action": "Move through enabled native controls and the active slide's CTA"
+      }
+    ],
+    "notes": [
+      "No autoplay. Transform transition is 500 ms and disabled by prefers-reduced-motion.",
+      "Inactive slides are inert and aria-hidden; pagination uses native toggle buttons, not incomplete tabs.",
+      "Call destroy() before replacing the DOM; it aborts event listeners and disconnects the ResizeObserver."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": null,
+        "nodeId": "12102:175374"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/social-proof-carousel/social-proof-carousel.js",
+        "export": "SocialProofCarousel"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:665af24d944e776e61e0644beb39ebfd6a3630a3ac7e88858142164788b06b70",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:1fb7be7580d481700553d6af9c62d6b5b8e76abe472aa0ab416a02c6f5d78484"
+    }
+  }
+}

@@ -112,11 +112,46 @@
     }
   },
   "decisions": {
-    "unboundPaint": "{count} painted layers carry no variable ({list}). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
-    "genericLayers": "{count} layers carry Figma-generated names ({list}). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
-    "codePending": "No code exists yet. Generate {importPath} from the spec (/spec-to-html), run npm run evidence:code -- --slug={slug}, then remove anchors.code.pending.",
-    "archetype": "Scaffolded as {archetype} ({why}). Confirm, or re-run npm run specs:scaffold -- --slug={slug} --archetype=<link-card|card|collection>.",
-    "levers": "Levers were derived from roles ({roles}), not from component properties. Confirm names and which are authored (lever true) versus integration (lever false).",
-    "match": "Structural match says {verdict}: closest existing contract is {name} (score {score}). Extend it instead of adding a component?"
+    "unboundPaint": {
+      "question": "{count} painted layers carry no variable ({list}). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "confidence": "high",
+      "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy."
+    },
+    "genericLayers": {
+      "question": "{count} layers carry Figma-generated names ({list}). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set."
+    },
+    "codePending": {
+      "question": "No code exists yet. Generate {importPath} from the spec (/spec-to-html), run npm run evidence:code -- --slug={slug}, then remove anchors.code.pending.",
+      "confidence": "high",
+      "fix": "Once {importPath} exists, run npm run evidence:code -- --slug={slug} and delete anchors.code.pending."
+    },
+    "archetype": {
+      "question": "Scaffolded as {archetype} ({why}). Confirm, or re-run npm run specs:scaffold -- --slug={slug} --archetype=<link-card|card|collection>.",
+      "chose": "archetype {archetype}, because {why}",
+      "confidence": "medium",
+      "fix": "npm run specs:scaffold -- --slug={slug} --archetype=<link-card|card|collection> --force"
+    },
+    "levers": {
+      "question": "Levers were derived from roles ({roles}), not from component properties. Confirm names and which are authored (lever true) versus integration (lever false).",
+      "chose": "levers from roles: {roles}",
+      "confidence": "medium",
+      "fix": "Edit props[] in this file: rename a lever, or set lever:false where it is integration rather than authoring."
+    },
+    "match": {
+      "question": "Structural match says {verdict}: closest existing contract is {name} (score {score}). Extend it instead of adding a component?",
+      "chose": "a new component, over extending {name} (match {verdict}, score {score})",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to {name} instead."
+    },
+    "strayText": {
+      "confidence": "low",
+      "fix": "Name the layer in Figma so it claims a role, or add it under anatomy.root.parts here."
+    },
+    "extraArt": {
+      "confidence": "medium",
+      "fix": "Fold the layers into the Media instance in Figma, or name them as parts in anatomy."
+    }
   }
 }

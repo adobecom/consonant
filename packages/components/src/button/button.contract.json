@@ -1,0 +1,234 @@
+{
+  "$schema": "../../../specs/southleft/contract.schema.json",
+  "id": "s2a.button",
+  "name": "Button",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "A non-interactive content card; actions live in a slot.",
+  "semantics": {
+    "element": "article"
+  },
+  "props": [
+    {
+      "name": "iconEnd",
+      "type": "text",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon End#8359:334"
+        },
+        "code": {
+          "prop": "iconEnd"
+        }
+      }
+    },
+    {
+      "name": "iconStart",
+      "type": "text",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon Start#8359:263"
+        },
+        "code": {
+          "prop": "iconStart"
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "default": "\"Label\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label#8359:192"
+        },
+        "code": {
+          "prop": "label"
+        }
+      }
+    },
+    {
+      "name": "showIconEnd",
+      "type": "boolean",
+      "description": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Icon End#8359:121"
+        },
+        "code": {
+          "prop": "showIconEnd"
+        }
+      }
+    },
+    {
+      "name": "showIconStart",
+      "type": "boolean",
+      "description": "Figma authoring toggle for the \"Icon Start\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Icon Start#8359:50"
+        },
+        "code": {
+          "prop": "showIconStart"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "md"
+        ]
+      },
+      "default": "\"md\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size"
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "style",
+      "type": {
+        "enum": [
+          "solid",
+          "outlined",
+          "transparent",
+          "accent",
+          "knockout",
+          "outline-inverse"
+        ]
+      },
+      "default": "\"solid\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style"
+        },
+        "code": {
+          "prop": "style"
+        }
+      }
+    },
+    {
+      "name": "href",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "href"
+        }
+      }
+    },
+    {
+      "name": "state",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "state"
+        }
+      }
+    },
+    {
+      "name": "onClick",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "onClick"
+        }
+      }
+    }
+  ],
+  "states": [
+    "hover",
+    "active",
+    "disabled",
+    "focus-visible"
+  ],
+  "anatomy": {
+    "root": {
+      "element": "article",
+      "tokens": {
+        "background-color": "{s2a.color.background.subtle}",
+        "border-radius": "{s2a.border-radius.md}",
+        "padding": "{s2a.spacing.xl}",
+        "gap": "{s2a.spacing.md}"
+      },
+      "parts": {
+        "icon-start": {
+          "slot": {
+            "name": "Icon Start",
+            "acceptsMode": "prefer"
+          }
+        },
+        "label": {},
+        "icon-end": {
+          "slot": {
+            "name": "Icon End",
+            "acceptsMode": "prefer"
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ],
+    "notes": [
+      "Actions inside the card are native links or buttons; the card itself has no role."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "d91a1f5f4a290b66b0aadb6f24e1a30b6cc9e3ba",
+        "nodeId": "10715:35477"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/button/button.js",
+        "export": "Button"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:ab4646e940f088c84700ab60e9a7dd46be13b1ad4e95fdee554750400fba895d",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7"
+    }
+  }
+}

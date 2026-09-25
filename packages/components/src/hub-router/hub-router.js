@@ -1,4 +1,4 @@
-import { html } from "lit";
+import { html, nothing } from "lit";
 import { SectionHeader } from "../section-header/section-header.js";
 import { ElasticCard } from "../elastic-card/elastic-card.js";
 import { Media } from "../media/media.js";
@@ -70,9 +70,9 @@ export const HubRouter = ({
   theme = "on-light",
   cards = DEFAULT_HUB_ROUTER_CARDS,
 } = {}) => html`
-  <section class="c-hub-router" data-theme=${theme}>
+  <section class="c-hub-router" data-theme=${theme === "on-dark" || theme === "dark" ? "dark" : nothing}>
     <div class="c-hub-router__heading">
-      ${SectionHeader({ eyebrow, showEyebrow, title: heading, body, theme })}
+      ${SectionHeader({ eyebrow, showEyebrow, title: heading, body })}
     </div>
     <div class="c-hub-router__carousel" role="list" aria-label="Product categories"
       @mouseleave=${clearEdge}

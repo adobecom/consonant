@@ -761,6 +761,82 @@ body {
 .contract-settings summary { cursor: pointer; padding: 2px 0; }
 .contract-settings .form-field { margin-top: 8px; }
 .contract-match { border-color: var(--accent); }
+
+/* ── Contract Studio ───────────────────────────────────────────────────────── */
+/* The curation editor. Visual weight goes to the two things that change what a
+   person does next: the mode toggle, and the verdict above Publish. */
+
+.studio-index { display: flex; flex-direction: column; gap: var(--s-1); }
+.studio-row {
+  display: flex; align-items: center; gap: var(--s-2);
+  width: 100%; padding: var(--s-2) var(--s-3);
+  background: var(--bg-raised); border: 1px solid var(--border);
+  border-radius: var(--r-sm); cursor: pointer; text-align: left;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.studio-row:hover { background: var(--bg-hover); border-color: var(--border-md); }
+.studio-row:focus-visible { outline: none; box-shadow: var(--ring); }
+.studio-row-name { flex: 1; min-width: 0; font-size: 11.5px; color: var(--text-1); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.studio-row-slug { font-size: 10px; color: var(--text-3); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; flex-shrink: 0; }
+.studio-empty { font-size: 11px; color: var(--text-3); padding: var(--s-2) 0; }
+
+.studio-head { display: flex; align-items: center; gap: var(--s-2); padding-bottom: var(--s-3); border-bottom: 1px solid var(--border); margin-bottom: var(--s-3); }
+.studio-head-meta { flex: 1; min-width: 0; }
+.studio-head-id { font-size: 12px; font-weight: 600; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.studio-head-sub { font-size: 10px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+
+.studio-modes { display: flex; flex-shrink: 0; border: 1px solid var(--border-md); border-radius: var(--r-sm); overflow: hidden; }
+.studio-mode {
+  font-size: 10px; font-weight: 500; letter-spacing: .02em;
+  padding: 3px var(--s-2); border: 0; cursor: pointer;
+  background: var(--bg-raised); color: var(--text-2);
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.studio-mode:hover { background: var(--bg-hover); }
+.studio-mode.active { background: var(--accent); color: #fff; }
+.studio-mode:focus-visible { outline: none; box-shadow: var(--ring); position: relative; z-index: 1; }
+
+.studio-body { padding-bottom: var(--s-3); }
+.studio-json { min-height: 320px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10.5px; line-height: 1.6; }
+
+/* Draft notes: the judgment calls a reviewer has to read. Amber, not red —
+   a guess is not a failure, but it is not finished either. */
+.studio-notes { background: rgba(217,164,58,0.07); border: 1px solid rgba(217,164,58,0.22); border-radius: var(--r-sm); padding: var(--s-2) var(--s-3); margin-bottom: var(--s-3); }
+.studio-notes-head { font-size: 10.5px; font-weight: 600; color: #8A6516; margin-bottom: var(--s-1); }
+.studio-note { display: flex; gap: var(--s-2); font-size: 10px; line-height: 1.5; color: var(--text-2); padding: 2px 0; }
+.studio-note-conf { flex-shrink: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 9px; text-transform: uppercase; letter-spacing: .04em; width: 42px; color: var(--text-3); }
+.studio-note-conf.low { color: #B4560F; font-weight: 600; }
+
+.studio-sec { margin-bottom: var(--s-4); }
+.studio-sec-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); margin-bottom: var(--s-2); }
+.studio-add { font-size: 10px; color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-bdr); border-radius: var(--r-sm); padding: 2px var(--s-2); cursor: pointer; }
+.studio-add:hover { background: rgba(75,92,240,0.14); }
+
+.studio-item { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2); border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--bg-raised); margin-bottom: var(--s-1); }
+.studio-item-name { flex: 1; min-width: 0; font-size: 11px; font-weight: 500; color: var(--text-1); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.studio-item-bind { font-size: 9.5px; color: var(--text-3); white-space: nowrap; flex-shrink: 0; }
+.studio-del { border: 0; background: none; cursor: pointer; color: var(--text-3); font-size: 13px; line-height: 1; padding: 0 2px; flex-shrink: 0; }
+.studio-del:hover { color: var(--red); }
+
+.studio-toggle { font-size: 9.5px; padding: 3px var(--s-2); margin: 0 var(--s-1) var(--s-1) 0; border-radius: var(--r-sm); cursor: pointer; border: 1px solid var(--border-md); background: var(--bg-raised); color: var(--text-2); transition: all var(--t-fast) var(--ease); }
+.studio-toggle:hover { border-color: var(--accent-bdr); }
+.studio-toggle.on { background: var(--accent-bg); border-color: var(--accent-bdr); color: var(--accent); font-weight: 600; }
+
+.studio-kv { display: flex; gap: var(--s-2); font-size: 10.5px; padding: 3px 0; }
+.studio-kv-key { color: var(--text-3); min-width: 108px; flex-shrink: 0; }
+.studio-kv-val { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--text-2); word-break: break-all; }
+
+.studio-footer { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding-top: var(--s-3); margin-top: var(--s-3); }
+.studio-verdict { font-size: 10.5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin-bottom: var(--s-2); color: var(--text-2); }
+.studio-verdict.ok  { color: var(--green); }
+.studio-verdict.bad { color: var(--red); }
+.studio-verdict.idle { color: var(--text-3); }
+.studio-warnings { font-size: 10px; line-height: 1.5; color: #8A6516; margin-bottom: var(--s-2); white-space: pre-wrap; }
+
+/* What the set itself declares a swap points at. A name with no contract is
+   shown as a named gap, not hidden — "extract it first" is the next step. */
+.studio-swap-hint { margin-top: var(--s-2); padding-top: var(--s-2); border-top: 1px dashed var(--border); }
+.studio-swap-line { display: flex; align-items: center; gap: var(--s-2); font-size: 10px; color: var(--text-3); padding: 2px 0; }
 </style>
 </head>
 <body>
@@ -844,6 +920,15 @@ body {
         <path d="M8 4L10 6" stroke="currentColor" stroke-width="1.2"/>
       </svg>
       <span class="tab-label">Tools</span>
+    </button>
+    <!-- Contract -->
+    <button class="tab" data-panel="contract" aria-label="Contract">
+      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M3.5 1.5H8L11 4.5V12.5H3.5V1.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M8 1.5V4.5H11" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M5.5 7H9M5.5 9.5H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <span class="tab-label">Contract</span>
     </button>
     <!-- Request -->
     <button class="tab" data-panel="request" aria-label="Request">
@@ -939,6 +1024,26 @@ body {
 
       <div class="tools-divider"></div>
 
+      <!-- ── Doc readability ─────────────────────────────────────────── -->
+      <div class="section-label">Doc readability</div>
+      <div class="sel-card">
+        <span class="sel-card-empty" id="docCheckSelectionEmpty">Select a documentation frame</span>
+        <div class="sel-card-info" id="docCheckSelectionInfo" style="display:none;">
+          <span class="sel-icon">¶</span>
+          <div class="sel-meta">
+            <span class="sel-name" id="docCheckName">—</span>
+            <span class="sel-type" id="docCheckMeta">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="docCheckBtn" disabled style="flex:1;">Check readability</button>
+      </div>
+      <div class="status" id="docCheckStatus"></div>
+      <div id="docCheckIssues" style="display:none; margin-top:6px; max-height:200px; overflow-y:auto;"></div>
+
+      <div class="tools-divider"></div>
+
       <!-- ── Contract ───────────────────────────────────────────────── -->
       <div class="section-label">Contract</div>
       <div class="sel-card">
@@ -1018,6 +1123,60 @@ body {
     </div>
 
     <!-- Request — file a triage-ready request from inside Figma -->
+    <!-- Contract Studio -->
+    <div class="panel" id="contractPanel">
+
+      <!-- List: what is selected, and what the repo already has -->
+      <div id="studioList">
+        <div class="sel-card">
+          <span class="sel-card-empty" id="studioSelEmpty">Select a component set or frame in Figma</span>
+          <div class="sel-card-info" id="studioSelInfo" style="display:none;">
+            <span class="sel-icon">⎘</span>
+            <div class="sel-meta">
+              <span class="sel-name" id="studioSelName">—</span>
+              <span class="sel-type" id="studioSelMeta">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="studioOpenBtn" disabled style="flex:1;">Open contract</button>
+        </div>
+        <div class="status" id="studioListStatus"></div>
+
+        <div class="section-label" style="margin-top:var(--s-4);">Contracts in the repo</div>
+        <div id="studioIndex" class="studio-index"></div>
+      </div>
+
+      <!-- Editor -->
+      <div id="studioEditor" style="display:none;">
+        <div class="studio-head">
+          <button class="icon-btn" id="studioBackBtn" title="Back to the list" aria-label="Back">←</button>
+          <div class="studio-head-meta">
+            <div class="studio-head-id" id="studioId">—</div>
+            <div class="studio-head-sub" id="studioSub">—</div>
+          </div>
+          <span class="badge badge-warm" id="studioDraftChip" style="display:none;">draft</span>
+          <div class="studio-modes" role="tablist" aria-label="Editor mode">
+            <button class="studio-mode active" id="studioModeGui" role="tab" aria-selected="true">GUI</button>
+            <button class="studio-mode" id="studioModeJson" role="tab" aria-selected="false">JSON</button>
+          </div>
+        </div>
+
+        <div class="studio-body">
+          <div id="studioDraftNotes" class="studio-notes" style="display:none;"></div>
+          <div id="studioGui"></div>
+          <textarea id="studioJson" class="form-textarea studio-json" spellcheck="false" style="display:none;"></textarea>
+        </div>
+
+        <!-- sticky verdict + publish, visible the whole time you edit -->
+        <div class="studio-footer" id="studioFooter">
+          <div class="studio-verdict" id="studioVerdict">—</div>
+          <div class="studio-warnings" id="studioWarnings" style="display:none;"></div>
+          <button class="btn" id="studioPublishBtn" disabled style="width:100%;">Publish contract →</button>
+        </div>
+      </div>
+    </div>
+
     <div class="panel" id="requestPanel">
       <div class="section-label">Request a change</div>
       <p class="req-intro">Ask for a token, component, or change. Files a triage-ready GitHub issue — the design-system team reviews weekly.</p>
@@ -1119,6 +1278,91 @@ body {
   };
   var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 
+  // src/studio.ts
+  var emptyStudio = () => ({
+    slug: null,
+    def: null,
+    evidence: null,
+    freeAxes: [],
+    index: {},
+    notes: [],
+    jsonMode: false,
+    jsonText: "",
+    jsonError: null,
+    validation: null,
+    busy: false,
+    dirty: false
+  });
+  var STATE_NAMES = ["hover", "active", "focus-visible", "disabled"];
+  var ACCEPTS_MODES = ["restrict", "prefer", "open"];
+  function mutateDef(state, fn) {
+    var _a26;
+    const next = JSON.parse(JSON.stringify((_a26 = state.def) != null ? _a26 : {}));
+    fn(next);
+    return next;
+  }
+  function slotsOf(def) {
+    var _a26;
+    const out = [];
+    const walk = (node, path) => {
+      var _a27;
+      if (!node || typeof node !== "object") return;
+      if (node.slot) out.push({ path, node });
+      for (const [name, child] of Object.entries((_a27 = node.parts) != null ? _a27 : {})) walk(child, `${path}.${name}`);
+    };
+    walk((_a26 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a26.root, "root");
+    return out;
+  }
+  function rootTokens(def) {
+    var _a26, _b, _c;
+    return (_c = (_b = (_a26 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a26.root) == null ? void 0 : _b.tokens) != null ? _c : {};
+  }
+  function unboundAxes(state) {
+    var _a26, _b, _c, _d;
+    const used = new Set(((_b = (_a26 = state.def) == null ? void 0 : _a26.props) != null ? _b : []).map((p) => {
+      var _a27;
+      return (_a27 = p == null ? void 0 : p.figma) == null ? void 0 : _a27.property;
+    }).filter(Boolean));
+    return ((_d = (_c = state.evidence) == null ? void 0 : _c.axes) != null ? _d : []).filter((a) => !used.has(a.name));
+  }
+  function acceptNames(state) {
+    var _a26;
+    const items = Array.isArray((_a26 = state.index) == null ? void 0 : _a26.items) ? state.index.items : [];
+    return [...new Set(items.map((c) => c == null ? void 0 : c.name).filter(Boolean))].sort();
+  }
+  function propFromAxis(axis) {
+    var _a26, _b;
+    const camel = String(axis.name).replace(/#.*$/, "").trim().replace(/[^A-Za-z0-9]+(.)?/g, (_m, c) => c ? c.toUpperCase() : "").replace(/^(.)/, (c) => c.toLowerCase());
+    const base = {
+      name: camel,
+      lever: true,
+      figma: { kind: axis.type, property: axis.name },
+      code: { prop: camel }
+    };
+    if (axis.type === "VARIANT") {
+      base.type = "string";
+      base.enum = (_b = (_a26 = axis.variantOptions) != null ? _a26 : axis.options) != null ? _b : [];
+      if (axis.defaultValue !== void 0) base.default = axis.defaultValue;
+      base.code.attr = `data-${String(axis.name).replace(/#.*$/, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+    } else if (axis.type === "BOOLEAN") {
+      base.type = "boolean";
+      if (axis.defaultValue !== void 0) base.default = axis.defaultValue;
+    } else {
+      base.type = "string";
+    }
+    return base;
+  }
+  function verdictOf(state) {
+    if (state.jsonError) return { tone: "bad", text: `JSON: ${state.jsonError}` };
+    if (!state.validation) return { tone: "idle", text: "validating\u2026" };
+    if (state.validation.valid) return { tone: "ok", text: "\u2713 valid contract definition" };
+    return { tone: "bad", text: `\u2717 ${state.validation.errors.slice(0, 2).join("  \xB7  ")}` };
+  }
+  var canPublish = (s) => {
+    var _a26;
+    return !s.busy && !s.jsonError && Boolean((_a26 = s.validation) == null ? void 0 : _a26.valid);
+  };
+
   // src/ui.ts
   function esc(s) {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -1213,18 +1457,20 @@ body {
   var panelEls = {
     home: document.getElementById("homePanel"),
     tools: document.getElementById("toolsPanel"),
+    contract: document.getElementById("contractPanel"),
     request: document.getElementById("requestPanel")
   };
   function switchPanel(panel) {
     activePanel = panel;
-    Object.entries(panelEls).forEach(([key, el]) => {
-      el.classList.toggle("active", key === panel);
+    Object.entries(panelEls).forEach(([key, el2]) => {
+      el2.classList.toggle("active", key === panel);
     });
     document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
       tab.classList.toggle("active", tab.dataset.panel === panel);
     });
     if (panel === "home") renderHomeView();
     if (panel === "request") postToPlugin("request:capture");
+    if (panel === "contract") studioRefreshIndex();
   }
   document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -1240,8 +1486,8 @@ body {
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a19;
-        return (_a19 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a19.click();
+        var _a26;
+        return (_a26 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a26.click();
       }
     },
     {
@@ -1322,13 +1568,13 @@ body {
     "tools:request"
   ];
   function fireFeature(feat) {
-    var _a19;
+    var _a26;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a19 = feat.pluginPayload) != null ? _a19 : {});
+      postToPlugin(feat.pluginAction, (_a26 = feat.pluginPayload) != null ? _a26 : {});
     }
     if (activePanel === "home") renderHomeView();
   }
@@ -1341,8 +1587,8 @@ body {
       (f) => `<button class="action-row" data-id="${esc(f.id)}">${esc(f.name)}${badgeHtml(heatOf(f.id))}</button>`
     ).join("");
   }
-  function bindActionList(el) {
-    el.querySelectorAll(".action-row").forEach((row) => {
+  function bindActionList(el2) {
+    el2.querySelectorAll(".action-row").forEach((row) => {
       row.addEventListener("click", () => {
         const feat = FEATURES.find((f) => f.id === row.dataset.id);
         if (feat) fireFeature(feat);
@@ -1420,12 +1666,12 @@ body {
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a19, _b;
+    var _a26, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a19 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a19.scrollIntoView({ block: "nearest" });
+      (_a26 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a26.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -1490,7 +1736,7 @@ body {
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a19;
+    var _a26;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -1503,7 +1749,7 @@ body {
     }
     document.body.removeChild(ta);
     try {
-      (_a19 = navigator.clipboard) == null ? void 0 : _a19.writeText(text).catch(() => {
+      (_a26 = navigator.clipboard) == null ? void 0 : _a26.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -1614,7 +1860,7 @@ body {
     else bridgeConnect();
   });
   function setAllDots(on) {
-    [bridgeDot, bridgeDotMini, popoverDot].forEach((el) => el == null ? void 0 : el.classList.toggle("on", on));
+    [bridgeDot, bridgeDotMini, popoverDot].forEach((el2) => el2 == null ? void 0 : el2.classList.toggle("on", on));
   }
   function updateBridgeUi() {
     if (bridgeConnected) {
@@ -1654,7 +1900,7 @@ body {
       if (ws.readyState !== 1 || !result) return;
       const info = result.fileInfo || result;
       if (!info.fileKey) info.fileKey = "local-" + Date.now();
-      info.pluginVersion = "0.2.0";
+      info.pluginVersion = "0.3.0";
       ws.send(JSON.stringify({ type: "FILE_INFO", data: info }));
     }).catch(() => {
     });
@@ -1855,13 +2101,13 @@ body {
     document.querySelectorAll("#selectAxes .chip").forEach((c) => c.classList.remove("on"));
   });
   function setAnnotateStatus(msg, type = "") {
-    const el = document.getElementById("annotateStatus");
-    el.textContent = msg;
-    el.className = "status" + (type ? " " + type : "");
+    const el2 = document.getElementById("annotateStatus");
+    el2.textContent = msg;
+    el2.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a19;
-    annotateNodeId = (_a19 = sel == null ? void 0 : sel.id) != null ? _a19 : null;
+    var _a26;
+    annotateNodeId = (_a26 = sel == null ? void 0 : sel.id) != null ? _a26 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -1909,14 +2155,14 @@ body {
     postToPlugin("annotate:clear", { nodeId: annotateNodeId });
   });
   function setDocStatus(msg, type = "") {
-    const el = document.getElementById("docStatus");
-    el.textContent = msg;
-    el.className = "status" + (type ? " " + type : "");
+    const el2 = document.getElementById("docStatus");
+    el2.textContent = msg;
+    el2.className = "status" + (type ? " " + type : "");
   }
   function updateDocSelection(sel) {
-    var _a19, _b;
+    var _a26, _b;
     const isDocable = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT";
-    docSetId = isDocable ? (_a19 = sel == null ? void 0 : sel.id) != null ? _a19 : null : null;
+    docSetId = isDocable ? (_a26 = sel == null ? void 0 : sel.id) != null ? _a26 : null : null;
     const emptyEl = document.getElementById("docSelectionEmpty");
     const infoEl = document.getElementById("docSelectionInfo");
     const nameEl = document.getElementById("docSetName");
@@ -1934,8 +2180,44 @@ body {
       btn.disabled = true;
     }
   }
+  var docCheckId = null;
+  function updateDocCheckSelection(sel) {
+    var _a26;
+    const ok = (sel == null ? void 0 : sel.nodeType) === "FRAME";
+    docCheckId = ok ? (_a26 = sel == null ? void 0 : sel.id) != null ? _a26 : null : null;
+    const emptyEl = document.getElementById("docCheckSelectionEmpty");
+    const infoEl = document.getElementById("docCheckSelectionInfo");
+    const nameEl = document.getElementById("docCheckName");
+    const metaEl = document.getElementById("docCheckMeta");
+    const btn = document.getElementById("docCheckBtn");
+    if (ok && sel) {
+      emptyEl.style.display = "none";
+      infoEl.style.display = "flex";
+      nameEl.textContent = sel.name;
+      metaEl.textContent = sel.width && sel.height ? `${Math.round(sel.width)} \xD7 ${Math.round(sel.height)}` : "frame";
+      btn.disabled = false;
+    } else {
+      emptyEl.style.display = "block";
+      infoEl.style.display = "none";
+      btn.disabled = true;
+      const issues = document.getElementById("docCheckIssues");
+      issues.style.display = "none";
+      issues.innerHTML = "";
+    }
+  }
   var _a7;
-  (_a7 = document.getElementById("docGenerateBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
+  (_a7 = document.getElementById("docCheckBtn")) == null ? void 0 : _a7.addEventListener("click", () => {
+    if (!docCheckId) return;
+    sendTelemetry("action:docs-check");
+    const btn = document.getElementById("docCheckBtn");
+    btn.disabled = true;
+    btn.textContent = "Checking\u2026";
+    const status = document.getElementById("docCheckStatus");
+    status.textContent = "";
+    postToPlugin("docs:check", { nodeId: docCheckId });
+  });
+  var _a8;
+  (_a8 = document.getElementById("docGenerateBtn")) == null ? void 0 : _a8.addEventListener("click", () => {
     if (!docSetId) return;
     sendTelemetry("action:doc-generate");
     const btn = document.getElementById("docGenerateBtn");
@@ -1944,13 +2226,556 @@ body {
     setDocStatus("");
     postToPlugin("doc:generate", { setId: docSetId });
   });
+  var studio = emptyStudio();
+  var studioSel = null;
+  var studioValidateTimer;
+  var $s = (id) => document.getElementById(id);
+  function studioApi(path, init) {
+    var _a26;
+    return fetch(`${contractEndpoint}${path}`, __spreadProps(__spreadValues({}, init), { headers: __spreadValues({ "content-type": "application/json" }, (_a26 = init == null ? void 0 : init.headers) != null ? _a26 : {}) }));
+  }
+  function studioSetSelection(sel) {
+    var _a26;
+    const usable = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT" || (sel == null ? void 0 : sel.nodeType) === "FRAME";
+    studioSel = usable ? sel : null;
+    const empty = $s("studioSelEmpty"), info = $s("studioSelInfo");
+    const btn = $s("studioOpenBtn");
+    if (usable && sel) {
+      empty.style.display = "none";
+      info.style.display = "flex";
+      $s("studioSelName").textContent = sel.name;
+      $s("studioSelMeta").textContent = sel.nodeType === "COMPONENT_SET" ? `${(_a26 = sel.variantCount) != null ? _a26 : 0} variants` : sel.nodeType.toLowerCase();
+      btn.disabled = false;
+    } else {
+      empty.style.display = "block";
+      info.style.display = "none";
+      btn.disabled = true;
+    }
+  }
+  async function studioRefreshIndex() {
+    var _a26;
+    const host = $s("studioIndex");
+    host.innerHTML = '<div style="font-size:10.5px; opacity:.6; padding:4px 0;">loading\u2026</div>';
+    try {
+      const res = await studioApi("/contracts");
+      if (!res.ok) throw new Error(`sync server returned ${res.status}`);
+      const index = await res.json();
+      studio.index = index;
+      const rows = Array.isArray(index == null ? void 0 : index.items) ? index.items : [];
+      if (!rows.length) {
+        host.innerHTML = '<div class="studio-empty">No contracts yet \u2014 extract one in the Tools tab.</div>';
+        return;
+      }
+      host.innerHTML = "";
+      for (const c of [...rows].sort((a, b) => {
+        var _a27, _b;
+        return String((_a27 = a.name) != null ? _a27 : a.slug).localeCompare(String((_b = b.name) != null ? _b : b.slug));
+      })) {
+        const row = document.createElement("button");
+        row.className = "studio-row";
+        const name = document.createElement("span");
+        name.className = "studio-row-name";
+        name.textContent = String((_a26 = c.name) != null ? _a26 : c.slug);
+        const badge = document.createElement("span");
+        badge.className = `badge ${c.hasDefs ? "badge-hot" : "badge-cold"}`;
+        badge.textContent = c.hasDefs ? "curated" : "evidence only";
+        const slug = document.createElement("span");
+        slug.className = "studio-row-slug";
+        slug.textContent = String(c.slug);
+        row.append(name, badge, slug);
+        row.addEventListener("click", () => studioOpen(String(c.slug)));
+        host.appendChild(row);
+      }
+    } catch (e) {
+      host.innerHTML = `<div class="studio-empty">Sync server unreachable at ${contractEndpoint}. Start it with npm run contract:relay.</div>`;
+    }
+  }
+  function studioShow(view) {
+    $s("studioList").style.display = view === "list" ? "block" : "none";
+    $s("studioEditor").style.display = view === "editor" ? "block" : "none";
+  }
+  async function studioOpen(ref, by = "slug") {
+    var _a26, _b, _c, _d, _e, _f, _g, _h, _i;
+    studio = __spreadProps(__spreadValues({}, emptyStudio()), { slug: by === "slug" ? ref : null, busy: true });
+    studioResult = null;
+    studioShow("editor");
+    $s("studioId").textContent = ref;
+    $s("studioSub").textContent = "loading\u2026";
+    $s("studioGui").innerHTML = "";
+    $s("studioDraftNotes").style.display = "none";
+    try {
+      const res = await studioApi(`/def-context?${by}=${encodeURIComponent(ref)}`);
+      if (!res.ok) {
+        const hint = res.status === 404 ? "Sync server is running older code. Restart it: npm run contract-sync (in apps/s2a-toolkit)." : `Sync server returned ${res.status}.`;
+        throw new Error(hint);
+      }
+      const ctx = await res.json();
+      studio.slug = (_a26 = ctx.slug) != null ? _a26 : studio.slug;
+      studio.def = ctx.def;
+      studio.evidence = ctx.evidence;
+      studio.freeAxes = (_b = ctx.freeAxes) != null ? _b : [];
+      studio.index = (_c = ctx.index) != null ? _c : {};
+      studio.busy = false;
+      if (!ctx.hasDef) {
+        studio.validation = { valid: false, errors: ["no curated definition for this set yet"], warnings: [] };
+        studioRender();
+        studioRenderEmpty(Boolean((_e = (_d = ctx.evidence) == null ? void 0 : _d.axes) == null ? void 0 : _e.length));
+        return;
+      }
+      studioRender();
+      studioValidate();
+      if (studioSel && slotsOf((_f = studio.def) != null ? _f : {}).length) postToPlugin("studio:swap-targets", { setId: studioSel.id });
+    } catch (err) {
+      studio.busy = false;
+      studio.validation = { valid: false, errors: [String((_g = err == null ? void 0 : err.message) != null ? _g : err)], warnings: [] };
+      $s("studioSub").textContent = (_h = studio.slug) != null ? _h : ref;
+      $s("studioGui").innerHTML = "";
+      $s("studioGui").appendChild(el("div", "studio-empty", String((_i = err == null ? void 0 : err.message) != null ? _i : err)));
+      $s("studioDraftNotes").style.display = "none";
+      studioRenderFooter();
+    }
+  }
+  function studioValidate() {
+    studioResult = null;
+    window.clearTimeout(studioValidateTimer);
+    studioValidateTimer = window.setTimeout(async () => {
+      if (!studio.def) return;
+      try {
+        const res = await studioApi("/validate", { method: "POST", body: JSON.stringify({ def: studio.def }) });
+        studio.validation = res.ok ? await res.json() : { valid: false, errors: [res.status === 404 ? "sync server is running older code \u2014 restart it" : `validate returned ${res.status}`], warnings: [] };
+      } catch (e) {
+        studio.validation = { valid: false, errors: ["sync server unreachable \u2014 cannot validate"], warnings: [] };
+      }
+      studioRenderFooter();
+    }, 400);
+  }
+  function studioEdit(fn) {
+    studioResult = null;
+    studio.def = mutateDef(studio, fn);
+    studio.dirty = true;
+    studio.validation = null;
+    if (studio.jsonMode) $s("studioJson").textContent = JSON.stringify(studio.def, null, 2);
+    studioRender();
+    studioValidate();
+  }
+  var studioResult = null;
+  function studioRenderFooter() {
+    var _a26, _b;
+    const v = studioResult != null ? studioResult : verdictOf(studio);
+    const node = $s("studioVerdict");
+    node.className = `studio-verdict ${v.tone}`;
+    node.textContent = v.text;
+    const warn = ((_b = (_a26 = studio.validation) == null ? void 0 : _a26.warnings) != null ? _b : []).map((w) => `\u26A0 ${w}`).join("\n");
+    $s("studioWarnings").textContent = warn;
+    $s("studioWarnings").style.display = warn ? "block" : "none";
+    $s("studioPublishBtn").disabled = !canPublish(studio);
+  }
+  var el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== void 0) n.textContent = text;
+    return n;
+  };
+  function studioSection(title, add) {
+    const sec = el("div", "studio-sec");
+    const head = el("div", "studio-sec-head");
+    const h = el("div", "section-label", title);
+    h.style.margin = "0";
+    head.appendChild(h);
+    if (add) head.appendChild(add);
+    sec.appendChild(head);
+    return sec;
+  }
+  function studioAddButton(label, options, onPick) {
+    if (!options.length) return void 0;
+    const wrap = el("div");
+    wrap.style.cssText = "position:relative;";
+    const btn = el("button", "studio-add", label);
+    const menu = el("select");
+    menu.style.cssText = "position:absolute; inset:0; opacity:0; cursor:pointer; width:100%;";
+    menu.innerHTML = '<option value=""></option>' + options.map((o) => `<option value="${esc(o.value)}">${esc(o.text)}</option>`).join("");
+    menu.addEventListener("change", () => {
+      if (menu.value) {
+        onPick(menu.value);
+        menu.value = "";
+      }
+    });
+    wrap.append(btn, menu);
+    return wrap;
+  }
+  var stripHash = (n) => String(n).split("#")[0].trim();
+  var kebabish = (n) => String(n).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  function studioRenderGui() {
+    var _a26, _b, _c, _d, _e, _f, _g, _h;
+    const host = $s("studioGui");
+    host.innerHTML = "";
+    const d = studio.def;
+    if (!d) {
+      host.appendChild(el("div", "studio-empty", "No curated definition for this set yet. Extract its evidence in the Tools tab, and the draft will appear here with every judgment call listed."));
+      return;
+    }
+    const free = unboundAxes(studio);
+    const props = studioSection(
+      `Props \xB7 ${((_a26 = d.props) != null ? _a26 : []).length}`,
+      studioAddButton(
+        "+ from an axis",
+        free.map((a) => ({ value: a.name, text: `${a.name} \xB7 ${a.type}` })),
+        (name) => studioEdit((def) => {
+          var _a27, _b2, _c2;
+          const axis = ((_b2 = (_a27 = studio.evidence) == null ? void 0 : _a27.axes) != null ? _b2 : []).find((a) => a.name === name);
+          if (axis) (def.props = (_c2 = def.props) != null ? _c2 : []).push(propFromAxis(axis));
+        })
+      )
+    );
+    for (const [i, prop] of ((_b = d.props) != null ? _b : []).entries()) {
+      const row = el("div", "studio-item");
+      row.appendChild(el("span", "studio-item-name", prop.name));
+      row.appendChild(el("span", "studio-item-bind", ((_c = prop.figma) == null ? void 0 : _c.property) ? `${prop.figma.kind} \xB7 ${prop.figma.property}` : "no design counterpart"));
+      const lever = el("input");
+      lever.type = "checkbox";
+      lever.checked = Boolean(prop.lever);
+      lever.title = "Lever: authored by a designer. Unchecked means integration-only.";
+      lever.addEventListener("change", () => studioEdit((def) => {
+        def.props[i].lever = lever.checked;
+      }));
+      row.appendChild(lever);
+      const del = el("button", "studio-del", "\xD7");
+      del.title = `Remove ${prop.name}`;
+      del.addEventListener("click", () => studioEdit((def) => {
+        def.props.splice(i, 1);
+      }));
+      row.appendChild(del);
+      props.appendChild(row);
+    }
+    if (!((_d = d.props) != null ? _d : []).length) props.appendChild(el("div", "studio-empty", free.length ? "No props curated yet \u2014 add one from a real axis." : "No props, and no unbound axes to add from."));
+    host.appendChild(props);
+    const used = ((_e = d.states) != null ? _e : []).map((x) => typeof x === "string" ? x : x.name).filter(Boolean);
+    const states = studioSection(
+      "States",
+      studioAddButton(
+        "+ add",
+        STATE_NAMES.filter((n) => !used.includes(n)).map((n) => ({ value: n, text: n })),
+        (n) => studioEdit((def) => {
+          var _a27;
+          (def.states = (_a27 = def.states) != null ? _a27 : []).push(n);
+        })
+      )
+    );
+    const chips = el("div");
+    for (const [i, st] of used.entries()) {
+      const c = el("button", "studio-toggle on", st);
+      c.title = `Remove ${st}`;
+      c.addEventListener("click", () => studioEdit((def) => {
+        def.states.splice(i, 1);
+        if (!def.states.length) delete def.states;
+      }));
+      chips.appendChild(c);
+    }
+    if (!used.length) chips.appendChild(el("div", "studio-empty", "No runtime states declared."));
+    states.appendChild(chips);
+    host.appendChild(states);
+    const slots = slotsOf(d);
+    if (slots.length) {
+      const sec = studioSection(`Slots \xB7 ${slots.length}`);
+      for (const { path, node } of slots) {
+        const box = el("div", "studio-item");
+        box.style.cssText = "flex-direction:column; align-items:stretch; gap:var(--s-2);";
+        const head = el("div");
+        head.style.cssText = "display:flex; align-items:center; gap:var(--s-2);";
+        const label = el("span", "studio-item-name", path);
+        const mode = el("select", "form-input");
+        mode.style.cssText = "width:auto; font-size:10px; padding:2px 4px;";
+        mode.innerHTML = ACCEPTS_MODES.map((m) => `<option ${node.slot.acceptsMode === m ? "selected" : ""}>${m}</option>`).join("");
+        mode.addEventListener("change", () => studioEdit((def) => {
+          const t = slotsOf(def).find((x) => x.path === path);
+          if (t) t.node.slot.acceptsMode = mode.value;
+        }));
+        head.append(label, mode);
+        box.appendChild(head);
+        const names = acceptNames(studio);
+        const acc = el("div");
+        for (const n of names) {
+          const on = ((_f = node.slot.accepts) != null ? _f : []).includes(n);
+          const b = el("button", `studio-toggle${on ? " on" : ""}`, n);
+          b.addEventListener("click", () => studioEdit((def) => {
+            var _a27;
+            const t = slotsOf(def).find((x) => x.path === path);
+            if (!t) return;
+            const a = t.node.slot.accepts = (_a27 = t.node.slot.accepts) != null ? _a27 : [];
+            const at = a.indexOf(n);
+            if (at >= 0) a.splice(at, 1);
+            else a.push(n);
+          }));
+          acc.appendChild(b);
+        }
+        if (!names.length) acc.appendChild(el("div", "studio-empty", "No other contracts to accept yet."));
+        box.appendChild(acc);
+        const swapProp = ((_g = d.props) != null ? _g : []).find((p) => {
+          var _a27;
+          return ((_a27 = p.figma) == null ? void 0 : _a27.kind) === "INSTANCE_SWAP" && kebabish(stripHash(p.figma.property)) === path.split(".").pop();
+        });
+        const declared = swapProp ? (_h = studioSwapTargets[swapProp.figma.property]) != null ? _h : [] : [];
+        if (declared.length) {
+          const hint = el("div", "studio-swap-hint");
+          for (const t of declared) {
+            const known = names.includes(t.name);
+            const line = el("div", "studio-swap-line");
+            line.appendChild(el("span", "studio-note-conf", t.role));
+            if (known) {
+              const b = el("button", "studio-toggle", `accept ${t.name}`);
+              b.addEventListener("click", () => studioEdit((def) => {
+                var _a27;
+                const tgt = slotsOf(def).find((x) => x.path === path);
+                if (!tgt) return;
+                const a = tgt.node.slot.accepts = (_a27 = tgt.node.slot.accepts) != null ? _a27 : [];
+                if (!a.includes(t.name)) a.push(t.name);
+              }));
+              line.appendChild(b);
+            } else {
+              line.appendChild(el("span", void 0, `${t.name} \u2014 no contract yet, so it cannot be accepted. Extract it first.`));
+            }
+            hint.appendChild(line);
+          }
+          box.appendChild(hint);
+        }
+        sec.appendChild(box);
+      }
+      host.appendChild(sec);
+    }
+    const toks = rootTokens(d);
+    const tokens = studioSection(`Root tokens \xB7 ${Object.keys(toks).length}`);
+    for (const [prop, ref] of Object.entries(toks)) {
+      const row = el("div", "studio-kv");
+      row.append(el("span", "studio-kv-key", prop), el("span", "studio-kv-val", String(ref)));
+      tokens.appendChild(row);
+    }
+    if (!Object.keys(toks).length) tokens.appendChild(el("div", "studio-empty", "No root token bindings."));
+    host.appendChild(tokens);
+  }
+  var studioAwaitingExtract = false;
+  var studioSwapTargets = {};
+  function studioExtract(btn, name = "", rename = false) {
+    if (!studioSel) return;
+    sendTelemetry("action:studio-extract");
+    studioAwaitingExtract = true;
+    btn.disabled = true;
+    btn.textContent = "Reading the set\u2026";
+    postToPlugin("contract:extract", { setId: studioSel.id, name, rename });
+  }
+  async function studioOnEvidence(msg) {
+    var _a26, _b, _c, _d;
+    const reset = () => {
+      const b = document.querySelector("#studioGui .btn");
+      if (b) {
+        b.disabled = false;
+        b.textContent = "Extract this set";
+      }
+    };
+    const fail = (text) => {
+      $s("studioVerdict").className = "studio-verdict bad";
+      $s("studioVerdict").textContent = text;
+      reset();
+    };
+    if (msg.error) return fail(`Extract failed: ${msg.error}`);
+    try {
+      const evidence = msg.evidence;
+      const hash = "sha256:" + await sha256Hex(msg.hashInput);
+      const res = await fetch(`${contractEndpoint.replace(/\/$/, "")}/evidence`, {
+        method: "POST",
+        headers: contractHeaders(),
+        body: JSON.stringify({ evidence, hash })
+      });
+      const out = await res.json();
+      if (!res.ok) throw new Error(out.error || `sync endpoint returned ${res.status}`);
+      contractIndexCache = null;
+      studioOpen(String((_c = (_a26 = out.slug) != null ? _a26 : studio.slug) != null ? _c : (_b = evidence.set) == null ? void 0 : _b.name), out.slug ? "slug" : "name");
+    } catch (err) {
+      fail(`Could not publish the evidence: ${(_d = err == null ? void 0 : err.message) != null ? _d : err}`);
+    }
+  }
+  function studioRenderEmpty(hasEvidence) {
+    const host = $s("studioGui");
+    host.innerHTML = "";
+    if (!hasEvidence) {
+      host.appendChild(el("div", "studio-empty", "Nothing published for this set yet. Extracting reads its real variant axes, token bindings and structure, and records only what is there \u2014 it never infers an API."));
+      const isFrame = (studioSel == null ? void 0 : studioSel.nodeType) === "FRAME";
+      let nameInput;
+      let renameBox;
+      if (isFrame) {
+        const field = el("div", "form-field");
+        field.style.marginTop = "var(--s-3)";
+        const label = el("label", "form-label", "Name this candidate");
+        nameInput = el("input", "form-input");
+        nameInput.type = "text";
+        nameInput.placeholder = "e.g. FeatureTile";
+        const check = el("label", "form-label");
+        check.style.cssText = "display:flex; gap:6px; align-items:center; margin-top:var(--s-2); font-weight:400;";
+        renameBox = el("input");
+        renameBox.type = "checkbox";
+        renameBox.checked = true;
+        check.append(renameBox, document.createTextNode("Rename the layer in Figma to match"));
+        field.append(label, nameInput, check);
+        host.appendChild(field);
+      }
+      const row2 = el("div", "btn-row");
+      const btn2 = el("button", "btn", "Extract this set");
+      btn2.style.flex = "1";
+      btn2.disabled = !studioSel;
+      if (!studioSel) btn2.title = "Select the component set in Figma first";
+      btn2.addEventListener("click", () => {
+        var _a26;
+        const name = (_a26 = nameInput == null ? void 0 : nameInput.value.trim()) != null ? _a26 : "";
+        if (isFrame && !name) {
+          nameInput == null ? void 0 : nameInput.focus();
+          $s("studioVerdict").className = "studio-verdict bad";
+          $s("studioVerdict").textContent = "A frame needs a name before it can be extracted.";
+          return;
+        }
+        studioExtract(btn2, name, Boolean(renameBox == null ? void 0 : renameBox.checked));
+      });
+      row2.appendChild(btn2);
+      host.appendChild(row2);
+      return;
+    }
+    host.appendChild(el("div", "studio-empty", "Evidence is published for this set but nobody has curated it yet. Drafting reads the real axes and proposes a definition \u2014 every judgment call it makes is listed for you to review before anything is published."));
+    const row = el("div", "btn-row");
+    const btn = el("button", "btn", "Draft a contract from the evidence");
+    btn.style.flex = "1";
+    btn.addEventListener("click", async () => {
+      var _a26, _b;
+      btn.disabled = true;
+      btn.textContent = "Drafting\u2026";
+      try {
+        const res = await studioApi("/draft", { method: "POST", body: JSON.stringify({ slug: studio.slug, name: studioSel == null ? void 0 : studioSel.name }) });
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error((_a26 = out.error) != null ? _a26 : res.status === 404 ? "Sync server is running older code. Restart it: npm run contract-sync (in apps/s2a-toolkit)." : `draft failed (${res.status})`);
+        studio.def = out.def;
+        studio.dirty = true;
+        studio.validation = null;
+        studioRender();
+        studioValidate();
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = "Draft a contract from the evidence";
+        $s("studioVerdict").className = "studio-verdict bad";
+        $s("studioVerdict").textContent = `Could not draft: ${(_b = err.message) != null ? _b : err}`;
+      }
+    });
+    row.appendChild(btn);
+    host.appendChild(row);
+  }
+  function studioRenderNotes() {
+    var _a26, _b, _c;
+    const host = $s("studioDraftNotes");
+    const notes = ((_b = (_a26 = studio.def) == null ? void 0 : _a26.decisions) != null ? _b : []).filter((n) => n.status === "open");
+    if (!notes.length) {
+      host.style.display = "none";
+      host.innerHTML = "";
+      return;
+    }
+    const low = notes.filter((n) => n.confidence === "low").length;
+    host.innerHTML = "";
+    host.appendChild(el(
+      "div",
+      "studio-notes-head",
+      `${notes.length} judgment call${notes.length === 1 ? "" : "s"} to review${low ? ` \xB7 ${low} low confidence` : ""}`
+    ));
+    const band = (c) => c === "low" ? 0 : c === "medium" ? 1 : 2;
+    for (const n of [...notes].sort((a, b) => band(a.confidence) - band(b.confidence)).slice(0, 6)) {
+      const row = el("div", "studio-note");
+      const conf = el("span", `studio-note-conf${n.confidence === "low" ? " low" : ""}`, (_c = n.confidence) != null ? _c : "\u2014");
+      const body = el("span", void 0, n.chose ? n.chose : n.question);
+      if (n.fix) row.title = `If wrong: ${n.fix}`;
+      row.append(conf, body);
+      host.appendChild(row);
+    }
+    host.style.display = "block";
+  }
+  function studioRender() {
+    var _a26, _b, _c, _d, _e, _f, _g;
+    const d = studio.def;
+    $s("studioId").textContent = (d == null ? void 0 : d.component) ? `${d.component} \xB7 ${studio.slug}` : (_a26 = studio.slug) != null ? _a26 : "\u2014";
+    const set = (_b = studio.evidence) == null ? void 0 : _b.set;
+    $s("studioSub").textContent = set ? `${(_c = set.name) != null ? _c : ""} \xB7 ${(_f = (_e = (_d = studio.evidence) == null ? void 0 : _d.axes) == null ? void 0 : _e.length) != null ? _f : 0} axes` : (_g = studio.slug) != null ? _g : "";
+    $s("studioDraftChip").style.display = (d == null ? void 0 : d.status) === "curated-draft" ? "inline-block" : "none";
+    studioRenderNotes();
+    if (studio.jsonMode) {
+      studioRenderFooter();
+      return;
+    }
+    studioRenderGui();
+    studioRenderFooter();
+  }
+  function studioSetMode(json) {
+    if (!json && studio.jsonMode && studio.jsonError) return;
+    studio.jsonMode = json;
+    $s("studioModeGui").classList.toggle("active", !json);
+    $s("studioModeJson").classList.toggle("active", json);
+    $s("studioGui").style.display = json ? "none" : "block";
+    $s("studioJson").style.display = json ? "block" : "none";
+    if (json) $s("studioJson").value = JSON.stringify(studio.def, null, 2);
+    studioRender();
+  }
+  var _a9;
+  (_a9 = document.getElementById("studioOpenBtn")) == null ? void 0 : _a9.addEventListener("click", () => {
+    if (!studioSel) return;
+    sendTelemetry("action:studio-open");
+    studioOpen(studioSel.name, "name");
+  });
+  var _a10;
+  (_a10 = document.getElementById("studioBackBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
+    studioShow("list");
+    studioRefreshIndex();
+  });
+  var _a11;
+  (_a11 = document.getElementById("studioModeGui")) == null ? void 0 : _a11.addEventListener("click", () => studioSetMode(false));
+  var _a12;
+  (_a12 = document.getElementById("studioModeJson")) == null ? void 0 : _a12.addEventListener("click", () => studioSetMode(true));
+  var _a13;
+  (_a13 = document.getElementById("studioJson")) == null ? void 0 : _a13.addEventListener("input", (e) => {
+    var _a26;
+    const text = e.target.value;
+    try {
+      studio.def = JSON.parse(text);
+      studio.jsonError = null;
+      studio.validation = null;
+      studio.dirty = true;
+      studioValidate();
+    } catch (err) {
+      studio.jsonError = String((_a26 = err.message) != null ? _a26 : err);
+      studio.validation = null;
+    }
+    studioRenderFooter();
+  });
+  var _a14;
+  (_a14 = document.getElementById("studioPublishBtn")) == null ? void 0 : _a14.addEventListener("click", async () => {
+    var _a26, _b, _c, _d, _e, _f;
+    if (!canPublish(studio) || !studio.def) return;
+    sendTelemetry("action:studio-publish");
+    const btn = $s("studioPublishBtn");
+    studio.busy = true;
+    btn.disabled = true;
+    btn.textContent = "Publishing\u2026";
+    try {
+      const res = await studioApi("/evidence", { method: "POST", body: JSON.stringify({ defEdits: [studio.def], slug: studio.slug }) });
+      const out = await res.json();
+      studioResult = res.ok ? { tone: "ok", text: `Saved to ${(_c = (_b = (_a26 = out.defs) == null ? void 0 : _a26[0]) == null ? void 0 : _b.path) != null ? _c : "the repo"} \u2014 regenerate and run the gate.` } : { tone: "bad", text: `Failed: ${((_e = out.errors) != null ? _e : [(_d = out.error) != null ? _d : res.status]).slice(0, 2).join(" \xB7 ")}` };
+      studio.dirty = !res.ok;
+    } catch (err) {
+      studioResult = { tone: "bad", text: `Failed: ${(_f = err.message) != null ? _f : err}` };
+    } finally {
+      studio.busy = false;
+      btn.textContent = "Publish contract \u2192";
+      studioRenderFooter();
+    }
+  });
   var contractEndpoint = "http://localhost:9410";
   var contractRelayKey = "";
   var contractHeaders = () => __spreadValues({ "Content-Type": "application/json" }, contractRelayKey ? { "x-s2a-relay-key": contractRelayKey } : {});
   function setContractStatus(msg, type = "") {
-    const el = document.getElementById("contractStatus");
-    el.innerHTML = msg;
-    el.className = "status" + (type ? " " + type : "");
+    const el2 = document.getElementById("contractStatus");
+    el2.innerHTML = msg;
+    el2.className = "status" + (type ? " " + type : "");
   }
   function contractSlug(name) {
     return name.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, "").replace(/\s*[—–-]\s*v\d+(\.\d+)*\s*$/i, "").replace(/\(.*?\)/g, "").trim().replace(/([a-z0-9])([A-Z])/g, "$1-$2").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "").toLowerCase();
@@ -1971,7 +2796,7 @@ body {
   }
   var contractIsFrame = false;
   async function updateContractSelection(sel) {
-    var _a19;
+    var _a26;
     const setLike = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT" || (sel == null ? void 0 : sel.nodeType) === "INSTANCE";
     contractIsFrame = (sel == null ? void 0 : sel.nodeType) === "FRAME" || (sel == null ? void 0 : sel.nodeType) === "SECTION" || (sel == null ? void 0 : sel.nodeType) === "GROUP";
     const ok = setLike || contractIsFrame;
@@ -1979,7 +2804,7 @@ body {
     document.getElementById("contractMatch").style.display = "none";
     document.getElementById("contractBuildRow").style.display = "none";
     if (contractIsFrame && sel) document.getElementById("contractNameInput").placeholder = contractSlug(sel.name) || "candidate-name";
-    contractSetId = ok ? (_a19 = sel == null ? void 0 : sel.id) != null ? _a19 : null : null;
+    contractSetId = ok ? (_a26 = sel == null ? void 0 : sel.id) != null ? _a26 : null : null;
     contractEvidence = null;
     const emptyEl = document.getElementById("contractSelectionEmpty");
     const infoEl = document.getElementById("contractSelectionInfo");
@@ -2068,9 +2893,9 @@ body {
     return [h0, h1, h2, h3, h4, h5, h6, h7].map((x) => x.toString(16).padStart(8, "0")).join("");
   }
   async function sha256Hex(text) {
-    var _a19;
+    var _a26;
     try {
-      if ((_a19 = globalThis.crypto) == null ? void 0 : _a19.subtle) {
+      if ((_a26 = globalThis.crypto) == null ? void 0 : _a26.subtle) {
         const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
         return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
       }
@@ -2097,10 +2922,10 @@ body {
     setContractStatus("");
     postToPlugin("contract:extract", { setId: contractSetId, name, rename });
   }
-  var _a8;
-  (_a8 = document.getElementById("contractExtractBtn")) == null ? void 0 : _a8.addEventListener("click", runContractExtract);
-  var _a9;
-  (_a9 = document.getElementById("contractCopyBtn")) == null ? void 0 : _a9.addEventListener("click", async () => {
+  var _a15;
+  (_a15 = document.getElementById("contractExtractBtn")) == null ? void 0 : _a15.addEventListener("click", runContractExtract);
+  var _a16;
+  (_a16 = document.getElementById("contractCopyBtn")) == null ? void 0 : _a16.addEventListener("click", async () => {
     if (!contractEvidence) return;
     const text = JSON.stringify(__spreadProps(__spreadValues({}, contractEvidence.evidence), { provenance: { hash: contractEvidence.hash } }), null, 2);
     try {
@@ -2116,8 +2941,8 @@ body {
       setContractStatus(done ? "Evidence JSON copied" : "Copy failed", done ? "ok" : "err");
     }
   });
-  var _a10;
-  (_a10 = document.getElementById("contractPublishBtn")) == null ? void 0 : _a10.addEventListener("click", async () => {
+  var _a17;
+  (_a17 = document.getElementById("contractPublishBtn")) == null ? void 0 : _a17.addEventListener("click", async () => {
     if (!contractEvidence) return;
     sendTelemetry("action:contract-publish");
     contractLog("publish:start", { hash: contractEvidence.hash, endpoint: contractEndpoint });
@@ -2145,7 +2970,12 @@ body {
     }
   });
   async function onContractEvidence(msg) {
-    var _a19, _b;
+    var _a26, _b;
+    if (studioAwaitingExtract) {
+      studioAwaitingExtract = false;
+      void studioOnEvidence(msg);
+      return;
+    }
     const btn = document.getElementById("contractExtractBtn");
     btn.disabled = !contractSetId;
     btn.textContent = "Extract contract";
@@ -2159,7 +2989,7 @@ body {
       const hash = "sha256:" + await sha256Hex(msg.hashInput);
       const setInfo = evidence.set;
       if ((setInfo == null ? void 0 : setInfo.layerName) && setInfo.layerName !== setInfo.name) document.getElementById("contractSetName").textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
-      contractLog("extract:ok", { set: (_a19 = evidence.set) == null ? void 0 : _a19.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
+      contractLog("extract:ok", { set: (_a26 = evidence.set) == null ? void 0 : _a26.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
       contractEvidence = { evidence, canonical: msg.canonical, hash };
       const counts = evidence.counts;
       const axes = evidence.axes;
@@ -2167,8 +2997,8 @@ body {
       const collections = [...new Set(variables.map((v) => v.collection))];
       const instances = evidence.instances;
       const nested = [...new Set(instances.map((i) => {
-        var _a20;
-        return (_a20 = i.set) == null ? void 0 : _a20.name;
+        var _a27;
+        return (_a27 = i.set) == null ? void 0 : _a27.name;
       }).filter(Boolean))];
       const meta = evidence.set.meta;
       const pattern = evidence.pattern;
@@ -2198,27 +3028,27 @@ body {
     }
   }
   async function showContractMatch(evidence) {
-    const el = document.getElementById("contractMatch");
+    const el2 = document.getElementById("contractMatch");
     try {
       const res = await fetch(`${contractEndpoint.replace(/\/$/, "")}/match`, { method: "POST", headers: contractHeaders(), body: JSON.stringify({ evidence }) });
       if (!res.ok) {
-        el.style.display = "none";
+        el2.style.display = "none";
         return;
       }
       const m = await res.json();
       contractLog("match", { verdict: m.verdict, top: m.unit.slice(0, 3).map((u) => `${u.slug}:${u.score}`) });
-      el.textContent = [
+      el2.textContent = [
         `${m.verdict === "extend" ? "\u2194 extend" : m.verdict === "new" ? "\uFF0B new contract" : "\u2194 extend or \uFF0B new"}: ${m.summary}`,
         ...m.unit.slice(0, 3).map((u) => `  ${u.name} ${u.score}${u.missing.length ? ` \xB7 would need ${u.missing.join(", ")}` : ""}${u.verified ? " \xB7 evidence \u2713" : ""}`),
         ...m.candidate.repeats ? [`  organism (${m.candidate.repeats.count}\xD7 unit): ${m.organism.length ? m.organism.map((o) => `${o.name} ${o.score}${o.acceptsBest ? " \u2713 accepts" : ""}`).join(" \xB7 ") : "no collection contract yet"}`] : []
       ].join("\n");
-      el.style.display = "block";
+      el2.style.display = "block";
     } catch (e) {
-      el.style.display = "none";
+      el2.style.display = "none";
     }
   }
-  var _a11;
-  (_a11 = document.getElementById("contractBuildBtn")) == null ? void 0 : _a11.addEventListener("click", async () => {
+  var _a18;
+  (_a18 = document.getElementById("contractBuildBtn")) == null ? void 0 : _a18.addEventListener("click", async () => {
     const btn = document.getElementById("contractBuildBtn");
     const name = document.getElementById("contractSetName").textContent || "";
     const slug = contractSlug(name);
@@ -2237,8 +3067,8 @@ body {
       btn.textContent = "Build set from contract";
     }
   });
-  var _a12;
-  (_a12 = document.getElementById("contractEndpointSaveBtn")) == null ? void 0 : _a12.addEventListener("click", () => {
+  var _a19;
+  (_a19 = document.getElementById("contractEndpointSaveBtn")) == null ? void 0 : _a19.addEventListener("click", () => {
     const endpoint = document.getElementById("contractEndpointInput").value.trim() || "http://localhost:9410";
     const relayKey = document.getElementById("contractRelayKeyInput").value.trim();
     contractEndpoint = endpoint;
@@ -2248,7 +3078,7 @@ body {
     setContractStatus(`Sync endpoint: <code>${esc(endpoint)}</code>`, "ok");
   });
   window.addEventListener("message", (event) => {
-    var _a19, _b, _c, _d, _e, _f, _g, _h, _i;
+    var _a26, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -2279,10 +3109,10 @@ body {
         break;
       }
       case "select:result": {
-        const el = document.getElementById("selectStatus");
-        if (el) {
-          el.textContent = msg.message;
-          el.className = "status ok";
+        const el2 = document.getElementById("selectStatus");
+        if (el2) {
+          el2.textContent = msg.message;
+          el2.className = "status ok";
         }
         break;
       }
@@ -2296,11 +3126,13 @@ body {
           };
           updateAnnotateSelection(sel);
           updateDocSelection(sel);
+          updateDocCheckSelection(__spreadProps(__spreadValues({}, sel), { width: msg.width, height: msg.height }));
+          studioSetSelection(sel);
           void updateContractSelection(sel);
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a19 = msg.sectionCount) != null ? _a19 : 0,
+            (_a26 = msg.sectionCount) != null ? _a26 : 0,
             (_b = msg.sectionName) != null ? _b : sel.name
           );
         } else {
@@ -2322,6 +3154,15 @@ body {
       }
       case "contract:evidence": {
         void onContractEvidence(msg);
+        break;
+      }
+      // Sandbox → sync server file drop (PNG goldens, diffs): bytes never pass
+      // through the console. Sent by code.ts with figma.ui.postMessage.
+      case "contract:artifact": {
+        fetch(`${contractEndpoint.replace(/\/$/, "")}/artifact`, { method: "POST", headers: contractHeaders(), body: JSON.stringify({ name: msg.name, b64: msg.b64 }) }).then((r) => r.json()).then((r) => {
+          contractLog("artifact:saved", r);
+          parent.postMessage({ pluginMessage: { type: "contract:artifact:saved", name: msg.name, result: r } }, "*");
+        }).catch((err) => contractLog("artifact:error", (err == null ? void 0 : err.message) || String(err)));
         break;
       }
       case "contract:build-set:done": {
@@ -2383,6 +3224,43 @@ body {
         }
         break;
       }
+      case "studio:swap-targets-result": {
+        studioSwapTargets = (_j = msg.targets) != null ? _j : {};
+        if (studio.def && !studio.jsonMode) studioRenderGui();
+        break;
+      }
+      case "docs:check-result": {
+        const btn = document.getElementById("docCheckBtn");
+        btn.disabled = false;
+        btn.textContent = "Check readability";
+        const status = document.getElementById("docCheckStatus");
+        const list = document.getElementById("docCheckIssues");
+        if (msg.error) {
+          status.textContent = String(msg.error);
+          list.style.display = "none";
+          list.innerHTML = "";
+          break;
+        }
+        const fails = msg.fails, warns = msg.warns;
+        status.textContent = fails === 0 && warns === 0 ? `Pass \u2014 ${msg.textNodes} text nodes, theme ${(_k = msg.theme) != null ? _k : "?"}` : `${fails} to fix, ${warns} to look at \u2014 ${msg.textNodes} text nodes`;
+        const issues = (_l = msg.issues) != null ? _l : [];
+        if (!issues.length) {
+          list.style.display = "none";
+          list.innerHTML = "";
+          break;
+        }
+        const order = (l) => l === "fail" ? 0 : 1;
+        list.innerHTML = "";
+        for (const i of [...issues].sort((a, b) => order(a.level) - order(b.level))) {
+          const row = document.createElement("div");
+          row.style.cssText = "font-size:10.5px; line-height:1.45; padding:4px 6px; margin-bottom:3px; border-left:2px solid " + (i.level === "fail" ? "#d4594a" : "#b8862b") + "; cursor:" + (i.nodeId ? "pointer" : "default") + ";";
+          row.textContent = `${i.level === "fail" ? "fix" : "look"} \xB7 ${i.code} \u2014 ${i.message}`;
+          if (i.nodeId) row.addEventListener("click", () => postToPlugin("docs:reveal", { nodeId: i.nodeId }));
+          list.appendChild(row);
+        }
+        list.style.display = "block";
+        break;
+      }
       case "doc:result": {
         const btn = document.getElementById("docGenerateBtn");
         btn.disabled = !docSetId;
@@ -2410,9 +3288,9 @@ body {
     });
   });
   function setTokenReleaseStatus(msg, type = "") {
-    const el = document.getElementById("tokenReleaseStatus");
-    el.innerHTML = msg;
-    el.className = "status" + (type ? " " + type : "");
+    const el2 = document.getElementById("tokenReleaseStatus");
+    el2.innerHTML = msg;
+    el2.className = "status" + (type ? " " + type : "");
   }
   function syncTokenReleaseAuthUi() {
     const setup = document.getElementById("ghTokenSetup");
@@ -2421,8 +3299,8 @@ body {
     setup.style.display = hasToken ? "none" : "block";
     release.style.display = hasToken ? "block" : "none";
   }
-  var _a13;
-  (_a13 = document.getElementById("ghTokenSaveBtn")) == null ? void 0 : _a13.addEventListener("click", () => {
+  var _a20;
+  (_a20 = document.getElementById("ghTokenSaveBtn")) == null ? void 0 : _a20.addEventListener("click", () => {
     const input = document.getElementById("ghTokenInput");
     const value = input.value.trim();
     if (!value) return;
@@ -2432,8 +3310,8 @@ body {
     syncTokenReleaseAuthUi();
     setTokenReleaseStatus("Token saved to Figma client storage.", "ok");
   });
-  var _a14;
-  (_a14 = document.getElementById("ghTokenClearBtn")) == null ? void 0 : _a14.addEventListener("click", () => {
+  var _a21;
+  (_a21 = document.getElementById("ghTokenClearBtn")) == null ? void 0 : _a21.addEventListener("click", () => {
     ghToken = null;
     postToPlugin("gh-token:set", { token: "" });
     syncTokenReleaseAuthUi();
@@ -2451,9 +3329,9 @@ body {
     if (!res.ok) throw new Error(`GitHub API ${res.status} on ${path}`);
     return res.json();
   }
-  var _a15;
-  (_a15 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a15.addEventListener("click", async () => {
-    var _a19;
+  var _a22;
+  (_a22 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a22.addEventListener("click", async () => {
+    var _a26;
     if (!ghToken) return;
     sendTelemetry("action:token-release");
     const btn = document.getElementById("tokenReleaseBtn");
@@ -2476,9 +3354,9 @@ body {
       for (let i = 0; i < 15 && !run; i++) {
         await new Promise((r) => setTimeout(r, 2e3));
         const data = await ghJson(`/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`);
-        run = (_a19 = (data.workflow_runs || []).find(
+        run = (_a26 = (data.workflow_runs || []).find(
           (r) => new Date(r.created_at).getTime() >= dispatchedAt - 5e3
-        )) != null ? _a19 : null;
+        )) != null ? _a26 : null;
       }
       if (!run) throw new Error("Dispatched, but no run appeared within 30s \u2014 check the Actions tab.");
       const runLink = `<a href="${run.html_url}" target="_blank">Actions run \u2192</a>`;
@@ -2559,9 +3437,9 @@ body {
     return `https://www.figma.com/design/${ctx.fileKey}/${slug}?node-id=${ctx.node.id.replace(":", "-")}`;
   }
   function setReqStatus(msg, type = "") {
-    const el = document.getElementById("reqStatus");
-    el.innerHTML = msg;
-    el.className = "status" + (type ? " " + type : "");
+    const el2 = document.getElementById("reqStatus");
+    el2.innerHTML = msg;
+    el2.className = "status" + (type ? " " + type : "");
   }
   function bindReqChips(containerId, dataKey, onPick) {
     document.querySelectorAll(`#${containerId} .chip`).forEach((chip) => {
@@ -2595,12 +3473,12 @@ body {
     const addBtn = document.getElementById("reqAddImageBtn");
     if (addBtn) addBtn.style.display = reqImages.length >= MAX_IMAGES ? "none" : "";
   }
-  var _a16;
-  (_a16 = document.getElementById("reqAddImageBtn")) == null ? void 0 : _a16.addEventListener("click", () => {
+  var _a23;
+  (_a23 = document.getElementById("reqAddImageBtn")) == null ? void 0 : _a23.addEventListener("click", () => {
     document.getElementById("reqImageInput").click();
   });
-  var _a17;
-  (_a17 = document.getElementById("reqImageInput")) == null ? void 0 : _a17.addEventListener("change", (e) => {
+  var _a24;
+  (_a24 = document.getElementById("reqImageInput")) == null ? void 0 : _a24.addEventListener("change", (e) => {
     const input = e.target;
     const files = Array.from(input.files || []);
     input.value = "";
@@ -2621,9 +3499,9 @@ body {
       reader.readAsDataURL(file);
     }
   });
-  var _a18;
-  (_a18 = document.getElementById("reqSubmitBtn")) == null ? void 0 : _a18.addEventListener("click", async () => {
-    var _a19;
+  var _a25;
+  (_a25 = document.getElementById("reqSubmitBtn")) == null ? void 0 : _a25.addEventListener("click", async () => {
+    var _a26;
     const summaryEl = document.getElementById("reqSummary");
     const useCaseEl = document.getElementById("reqUseCase");
     const summary = summaryEl.value.trim();
@@ -2678,7 +3556,7 @@ body {
             figmaUrl,
             fileName: ctx == null ? void 0 : ctx.fileName,
             page: ctx == null ? void 0 : ctx.page,
-            nodeName: (_a19 = ctx == null ? void 0 : ctx.node) == null ? void 0 : _a19.name,
+            nodeName: (_a26 = ctx == null ? void 0 : ctx.node) == null ? void 0 : _a26.name,
             tokenName: ctx == null ? void 0 : ctx.tokenName,
             requester: ctx == null ? void 0 : ctx.user,
             images: reqImages.map((i) => ({ name: i.name, type: i.type, dataUrl: i.dataUrl }))

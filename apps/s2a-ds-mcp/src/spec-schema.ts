@@ -64,7 +64,7 @@ export const ComponentSpecSchema = z.object({
   states: z.array(z.object({ name: z.string(), figma: FigmaBindingSchema, code: z.record(z.unknown()), notes: z.string().optional() })).optional(),
   anatomy: AnatomyPartSchema.optional(),
   bindings: z.object({ figma: z.record(z.unknown()), code: z.record(z.unknown()) }).optional(),
-  decisions: z.array(z.object({ id: z.string(), question: z.string(), decision: z.string().optional(), status: z.enum(["open", "decided"]), owner: z.string().optional(), evidence: z.string().optional() })).optional(),
+  decisions: z.array(z.object({ id: z.string(), question: z.string(), chose: z.string().optional(), alternatives: z.array(z.string()).optional(), confidence: z.enum(["high", "medium", "low"]).optional(), fix: z.string().optional(), decision: z.string().optional(), status: z.enum(["open", "decided"]), owner: z.string().optional(), evidence: z.string().optional() })).optional(),
   provenance: z.object({ defs: z.string().nullable(), codeEvidence: z.string().nullable(), figmaEvidence: z.string().nullable(), generator: z.string() }).optional(),
 });
 

@@ -532,7 +532,7 @@ async function buildFromFigma() {
     );
     await buildCssFromTokens(mergedLightPrimitives, {
       destination: "tokens.primitives.light.css",
-      selector: ':root, :root[data-theme="light"]',
+      selector: ':root, :root[data-theme="light"], [data-theme="light"]',
       filter: (token) => {
         const path = token.path || [];
         // Only emit s2a.color.* — exclude legacy bare color.* duplicates and dataviz
@@ -568,7 +568,7 @@ async function buildFromFigma() {
     );
     await buildCssFromTokens(mergedDarkPrimitives, {
       destination: "tokens.primitives.dark.css",
-      selector: ':root[data-theme="dark"]',
+      selector: ':root[data-theme="dark"], [data-theme="dark"]',
       filter: (token) => {
         const path = token.path || [];
         // Only emit s2a.color.* — exclude legacy bare color.* duplicates and dataviz
@@ -922,7 +922,7 @@ async function buildFromFigma() {
     }
     await buildCssFromTokens(mergedSemanticLight, {
       destination: "tokens.semantic.light.css",
-      selector: ':root, :root[data-theme="light"]',
+      selector: ':root, :root[data-theme="light"], [data-theme="light"]',
       filter: (token) => {
         const path = token.path || [];
         // Exclude tokens whose ref is still unresolved (literal {color.xxx} not {s2a.color.xxx}) — avoids truncated names and broken values
@@ -1005,7 +1005,7 @@ async function buildFromFigma() {
     }
     await buildCssFromTokens(mergedSemanticDark, {
       destination: "tokens.semantic.dark.css",
-      selector: ':root[data-theme="dark"]',
+      selector: ':root[data-theme="dark"], [data-theme="dark"]',
       filter: (token) => {
         const path = token.path || [];
         // Exclude tokens whose ref is still unresolved (literal {color.xxx} not {s2a.color.xxx}) — avoids truncated names and broken values

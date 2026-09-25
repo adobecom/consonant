@@ -33,6 +33,15 @@
         "approved"
       ]
     },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver for the generated contract. Mirrors the s2a:meta stamp on the Figma set. Omitted means the contract ships 0.1.0."
+    },
+    "archetype": {
+      "type": "string",
+      "description": "The upstream archetype this component reads as (southleft/ds-contracts-poc's closed enum). Set by the scaffold; only emitted into the contract when it is one of their values."
+    },
     "curated": {
       "type": "object",
       "properties": {
@@ -426,6 +435,7 @@
     },
     "decision": {
       "type": "object",
+      "description": "One judgment call the draft made or deferred. chose/alternatives/confidence/fix are the draft notes: what the scaffold decided, what else it could have been, how much to trust it, and the one-line edit that corrects it. Reviewing these is the curation step.",
       "required": [
         "id",
         "question",
@@ -438,6 +448,29 @@
         },
         "question": {
           "type": "string"
+        },
+        "chose": {
+          "type": "string",
+          "description": "What the draft actually did, stated as a fact. Absent when the draft made no choice and is only reporting something the reviewer must act on."
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The other readings the evidence would support."
+        },
+        "confidence": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "description": "high = read straight from the evidence; medium = derived through the dictionary or a heuristic; low = a guess on thin or conflicting evidence. Review low first."
+        },
+        "fix": {
+          "type": "string",
+          "description": "The one-line edit that corrects this if the draft got it wrong."
         },
         "decision": {
           "type": "string"

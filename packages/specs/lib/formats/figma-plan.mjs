@@ -57,6 +57,9 @@ export function figmaPlan(ir) {
   });
   const tree = (part, name) => ({
     name: part.figma && part.figma.startsWith(".") && !part.figma.includes("/") ? part.figma : "." + (name === "root" ? "root" : name),
+    // source: the layer path in the anchored Figma node (from the evidence walk),
+    // so Build set can normalise a clone of the golden instead of drawing from scratch.
+    source: part.figma ?? null,
     element: part.element ?? null,
     bindings: bindingsOf(part.tokens),
     slot: part.slot ? { name: part.slot.name, accepts: part.slot.accepts, mode: part.slot.acceptsMode } : null,

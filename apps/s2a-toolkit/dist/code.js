@@ -439,7 +439,7 @@ function combos(axes) {
   return out.slice(0, 24);
 }
 var cleanName = (n) => n.replace(/^\./, "");
-var toTitle = (n) => cleanName(n).replace(/[-_]/g, " ").replace(/^./, (c) => c.toUpperCase());
+var toTitle = (n) => cleanName(n).replace(/[-_]/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/^./, (c) => c.toUpperCase());
 async function buildSetFromPlan(plan) {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j;
   const report = { set: "", setId: "", variants: 0, layers: 0, boundVariables: 0, unresolvedVariables: [], stylesApplied: 0, stylesMissing: [], properties: 0, notes: [] };
@@ -553,7 +553,7 @@ async function buildSetFromPlan(plan) {
     }
   }
   function buildLayer(layer, parent, depth) {
-    var _a2, _b2, _c2, _d2;
+    var _a2, _b2, _c2, _d2, _e2;
     const textLike = layer.element && TEXT_ELEMENTS.test(layer.element) || Boolean(layer.bindings["font-size"] || layer.bindings["font-family"]);
     const isText = textLike && !layer.children.length;
     const isImage = layer.element === "img" || /\b(img|image|picture|video)\b/i.test(cleanName(layer.name));
@@ -603,6 +603,27 @@ async function buildSetFromPlan(plan) {
       r.fills = [{ type: "SOLID", color: { r: 0.85, g: 0.85, b: 0.85 } }];
       parent.appendChild(r);
       node = r;
+    } else if (layer.element === "hr" || /^(divider|rule|separator)$/i.test(cleanName(layer.name))) {
+      const f = figma.createFrame();
+      f.name = layer.name;
+      f.fills = [];
+      f.resize(320, 1);
+      f.strokeWeight = 1;
+      f.strokes = [{ type: "SOLID", color: { r: 0.8, g: 0.8, b: 0.8 } }];
+      parent.appendChild(f);
+      bindLayer(f, layer.bindings);
+      node = f;
+    } else if (/^svg|^i$/.test((_d2 = layer.element) != null ? _d2 : "") || /icon|chevron|arrow|caret|glyph/i.test(cleanName(layer.name))) {
+      const f = figma.createFrame();
+      f.name = layer.name;
+      f.resize(24, 24);
+      f.fills = [{ type: "SOLID", color: { r: 0.6, g: 0.6, b: 0.6 } }];
+      f.cornerRadius = 4;
+      parent.appendChild(f);
+      bindLayer(f, layer.bindings);
+      node = f;
+      report.layers++;
+      return node;
     } else {
       const f = figma.createFrame();
       f.name = layer.name;
@@ -620,7 +641,7 @@ async function buildSetFromPlan(plan) {
           const inst = comp.createInstance();
           inst.name = `[${layer.slot.name}]`;
           f.appendChild(inst);
-          report.notes.push(`slot ${layer.slot.name}: filled with ${((_d2 = comp.parent) == null ? void 0 : _d2.type) === "COMPONENT_SET" ? comp.parent.name : comp.name}`);
+          report.notes.push(`slot ${layer.slot.name}: filled with ${((_e2 = comp.parent) == null ? void 0 : _e2.type) === "COMPONENT_SET" ? comp.parent.name : comp.name}`);
         } else {
           const placeholder = figma.createFrame();
           placeholder.name = `[${layer.slot.name}: ${layer.slot.accepts.join(" | ")}]`;
@@ -637,7 +658,7 @@ async function buildSetFromPlan(plan) {
     }
     report.layers++;
     try {
-      if (parent.layoutMode !== "NONE" && node.type !== "TEXT") node.layoutSizingHorizontal = parent.layoutMode === "VERTICAL" ? "FILL" : "HUG";
+      if (parent.layoutMode !== "NONE") node.layoutSizingHorizontal = parent.layoutMode === "VERTICAL" ? "FILL" : "HUG";
     } catch (e) {
     }
     return node;
@@ -707,11 +728,24 @@ async function buildSetFromPlan(plan) {
     const head = fp.replace(/[A-Z].*$/, "");
     const cands = [...fromPath, fp.replace(/^show/i, ""), tail, head, fp].map(key).filter(Boolean);
     const all = "findAll" in root ? root.findAll(() => true) : [];
+    const want = prop.type === "TEXT" ? (n) => n.type === "TEXT" || "findOne" in n && Boolean(n.findOne((x) => x.type === "TEXT")) : () => true;
+    for (const c of cands) {
+      const hit = all.find((n) => key(n.name) === c && want(n));
+      if (hit) return hit;
+    }
     for (const c of cands) {
       const hit = all.find((n) => key(n.name) === c);
       if (hit) return hit;
     }
     return null;
+  };
+  const insideInstance = (n) => {
+    let p = n.parent;
+    while (p && p.type !== "COMPONENT" && p.type !== "COMPONENT_SET" && p.type !== "PAGE") {
+      if (p.type === "INSTANCE") return true;
+      p = p.parent;
+    }
+    return false;
   };
   const descend = (target, type) => target.type === type ? target : "findOne" in target ? target.findOne((n) => n.type === type) : null;
   for (const prop of plan.properties.filter((p) => p.type !== "VARIANT")) {
@@ -736,6 +770,10 @@ async function buildSetFromPlan(plan) {
           const text = descend(target, "TEXT");
           if (!text) {
             report.notes.push(`property ${name}: layer ${target.name} is a ${target.type} with no text inside; wire it by hand`);
+            continue;
+          }
+          if (insideInstance(text)) {
+            report.notes.push(`property ${name}: text lives inside the slotted instance; expose the instance's own text property (nested property) instead of a card-level one`);
             continue;
           }
           text.componentPropertyReferences = __spreadProps(__spreadValues({}, text.componentPropertyReferences || {}), { characters: propKey });
@@ -770,6 +808,421 @@ async function buildSetFromPlan(plan) {
   figma.currentPage.selection = [set];
   figma.viewport.scrollAndZoomIntoView([set]);
   return report;
+}
+
+// src/contract-normalize.ts
+var CSS_TO_FIELD = {
+  "background-color": ["fills"],
+  background: ["fills"],
+  color: ["fills"],
+  padding: ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft"],
+  "padding-top": ["paddingTop"],
+  "padding-right": ["paddingRight"],
+  "padding-bottom": ["paddingBottom"],
+  "padding-left": ["paddingLeft"],
+  gap: ["itemSpacing"],
+  "border-radius": ["topLeftRadius", "topRightRadius", "bottomLeftRadius", "bottomRightRadius"],
+  "border-color": ["strokes"],
+  "border-width": ["strokeWeight"],
+  "font-size": ["fontSize"],
+  "line-height": ["lineHeight"],
+  "letter-spacing": ["letterSpacing"],
+  "font-family": ["fontFamily"],
+  "font-weight": ["fontStyle"]
+};
+var hex = (c) => "#" + [c.r, c.g, c.b].map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("") + ("a" in c && c.a !== void 0 && c.a < 1 ? Math.round(c.a * 100) + "%" : "");
+var near = (a, b, tol = 0.5) => Math.abs(a - b) <= tol;
+var colorNear = (a, b) => {
+  var _a, _b;
+  return near(a.r, b.r, 2 / 255) && near(a.g, b.g, 2 / 255) && near(a.b, b.b, 2 / 255) && near((_a = "a" in a ? a.a : 1) != null ? _a : 1, (_b = "a" in b ? b.a : 1) != null ? _b : 1, 0.02);
+};
+function byPath(root, path) {
+  var _a;
+  const segs = path.replace(/^\//, "").split("/").filter(Boolean);
+  let node = root;
+  let i = 0;
+  while (i < segs.length) {
+    if (!("children" in node)) return null;
+    let hit = null, used = 0;
+    for (let len = segs.length - i; len >= 1 && !hit; len--) {
+      const name = segs.slice(i, i + len).join("/");
+      hit = (_a = node.children.find((c) => c.name === name)) != null ? _a : null;
+      if (hit) used = len;
+    }
+    if (!hit) return null;
+    node = hit;
+    i += used;
+  }
+  return node;
+}
+async function normalizeFromSource(plan, options = {}) {
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s;
+  const adopt = Boolean(options.adopt);
+  const report = { set: "", setId: "", sourceId: (_b = (_a = plan.anchors) == null ? void 0 : _a.nodeId) != null ? _b : "", mode: adopt ? "adopt" : "normalize", variants: 0, layers: 0, boundVariables: 0, unresolvedVariables: [], stylesApplied: 0, stylesMissing: [], properties: 0, notes: [], renamed: [], drift: [], adopted: [], unmapped: [] };
+  const src = ((_c = plan.anchors) == null ? void 0 : _c.nodeId) ? await figma.getNodeByIdAsync(plan.anchors.nodeId) : null;
+  if (!src || !("clone" in src)) throw new Error(`anchor ${(_e = (_d = plan.anchors) == null ? void 0 : _d.nodeId) != null ? _e : "(none)"} is not in this file; use the dictionary scaffold instead`);
+  const [variables, styles] = await Promise.all([figma.variables.getLocalVariablesAsync(), figma.getLocalTextStylesAsync()]);
+  const norm = (s) => s.toLowerCase().replace(/^s2a[/-]/, "").replace(/[^a-z0-9]/g, "");
+  const byName = /* @__PURE__ */ new Map(), byNorm = /* @__PURE__ */ new Map();
+  for (const v of variables) {
+    byName.set(v.name, v);
+    if (!byNorm.has(norm(v.name))) byNorm.set(norm(v.name), v);
+  }
+  const findVar = (name) => {
+    var _a2, _b2;
+    const v = (_b2 = (_a2 = byName.get(name)) != null ? _a2 : byNorm.get(norm(name))) != null ? _b2 : null;
+    if (!v) report.unresolvedVariables.push(name);
+    return v;
+  };
+  const styleByName = /* @__PURE__ */ new Map();
+  for (const st of styles) {
+    styleByName.set(st.name, st);
+    styleByName.set((_f = st.name.split("/").pop()) != null ? _f : st.name, st);
+  }
+  const fontsNeeded = /* @__PURE__ */ new Set();
+  const page = figma.currentPage;
+  let maxX = 0, minY = Infinity;
+  for (const n of page.children) {
+    if ("x" in n) {
+      maxX = Math.max(maxX, n.x + n.width);
+      minY = Math.min(minY, n.y);
+    }
+  }
+  if (!isFinite(minY)) minY = 0;
+  const section = figma.createSection();
+  section.name = `Contracts / ${plan.component} (${adopt ? "tokenized" : "normalized"})`;
+  page.appendChild(section);
+  section.x = maxX + 200;
+  section.y = minY;
+  const clone = src.clone();
+  section.appendChild(clone);
+  clone.x = 40;
+  clone.y = 80;
+  let host;
+  if (clone.type === "COMPONENT" || clone.type === "COMPONENT_SET") host = clone;
+  else if (clone.type === "FRAME" || clone.type === "INSTANCE") host = figma.createComponentFromNode(clone.type === "INSTANCE" ? await clone.detachInstance() : clone);
+  else throw new Error(`cannot normalise a ${clone.type}`);
+  host.name = plan.component;
+  section.resizeWithoutConstraints(host.width + 80, host.height + 120);
+  const variants = host.type === "COMPONENT_SET" ? [...host.children] : [host];
+  const parts = [];
+  const collect = (l, canonical) => {
+    var _a2;
+    if (l.source) parts.push({ layer: l, canonical });
+    for (const c of (_a2 = l.children) != null ? _a2 : []) collect(c, c.name);
+  };
+  for (const c of (_g = plan.anatomy.children) != null ? _g : []) collect(c, c.name);
+  const mismatch = (entry, bind) => {
+    if (!adopt) {
+      report.drift.push(entry);
+      return;
+    }
+    try {
+      bind();
+      report.boundVariables++;
+      report.adopted.push(entry);
+    } catch (err) {
+      report.notes.push(`${entry.layer}.${entry.property}: ${(err == null ? void 0 : err.message) || err}`);
+      report.drift.push(entry);
+    }
+  };
+  const bindIfEqual = (target, layerName, bindings) => {
+    let node = target;
+    for (const [cssProp, names] of Object.entries(bindings)) {
+      const fields = CSS_TO_FIELD[cssProp];
+      if (!fields || !names.length) continue;
+      fields.forEach((field, i) => {
+        var _a2, _b2, _c2;
+        const v = findVar(names.length === 1 ? names[0] : cssProp === "padding" && names.length === 2 ? i % 2 === 0 ? names[0] : names[1] : names[Math.min(i, names.length - 1)]);
+        if (!v) return;
+        const resolved2 = v.resolveForConsumer(node);
+        const val = resolved2 == null ? void 0 : resolved2.value;
+        try {
+          if (field === "fills" || field === "strokes") {
+            let painted = node;
+            if (!(node[field] || []).some((p) => p.type === "SOLID") && "findOne" in node) {
+              const glyph = node.findOne((x) => (x.type === "VECTOR" || x.type === "BOOLEAN_OPERATION") && (x[field] || []).some((p) => p.type === "SOLID"));
+              if (glyph) painted = glyph;
+            }
+            node = painted;
+            const paints = node[field] || [];
+            const solid2 = paints.find((p) => p.type === "SOLID");
+            if (!solid2) {
+              report.drift.push({ layer: layerName, property: cssProp, drawn: paints.length ? paints[0].type.toLowerCase() : "none", token: v.name, tokenValue: typeof val === "object" && val && "r" in val ? hex(val) : String(val) });
+              return;
+            }
+            const drawn = __spreadProps(__spreadValues({}, solid2.color), { a: (_a2 = solid2.opacity) != null ? _a2 : 1 });
+            if (typeof val === "object" && val && "r" in val && colorNear(drawn, val)) {
+              node[field] = paints.map((p) => p === solid2 ? figma.variables.setBoundVariableForPaint(solid2, "color", v) : p);
+              report.boundVariables++;
+            } else mismatch({ layer: layerName, property: cssProp, drawn: hex(drawn), token: v.name, tokenValue: typeof val === "object" && val && "r" in val ? hex(val) : String(val) }, () => {
+              const lit = val;
+              node[field] = paints.map((p) => {
+                var _a3;
+                return p === solid2 ? figma.variables.setBoundVariableForPaint(__spreadProps(__spreadValues({}, solid2), { color: { r: lit.r, g: lit.g, b: lit.b }, opacity: (_a3 = lit.a) != null ? _a3 : 1 }), "color", v) : p;
+              });
+            });
+          } else if (field === "fontFamily" || field === "fontStyle") {
+            if (node.type !== "TEXT") return;
+            const fn = node.fontName;
+            const drawn = field === "fontFamily" ? fn.family : fn.style;
+            if (String(val).toLowerCase() === String(drawn).toLowerCase()) {
+              node.setBoundVariable(field, v);
+              report.boundVariables++;
+            } else mismatch({ layer: layerName, property: cssProp, drawn: String(drawn), token: v.name, tokenValue: String(val) }, () => {
+              node.setBoundVariable(field, v);
+            });
+          } else if (field === "fontSize" || field === "lineHeight" || field === "letterSpacing") {
+            if (node.type !== "TEXT") return;
+            const t = node;
+            const drawn = field === "fontSize" ? t.fontSize : field === "lineHeight" ? (_b2 = t.lineHeight.value) != null ? _b2 : NaN : (_c2 = t.letterSpacing.value) != null ? _c2 : NaN;
+            if (typeof val === "number" && near(drawn, val)) {
+              t.setBoundVariable(field, v);
+              report.boundVariables++;
+            } else mismatch({ layer: layerName, property: cssProp, drawn: String(Math.round(drawn * 100) / 100), token: v.name, tokenValue: String(val) }, () => {
+              t.setBoundVariable(field, v);
+            });
+          } else {
+            const drawn = node[field];
+            if (typeof drawn !== "number" || typeof val !== "number") {
+              report.drift.push({ layer: layerName, property: cssProp, drawn: String(drawn), token: v.name, tokenValue: String(val) });
+              return;
+            }
+            if (near(drawn, val)) {
+              node.setBoundVariable(field, v);
+              report.boundVariables++;
+            } else mismatch({ layer: layerName, property: cssProp, drawn: String(Math.round(drawn * 100) / 100), token: v.name, tokenValue: String(val) }, () => {
+              node.setBoundVariable(field, v);
+            });
+          }
+        } catch (err) {
+          report.notes.push(`${layerName}.${field}: ${(err == null ? void 0 : err.message) || err}`);
+        }
+      });
+    }
+  };
+  const resolved = [];
+  for (const variant of variants) {
+    const nodes = /* @__PURE__ */ new Map();
+    for (const { layer, canonical } of parts) {
+      const n = byPath(variant, layer.source);
+      if (n) nodes.set(canonical, n);
+      else report.unmapped.push(`${variant === host ? "" : variant.name + " "}${layer.source} \u2192 ${canonical}`);
+    }
+    resolved.push({ variant, nodes });
+  }
+  const stripId = (n) => n.replace(/#\d+:\d+$/, "");
+  const existingProps = new Set(Object.keys((_h = host.componentPropertyDefinitions) != null ? _h : {}));
+  for (const prop of plan.properties.filter((p) => p.type !== "VARIANT")) {
+    const name = stripId(prop.name);
+    if (existingProps.has(prop.name)) {
+      report.properties++;
+      continue;
+    }
+    try {
+      const targets = resolved.map((r) => {
+        var _a2, _b2;
+        return { r, node: prop.layer ? (_b2 = byPath(r.variant, prop.layer)) != null ? _b2 : prop.layer.startsWith(".") ? (_a2 = r.nodes.get(prop.layer.split("/").pop().replace(/^\./, ""))) != null ? _a2 : null : null : null };
+      });
+      const textNode = (n) => !n ? null : n.type === "TEXT" ? n : "findOne" in n ? n.findOne((x) => x.type === "TEXT") : null;
+      if (prop.type === "TEXT") {
+        const first = textNode((_j = (_i = targets[0]) == null ? void 0 : _i.node) != null ? _j : null);
+        if (!first) {
+          report.notes.push(`property ${name}: no text layer at ${(_k = prop.layer) != null ? _k : "(no layer)"}`);
+          continue;
+        }
+        let p = first.parent;
+        let inInstance = false;
+        while (p && p.type !== "COMPONENT" && p.type !== "PAGE") {
+          if (p.type === "INSTANCE") {
+            inInstance = true;
+            break;
+          }
+          p = p.parent;
+        }
+        if (inInstance) {
+          report.notes.push(`property ${name}: text sits inside a nested instance; expose that instance's text property instead`);
+          continue;
+        }
+        const key = host.addComponentProperty(name, "TEXT", first.characters || name);
+        report.properties++;
+        for (const t of targets) {
+          const tn = textNode(t.node);
+          if (tn) tn.componentPropertyReferences = __spreadProps(__spreadValues({}, tn.componentPropertyReferences || {}), { characters: key });
+        }
+      } else if (prop.type === "BOOLEAN") {
+        if (!((_l = targets[0]) == null ? void 0 : _l.node)) {
+          report.notes.push(`property ${name}: no layer at ${(_m = prop.layer) != null ? _m : "(no layer)"}`);
+          continue;
+        }
+        const key = host.addComponentProperty(name, "BOOLEAN", prop.defaultValue !== false);
+        report.properties++;
+        for (const t of targets) if (t.node) t.node.componentPropertyReferences = __spreadProps(__spreadValues({}, t.node.componentPropertyReferences || {}), { visible: key });
+      } else if (prop.type === "INSTANCE_SWAP") {
+        const inst = ((_n = targets[0]) == null ? void 0 : _n.node) && targets[0].node.type === "INSTANCE" ? targets[0].node : null;
+        if (!inst) {
+          report.notes.push(`property ${name}: ${(_o = prop.layer) != null ? _o : "(no layer)"} is raw layers, not an instance; place a library instance there before it can swap`);
+          continue;
+        }
+        const main = await inst.getMainComponentAsync();
+        if (!main) {
+          report.notes.push(`property ${name}: instance has no main component`);
+          continue;
+        }
+        const key = host.addComponentProperty(name, "INSTANCE_SWAP", main.id);
+        report.properties++;
+        for (const t of targets) if (t.node && t.node.type === "INSTANCE") t.node.componentPropertyReferences = __spreadProps(__spreadValues({}, t.node.componentPropertyReferences || {}), { mainComponent: key });
+      }
+    } catch (err) {
+      report.notes.push(`property ${name}: ${(err == null ? void 0 : err.message) || err}`);
+    }
+  }
+  for (const { variant, nodes } of resolved) {
+    if (variant.type === "COMPONENT" && host.type === "COMPONENT") {
+    }
+    for (const { layer, canonical } of parts) {
+      const n = nodes.get(canonical);
+      if (!n) continue;
+      if (n.name !== canonical) {
+        report.renamed.push({ from: n.name, to: canonical });
+        n.name = canonical;
+      }
+      bindIfEqual(n, canonical, layer.bindings);
+      const sizeVar = (_p = layer.bindings["font-size"]) == null ? void 0 : _p[0];
+      if (n.type === "TEXT" && sizeVar) {
+        const styleName = sizeVar.replace("typography/font-size/", "typography/");
+        const st = (_s = (_r = styleByName.get(styleName)) != null ? _r : styleByName.get((_q = styleName.split("/").pop()) != null ? _q : "")) != null ? _s : null;
+        const t = n;
+        const fn = t.fontName;
+        const styleEntry = st ? { layer: canonical, property: "text-style", drawn: `${fn.family} ${fn.style} ${Math.round(t.fontSize)}`, token: st.name, tokenValue: `${st.fontName.family} ${st.fontName.style} ${st.fontSize}` } : null;
+        if (st && st.fontName.family === fn.family && st.fontName.style === fn.style && near(st.fontSize, t.fontSize)) {
+          fontsNeeded.add(JSON.stringify(fn));
+          await figma.loadFontAsync(fn);
+          await t.setTextStyleIdAsync(st.id);
+          report.stylesApplied++;
+        } else if (st && adopt) {
+          await figma.loadFontAsync(fn);
+          await figma.loadFontAsync(st.fontName);
+          await t.setTextStyleIdAsync(st.id);
+          report.stylesApplied++;
+          report.adopted.push(styleEntry);
+        } else if (st) report.drift.push(styleEntry);
+        else report.stylesMissing.push(styleName);
+      }
+      report.layers++;
+    }
+    bindIfEqual(variant, ".root", plan.anatomy.bindings);
+  }
+  report.set = host.name;
+  report.setId = host.id;
+  report.variants = variants.length;
+  report.unresolvedVariables = [...new Set(report.unresolvedVariables)];
+  figma.currentPage.selection = [host];
+  figma.viewport.scrollAndZoomIntoView([host]);
+  return report;
+}
+
+// src/doc-check.ts
+var CHAR_WIDTH = { 56: 27.5, 24: 11.9, 20: 8.42, 16: 6.74, 14: 5.9 };
+var MAX_CHARS = 80;
+var MAX_WIDTH = { 24: 640, 20: 640, 16: 500 };
+var BODY_SIZES = [24, 20, 16];
+var THEME_COLLECTION = "VariableCollectionId:6:17";
+var srgb = (c) => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+var luminance = (c) => 0.2126 * srgb(c.r) + 0.7152 * srgb(c.g) + 0.0722 * srgb(c.b);
+var contrast = (a, b) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+var solid = (node) => {
+  const fills = node.fills;
+  if (!Array.isArray(fills)) return null;
+  const f = fills.find((p) => p.visible !== false && p.type === "SOLID");
+  return f ? f.color : null;
+};
+var surfaceOf = (node, root) => {
+  let n = node.parent;
+  while (n && n !== root.parent) {
+    const c = solid(n);
+    if (c) return c;
+    n = n.parent;
+  }
+  return solid(root);
+};
+async function checkDocFrame(frame) {
+  var _a, _b;
+  const issues = [];
+  const add = (level, code2, message, nodeId) => issues.push({ level, code: code2, message, nodeId });
+  let themeName = null;
+  try {
+    const theme = await figma.variables.getVariableCollectionByIdAsync(THEME_COLLECTION);
+    if (theme) {
+      const modeId = frame.resolvedVariableModes[theme.id];
+      themeName = (_b = (_a = theme.modes.find((m) => m.modeId === modeId)) == null ? void 0 : _a.name) != null ? _b : null;
+      if (themeName && themeName !== "Dark") {
+        add("fail", "DOC_THEME_MODE", `theme resolves ${themeName}, not Dark \u2014 this frame will render black on black`, frame.id);
+      }
+    }
+  } catch (e) {
+  }
+  const texts = frame.findAll((n) => n.type === "TEXT");
+  for (const t of texts) {
+    const size = typeof t.fontSize === "number" ? t.fontSize : null;
+    if (size === null) {
+      add("warn", "DOC_MIXED_SIZE", `mixed font sizes in one node \u2014 "${t.characters.slice(0, 36)}\u2026"`, t.id);
+      continue;
+    }
+    const cw = CHAR_WIDTH[size];
+    if (!cw) {
+      add("warn", "DOC_UNMEASURED_SIZE", `${size}px has no measured character width \u2014 measure it and add it to CHAR_WIDTH`, t.id);
+      continue;
+    }
+    const lines = Math.max(1, Math.round(t.height / (size * 1.5)));
+    const chars = lines === 1 ? t.characters.length : Math.round(t.width / cw);
+    if (chars > MAX_CHARS) {
+      add("fail", "DOC_MEASURE", `${size}px runs ${chars} characters \u2014 WCAG 1.4.8 caps a line at ${MAX_CHARS}`, t.id);
+    }
+    const lh = t.lineHeight;
+    if (BODY_SIZES.includes(size)) {
+      const ok = typeof lh === "object" && lh.unit === "PERCENT" && lh.value >= 150;
+      if (!ok) {
+        const shown = typeof lh === "object" && lh.unit === "PERCENT" ? `${lh.value}%` : typeof lh === "object" ? lh.unit : "mixed";
+        add("fail", "DOC_LINE_HEIGHT", `${size}px line height is ${shown} \u2014 WCAG 1.4.8 wants at least 150%`, t.id);
+      }
+    }
+    if (t.textAlignHorizontal === "JUSTIFIED") {
+      add("fail", "DOC_JUSTIFIED", `justified text \u2014 WCAG 1.4.8 forbids it: "${t.characters.slice(0, 36)}\u2026"`, t.id);
+    }
+    const cap = MAX_WIDTH[size];
+    if (cap && typeof t.maxWidth === "number" && t.maxWidth > cap) {
+      add("warn", "DOC_MAXWIDTH", `${size}px maxWidth ${Math.round(t.maxWidth)} exceeds the ${cap} cap for that size`, t.id);
+    }
+    const ink = solid(t);
+    const bg = surfaceOf(t, frame);
+    if (ink && bg) {
+      const r = contrast(ink, bg);
+      const large = size >= 24;
+      const aa = large ? 3 : 4.5;
+      const aaa = large ? 4.5 : 7;
+      if (r < aa) add("fail", "DOC_CONTRAST", `${size}px contrast ${r.toFixed(2)}:1 \u2014 below WCAG AA (${aa}:1)`, t.id);
+      else if (r < aaa) add("warn", "DOC_CONTRAST_AAA", `${size}px contrast ${r.toFixed(2)}:1 \u2014 passes AA, below AAA (${aaa}:1)`, t.id);
+    }
+  }
+  const unnamed = frame.findAll((n) => /^(Frame|Group|Rectangle|Ellipse|Vector|Line) \d+$/.test(n.name));
+  for (const n of unnamed.slice(0, 8)) add("warn", "DOC_UNNAMED_LAYER", `unnamed layer "${n.name}"`, n.id);
+  if (unnamed.length > 8) add("warn", "DOC_UNNAMED_LAYER", `\u2026and ${unnamed.length - 8} more unnamed layers`);
+  const card = frame.children.find((c) => c.name === "Desktop");
+  if (card) {
+    const names = card.children.map((c) => c.name);
+    for (let i = 0; i < names.length - 1; i++) {
+      if (names[i] === "separator" && names[i + 1] === "separator") {
+        add("warn", "DOC_DOUBLE_RULE", `two separators stacked at position ${i}`, card.children[i].id);
+      }
+    }
+    if (names.length && names[0] !== "section") add("warn", "DOC_RHYTHM", `card starts with "${names[0]}", expected a section`);
+    if (names.length && names[names.length - 1] !== "section") add("warn", "DOC_RHYTHM", `card ends with "${names[names.length - 1]}", expected a section`);
+  }
+  return { issues, textNodes: texts.length, theme: themeName };
 }
 
 // src/code.ts
@@ -918,6 +1371,100 @@ async function handleBridgeMethod(method, params) {
           fileName: figma.root.name,
           page: { id: figma.currentPage.id, name: figma.currentPage.name }
         })
+      };
+    }
+    // CAPTURE_SCREENSHOT — export a node (or the current page) as PNG/JPG/SVG via
+    // exportAsync; mirrors the bundled Desktop Bridge so figma_capture_screenshot works
+    // through the toolkit. Scale is capped so the longest side is ≤ 1568px (Claude's
+    // vision ceiling) — larger exports only cost bandwidth and tokens.
+    case "CAPTURE_SCREENSHOT": {
+      const node = params.nodeId ? await figma.getNodeByIdAsync(params.nodeId) : figma.currentPage;
+      if (!node) throw new Error("Node not found: " + params.nodeId);
+      if (!("exportAsync" in node)) throw new Error("Node type " + node.type + " does not support export");
+      const format = (params.format || "PNG").toUpperCase();
+      const requestedScale = Number(params.scale) > 0 ? Number(params.scale) : 1;
+      let scale = requestedScale;
+      const AI_MAX_DIMENSION = 1568;
+      let w = 0, h = 0;
+      if (node.type === "PAGE") {
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        for (const child of node.children) {
+          const bb = child.absoluteBoundingBox;
+          if (child.visible !== false && bb) {
+            minX = Math.min(minX, bb.x);
+            minY = Math.min(minY, bb.y);
+            maxX = Math.max(maxX, bb.x + bb.width);
+            maxY = Math.max(maxY, bb.y + bb.height);
+          }
+        }
+        if (minX !== Infinity) {
+          w = maxX - minX;
+          h = maxY - minY;
+        }
+      } else if ("width" in node && "height" in node) {
+        w = node.width;
+        h = node.height;
+      }
+      if (w > 0 && h > 0) {
+        const longest = Math.max(w, h);
+        if (longest * scale > AI_MAX_DIMENSION) scale = AI_MAX_DIMENSION / longest;
+      }
+      const advice = [];
+      if (scale < requestedScale) advice.push("Scale capped from " + requestedScale + "x to " + scale.toFixed(2) + "x (AI vision max: 1568px).");
+      if (node.type === "PAGE" && scale < 0.5) advice.push("Full-page capture at " + scale.toFixed(2) + "x \u2014 text may be unreadable. Pass a nodeId to target a specific frame.");
+      const settings = format === "SVG" ? { format: "SVG" } : { format, constraint: { type: "SCALE", value: scale } };
+      const bytes = await node.exportAsync(settings);
+      const bounds = "absoluteBoundingBox" in node ? node.absoluteBoundingBox : null;
+      return {
+        image: {
+          base64: figma.base64Encode(bytes),
+          format,
+          scale,
+          byteLength: bytes.length,
+          node: { id: node.id, name: node.name, type: node.type },
+          bounds,
+          formatAdvice: advice.join(" ")
+        }
+      };
+    }
+    // CREATE_SLOT — add a native Slot to a COMPONENT (one call per variant for a set).
+    // createSlot() takes no arguments; renaming the returned node is the naming API.
+    case "CREATE_SLOT": {
+      const target = await figma.getNodeByIdAsync(params.nodeId);
+      if (!target) throw new Error("Node not found: " + params.nodeId);
+      if (target.type !== "COMPONENT") {
+        throw new Error("Node must be a COMPONENT (standalone or a variant inside a COMPONENT_SET). Got: " + target.type + ". For a COMPONENT_SET, call this once per variant component.");
+      }
+      const comp = target;
+      if (typeof comp.createSlot !== "function") {
+        throw new Error("createSlot() is not available. Update Figma Desktop to a version with Slots support.");
+      }
+      const slot = comp.createSlot();
+      if (params.name) slot.name = String(params.name);
+      if (params.layoutMode === "GRID") throw new Error("GRID layoutMode is not allowed on slot nodes");
+      if (params.layoutMode) slot.layoutMode = params.layoutMode;
+      if (params.width !== void 0 || params.height !== void 0) {
+        slot.resize(
+          params.width !== void 0 ? Number(params.width) : slot.width,
+          params.height !== void 0 ? Number(params.height) : slot.height
+        );
+      }
+      let propertyKey = null;
+      try {
+        const refs = slot.componentPropertyReferences;
+        if (refs && refs.slotContentId) propertyKey = refs.slotContentId;
+      } catch (e) {
+      }
+      return {
+        slot: {
+          id: slot.id,
+          name: slot.name,
+          type: slot.type,
+          propertyKey,
+          width: slot.width,
+          height: slot.height,
+          layoutMode: slot.layoutMode
+        }
       };
     }
     default:
@@ -1131,7 +1678,7 @@ function genAnonId() {
   return (rnd() + rnd()).slice(0, 16);
 }
 figma.ui.onmessage = async (msg) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G, _H, _I;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O;
   switch (msg.type) {
     case "ui-ready":
       notifySelection();
@@ -1274,13 +1821,29 @@ figma.ui.onmessage = async (msg) => {
       break;
     }
     // Build a component set from a contract's figma.plan.json (see contract-build.ts).
+    // Export a node as PNG and hand it to the sync server through the UI
+    // (see ui.ts contract:artifact). { nodeId, name, scale? } → file on disk.
+    case "contract:export": {
+      try {
+        const node = await figma.getNodeByIdAsync(String(msg.nodeId));
+        if (!node || !("exportAsync" in node)) throw new Error(`node ${msg.nodeId} not exportable`);
+        const bytes = await node.exportAsync({ format: "PNG", constraint: { type: "SCALE", value: Number(msg.scale) || 1 } });
+        figma.ui.postMessage({ type: "contract:artifact", name: String(msg.name || `${node.name}.png`), b64: figma.base64Encode(bytes) });
+      } catch (err) {
+        figma.ui.postMessage({ type: "contract:artifact:saved", name: msg.name, error: (err == null ? void 0 : err.message) || String(err) });
+      }
+      break;
+    }
     case "contract:build-set": {
       try {
-        const report = await buildSetFromPlan(msg.plan);
-        figma.notify(`Built ${report.set}: ${report.variants} variants, ${report.layers} layers`);
+        const plan = msg.plan;
+        const anchored = ((_h = plan == null ? void 0 : plan.anchors) == null ? void 0 : _h.nodeId) ? await figma.getNodeByIdAsync(plan.anchors.nodeId) : null;
+        const report = anchored && "clone" in anchored ? await normalizeFromSource(plan, { adopt: Boolean(msg.adopt) }) : await buildSetFromPlan(plan);
+        const drift = (_j = (_i = report.drift) == null ? void 0 : _i.length) != null ? _j : 0;
+        figma.notify(`Built ${report.set}: ${report.variants} variant${report.variants === 1 ? "" : "s"}, ${report.layers} layers${drift ? `, ${drift} token drift` : ""}`);
         figma.ui.postMessage({ type: "contract:build-set:done", report });
       } catch (err) {
-        figma.ui.postMessage({ type: "contract:build-set:done", error: ((err == null ? void 0 : err.message) || String(err)) + ((err == null ? void 0 : err.stack) ? " @ " + ((_h = String(err.stack).split("\n")[1]) == null ? void 0 : _h.trim()) : "") });
+        figma.ui.postMessage({ type: "contract:build-set:done", error: ((err == null ? void 0 : err.message) || String(err)) + ((err == null ? void 0 : err.stack) ? " @ " + ((_k = String(err.stack).split("\n")[1]) == null ? void 0 : _k.trim()) : "") });
       }
       break;
     }
@@ -1290,7 +1853,7 @@ figma.ui.onmessage = async (msg) => {
     case "contract:extract": {
       const startedAt = Date.now();
       try {
-        let node = msg.setId ? await figma.getNodeByIdAsync(msg.setId) : (_i = figma.currentPage.selection[0]) != null ? _i : null;
+        let node = msg.setId ? await figma.getNodeByIdAsync(msg.setId) : (_l = figma.currentPage.selection[0]) != null ? _l : null;
         if (node && node.type === "INSTANCE") node = await node.getMainComponentAsync();
         const EXTRACTABLE = ["COMPONENT_SET", "COMPONENT", "FRAME", "SECTION", "GROUP"];
         if (!node || !EXTRACTABLE.includes(node.type)) {
@@ -1301,7 +1864,7 @@ figma.ui.onmessage = async (msg) => {
         const isFrameLike = node.type === "FRAME" || node.type === "SECTION" || node.type === "GROUP";
         if (candidateName && isFrameLike && msg.rename) node.name = candidateName;
         const evidence = await extractEvidence({
-          fileKey: (_j = figma.fileKey) != null ? _j : null,
+          fileKey: (_m = figma.fileKey) != null ? _m : null,
           fileName: figma.root.name,
           pluginVersion: PLUGIN_VERSION,
           getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
@@ -1320,7 +1883,7 @@ figma.ui.onmessage = async (msg) => {
           durationMs: Date.now() - startedAt
         });
       } catch (err) {
-        figma.ui.postMessage({ type: "contract:evidence", error: ((err == null ? void 0 : err.message) || String(err)) + ((err == null ? void 0 : err.stack) ? " @ " + ((_k = String(err.stack).split("\n")[1]) == null ? void 0 : _k.trim()) : "") });
+        figma.ui.postMessage({ type: "contract:evidence", error: ((err == null ? void 0 : err.message) || String(err)) + ((err == null ? void 0 : err.stack) ? " @ " + ((_n = String(err.stack).split("\n")[1]) == null ? void 0 : _n.trim()) : "") });
       }
       break;
     }
@@ -1361,7 +1924,7 @@ figma.ui.onmessage = async (msg) => {
         return id ? (_b2 = varNames.get(id)) != null ? _b2 : "" : "";
       };
       var bvLabel = bvLabel2;
-      const categories = new Set((_l = msg.categories) != null ? _l : []);
+      const categories = new Set((_o = msg.categories) != null ? _o : []);
       const selection = figma.currentPage.selection;
       if (!selection.length) {
         figma.ui.postMessage({ type: "annotate:result", error: "No selection" });
@@ -1375,7 +1938,7 @@ figma.ui.onmessage = async (msg) => {
       }
       const varIdSet = /* @__PURE__ */ new Set();
       for (const n of allNodes) {
-        const bv = (_m = n.boundVariables) != null ? _m : {};
+        const bv = (_p = n.boundVariables) != null ? _p : {};
         for (const key of Object.keys(bv)) {
           const val = bv[key];
           if (!val) continue;
@@ -1395,19 +1958,19 @@ figma.ui.onmessage = async (msg) => {
       }));
       let annotated = 0;
       for (const n of allNodes) {
-        const bv = (_n = n.boundVariables) != null ? _n : {};
+        const bv = (_q = n.boundVariables) != null ? _q : {};
         const anns = [];
-        const pdVar = (_p = (_o = n.getPluginData) == null ? void 0 : _o.call(n, "s2aTokenVar")) != null ? _p : "";
-        const pdProp = (_r = (_q = n.getPluginData) == null ? void 0 : _q.call(n, "s2aTokenProp")) != null ? _r : "";
+        const pdVar = (_s = (_r = n.getPluginData) == null ? void 0 : _r.call(n, "s2aTokenVar")) != null ? _s : "";
+        const pdProp = (_u = (_t = n.getPluginData) == null ? void 0 : _t.call(n, "s2aTokenProp")) != null ? _u : "";
         if (categories.has("color-fg") && n.type === "TEXT") {
-          if (((_t = (_s = bv.fills) == null ? void 0 : _s.length) != null ? _t : 0) > 0) {
+          if (((_w = (_v = bv.fills) == null ? void 0 : _v.length) != null ? _w : 0) > 0) {
             anns.push({ label: bvLabel2(bv, "fills") || "color-fg", properties: [{ type: "fills" }] });
           } else if (pdVar && pdProp === "fills") {
             anns.push({ label: pdVar, properties: [{ type: "fills" }] });
           }
         }
         if (categories.has("color-bg") && n.type !== "TEXT") {
-          if (((_v = (_u = bv.fills) == null ? void 0 : _u.length) != null ? _v : 0) > 0) {
+          if (((_y = (_x = bv.fills) == null ? void 0 : _x.length) != null ? _y : 0) > 0) {
             anns.push({ label: bvLabel2(bv, "fills") || "color-bg", properties: [{ type: "fills" }] });
           } else if (pdVar && pdProp === "fills") {
             anns.push({ label: pdVar, properties: [{ type: "fills" }] });
@@ -1443,15 +2006,15 @@ figma.ui.onmessage = async (msg) => {
         }
         if (categories.has("typography") && n.type === "TEXT") {
           const tp = [];
-          if (((_x = (_w = bv.fontFamily) == null ? void 0 : _w.length) != null ? _x : 0) > 0) tp.push({ type: "fontFamily" });
-          if (((_z = (_y = bv.fontSize) == null ? void 0 : _y.length) != null ? _z : 0) > 0) tp.push({ type: "fontSize" });
-          if (((_B = (_A = bv.lineHeight) == null ? void 0 : _A.length) != null ? _B : 0) > 0) tp.push({ type: "lineHeight" });
-          if (((_D = (_C = bv.letterSpacing) == null ? void 0 : _C.length) != null ? _D : 0) > 0) tp.push({ type: "letterSpacing" });
+          if (((_A = (_z = bv.fontFamily) == null ? void 0 : _z.length) != null ? _A : 0) > 0) tp.push({ type: "fontFamily" });
+          if (((_C = (_B = bv.fontSize) == null ? void 0 : _B.length) != null ? _C : 0) > 0) tp.push({ type: "fontSize" });
+          if (((_E = (_D = bv.lineHeight) == null ? void 0 : _D.length) != null ? _E : 0) > 0) tp.push({ type: "lineHeight" });
+          if (((_G = (_F = bv.letterSpacing) == null ? void 0 : _F.length) != null ? _G : 0) > 0) tp.push({ type: "letterSpacing" });
           if (tp.length) {
             const lbl = bvLabel2(bv, "fontSize") || bvLabel2(bv, "fontFamily") || "typography";
             anns.push({ label: lbl, properties: tp });
           }
-          if (((_F = (_E = bv.fontStyle) == null ? void 0 : _E.length) != null ? _F : 0) > 0) {
+          if (((_I = (_H = bv.fontStyle) == null ? void 0 : _H.length) != null ? _I : 0) > 0) {
             const lbl = bvLabel2(bv, "fontStyle");
             anns.push({ label: lbl || "font-weight", properties: [{ type: "fontWeight" }] });
           }
@@ -1491,7 +2054,7 @@ figma.ui.onmessage = async (msg) => {
       let cleared = 0;
       for (const n of all) {
         try {
-          if (((_G = n.annotations) == null ? void 0 : _G.length) > 0) {
+          if (((_J = n.annotations) == null ? void 0 : _J.length) > 0) {
             n.annotations = [];
             cleared++;
           }
@@ -1510,6 +2073,92 @@ figma.ui.onmessage = async (msg) => {
         figma.ui.postMessage(__spreadValues({ type: "bridge:command-result", requestId, success: true }, result2));
       } catch (e) {
         figma.ui.postMessage({ type: "bridge:command-result", requestId, success: false, error: e.message || String(e) });
+      }
+      break;
+    }
+    // Clicking a reported issue jumps to the layer it is about — a finding you
+    // cannot locate is barely a finding.
+    // An INSTANCE_SWAP already declares what belongs in it: a default component
+    // and Figma's preferred-values list. Reading that beats asking a person to
+    // scan every contract in the repo for the one the set already points at.
+    case "studio:swap-targets": {
+      try {
+        let node = await figma.getNodeByIdAsync(msg.setId);
+        if (node && node.type === "COMPONENT" && ((_K = node.parent) == null ? void 0 : _K.type) === "COMPONENT_SET") node = node.parent;
+        if (!node || node.type !== "COMPONENT_SET" && node.type !== "COMPONENT") {
+          figma.ui.postMessage({ type: "studio:swap-targets-result", targets: {} });
+          break;
+        }
+        const defs = (_L = node.componentPropertyDefinitions) != null ? _L : {};
+        const setNameOf = (n) => !n ? null : n.parent && n.parent.type === "COMPONENT_SET" ? n.parent.name : n.name;
+        const targets = {};
+        for (const [prop, def] of Object.entries(defs)) {
+          if (def.type !== "INSTANCE_SWAP") continue;
+          const found = [];
+          const seen = /* @__PURE__ */ new Set();
+          const add = (role, name) => {
+            if (name && !seen.has(name)) {
+              seen.add(name);
+              found.push({ role, name });
+            }
+          };
+          const dv = def.defaultValue;
+          if (dv) {
+            try {
+              add("default", setNameOf(await figma.getNodeByIdAsync(dv)));
+            } catch (e) {
+            }
+          }
+          for (const pv of (_M = def.preferredValues) != null ? _M : []) {
+            try {
+              const imported = pv.type === "COMPONENT_SET" ? await figma.importComponentSetByKeyAsync(pv.key) : await figma.importComponentByKeyAsync(pv.key);
+              add("preferred", setNameOf(imported));
+            } catch (e) {
+            }
+          }
+          targets[prop] = found;
+        }
+        figma.ui.postMessage({ type: "studio:swap-targets-result", targets });
+      } catch (e) {
+        figma.ui.postMessage({ type: "studio:swap-targets-result", targets: {}, error: e.message || String(e) });
+      }
+      break;
+    }
+    case "docs:reveal": {
+      const node = await figma.getNodeByIdAsync(msg.nodeId);
+      if (!node || !("visible" in node)) {
+        figma.notify("That layer is gone \u2014 re-run the check");
+        break;
+      }
+      const page = (() => {
+        let n = node;
+        while (n && n.type !== "PAGE") n = n.parent;
+        return n;
+      })();
+      if (page && page !== figma.currentPage) await figma.setCurrentPageAsync(page);
+      figma.currentPage.selection = [node];
+      figma.viewport.scrollAndZoomIntoView([node]);
+      break;
+    }
+    case "docs:check": {
+      try {
+        const node = await figma.getNodeByIdAsync(msg.nodeId);
+        if (!node || node.type !== "FRAME") {
+          figma.ui.postMessage({ type: "docs:check-result", error: "Select a documentation frame" });
+          break;
+        }
+        const { issues, textNodes, theme } = await checkDocFrame(node);
+        figma.ui.postMessage({
+          type: "docs:check-result",
+          name: node.name,
+          textNodes,
+          theme,
+          fails: issues.filter((i) => i.level === "fail").length,
+          warns: issues.filter((i) => i.level === "warn").length,
+          issues
+        });
+      } catch (e) {
+        figma.ui.postMessage({ type: "docs:check-result", error: e.message || String(e) });
       }
       break;
     }
@@ -1540,7 +2189,7 @@ figma.ui.onmessage = async (msg) => {
         }
         const bColls = await figma.variables.getLocalVariableCollectionsAsync();
         const themeColl = bColls.find((c) => c.id === "VariableCollectionId:6:17");
-        const darkModeId = (_H = themeColl == null ? void 0 : themeColl.modes.find((m) => m.name === "Dark")) == null ? void 0 : _H.modeId;
+        const darkModeId = (_N = themeColl == null ? void 0 : themeColl.modes.find((m) => m.name === "Dark")) == null ? void 0 : _N.modeId;
         const [cLabel, cCaption, cBody] = await Promise.all([
           figma.variables.getVariableByIdAsync("VariableID:2483:41392"),
           // content/label
@@ -1690,7 +2339,7 @@ figma.ui.onmessage = async (msg) => {
         if (slotsRow) {
           let usesSlots = false;
           try {
-            usesSlots = !!((_I = variants[0]) == null ? void 0 : _I.findOne((n) => n.type === "SLOT"));
+            usesSlots = !!((_O = variants[0]) == null ? void 0 : _O.findOne((n) => n.type === "SLOT"));
           } catch (e) {
           }
           slotsRow.visible = usesSlots;

@@ -15,8 +15,8 @@ export const GlobalNavigation = ({
   signInHref = "https://account.adobe.com/",
 } = {}) => html`
   <header class="c-global-navigation" role="banner">
-    <a class="gnav-brand" href=${brandHref} aria-label="Adobe home"
-      >${Logo({ context: "on-dark" })}</a
+    <a class="gnav-brand" href=${brandHref} aria-label="Adobe home" data-theme="dark"
+      >${Logo()}</a
     >
     <nav class="gnav-desktop" aria-label="Main navigation">
       ${links.map((link) => html`<a href=${link.href}>${link.label}</a>`)}

@@ -7,16 +7,14 @@
   "setName": "ActionCard",
   "anatomy": {
     "name": ".root",
+    "source": ".root",
     "element": "a",
     "bindings": {
       "background-color": [
         "s2a/color/background/subtle"
       ],
       "border-radius": [
-        "s2a/border-radius/md"
-      ],
-      "padding": [
-        "s2a/spacing/xl"
+        "s2a/border-radius/lg"
       ],
       "gap": [
         "s2a/spacing/md"
@@ -26,6 +24,7 @@
     "children": [
       {
         "name": ".media",
+        "source": ".media",
         "element": "div[aria-hidden]",
         "bindings": {},
         "slot": {
@@ -38,66 +37,52 @@
         "children": []
       },
       {
-        "name": ".headline",
-        "element": "h3",
+        "name": ".copy",
+        "source": ".copy",
+        "element": "div",
         "bindings": {
-          "font-family": [
-            "s2a/font-family/heading"
+          "padding": [
+            "s2a/spacing/none",
+            "s2a/spacing/2xl",
+            "s2a/spacing/2xl",
+            "s2a/spacing/2xl"
           ],
-          "font-weight": [
-            "s2a/font-weight/heading"
-          ],
-          "font-size": [
-            "s2a/typography/font-size/heading-4"
-          ],
-          "line-height": [
-            "s2a/typography/line-height/heading-4"
-          ],
-          "letter-spacing": [
-            "s2a/typography/letter-spacing/heading-4"
-          ],
-          "color": [
-            "s2a/color/content/heading"
-          ]
-        },
-        "slot": null,
-        "children": []
-      },
-      {
-        "name": ".divider",
-        "element": "hr",
-        "bindings": {
-          "border-color": [
-            "s2a/color/border/subtle"
-          ]
-        },
-        "slot": null,
-        "children": []
-      },
-      {
-        "name": ".cta",
-        "element": "span",
-        "bindings": {
-          "font-family": [
-            "s2a/font-family/label"
-          ],
-          "font-weight": [
-            "s2a/font-weight/label"
-          ],
-          "font-size": [
-            "s2a/typography/font-size/label"
-          ],
-          "line-height": [
-            "s2a/typography/line-height/label"
-          ],
-          "color": [
-            "s2a/color/content/default"
+          "gap": [
+            "s2a/spacing/md"
           ]
         },
         "slot": null,
         "children": [
           {
+            "name": ".headline",
+            "source": ".copy/.headline",
+            "element": "h3",
+            "bindings": {
+              "font-family": [
+                "s2a/font/family/heading"
+              ],
+              "font-weight": [
+                "s2a/font/weight/heading"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/heading-5"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/heading-5"
+              ],
+              "letter-spacing": [
+                "s2a/typography/letter-spacing/heading-5"
+              ],
+              "color": [
+                "s2a/color/content/heading"
+              ]
+            },
+            "slot": null,
+            "children": []
+          },
+          {
             "name": ".chevron",
+            "source": ".copy/.chevron",
             "element": "svg[aria-hidden]",
             "bindings": {
               "color": [
@@ -113,40 +98,31 @@
   },
   "anchors": {
     "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
-    "kind": "pattern-frame",
-    "nodeId": "13999:205827",
+    "kind": "component-set",
+    "nodeId": "14226:196789",
     "nodeName": "ActionCard",
-    "componentSetKey": "",
+    "componentSetKey": "242365cbd00ab8a07d044f4a62608b99692a9aa3",
     "deprecated": false,
     "successorNodeId": null,
-    "usages": []
+    "usages": [
+      "14278:197804 (xl - 2560px page › Quick Actions › 6-Up 13713:193638: ActionCardRow instance replacing the hand-drawn Row)",
+      "14278:197742 (Playground 6-Up 13999:205825: ActionCardRow instance)",
+      "14229:197242 (ActionCardRow component set, Layout=row)",
+      "14226:196800 (Row (golden): the original hand-drawn tiles, kept for the visual eval)"
+    ]
   },
   "properties": [
     {
-      "name": "Media Src",
+      "name": "Media#14226:2",
       "type": "INSTANCE_SWAP",
       "forProp": "mediaSrc",
-      "layer": "/Group 2087327847",
-      "derived": true,
-      "note": "no component property in Figma yet; layer /Group 2087327847"
+      "defaultValue": "3240:7620",
+      "layer": ".media"
     },
     {
-      "name": "Headline",
+      "name": "Headline#14226:1",
       "type": "TEXT",
-      "forProp": "headline",
-      "layer": "/Copy >/Headline",
-      "defaultValue": null,
-      "derived": true,
-      "note": "no component property in Figma yet; layer /Copy >/Headline"
-    },
-    {
-      "name": "Cta Label",
-      "type": "TEXT",
-      "forProp": "ctaLabel",
-      "layer": "/Copy >/Chevron",
-      "defaultValue": null,
-      "derived": true,
-      "note": "no component property in Figma yet; layer /Copy >/Chevron"
+      "forProp": "headline"
     }
   ],
   "states": [
@@ -168,10 +144,7 @@
           "s2a/color/background/subtle"
         ],
         "border-radius": [
-          "s2a/border-radius/md"
-        ],
-        "padding": [
-          "s2a/spacing/xl"
+          "s2a/border-radius/lg"
         ],
         "gap": [
           "s2a/spacing/md"
@@ -179,7 +152,7 @@
       }
     },
     {
-      "name": "/Group 2087327847",
+      "name": ".media",
       "selector": ".ac-media",
       "bindings": {},
       "slot": {
@@ -191,23 +164,38 @@
       }
     },
     {
-      "name": "/Copy >/Headline",
+      "name": ".copy",
+      "selector": ".ac-copy",
+      "bindings": {
+        "padding": [
+          "s2a/spacing/none",
+          "s2a/spacing/2xl",
+          "s2a/spacing/2xl",
+          "s2a/spacing/2xl"
+        ],
+        "gap": [
+          "s2a/spacing/md"
+        ]
+      }
+    },
+    {
+      "name": ".copy/.headline",
       "selector": ".ac-headline",
       "bindings": {
         "font-family": [
-          "s2a/font-family/heading"
+          "s2a/font/family/heading"
         ],
         "font-weight": [
-          "s2a/font-weight/heading"
+          "s2a/font/weight/heading"
         ],
         "font-size": [
-          "s2a/typography/font-size/heading-4"
+          "s2a/typography/font-size/heading-5"
         ],
         "line-height": [
-          "s2a/typography/line-height/heading-4"
+          "s2a/typography/line-height/heading-5"
         ],
         "letter-spacing": [
-          "s2a/typography/letter-spacing/heading-4"
+          "s2a/typography/letter-spacing/heading-5"
         ],
         "color": [
           "s2a/color/content/heading"
@@ -215,38 +203,8 @@
       }
     },
     {
-      "name": "/Line 87474",
-      "selector": ".ac-divider",
-      "bindings": {
-        "border-color": [
-          "s2a/color/border/subtle"
-        ]
-      }
-    },
-    {
-      "name": "/Copy >/Chevron",
-      "selector": ".ac-cta",
-      "bindings": {
-        "font-family": [
-          "s2a/font-family/label"
-        ],
-        "font-weight": [
-          "s2a/font-weight/label"
-        ],
-        "font-size": [
-          "s2a/typography/font-size/label"
-        ],
-        "line-height": [
-          "s2a/typography/line-height/label"
-        ],
-        "color": [
-          "s2a/color/content/default"
-        ]
-      }
-    },
-    {
-      "name": ".ac-cta__chevron",
-      "selector": ".ac-cta__chevron",
+      "name": ".copy/.chevron",
+      "selector": ".ac-chevron",
       "bindings": {
         "color": [
           "s2a/color/content/default"
@@ -255,7 +213,6 @@
     }
   ],
   "textStyles": [
-    "s2a/typography/heading-4",
-    "s2a/typography/label"
+    "s2a/typography/heading-5"
   ]
 }

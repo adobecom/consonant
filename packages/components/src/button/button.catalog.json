@@ -1,0 +1,96 @@
+{
+  "id": "s2a.button",
+  "name": "Button",
+  "slug": "button",
+  "status": "curated-draft",
+  "description": "A non-interactive content card; actions live in a slot.",
+  "props": [
+    {
+      "name": "iconEnd",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "iconStart",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showIconEnd",
+      "type": "boolean",
+      "lever": false
+    },
+    {
+      "name": "showIconStart",
+      "type": "boolean",
+      "lever": false
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "style",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "onClick",
+      "type": "function",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.icon-start",
+    "root.label",
+    "root.icon-end"
+  ],
+  "slots": [
+    {
+      "path": "root.icon-start",
+      "accepts": [],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.icon-end",
+      "accepts": [],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 4,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/button/button.js",
+      "export": "Button",
+      "controller": null,
+      "cssClass": "c-button"
+    },
+    "figma": "10715:35477"
+  },
+  "openDecisions": 9
+}

@@ -7,12 +7,14 @@
   "setName": "Section - Social Proof",
   "anatomy": {
     "name": ".root",
+    "source": "Section - Social Proof",
     "element": null,
     "bindings": {},
     "slot": null,
     "children": [
       {
         "name": ".track",
+        "source": "Frame 2147230860",
         "element": null,
         "bindings": {
           "gap": [
@@ -23,6 +25,7 @@
         "children": [
           {
             "name": ".slide-active",
+            "source": ".slide-active",
             "element": null,
             "bindings": {},
             "slot": {
@@ -38,6 +41,7 @@
       },
       {
         "name": ".nav",
+        "source": "Nav items",
         "element": null,
         "bindings": {},
         "slot": {
@@ -51,12 +55,14 @@
       },
       {
         "name": ".pagination",
+        "source": "Carousel Pagination",
         "element": "div[role=group]",
         "bindings": {},
         "slot": null,
         "children": [
           {
             "name": ".dot",
+            "source": null,
             "element": "button[aria-pressed]",
             "bindings": {
               "width": [

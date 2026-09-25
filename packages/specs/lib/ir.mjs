@@ -119,7 +119,7 @@ export function buildIR({ defs, code, figma = null, tokens, generator }) {
 
   return {
     generator,
-    component: { name: defs.component, slug: defs.slug, description: defs.description ?? null, status: defs.status, cssClass: defs.anchors.code.cssClass, storybookId: code?.component?.spec?.storybookId ?? null },
+    component: { name: defs.component, slug: defs.slug, description: defs.description ?? null, status: defs.status, version: defs.version ?? null, archetype: defs.archetype ?? null, cssClass: defs.anchors.code.cssClass, storybookId: code?.component?.spec?.storybookId ?? null },
     anchors: { figma: figmaBlock.anchors, code: { importPath: defs.anchors.code.importPath, export: defs.anchors.code.export, controller: defs.anchors.code.controller ?? null, cssClass: defs.anchors.code.cssClass } },
     figmaEvidence: figmaBlock.evidence,
     props, variants,

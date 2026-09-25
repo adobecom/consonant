@@ -90,7 +90,7 @@ navigation tiles, and a play/pause control.
   <div class="rm-slides">
     <div class="rm-slide" data-state="active">
       <video class="rm-video" data-lazy-src="…" autoplay muted loop playsinline></video>
-      <div class="c-rich-content" data-theme="on-dark" data-density="tight" data-measure="narrow">
+      <div class="rm-content" data-theme="dark"><div class="c-rich-content" data-density="tight" data-measure="narrow">
         <p class="c-rich-content__eyebrow">Eyebrow</p>
         <h2 class="c-rich-content__title">Slide heading</h2>
         <p class="c-rich-content__body">Slide description.</p>
