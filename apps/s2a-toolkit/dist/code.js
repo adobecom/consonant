@@ -395,6 +395,8 @@ async function extractEvidence(api, set) {
 }
 function hashableBody(evidence) {
   const _a = evidence, { extractedAt, provenance } = _a, rest = __objRest(_a, ["extractedAt", "provenance"]);
+  void extractedAt;
+  void provenance;
   return canonicalJson(rest);
 }
 

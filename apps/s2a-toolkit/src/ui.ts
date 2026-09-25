@@ -1,3 +1,4 @@
+import { createJsonEditor, type JsonEditorHandle } from './json-editor';
 import { emptyStudio, mutateDef, slotsOf, rootTokens, unboundAxes, acceptNames, propFromAxis, verdictOf, canPublish, STATE_NAMES, ACCEPTS_MODES, type StudioState } from './studio';
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -994,6 +995,7 @@ function studioShow(view: 'list' | 'editor') {
 }
 
 async function studioOpen(ref: string, by: 'slug' | 'name' = 'slug') {
+  studioUnmountEditor();
   studio = { ...emptyStudio(), slug: by === 'slug' ? ref : null, busy: true };
   studioResult = null;
   studioShow('editor');
@@ -1067,7 +1069,7 @@ function studioEdit(fn: (def: any) => void) {
   studio.def = mutateDef(studio, fn);
   studio.dirty = true;
   studio.validation = null;
-  if (studio.jsonMode) $s('studioJson').textContent = JSON.stringify(studio.def, null, 2);
+  if (studio.jsonMode) studioEditor?.setValue(JSON.stringify(studio.def, null, 2));
   studioRender();
   studioValidate();
 }
@@ -1252,6 +1254,7 @@ function studioRenderGui() {
 let studioAwaitingExtract = false;
 // Figma's own answer to "what goes in this swap", per INSTANCE_SWAP property.
 let studioSwapTargets: Record<string, Array<{ role: string; name: string }>> = {};
+let studioEditor: JsonEditorHandle | null = null;
 
 // Extraction from the Contract tab. Telling someone to go to another tab to get
 // the thing this tab is named after is the kind of seam a person reads as broken.
@@ -1398,9 +1401,47 @@ function studioSetMode(json: boolean) {
   $s('studioModeGui').classList.toggle('active', !json);
   $s('studioModeJson').classList.toggle('active', json);
   $s('studioGui').style.display = json ? 'none' : 'block';
-  $s('studioJson').style.display = json ? 'block' : 'none';
-  if (json) ($s('studioJson') as HTMLTextAreaElement).value = JSON.stringify(studio.def, null, 2);
+  $s('studioJsonWrap').style.display = json ? 'block' : 'none';
+  if (json) studioMountEditor();
   studioRender();
+}
+
+// The editor is created on entry and torn down on exit rather than kept alive,
+// so it can never hold a document that disagrees with studio.def.
+function studioMountEditor() {
+  const host = $s('studioJson');
+  const text = JSON.stringify(studio.def, null, 2);
+  if (studioEditor) { studioEditor.setValue(text); return; }
+  host.innerHTML = '';
+  studioEditor = createJsonEditor(host, {
+    doc: text,
+    onChange: (value) => {
+      studioResult = null;
+      try {
+        studio.def = JSON.parse(value);
+        studio.jsonError = null;
+        studio.validation = null;
+        studio.dirty = true;
+        studioValidate();
+      } catch (err: any) {
+        // The editor already underlines the offending line; the footer only has
+        // to say that publishing is off the table until it parses.
+        studio.jsonError = String(err?.message ?? err).replace(/^JSON\.parse: /, '');
+        studio.validation = null;
+      }
+      studioRenderFooter();
+    },
+    // Schema errors the parser cannot see, mapped onto the whole document —
+    // better than a message with no location at all.
+    externalDiagnostics: () => (studio.validation?.errors ?? []).map((message) => ({
+      from: 0, to: 0, severity: 'warning' as const, message,
+    })),
+  });
+}
+
+function studioUnmountEditor() {
+  studioEditor?.destroy();
+  studioEditor = null;
 }
 
 document.getElementById('studioOpenBtn')?.addEventListener('click', () => {
@@ -1410,24 +1451,14 @@ document.getElementById('studioOpenBtn')?.addEventListener('click', () => {
   // "Button — v2" into a slug that does not exist; resolveSlug knows it is Button.
   studioOpen(studioSel.name, 'name');
 });
-document.getElementById('studioBackBtn')?.addEventListener('click', () => { studioShow('list'); studioRefreshIndex(); });
+document.getElementById('studioBackBtn')?.addEventListener('click', () => { studioUnmountEditor(); studioShow('list'); studioRefreshIndex(); });
 document.getElementById('studioModeGui')?.addEventListener('click', () => studioSetMode(false));
+for (const [id, depth] of [['studioFold1', 1], ['studioFold2', 2], ['studioFold3', 3]] as const) {
+  document.getElementById(id)?.addEventListener('click', () => studioEditor?.foldToDepth(depth));
+}
+document.getElementById('studioUnfold')?.addEventListener('click', () => studioEditor?.unfoldAll());
 document.getElementById('studioModeJson')?.addEventListener('click', () => studioSetMode(true));
 
-document.getElementById('studioJson')?.addEventListener('input', (e) => {
-  const text = (e.target as HTMLTextAreaElement).value;
-  try {
-    studio.def = JSON.parse(text);
-    studio.jsonError = null;
-    studio.validation = null;
-    studio.dirty = true;
-    studioValidate();
-  } catch (err: any) {
-    studio.jsonError = String(err.message ?? err);
-    studio.validation = null;
-  }
-  studioRenderFooter();
-});
 
 document.getElementById('studioPublishBtn')?.addEventListener('click', async () => {
   if (!canPublish(studio) || !studio.def) return;

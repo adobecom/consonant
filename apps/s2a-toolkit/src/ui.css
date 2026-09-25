@@ -833,3 +833,16 @@ body {
    shown as a named gap, not hidden — "extract it first" is the next step. */
 .studio-swap-hint { margin-top: var(--s-2); padding-top: var(--s-2); border-top: 1px dashed var(--border); }
 .studio-swap-line { display: flex; align-items: center; gap: var(--s-2); font-size: 10px; color: var(--text-3); padding: 2px 0; }
+
+/* JSON mode — a real editor, so it gets a real frame. The fold buttons are
+   depth shortcuts: 1 collapses to the top level, 3 to the third. */
+.studio-json-bar { display: flex; align-items: center; gap: var(--s-1); margin-bottom: var(--s-2); }
+.studio-json-label { flex: 1; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
+.studio-json-btn {
+  font-size: 10px; padding: 2px var(--s-2); cursor: pointer;
+  border: 1px solid var(--border-md); border-radius: var(--r-sm);
+  background: var(--bg-raised); color: var(--text-2);
+  transition: all var(--t-fast) var(--ease);
+}
+.studio-json-btn:hover { border-color: var(--accent-bdr); color: var(--accent); background: var(--accent-bg); }
+.studio-json-btn:focus-visible { outline: none; box-shadow: var(--ring); }

@@ -330,7 +330,16 @@
         <div class="studio-body">
           <div id="studioDraftNotes" class="studio-notes" style="display:none;"></div>
           <div id="studioGui"></div>
-          <textarea id="studioJson" class="form-textarea studio-json" spellcheck="false" style="display:none;"></textarea>
+          <div id="studioJsonWrap" style="display:none;">
+            <div class="studio-json-bar">
+              <span class="studio-json-label">contract definition</span>
+              <button class="studio-json-btn" id="studioFold1" title="Collapse to the top level">1</button>
+              <button class="studio-json-btn" id="studioFold2" title="Collapse to the second level">2</button>
+              <button class="studio-json-btn" id="studioFold3" title="Collapse to the third level">3</button>
+              <button class="studio-json-btn" id="studioUnfold" title="Expand everything">expand all</button>
+            </div>
+            <div id="studioJson"></div>
+          </div>
         </div>
 
         <!-- sticky verdict + publish, visible the whole time you edit -->
