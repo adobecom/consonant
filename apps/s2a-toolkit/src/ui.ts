@@ -117,7 +117,7 @@ let bridgeReconnectAttempts = 0;
 let bridgeUserDisconnected  = false;
 let activePanel: Panel = 'docs';
 let isMini = false;
-let popoverOpen = false;
+let bridgeConnecting = false;
 
 const pendingRequests = new Map<string, {
   resolve: (v: any) => void;
@@ -492,7 +492,6 @@ toggleMiniBtn.addEventListener('click', () => {
   isMini = !isMini;
   app.classList.toggle('mini', isMini);
   applySize();
-  if (isMini && popoverOpen) closePopover();
 });
 
 // ── Drag-to-resize (bottom-right grip) ─────────────────────────────────────────
@@ -624,11 +623,8 @@ const WS_PORTS = [9223,9224,9225,9226,9227,9228,9229,9230,9231,9232];
 
 const bridgeDot       = document.getElementById('bridgeDot')       as HTMLElement;
 const bridgeDotMini   = document.getElementById('bridgeDotMini')   as HTMLElement;
-const popoverDot      = document.getElementById('popoverDot')      as HTMLElement;
-const bridgePortLabel = document.getElementById('bridgePortLabel') as HTMLElement;
-const bridgePillLabel = document.getElementById('bridgePillLabel') as HTMLElement;
-const bridgeToggleBtn = document.getElementById('bridgeToggleBtn') as HTMLButtonElement;
-const bridgePopover   = document.getElementById('bridgePopover')   as HTMLElement;
+const bridgePillLabel  = document.getElementById('bridgePillLabel')  as HTMLElement;
+const bridgePillAction = document.getElementById('bridgePillAction') as HTMLElement;
 const bridgeTabBtn    = document.getElementById('bridgeTabBtn')    as HTMLButtonElement;
 const bridgeMiniBtn   = document.getElementById('bridgeMiniBtn')   as HTMLButtonElement;
 
@@ -646,38 +642,42 @@ function sendBridgeCommand(method: string, params: Record<string, unknown> = {},
   });
 }
 
-function openPopover()  { popoverOpen = true;  bridgePopover.classList.add('open'); }
-function closePopover() { popoverOpen = false; bridgePopover.classList.remove('open'); }
-
-bridgeTabBtn.addEventListener('click',  (e) => { e.stopPropagation(); popoverOpen ? closePopover() : openPopover(); });
-bridgeMiniBtn?.addEventListener('click', (e) => { e.stopPropagation(); popoverOpen ? closePopover() : openPopover(); });
-document.addEventListener('click', () => { if (popoverOpen) closePopover(); });
-bridgePopover.addEventListener('click', e => e.stopPropagation());
-
-bridgeToggleBtn.addEventListener('click', () => {
-  if (bridgeConnected) bridgeDisconnect(); else bridgeConnect();
-});
+// One click, both directions. Connecting is not instant, so a click while it is
+// in flight cancels rather than queueing a second attempt behind the first.
+function bridgeToggle(e: Event) {
+  e.stopPropagation();
+  if (bridgeConnecting || bridgeConnected) bridgeDisconnect(); else bridgeConnect();
+}
+bridgeTabBtn.addEventListener('click', bridgeToggle);
+bridgeMiniBtn?.addEventListener('click', bridgeToggle);
 
 function setAllDots(on: boolean) {
-  [bridgeDot, bridgeDotMini, popoverDot].forEach(el => el?.classList.toggle('on', on));
+  [bridgeDot, bridgeDotMini].forEach(el => el?.classList.toggle('on', on));
 }
 
+// The port used to live in the popover. It is detail, not a decision, so it
+// moves to the pill's tooltip rather than costing a click to read.
 function updateBridgeUi() {
+  const pills = [bridgeTabBtn, bridgeMiniBtn];
+  setAllDots(bridgeConnected);
+  for (const pill of pills) {
+    pill?.classList.toggle('connected', bridgeConnected);
+    pill?.classList.toggle('connecting', bridgeConnecting && !bridgeConnected);
+  }
   if (bridgeConnected) {
-    setAllDots(true);
-    bridgePortLabel.textContent = 'Port ' + bridgeWsPort;
-    bridgeToggleBtn.textContent = 'Disconnect';
-    bridgeToggleBtn.className   = 'btn btn-ghost';
-    if (bridgePillLabel) bridgePillLabel.textContent = 'Connected';
-    bridgeTabBtn?.classList.add('connected');
+    if (bridgePillLabel)  bridgePillLabel.textContent  = 'Connected';
+    if (bridgePillAction) bridgePillAction.textContent = 'Disconnect';
+    bridgeTabBtn?.setAttribute('title', `Claude Code on port ${bridgeWsPort} — click to disconnect`);
+    bridgeTabBtn?.setAttribute('aria-label', 'Disconnect from Claude Code');
+  } else if (bridgeConnecting) {
+    if (bridgePillLabel)  bridgePillLabel.textContent  = 'Connecting…';
+    if (bridgePillAction) bridgePillAction.textContent = 'Cancel';
+    bridgeTabBtn?.setAttribute('title', 'Looking for Claude Code — click to cancel');
+    bridgeTabBtn?.setAttribute('aria-label', 'Cancel connecting to Claude Code');
   } else {
-    setAllDots(false);
-    bridgePortLabel.textContent = '—';
-    bridgeToggleBtn.textContent = 'Connect';
-    bridgeToggleBtn.className   = 'btn';
-    bridgeToggleBtn.disabled    = false;
-    if (bridgePillLabel) bridgePillLabel.textContent = 'Connect';
-    bridgeTabBtn?.classList.remove('connected');
+    if (bridgePillLabel)  bridgePillLabel.textContent  = 'Connect';
+    bridgeTabBtn?.setAttribute('title', 'Connect to Claude Code');
+    bridgeTabBtn?.setAttribute('aria-label', 'Connect to Claude Code');
   }
 }
 
@@ -751,11 +751,19 @@ function reconnectToPort(port: number) {
   } catch { if (!bridgeUserDisconnected) bridgeConnect(); }
 }
 
+// Nothing answered on any port. Say so where the person is looking, and name
+// the fix — the bridge is the toolkit plugin itself, running in Figma.
+function bridgeConnectFailed() {
+  bridgeConnecting = false;
+  updateBridgeUi();
+  setPaletteHint('No Claude Code bridge found on ports 9223–9232. Start it, then click Connect.');
+}
+
 function bridgeConnect() {
   bridgeUserDisconnected = false;
   if (bridgeReconnectTimer) { clearTimeout(bridgeReconnectTimer); bridgeReconnectTimer = null; }
-  bridgeToggleBtn.textContent = 'Connecting…';
-  bridgeToggleBtn.disabled = true;
+  bridgeConnecting = true;
+  updateBridgeUi();
 
   let found = false;
   let pending = WS_PORTS.length;
@@ -769,7 +777,7 @@ function bridgeConnect() {
         clearTimeout(t);
         if (found) { ws.close(); return; }
         found = true;
-        bridgeWs = ws; bridgeWsPort = port; bridgeConnected = true; bridgeReconnectAttempts = 0;
+        bridgeWs = ws; bridgeWsPort = port; bridgeConnected = true; bridgeConnecting = false; bridgeReconnectAttempts = 0;
         updateBridgeUi();
         attachWsHandlers(ws, port); initBridgeConnection(ws); bridgeStartKeepalive();
       };
@@ -778,19 +786,16 @@ function bridgeConnect() {
         clearTimeout(t);
         if (!found) {
           pending--;
-          if (pending <= 0) {
-            bridgeToggleBtn.textContent = 'Connect';
-            bridgeToggleBtn.disabled    = false;
-            bridgePortLabel.textContent = 'No server found';
-          }
+          if (pending <= 0) { bridgeConnectFailed(); }
         }
       };
-    } catch { pending--; if (pending <= 0 && !found) { bridgeToggleBtn.textContent = 'Connect'; bridgeToggleBtn.disabled = false; } }
+    } catch { pending--; if (pending <= 0 && !found) bridgeConnectFailed(); }
   });
 }
 
 function bridgeDisconnect() {
   bridgeUserDisconnected = true;
+  bridgeConnecting = false;
   bridgeStopKeepalive();
   if (bridgeReconnectTimer) { clearTimeout(bridgeReconnectTimer); bridgeReconnectTimer = null; }
   try { bridgeWs?.close(); } catch {}

@@ -23571,7 +23571,7 @@
   var bridgeUserDisconnected = false;
   var activePanel = "docs";
   var isMini = false;
-  var popoverOpen = false;
+  var bridgeConnecting = false;
   var pendingRequests = /* @__PURE__ */ new Map();
   var requestCounter = 0;
   var panelEls = {
@@ -23903,7 +23903,6 @@
     isMini = !isMini;
     app.classList.toggle("mini", isMini);
     applySize();
-    if (isMini && popoverOpen) closePopover();
   });
   var resizeGrip = document.getElementById("resizeGrip");
   resizeGrip == null ? void 0 : resizeGrip.addEventListener("pointerdown", (e) => {
@@ -24008,11 +24007,8 @@
   var WS_PORTS = [9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
   var bridgeDot = document.getElementById("bridgeDot");
   var bridgeDotMini = document.getElementById("bridgeDotMini");
-  var popoverDot = document.getElementById("popoverDot");
-  var bridgePortLabel = document.getElementById("bridgePortLabel");
   var bridgePillLabel = document.getElementById("bridgePillLabel");
-  var bridgeToggleBtn = document.getElementById("bridgeToggleBtn");
-  var bridgePopover = document.getElementById("bridgePopover");
+  var bridgePillAction = document.getElementById("bridgePillAction");
   var bridgeTabBtn = document.getElementById("bridgeTabBtn");
   var bridgeMiniBtn = document.getElementById("bridgeMiniBtn");
   function sendBridgeCommand(method, params = {}, timeoutMs = 15e3) {
@@ -24028,49 +24024,37 @@
       postToPlugin("bridge:command", { requestId, method, params });
     });
   }
-  function openPopover() {
-    popoverOpen = true;
-    bridgePopover.classList.add("open");
-  }
-  function closePopover() {
-    popoverOpen = false;
-    bridgePopover.classList.remove("open");
-  }
-  bridgeTabBtn.addEventListener("click", (e) => {
+  function bridgeToggle(e) {
     e.stopPropagation();
-    popoverOpen ? closePopover() : openPopover();
-  });
-  bridgeMiniBtn == null ? void 0 : bridgeMiniBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    popoverOpen ? closePopover() : openPopover();
-  });
-  document.addEventListener("click", () => {
-    if (popoverOpen) closePopover();
-  });
-  bridgePopover.addEventListener("click", (e) => e.stopPropagation());
-  bridgeToggleBtn.addEventListener("click", () => {
-    if (bridgeConnected) bridgeDisconnect();
+    if (bridgeConnecting || bridgeConnected) bridgeDisconnect();
     else bridgeConnect();
-  });
+  }
+  bridgeTabBtn.addEventListener("click", bridgeToggle);
+  bridgeMiniBtn == null ? void 0 : bridgeMiniBtn.addEventListener("click", bridgeToggle);
   function setAllDots(on) {
-    [bridgeDot, bridgeDotMini, popoverDot].forEach((el2) => el2 == null ? void 0 : el2.classList.toggle("on", on));
+    [bridgeDot, bridgeDotMini].forEach((el2) => el2 == null ? void 0 : el2.classList.toggle("on", on));
   }
   function updateBridgeUi() {
+    const pills = [bridgeTabBtn, bridgeMiniBtn];
+    setAllDots(bridgeConnected);
+    for (const pill of pills) {
+      pill == null ? void 0 : pill.classList.toggle("connected", bridgeConnected);
+      pill == null ? void 0 : pill.classList.toggle("connecting", bridgeConnecting && !bridgeConnected);
+    }
     if (bridgeConnected) {
-      setAllDots(true);
-      bridgePortLabel.textContent = "Port " + bridgeWsPort;
-      bridgeToggleBtn.textContent = "Disconnect";
-      bridgeToggleBtn.className = "btn btn-ghost";
       if (bridgePillLabel) bridgePillLabel.textContent = "Connected";
-      bridgeTabBtn == null ? void 0 : bridgeTabBtn.classList.add("connected");
+      if (bridgePillAction) bridgePillAction.textContent = "Disconnect";
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("title", `Claude Code on port ${bridgeWsPort} \u2014 click to disconnect`);
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("aria-label", "Disconnect from Claude Code");
+    } else if (bridgeConnecting) {
+      if (bridgePillLabel) bridgePillLabel.textContent = "Connecting\u2026";
+      if (bridgePillAction) bridgePillAction.textContent = "Cancel";
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("title", "Looking for Claude Code \u2014 click to cancel");
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("aria-label", "Cancel connecting to Claude Code");
     } else {
-      setAllDots(false);
-      bridgePortLabel.textContent = "\u2014";
-      bridgeToggleBtn.textContent = "Connect";
-      bridgeToggleBtn.className = "btn";
-      bridgeToggleBtn.disabled = false;
       if (bridgePillLabel) bridgePillLabel.textContent = "Connect";
-      bridgeTabBtn == null ? void 0 : bridgeTabBtn.classList.remove("connected");
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("title", "Connect to Claude Code");
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("aria-label", "Connect to Claude Code");
     }
   }
   function bridgeStartKeepalive() {
@@ -24167,14 +24151,19 @@
       if (!bridgeUserDisconnected) bridgeConnect();
     }
   }
+  function bridgeConnectFailed() {
+    bridgeConnecting = false;
+    updateBridgeUi();
+    setPaletteHint("No Claude Code bridge found on ports 9223\u20139232. Start it, then click Connect.");
+  }
   function bridgeConnect() {
     bridgeUserDisconnected = false;
     if (bridgeReconnectTimer) {
       clearTimeout(bridgeReconnectTimer);
       bridgeReconnectTimer = null;
     }
-    bridgeToggleBtn.textContent = "Connecting\u2026";
-    bridgeToggleBtn.disabled = true;
+    bridgeConnecting = true;
+    updateBridgeUi();
     let found = false;
     let pending = WS_PORTS.length;
     WS_PORTS.forEach((port) => {
@@ -24194,6 +24183,7 @@
           bridgeWs = ws;
           bridgeWsPort = port;
           bridgeConnected = true;
+          bridgeConnecting = false;
           bridgeReconnectAttempts = 0;
           updateBridgeUi();
           attachWsHandlers(ws, port);
@@ -24208,23 +24198,19 @@
           if (!found) {
             pending--;
             if (pending <= 0) {
-              bridgeToggleBtn.textContent = "Connect";
-              bridgeToggleBtn.disabled = false;
-              bridgePortLabel.textContent = "No server found";
+              bridgeConnectFailed();
             }
           }
         };
       } catch (e) {
         pending--;
-        if (pending <= 0 && !found) {
-          bridgeToggleBtn.textContent = "Connect";
-          bridgeToggleBtn.disabled = false;
-        }
+        if (pending <= 0 && !found) bridgeConnectFailed();
       }
     });
   }
   function bridgeDisconnect() {
     bridgeUserDisconnected = true;
+    bridgeConnecting = false;
     bridgeStopKeepalive();
     if (bridgeReconnectTimer) {
       clearTimeout(bridgeReconnectTimer);

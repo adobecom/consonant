@@ -183,6 +183,34 @@ body {
 
 .bridge-label { line-height: 1; }
 
+/* The pill swaps its state text for the action it will take, so a connected
+   bridge reads "Connected" at rest and "Disconnect" under the cursor. Only the
+   connected pill swaps — "Connect" already names its own action. */
+.bridge-action { line-height: 1; display: none; }
+.bridge-pill.connected:hover  .bridge-label,
+.bridge-pill.connected:focus-visible .bridge-label { display: none; }
+.bridge-pill.connected:hover  .bridge-action,
+.bridge-pill.connected:focus-visible .bridge-action { display: inline; }
+.bridge-pill.connected:hover,
+.bridge-pill.connected:focus-visible {
+  border-color: var(--accent-bdr);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+.bridge-pill.connected:hover .bridge-dot,
+.bridge-pill.connected:focus-visible .bridge-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-bg);
+}
+
+/* Connecting is a real third state — it should not look idle. */
+.bridge-pill.connecting { color: var(--text-2); }
+.bridge-pill.connecting .bridge-dot { background: var(--accent); animation: bridge-pulse 1s ease-in-out infinite; }
+@keyframes bridge-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .bridge-pill.connecting .bridge-dot { animation: none; opacity: 0.7; }
+}
+
 /* ── Bridge dot ─────────────────────────────────────────────────────────── */
 
 .bridge-dot {
@@ -199,28 +227,6 @@ body {
   box-shadow: 0 0 0 2px var(--green-bg);
 }
 
-/* ── Bridge popover ─────────────────────────────────────────────────────── */
-
-.bridge-popover {
-  display: none;
-  position: absolute;
-  top: 48px;
-  right: 8px;
-  width: 210px;
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06);
-  padding: 12px;
-  z-index: 100;
-}
-.bridge-popover.open { display: block; }
-
-.agent-header { display: flex; align-items: center; gap: 8px; }
-.agent-icon { flex-shrink: 0; display: block; border-radius: 4px; }
-.agent-meta { flex: 1; min-width: 0; }
-.agent-name { font-size: 11px; font-weight: 600; color: var(--text-1); display: block; }
-.agent-port { font-size: 10px; color: var(--text-3); display: block; margin-top: 1px; font-variant-numeric: tabular-nums; }
 
 /* ── Section context bar ─────────────────────────────────────────────────── */
 
@@ -916,9 +922,13 @@ body {
           <path d="M9.2 9.2L12 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
         </svg>
       </button>
-      <button class="bridge-pill" id="bridgeTabBtn" aria-label="Claude Code bridge status">
+      <!-- The pill is the control, not a door to one. It reads its state at
+           rest and the action it will take on hover, so connecting and
+           disconnecting are both one click with nothing to dismiss. -->
+      <button class="bridge-pill" id="bridgeTabBtn" aria-label="Connect to Claude Code">
         <span class="bridge-dot" id="bridgeDot"></span>
         <span class="bridge-label" id="bridgePillLabel">Connect</span>
+        <span class="bridge-action" id="bridgePillAction" aria-hidden="true">Disconnect</span>
       </button>
       <button class="icon-btn" id="toggleMiniBtn" aria-label="Minimize plugin">
         <svg class="icon-collapse" width="13" height="13" viewBox="0 0 14 14" fill="none">
@@ -931,22 +941,6 @@ body {
     </div>
   </header>
 
-  <!-- ── Bridge popover ───────────────────────────────────────────────── -->
-  <div class="bridge-popover" id="bridgePopover">
-    <div class="agent-header">
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="agent-icon" aria-hidden="true">
-        <rect width="20" height="20" rx="5" fill="#D97559"/>
-        <path d="M10 4.5L14 14H12.2L11.2 11.5H8.8L7.8 14H6L10 4.5Z" fill="white"/>
-        <rect x="9" y="10" width="2" height="1.2" rx="0.6" fill="#D97559"/>
-      </svg>
-      <div class="agent-meta">
-        <span class="agent-name">Claude Code</span>
-        <span class="agent-port" id="bridgePortLabel">—</span>
-      </div>
-      <span class="bridge-dot" id="popoverDot"></span>
-    </div>
-    <button class="btn" id="bridgeToggleBtn" style="width:100%;margin-top:8px;">Connect</button>
-  </div>
 
   <!-- ── Section context bar ──────────────────────────────────────────── -->
   <div class="section-bar hidden full-only" id="sectionBar">
@@ -24878,7 +24872,7 @@ body {
   var bridgeUserDisconnected = false;
   var activePanel = "docs";
   var isMini = false;
-  var popoverOpen = false;
+  var bridgeConnecting = false;
   var pendingRequests = /* @__PURE__ */ new Map();
   var requestCounter = 0;
   var panelEls = {
@@ -25210,7 +25204,6 @@ body {
     isMini = !isMini;
     app.classList.toggle("mini", isMini);
     applySize();
-    if (isMini && popoverOpen) closePopover();
   });
   var resizeGrip = document.getElementById("resizeGrip");
   resizeGrip == null ? void 0 : resizeGrip.addEventListener("pointerdown", (e) => {
@@ -25315,11 +25308,8 @@ body {
   var WS_PORTS = [9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
   var bridgeDot = document.getElementById("bridgeDot");
   var bridgeDotMini = document.getElementById("bridgeDotMini");
-  var popoverDot = document.getElementById("popoverDot");
-  var bridgePortLabel = document.getElementById("bridgePortLabel");
   var bridgePillLabel = document.getElementById("bridgePillLabel");
-  var bridgeToggleBtn = document.getElementById("bridgeToggleBtn");
-  var bridgePopover = document.getElementById("bridgePopover");
+  var bridgePillAction = document.getElementById("bridgePillAction");
   var bridgeTabBtn = document.getElementById("bridgeTabBtn");
   var bridgeMiniBtn = document.getElementById("bridgeMiniBtn");
   function sendBridgeCommand(method, params = {}, timeoutMs = 15e3) {
@@ -25335,49 +25325,37 @@ body {
       postToPlugin("bridge:command", { requestId, method, params });
     });
   }
-  function openPopover() {
-    popoverOpen = true;
-    bridgePopover.classList.add("open");
-  }
-  function closePopover() {
-    popoverOpen = false;
-    bridgePopover.classList.remove("open");
-  }
-  bridgeTabBtn.addEventListener("click", (e) => {
+  function bridgeToggle(e) {
     e.stopPropagation();
-    popoverOpen ? closePopover() : openPopover();
-  });
-  bridgeMiniBtn == null ? void 0 : bridgeMiniBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    popoverOpen ? closePopover() : openPopover();
-  });
-  document.addEventListener("click", () => {
-    if (popoverOpen) closePopover();
-  });
-  bridgePopover.addEventListener("click", (e) => e.stopPropagation());
-  bridgeToggleBtn.addEventListener("click", () => {
-    if (bridgeConnected) bridgeDisconnect();
+    if (bridgeConnecting || bridgeConnected) bridgeDisconnect();
     else bridgeConnect();
-  });
+  }
+  bridgeTabBtn.addEventListener("click", bridgeToggle);
+  bridgeMiniBtn == null ? void 0 : bridgeMiniBtn.addEventListener("click", bridgeToggle);
   function setAllDots(on) {
-    [bridgeDot, bridgeDotMini, popoverDot].forEach((el2) => el2 == null ? void 0 : el2.classList.toggle("on", on));
+    [bridgeDot, bridgeDotMini].forEach((el2) => el2 == null ? void 0 : el2.classList.toggle("on", on));
   }
   function updateBridgeUi() {
+    const pills = [bridgeTabBtn, bridgeMiniBtn];
+    setAllDots(bridgeConnected);
+    for (const pill of pills) {
+      pill == null ? void 0 : pill.classList.toggle("connected", bridgeConnected);
+      pill == null ? void 0 : pill.classList.toggle("connecting", bridgeConnecting && !bridgeConnected);
+    }
     if (bridgeConnected) {
-      setAllDots(true);
-      bridgePortLabel.textContent = "Port " + bridgeWsPort;
-      bridgeToggleBtn.textContent = "Disconnect";
-      bridgeToggleBtn.className = "btn btn-ghost";
       if (bridgePillLabel) bridgePillLabel.textContent = "Connected";
-      bridgeTabBtn == null ? void 0 : bridgeTabBtn.classList.add("connected");
+      if (bridgePillAction) bridgePillAction.textContent = "Disconnect";
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("title", `Claude Code on port ${bridgeWsPort} \u2014 click to disconnect`);
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("aria-label", "Disconnect from Claude Code");
+    } else if (bridgeConnecting) {
+      if (bridgePillLabel) bridgePillLabel.textContent = "Connecting\u2026";
+      if (bridgePillAction) bridgePillAction.textContent = "Cancel";
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("title", "Looking for Claude Code \u2014 click to cancel");
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("aria-label", "Cancel connecting to Claude Code");
     } else {
-      setAllDots(false);
-      bridgePortLabel.textContent = "\u2014";
-      bridgeToggleBtn.textContent = "Connect";
-      bridgeToggleBtn.className = "btn";
-      bridgeToggleBtn.disabled = false;
       if (bridgePillLabel) bridgePillLabel.textContent = "Connect";
-      bridgeTabBtn == null ? void 0 : bridgeTabBtn.classList.remove("connected");
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("title", "Connect to Claude Code");
+      bridgeTabBtn == null ? void 0 : bridgeTabBtn.setAttribute("aria-label", "Connect to Claude Code");
     }
   }
   function bridgeStartKeepalive() {
@@ -25474,14 +25452,19 @@ body {
       if (!bridgeUserDisconnected) bridgeConnect();
     }
   }
+  function bridgeConnectFailed() {
+    bridgeConnecting = false;
+    updateBridgeUi();
+    setPaletteHint("No Claude Code bridge found on ports 9223\u20139232. Start it, then click Connect.");
+  }
   function bridgeConnect() {
     bridgeUserDisconnected = false;
     if (bridgeReconnectTimer) {
       clearTimeout(bridgeReconnectTimer);
       bridgeReconnectTimer = null;
     }
-    bridgeToggleBtn.textContent = "Connecting\u2026";
-    bridgeToggleBtn.disabled = true;
+    bridgeConnecting = true;
+    updateBridgeUi();
     let found = false;
     let pending = WS_PORTS.length;
     WS_PORTS.forEach((port) => {
@@ -25501,6 +25484,7 @@ body {
           bridgeWs = ws;
           bridgeWsPort = port;
           bridgeConnected = true;
+          bridgeConnecting = false;
           bridgeReconnectAttempts = 0;
           updateBridgeUi();
           attachWsHandlers(ws, port);
@@ -25515,23 +25499,19 @@ body {
           if (!found) {
             pending--;
             if (pending <= 0) {
-              bridgeToggleBtn.textContent = "Connect";
-              bridgeToggleBtn.disabled = false;
-              bridgePortLabel.textContent = "No server found";
+              bridgeConnectFailed();
             }
           }
         };
       } catch (e) {
         pending--;
-        if (pending <= 0 && !found) {
-          bridgeToggleBtn.textContent = "Connect";
-          bridgeToggleBtn.disabled = false;
-        }
+        if (pending <= 0 && !found) bridgeConnectFailed();
       }
     });
   }
   function bridgeDisconnect() {
     bridgeUserDisconnected = true;
+    bridgeConnecting = false;
     bridgeStopKeepalive();
     if (bridgeReconnectTimer) {
       clearTimeout(bridgeReconnectTimer);
