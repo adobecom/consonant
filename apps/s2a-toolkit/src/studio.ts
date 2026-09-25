@@ -47,6 +47,33 @@ export const emptyStudio = (): StudioState => ({
 export const STATE_NAMES = ['hover', 'active', 'focus-visible', 'disabled'];
 export const ACCEPTS_MODES = ['restrict', 'prefer', 'open'];
 
+
+// A state is an object in the schema — name, a design binding, and how the code
+// expresses it. Pushing the bare string the chip displays produces
+// "/states/N must be object" the moment anything validates it.
+const STATE_MECHANISM: Record<string, string> = {
+  hover: ':hover',
+  active: ':active',
+  'focus-visible': ':focus-visible',
+  disabled: '[disabled] / :disabled',
+};
+
+export function makeState(name: string, evidence: StudioState['evidence']): StudioDef {
+  // Bind to the set's own State axis when it has one; otherwise say plainly
+  // that this state has no design counterpart rather than inventing a property.
+  const axis = (evidence?.axes ?? []).find((a: any) =>
+    a.type === 'VARIANT' && /^(state|interaction|pseudo)s?$/i.test(String(a.name).split('#')[0].trim()));
+  return {
+    name,
+    figma: axis ? { kind: 'VARIANT', property: axis.name, notes: `${String(axis.name).split('#')[0].trim()}=${name}` } : 'NONE',
+    code: { mechanism: STATE_MECHANISM[name] ?? 'tbd' },
+    notes: 'Added by hand — confirm the code expresses it this way.',
+  };
+}
+
+// The chips show a name; the file stores an object. Read through both.
+export const stateName = (s: any): string => (typeof s === 'string' ? s : s?.name ?? '');
+
 // A def edit is a whole-object replace: clone, mutate, re-validate. Mutating in
 // place makes "is this dirty" unanswerable and makes undo impossible later.
 export function mutateDef(state: StudioState, fn: (def: StudioDef) => void): StudioDef {

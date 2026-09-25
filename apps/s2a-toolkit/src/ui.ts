@@ -1,3 +1,4 @@
+import { makeState, stateName } from './studio';
 import { createJsonEditor, type JsonEditorHandle } from './json-editor';
 import { emptyStudio, mutateDef, slotsOf, rootTokens, unboundAxes, acceptNames, propFromAxis, verdictOf, canPublish, STATE_NAMES, ACCEPTS_MODES, type StudioState } from './studio';
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -1168,10 +1169,11 @@ function studioRenderGui() {
   host.appendChild(props);
 
   // States — the schema's four, never an invented one.
-  const used: string[] = (d.states ?? []).map((x: any) => (typeof x === 'string' ? x : x.name)).filter(Boolean);
+  const used: string[] = (d.states ?? []).map(stateName).filter(Boolean);
   const states = studioSection('States',
     studioAddButton('+ add', STATE_NAMES.filter((n) => !used.includes(n)).map((n) => ({ value: n, text: n })),
-      (n) => studioEdit((def) => { (def.states = def.states ?? []).push(n); })));
+      // A state is an object in the schema, not the string the chip shows.
+      (n) => studioEdit((def) => { (def.states = def.states ?? []).push(makeState(n, studio.evidence)); })));
   const chips = el('div');
   for (const [i, st] of used.entries()) {
     const c = el('button', 'studio-toggle on', st) as HTMLButtonElement;

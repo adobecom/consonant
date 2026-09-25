@@ -20,6 +20,111 @@
   };
   var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 
+  // src/studio.ts
+  var emptyStudio = () => ({
+    slug: null,
+    def: null,
+    evidence: null,
+    freeAxes: [],
+    index: {},
+    notes: [],
+    jsonMode: false,
+    jsonText: "",
+    jsonError: null,
+    validation: null,
+    busy: false,
+    dirty: false
+  });
+  var STATE_NAMES = ["hover", "active", "focus-visible", "disabled"];
+  var ACCEPTS_MODES = ["restrict", "prefer", "open"];
+  var STATE_MECHANISM = {
+    hover: ":hover",
+    active: ":active",
+    "focus-visible": ":focus-visible",
+    disabled: "[disabled] / :disabled"
+  };
+  function makeState(name2, evidence) {
+    var _a28, _b;
+    const axis = ((_a28 = evidence == null ? void 0 : evidence.axes) != null ? _a28 : []).find((a) => a.type === "VARIANT" && /^(state|interaction|pseudo)s?$/i.test(String(a.name).split("#")[0].trim()));
+    return {
+      name: name2,
+      figma: axis ? { kind: "VARIANT", property: axis.name, notes: `${String(axis.name).split("#")[0].trim()}=${name2}` } : "NONE",
+      code: { mechanism: (_b = STATE_MECHANISM[name2]) != null ? _b : "tbd" },
+      notes: "Added by hand \u2014 confirm the code expresses it this way."
+    };
+  }
+  var stateName = (s) => {
+    var _a28;
+    return typeof s === "string" ? s : (_a28 = s == null ? void 0 : s.name) != null ? _a28 : "";
+  };
+  function mutateDef(state, fn) {
+    var _a28;
+    const next = JSON.parse(JSON.stringify((_a28 = state.def) != null ? _a28 : {}));
+    fn(next);
+    return next;
+  }
+  function slotsOf(def) {
+    var _a28;
+    const out = [];
+    const walk = (node, path) => {
+      var _a29;
+      if (!node || typeof node !== "object") return;
+      if (node.slot) out.push({ path, node });
+      for (const [name2, child] of Object.entries((_a29 = node.parts) != null ? _a29 : {})) walk(child, `${path}.${name2}`);
+    };
+    walk((_a28 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a28.root, "root");
+    return out;
+  }
+  function rootTokens(def) {
+    var _a28, _b, _c;
+    return (_c = (_b = (_a28 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a28.root) == null ? void 0 : _b.tokens) != null ? _c : {};
+  }
+  function unboundAxes(state) {
+    var _a28, _b, _c, _d;
+    const used = new Set(((_b = (_a28 = state.def) == null ? void 0 : _a28.props) != null ? _b : []).map((p) => {
+      var _a29;
+      return (_a29 = p == null ? void 0 : p.figma) == null ? void 0 : _a29.property;
+    }).filter(Boolean));
+    return ((_d = (_c = state.evidence) == null ? void 0 : _c.axes) != null ? _d : []).filter((a) => !used.has(a.name));
+  }
+  function acceptNames(state) {
+    var _a28;
+    const items = Array.isArray((_a28 = state.index) == null ? void 0 : _a28.items) ? state.index.items : [];
+    return [...new Set(items.map((c) => c == null ? void 0 : c.name).filter(Boolean))].sort();
+  }
+  function propFromAxis(axis) {
+    var _a28, _b;
+    const camel = String(axis.name).replace(/#.*$/, "").trim().replace(/[^A-Za-z0-9]+(.)?/g, (_m, c) => c ? c.toUpperCase() : "").replace(/^(.)/, (c) => c.toLowerCase());
+    const base2 = {
+      name: camel,
+      lever: true,
+      figma: { kind: axis.type, property: axis.name },
+      code: { prop: camel }
+    };
+    if (axis.type === "VARIANT") {
+      base2.type = "string";
+      base2.enum = (_b = (_a28 = axis.variantOptions) != null ? _a28 : axis.options) != null ? _b : [];
+      if (axis.defaultValue !== void 0) base2.default = axis.defaultValue;
+      base2.code.attr = `data-${String(axis.name).replace(/#.*$/, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+    } else if (axis.type === "BOOLEAN") {
+      base2.type = "boolean";
+      if (axis.defaultValue !== void 0) base2.default = axis.defaultValue;
+    } else {
+      base2.type = "string";
+    }
+    return base2;
+  }
+  function verdictOf(state) {
+    if (state.jsonError) return { tone: "bad", text: `JSON: ${state.jsonError}` };
+    if (!state.validation) return { tone: "idle", text: "validating\u2026" };
+    if (state.validation.valid) return { tone: "ok", text: "\u2713 valid contract definition" };
+    return { tone: "bad", text: `\u2717 ${state.validation.errors.slice(0, 2).join("  \xB7  ")}` };
+  }
+  var canPublish = (s) => {
+    var _a28;
+    return !s.busy && !s.jsonError && Boolean((_a28 = s.validation) == null ? void 0 : _a28.valid);
+  };
+
   // node_modules/@marijn/find-cluster-break/src/index.js
   var rangeFrom = [];
   var rangeTo = [];
@@ -23378,91 +23483,6 @@
     };
   }
 
-  // src/studio.ts
-  var emptyStudio = () => ({
-    slug: null,
-    def: null,
-    evidence: null,
-    freeAxes: [],
-    index: {},
-    notes: [],
-    jsonMode: false,
-    jsonText: "",
-    jsonError: null,
-    validation: null,
-    busy: false,
-    dirty: false
-  });
-  var STATE_NAMES = ["hover", "active", "focus-visible", "disabled"];
-  var ACCEPTS_MODES = ["restrict", "prefer", "open"];
-  function mutateDef(state, fn) {
-    var _a28;
-    const next = JSON.parse(JSON.stringify((_a28 = state.def) != null ? _a28 : {}));
-    fn(next);
-    return next;
-  }
-  function slotsOf(def) {
-    var _a28;
-    const out = [];
-    const walk = (node, path) => {
-      var _a29;
-      if (!node || typeof node !== "object") return;
-      if (node.slot) out.push({ path, node });
-      for (const [name2, child] of Object.entries((_a29 = node.parts) != null ? _a29 : {})) walk(child, `${path}.${name2}`);
-    };
-    walk((_a28 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a28.root, "root");
-    return out;
-  }
-  function rootTokens(def) {
-    var _a28, _b, _c;
-    return (_c = (_b = (_a28 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a28.root) == null ? void 0 : _b.tokens) != null ? _c : {};
-  }
-  function unboundAxes(state) {
-    var _a28, _b, _c, _d;
-    const used = new Set(((_b = (_a28 = state.def) == null ? void 0 : _a28.props) != null ? _b : []).map((p) => {
-      var _a29;
-      return (_a29 = p == null ? void 0 : p.figma) == null ? void 0 : _a29.property;
-    }).filter(Boolean));
-    return ((_d = (_c = state.evidence) == null ? void 0 : _c.axes) != null ? _d : []).filter((a) => !used.has(a.name));
-  }
-  function acceptNames(state) {
-    var _a28;
-    const items = Array.isArray((_a28 = state.index) == null ? void 0 : _a28.items) ? state.index.items : [];
-    return [...new Set(items.map((c) => c == null ? void 0 : c.name).filter(Boolean))].sort();
-  }
-  function propFromAxis(axis) {
-    var _a28, _b;
-    const camel = String(axis.name).replace(/#.*$/, "").trim().replace(/[^A-Za-z0-9]+(.)?/g, (_m, c) => c ? c.toUpperCase() : "").replace(/^(.)/, (c) => c.toLowerCase());
-    const base2 = {
-      name: camel,
-      lever: true,
-      figma: { kind: axis.type, property: axis.name },
-      code: { prop: camel }
-    };
-    if (axis.type === "VARIANT") {
-      base2.type = "string";
-      base2.enum = (_b = (_a28 = axis.variantOptions) != null ? _a28 : axis.options) != null ? _b : [];
-      if (axis.defaultValue !== void 0) base2.default = axis.defaultValue;
-      base2.code.attr = `data-${String(axis.name).replace(/#.*$/, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
-    } else if (axis.type === "BOOLEAN") {
-      base2.type = "boolean";
-      if (axis.defaultValue !== void 0) base2.default = axis.defaultValue;
-    } else {
-      base2.type = "string";
-    }
-    return base2;
-  }
-  function verdictOf(state) {
-    if (state.jsonError) return { tone: "bad", text: `JSON: ${state.jsonError}` };
-    if (!state.validation) return { tone: "idle", text: "validating\u2026" };
-    if (state.validation.valid) return { tone: "ok", text: "\u2713 valid contract definition" };
-    return { tone: "bad", text: `\u2717 ${state.validation.errors.slice(0, 2).join("  \xB7  ")}` };
-  }
-  var canPublish = (s) => {
-    var _a28;
-    return !s.busy && !s.jsonError && Boolean((_a28 = s.validation) == null ? void 0 : _a28.valid);
-  };
-
   // src/ui.ts
   function esc(s) {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -24557,15 +24577,16 @@
     }
     if (!((_d = d.props) != null ? _d : []).length) props.appendChild(el("div", "studio-empty", free.length ? "No props curated yet \u2014 add one from a real axis." : "No props, and no unbound axes to add from."));
     host.appendChild(props);
-    const used = ((_e = d.states) != null ? _e : []).map((x) => typeof x === "string" ? x : x.name).filter(Boolean);
+    const used = ((_e = d.states) != null ? _e : []).map(stateName).filter(Boolean);
     const states = studioSection(
       "States",
       studioAddButton(
         "+ add",
         STATE_NAMES.filter((n) => !used.includes(n)).map((n) => ({ value: n, text: n })),
+        // A state is an object in the schema, not the string the chip shows.
         (n) => studioEdit((def) => {
           var _a29;
-          (def.states = (_a29 = def.states) != null ? _a29 : []).push(n);
+          (def.states = (_a29 = def.states) != null ? _a29 : []).push(makeState(n, studio.evidence));
         })
       )
     );
