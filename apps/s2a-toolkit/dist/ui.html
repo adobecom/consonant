@@ -1055,52 +1055,6 @@ body {
       <div class="status" id="docCheckStatus"></div>
       <div id="docCheckIssues" style="display:none; margin-top:6px; max-height:200px; overflow-y:auto;"></div>
 
-      <div class="tools-divider"></div>
-
-      <!-- ── Contract ───────────────────────────────────────────────── -->
-      <div class="section-label">Contract</div>
-      <div class="sel-card">
-        <span class="sel-card-empty" id="contractSelectionEmpty">Select a component set, variant or instance</span>
-        <div class="sel-card-info" id="contractSelectionInfo" style="display:none;">
-          <span class="sel-icon">⎘</span>
-          <div class="sel-meta">
-            <span class="sel-name" id="contractSetName">—</span>
-            <span class="sel-type" id="contractSetStatus">—</span>
-          </div>
-        </div>
-      </div>
-      <div class="form-field" id="contractNameField" style="display:none; margin-top:8px;">
-        <label class="form-label" for="contractNameInput">Name this candidate before you extract</label>
-        <input class="form-input" id="contractNameInput" type="text" placeholder="e.g. FeatureTile or FeatureTileRow" />
-        <label class="form-check" style="display:flex; gap:6px; align-items:center; margin-top:6px; font-size:11px;">
-          <input type="checkbox" id="contractRenameLayer" checked /> Rename the layer in Figma to match
-        </label>
-      </div>
-      <div class="btn-row">
-        <button class="btn" id="contractExtractBtn" disabled style="flex:2;">Extract contract</button>
-        <button class="btn btn-ghost" id="contractCopyBtn" disabled title="Copy the evidence JSON">Copy</button>
-        <button class="btn btn-ghost" id="contractPublishBtn" disabled title="Send to the sync endpoint">Publish</button>
-      </div>
-      <div class="status" id="contractStatus"></div>
-      <pre class="contract-summary" id="contractSummary" style="display:none;"></pre>
-      <pre class="contract-summary contract-match" id="contractMatch" style="display:none;"></pre>
-      <div class="btn-row" id="contractBuildRow" style="display:none;">
-        <button class="btn btn-ghost" id="contractBuildBtn" title="Build a component set on this page from the contract's figma.plan.json">Build set from contract</button>
-      </div>
-      <details class="contract-settings">
-        <summary>Sync endpoint</summary>
-        <div class="form-field">
-          <label class="form-label" for="contractEndpointInput">Endpoint</label>
-          <input class="form-input" id="contractEndpointInput" type="url" placeholder="http://localhost:9410 (dev) or the relay URL" />
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="contractRelayKeyInput">Relay key (optional)</label>
-          <input class="form-input" id="contractRelayKeyInput" type="password" placeholder="x-s2a-relay-key" />
-        </div>
-        <div class="btn-row">
-          <button class="btn btn-ghost" id="contractEndpointSaveBtn">Save</button>
-        </div>
-      </details>
 
       <div class="tools-divider"></div>
 
@@ -1148,16 +1102,57 @@ body {
             <div class="sel-meta">
               <span class="sel-name" id="studioSelName">—</span>
               <span class="sel-type" id="studioSelMeta">—</span>
+              <!-- Contract status resolves asynchronously, so it gets its own
+                   line rather than racing the synchronous meta above. -->
+              <span class="sel-type" id="contractSetStatus"></span>
             </div>
           </div>
         </div>
+        <!-- A frame is a candidate, not a component yet — it needs a name
+             before there is anything to file evidence under. -->
+        <div class="form-field" id="contractNameField" style="display:none;">
+          <label class="form-label" for="contractNameInput">Name this candidate before you extract</label>
+          <input class="form-input" id="contractNameInput" type="text" placeholder="e.g. FeatureTile or FeatureTileRow" />
+          <label class="form-check" style="display:flex; gap:6px; align-items:center; margin-top:6px; font-size:11px;">
+            <input type="checkbox" id="contractRenameLayer" checked /> Rename the layer in Figma to match
+          </label>
+        </div>
+
+        <!-- Extraction and curation are one job, so they are one row. Extract
+             records what Figma says; Open curates it. -->
         <div class="btn-row">
-          <button class="btn" id="studioOpenBtn" disabled style="flex:1;">Open contract</button>
+          <button class="btn" id="contractExtractBtn" disabled style="flex:2;">Extract contract</button>
+          <button class="btn" id="studioOpenBtn" disabled style="flex:2;">Open contract</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="contractCopyBtn" disabled title="Copy the evidence JSON" style="flex:1;">Copy evidence</button>
+          <button class="btn btn-ghost" id="contractPublishBtn" disabled title="Send to the sync endpoint" style="flex:1;">Publish evidence</button>
         </div>
         <div class="status" id="studioListStatus"></div>
+        <div class="status" id="contractStatus"></div>
+        <pre class="contract-summary" id="contractSummary" style="display:none;"></pre>
+        <pre class="contract-summary contract-match" id="contractMatch" style="display:none;"></pre>
+        <div class="btn-row" id="contractBuildRow" style="display:none;">
+          <button class="btn btn-ghost" id="contractBuildBtn" title="Build a component set on this page from the contract's figma.plan.json" style="flex:1;">Build set from contract</button>
+        </div>
 
         <div class="section-label" style="margin-top:var(--s-4);">Contracts in the repo</div>
         <div id="studioIndex" class="studio-index"></div>
+
+        <details class="contract-settings">
+          <summary>Sync endpoint</summary>
+          <div class="form-field">
+            <label class="form-label" for="contractEndpointInput">Endpoint</label>
+            <input class="form-input" id="contractEndpointInput" type="url" placeholder="http://localhost:9410 (dev) or the relay URL" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="contractRelayKeyInput">Relay key (optional)</label>
+            <input class="form-input" id="contractRelayKeyInput" type="password" placeholder="x-s2a-relay-key" />
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="contractEndpointSaveBtn">Save</button>
+          </div>
+        </details>
       </div>
 
       <!-- Editor -->
@@ -24933,7 +24928,7 @@ body {
       description: "Record the selected component set as design evidence (axes, variants, token bindings per mode) and publish it",
       category: "Tools",
       uiAction: () => {
-        switchPanel("tools");
+        switchPanel("contract");
         if (contractSetId) runContractExtract();
       }
     },
@@ -25641,8 +25636,8 @@ body {
     }
   }
   function studioSetSelection(sel) {
-    var _a28;
-    const usable = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT" || (sel == null ? void 0 : sel.nodeType) === "FRAME";
+    var _a28, _b;
+    const usable = ["COMPONENT_SET", "COMPONENT", "INSTANCE", "FRAME", "SECTION", "GROUP"].includes((_a28 = sel == null ? void 0 : sel.nodeType) != null ? _a28 : "");
     studioSel = usable ? sel : null;
     const empty2 = $s("studioSelEmpty"), info = $s("studioSelInfo");
     const btn = $s("studioOpenBtn");
@@ -25650,7 +25645,7 @@ body {
       empty2.style.display = "none";
       info.style.display = "flex";
       $s("studioSelName").textContent = sel.name;
-      $s("studioSelMeta").textContent = sel.nodeType === "COMPONENT_SET" ? `${(_a28 = sel.variantCount) != null ? _a28 : 0} variants` : sel.nodeType.toLowerCase();
+      $s("studioSelMeta").textContent = sel.nodeType === "COMPONENT_SET" ? `${(_b = sel.variantCount) != null ? _b : 0} variants` : sel.nodeType.toLowerCase();
       btn.disabled = false;
     } else {
       empty2.style.display = "block";
@@ -25669,7 +25664,7 @@ body {
       studio.index = index;
       const rows = Array.isArray(index == null ? void 0 : index.items) ? index.items : [];
       if (!rows.length) {
-        host.innerHTML = '<div class="studio-empty">No contracts yet \u2014 extract one in the Tools tab.</div>';
+        host.innerHTML = '<div class="studio-empty">No contracts yet \u2014 select a component set above and Extract.</div>';
         return;
       }
       host.innerHTML = "";
@@ -26249,9 +26244,6 @@ body {
     if (contractIsFrame && sel) document.getElementById("contractNameInput").placeholder = contractSlug(sel.name) || "candidate-name";
     contractSetId = ok ? (_a28 = sel == null ? void 0 : sel.id) != null ? _a28 : null : null;
     contractEvidence = null;
-    const emptyEl = document.getElementById("contractSelectionEmpty");
-    const infoEl = document.getElementById("contractSelectionInfo");
-    const nameEl = document.getElementById("contractSetName");
     const statusEl = document.getElementById("contractSetStatus");
     const extract = document.getElementById("contractExtractBtn");
     const copy = document.getElementById("contractCopyBtn");
@@ -26261,14 +26253,10 @@ body {
     copy.disabled = true;
     publish.disabled = true;
     if (!ok || !sel) {
-      emptyEl.style.display = "block";
-      infoEl.style.display = "none";
+      statusEl.textContent = "";
       extract.disabled = true;
       return;
     }
-    emptyEl.style.display = "none";
-    infoEl.style.display = "flex";
-    nameEl.textContent = sel.name;
     extract.disabled = false;
     statusEl.textContent = "checking\u2026";
     const slugs = await contractIndex();
@@ -26431,7 +26419,7 @@ body {
       const evidence = msg.evidence;
       const hash = "sha256:" + await sha256Hex(msg.hashInput);
       const setInfo = evidence.set;
-      if ((setInfo == null ? void 0 : setInfo.layerName) && setInfo.layerName !== setInfo.name) document.getElementById("contractSetName").textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
+      if ((setInfo == null ? void 0 : setInfo.layerName) && setInfo.layerName !== setInfo.name) document.getElementById("studioSelName").textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
       contractLog("extract:ok", { set: (_a28 = evidence.set) == null ? void 0 : _a28.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
       contractEvidence = { evidence, canonical: msg.canonical, hash };
       const counts = evidence.counts;
@@ -26493,7 +26481,7 @@ body {
   var _a20;
   (_a20 = document.getElementById("contractBuildBtn")) == null ? void 0 : _a20.addEventListener("click", async () => {
     const btn = document.getElementById("contractBuildBtn");
-    const name2 = document.getElementById("contractSetName").textContent || "";
+    const name2 = document.getElementById("studioSelName").textContent || "";
     const slug = contractSlug(name2);
     btn.disabled = true;
     btn.textContent = "Building\u2026";

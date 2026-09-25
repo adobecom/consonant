@@ -23653,7 +23653,7 @@
       description: "Record the selected component set as design evidence (axes, variants, token bindings per mode) and publish it",
       category: "Tools",
       uiAction: () => {
-        switchPanel("tools");
+        switchPanel("contract");
         if (contractSetId) runContractExtract();
       }
     },
@@ -24361,8 +24361,8 @@
     }
   }
   function studioSetSelection(sel) {
-    var _a28;
-    const usable = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT" || (sel == null ? void 0 : sel.nodeType) === "FRAME";
+    var _a28, _b;
+    const usable = ["COMPONENT_SET", "COMPONENT", "INSTANCE", "FRAME", "SECTION", "GROUP"].includes((_a28 = sel == null ? void 0 : sel.nodeType) != null ? _a28 : "");
     studioSel = usable ? sel : null;
     const empty2 = $s("studioSelEmpty"), info = $s("studioSelInfo");
     const btn = $s("studioOpenBtn");
@@ -24370,7 +24370,7 @@
       empty2.style.display = "none";
       info.style.display = "flex";
       $s("studioSelName").textContent = sel.name;
-      $s("studioSelMeta").textContent = sel.nodeType === "COMPONENT_SET" ? `${(_a28 = sel.variantCount) != null ? _a28 : 0} variants` : sel.nodeType.toLowerCase();
+      $s("studioSelMeta").textContent = sel.nodeType === "COMPONENT_SET" ? `${(_b = sel.variantCount) != null ? _b : 0} variants` : sel.nodeType.toLowerCase();
       btn.disabled = false;
     } else {
       empty2.style.display = "block";
@@ -24389,7 +24389,7 @@
       studio.index = index;
       const rows = Array.isArray(index == null ? void 0 : index.items) ? index.items : [];
       if (!rows.length) {
-        host.innerHTML = '<div class="studio-empty">No contracts yet \u2014 extract one in the Tools tab.</div>';
+        host.innerHTML = '<div class="studio-empty">No contracts yet \u2014 select a component set above and Extract.</div>';
         return;
       }
       host.innerHTML = "";
@@ -24969,9 +24969,6 @@
     if (contractIsFrame && sel) document.getElementById("contractNameInput").placeholder = contractSlug(sel.name) || "candidate-name";
     contractSetId = ok ? (_a28 = sel == null ? void 0 : sel.id) != null ? _a28 : null : null;
     contractEvidence = null;
-    const emptyEl = document.getElementById("contractSelectionEmpty");
-    const infoEl = document.getElementById("contractSelectionInfo");
-    const nameEl = document.getElementById("contractSetName");
     const statusEl = document.getElementById("contractSetStatus");
     const extract = document.getElementById("contractExtractBtn");
     const copy = document.getElementById("contractCopyBtn");
@@ -24981,14 +24978,10 @@
     copy.disabled = true;
     publish.disabled = true;
     if (!ok || !sel) {
-      emptyEl.style.display = "block";
-      infoEl.style.display = "none";
+      statusEl.textContent = "";
       extract.disabled = true;
       return;
     }
-    emptyEl.style.display = "none";
-    infoEl.style.display = "flex";
-    nameEl.textContent = sel.name;
     extract.disabled = false;
     statusEl.textContent = "checking\u2026";
     const slugs = await contractIndex();
@@ -25151,7 +25144,7 @@
       const evidence = msg.evidence;
       const hash = "sha256:" + await sha256Hex(msg.hashInput);
       const setInfo = evidence.set;
-      if ((setInfo == null ? void 0 : setInfo.layerName) && setInfo.layerName !== setInfo.name) document.getElementById("contractSetName").textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
+      if ((setInfo == null ? void 0 : setInfo.layerName) && setInfo.layerName !== setInfo.name) document.getElementById("studioSelName").textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
       contractLog("extract:ok", { set: (_a28 = evidence.set) == null ? void 0 : _a28.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
       contractEvidence = { evidence, canonical: msg.canonical, hash };
       const counts = evidence.counts;
@@ -25213,7 +25206,7 @@
   var _a20;
   (_a20 = document.getElementById("contractBuildBtn")) == null ? void 0 : _a20.addEventListener("click", async () => {
     const btn = document.getElementById("contractBuildBtn");
-    const name2 = document.getElementById("contractSetName").textContent || "";
+    const name2 = document.getElementById("studioSelName").textContent || "";
     const slug = contractSlug(name2);
     btn.disabled = true;
     btn.textContent = "Building\u2026";

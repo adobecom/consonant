@@ -220,7 +220,7 @@ const FEATURES: Feature[] = [
     name: 'Extract contract',
     description: 'Record the selected component set as design evidence (axes, variants, token bindings per mode) and publish it',
     category: 'Tools',
-    uiAction: () => { switchPanel('tools'); if (contractSetId) runContractExtract(); },
+    uiAction: () => { switchPanel('contract'); if (contractSetId) runContractExtract(); },
   },
   {
     id: 'tools:request',
@@ -951,7 +951,7 @@ async function studioApi(path: string, init?: RequestInit) {
 }
 
 function studioSetSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
-  const usable = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT' || sel?.nodeType === 'FRAME';
+  const usable = ['COMPONENT_SET', 'COMPONENT', 'INSTANCE', 'FRAME', 'SECTION', 'GROUP'].includes(sel?.nodeType ?? '');
   studioSel = usable ? sel : null;
   const empty = $s('studioSelEmpty'), info = $s('studioSelInfo');
   const btn = $s('studioOpenBtn') as HTMLButtonElement;
@@ -977,7 +977,7 @@ async function studioRefreshIndex() {
     const index = await res.json();
     studio.index = index;
     const rows: any[] = Array.isArray(index?.items) ? index.items : [];
-    if (!rows.length) { host.innerHTML = '<div class="studio-empty">No contracts yet — extract one in the Tools tab.</div>'; return; }
+    if (!rows.length) { host.innerHTML = '<div class="studio-empty">No contracts yet — select a component set above and Extract.</div>'; return; }
     host.innerHTML = '';
     for (const c of [...rows].sort((a, b) => String(a.name ?? a.slug).localeCompare(String(b.name ?? b.slug)))) {
       const row = document.createElement('button');
@@ -1549,9 +1549,8 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
   if (contractIsFrame && sel) (document.getElementById('contractNameInput') as HTMLInputElement).placeholder = contractSlug(sel.name) || 'candidate-name';
   contractSetId = ok ? (sel?.id ?? null) : null;
   contractEvidence = null;
-  const emptyEl  = document.getElementById('contractSelectionEmpty') as HTMLElement;
-  const infoEl   = document.getElementById('contractSelectionInfo')  as HTMLElement;
-  const nameEl   = document.getElementById('contractSetName')   as HTMLElement;
+  // One card now serves extraction and curation, so this no longer owns a
+  // selection card of its own — it only writes the contract status line.
   const statusEl = document.getElementById('contractSetStatus') as HTMLElement;
   const extract  = document.getElementById('contractExtractBtn') as HTMLButtonElement;
   const copy     = document.getElementById('contractCopyBtn')    as HTMLButtonElement;
@@ -1559,9 +1558,7 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
   const summary  = document.getElementById('contractSummary')    as HTMLElement;
   summary.style.display = 'none';
   copy.disabled = true; publish.disabled = true;
-  if (!ok || !sel) { emptyEl.style.display = 'block'; infoEl.style.display = 'none'; extract.disabled = true; return; }
-  emptyEl.style.display = 'none'; infoEl.style.display = 'flex';
-  nameEl.textContent = sel.name;
+  if (!ok || !sel) { statusEl.textContent = ''; extract.disabled = true; return; }
   extract.disabled = false;
   statusEl.textContent = 'checking…';
   const slugs = await contractIndex();
@@ -1684,7 +1681,7 @@ async function onContractEvidence(msg: Record<string, unknown>) {
   const evidence = msg.evidence as Record<string, unknown>;
   const hash = 'sha256:' + await sha256Hex(msg.hashInput as string);
   const setInfo = evidence.set as { name: string; layerName?: string };
-  if (setInfo?.layerName && setInfo.layerName !== setInfo.name) (document.getElementById('contractSetName') as HTMLElement).textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
+  if (setInfo?.layerName && setInfo.layerName !== setInfo.name) (document.getElementById('studioSelName') as HTMLElement).textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
   contractLog('extract:ok', { set: (evidence.set as any)?.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
   contractEvidence = { evidence, canonical: msg.canonical as string, hash };
   const counts = evidence.counts as { variants: number; nodes: number; bindings: number; unboundPaintNodes: number };
@@ -1742,7 +1739,7 @@ async function showContractMatch(evidence: Record<string, unknown>) {
 // Build a component set on the current page from the contract's figma.plan.json.
 document.getElementById('contractBuildBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('contractBuildBtn') as HTMLButtonElement;
-  const name = (document.getElementById('contractSetName') as HTMLElement).textContent || '';
+  const name = (document.getElementById('studioSelName') as HTMLElement).textContent || '';
   const slug = contractSlug(name);
   btn.disabled = true; btn.textContent = 'Building…';
   try {
