@@ -388,11 +388,11 @@ function transformVariables({ variables, collections }) {
 function splitVariablePath(variable) {
   const segments = (variable.name || "")
     .split("/")
-    .map((segment) => toSlug(segment))
+    .map((segment) => toKeySlug(segment))
     .filter(Boolean);
 
   if (!segments.length) {
-    segments.push(toSlug(variable.id || "token"));
+    segments.push(toKeySlug(variable.id || "token"));
   }
 
   return segments;
@@ -544,6 +544,29 @@ function toSlug(value) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-+|-+$/g, "");
+  return normalized || "token";
+}
+
+// Variable NAME segments are not file names, and underscores carry meaning in
+// them that a kebab slug destroys:
+//
+//   • a decimal point — "neg-3_84" is -3.84px. Slugged to "neg-3-84" the value
+//     is unreadable and every consumer's custom property is silently renamed.
+//   • a leading "_" marks a token as private/design-only (_visibility, _id,
+//     _label, _breakpoint, _margin-reflow). build-tokens.js strips those by
+//     that prefix, so rewriting it to "-" smuggles them into shipped CSS.
+//
+// 762a9b95 folded underscores into the shared slug while fixing collection-name
+// tests, which broke both at once. File and mode slugs stay kebab above; only
+// these segments keep underscores.
+function toKeySlug(value) {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/_+/g, "_");
   return normalized || "token";
 }
 
