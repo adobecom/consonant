@@ -846,3 +846,31 @@ body {
 }
 .studio-json-btn:hover { border-color: var(--accent-bdr); color: var(--accent); background: var(--accent-bg); }
 .studio-json-btn:focus-visible { outline: none; box-shadow: var(--ring); }
+
+/* ── Palette feedback ──────────────────────────────────────────────────────
+   A command that cannot run says so here, and the control it wanted gets a
+   brief ring so you can see where you landed. */
+.toast {
+  position: absolute; left: 10px; right: 10px; top: 44px; z-index: 40;
+  background: var(--bg-raised); color: var(--text-1);
+  border: 1px solid var(--accent-bdr); border-left: 3px solid var(--accent);
+  border-radius: var(--r-md); padding: 8px 10px; font-size: 11px; line-height: 1.45;
+  box-shadow: 0 4px 14px rgba(26,28,30,0.10);
+  animation: toast-in 140ms ease-out;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+.section-flash {
+  border-radius: var(--r-sm);
+  animation: section-flash 1.2s ease-out;
+}
+@keyframes section-flash {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; background: transparent; }
+  15%      { box-shadow: 0 0 0 3px var(--accent-bdr); background: var(--accent-bg); }
+  70%      { box-shadow: 0 0 0 3px var(--accent-bdr); background: var(--accent-bg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+  .section-flash { animation: none; box-shadow: 0 0 0 3px var(--accent-bdr); background: var(--accent-bg); }
+}

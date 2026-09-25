@@ -7,6 +7,11 @@
 <body>
 <div id="app">
 
+  <!-- Says why a palette command could not run. Lives above the panels so the
+       message survives the tab switch that command just made. -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+
   <!-- ── Header (always visible) ──────────────────────────────────────── -->
   <header class="header">
     <div class="header-brand">
@@ -125,7 +130,7 @@
     <div class="panel" id="toolsPanel">
 
       <!-- ── Variant Filter ──────────────────────────────────────────── -->
-      <div class="section-label">Variant filter</div>
+      <div id="sec-variant-filter" class="section-label">Variant filter</div>
       <div class="empty-state" id="selectEmpty" style="padding:16px 0 0;">Select a component set</div>
       <div id="selectBody" style="display:none;">
         <div class="set-name" id="selectSetName"></div>
@@ -141,7 +146,7 @@
       <div class="tools-divider"></div>
 
       <!-- ── Annotate ───────────────────────────────────────────────── -->
-      <div class="section-label">Annotate</div>
+      <div id="sec-annotate" class="section-label">Annotate</div>
       <div class="sel-card">
         <span class="sel-card-empty" id="annotateSelectionEmpty">Select an instance or frame</span>
         <div class="sel-card-info" id="annotateSelectionInfo" style="display:none;">
@@ -171,7 +176,7 @@
       <div class="tools-divider"></div>
 
       <!-- ── Component doc ───────────────────────────────────────────────── -->
-      <div class="section-label">Component doc</div>
+      <div id="sec-component-doc" class="section-label">Component doc</div>
       <div class="sel-card">
         <span class="sel-card-empty" id="docSelectionEmpty">Select a component or set</span>
         <div class="sel-card-info" id="docSelectionInfo" style="display:none;">
@@ -190,7 +195,7 @@
       <div class="tools-divider"></div>
 
       <!-- ── Doc readability ─────────────────────────────────────────── -->
-      <div class="section-label">Doc readability</div>
+      <div id="sec-doc-readability" class="section-label">Doc readability</div>
       <div class="sel-card">
         <span class="sel-card-empty" id="docCheckSelectionEmpty">Select a documentation frame</span>
         <div class="sel-card-info" id="docCheckSelectionInfo" style="display:none;">
@@ -211,7 +216,7 @@
       <div class="tools-divider"></div>
 
       <!-- ── Token release ────────────────────────────────────────────── -->
-      <div class="section-label">Token release</div>
+      <div id="sec-token-release" class="section-label">Token release</div>
 
       <!-- One-time GitHub token setup (shown until a token is saved) -->
       <div id="ghTokenSetup" style="display:none;">

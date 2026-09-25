@@ -159,6 +159,33 @@ document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => 
 
 // ── Feature registry ──────────────────────────────────────────────────────────
 
+// A palette entry that only switches tabs is not a command — it is a link
+// wearing a command's clothes, and it leaves you to hunt for the control you
+// just asked for. Every entry below either does the thing or says why it
+// cannot: run the real control when its preconditions hold, otherwise take you
+// to it, highlight it, and name what is missing. The real control stays the
+// single source of enablement, so the palette can never disagree with the panel.
+let paletteHintTimer: number | undefined;
+function setPaletteHint(text: string) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = text;
+  el.hidden = false;
+  clearTimeout(paletteHintTimer);
+  paletteHintTimer = setTimeout(() => { el.hidden = true; }, 4000) as unknown as number;
+}
+
+function runOrReveal(panel: Panel, buttonId: string, sectionId: string, needs: string) {
+  switchPanel(panel);
+  const btn = document.getElementById(buttonId) as HTMLButtonElement | null;
+  if (btn && !btn.disabled) { btn.click(); return; }
+  const section = document.getElementById(sectionId);
+  section?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  section?.classList.add('section-flash');
+  setTimeout(() => section?.classList.remove('section-flash'), 1200);
+  setPaletteHint(needs);
+}
+
 interface Feature {
   id: string;
   name: string;
@@ -190,14 +217,16 @@ const FEATURES: Feature[] = [
     name: 'Filter variant set',
     description: 'Select a subset of variants by axis value',
     category: 'Tools',
-    uiAction: () => switchPanel('tools'),
+    uiAction: () => runOrReveal('tools', 'selectApplyBtn', 'sec-variant-filter',
+      'Pick the axis values you want, then Select.'),
   },
   {
     id: 'tools:annotate',
     name: 'Annotate selection',
     description: 'Add token and a11y annotations to the selected node',
     category: 'Tools',
-    uiAction: () => switchPanel('tools'),
+    uiAction: () => runOrReveal('tools', 'annotateApplyBtn', 'sec-annotate',
+      'Select a node in Figma and choose at least one category.'),
   },
   {
     id: 'tools:annotate-clear',
@@ -205,7 +234,9 @@ const FEATURES: Feature[] = [
     description: 'Remove all annotation layers from selection',
     category: 'Tools',
     uiAction: () => {
-      if (annotateNodeId) postToPlugin('annotate:clear', { nodeId: annotateNodeId });
+      // Silently doing nothing reads as a broken command, so say what is missing.
+      if (!annotateNodeId) { setPaletteHint('Select an annotated node in Figma first.'); return; }
+      postToPlugin('annotate:clear', { nodeId: annotateNodeId });
     },
   },
   {
@@ -213,21 +244,52 @@ const FEATURES: Feature[] = [
     name: 'Generate component doc',
     description: 'Build a full documentation page for the selected component or component set',
     category: 'Tools',
-    uiAction: () => switchPanel('tools'),
+    uiAction: () => runOrReveal('tools', 'docGenerateBtn', 'sec-component-doc',
+      'Select a component or component set in Figma first.'),
   },
   {
     id: 'tools:contract',
     name: 'Extract contract',
     description: 'Record the selected component set as design evidence (axes, variants, token bindings per mode) and publish it',
     category: 'Tools',
-    uiAction: () => { switchPanel('contract'); if (contractSetId) runContractExtract(); },
+    uiAction: () => runOrReveal('contract', 'contractExtractBtn', 'studioList',
+      'Select a component set, instance or frame in Figma first.'),
   },
   {
     id: 'tools:request',
     name: 'Request a change',
     description: 'File a token/component/change request as a triage-ready GitHub issue',
     category: 'Tools',
-    uiAction: () => switchPanel('request'),
+    // The form is the action here, so land in the first field rather than
+    // leaving the person to click into it.
+    uiAction: () => {
+      switchPanel('request');
+      setTimeout(() => (document.getElementById('reqSummary') as HTMLInputElement | null)?.focus(), 0);
+    },
+  },
+
+  {
+    id: 'tools:doc-check',
+    name: 'Check doc readability',
+    description: 'Measure the selected doc frame against the readability guardrail (WCAG 1.4.8, contrast, structure)',
+    category: 'Tools',
+    uiAction: () => runOrReveal('tools', 'docCheckBtn', 'sec-doc-readability',
+      'Select a documentation frame in Figma first.'),
+  },
+  {
+    id: 'tools:open-contracts',
+    name: 'Open contracts',
+    description: 'Browse the contracts the repo already has, and curate one',
+    category: 'Tools',
+    uiAction: () => { switchPanel('contract'); void studioRefreshIndex(); },
+  },
+  {
+    id: 'tokens:release',
+    name: 'Prepare token release',
+    description: 'Sync variables from Figma, build, and open a release PR — the workflow never publishes',
+    category: 'Tokens',
+    uiAction: () => runOrReveal('tools', 'tokenReleaseBtn', 'sec-token-release',
+      'Save a GitHub token first — Tools → Token release.'),
   },
 
   // Bridge

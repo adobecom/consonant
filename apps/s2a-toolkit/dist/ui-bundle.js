@@ -23598,6 +23598,30 @@
       if (p) switchPanel(p);
     });
   });
+  var paletteHintTimer;
+  function setPaletteHint(text) {
+    const el2 = document.getElementById("toast");
+    if (!el2) return;
+    el2.textContent = text;
+    el2.hidden = false;
+    clearTimeout(paletteHintTimer);
+    paletteHintTimer = setTimeout(() => {
+      el2.hidden = true;
+    }, 4e3);
+  }
+  function runOrReveal(panel, buttonId, sectionId, needs) {
+    switchPanel(panel);
+    const btn = document.getElementById(buttonId);
+    if (btn && !btn.disabled) {
+      btn.click();
+      return;
+    }
+    const section = document.getElementById(sectionId);
+    section == null ? void 0 : section.scrollIntoView({ block: "start", behavior: "smooth" });
+    section == null ? void 0 : section.classList.add("section-flash");
+    setTimeout(() => section == null ? void 0 : section.classList.remove("section-flash"), 1200);
+    setPaletteHint(needs);
+  }
   var FEATURES = [
     // Tools
     {
@@ -23622,14 +23646,24 @@
       name: "Filter variant set",
       description: "Select a subset of variants by axis value",
       category: "Tools",
-      uiAction: () => switchPanel("tools")
+      uiAction: () => runOrReveal(
+        "tools",
+        "selectApplyBtn",
+        "sec-variant-filter",
+        "Pick the axis values you want, then Select."
+      )
     },
     {
       id: "tools:annotate",
       name: "Annotate selection",
       description: "Add token and a11y annotations to the selected node",
       category: "Tools",
-      uiAction: () => switchPanel("tools")
+      uiAction: () => runOrReveal(
+        "tools",
+        "annotateApplyBtn",
+        "sec-annotate",
+        "Select a node in Figma and choose at least one category."
+      )
     },
     {
       id: "tools:annotate-clear",
@@ -23637,7 +23671,11 @@
       description: "Remove all annotation layers from selection",
       category: "Tools",
       uiAction: () => {
-        if (annotateNodeId) postToPlugin("annotate:clear", { nodeId: annotateNodeId });
+        if (!annotateNodeId) {
+          setPaletteHint("Select an annotated node in Figma first.");
+          return;
+        }
+        postToPlugin("annotate:clear", { nodeId: annotateNodeId });
       }
     },
     {
@@ -23645,24 +23683,73 @@
       name: "Generate component doc",
       description: "Build a full documentation page for the selected component or component set",
       category: "Tools",
-      uiAction: () => switchPanel("tools")
+      uiAction: () => runOrReveal(
+        "tools",
+        "docGenerateBtn",
+        "sec-component-doc",
+        "Select a component or component set in Figma first."
+      )
     },
     {
       id: "tools:contract",
       name: "Extract contract",
       description: "Record the selected component set as design evidence (axes, variants, token bindings per mode) and publish it",
       category: "Tools",
-      uiAction: () => {
-        switchPanel("contract");
-        if (contractSetId) runContractExtract();
-      }
+      uiAction: () => runOrReveal(
+        "contract",
+        "contractExtractBtn",
+        "studioList",
+        "Select a component set, instance or frame in Figma first."
+      )
     },
     {
       id: "tools:request",
       name: "Request a change",
       description: "File a token/component/change request as a triage-ready GitHub issue",
       category: "Tools",
-      uiAction: () => switchPanel("request")
+      // The form is the action here, so land in the first field rather than
+      // leaving the person to click into it.
+      uiAction: () => {
+        switchPanel("request");
+        setTimeout(() => {
+          var _a28;
+          return (_a28 = document.getElementById("reqSummary")) == null ? void 0 : _a28.focus();
+        }, 0);
+      }
+    },
+    {
+      id: "tools:doc-check",
+      name: "Check doc readability",
+      description: "Measure the selected doc frame against the readability guardrail (WCAG 1.4.8, contrast, structure)",
+      category: "Tools",
+      uiAction: () => runOrReveal(
+        "tools",
+        "docCheckBtn",
+        "sec-doc-readability",
+        "Select a documentation frame in Figma first."
+      )
+    },
+    {
+      id: "tools:open-contracts",
+      name: "Open contracts",
+      description: "Browse the contracts the repo already has, and curate one",
+      category: "Tools",
+      uiAction: () => {
+        switchPanel("contract");
+        void studioRefreshIndex();
+      }
+    },
+    {
+      id: "tokens:release",
+      name: "Prepare token release",
+      description: "Sync variables from Figma, build, and open a release PR \u2014 the workflow never publishes",
+      category: "Tokens",
+      uiAction: () => runOrReveal(
+        "tools",
+        "tokenReleaseBtn",
+        "sec-token-release",
+        "Save a GitHub token first \u2014 Tools \u2192 Token release."
+      )
     },
     // Bridge
     {
