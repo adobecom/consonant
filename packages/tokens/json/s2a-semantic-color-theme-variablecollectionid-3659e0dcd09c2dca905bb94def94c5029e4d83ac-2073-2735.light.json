@@ -286,7 +286,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "ALL_SCOPES"
               ],
@@ -432,12 +432,12 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "ALL_SCOPES"
               ],
               "codeSyntax": {
-                "WEB": "var(--s2a-color-content-title)"
+                "WEB": "var(--s2a-color-content-heading)"
               }
             }
           }
@@ -579,6 +579,145 @@
                 "ALL_SCOPES"
               ],
               "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "scrim": {
+        "transparent": {
+          "scrim-opacity-00": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.00}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-64": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.64}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-72": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.72}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-88": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.88}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-00-inverse": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.00}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-64-inverse": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.64}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-72-inverse": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.72}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-88-inverse": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.88}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
             }
           }
         }
@@ -3731,6 +3870,76 @@
               "scopes": [
                 "FRAME_FILL",
                 "SHAPE_FILL"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "marquee": {
+        "product-transparent-background": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.white.72}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "product-transparent-card-background": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.50}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "product-transparent-pill-background": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.50}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "product-pill-border": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.black.04}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }

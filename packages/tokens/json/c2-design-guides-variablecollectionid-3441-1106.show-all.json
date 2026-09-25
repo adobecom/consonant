@@ -37,6 +37,24 @@
               }
             }
           },
+          "_grid-bottom": {
+            "$type": "color",
+            "$value": "#0097FF33",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-_design-guides-spacer-background)"
+                }
+              }
+            }
+          },
           "_base-top": {
             "$type": "color",
             "$value": "#0E7C7B33",
@@ -186,6 +204,24 @@
           "_base-bottom": {
             "$type": "color",
             "$value": "#8A6D0B",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "TEXT_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-_design-guides-spacer-background)"
+                }
+              }
+            }
+          },
+          "_grid-bottom": {
+            "$type": "color",
+            "$value": "#54B4F5",
             "$description": "DESIGN ONLY",
             "$extensions": {
               "com.figma": {
