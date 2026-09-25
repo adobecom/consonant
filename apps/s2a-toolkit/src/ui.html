@@ -32,6 +32,14 @@
           <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
+      <!-- Home used to advertise the palette. With Home gone the shortcut still
+           works everywhere, but nothing said so — this is that affordance. -->
+      <button class="icon-btn" id="paletteHintBtn" title="Search all actions (⌘K)" aria-label="Search all actions">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+          <circle cx="6.2" cy="6.2" r="3.9" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M9.2 9.2L12 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </button>
       <button class="bridge-pill" id="bridgeTabBtn" aria-label="Claude Code bridge status">
         <span class="bridge-dot" id="bridgeDot"></span>
         <span class="bridge-label" id="bridgePillLabel">Connect</span>
@@ -74,60 +82,48 @@
   <button id="formatSectionBtn" style="display:none" aria-hidden="true"></button>
 
   <!-- ── Tab bar ──────────────────────────────────────────────────────── -->
-  <nav class="tab-bar full-only" id="tabBar" aria-label="Tools">
-    <!-- Home -->
-    <button class="tab active" data-panel="home" aria-label="Home">
-      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
-        <path d="M2 7L7 2.5L12 7" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-        <path d="M3.5 5.5V11.5H5.5V9H8.5V11.5H10.5V5.5" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-      </svg>
-      <span class="tab-label">Home</span>
-    </button>
-    <!-- Tools -->
-    <button class="tab" data-panel="tools" aria-label="Tools">
-      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
-        <path d="M9.5 2.5L11.5 4.5L5 11H3V9L9.5 2.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-        <path d="M8 4L10 6" stroke="currentColor" stroke-width="1.2"/>
-      </svg>
-      <span class="tab-label">Tools</span>
-    </button>
-    <!-- Contract -->
-    <button class="tab" data-panel="contract" aria-label="Contract">
+  <nav class="tab-bar full-only" id="tabBar" aria-label="Sections">
+    <!-- Docs — everything that documents a component -->
+    <button class="tab active" data-panel="docs" aria-label="Docs">
       <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
         <path d="M3.5 1.5H8L11 4.5V12.5H3.5V1.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
         <path d="M8 1.5V4.5H11" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
         <path d="M5.5 7H9M5.5 9.5H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
       </svg>
-      <span class="tab-label">Contract</span>
+      <span class="tab-label">Docs</span>
     </button>
-    <!-- Request -->
-    <button class="tab" data-panel="request" aria-label="Request">
+    <!-- Contracts — extract what Figma says, then curate it -->
+    <button class="tab" data-panel="contract" aria-label="Contracts">
+      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M2 4.5L7 2L12 4.5L7 7L2 4.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M2 7L7 9.5L12 7M2 9.5L7 12L12 9.5" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+      </svg>
+      <span class="tab-label">Contracts</span>
+    </button>
+    <!-- Tokens -->
+    <button class="tab" data-panel="tokens" aria-label="Tokens">
+      <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.2"/>
+      </svg>
+      <span class="tab-label">Tokens</span>
+    </button>
+    <!-- Requests -->
+    <button class="tab" data-panel="request" aria-label="Requests">
       <svg class="tab-icon" width="13" height="13" viewBox="0 0 14 14" fill="none">
         <path d="M12.5 1.5L6.5 7.5M12.5 1.5L8.5 12.5L6.5 7.5L1.5 5.5L12.5 1.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
       </svg>
-      <span class="tab-label">Request</span>
+      <span class="tab-label">Requests</span>
     </button>
   </nav>
 
   <!-- ── Panels ───────────────────────────────────────────────────────── -->
   <div class="main-content" id="mainContent">
 
-    <!-- Home -->
-    <div class="panel active" id="homePanel">
-      <button class="palette-hint" id="paletteHintBtn" aria-label="Open command palette">
-        <span class="palette-hint-key">⌘K</span>
-        <span class="palette-hint-text">Search all actions…</span>
-      </button>
-      <div class="section-label" style="margin-top:14px;">Quick actions</div>
-      <div class="action-list" id="homeQuickActions"></div>
-      <div id="homeRecentsSection" style="display:none;">
-        <div class="section-label" style="margin-top:14px;">Recently used</div>
-        <div class="action-list" id="homeRecents"></div>
-      </div>
-    </div>
 
-    <!-- Tools — select + annotate + spec stacked -->
-    <div class="panel" id="toolsPanel">
+    <!-- Docs — the three things that document a component, plus the
+         variant filter they all operate on -->
+    <div class="panel active" id="docsPanel">
 
       <!-- ── Variant Filter ──────────────────────────────────────────── -->
       <div id="sec-variant-filter" class="section-label">Variant filter</div>
@@ -213,7 +209,10 @@
       <div id="docCheckIssues" style="display:none; margin-top:6px; max-height:200px; overflow-y:auto;"></div>
 
 
-      <div class="tools-divider"></div>
+    </div>
+
+    <!-- Tokens -->
+    <div class="panel" id="tokensPanel">
 
       <!-- ── Token release ────────────────────────────────────────────── -->
       <div id="sec-token-release" class="section-label">Token release</div>

@@ -23569,14 +23569,14 @@
   var bridgeReconnectTimer = null;
   var bridgeReconnectAttempts = 0;
   var bridgeUserDisconnected = false;
-  var activePanel = "home";
+  var activePanel = "docs";
   var isMini = false;
   var popoverOpen = false;
   var pendingRequests = /* @__PURE__ */ new Map();
   var requestCounter = 0;
   var panelEls = {
-    home: document.getElementById("homePanel"),
-    tools: document.getElementById("toolsPanel"),
+    docs: document.getElementById("docsPanel"),
+    tokens: document.getElementById("tokensPanel"),
     contract: document.getElementById("contractPanel"),
     request: document.getElementById("requestPanel")
   };
@@ -23588,7 +23588,6 @@
     document.querySelectorAll(".tab[data-panel]").forEach((tab) => {
       tab.classList.toggle("active", tab.dataset.panel === panel);
     });
-    if (panel === "home") renderHomeView();
     if (panel === "request") postToPlugin("request:capture");
     if (panel === "contract") studioRefreshIndex();
   }
@@ -23647,7 +23646,7 @@
       description: "Select a subset of variants by axis value",
       category: "Tools",
       uiAction: () => runOrReveal(
-        "tools",
+        "docs",
         "selectApplyBtn",
         "sec-variant-filter",
         "Pick the axis values you want, then Select."
@@ -23659,7 +23658,7 @@
       description: "Add token and a11y annotations to the selected node",
       category: "Tools",
       uiAction: () => runOrReveal(
-        "tools",
+        "docs",
         "annotateApplyBtn",
         "sec-annotate",
         "Select a node in Figma and choose at least one category."
@@ -23684,7 +23683,7 @@
       description: "Build a full documentation page for the selected component or component set",
       category: "Tools",
       uiAction: () => runOrReveal(
-        "tools",
+        "docs",
         "docGenerateBtn",
         "sec-component-doc",
         "Select a component or component set in Figma first."
@@ -23723,7 +23722,7 @@
       description: "Measure the selected doc frame against the readability guardrail (WCAG 1.4.8, contrast, structure)",
       category: "Tools",
       uiAction: () => runOrReveal(
-        "tools",
+        "docs",
         "docCheckBtn",
         "sec-doc-readability",
         "Select a documentation frame in Figma first."
@@ -23745,7 +23744,7 @@
       description: "Sync variables from Figma, build, and open a release PR \u2014 the workflow never publishes",
       category: "Tokens",
       uiAction: () => runOrReveal(
-        "tools",
+        "docs",
         "tokenReleaseBtn",
         "sec-token-release",
         "Save a GitHub token first \u2014 Tools \u2192 Token release."
@@ -23783,40 +23782,10 @@
     } else if (feat.pluginAction) {
       postToPlugin(feat.pluginAction, (_a28 = feat.pluginPayload) != null ? _a28 : {});
     }
-    if (activePanel === "home") renderHomeView();
   }
   function badgeHtml(heat) {
     if (heat === "cold") return "";
     return `<span class="badge badge-${heat}">${heat}</span>`;
-  }
-  function actionRowsHtml(feats) {
-    return feats.map(
-      (f) => `<button class="action-row" data-id="${esc(f.id)}">${esc(f.name)}${badgeHtml(heatOf(f.id))}</button>`
-    ).join("");
-  }
-  function bindActionList(el2) {
-    el2.querySelectorAll(".action-row").forEach((row) => {
-      row.addEventListener("click", () => {
-        const feat = FEATURES.find((f) => f.id === row.dataset.id);
-        if (feat) fireFeature(feat);
-      });
-    });
-  }
-  function renderHomeView() {
-    const quickEl = document.getElementById("homeQuickActions");
-    const recentsEl = document.getElementById("homeRecents");
-    const recentsSection = document.getElementById("homeRecentsSection");
-    const quickFeats = QUICK_ACTION_IDS.map((id) => FEATURES.find((f) => f.id === id)).filter(Boolean);
-    quickEl.innerHTML = actionRowsHtml(quickFeats);
-    bindActionList(quickEl);
-    const recents = recentlyUsed(5);
-    if (recents.length === 0) {
-      recentsSection.style.display = "none";
-    } else {
-      recentsSection.style.display = "block";
-      recentsEl.innerHTML = actionRowsHtml(recents);
-      bindActionList(recentsEl);
-    }
   }
   var paletteOpen = false;
   var paletteSelected = 0;
@@ -23835,19 +23804,36 @@
     paletteOpen = false;
     paletteOverlay.classList.remove("open");
   }
+  var paletteGrouping = null;
   function filterPalette(q) {
     const lower = q.toLowerCase();
-    paletteFiltered = q ? FEATURES.filter(
-      (f) => f.name.toLowerCase().includes(lower) || f.description.toLowerCase().includes(lower) || f.category.toLowerCase().includes(lower) || f.id.toLowerCase().includes(lower)
-    ) : FEATURES;
+    if (q) {
+      paletteGrouping = null;
+      paletteFiltered = FEATURES.filter(
+        (f) => f.name.toLowerCase().includes(lower) || f.description.toLowerCase().includes(lower) || f.category.toLowerCase().includes(lower) || f.id.toLowerCase().includes(lower)
+      );
+    } else {
+      const group = /* @__PURE__ */ new Map();
+      const recents = recentlyUsed(5);
+      for (const f of recents) group.set(f.id, "Recent");
+      const quick = QUICK_ACTION_IDS.map((id) => FEATURES.find((f) => f.id === id)).filter((f) => Boolean(f) && !group.has(f.id));
+      for (const f of quick) group.set(f.id, "Suggested");
+      const rest = FEATURES.filter((f) => !group.has(f.id));
+      paletteFiltered = [...recents, ...quick, ...rest];
+      paletteGrouping = group;
+    }
     paletteSelected = 0;
     renderPalette();
   }
   function renderPalette() {
-    const cats = [...new Set(paletteFiltered.map((f) => f.category))];
+    const groupOf = (f) => {
+      var _a28;
+      return (_a28 = paletteGrouping == null ? void 0 : paletteGrouping.get(f.id)) != null ? _a28 : f.category;
+    };
+    const cats = [...new Set(paletteFiltered.map(groupOf))];
     let globalIdx = 0;
     paletteList.innerHTML = cats.map((cat) => {
-      const items = paletteFiltered.filter((f) => f.category === cat);
+      const items = paletteFiltered.filter((f) => groupOf(f) === cat);
       const rows = items.map((f) => {
         const idx = globalIdx++;
         const heat = heatOf(f.id);
@@ -25842,7 +25828,6 @@
   postToPlugin("contract-endpoint:get");
   postToPlugin("gh-token:get");
   applySize();
-  renderHomeView();
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden && !bridgeConnected && !bridgeUserDisconnected && !bridgeReconnectTimer) {
       bridgeReconnectAttempts = 0;

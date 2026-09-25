@@ -115,7 +115,7 @@ let bridgeKeepaliveTimer: ReturnType<typeof setInterval>  | null = null;
 let bridgeReconnectTimer: ReturnType<typeof setTimeout>   | null = null;
 let bridgeReconnectAttempts = 0;
 let bridgeUserDisconnected  = false;
-let activePanel: Panel = 'home';
+let activePanel: Panel = 'docs';
 let isMini = false;
 let popoverOpen = false;
 
@@ -128,11 +128,11 @@ let requestCounter = 0;
 
 // ── Panel switching ───────────────────────────────────────────────────────────
 
-type Panel = 'home' | 'tools' | 'contract' | 'request';
+type Panel = 'docs' | 'contract' | 'tokens' | 'request';
 
 const panelEls: Record<Panel, HTMLElement> = {
-  home:     document.getElementById('homePanel')     as HTMLElement,
-  tools:    document.getElementById('toolsPanel')    as HTMLElement,
+  docs:     document.getElementById('docsPanel')     as HTMLElement,
+  tokens:   document.getElementById('tokensPanel')   as HTMLElement,
   contract: document.getElementById('contractPanel') as HTMLElement,
   request:  document.getElementById('requestPanel')  as HTMLElement,
 };
@@ -145,7 +145,6 @@ function switchPanel(panel: Panel) {
   document.querySelectorAll<HTMLButtonElement>('.tab[data-panel]').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.panel === panel);
   });
-  if (panel === 'home') renderHomeView();
   if (panel === 'request') postToPlugin('request:capture'); // refresh the context card
   if (panel === 'contract') studioRefreshIndex();
 }
@@ -217,7 +216,7 @@ const FEATURES: Feature[] = [
     name: 'Filter variant set',
     description: 'Select a subset of variants by axis value',
     category: 'Tools',
-    uiAction: () => runOrReveal('tools', 'selectApplyBtn', 'sec-variant-filter',
+    uiAction: () => runOrReveal('docs', 'selectApplyBtn', 'sec-variant-filter',
       'Pick the axis values you want, then Select.'),
   },
   {
@@ -225,7 +224,7 @@ const FEATURES: Feature[] = [
     name: 'Annotate selection',
     description: 'Add token and a11y annotations to the selected node',
     category: 'Tools',
-    uiAction: () => runOrReveal('tools', 'annotateApplyBtn', 'sec-annotate',
+    uiAction: () => runOrReveal('docs', 'annotateApplyBtn', 'sec-annotate',
       'Select a node in Figma and choose at least one category.'),
   },
   {
@@ -244,7 +243,7 @@ const FEATURES: Feature[] = [
     name: 'Generate component doc',
     description: 'Build a full documentation page for the selected component or component set',
     category: 'Tools',
-    uiAction: () => runOrReveal('tools', 'docGenerateBtn', 'sec-component-doc',
+    uiAction: () => runOrReveal('docs', 'docGenerateBtn', 'sec-component-doc',
       'Select a component or component set in Figma first.'),
   },
   {
@@ -273,7 +272,7 @@ const FEATURES: Feature[] = [
     name: 'Check doc readability',
     description: 'Measure the selected doc frame against the readability guardrail (WCAG 1.4.8, contrast, structure)',
     category: 'Tools',
-    uiAction: () => runOrReveal('tools', 'docCheckBtn', 'sec-doc-readability',
+    uiAction: () => runOrReveal('docs', 'docCheckBtn', 'sec-doc-readability',
       'Select a documentation frame in Figma first.'),
   },
   {
@@ -288,7 +287,7 @@ const FEATURES: Feature[] = [
     name: 'Prepare token release',
     description: 'Sync variables from Figma, build, and open a release PR — the workflow never publishes',
     category: 'Tokens',
-    uiAction: () => runOrReveal('tools', 'tokenReleaseBtn', 'sec-token-release',
+    uiAction: () => runOrReveal('docs', 'tokenReleaseBtn', 'sec-token-release',
       'Save a GitHub token first — Tools → Token release.'),
   },
 
@@ -327,8 +326,6 @@ function fireFeature(feat: Feature) {
   } else if (feat.pluginAction) {
     postToPlugin(feat.pluginAction, feat.pluginPayload ?? {});
   }
-  // Refresh home if it's visible (heat badges may change)
-  if (activePanel === 'home') renderHomeView();
 }
 
 // ── Home view ─────────────────────────────────────────────────────────────────
@@ -351,27 +348,6 @@ function bindActionList(el: HTMLElement) {
       if (feat) fireFeature(feat);
     });
   });
-}
-
-function renderHomeView() {
-  const quickEl   = document.getElementById('homeQuickActions') as HTMLElement;
-  const recentsEl = document.getElementById('homeRecents') as HTMLElement;
-  const recentsSection = document.getElementById('homeRecentsSection') as HTMLElement;
-
-  const quickFeats = QUICK_ACTION_IDS
-    .map(id => FEATURES.find(f => f.id === id)!)
-    .filter(Boolean);
-  quickEl.innerHTML = actionRowsHtml(quickFeats);
-  bindActionList(quickEl);
-
-  const recents = recentlyUsed(5);
-  if (recents.length === 0) {
-    recentsSection.style.display = 'none';
-  } else {
-    recentsSection.style.display = 'block';
-    recentsEl.innerHTML = actionRowsHtml(recents);
-    bindActionList(recentsEl);
-  }
 }
 
 // ── Command palette ───────────────────────────────────────────────────────────
@@ -397,26 +373,44 @@ function closePalette() {
   paletteOverlay.classList.remove('open');
 }
 
+// With Home gone, an empty query is the home screen: what you reached for
+// last, then the handful worth reaching for first, then everything. Nothing is
+// hidden — the order changes, not the contents.
+let paletteGrouping: Map<string, string> | null = null;
+
 function filterPalette(q: string) {
   const lower = q.toLowerCase();
-  paletteFiltered = q
-    ? FEATURES.filter(f =>
-        f.name.toLowerCase().includes(lower) ||
-        f.description.toLowerCase().includes(lower) ||
-        f.category.toLowerCase().includes(lower) ||
-        f.id.toLowerCase().includes(lower)
-      )
-    : FEATURES;
+  if (q) {
+    paletteGrouping = null;
+    paletteFiltered = FEATURES.filter(f =>
+      f.name.toLowerCase().includes(lower) ||
+      f.description.toLowerCase().includes(lower) ||
+      f.category.toLowerCase().includes(lower) ||
+      f.id.toLowerCase().includes(lower)
+    );
+  } else {
+    const group = new Map<string, string>();
+    const recents = recentlyUsed(5);
+    for (const f of recents) group.set(f.id, 'Recent');
+    const quick = QUICK_ACTION_IDS
+      .map(id => FEATURES.find(f => f.id === id))
+      .filter((f): f is Feature => Boolean(f) && !group.has(f!.id));
+    for (const f of quick) group.set(f.id, 'Suggested');
+    const rest = FEATURES.filter(f => !group.has(f.id));
+    paletteFiltered = [...recents, ...quick, ...rest];
+    paletteGrouping = group;
+  }
   paletteSelected = 0;
   renderPalette();
 }
 
 function renderPalette() {
-  const cats = [...new Set(paletteFiltered.map(f => f.category))];
+  const groupOf = (f: Feature) => paletteGrouping?.get(f.id) ?? f.category;
+  const cats = [...new Set(paletteFiltered.map(groupOf))];
   let globalIdx = 0;
 
   paletteList.innerHTML = cats.map(cat => {
-    const items = paletteFiltered.filter(f => f.category === cat);
+    const items = paletteFiltered.filter(f => groupOf(f) === cat);
     const rows = items.map(f => {
       const idx = globalIdx++;
       const heat = heatOf(f.id);
@@ -2365,7 +2359,6 @@ postToPlugin('contract-endpoint:get');
 postToPlugin('gh-token:get');
 applySize();
 
-renderHomeView();
 
 // Self-heal: reconnect when Figma tab regains focus
 document.addEventListener('visibilitychange', () => {
