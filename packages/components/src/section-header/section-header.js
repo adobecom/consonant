@@ -7,16 +7,11 @@ export const SectionHeader = ({
   showEyebrow = true,
   title = "",
   body = "",
-  theme = "on-light",
   showActions = false,
   actions,
 } = {}) => html`
-  <div
-    class="c-section-header"
-    data-theme=${theme === "on-dark" ? "on-dark" : "on-light"}
-  >
+  <div class="c-section-header">
     ${RichContent({
-      theme,
       density: "tight",
       justifyContent: "center",
       measure: "wide",

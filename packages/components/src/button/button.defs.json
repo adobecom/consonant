@@ -1,0 +1,359 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Button",
+  "slug": "button",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from button.figma.evidence.json (sha256:7cc11606…) through packages/specs/dictionary.json (card)",
+    "date": "2026-09-25",
+    "reviewer": "Matt"
+  },
+  "description": "A non-interactive content card; actions live in a slot.",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "10715:35477",
+      "nodeName": "Button — v2",
+      "componentSetKey": "d91a1f5f4a290b66b0aadb6f24e1a30b6cc9e3ba",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"↳ Button\"; 456 nodes, 759 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/button/button.js",
+      "export": "Button",
+      "cssClass": "c-button",
+      "pending": true
+    }
+  },
+  "props": [
+    {
+      "name": "iconEnd",
+      "lever": true,
+      "type": "string",
+      "figma": {
+        "kind": "INSTANCE_SWAP",
+        "property": "Icon End#8359:334"
+      },
+      "code": {
+        "prop": "iconEnd"
+      }
+    },
+    {
+      "name": "iconStart",
+      "lever": true,
+      "type": "string",
+      "figma": {
+        "kind": "INSTANCE_SWAP",
+        "property": "Icon Start#8359:263"
+      },
+      "code": {
+        "prop": "iconStart"
+      }
+    },
+    {
+      "name": "label",
+      "lever": true,
+      "type": "string",
+      "default": "Label",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Label#8359:192"
+      },
+      "code": {
+        "prop": "label"
+      }
+    },
+    {
+      "name": "showIconEnd",
+      "lever": false,
+      "type": "boolean",
+      "default": false,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show Icon End#8359:121"
+      },
+      "code": {
+        "prop": "showIconEnd"
+      },
+      "notes": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes."
+    },
+    {
+      "name": "showIconStart",
+      "lever": false,
+      "type": "boolean",
+      "default": false,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show Icon Start#8359:50"
+      },
+      "code": {
+        "prop": "showIconStart"
+      },
+      "notes": "Figma authoring toggle for the \"Icon Start\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes."
+    },
+    {
+      "name": "size",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "md"
+      ],
+      "default": "md",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Size"
+      },
+      "code": {
+        "prop": "size",
+        "attr": "data-size"
+      }
+    },
+    {
+      "name": "style",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "solid",
+        "outlined",
+        "transparent",
+        "accent",
+        "knockout",
+        "outline-inverse"
+      ],
+      "default": "solid",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Style"
+      },
+      "code": {
+        "prop": "style",
+        "attr": "data-style"
+      }
+    },
+    {
+      "name": "href",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "href"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "state",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "state"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "onClick",
+      "lever": true,
+      "type": "function",
+      "figma": "NONE",
+      "code": {
+        "prop": "onClick"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    }
+  ],
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      },
+      "code": {
+        "mechanism": ":hover"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "active",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=active"
+      },
+      "code": {
+        "mechanism": ":active"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=disabled"
+      },
+      "code": {
+        "mechanism": "[disabled] / :disabled"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      },
+      "code": {
+        "mechanism": ":focus-visible"
+      },
+      "notes": "Runtime state, never an authored prop."
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-button",
+      "figma": ".root",
+      "element": "article",
+      "tokens": {
+        "background-color": "{s2a.color.background.subtle}",
+        "border-radius": "{s2a.border-radius.md}",
+        "padding": "{s2a.spacing.xl}",
+        "gap": "{s2a.spacing.md}"
+      },
+      "parts": {
+        "icon-start": {
+          "selector": ".c-button__icon",
+          "figma": "/Icon Start",
+          "slot": {
+            "name": "Icon Start",
+            "accepts": [],
+            "acceptsMode": "prefer",
+            "notes": "Instance-swap property \"Icon Start\" — list what it accepts once those contracts exist."
+          }
+        },
+        "label": {
+          "selector": ".c-button__label",
+          "figma": "/Label"
+        },
+        "icon-end": {
+          "selector": ".c-button__icon",
+          "figma": "/Icon End",
+          "slot": {
+            "name": "Icon End",
+            "accepts": [],
+            "acceptsMode": "prefer",
+            "notes": "Instance-swap property \"Icon End\" — list what it accepts once those contracts exist."
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ],
+    "notes": [
+      "Actions inside the card are native links or buttons; the card itself has no role."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "b-code-only-props",
+      "question": "href, state, onClick exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false). \"state\" collides with the State axis, which this draft read as runtime states — decide whether the code prop or the state axis is the truth.",
+      "chose": "added 3 code-only props as levers with no design binding",
+      "confidence": "low",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.code.evidence.json"
+    },
+    {
+      "id": "b-part-selectors",
+      "question": "icon-start, icon-end have no class of their own in button.css — they all share .c-button__icon. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "pointed icon-start and icon-end at .c-button__icon",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to button.css.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "packages/components/src/button/button.css"
+    },
+    {
+      "id": "b-archetype",
+      "question": "Scaffolded as card (default when no stronger signal is present). Confirm, or re-run npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection>.",
+      "chose": "archetype card, because default when no stronger signal is present",
+      "confidence": "medium",
+      "fix": "npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "Matt",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "collection: A row, grid or scroller of one repeated unit."
+      ],
+      "evidence": "roles media, eyebrow, icon; pattern n/a"
+    },
+    {
+      "id": "b-classify-1",
+      "question": "\"Show Icon End\" treated as a Figma visibility helper for \"Icon End\", not a code lever. Confirm, or change it in props/states.",
+      "chose": "\"Show Icon End\" treated as a Figma visibility helper for \"Icon End\", not a code lever",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-classify-2",
+      "question": "\"Show Icon Start\" treated as a Figma visibility helper for \"Icon Start\", not a code lever. Confirm, or change it in props/states.",
+      "chose": "\"Show Icon Start\" treated as a Figma visibility helper for \"Icon Start\", not a code lever",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-classify-3",
+      "question": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop. Confirm, or change it in props/states.",
+      "chose": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-unbound-paint",
+      "question": "30 painted layers carry no variable (/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, …). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "confidence": "high",
+      "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json unboundPaint"
+    },
+    {
+      "id": "b-layer-names",
+      "question": "4 layers carry Figma-generated names (/Icon Start/Frame, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame, /Icon End/Frame, /Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json anatomy"
+    },
+    {
+      "id": "b-code-pending",
+      "question": "No code exists yet. Generate packages/components/src/button/button.js from the spec (/spec-to-html), run npm run evidence:code -- --slug=button, then remove anchors.code.pending.",
+      "confidence": "high",
+      "fix": "Once packages/components/src/button/button.js exists, run npm run evidence:code -- --slug=button and delete anchors.code.pending.",
+      "status": "open",
+      "owner": "Matt"
+    }
+  ]
+}

@@ -1,11 +1,16 @@
 .c-quote-card {
   position: relative;
   width: 100%;
-  overflow: hidden;
+  /* clip (not hidden) keeps the aspect-ratio box's content-based minimum
+     height, so maximum-length authored copy grows the card instead of being
+     cut off; the radius still clips the media. */
+  overflow: clip;
   border-radius: var(--s2a-border-radius-md, 16px);
   /* Desktop: landscape aspect ratio matching Figma 1480×824 */
   aspect-ratio: 1480 / 824;
   container-type: inline-size;
+  display: grid;
+  align-items: center;
 }
 
 /* ─── Media ──────────────────────────────────────────────────────────────── */
@@ -31,7 +36,9 @@
   inset: 0;
   background: linear-gradient(
     139.85deg,
+    /* Primitive: invariant media scrim has no semantic overlay aliases. */
     var(--s2a-color-transparent-black-64, rgba(0, 0, 0, 0.64)) 0%,
+    /* Primitive: invariant media scrim has no semantic overlay aliases. */
     var(--s2a-color-transparent-black-16, rgba(0, 0, 0, 0.16)) 100%
   );
 }
@@ -39,13 +46,9 @@
 /* ─── Content ─────────────────────────────────────────────────────────────── */
 
 .qc-content {
-  position: absolute;
-  left: var(--s2a-spacing-4xl, 64px);
-  /* Figma: left=72px — closest token is 4xl=64px; override with local prop */
-  left: 72px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 532px;
+  position: relative;
+  margin: var(--s2a-spacing-4xl, 64px);
+  width: min(532px, calc(100% - 128px));
   display: flex;
   flex-direction: column;
   gap: var(--s2a-spacing-lg, 24px);
@@ -55,11 +58,12 @@
 
 .qc-quote__text {
   margin: 0;
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display", sans-serif);
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display"), Arial, sans-serif;
   font-weight: var(--s2a-font-weight-heading, 900);
   font-size: var(--s2a-typography-font-size-heading-2, 80px);
   line-height: var(--s2a-typography-line-height-heading-2, 76px);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-2, -3.2px);
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
   color: var(--s2a-color-content-knockout, #fff);
   position: relative;
 }
@@ -80,65 +84,66 @@
 }
 
 .qc-attribution__name {
-  font-family: var(--s2a-font-family-eyebrow, "Adobe Clean", sans-serif);
+  font-family: var(--s2a-font-family-eyebrow, "Adobe Clean"), Arial, sans-serif;
   font-weight: var(--s2a-font-weight-eyebrow, 700);
   font-size: var(--s2a-typography-font-size-eyebrow, 16px);
   line-height: var(--s2a-typography-line-height-eyebrow, 20px);
   letter-spacing: var(--s2a-typography-letter-spacing-eyebrow, 0px);
   color: var(--s2a-color-content-knockout, #fff);
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .qc-attribution__role {
-  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
+  font-family: var(--s2a-font-family-body, "Adobe Clean"), Arial, sans-serif;
   font-weight: var(--s2a-font-weight-body, 400);
   font-size: var(--s2a-typography-font-size-body-md, 16px);
   line-height: var(--s2a-typography-line-height-body-md, 20px);
   letter-spacing: var(--s2a-typography-letter-spacing-body-md, 0px);
   color: var(--s2a-color-content-knockout, #fff);
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 /* ─── Tablet: tighter type ───────────────────────────────────────────────── */
+.qc-actions .c-button {
+  max-width: 100%;
+  height: auto;
+  min-height: 40px;
+}
+
+.qc-actions .c-button__label {
+  overflow-wrap: anywhere;
+}
 
 @container (max-width: 1279px) {
   .qc-quote__text {
-    font-size: clamp(32px, 5cqi, 80px);
+    font-size: 48px;
     line-height: 1.05;
-    letter-spacing: -0.04em;
+    letter-spacing: 0;
   }
 
   .qc-content {
-    width: min(532px, calc(100cqi - 144px));
+    width: min(532px, calc(100% - 128px));
   }
 }
 
 /* ─── Mobile: portrait layout, content anchored to bottom ───────────────── */
 
 @container (max-width: 599px) {
-  .c-quote-card {
-    aspect-ratio: 375 / 620;
-  }
-
   .qc-content {
-    left: 0;
-    right: 35px;
-    top: auto;
-    bottom: 0;
-    transform: none;
+    margin: 0;
     width: auto;
-    padding: var(--s2a-spacing-lg, 24px);
+    padding: var(--s2a-spacing-4xl, 64px) var(--s2a-spacing-lg, 24px);
     gap: var(--s2a-spacing-lg, 24px);
   }
 
-  .qc-quote__text {
-    font-size: var(--s2a-typography-font-size-heading-4, 32px);
-    line-height: var(--s2a-typography-line-height-heading-4, 32px);
-    letter-spacing: -0.03em;
-  }
+  /* The quote keeps the 48px tablet step on phones (Home 375 spec 8278:190566
+     sets it at that size over a 340px card); only the inset changes. */
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────────────────── */
+@media (max-width: 599px) {
+  .c-quote-card { aspect-ratio: 375 / 620; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .qc-media__img {

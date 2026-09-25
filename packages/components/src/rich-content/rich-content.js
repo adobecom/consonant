@@ -1,7 +1,6 @@
 import { html, nothing } from "lit";
 import "./rich-content.css";
 
-const normalizeTheme = (value) => (value === "on-dark" ? "on-dark" : "on-light");
 const normalizeDensity = (value) => (value === "regular" ? "regular" : "tight");
 const normalizeJustify = (value) => (value === "center" ? "center" : "start");
 const normalizeMeasure = (value) => (value === "wide" || value === "none" ? value : "narrow");
@@ -13,7 +12,6 @@ const hasText = (value) => typeof value === "string" && value.trim().length > 0;
  * Mirrors matt-atoms RichContent component set (node 3069-5302).
  */
 export const RichContent = ({
-  theme = "on-light",
   density = "tight",
   justifyContent = "start",
   measure = "narrow",
@@ -27,7 +25,6 @@ export const RichContent = ({
   showActions = true,
   actions,
 } = {}) => {
-  const resolvedTheme = normalizeTheme(theme);
   const resolvedDensity = normalizeDensity(density);
   const resolvedJustify = normalizeJustify(justifyContent);
   const resolvedMeasure = normalizeMeasure(measure);
@@ -67,7 +64,6 @@ export const RichContent = ({
   return html`
     <div
       class="c-rich-content"
-      data-theme=${resolvedTheme}
       data-density=${resolvedDensity}
       data-justify=${resolvedJustify}
       data-measure=${resolvedMeasure}

@@ -1,0 +1,69 @@
+{
+  "id": "s2a.action-card",
+  "name": "ActionCard",
+  "slug": "action-card",
+  "status": "curated-draft",
+  "description": "A card that is one link: an illustration in a Media slot, a headline, and a chevron. The whole surface is the target and the headline is the accessible name. Used in the Acrobat \"Get started with Acrobat tools\" row (ActionCardRow).",
+  "props": [
+    {
+      "name": "href",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "lever": false
+    },
+    {
+      "name": "mediaSrc",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "headline",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.media",
+    "root.copy",
+    "root.copy.headline",
+    "root.copy.chevron"
+  ],
+  "slots": [
+    {
+      "path": "root.media",
+      "accepts": [
+        "Media"
+      ],
+      "mode": "restrict"
+    }
+  ],
+  "tokens": 12,
+  "a11y": {
+    "role": "link",
+    "wcag": [
+      "1.1.1",
+      "1.4.1",
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.4",
+      "2.4.7",
+      "2.5.8"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/action-card/action-card.js",
+      "export": "ActionCard",
+      "controller": null,
+      "cssClass": "c-action-card"
+    },
+    "figma": "14226:196789"
+  },
+  "openDecisions": 3
+}

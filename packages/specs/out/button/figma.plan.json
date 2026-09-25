@@ -1,0 +1,205 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Button",
+  "setName": "Button — v2",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "article",
+    "bindings": {
+      "background-color": [
+        "s2a/color/background/subtle"
+      ],
+      "border-radius": [
+        "s2a/border-radius/md"
+      ],
+      "padding": [
+        "s2a/spacing/xl"
+      ],
+      "gap": [
+        "s2a/spacing/md"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".icon-start",
+        "source": "/Icon Start",
+        "element": null,
+        "bindings": {},
+        "slot": {
+          "name": "Icon Start",
+          "accepts": [],
+          "mode": "prefer"
+        },
+        "children": []
+      },
+      {
+        "name": ".label",
+        "source": "/Label",
+        "element": null,
+        "bindings": {},
+        "slot": null,
+        "children": []
+      },
+      {
+        "name": ".icon-end",
+        "source": "/Icon End",
+        "element": null,
+        "bindings": {},
+        "slot": {
+          "name": "Icon End",
+          "accepts": [],
+          "mode": "prefer"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10715:35477",
+    "nodeName": "Button — v2",
+    "componentSetKey": "d91a1f5f4a290b66b0aadb6f24e1a30b6cc9e3ba",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "options": [
+        "md"
+      ],
+      "defaultValue": "md"
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [
+        "solid",
+        "outlined",
+        "transparent",
+        "accent",
+        "knockout",
+        "outline-inverse"
+      ],
+      "defaultValue": "solid"
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "focus"
+      ],
+      "defaultValue": "default",
+      "fromState": "hover"
+    },
+    {
+      "name": "Icon End#8359:334",
+      "type": "INSTANCE_SWAP",
+      "forProp": "iconEnd",
+      "defaultValue": "8873:23272"
+    },
+    {
+      "name": "Icon Start#8359:263",
+      "type": "INSTANCE_SWAP",
+      "forProp": "iconStart",
+      "defaultValue": "14:11802"
+    },
+    {
+      "name": "Label#8359:192",
+      "type": "TEXT",
+      "forProp": "label"
+    }
+  ],
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      }
+    },
+    {
+      "name": "active",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=active"
+      }
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=disabled"
+      }
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      }
+    }
+  ],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-button",
+      "bindings": {
+        "background-color": [
+          "s2a/color/background/subtle"
+        ],
+        "border-radius": [
+          "s2a/border-radius/md"
+        ],
+        "padding": [
+          "s2a/spacing/xl"
+        ],
+        "gap": [
+          "s2a/spacing/md"
+        ]
+      }
+    },
+    {
+      "name": "/Icon Start",
+      "selector": ".c-button__icon",
+      "bindings": {},
+      "slot": {
+        "name": "Icon Start",
+        "accepts": [],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/Label",
+      "selector": ".c-button__label",
+      "bindings": {}
+    },
+    {
+      "name": "/Icon End",
+      "selector": ".c-button__icon",
+      "bindings": {},
+      "slot": {
+        "name": "Icon End",
+        "accepts": [],
+        "mode": "prefer"
+      }
+    }
+  ],
+  "textStyles": []
+}

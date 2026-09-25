@@ -1,0 +1,142 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "quote-card",
+  "storybookId": "cards-quotecard",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "showattribution-on",
+      "name": "showAttribution on",
+      "args": {
+        "showAttribution": true
+      }
+    },
+    {
+      "id": "showattribution-off",
+      "name": "showAttribution off",
+      "args": {
+        "showAttribution": false
+      }
+    },
+    {
+      "id": "showcta-on",
+      "name": "showCta on",
+      "args": {
+        "showCta": true
+      }
+    },
+    {
+      "id": "showcta-off",
+      "name": "showCta off",
+      "args": {
+        "showCta": false
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "cards-quotecard--default",
+      "name": "Default",
+      "argKeys": [
+        "quote",
+        "attributionName",
+        "attributionRole",
+        "ctaLabel",
+        "ctaHref",
+        "imageSrc"
+      ]
+    },
+    {
+      "id": "cards-quotecard--mobile",
+      "name": "Mobile (375px)",
+      "argKeys": [
+        "quote",
+        "attributionName",
+        "attributionRole",
+        "ctaLabel",
+        "ctaHref",
+        "imageSrc"
+      ]
+    },
+    {
+      "id": "cards-quotecard--no-attribution",
+      "name": "No Attribution",
+      "argKeys": [
+        "quote",
+        "attributionName",
+        "attributionRole",
+        "ctaLabel",
+        "ctaHref",
+        "imageSrc",
+        "showAttribution"
+      ]
+    },
+    {
+      "id": "cards-quotecard--no-cta",
+      "name": "No Cta",
+      "argKeys": [
+        "quote",
+        "attributionName",
+        "attributionRole",
+        "ctaLabel",
+        "ctaHref",
+        "imageSrc",
+        "showCta"
+      ]
+    },
+    {
+      "id": "cards-quotecard--content-only",
+      "name": "Content Only",
+      "argKeys": [
+        "quote",
+        "attributionName",
+        "attributionRole",
+        "ctaLabel",
+        "ctaHref",
+        "imageSrc",
+        "showAttribution",
+        "showCta"
+      ]
+    },
+    {
+      "id": "cards-quotecard--no-image",
+      "name": "No Image",
+      "argKeys": [
+        "quote",
+        "attributionName",
+        "attributionRole",
+        "ctaLabel",
+        "ctaHref",
+        "imageSrc"
+      ]
+    },
+    {
+      "id": "cards-quotecard--all-three",
+      "name": "All three slides",
+      "argKeys": [
+        "quote",
+        "attributionName",
+        "attributionRole",
+        "ctaLabel",
+        "ctaHref",
+        "imageSrc"
+      ]
+    }
+  ],
+  "deferred": [],
+  "extra": [
+    "cards-quotecard--mobile",
+    "cards-quotecard--no-attribution",
+    "cards-quotecard--no-cta",
+    "cards-quotecard--content-only",
+    "cards-quotecard--no-image",
+    "cards-quotecard--all-three"
+  ]
+}

@@ -1,0 +1,631 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-09-17T16:55:48.912Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "social-proof-carousel",
+    "name": "SocialProofCarousel",
+    "cssClass": "c-social-proof-carousel",
+    "importPath": "packages/components/src/social-proof-carousel/social-proof-carousel.js",
+    "exports": [
+      "SocialProofCarousel",
+      "SocialProofCarouselController"
+    ],
+    "render": "SocialProofCarousel",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/social-proof-carousel/social-proof-carousel.spec.json",
+      "storybookId": "organisms-socialproofcarousel",
+      "figmaNodeId": "12102:175374"
+    }
+  },
+  "sources": {
+    "packages/components/src/social-proof-carousel/index.js": "sha256:502a6c89d3299ace688a358f452155e56e9e11308188345ecf8644a8373ed1d7",
+    "packages/components/src/social-proof-carousel/social-proof-carousel.js": "sha256:c75599678787f933cf11552b153a0e8370faa600529d8a4f9033792b45538ac3",
+    "packages/components/src/social-proof-carousel/social-proof-carousel.css": "sha256:038913c7a1d0d819afad7ae8365ee9a015e7e0e3c1dad501e77f42f993419e30"
+  },
+  "props": [
+    {
+      "name": "slides",
+      "default": "[]",
+      "type": "array"
+    },
+    {
+      "name": "activeIndex",
+      "default": "0",
+      "type": "number"
+    }
+  ],
+  "attributes": {
+    "data-active": {
+      "values": [
+        "0",
+        "1"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-has-icon-end": {
+      "values": [
+        "false"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-has-icon-start": {
+      "values": [
+        "false"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-single": {
+      "values": [
+        "false",
+        "true"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-size": {
+      "values": [
+        "lg",
+        "md"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-state": {
+      "values": [
+        "active",
+        "inactive"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": false
+    },
+    "data-style": {
+      "values": [
+        "knockout"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    }
+  },
+  "parts": {
+    "template": [
+      "c-social-proof-carousel",
+      "spc-dot",
+      "spc-nav",
+      "spc-nav--next",
+      "spc-nav--prev",
+      "spc-pagination",
+      "spc-slide",
+      "spc-track"
+    ],
+    "stylesheet": [
+      "QuoteCard",
+      "c-social-proof-carousel",
+      "spc-dot",
+      "spc-nav",
+      "spc-nav--next",
+      "spc-nav--prev",
+      "spc-pagination",
+      "spc-slide",
+      "spc-track"
+    ],
+    "runtime": [
+      "c-button",
+      "c-button__label",
+      "c-icon-button",
+      "c-icon-button__icon",
+      "c-quote-card",
+      "c-social-proof-carousel",
+      "qc-actions",
+      "qc-attribution",
+      "qc-attribution__name",
+      "qc-attribution__role",
+      "qc-content",
+      "qc-media",
+      "qc-media__img",
+      "qc-media__overlay",
+      "qc-open-quote",
+      "qc-quote",
+      "qc-quote__text",
+      "spc-dot",
+      "spc-nav",
+      "spc-nav--next",
+      "spc-nav--prev",
+      "spc-pagination",
+      "spc-slide",
+      "spc-track"
+    ],
+    "own": [
+      "c-social-proof-carousel",
+      "spc-dot",
+      "spc-nav",
+      "spc-nav--next",
+      "spc-nav--prev",
+      "spc-pagination",
+      "spc-slide",
+      "spc-track"
+    ]
+  },
+  "aria": {
+    "roles": [
+      "group"
+    ],
+    "attributes": [
+      "aria-hidden",
+      "aria-label",
+      "aria-pressed"
+    ],
+    "tags": [
+      "button"
+    ]
+  },
+  "imports": [
+    "../icon-button/icon-button.js",
+    "../quote-card/quote-card.js",
+    "./social-proof-carousel.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-border-radius-round": {
+        "fallback": true
+      },
+      "--s2a-color-content-knockout": {
+        "fallback": true
+      },
+      "--s2a-color-focus-ring-default": {
+        "fallback": true
+      },
+      "--s2a-color-transparent-white-64": {
+        "fallback": true
+      },
+      "--s2a-spacing-xs": {
+        "fallback": true
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [
+    ":focus",
+    "[aria-pressed=\"true\"]"
+  ],
+  "queries": [
+    "@media (max-width: 599px)",
+    "@media (prefers-reduced-motion: reduce)"
+  ],
+  "stories": [
+    {
+      "id": "organisms-socialproofcarousel--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-social-proof-carousel"
+        ],
+        "dataset": {
+          "active": "0",
+          "single": "false"
+        }
+      },
+      "attributes": {
+        "data-active": [
+          "0"
+        ],
+        "data-single": [
+          "false"
+        ],
+        "data-state": [
+          "active",
+          "inactive"
+        ],
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "lg",
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-active": [
+          "0"
+        ],
+        "data-single": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label",
+        "c-icon-button",
+        "c-icon-button__icon",
+        "c-quote-card",
+        "c-social-proof-carousel",
+        "qc-actions",
+        "qc-attribution",
+        "qc-attribution__name",
+        "qc-attribution__role",
+        "qc-content",
+        "qc-media",
+        "qc-media__img",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text",
+        "spc-dot",
+        "spc-nav",
+        "spc-nav--next",
+        "spc-nav--prev",
+        "spc-pagination",
+        "spc-slide",
+        "spc-track"
+      ],
+      "roles": [
+        "group"
+      ],
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "aria-pressed"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Watch now",
+          "disabled": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Explore",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Previous slide",
+          "disabled": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Next slide",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Slide 1",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Slide 2",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Slide 3",
+          "disabled": false
+        }
+      ],
+      "nodes": 61
+    },
+    {
+      "id": "organisms-socialproofcarousel--start-on-second",
+      "name": "Start on slide 2",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-social-proof-carousel"
+        ],
+        "dataset": {
+          "active": "1",
+          "single": "false"
+        }
+      },
+      "attributes": {
+        "data-active": [
+          "1"
+        ],
+        "data-single": [
+          "false"
+        ],
+        "data-state": [
+          "active",
+          "inactive"
+        ],
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "lg",
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-active": [
+          "1"
+        ],
+        "data-single": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label",
+        "c-icon-button",
+        "c-icon-button__icon",
+        "c-quote-card",
+        "c-social-proof-carousel",
+        "qc-actions",
+        "qc-attribution",
+        "qc-attribution__name",
+        "qc-attribution__role",
+        "qc-content",
+        "qc-media",
+        "qc-media__img",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text",
+        "spc-dot",
+        "spc-nav",
+        "spc-nav--next",
+        "spc-nav--prev",
+        "spc-pagination",
+        "spc-slide",
+        "spc-track"
+      ],
+      "roles": [
+        "group"
+      ],
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "aria-pressed"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Watch now",
+          "disabled": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Explore",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Previous slide",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Next slide",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Slide 1",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Slide 2",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Slide 3",
+          "disabled": false
+        }
+      ],
+      "nodes": 61
+    },
+    {
+      "id": "organisms-socialproofcarousel--two-slides",
+      "name": "Two slides",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-social-proof-carousel"
+        ],
+        "dataset": {
+          "active": "0",
+          "single": "false"
+        }
+      },
+      "attributes": {
+        "data-active": [
+          "0"
+        ],
+        "data-single": [
+          "false"
+        ],
+        "data-state": [
+          "active",
+          "inactive"
+        ],
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "lg",
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-active": [
+          "0"
+        ],
+        "data-single": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label",
+        "c-icon-button",
+        "c-icon-button__icon",
+        "c-quote-card",
+        "c-social-proof-carousel",
+        "qc-actions",
+        "qc-attribution",
+        "qc-attribution__name",
+        "qc-attribution__role",
+        "qc-content",
+        "qc-media",
+        "qc-media__img",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text",
+        "spc-dot",
+        "spc-nav",
+        "spc-nav--next",
+        "spc-nav--prev",
+        "spc-pagination",
+        "spc-slide",
+        "spc-track"
+      ],
+      "roles": [
+        "group"
+      ],
+      "aria": [
+        "aria-hidden",
+        "aria-label",
+        "aria-pressed"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        },
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Watch now",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Previous slide",
+          "disabled": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Next slide",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Slide 1",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Slide 2",
+          "disabled": false
+        }
+      ],
+      "nodes": 45
+    }
+  ],
+  "counts": {
+    "props": 2,
+    "attributes": 7,
+    "parts": 8,
+    "tokenReferences": 5,
+    "tokenReferencesWithoutFallback": 0,
+    "raw": 0,
+    "stories": 3,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:1fb7be7580d481700553d6af9c62d6b5b8e76abe472aa0ab416a02c6f5d78484"
+  }
+}

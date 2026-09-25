@@ -1,0 +1,311 @@
+{
+  "$schema": "../../../specs/southleft/contract.schema.json",
+  "id": "s2a.quote-card",
+  "name": "QuoteCard",
+  "version": "0.1.0",
+  "status": "deprecated",
+  "description": "Full-bleed testimonial card: decorative media with a scrim, a heading-2 quote, attribution, and one CTA. Lives inside SocialProofCarousel on the Homepage.",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "quote",
+      "type": "text",
+      "description": "Leading straight or curly quote hangs outside the text margin.",
+      "default": "\"\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "quote"
+        }
+      }
+    },
+    {
+      "name": "attributionName",
+      "type": "text",
+      "default": "\"\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "attributionName"
+        }
+      }
+    },
+    {
+      "name": "attributionRole",
+      "type": "text",
+      "default": "\"\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "attributionRole"
+        }
+      }
+    },
+    {
+      "name": "showAttribution",
+      "type": "boolean",
+      "default": "true",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Attribution#9435:0"
+        },
+        "code": {
+          "prop": "showAttribution"
+        }
+      }
+    },
+    {
+      "name": "ctaLabel",
+      "type": "text",
+      "default": "\"\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "ctaLabel"
+        }
+      }
+    },
+    {
+      "name": "ctaHref",
+      "type": "text",
+      "description": "Destination is content, not design; authoring validates it.",
+      "default": "\"#\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "ctaHref"
+        }
+      }
+    },
+    {
+      "name": "showCta",
+      "type": "boolean",
+      "default": "true",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show CTA#9334:0"
+        },
+        "code": {
+          "prop": "showCta"
+        }
+      }
+    },
+    {
+      "name": "imageSrc",
+      "type": "text",
+      "default": "\"\"",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Media#9435:3"
+        },
+        "code": {
+          "prop": "imageSrc"
+        }
+      }
+    },
+    {
+      "name": "imageAlt",
+      "type": "text",
+      "description": "Media is decorative and aria-hidden; alt is kept for the img element only.",
+      "default": "\"\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "imageAlt"
+        }
+      }
+    },
+    {
+      "name": "imageSrcset",
+      "type": "text",
+      "description": "Delivery detail.",
+      "default": "\"\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "imageSrcset"
+        }
+      }
+    },
+    {
+      "name": "imageSizes",
+      "type": "text",
+      "description": "Delivery detail.",
+      "default": "\"100vw\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "imageSizes"
+        }
+      }
+    },
+    {
+      "name": "imageLoading",
+      "type": {
+        "enum": [
+          "eager",
+          "lazy"
+        ]
+      },
+      "description": "Performance detail; the Homepage sets eager for the active slide only.",
+      "default": "\"eager\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "imageLoading"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "description": "aspect-ratio 1480/824 desktop, 375/620 mobile, from the two Figma variants; overflow clip so long copy grows the card.",
+      "element": "div",
+      "tokens": {
+        "border-radius": "{s2a.border-radius.md}"
+      },
+      "parts": {
+        "media": {
+          "element": "div[aria-hidden]",
+          "parts": {
+            "img": {
+              "element": "img"
+            },
+            "overlay": {
+              "description": "Figma: Overlay instance (Scrim=content-left-medium) binds transparent/black/16 and /64; the gradient itself is a Primitive exception.",
+              "literals": {
+                "background": "linear-gradient(139.85deg, {s2a.color.transparent-black.64} 0%, {s2a.color.transparent-black.16} 100%)"
+              }
+            }
+          }
+        },
+        "content": {
+          "description": "Desktop: 64px inset, 532px measure (Figma .content 532 wide). Mobile: padding 64/24, stacked to the bottom edge.",
+          "tokens": {
+            "margin": "{s2a.spacing.4xl}",
+            "gap": "{s2a.spacing.lg}"
+          },
+          "literals": {
+            "padding": "{s2a.spacing.4xl} {s2a.spacing.lg}"
+          },
+          "parts": {
+            "quote": {
+              "description": "Figma binds heading-2 per breakpoint mode: xl 56, lg 56, md 48, sm 32. Code steps to 48px below 1280px and keeps 48 on phones (see decisions). Figma binds the quote's fill to content/default; code uses content/knockout (see decisions).",
+              "element": "p",
+              "tokens": {
+                "font-family": "{s2a.font-family.heading}",
+                "font-weight": "{s2a.font-weight.heading}",
+                "font-size": "{s2a.typography.font-size.heading-2}",
+                "line-height": "{s2a.typography.line-height.heading-2}",
+                "color": "{s2a.color.content.knockout}"
+              }
+            },
+            "attribution": {
+              "parts": {
+                "name": {
+                  "tokens": {
+                    "font-family": "{s2a.font-family.eyebrow}",
+                    "font-weight": "{s2a.font-weight.eyebrow}",
+                    "font-size": "{s2a.typography.font-size.eyebrow}",
+                    "line-height": "{s2a.typography.line-height.eyebrow}",
+                    "letter-spacing": "{s2a.typography.letter-spacing.eyebrow}",
+                    "color": "{s2a.color.content.knockout}"
+                  }
+                },
+                "role": {
+                  "tokens": {
+                    "font-family": "{s2a.font-family.body}",
+                    "font-weight": "{s2a.font-weight.body}",
+                    "font-size": "{s2a.typography.font-size.body-md}",
+                    "line-height": "{s2a.typography.line-height.body-md}",
+                    "letter-spacing": "{s2a.typography.letter-spacing.body-md}",
+                    "color": "{s2a.color.content.knockout}"
+                  }
+                }
+              }
+            },
+            "actions": {
+              "slot": {
+                "name": "Children",
+                "accepts": [
+                  "Button"
+                ],
+                "acceptsMode": "restrict"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10",
+      "2.1.1"
+    ],
+    "notes": [
+      "CTA is a native link; authoring validates its URL.",
+      "Decorative media is aria-hidden. Do not use this component for meaningful diagrams or images requiring an accessible description.",
+      "Content remains in flow so longer copy can grow the card rather than being clipped."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "15162ddb44ecc838d25c5d791891ae0eb74b6308",
+        "nodeId": "9334:3814"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/quote-card/quote-card.js",
+        "export": "QuoteCard"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:dc3fbf5ac2d7c4f045f8ac2da9eb5cf81fb1d611c14729c46555744c9034e454",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:54759300b02463c7cb780dba82725572758af914b4d0c10e927e021cb579e6ee"
+    }
+  }
+}

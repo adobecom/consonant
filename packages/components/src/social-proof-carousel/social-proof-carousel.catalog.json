@@ -1,0 +1,62 @@
+{
+  "id": "s2a.social-proof-carousel",
+  "name": "SocialProofCarousel",
+  "slug": "social-proof-carousel",
+  "status": "curated-draft",
+  "description": "Full-bleed slider of QuoteCards: the active slide centered with equal peeks of its neighbours, knockout IconButton arrows, native toggle-button pagination. No autoplay.",
+  "props": [
+    {
+      "name": "slides",
+      "type": "QuoteCard[]",
+      "lever": true
+    },
+    {
+      "name": "activeIndex",
+      "type": "number",
+      "lever": false
+    }
+  ],
+  "parts": [
+    "root",
+    "root.track",
+    "root.track.slide",
+    "root.nav",
+    "root.pagination",
+    "root.pagination.dot"
+  ],
+  "slots": [
+    {
+      "path": "root.track.slide",
+      "accepts": [
+        "QuoteCard"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.nav",
+      "accepts": [
+        "IconButton"
+      ],
+      "mode": "restrict"
+    }
+  ],
+  "tokens": 6,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "2.1.1",
+      "2.2.2",
+      "2.4.7"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/social-proof-carousel/social-proof-carousel.js",
+      "export": "SocialProofCarousel",
+      "controller": "SocialProofCarouselController",
+      "cssClass": "c-social-proof-carousel"
+    },
+    "figma": "12102:175374"
+  },
+  "openDecisions": 1
+}

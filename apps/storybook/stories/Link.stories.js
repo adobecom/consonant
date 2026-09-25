@@ -21,7 +21,7 @@ only affordance.
       },
       source: {
         language: "html",
-        code: `<a class="c-link" href="#" data-kind="action" data-emphasis="default" data-context="on-light">
+        code: `<a class="c-link" href="#" data-kind="action" data-emphasis="default">
   <span class="c-link__label">Label</span>
   <span class="c-link__icon-end"><!-- 12px chevron --></span>
 </a>`,
@@ -41,7 +41,6 @@ only affordance.
       options: ["default", "subtle"],
       description: "text kind only — subtle drops to content/body-subtle",
     },
-    context: { control: "radio", options: ["on-light", "on-dark"] },
     underline: { control: "boolean" },
     showIconEnd: { control: "boolean" },
   },
@@ -50,7 +49,6 @@ only affordance.
     href: "#",
     kind: "action",
     emphasis: "default",
-    context: "on-light",
     underline: false,
     showIconEnd: true,
   },
@@ -60,9 +58,10 @@ only affordance.
 
 const darkSurface = (content) => html`
   <div
+    data-theme="dark"
     style="
       padding: 24px 32px;
-      background: var(--s2a-color-background-knockout, #000);
+      background: var(--s2a-color-background-default, #000);
       border-radius: 8px;
     "
   >
@@ -80,13 +79,14 @@ export const TextSubtle = {
   args: { kind: "text", emphasis: "subtle", label: "Terms of use", showIconEnd: false },
 };
 
+// Dark is a surface mode, not a prop: the wrapper pins data-theme="dark" and the
+// theme-aware tokens (content/default, focus-ring/default) flip inside it.
 export const OnDark = {
-  args: { context: "on-dark" },
   render: (args) => darkSurface(Link(args)),
 };
 
 export const OnDarkTextSubtle = {
-  args: { context: "on-dark", kind: "text", emphasis: "subtle", label: "Privacy policy", showIconEnd: false },
+  args: { kind: "text", emphasis: "subtle", label: "Privacy policy", showIconEnd: false },
   render: (args) => darkSurface(Link(args)),
 };
 
@@ -100,8 +100,8 @@ export const AllVariants = {
       ${Link({ label: "Text subtle", kind: "text", emphasis: "subtle", showIconEnd: false })}
       ${darkSurface(
         html`<div style="display: grid; gap: 16px; justify-items: start;">
-          ${Link({ label: "Action on dark", context: "on-dark" })}
-          ${Link({ label: "Text subtle on dark", context: "on-dark", kind: "text", emphasis: "subtle", showIconEnd: false })}
+          ${Link({ label: "Action on dark" })}
+          ${Link({ label: "Text subtle on dark", kind: "text", emphasis: "subtle", showIconEnd: false })}
         </div>`,
       )}
     </div>

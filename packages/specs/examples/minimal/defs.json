@@ -1,0 +1,38 @@
+[
+  {
+    "id": "demo.tag",
+    "name": "Tag",
+    "description": "A small label that classifies the thing it sits beside. Not interactive.",
+    "semantics": { "element": "span" },
+    "props": [
+      {
+        "name": "tone",
+        "type": { "enum": ["neutral", "info", "success", "warning"] },
+        "default": "neutral",
+        "description": "Which meaning the tag carries.",
+        "bindings": { "figma": { "kind": "VARIANT", "property": "Tone" }, "code": { "prop": "tone" } }
+      },
+      {
+        "name": "label",
+        "type": "text",
+        "description": "The text inside the tag.",
+        "bindings": { "figma": { "kind": "TEXT", "property": "Label" }, "code": { "prop": "label" } }
+      }
+    ],
+    "states": [],
+    "anatomy": {
+      "root": {
+        "description": "The tag surface.",
+        "tokens": {
+          "background-color": "{demo.color.surface.subtle}",
+          "border-radius": "{demo.radius.sm}",
+          "padding-inline": "{demo.space.xs}"
+        },
+        "parts": {
+          "label": { "description": "The text node.", "tokens": { "color": "{demo.color.content.default}" } }
+        }
+      }
+    },
+    "a11y": { "contrast": "AA" }
+  }
+]

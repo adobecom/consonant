@@ -1,66 +1,520 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "Button",
   "slug": "button",
   "cssClass": "c-button",
+  "figmaNodeId": "10715:35477",
   "storybookId": "atoms-button",
-  "description": "Primary action button. Matches Figma \"Button — v2\" component set (node 10715:35477). No Context axis — light/dark theming flows from the S2A variable modes (:root[data-theme]); knockout and outline-inverse are the styles for always-dark media surfaces.",
-  "figma": {
-    "componentSet": "Button — v2",
-    "nodeId": "10715:35477"
-  },
+  "description": "A non-interactive content card; actions live in a slot.",
   "variants": {
-    "style": ["solid", "outlined", "transparent", "accent", "knockout", "outline-inverse"],
-    "size": ["md"],
-    "state": ["default", "hover", "active", "focus", "disabled"]
+    "Size": [
+      "md"
+    ],
+    "Style": [
+      "solid",
+      "outlined",
+      "transparent",
+      "accent",
+      "knockout",
+      "outline-inverse"
+    ]
   },
   "props": [
-    { "name": "label", "type": "string", "defaultValue": "\"Label\"", "description": "Button label text (Figma Label text prop)" },
-    { "name": "href", "type": "string", "description": "Renders <a> when set, <button> otherwise" },
-    { "name": "style", "type": "string", "defaultValue": "\"solid\"", "enum": ["solid", "outlined", "transparent", "accent", "knockout", "outline-inverse"], "description": "Visual style (Figma Style axis)" },
-    { "name": "size", "type": "string", "defaultValue": "\"md\"", "enum": ["md"], "description": "Size (v2 ships md only)" },
-    { "name": "state", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "hover", "active", "focus", "disabled"], "description": "Forced visual state for docs; interactive states come from CSS pseudo-classes" },
-    { "name": "showIconStart", "type": "boolean", "defaultValue": "false", "description": "Show leading icon (Figma Show Icon Start)" },
-    { "name": "showIconEnd", "type": "boolean", "defaultValue": "false", "description": "Show trailing icon (Figma Show Icon End; defaults to caret)" },
-    { "name": "iconStart", "type": "Node | string", "description": "Leading icon content (Figma Icon Start instance swap)" },
-    { "name": "iconEnd", "type": "Node | string", "description": "Trailing icon content (Figma Icon End instance swap)" },
-    { "name": "onClick", "type": "function", "description": "Click handler" }
+    {
+      "name": "iconEnd",
+      "type": "string",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon End#8359:334",
+          "verified": true
+        },
+        "code": {
+          "prop": "iconEnd",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": "Node|string"
+        }
+      }
+    },
+    {
+      "name": "iconStart",
+      "type": "string",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon Start#8359:263",
+          "verified": true
+        },
+        "code": {
+          "prop": "iconStart",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": "Node|string"
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"Label\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label#8359:192",
+          "verified": true
+        },
+        "code": {
+          "prop": "label",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": "string"
+        }
+      }
+    },
+    {
+      "name": "showIconEnd",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "lever": false,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Icon End#8359:121",
+          "verified": true
+        },
+        "code": {
+          "prop": "showIconEnd",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": "boolean"
+        }
+      }
+    },
+    {
+      "name": "showIconStart",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Figma authoring toggle for the \"Icon Start\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "lever": false,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Icon Start#8359:50",
+          "verified": true
+        },
+        "code": {
+          "prop": "showIconStart",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": "boolean"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "defaultValue": "\"md\"",
+      "enum": [
+        "md"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "verified": true,
+          "options": [
+            "md"
+          ]
+        },
+        "code": {
+          "prop": "size",
+          "attr": "data-size",
+          "extracted": true,
+          "jsdoc": "'md'"
+        }
+      }
+    },
+    {
+      "name": "style",
+      "type": "string",
+      "defaultValue": "\"solid\"",
+      "enum": [
+        "solid",
+        "outlined",
+        "transparent",
+        "accent",
+        "knockout",
+        "outline-inverse"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style",
+          "verified": true,
+          "options": [
+            "solid",
+            "outlined",
+            "transparent",
+            "accent",
+            "knockout",
+            "outline-inverse"
+          ]
+        },
+        "code": {
+          "prop": "style",
+          "attr": "data-style",
+          "extracted": true,
+          "jsdoc": "'solid'|'outlined'|'transparent'|'accent'|'knockout'|'outline-inverse'"
+        }
+      }
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "href",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": "string"
+        }
+      }
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "state",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": "'default'|'hover'|'active'|'focus'|'disabled'"
+        }
+      }
+    },
+    {
+      "name": "onClick",
+      "type": "function",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "onClick",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": "Function"
+        }
+      }
+    }
   ],
-  "legacyPropMapping": {
-    "description": "v1 props are still accepted and mapped for older call sites: intent=accent → style=accent; background=solid+context=on-dark → style=knockout; background=outlined+context=on-dark → style=outline-inverse; background otherwise maps to the same-named style. The context prop itself no longer exists — page theme comes from :root[data-theme].",
-    "removed": ["context", "background", "intent"]
-  },
   "tokenBindings": {
-    "background:solid:default": "--s2a-color-button-background-solid-default → fallback --s2a-color-background-inverse",
-    "background:solid:hover": "--s2a-color-button-background-solid-hover → fallback --s2a-color-iconbutton-background-primary-solid-on-light-hover",
-    "background:solid:active": "--s2a-color-button-background-solid-active → fallback --s2a-color-background-inverse",
-    "content:solid": "--s2a-color-button-content-solid-default → fallback --s2a-color-button-content-primary-solid-default",
-    "background:outlined:hover": "--s2a-color-button-background-outlined-hover → fallback --s2a-color-button-background-primary-transparent-on-light-hover",
-    "background:outlined:active": "--s2a-color-button-background-outlined-active → fallback --s2a-color-background-inverse",
-    "content:outlined": "--s2a-color-content-default (Figma binding)",
-    "content:outlined:active": "--s2a-color-button-content-outlined-active → fallback --s2a-color-content-inverse",
-    "border:outlined": "--s2a-color-border-knockout (Figma binding; light gray-1000 / dark gray-25)",
-    "background:transparent:*": "--s2a-color-button-background-transparent-{default,hover,active} → fallback --s2a-color-button-background-primary-transparent-on-light-{default,hover,active}",
-    "background:accent:*": "--s2a-color-button-background-accent-{default,hover,active} → fallback --s2a-color-button-background-accent-solid-on-light-{default,hover,active}",
-    "content:accent": "--s2a-color-content-knockout (Figma binding)",
-    "background:knockout:*": "--s2a-color-button-background-knockout-{default,hover,active} → fallback --s2a-color-gray-{25,50,100} (theme-invariant by design)",
-    "content:knockout": "--s2a-color-button-content-knockout → fallback --s2a-color-button-content-primary-solid-inverse",
-    "background:outline-inverse:*": "--s2a-color-button-background-outline-inverse-{default,hover,active} → fallback --s2a-color-transparent-white-{00,08,16}",
-    "content:outline-inverse": "--s2a-color-button-content-outline-inverse → fallback --s2a-color-content-knockout",
-    "focus-ring": "--s2a-color-focus-ring-default; knockout/outline-inverse use --s2a-color-focus-ring-knockout with a --s2a-color-background-knockout gap ring"
+    "root-background-color": "--s2a-color-background-subtle",
+    "root-border-radius": "--s2a-border-radius-md",
+    "root-padding": "--s2a-spacing-xl",
+    "root-gap": "--s2a-spacing-md"
   },
-  "knownTokenGaps": [
-    "All v2 button token names (s2a/color/button/{background,content,border}/{style}/{state}) are bound in Figma but not yet in the shipped tokens release — CSS chains each to a shipped var with identical light/dark resolution and upgrades automatically when they ship.",
-    "outline-inverse hover/active resolve white/08–16 in Light but black/08–24 in Dark in Figma; no shipped var flips that direction, so the invariant white fallbacks are used until the v2 tokens ship (visually subtle: 8–16% overlays on media surfaces).",
-    "md height 40px and vertical padding 14px are unbound in Figma with no matching semantic tokens."
-  ],
+  "composedOf": [],
   "a11y": {
-    "role": "button (native <button>) or link (<a href>)",
-    "requiredAriaAttrs": [],
-    "wcag": ["2.1.1", "2.4.7", "1.4.3"],
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ],
     "notes": [
-      "Disabled <a> buttons get aria-disabled='true', tabindex='-1', and a click interceptor.",
-      "Focus ring is a two-layer box-shadow using --s2a-color-focus-ring-default (or -knockout on media styles).",
-      "Icon spans are aria-hidden; the label text carries the accessible name."
+      "Actions inside the card are native links or buttons; the card itself has no role."
     ]
+  },
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      },
+      "code": {
+        "mechanism": ":hover"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "active",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=active"
+      },
+      "code": {
+        "mechanism": ":active"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=disabled"
+      },
+      "code": {
+        "mechanism": "[disabled] / :disabled"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      },
+      "code": {
+        "mechanism": ":focus-visible"
+      },
+      "notes": "Runtime state, never an authored prop."
+    }
+  ],
+  "anatomy": {
+    "selector": ".c-button",
+    "figma": ".root",
+    "element": "article",
+    "tokens": {
+      "background-color": {
+        "value": "{s2a.color.background.subtle}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.color.background.subtle}",
+            "cssVar": "--s2a-color-background-subtle",
+            "figma": "s2a/color/background/subtle",
+            "shipped": true,
+            "value": "#f8f8f8",
+            "dark": "#505050"
+          }
+        ]
+      },
+      "border-radius": {
+        "value": "{s2a.border-radius.md}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.border-radius.md}",
+            "cssVar": "--s2a-border-radius-md",
+            "figma": "s2a/border-radius/md",
+            "shipped": true,
+            "value": "16px"
+          }
+        ]
+      },
+      "padding": {
+        "value": "{s2a.spacing.xl}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.xl}",
+            "cssVar": "--s2a-spacing-xl",
+            "figma": "s2a/spacing/xl",
+            "shipped": true,
+            "value": "32px"
+          }
+        ]
+      },
+      "gap": {
+        "value": "{s2a.spacing.md}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.md}",
+            "cssVar": "--s2a-spacing-md",
+            "figma": "s2a/spacing/md",
+            "shipped": true,
+            "value": "16px"
+          }
+        ]
+      }
+    },
+    "parts": {
+      "icon-start": {
+        "selector": ".c-button__icon",
+        "figma": "/Icon Start",
+        "slot": {
+          "name": "Icon Start",
+          "accepts": [],
+          "acceptsMode": "prefer",
+          "notes": "Instance-swap property \"Icon Start\" — list what it accepts once those contracts exist."
+        }
+      },
+      "label": {
+        "selector": ".c-button__label",
+        "figma": "/Label"
+      },
+      "icon-end": {
+        "selector": ".c-button__icon",
+        "figma": "/Icon End",
+        "slot": {
+          "name": "Icon End",
+          "accepts": [],
+          "acceptsMode": "prefer",
+          "notes": "Instance-swap property \"Icon End\" — list what it accepts once those contracts exist."
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "10715:35477",
+        "nodeName": "Button — v2",
+        "componentSetKey": "d91a1f5f4a290b66b0aadb6f24e1a30b6cc9e3ba",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:7cc116068e4427e60712c6bc0222a0b3fad278c3374d48a0024b11a00cc2dc62",
+        "extractedAt": "2026-09-25T16:25:39.053Z",
+        "meta": {
+          "version": "2.0.0",
+          "status": "active",
+          "updated": "2026-08-04",
+          "changelog": "2.0.0   2026-08-04  major        Light/dark ready; new Style set. BREAKING vs v1"
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/button/button.js",
+        "export": "Button",
+        "controller": null,
+        "cssClass": "c-button"
+      },
+      "evidence": {
+        "hash": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "b-code-only-props",
+      "question": "href, state, onClick exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false). \"state\" collides with the State axis, which this draft read as runtime states — decide whether the code prop or the state axis is the truth.",
+      "chose": "added 3 code-only props as levers with no design binding",
+      "confidence": "low",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.code.evidence.json"
+    },
+    {
+      "id": "b-part-selectors",
+      "question": "icon-start, icon-end have no class of their own in button.css — they all share .c-button__icon. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "pointed icon-start and icon-end at .c-button__icon",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to button.css.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "packages/components/src/button/button.css"
+    },
+    {
+      "id": "b-archetype",
+      "question": "Scaffolded as card (default when no stronger signal is present). Confirm, or re-run npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection>.",
+      "chose": "archetype card, because default when no stronger signal is present",
+      "confidence": "medium",
+      "fix": "npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "Matt",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "collection: A row, grid or scroller of one repeated unit."
+      ],
+      "evidence": "roles media, eyebrow, icon; pattern n/a"
+    },
+    {
+      "id": "b-classify-1",
+      "question": "\"Show Icon End\" treated as a Figma visibility helper for \"Icon End\", not a code lever. Confirm, or change it in props/states.",
+      "chose": "\"Show Icon End\" treated as a Figma visibility helper for \"Icon End\", not a code lever",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-classify-2",
+      "question": "\"Show Icon Start\" treated as a Figma visibility helper for \"Icon Start\", not a code lever. Confirm, or change it in props/states.",
+      "chose": "\"Show Icon Start\" treated as a Figma visibility helper for \"Icon Start\", not a code lever",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-classify-3",
+      "question": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop. Confirm, or change it in props/states.",
+      "chose": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-unbound-paint",
+      "question": "30 painted layers carry no variable (/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, …). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "confidence": "high",
+      "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json unboundPaint"
+    },
+    {
+      "id": "b-layer-names",
+      "question": "4 layers carry Figma-generated names (/Icon Start/Frame, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame, /Icon End/Frame, /Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "button.figma.evidence.json anatomy"
+    },
+    {
+      "id": "b-code-pending",
+      "question": "No code exists yet. Generate packages/components/src/button/button.js from the spec (/spec-to-html), run npm run evidence:code -- --slug=button, then remove anchors.code.pending.",
+      "confidence": "high",
+      "fix": "Once packages/components/src/button/button.js exists, run npm run evidence:code -- --slug=button and delete anchors.code.pending.",
+      "status": "open",
+      "owner": "Matt"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:ab4646e940f088c84700ab60e9a7dd46be13b1ad4e95fdee554750400fba895d",
+    "codeEvidence": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7",
+    "figmaEvidence": "sha256:7cc116068e4427e60712c6bc0222a0b3fad278c3374d48a0024b11a00cc2dc62",
+    "generator": "s2a-spec-transform@1"
   }
 }

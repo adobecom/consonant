@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 220px;
-  max-height: 68px;
+  min-height: 68px;
   box-sizing: border-box;
   overflow: hidden;
   padding: var(--s2a-spacing-sm, 12px) var(--s2a-spacing-sm, 12px)
@@ -51,9 +51,18 @@
   width: 100%;
 }
 
-/* Label truncation — prevent wrapping in fixed-height cards */
+/* The tile owns the ink. Both tile surfaces are theme-invariant (dark glass,
+   white active), so the lockup must not bring its own theme-dependent
+   content/label color, and the ink must follow data-state when the controller
+   swaps the active tile after render. */
+.c-router-nav-item .c-product-lockup[data-style] {
+  color: inherit;
+}
+
+/* Labels fit on one line at the design size; under user text spacing
+   (WCAG 1.4.12) they wrap and the tile grows rather than clipping. */
 .c-router-nav-item .c-product-lockup[data-orientation="vertical"] .c-product-lockup__label {
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 /* Progress — absolute, pinned to card bottom edge */

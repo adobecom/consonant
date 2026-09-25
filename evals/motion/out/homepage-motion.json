@@ -1,0 +1,176 @@
+{
+  "date": "2026-09-17T16:56:30.660Z",
+  "source": {
+    "reference": "Milo C2 — context/milo/libs/c2/styles/styles.css (parallax-* recipe), libs/c2/blocks/elastic-carousel/elastic-carousel.css, libs/utils/decorate.js (video), libs/c2/blocks/carousel-c2; live adobe.com homepage recording 2026-09-14 (apps/authoring-poc/reports/polish/live-adobe-com/)",
+    "easing": "cubic-bezier(0.42, 0, 0, 1)",
+    "note": "Each contract names the element, the animation Milo applies, its timeline and range, and what reduced motion must do. The scorer checks the built visitor preview under both motion preferences."
+  },
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "results": [
+    {
+      "id": "hero-sticky-move-up",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-hero-move-up ok"
+    },
+    {
+      "id": "hero-fade-to-dark",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-hero-fade-to-dark ok"
+    },
+    {
+      "id": "section-overlap",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "layout ok"
+    },
+    {
+      "id": "category-heading-move-up",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-reveal ok"
+    },
+    {
+      "id": "category-rail-slide-in",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-rail-slide-in ok"
+    },
+    {
+      "id": "category-card-gap-shrink",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-rail-gap-shrink ok"
+    },
+    {
+      "id": "features-heading-move-up",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-reveal ok"
+    },
+    {
+      "id": "features-card-stagger",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-stagger ok"
+    },
+    {
+      "id": "features-image-scale-down",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-reveal-scale ok"
+    },
+    {
+      "id": "news-card-stagger",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-stagger ok"
+    },
+    {
+      "id": "product-card-stagger",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "home-stagger ok"
+    },
+    {
+      "id": "hero-video-autoplay",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "state playing, playing true, attrs {\"muted\":true,\"loop\":true,\"playsinline\":true}, advanced true"
+    },
+    {
+      "id": "hero-pause-control",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "Pause autoplay → Play autoplay, state paused"
+    },
+    {
+      "id": "category-hover-play",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "hover true, leave→paused true, focus true"
+    },
+    {
+      "id": "media-card-hover-zoom",
+      "mode": "no-preference",
+      "status": "PASS",
+      "detail": "transition transform 0.75s, hover scale 1.03"
+    },
+    {
+      "id": "hero-sticky-move-up",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "hero-fade-to-dark",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "category-heading-move-up",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "category-rail-slide-in",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "category-card-gap-shrink",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "features-heading-move-up",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "features-card-stagger",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "features-image-scale-down",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "news-card-stagger",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "product-card-stagger",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "no motion, as required"
+    },
+    {
+      "id": "hero-video-autoplay",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "state paused, sources 0, mp4 requests 0"
+    },
+    {
+      "id": "category-hover-play",
+      "mode": "reduce",
+      "status": "PASS",
+      "detail": "hover plays false"
+    }
+  ]
+}

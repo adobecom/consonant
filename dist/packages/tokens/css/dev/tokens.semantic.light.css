@@ -2,7 +2,7 @@
  * Do not edit directly, this file was auto-generated.
  */
 
-:root, :root[data-theme="light"] {
+:root, :root[data-theme="light"], [data-theme="light"] {
   /* Color / Background */
   --s2a-color-background-brand: var(--s2a-color-brand-adobe-red);
   --s2a-color-background-default: var(--s2a-color-gray-25);
@@ -198,10 +198,8 @@
   --s2a-color-router-nav-item-background-active: var(--s2a-color-gray-25);
   --s2a-color-router-nav-item-content-active: var(--s2a-color-gray-1000);
   --s2a-color-section-default: var(--s2a-color-gray-25);
-  --s2a-color-surface-default: var(--s2a-color-gray-25);
-  --s2a-color-surface-inverse: var(--s2a-color-gray-1000); /** Background for surfaces that invert relative to the current page mode — dark in light mode, light in dark mode. Use for expanded or active states where the component flips to contrast against the page (e.g. ElasticCard expanded state). Zero blast radius — safe to evolve. Counterpart: surface/subtle for the resting state. */
-  --s2a-color-surface-inverse-subtle: var(--s2a-color-gray-900); /** Background for surfaces that invert relative to the current page mode — dark in light mode, light in dark mode. Use for expanded or active states where the component flips to contrast against the page (e.g. ElasticCard expanded state). Zero blast radius — safe to evolve. Counterpart: surface/subtle for the resting state. */
-  --s2a-color-surface-knockout: var(--s2a-color-gray-25);
-  --s2a-color-surface-strong: #eee;
-  --s2a-color-surface-subtle: var(--s2a-color-gray-50);
+  --s2a-color-surface-default: var(--s2a-color-gray-25); /** Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme. */
+  --s2a-color-surface-inverse: var(--s2a-color-gray-1000); /** Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme. */
+  --s2a-color-surface-inverse-subtle: var(--s2a-color-gray-900); /** Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme. */
+  --s2a-color-surface-subtle: var(--s2a-color-gray-50); /** Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme. */
 }

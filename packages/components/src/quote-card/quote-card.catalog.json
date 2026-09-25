@@ -1,0 +1,110 @@
+{
+  "id": "s2a.quote-card",
+  "name": "QuoteCard",
+  "slug": "quote-card",
+  "status": "curated-draft",
+  "description": "Full-bleed testimonial card: decorative media with a scrim, a heading-2 quote, attribution, and one CTA. Lives inside SocialProofCarousel on the Homepage.",
+  "props": [
+    {
+      "name": "quote",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "attributionName",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "attributionRole",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showAttribution",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "ctaLabel",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "ctaHref",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showCta",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "imageSrc",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "imageAlt",
+      "type": "string",
+      "lever": false
+    },
+    {
+      "name": "imageSrcset",
+      "type": "string",
+      "lever": false
+    },
+    {
+      "name": "imageSizes",
+      "type": "string",
+      "lever": false
+    },
+    {
+      "name": "imageLoading",
+      "type": "string",
+      "lever": false
+    }
+  ],
+  "parts": [
+    "root",
+    "root.media",
+    "root.media.img",
+    "root.media.overlay",
+    "root.content",
+    "root.content.quote",
+    "root.content.attribution",
+    "root.content.attribution.name",
+    "root.content.attribution.role",
+    "root.content.actions"
+  ],
+  "slots": [
+    {
+      "path": "root.content.actions",
+      "accepts": [
+        "Button"
+      ],
+      "mode": "restrict"
+    }
+  ],
+  "tokens": 21,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10",
+      "2.1.1"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/quote-card/quote-card.js",
+      "export": "QuoteCard",
+      "controller": null,
+      "cssClass": "c-quote-card"
+    },
+    "figma": "9334:3814"
+  },
+  "openDecisions": 4
+}
