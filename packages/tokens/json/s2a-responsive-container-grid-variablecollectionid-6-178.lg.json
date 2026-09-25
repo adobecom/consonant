@@ -1024,6 +1024,22 @@
               }
             }
           }
+        },
+        "legal": {
+          "$type": "number",
+          "$value": "{s2a.font.size.md}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FONT_SIZE"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-typography-font-size-legal)"
+              }
+            }
+          }
         }
       },
       "letter-spacing": {
@@ -1250,6 +1266,22 @@
               }
             }
           }
+        },
+        "legal": {
+          "$type": "number",
+          "$value": "{s2a.font.letter-spacing.6xl}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "LETTER_SPACING"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-typography-letter-spacing-legal)"
+              }
+            }
+          }
         }
       },
       "line-height": {
@@ -1473,6 +1505,22 @@
               ],
               "codeSyntax": {
                 "WEB": "var(--s2a-typography-line-height-caption)"
+              }
+            }
+          }
+        },
+        "legal": {
+          "$type": "number",
+          "$value": "{s2a.font.line-height.sm}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "LINE_HEIGHT"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-typography-line-height-legal)"
               }
             }
           }
@@ -1844,23 +1892,93 @@
             }
           }
         },
-        "measure": {
-          "narrow": {
-            "$type": "number",
-            "$value": 512,
-            "$description": "DESIGN ONLY",
-            "$extensions": {
-              "com.figma": {
-                "hiddenFromPublishing": false,
-                "scopes": [
-                  "WIDTH_HEIGHT"
-                ],
-                "codeSyntax": {
-                  "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+        "_body-max-width": {
+          "$type": "number",
+          "$value": 680,
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "WIDTH_HEIGHT"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-rich-media-content-_max-width)"
+              }
+            }
+          }
+        },
+        "narrow": {
+          "heading": {
+            "narrow": {
+              "$type": "number",
+              "$value": 800,
+              "$description": "DESIGN ONLY",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "WIDTH_HEIGHT"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+                  }
+                }
+              }
+            },
+            "narrow-xs": {
+              "$type": "number",
+              "$value": 660,
+              "$description": "DESIGN ONLY",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "WIDTH_HEIGHT"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+                  }
                 }
               }
             }
           },
+          "body": {
+            "narrow": {
+              "$type": "number",
+              "$value": 515,
+              "$description": "DESIGN ONLY",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "WIDTH_HEIGHT"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+                  }
+                }
+              }
+            },
+            "narrow-xs": {
+              "$type": "number",
+              "$value": 515,
+              "$description": "DESIGN ONLY",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "WIDTH_HEIGHT"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "measure": {
           "wide": {
             "$type": "number",
             "$value": 1192,
@@ -2202,6 +2320,22 @@
     },
     "design-spacers": {
       "_base-bottom": {
+        "$type": "number",
+        "$value": "{s2a.spacing.128}",
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "TEXT_CONTENT",
+              "WIDTH_HEIGHT",
+              "GAP"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "_grid-bottom": {
         "$type": "number",
         "$value": "{s2a.spacing.128}",
         "$description": "DESIGN ONLY",

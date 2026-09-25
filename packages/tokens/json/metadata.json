@@ -2,34 +2,20 @@
   "fileId": "eGSyBcD5XdFXR8rJXJmVNY",
   "branchKey": null,
   "apiBase": "https://api.figma.com",
-  "generatedAt": "2026-08-18T15:39:41.701Z",
+  "generatedAt": "2026-09-25T20:40:06.841Z",
   "files": [
     {
-      "fileName": "s2a-primitives-color-theme-variablecollectionid-1-138.light.json",
+      "fileName": "s2a-primitives-dimension-static-variablecollectionid-1-44.mode-1.json",
       "collection": {
-        "id": "VariableCollectionId:1:138",
-        "name": "S2A / Primitives / Color / Theme",
-        "slug": "s2a-primitives-color-theme",
-        "idSlug": "variablecollectionid-1-138"
+        "id": "VariableCollectionId:1:44",
+        "name": "S2A / Primitives / Dimension / Static",
+        "slug": "s2a-primitives-dimension-static",
+        "idSlug": "variablecollectionid-1-44"
       },
       "mode": {
-        "id": "1:6",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-dimension-static-variablecollectionid-530eb9fc4e9077abe9390613e61263db0c186e91-4458-183.token.json",
-      "collection": {
-        "id": "VariableCollectionId:530eb9fc4e9077abe9390613e61263db0c186e91/4458:183",
-        "name": "S2A / Semantic / Dimension / Static",
-        "slug": "s2a-semantic-dimension-static",
-        "idSlug": "variablecollectionid-530eb9fc4e9077abe9390613e61263db0c186e91-4458-183"
-      },
-      "mode": {
-        "id": "78:0",
-        "name": "Token",
-        "slug": "token"
+        "id": "1:5",
+        "name": "Mode 1",
+        "slug": "mode-1"
       }
     },
     {
@@ -47,59 +33,31 @@
       }
     },
     {
-      "fileName": "primitives-core-variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74.mode-1.json",
+      "fileName": "s2a-semantic-dimension-static-variablecollectionid-530eb9fc4e9077abe9390613e61263db0c186e91-4458-183.token.json",
       "collection": {
-        "id": "VariableCollectionId:433e182a0b86bf16dd1ed62dacdbd3d3d2025110/82:74",
-        "name": "Primitives (Core)",
-        "slug": "primitives-core",
-        "idSlug": "variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74"
+        "id": "VariableCollectionId:530eb9fc4e9077abe9390613e61263db0c186e91/4458:183",
+        "name": "S2A / Semantic / Dimension / Static",
+        "slug": "s2a-semantic-dimension-static",
+        "idSlug": "variablecollectionid-530eb9fc4e9077abe9390613e61263db0c186e91-4458-183"
       },
       "mode": {
-        "id": "1:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
+        "id": "78:0",
+        "name": "Token",
+        "slug": "token"
       }
     },
     {
-      "fileName": "s2a-primitives-dimension-static-variablecollectionid-1-44.mode-1.json",
+      "fileName": "s2a-primitives-color-theme-variablecollectionid-1-138.light.json",
       "collection": {
-        "id": "VariableCollectionId:1:44",
-        "name": "S2A / Primitives / Dimension / Static",
-        "slug": "s2a-primitives-dimension-static",
-        "idSlug": "variablecollectionid-1-44"
+        "id": "VariableCollectionId:1:138",
+        "name": "S2A / Primitives / Color / Theme",
+        "slug": "s2a-primitives-color-theme",
+        "idSlug": "variablecollectionid-1-138"
       },
       "mode": {
-        "id": "1:5",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-color-theme-variablecollectionid-6-17.light.json",
-      "collection": {
-        "id": "VariableCollectionId:6:17",
-        "name": "S2A / Semantic / Color / Theme",
-        "slug": "s2a-semantic-color-theme",
-        "idSlug": "variablecollectionid-6-17"
-      },
-      "mode": {
-        "id": "6:0",
+        "id": "1:6",
         "name": "Light",
         "slug": "light"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-color-theme-variablecollectionid-6-17.dark.json",
-      "collection": {
-        "id": "VariableCollectionId:6:17",
-        "name": "S2A / Semantic / Color / Theme",
-        "slug": "s2a-semantic-color-theme",
-        "idSlug": "variablecollectionid-6-17"
-      },
-      "mode": {
-        "id": "6:1",
-        "name": "Dark",
-        "slug": "dark"
       }
     },
     {
@@ -159,29 +117,15 @@
       }
     },
     {
-      "fileName": "primitives-color-theme-variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841.light.json",
+      "fileName": "typography-variablecollectionid-214cb9a95fbbbe442c1390e1bc725ebb88b830b1-51-15.mode-1.json",
       "collection": {
-        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/18953:841",
-        "name": "Primitives / Color / Theme",
-        "slug": "primitives-color-theme",
-        "idSlug": "variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841"
+        "id": "VariableCollectionId:214cb9a95fbbbe442c1390e1bc725ebb88b830b1/51:15",
+        "name": "Typography",
+        "slug": "typography",
+        "idSlug": "variablecollectionid-214cb9a95fbbbe442c1390e1bc725ebb88b830b1-51-15"
       },
       "mode": {
-        "id": "17135:0",
-        "name": "Light",
-        "slug": "light"
-      }
-    },
-    {
-      "fileName": "primitives-dimension-static-variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
-        "name": "Primitives / Dimension / Static",
-        "slug": "primitives-dimension-static",
-        "idSlug": "variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239"
-      },
-      "mode": {
-        "id": "16797:0",
+        "id": "3:0",
         "name": "Mode 1",
         "slug": "mode-1"
       }
@@ -201,6 +145,104 @@
       }
     },
     {
+      "fileName": "primitives-dimension-static-variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:c429e3eaec67551a757335a356da6c60dd4d9453/18943:3239",
+        "name": "Primitives / Dimension / Static",
+        "slug": "primitives-dimension-static",
+        "idSlug": "variablecollectionid-c429e3eaec67551a757335a356da6c60dd4d9453-18943-3239"
+      },
+      "mode": {
+        "id": "16797:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "primitives-core-variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:433e182a0b86bf16dd1ed62dacdbd3d3d2025110/82:74",
+        "name": "Primitives (Core)",
+        "slug": "primitives-core",
+        "idSlug": "variablecollectionid-433e182a0b86bf16dd1ed62dacdbd3d3d2025110-82-74"
+      },
+      "mode": {
+        "id": "1:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "s2a-semantic-color-theme-variablecollectionid-6-17.light.json",
+      "collection": {
+        "id": "VariableCollectionId:6:17",
+        "name": "S2A / Semantic / Color / Theme",
+        "slug": "s2a-semantic-color-theme",
+        "idSlug": "variablecollectionid-6-17"
+      },
+      "mode": {
+        "id": "6:0",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "s2a-semantic-color-theme-variablecollectionid-6-17.dark.json",
+      "collection": {
+        "id": "VariableCollectionId:6:17",
+        "name": "S2A / Semantic / Color / Theme",
+        "slug": "s2a-semantic-color-theme",
+        "idSlug": "variablecollectionid-6-17"
+      },
+      "mode": {
+        "id": "6:1",
+        "name": "Dark",
+        "slug": "dark"
+      }
+    },
+    {
+      "fileName": "primitives-color-theme-variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841.light.json",
+      "collection": {
+        "id": "VariableCollectionId:fdf1816f97e476e039b3ef2de68e13a2db903d1e/18953:841",
+        "name": "Primitives / Color / Theme",
+        "slug": "primitives-color-theme",
+        "idSlug": "variablecollectionid-fdf1816f97e476e039b3ef2de68e13a2db903d1e-18953-841"
+      },
+      "mode": {
+        "id": "17135:0",
+        "name": "Light",
+        "slug": "light"
+      }
+    },
+    {
+      "fileName": "s-typography-variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627.mode-1.json",
+      "collection": {
+        "id": "VariableCollectionId:df621fb21582d7e499c45bf908fe7ea44b7c9c01/27101:21627",
+        "name": "•S Typography",
+        "slug": "s-typography",
+        "idSlug": "variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627"
+      },
+      "mode": {
+        "id": "19458:0",
+        "name": "Mode 1",
+        "slug": "mode-1"
+      }
+    },
+    {
+      "fileName": "specs-layout-variablecollectionid-abc78739bb2cbaac96283da4e10d74ed6e05c27d-5821-5.default.json",
+      "collection": {
+        "id": "VariableCollectionId:abc78739bb2cbaac96283da4e10d74ed6e05c27d/5821:5",
+        "name": "Specs Layout",
+        "slug": "specs-layout",
+        "idSlug": "variablecollectionid-abc78739bb2cbaac96283da4e10d74ed6e05c27d-5821-5"
+      },
+      "mode": {
+        "id": "5821:2",
+        "name": "Default",
+        "slug": "default"
+      }
+    },
+    {
       "fileName": "s2a-primitives-color-theme-variablecollectionid-23dfb9688d347020258cb5a8b587fd4c5c7287bc-2073-2569.light.json",
       "collection": {
         "id": "VariableCollectionId:23dfb9688d347020258cb5a8b587fd4c5c7287bc/2073:2569",
@@ -212,20 +254,6 @@
         "id": "1:6",
         "name": "Light",
         "slug": "light"
-      }
-    },
-    {
-      "fileName": "s2a-semantic-dimension-static-variablecollectionid-6c6b35ec4a5a89cf0598ba78e6c7482370d719ad-2073-2682.value.json",
-      "collection": {
-        "id": "VariableCollectionId:6c6b35ec4a5a89cf0598ba78e6c7482370d719ad/2073:2682",
-        "name": "S2A / Semantic / Dimension / Static",
-        "slug": "s2a-semantic-dimension-static",
-        "idSlug": "variablecollectionid-6c6b35ec4a5a89cf0598ba78e6c7482370d719ad-2073-2682"
-      },
-      "mode": {
-        "id": "1:7",
-        "name": "Value",
-        "slug": "value"
       }
     },
     {
@@ -327,59 +355,59 @@
       }
     },
     {
-      "fileName": "s-typography-variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627.mode-1.json",
+      "fileName": "s2a-container-variablecollectionid-12861-30707.default.json",
       "collection": {
-        "id": "VariableCollectionId:df621fb21582d7e499c45bf908fe7ea44b7c9c01/27101:21627",
-        "name": "•S Typography",
-        "slug": "s-typography",
-        "idSlug": "variablecollectionid-df621fb21582d7e499c45bf908fe7ea44b7c9c01-27101-21627"
+        "id": "VariableCollectionId:12861:30707",
+        "name": "S2A / Container",
+        "slug": "s2a-container",
+        "idSlug": "variablecollectionid-12861-30707"
       },
       "mode": {
-        "id": "19458:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "s-typography-variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627.mode-1.json",
-      "collection": {
-        "id": "VariableCollectionId:dbeda2c7fb4dab171973418e8101f01785b5e6e2/27101:21627",
-        "name": "•S Typography",
-        "slug": "s-typography",
-        "idSlug": "variablecollectionid-dbeda2c7fb4dab171973418e8101f01785b5e6e2-27101-21627"
-      },
-      "mode": {
-        "id": "19458:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
-      }
-    },
-    {
-      "fileName": "specs-layout-variablecollectionid-abc78739bb2cbaac96283da4e10d74ed6e05c27d-5821-5.default.json",
-      "collection": {
-        "id": "VariableCollectionId:abc78739bb2cbaac96283da4e10d74ed6e05c27d/5821:5",
-        "name": "Specs Layout",
-        "slug": "specs-layout",
-        "idSlug": "variablecollectionid-abc78739bb2cbaac96283da4e10d74ed6e05c27d-5821-5"
-      },
-      "mode": {
-        "id": "5821:2",
+        "id": "12861:0",
         "name": "Default",
         "slug": "default"
       }
     },
     {
-      "fileName": "typography-variablecollectionid-214cb9a95fbbbe442c1390e1bc725ebb88b830b1-51-15.mode-1.json",
+      "fileName": "s2a-container-variablecollectionid-12861-30707.fixed.json",
       "collection": {
-        "id": "VariableCollectionId:214cb9a95fbbbe442c1390e1bc725ebb88b830b1/51:15",
-        "name": "Typography",
-        "slug": "typography",
-        "idSlug": "variablecollectionid-214cb9a95fbbbe442c1390e1bc725ebb88b830b1-51-15"
+        "id": "VariableCollectionId:12861:30707",
+        "name": "S2A / Container",
+        "slug": "s2a-container",
+        "idSlug": "variablecollectionid-12861-30707"
       },
       "mode": {
-        "id": "3:0",
-        "name": "Mode 1",
-        "slug": "mode-1"
+        "id": "12861:1",
+        "name": "Fixed",
+        "slug": "fixed"
+      }
+    },
+    {
+      "fileName": "s2a-container-variablecollectionid-12861-30707.fluid.json",
+      "collection": {
+        "id": "VariableCollectionId:12861:30707",
+        "name": "S2A / Container",
+        "slug": "s2a-container",
+        "idSlug": "variablecollectionid-12861-30707"
+      },
+      "mode": {
+        "id": "12861:2",
+        "name": "Fluid",
+        "slug": "fluid"
+      }
+    },
+    {
+      "fileName": "s2a-semantic-dimension-static-variablecollectionid-6c6b35ec4a5a89cf0598ba78e6c7482370d719ad-2073-2682.value.json",
+      "collection": {
+        "id": "VariableCollectionId:6c6b35ec4a5a89cf0598ba78e6c7482370d719ad/2073:2682",
+        "name": "S2A / Semantic / Dimension / Static",
+        "slug": "s2a-semantic-dimension-static",
+        "idSlug": "variablecollectionid-6c6b35ec4a5a89cf0598ba78e6c7482370d719ad-2073-2682"
+      },
+      "mode": {
+        "id": "1:7",
+        "name": "Value",
+        "slug": "value"
       }
     },
     {
