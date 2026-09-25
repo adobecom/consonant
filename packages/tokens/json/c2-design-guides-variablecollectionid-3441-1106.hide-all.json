@@ -1,8 +1,8 @@
 {
-  "_c2": {
+  "c2": {
     "design-guides": {
       "design-spacer": {
-        "_label": {
+        "label": {
           "$type": "color",
           "$value": "#FFFFFF00",
           "$description": "DESIGN ONLY",
@@ -19,7 +19,7 @@
           }
         },
         "background": {
-          "_base-bottom": {
+          "base-bottom": {
             "$type": "color",
             "$value": "#BE981800",
             "$description": "DESIGN ONLY",
@@ -37,7 +37,25 @@
               }
             }
           },
-          "_base-top": {
+          "grid-bottom": {
+            "$type": "color",
+            "$value": "#0097FF00",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-_design-guides-spacer-background)"
+                }
+              }
+            }
+          },
+          "base-top": {
             "$type": "color",
             "$value": "#0E7C7B00",
             "$description": "DESIGN ONLY",
@@ -55,7 +73,7 @@
               }
             }
           },
-          "_blocks-gap": {
+          "blocks-gap": {
             "$type": "color",
             "$value": "#5B2C8300",
             "$description": "DESIGN ONLY",
@@ -73,7 +91,7 @@
               }
             }
           },
-          "_cards-bottom": {
+          "cards-bottom": {
             "$type": "color",
             "$value": "#B71C1C00",
             "$description": "DESIGN ONLY",
@@ -91,7 +109,7 @@
               }
             }
           },
-          "_cards-gap": {
+          "cards-gap": {
             "$type": "color",
             "$value": "#C1440E00",
             "$description": "DESIGN ONLY",
@@ -109,7 +127,7 @@
               }
             }
           },
-          "_cta-bottom": {
+          "cta-bottom": {
             "$type": "color",
             "$value": "#0B3D9100",
             "$description": "DESIGN ONLY",
@@ -127,7 +145,7 @@
               }
             }
           },
-          "_cta-top": {
+          "cta-top": {
             "$type": "color",
             "$value": "#3B2A2000",
             "$description": "DESIGN ONLY",
@@ -145,7 +163,7 @@
               }
             }
           },
-          "_pothole": {
+          "pothole": {
             "$type": "color",
             "$value": "#8E155000",
             "$description": "DESIGN ONLY",
@@ -163,7 +181,7 @@
               }
             }
           },
-          "_rich-content-bottom": {
+          "rich-content-bottom": {
             "$type": "color",
             "$value": "#0F6B3A00",
             "$description": "DESIGN ONLY",
@@ -183,7 +201,7 @@
           }
         },
         "content": {
-          "_base-bottom": {
+          "base-bottom": {
             "$type": "color",
             "$value": "#8A6D0B00",
             "$description": "DESIGN ONLY",
@@ -201,7 +219,25 @@
               }
             }
           },
-          "_base-top": {
+          "grid-bottom": {
+            "$type": "color",
+            "$value": "#54B4F500",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "TEXT_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-_design-guides-spacer-background)"
+                }
+              }
+            }
+          },
+          "base-top": {
             "$type": "color",
             "$value": "#169D9C00",
             "$description": "DESIGN ONLY",
@@ -219,7 +255,7 @@
               }
             }
           },
-          "_blocks-gap": {
+          "blocks-gap": {
             "$type": "color",
             "$value": "#A262D900",
             "$description": "DESIGN ONLY",
@@ -237,7 +273,7 @@
               }
             }
           },
-          "_cards-bottom": {
+          "cards-bottom": {
             "$type": "color",
             "$value": "#EA282800",
             "$description": "DESIGN ONLY",
@@ -255,7 +291,7 @@
               }
             }
           },
-          "_cards-gap": {
+          "cards-gap": {
             "$type": "color",
             "$value": "#DF683500",
             "$description": "DESIGN ONLY",
@@ -273,7 +309,7 @@
               }
             }
           },
-          "_cta-bottom": {
+          "cta-bottom": {
             "$type": "color",
             "$value": "#457AD400",
             "$description": "DESIGN ONLY",
@@ -291,7 +327,7 @@
               }
             }
           },
-          "_cta-top": {
+          "cta-top": {
             "$type": "color",
             "$value": "#8E593900",
             "$description": "DESIGN ONLY",
@@ -309,7 +345,7 @@
               }
             }
           },
-          "_pothole": {
+          "pothole": {
             "$type": "color",
             "$value": "#B5307100",
             "$description": "DESIGN ONLY",
@@ -327,7 +363,7 @@
               }
             }
           },
-          "_rich-content-bottom": {
+          "rich-content-bottom": {
             "$type": "color",
             "$value": "#11985000",
             "$description": "DESIGN ONLY",
@@ -348,7 +384,7 @@
         }
       },
       "visibility": {
-        "_all": {
+        "all": {
           "$type": "boolean",
           "$value": false,
           "$description": "DESIGN ONLY",
@@ -364,7 +400,7 @@
             }
           }
         },
-        "_spacers": {
+        "spacers": {
           "$type": "boolean",
           "$value": false,
           "$description": "DESIGN ONLY",
@@ -380,7 +416,7 @@
             }
           }
         },
-        "_text": {
+        "text": {
           "$type": "boolean",
           "$value": false,
           "$description": "DESIGN ONLY",
@@ -396,7 +432,7 @@
             }
           }
         },
-        "_instance-swaps": {
+        "instance-swaps": {
           "$type": "boolean",
           "$value": false,
           "$description": "DESIGN ONLY",
@@ -412,7 +448,7 @@
             }
           }
         },
-        "_layout": {
+        "layout": {
           "$type": "boolean",
           "$value": false,
           "$description": "DESIGN ONLY",
@@ -428,7 +464,7 @@
             }
           }
         },
-        "_radii": {
+        "radii": {
           "$type": "boolean",
           "$value": false,
           "$description": "DESIGN ONLY",
@@ -445,9 +481,9 @@
           }
         }
       },
-      "_spacer-background": {
+      "spacer-background": {
         "$type": "color",
-        "$value": "{_c2.design-guides.background._primary-no-opacity}",
+        "$value": "{c2.design-guides.background.primary-no-opacity}",
         "$description": "DESIGN ONLY",
         "$extensions": {
           "com.figma": {
@@ -463,9 +499,9 @@
           }
         }
       },
-      "_spacer-stroke": {
+      "spacer-stroke": {
         "$type": "color",
-        "$value": "{_c2.design-guides.background._primary-no-opacity}",
+        "$value": "{c2.design-guides.background.primary-no-opacity}",
         "$description": "DESIGN ONLY",
         "$extensions": {
           "com.figma": {
@@ -479,7 +515,7 @@
           }
         }
       },
-      "_spacer-content": {
+      "spacer-content": {
         "$type": "color",
         "$value": "#FF0AE300",
         "$description": "DESIGN ONLY",
@@ -495,7 +531,7 @@
           }
         }
       },
-      "_using-opacity": {
+      "using-opacity": {
         "$type": "number",
         "$value": 0,
         "$description": "DESIGN ONLY",

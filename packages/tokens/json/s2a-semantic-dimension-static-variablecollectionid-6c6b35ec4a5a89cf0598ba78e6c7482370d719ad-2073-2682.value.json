@@ -220,7 +220,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "STROKE_FLOAT"
               ],
@@ -236,7 +236,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "STROKE_FLOAT"
               ],
@@ -252,7 +252,7 @@
           "$description": "",
           "$extensions": {
             "com.figma": {
-              "hiddenFromPublishing": true,
+              "hiddenFromPublishing": false,
               "scopes": [
                 "STROKE_FLOAT"
               ],
@@ -800,7 +800,7 @@
       "letter-spacing": {
         "xs": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.neg-3_84}",
+          "$value": "{s2a.font.letter-spacing.neg-3-84}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -816,7 +816,7 @@
         },
         "sm": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.neg-3_2}",
+          "$value": "{s2a.font.letter-spacing.neg-3-2}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -832,7 +832,7 @@
         },
         "md": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.neg-2_88}",
+          "$value": "{s2a.font.letter-spacing.neg-2-88}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -848,7 +848,7 @@
         },
         "lg": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.neg-1_68}",
+          "$value": "{s2a.font.letter-spacing.neg-1-68}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -864,7 +864,7 @@
         },
         "xl": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.neg-1_44}",
+          "$value": "{s2a.font.letter-spacing.neg-1-44}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -896,7 +896,7 @@
         },
         "3xl": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.neg-0_96}",
+          "$value": "{s2a.font.letter-spacing.neg-0-96}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -912,7 +912,7 @@
         },
         "4xl": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.neg-0_48}",
+          "$value": "{s2a.font.letter-spacing.neg-0-48}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -928,7 +928,7 @@
         },
         "5xl": {
           "$type": "number",
-          "$value": "{s2a.font.letter-spacing.neg-0_2}",
+          "$value": "{s2a.font.letter-spacing.neg-0-2}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1227,7 +1227,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "TEXT_CONTENT",
               "WIDTH_HEIGHT",
@@ -1245,7 +1245,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "TEXT_CONTENT",
               "WIDTH_HEIGHT",
@@ -1263,7 +1263,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "TEXT_CONTENT",
               "WIDTH_HEIGHT",
@@ -1299,7 +1299,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "TEXT_CONTENT",
               "WIDTH_HEIGHT",
@@ -1371,7 +1371,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "TEXT_CONTENT",
               "WIDTH_HEIGHT",
@@ -1389,7 +1389,7 @@
         "$description": "",
         "$extensions": {
           "com.figma": {
-            "hiddenFromPublishing": true,
+            "hiddenFromPublishing": false,
             "scopes": [
               "TEXT_CONTENT",
               "WIDTH_HEIGHT",

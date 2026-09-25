@@ -1,1 +1,4070 @@
-{}
+{
+  "s2a": {
+    "color": {
+      "background": {
+        "default": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-default)"
+              }
+            }
+          }
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.50}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-subtle)"
+              }
+            }
+          }
+        },
+        "brand": {
+          "$type": "color",
+          "$value": "{s2a.color.brand.adobe-red}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-brand)"
+              }
+            }
+          }
+        },
+        "knockout": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-knockout)"
+              }
+            }
+          }
+        },
+        "inverse": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-inverse)"
+              }
+            }
+          }
+        },
+        "disabled": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.50}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-background-disabled)"
+              }
+            }
+          }
+        },
+        "utility": {
+          "error": {
+            "$type": "color",
+            "$value": "{s2a.color.red.900}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-background-utility-error)"
+                }
+              }
+            }
+          }
+        }
+      },
+      "border": {
+        "default": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.800}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-default)"
+              }
+            }
+          }
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.300}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-subtle)"
+              }
+            }
+          }
+        },
+        "strong": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.900}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-strong)"
+              }
+            }
+          }
+        },
+        "knockout": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-knockout)"
+              }
+            }
+          }
+        },
+        "inverse": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-inverse)"
+              }
+            }
+          }
+        },
+        "brand": {
+          "$type": "color",
+          "$value": "{s2a.color.brand.adobe-red}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-brand)"
+              }
+            }
+          }
+        },
+        "disabled": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.400}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-disabled)"
+              }
+            }
+          }
+        },
+        "utility": {
+          "error": {
+            "$type": "color",
+            "$value": "{s2a.color.red.900}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-border-utility-error)"
+                }
+              }
+            }
+          }
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#3B63FB",
+          "$description": "Accent border/indicator color (Adobe accent blue). Used for selected-state borders like the tab underline. Fills the gap where S2A had no semantic accent — the blue previously only lived in button/icon-button component tokens.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "STROKE_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "content": {
+        "default": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-default)"
+              }
+            }
+          }
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.black.64}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-subtle)"
+              }
+            }
+          }
+        },
+        "strong": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.900}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-strong)"
+              }
+            }
+          }
+        },
+        "knockout": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-knockout)"
+              }
+            }
+          }
+        },
+        "inverse": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "Text and icon color for content on always-light surfaces — surfaces that stay light regardless of page or section mode (e.g. active state pills, surface-default cards used in a dark context). Resolves to the same dark value in both Light and Dark modes. Counterpart to content/knockout, which is always white for always-dark surfaces.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-inverse)"
+              }
+            }
+          }
+        },
+        "on-inverse": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "Text and icon color for content on always-light surfaces — surfaces that stay light regardless of page or section mode (e.g. active state pills, surface-default cards used in a dark context). Resolves to the same dark value in both Light and Dark modes. Counterpart to content/knockout, which is always white for always-dark surfaces.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-inverse)"
+              }
+            }
+          }
+        },
+        "on-inverse-subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.white.64}",
+          "$description": "Text and icon color for content on always-light surfaces — surfaces that stay light regardless of page or section mode (e.g. active state pills, surface-default cards used in a dark context). Resolves to the same dark value in both Light and Dark modes. Counterpart to content/knockout, which is always white for always-dark surfaces.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-inverse)"
+              }
+            }
+          }
+        },
+        "brand": {
+          "$type": "color",
+          "$value": "{s2a.color.brand.adobe-red}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-brand)"
+              }
+            }
+          }
+        },
+        "disabled": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.400}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-disabled)"
+              }
+            }
+          }
+        },
+        "utility": {
+          "error": {
+            "$type": "color",
+            "$value": "{s2a.color.red.900}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-content-utility-error)"
+                }
+              }
+            }
+          }
+        },
+        "heading": {
+          "$type": "color",
+          "$value": "{s2a.color.content.default}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-heading)"
+              }
+            }
+          }
+        },
+        "subheading": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-subheading)"
+              }
+            }
+          }
+        },
+        "body-subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.content.subtle}",
+          "$description": "text subtle",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-body-subtle)"
+              }
+            }
+          }
+        },
+        "body-strong": {
+          "$type": "color",
+          "$value": "{s2a.color.content.strong}",
+          "$description": "This is for text",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-body-strong)"
+              }
+            }
+          }
+        },
+        "eyebrow": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.black.64}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-eyebrow)"
+              }
+            }
+          }
+        },
+        "label": {
+          "$type": "color",
+          "$value": "{s2a.color.content.default}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-label)"
+              }
+            }
+          }
+        },
+        "caption": {
+          "$type": "color",
+          "$value": "{s2a.color.content.subtle}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-content-caption)"
+              }
+            }
+          }
+        }
+      },
+      "page": {
+        "default": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.75}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "inverse": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "scrim": {
+        "transparent": {
+          "scrim-opacity-00": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.00}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-64": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.64}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-72": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.72}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-88": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.88}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-00-inverse": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.00}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-64-inverse": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.64}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-72-inverse": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.72}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "scrim-opacity-88-inverse": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.88}",
+            "$description": "DESIGN ONLY",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "FRAME_FILL",
+                  "SHAPE_FILL",
+                  "STROKE_COLOR",
+                  "EFFECT_COLOR"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          }
+        }
+      },
+      "section": {
+        "default": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "surface": {
+        "default": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "knockout": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.50}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "strong": {
+          "$type": "color",
+          "$value": "#EEEEEE",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "inverse-subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.900}",
+          "$description": "Background for surfaces that invert relative to the current page mode — dark in light mode, light in dark mode. Use for expanded or active states where the component flips to contrast against the page (e.g. ElasticCard expanded state). Zero blast radius — safe to evolve. Counterpart: surface/subtle for the resting state.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "inverse": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "Background for surfaces that invert relative to the current page mode — dark in light mode, light in dark mode. Use for expanded or active states where the component flips to contrast against the page (e.g. ElasticCard expanded state). Zero blast radius — safe to evolve. Counterpart: surface/subtle for the resting state.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "divider": {
+        "default": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.800}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-default)"
+              }
+            }
+          }
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.black.12}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-subtle)"
+              }
+            }
+          }
+        },
+        "subtle-inverse": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.white.16}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-subtle)"
+              }
+            }
+          }
+        },
+        "strong": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.900}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-strong)"
+              }
+            }
+          }
+        },
+        "knockout": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-knockout)"
+              }
+            }
+          }
+        },
+        "inverse": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-border-inverse)"
+              }
+            }
+          }
+        }
+      },
+      "focus-ring": {
+        "default": {
+          "$type": "color",
+          "$value": "{s2a.color.blue.900}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-focus-ring-default)"
+              }
+            }
+          }
+        },
+        "knockout": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-focus-ring-knockout)"
+              }
+            }
+          }
+        }
+      },
+      "button": {
+        "background": {
+          "primary": {
+            "solid": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.1000}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-solid-on-light-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.64}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-solid-on-light-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.1000}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-solid-on-light-active)"
+                      }
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-solid-on-dark-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.64}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-solid-on-dark-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-solid-on-dark-active)"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "outlined": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.00}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-outlined-on-light-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.08}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-outlined-on-light-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.1000}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-outlined-on-light-active)"
+                      }
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.64}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-outlined-on-dark-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-outlined-on-dark-active)"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "transparent": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.00}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-transparent-on-light-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.08}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-transparent-on-light-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.12}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-transparent-on-light-active)"
+                      }
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.00}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-transparent-on-dark-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.12}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-transparent-on-dark-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.16}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-primary-transparent-on-dark-active)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "solid": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.64}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "outlined": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.00}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.08}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "transparent": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.00}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.08}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.12}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "accent": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.blue.900}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.blue.1000}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.blue.1100}",
+              "$description": "Phase 1 — simplified mode-responsive token. Replaces on-light/on-dark Context variants.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "solid": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.blue.900}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-accent-solid-on-light-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.blue.1000}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-accent-solid-on-light-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.blue.1100}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-background-accent-solid-on-light-active)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "knockout": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.25}",
+              "$description": "Knockout style — always-white/light bg for use on dark/colored surfaces.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.50}",
+              "$description": "Knockout style — always-white/light bg for use on dark/colored surfaces.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.100}",
+              "$description": "Knockout style — always-white/light bg for use on dark/colored surfaces.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "outline-inverse": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.00}",
+              "$description": "outline-inverse style — static white values for use on dark/colored surfaces.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.08}",
+              "$description": "outline-inverse style — static white values for use on dark/colored surfaces.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.16}",
+              "$description": "outline-inverse style — static white values for use on dark/colored surfaces.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          }
+        },
+        "border": {
+          "primary": {
+            "solid": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.1000}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-border-primary-solid-on-light-default)"
+                      }
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-border-primary-solid-on-dark-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-border-primary-solid-on-dark-hover)"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "outlined": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.1000}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-border-primary-outlined-on-light-default)"
+                      }
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by simplified mode-responsive token (no on-light/on-dark segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-button-border-primary-outlined-on-dark-default)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "outlined": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "DEPRECATED — replaced by s2a/color/border/knockout (same primitives, gray/1000 Light / gray/25 Dark). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "solid": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "DEPRECATED — replaced by s2a/color/border/knockout (same primitives, gray/1000 Light / gray/25 Dark). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "knockout": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.25}",
+              "$description": "Knockout button border — always white. White border on white bg for knockout style.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "outline-inverse": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.25}",
+              "$description": "outline-inverse style — static white values for use on dark/colored surfaces.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          }
+        },
+        "content": {
+          "knockout": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.1000}",
+            "$description": "Knockout button text — always near-black. Pairs with white button bg on dark surfaces.",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "primary": {
+            "solid": {
+              "default": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.25}",
+                "$description": "DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-solid-default)"
+                    }
+                  }
+                }
+              },
+              "inverse": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.1000}",
+                "$description": "DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-solid-inverse)"
+                    }
+                  }
+                }
+              }
+            },
+            "outlined": {
+              "default": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.1000}",
+                "$description": "DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-outlined-default)"
+                    }
+                  }
+                }
+              },
+              "knockout": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.25}",
+                "$description": "DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-outlined-knockout)"
+                    }
+                  }
+                }
+              }
+            },
+            "transparent": {
+              "default": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.1000}",
+                "$description": "DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-transparent-default)"
+                    }
+                  }
+                }
+              },
+              "knockout": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.25}",
+                "$description": "DEPRECATED — replaced by simplified mode-responsive token (no primary/ segment). Will be renamed to _deprecated/ path once all component bindings are migrated. Removal target: v1 token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-button-content-primary-transparent-knockout)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "solid": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.25}",
+              "$description": "DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "outlined": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.25}",
+              "$description": "DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "transparent": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "accent": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.25}",
+              "$description": "DEPRECATED — replaced by s2a/color/content/inverse (solid), content/default (outlined, transparent), content/knockout (accent). Will be renamed to _deprecated/ path once all bindings are migrated. Removal target: v1 token release.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "outline-inverse": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.25}",
+            "$description": "outline-inverse button text — always white. For use on dark/colored surfaces.",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          }
+        }
+      },
+      "icon-button": {
+        "background": {
+          "primary": {
+            "solid": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.1000}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-solid-on-light-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.64}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-solid-on-light-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.1000}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-solid-on-light-active)"
+                      }
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-solid-on-dark-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.64}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-solid-on-dark-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-solid-on-dark-active)"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "outlined": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.00}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-on-light-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.08}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-on-light-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.1000}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-on-light-active)"
+                      }
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.00}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-on-dark-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.64}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-on-dark-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-outlined-on-dark-active)"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "transparent": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.00}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-on-light-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.08}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-on-light-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.black.12}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-on-light-active)"
+                      }
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.00}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-on-dark-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.12}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-on-dark-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.transparent.white.16}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-primary-transparent-on-dark-active)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "accent": {
+            "solid": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.blue.900}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-accent-solid-on-light-default)"
+                      }
+                    }
+                  }
+                },
+                "hover": {
+                  "$type": "color",
+                  "$value": "{s2a.color.blue.1000}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-accent-solid-on-light-hover)"
+                      }
+                    }
+                  }
+                },
+                "active": {
+                  "$type": "color",
+                  "$value": "{s2a.color.blue.1100}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-background-accent-solid-on-light-active)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "solid": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.64}",
+              "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "transparent": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.00}",
+              "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.08}",
+              "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.12}",
+              "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "knockout": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.25}",
+              "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.50}",
+              "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.100}",
+              "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          }
+        },
+        "border": {
+          "primary": {
+            "solid": {
+              "on-light": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.1000}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-border-primary-solid-on-light-default)"
+                      }
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-border-primary-solid-default)"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "outlined": {
+              "default": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.1000}",
+                "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-border-primary-outlined-default)"
+                    }
+                  }
+                }
+              },
+              "on-dark": {
+                "default": {
+                  "$type": "color",
+                  "$value": "{s2a.color.gray.25}",
+                  "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                  "$extensions": {
+                    "com.figma": {
+                      "hiddenFromPublishing": false,
+                      "scopes": [
+                        "ALL_SCOPES"
+                      ],
+                      "codeSyntax": {
+                        "WEB": "var(--s2a-color-iconbutton-border-primary-outlined-on-dark-default)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "content": {
+          "primary": {
+            "solid": {
+              "default": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.25}",
+                "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-solid-default)"
+                    }
+                  }
+                }
+              },
+              "inverse": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.1000}",
+                "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-solid-inverse)"
+                    }
+                  }
+                }
+              }
+            },
+            "outlined": {
+              "default": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.1000}",
+                "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-outlined-default)"
+                    }
+                  }
+                }
+              },
+              "knockout": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.25}",
+                "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-outlined-knockout)"
+                    }
+                  }
+                }
+              }
+            },
+            "transparent": {
+              "default": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.1000}",
+                "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-transparent-default)"
+                    }
+                  }
+                }
+              },
+              "knockout": {
+                "$type": "color",
+                "$value": "{s2a.color.gray.25}",
+                "$description": "DEPRECATED — replaced by iconbutton/* simplified tokens. Will be removed in a future token release.",
+                "$extensions": {
+                  "com.figma": {
+                    "hiddenFromPublishing": false,
+                    "scopes": [
+                      "ALL_SCOPES"
+                    ],
+                    "codeSyntax": {
+                      "WEB": "var(--s2a-color-iconbutton-content-primary-transparent-knockout)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "solid": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.25}",
+            "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "transparent": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.1000}",
+            "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          },
+          "knockout": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.1000}",
+            "$description": "Simplified mode-responsive token. Replaces icon-button/background/primary/* and icon-button/content/primary/* deprecated tokens.",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          }
+        }
+      },
+      "promo-cta": {
+        "button": {
+          "background": {
+            "neutral": {
+              "on-image": {
+                "on-dark": {
+                  "active": {
+                    "$type": "color",
+                    "$value": "{s2a.color.background.default}",
+                    "$description": "Deprecated — superseded by promo-cta/button/* tokens (light/dark mode-responsive). Do not use.",
+                    "$extensions": {
+                      "com.figma": {
+                        "hiddenFromPublishing": false,
+                        "scopes": [
+                          "ALL_SCOPES"
+                        ],
+                        "codeSyntax": {
+                          "WEB": "var(--s2a-color-promo-cta-button-background-neutral-on-image-on-dark-active)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.800}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.700}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "border": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.700}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.500}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.24}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "icon": {
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.25}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          }
+        },
+        "background": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "label": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "control-button": {
+        "background": {
+          "solid": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.75}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.300}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "disabled": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.04}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "focus": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.04}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "transparent": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.32}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.16}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.08}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "disabled": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.16}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "focus": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.32}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "media": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.64}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.80}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.96}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "disabled": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.32}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "focus": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.64}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          }
+        },
+        "border": {
+          "solid": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.24}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.400}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.700}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "disabled": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.08}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "focus": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.08}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "transparent": {
+            "disabled": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.16}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_SCOPES"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          },
+          "media": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.24}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          }
+        }
+      },
+      "router-nav-item": {
+        "background": {
+          "active": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.25}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          }
+        },
+        "content": {
+          "active": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.1000}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          }
+        }
+      },
+      "merch-card": {
+        "pro": {
+          "surface": {
+            "$type": "color",
+            "$value": "{s2a.color.background.knockout}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {}
+              }
+            }
+          }
+        },
+        "highlight": {
+          "features": {
+            "background": {
+              "$type": "color",
+              "$value": "{s2a.color.surface.inverse-subtle}",
+              "$description": "Dark features panel on the MerchCard highlight style. Aliases surface/inverse-subtle: dark (gray/900) in Light theme, subtle light (gray/50) in Dark theme.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_FILLS"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "content": {
+              "$type": "color",
+              "$value": "{s2a.color.content.on-inverse}",
+              "$description": "Readable text/icon on the MerchCard highlight features panel. Aliases content/on-inverse: white in Light theme, near-black in Dark theme. Pairs with merch-card/highlight/features/background.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_FILLS"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            },
+            "content-subtle": {
+              "$type": "color",
+              "$value": "{s2a.color.content.on-inverse-subtle}",
+              "$description": "Secondary text on the MerchCard highlight features panel. Aliases content/on-inverse-subtle.",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "ALL_FILLS"
+                  ],
+                  "codeSyntax": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "c2": {
+    "component": {
+      "button": {
+        "control": {
+          "background": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.75}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "FRAME_FILL",
+                    "SHAPE_FILL"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.300}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "FRAME_FILL",
+                    "SHAPE_FILL"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.1000}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "FRAME_FILL",
+                    "SHAPE_FILL"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            },
+            "disabled": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.04}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "FRAME_FILL",
+                    "SHAPE_FILL"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            },
+            "focus": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.04}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "FRAME_FILL",
+                    "SHAPE_FILL"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            }
+          },
+          "disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.1000}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "border": {
+            "default": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.white.24}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "STROKE_COLOR"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            },
+            "hover": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.400}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "STROKE_COLOR"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            },
+            "active": {
+              "$type": "color",
+              "$value": "{s2a.color.gray.700}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "STROKE_COLOR"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            },
+            "disabled": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.08}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "STROKE_COLOR"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            },
+            "focus": {
+              "$type": "color",
+              "$value": "{s2a.color.transparent.black.08}",
+              "$description": "",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "STROKE_COLOR"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-color-focus-ring-default)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "background": {
+          "accent-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "knockout": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.25}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "knockout-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.25}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "knockout-hover": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.64}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "knockout-inverted-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "outline-hover": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.08}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "outline-knockout-hover": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.64}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "solid-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "transparent-active": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.12}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "transparent-knockout-hover": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.12}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "transparent-knockout-active": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.16}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "SHAPE_FILL"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          }
+        },
+        "border": {
+          "focus-ring": {
+            "$type": "color",
+            "$value": "{s2a.color.blue.900}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "STROKE_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "inverted": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.1000}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "STROKE_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "knockout-hover": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.300}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "STROKE_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "outline": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.1000}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "STROKE_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "outline-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "STROKE_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "outline-knockout": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.25}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "STROKE_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "outline-knockout-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.25}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "STROKE_COLOR"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          }
+        },
+        "content": {
+          "disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "transparent-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "inverted-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "knockout-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "outline-knockout-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.white.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "knockout-inverted": {
+            "$type": "color",
+            "$value": "{s2a.color.gray.1000}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          },
+          "knockout-inverted-disabled": {
+            "$type": "color",
+            "$value": "{s2a.color.transparent.black.48}",
+            "$description": "",
+            "$extensions": {
+              "com.figma": {
+                "hiddenFromPublishing": false,
+                "scopes": [
+                  "ALL_SCOPES"
+                ],
+                "codeSyntax": {
+                  "WEB": "var(--s2a-color-focus-ring-default)"
+                }
+              }
+            }
+          }
+        }
+      },
+      "card": {
+        "background": {
+          "$type": "color",
+          "$value": "#F6F6F6",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "media": {
+        "background": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.300}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "marquee": {
+        "product-transparent-background": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.white.72}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "product-transparent-card-background": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.50}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "product-transparent-pill-background": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.50}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "product-pill-border": {
+          "$type": "color",
+          "$value": "{s2a.color.transparent.black.04}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "scrim": {
+        "fade-start": {
+          "$type": "color",
+          "$value": "#F6F6F600",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "fade-end": {
+          "$type": "color",
+          "$value": "#F6F6F6",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      }
+    },
+    "design-guides": {
+      "primary": {
+        "$type": "color",
+        "$value": "#FF0AE3",
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-_system-design-guides-primary)"
+            }
+          }
+        }
+      },
+      "primary-alt": {
+        "$type": "color",
+        "$value": "#850076",
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "ALL_SCOPES"
+            ],
+            "codeSyntax": {
+              "WEB": "var(--s2a-_system-design-guides-primary-alt)"
+            }
+          }
+        }
+      },
+      "background": {
+        "alt-text": {
+          "$type": "color",
+          "$value": "#FFD5FA4D",
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "FRAME_FILL",
+                "STROKE_COLOR"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-_system-design-guides-background-alt-text)"
+              }
+            }
+          }
+        },
+        "primary": {
+          "$type": "color",
+          "$value": "#FF0AE326",
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-_system-design-guides-background-primary)"
+              }
+            }
+          }
+        },
+        "primary-no-opacity": {
+          "$type": "color",
+          "$value": "#FF0AE300",
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": true,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-_system-design-guides-background-primary-no-opacity)"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

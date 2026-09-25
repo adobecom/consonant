@@ -1,6 +1,6 @@
 {
   "s2a": {
-    "_id": {
+    "id": {
       "$type": "string",
       "$value": "md",
       "$description": "",
@@ -16,7 +16,7 @@
         }
       }
     },
-    "_label": {
+    "label": {
       "$type": "string",
       "$value": "MD",
       "$description": "",
@@ -32,7 +32,7 @@
         }
       }
     },
-    "_breakpoint": {
+    "breakpoint": {
       "$type": "string",
       "$value": "Tablet",
       "$description": "",
@@ -50,7 +50,7 @@
     },
     "containers": {
       "legacy-retire": {
-        "_static": {
+        "static": {
           "$type": "number",
           "$value": 640,
           "$description": "DESIGN ONLY",
@@ -66,7 +66,7 @@
             }
           }
         },
-        "_grid-container-max-width": {
+        "grid-container-max-width": {
           "$type": "number",
           "$value": 1067,
           "$description": "DESIGN ONLY",
@@ -82,7 +82,7 @@
             }
           }
         },
-        "_grid-container-min-width": {
+        "grid-container-min-width": {
           "$type": "number",
           "$value": 640,
           "$description": "DESIGN ONLY",
@@ -100,7 +100,7 @@
         }
       },
       "default": {
-        "_static": {
+        "static": {
           "$type": "number",
           "$value": 640,
           "$description": "DESIGN ONLY",
@@ -116,7 +116,7 @@
             }
           }
         },
-        "_14-col-max-width": {
+        "14-col-max-width": {
           "$type": "number",
           "$value": 2241.330078125,
           "$description": "DESIGN ONLY",
@@ -132,7 +132,7 @@
             }
           }
         },
-        "_grid-container-max-width": {
+        "grid-container-max-width": {
           "$type": "number",
           "$value": 1151,
           "$description": "DESIGN ONLY",
@@ -148,7 +148,7 @@
             }
           }
         },
-        "_grid-container-min-width": {
+        "grid-container-min-width": {
           "$type": "number",
           "$value": 640,
           "$description": "DESIGN ONLY",
@@ -166,7 +166,7 @@
         }
       },
       "fixed-offset": {
-        "_static": {
+        "static": {
           "$type": "number",
           "$value": 688,
           "$description": "DESIGN ONLY",
@@ -182,7 +182,7 @@
             }
           }
         },
-        "_grid-container-max-width": {
+        "grid-container-max-width": {
           "$type": "number",
           "$value": 1151,
           "$description": "DESIGN ONLY",
@@ -198,7 +198,7 @@
             }
           }
         },
-        "_grid-container-min-width": {
+        "grid-container-min-width": {
           "$type": "number",
           "$value": 640,
           "$description": "DESIGN ONLY",
@@ -233,7 +233,7 @@
           }
         }
       },
-      "_columns": {
+      "columns": {
         "$type": "number",
         "$value": 12,
         "$description": "DESIGN ONLY",
@@ -498,7 +498,7 @@
       }
     },
     "viewport": {
-      "_static": {
+      "static": {
         "$type": "number",
         "$value": 768,
         "$description": "DESIGN ONLY",
@@ -514,7 +514,7 @@
           }
         }
       },
-      "_static_alt": {
+      "static-alt": {
         "$type": "number",
         "$value": 768,
         "$description": "DESIGN ONLY",
@@ -530,7 +530,7 @@
           }
         }
       },
-      "_max-width": {
+      "max-width": {
         "$type": "number",
         "$value": 1279,
         "$description": "DESIGN ONLY",
@@ -546,7 +546,7 @@
           }
         }
       },
-      "_min-width": {
+      "min-width": {
         "$type": "number",
         "$value": 768,
         "$description": "DESIGN ONLY",
@@ -562,7 +562,7 @@
           }
         }
       },
-      "_min-width-899": {
+      "min-width-899": {
         "$type": "number",
         "$value": 900,
         "$description": "DESIGN ONLY",
@@ -579,9 +579,9 @@
         }
       },
       "side-margins": {
-        "_margin-reflow-legacy": {
+        "margin-reflow-legacy": {
           "$type": "number",
-          "$value": "{margins._gutter-reflow-md-mm}",
+          "$value": "{margins.gutter-reflow-md-mm}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -597,9 +597,9 @@
             }
           }
         },
-        "_margin-reflow-default": {
+        "margin-reflow-default": {
           "$type": "number",
-          "$value": "{margins._gutter-default-reflow-md-mm}",
+          "$value": "{margins.gutter-default-reflow-md-mm}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -615,7 +615,7 @@
             }
           }
         },
-        "_margin-offset-reflow": {
+        "margin-offset-reflow": {
           "$type": "number",
           "$value": "{s2a.spacing.lg}",
           "$description": "",
@@ -633,7 +633,7 @@
             }
           }
         },
-        "_margin-offset-reflow-legacy": {
+        "margin-offset-reflow-legacy": {
           "$type": "number",
           "$value": "{s2a.spacing.2xl}",
           "$description": "",
@@ -652,7 +652,7 @@
           }
         }
       },
-      "_visibility": {
+      "visibility": {
         "xl": {
           "$type": "boolean",
           "$value": false,
@@ -1024,6 +1024,22 @@
               }
             }
           }
+        },
+        "legal": {
+          "$type": "number",
+          "$value": "{s2a.font.size.md}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FONT_SIZE"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-typography-font-size-legal)"
+              }
+            }
+          }
         }
       },
       "letter-spacing": {
@@ -1250,6 +1266,22 @@
               }
             }
           }
+        },
+        "legal": {
+          "$type": "number",
+          "$value": "{s2a.font.letter-spacing.6xl}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "LETTER_SPACING"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-typography-letter-spacing-legal)"
+              }
+            }
+          }
         }
       },
       "line-height": {
@@ -1473,6 +1505,22 @@
               ],
               "codeSyntax": {
                 "WEB": "var(--s2a-typography-line-height-caption)"
+              }
+            }
+          }
+        },
+        "legal": {
+          "$type": "number",
+          "$value": "{s2a.font.line-height.sm}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "LINE_HEIGHT"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-typography-line-height-legal)"
               }
             }
           }
@@ -1828,7 +1876,7 @@
     },
     "rich-media": {
       "content": {
-        "_max-width": {
+        "max-width": {
           "$type": "number",
           "$value": 667,
           "$description": "DESIGN ONLY",
@@ -1844,23 +1892,93 @@
             }
           }
         },
-        "measure": {
-          "narrow": {
-            "$type": "number",
-            "$value": 456,
-            "$description": "DESIGN ONLY",
-            "$extensions": {
-              "com.figma": {
-                "hiddenFromPublishing": false,
-                "scopes": [
-                  "WIDTH_HEIGHT"
-                ],
-                "codeSyntax": {
-                  "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+        "body-max-width": {
+          "$type": "number",
+          "$value": 680,
+          "$description": "DESIGN ONLY",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "WIDTH_HEIGHT"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-rich-media-content-_max-width)"
+              }
+            }
+          }
+        },
+        "narrow": {
+          "heading": {
+            "narrow": {
+              "$type": "number",
+              "$value": 680,
+              "$description": "DESIGN ONLY",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "WIDTH_HEIGHT"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+                  }
+                }
+              }
+            },
+            "narrow-xs": {
+              "$type": "number",
+              "$value": 560,
+              "$description": "DESIGN ONLY",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "WIDTH_HEIGHT"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+                  }
                 }
               }
             }
           },
+          "body": {
+            "narrow": {
+              "$type": "number",
+              "$value": 415,
+              "$description": "DESIGN ONLY",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "WIDTH_HEIGHT"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+                  }
+                }
+              }
+            },
+            "narrow-xs": {
+              "$type": "number",
+              "$value": 415,
+              "$description": "DESIGN ONLY",
+              "$extensions": {
+                "com.figma": {
+                  "hiddenFromPublishing": false,
+                  "scopes": [
+                    "WIDTH_HEIGHT"
+                  ],
+                  "codeSyntax": {
+                    "WEB": "var(--s2a-rich-media-content-measure-narrow)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "measure": {
           "wide": {
             "$type": "number",
             "$value": 848,
@@ -2133,9 +2251,9 @@
       }
     }
   },
-  "_c2": {
+  "c2": {
     "grid": {
-      "_page-max-width": {
+      "page-max-width": {
         "$type": "number",
         "$value": 1280,
         "$description": "DESIGN ONLY",
@@ -2151,7 +2269,7 @@
           }
         }
       },
-      "_page-min-width": {
+      "page-min-width": {
         "$type": "number",
         "$value": 768,
         "$description": "DESIGN ONLY",
@@ -2167,7 +2285,7 @@
           }
         }
       },
-      "_container-w-margins-max-width": {
+      "container-w-margins-max-width": {
         "$type": "number",
         "$value": 2304,
         "$description": "DESIGN ONLY",
@@ -2183,7 +2301,7 @@
           }
         }
       },
-      "_container-max-width": {
+      "container-max-width": {
         "$type": "number",
         "$value": 1920,
         "$description": "DESIGN ONLY",
@@ -2201,7 +2319,7 @@
       }
     },
     "design-spacers": {
-      "_base-bottom": {
+      "base-bottom": {
         "$type": "number",
         "$value": "{s2a.spacing.80}",
         "$description": "DESIGN ONLY",
@@ -2217,7 +2335,7 @@
           }
         }
       },
-      "_base-top": {
+      "grid-bottom": {
         "$type": "number",
         "$value": "{s2a.spacing.80}",
         "$description": "DESIGN ONLY",
@@ -2233,7 +2351,23 @@
           }
         }
       },
-      "_blocks-gap": {
+      "base-top": {
+        "$type": "number",
+        "$value": "{s2a.spacing.80}",
+        "$description": "DESIGN ONLY",
+        "$extensions": {
+          "com.figma": {
+            "hiddenFromPublishing": false,
+            "scopes": [
+              "TEXT_CONTENT",
+              "WIDTH_HEIGHT",
+              "GAP"
+            ],
+            "codeSyntax": {}
+          }
+        }
+      },
+      "blocks-gap": {
         "$type": "number",
         "$value": "{s2a.spacing.64}",
         "$description": "DESIGN ONLY",
@@ -2249,7 +2383,7 @@
           }
         }
       },
-      "_cards-bottom": {
+      "cards-bottom": {
         "$type": "number",
         "$value": "{s2a.spacing.24}",
         "$description": "DESIGN ONLY",
@@ -2265,7 +2399,7 @@
           }
         }
       },
-      "_cards-gap": {
+      "cards-gap": {
         "$type": "number",
         "$value": "{s2a.spacing.8}",
         "$description": "DESIGN ONLY",
@@ -2281,7 +2415,7 @@
           }
         }
       },
-      "_cta-bottom": {
+      "cta-bottom": {
         "$type": "number",
         "$value": "{s2a.spacing.32}",
         "$description": "DESIGN ONLY",
@@ -2297,7 +2431,7 @@
           }
         }
       },
-      "_cta-top": {
+      "cta-top": {
         "$type": "number",
         "$value": "{s2a.spacing.24}",
         "$description": "DESIGN ONLY",
@@ -2313,7 +2447,7 @@
           }
         }
       },
-      "_pothole": {
+      "pothole": {
         "$type": "number",
         "$value": "{s2a.spacing.80}",
         "$description": "DESIGN ONLY",
@@ -2329,7 +2463,7 @@
           }
         }
       },
-      "_pothole-bleed": {
+      "pothole-bleed": {
         "$type": "number",
         "$value": "{s2a.spacing.24}",
         "$description": "DESIGN ONLY",
@@ -2345,7 +2479,7 @@
           }
         }
       },
-      "_rich-content-bottom": {
+      "rich-content-bottom": {
         "$type": "number",
         "$value": "{s2a.spacing.24}",
         "$description": "DESIGN ONLY",
@@ -2364,7 +2498,7 @@
     },
     "component": {
       "button": {
-        "_corner-radius": {
+        "corner-radius": {
           "$type": "number",
           "$value": 20,
           "$description": "",
@@ -2378,7 +2512,7 @@
             }
           }
         },
-        "_focus-radius": {
+        "focus-radius": {
           "$type": "number",
           "$value": 22,
           "$description": "",

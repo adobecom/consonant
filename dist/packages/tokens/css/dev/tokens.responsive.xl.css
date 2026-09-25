@@ -26,6 +26,19 @@
   --s2a-viewport-vertical-padding-xs: var(--s2a-spacing-4xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
   --s2a-viewport-vertical-padding-2xs: var(--s2a-spacing-xl); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
   --s2a-viewport-vertical-padding-none: var(--s2a-spacing-none); /** Deprecated — scheduled for removal in favor of --s2a-section-spacing-*. Keeping bound until we&#39;re ready to fully remove it; do not delete without checking for remaining usage first. */
+  --s2a-viewport-visibility-xl: true;
+  --s2a-viewport-visibility-xl-lg: true;
+  --s2a-viewport-visibility-xl-md: true;
+  --s2a-viewport-visibility-lg: false;
+  --s2a-viewport-visibility-lg-md: false;
+  --s2a-viewport-visibility-lg-sm: false;
+  --s2a-viewport-visibility-md: false;
+  --s2a-viewport-visibility-md-sm: false;
+  --s2a-viewport-visibility-sm: false;
+  --s2a-viewport-side-margins-margin-offset-reflow: var(--s2a-spacing-lg);
+  --s2a-viewport-side-margins-margin-offset-reflow-legacy: 159.36px;
+  --s2a-viewport-side-margins-margin-reflow-default: 120px;
+  --s2a-viewport-side-margins-margin-reflow-legacy: 120px;
 
   /* Layout */
   --s2a-layout-guide-gap: var(--s2a-spacing-xs);
@@ -45,6 +58,7 @@
   --s2a-typography-font-size-heading-4: var(--s2a-font-size-4xl);
   --s2a-typography-font-size-heading-5: var(--s2a-font-size-2xl);
   --s2a-typography-font-size-heading-6: var(--s2a-font-size-lg);
+  --s2a-typography-font-size-legal: var(--s2a-font-size-md);
 
   /* Typography / Letter Spacing */
   --s2a-typography-letter-spacing-super: var(--s2a-font-letter-spacing-xs);
@@ -61,6 +75,7 @@
   --s2a-typography-letter-spacing-heading-4: var(--s2a-font-letter-spacing-2xl);
   --s2a-typography-letter-spacing-heading-5: var(--s2a-font-letter-spacing-4xl);
   --s2a-typography-letter-spacing-heading-6: var(--s2a-font-letter-spacing-5xl);
+  --s2a-typography-letter-spacing-legal: var(--s2a-font-letter-spacing-6xl);
 
   /* Typography / Line Height */
   --s2a-typography-line-height-super: var(--s2a-font-line-height-6xl);
@@ -77,11 +92,15 @@
   --s2a-typography-line-height-heading-4: var(--s2a-font-line-height-lg);
   --s2a-typography-line-height-heading-5: var(--s2a-font-line-height-md);
   --s2a-typography-line-height-heading-6: var(--s2a-font-line-height-xs);
+  --s2a-typography-line-height-legal: var(--s2a-font-line-height-sm);
 
   /* Other */
+  --s2a-breakpoint: Desktop XL;
   --s2a-cards-immersive-padding: var(--s2a-spacing-2xl);
   --s2a-hover-list-number-container-width: 64px;
   --s2a-hover-list-padding-vertical: var(--s2a-spacing-lg);
+  --s2a-id: xl;
+  --s2a-label: XL;
   --s2a-segmented-control-segment-padding-x: var(--s2a-spacing-20);
   --s2a-segmented-control-track-radius: var(--s2a-border-radius-16);
   --s2a-side-by-side-max-width-overlay: 400px;
