@@ -171,6 +171,14 @@ async function buildFromFigma() {
     "s2a-design-guides", // DESIGN ONLY — Figma-canvas annotation/guide colors, never shipped
     "c2-design-guides",  // DESIGN ONLY — Figma-canvas layout guides (hide-all/show-all/show-spacers), never shipped
     "s2a-min-max",       // not currently emitted; wire a bucket here if these should ship
+    // DESIGN ONLY — a Figma mode switch, not a token source. Its two `_`-prefixed
+    // variables (side-margins, container-max) carry no values of their own: each
+    // mode aliases into "S2A / Responsive / Container / Grid", which DOES ship.
+    // Nothing in the file aliases to them. Emitting it would write
+    // tokens.responsive.{default,fixed,fluid}.css — mode names that break the
+    // xl/lg/md/sm breakpoint contract every consumer loads by. Designers pick
+    // Default/Fixed/Fluid on a frame; CSS reads the grid tokens directly.
+    "s2a-container",
   ]);
 
   for (const entry of files) {
