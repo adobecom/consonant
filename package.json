@@ -53,7 +53,8 @@
     "prototype-server": "node apps/s2a-toolkit/server/prototype-server.js",
     "specs:scaffold": "node packages/specs/scaffold.mjs",
     "specs:upstream": "node packages/specs/upstream.mjs",
-    "specs:export": "node packages/specs/export.mjs"
+    "specs:export": "node packages/specs/export.mjs",
+    "validators:build": "npm --prefix packages/validators install --silent && npm --prefix packages/validators run build"
   },
   "keywords": [],
   "author": "",

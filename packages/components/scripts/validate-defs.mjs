@@ -8,19 +8,26 @@
 // Usage: node packages/components/scripts/validate-defs.mjs [--slug=a,b]
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
-const Ajv = require("ajv");
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..", "..", "..");
 const SRC = join(ROOT, "packages", "components", "src");
 const TOKENS_DIR = join(ROOT, "dist", "packages", "tokens", "css", "dev");
 const only = process.argv.find((a) => a.startsWith("--slug="))?.slice(7)?.split(",");
 
-const schema = JSON.parse(readFileSync(join(ROOT, "packages", "components", "defs.schema.json"), "utf8"));
-const validate = new Ajv({ allErrors: true, strict: false }).compile(schema);
+// Schema conformance comes from @adobecom/s2a-validators, not a private ajv
+// compile here. Two copies of "what valid means" is how the writer and the
+// checker drift apart. If the package is not built the run stops — a validator
+// that quietly skips its first check is worse than no validator.
+const validatorsDist = join(ROOT, "packages", "validators", "dist", "index.js");
+if (!existsSync(validatorsDist)) {
+  console.error("validate-defs: @adobecom/s2a-validators is not built.\n  cd packages/validators && npm install && npm run build");
+  process.exit(2);
+}
+const { validateDefs } = await import(pathToFileURL(validatorsDist).href);
 const specs = new Map(readdirSync(SRC).filter((d) => existsSync(join(SRC, d, `${d}.spec.json`))).map((d) => [d, JSON.parse(readFileSync(join(SRC, d, `${d}.spec.json`), "utf8"))]));
 const specByName = new Map([...specs.values()].map((s) => [String(s.name).toLowerCase(), s]));
 const shipped = new Set();
@@ -37,7 +44,7 @@ const slugs = (only ?? readdirSync(SRC)).filter((d) => existsSync(join(SRC, d, `
 for (const slug of slugs) {
   const defs = JSON.parse(readFileSync(join(SRC, slug, `${slug}.defs.json`), "utf8"));
   const problems = [];
-  if (!validate(defs)) for (const e of validate.errors) problems.push(`schema ${e.instancePath || "/"} ${e.message}`);
+  for (const v of validateDefs(defs, ROOT).violations) problems.push(`schema ${v.message}`);
   const evidencePath = join(SRC, slug, `${slug}.code.evidence.json`);
   const evidence = existsSync(evidencePath) ? JSON.parse(readFileSync(evidencePath, "utf8")) : null;
   const pending = Boolean(defs.anchors?.code?.pending);

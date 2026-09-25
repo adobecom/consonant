@@ -19,9 +19,8 @@
 // this is safe to run anywhere.
 import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
-import Ajv from "ajv";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..", "..");
@@ -72,12 +71,21 @@ if (update) {
 }
 
 // ── TRIPWIRE ─────────────────────────────────────────────────────────────────
-const schema = readJson(join(DIR, "contract.schema.json"));
-const ajv = new Ajv({ allErrors: true, strict: false });
-const validate = ajv.compile(schema);
+// Conformance comes from @adobecom/s2a-validators, which loads this same
+// vendored schema. A private compile here would be a second opinion on what
+// upstream requires, and the whole point of this check is that there is one.
+const validatorsDist = join(ROOT, "packages", "validators", "dist", "index.js");
+if (!existsSync(validatorsDist)) {
+  console.error("upstream: @adobecom/s2a-validators is not built.\n  cd packages/validators && npm install && npm run build");
+  process.exit(2);
+}
+const { validateContract } = await import(pathToFileURL(validatorsDist).href);
+const validate = (data) => validateContract(data, ROOT);
+
 const golden = readJson(join(DIR, "golden.button.contract.json"));
-if (!validate(golden)) {
-  report("TRIPWIRE", "GOLDEN_REJECTED", "fail", `upstream's own ${golden.id} no longer validates against our vendored schema — our copy or validator drifted: ${ajv.errorsText(validate.errors).slice(0, 200)}`);
+const goldenResult = validate(golden);
+if (!goldenResult.ok) {
+  report("TRIPWIRE", "GOLDEN_REJECTED", "fail", `upstream's own ${golden.id} no longer validates against our vendored schema — our copy or validator drifted: ${goldenResult.violations.map((v) => v.message).join("; ").slice(0, 200)}`);
 } else {
   report("TRIPWIRE", "GOLDEN_OK", "info", `${golden.id} v${golden.version} validates — the vendored pair is self-consistent`);
 }
@@ -95,14 +103,15 @@ let conform = 0;
 const per = [];
 for (const slug of withContract) {
   const contract = readJson(join(SRC, slug, `${slug}.contract.json`));
-  const ok = validate(contract);
+  const { ok, violations: errs } = validate(contract);
   if (ok) conform++;
-  const errs = validate.errors ?? [];
+  // Root-level only: a missing field on a nested part is a different problem
+  // from one the contract itself omits, and ranking them together misleads.
   for (const e of errs) {
-    if (e.keyword === "required" && e.instancePath === "") missingReq.set(e.params.missingProperty, (missingReq.get(e.params.missingProperty) ?? 0) + 1);
-    if (e.keyword === "additionalProperties" && e.instancePath === "") extraProp.set(e.params.additionalProperty, (extraProp.get(e.params.additionalProperty) ?? 0) + 1);
+    if (e.keyword === "required" && e.value === "/" && e.property) missingReq.set(e.property, (missingReq.get(e.property) ?? 0) + 1);
+    if (e.keyword === "additionalProperties" && e.value === "/" && e.property) extraProp.set(e.property, (extraProp.get(e.property) ?? 0) + 1);
   }
-  per.push({ slug, ok, errors: errs.length, first: errs[0] ? `${errs[0].instancePath || "/"} ${errs[0].message}` : "" });
+  per.push({ slug, ok, errors: errs.length, first: errs[0]?.message ?? "" });
 }
 const rank = (m) => [...m.entries()].sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} (${n})`).join(", ");
 report("CONFORMANCE", "VALID", conform === withContract.length ? "info" : "fail", `${conform}/${withContract.length} emitted contracts validate against ${pin.repo}`);
