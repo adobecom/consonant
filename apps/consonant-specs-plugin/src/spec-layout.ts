@@ -4,7 +4,7 @@ import { matchSpacing, matchColor, detectNodeColorRole } from './tokens';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function removeOverlays(node: SceneNode, overlayName: string): void {
+function removeOverlays(node: SceneNode, overlayName: string, targetId?: string): void {
   // Legacy: overlays used to be parented inside the node.
   if ('children' in node) {
     const toRemove = (node as FrameNode).children.filter(c => c.name === overlayName);
@@ -18,7 +18,12 @@ function removeOverlays(node: SceneNode, overlayName: string): void {
     }
   }
   // New: overlays are now parented to the page so they work on instances.
-  const pageOverlays = figma.currentPage.children.filter(c => c.name === overlayName);
+  // Scope removal to the overlay belonging to this specific node (tagged via
+  // pluginData) so regenerating one node's overlay doesn't wipe another's.
+  const pageOverlays = figma.currentPage.children.filter(c =>
+    c.name === overlayName &&
+    (targetId === undefined || c.getPluginData('specTarget') === targetId)
+  );
   for (const o of pageOverlays) o.remove();
 }
 
@@ -787,12 +792,13 @@ export async function generateSpacingSection(sourceNode: SceneNode): Promise<voi
   if (!('children' in sourceNode) || sourceNode.children.length === 0) return;
 
   // Remove any existing overlays first
-  removeOverlays(sourceNode, 'spacing-detailed-overlay');
+  removeOverlays(sourceNode, 'spacing-detailed-overlay', sourceNode.id);
 
   // Overlay floats above the node — parented to the page so it works on
   // instances (which reject appendChild). Coordinates are absolute.
   const overlay = figma.createFrame();
   overlay.name = 'spacing-detailed-overlay';
+  overlay.setPluginData('specTarget', sourceNode.id);
   overlay.resize(sourceNode.width, sourceNode.height);
   overlay.fills = [];
   overlay.clipsContent = false;

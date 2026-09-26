@@ -1,4 +1,8 @@
 import { renderAlignV2ScanResult, renderAlignV2ApplyResult, setV2ActiveTab, collectV2ApplySelections } from './align-v2-ui';
+import { RATIOS, swapLabel } from './ratio';
+import { initColorStudyUi, updateColorStudySelection, renderColorStudyResult, renderColorStudyApplyResult } from './color-study-ui';
+import { LANG_META, LANG_ORDER } from './localize-languages';
+import { buildPastePrompt, parsePasteResponse } from './localize-paste';
 
 function esc(s: unknown): string {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -30,6 +34,8 @@ interface PropertyEntry {
 
 declare const FEATURE_A11Y: boolean;
 declare const FEATURE_LEGACY_ALIGN: boolean;
+declare const FEATURE_VARIABLES: boolean;
+declare const FEATURE_SELECT: boolean;
 declare const __PLUGIN_VERSION__: string;
 declare const __PLUGIN_BUILD_SHA__: string;
 declare const __PLUGIN_BUILD_TIME__: string;
@@ -51,6 +57,19 @@ if (!FEATURE_LEGACY_ALIGN) {
   document.getElementById('hamburgerMatchItem')?.remove();
   document.querySelector<HTMLElement>('.tab-panel[data-panel="align"]')?.remove();
   document.querySelector<HTMLElement>('.tab-panel[data-panel="match"]')?.remove();
+}
+
+// Feature flags: Variables and Select panels are unwired placeholders (markup only,
+// no handlers) — hidden until they get real logic.
+if (!FEATURE_VARIABLES) {
+  document.getElementById('menuVariablesItem')?.remove();
+  document.getElementById('hamburgerVariablesItem')?.remove();
+  document.querySelector<HTMLElement>('.tab-panel[data-panel="variables"]')?.remove();
+}
+if (!FEATURE_SELECT) {
+  document.getElementById('menuSelectItem')?.remove();
+  document.getElementById('hamburgerSelectItem')?.remove();
+  document.querySelector<HTMLElement>('.tab-panel[data-panel="select"]')?.remove();
 }
 
 const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
@@ -79,6 +98,7 @@ function navigateTo(toolId: string, toolName: string) {
   document.querySelectorAll<HTMLElement>('.hamburger-item').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tool === toolId);
   });
+  syncCollapsedSize();
 }
 
 function navigateBack() {
@@ -95,6 +115,7 @@ function navigateBack() {
   if (headerDetail) headerDetail.style.display = 'none';
   if (hamburgerMenu) hamburgerMenu.classList.remove('open');
   if (hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded', 'false');
+  syncCollapsedSize();
 }
 
 // Menu items
@@ -129,6 +150,49 @@ document.querySelectorAll<HTMLButtonElement>('.bridge-status-pill').forEach(pill
 
 // Back button
 document.getElementById('backBtn')?.addEventListener('click', navigateBack);
+
+// ── Collapse / expand panel ───────────────────────────────────────────────
+// Collapsed = header row only; the iframe is resized to fit the header's
+// intrinsic width/height. Expanding restores the size code.ts last set.
+let panelCollapsed = false;
+
+function measureHeaderSize(): { width: number; height: number } {
+  const header = document.getElementById('pluginHeader');
+  if (!header) return { width: 300, height: 40 };
+  header.classList.add('measuring');
+  const width = Math.ceil(header.getBoundingClientRect().width);
+  header.classList.remove('measuring');
+  const height = Math.ceil(header.getBoundingClientRect().height);
+  return { width, height };
+}
+
+function syncCollapsedSize(): void {
+  if (!panelCollapsed) return;
+  const { width, height } = measureHeaderSize();
+  parent.postMessage({ pluginMessage: { type: 'panel-collapse', collapsed: true, width, height } }, '*');
+}
+
+function setPanelCollapsed(collapsed: boolean): void {
+  panelCollapsed = collapsed;
+  document.body.classList.toggle('panel-collapsed', collapsed);
+  document.querySelectorAll<HTMLButtonElement>('[data-collapse-toggle]').forEach(btn => {
+    btn.setAttribute('aria-expanded', String(!collapsed));
+    const label = collapsed ? 'Expand panel' : 'Collapse panel';
+    btn.setAttribute('aria-label', label);
+    btn.title = label;
+  });
+  if (collapsed) {
+    document.getElementById('hamburgerMenu')?.classList.remove('open');
+    document.getElementById('hamburgerBtn')?.setAttribute('aria-expanded', 'false');
+    syncCollapsedSize();
+  } else {
+    parent.postMessage({ pluginMessage: { type: 'panel-collapse', collapsed: false } }, '*');
+  }
+}
+
+document.querySelectorAll<HTMLButtonElement>('[data-collapse-toggle]').forEach(btn => {
+  btn.addEventListener('click', () => setPanelCollapsed(!panelCollapsed));
+});
 
 // Hamburger toggle
 document.getElementById('hamburgerBtn')?.addEventListener('click', (e) => {
@@ -182,6 +246,44 @@ function postToPlugin(type: string, payload?: Record<string, unknown>) {
   parent.postMessage({ pluginMessage: { type, ...payload } }, 'https://www.figma.com');
 }
 
+// ── Aspect Ratio tab (ported from the Adobe.com Design Tools plugin) ───────
+let ratioOrientation: 'landscape' | 'portrait' = 'landscape';
+
+function renderRatios(): void {
+  const list = document.getElementById('ratioList');
+  if (!list) return;
+  list.replaceChildren();
+  for (const r of RATIOS) {
+    const portrait = ratioOrientation === 'portrait';
+    const rw = portrait ? r.h : r.w;
+    const rh = portrait ? r.w : r.h;
+    const label = portrait ? swapLabel(r.label) : r.label;
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-secondary ratio-btn';
+    btn.innerHTML = `<span class="ratio-label">${esc(label)}</span><span class="ratio-note">${esc(r.note)}</span>`;
+    btn.addEventListener('click', () => postToPlugin('apply-ratio', { rw, rh, label }));
+    list.appendChild(btn);
+  }
+}
+
+function setRatioOrientation(o: 'landscape' | 'portrait'): void {
+  ratioOrientation = o;
+  document.getElementById('segLandscape')?.classList.toggle('active', o === 'landscape');
+  document.getElementById('segPortrait')?.classList.toggle('active', o === 'portrait');
+  renderRatios();
+}
+document.getElementById('segLandscape')?.addEventListener('click', () => setRatioOrientation('landscape'));
+document.getElementById('segPortrait')?.addEventListener('click', () => setRatioOrientation('portrait'));
+renderRatios();
+
+function updateRatioHint(resizableCount: number, total: number): void {
+  const hint = document.getElementById('ratioHint');
+  if (!hint) return;
+  if (total === 0) hint.textContent = 'Select something resizable';
+  else if (resizableCount === 0) hint.textContent = 'Selection has no resizable items (lines and text are excluded)';
+  else hint.textContent = `Applies to ${resizableCount} of ${total} selected item(s)`;
+}
+
 // On plugin load, append the build marker to the footer even before tokens load,
 // so the user can verify which bundle is running at a glance.
 (function injectBuildMarker(): void {
@@ -211,17 +313,41 @@ window.addEventListener('message', (event) => {
       updateTabControls('match');
       updateTabControls('design');
       updateTabControls('specs');
-      updateTabControls('localize');
+      updateLocalizeControls();
       updateA11yControls();
+      updateRatioHint(Number(msg.resizableCount ?? 0), Number(msg.count ?? 0));
+      updateColorStudySelection(msg.selection ?? null, Number(msg.count ?? 0));
       break;
-    case 'api-key-state':
-      updateApiKeyUi(msg.hasKey as boolean, msg.masked as string | undefined);
+    case 'color-study-result':
+      renderColorStudyResult(msg.result ?? null, msg.error as string | undefined);
+      break;
+    case 'color-study-apply-result':
+      renderColorStudyApplyResult(msg.results ?? []);
+      postToPlugin('color-study-scan'); // refresh bindings in place
       break;
     case 'localize-status':
       updateLocalizeStatus(msg.message as string);
+      // Terminal statuses from code.ts's catch blocks (both the 'localize' and
+      // 'paste-apply' handlers report failures the same way, so re-enable both —
+      // harmless if only one was actually in flight) and from 'paste-collect'
+      // finding no text (which otherwise never sends a further message, and
+      // copyPromptBtn would stay disabled forever).
+      if (typeof msg.message === 'string' && msg.message.startsWith('Error')) {
+        if (localizeBtn) localizeBtn.disabled = false;
+        if (applyPasteBtn) applyPasteBtn.disabled = false;
+      }
+      if (msg.message === 'No text found in selection.') {
+        if (copyPromptBtn) copyPromptBtn.disabled = false;
+      }
       break;
-    case 'localize-bridge-prompt':
-      showLocalizeBridgePrompt(msg as any);
+    case 'localize-done':
+      handleLocalizeDone(msg.created as number, msg.errors as string[]);
+      break;
+    case 'paste-source':
+      handlePasteSource(msg.frameName as string, msg.strings as string[]);
+      break;
+    case 'email-state':
+      handleEmailState(msg.email as string);
       break;
     case 'token-status': {
       updateTokenStatus(msg.count as number, msg.version as string);
@@ -510,64 +636,63 @@ function updateSpecStatus(message: string) {
 }
 
 // Localize tab
-const KEYED_PROVIDERS = new Set(['deepl', 'google', 'azure']);
-
-const providerSelect = document.getElementById('providerSelect') as HTMLSelectElement | null;
-const apiKeySection = document.getElementById('apiKeySection') as HTMLElement | null;
-
-function syncKeySection() {
-  const provider = providerSelect?.value || 'mymemory';
-  if (apiKeySection) apiKeySection.style.display = KEYED_PROVIDERS.has(provider) ? 'block' : 'none';
-  postToPlugin('get-api-key', { provider });
+const GROUP_LABELS: Record<string, string> = { latin: 'Latin', cjk: 'CJK', other: 'Other' };
+const langList = document.getElementById('langList') as HTMLDivElement | null;
+if (langList) {
+  let currentGroup = '';
+  for (const code of LANG_ORDER) {
+    const m = LANG_META[code];
+    if (m.group !== currentGroup) {
+      currentGroup = m.group;
+      const h = document.createElement('div');
+      h.className = 'lang-group';
+      h.textContent = GROUP_LABELS[m.group];
+      langList.appendChild(h);
+    }
+    const label = document.createElement('label');
+    label.className = 'match-option';
+    label.innerHTML = `<input type="checkbox" id="loc-${code}"> ${esc(m.name)} <span class="lang-note">— ${esc(m.note)}</span>`;
+    langList.appendChild(label);
+  }
 }
 
-providerSelect?.addEventListener('change', syncKeySection);
-syncKeySection();
+function selectedLangs(): string[] {
+  return LANG_ORDER.filter((c) => Boolean((document.getElementById(`loc-${c}`) as HTMLInputElement | null)?.checked));
+}
+
+// Arabic auto-checks RTL
+document.getElementById('loc-ar')?.addEventListener('change', () => {
+  const ar = document.getElementById('loc-ar') as HTMLInputElement;
+  const rtl = document.getElementById('locRtl') as HTMLInputElement | null;
+  if (ar.checked && rtl) rtl.checked = true;
+});
 
 document.getElementById('locCheckAll')?.addEventListener('click', () => {
-  const ids = ['locDe', 'locZh', 'locTh', 'locAr'];
-  const boxes = ids.map(id => document.getElementById(id) as HTMLInputElement).filter(Boolean);
-  const allChecked = boxes.every(b => b.checked);
-  boxes.forEach(b => { b.checked = !allChecked; });
-  // Auto-check RTL when Arabic is checked
-  const locRtlEl = document.getElementById('locRtl') as HTMLInputElement | null;
-  if (locRtlEl && !allChecked) locRtlEl.checked = true;
+  const boxes = LANG_ORDER.map((c) => document.getElementById(`loc-${c}`) as HTMLInputElement).filter(Boolean);
+  const allChecked = boxes.every((b) => b.checked);
+  boxes.forEach((b) => { b.checked = !allChecked; });
+  const rtl = document.getElementById('locRtl') as HTMLInputElement | null;
+  if (rtl && !allChecked) rtl.checked = true;
 });
 
-const locAr = document.getElementById('locAr') as HTMLInputElement | null;
-const locRtl = document.getElementById('locRtl') as HTMLInputElement | null;
-locAr?.addEventListener('change', () => {
-  if (locAr.checked && locRtl && !locRtl.checked) locRtl.checked = true;
-});
+// Provider switching
+const providerSelect = document.getElementById('providerSelect') as HTMLSelectElement | null;
+function syncProviderUi(): void {
+  const p = providerSelect?.value || 'google';
+  const emailSection = document.getElementById('emailSection') as HTMLElement | null;
+  const pasteSection = document.getElementById('pasteSection') as HTMLElement | null;
+  const localizeMainBtn = document.getElementById('localizeBtn') as HTMLButtonElement | null;
+  if (emailSection) emailSection.style.display = p === 'mymemory' ? 'block' : 'none';
+  if (pasteSection) pasteSection.style.display = p === 'paste' ? 'block' : 'none';
+  if (localizeMainBtn) localizeMainBtn.style.display = p === 'paste' ? 'none' : 'block';
+}
+providerSelect?.addEventListener('change', syncProviderUi);
+syncProviderUi();
+postToPlugin('get-email');
 
-document.getElementById('localizeBtn')?.addEventListener('click', () => {
-  const languages: string[] = [];
-  if ((document.getElementById('locDe') as HTMLInputElement).checked) languages.push('de');
-  if ((document.getElementById('locZh') as HTMLInputElement).checked) languages.push('zh');
-  if ((document.getElementById('locTh') as HTMLInputElement).checked) languages.push('th');
-  if ((document.getElementById('locAr') as HTMLInputElement).checked) languages.push('ar');
-  if (languages.length === 0) {
-    updateLocalizeStatus('Select at least one language.');
-    return;
-  }
-  const provider = providerSelect?.value || 'mymemory';
-  const applyRtl = (document.getElementById('locRtl') as HTMLInputElement).checked;
-  postToPlugin('localize', { languages, applyRtl, provider });
-  updateLocalizeStatus('Localizing — this may take a moment...');
-});
-
-document.getElementById('saveKeyBtn')?.addEventListener('click', () => {
-  const input = document.getElementById('apiKeyInput') as HTMLInputElement;
-  const key = input.value.trim();
-  if (!key) return;
-  const provider = providerSelect?.value || '';
-  postToPlugin('save-api-key', { key, provider });
-  input.value = '';
-});
-
-document.getElementById('clearKeyBtn')?.addEventListener('click', () => {
-  const provider = providerSelect?.value || '';
-  postToPlugin('clear-api-key', { provider });
+document.getElementById('emailInput')?.addEventListener('change', () => {
+  const input = document.getElementById('emailInput') as HTMLInputElement;
+  postToPlugin('save-email', { email: input.value.trim() });
 });
 
 function updateLocalizeStatus(message: string) {
@@ -575,32 +700,98 @@ function updateLocalizeStatus(message: string) {
   if (el) el.innerHTML = `<span style="color:var(--text-secondary)">${esc(message)}</span>`;
 }
 
-const LANG_NAMES: Record<string, string> = { de: 'German', zh: 'Chinese', th: 'Thai', ar: 'Arabic' };
+// Re-entrancy guard: each action button is disabled the instant its message is
+// posted, and only re-enabled once the matching terminal response arrives from
+// code.ts (see the 'localize-status'/'localize-done'/'paste-source' cases in the
+// message dispatch switch above). This prevents a double-click (or a slow network
+// round trip) from firing duplicate 'localize' / 'paste-collect' / 'paste-apply'
+// messages, which would otherwise produce duplicate clone sets. Buttons are only
+// ever disabled right before a post() that is guaranteed a response, so local
+// validation failures (which return before posting) never need a matching re-enable.
+const localizeBtn = document.getElementById('localizeBtn') as HTMLButtonElement | null;
+const copyPromptBtn = document.getElementById('copyPromptBtn') as HTMLButtonElement | null;
+const applyPasteBtn = document.getElementById('applyPasteBtn') as HTMLButtonElement | null;
 
-function showLocalizeBridgePrompt(data: { frameName: string; frameId: string; languages: string[]; applyRtl: boolean; sourceTexts: { nodeId: string; text: string }[] }) {
-  const langList = data.languages.map(l => LANG_NAMES[l] || l).join(', ');
-  const cmd = `Translate the frame "${data.frameName}" (${data.frameId}) into ${langList}. ${data.sourceTexts.length} text strings to translate.${data.applyRtl ? ' Apply RTL layout for Arabic.' : ''}\n\nUse figma_execute to: 1) get text nodes from the frame, 2) clone the frame with a [${data.languages.join('/')}] prefix, 3) load fonts, 4) apply translations to the cloned text nodes.`;
-  const el = document.getElementById('localizeStatus');
-  if (el) {
-    el.innerHTML = `
-      <div style="padding:10px;background:var(--bg-secondary,#f5f5f5);border-radius:6px;border-left:3px solid var(--accent,#1473E6);">
-        <div style="font-weight:600;font-size:11px;color:var(--accent,#1473E6);margin-bottom:4px;">Ready for translation &#x2714;</div>
-        <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">Paste this in Claude Code to translate via bridge:</div>
-        <code id="localizeCmdText" style="display:block;background:var(--bg,#fff);padding:6px 8px;border-radius:4px;font-size:10px;border:1px solid var(--border,#e5e5e5);line-height:1.4;">${esc(cmd)}</code>
-        <button class="btn btn-secondary" id="copyLocalizeCmd" style="margin-top:6px;padding:4px 8px;font-size:10px;width:100%;">Copy</button>
-        <div style="font-size:10px;color:var(--text-tertiary,#999);margin-top:6px;">Requires Bridge connected + Claude Code open in this project</div>
-      </div>`;
-    document.getElementById('copyLocalizeCmd')?.addEventListener('click', async () => {
-      await copyToClipboard(cmd);
-      const btn = document.getElementById('copyLocalizeCmd');
-      if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); }
-    });
-  }
+// One-click localize (google / mymemory)
+localizeBtn?.addEventListener('click', () => {
+  const languages = selectedLangs();
+  if (languages.length === 0) { updateLocalizeStatus('Select at least one language.'); return; }
+  localizeBtn.disabled = true;
+  postToPlugin('localize', {
+    provider: providerSelect?.value || 'google',
+    languages,
+    applyRtl: (document.getElementById('locRtl') as HTMLInputElement | null)?.checked ?? false,
+  });
+  updateLocalizeStatus('Localizing — this may take a moment...');
+});
+
+// Paste mode
+let pasteLangs: string[] = [];
+let pasteCount = 0;
+
+copyPromptBtn?.addEventListener('click', () => {
+  pasteLangs = selectedLangs();
+  if (pasteLangs.length === 0) { updateLocalizeStatus('Select at least one language.'); return; }
+  copyPromptBtn.disabled = true;
+  postToPlugin('paste-collect');
+});
+
+applyPasteBtn?.addEventListener('click', () => {
+  const raw = (document.getElementById('pasteInput') as HTMLTextAreaElement | null)?.value ?? '';
+  const parsed = parsePasteResponse(raw, pasteLangs, pasteCount);
+  if (!parsed.ok) { updateLocalizeStatus(parsed.error); return; }
+  applyPasteBtn.disabled = true;
+  postToPlugin('paste-apply', {
+    translations: parsed.translations,
+    applyRtl: (document.getElementById('locRtl') as HTMLInputElement | null)?.checked ?? false,
+  });
+  updateLocalizeStatus('Applying translations...');
+});
+
+function handleLocalizeDone(created: number, errors: string[]): void {
+  const errTail = errors && errors.length > 0 ? ` Errors: ${errors.join('; ')}` : '';
+  updateLocalizeStatus(`Created ${created} localized frame(s).${errTail}`);
+  if (localizeBtn) localizeBtn.disabled = false;
+  if (applyPasteBtn) applyPasteBtn.disabled = false;
 }
 
-function updateApiKeyUi(hasKey: boolean, masked?: string) {
-  const status = document.getElementById('apiKeyStatus') as HTMLElement;
-  if (status) status.textContent = hasKey ? `Saved: ${masked || '••••'}` : 'No key saved.';
+function handleEmailState(email: string): void {
+  const input = document.getElementById('emailInput') as HTMLInputElement | null;
+  if (input) input.value = email;
+}
+
+function handlePasteSource(frameName: string, strings: string[]): void {
+  pasteCount = strings.length;
+  const prompt = buildPastePrompt(frameName, strings, pasteLangs);
+  void copyToClipboard(prompt).then(() => {
+    updateLocalizeStatus(`Prompt for ${pasteCount} strings copied — paste it into any AI chat, then paste the JSON response below.`);
+    if (copyPromptBtn) copyPromptBtn.disabled = false;
+  });
+}
+
+// Localize tab — selection gating. code.ts's 'localize' / 'paste-collect' /
+// 'paste-apply' handlers only accept exactly ONE selected node — they reject 0
+// or 2+ selections via a transient figma.notify toast that never reaches this
+// UI. Mirror that contract here (unlike the generic updateTabControls used by
+// the other tabs, which only distinguishes empty vs. non-empty) so the panel
+// never renders in an actionable state for a selection the main thread will
+// silently refuse.
+function updateLocalizeControls(): void {
+  const placeholder = document.getElementById('localizePlaceholder');
+  const controls = document.getElementById('localizeControls');
+  if (!placeholder || !controls) return;
+  if (currentSelection.count === 1) {
+    placeholder.style.display = 'none';
+    controls.style.display = 'block';
+  } else if (currentSelection.count > 1) {
+    placeholder.textContent = 'Select exactly one frame';
+    placeholder.style.display = 'block';
+    controls.style.display = 'none';
+  } else {
+    placeholder.textContent = 'Select a frame to localize';
+    placeholder.style.display = 'block';
+    controls.style.display = 'none';
+  }
 }
 
 // A11y tab — controls visibility
@@ -1424,5 +1615,7 @@ document.getElementById('alignV2ApplyBtn')?.addEventListener('click', () => {
   if (selections.length === 0) return;
   parent.postMessage({ pluginMessage: { type: 'align-v2-apply', selections } }, '*');
 });
+
+initColorStudyUi(postToPlugin);
 
 postToPlugin('ui-ready');
