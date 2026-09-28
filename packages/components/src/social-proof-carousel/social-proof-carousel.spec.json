@@ -63,6 +63,7 @@
     "dot-background": "--s2a-color-transparent-white-64",
     "dot-outline": "--s2a-color-focus-ring-default"
   },
+  "tier": "block",
   "composedOf": [
     "quote-card",
     "icon-button"
@@ -166,7 +167,9 @@
                 "QuoteCard"
               ],
               "acceptsMode": "restrict",
-              "notes": "One QuoteCard per slide; inactive slides are inert."
+              "notes": "One QuoteCard per slide; inactive slides are inert.",
+              "min": 1,
+              "max": 24
             }
           }
         }
@@ -192,7 +195,9 @@
             "IconButton"
           ],
           "acceptsMode": "restrict",
-          "notes": "IconButton style=knockout size=lg, arrow-left / arrow-right, aria-label Previous slide / Next slide. Figma shows both a Global / Carousel instance and IconButton — v2 (see decisions)."
+          "notes": "IconButton style=knockout size=lg, arrow-left / arrow-right, aria-label Previous slide / Next slide. Figma shows both a Global / Carousel instance and IconButton — v2 (see decisions).",
+          "min": 0,
+          "max": 2
         },
         "notes": "40px from each edge (Figma Nav items: 40 inset); mobile drops to the bottom edge."
       },
@@ -362,7 +367,7 @@
     }
   ],
   "provenance": {
-    "defs": "sha256:665af24d944e776e61e0644beb39ebfd6a3630a3ac7e88858142164788b06b70",
+    "defs": "sha256:1b60814b66381a746fa0ffc29739723f019576a75970567a2c5ab103259328d2",
     "codeEvidence": "sha256:1fb7be7580d481700553d6af9c62d6b5b8e76abe472aa0ab416a02c6f5d78484",
     "figmaEvidence": null,
     "generator": "s2a-spec-transform@1"

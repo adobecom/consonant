@@ -54,7 +54,9 @@
                 "accepts": [
                   "QuoteCard"
                 ],
-                "acceptsMode": "restrict"
+                "acceptsMode": "restrict",
+                "min": 1,
+                "max": 24
               }
             }
           }
@@ -70,7 +72,9 @@
             "accepts": [
               "IconButton"
             ],
-            "acceptsMode": "restrict"
+            "acceptsMode": "restrict",
+            "min": 0,
+            "max": 2
           }
         },
         "pagination": {
@@ -140,7 +144,7 @@
   },
   "provenance": {
     "version": 1,
-    "canonicalRevision": "sha256:665af24d944e776e61e0644beb39ebfd6a3630a3ac7e88858142164788b06b70",
+    "canonicalRevision": "sha256:1b60814b66381a746fa0ffc29739723f019576a75970567a2c5ab103259328d2",
     "source": {
       "kind": "code",
       "adapter": "s2a-spec-transform@1",

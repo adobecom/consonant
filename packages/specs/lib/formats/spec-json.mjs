@@ -25,6 +25,11 @@ export function specJson(ir, { slugOf }) {
   if (ir.forbiddenCombinations.length) spec.forbiddenCombinations = ir.forbiddenCombinations;
   spec.props = props;
   spec.tokenBindings = ir.tokenBindings;
+  // Tier is ours, not upstream's. southleft/ds-contracts-poc sets
+  // additionalProperties:false with no extension point, so putting it in
+  // contract.json would fail conformance — it lives here and in the catalog,
+  // next to composedOf, which is the thing it classifies.
+  spec.tier = ir.component.tier;
   spec.composedOf = ir.composedOfNames.map(slugOf);
   spec.a11y = ir.a11y ?? { wcag: [] };
   spec.states = ir.states;

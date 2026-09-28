@@ -68,12 +68,30 @@ for (const slug of slugs) {
         const v = toVar(m[0]);
         if (shipped.size && !shipped.has(v)) problems.push(`anatomy ${path} ${prop}: ${m[0]} → ${v} is not a shipped token`);
       }
-      if (part.slot) for (const name of part.slot.accepts) if (!specByName.has(name.toLowerCase()) && !specs.has(name)) problems.push(`slot ${part.slot.name}: accepts "${name}" but no spec.json has that name`);
+      if (part.slot) {
+        for (const name of part.slot.accepts) if (!specByName.has(name.toLowerCase()) && !specs.has(name)) problems.push(`slot ${part.slot.name}: accepts "${name}" but no spec.json has that name`);
+        const { min, max, name: slotName, accepts, acceptsMode } = part.slot;
+        // Cardinality has to be satisfiable. min > max is unbuildable, and the
+        // schema cannot catch it because it compares two sibling fields.
+        if (min != null && max != null && min > max) problems.push(`slot ${slotName}: min ${min} is greater than max ${max}`);
+        // A required slot that accepts nothing nameable can never be filled.
+        if ((min ?? 0) > 0 && acceptsMode === "restrict" && accepts.length === 0) problems.push(`slot ${slotName}: requires at least ${min} child but restricts to an empty accepts list`);
+      }
+    }
+    // A block is a contract whose job is arrangement. One with no slots composes
+    // nothing, which means it is a component that has been mislabelled — and the
+    // label is what tells a consumer to build it out of other contracts.
+    if (defs.tier === "block") {
+      const slots = all.filter(({ part }) => part.slot);
+      if (!slots.length) problems.push(`tier "block" but no part declares a slot — a block is an arrangement of other contracts`);
+      const composes = new Set(slots.flatMap(({ part }) => part.slot.accepts));
+      if (slots.length && !composes.size) problems.push(`tier "block" but no slot names anything in accepts — nothing to compose`);
     }
     for (const d of defs.decisions) if (d.status === "decided" && !d.decision) problems.push(`decision ${d.id} is decided without a decision text`);
   }
   const open = defs.decisions?.filter((d) => d.status === "open").length ?? 0;
-  console.log(`${problems.length ? "FAIL" : "PASS"}  ${slug.padEnd(24)} ${defs.status} · ${defs.props.length} props (${defs.props.filter((p) => p.lever).length} levers) · ${open} open decisions${warnings.length ? " · code pending" : ""}`);
+  const tier = defs.tier ?? "component";
+  console.log(`${problems.length ? "FAIL" : "PASS"}  ${slug.padEnd(24)} ${tier === "block" ? "block · " : ""}${defs.status} · ${defs.props.length} props (${defs.props.filter((p) => p.lever).length} levers) · ${open} open decisions${warnings.length ? " · code pending" : ""}`);
   for (const p of problems) console.log(`      ${p}`);
   for (const w of warnings) console.log(`      warn: ${w}`);
   if (problems.length) failures++;

@@ -73,7 +73,7 @@ WCAG 2.2 AA: `2.1.1`, `2.2.2`, `2.4.7`
 
 ## Provenance
 
-- defs: sha256:665af24d944e776e61e0644beb39ebfd6a3630a3ac7e88858142164788b06b70
+- defs: sha256:1b60814b66381a746fa0ffc29739723f019576a75970567a2c5ab103259328d2
 - code evidence: sha256:1fb7be7580d481700553d6af9c62d6b5b8e76abe472aa0ab416a02c6f5d78484
 - figma evidence: not published
 

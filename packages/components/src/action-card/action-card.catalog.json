@@ -2,6 +2,7 @@
   "id": "s2a.action-card",
   "name": "ActionCard",
   "slug": "action-card",
+  "tier": "component",
   "status": "curated-draft",
   "description": "A card that is one link: an illustration in a Media slot, a headline, and a chevron. The whole surface is the target and the headline is the accessible name. Used in the Acrobat \"Get started with Acrobat tools\" row (ActionCardRow).",
   "props": [

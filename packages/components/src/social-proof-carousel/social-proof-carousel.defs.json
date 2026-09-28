@@ -3,6 +3,7 @@
   "component": "SocialProofCarousel",
   "slug": "social-proof-carousel",
   "status": "curated-draft",
+  "tier": "block",
   "curated": {
     "by": "Claude, from social-proof-carousel.code.evidence.json and the Figma metadata of 12102:175374 / 8278:190566",
     "date": "2026-09-17",
@@ -22,7 +23,7 @@
         "12102:175100 (Home 1441+ v2 Dark)",
         "8278:190566 (Home 375: Slide / Active Slide / Slide)"
       ],
-      "notes": "There is no carousel component set: the section frame composes .slide-left/.slide-active/.slide-right (.QuoteCard instances), a Global / Carousel nav instance on each side, an IconButton — v2, and three pagination ellipses. Axes below are therefore layer-level, not variant properties."
+      "notes": "There is no carousel component set: the section frame composes .slide-left/.slide-active/.slide-right (.QuoteCard instances), a Global / Carousel nav instance on each side, an IconButton \u2014 v2, and three pagination ellipses. Axes below are therefore layer-level, not variant properties."
     },
     "code": {
       "importPath": "packages/components/src/social-proof-carousel/social-proof-carousel.js",
@@ -97,7 +98,7 @@
         "notes": "peek geometry per breakpoint"
       },
       "code": {
-        "mechanism": "controller: peek 11.46% ≥1600px, 8.6% below, 16px under 600px; 8px gaps; active slide at peek + gap"
+        "mechanism": "controller: peek 11.46% \u22651600px, 8.6% below, 16px under 600px; 8px gaps; active slide at peek + gap"
       }
     }
   ],
@@ -122,7 +123,9 @@
                   "QuoteCard"
                 ],
                 "acceptsMode": "restrict",
-                "notes": "One QuoteCard per slide; inactive slides are inert."
+                "notes": "One QuoteCard per slide; inactive slides are inert.",
+                "min": 1,
+                "max": 24
               }
             }
           }
@@ -140,7 +143,9 @@
               "IconButton"
             ],
             "acceptsMode": "restrict",
-            "notes": "IconButton style=knockout size=lg, arrow-left / arrow-right, aria-label Previous slide / Next slide. Figma shows both a Global / Carousel instance and IconButton — v2 (see decisions)."
+            "notes": "IconButton style=knockout size=lg, arrow-left / arrow-right, aria-label Previous slide / Next slide. Figma shows both a Global / Carousel instance and IconButton \u2014 v2 (see decisions).",
+            "min": 0,
+            "max": 2
           },
           "notes": "40px from each edge (Figma Nav items: 40 inset); mobile drops to the bottom edge."
         },
@@ -200,8 +205,8 @@
   "decisions": [
     {
       "id": "spc-nav-component",
-      "question": "The section frame carries both a 'Global / Carousel' nav instance and an 'IconButton — v2'. Which is the arrow control of record?",
-      "decision": "Code uses IconButton — v2 (knockout, lg), matching the icon-button bindings on the section (icon-button/background/knockout/default, content/knockout). Confirm and remove the Global / Carousel instances from the frame.",
+      "question": "The section frame carries both a 'Global / Carousel' nav instance and an 'IconButton \u2014 v2'. Which is the arrow control of record?",
+      "decision": "Code uses IconButton \u2014 v2 (knockout, lg), matching the icon-button bindings on the section (icon-button/background/knockout/default, content/knockout). Confirm and remove the Global / Carousel instances from the frame.",
       "status": "open",
       "owner": "Matt",
       "evidence": "get_metadata 12102:175374; get_variable_defs binds s2a/color/icon-button/* knockout."
@@ -220,7 +225,7 @@
       "decision": "Bind to {s2a.spacing.2xl} in the spec transform; the value matches and the Figma inset is 40.",
       "status": "decided",
       "owner": "Claude",
-      "evidence": "Figma Nav items x=40 / 512+40; social-proof-carousel.css lines 38–39."
+      "evidence": "Figma Nav items x=40 / 512+40; social-proof-carousel.css lines 38\u201339."
     },
     {
       "id": "spc-peek-geometry",

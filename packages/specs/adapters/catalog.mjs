@@ -30,6 +30,9 @@ export default {
         id: `s2a.${ir.component.slug}`,
         name: ir.component.name,
         slug: ir.component.slug,
+        // A picker needs to know whether it is offering you a thing or an
+        // arrangement of things before it shows you its slots.
+        tier: ir.component.tier ?? "component",
         status: ir.component.status ?? null,
         description: ir.component.description ?? null,
         props: (ir.props ?? []).map((p) => ({ name: p.name, type: p.type, lever: Boolean(p.lever) })),
