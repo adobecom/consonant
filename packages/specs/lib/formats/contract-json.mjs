@@ -147,6 +147,13 @@ export function contractJson(ir, { id }) {
 
   const element = ir.anatomy.root?.element;
   contract.semantics = { element: ELEMENTS.has(element) ? element : "div" };
+  // A tag that depends on a prop is not a footnote — a consumer generating from
+  // this has to know that href turns a button into an anchor, or it emits the
+  // wrong element and the wrong keyboard behaviour with it.
+  const byProp = ir.anatomy.root?.elementByProp;
+  if (byProp?.prop && byProp.map && Object.values(byProp.map).every((v) => ELEMENTS.has(v))) {
+    contract.semantics.elementByProp = { prop: byProp.prop, map: byProp.map };
+  }
   const role = ir.a11y?.role;
   if (typeof role === "string" && /^[a-z][a-z-]*$/.test(role)) contract.semantics.role = role;
 

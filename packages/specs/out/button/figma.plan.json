@@ -8,7 +8,7 @@
   "anatomy": {
     "name": ".root",
     "source": ".root",
-    "element": "article",
+    "element": "button",
     "bindings": {
       "background-color": [
         "s2a/color/background/subtle"
@@ -40,7 +40,7 @@
       {
         "name": ".label",
         "source": "/Label",
-        "element": null,
+        "element": "span",
         "bindings": {},
         "slot": null,
         "children": []

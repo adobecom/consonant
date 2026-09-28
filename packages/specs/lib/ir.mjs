@@ -32,6 +32,7 @@ function resolveTree(part, name, tokens) {
   const out = { selector: part.selector };
   if (part.figma) out.figma = part.figma;
   if (part.element) out.element = part.element;
+  if (part.elementByProp) out.elementByProp = part.elementByProp;
   if (Object.keys(resolved).length) out.tokens = resolved;
   if (part.slot) out.slot = part.slot;
   if (part.notes) out.notes = part.notes;

@@ -448,6 +448,26 @@
         },
         "notes": {
           "type": "string"
+        },
+        "elementByProp": {
+          "type": "object",
+          "required": [
+            "prop",
+            "map"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "prop": {
+              "type": "string"
+            },
+            "map": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "When the rendered tag depends on a prop rather than being fixed. Button is the case: an anchor when href is set, a button otherwise. `element` stays the default, and this says what changes it. Upstream already defines semantics.elementByProp; this is the input side of it."
         }
       }
     },

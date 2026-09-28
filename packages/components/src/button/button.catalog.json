@@ -4,7 +4,7 @@
   "slug": "button",
   "tier": "component",
   "status": "curated-draft",
-  "description": "A non-interactive content card; actions live in a slot.",
+  "description": "A button. Renders a native button, or an anchor when href is set, so it keeps the right keyboard and activation behaviour either way.",
   "props": [
     {
       "name": "iconEnd",
@@ -79,9 +79,12 @@
   "a11y": {
     "role": null,
     "wcag": [
-      "1.1.1",
       "1.4.3",
-      "1.4.10"
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
     ]
   },
   "anchors": {
@@ -93,5 +96,5 @@
     },
     "figma": "10715:35477"
   },
-  "openDecisions": 9
+  "openDecisions": 8
 }

@@ -4,22 +4,23 @@
   "slug": "button",
   "status": "curated-draft",
   "curated": {
-    "by": "specs:scaffold from button.figma.evidence.json (sha256:7cc11606…) through packages/specs/dictionary.json (card)",
+    "by": "specs:scaffold from button.figma.evidence.json (sha256:7cc11606\u2026) through packages/specs/dictionary.json (card)",
     "date": "2026-09-25",
     "reviewer": "Matt"
   },
-  "description": "A non-interactive content card; actions live in a slot.",
+  "description": "A button. Renders a native button, or an anchor when href is set, so it keeps the right keyboard and activation behaviour either way.",
+  "archetype": "button",
   "anchors": {
     "figma": {
       "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
       "kind": "component-set",
       "nodeId": "10715:35477",
-      "nodeName": "Button — v2",
+      "nodeName": "Button \u2014 v2",
       "componentSetKey": "d91a1f5f4a290b66b0aadb6f24e1a30b6cc9e3ba",
       "deprecated": false,
       "successorNodeId": null,
       "usages": [],
-      "notes": "Component set on page \"↳ Button\"; 456 nodes, 759 token bindings."
+      "notes": "Component set on page \"\u21b3 Button\"; 456 nodes, 759 token bindings."
     },
     "code": {
       "importPath": "packages/components/src/button/button.js",
@@ -78,7 +79,7 @@
       "code": {
         "prop": "showIconEnd"
       },
-      "notes": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes."
+      "notes": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not \u2014 this is not a prop a consumer passes."
     },
     {
       "name": "showIconStart",
@@ -92,7 +93,7 @@
       "code": {
         "prop": "showIconStart"
       },
-      "notes": "Figma authoring toggle for the \"Icon Start\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes."
+      "notes": "Figma authoring toggle for the \"Icon Start\" swap. In code the slot either has content or it does not \u2014 this is not a prop a consumer passes."
     },
     {
       "name": "size",
@@ -218,7 +219,14 @@
     "root": {
       "selector": ".c-button",
       "figma": ".root",
-      "element": "article",
+      "element": "button",
+      "elementByProp": {
+        "prop": "href",
+        "map": {
+          "set": "a",
+          "unset": "button"
+        }
+      },
       "tokens": {
         "background-color": "{s2a.color.background.subtle}",
         "border-radius": "{s2a.border-radius.md}",
@@ -233,12 +241,13 @@
             "name": "Icon Start",
             "accepts": [],
             "acceptsMode": "prefer",
-            "notes": "Instance-swap property \"Icon Start\" — list what it accepts once those contracts exist."
+            "notes": "Instance-swap property \"Icon Start\" \u2014 list what it accepts once those contracts exist."
           }
         },
         "label": {
           "selector": ".c-button__label",
-          "figma": "/Label"
+          "figma": "/Label",
+          "element": "span"
         },
         "icon-end": {
           "selector": ".c-button__icon",
@@ -247,7 +256,7 @@
             "name": "Icon End",
             "accepts": [],
             "acceptsMode": "prefer",
-            "notes": "Instance-swap property \"Icon End\" — list what it accepts once those contracts exist."
+            "notes": "Instance-swap property \"Icon End\" \u2014 list what it accepts once those contracts exist."
           }
         }
       }
@@ -256,18 +265,33 @@
   "forbiddenCombinations": [],
   "a11y": {
     "wcag": [
-      "1.1.1",
       "1.4.3",
-      "1.4.10"
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "keyboard": [
+      {
+        "key": "Enter",
+        "action": "Activates the control."
+      },
+      {
+        "key": "Space",
+        "action": "Activates the control when it renders as a button. An anchor activates on Enter only."
+      }
     ],
     "notes": [
-      "Actions inside the card are native links or buttons; the card itself has no role."
+      "Native button or anchor, so role, focus order and activation come from the element \u2014 do not add role=\"button\".",
+      "An icon-only button needs an accessible name from the label prop; the icon is decorative and must not be the only name.",
+      "disabled is a real attribute on the button form, not a class. An anchor cannot be disabled \u2014 remove href instead."
     ]
   },
   "decisions": [
     {
       "id": "b-code-only-props",
-      "question": "href, state, onClick exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false). \"state\" collides with the State axis, which this draft read as runtime states — decide whether the code prop or the state axis is the truth.",
+      "question": "href, state, onClick exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false). \"state\" collides with the State axis, which this draft read as runtime states \u2014 decide whether the code prop or the state axis is the truth.",
       "chose": "added 3 code-only props as levers with no design binding",
       "confidence": "low",
       "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
@@ -277,7 +301,7 @@
     },
     {
       "id": "b-part-selectors",
-      "question": "icon-start, icon-end have no class of their own in button.css — they all share .c-button__icon. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "question": "icon-start, icon-end have no class of their own in button.css \u2014 they all share .c-button__icon. The design names these parts separately and the code does not. Split the class, or model them as one part.",
       "chose": "pointed icon-start and icon-end at .c-button__icon",
       "confidence": "low",
       "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to button.css.",
@@ -288,16 +312,17 @@
     {
       "id": "b-archetype",
       "question": "Scaffolded as card (default when no stronger signal is present). Confirm, or re-run npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection>.",
-      "chose": "archetype card, because default when no stronger signal is present",
-      "confidence": "medium",
+      "chose": "archetype button",
+      "confidence": "high",
       "fix": "npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection> --force",
-      "status": "open",
+      "status": "decided",
       "owner": "Matt",
       "alternatives": [
         "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
         "collection: A row, grid or scroller of one repeated unit."
       ],
-      "evidence": "roles media, eyebrow, icon; pattern n/a"
+      "evidence": "roles media, eyebrow, icon; pattern n/a",
+      "decision": "Button, not card. The scaffold fell back to card because no signal was stronger, and that default propagated: the contract declared its root element as article and described itself as a non-interactive content card. button.js settles it \u2014 createButton does document.createElement(href ? 'a' : 'button') and decorateButton decorates an existing anchor or button. \"button\" is in upstream's closed archetype enum, so it emits."
     },
     {
       "id": "b-classify-1",
@@ -331,7 +356,7 @@
     },
     {
       "id": "b-unbound-paint",
-      "question": "30 painted layers carry no variable (/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, …). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "question": "30 painted layers carry no variable (/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, \u2026). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
       "confidence": "high",
       "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy.",
       "status": "open",
