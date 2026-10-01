@@ -3876,6 +3876,36 @@
           }
         }
       },
+      "scrim": {
+        "_fade-start": {
+          "$type": "color",
+          "$value": "#F6F6F600",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "_fade-end": {
+          "$type": "color",
+          "$value": "#F6F6F6",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
       "marquee": {
         "product-transparent-background": {
           "$type": "color",
@@ -3940,36 +3970,6 @@
                 "SHAPE_FILL",
                 "STROKE_COLOR",
                 "EFFECT_COLOR"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        }
-      },
-      "scrim": {
-        "_fade-start": {
-          "$type": "color",
-          "$value": "#F6F6F600",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        },
-        "_fade-end": {
-          "$type": "color",
-          "$value": "#F6F6F6",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
               ],
               "codeSyntax": {}
             }
