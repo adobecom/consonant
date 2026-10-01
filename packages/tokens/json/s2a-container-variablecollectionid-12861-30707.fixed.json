@@ -1,0 +1,35 @@
+{
+  "container-margins": {
+    "_side-margins-mode": {
+      "$type": "number",
+      "$value": "{s2a.viewport.side-margins._margin-offset-reflow}",
+      "$description": "DESIGN ONLY",
+      "$extensions": {
+        "com.figma": {
+          "hiddenFromPublishing": false,
+          "scopes": [
+            "WIDTH_HEIGHT",
+            "GAP",
+            "FONT_VARIATIONS"
+          ],
+          "codeSyntax": {}
+        }
+      }
+    },
+    "_container-max-mode": {
+      "$type": "number",
+      "$value": "{s2a.containers.fixed-offset._grid-container-max-width}",
+      "$description": "DESIGN ONLY",
+      "$extensions": {
+        "com.figma": {
+          "hiddenFromPublishing": false,
+          "scopes": [
+            "WIDTH_HEIGHT",
+            "GAP"
+          ],
+          "codeSyntax": {}
+        }
+      }
+    }
+  }
+}
