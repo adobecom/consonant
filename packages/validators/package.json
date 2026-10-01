@@ -1,12 +1,16 @@
 {
   "name": "@adobecom/s2a-validators",
   "version": "0.1.0",
-  "description": "Authoritative S2A token/spec validators — one source of truth for the MCP, CI, and evals.",
+  "description": "Authoritative S2A token/spec validators \u2014 one source of truth for the MCP, CI, and evals.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": { "s2a-validate-css": "./dist/cli.js" },
-  "files": ["dist"],
+  "bin": {
+    "s2a-validate-css": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
@@ -25,5 +29,8 @@
     "@types/node": "^20.0.0",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0"
+  },
+  "dependencies": {
+    "ajv": "^8.18.0"
   }
 }

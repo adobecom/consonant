@@ -1,0 +1,202 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "SocialProofCarousel",
+  "setName": "Section - Social Proof",
+  "anatomy": {
+    "name": ".root",
+    "source": "Section - Social Proof",
+    "element": null,
+    "bindings": {},
+    "slot": null,
+    "children": [
+      {
+        "name": ".track",
+        "source": "Frame 2147230860",
+        "element": null,
+        "bindings": {
+          "gap": [
+            "s2a/spacing/xs"
+          ]
+        },
+        "slot": null,
+        "children": [
+          {
+            "name": ".slide-active",
+            "source": ".slide-active",
+            "element": null,
+            "bindings": {},
+            "slot": {
+              "name": "slide",
+              "accepts": [
+                "QuoteCard"
+              ],
+              "mode": "restrict"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".nav",
+        "source": "Nav items",
+        "element": null,
+        "bindings": {},
+        "slot": {
+          "name": "control",
+          "accepts": [
+            "IconButton"
+          ],
+          "mode": "restrict"
+        },
+        "children": []
+      },
+      {
+        "name": ".pagination",
+        "source": "Carousel Pagination",
+        "element": "div[role=group]",
+        "bindings": {},
+        "slot": null,
+        "children": [
+          {
+            "name": ".dot",
+            "source": null,
+            "element": "button[aria-pressed]",
+            "bindings": {
+              "width": [
+                "s2a/spacing/xs"
+              ],
+              "height": [
+                "s2a/spacing/xs"
+              ],
+              "border-radius": [
+                "s2a/border-radius/round"
+              ],
+              "background": [
+                "s2a/color/transparent-white/64"
+              ],
+              "outline": [
+                "s2a/color/focus-ring/default"
+              ]
+            },
+            "slot": null,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "pattern-frame",
+    "nodeId": "12102:175374",
+    "nodeName": "Section - Social Proof",
+    "componentSetKey": null,
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": [
+      "12102:175100 (Home 1441+ v2 Dark)",
+      "8278:190566 (Home 375: Slide / Active Slide / Slide)"
+    ]
+  },
+  "properties": [
+    {
+      "name": "Slides",
+      "type": "INSTANCE_SWAP",
+      "forProp": "slides",
+      "layer": ".slide-left / .slide-active / .slide-right",
+      "derived": true,
+      "note": "no component property in Figma yet; layer .slide-left / .slide-active / .slide-right"
+    }
+  ],
+  "states": [
+    {
+      "name": "slide",
+      "figma": {
+        "kind": "LAYER",
+        "property": ".slide-active vs .slide-left/.slide-right"
+      }
+    },
+    {
+      "name": "single",
+      "figma": "NONE"
+    },
+    {
+      "name": "breakpoint",
+      "figma": {
+        "kind": "LAYER",
+        "property": "Home 375 frame: 327px slide at x=24",
+        "notes": "peek geometry per breakpoint"
+      }
+    }
+  ],
+  "layers": [
+    {
+      "name": "Section - Social Proof",
+      "selector": ".c-social-proof-carousel",
+      "bindings": {}
+    },
+    {
+      "name": "Frame 2147230860",
+      "selector": ".spc-track",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/xs"
+        ]
+      }
+    },
+    {
+      "name": ".slide-active",
+      "selector": ".spc-slide",
+      "bindings": {},
+      "slot": {
+        "name": "slide",
+        "accepts": [
+          "QuoteCard"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "Nav items",
+      "selector": ".spc-nav",
+      "bindings": {},
+      "slot": {
+        "name": "control",
+        "accepts": [
+          "IconButton"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "Carousel Pagination",
+      "selector": ".spc-pagination",
+      "bindings": {}
+    },
+    {
+      "name": ".spc-dot",
+      "selector": ".spc-dot",
+      "bindings": {
+        "width": [
+          "s2a/spacing/xs"
+        ],
+        "height": [
+          "s2a/spacing/xs"
+        ],
+        "border-radius": [
+          "s2a/border-radius/round"
+        ],
+        "background": [
+          "s2a/color/transparent-white/64"
+        ],
+        "outline": [
+          "s2a/color/focus-ring/default"
+        ]
+      }
+    }
+  ],
+  "textStyles": []
+}

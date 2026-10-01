@@ -20,7 +20,6 @@
     { "name": "showSecondIcon", "type": "boolean", "defaultValue": "false", "description": "Figma: Show Second App Icon" },
     { "name": "orientation", "type": "string", "defaultValue": "\"horizontal\"", "enum": ["horizontal", "vertical"] },
     { "name": "styleVariant", "type": "string", "defaultValue": "\"label\"", "enum": ["label", "eyebrow", "knockout", "inverse"], "description": "label = content/label ink · eyebrow = content/eyebrow ink + eyebrow ramp · knockout = always-white for dark/media surfaces · inverse = flips opposite the theme" },
-    { "name": "context", "type": "string", "deprecated": true, "description": "DEPRECATED v1 alias — \"on-dark\" maps to styleVariant \"knockout\" when styleVariant is unset. Remove usages; theme comes from variable modes." },
     { "name": "width", "type": "string", "defaultValue": "\"hug\"", "enum": ["hug", "fill"] },
     { "name": "showIconStart", "type": "boolean", "defaultValue": "true", "description": "Figma: Show App Icon" },
     { "name": "showIcon", "type": "boolean", "description": "Overrides showIconStart when set" },

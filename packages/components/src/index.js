@@ -39,3 +39,5 @@ export * from "./logo/index.js";
 export * from "./merch-card/index.js";
 export * from "./bento/index.js";
 export * from "./jump-link/index.js";
+export * from "./global-navigation/global-navigation.js";
+export * from "./homepage-sections/homepage-sections.js";

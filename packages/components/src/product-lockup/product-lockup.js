@@ -40,8 +40,6 @@ const normalizeIconSize = (value) => {
  * @param {'hug'|'fill'} opts.width
  * @param {boolean} opts.showIconStart   - Figma "Show App Icon"
  * @param {boolean} opts.showIconEnd     - Figma "Show Icon End" (chevron)
- * @param {'on-light'|'on-dark'} [opts.context] - DEPRECATED v1 alias; "on-dark" maps to
- *                                         styleVariant "knockout" when styleVariant is unset.
  */
 export const ProductLockup = ({
   label = "Product label",
@@ -51,7 +49,6 @@ export const ProductLockup = ({
   showSecondIcon = false,
   orientation = "horizontal",
   styleVariant,
-  context,
   width = "hug",
   showIconStart = true,
   showIcon,
@@ -59,11 +56,7 @@ export const ProductLockup = ({
   iconSize = "auto",
   caret = CaretIcon,
 } = {}) => {
-  // v1 compatibility: context="on-dark" used to swap the ink to knockout white.
-  // v2 expresses that as Style=knockout. Explicit styleVariant always wins.
-  const resolvedStyle = normalizeStyle(
-    styleVariant ?? (context === "on-dark" ? "knockout" : "label"),
-  );
+  const resolvedStyle = normalizeStyle(styleVariant ?? "label");
   const normalizedOrientation = normalizeOrientation(orientation);
   const normalizedWidth = normalizeWidth(width);
   const resolvedShowIconStart =

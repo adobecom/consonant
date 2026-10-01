@@ -1,0 +1,98 @@
+.c-global-navigation {
+  position: relative;
+  z-index: 20;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: var(--s2a-spacing-lg, 24px);
+  padding-inline: var(--s2a-spacing-md, 16px);
+  /* Primitive: fixed dark navigation has no theme-invariant surface alias. */
+  background: var(--s2a-gnav-background, #000);
+  color: var(--s2a-color-content-knockout, #fff);
+  font:
+    700 14px/1.3 var(--s2a-font-family-label, Arial),
+    sans-serif;
+}
+.c-global-navigation a {
+  color: inherit;
+  text-decoration: none;
+  letter-spacing: 0;
+}
+.gnav-brand {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  min-height: 44px;
+}
+.gnav-desktop {
+  display: flex;
+  gap: var(--s2a-spacing-lg, 24px);
+  align-items: center;
+}
+.gnav-desktop a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  white-space: nowrap;
+}
+.gnav-utility {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.gnav-mobile {
+  display: none;
+}
+.gnav-close {
+  display: none;
+}
+.gnav-mobile[open] .gnav-close {
+  display: flex;
+}
+.gnav-mobile[open] .gnav-open {
+  display: none;
+}
+.c-global-navigation a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.c-global-navigation :focus-visible {
+  outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
+  outline-offset: 3px;
+}
+@media (max-width: 1023px) {
+  .gnav-desktop {
+    display: none;
+  }
+  .gnav-mobile {
+    display: block;
+  }
+  .gnav-mobile summary {
+    list-style: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+  }
+  .gnav-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+  .gnav-mobile summary svg {
+    width: 20px;
+    height: 20px;
+  }
+  /* Primitive: same fixed dark treatment as the bar, independent of page theme. */
+  .gnav-mobile nav {
+    position: absolute;
+    inset: 100% 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: var(--s2a-spacing-lg, 24px);
+    background: var(--s2a-gnav-background, #000);
+  }
+  .gnav-mobile nav a {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
+}

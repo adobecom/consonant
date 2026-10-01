@@ -36,7 +36,7 @@
   align-items: center;
   gap: var(--s2a-spacing-2xl, 40px);
   padding-block: var(--s2a-spacing-2xl, 40px);
-  background-color: var(--s2a-color-background-default, #ffffff);
+  background-color: var(--s2a-color-surface-default, var(--s2a-color-background-default, #ffffff));
   border-radius: var(--s2a-border-radius-xl, 32px) var(--s2a-border-radius-xl, 32px) 0 0;
   overflow: hidden;
   width: 100%;
@@ -46,6 +46,11 @@
 .c-hub-router__heading {
   width: 100%;
   padding-inline: var(--s2a-spacing-lg, 24px); /* mobile */
+}
+/* The current subtle token is 4.43:1 on the dark card surface. Use the
+   accessible foreground until the surface/subtle token pairing is corrected. */
+.c-hub-router .c-elastic-card[data-state="resting"]:not(:hover) .c-elastic-card__body-text {
+  color: var(--s2a-color-content-default);
 }
 
 /* ─── Carousel — BASE: mobile snap-scroll ────────────────────────────────────── */
@@ -57,6 +62,8 @@
   padding-inline: var(--s2a-spacing-lg, 24px);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  /* Match the content inset so the first card does not auto-snap on load. */
+  scroll-padding-inline: var(--s2a-spacing-lg, 24px);
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -71,9 +78,24 @@
   scroll-snap-align: start;
 }
 
-/* Card at its natural resting width on mobile */
+/* Card at its natural resting width on tablet */
 .c-hub-router__carousel .c-elastic-card {
   inline-size: var(--s2a-elastic-card-width-resting, 294px);
+}
+
+/* Mobile (Figma 8278:190405): one card fills the rail inset, capped at the v2
+   mobile card width, with the v2 mobile media inset and tighter radius. */
+@media (max-width: 599px) {
+  .c-hub-router__carousel .c-elastic-card {
+    inline-size: min(360px, calc(100vw - var(--s2a-spacing-lg, 24px) * 2));
+  }
+  .c-hub-router .c-elastic-card__media {
+    padding-inline: var(--s2a-spacing-2xs, 4px);
+  }
+  .c-hub-router .c-elastic-card__media > :is(img, picture, .c-media) {
+    border-radius: var(--s2a-border-radius-sm, 12px);
+    overflow: hidden;
+  }
 }
 
 /* ─── 1024–1279px: card size override (Figma: padding=16px, media=325px) ──────
@@ -172,4 +194,11 @@
     justify-content: flex-end;
     padding-inline-end: max(8px, calc((100vw - 1502px) / 2));
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-hub-router__carousel { scroll-behavior: auto; }
+  .c-hub-router__carousel > [role="listitem"],
+  .c-hub-router .c-elastic-card,
+  .c-hub-router .c-elastic-card * { transition: none !important; }
 }

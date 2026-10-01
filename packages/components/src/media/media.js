@@ -37,6 +37,7 @@ const buildVideo = ({
   controls,
   playsinline,
   sources,
+  preload = "metadata",
 }) => html`
   <video
     src=${src ?? nothing}
@@ -46,7 +47,7 @@ const buildVideo = ({
     ?loop=${loop}
     ?playsinline=${playsinline}
     ?controls=${controls}
-    preload="metadata"
+    preload=${preload}
   >
     ${Array.isArray(sources)
       ? sources.map(
@@ -58,6 +59,13 @@ const buildVideo = ({
 
 const defaultOverlay = html`<span class="c-media__overlay" aria-hidden="true"></span>`;
 
+/**
+ * @param {{ src?: string, alt?: string, aspectRatio?: string, size?: string, objectFit?: string,
+ *   objectPosition?: string, type?: "image" | "video", lazy?: boolean, poster?: string,
+ *   autoplay?: boolean, muted?: boolean, loop?: boolean, controls?: boolean, playsinline?: boolean,
+ *   preload?: "none" | "metadata" | "auto", overlay?: import("lit").TemplateResult | undefined,
+ *   sources?: { src: string, type?: string, media?: string }[], mediaTemplate?: import("lit").TemplateResult }} [options]
+ */
 export const Media = ({
   src,
   alt = "",
@@ -73,6 +81,7 @@ export const Media = ({
   loop = true,
   controls = false,
   playsinline = true,
+  preload = "metadata",
   overlay = defaultOverlay,
   sources,
   mediaTemplate,
@@ -95,6 +104,7 @@ export const Media = ({
           controls,
           playsinline,
           sources,
+          preload,
         })
       : buildImage({ src, alt, lazy, objectPosition: positionValue });
 

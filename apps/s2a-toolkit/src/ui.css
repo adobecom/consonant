@@ -179,6 +179,34 @@ body {
 
 .bridge-label { line-height: 1; }
 
+/* The pill swaps its state text for the action it will take, so a connected
+   bridge reads "Connected" at rest and "Disconnect" under the cursor. Only the
+   connected pill swaps — "Connect" already names its own action. */
+.bridge-action { line-height: 1; display: none; }
+.bridge-pill.connected:hover  .bridge-label,
+.bridge-pill.connected:focus-visible .bridge-label { display: none; }
+.bridge-pill.connected:hover  .bridge-action,
+.bridge-pill.connected:focus-visible .bridge-action { display: inline; }
+.bridge-pill.connected:hover,
+.bridge-pill.connected:focus-visible {
+  border-color: var(--accent-bdr);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+.bridge-pill.connected:hover .bridge-dot,
+.bridge-pill.connected:focus-visible .bridge-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-bg);
+}
+
+/* Connecting is a real third state — it should not look idle. */
+.bridge-pill.connecting { color: var(--text-2); }
+.bridge-pill.connecting .bridge-dot { background: var(--accent); animation: bridge-pulse 1s ease-in-out infinite; }
+@keyframes bridge-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .bridge-pill.connecting .bridge-dot { animation: none; opacity: 0.7; }
+}
+
 /* ── Bridge dot ─────────────────────────────────────────────────────────── */
 
 .bridge-dot {
@@ -195,28 +223,6 @@ body {
   box-shadow: 0 0 0 2px var(--green-bg);
 }
 
-/* ── Bridge popover ─────────────────────────────────────────────────────── */
-
-.bridge-popover {
-  display: none;
-  position: absolute;
-  top: 48px;
-  right: 8px;
-  width: 210px;
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06);
-  padding: 12px;
-  z-index: 100;
-}
-.bridge-popover.open { display: block; }
-
-.agent-header { display: flex; align-items: center; gap: 8px; }
-.agent-icon { flex-shrink: 0; display: block; border-radius: 4px; }
-.agent-meta { flex: 1; min-width: 0; }
-.agent-name { font-size: 11px; font-weight: 600; color: var(--text-1); display: block; }
-.agent-port { font-size: 10px; color: var(--text-3); display: block; margin-top: 1px; font-variant-numeric: tabular-nums; }
 
 /* ── Section context bar ─────────────────────────────────────────────────── */
 
@@ -740,3 +746,137 @@ body {
 }
 .req-thumb-rm:hover { background: var(--red); }
 
+/* ── Contract evidence summary ─────────────────────────────────────────────── */
+.contract-summary {
+  margin: 8px 0 0;
+  padding: 8px;
+  font: 10px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--text-2);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  white-space: pre-wrap;
+  max-height: 160px;
+  overflow: auto;
+}
+.contract-settings { margin-top: 8px; font-size: 11px; color: var(--text-2); }
+.contract-settings summary { cursor: pointer; padding: 2px 0; }
+.contract-settings .form-field { margin-top: 8px; }
+.contract-match { border-color: var(--accent); }
+
+/* ── Contract Studio ───────────────────────────────────────────────────────── */
+/* The curation editor. Visual weight goes to the two things that change what a
+   person does next: the mode toggle, and the verdict above Publish. */
+
+.studio-index { display: flex; flex-direction: column; gap: var(--s-1); }
+.studio-row {
+  display: flex; align-items: center; gap: var(--s-2);
+  width: 100%; padding: var(--s-2) var(--s-3);
+  background: var(--bg-raised); border: 1px solid var(--border);
+  border-radius: var(--r-sm); cursor: pointer; text-align: left;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.studio-row:hover { background: var(--bg-hover); border-color: var(--border-md); }
+.studio-row:focus-visible { outline: none; box-shadow: var(--ring); }
+.studio-row-name { flex: 1; min-width: 0; font-size: 11.5px; color: var(--text-1); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.studio-row-slug { font-size: 10px; color: var(--text-3); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; flex-shrink: 0; }
+.studio-empty { font-size: 11px; color: var(--text-3); padding: var(--s-2) 0; }
+
+.studio-head { display: flex; align-items: center; gap: var(--s-2); padding-bottom: var(--s-3); border-bottom: 1px solid var(--border); margin-bottom: var(--s-3); }
+.studio-head-meta { flex: 1; min-width: 0; }
+.studio-head-id { font-size: 12px; font-weight: 600; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.studio-head-sub { font-size: 10px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+
+.studio-modes { display: flex; flex-shrink: 0; border: 1px solid var(--border-md); border-radius: var(--r-sm); overflow: hidden; }
+.studio-mode {
+  font-size: 10px; font-weight: 500; letter-spacing: .02em;
+  padding: 3px var(--s-2); border: 0; cursor: pointer;
+  background: var(--bg-raised); color: var(--text-2);
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.studio-mode:hover { background: var(--bg-hover); }
+.studio-mode.active { background: var(--accent); color: #fff; }
+.studio-mode:focus-visible { outline: none; box-shadow: var(--ring); position: relative; z-index: 1; }
+
+.studio-body { padding-bottom: var(--s-3); }
+.studio-json { min-height: 320px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10.5px; line-height: 1.6; }
+
+/* Draft notes: the judgment calls a reviewer has to read. Amber, not red —
+   a guess is not a failure, but it is not finished either. */
+.studio-notes { background: rgba(217,164,58,0.07); border: 1px solid rgba(217,164,58,0.22); border-radius: var(--r-sm); padding: var(--s-2) var(--s-3); margin-bottom: var(--s-3); }
+.studio-notes-head { font-size: 10.5px; font-weight: 600; color: #8A6516; margin-bottom: var(--s-1); }
+.studio-note { display: flex; gap: var(--s-2); font-size: 10px; line-height: 1.5; color: var(--text-2); padding: 2px 0; }
+.studio-note-conf { flex-shrink: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 9px; text-transform: uppercase; letter-spacing: .04em; width: 42px; color: var(--text-3); }
+.studio-note-conf.low { color: #B4560F; font-weight: 600; }
+
+.studio-sec { margin-bottom: var(--s-4); }
+.studio-sec-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); margin-bottom: var(--s-2); }
+.studio-add { font-size: 10px; color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-bdr); border-radius: var(--r-sm); padding: 2px var(--s-2); cursor: pointer; }
+.studio-add:hover { background: rgba(75,92,240,0.14); }
+
+.studio-item { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2); border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--bg-raised); margin-bottom: var(--s-1); }
+.studio-item-name { flex: 1; min-width: 0; font-size: 11px; font-weight: 500; color: var(--text-1); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.studio-item-bind { font-size: 9.5px; color: var(--text-3); white-space: nowrap; flex-shrink: 0; }
+.studio-del { border: 0; background: none; cursor: pointer; color: var(--text-3); font-size: 13px; line-height: 1; padding: 0 2px; flex-shrink: 0; }
+.studio-del:hover { color: var(--red); }
+
+.studio-toggle { font-size: 9.5px; padding: 3px var(--s-2); margin: 0 var(--s-1) var(--s-1) 0; border-radius: var(--r-sm); cursor: pointer; border: 1px solid var(--border-md); background: var(--bg-raised); color: var(--text-2); transition: all var(--t-fast) var(--ease); }
+.studio-toggle:hover { border-color: var(--accent-bdr); }
+.studio-toggle.on { background: var(--accent-bg); border-color: var(--accent-bdr); color: var(--accent); font-weight: 600; }
+
+.studio-kv { display: flex; gap: var(--s-2); font-size: 10.5px; padding: 3px 0; }
+.studio-kv-key { color: var(--text-3); min-width: 108px; flex-shrink: 0; }
+.studio-kv-val { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--text-2); word-break: break-all; }
+
+.studio-footer { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding-top: var(--s-3); margin-top: var(--s-3); }
+.studio-verdict { font-size: 10.5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin-bottom: var(--s-2); color: var(--text-2); }
+.studio-verdict.ok  { color: var(--green); }
+.studio-verdict.bad { color: var(--red); }
+.studio-verdict.idle { color: var(--text-3); }
+.studio-warnings { font-size: 10px; line-height: 1.5; color: #8A6516; margin-bottom: var(--s-2); white-space: pre-wrap; }
+
+/* What the set itself declares a swap points at. A name with no contract is
+   shown as a named gap, not hidden — "extract it first" is the next step. */
+.studio-swap-hint { margin-top: var(--s-2); padding-top: var(--s-2); border-top: 1px dashed var(--border); }
+.studio-swap-line { display: flex; align-items: center; gap: var(--s-2); font-size: 10px; color: var(--text-3); padding: 2px 0; }
+
+/* JSON mode — a real editor, so it gets a real frame. The fold buttons are
+   depth shortcuts: 1 collapses to the top level, 3 to the third. */
+.studio-json-bar { display: flex; align-items: center; gap: var(--s-1); margin-bottom: var(--s-2); }
+.studio-json-label { flex: 1; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
+.studio-json-btn {
+  font-size: 10px; padding: 2px var(--s-2); cursor: pointer;
+  border: 1px solid var(--border-md); border-radius: var(--r-sm);
+  background: var(--bg-raised); color: var(--text-2);
+  transition: all var(--t-fast) var(--ease);
+}
+.studio-json-btn:hover { border-color: var(--accent-bdr); color: var(--accent); background: var(--accent-bg); }
+.studio-json-btn:focus-visible { outline: none; box-shadow: var(--ring); }
+
+/* ── Palette feedback ──────────────────────────────────────────────────────
+   A command that cannot run says so here, and the control it wanted gets a
+   brief ring so you can see where you landed. */
+.toast {
+  position: absolute; left: 10px; right: 10px; top: 44px; z-index: 40;
+  background: var(--bg-raised); color: var(--text-1);
+  border: 1px solid var(--accent-bdr); border-left: 3px solid var(--accent);
+  border-radius: var(--r-md); padding: 8px 10px; font-size: 11px; line-height: 1.45;
+  box-shadow: 0 4px 14px rgba(26,28,30,0.10);
+  animation: toast-in 140ms ease-out;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+.section-flash {
+  border-radius: var(--r-sm);
+  animation: section-flash 1.2s ease-out;
+}
+@keyframes section-flash {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; background: transparent; }
+  15%      { box-shadow: 0 0 0 3px var(--accent-bdr); background: var(--accent-bg); }
+  70%      { box-shadow: 0 0 0 3px var(--accent-bdr); background: var(--accent-bg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+  .section-flash { animation: none; box-shadow: 0 0 0 3px var(--accent-bdr); background: var(--accent-bg); }
+}

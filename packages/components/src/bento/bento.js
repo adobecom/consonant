@@ -5,6 +5,7 @@ import "./bento.css";
 import chevronRightSvg from "../icons/chevron-right.svg?raw";
 
 const VALID_WIDTHS = new Set(["full", "third"]);
+const VALID_TEXT_ALIGNS = new Set(["left", "center"]);
 const normalize = (v, allowed, fallback) => (allowed.has(v) ? v : fallback);
 
 const CtaChevron = () =>
@@ -16,10 +17,12 @@ const CtaChevron = () =>
  * Light/dark is token-driven: the text uses theme-aware content tokens that flip
  * with `:root[data-theme]`, so the same markup renders correctly on either theme
  * with no variant. `width` sets the tile proportion — `full` (wide, row hero) or
- * `third` (squarer, sits in a 3-up grid).
+ * `third` (squarer, sits in a 3-up grid). `textAlign` matches Figma's Bento — v2
+ * "Text Alignment" variant (`default` → `left`, `centered` → `center`).
  */
 export const Bento = ({
   width = "full",
+  textAlign = "left",
   app = "creative-cloud",
   showIcon = true,
   imageSrc,
@@ -31,9 +34,10 @@ export const Bento = ({
   showCta = true,
 } = {}) => {
   const resolvedWidth = normalize(width, VALID_WIDTHS, "full");
+  const resolvedTextAlign = normalize(textAlign, VALID_TEXT_ALIGNS, "left");
 
   return html`
-    <div class="c-bento" data-width=${resolvedWidth}>
+    <div class="c-bento" data-width=${resolvedWidth} data-text-align=${resolvedTextAlign}>
       <div class="c-bento__media" aria-hidden="true">
         ${imageSrc
           ? html`<img

@@ -1,0 +1,366 @@
+{
+  "sources": {
+    "dark-1920": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "frame": "12102:175100",
+      "section": "12102:175099 (Home 1441+ v2 Dark)",
+      "captured": "2026-09-14",
+      "note": "Section renders exported through the Figma MCP. Directional goldens: the WIP carries placeholder copy and known editorial deviations recorded in docs/future-notes/s2a-homepage-gap-register.md."
+    },
+    "light-breakpoints": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "section": "9672:83669 (Home — Original Design Specs)",
+      "frames": {
+        "375": "8278:190283",
+        "1024": "8278:189703",
+        "1440": "8278:189186",
+        "1920": "8278:188665"
+      },
+      "captured": "2026-09-15",
+      "note": "Full-frame renders cropped per section with the frame metadata (Body offset + section offset). Light theme. The 375 frame ends after News. Baselines were set from the 2026-09-15 run after the gutter, tab-rail and mobile-carousel fixes and only ratchet down."
+    }
+  },
+  "groups": [
+    {
+      "id": "1920-dark",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "theme": "dark",
+      "goldenDir": "golden"
+    },
+    {
+      "id": "1920-light",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "theme": "light",
+      "goldenDir": "golden/1920-light"
+    },
+    {
+      "id": "1440-light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "light",
+      "goldenDir": "golden/1440-light"
+    },
+    {
+      "id": "1024-light",
+      "viewport": {
+        "width": 1024,
+        "height": 800
+      },
+      "theme": "light",
+      "goldenDir": "golden/1024-light"
+    },
+    {
+      "id": "375-light",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "theme": "light",
+      "goldenDir": "golden/375-light"
+    }
+  ],
+  "sections": {
+    "hero": {
+      "golden": "hero.webp",
+      "selectors": [
+        ".page-section[data-component=\"global-navigation\"]",
+        ".page-section[data-component=\"router-marquee\"]"
+      ],
+      "notes": "Figma hero includes the nav overlay; candidate is nav bar + marquee. Golden is a video frame; candidate the still; router tabs identical."
+    },
+    "router-marquee": {
+      "golden": "router-marquee.webp",
+      "selectors": [
+        ".page-section[data-component=\"router-marquee\"]"
+      ],
+      "notes": "Dark WIP only: Content frame without nav."
+    },
+    "hub-router": {
+      "golden": "hub-router.webp",
+      "selectors": [
+        ".c-hub-router__heading",
+        ".c-hub-router__carousel"
+      ],
+      "notes": "Golden covers heading + rail without section padding; goldens show one card expanded on hover, candidate rests."
+    },
+    "media-section": {
+      "golden": "media-section.webp",
+      "selectors": [
+        ".c-media-section .home-reveal",
+        ".home-media-grid"
+      ],
+      "notes": "Corrected merged headline and repeated CTAs in code (gap register)."
+    },
+    "social-proof-carousel": {
+      "golden": "social-proof-carousel.webp",
+      "selectors": [
+        ".c-social-proof-carousel"
+      ],
+      "notes": "Goldens use the deprecated QuoteCard master with prev/next controls; candidate is single-slide."
+    },
+    "news-section": {
+      "golden": "news-section.webp",
+      "selectors": [
+        ".home-news-heading",
+        ".home-news-grid"
+      ],
+      "notes": "The 1920 dark golden node covers the heading row only; the light frames include the list."
+    },
+    "product-router": {
+      "golden": "product-router.webp",
+      "selectors": [
+        ".home-product-hero",
+        ".home-product-grid > :first-child",
+        ".home-product-grid > :last-child"
+      ],
+      "notes": "Golden last row order is Business Products, Illustrator, All products."
+    },
+    "site-footer": {
+      "golden": "site-footer.webp",
+      "selectors": [
+        ".c-site-footer"
+      ],
+      "notes": "Goldens include featured-products and legal rows that are not built yet."
+    }
+  },
+  "cases": [
+    {
+      "group": "1920-dark",
+      "section": "router-marquee",
+      "node": "12102:175105",
+      "baseline": 0.55
+    },
+    {
+      "group": "1920-dark",
+      "section": "hub-router",
+      "node": "12102:175264",
+      "baseline": 0.5
+    },
+    {
+      "group": "1920-dark",
+      "section": "media-section",
+      "node": "12102:175360",
+      "baseline": 0.35
+    },
+    {
+      "group": "1920-dark",
+      "section": "social-proof-carousel",
+      "node": "12102:175374",
+      "baseline": 0.35
+    },
+    {
+      "group": "1920-dark",
+      "section": "news-section",
+      "node": "12102:175420",
+      "baseline": 0.35
+    },
+    {
+      "group": "1920-dark",
+      "section": "product-router",
+      "node": "12102:175429",
+      "baseline": 0.35
+    },
+    {
+      "group": "1920-dark",
+      "section": "site-footer",
+      "node": "12102:175540",
+      "baseline": 0.35
+    },
+    {
+      "group": "1920-light",
+      "section": "hero",
+      "node": "8278:188667",
+      "baseline": 0.58,
+      "masks": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.08,
+          "why": "global-navigation stub vs transparent Figma nav"
+        }
+      ],
+      "notes": "Golden is a video frame with two CTAs; candidate is the local still with one. The rail and copy are the signal."
+    },
+    {
+      "group": "1920-light",
+      "section": "hub-router",
+      "node": "8278:188829",
+      "baseline": 0.4,
+      "notes": "Goldens show a hover-expanded (surface/inverse-subtle) card; the 375 golden is a stacked card deck the carousel does not implement (gap register)."
+    },
+    {
+      "group": "1920-light",
+      "section": "media-section",
+      "node": "8278:188890",
+      "baseline": 0.38
+    },
+    {
+      "group": "1920-light",
+      "section": "social-proof-carousel",
+      "node": "8278:188943",
+      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327×542 in both."
+    },
+    {
+      "group": "1920-light",
+      "section": "news-section",
+      "node": "8278:188983"
+    },
+    {
+      "group": "1920-light",
+      "section": "product-router",
+      "node": "8278:189010"
+    },
+    {
+      "group": "1920-light",
+      "section": "site-footer",
+      "node": "8278:189090"
+    },
+    {
+      "group": "1440-light",
+      "section": "hero",
+      "node": "8278:189188",
+      "baseline": 0.58,
+      "masks": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.08,
+          "why": "global-navigation stub vs transparent Figma nav"
+        }
+      ],
+      "notes": "Golden is a video frame with two CTAs; candidate is the local still with one. The rail and copy are the signal."
+    },
+    {
+      "group": "1440-light",
+      "section": "hub-router",
+      "node": "8278:189350",
+      "baseline": 0.45,
+      "notes": "Goldens show a hover-expanded (surface/inverse-subtle) card; the 375 golden is a stacked card deck the carousel does not implement (gap register)."
+    },
+    {
+      "group": "1440-light",
+      "section": "media-section",
+      "node": "8278:189410"
+    },
+    {
+      "group": "1440-light",
+      "section": "social-proof-carousel",
+      "node": "8278:189460",
+      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327×542 in both."
+    },
+    {
+      "group": "1440-light",
+      "section": "news-section",
+      "node": "8278:189502"
+    },
+    {
+      "group": "1440-light",
+      "section": "product-router",
+      "node": "8278:189529"
+    },
+    {
+      "group": "1440-light",
+      "section": "site-footer",
+      "node": "8278:189607"
+    },
+    {
+      "group": "1024-light",
+      "section": "hero",
+      "node": "8278:189705",
+      "baseline": 0.65,
+      "masks": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.08,
+          "why": "global-navigation stub vs transparent Figma nav"
+        }
+      ],
+      "notes": "Golden is a video frame with two CTAs; candidate is the local still with one. The rail and copy are the signal."
+    },
+    {
+      "group": "1024-light",
+      "section": "hub-router",
+      "node": "8278:189867",
+      "baseline": 0.58,
+      "notes": "Goldens show a hover-expanded (surface/inverse-subtle) card; the 375 golden is a stacked card deck the carousel does not implement (gap register)."
+    },
+    {
+      "group": "1024-light",
+      "section": "media-section",
+      "node": "8278:189989"
+    },
+    {
+      "group": "1024-light",
+      "section": "social-proof-carousel",
+      "node": "8278:190039",
+      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327×542 in both."
+    },
+    {
+      "group": "1024-light",
+      "section": "news-section",
+      "node": "8278:190079"
+    },
+    {
+      "group": "1024-light",
+      "section": "product-router",
+      "node": "8278:190106"
+    },
+    {
+      "group": "1024-light",
+      "section": "site-footer",
+      "node": "8278:190184"
+    },
+    {
+      "group": "375-light",
+      "section": "hero",
+      "node": "8278:190284",
+      "baseline": 0.85,
+      "masks": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.15,
+          "why": "iOS status bar + transparent Figma nav"
+        }
+      ],
+      "notes": "Golden is a video frame with two CTAs; candidate is the local still with one. The rail and copy are the signal."
+    },
+    {
+      "group": "375-light",
+      "section": "hub-router",
+      "node": "8278:190405",
+      "baseline": 0.6,
+      "notes": "Goldens show a hover-expanded (surface/inverse-subtle) card; the 375 golden is a stacked card deck the carousel does not implement (gap register)."
+    },
+    {
+      "group": "375-light",
+      "section": "media-section",
+      "node": "8278:190519"
+    },
+    {
+      "group": "375-light",
+      "section": "social-proof-carousel",
+      "node": "8278:190566",
+      "baseline": 0.6,
+      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327×542 in both."
+    },
+    {
+      "group": "375-light",
+      "section": "news-section",
+      "node": "8278:190594"
+    }
+  ]
+}

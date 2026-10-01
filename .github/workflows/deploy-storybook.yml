@@ -9,7 +9,10 @@ permissions:
   contents: write
 
 jobs:
+  authoring-quality:
+    uses: ./.github/workflows/authoring-checks.yml
   deploy:
+    needs: authoring-quality
     runs-on: ubuntu-latest
     env:
       GITHUB_PAGES: true
@@ -30,6 +33,9 @@ jobs:
 
       - name: Build Storybook
         run: npm run storybook:build
+
+      - name: Build and stage S2A Studio
+        run: npx nx run authoring-poc:stage-pages
 
       - name: Disable Jekyll (allow _-prefixed assets to be served)
         run: touch storybook-static/.nojekyll

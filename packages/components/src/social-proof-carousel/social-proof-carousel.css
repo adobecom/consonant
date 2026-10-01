@@ -12,7 +12,7 @@
   gap: 8px;
   will-change: transform;
   /* Initial state: translate = peek, so first slide is in view */
-  transform: translateX(var(--spc-peek, 11.46%));
+  transform: translateX(calc(var(--spc-peek, 11.46%) + var(--s2a-spacing-xs, 8px)));
 }
 
 /* ─── Slides ─────────────────────────────────────────────────────────────── */
@@ -52,20 +52,23 @@
   z-index: 10;
 }
 
+/* Dots bind what the .QuoteCard DotPagination binds in Figma (9334:3814):
+   size spacing/xs, radius/round, inactive transparent/white/64, active
+   content/knockout. */
 .spc-dot {
   appearance: none;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: var(--s2a-spacing-xs, 8px);
+  height: var(--s2a-spacing-xs, 8px);
+  border-radius: var(--s2a-border-radius-round, 50%);
   border: none;
   padding: 0;
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--s2a-color-transparent-white-64, rgba(255, 255, 255, 0.64));
   cursor: pointer;
   transition: background 200ms ease, transform 200ms ease;
 }
 
-.spc-dot[aria-selected="true"] {
-  background: #fff;
+.spc-dot[aria-pressed="true"] {
+  background: var(--s2a-color-content-knockout, #fff);
   transform: scale(1.25);
 }
 
@@ -75,6 +78,10 @@
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────────────────── */
+@media (max-width: 599px) {
+  .spc-nav { top: auto; bottom: 16px; transform: none; }
+  .spc-pagination { bottom: 32px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .spc-track {
@@ -84,4 +91,7 @@
   .spc-dot {
     transition: none;
   }
+}
+.c-social-proof-carousel[data-single="true"] :is(.spc-nav, .spc-pagination) {
+  display: none;
 }

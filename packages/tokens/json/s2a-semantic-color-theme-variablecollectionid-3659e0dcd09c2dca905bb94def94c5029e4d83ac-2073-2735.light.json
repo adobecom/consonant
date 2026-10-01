@@ -3104,6 +3104,72 @@
             }
           }
         }
+      },
+      "surface": {
+        "default": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.25}",
+          "$description": "Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-surface-default)"
+              }
+            }
+          }
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.50}",
+          "$description": "Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-surface-subtle)"
+              }
+            }
+          }
+        },
+        "inverse": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.1000}",
+          "$description": "Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-surface-inverse)"
+              }
+            }
+          }
+        },
+        "inverse-subtle": {
+          "$type": "color",
+          "$value": "{s2a.color.gray.900}",
+          "$description": "Surface family (additive 0.0.21): elevation-neutral page/card surfaces; inverse pairs flip with the theme.",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "ALL_SCOPES"
+              ],
+              "codeSyntax": {
+                "WEB": "var(--s2a-color-surface-inverse-subtle)"
+              }
+            }
+          }
+        }
       }
     }
   },

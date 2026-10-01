@@ -16,6 +16,7 @@
 
 - Before running any MCP codegen (Codex/Claude/Cursor), read the guardrail docs in [`docs/guardrails/`](docs/guardrails/) and paste the "Guardrail reminder" snippet from [`docs/guardrails/no-primitives-in-components.md`](docs/guardrails/no-primitives-in-components.md) into the agent prompt.
 - Reject or fix any generated code that uses primitive tokens without an inline `Primitive:` comment.
+- When authoring or editing **documentation frames in Figma**, follow [`docs/guardrails/figma-documentation-readability.md`](docs/guardrails/figma-documentation-readability.md): cap every text node per the measured table (never over 80 characters), 150% line height, pin the frame's theme collection to Dark, and re-resolve paint literals.
 
 ## Repository Docs to Reference
 

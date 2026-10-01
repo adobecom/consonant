@@ -10,6 +10,11 @@
   overflow: hidden;
   background: var(--s2a-color-transparent-white-08, rgba(255, 255, 255, 0.08));
   box-sizing: border-box;
+  transition: background-color 300ms cubic-bezier(0.42, 0, 0, 1);
+}
+
+.c-product-card:is(:hover, :focus-within) {
+  background: var(--s2a-color-transparent-white-12, rgba(255, 255, 255, 0.12));
 }
 
 .c-product-card[role="button"] {
@@ -20,6 +25,9 @@
   outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
   outline-offset: 2px;
 }
+.c-product-card:focus-within { outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6); outline-offset: 2px; }
+.c-product-card[href] { text-decoration: none; color: inherit; }
+.c-product-card:focus-within :is(.c-product-card__image, .c-product-card__scrim) { opacity: 1; }
 
 /* ─── Background image (hover reveal) ───────────────────────────────────────── */
 
@@ -87,9 +95,12 @@
   font-weight: var(--s2a-font-weight-heading, 900);
   font-size: var(--s2a-typography-font-size-heading-5, 24px);
   line-height: var(--s2a-typography-line-height-heading-5, 24px);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-5, -0.48px);
+  letter-spacing: 0;
   color: var(--s2a-color-content-knockout, #fff);
   margin: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .c-product-card, .c-product-card__image, .c-product-card__scrim { transition: none; }
 }
 
 .c-product-card__body {

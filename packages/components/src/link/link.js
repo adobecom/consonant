@@ -23,7 +23,6 @@ const CHEVRON_RIGHT = html`<svg
  * @param {string} args.href - Destination URL
  * @param {"action"|"text"} args.kind - action = label ramp CTA link, text = inline body link
  * @param {"default"|"subtle"} args.emphasis - text kind only; subtle drops to body-subtle color
- * @param {"on-light"|"on-dark"} args.context - surface context
  * @param {boolean} args.underline - render with persistent underline
  * @param {boolean} args.showIconEnd - show trailing 12px chevron
  */
@@ -32,7 +31,6 @@ export const Link = ({
   href = "#",
   kind = "action",
   emphasis = "default",
-  context = "on-light",
   underline = false,
   showIconEnd = true,
 } = {}) => html`
@@ -41,7 +39,6 @@ export const Link = ({
     href=${href}
     data-kind=${kind}
     data-emphasis=${emphasis}
-    data-context=${context}
     data-underline=${underline ? "" : nothing}
   >
     <span class="c-link__label">${label}</span>

@@ -1,0 +1,184 @@
+{
+  "$schema": "../../../specs/southleft/contract.schema.json",
+  "id": "s2a.action-card",
+  "name": "ActionCard",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "A card that is one link: an illustration in a Media slot, a headline, and a chevron. The whole surface is the target and the headline is the accessible name. Used in the Acrobat \"Get started with Acrobat tools\" row (ActionCardRow).",
+  "semantics": {
+    "element": "a",
+    "role": "link"
+  },
+  "props": [
+    {
+      "name": "href",
+      "type": "text",
+      "description": "Destination; authoring validates it.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "href"
+        }
+      }
+    },
+    {
+      "name": "target",
+      "type": "text",
+      "description": "Integration detail; new-window links append an accessible hint.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "target"
+        }
+      }
+    },
+    {
+      "name": "mediaSrc",
+      "type": "text",
+      "description": "Decorative illustration; aria-hidden. Assets: apps/storybook/stories/assets/action-card/<slug>_2x.png (+ .svg for vector art).",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Media#14226:2"
+        },
+        "code": {
+          "prop": "mediaSrc"
+        }
+      }
+    },
+    {
+      "name": "headline",
+      "type": "text",
+      "description": "The card's accessible name (whole card is the link). Default in Figma: \"Headline\".",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Headline#14226:1"
+        },
+        "code": {
+          "prop": "headline"
+        }
+      }
+    }
+  ],
+  "states": [
+    "hover",
+    "focus-visible"
+  ],
+  "anatomy": {
+    "root": {
+      "description": "Block-level link, 313px wide in the row. No padding on the root: the media is full-bleed (top, clipped by the card's radius) and the copy block carries its own padding. Hug height; in a row the cards stretch to the tallest. radius/lg (22px) and spacing/2xl (40px) are the tokens nearest the original 26px / 39px.",
+      "element": "a",
+      "tokens": {
+        "background-color": "{s2a.color.background.subtle}",
+        "border-radius": "{s2a.border-radius.lg}",
+        "gap": "{s2a.spacing.md}"
+      },
+      "parts": {
+        "media": {
+          "description": "Full-bleed, top of the card, 4:3 (313×235). The illustration is content: an image fill on the Media instance, exported from the original tile cropped at the copy block's top (313×228).",
+          "element": "div[aria-hidden]",
+          "slot": {
+            "name": "Media",
+            "accepts": [
+              "Media"
+            ],
+            "acceptsMode": "restrict"
+          }
+        },
+        "copy": {
+          "description": "Headline and chevron on one row, start-aligned, vertically centred; the chevron hugs the text (the headline hugs its content up to the row's inner width).",
+          "element": "div",
+          "tokens": {
+            "gap": "{s2a.spacing.md}"
+          },
+          "literals": {
+            "padding": "{s2a.spacing.none} {s2a.spacing.2xl} {s2a.spacing.2xl} {s2a.spacing.2xl}"
+          },
+          "parts": {
+            "headline": {
+              "description": "Text style s2a/typography/heading-5 (24px): the rung nearest the original 29px that keeps most headlines on one line; two-line headlines make the card 339 tall.",
+              "element": "h3",
+              "tokens": {
+                "font-family": "{s2a.font-family.heading}",
+                "font-weight": "{s2a.font-weight.heading}",
+                "font-size": "{s2a.typography.font-size.heading-5}",
+                "line-height": "{s2a.typography.line-height.heading-5}",
+                "letter-spacing": "{s2a.typography.letter-spacing.heading-5}",
+                "color": "{s2a.color.content.heading}"
+              }
+            },
+            "chevron": {
+              "description": "S2a_Icon_Chevron_Right at 16px; decorative, never the only indication of the link (WCAG 1.4.1).",
+              "element": "svg[aria-hidden]",
+              "tokens": {
+                "color": "{s2a.color.content.default}"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "role": "link",
+    "wcag": [
+      "1.1.1",
+      "1.4.1",
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.4",
+      "2.4.7",
+      "2.5.8"
+    ],
+    "keyboard": [
+      {
+        "key": "Tab",
+        "action": "moves focus to the card as one stop"
+      },
+      {
+        "key": "Enter",
+        "action": "follows the link"
+      }
+    ],
+    "notes": [
+      "One link, one accessible name: the headline text. Media, icon and chevron are aria-hidden so the name is not padded with noise.",
+      "No interactive element may be nested inside the card (a link inside a link is invalid HTML and unreachable by keyboard).",
+      "Focus ring is drawn on the whole card surface (2.4.7) and the target is at least 24×24 (2.5.8).",
+      "Headline and description meet 4.5:1 on the card surface; the chevron and any border meet 3:1 (1.4.3, 1.4.11).",
+      "The arrow is decorative: link purpose comes from the headline text (2.4.4), not from the glyph alone (1.4.1)."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "242365cbd00ab8a07d044f4a62608b99692a9aa3",
+        "nodeId": "14226:196789"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/action-card/action-card.js",
+        "export": "ActionCard"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:b6f9290f4243c9dfeb3b0511a4e5bdf5ed525c41ca1d7c5433cf770db0b50777",
+    "source": {
+      "kind": "design",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:b6f9290f4243c9dfeb3b0511a4e5bdf5ed525c41ca1d7c5433cf770db0b50777"
+    }
+  }
+}

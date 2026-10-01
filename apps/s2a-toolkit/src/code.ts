@@ -1,3 +1,8 @@
+import { extractEvidence, hashableBody, canonicalJson } from './contract-extract';
+import { buildSetFromPlan } from './contract-build';
+import { normalizeFromSource } from './contract-normalize';
+import { checkDocFrame } from './doc-check';
+
 // ── Serializers ──────────────────────────────────────────────────────────────
 
 function serializeVariable(v: Variable): Record<string, unknown> {
@@ -164,6 +169,91 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
           fileKey: figma.fileKey || null,
           fileName: figma.root.name,
           page: { id: figma.currentPage.id, name: figma.currentPage.name },
+        },
+      };
+    }
+
+    // CAPTURE_SCREENSHOT — export a node (or the current page) as PNG/JPG/SVG via
+    // exportAsync; mirrors the bundled Desktop Bridge so figma_capture_screenshot works
+    // through the toolkit. Scale is capped so the longest side is ≤ 1568px (Claude's
+    // vision ceiling) — larger exports only cost bandwidth and tokens.
+    case 'CAPTURE_SCREENSHOT': {
+      const node = params.nodeId ? await figma.getNodeByIdAsync(params.nodeId as string) : figma.currentPage;
+      if (!node) throw new Error('Node not found: ' + params.nodeId);
+      if (!('exportAsync' in node)) throw new Error('Node type ' + node.type + ' does not support export');
+      const format = ((params.format as string) || 'PNG').toUpperCase() as 'PNG' | 'JPG' | 'SVG';
+      const requestedScale = Number(params.scale) > 0 ? Number(params.scale) : 1;
+      let scale = requestedScale;
+      const AI_MAX_DIMENSION = 1568;
+      let w = 0, h = 0;
+      if (node.type === 'PAGE') {
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        for (const child of (node as PageNode).children) {
+          const bb = (child as SceneNode).absoluteBoundingBox;
+          if (child.visible !== false && bb) {
+            minX = Math.min(minX, bb.x); minY = Math.min(minY, bb.y);
+            maxX = Math.max(maxX, bb.x + bb.width); maxY = Math.max(maxY, bb.y + bb.height);
+          }
+        }
+        if (minX !== Infinity) { w = maxX - minX; h = maxY - minY; }
+      } else if ('width' in node && 'height' in node) {
+        w = (node as SceneNode & { width: number; height: number }).width;
+        h = (node as SceneNode & { width: number; height: number }).height;
+      }
+      if (w > 0 && h > 0) {
+        const longest = Math.max(w, h);
+        if (longest * scale > AI_MAX_DIMENSION) scale = AI_MAX_DIMENSION / longest;
+      }
+      const advice: string[] = [];
+      if (scale < requestedScale) advice.push('Scale capped from ' + requestedScale + 'x to ' + scale.toFixed(2) + 'x (AI vision max: 1568px).');
+      if (node.type === 'PAGE' && scale < 0.5) advice.push('Full-page capture at ' + scale.toFixed(2) + 'x — text may be unreadable. Pass a nodeId to target a specific frame.');
+      const settings: ExportSettings = format === 'SVG'
+        ? { format: 'SVG' }
+        : { format, constraint: { type: 'SCALE', value: scale } };
+      const bytes = await (node as ExportMixin).exportAsync(settings);
+      const bounds = 'absoluteBoundingBox' in node ? (node as SceneNode).absoluteBoundingBox : null;
+      return {
+        image: {
+          base64: figma.base64Encode(bytes),
+          format,
+          scale,
+          byteLength: bytes.length,
+          node: { id: node.id, name: node.name, type: node.type },
+          bounds,
+          formatAdvice: advice.join(' '),
+        },
+      };
+    }
+
+    // CREATE_SLOT — add a native Slot to a COMPONENT (one call per variant for a set).
+    // createSlot() takes no arguments; renaming the returned node is the naming API.
+    case 'CREATE_SLOT': {
+      const target = await figma.getNodeByIdAsync(params.nodeId as string);
+      if (!target) throw new Error('Node not found: ' + params.nodeId);
+      if (target.type !== 'COMPONENT') {
+        throw new Error('Node must be a COMPONENT (standalone or a variant inside a COMPONENT_SET). Got: ' + target.type + '. For a COMPONENT_SET, call this once per variant component.');
+      }
+      const comp = target as ComponentNode & { createSlot?: () => SceneNode & FrameNode };
+      if (typeof comp.createSlot !== 'function') {
+        throw new Error('createSlot() is not available. Update Figma Desktop to a version with Slots support.');
+      }
+      const slot = comp.createSlot();
+      if (params.name) slot.name = String(params.name);
+      if (params.layoutMode === 'GRID') throw new Error('GRID layoutMode is not allowed on slot nodes');
+      if (params.layoutMode) slot.layoutMode = params.layoutMode as 'NONE' | 'HORIZONTAL' | 'VERTICAL';
+      if (params.width !== undefined || params.height !== undefined) {
+        slot.resize(params.width !== undefined ? Number(params.width) : slot.width,
+                    params.height !== undefined ? Number(params.height) : slot.height);
+      }
+      let propertyKey: string | null = null;
+      try {
+        const refs = (slot as SceneNode & { componentPropertyReferences?: Record<string, string> }).componentPropertyReferences;
+        if (refs && refs.slotContentId) propertyKey = refs.slotContentId;
+      } catch { /* ignore */ }
+      return {
+        slot: {
+          id: slot.id, name: slot.name, type: slot.type, propertyKey,
+          width: slot.width, height: slot.height, layoutMode: slot.layoutMode,
         },
       };
     }
@@ -380,6 +470,8 @@ figma.on('currentpagechange', () => {
 
 // ── Message handler ──────────────────────────────────────────────────────────
 
+const PLUGIN_VERSION = '0.2.1';
+
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
 
 // Anonymous, random per-install id for usage telemetry. Not tied to identity —
@@ -414,6 +506,22 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
     case 'gh-token:get': {
       const token = (await figma.clientStorage.getAsync('gh-token')) ?? '';
       figma.ui.postMessage({ type: 'gh-token:value', token });
+      break;
+    }
+
+    // Contract sync endpoint: localhost:9410 in development, the relay when
+    // published. Per user, never in the document. The relay key is optional.
+    case 'contract-endpoint:get': {
+      const endpoint = ((await figma.clientStorage.getAsync('contract-endpoint')) as string | undefined) || 'http://localhost:9410';
+      const relayKey = ((await figma.clientStorage.getAsync('contract-relay-key')) as string | undefined) || '';
+      figma.ui.postMessage({ type: 'contract-endpoint:value', endpoint, relayKey });
+      break;
+    }
+    case 'contract-endpoint:set': {
+      const endpoint = ((msg.endpoint as string) || '').trim();
+      const relayKey = ((msg.relayKey as string) || '').trim();
+      if (endpoint) await figma.clientStorage.setAsync('contract-endpoint', endpoint); else await figma.clientStorage.deleteAsync('contract-endpoint');
+      if (relayKey) await figma.clientStorage.setAsync('contract-relay-key', relayKey); else await figma.clientStorage.deleteAsync('contract-relay-key');
       break;
     }
 
@@ -508,6 +616,78 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
 
     case 'notify': {
       figma.notify(msg.message as string);
+      break;
+    }
+
+    // Build a component set from a contract's figma.plan.json (see contract-build.ts).
+    // Export a node as PNG and hand it to the sync server through the UI
+    // (see ui.ts contract:artifact). { nodeId, name, scale? } → file on disk.
+    case 'contract:export': {
+      try {
+        const node = await figma.getNodeByIdAsync(String(msg.nodeId)) as SceneNode | null;
+        if (!node || !('exportAsync' in node)) throw new Error(`node ${msg.nodeId} not exportable`);
+        const bytes = await (node as ExportMixin).exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: Number(msg.scale) || 1 } });
+        figma.ui.postMessage({ type: 'contract:artifact', name: String(msg.name || `${node.name}.png`), b64: figma.base64Encode(bytes) });
+      } catch (err: any) { figma.ui.postMessage({ type: 'contract:artifact:saved', name: msg.name, error: err?.message || String(err) }); }
+      break;
+    }
+    case 'contract:build-set': {
+      try {
+        // Golden first: when the contract's anchor is in this file, clone it and
+        // apply the contract (names, properties, matching tokens, drift report).
+        // The dictionary scaffold is only for contracts with no design here.
+        const plan = msg.plan as any;
+        const anchored = plan?.anchors?.nodeId ? await figma.getNodeByIdAsync(plan.anchors.nodeId) : null;
+        const report = anchored && 'clone' in anchored ? await normalizeFromSource(plan, { adopt: Boolean(msg.adopt) }) : await buildSetFromPlan(plan);
+        const drift = (report as any).drift?.length ?? 0;
+        figma.notify(`Built ${report.set}: ${report.variants} variant${report.variants === 1 ? '' : 's'}, ${report.layers} layers${drift ? `, ${drift} token drift` : ''}`);
+        figma.ui.postMessage({ type: 'contract:build-set:done', report });
+      } catch (err: any) {
+        figma.ui.postMessage({ type: 'contract:build-set:done', error: (err?.message || String(err)) + (err?.stack ? ' @ ' + String(err.stack).split('\n')[1]?.trim() : '') });
+      }
+      break;
+    }
+
+    // Contract evidence: a deterministic walk of the selected component set
+    // (or the set behind a selected variant / instance). No judgment here; the
+    // UI hashes and publishes the result to the sync server.
+    case 'contract:extract': {
+      const startedAt = Date.now();
+      try {
+        let node: BaseNode | null = msg.setId ? await figma.getNodeByIdAsync(msg.setId as string) : (figma.currentPage.selection[0] ?? null);
+        if (node && node.type === 'INSTANCE') node = await (node as InstanceNode).getMainComponentAsync();
+        const EXTRACTABLE = ['COMPONENT_SET', 'COMPONENT', 'FRAME', 'SECTION', 'GROUP'];
+        if (!node || !EXTRACTABLE.includes(node.type)) {
+          figma.ui.postMessage({ type: 'contract:evidence', error: 'Select a component set, a variant, an instance, or a frame to extract as a candidate' });
+          break;
+        }
+        const candidateName = ((msg.name as string) || '').trim();
+        const isFrameLike = node.type === 'FRAME' || node.type === 'SECTION' || node.type === 'GROUP';
+        if (candidateName && isFrameLike && msg.rename) node.name = candidateName;
+        const evidence = await extractEvidence({
+          fileKey: figma.fileKey ?? null,
+          fileName: figma.root.name,
+          pluginVersion: PLUGIN_VERSION,
+          getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
+          getVariableCollectionByIdAsync: (id) => figma.variables.getVariableCollectionByIdAsync(id),
+          getStyleByIdAsync: (id) => figma.getStyleByIdAsync(id),
+        }, node as any);
+        if (candidateName && isFrameLike) {
+          // The layer name stays on record; the candidate name is what the
+          // contract, the slug and the proposal use.
+          (evidence.set as any).layerName = msg.rename ? candidateName : node.name;
+          evidence.set.name = candidateName;
+        }
+        figma.ui.postMessage({
+          type: 'contract:evidence',
+          evidence,
+          hashInput: hashableBody(evidence),
+          canonical: canonicalJson(evidence),
+          durationMs: Date.now() - startedAt,
+        });
+      } catch (err: any) {
+        figma.ui.postMessage({ type: 'contract:evidence', error: (err?.message || String(err)) + (err?.stack ? ' @ ' + String(err.stack).split('\n')[1]?.trim() : '') });
+      }
       break;
     }
 
@@ -707,6 +887,80 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         figma.ui.postMessage({ type: 'bridge:command-result', requestId, success: true, ...result });
       } catch (e: any) {
         figma.ui.postMessage({ type: 'bridge:command-result', requestId, success: false, error: e.message || String(e) });
+      }
+      break;
+    }
+
+    // Clicking a reported issue jumps to the layer it is about — a finding you
+    // cannot locate is barely a finding.
+    // An INSTANCE_SWAP already declares what belongs in it: a default component
+    // and Figma's preferred-values list. Reading that beats asking a person to
+    // scan every contract in the repo for the one the set already points at.
+    case 'studio:swap-targets': {
+      try {
+        let node = await figma.getNodeByIdAsync(msg.setId as string);
+        if (node && node.type === 'COMPONENT' && node.parent?.type === 'COMPONENT_SET') node = node.parent;
+        if (!node || (node.type !== 'COMPONENT_SET' && node.type !== 'COMPONENT')) {
+          figma.ui.postMessage({ type: 'studio:swap-targets-result', targets: {} });
+          break;
+        }
+        const defs = (node as ComponentSetNode).componentPropertyDefinitions ?? {};
+        // A variant resolves to its set: "Chevron / down" is the Chevron contract.
+        const setNameOf = (n: BaseNode | null) => !n ? null : (n.parent && n.parent.type === 'COMPONENT_SET' ? n.parent.name : n.name);
+        const targets: Record<string, Array<{ role: string; name: string }>> = {};
+        for (const [prop, def] of Object.entries(defs)) {
+          if ((def as any).type !== 'INSTANCE_SWAP') continue;
+          const found: Array<{ role: string; name: string }> = [];
+          const seen = new Set<string>();
+          const add = (role: string, name: string | null) => { if (name && !seen.has(name)) { seen.add(name); found.push({ role, name }); } };
+          const dv = (def as any).defaultValue as string | undefined;
+          if (dv) { try { add('default', setNameOf(await figma.getNodeByIdAsync(dv))); } catch { /* the default may live in a library */ } }
+          for (const pv of ((def as any).preferredValues ?? []) as Array<{ type: string; key: string }>) {
+            try {
+              const imported = pv.type === 'COMPONENT_SET'
+                ? await figma.importComponentSetByKeyAsync(pv.key)
+                : await figma.importComponentByKeyAsync(pv.key);
+              add('preferred', setNameOf(imported));
+            } catch { /* an unpublished or unreachable key is not an error here */ }
+          }
+          targets[prop] = found;
+        }
+        figma.ui.postMessage({ type: 'studio:swap-targets-result', targets });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'studio:swap-targets-result', targets: {}, error: e.message || String(e) });
+      }
+      break;
+    }
+
+    case 'docs:reveal': {
+      const node = await figma.getNodeByIdAsync(msg.nodeId as string);
+      if (!node || !('visible' in node)) { figma.notify('That layer is gone — re-run the check'); break; }
+      const page = (() => { let n: BaseNode | null = node; while (n && n.type !== 'PAGE') n = n.parent; return n as PageNode | null; })();
+      if (page && page !== figma.currentPage) await figma.setCurrentPageAsync(page);
+      figma.currentPage.selection = [node as SceneNode];
+      figma.viewport.scrollAndZoomIntoView([node as SceneNode]);
+      break;
+    }
+
+    case 'docs:check': {
+      try {
+        const node = await figma.getNodeByIdAsync(msg.nodeId as string);
+        if (!node || node.type !== 'FRAME') {
+          figma.ui.postMessage({ type: 'docs:check-result', error: 'Select a documentation frame' });
+          break;
+        }
+        const { issues, textNodes, theme } = await checkDocFrame(node as FrameNode);
+        figma.ui.postMessage({
+          type: 'docs:check-result',
+          name: node.name,
+          textNodes,
+          theme,
+          fails: issues.filter(i => i.level === 'fail').length,
+          warns: issues.filter(i => i.level === 'warn').length,
+          issues,
+        });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'docs:check-result', error: e.message || String(e) });
       }
       break;
     }

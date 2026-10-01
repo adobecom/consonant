@@ -1,0 +1,91 @@
+name: Contract sync
+
+# Dispatched by the contract relay (apps/s2a-contract-relay) on a
+# contract/<slug>/<hash8> branch that carries the published Figma evidence in
+# packages/components/evidence/inbox/. One implementation, two transports:
+# this job runs the same apply script the local sync server exposes.
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: Component slug the evidence belongs to
+        required: true
+        type: string
+      hash:
+        description: sha256 of the canonical evidence body
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write   # gh label create
+
+concurrency:
+  group: contract-sync-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NX_DAEMON: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npx nx build tokens
+
+      - name: Apply evidence, refresh generated files, run the gate
+        id: apply
+        run: node apps/s2a-toolkit/server/contract-sync-apply.cjs --summary=.contract-sync-summary.md
+
+      - name: Commit, push, open PR
+        if: success()
+        env:
+          # A PR opened with github.token does not trigger pull_request workflows
+          # (no preview, no authoring checks on the PR). Set CONTRACT_BOT_TOKEN
+          # (a fine-grained PAT with contents + pull-requests write) to get them.
+          GH_TOKEN: ${{ secrets.CONTRACT_BOT_TOKEN || github.token }}
+          SLUG: ${{ inputs.slug }}
+          HASH: ${{ inputs.hash }}
+        run: |
+          git config user.name "s2a-contract-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A packages/components packages/specs/out
+          if git diff --cached --quiet; then
+            echo "### 🟰 Evidence already in sync; nothing to commit" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git commit -m "chore(contracts): sync ${SLUG} evidence ${HASH:7:8}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          if gh pr view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh pr edit "${GITHUB_REF_NAME}" --body-file .contract-sync-summary.md
+          else
+            gh label create contracts --description "Contract evidence from the S2A Toolkit" --color 6f42c1 --force >/dev/null 2>&1 || true
+            gh pr create --title "contracts: ${SLUG} evidence ${HASH:7:8}" --body-file .contract-sync-summary.md --head "${GITHUB_REF_NAME}" --base main --label contracts \
+              || gh pr create --title "contracts: ${SLUG} evidence ${HASH:7:8}" --body-file .contract-sync-summary.md --head "${GITHUB_REF_NAME}" --base main
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ -f .contract-sync-summary.md ]; then cat .contract-sync-summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ "${{ steps.apply.outcome }}" != "success" ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "The gate was red: nothing was committed. The evidence stays in the inbox on this branch for inspection." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: contract-sync-evidence
+          path: |
+            .contract-sync-summary.md
+            evals/gate/out/
+          retention-days: 30
+          if-no-files-found: ignore

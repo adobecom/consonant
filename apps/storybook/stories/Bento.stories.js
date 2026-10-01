@@ -44,6 +44,11 @@ Full-bleed media tile with a top-left app icon and a bottom-left headline / body
       options: ["full", "third"],
       description: "full: 1392/711 wide hero · third: 692/711 squarer grid tile",
     },
+    textAlign: {
+      control: { type: "inline-radio" },
+      options: ["left", "center"],
+      description: "Matches Figma's \"Text Alignment\" variant (default→left, centered→center)",
+    },
     app: { control: "text", description: "App slug for the icon badge" },
     showIcon: { control: "boolean" },
     imageSrc: { control: "text" },
@@ -56,6 +61,7 @@ Full-bleed media tile with a top-left app icon and a bottom-left headline / body
   },
   args: {
     width: "full",
+    textAlign: "left",
     app: "creative-cloud",
     showIcon: true,
     imageSrc: LIGHT_FULL,
@@ -106,6 +112,22 @@ export const Third = {
     headline: "Work smarter with documents.",
     body: "Trusted PDF tools, now with AI for editing, insights, and content creation.",
     ctaLabel: "Learn more",
+  },
+  render: (args) => html`<div style="max-width: 692px; padding: 24px;">${Bento(args)}</div>`,
+};
+
+// ─── Centered text alignment ────────────────────────────────────────────────────
+
+export const CenteredText = {
+  name: "Centered text alignment",
+  args: {
+    textAlign: "center",
+    width: "third",
+    app: "acrobat-pro",
+    imageSrc: DARK_THIRD_A,
+    headline: "Edit PDFs in a few clicks.",
+    body: "Update text and images, rearrange content, and share instantly.",
+    ctaLabel: "Try it now",
   },
   render: (args) => html`<div style="max-width: 692px; padding: 24px;">${Bento(args)}</div>`,
 };

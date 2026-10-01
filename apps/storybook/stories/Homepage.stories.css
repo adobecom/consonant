@@ -1,0 +1,15 @@
+.homepage-story {
+  display: block;
+  background: var(--s2a-color-background-default);
+  color: var(--s2a-color-content-default);
+}
+.homepage-story .page-section {
+  margin: 0;
+  min-width: 0;
+}
+.homepage-story :is(h1, h2, h3, p) {
+  letter-spacing: 0;
+}
+.homepage-story .c-hub-router {
+  padding-block: var(--s2a-layout-lg, 124px) 0;
+}

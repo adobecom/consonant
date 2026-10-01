@@ -1,0 +1,128 @@
+{
+  "source": {
+    "reference": "Milo C2 — context/milo/libs/c2/styles/styles.css (parallax-* recipe), libs/c2/blocks/elastic-carousel/elastic-carousel.css, libs/utils/decorate.js (video), libs/c2/blocks/carousel-c2; live adobe.com homepage recording 2026-09-14 (apps/authoring-poc/reports/polish/live-adobe-com/)",
+    "easing": "cubic-bezier(0.42, 0, 0, 1)",
+    "note": "Each contract names the element, the animation Milo applies, its timeline and range, and what reduced motion must do. The scorer checks the built visitor preview under both motion preferences."
+  },
+  "viewport": { "width": 1440, "height": 900 },
+  "contracts": [
+    {
+      "id": "hero-sticky-move-up",
+      "section": "router-marquee",
+      "selector": "main > .page-section[data-component=\"router-marquee\"]",
+      "milo": ".section.parallax-move-up-fast",
+      "computed": { "position": "sticky", "top": "0px" },
+      "animation": { "name": "home-hero-move-up", "timeline": "scroll", "range": ["0px", "80vh"], "easing": "ease-out", "fill": "both" },
+      "reducedMotion": { "animations": 0, "positionNot": "sticky" }
+    },
+    {
+      "id": "hero-fade-to-dark",
+      "section": "router-marquee",
+      "selector": "main > .page-section[data-component=\"router-marquee\"]",
+      "pseudo": "::after",
+      "milo": ".section.parallax-move-up-fast::after",
+      "animation": { "name": "home-hero-fade-to-dark", "timeline": "scroll", "range": ["0px", "80vh"], "easing": "linear", "fill": "both" },
+      "reducedMotion": { "animations": 0 }
+    },
+    {
+      "id": "section-overlap",
+      "section": "hub-router",
+      "selector": "main > .page-section[data-component=\"router-marquee\"] + .page-section",
+      "milo": ".section.rounded-corners-top (margin-block: -radius)",
+      "computed": { "marginTop": "-32px", "borderTopLeftRadius": "32px", "zIndex": "1" }
+    },
+    {
+      "id": "category-heading-move-up",
+      "section": "hub-router",
+      "selector": ".c-hub-router__heading",
+      "milo": ".rich-content.parallax-move-up",
+      "animation": { "name": "home-reveal", "timeline": "view", "range": ["entry 0%", "entry 100%"], "easing": "cubic-bezier(0.42, 0, 0, 1)", "fill": "both" },
+      "reducedMotion": { "animations": 0 }
+    },
+    {
+      "id": "category-rail-slide-in",
+      "section": "hub-router",
+      "selector": ".c-hub-router__carousel",
+      "milo": ".elastic-carousel-container (elasticCarouselSlideIn)",
+      "animation": { "name": "home-rail-slide-in", "timeline": "view", "range": ["entry 20%", "exit 100%"], "easing": "cubic-bezier(0.42, 0, 0, 1)", "fill": "both" },
+      "reducedMotion": { "animations": 0 }
+    },
+    {
+      "id": "category-card-gap-shrink",
+      "section": "hub-router",
+      "selector": ".c-hub-router__carousel > [role=\"listitem\"]:nth-child(2)",
+      "milo": ".elastic-carousel-item (elasticItemsGapShrink)",
+      "animation": { "name": "home-rail-gap-shrink", "timeline": "view", "range": ["entry 0%", "exit 100%"], "easing": "cubic-bezier(0.42, 0, 0, 1)", "fill": "both" },
+      "reducedMotion": { "animations": 0 }
+    },
+    {
+      "id": "features-heading-move-up",
+      "section": "media-section",
+      "selector": ".c-media-section .home-reveal",
+      "milo": ".rich-content.parallax-move-up",
+      "animation": { "name": "home-reveal", "timeline": "view", "range": ["entry 0%", "entry 100%"], "easing": "cubic-bezier(0.42, 0, 0, 1)", "fill": "both" },
+      "reducedMotion": { "animations": 0 }
+    },
+    {
+      "id": "features-card-stagger",
+      "section": "media-section",
+      "selector": ".home-media-grid > :nth-child(3)",
+      "milo": ".parallax-stagger-ltr.three-up > * (enable-parallax-stagger)",
+      "animation": { "name": "home-stagger", "timeline": "view", "range": ["entry 0%", "cover 70%"], "easing": "cubic-bezier(0.42, 0, 0, 1)", "fill": "both" },
+      "reducedMotion": { "animations": 0 }
+    },
+    {
+      "id": "features-image-scale-down",
+      "section": "media-section",
+      "selector": ".home-media-grid .home-media-frame",
+      "milo": "picture.parallax-scale-down",
+      "animation": { "name": "home-reveal-scale", "timeline": "view", "range": ["entry 0%", "entry 100%"], "easing": "cubic-bezier(0.42, 0, 0, 1)", "fill": "both" },
+      "reducedMotion": { "animations": 0 }
+    },
+    {
+      "id": "news-card-stagger",
+      "section": "news-section",
+      "selector": ".home-news-grid > :nth-child(2)",
+      "milo": ".news-items.parallax-stagger-ltr > .news-item",
+      "animation": { "name": "home-stagger", "timeline": "view", "range": ["entry 0%", "cover 70%"], "easing": "cubic-bezier(0.42, 0, 0, 1)", "fill": "both" },
+      "reducedMotion": { "animations": 0 }
+    },
+    {
+      "id": "product-card-stagger",
+      "section": "product-router",
+      "selector": ".home-product-grid > :nth-child(5)",
+      "milo": ".base-card (enable-parallax-stagger)",
+      "animation": { "name": "home-stagger", "timeline": "view", "range": ["entry 0%", "cover 70%"], "easing": "cubic-bezier(0.42, 0, 0, 1)", "fill": "both" },
+      "reducedMotion": { "animations": 0 }
+    }
+  ],
+  "behaviors": [
+    {
+      "id": "hero-video-autoplay",
+      "milo": "decorate.js getVideoAttrs: playsinline muted loop autoplay; reduced motion pauses",
+      "selector": ".rm-slide[data-state=\"active\"] .rm-video",
+      "attributes": { "muted": true, "loop": true, "playsinline": true },
+      "normalMotion": { "marqueeState": "playing", "videoPlaying": true, "advancesWithinMs": 6500 },
+      "reducedMotion": { "marqueeState": "paused", "videoSources": 0 }
+    },
+    {
+      "id": "hero-pause-control",
+      "milo": "decorate.js addAccessibilityControl + USER_PAUSED sentinel",
+      "selector": ".rm-play-pause",
+      "normalMotion": { "labelBefore": "Pause autoplay", "labelAfterClick": "Play autoplay", "stateAfterClick": "paused" }
+    },
+    {
+      "id": "category-hover-play",
+      "milo": "decorate.js applyHoverPlay (mouseenter/mouseleave + focus/blur parity)",
+      "selector": ".c-hub-router__carousel > [role=\"listitem\"]:nth-child(2)",
+      "normalMotion": { "playsOnHoverWithinMs": 2000, "pausesOnLeave": true, "playsOnFocus": true },
+      "reducedMotion": { "playsOnHover": false }
+    },
+    {
+      "id": "media-card-hover-zoom",
+      "milo": "base-card.css picture img transition: transform 0.75s; hover scale(1.03)",
+      "selector": ".home-media-grid > :nth-child(2) .c-media-card__media img",
+      "normalMotion": { "transitionProperty": "transform", "transitionDuration": "0.75s", "hoverScale": 1.03 }
+    }
+  ]
+}

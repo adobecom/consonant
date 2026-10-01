@@ -1,0 +1,257 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "ActionCard",
+  "slug": "action-card",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from the original tile, then curated 2026-09-21 after the ActionCard component was rebuilt in Figma (Media slot + headline + chevron)",
+    "date": "2026-09-21",
+    "reviewer": "Matt"
+  },
+  "description": "A card that is one link: an illustration in a Media slot, a headline, and a chevron. The whole surface is the target and the headline is the accessible name. Used in the Acrobat \"Get started with Acrobat tools\" row (ActionCardRow).",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "14226:196789",
+      "nodeName": "ActionCard",
+      "componentSetKey": "242365cbd00ab8a07d044f4a62608b99692a9aa3",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [
+        "14278:197804 (xl - 2560px page › Quick Actions › 6-Up 13713:193638: ActionCardRow instance replacing the hand-drawn Row)",
+        "14278:197742 (Playground 6-Up 13999:205825: ActionCardRow instance)",
+        "14229:197242 (ActionCardRow component set, Layout=row)",
+        "14226:196800 (Row (golden): the original hand-drawn tiles, kept for the visual eval)"
+      ],
+      "notes": "Single COMPONENT (no variants yet): VERTICAL auto layout, hug height, media top and copy pinned to the bottom; padding spacing/xl, gap spacing/md, fill background/subtle, radius border/radius/md. Illustrations are content: image fills on the Media instance, exported to apps/storybook/stories/assets/action-card/."
+    },
+    "code": {
+      "importPath": "packages/components/src/action-card/action-card.js",
+      "export": "ActionCard",
+      "cssClass": "c-action-card",
+      "pending": true
+    }
+  },
+  "props": [
+    {
+      "name": "href",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "href"
+      },
+      "notes": "Destination; authoring validates it."
+    },
+    {
+      "name": "target",
+      "lever": false,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "target"
+      },
+      "notes": "Integration detail; new-window links append an accessible hint."
+    },
+    {
+      "name": "mediaSrc",
+      "lever": true,
+      "type": "string",
+      "figma": {
+        "kind": "INSTANCE_SWAP",
+        "property": "Media#14226:2",
+        "layer": ".media",
+        "notes": "Media instance, Aspect Ratio=4:3, Radii=none, Type=image; the illustration is the instance's image fill."
+      },
+      "code": {
+        "prop": "mediaSrc"
+      },
+      "notes": "Decorative illustration; aria-hidden. Assets: apps/storybook/stories/assets/action-card/<slug>_2x.png (+ .svg for vector art)."
+    },
+    {
+      "name": "headline",
+      "lever": true,
+      "type": "string",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Headline#14226:1"
+      },
+      "code": {
+        "prop": "headline"
+      },
+      "notes": "The card's accessible name (whole card is the link). Default in Figma: \"Headline\"."
+    }
+  ],
+  "states": [
+    {
+      "name": "State",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "default | hover | focused (design only)"
+      },
+      "code": {
+        "mechanism": ":hover and :focus-visible on the root link"
+      },
+      "notes": "Runtime states, never authored props."
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-action-card",
+      "figma": ".root",
+      "element": "a",
+      "tokens": {
+        "background-color": "{s2a.color.background.subtle}",
+        "border-radius": "{s2a.border-radius.lg}",
+        "gap": "{s2a.spacing.md}"
+      },
+      "notes": "Block-level link, 313px wide in the row. No padding on the root: the media is full-bleed (top, clipped by the card's radius) and the copy block carries its own padding. Hug height; in a row the cards stretch to the tallest. radius/lg (22px) and spacing/2xl (40px) are the tokens nearest the original 26px / 39px.",
+      "parts": {
+        "media": {
+          "selector": ".ac-media",
+          "figma": ".media",
+          "element": "div[aria-hidden]",
+          "slot": {
+            "name": "Media",
+            "accepts": [
+              "Media"
+            ],
+            "acceptsMode": "restrict",
+            "notes": "Media 4:3 instance (closest ratio the Media set offers to the original 313×214 art area); its placeholder Overlay is hidden."
+          },
+          "notes": "Full-bleed, top of the card, 4:3 (313×235). The illustration is content: an image fill on the Media instance, exported from the original tile cropped at the copy block's top (313×228)."
+        },
+        "copy": {
+          "selector": ".ac-copy",
+          "figma": ".copy",
+          "element": "div",
+          "tokens": {
+            "padding": "{s2a.spacing.none} {s2a.spacing.2xl} {s2a.spacing.2xl} {s2a.spacing.2xl}",
+            "gap": "{s2a.spacing.md}"
+          },
+          "notes": "Headline and chevron on one row, start-aligned, vertically centred; the chevron hugs the text (the headline hugs its content up to the row's inner width).",
+          "parts": {
+            "headline": {
+              "selector": ".ac-headline",
+              "figma": ".copy/.headline",
+              "element": "h3",
+              "tokens": {
+                "font-family": "{s2a.font-family.heading}",
+                "font-weight": "{s2a.font-weight.heading}",
+                "font-size": "{s2a.typography.font-size.heading-5}",
+                "line-height": "{s2a.typography.line-height.heading-5}",
+                "letter-spacing": "{s2a.typography.letter-spacing.heading-5}",
+                "color": "{s2a.color.content.heading}"
+              },
+              "notes": "Text style s2a/typography/heading-5 (24px): the rung nearest the original 29px that keeps most headlines on one line; two-line headlines make the card 339 tall."
+            },
+            "chevron": {
+              "selector": ".ac-chevron",
+              "figma": ".copy/.chevron",
+              "element": "svg[aria-hidden]",
+              "tokens": {
+                "color": "{s2a.color.content.default}"
+              },
+              "notes": "S2a_Icon_Chevron_Right at 16px; decorative, never the only indication of the link (WCAG 1.4.1)."
+            }
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "role": "link",
+    "wcag": [
+      "1.1.1",
+      "1.4.1",
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.4",
+      "2.4.7",
+      "2.5.8"
+    ],
+    "keyboard": [
+      {
+        "key": "Tab",
+        "action": "moves focus to the card as one stop"
+      },
+      {
+        "key": "Enter",
+        "action": "follows the link"
+      }
+    ],
+    "notes": [
+      "One link, one accessible name: the headline text. Media, icon and chevron are aria-hidden so the name is not padded with noise.",
+      "No interactive element may be nested inside the card (a link inside a link is invalid HTML and unreachable by keyboard).",
+      "Focus ring is drawn on the whole card surface (2.4.7) and the target is at least 24×24 (2.5.8).",
+      "Headline and description meet 4.5:1 on the card surface; the chevron and any border meet 3:1 (1.4.3, 1.4.11).",
+      "The arrow is decorative: link purpose comes from the headline text (2.4.4), not from the glyph alone (1.4.1)."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "ac-archetype",
+      "question": "Scaffolded as link-card (roles include heading and cta with no repeated unit). Confirm, or re-run npm run specs:scaffold -- --slug=action-card --archetype=<link-card|card|collection>.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "roles heading, cta, media, divider; pattern frame, 0 repeats"
+    },
+    {
+      "id": "ac-levers",
+      "question": "Levers were derived from roles (media → mediaSrc, heading → headline, divider → divider, cta → ctaLabel), not from component properties. Confirm names and which are authored (lever true) versus integration (lever false).",
+      "status": "decided",
+      "owner": "Matt",
+      "evidence": "ActionCard 14226:196789 componentPropertyDefinitions",
+      "decision": "Two levers: headline (TEXT property Headline) and mediaSrc (INSTANCE_SWAP property Media). No CTA label: the chevron is the affordance and the headline carries the name."
+    },
+    {
+      "id": "ac-unbound-paint",
+      "question": "11 painted layers carry no variable (/ fills, /Group 2087327847/Abc fills, /Line 87474 strokes, /Group 2085666331/Rectangle 2147231707 strokes, /Group 2085666331/Ellipse 36325 fills+strokes, /Group 2085666331/Ellipse 36326 fills+strokes, …). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "status": "decided",
+      "owner": "Matt",
+      "evidence": "action-card.figma.evidence.json (rebuilt) unboundPaint",
+      "decision": "The tile was rebuilt as a token-bound component; the only unbound paint left is the image fill on the Media instance's Asset layer, which is content by design."
+    },
+    {
+      "id": "ac-layer-names",
+      "question": "11 layers carry Figma-generated names (/Copy >/Chevron/Vector, /Group 2087327847, /Line 87474, /Group 2085666331, /Group 2085666331/Rectangle 2147231707, …). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "status": "decided",
+      "owner": "Matt",
+      "evidence": "Row 13999:205826; golden tiles kept at 14226:196800",
+      "decision": "Rebuilt: .root / .media / .copy / .headline / .chevron. Illustrations exported once and placed as image fills; six instances replace the six hand-drawn frames."
+    },
+    {
+      "id": "ac-extra-art",
+      "question": "Additional shape layers outside the media group (/Group 2085666331). Fold them into the Media instance or name them as parts.",
+      "status": "decided",
+      "owner": "Matt",
+      "evidence": "apps/storybook/stories/assets/action-card/",
+      "decision": "Art layers are no longer part of the component; each illustration is an exported asset (PNG@2x + SVG where vector)."
+    },
+    {
+      "id": "ac-match",
+      "question": "Structural match says extend-or-new: closest existing contract is ProductCard (score 0.74). Extend it instead of adding a component?",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "ProductCard (0.74) is closest; extend it with divider, text or start a new contract."
+    },
+    {
+      "id": "ac-code-pending",
+      "question": "No code exists yet. Generate packages/components/src/action-card/action-card.js from the spec (/spec-to-html), run npm run evidence:code -- --slug=action-card, then remove anchors.code.pending.",
+      "status": "open",
+      "owner": "Matt"
+    },
+    {
+      "id": "ac-type-rung",
+      "question": "The original headline is 29px, between heading-5 (24) and heading-4 (36). heading-5 keeps one-line headlines like the golden; heading-4 reads closer in weight but wraps four of six. Which rung is the tile's?",
+      "status": "decided",
+      "owner": "Matt",
+      "decision": "heading-5 for now (closest rung, one-line headlines). Revisit if the row needs more presence.",
+      "evidence": "Figma ActionCard 14226:196789 after 2026-09-21 restructure; golden Row 14226:196800."
+    }
+  ]
+}

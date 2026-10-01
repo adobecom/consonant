@@ -112,6 +112,16 @@
   min-width: 0;
 }
 
+/* Text Alignment=centered (Figma Bento — v2 / TextCard — v2 Style=centered) */
+.c-bento[data-text-align="center"] .c-bento__text {
+  align-items: center;
+}
+
+.c-bento[data-text-align="center"] .c-bento__headline,
+.c-bento[data-text-align="center"] .c-bento__body {
+  text-align: center;
+}
+
 .c-bento__headline {
   margin: 0;
   font-family: var(--s2a-font-family-heading, "Adobe Clean Display", sans-serif);
@@ -147,6 +157,10 @@
   line-height: var(--s2a-typography-line-height-label, 18px);
   letter-spacing: var(--s2a-typography-letter-spacing-label, 0px);
   transition: opacity 150ms ease;
+}
+
+.c-bento[data-text-align="center"] .c-bento__cta {
+  align-self: center;
 }
 
 .c-bento__cta:hover {

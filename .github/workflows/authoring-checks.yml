@@ -1,0 +1,57 @@
+name: Authoring quality and performance
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 6 * * 1-5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: authoring-quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NX_DAEMON: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Contract gate (docs/future-notes/s2a-contract-system-plan.md, step 5):
+      # schemas, curation, composition, tokens, design bindings, freshness.
+      # Static and fast; the page evals below are its --full half.
+      - run: npx nx build tokens
+      - run: npm run gate
+      - run: npm run specs:test && npm run evidence:code:test
+      - run: npx nx run-many -t typecheck test inventory -p authoring-poc
+      - run: npx nx run authoring-poc:e2e
+      - run: npx nx run authoring-poc:homepage-e2e
+      - run: npm run eval:tokens:homepage
+      - run: npm run eval:motion:homepage
+      - run: npm run eval:visual:homepage
+      - run: npx nx run authoring-poc:a11y-audit
+      # Keep performance runs serial and separate from functional browser work.
+      - run: npx nx run authoring-poc:perf
+      - run: npx nx run authoring-poc:homepage-perf
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: authoring-evidence
+          path: |
+            apps/authoring-poc/reports/
+            evals/gate/out/
+            evals/visual/out/homepage/report.json
+            evals/motion/out/
+            evals/tokens/out/
+          retention-days: 30
+          if-no-files-found: error

@@ -1,0 +1,3284 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-09-17T16:52:26.957Z",
+  "extractor": {
+    "plugin": "s2a-toolkit",
+    "version": "0.2.1"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": {
+      "id": "11878:222771",
+      "name": "   ↳ QuoteCard"
+    }
+  },
+  "set": {
+    "id": "9334:3814",
+    "key": "15162ddb44ecc838d25c5d791891ae0eb74b6308",
+    "name": ".QuoteCard",
+    "type": "COMPONENT_SET",
+    "description": "— s2a:meta —\nversion:    1.0.0\nstatus:     deprecated\nupdated:    2026-09-03\nchangelog:\n  1.0.0   2026-09-03  init         First versioned stamp. Restored to its original, pre-existing shape (Context=on-dark axis, slotted Button v1, tight MIN-aligned .content layout) after a same-session experiment altered it in place — this component turned out to be live in an external file's homepage carousel, so the in-place edit was reverted rather than risk breaking that usage. Status set to deprecated: \"QuoteCard — v2\" (2.0.0) is the version for new work; this v1 is kept fully functional for existing consumers only. Do not use in new work.\n\nFull-bleed quote card for social proof carousels. Desktop (1480×824) — landscape carousel slide. Mobile (375×620) — portrait and narrow contexts. Swap Media to control aspect ratio or use video. Toggle Show CTA, Show Attribution, and Show Pagination to simplify the card.",
+    "meta": {
+      "version": "1.0.0",
+      "status": "deprecated",
+      "updated": "2026-09-03",
+      "changelog": "1.0.0   2026-09-03  init         First versioned stamp. Restored to its original, pre-existing shape (Context=on-dark axis, slotted Button v1, tight MIN-aligned .content layout) after a same-session experiment altered it in place — this component turned out to be live in an external file's homepage carousel, so the in-place edit was reverted rather than risk breaking that usage. Status set to deprecated: \"QuoteCard — v2\" (2.0.0) is the version for new work; this v1 is kept fully functional for existing consumers only. Do not use in new work."
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Breakpoint",
+      "type": "VARIANT",
+      "defaultValue": "Desktop",
+      "options": [
+        "Desktop",
+        "Mobile"
+      ]
+    },
+    {
+      "name": "Context",
+      "type": "VARIANT",
+      "defaultValue": "on-dark",
+      "options": [
+        "on-dark"
+      ]
+    },
+    {
+      "name": "Media#9435:3",
+      "type": "INSTANCE_SWAP",
+      "defaultValue": "3270:1998",
+      "preferredValues": []
+    },
+    {
+      "name": "Show Attribution#9435:0",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "Show CTA#9334:0",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "Show Pagination#9517:0",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    }
+  ],
+  "variants": [
+    {
+      "id": "9334:3740",
+      "key": "42e86cf51042ccea610ac5c0e008c787485724a3",
+      "name": "Context=on-dark, Breakpoint=Desktop",
+      "props": {
+        "Context": "on-dark",
+        "Breakpoint": "Desktop"
+      },
+      "width": 1480,
+      "height": 824
+    },
+    {
+      "id": "9422:3926",
+      "key": "803ece05e583798b478cab226f6dfb92ce310c44",
+      "name": "Context=on-dark, Breakpoint=Mobile",
+      "props": {
+        "Context": "on-dark",
+        "Breakpoint": "Mobile"
+      },
+      "width": 375,
+      "height": 620
+    }
+  ],
+  "anatomy": {
+    "variant": "Context=on-dark, Breakpoint=Desktop",
+    "tree": {
+      "name": "Context=on-dark, Breakpoint=Desktop",
+      "type": "COMPONENT",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "FIXED"
+      },
+      "children": [
+        {
+          "name": ".media",
+          "type": "INSTANCE",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Asset",
+              "type": "FRAME",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": "Overlay",
+              "type": "INSTANCE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            }
+          ]
+        },
+        {
+          "name": ".content",
+          "type": "FRAME",
+          "layoutMode": "VERTICAL",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "HUG"
+          },
+          "children": [
+            {
+              "name": ".quote",
+              "type": "INSTANCE",
+              "layoutMode": "HORIZONTAL",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              },
+              "children": [
+                {
+                  "name": "{heading}",
+                  "type": "TEXT",
+                  "sizing": {
+                    "horizontal": "FILL",
+                    "vertical": "HUG"
+                  }
+                }
+              ]
+            },
+            {
+              "name": ".attribution",
+              "type": "INSTANCE",
+              "layoutMode": "VERTICAL",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              },
+              "children": [
+                {
+                  "name": "Meta/Name",
+                  "type": "INSTANCE",
+                  "layoutMode": "HORIZONTAL",
+                  "sizing": {
+                    "horizontal": "FILL",
+                    "vertical": "HUG"
+                  },
+                  "children": [
+                    {
+                      "name": "{metaname}",
+                      "type": "TEXT",
+                      "sizing": {
+                        "horizontal": "HUG",
+                        "vertical": "HUG"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Meta/Role",
+                  "type": "INSTANCE",
+                  "layoutMode": "HORIZONTAL",
+                  "sizing": {
+                    "horizontal": "HUG",
+                    "vertical": "HUG"
+                  },
+                  "children": [
+                    {
+                      "name": "{metarole}",
+                      "type": "TEXT",
+                      "sizing": {
+                        "horizontal": "HUG",
+                        "vertical": "HUG"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": ".actions",
+              "type": "INSTANCE",
+              "layoutMode": "VERTICAL",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              },
+              "children": [
+                {
+                  "name": "Children",
+                  "type": "SLOT",
+                  "layoutMode": "HORIZONTAL",
+                  "sizing": {
+                    "horizontal": "FILL",
+                    "vertical": "HUG"
+                  },
+                  "children": [
+                    {
+                      "name": "Button — v1",
+                      "type": "INSTANCE",
+                      "layoutMode": "HORIZONTAL",
+                      "sizing": {
+                        "horizontal": "HUG",
+                        "vertical": "HUG"
+                      },
+                      "children": [
+                        {
+                          "name": "Icon Start",
+                          "type": "FRAME",
+                          "sizing": {
+                            "horizontal": "FIXED",
+                            "vertical": "FIXED"
+                          },
+                          "children": [
+                            {
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "layoutMode": "HORIZONTAL",
+                              "sizing": {
+                                "horizontal": "FIXED",
+                                "vertical": "FIXED"
+                              },
+                              "children": [
+                                {
+                                  "name": "S2_Icon_Circle_20_N",
+                                  "type": "INSTANCE",
+                                  "layoutMode": "HORIZONTAL",
+                                  "sizing": {
+                                    "horizontal": "FILL",
+                                    "vertical": "FILL"
+                                  },
+                                  "children": [
+                                    {
+                                      "name": "Frame",
+                                      "type": "FRAME",
+                                      "sizing": {
+                                        "horizontal": "FILL",
+                                        "vertical": "FILL"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "Icon color",
+                              "type": "RECTANGLE",
+                              "sizing": {
+                                "horizontal": "FIXED",
+                                "vertical": "FIXED"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "name": "Label",
+                          "type": "TEXT",
+                          "sizing": {
+                            "horizontal": "HUG",
+                            "vertical": "HUG"
+                          }
+                        },
+                        {
+                          "name": "Icon End",
+                          "type": "FRAME",
+                          "sizing": {
+                            "horizontal": "FIXED",
+                            "vertical": "FIXED"
+                          },
+                          "children": [
+                            {
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "layoutMode": "HORIZONTAL",
+                              "sizing": {
+                                "horizontal": "FIXED",
+                                "vertical": "FIXED"
+                              },
+                              "children": [
+                                {
+                                  "name": "Size=200, Direction=right",
+                                  "type": "INSTANCE",
+                                  "layoutMode": "HORIZONTAL",
+                                  "sizing": {
+                                    "horizontal": "FILL",
+                                    "vertical": "FILL"
+                                  },
+                                  "children": [
+                                    {
+                                      "name": "S2_Icon_UIChevron_Size300_N",
+                                      "type": "INSTANCE",
+                                      "layoutMode": "HORIZONTAL",
+                                      "sizing": {
+                                        "horizontal": "FILL",
+                                        "vertical": "FIXED"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "Icon color",
+                              "type": "RECTANGLE",
+                              "sizing": {
+                                "horizontal": "FIXED",
+                                "vertical": "FIXED"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": ".pagination",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "HUG"
+          },
+          "children": [
+            {
+              "name": ".dot-1",
+              "type": "INSTANCE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": ".dot-2",
+              "type": "INSTANCE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": ".dot-3",
+              "type": "INSTANCE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": ".dot-4",
+              "type": "INSTANCE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            },
+            {
+              "name": ".dot-5",
+              "type": "INSTANCE",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "",
+      "nodeId": "9334:3740",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "",
+      "nodeId": "9334:3740",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "",
+      "nodeId": "9334:3740",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "",
+      "nodeId": "9334:3740",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.media",
+      "nodeId": "9395:3809",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.media/Overlay",
+      "nodeId": "I9395:3809;3271:2294",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:233"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.media/Overlay",
+      "nodeId": "I9395:3809;3271:2294",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:237"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.quote",
+      "nodeId": "9380:3809",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9380:3809;3023:4425",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9380:3809;3023:4425",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:1:259"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9380:3809;3023:4425",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1221"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9380:3809;3023:4425",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44675"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9380:3809;3023:4425",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1227"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9380:3809;3023:4425",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1228"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9380:3809;3023:4425",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:a4f7c56b483cc9de25de0eff562eda9da4b49b7b,"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution",
+      "nodeId": "9380:3811",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9380:3811;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9380:3811;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:833"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9380:3811;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1226"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9380:3811;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44677"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9380:3811;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1234"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9380:3811;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1218"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9380:3811;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:152b1b57fb441ccfd288060043e1cd0a4365737f,"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9380:3811;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9380:3811;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9380:3811;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9380:3811;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9380:3811;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9380:3811;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9380:3811;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:8f9651588cc275ebe89d81b01b6344b3cf245539,"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions",
+      "nodeId": "9334:3750",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions",
+      "nodeId": "9334:3750",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions",
+      "nodeId": "9334:3750",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions",
+      "nodeId": "9334:3750",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions",
+      "nodeId": "9334:3750",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children",
+      "nodeId": "I9334:3750;2900:1564",
+      "nodeType": "SLOT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:51"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:51"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:2832:7097"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:51"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:51"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Icon Start/Icon color",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56283",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2352:1010"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56284",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2352:1010"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56284",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56284",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56284",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56284",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56284",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56284",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56287;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Icon End/Icon color",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56288",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2352:1010"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination",
+      "nodeId": "9517:3867",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3867;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3867;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3867;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3867;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3867;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3867;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3867;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3867;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3867;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3867;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:246"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3867;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3867;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3867;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3867;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3867;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3867;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3867;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:246"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3867;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3867;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3867;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3867;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3867;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3867;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3867;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:246"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3867;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3867;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3867;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3867;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3867;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3867;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3867;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:246"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3867;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3867;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3867;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3867;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "",
+      "nodeId": "9422:3926",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "",
+      "nodeId": "9422:3926",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "",
+      "nodeId": "9422:3926",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "",
+      "nodeId": "9422:3926",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.media",
+      "nodeId": "9422:3927",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.media/Overlay",
+      "nodeId": "I9422:3927;3271:2294",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:233"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.media/Overlay",
+      "nodeId": "I9422:3927;3271:2294",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:237"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.quote",
+      "nodeId": "9422:3929",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9422:3929;3023:4425",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9422:3929;3023:4425",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:1:259"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9422:3929;3023:4425",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1221"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9422:3929;3023:4425",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44675"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9422:3929;3023:4425",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1227"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9422:3929;3023:4425",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1228"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.quote/{heading}",
+      "nodeId": "I9422:3929;3023:4425",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:a4f7c56b483cc9de25de0eff562eda9da4b49b7b,"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution",
+      "nodeId": "9422:3930",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9422:3930;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9422:3930;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:833"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9422:3930;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1226"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9422:3930;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44677"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9422:3930;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1234"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9422:3930;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1218"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Name/{metaname}",
+      "nodeId": "I9422:3930;3086:15691;3086:15664",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:152b1b57fb441ccfd288060043e1cd0a4365737f,"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9422:3930;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9422:3930;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9422:3930;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9422:3930;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9422:3930;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9422:3930;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Role/{metarole}",
+      "nodeId": "I9422:3930;3086:15693;3086:15669",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:8f9651588cc275ebe89d81b01b6344b3cf245539,"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions",
+      "nodeId": "9422:3931",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions",
+      "nodeId": "9422:3931",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions",
+      "nodeId": "9422:3931",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions",
+      "nodeId": "9422:3931",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions",
+      "nodeId": "9422:3931",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children",
+      "nodeId": "I9422:3931;2900:1564",
+      "nodeType": "SLOT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:51"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:51"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:2832:7097"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:51"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:51"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Icon Start/Icon color",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56283",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2352:1010"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56284",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2352:1010"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56284",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56284",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56284",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56284",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56284",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Label",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56284",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56287;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Icon End/Icon color",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56288",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2352:1010"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination",
+      "nodeId": "9517:3873",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3873;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3873;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3873;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3873;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3873;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3873;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3873;8350:234687",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3873;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3873;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3873;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:246"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3873;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3873;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3873;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3873;8350:234688",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3873;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3873;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3873;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:246"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3873;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3873;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3873;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3873;8350:234689",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3873;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3873;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3873;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:246"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3873;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3873;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3873;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3873;8350:234690",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3873;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3873;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3873;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:1:246"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3873;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3873;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3873;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:253"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3873;8350:234691",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "variable": "VariableID:3:60"
+    }
+  ],
+  "variables": {
+    "VariableID:1:233": {
+      "name": "s2a/color/transparent/black/16",
+      "key": "ca2c5cc5fb44882c758f7c99ea06d0b44c08b0c2",
+      "collection": "S2A / Primitives / Color / Theme",
+      "collectionId": "VariableCollectionId:1:138",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-transparent-black-16)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.1599999964237213
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.1599999964237213
+        }
+      }
+    },
+    "VariableID:1:237": {
+      "name": "s2a/color/transparent/black/64",
+      "key": "a8fd1ada48014daa66be1ebc812370ce26b43bbe",
+      "collection": "S2A / Primitives / Color / Theme",
+      "collectionId": "VariableCollectionId:1:138",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-transparent-black-64)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        }
+      }
+    },
+    "VariableID:1:246": {
+      "name": "s2a/color/transparent/white/64",
+      "key": "1221489c85bde361e15278bd339934af7fd8b535",
+      "collection": "S2A / Primitives / Color / Theme",
+      "collectionId": "VariableCollectionId:1:138",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-transparent-white-64)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.6399999856948853
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.6399999856948853
+        }
+      }
+    },
+    "VariableID:1:253": {
+      "name": "s2a/border/radius/round",
+      "key": "bde03498ba036746cb1f4116b186994ae002d80b",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-radius-round)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/border/radius/999"
+        }
+      },
+      "resolved": {
+        "Value": 999
+      }
+    },
+    "VariableID:1:259": {
+      "name": "s2a/font/family/heading",
+      "key": "71540b0418d40a4f8979c1fa5eb545fe1a3e15df",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-heading)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean-display"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean Display"
+      }
+    },
+    "VariableID:1:51": {
+      "name": "s2a/border/radius/999",
+      "key": "d42a9e127c99284ac13ed9b7716850d36c215048",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-radius-999)"
+      },
+      "valuesByMode": {
+        "Mode 1": 999
+      },
+      "resolved": {
+        "Mode 1": 999
+      }
+    },
+    "VariableID:2352:1010": {
+      "name": "s2a/color/button/content/primary/solid/inverse",
+      "key": "1be16e2cac84c2cd2054204950a5df8f3107beeb",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-button-content-primary-solid-inverse)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/1000"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2352:1217": {
+      "name": "s2a/typography/font-size/label",
+      "key": "4251945d797f40d6226cbd66cdc61224e8b57907",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:2352:1218": {
+      "name": "s2a/typography/line-height/eyebrow",
+      "key": "eb4f00cdaa01bac5496ad4493fd63dd2f4aaba2a",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-eyebrow)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/sm"
+        }
+      },
+      "resolved": {
+        "lg": 20,
+        "md": 20,
+        "sm": 20,
+        "xl": 20
+      }
+    },
+    "VariableID:2352:1221": {
+      "name": "s2a/typography/font-size/heading-2",
+      "key": "824882e38a3af2171f70f1a2131e2f3d63ae44ef",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-heading-2)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/7xl"
+        },
+        "md": {
+          "alias": "s2a/font/size/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/size/3xl"
+        },
+        "xl": {
+          "alias": "s2a/font/size/7xl"
+        }
+      },
+      "resolved": {
+        "lg": 56,
+        "md": 48,
+        "sm": 32,
+        "xl": 56
+      }
+    },
+    "VariableID:2352:1225": {
+      "name": "s2a/typography/line-height/body-md",
+      "key": "6867e317bac7e5df3b3b3b8fea5cbe1f5ff96569",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-body-md)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/sm"
+        }
+      },
+      "resolved": {
+        "lg": 20,
+        "md": 20,
+        "sm": 20,
+        "xl": 20
+      }
+    },
+    "VariableID:2352:1226": {
+      "name": "s2a/typography/font-size/eyebrow",
+      "key": "b976177c23ceb9a53aa97eb9a8eaf6716db4fd92",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-eyebrow)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/md"
+        },
+        "md": {
+          "alias": "s2a/font/size/md"
+        },
+        "sm": {
+          "alias": "s2a/font/size/md"
+        },
+        "xl": {
+          "alias": "s2a/font/size/md"
+        }
+      },
+      "resolved": {
+        "lg": 16,
+        "md": 16,
+        "sm": 16,
+        "xl": 16
+      }
+    },
+    "VariableID:2352:1227": {
+      "name": "s2a/typography/letter-spacing/heading-2",
+      "key": "d15d8b45e38bb9802fdc33de59792714fabcdbc0",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-heading-2)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/lg"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/3xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/lg"
+        }
+      },
+      "resolved": {
+        "lg": -1.6799999475479126,
+        "md": -1.440000057220459,
+        "sm": -0.9599999785423279,
+        "xl": -1.6799999475479126
+      }
+    },
+    "VariableID:2352:1228": {
+      "name": "s2a/typography/line-height/heading-2",
+      "key": "2c7ae50a0712fcb07ef10d2f37d8451216114b3b",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-heading-2)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/3xl"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/2xl"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/lg"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/3xl"
+        }
+      },
+      "resolved": {
+        "lg": 56,
+        "md": 48,
+        "sm": 32,
+        "xl": 56
+      }
+    },
+    "VariableID:2352:1233": {
+      "name": "s2a/typography/letter-spacing/label",
+      "key": "23c0c37e5e02762087e6356ff09f8b225fb86530",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1234": {
+      "name": "s2a/typography/letter-spacing/eyebrow",
+      "key": "71e62b0fbefeee25fd09768e64e2ef2eacf8d5a2",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-eyebrow)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1235": {
+      "name": "s2a/typography/font-size/body-md",
+      "key": "f59fee256233063a86b7e239d739dae476990369",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-body-md)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/md"
+        },
+        "md": {
+          "alias": "s2a/font/size/md"
+        },
+        "sm": {
+          "alias": "s2a/font/size/md"
+        },
+        "xl": {
+          "alias": "s2a/font/size/md"
+        }
+      },
+      "resolved": {
+        "lg": 16,
+        "md": 16,
+        "sm": 16,
+        "xl": 16
+      }
+    },
+    "VariableID:2352:1242": {
+      "name": "s2a/typography/letter-spacing/body-md",
+      "key": "b2306b125f9eb3776b9c296e4ae51ad3df0956f1",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-body-md)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1243": {
+      "name": "s2a/typography/line-height/label",
+      "key": "abb6d9e6cec2ece062e61863bbdd9952bf5c20b7",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:2557:831": {
+      "name": "s2a/font/family/body",
+      "key": "1edb607e8abe067f568cf71829393343fa8114e7",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:2557:832": {
+      "name": "s2a/font/family/label",
+      "key": "f6adac658998b85abc31ac0ef46213e38e28e430",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:2557:833": {
+      "name": "s2a/font/family/eyebrow",
+      "key": "b1ae3693d3d6086ecb9054011346b775195cba55",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-eyebrow)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:2832:7097": {
+      "name": "s2a/color/button/background/primary/solid/on-dark/default",
+      "key": "c1b6b92da1798ca47635abc000e8675faa1fa42a",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-button-background-primary-solid-on-dark-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/25"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2:111": {
+      "name": "s2a/border/width/sm",
+      "key": "666a22fb86e8b91a0d951e73056b98e0ad3d8095",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-width-sm)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "border/width/1"
+        }
+      },
+      "resolved": {
+        "Value": 1
+      }
+    },
+    "VariableID:2:95": {
+      "name": "s2a/border/radius/md",
+      "key": "b7a63f64b32ce539ee4d777c44f1d5cb304d334e",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-radius-md)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/border/radius/16"
+        }
+      },
+      "resolved": {
+        "Value": 16
+      }
+    },
+    "VariableID:3:56": {
+      "name": "s2a/spacing/lg",
+      "key": "11f5166ec34c6428342104cb81888657974bb546",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-lg)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/24"
+        }
+      },
+      "resolved": {
+        "Value": 24
+      }
+    },
+    "VariableID:3:60": {
+      "name": "s2a/spacing/xs",
+      "key": "e10a518f00672b7fbcf09a880a97e7f8cd41059c",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-xs)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/8"
+        }
+      },
+      "resolved": {
+        "Value": 8
+      }
+    },
+    "VariableID:3:61": {
+      "name": "s2a/spacing/none",
+      "key": "773c30f631ac69028e160f46e4dfefdb7daa184d",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-none)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/0"
+        }
+      },
+      "resolved": {
+        "Value": 0
+      }
+    },
+    "VariableID:5388:44675": {
+      "name": "s2a/font/weight/heading",
+      "key": "a07570623563c5699282555898a260eb980bf644",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-heading)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean-display/black"
+        }
+      },
+      "resolved": {
+        "Value": "Black"
+      }
+    },
+    "VariableID:5388:44676": {
+      "name": "s2a/font/weight/body",
+      "key": "0bdbc4a5ed307dbc488a269b048e5e81d7282ef7",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/regular"
+        }
+      },
+      "resolved": {
+        "Value": "Regular"
+      }
+    },
+    "VariableID:5388:44677": {
+      "name": "s2a/font/weight/eyebrow",
+      "key": "5e77430d9c7d2dea6198afea46962e23ffc95fe4",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-eyebrow)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:5388:44678": {
+      "name": "s2a/font/weight/label",
+      "key": "b8019565b44226550b04ed1dd81d36d8b480cac6",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:6:81": {
+      "name": "s2a/color/content/knockout",
+      "key": "e1cf82e3f4bf9e90fb4475861a81a68af0127fec",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-knockout)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/25"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:6:82": {
+      "name": "s2a/color/content/default",
+      "key": "37e4aab70c1b4e190e04c4945427869636094364",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "S:a4f7c56b483cc9de25de0eff562eda9da4b49b7b,": {
+      "name": "s2a/typography/heading-2",
+      "key": "a4f7c56b483cc9de25de0eff562eda9da4b49b7b"
+    },
+    "S:152b1b57fb441ccfd288060043e1cd0a4365737f,": {
+      "name": "s2a/typography/eyebrow",
+      "key": "152b1b57fb441ccfd288060043e1cd0a4365737f"
+    },
+    "S:8f9651588cc275ebe89d81b01b6344b3cf245539,": {
+      "name": "s2a/typography/body-md",
+      "key": "8f9651588cc275ebe89d81b01b6344b3cf245539"
+    },
+    "S:536bbf234b1a0a717cffe0e3c578fb0052669086,": {
+      "name": "s2a/typography/label",
+      "key": "536bbf234b1a0a717cffe0e3c578fb0052669086"
+    }
+  },
+  "explicitModes": [
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution",
+      "collection": "S2A / Semantic / Color / Theme",
+      "mode": "Light"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions",
+      "collection": "S2A / Semantic / Color / Theme",
+      "mode": "Light"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination",
+      "collection": "S2A / Semantic / Color / Theme",
+      "mode": "Light"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "",
+      "collection": "S2A / Responsive / Container / Grid",
+      "mode": "sm"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content",
+      "collection": "S2A / Semantic / Color / Theme",
+      "mode": "Dark"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution",
+      "collection": "S2A / Semantic / Color / Theme",
+      "mode": "Light"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions",
+      "collection": "S2A / Semantic / Color / Theme",
+      "mode": "Light"
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination",
+      "collection": "S2A / Semantic / Color / Theme",
+      "mode": "Light"
+    }
+  ],
+  "instances": [
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.media",
+      "nodeId": "9395:3809",
+      "mainComponent": {
+        "id": "3270:1998",
+        "key": "f51aff101cc88d97ffde78a087321d5aff76ac1d",
+        "name": "Aspect Ratio=16:9, Radii=none, Type=image"
+      },
+      "set": {
+        "id": "3240:7621",
+        "key": "0a5a12c0db994e5f4729cff3cf1e1b08e3f551c5",
+        "name": "Media"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.media/Overlay",
+      "nodeId": "I9395:3809;3271:2294",
+      "mainComponent": {
+        "id": "3271:2265",
+        "key": "235fa22e864c98e7cadc09022701de2b6ba9d255",
+        "name": "Scrim=content-left-medium"
+      },
+      "set": {
+        "id": "3271:2266",
+        "key": "c67ecd806384347e938de1e4f2042e9cbd5b288c",
+        "name": "Overlay"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.quote",
+      "nodeId": "9380:3809",
+      "mainComponent": {
+        "id": "3023:4424",
+        "key": "4d9b4cfde756cf8b3af293c3f07436205a49439a",
+        "name": "Size=heading-2"
+      },
+      "set": {
+        "id": "3023:4421",
+        "key": "c8facdfc2395863a46dea74ccd0d5bd52f41a9b9",
+        "name": "Heading"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution",
+      "nodeId": "9380:3811",
+      "mainComponent": {
+        "id": "3086:15696",
+        "key": "a3f60d468181d8ef821dc101e61f970926612aae",
+        "name": "MetaLine"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Name",
+      "nodeId": "I9380:3811;3086:15691",
+      "mainComponent": {
+        "id": "3086:15663",
+        "key": "44d8e506ad474ef922789962f60e50da9525ba34",
+        "name": "Emphasis=strong"
+      },
+      "set": {
+        "id": "3086:15660",
+        "key": "1fae35094aa8fb0dc6b44e034ddaf085daf89a34",
+        "name": "Meta/Name"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.attribution/Meta/Role",
+      "nodeId": "I9380:3811;3086:15693",
+      "mainComponent": {
+        "id": "3086:15668",
+        "key": "6bd23b104d58ddbe38b600bb647d6656d6998b32",
+        "name": "Emphasis=strong"
+      },
+      "set": {
+        "id": "3086:15665",
+        "key": "08a7e969e24810265833231e6082770c3d4b6bc7",
+        "name": "Meta/Role"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions",
+      "nodeId": "9334:3750",
+      "mainComponent": {
+        "id": "2900:1567",
+        "key": "57aefb5ceb7b82012474c2ec71c6098ae0b008f7",
+        "name": "Actions"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9334:3750;2900:1564;13549:190893",
+      "mainComponent": {
+        "id": "8359:56279",
+        "key": "ecddd538fa990ffd51712cda68f312d6d87d39da",
+        "name": "Context=on-dark, Style=solid, Size=md, State=default"
+      },
+      "set": {
+        "id": "8359:55686",
+        "key": "e95648fc4135acd095ccc09bf9d4e1f4e200afed",
+        "name": "🚫 Button — v1"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Icon Start/Frame/S2_Icon_Circle_20_N",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56282",
+      "mainComponent": {
+        "id": "14:11802",
+        "key": "fa3f2d58b29932052067fbeefadb86981166bd07",
+        "name": "S2_Icon_Circle_20_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Icon End/Frame/Size=200, Direction=right",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56287",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "898b40541dd33b417fd3827d5f824d80859a2967",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.content/.actions/Children/Button — v1/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I9334:3750;2900:1564;13549:190893;8359:56287;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination",
+      "nodeId": "9517:3867",
+      "mainComponent": {
+        "id": "8350:234686",
+        "key": "5195dbddad9b4d108a4c2b46eb5684eaed814f4c",
+        "name": "DotPagination"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3867;8350:234687",
+      "mainComponent": {
+        "id": "8350:234694",
+        "key": "4744e5c2ebeda4113e331079d9d87d95c8b48f78",
+        "name": "State=active"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3867;8350:234688",
+      "mainComponent": {
+        "id": "8350:234695",
+        "key": "a40832e9e2ccade8a940f30726af1bb7fc6978a8",
+        "name": "State=inactive"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3867;8350:234689",
+      "mainComponent": {
+        "id": "8350:234695",
+        "key": "a40832e9e2ccade8a940f30726af1bb7fc6978a8",
+        "name": "State=inactive"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3867;8350:234690",
+      "mainComponent": {
+        "id": "8350:234695",
+        "key": "a40832e9e2ccade8a940f30726af1bb7fc6978a8",
+        "name": "State=inactive"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Desktop",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3867;8350:234691",
+      "mainComponent": {
+        "id": "8350:234695",
+        "key": "a40832e9e2ccade8a940f30726af1bb7fc6978a8",
+        "name": "State=inactive"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.media",
+      "nodeId": "9422:3927",
+      "mainComponent": {
+        "id": "3270:1998",
+        "key": "f51aff101cc88d97ffde78a087321d5aff76ac1d",
+        "name": "Aspect Ratio=16:9, Radii=none, Type=image"
+      },
+      "set": {
+        "id": "3240:7621",
+        "key": "0a5a12c0db994e5f4729cff3cf1e1b08e3f551c5",
+        "name": "Media"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.media/Overlay",
+      "nodeId": "I9422:3927;3271:2294",
+      "mainComponent": {
+        "id": "3271:2265",
+        "key": "235fa22e864c98e7cadc09022701de2b6ba9d255",
+        "name": "Scrim=content-left-medium"
+      },
+      "set": {
+        "id": "3271:2266",
+        "key": "c67ecd806384347e938de1e4f2042e9cbd5b288c",
+        "name": "Overlay"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.quote",
+      "nodeId": "9422:3929",
+      "mainComponent": {
+        "id": "3023:4424",
+        "key": "4d9b4cfde756cf8b3af293c3f07436205a49439a",
+        "name": "Size=heading-2"
+      },
+      "set": {
+        "id": "3023:4421",
+        "key": "c8facdfc2395863a46dea74ccd0d5bd52f41a9b9",
+        "name": "Heading"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution",
+      "nodeId": "9422:3930",
+      "mainComponent": {
+        "id": "3086:15696",
+        "key": "a3f60d468181d8ef821dc101e61f970926612aae",
+        "name": "MetaLine"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Name",
+      "nodeId": "I9422:3930;3086:15691",
+      "mainComponent": {
+        "id": "3086:15663",
+        "key": "44d8e506ad474ef922789962f60e50da9525ba34",
+        "name": "Emphasis=strong"
+      },
+      "set": {
+        "id": "3086:15660",
+        "key": "1fae35094aa8fb0dc6b44e034ddaf085daf89a34",
+        "name": "Meta/Name"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.attribution/Meta/Role",
+      "nodeId": "I9422:3930;3086:15693",
+      "mainComponent": {
+        "id": "3086:15668",
+        "key": "6bd23b104d58ddbe38b600bb647d6656d6998b32",
+        "name": "Emphasis=strong"
+      },
+      "set": {
+        "id": "3086:15665",
+        "key": "08a7e969e24810265833231e6082770c3d4b6bc7",
+        "name": "Meta/Role"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions",
+      "nodeId": "9422:3931",
+      "mainComponent": {
+        "id": "2900:1567",
+        "key": "57aefb5ceb7b82012474c2ec71c6098ae0b008f7",
+        "name": "Actions"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1",
+      "nodeId": "I9422:3931;2900:1564;13549:190909",
+      "mainComponent": {
+        "id": "8359:56279",
+        "key": "ecddd538fa990ffd51712cda68f312d6d87d39da",
+        "name": "Context=on-dark, Style=solid, Size=md, State=default"
+      },
+      "set": {
+        "id": "8359:55686",
+        "key": "e95648fc4135acd095ccc09bf9d4e1f4e200afed",
+        "name": "🚫 Button — v1"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Icon Start/Frame/S2_Icon_Circle_20_N",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56282",
+      "mainComponent": {
+        "id": "14:11802",
+        "key": "fa3f2d58b29932052067fbeefadb86981166bd07",
+        "name": "S2_Icon_Circle_20_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Icon End/Frame/Size=200, Direction=right",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56287",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "898b40541dd33b417fd3827d5f824d80859a2967",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.content/.actions/Children/Button — v1/Icon End/Frame/Size=200, Direction=right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I9422:3931;2900:1564;13549:190909;8359:56287;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination",
+      "nodeId": "9517:3873",
+      "mainComponent": {
+        "id": "8350:234686",
+        "key": "5195dbddad9b4d108a4c2b46eb5684eaed814f4c",
+        "name": "DotPagination"
+      },
+      "set": null
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-1",
+      "nodeId": "I9517:3873;8350:234687",
+      "mainComponent": {
+        "id": "8350:234694",
+        "key": "4744e5c2ebeda4113e331079d9d87d95c8b48f78",
+        "name": "State=active"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-2",
+      "nodeId": "I9517:3873;8350:234688",
+      "mainComponent": {
+        "id": "8350:234695",
+        "key": "a40832e9e2ccade8a940f30726af1bb7fc6978a8",
+        "name": "State=inactive"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-3",
+      "nodeId": "I9517:3873;8350:234689",
+      "mainComponent": {
+        "id": "8350:234695",
+        "key": "a40832e9e2ccade8a940f30726af1bb7fc6978a8",
+        "name": "State=inactive"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-4",
+      "nodeId": "I9517:3873;8350:234690",
+      "mainComponent": {
+        "id": "8350:234695",
+        "key": "a40832e9e2ccade8a940f30726af1bb7fc6978a8",
+        "name": "State=inactive"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    },
+    {
+      "variant": "Context=on-dark, Breakpoint=Mobile",
+      "node": "/.pagination/.dot-5",
+      "nodeId": "I9517:3873;8350:234691",
+      "mainComponent": {
+        "id": "8350:234695",
+        "key": "a40832e9e2ccade8a940f30726af1bb7fc6978a8",
+        "name": "State=inactive"
+      },
+      "set": {
+        "id": "8350:234693",
+        "key": "d4a599859b45b3d3a374147de54fdf9131365dfa",
+        "name": "Dot"
+      }
+    }
+  ],
+  "counts": {
+    "variants": 2,
+    "nodes": 70,
+    "bindings": 188,
+    "unboundPaintNodes": 18
+  },
+  "provenance": {
+    "hash": "sha256:1514272a63e6ce5a860c03dd92a4f9cc44b744ac1f52f9ae6a70c83051404327"
+  }
+}

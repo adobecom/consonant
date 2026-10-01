@@ -12,7 +12,6 @@
     "measure": ["narrow", "wide", "none"]
   },
   "props": [
-    { "name": "theme", "type": "string", "defaultValue": "\"on-light\"", "enum": ["on-light", "on-dark"] },
     { "name": "density", "type": "string", "defaultValue": "\"tight\"", "enum": ["tight", "regular"], "description": "tight = compact spacing, regular = more breathing room" },
     { "name": "justifyContent", "type": "string", "defaultValue": "\"start\"", "enum": ["start", "center"] },
     { "name": "measure", "type": "string", "defaultValue": "\"narrow\"", "enum": ["narrow", "wide", "none"], "description": "Max-width constraint on text lines. none = no constraint." },

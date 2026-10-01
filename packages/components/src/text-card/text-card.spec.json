@@ -1,0 +1,15 @@
+{
+  "name":"TextCard", "slug":"text-card", "figmaNodeId":"11362:245184", "cssClass":"c-text-card", "storybookId":"pages-homepage--news",
+  "description":"S2A TextCard v2, headline, optional body and native text link. Used below an h2 in the Homepage News section.",
+  "variants":{},
+  "props":[
+    {"name":"headline","type":"string","defaultValue":"\"\""},
+    {"name":"body","type":"string","defaultValue":"\"\""},
+    {"name":"ctaLabel","type":"string","defaultValue":"\"Read story\""},
+    {"name":"ctaHref","type":"string","defaultValue":"\"#\""},
+    {"name":"showBody","type":"boolean","defaultValue":"true"},
+    {"name":"showCta","type":"boolean","defaultValue":"true"}
+  ],
+  "tokenBindings":{"padding":"--s2a-spacing-lg","heading":"--s2a-color-content-heading","body":"--s2a-color-content-body-subtle"},
+  "a11y":{"wcag":["1.3.1","2.1.1","2.4.4","2.4.7"],"notes":["Headline is an h3; caller supplies the section h2.","CTA is a native anchor and must have a meaningful label and URL."]}
+}

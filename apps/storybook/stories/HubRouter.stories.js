@@ -20,7 +20,7 @@ export default {
       },
       source: {
         language: "html",
-        code: `<section class="c-hub-router" data-theme="on-light">
+        code: `<section class="c-hub-router">
   <div class="c-hub-router__heading">
     <section class="c-section-header">
       <div class="c-rich-content" data-density="tight" data-justify="center" data-measure="wide">
@@ -57,6 +57,7 @@ export default {
     theme: {
       control: "select",
       options: ["on-light", "on-dark"],
+      description: "on-dark pins data-theme=\"dark\" on the section (a surface mode); the heading and cards read theme tokens inside it",
     },
   },
   args: {

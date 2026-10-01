@@ -59,6 +59,32 @@ metadata. The right fix is to extract the `s2a-ds` MCP validators
 (`validate_css` / `validate_spec`) into a **shared lib** used by the agents, CI,
 and these scorers — one definition of "what's a violation," everywhere.
 
+## The gate
+
+```bash
+npm run gate        # schemas · schema lock · defs · composition · tokens · figma bindings · freshness
+npm run gate:full   # + build + homepage evals (tokens, motion, visual, a11y, perf)
+npm run gate:lock   # re-vendor packages/specs/schema.lock.json after a reviewed schema change
+```
+
+Stable codes per finding, report in `evals/gate/out/gate.json`, red on any
+FAIL. See `docs/future-notes/s2a-contract-system-plan.md` (step 5).
+
+## Page evals (Homepage)
+
+Three page-level evals share `evals/datasets/<page>/` (see
+[`docs/future-notes/s2a-eval-harness-plan.md`](../docs/future-notes/s2a-eval-harness-plan.md)):
+
+```bash
+npx nx build authoring-poc          # the candidate: the built visitor preview
+npm run eval:visual:homepage        # Figma section renders × theme × breakpoint (cases.json, golden/)
+npm run eval:motion:homepage        # Milo motion contracts + video/hover behaviors (motion.json)
+npm run eval:tokens:homepage        # Figma variable bindings vs component CSS vs shipped tokens (tokens.json)
+node evals/visual/homepage-parity.mjs --page=cpro-hub   # catalog-only pages list their sections
+```
+
+Reports land in `evals/*/out/`. Visual baselines are per case and only ratchet down.
+
 ## Next
 
 - Wire real generation (design->code) and feed outputs through these scorers.

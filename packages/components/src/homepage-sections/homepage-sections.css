@@ -1,0 +1,375 @@
+/* Page column: 1480px max (Home 1920 spec 8278:188665), layout-lg gutters at
+   1280–1919 (Home 1440 spec 8278:189186: 128px), and the 1024 spec's 88px
+   gutter below that (8278:189703). */
+.home-section {
+  width: min(1480px, calc(100% - 2 * var(--s2a-layout-lg, 128px)));
+  margin-inline: auto;
+}
+@media (max-width: 1279px) {
+  .home-section {
+    /* Primitive: 88px page gutter from the Home 1024 spec; no layout token sits at md. */
+    width: calc(100% - 176px);
+  }
+}
+.c-media-section {
+  padding-block: var(--s2a-layout-lg, 124px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-4xl, 64px);
+}
+.home-media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s2a-spacing-4xl, 64px) var(--s2a-spacing-xs, 8px);
+}
+.home-feature {
+  grid-column: 1 / -1;
+}
+.home-card,
+.home-feature {
+  min-width: 0;
+}
+.home-media-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.home-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.c-news-section {
+  padding-block: var(--s2a-layout-lg, 124px);
+}
+.home-news-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--s2a-spacing-md, 16px);
+  margin: 0 0 var(--s2a-spacing-lg, 24px);
+  padding-inline: var(--s2a-spacing-lg, 24px);
+  font:
+    700 16px/20px var(--s2a-font-family-label, Arial),
+    sans-serif;
+}
+.home-news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s2a-spacing-xs, 8px);
+}
+.home-news-grid article {
+  min-width: 0;
+}
+/* Primitive: the product/footer pattern is fixed black in both page modes. */
+.home-product-hero {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1920 / 1040;
+  min-height: 600px;
+  overflow: hidden;
+  background: var(--s2a-homepage-dark-surface, #000);
+}
+.home-product-hero > img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+}
+/* Primitive: image-edge scrim blends into the fixed black product surface. */
+.home-product-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    var(--s2a-homepage-dark-surface, #000) 4%,
+    transparent 55%,
+    var(--s2a-homepage-dark-surface, #000) 99%
+  );
+}
+.home-product-copy {
+  position: relative;
+  z-index: 1;
+  padding: var(--s2a-layout-lg, 124px) var(--s2a-spacing-lg, 24px) 0;
+}
+/* Primitive: fixed dark treatment, not the theme-adaptive inverse surface. */
+.c-product-router,
+.c-site-footer {
+  background: var(--s2a-homepage-dark-surface, #000);
+  color: var(--s2a-color-content-knockout, #fff);
+}
+.home-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s2a-spacing-xs, 8px);
+  padding-block: var(--s2a-spacing-2xl, 40px) var(--s2a-layout-lg, 124px);
+}
+.home-product-grid .c-product-card {
+  height: auto;
+  min-height: 254px;
+  gap: var(--s2a-spacing-2xl, 40px);
+}
+.home-footer-links {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--s2a-spacing-lg, 24px);
+  padding-block: var(--s2a-spacing-2xl, 40px);
+}
+.home-footer-links h2 {
+  font:
+    700 16px/20px var(--s2a-font-family-label, Arial),
+    sans-serif;
+  margin: 0 0 var(--s2a-spacing-lg, 24px);
+}
+.home-footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s2a-spacing-xs, 8px);
+}
+.home-footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--s2a-spacing-lg, 24px); /* WCAG 2.2 target size */
+  min-width: var(--s2a-spacing-lg, 24px);
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.8;
+  font:
+    400 14px/20px var(--s2a-font-family-body, Arial),
+    sans-serif;
+}
+.home-footer-links a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+.home-footer-legal {
+  padding-block: var(--s2a-spacing-2xl, 40px);
+}
+.home-footer-wordmark {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  color: inherit;
+}
+.home-footer-wordmark .c-logo {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.home-footer-wordmark svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.c-site-footer a:focus-visible {
+  outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
+  outline-offset: 3px;
+}
+.home-section :is(h1, h2, h3, p),
+.c-product-router :is(h1, h2, h3, p) {
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1100px) {
+  .home-footer-links {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  .home-section {
+    /* Home 375 spec 8278:190283: 24px gutters. */
+    width: calc(100% - 2 * var(--s2a-spacing-lg, 24px));
+  }
+  .c-media-section,
+  .c-news-section {
+    padding-block: var(--s2a-spacing-4xl, 64px);
+  }
+  .home-media-grid,
+  .home-news-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s2a-spacing-2xl, 40px);
+  }
+  .home-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .home-product-hero {
+    aspect-ratio: 4 / 5;
+    min-height: 480px;
+  }
+  /* Content-height cards on mobile; the desktop tile height is a hover-art canvas. */
+  .home-product-grid .c-product-card {
+    min-height: 0;
+    gap: var(--s2a-spacing-lg, 24px);
+  }
+  .home-product-copy {
+    padding-top: var(--s2a-spacing-4xl, 64px);
+  }
+  .home-footer-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 420px) {
+  .home-product-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ─── Section overlap (Figma 12102:175100: Body starts 32px above the hero's end;
+   Milo C2 section-metadata .rounded-corners-top) ───────────────────────────── */
+main > .page-section[data-component="router-marquee"] ~ .page-section {
+  position: relative;
+  z-index: 1;
+  background: var(--s2a-color-background-default);
+}
+main > .page-section[data-component="router-marquee"] + .page-section {
+  margin-top: calc(-1 * var(--s2a-border-radius-xl, 32px));
+  border-radius: var(--s2a-border-radius-xl, 32px) var(--s2a-border-radius-xl, 32px) 0 0;
+  overflow: clip;
+}
+
+/* ─── Motion: port of Milo C2 (context/milo/libs/c2/styles/styles.css and the
+   elastic-carousel block), which is what the live adobe.com homepage runs.
+   Scroll-driven and CSS-only; every rule is off under reduced motion and in
+   Studio's authoring mode, and browsers without animation-timeline get the
+   static layout. Shared easing: --parallax-easing in Milo. ──────────────── */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Hero: sticky, drifts up 35vh and fades to dark over the first 80vh of
+       scroll while the rounded section slides over it (parallax-move-up-fast +
+       parallax-fade-to-dark). */
+    html:not([data-editing="true"]) main > .page-section[data-component="router-marquee"] {
+      --home-hero-move-up-to: -35vh;
+      position: sticky;
+      top: 0;
+      z-index: 0;
+      will-change: transform;
+      animation: home-hero-move-up ease-out both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 80vh;
+    }
+    @media (width >= 1280px) and (width < 1440px) and (height < 900px) {
+      html:not([data-editing="true"]) main > .page-section[data-component="router-marquee"] {
+        --home-hero-move-up-to: -50vh;
+      }
+    }
+    html:not([data-editing="true"]) main > .page-section[data-component="router-marquee"]::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      /* Primitive: Milo fades the hero to solid black in both themes. */
+      background: var(--s2a-color-gray-1000, #000);
+      opacity: 0;
+      animation: home-hero-fade-to-dark linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 80vh;
+    }
+    @keyframes home-hero-move-up {
+      from { transform: translateY(0); }
+      to { transform: translateY(var(--home-hero-move-up-to)); }
+    }
+    @keyframes home-hero-fade-to-dark {
+      from { opacity: 0; }
+      to { opacity: 0.75; }
+    }
+
+    /* Section headers: parallax-move-up (100px) on view entry. */
+    html:not([data-editing="true"]) :is(.home-reveal, .c-hub-router__heading) {
+      --home-reveal-y: 100px;
+      animation: home-reveal cubic-bezier(0.42, 0, 0, 1) both;
+      animation-timeline: view(block 40% 10%);
+      animation-range: entry 0% entry 100%;
+      will-change: transform;
+    }
+
+    /* Category rail: elasticCarouselSlideIn (200px from the right, fades in) and
+       per-card elasticItemsGapShrink (wide gaps settle to the 8px design gap). */
+    @media (min-width: 768px) {
+      html:not([data-editing="true"]) .c-hub-router__carousel {
+        --home-rail-start-margin: 200px;
+        animation: home-rail-slide-in cubic-bezier(0.42, 0, 0, 1) both;
+        animation-timeline: view();
+        animation-range: entry 20% exit 100%;
+      }
+      html:not([data-editing="true"]) .c-hub-router__carousel > [role="listitem"] {
+        --home-rail-start-gap: 2.75rem;
+        --home-rail-end-gap: 0.25rem;
+        margin-inline: var(--home-rail-start-gap);
+        will-change: margin-inline;
+        animation: home-rail-gap-shrink cubic-bezier(0.42, 0, 0, 1) both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+      html:not([data-editing="true"]) .c-hub-router__carousel > [role="listitem"]:nth-child(2) { --home-rail-start-gap: 2.25rem; }
+      html:not([data-editing="true"]) .c-hub-router__carousel > [role="listitem"]:nth-child(3) { --home-rail-start-gap: 1.75rem; }
+      html:not([data-editing="true"]) .c-hub-router__carousel > [role="listitem"]:nth-child(4) { --home-rail-start-gap: 1rem; }
+      html:not([data-editing="true"]) .c-hub-router__carousel > [role="listitem"]:nth-child(5) { --home-rail-start-gap: 0.5rem; }
+      /* The design gap (8px) is now carried by the settled margins. */
+      html:not([data-editing="true"]) .c-hub-router__carousel { gap: 0; }
+    }
+    @keyframes home-rail-slide-in {
+      0% { margin-left: var(--home-rail-start-margin); opacity: 0; }
+      20% { opacity: 1; }
+      40% { margin-left: 0; }
+      100% { margin-left: 0; opacity: 1; }
+    }
+    @keyframes home-rail-gap-shrink {
+      0% { margin-inline: var(--home-rail-start-gap); }
+      40% { margin-inline: var(--home-rail-end-gap); }
+      100% { margin-inline: var(--home-rail-end-gap); }
+    }
+
+    /* Card grids: parallax-stagger-ltr three-up. Column indexes 1.5 / 3.25 / 5.5
+       and +1 per row, times a 48px drift; multi-row grids run to cover 70%. */
+    html:not([data-editing="true"]) .home-reveal-stagger {
+      --home-stagger-drift: 48px;
+      view-timeline: --home-stagger block;
+      view-timeline-inset: 40% 10%;
+    }
+    html:not([data-editing="true"]) .home-reveal-stagger > * {
+      --home-stagger-index: 1.5;
+      --home-stagger-row: 0;
+      animation: home-stagger cubic-bezier(0.42, 0, 0, 1) both;
+      animation-timeline: --home-stagger;
+      animation-range: entry 0% cover 70%;
+      will-change: transform;
+    }
+    html:not([data-editing="true"]) .home-reveal-stagger > :nth-child(3n + 2) { --home-stagger-index: 3.25; }
+    html:not([data-editing="true"]) .home-reveal-stagger > :nth-child(3n) { --home-stagger-index: 5.5; }
+    html:not([data-editing="true"]) .home-reveal-stagger > :nth-child(n + 4):nth-child(-n + 6) { --home-stagger-row: 1; }
+    html:not([data-editing="true"]) .home-reveal-stagger > :nth-child(n + 7):nth-child(-n + 9) { --home-stagger-row: 2; }
+    html:not([data-editing="true"]) .home-reveal-stagger > :nth-child(n + 10) { --home-stagger-row: 3; }
+    /* The feature card spans the row on its own: treat it as the first column. */
+    html:not([data-editing="true"]) .home-media-grid > .home-feature { --home-stagger-index: 1.5; --home-stagger-row: 0; }
+    html:not([data-editing="true"]) .home-media-grid > .home-feature ~ :nth-child(2) { --home-stagger-index: 1.5; --home-stagger-row: 1; }
+    html:not([data-editing="true"]) .home-media-grid > .home-feature ~ :nth-child(3) { --home-stagger-index: 3.25; --home-stagger-row: 1; }
+    html:not([data-editing="true"]) .home-media-grid > .home-feature ~ :nth-child(4) { --home-stagger-index: 5.5; --home-stagger-row: 1; }
+    @keyframes home-stagger {
+      from { transform: translate3d(0, calc((var(--home-stagger-index) + var(--home-stagger-row)) * var(--home-stagger-drift)), 0); }
+      to { transform: translate3d(0, 0, 0); }
+    }
+    @keyframes home-reveal {
+      from { transform: translate3d(0, var(--home-reveal-y), 0); }
+      to { transform: translate3d(0, 0, 0); }
+    }
+
+    /* Card images settle from a slight zoom (parallax-scale-down on pictures). */
+    html:not([data-editing="true"]) .home-reveal-stagger .home-media-frame {
+      animation: home-reveal-scale cubic-bezier(0.42, 0, 0, 1) both;
+      animation-timeline: view(block 40% 10%);
+      animation-range: entry 0% entry 100%;
+      will-change: transform;
+    }
+    @keyframes home-reveal-scale {
+      from { transform: scale(1.1); }
+      to { transform: scale(1); }
+    }
+  }
+}

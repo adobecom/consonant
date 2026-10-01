@@ -1,0 +1,16 @@
+@import "../../../dist/packages/tokens/css/dev/tokens.primitives.css";
+@import "../../../dist/packages/tokens/css/dev/tokens.semantic.css";
+@import "../../../dist/packages/tokens/css/dev/tokens.semantic.light.css";
+@import "../../../dist/packages/tokens/css/dev/tokens.semantic.dark.css";
+@import "../../../dist/packages/tokens/css/dev/tokens.responsive.sm.css";
+@import "../../../dist/packages/tokens/css/dev/tokens.responsive.md.css";
+@import "../../../dist/packages/tokens/css/dev/tokens.responsive.lg.css";
+@import "../../../dist/packages/tokens/css/dev/tokens.responsive.xl.css";
+
+/* Mirror Storybook's font delivery. The Adobe Fonts kits (hah7vzn, mie2rub)
+   publish "adobe-clean" / "adobe-clean-display", while the tokens name the
+   locally installed faces; list both so either delivery path resolves. */
+:root {
+  --s2a-font-family-adobe-clean: "Adobe Clean", adobe-clean, "Trebuchet MS", sans-serif;
+  --s2a-font-family-adobe-clean-display: "Adobe Clean Display", adobe-clean-display, "Adobe Clean", adobe-clean, "Trebuchet MS", sans-serif;
+}

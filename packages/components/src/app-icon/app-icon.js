@@ -669,7 +669,10 @@ const SIZE_MAP = {
 
 const getIconEntry = (slug) => APP_LIBRARY[slug] ?? APP_LIBRARY[DEFAULT_APP];
 const getSize = (size) => (SIZE_MAP[size] ? size : "md");
-const buildSrc = (filename) => `${CDN_BASE_URL}/${filename}`;
+let assetBaseUrl = CDN_BASE_URL;
+// Hosting applications may serve official captured icons from their own origin.
+export const configureAppIconAssets = (baseUrl) => { assetBaseUrl = baseUrl.replace(/\/$/, ""); };
+const buildSrc = (filename) => `${assetBaseUrl}/${filename}`;
 const setLoadState = (event, state) => {
   event.currentTarget.parentElement?.setAttribute("data-load-state", state);
 };

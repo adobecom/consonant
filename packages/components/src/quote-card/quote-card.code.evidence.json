@@ -1,0 +1,693 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-09-17T16:55:50.093Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "quote-card",
+    "name": "QuoteCard",
+    "cssClass": "c-quote-card",
+    "importPath": "packages/components/src/quote-card/quote-card.js",
+    "exports": [
+      "QuoteCard"
+    ],
+    "render": "QuoteCard",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/quote-card/quote-card.spec.json",
+      "storybookId": "cards-quotecard",
+      "figmaNodeId": "9334:3814"
+    }
+  },
+  "sources": {
+    "packages/components/src/quote-card/index.js": "sha256:f2a11b1feaece9a1ceaf70b8bfa7eab1fdecd640f2da41de5ec7dacd3926dd40",
+    "packages/components/src/quote-card/quote-card.js": "sha256:e1eed40f6f2f480666a5c112a2d7dabc099e4473db4cc882774911630d4b1fc1",
+    "packages/components/src/quote-card/quote-card.css": "sha256:1285f597c5a13b0aff49dbff56d535c94a433a0a5cbbb4ec01e72fff097c50ad"
+  },
+  "props": [
+    {
+      "name": "quote",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "attributionName",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "attributionRole",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "ctaLabel",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "ctaHref",
+      "default": "\"#\"",
+      "type": "string"
+    },
+    {
+      "name": "showAttribution",
+      "default": "true",
+      "type": "boolean"
+    },
+    {
+      "name": "showCta",
+      "default": "true",
+      "type": "boolean"
+    },
+    {
+      "name": "imageSrc",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "imageAlt",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "imageSrcset",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "imageSizes",
+      "default": "\"100vw\"",
+      "type": "string"
+    },
+    {
+      "name": "imageLoading",
+      "default": "\"eager\"",
+      "type": "string"
+    }
+  ],
+  "attributes": {
+    "data-has-icon-end": {
+      "values": [
+        "false"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-has-icon-start": {
+      "values": [
+        "false"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-size": {
+      "values": [
+        "md"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-style": {
+      "values": [
+        "knockout"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    }
+  },
+  "parts": {
+    "template": [
+      "c-quote-card",
+      "qc-actions",
+      "qc-attribution",
+      "qc-attribution__name",
+      "qc-attribution__role",
+      "qc-content",
+      "qc-media",
+      "qc-media__img",
+      "qc-media__overlay",
+      "qc-open-quote",
+      "qc-quote",
+      "qc-quote__text"
+    ],
+    "stylesheet": [
+      "c-button",
+      "c-button__label",
+      "c-quote-card",
+      "qc-actions",
+      "qc-attribution",
+      "qc-attribution__name",
+      "qc-attribution__role",
+      "qc-content",
+      "qc-media",
+      "qc-media__img",
+      "qc-media__overlay",
+      "qc-open-quote",
+      "qc-quote__text"
+    ],
+    "runtime": [
+      "c-button",
+      "c-button__label",
+      "c-quote-card",
+      "qc-actions",
+      "qc-attribution",
+      "qc-attribution__name",
+      "qc-attribution__role",
+      "qc-content",
+      "qc-media",
+      "qc-media__img",
+      "qc-media__overlay",
+      "qc-open-quote",
+      "qc-quote",
+      "qc-quote__text"
+    ],
+    "own": [
+      "c-button",
+      "c-button__label",
+      "c-quote-card",
+      "qc-actions",
+      "qc-attribution",
+      "qc-attribution__name",
+      "qc-attribution__role",
+      "qc-content",
+      "qc-media",
+      "qc-media__img",
+      "qc-media__overlay",
+      "qc-open-quote",
+      "qc-quote__text"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden"
+    ],
+    "tags": [
+      "img"
+    ]
+  },
+  "imports": [
+    "../button/button.js",
+    "./quote-card.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-border-radius-md": {
+        "fallback": true
+      },
+      "--s2a-color-content-knockout": {
+        "fallback": true
+      },
+      "--s2a-color-transparent-black-16": {
+        "fallback": true
+      },
+      "--s2a-color-transparent-black-64": {
+        "fallback": true
+      },
+      "--s2a-font-family-body": {
+        "fallback": true
+      },
+      "--s2a-font-family-eyebrow": {
+        "fallback": true
+      },
+      "--s2a-font-family-heading": {
+        "fallback": true
+      },
+      "--s2a-font-weight-body": {
+        "fallback": true
+      },
+      "--s2a-font-weight-eyebrow": {
+        "fallback": true
+      },
+      "--s2a-font-weight-heading": {
+        "fallback": true
+      },
+      "--s2a-spacing-4xl": {
+        "fallback": true
+      },
+      "--s2a-spacing-lg": {
+        "fallback": true
+      },
+      "--s2a-typography-font-size-body-md": {
+        "fallback": true
+      },
+      "--s2a-typography-font-size-eyebrow": {
+        "fallback": true
+      },
+      "--s2a-typography-font-size-heading-2": {
+        "fallback": true
+      },
+      "--s2a-typography-letter-spacing-body-md": {
+        "fallback": true
+      },
+      "--s2a-typography-letter-spacing-eyebrow": {
+        "fallback": true
+      },
+      "--s2a-typography-line-height-body-md": {
+        "fallback": true
+      },
+      "--s2a-typography-line-height-eyebrow": {
+        "fallback": true
+      },
+      "--s2a-typography-line-height-heading-2": {
+        "fallback": true
+      }
+    },
+    "custom": [],
+    "raw": [
+      {
+        "line": 119,
+        "declaration": "font-size: 48px;"
+      }
+    ]
+  },
+  "states": [],
+  "queries": [
+    "@container (max-width: 1279px)",
+    "@container (max-width: 599px)",
+    "@media (max-width: 599px)",
+    "@media (prefers-reduced-motion: reduce)"
+  ],
+  "stories": [
+    {
+      "id": "cards-quotecard--default",
+      "name": "Default",
+      "args": {
+        "quote": "\"If it wasn't for Creative Cloud, I don't think I'd be here. I feel like I can create anything.\"",
+        "attributionName": "Michelle Phan",
+        "attributionRole": "Creator",
+        "ctaLabel": "Learn more",
+        "ctaHref": "#",
+        "imageSrc": "http://127.0.0.1:56234/assets/slide-1-OrkBQbCA.jpg"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-quote-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label",
+        "c-quote-card",
+        "qc-actions",
+        "qc-attribution",
+        "qc-attribution__name",
+        "qc-attribution__role",
+        "qc-content",
+        "qc-media",
+        "qc-media__img",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 14
+    },
+    {
+      "id": "cards-quotecard--mobile",
+      "name": "Mobile (375px)",
+      "args": {
+        "quote": "\"If it wasn't for Creative Cloud, I don't think I'd be here. I feel like I can create anything.\"",
+        "attributionName": "Michelle Phan",
+        "attributionRole": "Creator",
+        "ctaLabel": "Learn more",
+        "ctaHref": "#",
+        "imageSrc": "http://127.0.0.1:56234/assets/slide-1-OrkBQbCA.jpg"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-quote-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label",
+        "c-quote-card",
+        "qc-actions",
+        "qc-attribution",
+        "qc-attribution__name",
+        "qc-attribution__role",
+        "qc-content",
+        "qc-media",
+        "qc-media__img",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 14
+    },
+    {
+      "id": "cards-quotecard--no-attribution",
+      "name": "No Attribution",
+      "args": {
+        "quote": "\"If it wasn't for Creative Cloud, I don't think I'd be here. I feel like I can create anything.\"",
+        "attributionName": "Michelle Phan",
+        "attributionRole": "Creator",
+        "ctaLabel": "Learn more",
+        "ctaHref": "#",
+        "imageSrc": "http://127.0.0.1:56234/assets/slide-1-OrkBQbCA.jpg",
+        "showAttribution": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-quote-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label",
+        "c-quote-card",
+        "qc-actions",
+        "qc-content",
+        "qc-media",
+        "qc-media__img",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 11
+    },
+    {
+      "id": "cards-quotecard--no-cta",
+      "name": "No Cta",
+      "args": {
+        "quote": "\"If it wasn't for Creative Cloud, I don't think I'd be here. I feel like I can create anything.\"",
+        "attributionName": "Michelle Phan",
+        "attributionRole": "Creator",
+        "ctaLabel": "Learn more",
+        "ctaHref": "#",
+        "imageSrc": "http://127.0.0.1:56234/assets/slide-1-OrkBQbCA.jpg",
+        "showCta": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-quote-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-quote-card",
+        "qc-attribution",
+        "qc-attribution__name",
+        "qc-attribution__role",
+        "qc-content",
+        "qc-media",
+        "qc-media__img",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 11
+    },
+    {
+      "id": "cards-quotecard--content-only",
+      "name": "Content Only",
+      "args": {
+        "quote": "\"If it wasn't for Creative Cloud, I don't think I'd be here. I feel like I can create anything.\"",
+        "attributionName": "Michelle Phan",
+        "attributionRole": "Creator",
+        "ctaLabel": "Learn more",
+        "ctaHref": "#",
+        "imageSrc": "http://127.0.0.1:56234/assets/slide-1-OrkBQbCA.jpg",
+        "showAttribution": false,
+        "showCta": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-quote-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-quote-card",
+        "qc-content",
+        "qc-media",
+        "qc-media__img",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "cards-quotecard--no-image",
+      "name": "No Image",
+      "args": {
+        "quote": "\"If it wasn't for Creative Cloud, I don't think I'd be here. I feel like I can create anything.\"",
+        "attributionName": "Michelle Phan",
+        "attributionRole": "Creator",
+        "ctaLabel": "Learn more",
+        "ctaHref": "#",
+        "imageSrc": ""
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-quote-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label",
+        "c-quote-card",
+        "qc-actions",
+        "qc-attribution",
+        "qc-attribution__name",
+        "qc-attribution__role",
+        "qc-content",
+        "qc-media",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "cards-quotecard--all-three",
+      "name": "All three slides",
+      "args": {
+        "quote": "\"If it wasn't for Creative Cloud, I don't think I'd be here. I feel like I can create anything.\"",
+        "attributionName": "Michelle Phan",
+        "attributionRole": "Creator",
+        "ctaLabel": "Learn more",
+        "ctaHref": "#",
+        "imageSrc": "http://127.0.0.1:56234/assets/slide-1-OrkBQbCA.jpg"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-quote-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label",
+        "c-quote-card",
+        "qc-actions",
+        "qc-attribution",
+        "qc-attribution__name",
+        "qc-attribution__role",
+        "qc-content",
+        "qc-media",
+        "qc-media__img",
+        "qc-media__overlay",
+        "qc-open-quote",
+        "qc-quote",
+        "qc-quote__text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 14
+    }
+  ],
+  "counts": {
+    "props": 12,
+    "attributes": 4,
+    "parts": 13,
+    "tokenReferences": 20,
+    "tokenReferencesWithoutFallback": 0,
+    "raw": 1,
+    "stories": 7,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:54759300b02463c7cb780dba82725572758af914b4d0c10e927e021cb579e6ee"
+  }
+}

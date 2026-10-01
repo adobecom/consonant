@@ -1,0 +1,1109 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-09-17T15:02:36.039Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "button",
+    "name": "Button",
+    "cssClass": "c-button",
+    "importPath": "packages/components/src/button/button.js",
+    "exports": [
+      "createButton",
+      "decorateButton"
+    ],
+    "render": "createButton",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/button/button.spec.json",
+      "storybookId": "atoms-button",
+      "figmaNodeId": null
+    }
+  },
+  "sources": {
+    "packages/components/src/button/index.js": "sha256:c66b10ad1e03b5caeaa997c5baa56a4bd8747b7a3df5bb80d3f011c537a31e1c",
+    "packages/components/src/button/button.js": "sha256:752f2cf965a6b90b81d560530919422cd7187b13b5c12274f4b5c6af4dadc9af",
+    "packages/components/src/button/button.css": "sha256:7555a5988faaee07d32e30f31572947fed0c7900c87660aab3f6d18662bcea36"
+  },
+  "props": [
+    {
+      "name": "label",
+      "default": "'Label'",
+      "type": "string",
+      "jsdoc": "string"
+    },
+    {
+      "name": "href",
+      "jsdoc": "string",
+      "type": "string"
+    },
+    {
+      "name": "size",
+      "default": "'md'",
+      "type": "string",
+      "jsdoc": "'md'"
+    },
+    {
+      "name": "state",
+      "default": "'default'",
+      "type": "string",
+      "jsdoc": "'default'|'hover'|'active'|'focus'|'disabled'"
+    },
+    {
+      "name": "showIconStart",
+      "default": "false",
+      "type": "boolean",
+      "jsdoc": "boolean"
+    },
+    {
+      "name": "showIconEnd",
+      "default": "false",
+      "type": "boolean",
+      "jsdoc": "boolean"
+    },
+    {
+      "name": "iconStart",
+      "jsdoc": "Node|string",
+      "type": "node|string"
+    },
+    {
+      "name": "iconEnd",
+      "jsdoc": "Node|string",
+      "type": "node|string"
+    },
+    {
+      "name": "onClick",
+      "jsdoc": "Function",
+      "type": "function"
+    },
+    {
+      "name": "style",
+      "jsdoc": "'solid'|'outlined'|'transparent'|'accent'|'knockout'|'outline-inverse'",
+      "type": "enum",
+      "enum": [
+        "solid",
+        "outlined",
+        "transparent",
+        "accent",
+        "knockout",
+        "outline-inverse"
+      ]
+    }
+  ],
+  "attributes": {
+    "data-force-state": {
+      "values": [
+        "active",
+        "disabled",
+        "focus",
+        "hover"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime",
+        "stylesheet"
+      ],
+      "onRoot": true
+    },
+    "data-has-icon-end": {
+      "values": [
+        "false",
+        "true"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    },
+    "data-has-icon-start": {
+      "values": [
+        "false",
+        "true"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    },
+    "data-size": {
+      "values": [
+        "md"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    },
+    "data-style": {
+      "values": [
+        "accent",
+        "knockout",
+        "outline-inverse",
+        "outlined",
+        "solid",
+        "transparent"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime",
+        "stylesheet"
+      ],
+      "onRoot": true
+    },
+    "data-theme": {
+      "values": [
+        "light|dark"
+      ],
+      "dynamic": false,
+      "sources": [
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": false
+    }
+  },
+  "parts": {
+    "template": [],
+    "stylesheet": [
+      "c-button",
+      "c-button__icon",
+      "c-button__label",
+      "json",
+      "spec"
+    ],
+    "runtime": [
+      "c-button",
+      "c-button__icon",
+      "c-button__icon--end",
+      "c-button__icon--start",
+      "c-button__label"
+    ],
+    "own": [
+      "c-button",
+      "c-button__icon",
+      "c-button__icon--end",
+      "c-button__icon--start",
+      "c-button__label"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden"
+    ],
+    "tags": [
+      "a",
+      "button"
+    ]
+  },
+  "imports": [
+    "./button.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-blur-md": {
+        "fallback": false
+      },
+      "--s2a-border-radius-round": {
+        "fallback": false
+      },
+      "--s2a-border-width-md": {
+        "fallback": false
+      },
+      "--s2a-border-width-sm": {
+        "fallback": false
+      },
+      "--s2a-color-background-default": {
+        "fallback": false
+      },
+      "--s2a-color-background-inverse": {
+        "fallback": false
+      },
+      "--s2a-color-background-knockout": {
+        "fallback": false
+      },
+      "--s2a-color-border-knockout": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-accent-active": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-accent-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-accent-hover": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-accent-solid-on-light-active": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-accent-solid-on-light-default": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-accent-solid-on-light-hover": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-knockout-active": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-knockout-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-knockout-hover": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-outline-inverse-active": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-outline-inverse-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-outline-inverse-hover": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-outlined-active": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-outlined-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-outlined-hover": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-primary-transparent-on-light-active": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-primary-transparent-on-light-default": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-primary-transparent-on-light-hover": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-solid-active": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-solid-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-solid-hover": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-transparent-active": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-transparent-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-transparent-hover": {
+        "fallback": true
+      },
+      "--s2a-color-button-border-knockout-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-border-outline-inverse-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-content-accent-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-content-knockout": {
+        "fallback": true
+      },
+      "--s2a-color-button-content-outline-inverse": {
+        "fallback": true
+      },
+      "--s2a-color-button-content-outlined-active": {
+        "fallback": true
+      },
+      "--s2a-color-button-content-primary-solid-default": {
+        "fallback": false
+      },
+      "--s2a-color-button-content-primary-solid-inverse": {
+        "fallback": false
+      },
+      "--s2a-color-button-content-solid-default": {
+        "fallback": true
+      },
+      "--s2a-color-content-default": {
+        "fallback": false
+      },
+      "--s2a-color-content-inverse": {
+        "fallback": false
+      },
+      "--s2a-color-content-knockout": {
+        "fallback": false
+      },
+      "--s2a-color-focus-ring-default": {
+        "fallback": false
+      },
+      "--s2a-color-focus-ring-knockout": {
+        "fallback": false
+      },
+      "--s2a-color-gray-100": {
+        "fallback": false
+      },
+      "--s2a-color-gray-25": {
+        "fallback": false
+      },
+      "--s2a-color-gray-50": {
+        "fallback": false
+      },
+      "--s2a-color-iconbutton-background-primary-solid-on-light-hover": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-white-00": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-white-08": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-white-16": {
+        "fallback": false
+      },
+      "--s2a-font-family-label": {
+        "fallback": false
+      },
+      "--s2a-font-size-xs": {
+        "fallback": false
+      },
+      "--s2a-font-weight-label": {
+        "fallback": false
+      },
+      "--s2a-opacity-disabled": {
+        "fallback": false
+      },
+      "--s2a-spacing-2xs": {
+        "fallback": false
+      },
+      "--s2a-spacing-3xs": {
+        "fallback": false
+      },
+      "--s2a-spacing-lg": {
+        "fallback": false
+      },
+      "--s2a-spacing-xs": {
+        "fallback": false
+      },
+      "--s2a-typography-font-size-label": {
+        "fallback": false
+      },
+      "--s2a-typography-letter-spacing-label": {
+        "fallback": false
+      },
+      "--s2a-typography-line-height-label": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [
+    ":active",
+    ":disabled",
+    ":focus",
+    ":hover"
+  ],
+  "queries": [],
+  "stories": [
+    {
+      "id": "atoms-button--solid",
+      "name": "Solid",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "solid",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--outlined",
+      "name": "Outlined",
+      "args": {
+        "label": "Label",
+        "style": "outlined",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "outlined",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "outlined"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "outlined"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--transparent",
+      "name": "Transparent",
+      "args": {
+        "label": "Label",
+        "style": "transparent",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "transparent",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "transparent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "transparent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--accent",
+      "name": "Accent",
+      "args": {
+        "label": "Get started",
+        "style": "accent",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "accent",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "accent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "accent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Get started",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--disabled",
+      "name": "Disabled",
+      "args": {
+        "label": "Disabled",
+        "style": "solid",
+        "size": "md",
+        "state": "disabled",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "solid",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false",
+          "forceState": "disabled"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ],
+        "data-force-state": [
+          "disabled"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ],
+        "data-force-state": [
+          "disabled"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Disabled",
+          "disabled": true
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--knockout",
+      "name": "Knockout (media surface)",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "knockout",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Watch now",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--outline-inverse",
+      "name": "Outline-inverse (media surface)",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "outline-inverse",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "outline-inverse"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "outline-inverse"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--icon-slots",
+      "name": "Icon Slots",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "solid",
+          "size": "md",
+          "hasIconStart": "true",
+          "hasIconEnd": "true"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-icon-end": [
+          "true"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-icon-end": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__icon",
+        "c-button__icon--end",
+        "c-button__icon--start",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Download presets",
+          "disabled": false
+        }
+      ],
+      "nodes": 7
+    },
+    {
+      "id": "atoms-button--all-styles-matrix",
+      "name": "All styles × states",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "solid",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "default",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--backdrop-blur",
+      "name": "Backdrop blur (glassy styles)",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "outlined",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "outlined"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "outlined"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "outlined",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    }
+  ],
+  "counts": {
+    "props": 10,
+    "attributes": 6,
+    "parts": 5,
+    "tokenReferences": 64,
+    "tokenReferencesWithoutFallback": 39,
+    "raw": 0,
+    "stories": 10,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7"
+  }
+}

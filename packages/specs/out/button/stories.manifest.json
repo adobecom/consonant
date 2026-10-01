@@ -1,0 +1,202 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "button",
+  "storybookId": "atoms-button",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "size-md",
+      "name": "size: md",
+      "args": {
+        "size": "md"
+      }
+    },
+    {
+      "id": "style-solid",
+      "name": "style: solid",
+      "args": {
+        "style": "solid"
+      }
+    },
+    {
+      "id": "style-outlined",
+      "name": "style: outlined",
+      "args": {
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "style-transparent",
+      "name": "style: transparent",
+      "args": {
+        "style": "transparent"
+      }
+    },
+    {
+      "id": "style-accent",
+      "name": "style: accent",
+      "args": {
+        "style": "accent"
+      }
+    },
+    {
+      "id": "style-knockout",
+      "name": "style: knockout",
+      "args": {
+        "style": "knockout"
+      }
+    },
+    {
+      "id": "style-outline-inverse",
+      "name": "style: outline-inverse",
+      "args": {
+        "style": "outline-inverse"
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "atoms-button--solid",
+      "name": "Solid",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--outlined",
+      "name": "Outlined",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--transparent",
+      "name": "Transparent",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--accent",
+      "name": "Accent",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--disabled",
+      "name": "Disabled",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--knockout",
+      "name": "Knockout (media surface)",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--outline-inverse",
+      "name": "Outline-inverse (media surface)",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--icon-slots",
+      "name": "Icon Slots",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--all-styles-matrix",
+      "name": "All styles × states",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--backdrop-blur",
+      "name": "Backdrop blur (glassy styles)",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    }
+  ],
+  "deferred": [
+    "style-knockout",
+    "style-outline-inverse"
+  ],
+  "extra": [
+    "atoms-button--solid",
+    "atoms-button--outlined",
+    "atoms-button--transparent",
+    "atoms-button--accent",
+    "atoms-button--disabled",
+    "atoms-button--knockout",
+    "atoms-button--outline-inverse",
+    "atoms-button--icon-slots",
+    "atoms-button--all-styles-matrix",
+    "atoms-button--backdrop-blur"
+  ]
+}

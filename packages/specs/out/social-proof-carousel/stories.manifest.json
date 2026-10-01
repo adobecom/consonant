@@ -1,0 +1,37 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "social-proof-carousel",
+  "storybookId": "organisms-socialproofcarousel",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    }
+  ],
+  "existing": [
+    {
+      "id": "organisms-socialproofcarousel--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "organisms-socialproofcarousel--start-on-second",
+      "name": "Start on slide 2",
+      "argKeys": []
+    },
+    {
+      "id": "organisms-socialproofcarousel--two-slides",
+      "name": "Two slides",
+      "argKeys": []
+    }
+  ],
+  "deferred": [],
+  "extra": [
+    "organisms-socialproofcarousel--start-on-second",
+    "organisms-socialproofcarousel--two-slides"
+  ]
+}

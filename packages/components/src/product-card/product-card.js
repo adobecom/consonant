@@ -1,4 +1,5 @@
-import { html, nothing } from "lit";
+import { nothing } from "lit";
+import { html, literal } from "lit/static-html.js";
 import { AppIcon } from "../app-icon/app-icon.js";
 import "./product-card.css";
 
@@ -9,18 +10,26 @@ export const ProductCard = ({
   imageAlt = "",
   heading = "",
   body = "",
+  href,
   onClick,
 } = {}) => {
   const hasImage = Boolean(imageSrc);
+  const tag = href ? literal`a` : literal`div`;
 
   return html`
-    <div
+    <${tag}
       class="c-product-card"
+      href=${href || nothing}
+      aria-label=${href ? heading : nothing}
       data-has-image=${hasImage || nothing}
-      role=${onClick ? "button" : nothing}
-      tabindex=${onClick ? "0" : nothing}
+      role=${!href && onClick ? "button" : nothing}
+      tabindex=${!href && onClick ? "0" : nothing}
       @click=${onClick ?? nothing}
-      @keydown=${onClick ? (e) => (e.key === "Enter" || e.key === " ") && onClick(e) : nothing}
+      @keydown=${!href && onClick ? (e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        onClick(e);
+      } : nothing}
     >
       ${hasImage
         ? html`<img class="c-product-card__image" src=${imageSrc} alt=${imageAlt} loading="lazy" decoding="async" />`
@@ -32,9 +41,9 @@ export const ProductCard = ({
         ? html`<span class="c-product-card__icon" aria-hidden="true">${AppIcon({ app, size: "sm" })}</span>`
         : nothing}
       <div class="c-product-card__text">
-        ${heading ? html`<p class="c-product-card__heading">${heading}</p>` : nothing}
+        ${heading ? html`<h3 class="c-product-card__heading">${heading}</h3>` : nothing}
         ${body ? html`<p class="c-product-card__body">${body}</p>` : nothing}
       </div>
-    </div>
+    </${tag}>
   `;
 };

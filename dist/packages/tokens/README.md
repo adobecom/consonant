@@ -4,8 +4,57 @@ This package is the **source of truth** for every design token that ships in S2A
 It outputs **CSS only** (no JS runtime required).
 All CSS is generated from our internal Figma Variables → JSON export (`json/`), but these raw JSON files are **not** included in the published package.
 
-**Package name:** `s2a-tokens`  
-**Current version:** `0.0.4`
+**Package name:** `@adobecom/s2a-tokens` · published to GitHub Packages
+
+---
+
+# Installation
+
+The tokens ship as CSS custom properties (prefix `--s2a-`). Two ways to consume them:
+
+### npm (GitHub Packages) — needs a `read:packages` token
+
+GitHub's npm registry requires an auth token **even though this package is public**.
+
+`.npmrc` in your project:
+
+```ini
+@adobecom:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+```bash
+npm install @adobecom/s2a-tokens
+```
+
+```js
+import '@adobecom/s2a-tokens';                          // all layers, minified
+// …or import layers individually:
+import '@adobecom/s2a-tokens/css/tokens.semantic.css';
+import '@adobecom/s2a-tokens/css/tokens.semantic.light.css';
+import '@adobecom/s2a-tokens/css/tokens.semantic.dark.css';
+```
+
+```css
+.card {
+  color: var(--s2a-color-content-default);
+  padding: var(--s2a-spacing-md);
+}
+```
+
+### Registry-free — no token
+
+Because `adobecom/consonant` is public, fetch the release manifest and tarball
+directly — no `.npmrc`, no token. Ideal for runtime-loaded / no-build consumers:
+
+```
+https://raw.githubusercontent.com/adobecom/consonant/main/releases/latest.json
+```
+
+The manifest points at the current tarball with a `sha256` integrity hash and the
+list of CSS files.
+
+> Full guide (both paths, CI notes, version pinning): `docs/how-tos/install-s2a-tokens.md`.
 
 ---
 

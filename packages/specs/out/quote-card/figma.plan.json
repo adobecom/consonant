@@ -1,0 +1,409 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "QuoteCard",
+  "setName": ".QuoteCard",
+  "anatomy": {
+    "name": ".root",
+    "source": "Context=on-dark, Breakpoint=Desktop",
+    "element": "div",
+    "bindings": {
+      "border-radius": [
+        "s2a/border/radius/md"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".media",
+        "source": ".media",
+        "element": "div[aria-hidden]",
+        "bindings": {},
+        "slot": null,
+        "children": [
+          {
+            "name": ".img",
+            "source": null,
+            "element": "img",
+            "bindings": {},
+            "slot": null,
+            "children": []
+          },
+          {
+            "name": ".overlay",
+            "source": ".media/Overlay",
+            "element": null,
+            "bindings": {},
+            "slot": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".content",
+        "source": ".content",
+        "element": null,
+        "bindings": {
+          "margin": [
+            "s2a/spacing/4xl"
+          ],
+          "gap": [
+            "s2a/spacing/lg"
+          ],
+          "padding": [
+            "s2a/spacing/4xl",
+            "s2a/spacing/lg"
+          ]
+        },
+        "slot": null,
+        "children": [
+          {
+            "name": ".quote",
+            "source": ".content/.quote/{heading}",
+            "element": "p",
+            "bindings": {
+              "font-family": [
+                "s2a/font/family/heading"
+              ],
+              "font-weight": [
+                "s2a/font/weight/heading"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/heading-2"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/heading-2"
+              ],
+              "color": [
+                "s2a/color/content/knockout"
+              ]
+            },
+            "slot": null,
+            "children": []
+          },
+          {
+            "name": ".attribution",
+            "source": ".attribution",
+            "element": null,
+            "bindings": {},
+            "slot": null,
+            "children": [
+              {
+                "name": ".name",
+                "source": ".content/.attribution/Meta/Name/{metaname}",
+                "element": null,
+                "bindings": {
+                  "font-family": [
+                    "s2a/font/family/eyebrow"
+                  ],
+                  "font-weight": [
+                    "s2a/font/weight/eyebrow"
+                  ],
+                  "font-size": [
+                    "s2a/typography/font-size/eyebrow"
+                  ],
+                  "line-height": [
+                    "s2a/typography/line-height/eyebrow"
+                  ],
+                  "letter-spacing": [
+                    "s2a/typography/letter-spacing/eyebrow"
+                  ],
+                  "color": [
+                    "s2a/color/content/knockout"
+                  ]
+                },
+                "slot": null,
+                "children": []
+              },
+              {
+                "name": ".role",
+                "source": ".content/.attribution/Meta/Role/{metarole}",
+                "element": null,
+                "bindings": {
+                  "font-family": [
+                    "s2a/font/family/body"
+                  ],
+                  "font-weight": [
+                    "s2a/font/weight/body"
+                  ],
+                  "font-size": [
+                    "s2a/typography/font-size/body-md"
+                  ],
+                  "line-height": [
+                    "s2a/typography/line-height/body-md"
+                  ],
+                  "letter-spacing": [
+                    "s2a/typography/letter-spacing/body-md"
+                  ],
+                  "color": [
+                    "s2a/color/content/knockout"
+                  ]
+                },
+                "slot": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": ".actions",
+            "source": ".actions",
+            "element": null,
+            "bindings": {},
+            "slot": {
+              "name": "Children",
+              "accepts": [
+                "Button"
+              ],
+              "mode": "restrict"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "9334:3814",
+    "nodeName": ".QuoteCard",
+    "componentSetKey": "15162ddb44ecc838d25c5d791891ae0eb74b6308",
+    "deprecated": true,
+    "successorNodeId": "13549:190801",
+    "usages": [
+      "12102:175374 (Section - Social Proof: .slide-left / .slide-active / .slide-right)",
+      "8278:190566 (Home 375: Active Slide 327×542)"
+    ]
+  },
+  "properties": [
+    {
+      "name": "Breakpoint",
+      "type": "VARIANT",
+      "options": [
+        "Desktop",
+        "Mobile"
+      ],
+      "defaultValue": "Desktop",
+      "fromState": "Breakpoint"
+    },
+    {
+      "name": "Context",
+      "type": "VARIANT",
+      "options": [
+        "on-dark"
+      ],
+      "defaultValue": "on-dark",
+      "fromState": "Context"
+    },
+    {
+      "name": "Quote",
+      "type": "TEXT",
+      "forProp": "quote",
+      "layer": ".content/.quote/{heading}",
+      "defaultValue": "",
+      "derived": true,
+      "note": "no component property in Figma yet; layer .content/.quote/{heading}"
+    },
+    {
+      "name": "Attribution Name",
+      "type": "TEXT",
+      "forProp": "attributionName",
+      "layer": ".content/.attribution/Meta/Name/{metaname}",
+      "defaultValue": "",
+      "derived": true,
+      "note": "no component property in Figma yet; layer .content/.attribution/Meta/Name/{metaname}"
+    },
+    {
+      "name": "Attribution Role",
+      "type": "TEXT",
+      "forProp": "attributionRole",
+      "layer": ".content/.attribution/Meta/Role/{metarole}",
+      "defaultValue": "",
+      "derived": true,
+      "note": "no component property in Figma yet; layer .content/.attribution/Meta/Role/{metarole}"
+    },
+    {
+      "name": "Show Attribution#9435:0",
+      "type": "BOOLEAN",
+      "forProp": "showAttribution",
+      "defaultValue": true,
+      "layer": ".content/.attribution"
+    },
+    {
+      "name": "Cta Label",
+      "type": "TEXT",
+      "forProp": "ctaLabel",
+      "layer": ".content/.actions/Children/Button — v1/Label",
+      "defaultValue": "",
+      "derived": true,
+      "note": "no component property in Figma yet; layer .content/.actions/Children/Button — v1/Label"
+    },
+    {
+      "name": "Show CTA#9334:0",
+      "type": "BOOLEAN",
+      "forProp": "showCta",
+      "defaultValue": true,
+      "layer": ".content/.actions"
+    },
+    {
+      "name": "Media#9435:3",
+      "type": "INSTANCE_SWAP",
+      "forProp": "imageSrc",
+      "defaultValue": "3270:1998",
+      "layer": ".media"
+    }
+  ],
+  "states": [
+    {
+      "name": "Breakpoint",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Breakpoint",
+        "notes": "Desktop | Mobile"
+      }
+    },
+    {
+      "name": "Context",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Context",
+        "notes": "on-dark only"
+      }
+    }
+  ],
+  "layers": [
+    {
+      "name": "Context=on-dark, Breakpoint=Desktop",
+      "selector": ".c-quote-card",
+      "bindings": {
+        "border-radius": [
+          "s2a/border/radius/md"
+        ]
+      }
+    },
+    {
+      "name": ".media",
+      "selector": ".qc-media",
+      "bindings": {}
+    },
+    {
+      "name": ".qc-media__img",
+      "selector": ".qc-media__img",
+      "bindings": {}
+    },
+    {
+      "name": ".media/Overlay",
+      "selector": ".qc-media__overlay",
+      "bindings": {}
+    },
+    {
+      "name": ".content",
+      "selector": ".qc-content",
+      "bindings": {
+        "margin": [
+          "s2a/spacing/4xl"
+        ],
+        "gap": [
+          "s2a/spacing/lg"
+        ],
+        "padding": [
+          "s2a/spacing/4xl",
+          "s2a/spacing/lg"
+        ]
+      }
+    },
+    {
+      "name": ".content/.quote/{heading}",
+      "selector": ".qc-quote__text",
+      "bindings": {
+        "font-family": [
+          "s2a/font/family/heading"
+        ],
+        "font-weight": [
+          "s2a/font/weight/heading"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/heading-2"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/heading-2"
+        ],
+        "color": [
+          "s2a/color/content/knockout"
+        ]
+      }
+    },
+    {
+      "name": ".attribution",
+      "selector": ".qc-attribution",
+      "bindings": {}
+    },
+    {
+      "name": ".content/.attribution/Meta/Name/{metaname}",
+      "selector": ".qc-attribution__name",
+      "bindings": {
+        "font-family": [
+          "s2a/font/family/eyebrow"
+        ],
+        "font-weight": [
+          "s2a/font/weight/eyebrow"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/eyebrow"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/eyebrow"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/eyebrow"
+        ],
+        "color": [
+          "s2a/color/content/knockout"
+        ]
+      }
+    },
+    {
+      "name": ".content/.attribution/Meta/Role/{metarole}",
+      "selector": ".qc-attribution__role",
+      "bindings": {
+        "font-family": [
+          "s2a/font/family/body"
+        ],
+        "font-weight": [
+          "s2a/font/weight/body"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/body-md"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/body-md"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/body-md"
+        ],
+        "color": [
+          "s2a/color/content/knockout"
+        ]
+      }
+    },
+    {
+      "name": ".actions",
+      "selector": ".qc-actions",
+      "bindings": {},
+      "slot": {
+        "name": "Children",
+        "accepts": [
+          "Button"
+        ],
+        "mode": "restrict"
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/heading-2",
+    "s2a/typography/eyebrow",
+    "s2a/typography/body-md"
+  ]
+}

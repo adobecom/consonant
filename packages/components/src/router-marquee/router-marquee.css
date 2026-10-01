@@ -11,13 +11,17 @@
 .rm-slides {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 7;
-  min-height: 480px;
+  /* Preferred hero height: half the container width (Figma 1440 spec: 738px),
+     capped so the next section still peeks below the 64px nav; longer authored
+     copy can grow it. */
+  min-height: max(640px, min(50cqw, calc(100svh - 96px)));
+  display: grid;
 }
 
 .rm-slide {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  grid-area: 1 / 1;
+  min-width: 0;
   transform: translateX(100%);
   transition: transform 300ms cubic-bezier(0.42, 0, 0, 1);
   pointer-events: none;
@@ -37,11 +41,33 @@
   background: #111;
 }
 
-.rm-video {
+.rm-video, .rm-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+}
+.c-router-marquee[data-single="true"] .rm-controls { display: none; }
+.c-router-marquee[data-single="true"] .rm-content { padding-bottom: var(--s2a-spacing-4xl, 64px); }
+/* Title size/leading come from the responsive heading-1 tokens via RichContent
+   (measure="none"); only tracking is pinned to zero per the working rule. */
+.c-router-marquee .c-rich-content__title { letter-spacing: 0; overflow-wrap: anywhere; }
+.c-router-marquee .c-rich-content__body { letter-spacing: 0; }
+.c-router-marquee .c-rich-content { min-width: 0; }
+.c-router-marquee .c-rich-content :is(h2, p, .c-button__label) { overflow-wrap: anywhere; max-width: 100%; }
+/* Primitive: retain Button v2's 40px minimum while allowing authored labels to wrap. */
+.c-router-marquee .c-button { height: auto; min-height: 40px; max-width: 100%; padding-block: var(--s2a-spacing-xs, 8px); }
+/* The supplied hero still carries a baked-in frame label along its bottom edge
+   (see the gap register). Until approved clean art lands, bias tall crops upward
+   and, where the image is height-bound, oversize it so the bottom stays clipped. */
+.rm-image { object-position: center 30%; }
+@media (max-width: 1279px) {
+  .rm-image { height: 108%; object-position: center top; }
+}
+@media (max-width: 599px) {
+  .c-router-marquee .rm-image { object-position: 64% top; }
+  /* Primitive: the mobile image crop needs a fixed black scrim behind white copy. */
+  .c-router-marquee .rm-overlay { background: linear-gradient(180deg, rgb(0 0 0 / 64%) 0%, rgb(0 0 0 / 56%) 48%, transparent 100%); }
 }
 
 /* ─── Overlay ─────────────────────────────────────────────────────────────── */
@@ -146,12 +172,28 @@
     order: 1;
     flex: 1;
     width: auto;
+    /* Let the rail shrink below its content so five tiles share the row
+       (Home 1024 spec 8278:189705: five 168px tiles); min-width:auto would
+       keep every tile at 220px and push the rail past the edge. */
+    min-width: 0;
   }
 
   .rm-controls .c-router-nav-item {
     flex: 1;
     max-width: 220px;
     min-width: 165px;
+  }
+}
+
+/* ─── 1280px+: copy and rail offsets from the Homepage WIP (12102:175105) ─── */
+@container (min-width: 1280px) {
+  .rm-content {
+    padding-top: calc(var(--s2a-layout-sm, 80px) + var(--s2a-spacing-lg, 24px));
+    /* rail height 68 + rail bottom inset 80 + rail top inset 24 */
+    padding-bottom: calc(var(--s2a-layout-sm, 80px) + 68px + var(--s2a-spacing-lg, 24px));
+  }
+  .rm-controls {
+    padding-bottom: var(--s2a-layout-sm, 80px);
   }
 }
 
@@ -230,10 +272,6 @@
 /* ─── Mobile: smaller title, tighter padding, taller aspect ratio ─────────── */
 
 @container (max-width: 599px) {
-  .rm-slides {
-    aspect-ratio: 4 / 3;
-  }
-
   .rm-content {
     padding-left: var(--s2a-spacing-md, 16px);
     padding-right: var(--s2a-spacing-md, 16px);
