@@ -15,6 +15,7 @@
 //   npm run specs:composition              the conversion order, with repo state
 //   npm run specs:composition -- --group=atom
 //   npm run specs:composition -- --missing     only what has no spec at all
+//   npm run specs:composition -- --all         include deprecated sets
 //   npm run specs:composition -- --refresh     how to re-capture from Figma
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
@@ -78,10 +79,19 @@ const depthOf = (name, seen = new Set()) => {
 };
 
 const groupOf = (name) => doc.groups[name] ?? doc.groups[bare(name)] ?? "—";
+// The snapshot records the file as it is, deprecated sets included — that is an
+// honest record. The ordering report is a work queue, and nobody is going to
+// contract something marked for removal, so they are out unless asked for.
+const deprecated = (n) => /\u{1F6AB}|DEPRECATED/iu.test(String(n));
+// Icons are a slot concern, not a contract each. The Spectrum sets are named
+// S2_/S2a_ and the local ones sit under an Icon/ path; "AppIcon" is neither, and
+// stays, because it is a real component with a spec.
+const isIcon = (n) => /^s2a?[_-]/i.test(String(n)) || /(^|\/)icons?(\/|_|$)/i.test(String(n));
 const every = [...new Set([...Object.keys(composes), ...Object.values(composes).flat()])];
 
 const rows = every
   .filter((n) => !n.startsWith("Scale/") && !n.startsWith("B_app"))
+  .filter((n) => (has("all") ? true : !deprecated(n) && !isIcon(n)))
   .map((n) => {
     const { d, cycle } = depthOf(n);
     const hit = specByName.get(specKey(n));
@@ -104,7 +114,11 @@ for (const r of rows) {
 
 const noSpec = rows.filter((r) => !r.spec);
 const noContract = rows.filter((r) => r.spec && !r.contract);
-console.log(`\n${rows.length} components in the graph`);
+const base = every.filter((n) => !n.startsWith("Scale/") && !n.startsWith("B_app"));
+const hidDep = base.filter(deprecated).length;
+const hidIcon = base.filter((n) => !deprecated(n) && isIcon(n)).length;
+const hidden = [hidDep && `${hidDep} deprecated`, hidIcon && `${hidIcon} icon sets`].filter(Boolean).join(", ");
+console.log(`\n${rows.length} components in the graph${!has("all") && hidden ? `  (${hidden} hidden — see them with --all)` : ""}`);
 console.log(`  contracted      ${rows.filter((r) => r.contract).length}`);
 console.log(`  spec, no contract ${noContract.length}`);
 console.log(`  no spec at all    ${noSpec.length}`);
