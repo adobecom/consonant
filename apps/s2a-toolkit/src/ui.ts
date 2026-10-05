@@ -106,6 +106,10 @@ let annotateNodeId: string | null = null;
 let selectSetId:    string | null = null;
 let docSetId:     string | null = null;
 let contractSetId: string | null = null;
+// The slug the Contract panel last resolved from the selection. Clear needs the
+// same answer the panel is already showing — reading it from the evidence only
+// works if you extracted in this session, which is not how testing goes.
+let contractSelectedSlug: string | null = null;
 let contractEvidence: { evidence: Record<string, unknown>; canonical: string; hash: string } | null = null;
 let contractIndexCache: { at: number; slugs: Map<string, string> } | null = null;
 let bridgeConnected      = false;
@@ -1609,6 +1613,7 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
   (document.getElementById('contractBuildRow') as HTMLElement).style.display = 'none';
   if (contractIsFrame && sel) (document.getElementById('contractNameInput') as HTMLInputElement).placeholder = contractSlug(sel.name) || 'candidate-name';
   contractSetId = ok ? (sel?.id ?? null) : null;
+  contractSelectedSlug = null;
   contractEvidence = null;
   // One card now serves extraction and curation, so this no longer owns a
   // selection card of its own — it only writes the contract status line.
@@ -1625,6 +1630,7 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
   const slugs = await contractIndex();
   if (contractSetId !== sel.id) return; // selection moved on
   const slug = contractSlug(sel.name);
+  contractSelectedSlug = contractIsFrame ? null : (slug || null);
   if (contractIsFrame) { statusEl.textContent = `${sel.nodeType.toLowerCase()} · candidate; Extract to see repeats and the closest contracts`; return; }
   if (!slugs) statusEl.textContent = `${slug} · status unknown (${contractEndpoint} unreachable)`;
   else if (slugs.get(slug) === 'evidence') { statusEl.textContent = `✓ ${slug} · contract + evidence`; (document.getElementById('contractBuildRow') as HTMLElement).style.display = 'flex'; }
@@ -2456,7 +2462,10 @@ async function onCompositionScanned(msg: Record<string, unknown>) {
 function contractSlugForClear(): string | null {
   const typed = (document.getElementById('contractNameInput') as HTMLInputElement | null)?.value.trim();
   if (typed) return typed.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/^-+|-+$/g, '');
-  const fromEvidence = contractEvidence?.evidence?.set?.name;
+  // What the panel is already showing. This is the common case: a set is
+  // selected and its status line says the slug, with no extraction this session.
+  if (contractSelectedSlug) return contractSelectedSlug;
+  const fromEvidence = (contractEvidence?.evidence as any)?.set?.name;
   if (!fromEvidence) return null;
   return String(fromEvidence)
     .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '')
