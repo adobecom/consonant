@@ -54,6 +54,7 @@
     "icons:fetch": "node scripts/fetch-spectrum-icons.js",
     "prototype-server": "node apps/s2a-toolkit/server/prototype-server.js",
     "specs:scaffold": "node packages/spec-dictionary/scaffold.mjs",
+    "specs:clear": "node packages/spec-dictionary/clear.mjs",
     "specs:upstream": "node packages/spec-dictionary/upstream.mjs",
     "specs:export": "node packages/spec-dictionary/export.mjs",
     "validators:build": "npm --prefix packages/validators install --silent && npm --prefix packages/validators run build"
