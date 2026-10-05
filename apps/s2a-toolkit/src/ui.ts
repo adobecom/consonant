@@ -258,7 +258,7 @@ const FEATURES: Feature[] = [
     name: 'Extract contract',
     description: 'Record the selected component set as design evidence (axes, variants, token bindings per mode) and publish it',
     category: 'Tools',
-    uiAction: () => runOrReveal('contract', 'contractExtractBtn', 'studioList',
+    uiAction: () => runOrReveal('contract', 'contractPrimaryBtn', 'studioList',
       'Select a component set, instance or frame in Figma first.'),
   },
   {
@@ -1022,16 +1022,17 @@ function studioSetSelection(sel: { id: string; name: string; nodeType: string; v
   const usable = ['COMPONENT_SET', 'COMPONENT', 'INSTANCE', 'FRAME', 'SECTION', 'GROUP'].includes(sel?.nodeType ?? '');
   studioSel = usable ? sel : null;
   const empty = $s('studioSelEmpty'), info = $s('studioSelInfo');
-  const btn = $s('studioOpenBtn') as HTMLButtonElement;
+  const btn = $s('contractPrimaryBtn') as HTMLButtonElement | null;
   if (usable && sel) {
     empty.style.display = 'none'; info.style.display = 'flex';
     $s('studioSelName').textContent = sel.name;
     $s('studioSelMeta').textContent = sel.nodeType === 'COMPONENT_SET' ? `${sel.variantCount ?? 0} variants` : sel.nodeType.toLowerCase();
-    btn.disabled = false;
   } else {
     empty.style.display = 'block'; info.style.display = 'none';
-    btn.disabled = true;
   }
+  // The primary button's label and enabled state come from the contract state,
+  // resolved asynchronously — selection alone does not decide it.
+  if (!usable || !sel) { if (btn) { btn.disabled = true; btn.textContent = 'Select a component set'; } }
 }
 
 async function studioRefreshIndex() {
@@ -1524,13 +1525,7 @@ function studioUnmountEditor() {
   studioEditor = null;
 }
 
-document.getElementById('studioOpenBtn')?.addEventListener('click', () => {
-  if (!studioSel) return;
-  sendTelemetry('action:studio-open');
-  // Send the set's name and let the server resolve it. A client-side kebab turns
-  // "Button — v2" into a slug that does not exist; resolveSlug knows it is Button.
-  studioOpen(studioSel.name, 'name');
-});
+
 document.getElementById('studioBackBtn')?.addEventListener('click', () => { studioUnmountEditor(); studioShow('list'); studioRefreshIndex(); });
 document.getElementById('studioModeGui')?.addEventListener('click', () => studioSetMode(false));
 for (const [id, depth] of [['studioFold1', 1], ['studioFold2', 2], ['studioFold3', 3]] as const) {
@@ -1625,14 +1620,12 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
   // One card now serves extraction and curation, so this no longer owns a
   // selection card of its own — it only writes the contract status line.
   const statusEl = document.getElementById('contractSetStatus') as HTMLElement;
-  const extract  = document.getElementById('contractExtractBtn') as HTMLButtonElement;
   const copy     = document.getElementById('contractCopyBtn')    as HTMLButtonElement;
   const publish  = document.getElementById('contractPublishBtn') as HTMLButtonElement;
   const summary  = document.getElementById('contractSummary')    as HTMLElement;
   summary.style.display = 'none';
   copy.disabled = true; publish.disabled = true;
-  if (!ok || !sel) { statusEl.textContent = ''; extract.disabled = true; syncClearButton(null); return; }
-  extract.disabled = false;
+  if (!ok || !sel) { statusEl.textContent = ''; syncContractActions(null, 'none'); renderComposes(); return; }
   statusEl.textContent = 'checking…';
   const slugs = await contractIndex();
   if (contractSetId !== sel.id) return; // selection moved on
@@ -1643,7 +1636,12 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
   else if (slugs.get(slug) === 'evidence') { statusEl.textContent = `✓ ${slug} · contract + evidence`; (document.getElementById('contractBuildRow') as HTMLElement).style.display = 'flex'; }
   else if (slugs.get(slug) === 'spec') { statusEl.textContent = `✓ ${slug} · has a contract, no evidence yet`; (document.getElementById('contractBuildRow') as HTMLElement).style.display = 'flex'; }
   else statusEl.textContent = `○ ${slug} · new`;
-  syncClearButton(slug);
+  const st: ContractState = !slug ? 'none'
+    : contractHasDefs.has(slug) ? 'draft'
+    : slugs && slugs.get(slug) ? 'contract'
+    : 'new';
+  syncContractActions(slug, st);
+  renderComposes();
 }
 
 // SHA-256 without WebCrypto: the plugin UI iframe is not a secure context in
@@ -1695,13 +1693,23 @@ function runContractExtract() {
   const name = contractIsFrame ? (document.getElementById('contractNameInput') as HTMLInputElement).value.trim() : '';
   const rename = contractIsFrame && (document.getElementById('contractRenameLayer') as HTMLInputElement).checked;
   contractLog('extract:start', { setId: contractSetId, name: name || undefined });
-  const btn = document.getElementById('contractExtractBtn') as HTMLButtonElement;
-  btn.disabled = true; btn.textContent = 'Extracting…';
+  const btn = document.getElementById('contractPrimaryBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Creating…';
   setContractStatus('');
   postToPlugin('contract:extract', { setId: contractSetId, name, rename });
 }
 
-document.getElementById('contractExtractBtn')?.addEventListener('click', runContractExtract);
+// The primary button is whatever the state says it is.
+document.getElementById('contractPrimaryBtn')?.addEventListener('click', () => {
+  if (contractState === 'new') { void runContractExtract(); return; }
+  if (contractState === 'draft' || contractState === 'contract') {
+    if (!studioSel) return;
+    sendTelemetry('action:studio-open');
+    // Send the set's name and let the server resolve it. A client-side kebab turns
+    // "Button — v2" into a slug that does not exist; resolveSlug knows it is Button.
+    studioOpen(studioSel.name, 'name');
+  }
+});
 
 document.getElementById('contractCopyBtn')?.addEventListener('click', async () => {
   if (!contractEvidence) return;
@@ -1749,8 +1757,7 @@ async function onContractEvidence(msg: Record<string, unknown>) {
   // The Contract tab can start an extraction too. Route the reply back there
   // rather than into the Tools panel the person is not looking at.
   if (studioAwaitingExtract) { studioAwaitingExtract = false; void studioOnEvidence(msg); return; }
-  const btn = document.getElementById('contractExtractBtn') as HTMLButtonElement;
-  btn.disabled = !contractSetId; btn.textContent = 'Extract contract';
+  syncContractActions(contractSelectedSlug, contractState);
   if (msg.error) { contractLog('extract:error', msg.error); setContractStatus('❌ ' + esc(msg.error as string), 'err'); return; }
   try {
   const evidence = msg.evidence as Record<string, unknown>;
@@ -1758,6 +1765,11 @@ async function onContractEvidence(msg: Record<string, unknown>) {
   const setInfo = evidence.set as { name: string; layerName?: string };
   if (setInfo?.layerName && setInfo.layerName !== setInfo.name) (document.getElementById('studioSelName') as HTMLElement).textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
   contractLog('extract:ok', { set: (evidence.set as any)?.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
+  // Extract then Publish was two clicks for one intent: there is no reason to
+  // record what Figma says and then decline to file it. Re-publish stays under
+  // More for the rare case of sending it again.
+  queueMicrotask(() => { (document.getElementById('contractPublishBtn') as HTMLButtonElement | null)?.click(); });
+  renderComposes();
   contractEvidence = { evidence, canonical: msg.canonical as string, hash };
   const counts = evidence.counts as { variants: number; nodes: number; bindings: number; unboundPaintNodes: number };
   const axes = evidence.axes as Array<{ name: string; type: string; options?: string[] }>;
@@ -2401,6 +2413,79 @@ setInterval(() => {
 
 // Ask code.ts for the anonymous telemetry id (provisioned in clientStorage).
 postToPlugin('telemetry:init');
+
+// One primary action per state. The panel used to show the whole pipeline at
+// once — Extract, Open, Copy, Publish, Scan, Clear — which asks the reader to
+// understand the pipeline before doing anything. The pipeline is unchanged;
+// only one step of it is ever the next step, so only that one is offered.
+//
+//   nothing selected   Select a component set
+//   no contract        Create contract      (extract, publish, draft)
+//   draft or contract  Open contract        + Delete
+type ContractState = 'none' | 'new' | 'draft' | 'contract';
+let contractState: ContractState = 'none';
+
+function syncContractActions(slug: string | null, state: ContractState) {
+  contractState = state;
+  const primary = document.getElementById('contractPrimaryBtn') as HTMLButtonElement | null;
+  const del = document.getElementById('contractClearBtn') as HTMLButtonElement | null;
+  const copy = document.getElementById('contractCopyBtn') as HTMLButtonElement | null;
+  if (!primary || !del) return;
+  const LABEL: Record<ContractState, string> = {
+    none: 'Select a component set',
+    new: 'Create contract',
+    draft: 'Open contract',
+    contract: 'Open contract',
+  };
+  primary.textContent = LABEL[state];
+  primary.disabled = state === 'none';
+  primary.title = state === 'new'
+    ? 'Record what Figma says about this set, file it, and open it for curation'
+    : state === 'none' ? 'Select a component set or frame in Figma' : 'Curate this contract in the Studio';
+  // Delete only appears once there is something to delete.
+  const deletable = state === 'draft' || state === 'contract';
+  del.style.display = deletable ? '' : 'none';
+  del.disabled = !deletable;
+  del.title = deletable ? `Delete the draft for ${slug} and everything generated from it` : '';
+  if (copy) copy.disabled = !contractEvidence;
+  if (!deletable) clearDisarm();
+}
+
+// What the selection is built from. This is a property of the thing, already
+// sitting in the evidence, so it is shown rather than asked for. Composition is
+// reported at the SET level because that is what a contract describes — but it
+// is counted per variant, because variance IS the cardinality: a child present
+// in three of ten variants is a slot with min 0, not a part.
+function renderComposes() {
+  const el = document.getElementById('contractComposes') as HTMLElement | null;
+  if (!el) return;
+  const ev = contractEvidence?.evidence as any;
+  const instances: Array<{ variant?: string; set?: { name?: string }; mainComponent?: { name?: string } }> = ev?.instances ?? [];
+  if (!instances.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  const variants = new Set(instances.map((i) => i.variant).filter(Boolean));
+  const totalVariants = Math.max(1, variants.size || (ev?.variants?.length ?? 1));
+  const isIcon = (n: string) => /^s2a?[_-]/i.test(n) || /(^|\/)icons?(\/|_|$)/i.test(n);
+  const seen = new Map<string, { name: string; inVariants: Set<string>; count: number }>();
+  let icons = 0;
+  for (const ins of instances) {
+    const name = (ins.set?.name ?? ins.mainComponent?.name ?? '').replace(/^[\u{1F6AB}\s]+/u, '');
+    if (!name) continue;
+    if (isIcon(name)) { icons++; continue; }
+    if (!seen.has(name)) seen.set(name, { name, inVariants: new Set(), count: 0 });
+    const e = seen.get(name)!; e.count++; if (ins.variant) e.inVariants.add(ins.variant);
+  }
+  if (!seen.size && !icons) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  const rows = [...seen.values()].sort((a, b) => b.count - a.count).map((e) => {
+    const inAll = e.inVariants.size === 0 || e.inVariants.size >= totalVariants;
+    const per = Math.round(e.count / Math.max(1, e.inVariants.size || 1));
+    // "in 3 of 10 variants" is the signal that this is optional, not structural.
+    const where = inAll ? '' : ` <span class="muted">in ${e.inVariants.size} of ${totalVariants} variants</span>`;
+    return `<li><code>${esc(e.name)}</code>${per > 1 ? ` <span class="muted">×${per}</span>` : ''}${where}</li>`;
+  });
+  el.innerHTML = `<div class="muted" style="margin-bottom:4px;">Built from</div><ul style="margin:0;padding-left:16px;">${rows.join('')}</ul>` +
+    (icons ? `<div class="muted" style="margin-top:4px;">+ ${icons} icon instance${icons === 1 ? '' : 's'}</div>` : '');
+  el.style.display = 'block';
+}
 
 // Clear only means something when a draft exists. Without a defs.json there is
 // nothing curated to discard, and the generated files come back from a build.
