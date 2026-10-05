@@ -8,12 +8,15 @@
 // throw away the only copy of prose nobody can regenerate, so a tracked file is
 // restored rather than removed.
 //
-// Evidence is kept by default. figma.evidence.json costs a trip through the
-// plugin to recreate, and clearing a draft is not a reason to pay it again.
+// The two evidence files are not equally expensive, so they are not treated
+// alike. code.evidence.json regenerates from source in under a second with no
+// plugin, so clearing takes it. figma.evidence.json needs a person to select
+// the set and press Extract, and clearing a draft is not a reason to make
+// someone do that again — so it stays unless asked for.
 //
 //   npm run specs:clear -- --slug=dot-pagination           what it would do
 //   npm run specs:clear -- --slug=dot-pagination --yes     do it
-//   npm run specs:clear -- --slug=x --yes --evidence       also drop the evidence
+//   npm run specs:clear -- --slug=x --yes --evidence       cold start: drop the Figma evidence too
 //   npm run specs:clear -- --slug=x --yes --keep-defs      only the generated files
 import { existsSync, rmSync, readdirSync } from "node:fs";
 import { join, dirname, resolve, relative } from "node:path";
@@ -30,7 +33,7 @@ const has = (f) => process.argv.includes(`--${f}`);
 
 const slug = arg("slug");
 if (!slug) {
-  console.error("usage: npm run specs:clear -- --slug=<slug> [--yes] [--evidence] [--keep-defs]");
+  console.error("usage: npm run specs:clear -- --slug=<slug> [--yes] [--evidence] [--keep-defs]\n  --evidence  also drop figma.evidence.json (a cold start — you will need to Extract again)");
   process.exit(2);
 }
 const dir = join(SRC, slug);
@@ -43,8 +46,10 @@ const tracked = (p) => git(["ls-files", "--error-unmatch", relative(ROOT, p)]) !
 const generated = [`${slug}.contract.json`, `${slug}.catalog.json`, `${slug}.spec.md`].map((f) => join(dir, f));
 // The curated judgment layer — the thing scaffold writes.
 const curated = has("keep-defs") ? [] : [join(dir, `${slug}.defs.json`)];
-// Observed. Expensive to recreate, so opt-in.
-const evidence = has("evidence") ? [join(dir, `${slug}.code.evidence.json`), join(dir, `${slug}.figma.evidence.json`)] : [];
+// Observed from the code — one command, no plugin, so always cleared.
+const codeEvidence = [join(dir, `${slug}.code.evidence.json`)];
+// Observed from Figma — needs a person, so only on --evidence.
+const figmaEvidence = has("evidence") ? [join(dir, `${slug}.figma.evidence.json`)] : [];
 // Generated under the transform's out/.
 const outDir = join(OUT, slug);
 
@@ -52,7 +57,7 @@ const specPath = join(dir, `${slug}.spec.json`);
 const specTracked = existsSync(specPath) && tracked(specPath);
 
 const plan = [];
-for (const p of [...generated, ...curated, ...evidence]) {
+for (const p of [...generated, ...curated, ...codeEvidence, ...figmaEvidence]) {
   if (!existsSync(p)) continue;
   plan.push({ action: "remove", path: p });
 }
@@ -72,9 +77,8 @@ console.log(`${run ? "Clearing" : "Would clear"} ${slug}:\n`);
 for (const s of plan) {
   console.log(`  ${s.action.padEnd(8)} ${relative(ROOT, s.path)}${s.note ? `   (${s.note})` : ""}`);
 }
-if (!has("evidence")) {
-  const kept = [`${slug}.code.evidence.json`, `${slug}.figma.evidence.json`].filter((f) => existsSync(join(dir, f)));
-  if (kept.length) console.log(`\n  keeping  ${kept.join(", ")}  (pass --evidence to drop them too)`);
+if (!has("evidence") && existsSync(join(dir, `${slug}.figma.evidence.json`))) {
+  console.log(`\n  keeping  ${slug}.figma.evidence.json  — it needs the plugin to recreate. Pass --evidence for a cold start.`);
 }
 
 if (!run) { console.log(`\nNothing changed. Add --yes to do it.`); process.exit(0); }
@@ -84,4 +88,5 @@ for (const s of plan) {
   else git(["checkout", "HEAD", "--", relative(ROOT, s.path)]);
 }
 // The index lists every component; rebuilding it keeps the count honest.
-console.log(`\nCleared. Rebuild the index when you are done testing: npm run specs:build -- --index-only`);
+console.log(`\nCleared. Regenerate the code evidence with: npm run evidence:code -- --slug=${slug}`);
+console.log(`Rebuild the index when you are done testing: npm run specs:build -- --index-only`);

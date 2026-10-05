@@ -276,6 +276,9 @@
           <button class="btn btn-ghost" id="contractScanBtn" title="Walk the file and record what every component is built from" style="flex:1;">Scan composition</button>
           <button class="btn btn-ghost" id="contractClearBtn" title="Delete the draft and everything generated from it, so you can scaffold again" style="flex:1;">Clear draft…</button>
         </div>
+        <label class="muted" style="display:flex;align-items:center;gap:6px;font-size:11px;margin:-2px 0 2px 2px;cursor:pointer;" title="Figma evidence needs the plugin to recreate — only drop it if you are testing extraction itself">
+          <input type="checkbox" id="contractClearColdInput" style="margin:0;"> also clear Figma evidence (cold start)
+        </label>
         <div class="status" id="studioListStatus"></div>
         <div class="status" id="contractStatus"></div>
         <pre class="contract-summary" id="contractSummary" style="display:none;"></pre>

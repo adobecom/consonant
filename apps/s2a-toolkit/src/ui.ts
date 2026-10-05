@@ -2396,32 +2396,65 @@ postToPlugin('telemetry:init');
 
 // ── Clear draft ───────────────────────────────────────────────────────────────
 // Testing the scaffolder means running it repeatedly, and there was no way back
-// to a clean slate from inside Figma. Two clicks: the first asks, the second
-// does it, so a stray click cannot delete curation.
+// to a clean slate from inside Figma. Click to arm, click again to confirm, so a
+// stray click cannot take curation with it.
+//
+// The cold start is a checkbox rather than a third click: the two evidence files
+// are not equally expensive, and the choice between them is a mode you set
+// before acting, not a step in a sequence. Normal clear keeps
+// figma.evidence.json, because recreating it means selecting the set and
+// pressing Extract — not something to redo while iterating on the scaffolder.
 let clearArmed: string | null = null;
+let clearTimer: number | null = null;
+const clearIsCold = () => (document.getElementById('contractClearColdInput') as HTMLInputElement | null)?.checked ?? false;
+
+function clearDisarm() {
+  clearArmed = null;
+  if (clearTimer) { clearTimeout(clearTimer); clearTimer = null; }
+  const btn = document.getElementById('contractClearBtn') as HTMLButtonElement | null;
+  if (btn) btn.textContent = 'Clear draft…';
+}
+// Changing the mode re-arms, so the confirm always matches what the label says.
+document.getElementById('contractClearColdInput')?.addEventListener('change', clearDisarm);
+
 document.getElementById('contractClearBtn')?.addEventListener('click', async () => {
   const btn = document.getElementById('contractClearBtn') as HTMLButtonElement;
   const slug = contractSlugForClear();
   if (!slug) { setContractStatus('Select a component set first — the slug comes from the selection or the name field.', 'err'); return; }
+  const cold = clearIsCold();
+
   if (clearArmed !== slug) {
     clearArmed = slug;
-    btn.textContent = `Clear ${slug}?`;
-    setContractStatus(`This deletes <code>${esc(slug)}.defs.json</code> and everything generated from it. The hand-written spec is restored from git, and the evidence is kept. Click again to confirm.`, '');
-    setTimeout(() => { if (clearArmed === slug) { clearArmed = null; btn.textContent = 'Clear draft…'; } }, 8000);
+    btn.textContent = cold ? `Clear ${slug} + evidence?` : `Clear ${slug}?`;
+    setContractStatus(
+      `Deletes <code>${esc(slug)}.defs.json</code> and everything generated from it, plus the code evidence (one command to regenerate). ` +
+      `The hand-written spec is restored from git. ` +
+      (cold
+        ? `<b>The Figma evidence goes too</b> — you will need to select the set and press Extract again.`
+        : `<b>The Figma evidence is kept</b>, so you can scaffold again without re-extracting.`) +
+      `<br>Click again to confirm.`, '');
+    if (clearTimer) clearTimeout(clearTimer);
+    clearTimer = setTimeout(clearDisarm, 8000) as unknown as number;
     return;
   }
+
+  if (clearTimer) { clearTimeout(clearTimer); clearTimer = null; }
   clearArmed = null;
   btn.disabled = true; btn.textContent = 'Clearing…';
   sendTelemetry('action:contract-clear');
   try {
     const res = await fetch(`${contractEndpoint.replace(/\/$/, '')}/clear`, {
-      method: 'POST', headers: contractHeaders(), body: JSON.stringify({ slug }),
+      method: 'POST', headers: contractHeaders(), body: JSON.stringify({ slug, evidence: cold }),
     });
     const out = await res.json() as { cleared?: string[]; keptEvidence?: boolean; error?: string };
     if (!res.ok) throw new Error(out.error || `Sync endpoint returned ${res.status}`);
     contractIndexCache = null;
     const n = out.cleared?.length ?? 0;
-    setContractStatus(`Cleared <code>${esc(slug)}</code> — ${n} path${n === 1 ? '' : 's'}.${out.keptEvidence ? ' Evidence kept, so you can scaffold again without re-extracting.' : ''}`, 'ok');
+    setContractStatus(
+      `Cleared <code>${esc(slug)}</code> — ${n} path${n === 1 ? '' : 's'}. ` +
+      (out.keptEvidence
+        ? 'Figma evidence kept, so you can scaffold again without re-extracting.'
+        : 'Cold start: select the set and press Extract to begin again.'), 'ok');
   } catch (err: any) {
     setContractStatus(`Clear failed: ${esc(err?.message || String(err))}. ${syncDownMessage()}`, 'err');
   } finally {
