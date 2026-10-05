@@ -1,4 +1,4 @@
-// node --test packages/specs/build.test.mjs — the transform on fixtures and on
+// node --test packages/spec-dictionary/build.test.mjs — the transform on fixtures and on
 // the real slice: IR shape, spec validity, default conventions, resolved
 // tokens, freshness detection, and the derived formats.
 import { test } from "node:test";

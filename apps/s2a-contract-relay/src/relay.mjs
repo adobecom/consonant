@@ -39,7 +39,7 @@ const json = (status, body) => new Response(JSON.stringify(body), { status, head
 const b64 = (text) => (typeof btoa === "function" ? btoa(unescape(encodeURIComponent(text))) : Buffer.from(text, "utf8").toString("base64"));
 
 export function createRelay(config) {
-  const { token, repo, baseBranch = "main", workflow = "contract-sync.yml", indexPath = "packages/specs/out/contracts.index.json", relayKey = "", fetchImpl = globalThis.fetch, apiBase = "https://api.github.com", rawBase = "https://raw.githubusercontent.com" } = config;
+  const { token, repo, baseBranch = "main", workflow = "contract-sync.yml", indexPath = "packages/spec-dictionary/out/contracts.index.json", relayKey = "", fetchImpl = globalThis.fetch, apiBase = "https://api.github.com", rawBase = "https://raw.githubusercontent.com" } = config;
   const gh = async (method, path, body) => {
     const res = await fetchImpl(`${apiBase}/repos/${repo}${path}`, { method, headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", "content-type": "application/json", "user-agent": "s2a-contract-relay" }, body: body ? JSON.stringify(body) : undefined });
     const text = await res.text();

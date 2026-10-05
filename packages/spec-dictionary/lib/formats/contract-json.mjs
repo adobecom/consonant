@@ -136,7 +136,7 @@ export function contractJson(ir, { id }) {
   const defsStatus = ir.component.status;
   const deprecated = Boolean(ir.anchors.figma?.deprecated);
   const contract = {
-    $schema: "../../../specs/southleft/contract.schema.json",
+    $schema: "../../../spec-dictionary/southleft/contract.schema.json",
     id,
     name: ir.component.name,
     version: SEMVER.test(ir.component.version ?? "") ? ir.component.version : "0.1.0",

@@ -218,7 +218,7 @@ export function listSlugs() {
 
 export function staticEvidence(slug) {
   const dir = join(SRC, slug);
-  // spec.json is generated from this evidence (packages/specs), so it is read
+  // spec.json is generated from this evidence (packages/spec-dictionary), so it is read
   // for identity but never hashed as a source: that would be circular.
   const files = ["index.js", `${slug}.js`, `${slug}.css`].filter((f) => existsSync(join(dir, f)));
   const sources = Object.fromEntries(files.map((f) => [`packages/components/src/${slug}/${f}`, sha256(readFileSync(join(dir, f), "utf8"))]));

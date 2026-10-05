@@ -76,6 +76,64 @@ everywhere), so resolved values, evidence hashes and decisions have nowhere to l
 it. Rather than smuggle them in, they stay in our working format, and the catalog carries
 the browse-level summary. Three audiences, three artifacts, one source.
 
+## Where the artifacts live, and why they are not in here
+
+A fair question on first read: this folder is called the spec dictionary, and it contains
+no specs. The contracts sit beside the components instead.
+
+```
+packages/components/src/dot-pagination/
+  dot-pagination.defs.json            judgment        ─┐
+  dot-pagination.code.evidence.json   observed        ─┤  inputs
+  dot-pagination.figma.evidence.json  observed        ─┘
+  dot-pagination.spec.json            generated (s2a)       ─┐
+  dot-pagination.contract.json        generated (southleft) ─┤  outputs
+  dot-pagination.catalog.json         generated (catalog)   ─┤
+  dot-pagination.spec.md              generated             ─┘
+  dot-pagination.js / .css            the reference implementation
+```
+
+That colocation is deliberate, and four things depend on it:
+
+1. **The MCP's component loader reads `{slug}.{js,css,spec.json}` from one directory.**
+   Split them and it has to stitch two trees together.
+2. **The freshness gate diffs in place.** `specs:check` regenerates into memory and
+   compares against what is committed next to the component. That is how a hand edit is
+   caught.
+3. **The inputs are already there.** Moving only the output away separates a loop that is
+   read and reviewed together.
+4. **One pull request reads as one change** — the component and the contract describing it
+   move in the same diff.
+
+## What this package publishes
+
+`@adobecom/s2a-specs`. The payload is the contracts, gathered out of the component folders
+by `pack.mjs` on `prepack`:
+
+```
+dist/contracts/<slug>.json      the interop contract
+dist/catalog/<slug>.json        the light index entry
+dist/index.json                 every component, and whether it has a contract yet
+dist/contract.schema.json       the schema they validate against
+dist/index.mjs                  getContract(slug) · getCatalog(slug) · listContracts()
+```
+
+**The build tooling is not shipped** — no `build.mjs`, no `scaffold.mjs`, no engine, no
+adapters. A consumer reads contracts; it does not regenerate them.
+
+So the file layout and the package boundary deliberately do not match, and `pack.mjs` is
+what lets both be right:
+
+- **Files live with the component**, for the four reasons above.
+- **Contracts publish on their own**, because the entire point is that a consumer can take
+  the description *without* taking the implementation. Shipping them inside
+  `@adobecom/s2a-components` would force Milo to install our component library to read a
+  contract — precisely the coupling this system exists to avoid.
+
+`dist/index.json` ships the coverage gap on purpose (`described` vs `contracted`, plus a
+per-component flag), so a consumer sees what is covered rather than discovering it through
+a missing file.
+
 ## Commands
 
 ```bash
@@ -85,7 +143,7 @@ npm run specs:export -- --format=ts,yaml,md           # renditions, into out/exp
 npm run specs:export -- --slug=action-card --format=ts
 npm run specs:export -- --adapters=southleft,catalog
 npm run specs:upstream                                # drift against the external schema + conformance
-node packages/specs/examples/minimal/run.mjs          # the portability proof
+node packages/spec-dictionary/examples/minimal/run.mjs          # the portability proof
 ```
 
 **Canonical output belongs to `specs:build`**, because that is what the freshness leg of

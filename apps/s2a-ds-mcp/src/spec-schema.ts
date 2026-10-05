@@ -23,7 +23,7 @@ export const ComponentA11ySchema = z.object({
 });
 
 // Contract-system fields (docs/future-notes/s2a-contract-system-plan.md).
-// Generated specs (packages/specs/build.mjs) carry them; hand-written specs
+// Generated specs (packages/spec-dictionary/build.mjs) carry them; hand-written specs
 // may omit them. All additive.
 const FigmaBindingSchema = z.union([
   z.literal("NONE"),

@@ -6,7 +6,7 @@
 //   npm run specs:export -- --format=ts,yaml,md           extra serializations
 //   npm run specs:export -- --adapters=southleft,catalog  pick the schema targets
 //
-// This emits RENDITIONS only, under packages/specs/out/exports/<format>/<adapter>/
+// This emits RENDITIONS only, under packages/spec-dictionary/out/exports/<format>/<adapter>/
 // (gitignored). The canonical json beside each component is owned by
 // `npm run specs:build`, because that is what the freshness leg of the gate
 // compares against. A rendition is never a source.

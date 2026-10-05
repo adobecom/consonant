@@ -10,7 +10,7 @@
 // Check classes (docs/future-notes/s2a-contract-system-plan.md, step 5):
 //   SCHEMA        every spec.json validates against the vendored zod schema;
 //                 the frozen tripwire spec must validate (else the tooling drifted)
-//   SCHEMA_LOCK   the schema files match packages/specs/schema.lock.json
+//   SCHEMA_LOCK   the schema files match packages/spec-dictionary/schema.lock.json
 //   DEFS          curation checks (schema, code conformance, anatomy, composition, tokens)
 //   COMPOSITION   composedOf / slot accepts name specs that exist
 //   TOKENS        token bindings resolve in the shipped CSS (legacy specs warn)
@@ -51,7 +51,7 @@ for (const [slug, spec] of specs) {
   if (!r.success) report("SCHEMA", "SCHEMA_INVALID", "fail", `${slug}.spec.json`, r.error.issues.slice(0, 3).map((i) => `${i.path.join(".")}: ${i.message}`).join("; "));
 }
 const tripwire = readJson(join(ROOT, "packages", "specs", "fixtures", "tripwire.spec.json"));
-if (!ComponentSpecSchema.safeParse(tripwire).success) report("SCHEMA", "TRIPWIRE_FAILED", "fail", "packages/specs/fixtures/tripwire.spec.json", "the frozen known-good spec no longer validates: the schema or validator drifted");
+if (!ComponentSpecSchema.safeParse(tripwire).success) report("SCHEMA", "TRIPWIRE_FAILED", "fail", "packages/spec-dictionary/fixtures/tripwire.spec.json", "the frozen known-good spec no longer validates: the schema or validator drifted");
 
 // ── SCHEMA_LOCK ───────────────────────────────────────────────────────────────
 const current = Object.fromEntries(SCHEMA_FILES.map((f) => [f, sha(readFileSync(join(ROOT, f), "utf8"))]));
@@ -102,7 +102,7 @@ for (const slug of defsSlugs) {
 }
 
 // ── FRESH ─────────────────────────────────────────────────────────────────────
-const fresh = run("node", ["packages/specs/build.mjs", "--check"]);
+const fresh = run("node", ["packages/spec-dictionary/build.mjs", "--check"]);
 if (fresh.status !== 0) for (const line of fresh.stdout.split("\n").filter((l) => l.startsWith("       "))) report("FRESH", "SPEC_STALE", "fail", "specs:check", line.trim());
 for (const slug of slugs) {
   const ev = join(SRC, slug, `${slug}.code.evidence.json`);

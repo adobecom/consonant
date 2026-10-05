@@ -1,4 +1,4 @@
-// node --test packages/specs/scaffold.test.mjs — evidence → defs draft through
+// node --test packages/spec-dictionary/scaffold.test.mjs — evidence → defs draft through
 // the dictionary: schema-valid, archetype and roles derived not invented,
 // pending code anchors, and the draft flows on into the IR and the Figma plan.
 import { test } from "node:test";

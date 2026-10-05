@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-// packages/specs/build.mjs — the spec transform ("Spec Dictionary").
+// packages/spec-dictionary/build.mjs — the spec transform ("Spec Dictionary").
 //
 //   defs.json (judgment) + code.evidence.json + figma.evidence.json (when the
 //   plugin has published one) + shipped tokens  ──▶  IR  ──▶  formats
 //
 // Formats: spec.json and spec.md beside the component (the contract and its
-// page), stories.manifest.json and figma.plan.json under packages/specs/out.
+// page), stories.manifest.json and figma.plan.json under packages/spec-dictionary/out.
 // Every output carries a do-not-edit marker; --check regenerates in memory and
 // fails on any difference (the freshness gate).
 //
-//   node packages/specs/build.mjs --slug=quote-card      (npm run specs:build)
-//   node packages/specs/build.mjs --all
-//   node packages/specs/build.mjs --check                (npm run specs:check)
-//   node packages/specs/build.mjs --index-only           (rewrite contracts.index.json only)
+//   node packages/spec-dictionary/build.mjs --slug=quote-card      (npm run specs:build)
+//   node packages/spec-dictionary/build.mjs --all
+//   node packages/spec-dictionary/build.mjs --check                (npm run specs:check)
+//   node packages/spec-dictionary/build.mjs --index-only           (rewrite contracts.index.json only)
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -129,10 +129,10 @@ function main() {
   const indexContent = JSON.stringify(contractsIndex(), null, 2) + "\n";
   if (check) {
     const onDisk = existsSync(indexFile) ? readFileSync(indexFile, "utf8") : null;
-    if (onDisk !== indexContent) { console.log(`STALE  contracts.index.json\n       packages/specs/out/contracts.index.json: ${onDisk === null ? "missing" : "differs from a fresh build"}`); failures++; } else console.log("FRESH  contracts.index.json");
+    if (onDisk !== indexContent) { console.log(`STALE  contracts.index.json\n       packages/spec-dictionary/out/contracts.index.json: ${onDisk === null ? "missing" : "differs from a fresh build"}`); failures++; } else console.log("FRESH  contracts.index.json");
   } else { mkdirSync(OUT, { recursive: true }); writeFileSync(indexFile, indexContent); }
   if (args.includes("--index-only")) { console.log(`contracts.index.json rebuilt (${contractsIndex().count} items).`); return; }
-  console.log(check ? `${slugs.length - failures}/${slugs.length} fresh.` : `${slugs.length - failures}/${slugs.length} built. Outputs: spec.json + contract.json + catalog.json + spec.md beside each component, stories.manifest.json + figma.plan.json under packages/specs/out/.`);
+  console.log(check ? `${slugs.length - failures}/${slugs.length} fresh.` : `${slugs.length - failures}/${slugs.length} built. Outputs: spec.json + contract.json + catalog.json + spec.md beside each component, stories.manifest.json + figma.plan.json under packages/spec-dictionary/out/.`);
   process.exitCode = failures ? 1 : 0;
 }
 

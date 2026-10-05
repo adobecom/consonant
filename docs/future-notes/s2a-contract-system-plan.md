@@ -141,7 +141,7 @@ empty `successorNodeId` rather than a guess.
 
 ### 4. Spec transform (step 4, built 2026-09-17)
 
-`packages/specs/build.mjs` (`npm run specs:build`, `--slug=`, `--all`;
+`packages/spec-dictionary/build.mjs` (`npm run specs:build`, `--slug=`, `--all`;
 `npm run specs:check` for freshness) is the Spec Dictionary: one dependency-free
 folder, one IR, formats hanging off it.
 
@@ -198,8 +198,8 @@ authoring tests and the page evals after them, and uploads every report.
 
 | Class | Codes | Rule |
 | --- | --- | --- |
-| SCHEMA | `SCHEMA_INVALID`, `TRIPWIRE_FAILED` | every spec validates against the MCP zod schema; `packages/specs/fixtures/tripwire.spec.json` (a frozen hand-written spec) must validate, or the tooling drifted |
-| SCHEMA_LOCK | `SCHEMA_LOCK_DRIFT`, `SCHEMA_LOCK_MISSING` | `spec-schema.ts` and `defs.schema.json` hash-match `packages/specs/schema.lock.json`; a schema change is deliberate: review, run the gate, `npm run gate:lock` |
+| SCHEMA | `SCHEMA_INVALID`, `TRIPWIRE_FAILED` | every spec validates against the MCP zod schema; `packages/spec-dictionary/fixtures/tripwire.spec.json` (a frozen hand-written spec) must validate, or the tooling drifted |
+| SCHEMA_LOCK | `SCHEMA_LOCK_DRIFT`, `SCHEMA_LOCK_MISSING` | `spec-schema.ts` and `defs.schema.json` hash-match `packages/spec-dictionary/schema.lock.json`; a schema change is deliberate: review, run the gate, `npm run gate:lock` |
 | DEFS | `DEFS_FAILED` | `validate-defs` (schema, code conformance both ways, anatomy, composition, tokens) |
 | COMPOSITION | `COMPOSITION_UNKNOWN` | every `composedOf` and slot `accepts` names a spec that exists |
 | TOKENS | `TOKEN_UNSHIPPED` (fail), `TOKEN_UNSHIPPED_LEGACY` (warn), `TOKENS_NOT_BUILT` | bindings in generated specs must ship; hand-written specs warn until they are curated |
@@ -243,7 +243,7 @@ plugin Publish ──▶ relay (apps/s2a-contract-relay, Worker or local.mjs)
   this repo; optional `RELAY_KEY` header check). `worker.mjs` is the
   Cloudflare entry, `local.mjs` the Node one (port 9420). Its hash is the
   sync server's hash (tested equal).
-- `packages/specs/out/contracts.index.json` is written by every `specs:build`
+- `packages/spec-dictionary/out/contracts.index.json` is written by every `specs:build`
   and checked for freshness: every component's spec, defs, generated flag and
   evidence hashes. The relay serves it as `GET /contracts` so the plugin badge
   works against CI, and reads it to answer in-sync without a checkout.
@@ -329,7 +329,7 @@ set is the next thing to try on `.QuoteCard`.
 
 1. `npx wrangler secret put GITHUB_TOKEN` and `npx wrangler deploy` in
    `apps/s2a-contract-relay` (optionally `RELAY_KEY`).
-2. Commit `packages/specs/out/contracts.index.json` on main (the relay reads it).
+2. Commit `packages/spec-dictionary/out/contracts.index.json` on main (the relay reads it).
 3. In the plugin: Tools → Contract → Sync endpoint → the Worker URL (+ key).
 4. Repository settings: make the authoring-checks gate a required check.
 5. Extract `QuoteCard — v2` (13549:190801) and the Social Proof section so
@@ -372,8 +372,8 @@ packages/components/src/<slug>/<slug>.code.evidence.json    code evidence (gener
 packages/components/defs.schema.json                         defs schema (s2a-defs/1)
 packages/components/scripts/validate-defs.mjs                curation checks (schema, code conformance, anatomy, composition, tokens)
 packages/components/src/<slug>/<slug>.defs.json             curation (written by people, reviewed in PRs)
-packages/specs/build.mjs (+ lib/, build.test.mjs)          spec transform: IR + formats, freshness check
-packages/specs/out/<slug>/                                   stories.manifest.json, figma.plan.json (generated)
+packages/spec-dictionary/build.mjs (+ lib/, build.test.mjs)          spec transform: IR + formats, freshness check
+packages/spec-dictionary/out/<slug>/                                   stories.manifest.json, figma.plan.json (generated)
 packages/components/src/<slug>/<slug>.spec.md               generated spec page
 evals/gate.mjs                                               the gate (npm run gate | gate:full | gate:lock)
 apps/s2a-contract-relay/                                     relay: src/relay.mjs, src/worker.mjs, local.mjs, test/
@@ -382,6 +382,6 @@ apps/s2a-toolkit/server/contract-proposal.cjs                draft proposal (+ d
 apps/s2a-toolkit/server/contract-match.cjs                   structural match: roles, verdict, organism candidates
 apps/s2a-toolkit/src/contract-build.ts                       Build set from figma.plan.json (sandbox)
 .github/workflows/contract-sync.yml                          dispatched by the relay; commits + PR on green
-packages/specs/out/contracts.index.json                      committed contract index (relay + plugin badge)
-packages/specs/schema.lock.json, fixtures/tripwire.spec.json  schema lock and the frozen known-good spec
+packages/spec-dictionary/out/contracts.index.json                      committed contract index (relay + plugin badge)
+packages/spec-dictionary/schema.lock.json, fixtures/tripwire.spec.json  schema lock and the frozen known-good spec
 ```

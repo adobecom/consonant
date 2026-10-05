@@ -1,5 +1,5 @@
 // contract-build.ts — build a component set in Figma from a contract's
-// figma.plan.json (packages/specs/out/<slug>/figma.plan.json).
+// figma.plan.json (packages/spec-dictionary/out/<slug>/figma.plan.json).
 //
 // Deterministic scaffold, not a finished design: variants from the VARIANT
 // axes, named layers from the anatomy in the repo's naming rules (.root, .part),

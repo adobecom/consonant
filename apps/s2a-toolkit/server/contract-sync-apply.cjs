@@ -48,17 +48,17 @@ for (const file of files) {
     if (ev.status !== 0) red = true;
   }
   if (hasDefs) {
-    const build = run("node", ["packages/specs/build.mjs", `--slug=${slug}`]);
+    const build = run("node", ["packages/spec-dictionary/build.mjs", `--slug=${slug}`]);
     summary.push(`- spec: ${build.status === 0 ? (build.stdout.trim().split("\n")[0] || "rebuilt") : "BUILD FAILED"}`);
     if (build.status !== 0) red = true;
   } else {
     // A set with no contract: draft one through the spec dictionary so the PR
     // carries a reviewable defs.json + generated spec, not only a proposal.
-    const scaffold = run("node", ["packages/specs/scaffold.mjs", `--slug=${slug}`]);
+    const scaffold = run("node", ["packages/spec-dictionary/scaffold.mjs", `--slug=${slug}`]);
     if (scaffold.status === 0) {
       hasDefs = true;
       summary.push(`- contract: ${scaffold.stdout.trim().split("\n")[0] || "scaffolded"} (anchors.code.pending until the component exists)`);
-      const build = run("node", ["packages/specs/build.mjs", `--slug=${slug}`]);
+      const build = run("node", ["packages/spec-dictionary/build.mjs", `--slug=${slug}`]);
       summary.push(`- spec: ${build.status === 0 ? (build.stdout.trim().split("\n")[0] || "built") : "BUILD FAILED"}`);
       if (build.status !== 0) red = true;
       const defsPath = path.join(REPO_ROOT, "packages", "components", "src", slug, `${slug}.defs.json`);
@@ -85,7 +85,7 @@ for (const file of files) {
   summary.push("");
 }
 // Any placement changes the committed contract index, defs or not.
-const index = run("node", ["packages/specs/build.mjs", "--index-only"]);
+const index = run("node", ["packages/spec-dictionary/build.mjs", "--index-only"]);
 if (index.status !== 0) { summary.push("- contracts index: REBUILD FAILED"); red = true; }
 const gate = run("node", ["--import", "tsx", "evals/gate.mjs"]);
 const gateLines = gate.stdout.trim().split("\n");

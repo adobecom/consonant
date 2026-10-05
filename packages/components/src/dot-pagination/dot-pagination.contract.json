@@ -1,5 +1,5 @@
 {
-  "$schema": "../../../specs/southleft/contract.schema.json",
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
   "id": "s2a.dot-pagination",
   "name": "DotPagination",
   "version": "0.1.0",
@@ -146,7 +146,7 @@
   },
   "provenance": {
     "version": 1,
-    "canonicalRevision": "sha256:a5860e2c2611c6310b06a19baa3332b98526b44894247d14b1b453d6714551cb",
+    "canonicalRevision": "sha256:d12e6177dad3f5913af5e04485d6ddbf3eea907136f36f4782807b78d16a5a6b",
     "source": {
       "kind": "code",
       "adapter": "s2a-spec-transform@1",

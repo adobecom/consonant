@@ -1,5 +1,5 @@
 {
-  "$schema": "../../../specs/southleft/contract.schema.json",
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
   "id": "s2a.button",
   "name": "Button",
   "version": "0.1.0",
@@ -249,7 +249,7 @@
   },
   "provenance": {
     "version": 1,
-    "canonicalRevision": "sha256:75092678926cacb5495f15ec5718a5570acbe378ad46dd0aa735771edf3096cb",
+    "canonicalRevision": "sha256:9f466a333017b076256cd370e6240ed90efcb25940b839519a6f20d9d820cae5",
     "source": {
       "kind": "code",
       "adapter": "s2a-spec-transform@1",

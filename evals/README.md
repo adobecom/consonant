@@ -64,7 +64,7 @@ and these scorers — one definition of "what's a violation," everywhere.
 ```bash
 npm run gate        # schemas · schema lock · defs · composition · tokens · figma bindings · freshness
 npm run gate:full   # + build + homepage evals (tokens, motion, visual, a11y, perf)
-npm run gate:lock   # re-vendor packages/specs/schema.lock.json after a reviewed schema change
+npm run gate:lock   # re-vendor packages/spec-dictionary/schema.lock.json after a reviewed schema change
 ```
 
 Stable codes per finding, report in `evals/gate/out/gate.json`, red on any

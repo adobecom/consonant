@@ -1,0 +1,41 @@
+{
+  "name": "@adobecom/s2a-specs",
+  "version": "0.1.0",
+  "description": "S2A component contracts — what each component is, in a form a build can read: props, variants, states, token bindings, accessibility and what it composes with.",
+  "license": "ISC",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adobecom/consonant.git",
+    "directory": "packages/s2a-specs"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "main": "./dist/index.mjs",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./index.json": "./dist/index.json",
+    "./contracts/*.json": "./dist/contracts/*.json",
+    "./catalog/*.json": "./dist/catalog/*.json",
+    "./contract.schema.json": "./dist/contract.schema.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/",
+    "README.md"
+  ],
+  "scripts": {
+    "pack:dist": "node ./pack.mjs",
+    "prepack": "node ./pack.mjs"
+  },
+  "keywords": [
+    "design-system",
+    "component-contract",
+    "spec",
+    "contract",
+    "s2a",
+    "consonant"
+  ],
+  "private": false
+}

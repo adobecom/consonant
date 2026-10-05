@@ -5,7 +5,7 @@
 // this ever needs something from S2A to work, the engine has stopped being an
 // engine and has become part of the app.
 //
-//   node packages/specs/examples/minimal/run.mjs
+//   node packages/spec-dictionary/examples/minimal/run.mjs
 //
 // Writes to examples/minimal/out/. Delete it freely; it regenerates.
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -38,4 +38,4 @@ const written = runTransform({
   },
   log: (l) => console.log(`  ${l}`),
 });
-console.log(`${written.length} files → packages/specs/examples/minimal/out/`);
+console.log(`${written.length} files → packages/spec-dictionary/examples/minimal/out/`);

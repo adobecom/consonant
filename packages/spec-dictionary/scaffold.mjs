@@ -399,7 +399,7 @@ export function scaffoldDefs(evidence, { slug, name, archetype: forced, dictiona
     component,
     slug,
     status: "curated-draft",
-    curated: { by: `specs:scaffold from ${slug}.figma.evidence.json${evidence.provenance?.hash ? ` (${evidence.provenance.hash.slice(0, 15)}…)` : ""} through packages/specs/dictionary.json (${archetype})`, date: today, reviewer: "Matt" },
+    curated: { by: `specs:scaffold from ${slug}.figma.evidence.json${evidence.provenance?.hash ? ` (${evidence.provenance.hash.slice(0, 15)}…)` : ""} through packages/spec-dictionary/dictionary.json (${archetype})`, date: today, reviewer: "Matt" },
     description: arch.description,
     anchors: {
       figma: {
