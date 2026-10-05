@@ -213,3 +213,44 @@ test('code-only props are merged and a state-axis collision is called out', () =
   assert.match(note.question, /collides with the State axis/);
   assert.ok(!defs.props.some((p) => p.name === 'label' && p.figma === 'NONE'), 'a prop present in both is not duplicated');
 });
+
+// The extractor has always recorded nested instances; nothing read them, so a
+// component could be built from six others and scaffold clean. The gate only
+// checks composition a contract DECLARES, which leaves undeclared composition
+// invisible — the direction that actually goes wrong.
+test("scaffold: composed sets without a contract are raised, and icons are not", () => {
+  const composed = {
+    ...frameEvidence,
+    set: { ...frameEvidence.set, name: "QuoteCardFixture" },
+    instances: [
+      { node: "/.dot-1", set: { name: "Dot", key: "k1" } },
+      { node: "/.dot-2", set: { name: "Dot", key: "k1" } },
+      { node: "/.actions", set: { name: "Button", key: "k2" } },
+      { node: "/.icon", set: { name: "S2_Icon_UIArrow_N", key: "k3" } },
+    ],
+  };
+  const defs = scaffoldDefs(composed, { slug: "quote-card-fixture", contracts: [{ slug: "button", name: "Button" }] });
+  const d = defs.decisions.find((x) => x.id.endsWith("-composes"));
+  assert.ok(d, "a composition decision is raised");
+  assert.equal(d.status, "open", "an uncontracted set leaves it open");
+  assert.match(d.question, /Dot ×2/, "the missing set is named, with how often it appears");
+  assert.doesNotMatch(d.question, /Button/, "a set that already has a contract is not reported missing");
+  assert.doesNotMatch(d.question, /S2_Icon/, "icons are a slot concern, not a contract each");
+  assert.match(d.chose, /1 icon set left for the icon slot/, "icons are counted, not listed");
+});
+
+test("scaffold: when every composed set is contracted the note is settled, not a question", () => {
+  const composed = {
+    ...frameEvidence,
+    instances: [{ node: "/.actions", set: { name: "Button", key: "k2" } }],
+  };
+  const defs = scaffoldDefs(composed, { slug: "ac-fixture", contracts: [{ slug: "button", name: "Button" }] });
+  const d = defs.decisions.find((x) => x.id.endsWith("-composes"));
+  assert.equal(d.status, "decided");
+  assert.ok(d.decision, "a settled decision carries its decision text");
+});
+
+test("scaffold: a component that composes nothing raises no composition note", () => {
+  const defs = scaffoldDefs(frameEvidence, { slug: "leaf-fixture", contracts: [] });
+  assert.equal(defs.decisions.find((x) => x.id.endsWith("-composes")), undefined);
+});

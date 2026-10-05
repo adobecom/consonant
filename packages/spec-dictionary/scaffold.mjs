@@ -384,6 +384,50 @@ export function scaffoldDefs(evidence, { slug, name, archetype: forced, dictiona
       if (best && m.verdict && m.verdict !== "new") D("match", "match", { verdict: m.verdict, name: best.name, score: best.score }, { evidence: m.summary });
     } catch { /* matcher is advisory */ }
   }
+  // What this component is BUILT FROM. The extractor records every nested
+  // instance and the set it came from; until now nothing read it, so a
+  // component could be composed of six others and scaffold clean. The gate
+  // only checks composition a contract DECLARES — it is blind to composition
+  // a contract omits, which is the direction that actually goes wrong.
+  //
+  // Leaves have to be contracted before the things built from them, or any
+  // slot naming one of them fails COMPOSITION. Raising it here is what makes
+  // that ordering visible while someone is already looking at the component.
+  {
+    const seen = new Map();
+    for (const ins of evidence.instances ?? []) {
+      const set = ins.set ?? ins.mainComponent;
+      if (!set?.name) continue;
+      const name = undecorate(set.name) || set.name;
+      if (alnumName(name) === alnumName(component)) continue; // itself
+      if (!seen.has(alnumName(name))) seen.set(alnumName(name), { name, key: set.key ?? null, count: 0 });
+      seen.get(alnumName(name)).count++;
+    }
+    // Icons arrive by the hundred and are a slot concern, not a contract each.
+    const isIcon = (n) => /icon/i.test(n) && /^(s2|s2a)/i.test(n.replace(/^[._]/, ""));
+    const composed = [...seen.values()].filter((c) => !isIcon(c.name));
+    const icons = [...seen.values()].length - composed.length;
+    if (composed.length) {
+      const known = new Set((Array.isArray(contracts) ? contracts : []).map((c) => alnumName(c.name)));
+      const missing = composed.filter((c) => !known.has(alnumName(c.name)));
+      const have = composed.length - missing.length;
+      const list = (xs) => xs.map((c) => `${c.name}${c.count > 1 ? ` ×${c.count}` : ""}`).join(", ");
+      decisions.push({
+        id: `${ab}-composes`,
+        question: missing.length
+          ? `Built from ${composed.length} component set${composed.length === 1 ? "" : "s"}; ${missing.length} ha${missing.length === 1 ? "s" : "ve"} no contract yet: ${list(missing)}. A slot or part naming one of these fails the COMPOSITION check until it exists. Contract the leaves first, or record why each is internal to this component.`
+          : `Built from ${composed.length} component set${composed.length === 1 ? "" : "s"}, all of which already have a contract: ${list(composed)}. Confirm the anatomy models them as slots or parts deliberately.`,
+        chose: `recorded ${composed.length} composed set${composed.length === 1 ? "" : "s"}${have ? `, ${have} already contracted` : ""}${icons ? `; ${icons} icon set${icons === 1 ? "" : "s"} left for the icon slot` : ""}`,
+        confidence: missing.length ? "high" : "medium",
+        ...(missing.length ? { fix: `Scaffold each missing set first (npm run specs:scaffold -- --slug=<slug>), then declare the slot here. If a set is internal to this component — a Figma section marking it "do not use directly" is the usual tell — say so in this decision and model it as a part instead.` } : {}),
+        status: missing.length ? "open" : "decided",
+        ...(missing.length ? {} : { decision: `All composed sets are contracted; anatomy models them deliberately.` }),
+        owner: "Matt",
+        evidence: `${slug}.figma.evidence.json instances`,
+      });
+    }
+  }
+
   const importPath = `packages/components/src/${slug}/${slug}.js`;
   D("code-pending", "codePending", { importPath, slug });
 
