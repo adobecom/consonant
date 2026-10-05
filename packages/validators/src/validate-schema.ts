@@ -25,7 +25,7 @@ export type SchemaName = "defs" | "contract";
 /** Where each canonical schema lives, relative to the repo root. */
 export const SCHEMA_PATHS: Record<SchemaName, string> = {
   defs: join("packages", "components", "defs.schema.json"),
-  contract: join("packages", "specs", "southleft", "contract.schema.json"),
+  contract: join("packages", "spec-dictionary", "southleft", "contract.schema.json"),
 };
 
 export interface JsonSchema {

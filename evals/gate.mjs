@@ -27,7 +27,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const SRC = join(ROOT, "packages", "components", "src");
 const OUT = join(__dirname, "gate", "out");
-const LOCK = join(ROOT, "packages", "specs", "schema.lock.json");
+const LOCK = join(ROOT, "packages", "spec-dictionary", "schema.lock.json");
 const SCHEMA_FILES = ["apps/s2a-ds-mcp/src/spec-schema.ts", "packages/components/defs.schema.json"];
 const args = process.argv.slice(2);
 const full = args.includes("--full");
@@ -50,7 +50,7 @@ for (const [slug, spec] of specs) {
   const r = ComponentSpecSchema.safeParse(spec);
   if (!r.success) report("SCHEMA", "SCHEMA_INVALID", "fail", `${slug}.spec.json`, r.error.issues.slice(0, 3).map((i) => `${i.path.join(".")}: ${i.message}`).join("; "));
 }
-const tripwire = readJson(join(ROOT, "packages", "specs", "fixtures", "tripwire.spec.json"));
+const tripwire = readJson(join(ROOT, "packages", "spec-dictionary", "fixtures", "tripwire.spec.json"));
 if (!ComponentSpecSchema.safeParse(tripwire).success) report("SCHEMA", "TRIPWIRE_FAILED", "fail", "packages/spec-dictionary/fixtures/tripwire.spec.json", "the frozen known-good spec no longer validates: the schema or validator drifted");
 
 // ── SCHEMA_LOCK ───────────────────────────────────────────────────────────────
@@ -76,6 +76,64 @@ for (const [slug, spec] of specs) {
     for (const [n, c] of Object.entries(part?.parts ?? {})) walk(c, `${path}/${n}`);
   };
   if (spec.anatomy) walk(spec.anatomy, "root");
+}
+
+// The checks above verify that composition a contract DECLARES resolves. This is
+// the other direction: composition the design file shows and the contract never
+// mentions. Without it a component can be built from six others and pass clean —
+// which is how DotPagination's Dot stayed invisible while its evidence recorded
+// five instances of it.
+//
+// Warn rather than fail. Some composed sets are deliberately internal (Figma
+// usually says so with a section named "do not use directly"), and that call
+// belongs to a person. A decision naming the set is what settles it.
+for (const slug of slugs) {
+  const evPath = join(SRC, slug, `${slug}.figma.evidence.json`);
+  if (!existsSync(evPath)) continue;   // no design evidence, nothing to compare against
+  const ev = readJson(evPath);
+  if (!ev?.instances?.length) continue;
+  const spec = specs.get(slug);
+  const defsPath = join(SRC, slug, `${slug}.defs.json`);
+  const defs = existsSync(defsPath) ? readJson(defsPath) : null;
+  // Icons arrive by the hundred and belong to an icon slot, not a contract each.
+  const isIcon = (n) => /icon/i.test(n) && /^(s2|s2a)/i.test(String(n).replace(/^[._]/, ""));
+  const composed = new Map();
+  for (const ins of ev.instances) {
+    const name = (ins.set ?? ins.mainComponent)?.name;
+    if (!name || isIcon(name)) continue;
+    const clean = String(name).replace(/^[🚫.\s_]+/, "").replace(/\s*—\s*v\d+$/, "").trim();
+    if (!clean || alnum(clean) === alnum(spec?.name)) continue;
+    composed.set(alnum(clean), clean);
+  }
+  if (!composed.size) continue;
+
+  // Anything the contract already accounts for: composedOf, a slot's accepts,
+  // or a decision that mentions it by name (how an internal set gets settled).
+  const declared = new Set((spec?.composedOf ?? []).map(alnum));
+  const walkSlots = (part) => {
+    for (const a of part?.slot?.accepts ?? []) declared.add(alnum(a));
+    for (const c of Object.values(part?.parts ?? {})) walkSlots(c);
+  };
+  if (spec?.anatomy) walkSlots(spec.anatomy);
+
+  // A decision settles a composed set only when it is ABOUT composition. Naming
+  // the set is not enough: quote-card has decisions mentioning "Heading" and
+  // "Button" that are entirely about type ramps and token names, and treating
+  // those as settled would suppress four real gaps. Require composition
+  // vocabulary in the same decision as the name.
+  const COMPOSITIONAL = /internal|slot|compos|instance/i;
+  const settles = (name) => (defs?.decisions ?? []).some((d) => {
+    const text = `${d.question ?? ""} ${d.chose ?? ""} ${d.decision ?? ""} ${d.fix ?? ""}`;
+    return text.toLowerCase().includes(name.toLowerCase()) && COMPOSITIONAL.test(text);
+  });
+
+  for (const [key, name] of composed) {
+    if (declared.has(key)) continue;
+    if (settles(name)) continue;
+    const known = specs.has(key) || specByAlnum.has(key);
+    report("COMPOSITION", "COMPOSITION_UNDECLARED", "warn", `${slug}.figma.evidence.json instances`,
+      `builds from "${name}" and the contract never mentions it${known ? "" : " — and it has no spec.json either"}. Declare it as a slot or composedOf, or record in a decision why it is internal.`);
+  }
 }
 
 // ── TOKENS ────────────────────────────────────────────────────────────────────

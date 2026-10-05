@@ -187,7 +187,7 @@ function freeAxes(evidence, defs) {
 // real scaffolder instead of a second copy of its logic that could drift.
 async function draftDef(evidence, slug, name) {
   const { pathToFileURL } = require("node:url");
-  const { scaffoldDefs } = await import(pathToFileURL(path.join(REPO_ROOT, "packages", "specs", "scaffold.mjs")).href);
+  const { scaffoldDefs } = await import(pathToFileURL(path.join(REPO_ROOT, "packages", "spec-dictionary", "scaffold.mjs")).href);
   const contracts = (() => { try { return loadContracts(REPO_ROOT); } catch { return null; } })();
   // Curate against BOTH evidence pools when the component already has code.
   const codeFile = path.join(SRC_DIR, slug, `${slug}.code.evidence.json`);
@@ -228,7 +228,7 @@ function validateDef(defs) {
   let contract = null;
   if (!errors.length) {
     try {
-      const upstream = path.join(REPO_ROOT, "packages", "specs", "southleft", "contract.schema.json");
+      const upstream = path.join(REPO_ROOT, "packages", "spec-dictionary", "southleft", "contract.schema.json");
       if (Ajv && fs.existsSync(upstream)) {
         const ajv = new Ajv({ allErrors: true, strict: false });
         const conform = ajv.compile(JSON.parse(fs.readFileSync(upstream, "utf8")));
@@ -254,7 +254,7 @@ const server = http.createServer((req, res) => {
   if (req.method === "GET" && req.url.startsWith("/contracts")) return json(res, 200, contractIndex());
   if (req.method === "GET" && req.url.startsWith("/plan/")) {
     const slug = decodeURIComponent(req.url.slice(6)).replace(/[^a-z0-9-]/g, "");
-    const file = path.join(REPO_ROOT, "packages", "specs", "out", slug, "figma.plan.json");
+    const file = path.join(REPO_ROOT, "packages", "spec-dictionary", "out", slug, "figma.plan.json");
     if (!fs.existsSync(file)) return json(res, 404, { error: `no figma.plan.json for ${slug}; run npm run specs:build` });
     return json(res, 200, JSON.parse(fs.readFileSync(file, "utf8")));
   }
