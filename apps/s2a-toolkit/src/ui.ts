@@ -110,6 +110,9 @@ let contractSetId: string | null = null;
 // same answer the panel is already showing — reading it from the evidence only
 // works if you extracted in this session, which is not how testing goes.
 let contractSelectedSlug: string | null = null;
+// Which slugs have a curated defs.json. Clear has nothing to do without one,
+// and a button that always looks available teaches people to ignore it.
+const contractHasDefs = new Set<string>();
 let contractEvidence: { evidence: Record<string, unknown>; canonical: string; hash: string } | null = null;
 let contractIndexCache: { at: number; slugs: Map<string, string> } | null = null;
 let bridgeConnected      = false;
@@ -1595,9 +1598,13 @@ async function contractIndex(): Promise<Map<string, string> | null> {
   try {
     const res = await fetch(`${contractEndpoint.replace(/\/$/, '')}/contracts`, { headers: contractHeaders() });
     if (!res.ok) return null;
-    const data = await res.json() as { items: Array<{ slug: string; name: string; figmaEvidence: { hash: string } | null }> };
+    const data = await res.json() as { items: Array<{ slug: string; name: string; hasDefs?: boolean; figmaEvidence: { hash: string } | null }> };
     const slugs = new Map<string, string>();
-    for (const item of data.items) slugs.set(item.slug, item.figmaEvidence ? 'evidence' : 'spec');
+    contractHasDefs.clear();
+    for (const item of data.items) {
+      slugs.set(item.slug, item.figmaEvidence ? 'evidence' : 'spec');
+      if (item.hasDefs) contractHasDefs.add(item.slug);
+    }
     contractIndexCache = { at: Date.now(), slugs };
     return slugs;
   } catch { return null; }
@@ -1624,7 +1631,7 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
   const summary  = document.getElementById('contractSummary')    as HTMLElement;
   summary.style.display = 'none';
   copy.disabled = true; publish.disabled = true;
-  if (!ok || !sel) { statusEl.textContent = ''; extract.disabled = true; return; }
+  if (!ok || !sel) { statusEl.textContent = ''; extract.disabled = true; syncClearButton(null); return; }
   extract.disabled = false;
   statusEl.textContent = 'checking…';
   const slugs = await contractIndex();
@@ -1636,6 +1643,7 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
   else if (slugs.get(slug) === 'evidence') { statusEl.textContent = `✓ ${slug} · contract + evidence`; (document.getElementById('contractBuildRow') as HTMLElement).style.display = 'flex'; }
   else if (slugs.get(slug) === 'spec') { statusEl.textContent = `✓ ${slug} · has a contract, no evidence yet`; (document.getElementById('contractBuildRow') as HTMLElement).style.display = 'flex'; }
   else statusEl.textContent = `○ ${slug} · new`;
+  syncClearButton(slug);
 }
 
 // SHA-256 without WebCrypto: the plugin UI iframe is not a secure context in
@@ -2393,6 +2401,19 @@ setInterval(() => {
 
 // Ask code.ts for the anonymous telemetry id (provisioned in clientStorage).
 postToPlugin('telemetry:init');
+
+// Clear only means something when a draft exists. Without a defs.json there is
+// nothing curated to discard, and the generated files come back from a build.
+function syncClearButton(slug: string | null) {
+  const btn = document.getElementById('contractClearBtn') as HTMLButtonElement | null;
+  if (!btn) return;
+  const has = Boolean(slug && contractHasDefs.has(slug));
+  btn.disabled = !has;
+  btn.title = has
+    ? 'Delete the draft and everything generated from it, so you can scaffold again'
+    : slug ? `No draft for ${slug} yet — scaffold one first` : 'Select a component set';
+  if (!has) clearDisarm();
+}
 
 // ── Clear draft ───────────────────────────────────────────────────────────────
 // Testing the scaffolder means running it repeatedly, and there was no way back
