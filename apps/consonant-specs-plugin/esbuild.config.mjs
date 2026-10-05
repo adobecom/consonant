@@ -34,6 +34,8 @@ const buildTime = new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UT
 const featureDefines = {
   'FEATURE_A11Y': env.FEATURE_A11Y === 'true' ? 'true' : 'false',
   'FEATURE_LEGACY_ALIGN': env.FEATURE_LEGACY_ALIGN === 'true' ? 'true' : 'false',
+  'FEATURE_VARIABLES': env.FEATURE_VARIABLES === 'true' ? 'true' : 'false',
+  'FEATURE_SELECT': env.FEATURE_SELECT === 'true' ? 'true' : 'false',
   '__PLUGIN_VERSION__': JSON.stringify(pluginVersion),
   '__PLUGIN_BUILD_SHA__': JSON.stringify(buildSha),
   '__PLUGIN_BUILD_TIME__': JSON.stringify(buildTime),

@@ -2,11 +2,20 @@ import { getTokenVersion, getTokenCount, hasS2AVariables, loadLibraryTokens, rel
 import { getNodeProperties } from './annotations';
 import { specIt } from './spec-it';
 import { runS2AAudit, runFullAlign, runTextColorsAlign } from './s2a-audit';
-import { localize, collectSourceText, TranslationProvider } from './localize';
+import { localizeViaApi, collectSourceText, applyTranslationsToClones } from './localize';
+import type { ApiProvider } from './localize-languages';
 import { generateBlueline, generateBluelinePanels, placeCategoryBadge } from './a11y-blueline';
 import { runStructuralScan } from './a11y-structural-scan';
 import { generateFocusIndicators, collectFocusableElements } from './spec-focus-indicators';
 import { runAlignV2Scan, AlignV2Result } from './align-v2';
+import { heightFor, isRatioApplicableType } from './ratio';
+import { runColorStudy, applyColorStudy, ColorStudyTarget } from './color-study';
+
+// One predicate shared by the selection broadcast and apply-ratio — the UI can
+// never show ratio controls for a selection the apply would refuse.
+function ratioTarget(n: SceneNode): n is SceneNode & { resize(w: number, h: number): void } {
+  return 'resize' in n && 'width' in n && isRatioApplicableType(n.type);
+}
 
 // Bridge-readable build marker. Lets MCP probes confirm which bundle is loaded
 // via `globalThis.__PLUGIN_BUILD__` from inside figma_execute.
@@ -1297,24 +1306,6 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
   }
 }
 
-function apiKeyStorageKey(provider: string): string {
-  return `api-key-${provider}`;
-}
-
-function maskKey(key: string): string {
-  if (key.length <= 8) return '••••';
-  return `${key.slice(0, 6)}…${key.slice(-4)}`;
-}
-
-async function postApiKeyState(provider: string): Promise<void> {
-  const key = await figma.clientStorage.getAsync(apiKeyStorageKey(provider));
-  figma.ui.postMessage({
-    type: 'api-key-state',
-    hasKey: typeof key === 'string' && key.length > 0,
-    masked: typeof key === 'string' && key.length > 0 ? maskKey(key) : undefined,
-  });
-}
-
 // ── A11y annotation mode drawing ─────────────────────────────────────────────
 
 let annotateRunning = false;
@@ -1615,7 +1606,21 @@ async function drawA11yAnnotations(
   container.locked = true;
 }
 
-figma.showUI(__html__, { width: 300, height: 500, themeColors: true });
+// 360 wide so the Localize language notes fit on one line (localize-v2).
+const DEFAULT_UI_SIZE = { width: 360, height: 500 };
+figma.showUI(__html__, { ...DEFAULT_UI_SIZE, themeColors: true });
+
+// ── UI window sizing ──────────────────────────────────────────────────────
+// expandedUiSize is the size the window returns to when the panel is expanded.
+// While collapsed, tools may still change their preferred expanded size
+// (e.g. Align to S2A); we record it and apply it on expand.
+let expandedUiSize = { ...DEFAULT_UI_SIZE };
+let uiCollapsed = false;
+
+function setExpandedUiSize(width: number, height: number): void {
+  expandedUiSize = { width, height };
+  if (!uiCollapsed) figma.ui.resize(width, height);
+}
 
 figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
   try {
@@ -1706,6 +1711,33 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       }
       return;
     }
+    case 'apply-ratio': {
+      const rw = Number(msg.rw);
+      const rh = Number(msg.rh);
+      if (!Number.isFinite(rw) || !Number.isFinite(rh) || rw <= 0 || rh <= 0) return;
+      const targets = figma.currentPage.selection.filter(ratioTarget);
+      if (targets.length === 0) {
+        figma.notify('Select something resizable first');
+        return;
+      }
+      // Empirically verified 2026-08-14 (live Plugin API test): resize() wins
+      // even on FILL children and HUG frames — Figma converts the vertical
+      // sizing to FIXED, exactly like a manual drag. No skip needed.
+      let applied = 0;
+      for (const node of targets) {
+        try {
+          node.resize(node.width, heightFor(node.width, rw, rh));
+          applied++;
+        } catch (e) {
+          figma.notify(`Could not resize "${node.name}": ${e instanceof Error ? e.message : String(e)}`, { error: true });
+        }
+      }
+      if (applied > 0) {
+        figma.notify(`${String(msg.label ?? `${rw}:${rh}`)} applied to ${applied} item(s) — width kept`);
+        notifySelection(); // refresh the dims in the selection bar
+      }
+      return;
+    }
     case 'align-v2-apply': {
       const selections = msg.selections as Array<{ nodeId: string; property: string; bindingKey?: string; variableId?: string; textStyleId?: string }> | undefined;
       if (!Array.isArray(selections) || selections.length === 0) {
@@ -1762,12 +1794,48 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       figma.ui.postMessage({ type: 'align-v2-apply-result', results });
       return;
     }
+    case 'color-study-scan': {
+      const sel = figma.currentPage.selection;
+      if (sel.length === 0) { figma.ui.postMessage({ type: 'color-study-result', result: null, error: 'Select a frame, group, or layer first.' }); return; }
+      try {
+        const result = await runColorStudy(sel);
+        figma.ui.postMessage({ type: 'color-study-result', result });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'color-study-result', result: null, error: e?.message ?? String(e) });
+      }
+      return;
+    }
+    case 'color-study-window': {
+      // Picker needs room for the light/dark columns; restore the default when it closes.
+      if (msg.wide) setExpandedUiSize(450, 600);
+      else setExpandedUiSize(DEFAULT_UI_SIZE.width, DEFAULT_UI_SIZE.height);
+      return;
+    }
+    case 'color-study-apply': {
+      const targets = Array.isArray(msg.targets) ? (msg.targets as ColorStudyTarget[]) : [];
+      const variableId = typeof msg.variableId === 'string' ? msg.variableId : '';
+      if (targets.length === 0 || !variableId) { figma.ui.postMessage({ type: 'color-study-apply-result', results: [] }); return; }
+      const results = await applyColorStudy(targets, variableId);
+      figma.ui.postMessage({ type: 'color-study-apply-result', results });
+      return;
+    }
     case 'align-v2-window-resize': {
       const wide = !!msg.wide;
       if (wide) {
-        figma.ui.resize(450, 600);
+        setExpandedUiSize(450, 600);
       } else {
-        figma.ui.resize(300, 500);  // restores the default set in showUI at code.ts:1606
+        setExpandedUiSize(DEFAULT_UI_SIZE.width, DEFAULT_UI_SIZE.height);
+      }
+      return;
+    }
+    case 'panel-collapse': {
+      uiCollapsed = !!msg.collapsed;
+      if (uiCollapsed) {
+        const w = typeof msg.width === 'number' ? msg.width : expandedUiSize.width;
+        const h = typeof msg.height === 'number' ? msg.height : 40;
+        figma.ui.resize(w, h);
+      } else {
+        figma.ui.resize(expandedUiSize.width, expandedUiSize.height);
       }
       return;
     }
@@ -2061,25 +2129,13 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       }
       break;
     }
-    case 'get-api-key': {
-      const provider = typeof msg.provider === 'string' ? msg.provider : 'mymemory';
-      await postApiKeyState(provider);
+    case 'get-email': {
+      const email = (await figma.clientStorage.getAsync('mymemory-email')) || '';
+      figma.ui.postMessage({ type: 'email-state', email });
       break;
     }
-    case 'save-api-key': {
-      const key = typeof msg.key === 'string' ? msg.key.trim() : '';
-      const provider = typeof msg.provider === 'string' ? msg.provider : 'mymemory';
-      if (!key) { figma.notify('Empty API key', { error: true }); break; }
-      await figma.clientStorage.setAsync(apiKeyStorageKey(provider), key);
-      await postApiKeyState(provider);
-      figma.notify('API key saved');
-      break;
-    }
-    case 'clear-api-key': {
-      const provider = typeof msg.provider === 'string' ? msg.provider : 'mymemory';
-      await figma.clientStorage.deleteAsync(apiKeyStorageKey(provider));
-      await postApiKeyState(provider);
-      figma.notify('API key cleared');
+    case 'save-email': {
+      await figma.clientStorage.setAsync('mymemory-email', String(msg.email ?? ''));
       break;
     }
     // ── Bridge unified command handler (figma-console MCP protocol) ──────
@@ -2097,51 +2153,71 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
     }
 case 'localize': {
       const sel = figma.currentPage.selection;
-      if (sel.length === 0) { figma.notify('Select a frame first'); break; }
-      const provider = (typeof msg.provider === 'string' ? msg.provider : 'mymemory') as TranslationProvider;
+      if (sel.length !== 1) { figma.notify('Select exactly one frame'); break; }
+      const provider = msg.provider as ApiProvider;
       const languages = Array.isArray(msg.languages) ? (msg.languages as string[]) : [];
-      const applyRtl = Boolean(msg.applyRtl);
       if (languages.length === 0) {
         figma.ui.postMessage({ type: 'localize-status', message: 'Select at least one language.' });
         break;
       }
-
-      // Bridge provider — collect text and send to UI for prompt generation
-      if (provider === 'bridge') {
-        const sourceTexts = collectSourceText(sel[0]);
-        if (sourceTexts.length === 0) {
-          figma.ui.postMessage({ type: 'localize-status', message: 'No text found in selection.' });
-          break;
-        }
-        figma.ui.postMessage({
-          type: 'localize-bridge-prompt',
-          frameName: sel[0].name,
-          frameId: sel[0].id,
-          languages,
-          applyRtl,
-          sourceTexts,
-        });
-        break;
-      }
-
-      const needsKey = ['deepl', 'google', 'azure'].includes(provider);
-      let apiKey = '';
-      if (needsKey) {
-        apiKey = await figma.clientStorage.getAsync(apiKeyStorageKey(provider)) || '';
-        if (!apiKey) {
-          figma.ui.postMessage({ type: 'localize-status', message: `Add your ${provider} API key first.` });
-          break;
-        }
-      }
+      const email = (await figma.clientStorage.getAsync('mymemory-email')) || '';
       try {
-        const result = await localize(sel[0], languages, applyRtl, provider, apiKey);
-        const errTail = result.errors.length > 0 ? ` (errors: ${result.errors.join('; ')})` : '';
-        figma.ui.postMessage({ type: 'localize-status', message: `Created ${result.created} localized frame(s).${errTail}` });
-        figma.notify(`Localized ${result.created} frame(s)`);
+        const result = await localizeViaApi(
+          sel[0],
+          languages,
+          Boolean(msg.applyRtl),
+          provider,
+          email,
+          (message) => figma.ui.postMessage({ type: 'localize-status', message }),
+        );
+        figma.ui.postMessage({ type: 'localize-done', created: result.created, errors: result.errors });
+        if (result.created === 0 && result.errors.length > 0) {
+          figma.notify('Localize failed — see plugin window for details', { error: true });
+        } else if (result.created > 0 && result.errors.length > 0) {
+          figma.notify(`Localized ${result.created} frame(s), ${result.errors.length} language(s) failed`);
+        } else {
+          figma.notify(`Localized ${result.created} frame(s)`);
+        }
       } catch (e: any) {
         const errorMsg = e instanceof Error ? e.message : 'Unknown error';
         figma.ui.postMessage({ type: 'localize-status', message: `Error: ${errorMsg}` });
         figma.notify(`Localize failed: ${errorMsg}`, { error: true });
+      }
+      break;
+    }
+    case 'paste-collect': {
+      const sel = figma.currentPage.selection;
+      if (sel.length !== 1) { figma.notify('Select exactly one frame'); break; }
+      const strings = collectSourceText(sel[0]);
+      if (strings.length === 0) {
+        figma.ui.postMessage({ type: 'localize-status', message: 'No text found in selection.' });
+        break;
+      }
+      figma.ui.postMessage({ type: 'paste-source', frameName: sel[0].name, strings });
+      break;
+    }
+    case 'paste-apply': {
+      const sel = figma.currentPage.selection;
+      if (sel.length !== 1) { figma.notify('Select exactly one frame'); break; }
+      const translations = msg.translations as Record<string, string[]>;
+      try {
+        const result = await applyTranslationsToClones(
+          sel[0],
+          translations,
+          Boolean(msg.applyRtl),
+          (message) => figma.ui.postMessage({ type: 'localize-status', message }),
+        );
+        figma.ui.postMessage({ type: 'localize-done', created: result.created, errors: result.errors });
+        if (result.created === 0 && result.errors.length > 0) {
+          figma.notify('Localize failed — see plugin window for details', { error: true });
+        } else if (result.created > 0 && result.errors.length > 0) {
+          figma.notify(`Localized ${result.created} frame(s), ${result.errors.length} language(s) failed`);
+        } else {
+          figma.notify(`Localized ${result.created} frame(s)`);
+        }
+      } catch (e: any) {
+        const errorMsg = e instanceof Error ? e.message : 'Unknown error';
+        figma.ui.postMessage({ type: 'localize-status', message: `Error: ${errorMsg}` });
       }
       break;
     }
@@ -2165,7 +2241,7 @@ figma.on('currentpagechange', () => {
 function notifySelection() {
   const sel = figma.currentPage.selection;
   if (sel.length === 0) {
-    figma.ui.postMessage({ type: 'selection-changed', selection: null, count: 0, hasAutoLayout: false });
+    figma.ui.postMessage({ type: 'selection-changed', selection: null, count: 0, hasAutoLayout: false, resizableCount: 0 });
     figma.ui.postMessage({ type: 'bridge:selection-changed', selection: [] });
     return;
   }
@@ -2181,6 +2257,7 @@ function notifySelection() {
     },
     count: sel.length,
     hasAutoLayout,
+    resizableCount: sel.filter(ratioTarget).length,
   });
 
   // Forward selection event for bridge

@@ -73,6 +73,8 @@ Earlier in the project's history, `dist/` was committed alongside source. This c
 |---|---|---|
 | `FEATURE_A11Y` | false | Shows the A11y menu item + tab |
 | `FEATURE_LEGACY_ALIGN` | false | Shows the legacy `Align` and `Match` tools alongside `Align to S2A` |
+| `FEATURE_VARIABLES` | false | Shows the `Variables` menu item + panel (placeholder, no handlers yet) |
+| `FEATURE_SELECT` | false | Shows the `Select` menu item + panel (placeholder, no handlers yet) |
 
 Set them per-developer in `.env`; commit-safe (gitignored). Build picks them up via `esbuild.config.mjs`.
 
