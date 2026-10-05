@@ -429,7 +429,13 @@ export function scaffoldDefs(evidence, { slug, name, archetype: forced, dictiona
   }
 
   const importPath = `packages/components/src/${slug}/${slug}.js`;
-  D("code-pending", "codePending", { importPath, slug });
+  if (!existsSync(join(SRC, slug, `${slug}.js`))) D("code-pending", "codePending", { importPath, slug });
+  else if (!existsSync(join(SRC, slug, `${slug}.code.evidence.json`))) {
+    decisions.push({ id: `${ab}-code-evidence`, status: "open", confidence: "high",
+      question: `${slug}.js exists but its code evidence does not, so the props below were derived from Figma alone and nothing has checked them against the component.`,
+      fix: `npm run evidence:code -- --slug=${slug}, then re-scaffold or reconcile the props by hand.`,
+      owner: "Matt", evidence: `${slug}.js` });
+  }
 
   // Triage order: least trustworthy first, so a reviewer reads the guesses before
   // the readings. Stable within a band, so related notes stay together.
@@ -457,7 +463,12 @@ export function scaffoldDefs(evidence, { slug, name, archetype: forced, dictiona
         usages: [],
         notes: `${isSet ? "Component set" : "Frame"} on page "${evidence.file?.page?.name?.trim() ?? "?"}"; ${evidence.counts?.nodes ?? "?"} nodes, ${evidence.counts?.bindings ?? 0} token bindings. ${isSet ? "" : "Build set from this contract produces the normalized component set; re-anchor to it once published."}`.trim(),
       },
-      code: { importPath, export: component, cssClass: `c-${slug}`, pending: true },
+      // "pending" means there is no component yet — it makes validate-defs skip
+      // code conformance, so claiming it when the component DOES exist lets a
+      // contract describe props the code has never had. Decide it from the
+      // source file, not from the evidence: evidence is regenerable in a second
+      // and its absence says nothing about whether the component exists.
+      code: { importPath, export: component, cssClass: `c-${slug}`, ...(existsSync(join(SRC, slug, `${slug}.js`)) ? {} : { pending: true }) },
     },
     props,
     states,

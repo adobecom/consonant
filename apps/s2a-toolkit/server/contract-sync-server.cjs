@@ -96,11 +96,14 @@ function resolveSlug(evidence, override) {
 }
 function contractIndex() {
   const specs = readSpecs();
-  const items = specs.map((s) => ({ ...s, hasDefs: fs.existsSync(path.join(SRC_DIR, s.slug, `${s.slug}.defs.json`)), figmaEvidence: evidenceState(s.slug) }));
+  const items = specs.map((s) => ({ ...s,
+    hasDefs: fs.existsSync(path.join(SRC_DIR, s.slug, `${s.slug}.defs.json`)),
+    hasContract: fs.existsSync(path.join(SRC_DIR, s.slug, `${s.slug}.contract.json`)),
+    figmaEvidence: evidenceState(s.slug) }));
   if (fs.existsSync(NEW_DIR)) {
     for (const file of fs.readdirSync(NEW_DIR)) {
       const m = file.match(/^(.+)\.figma\.evidence\.json$/);
-      if (m && !specs.find((s) => s.slug === m[1])) items.push({ slug: m[1], name: m[1], figmaNodeId: null, specPath: null, hasDefs: false, figmaEvidence: evidenceState(m[1]) });
+      if (m && !specs.find((s) => s.slug === m[1])) items.push({ slug: m[1], name: m[1], figmaNodeId: null, specPath: null, hasDefs: false, hasContract: false, figmaEvidence: evidenceState(m[1]) });
     }
   }
   return { count: items.length, items };
@@ -357,6 +360,31 @@ const server = http.createServer((req, res) => {
   // spec.json is restored from git rather than deleted (for an unconverted
   // component that file is the hand-written spec), and evidence is kept unless
   // asked for, because re-extracting costs a trip through the plugin.
+  // Curation produces a defs.json and nothing a consumer can read. This is the
+  // step that turns it into the contract, the catalog entry, the spec page and
+  // the Figma plan — the plugin used to end with "now go run this in a terminal".
+  if (req.method === "POST" && req.url === "/build") {
+    let raw = "";
+    req.on("data", (c) => { raw += c; });
+    req.on("end", () => {
+      let body; try { body = JSON.parse(raw); } catch { return json(res, 400, { error: "Invalid JSON" }); }
+      const slug = String(body?.slug || "").replace(/[^a-z0-9-]/g, "");
+      if (!slug) return json(res, 400, { error: "Body must be { slug }" });
+      const val = spawnSync(process.execPath, ["packages/components/scripts/validate-defs.mjs", `--slug=${slug}`], { cwd: REPO_ROOT, encoding: "utf8" });
+      if (val.status !== 0) {
+        const problems = (val.stdout || "").split("\n").filter((l) => l.startsWith("      ")).map((l) => l.trim());
+        return json(res, 422, { error: "The definition does not validate", problems: problems.slice(0, 6) });
+      }
+      const r = spawnSync(process.execPath, ["packages/spec-dictionary/build.mjs", `--slug=${slug}`], { cwd: REPO_ROOT, encoding: "utf8" });
+      if (r.status !== 0) return json(res, 400, { error: (r.stderr || r.stdout || "build failed").trim().slice(0, 400) });
+      const line = (r.stdout || "").split("\n").find((l) => l.startsWith("BUILT")) || "";
+      // The coverage count only moves once the contract exists, so repack here.
+      spawnSync(process.execPath, ["packages/s2a-specs/pack.mjs"], { cwd: REPO_ROOT, encoding: "utf8" });
+      console.log(`  built ${slug}`);
+      return json(res, 200, { slug, summary: line.replace(/^BUILT\s+\S+\s+/, "").trim() });
+    });
+    return;
+  }
   if (req.method === "POST" && req.url === "/clear") {
     let raw = "";
     req.on("data", (c) => { raw += c; });
