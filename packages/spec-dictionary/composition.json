@@ -1,0 +1,220 @@
+{
+  "$schema": "s2a-composition/1",
+  "$note": "What each Figma component set is built from, and which page group it sits in. Captured from the design file, which is the visual source of truth. Refresh with: npm run specs:composition -- --refresh (prints the figma-console script to run), then paste the result here. A snapshot, not a derivation — it goes stale when the file changes.",
+  "capturedAt": "2026-10-05",
+  "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+  "groups": {
+    "AppIcon": "atom",
+    "Button": "atom",
+    "Checkbox": "atom",
+    "ControlButton": "atom",
+    "PlayButton": "atom",
+    "Divider": "atom",
+    "DotPagination": "atom",
+    "HelperText": "atom",
+    "JumpLink": "atom",
+    "Label": "atom",
+    "Link": "atom",
+    "Logo": "atom",
+    "Media": "atom",
+    "ProgressBar": "atom",
+    "Radio": "atom",
+    "RollerNavItem": "atom",
+    "SegmentedControl": "atom",
+    "Selector": "atom",
+    "Surface": "atom",
+    "Tabs": "atom",
+    "Tag": "atom",
+    "Text": "atom",
+    "Tooltips": "atom",
+    "Actions": "molecule",
+    "Cards": "molecule",
+    "Collapsible": "molecule",
+    "List": "molecule",
+    "ProductLockup": "molecule",
+    "PromoCTA": "molecule",
+    "RichContent": "molecule",
+    "SectionHeader": "molecule",
+    "Accordion": "organism",
+    "AllProductsRollerCarousel": "organism",
+    "Footer": "organism",
+    "RouterMarquee": "organism",
+    "ElasticCard": "card",
+    "ImmersiveCard": "card",
+    "ProductCard": "card",
+    "MerchCard": "card",
+    "MediaCard": "card",
+    "QuoteCard": "card",
+    "TextCard": "card"
+  },
+  "composes": {
+    "AppIcon": [
+      "B_app_CreativeCloud"
+    ],
+    "CheckboxTile": [
+      "Checkbox",
+      ".checkbox",
+      "Label"
+    ],
+    "Checkbox": [
+      ".checkbox",
+      "Label"
+    ],
+    ".checkbox": [],
+    "ControlButton — v2": [
+      "Scale/S2a-Icons-scale-rig"
+    ],
+    "DotPagination": [
+      "Dot"
+    ],
+    "Dot": [],
+    "JumpLinkNav": [
+      "JumpLink",
+      "ControlButton — v2"
+    ],
+    "JumpLink": [
+      "ControlButton — v2"
+    ],
+    "Media": [
+      "Overlay"
+    ],
+    "Overlay": [],
+    "Radio": [
+      "_radio"
+    ],
+    "_radio": [],
+    "SegmentedControl/3-up": [
+      "SegmentItem"
+    ],
+    "SegmentItem": [],
+    "Tabs": [
+      "_tab"
+    ],
+    "_tab": [],
+    "MetaLine": [
+      "Meta/Name",
+      "Meta/Role"
+    ],
+    "Actions": [
+      "Button — v1"
+    ],
+    "Collapsible": [
+      "ControlButton — v2",
+      "TextCard — v2",
+      "Link — v2"
+    ],
+    "List": [
+      "MerchCard/FeatureSection",
+      "Divider",
+      "ListItem"
+    ],
+    "ListItem": [],
+    "ProductLockup — v2": [
+      "AppIcon"
+    ],
+    "PromoCTA — v2": [
+      "PromoCTA/Arrow Button"
+    ],
+    "PromoCTA/Arrow Button": [],
+    "RichContent": [
+      "Eyebrow",
+      "Heading",
+      "Paragraph",
+      "Actions",
+      "Button — v1"
+    ],
+    "SectionHeader": [
+      "RichContent"
+    ],
+    "Accordion": [
+      "Collapsible",
+      "Divider"
+    ],
+    "RollerNavList": [
+      "RollerNavItem"
+    ],
+    "AllProductsRollerCarousel": [
+      "Divider",
+      "RollerNavList",
+      "Media"
+    ],
+    "RouterNavItem — v2": [
+      "ProductLockup — v2",
+      "ProgressBar"
+    ],
+    "ElasticCard — v2": [
+      "ProductLockup — v2",
+      "Media",
+      "Heading",
+      "ControlButton — v1"
+    ],
+    "ImmersiveCard": [
+      "Media",
+      "ControlButton — v1"
+    ],
+    "ProductCard — v2": [
+      "AppIcon"
+    ],
+    "MerchCard — v1": [
+      "ProductLockup — v2",
+      "MerchCard/PricingDisplay",
+      "MerchCard/SelectPromo",
+      "HelperText",
+      "Button — v2",
+      "MerchCard/TrustBadge",
+      "List",
+      "Collapsible"
+    ],
+    "MerchCard/SelectPromo": [
+      ".select/trigger",
+      "HelperText"
+    ],
+    "MerchCard/FeatureSection": [
+      "Divider"
+    ],
+    "MerchCard/TrustBadge": [],
+    "MerchCard/PricingDisplay": [],
+    "CardGrid": [
+      "MerchCard — v1"
+    ],
+    "CardRow": [
+      "MerchCard — v1",
+      "CheckboxTile"
+    ],
+    "MediaCard": [
+      "Media"
+    ],
+    "QuoteCard — v2": [
+      "Media",
+      "Heading",
+      "MetaLine",
+      "Actions",
+      "Button — v2",
+      "DotPagination"
+    ],
+    "SplitQuoteCard": [
+      "Heading",
+      "Meta/Name",
+      "Meta/Role",
+      "Media"
+    ],
+    "TextCard — v2": [
+      "Link — v2"
+    ],
+    "Heading": [],
+    "Paragraph": [],
+    "Eyebrow": [],
+    "Meta/Name": [],
+    "Meta/Role": [],
+    "Divider": [],
+    "Label": [],
+    "HelperText": [],
+    "ProgressBar": [],
+    "RollerNavItem": [],
+    "Link — v2": [],
+    "Button — v2": [],
+    "ControlButton — v1": [],
+    "Button — v1": [],
+    ".select/trigger": []
+  }
+}
