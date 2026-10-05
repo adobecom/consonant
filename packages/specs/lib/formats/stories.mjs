@@ -10,15 +10,25 @@ export function storiesManifest(ir) {
   }
   const defaults = Object.fromEntries(ir.props.map((p) => [p.name, p.default]));
   const existing = ir.stories.map((s) => ({ id: s.id, name: s.name, args: s.args ?? {} }));
+  // Enum values are strings (the defs schema says so), but a story writes the
+  // real thing — `count: 5`, not `"5"`. Comparing strictly would report every
+  // numeric-enum case as missing while the story sitting right there covers it,
+  // so compare by value, not by type.
+  const eq = (a, b) => a === b || (a != null && b != null && String(a) === String(b));
   // A story covers a derived case when it sets every arg to the case's value,
   // or leaves the arg at the component default when that is the case's value.
-  const covered = (d) => existing.some((e) => Object.entries(d.args).every(([k, v]) => (k in e.args ? e.args[k] === v : defaults[k] === v)));
+  const storyCovers = (e, d) => Object.entries(d.args).every(([k, v]) => (k in e.args ? eq(e.args[k], v) : eq(defaults[k], v)));
+  const covered = (d) => existing.some((e) => storyCovers(e, d));
   return {
     component: ir.component.slug,
     storybookId: ir.component.storybookId,
     derived,
     existing: existing.map((e) => ({ id: e.id, name: e.name, argKeys: Object.keys(e.args) })),
     deferred: derived.filter((d) => d.id !== "default" && !covered(d)).map((d) => d.id),
-    extra: existing.filter((e) => !derived.some((d) => d.name.toLowerCase() === e.name.toLowerCase())).map((e) => e.id),
+    // "Extra" means a story exercising something the contract does not describe
+    // — which usually says the contract is behind the stories, not that the
+    // story is surplus. Matching on NAME instead would flag every human-titled
+    // story ("Five Dots" never equals "count: 5") and say nothing at all.
+    extra: existing.filter((e) => !derived.some((d) => storyCovers(e, d))).map((e) => e.id),
   };
 }

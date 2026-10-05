@@ -108,12 +108,18 @@
     {
       "slug": "dot-pagination",
       "name": "DotPagination",
-      "figmaNodeId": null,
+      "figmaNodeId": "8350:234686",
       "specPath": "packages/components/src/dot-pagination/dot-pagination.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:1e5a277c66d64f07af742506ee4dec50ee0794bd6414a7de2536277a195b364e",
+        "extractedAt": "2026-10-05T16:32:17.362Z",
+        "setId": "8350:234686"
+      },
+      "codeEvidence": {
+        "hash": "sha256:20933c11a15da36bfc7addca568112e6cd646d3683523e27ac1d1511c9a6dc48"
+      }
     },
     {
       "slug": "elastic-card",

@@ -1,0 +1,93 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "DotPagination",
+  "setName": "DotPagination",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "nav",
+    "bindings": {
+      "gap": [
+        "s2a/spacing/xs"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".dot-1",
+        "source": ".dot-1",
+        "element": "button",
+        "bindings": {
+          "width": [
+            "s2a/spacing/xs"
+          ],
+          "height": [
+            "s2a/spacing/xs"
+          ],
+          "border-radius": [
+            "s2a/border/radius/round"
+          ],
+          "background-color": [
+            "s2a/color/transparent/white/64"
+          ]
+        },
+        "slot": null,
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "pattern-frame",
+    "nodeId": "8350:234686",
+    "nodeName": "DotPagination",
+    "componentSetKey": "5195dbddad9b4d108a4c2b46eb5684eaed814f4c",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [],
+  "states": [
+    {
+      "name": "active",
+      "figma": "NONE"
+    },
+    {
+      "name": "focus",
+      "figma": "NONE"
+    }
+  ],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-dot-pagination",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/xs"
+        ]
+      }
+    },
+    {
+      "name": ".dot-1",
+      "selector": ".c-dot-pagination__dot",
+      "bindings": {
+        "width": [
+          "s2a/spacing/xs"
+        ],
+        "height": [
+          "s2a/spacing/xs"
+        ],
+        "border-radius": [
+          "s2a/border/radius/round"
+        ],
+        "background-color": [
+          "s2a/color/transparent/white/64"
+        ]
+      }
+    }
+  ],
+  "textStyles": []
+}
