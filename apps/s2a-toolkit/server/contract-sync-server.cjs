@@ -15,6 +15,7 @@ const http   = require("http");
 const fs     = require("fs");
 const path   = require("path");
 const crypto = require("crypto");
+const { spawnSync } = require("child_process");
 const { proposalFor } = require("./contract-proposal.cjs");
 const { matchCandidate, loadContracts } = require("./contract-match.cjs");
 
@@ -348,6 +349,54 @@ const server = http.createServer((req, res) => {
       let sum = 0; for (const x of bytes) sum = (sum + x) % 65536;
       console.log(`  artifact ${name} ${bytes.length} bytes`);
       return json(res, 200, { path: path.posix.join("packages/components/evidence/artifacts", name), bytes: bytes.length, sum });
+    });
+    return;
+  }
+  // Clear a draft, so the scaffolder can be iterated on from inside Figma
+  // rather than only from a terminal. Same rules as npm run specs:clear:
+  // spec.json is restored from git rather than deleted (for an unconverted
+  // component that file is the hand-written spec), and evidence is kept unless
+  // asked for, because re-extracting costs a trip through the plugin.
+  if (req.method === "POST" && req.url === "/clear") {
+    let raw = "";
+    req.on("data", (c) => { raw += c; });
+    req.on("end", () => {
+      let body; try { body = JSON.parse(raw); } catch { return json(res, 400, { error: "Invalid JSON" }); }
+      const slug = String(body?.slug || "").replace(/[^a-z0-9-]/g, "");
+      if (!slug) return json(res, 400, { error: "Body must be { slug, evidence? }" });
+      const args = ["packages/spec-dictionary/clear.mjs", `--slug=${slug}`, "--yes"];
+      if (body.evidence) args.push("--evidence");
+      const r = spawnSync(process.execPath, args, { cwd: REPO_ROOT, encoding: "utf8" });
+      if (r.status !== 0) return json(res, 400, { error: (r.stderr || r.stdout || "clear failed").trim().slice(0, 400) });
+      const lines = (r.stdout || "").split("\n").filter((l) => /^\s{2}(remove|restore)/.test(l)).map((l) => l.trim());
+      console.log(`  cleared ${slug} (${lines.length} path${lines.length === 1 ? "" : "s"})`);
+      return json(res, 200, { slug, cleared: lines, keptEvidence: !body.evidence });
+    });
+    return;
+  }
+  // Refresh the composition snapshot. The plugin walks the file (it is the only
+  // thing that can) and posts the graph; this writes it where the ordering
+  // report reads it, so composition.json stops being something pasted by hand.
+  if (req.method === "POST" && req.url === "/composition") {
+    let raw = "";
+    req.on("data", (c) => { raw += c; if (raw.length > 8 * 1024 * 1024) req.destroy(); });
+    req.on("end", () => {
+      let body; try { body = JSON.parse(raw); } catch { return json(res, 400, { error: "Invalid JSON" }); }
+      if (!body?.composes || typeof body.composes !== "object") return json(res, 400, { error: "Body must be { composes, groups, fileKey }" });
+      const file = path.join(REPO_ROOT, "packages", "spec-dictionary", "composition.json");
+      const prev = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : {};
+      const doc = {
+        $schema: "s2a-composition/1",
+        $note: prev.$note || "What each Figma component set is built from, and which page group it sits in. Captured from the design file, which is the visual source of truth. Refresh from the toolkit's Contracts tab.",
+        capturedAt: new Date().toISOString().slice(0, 10),
+        fileKey: body.fileKey || prev.fileKey || null,
+        groups: body.groups || {},
+        composes: body.composes,
+      };
+      fs.writeFileSync(file, JSON.stringify(doc, null, 2) + "\n");
+      const edges = Object.values(body.composes).reduce((n, v) => n + (v?.length || 0), 0);
+      console.log(`  composition ${Object.keys(body.composes).length} components, ${edges} edges`);
+      return json(res, 200, { components: Object.keys(body.composes).length, edges, grouped: Object.keys(doc.groups).length });
     });
     return;
   }

@@ -487,6 +487,54 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
       notifySelection();
       break;
 
+    // Walk every component page and record what each published set is built
+    // from. The plugin is the only thing that can read the file, so the
+    // composition snapshot is refreshed from here rather than pasted in by hand.
+    case 'contract-scan-composition': {
+      try {
+        // Atomic level lives in page ORDER, not nesting: a separator page opens
+        // a group, and every indented page after it belongs to that group.
+        const GROUPS: Record<string, string> = {
+          '\u{1F9E9} Atoms': 'atom', '\u{1F9EC} Molecules': 'molecule', '\u{1F9EB} Organisms': 'organism',
+          '\u{1F0CF} Cards': 'card', '\u{1F9F1} Foundations ': 'foundation', '\u{1F6E0}\u{FE0F} Tooling': 'tooling',
+          '\u{1F3E0} Internal': 'internal', '\u{1F9ED} Exploration': 'exploration', '\u{1F4D0} Templates': 'template',
+        };
+        const groups: Record<string, string> = {};
+        const pages: PageNode[] = [];
+        let current: string | null = null;
+        for (const p of figma.root.children) {
+          if (Object.prototype.hasOwnProperty.call(GROUPS, p.name)) { current = GROUPS[p.name]; continue; }
+          if (/^-+$/.test(p.name.trim())) { current = null; continue; }
+          if (!p.name.startsWith('   \u21B3')) { current = null; continue; }
+          if (!current) continue;
+          groups[p.name.replace('   \u21B3 ', '').trim()] = current;
+          if (['atom', 'molecule', 'organism', 'card'].includes(current)) pages.push(p);
+        }
+        const composes: Record<string, string[]> = {};
+        for (const page of pages) {
+          await page.loadAsync();
+          // A COMPONENT inside a COMPONENT_SET is a variant, not a unit of its own.
+          const units = page.findAllWithCriteria({ types: ['COMPONENT_SET', 'COMPONENT'] })
+            .filter((n) => !(n.type === 'COMPONENT' && n.parent && n.parent.type === 'COMPONENT_SET'));
+          for (const u of units) {
+            const kids = new Set<string>();
+            for (const ins of u.findAllWithCriteria({ types: ['INSTANCE'] })) {
+              const m = await ins.getMainComponentAsync();
+              if (!m) continue;
+              const set = m.parent && m.parent.type === 'COMPONENT_SET' ? m.parent : m;
+              if (set.id === u.id) continue;
+              kids.add(set.name.replace(/^\u{1F6AB}\s*/u, ''));
+            }
+            composes[u.name.replace(/^\u{1F6AB}\s*/u, '')] = [...kids];
+          }
+        }
+        figma.ui.postMessage({ type: 'contract:composition', composes, groups, fileKey: figma.fileKey ?? null });
+      } catch (err) {
+        figma.ui.postMessage({ type: 'contract:composition', error: (err as Error)?.message || String(err) });
+      }
+      break;
+    }
+
     // Provision the anonymous telemetry id (and opt-out flag) for the UI.
     case 'telemetry:init': {
       let anonId = (await figma.clientStorage.getAsync('telemetry-anon-id')) as

@@ -1901,6 +1901,10 @@ window.addEventListener('message', (event) => {
       void onContractEvidence(msg as Record<string, unknown>);
       break;
     }
+    case 'contract:composition': {
+      void onCompositionScanned(msg as Record<string, unknown>);
+      break;
+    }
     // Sandbox → sync server file drop (PNG goldens, diffs): bytes never pass
     // through the console. Sent by code.ts with figma.ui.postMessage.
     case 'contract:artifact': {
@@ -2383,3 +2387,80 @@ setInterval(() => {
 
 // Ask code.ts for the anonymous telemetry id (provisioned in clientStorage).
 postToPlugin('telemetry:init');
+
+// ── Clear draft ───────────────────────────────────────────────────────────────
+// Testing the scaffolder means running it repeatedly, and there was no way back
+// to a clean slate from inside Figma. Two clicks: the first asks, the second
+// does it, so a stray click cannot delete curation.
+let clearArmed: string | null = null;
+document.getElementById('contractClearBtn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('contractClearBtn') as HTMLButtonElement;
+  const slug = contractSlugForClear();
+  if (!slug) { setContractStatus('Select a component set first — the slug comes from the selection or the name field.', 'err'); return; }
+  if (clearArmed !== slug) {
+    clearArmed = slug;
+    btn.textContent = `Clear ${slug}?`;
+    setContractStatus(`This deletes <code>${esc(slug)}.defs.json</code> and everything generated from it. The hand-written spec is restored from git, and the evidence is kept. Click again to confirm.`, '');
+    setTimeout(() => { if (clearArmed === slug) { clearArmed = null; btn.textContent = 'Clear draft…'; } }, 8000);
+    return;
+  }
+  clearArmed = null;
+  btn.disabled = true; btn.textContent = 'Clearing…';
+  sendTelemetry('action:contract-clear');
+  try {
+    const res = await fetch(`${contractEndpoint.replace(/\/$/, '')}/clear`, {
+      method: 'POST', headers: contractHeaders(), body: JSON.stringify({ slug }),
+    });
+    const out = await res.json() as { cleared?: string[]; keptEvidence?: boolean; error?: string };
+    if (!res.ok) throw new Error(out.error || `Sync endpoint returned ${res.status}`);
+    contractIndexCache = null;
+    const n = out.cleared?.length ?? 0;
+    setContractStatus(`Cleared <code>${esc(slug)}</code> — ${n} path${n === 1 ? '' : 's'}.${out.keptEvidence ? ' Evidence kept, so you can scaffold again without re-extracting.' : ''}`, 'ok');
+  } catch (err: any) {
+    setContractStatus(`Clear failed: ${esc(err?.message || String(err))}. ${syncDownMessage()}`, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Clear draft…';
+  }
+});
+
+// ── Scan composition ──────────────────────────────────────────────────────────
+// composition.json was a snapshot someone pasted in by hand, which meant it went
+// stale the moment the file changed. The plugin is the only thing that can walk
+// the file, so the refresh belongs here.
+document.getElementById('contractScanBtn')?.addEventListener('click', () => {
+  const btn = document.getElementById('contractScanBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Scanning…';
+  sendTelemetry('action:contract-scan');
+  setContractStatus('Walking every component page — this takes a few seconds.', '');
+  parent.postMessage({ pluginMessage: { type: 'contract-scan-composition' } }, '*');
+});
+
+async function onCompositionScanned(msg: Record<string, unknown>) {
+  const btn = document.getElementById('contractScanBtn') as HTMLButtonElement;
+  btn.disabled = false; btn.textContent = 'Scan composition';
+  if (msg.error) { setContractStatus(`Scan failed: ${esc(String(msg.error))}`, 'err'); return; }
+  try {
+    const res = await fetch(`${contractEndpoint.replace(/\/$/, '')}/composition`, {
+      method: 'POST', headers: contractHeaders(),
+      body: JSON.stringify({ composes: msg.composes, groups: msg.groups, fileKey: msg.fileKey }),
+    });
+    const out = await res.json() as { components?: number; edges?: number; grouped?: number; error?: string };
+    if (!res.ok) throw new Error(out.error || `Sync endpoint returned ${res.status}`);
+    setContractStatus(`Composition refreshed — ${out.components} components, ${out.edges} edges, ${out.grouped} grouped. See the order with <code>npm run specs:composition</code>.`, 'ok');
+  } catch (err: any) {
+    setContractStatus(`Could not write composition: ${esc(err?.message || String(err))}. ${syncDownMessage()}`, 'err');
+  }
+}
+
+// The slug to clear: whatever the Contract tab is pointed at.
+function contractSlugForClear(): string | null {
+  const typed = (document.getElementById('contractNameInput') as HTMLInputElement | null)?.value.trim();
+  if (typed) return typed.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/^-+|-+$/g, '');
+  const fromEvidence = contractEvidence?.evidence?.set?.name;
+  if (!fromEvidence) return null;
+  return String(fromEvidence)
+    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '')
+    .replace(/\s*[—–-]\s*v\d+(\.\d+)*\s*$/i, '')
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() || null;
+}
