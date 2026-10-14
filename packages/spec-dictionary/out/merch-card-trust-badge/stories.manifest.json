@@ -1,0 +1,46 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "merch-card-trust-badge",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    }
+  ],
+  "existing": [],
+  "deferred": [],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      ""
+    ],
+    "rowValues": [
+      {}
+    ],
+    "cell": {
+      "w": 153,
+      "h": 44,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {},
+        "forced": null,
+        "label": "default",
+        "nodeId": "10327:103546"
+      }
+    ],
+    "missing": []
+  }
+}

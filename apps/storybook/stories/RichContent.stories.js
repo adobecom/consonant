@@ -12,7 +12,7 @@ const section = (bg, content, { align = "flex-start", dark = false } = {}) => ht
   <div data-theme=${dark ? "dark" : nothing} style="
     width: 100%;
     box-sizing: border-box;
-    padding: 64px 80px;
+    padding: var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);
     background: ${bg};
     display: flex;
     flex-direction: column;
@@ -104,7 +104,7 @@ Marketing text content block: eyebrow + title + body paragraph + optional Action
 export const Example_3069_5370 = {
   name: "3069-5370 · Hero Center / On Light",
   render: () => section(
-    "#f8f8f8",
+    "var(--s2a-color-surface-subtle)",
     RichContent({
       density: "tight",
       justifyContent: "center",
@@ -130,7 +130,7 @@ export const Example_3069_5370 = {
 export const Example_3063_5190 = {
   name: "3063-5190 · Product Feature / Acrobat",
   render: () => section(
-    "#f8f8f8",
+    "var(--s2a-color-surface-subtle)",
     RichContent({
       density: "tight",
       justifyContent: "start",
@@ -159,7 +159,7 @@ export const Example_3063_5190 = {
 export const Example_3119_9377 = {
   name: "3119-9377 · Testimonial / On Dark",
   render: () => section(
-    "#0f0d0c",
+    "var(--s2a-color-background-knockout)",
     RichContent({
       density: "tight",
       justifyContent: "start",
@@ -188,7 +188,7 @@ export const Example_3119_9377 = {
 export const Example_3135_4661 = {
   name: "3135-4661 · Tools / On Dark Photo",
   render: () => section(
-    "linear-gradient(135deg, #2c1f14 0%, #1a120a 40%, #251a0e 70%, #1c1408 100%)",
+    "linear-gradient(135deg, var(--s2a-color-background-knockout) 0%, var(--s2a-color-background-knockout) 40%, var(--s2a-color-background-knockout) 70%, var(--s2a-color-background-knockout) 100%)",
     RichContent({
       density: "tight",
       justifyContent: "center",
@@ -216,7 +216,7 @@ export const Example_3135_4661 = {
 export const Example_3119_9356 = {
   name: "3119-9356 · Features Center / On Light",
   render: () => section(
-    "#ffffff",
+    "var(--s2a-color-surface-default)",
     RichContent({
       density: "tight",
       justifyContent: "center",
@@ -242,7 +242,7 @@ export const AllExamples = {
   render: () => html`
     <div style="display: flex; flex-direction: column; width: 100%;">
 
-      <div style="width:100%;box-sizing:border-box;padding:64px 80px;background:#f8f8f8;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:var(--s2a-color-surface-subtle);display:flex;flex-direction:column;align-items:center;">
         ${RichContent({
           density: "tight",
           justifyContent: "center",
@@ -254,7 +254,7 @@ export const AllExamples = {
         })}
       </div>
 
-      <div style="width:100%;box-sizing:border-box;padding:64px 80px;background:#f8f8f8;display:flex;flex-direction:column;align-items:flex-start;">
+      <div style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:var(--s2a-color-surface-subtle);display:flex;flex-direction:column;align-items:flex-start;">
         ${RichContent({
           density: "tight",
           justifyContent: "start",
@@ -270,7 +270,7 @@ export const AllExamples = {
         })}
       </div>
 
-      <div data-theme="dark" style="width:100%;box-sizing:border-box;padding:64px 80px;background:#0f0d0c;display:flex;flex-direction:column;align-items:flex-start;">
+      <div data-theme="dark" style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:var(--s2a-color-background-knockout);display:flex;flex-direction:column;align-items:flex-start;">
         ${RichContent({
           density: "tight",
           justifyContent: "start",
@@ -285,7 +285,7 @@ export const AllExamples = {
         })}
       </div>
 
-      <div data-theme="dark" style="width:100%;box-sizing:border-box;padding:64px 80px;background:linear-gradient(135deg,#2c1f14 0%,#1a120a 40%,#251a0e 70%,#1c1408 100%);display:flex;flex-direction:column;align-items:center;">
+      <div data-theme="dark" style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:linear-gradient(135deg,var(--s2a-color-background-knockout) 0%,var(--s2a-color-background-knockout) 40%,var(--s2a-color-background-knockout) 70%,var(--s2a-color-background-knockout) 100%);display:flex;flex-direction:column;align-items:center;">
         ${RichContent({
           density: "tight",
           justifyContent: "center",
@@ -299,7 +299,7 @@ export const AllExamples = {
         })}
       </div>
 
-      <div style="width:100%;box-sizing:border-box;padding:64px 80px;background:#ffffff;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:var(--s2a-color-surface-default);display:flex;flex-direction:column;align-items:center;">
         ${RichContent({
           density: "tight",
           justifyContent: "center",

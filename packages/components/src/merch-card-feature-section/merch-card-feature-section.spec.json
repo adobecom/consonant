@@ -1,0 +1,546 @@
+{
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
+  "name": "MerchCardFeatureSection",
+  "slug": "merch-card-feature-section",
+  "cssClass": "c-merch-card-feature-section",
+  "figmaNodeId": "10320:102040",
+  "variants": {},
+  "props": [
+    {
+      "name": "icon",
+      "type": "string",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon#10320:107",
+          "verified": true
+        },
+        "code": {
+          "prop": "icon",
+          "attr": null,
+          "extracted": false,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "showDivider",
+      "type": "boolean",
+      "defaultValue": "true",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Divider#10564:7",
+          "verified": true
+        },
+        "code": {
+          "prop": "showDivider",
+          "attr": null,
+          "extracted": false,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "defaultValue": "\"Section title\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Title#10320:104",
+          "verified": true
+        },
+        "code": {
+          "prop": "title",
+          "attr": null,
+          "extracted": false,
+          "jsdoc": null
+        }
+      }
+    }
+  ],
+  "tokenBindings": {
+    "root-gap": "--s2a-spacing-12",
+    "title-gap": "--s2a-spacing-8",
+    "title-padding-bottom": "--s2a-spacing-0",
+    "title-padding-left": "--s2a-spacing-0",
+    "title-padding-right": "--s2a-spacing-0",
+    "title-padding-top": "--s2a-spacing-0",
+    "title-text-color": "--s2a-color-content-heading",
+    "title-text-font-family": "--s2a-font-family-label",
+    "title-text-font-size": "--s2a-typography-font-size-label",
+    "title-text-font-weight": "--s2a-font-weight-label",
+    "title-text-letter-spacing": "--s2a-typography-letter-spacing-label",
+    "title-text-line-height": "--s2a-typography-line-height-label",
+    "items-gap": "--s2a-spacing-8",
+    "items-padding-bottom": "--s2a-spacing-0",
+    "items-padding-left": "--s2a-spacing-32",
+    "items-padding-right": "--s2a-spacing-0",
+    "items-padding-top": "--s2a-spacing-0"
+  },
+  "tier": "component",
+  "composedOf": [
+    "divider"
+  ],
+  "a11y": {
+    "wcag": []
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".c-merch-card-feature-section",
+    "figma": ".root",
+    "element": "div",
+    "layout": {
+      "display": "flex",
+      "direction": "column"
+    },
+    "tokens": {
+      "gap": {
+        "value": "{s2a.spacing.12}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.12}",
+            "cssVar": "--s2a-spacing-12",
+            "figma": "s2a/spacing/12",
+            "shipped": true,
+            "value": "12px"
+          }
+        ]
+      },
+      "width": {
+        "value": "raw:418px",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "parts": {
+      "divider": {
+        "selector": ".c-merch-card-feature-section__divider",
+        "figma": "/Divider",
+        "layout": {
+          "display": "flex",
+          "direction": "column",
+          "grow": true
+        },
+        "slot": {
+          "name": "Divider",
+          "accepts": [
+            "Divider"
+          ],
+          "acceptsMode": "restrict",
+          "default": {
+            "figma": "Divider",
+            "slug": "divider",
+            "props": {
+              "Style": "subtle"
+            }
+          },
+          "notes": "Composes Divider (divider)."
+        }
+      },
+      "title": {
+        "selector": ".c-merch-card-feature-section__title",
+        "figma": "/.title",
+        "element": "div",
+        "layout": {
+          "display": "flex",
+          "direction": "row",
+          "align": "center",
+          "grow": true
+        },
+        "tokens": {
+          "gap": {
+            "value": "{s2a.spacing.8}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.8}",
+                "cssVar": "--s2a-spacing-8",
+                "figma": "s2a/spacing/8",
+                "shipped": true,
+                "value": "8px"
+              }
+            ]
+          },
+          "padding-bottom": {
+            "value": "{s2a.spacing.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.0}",
+                "cssVar": "--s2a-spacing-0",
+                "figma": "s2a/spacing/0",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          },
+          "padding-left": {
+            "value": "{s2a.spacing.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.0}",
+                "cssVar": "--s2a-spacing-0",
+                "figma": "s2a/spacing/0",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          },
+          "padding-right": {
+            "value": "{s2a.spacing.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.0}",
+                "cssVar": "--s2a-spacing-0",
+                "figma": "s2a/spacing/0",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          },
+          "padding-top": {
+            "value": "{s2a.spacing.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.0}",
+                "cssVar": "--s2a-spacing-0",
+                "figma": "s2a/spacing/0",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          }
+        },
+        "parts": {
+          "s2-icon-acrobat-pdfedit-20-n": {
+            "selector": ".c-merch-card-feature-section__s2-icon-acrobat-pdfedit-20-n",
+            "figma": "/.title/.icon",
+            "layout": {
+              "display": "flex",
+              "direction": "row"
+            },
+            "tokens": {
+              "width": {
+                "value": "raw:20px",
+                "raw": true,
+                "tokens": []
+              },
+              "height": {
+                "value": "raw:20px",
+                "raw": true,
+                "tokens": []
+              }
+            }
+          },
+          "title-text": {
+            "selector": ".c-merch-card-feature-section__title-text",
+            "figma": "/.title/.title-text",
+            "element": "span",
+            "layout": {
+              "grow": true
+            },
+            "tokens": {
+              "color": {
+                "value": "{s2a.color.content.heading}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.color.content.heading}",
+                    "cssVar": "--s2a-color-content-heading",
+                    "figma": "s2a/color/content/heading",
+                    "shipped": true,
+                    "value": "#000",
+                    "dark": "#fff"
+                  }
+                ]
+              },
+              "font-family": {
+                "value": "{s2a.font.family.label}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.font.family.label}",
+                    "cssVar": "--s2a-font-family-label",
+                    "figma": "s2a/font/family/label",
+                    "shipped": true,
+                    "value": "\"Adobe Clean\""
+                  }
+                ]
+              },
+              "font-size": {
+                "value": "{s2a.typography.font-size.label}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.font-size.label}",
+                    "cssVar": "--s2a-typography-font-size-label",
+                    "figma": "s2a/typography/font-size/label",
+                    "shipped": true,
+                    "value": "0.875rem"
+                  }
+                ]
+              },
+              "font-weight": {
+                "value": "{s2a.font.weight.label}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.font.weight.label}",
+                    "cssVar": "--s2a-font-weight-label",
+                    "figma": "s2a/font/weight/label",
+                    "shipped": true,
+                    "value": "700"
+                  }
+                ]
+              },
+              "letter-spacing": {
+                "value": "{s2a.typography.letter-spacing.label}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.letter-spacing.label}",
+                    "cssVar": "--s2a-typography-letter-spacing-label",
+                    "figma": "s2a/typography/letter-spacing/label",
+                    "shipped": true,
+                    "value": "0"
+                  }
+                ]
+              },
+              "line-height": {
+                "value": "{s2a.typography.line-height.label}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.line-height.label}",
+                    "cssVar": "--s2a-typography-line-height-label",
+                    "figma": "s2a/typography/line-height/label",
+                    "shipped": true,
+                    "value": "18px"
+                  }
+                ]
+              }
+            },
+            "slot": {
+              "name": "title-text",
+              "accepts": [
+                "kind:text"
+              ],
+              "acceptsMode": "prefer",
+              "default": {
+                "text": "Section title"
+              }
+            }
+          }
+        }
+      },
+      "items": {
+        "selector": ".c-merch-card-feature-section__items",
+        "figma": "/.items",
+        "element": "div",
+        "layout": {
+          "display": "flex",
+          "direction": "column",
+          "grow": true
+        },
+        "tokens": {
+          "gap": {
+            "value": "{s2a.spacing.8}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.8}",
+                "cssVar": "--s2a-spacing-8",
+                "figma": "s2a/spacing/8",
+                "shipped": true,
+                "value": "8px"
+              }
+            ]
+          },
+          "padding-bottom": {
+            "value": "{s2a.spacing.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.0}",
+                "cssVar": "--s2a-spacing-0",
+                "figma": "s2a/spacing/0",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          },
+          "padding-left": {
+            "value": "{s2a.spacing.32}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.32}",
+                "cssVar": "--s2a-spacing-32",
+                "figma": "s2a/spacing/32",
+                "shipped": true,
+                "value": "32px"
+              }
+            ]
+          },
+          "padding-right": {
+            "value": "{s2a.spacing.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.0}",
+                "cssVar": "--s2a-spacing-0",
+                "figma": "s2a/spacing/0",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          },
+          "padding-top": {
+            "value": "{s2a.spacing.0}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.0}",
+                "cssVar": "--s2a-spacing-0",
+                "figma": "s2a/spacing/0",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "10320:102040",
+        "nodeName": "MerchCard/FeatureSection",
+        "componentSetKey": "9dedd45e22ee2649c1f34b5bfdd1b317a3caae7b",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:5ffbb816e1f31e6810d51950b8fdd81aacec085fbf2e00b99ba567060133ee2c",
+        "extractedAt": "2026-10-08T17:51:46.444Z",
+        "meta": {
+          "version": "",
+          "status": "",
+          "updated": "",
+          "changelog": ""
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/merch-card-feature-section/merch-card-feature-section.js",
+        "export": "MerchCardFeatureSection",
+        "controller": null,
+        "cssClass": "c-merch-card-feature-section"
+      },
+      "evidence": null
+    }
+  },
+  "decisions": [
+    {
+      "id": "mcfs-archetype-untemplated",
+      "question": "The archetype read as \"none\", which has no template in the dictionary (it has: link-card, card, collection, button, checkbox / radio, toggle / switch, input / field, badge / tag / chip, pagination, accordion, select / dropdown, helper text, list). Without one the draft gets no HTML element, no accessibility floor and no base CSS — the root falls back to <div>. Which archetype is this, really?",
+      "chose": "drafted with no archetype floor; root element defaults to div",
+      "confidence": "low",
+      "fix": "Set \"archetype\" in the defs to one the dictionary templates, or re-scaffold with --archetype=<name>. If none fit, the dictionary needs a new entry.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "no signal identified a kind — decide it rather than inheriting a default"
+    },
+    {
+      "id": "mcfs-archetype",
+      "question": "Scaffolded as none (no signal identified a kind — decide it rather than inheriting a default). Confirm, or re-run npm run specs:scaffold -- --slug=merch-card-feature-section --archetype=<link-card|card|collection>.",
+      "chose": "none — no signal identified a kind — decide it rather than inheriting a default",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=merch-card-feature-section --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×1; state axis none"
+    },
+    {
+      "id": "mcfs-composes",
+      "question": "Built from 1 component set, all of which already have a contract: Divider. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 1 composed set, 1 already contracted; 1 icon set left for the icon slot",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "scaffold",
+      "evidence": "merch-card-feature-section.figma.evidence.json instances"
+    },
+    {
+      "id": "mcfs-layer-names",
+      "question": "1 layers carry Figma-generated names (/.title/.icon/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card-feature-section.figma.evidence.json anatomy"
+    },
+    {
+      "id": "mcfs-code-pending",
+      "question": "No code exists yet. Generate packages/components/src/merch-card-feature-section/merch-card-feature-section.js from the spec (/spec-to-html), run npm run evidence:code -- --slug=merch-card-feature-section, then remove anchors.code.pending.",
+      "confidence": "high",
+      "fix": "Once packages/components/src/merch-card-feature-section/merch-card-feature-section.js exists, run npm run evidence:code -- --slug=merch-card-feature-section and delete anchors.code.pending.",
+      "status": "open",
+      "owner": "scaffold"
+    },
+    {
+      "id": "mcfs-hardcoded-values",
+      "question": "3 values in the design are set with no variable behind them: root width = 418px; root/title/s2-icon-acrobat-pdfedit-20-n width = 20px; root/title/s2-icon-acrobat-pdfedit-20-n height = 20px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card-feature-section.figma.evidence.json unboundValues"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:061db8467e300873af6615afb9e3df500d23810e23fcc6a088c174c33944ebf0",
+    "codeEvidence": null,
+    "figmaEvidence": "sha256:5ffbb816e1f31e6810d51950b8fdd81aacec085fbf2e00b99ba567060133ee2c",
+    "generator": "s2a-spec-transform@1"
+  }
+}

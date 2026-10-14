@@ -20,7 +20,7 @@ export default {
   title: "Cards/Bento",
   tags: ["autodocs"],
   render: (args) => html`
-    <div style="max-width: 1392px; padding: 24px;">${Bento(args)}</div>
+    <div style="max-width: 1392px; padding: var(--s2a-spacing-lg);">${Bento(args)}</div>
   `,
   parameters: {
     layout: "fullscreen",
@@ -80,7 +80,7 @@ export const Full = {
   name: "Full (wide hero)",
   // Image + centered crop matched to Figma "Bento — v2 · Dark · 1392×711" (12873:185673)
   args: { imageSrc: DARK_FULL },
-  render: (args) => html`<div style="max-width: 1392px; padding: 24px;">${Bento(args)}</div>`,
+  render: (args) => html`<div style="max-width: 1392px; padding: var(--s2a-spacing-lg);">${Bento(args)}</div>`,
 };
 
 // ─── Full · Dark theme ─────────────────────────────────────────────────────────
@@ -97,7 +97,7 @@ export const FullDark = {
     body: "Photoshop on the web and iPad keeps your work in sync — start on one, finish on another.",
     ctaLabel: "Learn more",
   },
-  render: (args) => html`<div style="max-width: 1392px; padding: 24px;">${Bento(args)}</div>`,
+  render: (args) => html`<div style="max-width: 1392px; padding: var(--s2a-spacing-lg);">${Bento(args)}</div>`,
 };
 
 // ─── Third (grid tile) ─────────────────────────────────────────────────────────
@@ -113,7 +113,7 @@ export const Third = {
     body: "Trusted PDF tools, now with AI for editing, insights, and content creation.",
     ctaLabel: "Learn more",
   },
-  render: (args) => html`<div style="max-width: 692px; padding: 24px;">${Bento(args)}</div>`,
+  render: (args) => html`<div style="max-width: 692px; padding: var(--s2a-spacing-lg);">${Bento(args)}</div>`,
 };
 
 // ─── Centered text alignment ────────────────────────────────────────────────────
@@ -129,7 +129,7 @@ export const CenteredText = {
     body: "Update text and images, rearrange content, and share instantly.",
     ctaLabel: "Try it now",
   },
-  render: (args) => html`<div style="max-width: 692px; padding: 24px;">${Bento(args)}</div>`,
+  render: (args) => html`<div style="max-width: 692px; padding: var(--s2a-spacing-lg);">${Bento(args)}</div>`,
 };
 
 // ─── Bento grid — 1 full hero + 3-up thirds (the classic layout) ───────────────
@@ -142,7 +142,7 @@ const BentoGrid = ({ full, thirds }) => html`
     .bento-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: var(--s2a-spacing-xs);
     }
     .bento-grid__hero {
       grid-column: 1 / -1;
@@ -168,7 +168,7 @@ export const Grid = {
   name: "Bento Grid (hero + 3-up)",
   parameters: { layout: "fullscreen" },
   render: () => html`
-    <div style="padding: 24px; max-width: 1392px; margin: 0 auto;">
+    <div style="padding: var(--s2a-spacing-lg); max-width: 1392px; margin: 0 auto;">
       ${BentoGrid({
         full: {
           width: "full",
@@ -211,7 +211,7 @@ export const GridDark = {
   parameters: { layout: "fullscreen" },
   globals: { theme: "dark" },
   render: () => html`
-    <div style="padding: 24px;">
+    <div style="padding: var(--s2a-spacing-lg);">
       <div style="max-width: 1392px; margin: 0 auto;">
         ${BentoGrid({
           full: {
@@ -302,5 +302,5 @@ export const NoIcon = {
     headline: "A cleaner tile without the app badge.",
     body: "Drop the icon when the tile isn't tied to a single app.",
   },
-  render: (args) => html`<div style="max-width: 1392px; padding: 24px;">${Bento(args)}</div>`,
+  render: (args) => html`<div style="max-width: 1392px; padding: var(--s2a-spacing-lg);">${Bento(args)}</div>`,
 };

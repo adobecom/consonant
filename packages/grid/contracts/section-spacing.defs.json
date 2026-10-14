@@ -1,0 +1,69 @@
+{
+  "$schema": "s2a-grid-defs/1",
+  "slug": "section-spacing",
+  "name": "Section spacing",
+  "version": "1.0.0",
+  "kind": "spacing",
+  "tier": "sectional",
+  "status": "shipped",
+  "description": "The vertical rhythm between sections: a t-shirt scale from 5xs to 5xl whose value changes per breakpoint, plus the viewport vertical padding scale that sets a section's own top and bottom. Unlike everything else in these contracts, this part of the grid genuinely ships as tokens, so the rules here check that the scale is complete and monotonic rather than checking a stylesheet. This is the scale Will found baked into the jump-links block as literal values, 'meaning you cant override it ever'.",
+  "anchors": {
+    "code": { "stylesheet": "dist/packages/tokens/css/dev/tokens.responsive.xl.css", "importPath": "@adobecom/s2a-tokens" },
+    "figma": { "collectionId": "VariableCollectionId:6:178", "fileKey": "qAF4nlt6O4ThbeXeO7jzdb", "nodeId": "104:26144", "layerName": "Section / Md Sec Spacer", "designOnly": false }
+  },
+  "breakpointBehavior": [
+    { "breakpoint": "sm", "behavior": "The scale compresses hard: 5xl is 80px where HD gives 240px, so a page does not become an unreadable column of air on a phone." },
+    { "breakpoint": "md", "behavior": "Intermediate values; 5xl is 160px." },
+    { "breakpoint": "lg", "behavior": "Full desktop values, identical to HD." },
+    { "breakpoint": "xl", "behavior": "Full values; 5xl is 240px." }
+  ],
+  "tokens": [
+    { "role": "section-gap", "ref": "{s2a.section-spacing.none}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.5xs}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.4xs}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.3xs}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.2xs}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.xs}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.sm}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.md}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.lg}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.xl}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.2xl}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.3xl}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.4xl}", "breakpoint": "all" },
+    { "role": "section-gap", "ref": "{s2a.section-spacing.5xl}", "breakpoint": "all" },
+    { "role": "section-padding", "ref": "{s2a.viewport-vertical-padding.none}", "breakpoint": "all" },
+    { "role": "section-padding", "ref": "{s2a.viewport-vertical-padding.2xs}", "breakpoint": "all" },
+    { "role": "section-padding", "ref": "{s2a.viewport-vertical-padding.xs}", "breakpoint": "all" },
+    { "role": "section-padding", "ref": "{s2a.viewport-vertical-padding.sm}", "breakpoint": "all" },
+    { "role": "section-padding", "ref": "{s2a.viewport-vertical-padding.md}", "breakpoint": "all" },
+    { "role": "section-padding", "ref": "{s2a.viewport-vertical-padding.lg}", "breakpoint": "all" },
+    { "role": "section-padding", "ref": "{s2a.viewport-vertical-padding.xl}", "breakpoint": "all" }
+  ],
+  "rules": [
+    { "id": "SEC_SCALE_SHIPPED", "statement": "Every step of the section-spacing scale ships in the built token CSS. A gap in the scale is how a block ends up with a literal.", "severity": "fail", "check": { "type": "tokenShipped", "ref": "{s2a.section-spacing.5xl}" } },
+    { "id": "SEC_NONE_SHIPPED", "statement": "The scale includes an explicit zero, so 'no gap' is a choice from the system rather than the absence of one.", "severity": "fail", "check": { "type": "tokenShipped", "ref": "{s2a.section-spacing.none}" } },
+    { "id": "SEC_PADDING_SHIPPED", "statement": "The viewport vertical padding scale ships.", "severity": "fail", "check": { "type": "tokenShipped", "ref": "{s2a.viewport-vertical-padding.xl}" } },
+    { "id": "SEC_FIGMA_XL_5XL", "statement": "Figma's HD mode agrees that the largest section gap is 240px.", "severity": "fail", "check": { "type": "figmaAgrees", "figmaPath": "section-spacing.5xl", "mode": "xl", "expected": 240 } },
+    { "id": "SEC_FIGMA_SM_5XL", "statement": "Figma's mobile mode compresses the largest section gap to 80px.", "severity": "fail", "check": { "type": "figmaAgrees", "figmaPath": "section-spacing.5xl", "mode": "sm", "expected": 80 } },
+    { "id": "SEC_MONOTONIC_XL", "statement": "The scale never goes backwards: at every breakpoint each step is greater than or equal to the one below it. Will found 2xl and 3xl inverted in the spacers once already.", "severity": "fail", "check": { "type": "manual", "note": "Checked by the validator across all four modes; see the conformance report. At md, 3xl (64) is smaller than 2xl (80) — recorded as a finding rather than silently tolerated." } },
+    { "id": "SEC_MD_BOUNDARY", "statement": "The md token file begins at 768, not 1024. The 1024 value flipped sectional spacing a whole range early and shipped for months.", "severity": "fail", "check": { "type": "boundaryAgreement", "breakpoint": "md", "expected": 768 } }
+  ],
+  "decisions": [
+    {
+      "id": "SEC_MD_INVERSION",
+      "question": "At the tablet breakpoint, section-spacing 3xl resolves to 64px while 2xl resolves to 80px — the scale inverts. Intended or a mapping slip?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "From the Figma modes: md 2xl = {s2a.layout.sm} = 80, md 3xl = {s2a.spacing.4xl} = 64. At every other breakpoint 3xl is greater than or equal to 2xl. Will has found and fixed one spacer dupe like this before."
+    },
+    {
+      "id": "SEC_SPACER_ROLES",
+      "question": "Will's cheat sheet names ten spacer roles — Base Top/Bottom, Grid Bottom, Blocks Gap, Cards Bottom, Cards Gap, CTA Top/Bottom, Pothole, Rich Content Bottom — each with four per-breakpoint values. Should those roles become semantic tokens that alias the scale, so a block says 'cta-top' rather than picking a step?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "They exist in Figma as _c2.design-spacers.* and are stripped as design-only. Naming the role is what would stop each block choosing its own step, which is the drift Will keeps auditing."
+    }
+  ],
+  "visualize": { "demo": "spacing", "overlay": false, "note": "Both scales at all four breakpoints, with the inversion at md marked." }
+}

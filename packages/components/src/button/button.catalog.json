@@ -4,7 +4,7 @@
   "slug": "button",
   "tier": "component",
   "status": "curated-draft",
-  "description": "A button. Renders a native button, or an anchor when href is set, so it keeps the right keyboard and activation behaviour either way.",
+  "description": "The primary action trigger — a text button with optional leading and trailing icons, in six styles. Light and dark are handled automatically by page-level modes, so you choose a style, not a theme.",
   "props": [
     {
       "name": "iconEnd",
@@ -32,17 +32,17 @@
       "lever": false
     },
     {
-      "name": "size",
-      "type": "string",
-      "lever": true
-    },
-    {
       "name": "style",
       "type": "string",
       "lever": true
     },
     {
       "name": "href",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "size",
       "type": "string",
       "lever": true
     },
@@ -60,22 +60,39 @@
   "parts": [
     "root",
     "root.icon-start",
+    "root.icon-start.frame",
+    "root.icon-start.frame.s2-icon-circle-20-n",
+    "root.icon-start.icon-color",
     "root.label",
-    "root.icon-end"
+    "root.icon-end",
+    "root.icon-end.frame",
+    "root.icon-end.frame.s2a-icon-chevron-right",
+    "root.icon-end.icon-color"
   ],
   "slots": [
     {
       "path": "root.icon-start",
-      "accepts": [],
+      "accepts": [
+        "kind:icon"
+      ],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.label",
+      "accepts": [
+        "kind:text"
+      ],
       "mode": "prefer"
     },
     {
       "path": "root.icon-end",
-      "accepts": [],
+      "accepts": [
+        "kind:icon"
+      ],
       "mode": "prefer"
     }
   ],
-  "tokens": 4,
+  "tokens": 60,
   "a11y": {
     "role": null,
     "wcag": [
@@ -96,5 +113,5 @@
     },
     "figma": "10715:35477"
   },
-  "openDecisions": 8
+  "openDecisions": 14
 }

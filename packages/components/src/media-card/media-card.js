@@ -43,7 +43,7 @@ export const MediaCard = ({
       <div class="c-media-card__media">
         ${mediaContent}
         ${showIcon
-          ? html`<span class="c-media-card__icon" aria-hidden="true">${AppIcon({ app, size: "md" })}</span>`
+          ? html`<span class="c-media-card__icon" aria-hidden="true">${AppIcon({ app, size: "24" })}</span>`
           : nothing}
       </div>
       <div class="c-media-card__copy">

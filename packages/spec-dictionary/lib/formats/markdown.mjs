@@ -1,5 +1,7 @@
 // <slug>.spec.md — the contract as a readable page: props, states, anatomy
 // with resolved tokens, slots, decisions, accessibility, provenance.
+import { matrixSpec } from "./matrix.mjs";
+
 const cell = (v) => String(v ?? "—").replace(/\|/g, "\\|").replace(/\n/g, " ");
 const fig = (b) => (b === "NONE" ? "NONE" : `${b.kind} \`${b.property}\`${b.verified === false ? " (not in evidence)" : b.verified ? " ✓" : ""}`);
 
@@ -49,6 +51,33 @@ export function markdown(ir) {
     L.push("");
   }
   if (ir.stories.length) L.push("## Stories", "", ...ir.stories.map((s) => `- \`${s.id}\` ${s.name}`), "");
+
+  // The state matrix is how this component is checked against its design, so
+  // the doc says it exists and what it covers. A component whose set has no
+  // State axis has nothing to lay out, and says so rather than going quiet.
+  const m = matrixSpec(ir);
+  const slug = ir.component.slug;
+  L.push("## State matrix", "");
+  if (!m) {
+    L.push(ir.figmaEvidence
+      ? "This set has no State axis, so there is no state matrix to render or compare."
+      : "No Figma evidence published yet, so there is no state matrix. Extract the set and rebuild.", "");
+  } else {
+    L.push(
+      `Every variant on one grid — ${m.rows.length} ${m.rows.length === 1 ? "row" : "rows"} x ${m.cols.length} states, ${m.cells.length} cells.`,
+      "States are rendered by setting `data-state`, not by pointing at the component, so all of them can be seen — and diffed — at once.",
+      "",
+      `| | ${m.cols.map((c) => `\`${c}\``).join(" | ")} |`,
+      `| --- | ${m.cols.map(() => "---").join(" | ")} |`,
+      ...m.rows.map((r) => `| ${r} | ${m.cols.map(() => "•").join(" | ")} |`),
+      "",
+      `- Story: **Generated/${ir.component.name} → State matrix**, with the Design overlay in the toolbar.`,
+      `- Golden: one composited sheet, \`evals/datasets/contracts/golden/${slug}/sheet.png\` — refresh with \`npm run goldens:sheet -- --slug=${slug}\`.`,
+      `- Compare: \`npm run eval:visual:matrix -- --slug=${slug}\` scores each cell and names the difference codes.`,
+      "",
+    );
+    if (m.missing.length) L.push(`> ${m.missing.length} cell(s) have no artwork in the design file: ${m.missing.join(", ")}.`, "");
+  }
   L.push("## Provenance", "", `- defs: ${ir.provenance.defs ?? "—"}`, `- code evidence: ${ir.provenance.codeEvidence ?? "—"}`, `- figma evidence: ${ir.provenance.figmaEvidence ?? "not published"}`, "");
   return L.join("\n");
 }

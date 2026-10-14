@@ -1,0 +1,485 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Link",
+  "slug": "link",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from link.figma.evidence.json (sha256:7a2a5b7c…) through packages/spec-dictionary/dictionary.json (button)",
+    "date": "2026-10-08",
+    "reviewer": "Matt"
+  },
+  "description": "A text link that adapts to light and dark automatically — no Context axis, theme-aware via content/default.",
+  "archetype": "button",
+  "version": "2.0.1",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "12823:184375",
+      "nodeName": "Link — v2",
+      "componentSetKey": "252b85e9d7c740613b3f2ddfd39c75f394edcd95",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"?\"; 135 nodes, 159 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/link/link.js",
+      "export": "Link",
+      "cssClass": "c-link"
+    }
+  },
+  "props": [
+    {
+      "name": "emphasis",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "default",
+        "subtle"
+      ],
+      "default": "default",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Emphasis"
+      },
+      "code": {
+        "prop": "emphasis",
+        "attr": "data-emphasis"
+      }
+    },
+    {
+      "name": "iconEnd",
+      "lever": true,
+      "type": "string",
+      "figma": {
+        "kind": "INSTANCE_SWAP",
+        "property": "Icon End#2609:0"
+      },
+      "code": {
+        "prop": "iconEnd"
+      }
+    },
+    {
+      "name": "kind",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "action",
+        "text"
+      ],
+      "default": "action",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Kind"
+      },
+      "code": {
+        "prop": "kind",
+        "attr": "data-kind"
+      }
+    },
+    {
+      "name": "label",
+      "lever": true,
+      "type": "string",
+      "default": "Label",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Label#2277:4"
+      },
+      "code": {
+        "prop": "label"
+      }
+    },
+    {
+      "name": "showIconEnd",
+      "lever": false,
+      "type": "boolean",
+      "default": true,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show Icon End#2541:0"
+      },
+      "code": {
+        "prop": "showIconEnd"
+      },
+      "notes": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes."
+    },
+    {
+      "name": "underline",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Underline#10238:0"
+      },
+      "code": {
+        "prop": "underline"
+      }
+    },
+    {
+      "name": "href",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "href"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    }
+  ],
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      },
+      "code": {
+        "mechanism": ":hover"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      },
+      "code": {
+        "mechanism": ":focus-visible"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "active",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=active"
+      },
+      "code": {
+        "mechanism": ":active"
+      },
+      "notes": "Runtime state, never an authored prop."
+    }
+  ],
+  "composition": [
+    {
+      "name": "S2a_Icon_Chevron_Right",
+      "treatment": "icon"
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-link",
+      "figma": ".root",
+      "element": "button",
+      "elementByProp": {
+        "prop": "href",
+        "map": {
+          "": "button",
+          "*": "a"
+        }
+      },
+      "tokens": {
+        "gap": "{s2a.spacing.xs}"
+      },
+      "tokensByProp": [
+        {
+          "prop": "kind",
+          "map": {
+            "action": {
+              "padding-top": "raw:6px",
+              "padding-bottom": "raw:6px"
+            },
+            "text": {
+              "padding-top": "raw:2px",
+              "padding-bottom": "raw:2px"
+            }
+          }
+        }
+      ],
+      "layout": {
+        "display": "inline-flex",
+        "direction": "row",
+        "align": "center"
+      },
+      "parts": {
+        "label-wrap": {
+          "selector": ".c-link__label-wrap",
+          "figma": "/.label-wrap",
+          "tokens": {
+            "gap": "raw:1px"
+          },
+          "layout": {
+            "display": "inline-flex",
+            "direction": "column"
+          },
+          "element": "div",
+          "parts": {
+            "call-to-action": {
+              "selector": ".c-link__call-to-action",
+              "figma": "/.label-wrap/Call to Action",
+              "tokensByProp": [
+                {
+                  "prop": "emphasis",
+                  "map": {
+                    "default": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "subtle": {
+                      "color": "{s2a.color.content.body-subtle}"
+                    }
+                  }
+                },
+                {
+                  "prop": "kind",
+                  "map": {
+                    "action": {
+                      "font-family": "{s2a.font.family.label}",
+                      "font-size": "{s2a.typography.font-size.label}",
+                      "font-weight": "{s2a.font.weight.label}",
+                      "letter-spacing": "{s2a.typography.letter-spacing.label}",
+                      "line-height": "{s2a.typography.line-height.label}"
+                    },
+                    "text": {
+                      "font-family": "{s2a.font.family.body}",
+                      "font-size": "{s2a.typography.font-size.body-md}",
+                      "font-weight": "{s2a.font.weight.body}",
+                      "letter-spacing": "{s2a.typography.letter-spacing.body-md}",
+                      "line-height": "{s2a.typography.line-height.body-md}"
+                    }
+                  }
+                }
+              ],
+              "element": "span",
+              "slot": {
+                "name": "Call to Action",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "default": {
+                  "text": "Label"
+                }
+              }
+            },
+            "underline": {
+              "selector": ".c-link__underline",
+              "figma": "/.label-wrap/.underline",
+              "tokens": {
+                "height": "raw:1px"
+              },
+              "tokensByProp": [
+                {
+                  "prop": "emphasis",
+                  "map": {
+                    "default": {
+                      "background-color": "{s2a.color.content.default}"
+                    },
+                    "subtle": {
+                      "background-color": "{s2a.color.content.body-subtle}"
+                    }
+                  }
+                },
+                {
+                  "prop": "kind",
+                  "map": {
+                    "action": {
+                      "width": "raw:33px"
+                    },
+                    "text": {
+                      "width": "raw:36px"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "end-icon": {
+          "selector": ".c-link__end-icon",
+          "figma": "/end-icon",
+          "tokens": {
+            "width": "raw:12px",
+            "height": "raw:12px"
+          },
+          "element": "div",
+          "parts": {
+            "frame": {
+              "selector": ".c-link__frame",
+              "figma": "/end-icon/Frame",
+              "tokens": {
+                "width": "raw:12px",
+                "height": "raw:12px"
+              },
+              "element": "div",
+              "parts": {
+                "s2a-icon-chevron-right": {
+                  "selector": ".c-link__s2a-icon-chevron-right",
+                  "figma": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+                  "tokens": {
+                    "width": "raw:12px",
+                    "height": "raw:12px"
+                  },
+                  "layout": {
+                    "display": "flex",
+                    "direction": "row"
+                  }
+                }
+              }
+            },
+            "icon-color": {
+              "selector": ".c-link__icon-color",
+              "figma": "/end-icon/Icon color",
+              "tokens": {
+                "width": "raw:12px",
+                "height": "raw:12px"
+              },
+              "tokensByProp": [
+                {
+                  "prop": "emphasis",
+                  "map": {
+                    "default": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "subtle": {
+                      "color": "{s2a.color.content.body-subtle}"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Renders a native <button>, or an <a> when it navigates — never a div with a click handler.",
+      "The label is the accessible name; an icon-only button needs an aria-label.",
+      "Focus is visible on the control itself (2.4.7) and the target is at least 24x24 (2.5.8).",
+      "Disabled is conveyed to assistive tech, not by colour alone (1.4.1).",
+      "Focus state shows a visible focus ring (WCAG 2.2 AA · SC 2.4.7 Focus Visible). Contrast holds in both themes because content/default resolves to a contrasting value per mode (SC 1.4.3 Contrast Minimum)."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "l-archetype",
+      "question": "Scaffolded as button (interactive: state axis has hover, focus, active; interactive, but nothing says which kind). Confirm, or re-run npm run specs:scaffold -- --slug=link --archetype=<link-card|card|collection>.",
+      "chose": "button — interactive: state axis has hover, focus, active; interactive, but nothing says which kind",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=link --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×2, focus-ring×1; state axis default/hover/focus/active"
+    },
+    {
+      "id": "l-part-selectors",
+      "question": "label-wrap, call-to-action, underline, end-icon, frame, s2a-icon-chevron-right, icon-color have no class of their own in link.css. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to link.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/link/link.css"
+    },
+    {
+      "id": "l-match",
+      "question": "Structural match says extend: closest existing contract is Collapsible (score 0.88). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Collapsible (match extend, score 0.88)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Collapsible instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Collapsible (0.88) already covers this; extend it with divider."
+    },
+    {
+      "id": "l-code-only-props",
+      "question": "href exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 1 code-only prop as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.code.evidence.json"
+    },
+    {
+      "id": "l-classify-1",
+      "question": "\"Show Icon End\" treated as a Figma visibility helper for \"Icon End\", not a code lever. Confirm, or change it in props/states.",
+      "chose": "\"Show Icon End\" treated as a Figma visibility helper for \"Icon End\", not a code lever",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.figma.evidence.json axes"
+    },
+    {
+      "id": "l-classify-2",
+      "question": "\"State\" read as runtime states (hover, focus-visible, active), not as a prop. Confirm, or change it in props/states.",
+      "chose": "\"State\" read as runtime states (hover, focus-visible, active), not as a prop",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.figma.evidence.json axes"
+    },
+    {
+      "id": "l-layer-names",
+      "question": "2 layers carry Figma-generated names (/end-icon/Frame, /end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.figma.evidence.json anatomy"
+    },
+    {
+      "id": "l-navigates-as-anchor",
+      "question": "\"href\" navigates, but the archetype's element is <button>. Rendered as <button> it is not reachable as a link, cannot be middle-clicked or opened in a new tab, and is announced with the wrong role. Should this component navigate at all?",
+      "chose": "drafted elementByProp: href empty -> <button>, present -> <a>",
+      "confidence": "medium",
+      "fix": "If it should never navigate, remove the \"href\" prop. If it always navigates, set anatomy.root.element to \"a\" and drop elementByProp.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "WCAG 2.1.1 Keyboard"
+    },
+    {
+      "id": "l-hardcoded-values",
+      "question": "16 values in the design are set with no variable behind them: root padding-top@kind=action = 6px; root padding-bottom@kind=action = 6px; root padding-top@kind=text = 2px; root padding-bottom@kind=text = 2px; root/label-wrap gap = 1px; root/label-wrap/underline height = 1px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.figma.evidence.json unboundValues"
+    }
+  ]
+}

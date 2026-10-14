@@ -5,7 +5,7 @@ import { APP_OPTIONS } from './AppIcon';
 const APP_SLUGS = APP_OPTIONS.map((a) => a.slug);
 
 const darkSurface = (content) => html`
-  <div style="padding:48px;background:#1a1a1a;border-radius:16px;display:inline-flex;align-items:center;justify-content:center;">
+  <div data-theme="dark" style="padding:var(--s2a-spacing-3xl);background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-md);display:inline-flex;align-items:center;justify-content:center;">
     ${content}
   </div>
 `;
@@ -16,7 +16,7 @@ export default {
   render: (args) => darkSurface(PromoCta(args)),
   parameters: {
     layout: 'centered',
-    backgrounds: { default: 'dark', values: [{ name: 'dark', value: '#1a1a1a' }] },
+    backgrounds: { default: 'dark', values: [{ name: 'dark', value: 'var(--s2a-color-background-knockout)' }] },
     docs: {
       description: {
         component: `
@@ -129,7 +129,7 @@ export const FillWidth = {
   name: 'Width · fill',
   args: { width: 'fill' },
   render: (args) => html`
-    <div style="padding:48px;background:#1a1a1a;border-radius:16px;width:320px;">
+    <div data-theme="dark" style="padding:var(--s2a-spacing-3xl);background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-md);width:320px;">
       ${PromoCta(args)}
     </div>
   `,
@@ -138,7 +138,7 @@ export const FillWidth = {
 export const AllApps = {
   name: 'All apps — xl · hug',
   render: () => html`
-    <div style="padding:48px;background:#1a1a1a;border-radius:16px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;">
+    <div data-theme="dark" style="padding:var(--s2a-spacing-3xl);background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-md);display:flex;flex-direction:column;gap:var(--s2a-spacing-xs);align-items:flex-start;">
       ${APP_OPTIONS.slice(0, 8).map((a) => PromoCta({ app: a.slug, label: a.label.replace('Adobe ', '') }))}
     </div>
   `,
@@ -147,10 +147,10 @@ export const AllApps = {
 export const AllStates = {
   name: 'All states · xl',
   render: () => html`
-    <div style="padding:48px;background:#1a1a1a;border-radius:16px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;">
+    <div data-theme="dark" style="padding:var(--s2a-spacing-3xl);background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-md);display:flex;flex-direction:column;gap:var(--s2a-spacing-xs);align-items:flex-start;">
       ${['default', 'hover', 'active'].map((state) => html`
-        <div style="display:flex;align-items:center;gap:16px;">
-          <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#555;width:56px;">${state}</span>
+        <div style="display:flex;align-items:center;gap:var(--s2a-spacing-md);">
+          <span style="font-size:var(--s2a-font-size-xs);font-weight:var(--s2a-font-weight-label);letter-spacing:var(--s2a-font-letter-spacing-6xl);text-transform:uppercase;color:var(--s2a-color-content-body-subtle);width:56px;">${state}</span>
           ${PromoCta({ state })}
         </div>
       `)}
@@ -161,10 +161,10 @@ export const AllStates = {
 export const BothSizes = {
   name: 'Both sizes · default',
   render: () => html`
-    <div style="padding:48px;background:#1a1a1a;border-radius:16px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;">
+    <div data-theme="dark" style="padding:var(--s2a-spacing-3xl);background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-md);display:flex;flex-direction:column;gap:var(--s2a-spacing-xs);align-items:flex-start;">
       ${['xl', 'lg'].map((size) => html`
-        <div style="display:flex;align-items:center;gap:16px;">
-          <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#555;width:24px;">${size}</span>
+        <div style="display:flex;align-items:center;gap:var(--s2a-spacing-md);">
+          <span style="font-size:var(--s2a-font-size-xs);font-weight:var(--s2a-font-weight-label);letter-spacing:var(--s2a-font-letter-spacing-6xl);text-transform:uppercase;color:var(--s2a-color-content-body-subtle);width:24px;">${size}</span>
           ${PromoCta({ size })}
         </div>
       `)}

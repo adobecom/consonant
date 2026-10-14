@@ -1,0 +1,1362 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-08T17:35:24.074Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "merch-card",
+    "name": "MerchCard",
+    "cssClass": "c-merch-card",
+    "importPath": "packages/components/src/merch-card/merch-card.js",
+    "exports": [
+      "MerchCard"
+    ],
+    "render": "MerchCard",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/merch-card/merch-card.spec.json",
+      "storybookId": "cards-merchcard",
+      "figmaNodeId": "10826:13312"
+    }
+  },
+  "sources": {
+    "packages/components/src/merch-card/index.js": "sha256:cd338a154ab7e4a0b98670907ae8892d60caf0b5718dda418b80a6f2d7ad61c6",
+    "packages/components/src/merch-card/merch-card.js": "sha256:cbc3e85b86735e39d1d12530d11ba729fa57f616fcfe51c5b34c728e28389c1c",
+    "packages/components/src/merch-card/merch-card.css": "sha256:2416cb94e7d48857f8cd9deb836f9e7998eca67c8b69416d4993893b3f12995c"
+  },
+  "props": [
+    {
+      "name": "style",
+      "default": "\"default\"",
+      "type": "string"
+    },
+    {
+      "name": "featuresList",
+      "default": "\"default\"",
+      "type": "string"
+    },
+    {
+      "name": "planName",
+      "default": "\"Plan Name\"",
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "default": "\"Plan description goes here.\"",
+      "type": "string"
+    },
+    {
+      "name": "app",
+      "default": "\"acrobat-pro\"",
+      "type": "string"
+    },
+    {
+      "name": "planLabel",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "price",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "comparePrice",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "priceNote",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "priceTerms",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "showPricing",
+      "default": "true",
+      "type": "boolean"
+    },
+    {
+      "name": "showOptions",
+      "default": "true",
+      "type": "boolean"
+    },
+    {
+      "name": "options",
+      "default": "null",
+      "type": "expression"
+    },
+    {
+      "name": "optionLabel",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "optionPromo",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "features",
+      "default": "[]",
+      "type": "array"
+    },
+    {
+      "name": "featuresTitle",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "primaryCtaLabel",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "secondaryCtaLabel",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "trustLabel",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "onPrimaryCta"
+    },
+    {
+      "name": "onSecondaryCta"
+    }
+  ],
+  "attributes": {
+    "data-features-list": {
+      "values": [
+        "closed",
+        "default"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-load-state": {
+      "values": [
+        "error"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-size": {
+      "values": [
+        "sm"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-style": {
+      "values": [
+        "default",
+        "highlight"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-merch-card",
+      "c-merch-card__actions",
+      "c-merch-card__body",
+      "c-merch-card__button",
+      "c-merch-card__button--accent",
+      "c-merch-card__button--outlined",
+      "c-merch-card__compare-price",
+      "c-merch-card__content",
+      "c-merch-card__cta",
+      "c-merch-card__description",
+      "c-merch-card__feature",
+      "c-merch-card__features",
+      "c-merch-card__features-content",
+      "c-merch-card__features-list",
+      "c-merch-card__features-title",
+      "c-merch-card__header",
+      "c-merch-card__lockup-icon",
+      "c-merch-card__lockup-label",
+      "c-merch-card__name-area",
+      "c-merch-card__option",
+      "c-merch-card__option-chevron",
+      "c-merch-card__option-label",
+      "c-merch-card__option-promo",
+      "c-merch-card__option-text",
+      "c-merch-card__options",
+      "c-merch-card__plan-header",
+      "c-merch-card__plan-name",
+      "c-merch-card__price",
+      "c-merch-card__price-note",
+      "c-merch-card__price-terms",
+      "c-merch-card__pricing",
+      "c-merch-card__trust",
+      "c-merch-card__trust-icon"
+    ],
+    "stylesheet": [
+      "c-merch-card",
+      "c-merch-card__actions",
+      "c-merch-card__body",
+      "c-merch-card__button",
+      "c-merch-card__button--accent",
+      "c-merch-card__button--outlined",
+      "c-merch-card__compare-price",
+      "c-merch-card__content",
+      "c-merch-card__cta",
+      "c-merch-card__description",
+      "c-merch-card__feature",
+      "c-merch-card__features",
+      "c-merch-card__features-content",
+      "c-merch-card__features-list",
+      "c-merch-card__features-title",
+      "c-merch-card__header",
+      "c-merch-card__lockup-icon",
+      "c-merch-card__lockup-label",
+      "c-merch-card__name-area",
+      "c-merch-card__option",
+      "c-merch-card__option-chevron",
+      "c-merch-card__option-label",
+      "c-merch-card__option-promo",
+      "c-merch-card__option-text",
+      "c-merch-card__options",
+      "c-merch-card__plan-header",
+      "c-merch-card__plan-name",
+      "c-merch-card__price",
+      "c-merch-card__price-note",
+      "c-merch-card__price-terms",
+      "c-merch-card__pricing",
+      "c-merch-card__trust",
+      "c-merch-card__trust-icon",
+      "json",
+      "spec"
+    ],
+    "runtime": [
+      "c-app-icon",
+      "c-app-icon__img",
+      "c-merch-card",
+      "c-merch-card__actions",
+      "c-merch-card__body",
+      "c-merch-card__button",
+      "c-merch-card__button--accent",
+      "c-merch-card__button--outlined",
+      "c-merch-card__compare-price",
+      "c-merch-card__content",
+      "c-merch-card__cta",
+      "c-merch-card__description",
+      "c-merch-card__feature",
+      "c-merch-card__features",
+      "c-merch-card__features-content",
+      "c-merch-card__features-list",
+      "c-merch-card__features-title",
+      "c-merch-card__header",
+      "c-merch-card__lockup-icon",
+      "c-merch-card__lockup-label",
+      "c-merch-card__name-area",
+      "c-merch-card__option",
+      "c-merch-card__option-chevron",
+      "c-merch-card__option-label",
+      "c-merch-card__option-promo",
+      "c-merch-card__option-text",
+      "c-merch-card__options",
+      "c-merch-card__plan-header",
+      "c-merch-card__plan-name",
+      "c-merch-card__price",
+      "c-merch-card__price-note",
+      "c-merch-card__price-terms",
+      "c-merch-card__pricing",
+      "c-merch-card__trust",
+      "c-merch-card__trust-icon"
+    ],
+    "own": [
+      "c-merch-card",
+      "c-merch-card__actions",
+      "c-merch-card__body",
+      "c-merch-card__button",
+      "c-merch-card__button--accent",
+      "c-merch-card__button--outlined",
+      "c-merch-card__compare-price",
+      "c-merch-card__content",
+      "c-merch-card__cta",
+      "c-merch-card__description",
+      "c-merch-card__feature",
+      "c-merch-card__features",
+      "c-merch-card__features-content",
+      "c-merch-card__features-list",
+      "c-merch-card__features-title",
+      "c-merch-card__header",
+      "c-merch-card__lockup-icon",
+      "c-merch-card__lockup-label",
+      "c-merch-card__name-area",
+      "c-merch-card__option",
+      "c-merch-card__option-chevron",
+      "c-merch-card__option-label",
+      "c-merch-card__option-promo",
+      "c-merch-card__option-text",
+      "c-merch-card__options",
+      "c-merch-card__plan-header",
+      "c-merch-card__plan-name",
+      "c-merch-card__price",
+      "c-merch-card__price-note",
+      "c-merch-card__price-terms",
+      "c-merch-card__pricing",
+      "c-merch-card__trust",
+      "c-merch-card__trust-icon"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden"
+    ],
+    "tags": [
+      "article",
+      "button",
+      "h3",
+      "ul"
+    ]
+  },
+  "imports": [
+    "../app-icon/app-icon.js",
+    "./merch-card.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-border-radius-999": {
+        "fallback": true
+      },
+      "--s2a-border-radius-md": {
+        "fallback": true
+      },
+      "--s2a-border-radius-sm": {
+        "fallback": true
+      },
+      "--s2a-border-radius-xs": {
+        "fallback": true
+      },
+      "--s2a-color-background-inverse": {
+        "fallback": true
+      },
+      "--s2a-color-background-subtle": {
+        "fallback": true
+      },
+      "--s2a-color-blue-900": {
+        "fallback": false
+      },
+      "--s2a-color-border-knockout": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-accent-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-background-primary-outlined-default": {
+        "fallback": true
+      },
+      "--s2a-color-button-content-primary-outlined-default": {
+        "fallback": true
+      },
+      "--s2a-color-content-default": {
+        "fallback": true
+      },
+      "--s2a-color-content-heading": {
+        "fallback": true
+      },
+      "--s2a-color-content-inverse": {
+        "fallback": true
+      },
+      "--s2a-color-content-knockout": {
+        "fallback": true
+      },
+      "--s2a-color-content-label": {
+        "fallback": true
+      },
+      "--s2a-color-content-subtle": {
+        "fallback": true
+      },
+      "--s2a-color-focus-ring-default": {
+        "fallback": true
+      },
+      "--s2a-color-gray-1000": {
+        "fallback": false
+      },
+      "--s2a-color-gray-50": {
+        "fallback": false
+      },
+      "--s2a-color-surface-default": {
+        "fallback": true
+      },
+      "--s2a-color-surface-inverse-subtle": {
+        "fallback": true
+      },
+      "--s2a-color-surface-subtle": {
+        "fallback": true
+      },
+      "--s2a-color-transparent-black-64": {
+        "fallback": false
+      },
+      "--s2a-font-family-body": {
+        "fallback": true
+      },
+      "--s2a-font-family-heading": {
+        "fallback": true
+      },
+      "--s2a-font-family-label": {
+        "fallback": true
+      },
+      "--s2a-font-weight-body": {
+        "fallback": true
+      },
+      "--s2a-font-weight-heading": {
+        "fallback": true
+      },
+      "--s2a-font-weight-label": {
+        "fallback": true
+      },
+      "--s2a-spacing-2xs": {
+        "fallback": true
+      },
+      "--s2a-spacing-3xl": {
+        "fallback": true
+      },
+      "--s2a-spacing-3xs": {
+        "fallback": true
+      },
+      "--s2a-spacing-lg": {
+        "fallback": true
+      },
+      "--s2a-spacing-md": {
+        "fallback": true
+      },
+      "--s2a-spacing-sm": {
+        "fallback": true
+      },
+      "--s2a-spacing-xs": {
+        "fallback": true
+      },
+      "--s2a-typography-font-size-body-sm": {
+        "fallback": true
+      },
+      "--s2a-typography-font-size-caption": {
+        "fallback": true
+      },
+      "--s2a-typography-font-size-heading-5": {
+        "fallback": true
+      },
+      "--s2a-typography-font-size-label": {
+        "fallback": true
+      },
+      "--s2a-typography-letter-spacing-heading-5": {
+        "fallback": true
+      },
+      "--s2a-typography-line-height-body-sm": {
+        "fallback": true
+      },
+      "--s2a-typography-line-height-caption": {
+        "fallback": true
+      },
+      "--s2a-typography-line-height-heading-5": {
+        "fallback": true
+      },
+      "--s2a-typography-line-height-label": {
+        "fallback": true
+      }
+    },
+    "custom": [
+      "--s2a-color-background-subtle",
+      "--s2a-color-border-knockout",
+      "--s2a-color-button-content-primary-outlined-default",
+      "--s2a-color-content-default",
+      "--s2a-color-content-heading",
+      "--s2a-color-content-label",
+      "--s2a-color-content-subtle",
+      "--s2a-color-focus-ring-default"
+    ],
+    "raw": []
+  },
+  "states": [
+    ":focus"
+  ],
+  "queries": [],
+  "stories": [
+    {
+      "id": "cards-merchcard--default",
+      "name": "Default",
+      "args": {
+        "style": "default",
+        "featuresList": "default",
+        "planName": "Acrobat Standard",
+        "description": "Simple PDF tools to edit, convert, and e-sign.",
+        "planLabel": "Standard PDF toolset",
+        "app": "acrobat-pro",
+        "comparePrice": "US$599.88/yr",
+        "price": "US$49.99/mo",
+        "priceNote": "Billed monthly, cancel anytime",
+        "priceTerms": "Offer terms apply",
+        "showPricing": true,
+        "showOptions": true,
+        "optionLabel": "1 License",
+        "optionPromo": "Save 7.5% your first year with 3+ licenses. See terms",
+        "featuresTitle": "Section title",
+        "features": [
+          "Feature item 1",
+          "Feature item 2",
+          "Feature item 3",
+          "Feature item 4"
+        ],
+        "primaryCtaLabel": "Get free app",
+        "secondaryCtaLabel": "Learn more",
+        "trustLabel": "Secure transaction"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-merch-card"
+        ],
+        "dataset": {
+          "style": "default",
+          "featuresList": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "default"
+        ],
+        "data-size": [
+          "sm"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-merch-card",
+        "c-merch-card__actions",
+        "c-merch-card__body",
+        "c-merch-card__button",
+        "c-merch-card__button--accent",
+        "c-merch-card__button--outlined",
+        "c-merch-card__compare-price",
+        "c-merch-card__content",
+        "c-merch-card__cta",
+        "c-merch-card__description",
+        "c-merch-card__feature",
+        "c-merch-card__features",
+        "c-merch-card__features-content",
+        "c-merch-card__features-list",
+        "c-merch-card__features-title",
+        "c-merch-card__header",
+        "c-merch-card__lockup-icon",
+        "c-merch-card__lockup-label",
+        "c-merch-card__name-area",
+        "c-merch-card__option",
+        "c-merch-card__option-chevron",
+        "c-merch-card__option-label",
+        "c-merch-card__option-promo",
+        "c-merch-card__option-text",
+        "c-merch-card__options",
+        "c-merch-card__plan-header",
+        "c-merch-card__plan-name",
+        "c-merch-card__price",
+        "c-merch-card__price-note",
+        "c-merch-card__price-terms",
+        "c-merch-card__pricing",
+        "c-merch-card__trust",
+        "c-merch-card__trust-icon"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "1 License Save 7.5% your first year with 3+ licenses. See te",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Get free app",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 41
+    },
+    {
+      "id": "cards-merchcard--highlight",
+      "name": "Highlight",
+      "args": {
+        "style": "highlight",
+        "featuresList": "default",
+        "planName": "Acrobat Standard",
+        "description": "Simple PDF tools to edit, convert, and e-sign.",
+        "planLabel": "Standard PDF toolset",
+        "app": "acrobat-pro",
+        "comparePrice": "US$599.88/yr",
+        "price": "US$49.99/mo",
+        "priceNote": "Billed monthly, cancel anytime",
+        "priceTerms": "Offer terms apply",
+        "showPricing": true,
+        "showOptions": true,
+        "optionLabel": "1 License",
+        "optionPromo": "Save 7.5% your first year with 3+ licenses. See terms",
+        "featuresTitle": "Section title",
+        "features": [
+          "Feature item 1",
+          "Feature item 2",
+          "Feature item 3",
+          "Feature item 4"
+        ],
+        "primaryCtaLabel": "Get free app",
+        "secondaryCtaLabel": "Learn more",
+        "trustLabel": "Secure transaction"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-merch-card"
+        ],
+        "dataset": {
+          "style": "highlight",
+          "featuresList": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "highlight"
+        ],
+        "data-features-list": [
+          "default"
+        ],
+        "data-size": [
+          "sm"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "highlight"
+        ],
+        "data-features-list": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-merch-card",
+        "c-merch-card__actions",
+        "c-merch-card__body",
+        "c-merch-card__button",
+        "c-merch-card__button--accent",
+        "c-merch-card__button--outlined",
+        "c-merch-card__compare-price",
+        "c-merch-card__content",
+        "c-merch-card__cta",
+        "c-merch-card__description",
+        "c-merch-card__feature",
+        "c-merch-card__features",
+        "c-merch-card__features-content",
+        "c-merch-card__features-list",
+        "c-merch-card__features-title",
+        "c-merch-card__header",
+        "c-merch-card__lockup-icon",
+        "c-merch-card__lockup-label",
+        "c-merch-card__name-area",
+        "c-merch-card__option",
+        "c-merch-card__option-chevron",
+        "c-merch-card__option-label",
+        "c-merch-card__option-promo",
+        "c-merch-card__option-text",
+        "c-merch-card__options",
+        "c-merch-card__plan-header",
+        "c-merch-card__plan-name",
+        "c-merch-card__price",
+        "c-merch-card__price-note",
+        "c-merch-card__price-terms",
+        "c-merch-card__pricing",
+        "c-merch-card__trust",
+        "c-merch-card__trust-icon"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "1 License Save 7.5% your first year with 3+ licenses. See te",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Get free app",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 41
+    },
+    {
+      "id": "cards-merchcard--features-closed",
+      "name": "Features Closed",
+      "args": {
+        "style": "default",
+        "featuresList": "closed",
+        "planName": "Acrobat Standard",
+        "description": "Simple PDF tools to edit, convert, and e-sign.",
+        "planLabel": "Standard PDF toolset",
+        "app": "acrobat-pro",
+        "comparePrice": "US$599.88/yr",
+        "price": "US$49.99/mo",
+        "priceNote": "Billed monthly, cancel anytime",
+        "priceTerms": "Offer terms apply",
+        "showPricing": true,
+        "showOptions": true,
+        "optionLabel": "1 License",
+        "optionPromo": "Save 7.5% your first year with 3+ licenses. See terms",
+        "featuresTitle": "Section title",
+        "features": [
+          "Feature item 1",
+          "Feature item 2",
+          "Feature item 3",
+          "Feature item 4"
+        ],
+        "primaryCtaLabel": "Get free app",
+        "secondaryCtaLabel": "Learn more",
+        "trustLabel": "Secure transaction"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-merch-card"
+        ],
+        "dataset": {
+          "style": "default",
+          "featuresList": "closed"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "closed"
+        ],
+        "data-size": [
+          "sm"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "closed"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-merch-card",
+        "c-merch-card__actions",
+        "c-merch-card__body",
+        "c-merch-card__button",
+        "c-merch-card__button--accent",
+        "c-merch-card__button--outlined",
+        "c-merch-card__compare-price",
+        "c-merch-card__content",
+        "c-merch-card__cta",
+        "c-merch-card__description",
+        "c-merch-card__features",
+        "c-merch-card__header",
+        "c-merch-card__lockup-icon",
+        "c-merch-card__lockup-label",
+        "c-merch-card__name-area",
+        "c-merch-card__option",
+        "c-merch-card__option-chevron",
+        "c-merch-card__option-label",
+        "c-merch-card__option-promo",
+        "c-merch-card__option-text",
+        "c-merch-card__options",
+        "c-merch-card__plan-header",
+        "c-merch-card__plan-name",
+        "c-merch-card__price",
+        "c-merch-card__price-note",
+        "c-merch-card__price-terms",
+        "c-merch-card__pricing",
+        "c-merch-card__trust",
+        "c-merch-card__trust-icon"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "1 License Save 7.5% your first year with 3+ licenses. See te",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Get free app",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 34
+    },
+    {
+      "id": "cards-merchcard--highlight-features-closed",
+      "name": "Highlight Features Closed",
+      "args": {
+        "style": "highlight",
+        "featuresList": "closed",
+        "planName": "Acrobat Standard",
+        "description": "Simple PDF tools to edit, convert, and e-sign.",
+        "planLabel": "Standard PDF toolset",
+        "app": "acrobat-pro",
+        "comparePrice": "US$599.88/yr",
+        "price": "US$49.99/mo",
+        "priceNote": "Billed monthly, cancel anytime",
+        "priceTerms": "Offer terms apply",
+        "showPricing": true,
+        "showOptions": true,
+        "optionLabel": "1 License",
+        "optionPromo": "Save 7.5% your first year with 3+ licenses. See terms",
+        "featuresTitle": "Section title",
+        "features": [
+          "Feature item 1",
+          "Feature item 2",
+          "Feature item 3",
+          "Feature item 4"
+        ],
+        "primaryCtaLabel": "Get free app",
+        "secondaryCtaLabel": "Learn more",
+        "trustLabel": "Secure transaction"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-merch-card"
+        ],
+        "dataset": {
+          "style": "highlight",
+          "featuresList": "closed"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "highlight"
+        ],
+        "data-features-list": [
+          "closed"
+        ],
+        "data-size": [
+          "sm"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "highlight"
+        ],
+        "data-features-list": [
+          "closed"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-merch-card",
+        "c-merch-card__actions",
+        "c-merch-card__body",
+        "c-merch-card__button",
+        "c-merch-card__button--accent",
+        "c-merch-card__button--outlined",
+        "c-merch-card__compare-price",
+        "c-merch-card__content",
+        "c-merch-card__cta",
+        "c-merch-card__description",
+        "c-merch-card__features",
+        "c-merch-card__header",
+        "c-merch-card__lockup-icon",
+        "c-merch-card__lockup-label",
+        "c-merch-card__name-area",
+        "c-merch-card__option",
+        "c-merch-card__option-chevron",
+        "c-merch-card__option-label",
+        "c-merch-card__option-promo",
+        "c-merch-card__option-text",
+        "c-merch-card__options",
+        "c-merch-card__plan-header",
+        "c-merch-card__plan-name",
+        "c-merch-card__price",
+        "c-merch-card__price-note",
+        "c-merch-card__price-terms",
+        "c-merch-card__pricing",
+        "c-merch-card__trust",
+        "c-merch-card__trust-icon"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "1 License Save 7.5% your first year with 3+ licenses. See te",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Get free app",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 34
+    },
+    {
+      "id": "cards-merchcard--minimal-no-optional-regions",
+      "name": "Minimal No Optional Regions",
+      "args": {
+        "style": "default",
+        "featuresList": "closed",
+        "planName": "Acrobat Standard",
+        "description": "Simple PDF tools to edit, convert, and e-sign.",
+        "planLabel": "Standard PDF toolset",
+        "app": "acrobat-pro",
+        "comparePrice": "US$599.88/yr",
+        "price": "US$49.99/mo",
+        "priceNote": "Billed monthly, cancel anytime",
+        "priceTerms": "Offer terms apply",
+        "showPricing": false,
+        "showOptions": false,
+        "optionLabel": "1 License",
+        "optionPromo": "Save 7.5% your first year with 3+ licenses. See terms",
+        "featuresTitle": "Section title",
+        "features": [
+          "Feature item 1",
+          "Feature item 2",
+          "Feature item 3",
+          "Feature item 4"
+        ],
+        "primaryCtaLabel": "Get free app",
+        "secondaryCtaLabel": "",
+        "trustLabel": ""
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-merch-card"
+        ],
+        "dataset": {
+          "style": "default",
+          "featuresList": "closed"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "closed"
+        ],
+        "data-size": [
+          "sm"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "closed"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-merch-card",
+        "c-merch-card__actions",
+        "c-merch-card__body",
+        "c-merch-card__button",
+        "c-merch-card__button--accent",
+        "c-merch-card__content",
+        "c-merch-card__cta",
+        "c-merch-card__description",
+        "c-merch-card__features",
+        "c-merch-card__header",
+        "c-merch-card__lockup-icon",
+        "c-merch-card__lockup-label",
+        "c-merch-card__name-area",
+        "c-merch-card__plan-header",
+        "c-merch-card__plan-name"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Get free app",
+          "disabled": false
+        }
+      ],
+      "nodes": 16
+    },
+    {
+      "id": "cards-merchcard--on-dark-surface",
+      "name": "On Dark Surface",
+      "args": {
+        "style": "default",
+        "featuresList": "default",
+        "planName": "Acrobat Standard",
+        "description": "Simple PDF tools to edit, convert, and e-sign.",
+        "planLabel": "Standard PDF toolset",
+        "app": "acrobat-pro",
+        "comparePrice": "US$599.88/yr",
+        "price": "US$49.99/mo",
+        "priceNote": "Billed monthly, cancel anytime",
+        "priceTerms": "Offer terms apply",
+        "showPricing": true,
+        "showOptions": true,
+        "optionLabel": "1 License",
+        "optionPromo": "Save 7.5% your first year with 3+ licenses. See terms",
+        "featuresTitle": "Section title",
+        "features": [
+          "Feature item 1",
+          "Feature item 2",
+          "Feature item 3",
+          "Feature item 4"
+        ],
+        "primaryCtaLabel": "Get free app",
+        "secondaryCtaLabel": "Learn more",
+        "trustLabel": "Secure transaction"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-merch-card"
+        ],
+        "dataset": {
+          "style": "default",
+          "featuresList": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "default"
+        ],
+        "data-size": [
+          "sm"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-merch-card",
+        "c-merch-card__actions",
+        "c-merch-card__body",
+        "c-merch-card__button",
+        "c-merch-card__button--accent",
+        "c-merch-card__button--outlined",
+        "c-merch-card__compare-price",
+        "c-merch-card__content",
+        "c-merch-card__cta",
+        "c-merch-card__description",
+        "c-merch-card__feature",
+        "c-merch-card__features",
+        "c-merch-card__features-content",
+        "c-merch-card__features-list",
+        "c-merch-card__features-title",
+        "c-merch-card__header",
+        "c-merch-card__lockup-icon",
+        "c-merch-card__lockup-label",
+        "c-merch-card__name-area",
+        "c-merch-card__option",
+        "c-merch-card__option-chevron",
+        "c-merch-card__option-label",
+        "c-merch-card__option-promo",
+        "c-merch-card__option-text",
+        "c-merch-card__options",
+        "c-merch-card__plan-header",
+        "c-merch-card__plan-name",
+        "c-merch-card__price",
+        "c-merch-card__price-note",
+        "c-merch-card__price-terms",
+        "c-merch-card__pricing",
+        "c-merch-card__trust",
+        "c-merch-card__trust-icon"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "1 License Save 7.5% your first year with 3+ licenses. See te",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Get free app",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 41
+    },
+    {
+      "id": "cards-merchcard--plan-comparison-row",
+      "name": "Plan Comparison Row",
+      "args": {
+        "style": "default",
+        "featuresList": "default",
+        "planName": "Acrobat Standard",
+        "description": "Simple PDF tools to edit, convert, and e-sign.",
+        "planLabel": "Standard PDF toolset",
+        "app": "acrobat-pro",
+        "comparePrice": "US$599.88/yr",
+        "price": "US$49.99/mo",
+        "priceNote": "Billed monthly, cancel anytime",
+        "priceTerms": "Offer terms apply",
+        "showPricing": true,
+        "showOptions": true,
+        "optionLabel": "1 License",
+        "optionPromo": "Save 7.5% your first year with 3+ licenses. See terms",
+        "featuresTitle": "Section title",
+        "features": [
+          "Feature item 1",
+          "Feature item 2",
+          "Feature item 3",
+          "Feature item 4"
+        ],
+        "primaryCtaLabel": "Get free app",
+        "secondaryCtaLabel": "Learn more",
+        "trustLabel": "Secure transaction"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-merch-card"
+        ],
+        "dataset": {
+          "style": "default",
+          "featuresList": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "default"
+        ],
+        "data-size": [
+          "sm"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-features-list": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-merch-card",
+        "c-merch-card__actions",
+        "c-merch-card__body",
+        "c-merch-card__button",
+        "c-merch-card__button--accent",
+        "c-merch-card__button--outlined",
+        "c-merch-card__compare-price",
+        "c-merch-card__content",
+        "c-merch-card__cta",
+        "c-merch-card__description",
+        "c-merch-card__feature",
+        "c-merch-card__features",
+        "c-merch-card__features-content",
+        "c-merch-card__features-list",
+        "c-merch-card__features-title",
+        "c-merch-card__header",
+        "c-merch-card__lockup-icon",
+        "c-merch-card__lockup-label",
+        "c-merch-card__name-area",
+        "c-merch-card__option",
+        "c-merch-card__option-chevron",
+        "c-merch-card__option-label",
+        "c-merch-card__option-promo",
+        "c-merch-card__option-text",
+        "c-merch-card__options",
+        "c-merch-card__plan-header",
+        "c-merch-card__plan-name",
+        "c-merch-card__price",
+        "c-merch-card__price-note",
+        "c-merch-card__price-terms",
+        "c-merch-card__pricing",
+        "c-merch-card__trust",
+        "c-merch-card__trust-icon"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "1 License Save 7.5% your first year with 3+ licenses. See te",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Get free app",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 41
+    }
+  ],
+  "counts": {
+    "props": 22,
+    "attributes": 4,
+    "parts": 33,
+    "tokenReferences": 46,
+    "tokenReferencesWithoutFallback": 4,
+    "raw": 0,
+    "stories": 7,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:3b9cbc4521e8e39538c0c1a4a55791dd20f5acb1723cd1ccc03d0a1df6f3df22"
+  }
+}

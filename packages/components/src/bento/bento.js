@@ -51,7 +51,7 @@ export const Bento = ({
       </div>
 
       ${showIcon
-        ? html`<span class="c-bento__icon" aria-hidden="true">${AppIcon({ app, size: "lg" })}</span>`
+        ? html`<span class="c-bento__icon" aria-hidden="true">${AppIcon({ app, size: "32" })}</span>`
         : nothing}
 
       <div class="c-bento__text">

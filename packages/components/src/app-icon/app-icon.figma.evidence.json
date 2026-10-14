@@ -1,0 +1,4748 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T19:04:30.101Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": {
+      "id": "3346:130118",
+      "name": "   ↳ AppIcon"
+    }
+  },
+  "set": {
+    "id": "8175:77406",
+    "key": "f35ab6b534f0adf17d33e238b40a49b6e532009b",
+    "name": "AppIcon",
+    "type": "COMPONENT_SET",
+    "description": "— s2a:meta —\nversion:    1.1.1\nstatus:     active\nupdated:    2026-09-10\nchangelog:\n  1.1.1   2026-09-10  patch        Fixed Size=48 and Size=80 (added in 1.1.0) — their nested icon layer wasn't wired to the exposed Icon instance-swap property, so switching to those sizes silently reset the icon to the default (CreativeCloud) instead of preserving the selected app mnemonic. Re-linked componentPropertyReferences to match the other 4 sizes.\n  1.1.0   2026-09-08  minor        Size variant renamed from t-shirt (xs/sm/md/lg) to pixel values (16/18/24/32); added 48 and 80 to support the new Product Marquee_Grid XL lockup. Non-breaking in Figma (instances auto-relabel); code side (size prop enum, spec.json) needs a matching update.\n  1.0.0   2026-08-04  init         Initial release",
+    "meta": {
+      "version": "1.1.1",
+      "status": "active",
+      "updated": "2026-09-10",
+      "changelog": "1.1.1   2026-09-10  patch        Fixed Size=48 and Size=80 (added in 1.1.0) — their nested icon layer wasn't wired to the exposed Icon instance-swap property, so switching to those sizes silently reset the icon to the default (CreativeCloud) instead of preserving the selected app mnemonic. Re-linked componentPropertyReferences to match the other 4 sizes.\n1.1.0   2026-09-08  minor        Size variant renamed from t-shirt (xs/sm/md/lg) to pixel values (16/18/24/32); added 48 and 80 to support the new Product Marquee_Grid XL lockup. Non-breaking in Figma (instances auto-relabel); code side (size prop enum, spec.json) needs a matching update.\n1.0.0   2026-08-04  init         Initial release"
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Icon#3582:54",
+      "type": "INSTANCE_SWAP",
+      "defaultValue": "9264:819",
+      "preferredValues": []
+    },
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "defaultValue": "16",
+      "options": [
+        "16",
+        "18",
+        "24",
+        "32",
+        "48",
+        "80"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "8175:77407",
+      "key": "71e5a2effab2700f9c44939c9d4769b4fd95b005",
+      "name": "Size=16",
+      "props": {
+        "Size": "16"
+      },
+      "width": 16,
+      "height": 16
+    },
+    {
+      "id": "8175:77409",
+      "key": "12c23043214adcafc716983f53b816b9d2e40a27",
+      "name": "Size=18",
+      "props": {
+        "Size": "18"
+      },
+      "width": 18,
+      "height": 18
+    },
+    {
+      "id": "8175:77411",
+      "key": "05c70c137f9e18ef753ba7a446238b14d77add96",
+      "name": "Size=24",
+      "props": {
+        "Size": "24"
+      },
+      "width": 24,
+      "height": 24
+    },
+    {
+      "id": "8175:77413",
+      "key": "6817ccbeb21ecc6bdc563e7adedeb2e031a36f13",
+      "name": "Size=32",
+      "props": {
+        "Size": "32"
+      },
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": "13738:193173",
+      "key": "012145a1c697879d900313bc5f7c3661ab9ecca0",
+      "name": "Size=48",
+      "props": {
+        "Size": "48"
+      },
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "13738:193201",
+      "key": "c99d04e7a9c76f9e82ac6f8c9043e23ca8466a11",
+      "name": "Size=80",
+      "props": {
+        "Size": "80"
+      },
+      "width": 80,
+      "height": 80
+    }
+  ],
+  "anatomy": {
+    "variant": "Size=16",
+    "tree": {
+      "name": "Size=16",
+      "type": "COMPONENT",
+      "id": "8175:77407",
+      "layoutMode": "VERTICAL",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "FIXED"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "MIN"
+      },
+      "children": [
+        {
+          "name": "B_app_CreativeCloud",
+          "type": "INSTANCE",
+          "id": "8175:77408",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "tile",
+              "type": "GROUP",
+              "id": "I8175:77408;8224:81",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "children": [
+                {
+                  "name": "tile",
+                  "type": "VECTOR",
+                  "id": "I8175:77408;8328:127",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                },
+                {
+                  "name": "tile",
+                  "type": "VECTOR",
+                  "id": "I8175:77408;8224:82",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                },
+                {
+                  "name": "colors",
+                  "type": "GROUP",
+                  "id": "I8175:77408;8224:83",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  },
+                  "children": [
+                    {
+                      "name": "Ellipse 11",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:84",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 14",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:85",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 6",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:86",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 8",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:87",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 12",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:88",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 15",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:89",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 9",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:90",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 4",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:91",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 21",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:92",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 5",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:93",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 22",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:94",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 16",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:95",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 20",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:96",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 10",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:97",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 7",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:98",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 17",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:99",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 18",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:100",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 24",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:101",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 19",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:102",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "Ellipse 23",
+                      "type": "ELLIPSE",
+                      "id": "I8175:77408;8224:103",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "mnemonic_logo",
+              "type": "GROUP",
+              "id": "I8175:77408;8224:104",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "children": [
+                {
+                  "name": "1024",
+                  "type": "VECTOR",
+                  "id": "I8175:77408;8224:105",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "Size=16",
+      "node": "",
+      "nodeId": "8175:77407",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=16",
+      "node": "",
+      "nodeId": "8175:77407",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=16",
+      "node": "",
+      "nodeId": "8175:77407",
+      "nodeType": "COMPONENT",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=16",
+      "node": "",
+      "nodeId": "8175:77407",
+      "nodeType": "COMPONENT",
+      "property": "paddingRight",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=16",
+      "node": "",
+      "nodeId": "8175:77407",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77408;8224:82",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:bc3d636e06d17fba6d25f0874390a012cb89a78b/1950:32"
+    },
+    {
+      "variant": "Size=18",
+      "node": "",
+      "nodeId": "8175:77409",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=18",
+      "node": "",
+      "nodeId": "8175:77409",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=18",
+      "node": "",
+      "nodeId": "8175:77409",
+      "nodeType": "COMPONENT",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=18",
+      "node": "",
+      "nodeId": "8175:77409",
+      "nodeType": "COMPONENT",
+      "property": "paddingRight",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=18",
+      "node": "",
+      "nodeId": "8175:77409",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77410;8224:82",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:bc3d636e06d17fba6d25f0874390a012cb89a78b/1950:32"
+    },
+    {
+      "variant": "Size=24",
+      "node": "",
+      "nodeId": "8175:77411",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=24",
+      "node": "",
+      "nodeId": "8175:77411",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=24",
+      "node": "",
+      "nodeId": "8175:77411",
+      "nodeType": "COMPONENT",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=24",
+      "node": "",
+      "nodeId": "8175:77411",
+      "nodeType": "COMPONENT",
+      "property": "paddingRight",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=24",
+      "node": "",
+      "nodeId": "8175:77411",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77412;8224:82",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:bc3d636e06d17fba6d25f0874390a012cb89a78b/1950:32"
+    },
+    {
+      "variant": "Size=32",
+      "node": "",
+      "nodeId": "8175:77413",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=32",
+      "node": "",
+      "nodeId": "8175:77413",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=32",
+      "node": "",
+      "nodeId": "8175:77413",
+      "nodeType": "COMPONENT",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=32",
+      "node": "",
+      "nodeId": "8175:77413",
+      "nodeType": "COMPONENT",
+      "property": "paddingRight",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=32",
+      "node": "",
+      "nodeId": "8175:77413",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77414;8224:82",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:bc3d636e06d17fba6d25f0874390a012cb89a78b/1950:32"
+    },
+    {
+      "variant": "Size=48",
+      "node": "",
+      "nodeId": "13738:193173",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=48",
+      "node": "",
+      "nodeId": "13738:193173",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=48",
+      "node": "",
+      "nodeId": "13738:193173",
+      "nodeType": "COMPONENT",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=48",
+      "node": "",
+      "nodeId": "13738:193173",
+      "nodeType": "COMPONENT",
+      "property": "paddingRight",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=48",
+      "node": "",
+      "nodeId": "13738:193173",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193174;8224:82",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:bc3d636e06d17fba6d25f0874390a012cb89a78b/1950:32"
+    },
+    {
+      "variant": "Size=80",
+      "node": "",
+      "nodeId": "13738:193201",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=80",
+      "node": "",
+      "nodeId": "13738:193201",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=80",
+      "node": "",
+      "nodeId": "13738:193201",
+      "nodeType": "COMPONENT",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=80",
+      "node": "",
+      "nodeId": "13738:193201",
+      "nodeType": "COMPONENT",
+      "property": "paddingRight",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=80",
+      "node": "",
+      "nodeId": "13738:193201",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193202;8224:82",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:bc3d636e06d17fba6d25f0874390a012cb89a78b/1950:32"
+    }
+  ],
+  "variables": {
+    "VariableID:3:61": {
+      "name": "s2a/spacing/none",
+      "key": "838a9eba555c7695010f538ccd595a33f28fbe49",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-none)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/0"
+        }
+      },
+      "resolved": {
+        "Value": 0
+      }
+    }
+  },
+  "textStyles": {},
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "8175:77408",
+      "mainComponent": {
+        "id": "9264:819",
+        "key": "e745b73cc121d13d783ccdc0d6a8354cf782c0a9",
+        "name": "B_app_CreativeCloud"
+      },
+      "set": null
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "8175:77410",
+      "mainComponent": {
+        "id": "9264:819",
+        "key": "e745b73cc121d13d783ccdc0d6a8354cf782c0a9",
+        "name": "B_app_CreativeCloud"
+      },
+      "set": null
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "8175:77412",
+      "mainComponent": {
+        "id": "9264:819",
+        "key": "e745b73cc121d13d783ccdc0d6a8354cf782c0a9",
+        "name": "B_app_CreativeCloud"
+      },
+      "set": null
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "8175:77414",
+      "mainComponent": {
+        "id": "9264:819",
+        "key": "e745b73cc121d13d783ccdc0d6a8354cf782c0a9",
+        "name": "B_app_CreativeCloud"
+      },
+      "set": null
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "13738:193174",
+      "mainComponent": {
+        "id": "9264:819",
+        "key": "e745b73cc121d13d783ccdc0d6a8354cf782c0a9",
+        "name": "B_app_CreativeCloud"
+      },
+      "set": null
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "13738:193202",
+      "mainComponent": {
+        "id": "9264:819",
+        "key": "e745b73cc121d13d783ccdc0d6a8354cf782c0a9",
+        "name": "B_app_CreativeCloud"
+      },
+      "set": null
+    }
+  ],
+  "counts": {
+    "variants": 6,
+    "nodes": 168,
+    "bindings": 36,
+    "unboundPaintNodes": 132
+  },
+  "unboundPaint": [
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77408;8328:127",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77408;8224:84",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77408;8224:85",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77408;8224:86",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77408;8224:87",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77408;8224:88",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77408;8224:89",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77408;8224:90",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77408;8224:91",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77408;8224:92",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77408;8224:93",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77408;8224:94",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77408;8224:95",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77408;8224:96",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77408;8224:97",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77408;8224:98",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77408;8224:99",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77408;8224:100",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77408;8224:101",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77408;8224:102",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77408;8224:103",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77408;8224:105",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77410;8328:127",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77410;8224:84",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77410;8224:85",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77410;8224:86",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77410;8224:87",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77410;8224:88",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77410;8224:89",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77410;8224:90",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77410;8224:91",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77410;8224:92",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77410;8224:93",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77410;8224:94",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77410;8224:95",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77410;8224:96",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77410;8224:97",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77410;8224:98",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77410;8224:99",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77410;8224:100",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77410;8224:101",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77410;8224:102",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77410;8224:103",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77410;8224:105",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77412;8328:127",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77412;8224:84",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77412;8224:85",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77412;8224:86",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77412;8224:87",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77412;8224:88",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77412;8224:89",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77412;8224:90",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77412;8224:91",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77412;8224:92",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77412;8224:93",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77412;8224:94",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77412;8224:95",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77412;8224:96",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77412;8224:97",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77412;8224:98",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77412;8224:99",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77412;8224:100",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77412;8224:101",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77412;8224:102",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77412;8224:103",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77412;8224:105",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77414;8328:127",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77414;8224:84",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77414;8224:85",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77414;8224:86",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77414;8224:87",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77414;8224:88",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77414;8224:89",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77414;8224:90",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77414;8224:91",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77414;8224:92",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77414;8224:93",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77414;8224:94",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77414;8224:95",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77414;8224:96",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77414;8224:97",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77414;8224:98",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77414;8224:99",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77414;8224:100",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77414;8224:101",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77414;8224:102",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77414;8224:103",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77414;8224:105",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193174;8328:127",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I13738:193174;8224:84",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I13738:193174;8224:85",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I13738:193174;8224:86",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I13738:193174;8224:87",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I13738:193174;8224:88",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I13738:193174;8224:89",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I13738:193174;8224:90",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I13738:193174;8224:91",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I13738:193174;8224:92",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I13738:193174;8224:93",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I13738:193174;8224:94",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I13738:193174;8224:95",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I13738:193174;8224:96",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I13738:193174;8224:97",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I13738:193174;8224:98",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I13738:193174;8224:99",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I13738:193174;8224:100",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I13738:193174;8224:101",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I13738:193174;8224:102",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I13738:193174;8224:103",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I13738:193174;8224:105",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193202;8328:127",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I13738:193202;8224:84",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I13738:193202;8224:85",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I13738:193202;8224:86",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I13738:193202;8224:87",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I13738:193202;8224:88",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I13738:193202;8224:89",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I13738:193202;8224:90",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I13738:193202;8224:91",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I13738:193202;8224:92",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I13738:193202;8224:93",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I13738:193202;8224:94",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I13738:193202;8224:95",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I13738:193202;8224:96",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I13738:193202;8224:97",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I13738:193202;8224:98",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I13738:193202;8224:99",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I13738:193202;8224:100",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I13738:193202;8224:101",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I13738:193202;8224:102",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I13738:193202;8224:103",
+      "nodeType": "ELLIPSE",
+      "properties": [
+        "fills"
+      ]
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I13738:193202;8224:105",
+      "nodeType": "VECTOR",
+      "properties": [
+        "fills"
+      ]
+    }
+  ],
+  "unboundValues": [
+    {
+      "variant": "Size=16",
+      "node": "",
+      "nodeId": "8175:77407",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Size=16",
+      "node": "",
+      "nodeId": "8175:77407",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "8175:77408",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I8175:77408;8224:81",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I8175:77408;8224:81",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77408;8328:127",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77408;8328:127",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77408;8328:127",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77408;8224:82",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77408;8224:82",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I8175:77408;8224:83",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 40.3
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I8175:77408;8224:83",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 46.3
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77408;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 17.26
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77408;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 17.26
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77408;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 13.17
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77408;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 13.17
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77408;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 29.72
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77408;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 29.72
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77408;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 21.85
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77408;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 21.85
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77408;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 20.35
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77408;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 20.35
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77408;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 15.27
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77408;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 15.27
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77408;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 21.85
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77408;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 21.85
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77408;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 29.95
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77408;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 29.95
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77408;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 11.56
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77408;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 11.56
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77408;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 17.98
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77408;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 17.98
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77408;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 10.03
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77408;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 10.03
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77408;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 10.2
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77408;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 10.2
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77408;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 21.85
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77408;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 21.85
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77408;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 9
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77408;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 9
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77408;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 12.57
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77408;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 12.57
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77408;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 9.1
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77408;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 6.37
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77408;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 8.36
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77408;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 7.24
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77408;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 8.36
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77408;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 7.24
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77408;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 9.54
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77408;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 9.54
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77408;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 11.97
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77408;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 11.97
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I8175:77408;8224:104",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 11.42
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I8175:77408;8224:104",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 8.67
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77408;8224:105",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77408;8224:105",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 11.42
+    },
+    {
+      "variant": "Size=16",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77408;8224:105",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 8.67
+    },
+    {
+      "variant": "Size=18",
+      "node": "",
+      "nodeId": "8175:77409",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Size=18",
+      "node": "",
+      "nodeId": "8175:77409",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "8175:77410",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I8175:77410;8224:81",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I8175:77410;8224:81",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77410;8328:127",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77410;8328:127",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77410;8328:127",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77410;8224:82",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77410;8224:82",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I8175:77410;8224:83",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 45.34
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I8175:77410;8224:83",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 52.09
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77410;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 19.42
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77410;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 19.42
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77410;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 14.82
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77410;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 14.82
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77410;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 33.44
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77410;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 33.44
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77410;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 24.59
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77410;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 24.59
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77410;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 22.89
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77410;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 22.89
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77410;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 17.18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77410;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 17.18
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77410;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 24.59
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77410;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 24.59
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77410;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 33.69
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77410;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 33.69
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77410;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 13.01
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77410;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 13.01
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77410;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 20.23
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77410;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 20.23
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77410;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 11.28
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77410;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 11.28
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77410;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 11.48
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77410;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 11.48
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77410;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 24.59
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77410;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 24.59
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77410;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 10.13
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77410;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 10.13
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77410;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 14.15
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77410;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 14.15
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77410;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 10.24
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77410;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 7.16
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77410;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 9.41
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77410;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 8.14
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77410;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 9.41
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77410;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 8.14
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77410;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 10.74
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77410;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 10.74
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77410;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 13.46
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77410;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 13.46
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I8175:77410;8224:104",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 12.85
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I8175:77410;8224:104",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 9.76
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77410;8224:105",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77410;8224:105",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 12.85
+    },
+    {
+      "variant": "Size=18",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77410;8224:105",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 9.76
+    },
+    {
+      "variant": "Size=24",
+      "node": "",
+      "nodeId": "8175:77411",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 24
+    },
+    {
+      "variant": "Size=24",
+      "node": "",
+      "nodeId": "8175:77411",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 24
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "8175:77412",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 24
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I8175:77412;8224:81",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 24
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I8175:77412;8224:81",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 24
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77412;8328:127",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77412;8328:127",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 24
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77412;8328:127",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 24
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77412;8224:82",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 24
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77412;8224:82",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 24
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I8175:77412;8224:83",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 60.45
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I8175:77412;8224:83",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 69.45
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77412;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 25.89
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77412;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 25.89
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77412;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 19.75
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77412;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 19.75
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77412;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 44.59
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77412;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 44.59
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77412;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 32.78
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77412;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 32.78
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77412;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 30.52
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77412;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 30.52
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77412;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 22.91
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77412;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 22.91
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77412;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 32.78
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77412;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 32.78
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77412;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 44.92
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77412;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 44.92
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77412;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 17.34
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77412;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 17.34
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77412;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 26.97
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77412;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 26.97
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77412;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 15.04
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77412;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 15.04
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77412;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 15.3
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77412;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 15.3
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77412;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 32.78
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77412;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 32.78
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77412;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 13.51
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77412;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 13.51
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77412;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18.86
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77412;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18.86
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77412;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 13.65
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77412;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 9.55
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77412;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 12.54
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77412;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 10.85
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77412;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 12.54
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77412;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 10.85
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77412;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 14.32
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77412;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 14.32
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77412;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 17.95
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77412;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 17.95
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I8175:77412;8224:104",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 17.14
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I8175:77412;8224:104",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 13.01
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77412;8224:105",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77412;8224:105",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 17.14
+    },
+    {
+      "variant": "Size=24",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77412;8224:105",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 13.01
+    },
+    {
+      "variant": "Size=32",
+      "node": "",
+      "nodeId": "8175:77413",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 32
+    },
+    {
+      "variant": "Size=32",
+      "node": "",
+      "nodeId": "8175:77413",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "8175:77414",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I8175:77414;8224:81",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 32
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I8175:77414;8224:81",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77414;8328:127",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77414;8328:127",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 32
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77414;8328:127",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77414;8224:82",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 32
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I8175:77414;8224:82",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I8175:77414;8224:83",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 80.6
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I8175:77414;8224:83",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 92.61
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77414;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 34.52
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I8175:77414;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 34.52
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77414;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 26.34
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I8175:77414;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 26.34
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77414;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 59.45
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I8175:77414;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 59.45
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77414;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 43.71
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I8175:77414;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 43.71
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77414;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 40.69
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I8175:77414;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 40.69
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77414;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 30.54
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I8175:77414;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 30.54
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77414;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 43.71
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I8175:77414;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 43.71
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77414;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 59.89
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I8175:77414;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 59.89
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77414;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 23.13
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I8175:77414;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 23.13
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77414;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 35.96
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I8175:77414;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 35.96
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77414;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 20.06
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I8175:77414;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 20.06
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77414;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 20.4
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I8175:77414;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 20.4
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77414;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 43.71
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I8175:77414;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 43.71
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77414;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18.01
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I8175:77414;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18.01
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77414;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 25.15
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I8175:77414;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 25.15
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77414;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18.2
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I8175:77414;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 12.74
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77414;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 16.72
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I8175:77414;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 14.47
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77414;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 16.72
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I8175:77414;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 14.47
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77414;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 19.09
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I8175:77414;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 19.09
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77414;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 23.93
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I8175:77414;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 23.93
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I8175:77414;8224:104",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 22.85
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I8175:77414;8224:104",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 17.35
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77414;8224:105",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77414;8224:105",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 22.85
+    },
+    {
+      "variant": "Size=32",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I8175:77414;8224:105",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 17.35
+    },
+    {
+      "variant": "Size=48",
+      "node": "",
+      "nodeId": "13738:193173",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 48
+    },
+    {
+      "variant": "Size=48",
+      "node": "",
+      "nodeId": "13738:193173",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "13738:193174",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I13738:193174;8224:81",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 48
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I13738:193174;8224:81",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193174;8328:127",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193174;8328:127",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 48
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193174;8328:127",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193174;8224:82",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 48
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193174;8224:82",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I13738:193174;8224:83",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 120.9
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I13738:193174;8224:83",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 138.91
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I13738:193174;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 51.78
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I13738:193174;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 51.78
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I13738:193174;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 39.51
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I13738:193174;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 39.51
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I13738:193174;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 89.17
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I13738:193174;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 89.17
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I13738:193174;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 65.56
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I13738:193174;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 65.56
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I13738:193174;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 61.04
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I13738:193174;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 61.04
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I13738:193174;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 45.82
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I13738:193174;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 45.82
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I13738:193174;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 65.56
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I13738:193174;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 65.56
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I13738:193174;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 89.84
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I13738:193174;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 89.84
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I13738:193174;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 34.69
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I13738:193174;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 34.69
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I13738:193174;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 53.94
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I13738:193174;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 53.94
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I13738:193174;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 30.08
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I13738:193174;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 30.08
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I13738:193174;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 30.61
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I13738:193174;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 30.61
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I13738:193174;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 65.56
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I13738:193174;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 65.56
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I13738:193174;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 27.01
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I13738:193174;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 27.01
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I13738:193174;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 37.72
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I13738:193174;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 37.72
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I13738:193174;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 27.3
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I13738:193174;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 19.1
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I13738:193174;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 25.08
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I13738:193174;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 21.71
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I13738:193174;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 25.08
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I13738:193174;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 21.71
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I13738:193174;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 28.63
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I13738:193174;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 28.63
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I13738:193174;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 35.9
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I13738:193174;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 35.9
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I13738:193174;8224:104",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 34.27
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I13738:193174;8224:104",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 26.02
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I13738:193174;8224:105",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I13738:193174;8224:105",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 34.27
+    },
+    {
+      "variant": "Size=48",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I13738:193174;8224:105",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 26.02
+    },
+    {
+      "variant": "Size=80",
+      "node": "",
+      "nodeId": "13738:193201",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 80
+    },
+    {
+      "variant": "Size=80",
+      "node": "",
+      "nodeId": "13738:193201",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 80
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud",
+      "nodeId": "13738:193202",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 80
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I13738:193202;8224:81",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 80
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile",
+      "nodeId": "I13738:193202;8224:81",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 80
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193202;8328:127",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193202;8328:127",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 80
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193202;8328:127",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 80
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193202;8224:82",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 80
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/tile",
+      "nodeId": "I13738:193202;8224:82",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 80
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I13738:193202;8224:83",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 201.5
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors",
+      "nodeId": "I13738:193202;8224:83",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 231.52
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I13738:193202;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 86.3
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 11",
+      "nodeId": "I13738:193202;8224:84",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 86.3
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I13738:193202;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 65.85
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 14",
+      "nodeId": "I13738:193202;8224:85",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 65.85
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I13738:193202;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 148.62
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 6",
+      "nodeId": "I13738:193202;8224:86",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 148.62
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I13738:193202;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 109.27
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 8",
+      "nodeId": "I13738:193202;8224:87",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 109.27
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I13738:193202;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 101.73
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 12",
+      "nodeId": "I13738:193202;8224:88",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 101.73
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I13738:193202;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 76.36
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 15",
+      "nodeId": "I13738:193202;8224:89",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 76.36
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I13738:193202;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 109.27
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 9",
+      "nodeId": "I13738:193202;8224:90",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 109.27
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I13738:193202;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 149.73
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 4",
+      "nodeId": "I13738:193202;8224:91",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 149.73
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I13738:193202;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 57.82
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 21",
+      "nodeId": "I13738:193202;8224:92",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 57.82
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I13738:193202;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 89.9
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 5",
+      "nodeId": "I13738:193202;8224:93",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 89.9
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I13738:193202;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 50.14
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 22",
+      "nodeId": "I13738:193202;8224:94",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 50.14
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I13738:193202;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 51.01
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 16",
+      "nodeId": "I13738:193202;8224:95",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 51.01
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I13738:193202;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 109.27
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 20",
+      "nodeId": "I13738:193202;8224:96",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 109.27
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I13738:193202;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 45.02
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 10",
+      "nodeId": "I13738:193202;8224:97",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 45.02
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I13738:193202;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 62.87
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 7",
+      "nodeId": "I13738:193202;8224:98",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 62.87
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I13738:193202;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 45.5
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 17",
+      "nodeId": "I13738:193202;8224:99",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 31.84
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I13738:193202;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 41.81
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 18",
+      "nodeId": "I13738:193202;8224:100",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 36.18
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I13738:193202;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 41.81
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 24",
+      "nodeId": "I13738:193202;8224:101",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 36.18
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I13738:193202;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 47.72
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 19",
+      "nodeId": "I13738:193202;8224:102",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 47.72
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I13738:193202;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 59.83
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/tile/colors/Ellipse 23",
+      "nodeId": "I13738:193202;8224:103",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 59.83
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I13738:193202;8224:104",
+      "nodeType": "GROUP",
+      "property": "width",
+      "value": 57.12
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/mnemonic_logo",
+      "nodeId": "I13738:193202;8224:104",
+      "nodeType": "GROUP",
+      "property": "height",
+      "value": 43.37
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I13738:193202;8224:105",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I13738:193202;8224:105",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 57.12
+    },
+    {
+      "variant": "Size=80",
+      "node": "/B_app_CreativeCloud/mnemonic_logo/1024",
+      "nodeId": "I13738:193202;8224:105",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 43.37
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:16aad98096660bd7dc5a1f301611d069a34c04b843741c55f2556fd8b2c47dfb"
+  }
+}

@@ -1,0 +1,26 @@
+/* ActionCard — generated from action-card.contract.json.
+ * Re-run: npm run specs:render -- --slug=action-card --target=milo */
+
+.action-card {
+  background-color: var(--s2a-color-surface-subtle, #f8f8f8);
+  border-radius: var(--s2a-border-radius-lg, 22px);
+  gap: var(--s2a-spacing-md, 16px);
+}
+
+.action-card .copy {
+  padding: var(--s2a-spacing-none, 0) var(--s2a-spacing-2xl, 40px) var(--s2a-spacing-2xl, 40px) var(--s2a-spacing-2xl, 40px);
+  gap: var(--s2a-spacing-md, 16px);
+}
+
+.action-card .headline {
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
+  font-weight: var(--s2a-font-weight-heading, 900);
+  font-size: var(--s2a-typography-font-size-heading-5, 1.5rem);
+  line-height: var(--s2a-typography-line-height-heading-5, 24px);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-5, -0.48px);
+  color: var(--s2a-color-content-heading, #000);
+}
+
+.action-card .chevron {
+  color: var(--s2a-color-content-default, #000);
+}

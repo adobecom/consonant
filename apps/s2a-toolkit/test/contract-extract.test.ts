@@ -139,3 +139,97 @@ test('a frame extracts as a candidate: repeats, generic-name hygiene, roles, ins
   assert.ok(evidence.pattern!.genericLayers >= 6);
   assert.deepEqual(evidence.pattern?.instancedSets, []);
 });
+
+// --- literals, for the token aligner ---------------------------------------
+// The walk recorded WHICH layers had no variable but never what value they
+// carried, so nothing could match them to a token. These cover the capture and
+// the one property it must not change: the evidence hash.
+
+const handoff = () => node({
+  id: 'h:1', name: 'Promo', type: 'FRAME', width: 640, height: 320,
+  fills: [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }],
+  itemSpacing: 21.33, paddingTop: 32, cornerRadius: 16,
+  children: [
+    node({ id: 'h:2', name: 'cta', type: 'FRAME', cornerRadius: 10.67, paddingLeft: 0,
+      fills: [{ type: 'SOLID', color: { r: 0.08, g: 0.45, b: 0.9 } }],
+      boundVariables: { strokes: { type: 'VARIABLE_ALIAS', id: 'VariableID:6:49' } },
+      strokes: [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }],
+      children: [] }),
+    node({ id: 'h:3', name: 'meta', type: 'TEXT', fontSize: 14, textStyleId: '',
+      lineHeight: { unit: 'PIXELS', value: 20 }, letterSpacing: { unit: 'PERCENT', value: 0 },
+      fills: [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 0.6 }], children: [] }),
+  ],
+});
+
+test('unbound literals are captured with their values, skipping anything already bound', async () => {
+  const evidence = await extractEvidence(api as any, handoff() as any);
+  const vals = evidence.unboundValues ?? [];
+  const at = (node: string, property: string) => vals.find(v => v.node.endsWith(node) && v.property === property);
+
+  // Colours, with the paint's own alpha.
+  assert.deepEqual(at('/cta', 'fills')?.value, { r: 0.08, g: 0.45, b: 0.9 });
+  assert.equal((at('/meta', 'fills')?.value as any).a, 0.6);
+
+  // Dimensions, including the scaled ones the aligner exists to rescue.
+  assert.equal(at('', 'itemSpacing')?.value, 21.33);
+  assert.equal(at('', 'cornerRadius')?.value, 16);
+  assert.equal(at('/cta', 'cornerRadius')?.value, 10.67);
+
+  // Type, because this text node has no text style.
+  assert.equal(at('/meta', 'fontSize')?.value, 14);
+  assert.equal(at('/meta', 'lineHeight')?.value, 20);
+
+  // A bound property is already an answer and must not show up as a finding.
+  assert.equal(at('/cta', 'strokes'), undefined);
+  // Nor a zero, which means "unset" far more often than it means a decision.
+  assert.equal(at('/cta', 'paddingLeft'), undefined);
+  // Nor a non-pixel letterSpacing, which no FLOAT token can express.
+  assert.equal(at('/meta', 'letterSpacing'), undefined);
+});
+
+test('an alpha paint records the opaque fill it sits on, so it can be composited', async () => {
+  const evidence = await extractEvidence(api as any, handoff() as any);
+  const meta = (evidence.unboundValues ?? []).find(v => v.node.endsWith('/meta') && v.property === 'fills');
+  assert.deepEqual(meta?.backdrop, { r: 1, g: 1, b: 1 }, 'the Promo frame is white and opaque');
+  // The frame's own fill is a finding too, and nothing sits behind it.
+  const root = (evidence.unboundValues ?? []).find(v => v.node === '' && v.property === 'fills');
+  assert.equal(root?.backdrop, undefined);
+});
+
+test('adding the literals does not change the evidence hash', async () => {
+  const evidence = await extractEvidence(api as any, handoff() as any);
+  const withValues = hashableBody(evidence);
+  const without = hashableBody({ ...evidence, unboundValues: [] } as any);
+  assert.equal(withValues, without, 'unboundValues must stay out of the hash, or every old extraction reads as stale');
+  assert.ok((evidence.unboundValues ?? []).length > 0, 'and there must actually be values to leave out');
+});
+
+test('a FIXED width or height is a literal; HUG and FILL are layout and stay out', async () => {
+  // A divider: a 1px-tall, 418px-wide rectangle with a bound fill and nothing else.
+  const rule = node({ id: 'd:1', name: 'Style=default', type: 'COMPONENT', width: 418, height: 1,
+    layoutSizingHorizontal: 'FIXED', layoutSizingVertical: 'FIXED',
+    fills: [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 } }], boundVariables: { fills: [{ type: 'VARIABLE_ALIAS', id: 'VariableID:6:49' }] },
+    strokes: [], strokeWeight: 1,
+    children: [
+      node({ id: 'd:2', name: 'hug', type: 'FRAME', width: 100, height: 40, layoutMode: 'HORIZONTAL', layoutSizingHorizontal: 'HUG', layoutSizingVertical: 'FILL', strokes: [], strokeWeight: 1, children: [] }),
+      node({ id: 'd:3', name: 'ruled', type: 'RECTANGLE', width: 20, height: 20, layoutSizingHorizontal: 'FIXED', layoutSizingVertical: 'FIXED',
+        strokes: [{ type: 'SOLID', color: { r: 1, g: 0, b: 0 } }], strokeWeight: 2, children: [] }),
+    ] });
+  const set = node({ id: 'd:0', name: 'Divider', type: 'COMPONENT_SET', componentPropertyDefinitions: { Style: { type: 'VARIANT', defaultValue: 'default', variantOptions: ['default'] } }, children: [rule] });
+  const evidence = await extractEvidence(api as any, set as any);
+  const vals = evidence.unboundValues ?? [];
+  const at = (n: string, property: string) => vals.find(v => v.node === n && v.property === property);
+
+  // The design's decision — a hairline — comes through, so the stylesheet can draw it.
+  assert.equal(at('', 'height')?.value, 1);
+  assert.equal(at('', 'width')?.value, 418);
+  // Sizes that follow content or the parent are not decisions.
+  assert.equal(at('/hug', 'width'), undefined);
+  assert.equal(at('/hug', 'height'), undefined);
+  assert.equal(at('/ruled', 'width')?.value, 20);
+
+  // Every node says strokeWeight: 1. Only a node that actually has a stroke means it.
+  assert.equal(at('', 'strokeWeight'), undefined);
+  assert.equal(at('/hug', 'strokeWeight'), undefined);
+  assert.equal(at('/ruled', 'strokeWeight')?.value, 2);
+});

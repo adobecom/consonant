@@ -88,7 +88,7 @@
     }
   ],
   "tokenBindings": {
-    "root-background-color": "--s2a-color-background-subtle",
+    "root-background-color": "--s2a-color-surface-subtle",
     "root-border-radius": "--s2a-border-radius-lg",
     "root-gap": "--s2a-spacing-md",
     "copy-padding": "--s2a-spacing-none",
@@ -155,16 +155,16 @@
     "element": "a",
     "tokens": {
       "background-color": {
-        "value": "{s2a.color.background.subtle}",
+        "value": "{s2a.color.surface.subtle}",
         "raw": false,
         "tokens": [
           {
-            "ref": "{s2a.color.background.subtle}",
-            "cssVar": "--s2a-color-background-subtle",
-            "figma": "s2a/color/background/subtle",
+            "ref": "{s2a.color.surface.subtle}",
+            "cssVar": "--s2a-color-surface-subtle",
+            "figma": "s2a/color/surface/subtle",
             "shipped": true,
             "value": "#f8f8f8",
-            "dark": "#505050"
+            "dark": "#131313"
           }
         ]
       },
@@ -480,10 +480,18 @@
       "owner": "Matt",
       "decision": "heading-5 for now (closest rung, one-line headlines). Revisit if the row needs more presence.",
       "evidence": "Figma ActionCard 14226:196789 after 2026-09-21 restructure; golden Row 14226:196800."
+    },
+    {
+      "id": "ac-surface-token",
+      "question": "The contract bound the card surface to background/subtle, but the Figma component binds surface/subtle. Both are #f8f8f8 in light, so the difference is invisible today. Which is the card's token?",
+      "status": "decided",
+      "owner": "Matt",
+      "evidence": "ActionCard 14226:196789 root fills -> s2a/color/surface/subtle; dist/packages/tokens/css/dev/tokens.semantic.light.css (both -> gray-50) and tokens.semantic.dark.css (surface -> gray-900 #131313, background -> gray-700 #505050)",
+      "decision": "surface/subtle, matching the component. The Surface family was added in tokens 0.0.21 for elevation-neutral card surfaces, which is what this is. The two tokens only diverge in dark mode, so the contract would have rendered the card #505050 instead of #131313 the first time anyone themed it — a latent bug rather than a naming preference."
     }
   ],
   "provenance": {
-    "defs": "sha256:b6f9290f4243c9dfeb3b0511a4e5bdf5ed525c41ca1d7c5433cf770db0b50777",
+    "defs": "sha256:f81bb4dc70c606e8b9675ae57b9512c53611db138ec9d7515b5a078ca39d1a9d",
     "codeEvidence": null,
     "figmaEvidence": "sha256:59b5d8393c34c47549a299c08c860ec4f340c0844ed6a74328d1073e0590a7d6",
     "generator": "s2a-spec-transform@1"

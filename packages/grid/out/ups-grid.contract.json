@@ -1,0 +1,276 @@
+{
+  "$generated": {
+    "name": "s2a-grid-contract-transform",
+    "version": "1"
+  },
+  "id": "s2a.grid.ups-grid",
+  "slug": "ups-grid",
+  "name": "Ups grid (N-up)",
+  "version": "0.1.0",
+  "kind": "grid",
+  "tier": "block",
+  "status": "proposed",
+  "supersededBy": null,
+  "description": "The third grid kind: a fixed number of equal items per row — two-up through six-up — collapsing to two-up at tablet and a single column on mobile, with an orphan rule that stretches a lone last item. This is the most completely specified layout in the whole system: Figma carries the behaviour, the breakpoints and the markup, and it is implemented nowhere in S2A. It is tier block, which by Will's own rule means C2 owns the implementation and S2A only holds the agreement.",
+  "anchors": {
+    "code": {
+      "stylesheet": "packages/grid/src/s2a-layout-grids.css"
+    },
+    "figma": {
+      "collectionId": "VariableCollectionId:6:178",
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "nodeId": "104:26144",
+      "layerName": "Ups flex-Grid (3ups)",
+      "designOnly": true
+    }
+  },
+  "breakpoints": [
+    {
+      "id": "sm",
+      "label": "S — Mobile",
+      "figmaMode": "sm",
+      "figmaLabel": "Mobile",
+      "minWidth": null,
+      "maxWidth": 767,
+      "mediaQuery": null,
+      "columns": 6,
+      "mockWidth": 375,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": null,
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.sm.css",
+        "mediaQuery": null,
+        "minWidth": null
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "md",
+      "label": "M — Tablet landscape",
+      "figmaMode": "md",
+      "figmaLabel": "Tablet",
+      "minWidth": 768,
+      "maxWidth": 1279,
+      "mediaQuery": "@media (width >= 768px)",
+      "columns": 12,
+      "mockWidth": 768,
+      "portraitEscape": 900,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 768px)",
+        "minWidth": 768
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.md.css",
+        "mediaQuery": "@media (width >= 768px)",
+        "minWidth": 768
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "lg",
+      "label": "L — Desktop",
+      "figmaMode": "lg",
+      "figmaLabel": "Desktop",
+      "minWidth": 1280,
+      "maxWidth": 1440,
+      "mediaQuery": "@media (width >= 1280px)",
+      "columns": 12,
+      "mockWidth": 1440,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 1280px)",
+        "minWidth": 1280
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.lg.css",
+        "mediaQuery": "@media (width >= 1280px)",
+        "minWidth": 1280
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "xl",
+      "label": "XL — Desktop HD",
+      "figmaMode": "xl",
+      "figmaLabel": "Desktop XL",
+      "minWidth": 1441,
+      "maxWidth": 2560,
+      "mediaQuery": "@media (width >= 1441px)",
+      "columns": 12,
+      "mockWidth": 2560,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": null,
+      "stylesheetNearest": {
+        "mediaQuery": "@media screen and (min-width: 1440px)",
+        "minWidth": 1440
+      },
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
+        "mediaQuery": "@media (width >= 1441px)",
+        "minWidth": 1441
+      },
+      "boundaryAgrees": false,
+      "inherited": true
+    }
+  ],
+  "breakpointBehavior": [
+    {
+      "breakpoint": "sm",
+      "behavior": "Single column, fully stacked.",
+      "columns": 6
+    },
+    {
+      "breakpoint": "md",
+      "behavior": "Always two-up, whatever the declared N. A lone last item takes full width when the orphan modifier is set.",
+      "columns": 12
+    },
+    {
+      "breakpoint": "lg",
+      "behavior": "Two to six per row, as declared by the two-up … six-up modifier.",
+      "columns": 12
+    },
+    {
+      "breakpoint": "xl",
+      "behavior": "Same count as lg; the items grow with the container.",
+      "columns": 12
+    }
+  ],
+  "tokens": [
+    {
+      "role": "gutter",
+      "ref": "{s2a.spacing.xs}",
+      "breakpoint": "all",
+      "cssVar": "--s2a-spacing-xs",
+      "shipped": true,
+      "values": {
+        "sm": 8,
+        "md": 8,
+        "lg": 8,
+        "xl": 8
+      }
+    }
+  ],
+  "surface": {
+    "classes": [
+      {
+        "name": "ups-grid",
+        "purpose": "Proposed: the N-up row. Figma documents the markup as <div class=\"ups-grid three-up\">.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      },
+      {
+        "name": "two-up",
+        "purpose": "Proposed: two items per row at desktop.",
+        "pattern": "{two|three|four|five|six}-up",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      },
+      {
+        "name": "three-up",
+        "purpose": "Proposed: three items per row at desktop.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      },
+      {
+        "name": "orphan-full",
+        "purpose": "Proposed: a lone last item stretches to full width instead of sitting half-empty.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      }
+    ],
+    "customProperties": []
+  },
+  "design": {
+    "collectionId": "VariableCollectionId:6:178",
+    "designOnly": true,
+    "values": {}
+  },
+  "rules": [
+    {
+      "id": "UPS_NOT_IN_S2A",
+      "statement": "No ups-grid class exists in S2A. The system is fully specified in Figma and implemented nowhere this repository can see.",
+      "severity": "fail",
+      "check": {
+        "type": "classAbsent",
+        "name": "ups-grid"
+      }
+    },
+    {
+      "id": "UPS_NO_TWO_UP",
+      "statement": "No N-up modifier exists in S2A either.",
+      "severity": "fail",
+      "check": {
+        "type": "classAbsent",
+        "name": "two-up"
+      }
+    },
+    {
+      "id": "UPS_NO_ORPHAN",
+      "statement": "The orphan rule exists in no stylesheet here.",
+      "severity": "fail",
+      "check": {
+        "type": "classAbsent",
+        "name": "orphan-full"
+      }
+    },
+    {
+      "id": "UPS_TIER_BLOCK",
+      "statement": "This is block-tier, so S2A must not add shipped tokens for it. Will: 'if its block level rules it wont be in s2a'.",
+      "severity": "fail",
+      "check": {
+        "type": "manual",
+        "note": "No tokens are declared beyond the shared gutter, which the foundation already ships. Re-check if this contract ever grows a token list of its own."
+      }
+    },
+    {
+      "id": "UPS_GUTTER_SHIPPED",
+      "statement": "The shared gutter token exists, so an implementation needs nothing new from the token pipeline.",
+      "severity": "fail",
+      "check": {
+        "type": "tokenShipped",
+        "ref": "{s2a.spacing.xs}"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "UPS_OWNER",
+      "question": "Who implements the ups grid — S2A or C2/Milo?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Figma says 'Ups is refactored in milo now. We could put this in figma as a system but its inline for now.' No .ups-grid definition was found in packages/grid, in Will's hosted demo, or under the vendored context/milo c2 and styles directories. Tier is recorded as block on the strength of his rule that block-level work stays in C2, which also makes this contract documentation rather than a build task for S2A."
+    },
+    {
+      "id": "UPS_TABLET_ALWAYS_TWO",
+      "question": "Is 'always two-up at tablet' right for five-up and six-up sets, or should they go three-up at tablet?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Figma states 'Tablet (768–1279px): Always 2-up' without exception. A six-item set then becomes three tablet rows, which may be intended or may be the reflow fix his note permits as a bespoke query."
+    }
+  ],
+  "visualize": {
+    "demo": "ups",
+    "overlay": false,
+    "note": "Rendered from the proposed rules with inline CSS, including the orphan case, so the behaviour can be reviewed before anyone writes it."
+  },
+  "provenance": {
+    "defs": "sha256:546349da4066a4cc737bbb7aba1e4e574e620f205398c3ddbc7a6c618285b4ca",
+    "code": "sha256:85c23da6c0b0fd1b6f89fbaf19696fa9f2fbf41b2dd5ef7598fab7cf931cf52e",
+    "figma": "sha256:d41aec77220ad4f98ec449c24cba47fd304215b59a049b215cdb8bce11a555dc",
+    "contract": "sha256:b369eac8582828578376931db12a51db97547d23ad4935eb5d811772cce6e08e"
+  }
+}

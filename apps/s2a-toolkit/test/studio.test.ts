@@ -80,3 +80,46 @@ test('publishing is off while anything is unknown', () => {
   assert.equal(canPublish({ ...base, validation: { valid: true, errors: [], warnings: [] }, jsonError: 'bad' }), false);
   assert.equal(canPublish({ ...base, validation: { valid: true, errors: [], warnings: [] }, busy: true }), false);
 });
+
+// --- a slot's own name narrows what belongs in it ----------------------------
+import { slotRole, contractRoles, rankAccepts } from '../src/studio';
+
+const ALL = ['ActionCard','AppIcon','Bento','Button','Card','Checkbox','Collapsible','ControlButton',
+  'Divider','DotPagination','ElasticCard','GlobalNavigation','HelperText','IconButton','JumpLink',
+  'Label','Link','List','Logo','Media','MediaCard','MerchCard','NavFilter','ProductCard',
+  'ProductLockup','ProgressBar','PromoCta','QuoteCard','Radio','RichContent','SectionHeader',
+  'SegmentedControl','SocialProofCarousel','Surface','Tabs','Tag','TextCard'];
+
+test('an icon slot does not offer MerchCard', () => {
+  const { role, likely, other } = rankAccepts(ALL, 'root.icon-start');
+  assert.equal(role, 'icon');
+  assert.ok(likely.includes('AppIcon') && likely.includes('Logo') && likely.includes('IconButton'));
+  assert.ok(other.includes('MerchCard') && other.includes('QuoteCard'));
+  assert.ok(likely.length < other.length, 'the point is that the likely list is short');
+});
+
+test('a generic name means anything goes, and is honoured as a choice', () => {
+  // ".element-start" says "anything"; ".icon-start" does not. That distinction
+  // is the authoring lever — rename the layer to widen the slot.
+  assert.equal(slotRole('root.element-start'), null);
+  assert.equal(slotRole('root.slot'), null);
+  const { role, likely, other } = rankAccepts(ALL, 'root.element-start');
+  assert.equal(role, null);
+  assert.equal(likely.length, 0);
+  assert.equal(other.length, ALL.length, 'nothing is demoted when the name claims nothing');
+});
+
+test('roles come off our own naming convention', () => {
+  assert.equal(slotRole('root.icon-end'), 'icon');
+  assert.equal(slotRole('root.media'), 'media');
+  assert.equal(slotRole('root.copy.headline'), 'text');
+  assert.equal(slotRole('root.cta'), 'action');
+  assert.ok(contractRoles('AppIcon').has('icon'));
+  assert.ok(contractRoles('Media').has('media'));
+  assert.ok(!contractRoles('MerchCard').has('icon'));
+});
+
+test('nothing is ever hidden — the rest is demoted, not removed', () => {
+  const { likely, other } = rankAccepts(ALL, 'root.icon-start');
+  assert.equal(likely.length + other.length, ALL.length);
+});

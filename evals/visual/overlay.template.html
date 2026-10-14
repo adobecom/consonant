@@ -1,0 +1,197 @@
+<title>Design Parity Inspector</title>
+<style>
+  /* A fixed neutral dark ground, deliberately not theme-aware: changing the
+     ground behind two images changes how their colours read, which is the one
+     thing this tool exists to judge. */
+  :root{
+    --ground:#16171a; --panel:#1e2025; --panel-2:#242730; --line:#2e3139;
+    --text:#e8eaee; --muted:#8d939f; --accent:#5b8cff;
+    --pass:#3ecf8e; --fail:#ff6b6b;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+    --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--text);font-family:var(--ui);font-size:14px;line-height:1.5}
+  .wrap{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+  @media (max-width:860px){.wrap{grid-template-columns:1fr}}
+
+  /* rail */
+  .rail{background:var(--panel);border-right:1px solid var(--line);padding:20px 0;overflow-y:auto;max-height:100vh}
+  @media (max-width:860px){.rail{max-height:none;border-right:0;border-bottom:1px solid var(--line)}}
+  .rail h1{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 4px;padding:0 20px;font-weight:600}
+  .rail .sub{padding:0 20px 16px;color:var(--muted);font-size:12px}
+  .case{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;color:inherit;
+        padding:9px 20px;cursor:pointer;font:inherit;border-left:2px solid transparent}
+  .case:hover{background:var(--panel-2)}
+  .case[aria-current="true"]{background:var(--panel-2);border-left-color:var(--accent)}
+  .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+  .case .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+  .case .pc{font-family:var(--mono);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  /* stage */
+  .main{display:flex;flex-direction:column;min-width:0;padding:24px 28px 28px}
+  .head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+  .head h2{margin:0;font-size:19px;font-weight:600;letter-spacing:-.01em}
+  .head .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .verdict{font-family:var(--mono);font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid}
+
+  .stage{position:relative;margin:18px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+         display:flex;align-items:center;justify-content:center;min-height:300px;padding:40px;
+         /* checkerboard so transparency reads as transparency, not as white */
+         background-color:#1b1d21;
+         background-image:linear-gradient(45deg,#212429 25%,transparent 25%),linear-gradient(-45deg,#212429 25%,transparent 25%),
+                          linear-gradient(45deg,transparent 75%,#212429 75%),linear-gradient(-45deg,transparent 75%,#212429 75%);
+         background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0}
+  .frame{position:relative;line-height:0;user-select:none}
+  .frame img{display:block;max-width:100%;image-rendering:pixelated}
+  .layer{position:absolute;inset:0}
+  .layer img{width:100%;height:100%}
+  .handle{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);pointer-events:none;box-shadow:0 0 0 1px rgba(0,0,0,.45)}
+  .handle::after{content:"";position:absolute;top:50%;left:50%;width:26px;height:26px;transform:translate(-50%,-50%);
+                 border-radius:50%;background:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.5)}
+  .tag{position:absolute;top:8px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+       padding:3px 7px;border-radius:4px;background:rgba(0,0,0,.6);color:#fff}
+  .tag.l{left:8px} .tag.r{right:8px}
+  .sbs{display:flex;gap:20px;align-items:flex-start}
+  .sbs figure{margin:0;text-align:center}
+  .sbs figcaption{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:8px}
+
+  /* controls */
+  .controls{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{background:var(--panel);border:0;color:var(--muted);font:inherit;font-size:13px;padding:7px 13px;cursor:pointer}
+  .seg button+button{border-left:1px solid var(--line)}
+  .seg button[aria-pressed="true"]{background:var(--accent);color:#0b0d12;font-weight:600}
+  input[type=range]{flex:1;min-width:180px;accent-color:var(--accent)}
+  .hint{color:var(--muted);font-size:12px;font-family:var(--mono)}
+  .zoom{display:inline-flex;gap:6px;align-items:center;color:var(--muted);font-size:12px;font-family:var(--mono)}
+</style>
+
+<div class="wrap">
+  <nav class="rail">
+    <h1>Design parity</h1>
+    <div class="sub" id="summary"></div>
+    <div id="cases"></div>
+  </nav>
+
+  <main class="main">
+    <div class="head">
+      <h2 id="title">—</h2>
+      <span class="verdict" id="verdict"></span>
+      <span class="meta" id="meta"></span>
+    </div>
+    <div class="stage" id="stage"></div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Comparison mode">
+        <button data-mode="wipe" aria-pressed="true">Wipe</button>
+        <button data-mode="fade" aria-pressed="false">Fade</button>
+        <button data-mode="diff" aria-pressed="false">Diff</button>
+        <button data-mode="sbs"  aria-pressed="false">Side by side</button>
+      </div>
+      <input type="range" id="slider" min="0" max="100" value="50" aria-label="Figma to Storybook">
+      <span class="zoom">zoom
+        <button class="segless" id="zoomOut" style="background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:6px;cursor:pointer;width:24px">−</button>
+        <span id="zoomLabel">4×</span>
+        <button id="zoomIn" style="background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:6px;cursor:pointer;width:24px">+</button>
+      </span>
+      <span class="hint">← → wipe · [ ] case · 1–4 mode</span>
+    </div>
+  </main>
+</div>
+
+<script>
+const CASES = /*__DATA__*/null;
+const THRESHOLD = /*__THRESHOLD__*/0;
+let idx = 0, mode = "wipe", pos = 50, zoom = 4;
+
+const $ = (s) => document.querySelector(s);
+const pct = (r) => (r * 100).toFixed(1) + "%";
+
+function renderRail() {
+  $("#cases").innerHTML = CASES.map((c, i) => `
+    <button class="case" data-i="${i}" aria-current="${i === idx}">
+      <span class="dot" style="background:${c.status === "PASS" ? "var(--pass)" : "var(--fail)"}"></span>
+      <span class="nm">${c.name.replace(/^[^-]+--/, "")}</span>
+      <span class="pc">${pct(c.ratio)}</span>
+    </button>`).join("");
+  const pass = CASES.filter((c) => c.status === "PASS").length;
+  $("#summary").textContent = `${pass} of ${CASES.length} within ${(THRESHOLD * 100).toFixed(0)}%`;
+}
+
+function renderStage() {
+  const c = CASES[idx];
+  if (!c) return;
+  $("#title").textContent = c.name;
+  $("#meta").textContent = `${c.variant}  ·  ${c.dims}`;
+  const v = $("#verdict");
+  v.textContent = `${c.status} ${pct(c.ratio)}`;
+  v.style.color = c.status === "PASS" ? "var(--pass)" : "var(--fail)";
+  v.style.borderColor = c.status === "PASS" ? "var(--pass)" : "var(--fail)";
+
+  const w = (parseInt(c.dims) || 160) * zoom / 2;
+  const stage = $("#stage");
+
+  if (mode === "sbs") {
+    stage.innerHTML = `<div class="sbs">
+      <figure><img src="${c.golden}" style="width:${w}px"><figcaption>Figma</figcaption></figure>
+      <figure><img src="${c.candidate}" style="width:${w}px"><figcaption>Storybook</figcaption></figure>
+      ${c.diff ? `<figure><img src="${c.diff}" style="width:${w}px"><figcaption>Diff</figcaption></figure>` : ""}
+    </div>`;
+    return;
+  }
+  if (mode === "diff") {
+    stage.innerHTML = `<div class="frame" style="width:${w}px">
+      <img src="${c.candidate}" style="width:${w}px">
+      ${c.diff ? `<div class="layer"><img src="${c.diff}" style="opacity:${pos / 100}"></div>` : ""}
+      <span class="tag l">Storybook</span><span class="tag r">differing pixels</span></div>`;
+    return;
+  }
+  // wipe and fade share a frame: Figma underneath, Storybook on top.
+  const clip = mode === "wipe" ? `clip-path:inset(0 0 0 ${pos}%)` : `opacity:${pos / 100}`;
+  stage.innerHTML = `<div class="frame" id="frame" style="width:${w}px">
+      <img src="${c.golden}" style="width:${w}px">
+      <div class="layer" style="${clip}"><img src="${c.candidate}"></div>
+      ${mode === "wipe" ? `<div class="handle" style="left:${pos}%"></div>` : ""}
+      <span class="tag l">Figma</span><span class="tag r">Storybook</span>
+    </div>`;
+  if (mode === "wipe") {
+    const frame = $("#frame");
+    const drag = (e) => {
+      const r = frame.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+      pos = Math.max(0, Math.min(100, (x / r.width) * 100));
+      $("#slider").value = pos; renderStage();
+    };
+    frame.addEventListener("pointerdown", (e) => { drag(e); frame.setPointerCapture(e.pointerId);
+      frame.onpointermove = drag; frame.onpointerup = () => { frame.onpointermove = null; }; });
+    frame.style.cursor = "ew-resize";
+  }
+}
+
+function render() { renderRail(); renderStage(); }
+
+document.addEventListener("click", (e) => {
+  const c = e.target.closest(".case");
+  if (c) { idx = +c.dataset.i; render(); return; }
+  const m = e.target.closest("[data-mode]");
+  if (m) {
+    mode = m.dataset.mode;
+    document.querySelectorAll("[data-mode]").forEach((b) => b.setAttribute("aria-pressed", String(b === m)));
+    render(); return;
+  }
+  if (e.target.id === "zoomIn") { zoom = Math.min(8, zoom * 2); $("#zoomLabel").textContent = zoom + "×"; renderStage(); }
+  if (e.target.id === "zoomOut") { zoom = Math.max(1, zoom / 2); $("#zoomLabel").textContent = zoom + "×"; renderStage(); }
+});
+$("#slider").addEventListener("input", (e) => { pos = +e.target.value; renderStage(); });
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") { pos = Math.min(100, pos + 2); $("#slider").value = pos; renderStage(); }
+  if (e.key === "ArrowLeft")  { pos = Math.max(0, pos - 2);  $("#slider").value = pos; renderStage(); }
+  if (e.key === "]") { idx = (idx + 1) % CASES.length; render(); }
+  if (e.key === "[") { idx = (idx - 1 + CASES.length) % CASES.length; render(); }
+  if ("1234".includes(e.key)) { document.querySelectorAll("[data-mode]")[+e.key - 1]?.click(); }
+});
+
+if (!CASES || !CASES.length) {
+  document.body.innerHTML = '<div style="padding:40px;font-family:var(--ui)">No cases. Run <code>npm run eval:visual:contracts</code> first.</div>';
+} else render();
+</script>

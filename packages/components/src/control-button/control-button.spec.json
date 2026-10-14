@@ -1,53 +1,718 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "ControlButton",
   "slug": "control-button",
   "cssClass": "c-control-button",
+  "figmaNodeId": "11180:181592",
   "storybookId": "control-button",
-  "description": "Icon-only media-overlay control (play/pause, next, close). v2 architecture: a single `media` style whose scrim background reads on any surface — the v1 Context and background axes were removed; page theming flows from variable modes, not props.",
-  "figma": {
-    "componentSet": "ControlButton — v2",
-    "nodeId": "11180:181592",
-    "page": "   ↳ ControlButton"
-  },
+  "description": "A compact, icon-only button for controlling an interactive container — a media player, carousel, lightbox, or modal. Reach for it when the icon alone carries the action: play/pause, next/previous, mute, expand, close.",
   "variants": {
-    "style": ["media"],
-    "size": ["md", "xl"],
-    "state": ["default", "hover", "active", "disabled", "focus"]
+    "Size": [
+      "xl",
+      "md"
+    ],
+    "State": [
+      "default",
+      "hover",
+      "active",
+      "disabled",
+      "focus"
+    ]
   },
   "props": [
-    { "name": "icon", "type": "TemplateResult", "description": "16×16 icon slot content (Figma: Icon INSTANCE_SWAP)" },
-    { "name": "label", "type": "string", "defaultValue": "\"\"", "description": "Accessible name — rendered as aria-label; the button is icon-only" },
-    { "name": "size", "type": "string", "defaultValue": "\"md\"", "enum": ["md", "xl"], "description": "md = 32px, xl = 48px square" },
-    { "name": "disabled", "type": "boolean", "defaultValue": "false" },
-    { "name": "forceState", "type": "string", "enum": ["hover", "active", "focus"], "description": "Docs-only state pinning via data-force-state (mirrors Button convention)" },
-    { "name": "onClick", "type": "Function" }
+    {
+      "name": "icon",
+      "type": "string",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon#8576:43",
+          "verified": true
+        },
+        "code": {
+          "prop": "icon",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "defaultValue": "\"xl\"",
+      "enum": [
+        "xl",
+        "md"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "verified": true,
+          "options": [
+            "xl",
+            "md"
+          ]
+        },
+        "code": {
+          "prop": "size",
+          "attr": "data-size",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "label",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "disabled",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "forceState",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "description": "The State axis, forceable from code. At runtime the states come from interaction; forcing one is for previews, docs and the state matrix. The hand-written component used data-force-state; generated code uses data-state.",
+      "enum": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "focus"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "verified": true,
+          "options": [
+            "default",
+            "hover",
+            "active",
+            "disabled",
+            "focus"
+          ]
+        },
+        "code": {
+          "prop": "forceState",
+          "attr": "data-state",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "onClick",
+      "type": "string",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "onClick",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
   ],
   "tokenBindings": {
-    "background:default": "--s2a-color-control-button-background-media-default → --s2a-color-transparent-black-64",
-    "background:hover": "--s2a-color-control-button-background-media-hover → --s2a-color-transparent-black-80",
-    "background:active": "--s2a-color-control-button-background-media-active → --s2a-color-transparent-black-96",
-    "background:disabled": "--s2a-color-control-button-background-media-disabled → --s2a-color-transparent-black-32",
-    "border": "--s2a-color-control-button-border-media → --s2a-color-transparent-white-24",
-    "icon:default": "--s2a-color-content-knockout",
-    "icon:disabled": "--s2a-color-transparent-white-48",
-    "focus-ring": "--s2a-color-focus-ring-default",
-    "radius": "--s2a-border-radius-6",
-    "border-width": "--s2a-border-width-sm",
-    "backdrop-blur": "--s2a-blur-8"
+    "root-border-radius": "--s2a-border-radius-6",
+    "root-background-color": "--s2a-color-control-button-background-media-default",
+    "root-border-width": "--s2a-border-width-sm",
+    "root-border-color": "--s2a-color-control-button-border-media",
+    "root-background-color:focus": "--s2a-color-control-button-background-media-focus",
+    "root-outline-color:focus": "--s2a-color-focus-ring-default",
+    "root-outline-width:focus": "--s2a-border-width-sm",
+    "root-background-color:disabled": "--s2a-color-control-button-background-media-disabled",
+    "root-background-color:active": "--s2a-color-control-button-background-media-active",
+    "root-background-color:hover": "--s2a-color-control-button-background-media-hover",
+    "icon-color": "--s2a-color-content-knockout",
+    "icon-color:disabled": "--s2a-color-transparent-white-48"
   },
-  "knownTokenGaps": [
-    "--s2a-color-control-button-* component tokens are bound in Figma (collection S2A/Semantic/Color/Theme) but not yet emitted by the shipped tokens release — CSS chains each to the shipped primitive it resolves to today. Remove the fallback chains when they ship.",
-    "Sizes (32/48) and the 16px icon rig use spacing tokens of identical value (--s2a-spacing-xl/-3xl/-md); Figma binds no dimension variables on the variant frames themselves."
-  ],
+  "tier": "component",
+  "composedOf": [],
   "a11y": {
-    "role": "button",
-    "requiredAriaAttrs": ["aria-label"],
-    "wcag": ["1.1.1", "2.1.1", "2.4.7", "2.5.8"],
+    "wcag": [
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
     "notes": [
-      "Icon-only control: `label` is mandatory in practice — it becomes aria-label (WCAG 1.1.1 / 4.1.2).",
-      "Focus state renders a 1px focus-ring/default outline at the button bounds, matching the v2 Figma Focus Ring layer (2.4.7).",
-      "md size is 32×32 — meets WCAG 2.5.8 minimum target size (24px); xl comfortably exceeds it.",
-      "Figma's focus variant stroke alignment was assumed outline-at-bounds (outline-offset: 0)."
+      "Renders a native <button>, or an <a> when it navigates — never a div with a click handler.",
+      "The label is the accessible name; an icon-only button needs an aria-label.",
+      "Focus is visible on the control itself (2.4.7) and the target is at least 24x24 (2.5.8).",
+      "Disabled is conveyed to assistive tech, not by colour alone (1.4.1).",
+      "Give every instance an accessible name. It shows only an icon, so set an aria-label that states the action (\"Play\", \"Next slide\", \"Close\"). WCAG 4.1.2 Name, Role, Value — every control exposes a name and role to assistive tech.",
+      "It's a real button. Implement as a <button> so it's reachable by keyboard: Tab moves to it, Enter and Space activate it. WCAG 2.1.1 Keyboard — all functionality works without a mouse.",
+      "The focus state isn't decoration. The focus variant's ring must ship in code so keyboard users can see where they are. WCAG 2.4.7 Focus Visible.",
+      "Watch contrast on media. Over photo or video the glyph can wash out — keep it on the component's scrim so it holds at least 3:1 against the background. WCAG 1.4.11 Non-text Contrast.",
+      "Keep the target big enough. Present at least a 24x24px pointer target (44x44 is better on touch). WCAG 2.5.8 Target Size (Minimum).",
+      "disabled is communicated, not just dimmed. Remove it from the tab order and expose the disabled state to assistive tech."
     ]
+  },
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      },
+      "code": {
+        "mechanism": ":hover"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "active",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=active"
+      },
+      "code": {
+        "mechanism": ":active"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=disabled"
+      },
+      "code": {
+        "mechanism": "[disabled] / :disabled"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      },
+      "code": {
+        "mechanism": ":focus-visible"
+      },
+      "notes": "Runtime state, never an authored prop."
+    }
+  ],
+  "anatomy": {
+    "selector": ".c-control-button",
+    "figma": ".root",
+    "element": "button",
+    "layout": {
+      "display": "flex",
+      "direction": "row",
+      "justify": "center",
+      "align": "center"
+    },
+    "tokens": {
+      "border-radius": {
+        "value": "{s2a.border.radius.6}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.border.radius.6}",
+            "cssVar": "--s2a-border-radius-6",
+            "figma": "s2a/border/radius/6",
+            "shipped": true,
+            "value": "6px"
+          }
+        ]
+      },
+      "background-color": {
+        "value": "{s2a.color.control-button.background.media.default}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.color.control-button.background.media.default}",
+            "cssVar": "--s2a-color-control-button-background-media-default",
+            "figma": "s2a/color/control-button/background/media/default",
+            "shipped": true,
+            "value": "rgb(0 0 0 / 64%)"
+          }
+        ]
+      },
+      "border-width": {
+        "value": "{s2a.border.width.sm}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.border.width.sm}",
+            "cssVar": "--s2a-border-width-sm",
+            "figma": "s2a/border/width/sm",
+            "shipped": true,
+            "value": "1px"
+          }
+        ]
+      },
+      "border-color": {
+        "value": "{s2a.color.control-button.border.media}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.color.control-button.border.media}",
+            "cssVar": "--s2a-color-control-button-border-media",
+            "figma": "s2a/color/control-button/border/media",
+            "shipped": true,
+            "value": "rgb(255 255 255 / 24%)"
+          }
+        ]
+      }
+    },
+    "states": {
+      "focus": {
+        "background-color": {
+          "value": "{s2a.color.control-button.background.media.focus}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{s2a.color.control-button.background.media.focus}",
+              "cssVar": "--s2a-color-control-button-background-media-focus",
+              "figma": "s2a/color/control-button/background/media/focus",
+              "shipped": true,
+              "value": "rgb(0 0 0 / 64%)"
+            }
+          ]
+        },
+        "outline-color": {
+          "value": "{s2a.color.focus-ring.default}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{s2a.color.focus-ring.default}",
+              "cssVar": "--s2a-color-focus-ring-default",
+              "figma": "s2a/color/focus-ring/default",
+              "shipped": true,
+              "value": "#3b63fb",
+              "dark": "#8eb9fc"
+            }
+          ]
+        },
+        "outline-width": {
+          "value": "{s2a.border.width.sm}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{s2a.border.width.sm}",
+              "cssVar": "--s2a-border-width-sm",
+              "figma": "s2a/border/width/sm",
+              "shipped": true,
+              "value": "1px"
+            }
+          ]
+        },
+        "outline-style": {
+          "value": "raw:solid",
+          "raw": true,
+          "tokens": []
+        },
+        "outline-offset": {
+          "value": "raw:1px",
+          "raw": true,
+          "tokens": []
+        }
+      },
+      "disabled": {
+        "background-color": {
+          "value": "{s2a.color.control-button.background.media.disabled}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{s2a.color.control-button.background.media.disabled}",
+              "cssVar": "--s2a-color-control-button-background-media-disabled",
+              "figma": "s2a/color/control-button/background/media/disabled",
+              "shipped": true,
+              "value": "rgb(0 0 0 / 32%)"
+            }
+          ]
+        }
+      },
+      "active": {
+        "background-color": {
+          "value": "{s2a.color.control-button.background.media.active}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{s2a.color.control-button.background.media.active}",
+              "cssVar": "--s2a-color-control-button-background-media-active",
+              "figma": "s2a/color/control-button/background/media/active",
+              "shipped": true,
+              "value": "rgb(0 0 0 / 96%)"
+            }
+          ]
+        },
+        "border-width": {
+          "value": "raw:1px",
+          "raw": true,
+          "tokens": []
+        }
+      },
+      "hover": {
+        "background-color": {
+          "value": "{s2a.color.control-button.background.media.hover}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{s2a.color.control-button.background.media.hover}",
+              "cssVar": "--s2a-color-control-button-background-media-hover",
+              "figma": "s2a/color/control-button/background/media/hover",
+              "shipped": true,
+              "value": "rgb(0 0 0 / 80%)"
+            }
+          ]
+        }
+      }
+    },
+    "tokensByProp": [
+      {
+        "prop": "size",
+        "map": {
+          "md": {
+            "width": {
+              "value": "raw:32px",
+              "raw": true,
+              "tokens": []
+            },
+            "height": {
+              "value": "raw:32px",
+              "raw": true,
+              "tokens": []
+            }
+          },
+          "xl": {
+            "width": {
+              "value": "raw:48px",
+              "raw": true,
+              "tokens": []
+            },
+            "height": {
+              "value": "raw:48px",
+              "raw": true,
+              "tokens": []
+            }
+          }
+        }
+      }
+    ],
+    "parts": {
+      "frame": {
+        "selector": ".c-control-button__frame",
+        "figma": "/Frame",
+        "element": "div",
+        "layout": {
+          "display": "inline-flex",
+          "direction": "row",
+          "justify": "center",
+          "align": "center"
+        },
+        "parts": {
+          "scale-s2a-icons-scale-rig": {
+            "selector": ".c-control-button__scale-s2a-icons-scale-rig",
+            "figma": "/Frame/Scale/S2a-Icons-scale-rig",
+            "layout": {
+              "display": "inline-flex",
+              "direction": "row",
+              "justify": "center",
+              "align": "center"
+            }
+          }
+        }
+      },
+      "icon": {
+        "selector": ".c-control-button__icon",
+        "figma": "/Icon color",
+        "tokens": {
+          "color": {
+            "value": "{s2a.color.content.knockout}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.color.content.knockout}",
+                "cssVar": "--s2a-color-content-knockout",
+                "figma": "s2a/color/content/knockout",
+                "shipped": true,
+                "value": "#fff"
+              }
+            ]
+          },
+          "width": {
+            "value": "raw:26px",
+            "raw": true,
+            "tokens": []
+          },
+          "height": {
+            "value": "raw:26px",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "states": {
+          "disabled": {
+            "color": {
+              "value": "{s2a.color.transparent.white.48}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.transparent.white.48}",
+                  "cssVar": "--s2a-color-transparent-white-48",
+                  "figma": "s2a/color/transparent/white/48",
+                  "shipped": true,
+                  "value": "rgb(255 255 255 / 48%)"
+                }
+              ]
+            }
+          }
+        },
+        "slot": {
+          "name": "Icon",
+          "accepts": [
+            "kind:icon"
+          ],
+          "acceptsMode": "prefer",
+          "notes": "Instance-swap property \"Icon\" — list what it accepts once those contracts exist.",
+          "default": {
+            "figma": "S2a_Icon_Arrow Right",
+            "size": 16,
+            "manifest": "s2a-icons",
+            "icon": "arrow-right"
+          }
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "11180:181592",
+        "nodeName": "ControlButton — v2",
+        "componentSetKey": "acbdd435890be6d30ed53563b536ca03105ea212",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:237421ed5ace4091353b24979f92eb452174f3c1becad23a8791c53c07533f7d",
+        "extractedAt": "2026-10-08T17:55:19.787Z",
+        "meta": {
+          "version": "2.0.0",
+          "status": "active",
+          "updated": "2026-08-04",
+          "changelog": "2.0.0   2026-08-04  init         Initial release"
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/control-button/control-button.js",
+        "export": "ControlButton",
+        "controller": null,
+        "cssClass": "c-control-button"
+      },
+      "evidence": {
+        "hash": "sha256:153748d201c2d4db882bcf73f038453b738a85820fa3ba26fcbcf932bf833772"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "cb-code-only-props",
+      "question": "label, disabled, onClick exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false). \"disabled\" collides with the State axis, which this draft read as runtime states — decide whether the code prop or the state axis is the truth.",
+      "chose": "added 3 code-only props as levers with no design binding",
+      "confidence": "low",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "control-button.code.evidence.json"
+    },
+    {
+      "id": "cb-part-selectors",
+      "question": "frame, scale-s2a-icons-scale-rig have no class of their own in control-button.css. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to control-button.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/control-button/control-button.css"
+    },
+    {
+      "id": "cb-match",
+      "question": "Structural match says extend: closest existing contract is Button (score 0.84). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Button (match extend, score 0.84)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Button instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Button (0.84) already covers this; extend it."
+    },
+    {
+      "id": "cb-classify-1",
+      "question": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop. Confirm, or change it in props/states.",
+      "chose": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "control-button.figma.evidence.json axes"
+    },
+    {
+      "id": "cb-classify-2",
+      "question": "\"Style\" has a single value (media) — read as fixed, not as a prop; add the prop when a second value exists. Confirm, or change it in props/states.",
+      "chose": "\"Style\" has a single value (media) — read as fixed, not as a prop; add the prop when a second value exists",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "control-button.figma.evidence.json axes"
+    },
+    {
+      "id": "cb-classify-3",
+      "question": "\"forceState\" read as the code's handle on the \"State\" axis (data-force-state), so every state can be rendered without a pointer. Confirm, or change it in props/states.",
+      "chose": "\"forceState\" read as the code's handle on the \"State\" axis (data-force-state), so every state can be rendered without a pointer",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "control-button.figma.evidence.json axes"
+    },
+    {
+      "id": "cb-archetype",
+      "question": "Scaffolded as button (binds s2a/color/control-button/* (6 variables); interactive: state axis has hover, active, disabled, focus; named \"ControlButton — v2\"). Confirm, or re-run npm run specs:scaffold -- --slug=control-button --archetype=<link-card|card|collection>.",
+      "chose": "button — binds s2a/color/control-button/* (6 variables); interactive: state axis has hover, active, disabled, focus; named \"ControlButton — v2\"",
+      "confidence": "high",
+      "fix": "npm run specs:scaffold -- --slug=control-button --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces control-button×6, transparent×1, focus-ring×1, content×1; state axis default/hover/active/disabled/focus"
+    },
+    {
+      "id": "cb-layer-names",
+      "question": "2 layers carry Figma-generated names (/Frame, /Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "control-button.figma.evidence.json anatomy"
+    },
+    {
+      "id": "cb-composes",
+      "question": "Built from 1 component set; 1 has no contract yet: Scale/S2a-Icons-scale-rig ×10. A slot or part naming one of these fails the COMPOSITION check until it exists. Contract the leaves first, or record why each is internal to this component.",
+      "chose": "recorded 1 composed set",
+      "confidence": "high",
+      "fix": "Scaffold each missing set first (npm run specs:scaffold -- --slug=<slug>), then declare the slot here. If a set is internal to this component — a Figma section marking it \"do not use directly\" is the usual tell — say so in this decision and model it as a part instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "control-button.figma.evidence.json instances"
+    },
+    {
+      "id": "cb-icon-defaults",
+      "question": "The design fills the \"icon\" slot with S2a_Icon_Arrow Right. The contract records the design's choice; binding it to the code icon library (packages/components/src/icons, manifest s2a-icons) is a decision — Heal in the Contract Book makes it when the names match, or set slot.default.manifest and slot.default.icon by hand.",
+      "chose": "recorded the design's default instance; left the library binding open",
+      "confidence": "medium",
+      "fix": "Set anatomy.root.parts.<part>.slot.default to { \"manifest\": \"s2a-icons\", \"icon\": \"<name>\" }; add the SVG to packages/components/src/icons if it is missing, then npm run specs:assets.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "control-button.figma.evidence.json instances"
+    },
+    {
+      "id": "cb-hardcoded-values",
+      "question": "7 values in the design are set with no variable behind them: root border-width:active = 1px; root width@size=md = 32px; root height@size=md = 32px; root width@size=xl = 48px; root height@size=xl = 48px; root/icon width = 26px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "control-button.figma.evidence.json unboundValues"
+    },
+    {
+      "id": "heal-icon-icon",
+      "question": "The design fills the root/icon slot with S2a_Icon_Arrow Right. Which code icon is that?",
+      "chose": "S2a_Icon_Arrow Right → s2a-icons/arrow-right (arrow-right.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "decision": "S2a_Icon_Arrow Right → s2a-icons/arrow-right (arrow-right.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "control-button.figma.evidence.json instances · packages/spec-dictionary/out/assets/s2a-icons.json",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-focus-ring",
+      "question": "Figma draws the focus state's ring as a child layer (/Focus Ring) stroked with s2a/color/focus-ring/default, on the State=focus variant. A child layer is how a design file paints outside the shape without resizing it. Carry it as a part, a border, or an outline?",
+      "chose": "outline on the root in the focus state: colour s2a/color/focus-ring/default, width s2a/border/width/sm, offset 1px — the ring is a 34px box with a 1px OUTSIDE stroke around the 32px root. A part would put a box inside the shape; a border would resize it.",
+      "decision": "outline on the root in the focus state: colour s2a/color/focus-ring/default, width s2a/border/width/sm, offset 1px — the ring is a 34px box with a 1px OUTSIDE stroke around the 32px root. A part would put a box inside the shape; a border would resize it.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "control-button.figma.evidence.json bindings, variant \"Style=media, Size=md, State=focus\", node /Focus Ring",
+      "confidence": "high"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:55b6ec09039d189dcef9a10af59e4decf6230f16d2ee3ae62a9e95b1fcd4a5ad",
+    "codeEvidence": "sha256:153748d201c2d4db882bcf73f038453b738a85820fa3ba26fcbcf932bf833772",
+    "figmaEvidence": "sha256:237421ed5ace4091353b24979f92eb452174f3c1becad23a8791c53c07533f7d",
+    "generator": "s2a-spec-transform@1"
   }
 }

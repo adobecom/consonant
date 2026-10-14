@@ -10,19 +10,18 @@ import { hierarchy, treemap } from "d3-hierarchy";
 import { hsl } from "d3-color";
 import { curveMonotoneX, area, line } from "d3-shape";
 import "./AnalyticsDashboard.css";
+import { tokenValue } from "./token-value.js";
 import snapshot from "./generated/analyticsSnapshot.js";
 
 // ── Palette ────────────────────────────────────────────────────────────────
-// Sourced from S2A primitive color tokens and validated with the dataviz
-// skill's checker (scripts/validate_palette.js). These are JS-level D3 fill
-// values, not CSS token usage in shipped component stylesheets, so drawing
-// from primitives here doesn't conflict with the "no primitives in CSS" rule.
+// D3 interpolates concrete colors, so resolve semantic roles when rendering.
+// Labels identify status; accent/error separate the two series in either theme.
 const COLOR = {
-  good: "#05834E", // s2a/color/green/900 — insertions, current (replacement) components
-  critical: "#9C2113", // s2a/color/red/1100 — detachments, deprecated components
-  neutral: "#C6C6C6", // s2a/color/gray/400 — diverging midpoint
-  sequential: "#3B63FB", // s2a/color/blue/900 — magnitude-only bars
-  gridline: "#DADADA", // s2a/color/gray/300
+  get good() { return tokenValue('color-border-accent'); },
+  get critical() { return tokenValue('color-content-utility-error'); },
+  get neutral() { return tokenValue('color-border-subtle'); },
+  get sequential() { return tokenValue('color-border-accent'); },
+  get gridline() { return tokenValue('color-border-subtle'); },
 };
 
 const fmt = format(",");
@@ -40,8 +39,8 @@ function getTooltip() {
   return {
     show(node, x, y) {
       tooltipEl.replaceChildren(node);
-      tooltipEl.style.left = `${x + 12}px`;
-      tooltipEl.style.top = `${y + 12}px`;
+      tooltipEl.style.left = `${x + parseFloat(tokenValue("spacing-sm"))}px`;
+      tooltipEl.style.top = `${y + parseFloat(tokenValue("spacing-sm"))}px`;
       tooltipEl.style.opacity = "1";
     },
     hide() {
@@ -69,7 +68,7 @@ function tooltipBox(rows, title) {
   const box = document.createElement("div");
   if (title) {
     const heading = document.createElement("div");
-    heading.style.marginBottom = "4px";
+    heading.style.marginBottom = "var(--s2a-spacing-2xs)";
     heading.textContent = title;
     box.appendChild(heading);
   }
@@ -78,7 +77,7 @@ function tooltipBox(rows, title) {
 }
 
 // Right-rounded horizontal bar path (square at the baseline, 4px round at the value end).
-function roundedBarPath(x0, y0, width, height, radius = 4) {
+function roundedBarPath(x0, y0, width, height, radius = parseFloat(tokenValue("border-radius-2xs"))) {
   const w = Math.max(width, 0);
   const r = Math.min(radius, w, height / 2);
   if (w <= 0) return `M${x0},${y0} h0 v${height} h0 Z`;
@@ -121,7 +120,7 @@ function drawTrendChart(container) {
     .attr("y1", (d) => y(d))
     .attr("y2", (d) => y(d))
     .attr("stroke", COLOR.gridline)
-    .attr("stroke-width", 1);
+    .style("stroke-width", "var(--s2a-border-width-sm)");
 
   g.append("g")
     .attr("transform", `translate(0,${innerH})`)
@@ -129,14 +128,14 @@ function drawTrendChart(container) {
     .call((g) => g.select(".domain").remove())
     .selectAll("text")
     .attr("fill", "currentColor")
-    .attr("font-size", 11);
+    .style("font-size", "var(--s2a-font-size-xs)");
 
   g.append("g")
     .call(axisLeft(y).ticks(4).tickFormat(fmtCompact).tickSize(0))
     .call((g) => g.select(".domain").remove())
     .selectAll("text")
     .attr("fill", "currentColor")
-    .attr("font-size", 11);
+    .style("font-size", "var(--s2a-font-size-xs)");
 
   const areaGen = area()
     .x((d) => x(d.date))
@@ -160,7 +159,7 @@ function drawTrendChart(container) {
     .attr("d", insertionsLine)
     .attr("fill", "none")
     .attr("stroke", COLOR.good)
-    .attr("stroke-width", 2)
+    .style("stroke-width", "var(--s2a-border-width-md)")
     .attr("stroke-linejoin", "round")
     .attr("stroke-linecap", "round");
   g.append("path")
@@ -168,7 +167,7 @@ function drawTrendChart(container) {
     .attr("d", detachmentsLine)
     .attr("fill", "none")
     .attr("stroke", COLOR.critical)
-    .attr("stroke-width", 2)
+    .style("stroke-width", "var(--s2a-border-width-md)")
     .attr("stroke-linejoin", "round")
     .attr("stroke-linecap", "round");
 
@@ -178,8 +177,8 @@ function drawTrendChart(container) {
     .attr("x", x(last.date))
     .attr("y", y(last.insertions) - 8)
     .attr("text-anchor", "end")
-    .attr("font-size", 11)
-    .attr("font-weight", 700)
+    .style("font-size", "var(--s2a-font-size-xs)")
+    .style("font-weight", "var(--s2a-font-weight-label)")
     .attr("fill", "currentColor")
     .text(fmt(last.insertions));
 
@@ -190,7 +189,7 @@ function drawTrendChart(container) {
     .attr("y1", 0)
     .attr("y2", innerH)
     .attr("stroke", COLOR.gridline)
-    .attr("stroke-width", 1)
+    .style("stroke-width", "var(--s2a-border-width-sm)")
     .style("opacity", 0);
 
   const bisect = bisector((d) => d.date).left;
@@ -292,8 +291,8 @@ function drawAdoptionChart(container) {
         .attr("x", x(b.value) + 6)
         .attr("y", b.y + barHeight / 2)
         .attr("dy", "0.35em")
-        .attr("font-size", 11)
-        .attr("font-weight", 700)
+        .style("font-size", "var(--s2a-font-size-xs)")
+        .style("font-weight", "var(--s2a-font-weight-label)")
         .attr("fill", "currentColor")
         .text(fmtCompact(b.value));
     });
@@ -303,7 +302,7 @@ function drawAdoptionChart(container) {
       .attr("y", rowY + barHeight + 2)
       .attr("dy", "0.35em")
       .attr("text-anchor", "end")
-      .attr("font-size", 12)
+      .style("font-size", "var(--s2a-font-size-xs)")
       .attr("fill", "currentColor")
       .text(f.name);
   });
@@ -311,7 +310,7 @@ function drawAdoptionChart(container) {
 
 // ── Panel 3: Milo token fidelity treemap + drill-in ─────────────────────────
 
-const complianceScale = scaleLinear().domain([0, 50, 100]).range([COLOR.critical, COLOR.neutral, COLOR.good]).clamp(true);
+const complianceScale = (score) => scaleLinear().domain([0, 50, 100]).range([COLOR.critical, COLOR.neutral, COLOR.good]).clamp(true)(score);
 
 function chip(label, variant) {
   const span = document.createElement("span");
@@ -338,7 +337,7 @@ function renderBlockDetail(container, block) {
 
   const heading = document.createElement("h3");
   heading.className = "s2a-panel__title";
-  heading.style.fontSize = "16px";
+  heading.style.fontSize = "var(--s2a-font-size-md)";
   heading.textContent = `${block.block}${block.official ? " — official mirror" : ""}`;
   container.appendChild(heading);
 
@@ -351,7 +350,7 @@ function renderBlockDetail(container, block) {
     const scoreBadge = document.createElement("span");
     scoreBadge.className = "s2a-chip";
     scoreBadge.style.background = complianceScale(f.complianceScore);
-    scoreBadge.style.color = hsl(complianceScale(f.complianceScore)).l > 0.6 ? "#131313" : "#fff";
+    scoreBadge.style.color = hsl(complianceScale(f.complianceScore)).l > 0.6 ? tokenValue("color-button-content-knockout") : tokenValue("color-content-knockout");
     scoreBadge.textContent = `${f.complianceScore}/100`;
     const path = document.createElement("code");
     path.textContent = f.filePath;
@@ -438,8 +437,8 @@ function drawFidelityTreemap(container) {
     .attr("height", (d) => d.y1 - d.y0)
     .attr("rx", 4)
     .attr("fill", (d) => complianceScale(d.data.avgScore))
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 2)
+    .attr("stroke", tokenValue("color-content-knockout"))
+    .style("stroke-width", "var(--s2a-border-width-md)")
     .on("pointermove", (event, d) => {
       tooltip.show(
         tooltipBox(
@@ -456,7 +455,7 @@ function drawFidelityTreemap(container) {
     .on("pointerleave", () => tooltip.hide())
     .on("click", (event, d) => {
       selectedBlock = d.data;
-      tiles.selectAll("rect").attr("stroke", (t) => (t.data === selectedBlock ? "#131313" : "#fff"));
+      tiles.selectAll("rect").attr("stroke", (t) => (t.data === selectedBlock ? tokenValue("color-button-content-knockout") : tokenValue("color-content-knockout")));
       renderBlockDetail(detailHost, selectedBlock);
     });
 
@@ -465,9 +464,9 @@ function drawFidelityTreemap(container) {
     .append("text")
     .attr("x", 6)
     .attr("y", 16)
-    .attr("font-size", 10)
-    .attr("font-weight", 700)
-    .attr("fill", (d) => (hsl(complianceScale(d.data.avgScore)).l > 0.6 ? "#131313" : "#fff"))
+    .style("font-size", "var(--s2a-font-size-xs)")
+    .style("font-weight", "var(--s2a-font-weight-label)")
+    .attr("fill", (d) => (hsl(complianceScale(d.data.avgScore)).l > 0.6 ? tokenValue("color-button-content-knockout") : tokenValue("color-content-knockout")))
     .style("pointer-events", "none")
     .text((d) => d.data.block);
 }
@@ -511,8 +510,8 @@ function drawConsumersChart(container) {
       .attr("x", x(d.usages) + 6)
       .attr("y", y + barHeight / 2)
       .attr("dy", "0.35em")
-      .attr("font-size", 11)
-      .attr("font-weight", 700)
+      .style("font-size", "var(--s2a-font-size-xs)")
+      .style("font-weight", "var(--s2a-font-weight-label)")
       .attr("fill", "currentColor")
       .text(fmtCompact(d.usages));
 
@@ -521,7 +520,7 @@ function drawConsumersChart(container) {
       .attr("y", y + barHeight / 2)
       .attr("dy", "0.35em")
       .attr("text-anchor", "end")
-      .attr("font-size", 11)
+      .style("font-size", "var(--s2a-font-size-xs)")
       .attr("fill", "currentColor")
       .text(label.length > 26 ? `${label.slice(0, 25)}…` : label);
   });

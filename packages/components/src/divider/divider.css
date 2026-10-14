@@ -27,4 +27,5 @@
    exact resolved value until --s2a-color-divider-* tokens ship. */
 .c-divider[data-style="subtle-inverse"] {
   background-color: var(--s2a-color-transparent-white-16);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
 }

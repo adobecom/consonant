@@ -8,14 +8,34 @@ export const refToVar = (ref) => "--" + ref.replace(/^\{|\}$/g, "").replace(/\./
 export const refToFigma = (ref) => ref.replace(/^\{|\}$/g, "").replace(/\./g, "/");
 export const REF = /\{s2a\.[a-z0-9.-]+\}/g;
 
+/** One token CSS file's declarations: `--s2a-x: value` pairs, nothing else. */
+export function parseTokenCss(css) {
+  const map = new Map();
+  for (const m of String(css).matchAll(/(--s2a-[a-z0-9_-]+)\s*:\s*([^;]+);/g)) map.set(m[1], m[2].trim());
+  return map;
+}
+
+/**
+ * The Node entry: read the shipped token CSS off disk, then hand the parsed
+ * files to the pure resolver. Everything that decides what a token resolves
+ * to lives in tokensFromFiles so a browser — which cannot read a directory —
+ * runs the identical lookup chain on the identical data.
+ */
 export function loadShippedTokens(dir) {
   const files = {};
-  if (!existsSync(dir)) return { files, names: new Set(), resolve: () => ({ shipped: false }) };
-  for (const f of readdirSync(dir)) {
-    const map = new Map();
-    for (const m of readFileSync(join(dir, f), "utf8").matchAll(/(--s2a-[a-z0-9_-]+)\s*:\s*([^;]+);/g)) map.set(m[1], m[2].trim());
-    files[f] = map;
-  }
+  if (!existsSync(dir)) return tokensFromFiles(files);
+  for (const f of readdirSync(dir)) files[f] = parseTokenCss(readFileSync(join(dir, f), "utf8"));
+  return tokensFromFiles(files);
+}
+
+/**
+ * The resolver, from already-parsed files: `{ "tokens.semantic.css": Map }`.
+ * Plain objects of name -> value are accepted too, so a JSON snapshot of the
+ * token files (what the Contract Book bundles) needs no re-wrapping.
+ */
+export function tokensFromFiles(input) {
+  const files = {};
+  for (const [f, v] of Object.entries(input ?? {})) files[f] = v instanceof Map ? v : new Map(Object.entries(v ?? {}));
   const names = new Set(Object.values(files).flatMap((m) => [...m.keys()]));
   // Lookup order per mode: mode-specific semantic → shared semantic → primitives.
   const chains = {

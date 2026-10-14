@@ -38,7 +38,7 @@ export const ProductCard = ({
         ? html`<span class="c-product-card__scrim" aria-hidden="true"></span>`
         : nothing}
       ${showIcon
-        ? html`<span class="c-product-card__icon" aria-hidden="true">${AppIcon({ app, size: "sm" })}</span>`
+        ? html`<span class="c-product-card__icon" aria-hidden="true">${AppIcon({ app, size: "18" })}</span>`
         : nothing}
       <div class="c-product-card__text">
         ${heading ? html`<h3 class="c-product-card__heading">${heading}</h3>` : nothing}

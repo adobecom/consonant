@@ -1,0 +1,237 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.app-icon",
+  "name": "AppIcon",
+  "version": "1.1.1",
+  "status": "draft",
+  "description": "AppIcon",
+  "archetype": "none",
+  "semantics": {
+    "element": "span",
+    "role": "img"
+  },
+  "props": [
+    {
+      "name": "app",
+      "type": "text",
+      "description": "Figma calls the instance swap \"Icon\"; the component calls it \"app\" and takes a key into APP_LIBRARY rather than a node. Same idea, two vocabularies.",
+      "default": "\"acrobat-pro\"",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon#3582:54"
+        },
+        "code": {
+          "prop": "app"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "16",
+          "18",
+          "24",
+          "32",
+          "48",
+          "80"
+        ]
+      },
+      "default": "\"24\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size"
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "ariaLabel",
+      "type": "text",
+      "description": "The accessible name. Authored whenever the icon carries meaning.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "ariaLabel"
+        }
+      }
+    },
+    {
+      "name": "ariaHidden",
+      "type": "boolean",
+      "description": "Decorative by default — a product mnemonic beside a label is usually noise to a screen reader. Set false and give an ariaLabel when the icon is the only content.",
+      "default": "true",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "ariaHidden"
+        }
+      }
+    },
+    {
+      "name": "loading",
+      "type": "text",
+      "description": "Integration detail: the <img> loading hint. No design counterpart.",
+      "default": "\"lazy\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "loading"
+        }
+      }
+    },
+    {
+      "name": "importance",
+      "type": "text",
+      "description": "Integration detail: fetch priority. No design counterpart.",
+      "default": "\"auto\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "importance"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "span",
+      "layout": {
+        "display": "flex",
+        "direction": "column"
+      },
+      "tokens": {
+        "gap": "{s2a.spacing.none}",
+        "padding-bottom": "{s2a.spacing.none}",
+        "padding-left": "{s2a.spacing.none}",
+        "padding-right": "{s2a.spacing.none}",
+        "padding-top": "{s2a.spacing.none}"
+      },
+      "literalsByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "16": {
+              "width": "16px",
+              "height": "16px"
+            },
+            "18": {
+              "width": "18px",
+              "height": "18px"
+            },
+            "24": {
+              "width": "24px",
+              "height": "24px"
+            },
+            "32": {
+              "width": "32px",
+              "height": "32px"
+            },
+            "48": {
+              "width": "48px",
+              "height": "48px"
+            },
+            "80": {
+              "width": "80px",
+              "height": "80px"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "img": {
+          "asset": {
+            "prop": "app",
+            "manifest": "adobe-product-icons",
+            "field": "filename",
+            "element": "img"
+          },
+          "literalsByProp": [
+            {
+              "prop": "size",
+              "map": {
+                "16": {
+                  "width": "16px",
+                  "height": "16px"
+                },
+                "18": {
+                  "width": "18px",
+                  "height": "18px"
+                },
+                "24": {
+                  "width": "24px",
+                  "height": "24px"
+                },
+                "32": {
+                  "width": "32px",
+                  "height": "32px"
+                },
+                "48": {
+                  "width": "48px",
+                  "height": "48px"
+                },
+                "80": {
+                  "width": "80px",
+                  "height": "80px"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "role": "img",
+    "wcag": [
+      "1.1.1",
+      "4.1.2"
+    ],
+    "notes": [
+      "1.1.1 Non-text Content: the icon either carries an accessible name (ariaLabel) or is explicitly hidden (ariaHidden). Never a bare image with no alt.",
+      "Decorative is the default. Beside a visible label the mnemonic repeats information, so aria-hidden is correct and ariaLabel is not needed.",
+      "Not interactive: no role=button, no tabindex. Wrap it in the control if it needs to be clickable."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "f35ab6b534f0adf17d33e238b40a49b6e532009b",
+        "nodeId": "8175:77406"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/app-icon/app-icon.js",
+        "export": "AppIcon"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:73af9f9a88d29a4b426a93dd16dc38bf80f66b12d731e5f63aff987d88d1f315",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:59d84aa6a7ba150f89f305c45c3fc7c9865810be05d0ca8f31b9acb579305478"
+    }
+  }
+}

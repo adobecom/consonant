@@ -34,6 +34,29 @@ var __objRest = (source, exclude) => {
 // src/contract-extract.ts
 var EVIDENCE_SCHEMA = "s2a-figma-evidence/1";
 var PAINT_PROPS = ["fills", "strokes"];
+var DIMENSION_PROPS = [
+  "cornerRadius",
+  "topLeftRadius",
+  "topRightRadius",
+  "bottomLeftRadius",
+  "bottomRightRadius",
+  "itemSpacing",
+  "counterAxisSpacing",
+  "paddingTop",
+  "paddingRight",
+  "paddingBottom",
+  "paddingLeft"
+];
+var SIZE_PROPS = [["width", "layoutSizingHorizontal"], ["height", "layoutSizingVertical"]];
+var UNBOUND_VALUE_CAP = 1500;
+function solidPaint(node, property) {
+  const paints = node[property];
+  if (!Array.isArray(paints)) return null;
+  const paint = paints.find((p) => (p == null ? void 0 : p.visible) !== false && (p == null ? void 0 : p.type) === "SOLID");
+  if (!(paint == null ? void 0 : paint.color)) return null;
+  const a = typeof paint.opacity === "number" ? paint.opacity : 1;
+  return __spreadValues({ r: paint.color.r, g: paint.color.g, b: paint.color.b }, a < 1 ? { a } : {});
+}
 function parseVariantName(name) {
   const props = {};
   for (const part of name.split(",")) {
@@ -83,12 +106,23 @@ function boundIds(value) {
   return value.id ? [value.id] : [];
 }
 function layerTree(node, depth) {
-  const layer = { name: node.name, type: node.type };
+  const layer = { name: node.name, type: node.type, id: node.id };
+  if (node.visible === false) layer.visible = false;
+  if (node.type === "TEXT") {
+    const chars = node.characters;
+    if (typeof chars === "string" && chars.length) layer.text = chars.slice(0, 200);
+  }
   const frame = node;
   if ("layoutMode" in node && frame.layoutMode && frame.layoutMode !== "NONE") layer.layoutMode = frame.layoutMode;
   try {
     if ("layoutSizingHorizontal" in node) layer.sizing = { horizontal: node.layoutSizingHorizontal, vertical: node.layoutSizingVertical };
   } catch (e) {
+  }
+  if (layer.layoutMode) {
+    const primary = frame.primaryAxisAlignItems;
+    const counter = frame.counterAxisAlignItems;
+    if (primary || counter) layer.align = __spreadValues(__spreadValues({}, primary ? { primary } : {}), counter ? { counter } : {});
+    if (frame.layoutWrap === "WRAP") layer.wrap = true;
   }
   if (depth < 8 && "children" in node && node.children.length) {
     layer.children = node.children.map((c) => layerTree(c, depth + 1));
@@ -217,8 +251,9 @@ async function extractEvidence(api, set) {
   let nodeCount = 0;
   let unboundPaintNodes = 0;
   const unboundPaint = [];
-  function walk(node, variant, path) {
-    var _a2, _b2;
+  const unboundValues = [];
+  function walk(node, variant, path, backdrop) {
+    var _a2, _b2, _c2;
     nodeCount++;
     const bv = (_a2 = node.boundVariables) != null ? _a2 : {};
     let paintBound = false;
@@ -236,6 +271,51 @@ async function extractEvidence(api, set) {
         if (unboundPaint.length < 200) unboundPaint.push({ variant, node: path, nodeId: node.id, nodeType: node.type, properties: painted });
       }
     }
+    {
+      const bound = new Set(Object.keys(bv));
+      const here = { variant, node: path, nodeId: node.id, nodeType: node.type };
+      const room = () => unboundValues.length < UNBOUND_VALUE_CAP;
+      for (const property of PAINT_PROPS) {
+        if (bound.has(property) || !room()) continue;
+        const colour = solidPaint(node, property);
+        if (colour) unboundValues.push(__spreadValues(__spreadProps(__spreadValues({}, here), { property, value: colour }), backdrop ? { backdrop } : {}));
+      }
+      for (const property of DIMENSION_PROPS) {
+        if (bound.has(property) || !room()) continue;
+        const value = node[property];
+        if (typeof value === "number" && value !== 0) unboundValues.push(__spreadProps(__spreadValues({}, here), { property, value }));
+      }
+      if (!bound.has("strokeWeight") && room() && Array.isArray(node.strokes) && node.strokes.some((p) => (p == null ? void 0 : p.visible) !== false)) {
+        const value = node.strokeWeight;
+        if (typeof value === "number" && value !== 0) unboundValues.push(__spreadProps(__spreadValues({}, here), { property: "strokeWeight", value }));
+      }
+      if (room() && Array.isArray(node.strokes) && node.strokes.some((p) => (p == null ? void 0 : p.visible) !== false)) {
+        const align2 = node.strokeAlign;
+        if (typeof align2 === "string") unboundValues.push(__spreadProps(__spreadValues({}, here), { property: "strokeAlign", value: align2 }));
+      }
+      for (const [property, sizing] of SIZE_PROPS) {
+        if (bound.has(property) || !room()) continue;
+        let fixed = false;
+        try {
+          fixed = node[sizing] === "FIXED";
+        } catch (e) {
+          fixed = false;
+        }
+        const value = node[property];
+        if (fixed && typeof value === "number" && value > 0) unboundValues.push(__spreadProps(__spreadValues({}, here), { property, value: Math.round(value * 100) / 100 }));
+      }
+      if (node.type === "TEXT" && room()) {
+        const text = node;
+        const styled = typeof text.textStyleId === "string" && text.textStyleId;
+        if (!styled) {
+          if (typeof text.fontSize === "number" && !bound.has("fontSize")) unboundValues.push(__spreadProps(__spreadValues({}, here), { property: "fontSize", value: text.fontSize }));
+          const lh = text.lineHeight;
+          if (lh && typeof lh === "object" && lh.unit === "PIXELS" && !bound.has("lineHeight")) unboundValues.push(__spreadProps(__spreadValues({}, here), { property: "lineHeight", value: lh.value }));
+          const ls = text.letterSpacing;
+          if (ls && typeof ls === "object" && ls.unit === "PIXELS" && ls.value !== 0 && !bound.has("letterSpacing")) unboundValues.push(__spreadProps(__spreadValues({}, here), { property: "letterSpacing", value: ls.value }));
+        }
+      }
+    }
     if (node.type === "TEXT") {
       const styleId = node.textStyleId;
       if (typeof styleId === "string" && styleId) {
@@ -247,7 +327,9 @@ async function extractEvidence(api, set) {
     for (const [collectionId, modeId] of Object.entries(modes)) explicitModes.push({ variant, node: path, collectionId, modeId });
     if (node.type === "INSTANCE") instanceNodes.push({ variant, node: path, instance: node });
     if ("children" in node) {
-      for (const child of node.children) walk(child, variant, path + "/" + child.name);
+      const own = solidPaint(node, "fills");
+      const under = own && ((_c2 = own.a) != null ? _c2 : 1) >= 1 ? { r: own.r, g: own.g, b: own.b } : backdrop;
+      for (const child of node.children) walk(child, variant, path + "/" + child.name, under);
     }
   }
   for (const v of variants) walk(v, v.name, "");
@@ -326,13 +408,27 @@ async function extractEvidence(api, set) {
   const instances = instanceNodes.map((n, i) => {
     const main = mains[i];
     const parent = (main == null ? void 0 : main.parent) && main.parent.type === "COMPONENT_SET" ? main.parent : null;
-    return {
+    let props;
+    try {
+      const cp = n.instance.componentProperties;
+      if (cp) {
+        props = {};
+        for (const [name, def] of Object.entries(cp)) {
+          if ((def == null ? void 0 : def.type) === "INSTANCE_SWAP") continue;
+          if (typeof (def == null ? void 0 : def.value) === "string" || typeof (def == null ? void 0 : def.value) === "boolean") props[name] = def.value;
+        }
+        if (!Object.keys(props).length) props = void 0;
+      }
+    } catch (e) {
+      props = void 0;
+    }
+    return __spreadValues({
       variant: n.variant,
       node: n.node,
       nodeId: n.instance.id,
       mainComponent: main ? { id: main.id, key: main.key, name: main.name } : null,
       set: parent ? { id: parent.id, key: parent.key, name: parent.name } : null
-    };
+    }, props ? { props } : {});
   });
   const defaultVariant = isSetLike ? pickDefaultVariant(variants, axes) : variants[0];
   let pattern;
@@ -387,17 +483,257 @@ async function extractEvidence(api, set) {
     }),
     instances,
     counts: { variants: variants.length, nodes: nodeCount, bindings: bindings.length, unboundPaintNodes },
-    unboundPaint
+    unboundPaint,
+    unboundValues
   }, pattern ? { pattern } : {}), {
     provenance: { hash: null }
   });
   return evidence;
 }
 function hashableBody(evidence) {
-  const _a = evidence, { extractedAt, provenance } = _a, rest = __objRest(_a, ["extractedAt", "provenance"]);
+  const _a = evidence, { extractedAt, provenance, unboundValues } = _a, rest = __objRest(_a, ["extractedAt", "provenance", "unboundValues"]);
   void extractedAt;
   void provenance;
+  void unboundValues;
   return canonicalJson(rest);
+}
+
+// src/token-align.ts
+var DIMENSION_PROPS2 = /^(cornerRadius|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius|itemSpacing|counterAxisSpacing|padding(Top|Right|Bottom|Left)|strokeWeight|strokeTopWeight|strokeBottomWeight|strokeLeftWeight|strokeRightWeight|width|height|minWidth|maxWidth)$/;
+var TYPOGRAPHY_PROPS = /^(fontSize|lineHeight|letterSpacing|fontWeight|paragraphSpacing)$/;
+var PAINT_PROPS2 = /^(fills|strokes)$/;
+function classOf(property) {
+  if (PAINT_PROPS2.test(property)) return "color";
+  if (TYPOGRAPHY_PROPS.test(property)) return "typography";
+  if (DIMENSION_PROPS2.test(property)) return "dimension";
+  return null;
+}
+function scopeFor(property, nodeType) {
+  if (property === "fills") {
+    if (nodeType === "TEXT") return "TEXT_FILL";
+    return ["FRAME", "COMPONENT", "COMPONENT_SET", "INSTANCE", "SECTION", "GROUP"].includes(nodeType) ? "FRAME_FILL" : "SHAPE_FILL";
+  }
+  if (property === "strokes") return "STROKE_COLOR";
+  if (/[Rr]adius$/.test(property)) return "CORNER_RADIUS";
+  if (/^stroke.*Weight$/.test(property)) return "STROKE_FLOAT";
+  if (/^(itemSpacing|counterAxisSpacing|padding)/.test(property)) return "GAP";
+  if (property === "fontSize") return "FONT_SIZE";
+  if (property === "lineHeight") return "LINE_HEIGHT";
+  if (property === "letterSpacing") return "LETTER_SPACING";
+  if (property === "fontWeight") return "FONT_WEIGHT";
+  return null;
+}
+var FILL_SCOPES = ["TEXT_FILL", "FRAME_FILL", "SHAPE_FILL"];
+function scopeAllows(scopes, want) {
+  if (!scopes || !scopes.length || scopes.includes("ALL_SCOPES")) return true;
+  if (!want) return false;
+  if (scopes.includes(want)) return true;
+  return FILL_SCOPES.includes(want) && scopes.includes("ALL_FILLS");
+}
+var scoped = (c) => Boolean(c.scopes && c.scopes.length && !c.scopes.includes("ALL_SCOPES"));
+function eligibleFamilies(property, nodeType) {
+  if (PAINT_PROPS2.test(property)) {
+    if (property === "strokes") return ["border", "color/border"];
+    if (nodeType === "TEXT") return ["content", "color/content"];
+    return ["background", "color/background", "surface", "color/surface"];
+  }
+  if (/[Rr]adius$/.test(property)) return ["border-radius", "radius", "corner-radius"];
+  if (/^stroke.*Weight$/.test(property)) return ["border-width", "stroke-width"];
+  if (/^(itemSpacing|counterAxisSpacing|padding)/.test(property)) return ["spacing", "gap", "padding"];
+  if (property === "fontSize") return ["font-size", "typography/size"];
+  if (property === "lineHeight") return ["line-height", "typography/line-height"];
+  if (property === "letterSpacing") return ["letter-spacing", "typography/tracking"];
+  if (property === "fontWeight") return ["font-weight"];
+  return [];
+}
+function familyRank(tokenName, families) {
+  const n = tokenName.toLowerCase();
+  for (let i = 0; i < families.length; i++) {
+    const f = families[i].toLowerCase();
+    if (new RegExp(`(^|[/.])${f.replace(/[/.]/g, "[/.]")}([/.]|$)`).test(n)) return i;
+  }
+  return -1;
+}
+var clamp01 = (n) => n < 0 ? 0 : n > 1 ? 1 : n;
+function composite(fg, bg = { r: 1, g: 1, b: 1 }) {
+  var _a;
+  const a = (_a = fg.a) != null ? _a : 1;
+  if (a >= 1) return { r: fg.r, g: fg.g, b: fg.b, a: 1 };
+  return {
+    r: clamp01(fg.r * a + bg.r * (1 - a)),
+    g: clamp01(fg.g * a + bg.g * (1 - a)),
+    b: clamp01(fg.b * a + bg.b * (1 - a)),
+    a: 1
+  };
+}
+var srgbToLinear = (c) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+function toLab(c) {
+  const r = srgbToLinear(clamp01(c.r)), g = srgbToLinear(clamp01(c.g)), b = srgbToLinear(clamp01(c.b));
+  const x = (r * 0.4124564 + g * 0.3575761 + b * 0.1804375) / 0.95047;
+  const y = (r * 0.2126729 + g * 0.7151522 + b * 0.072175) / 1;
+  const z = (r * 0.0193339 + g * 0.119192 + b * 0.9503041) / 1.08883;
+  const f = (t) => t > 8856e-6 ? Math.cbrt(t) : 7.787 * t + 16 / 116;
+  const fx = f(x), fy = f(y), fz = f(z);
+  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+}
+function deltaE(a, b) {
+  const [l1, a1, b1] = toLab(a), [l2, a2, b2] = toLab(b);
+  return Math.sqrt((l1 - l2) ** 2 + (a1 - a2) ** 2 + (b1 - b2) ** 2);
+}
+var DE_EXACT = 0.6;
+var DE_NEAR = 3;
+var DE_COMPOSITE = 5;
+var SCALE_FACTORS = [1, 4 / 3, 3 / 4, 1.5, 2 / 3, 2, 0.5, 1.25, 0.8];
+function detectScale(values, tokenValues, opts = {}) {
+  var _a, _b;
+  const minHits = (_a = opts.minHits) != null ? _a : 3;
+  const tol = (_b = opts.tolerance) != null ? _b : 0.02;
+  const hits = (factor) => values.filter((v) => tokenValues.some((t) => Math.abs(v / factor - t) <= tol)).length;
+  const base = hits(1);
+  let best = null;
+  for (const f of SCALE_FACTORS) {
+    if (f === 1) continue;
+    const n = hits(f);
+    if (n >= minHits && n > base && (!best || n > best.explains)) best = { factor: f, explains: n };
+  }
+  return best ? __spreadProps(__spreadValues({}, best), { of: values.length }) : null;
+}
+var PX_EXACT = 0.02;
+var PX_NEAR = 1.01;
+function rank(candidates, families, want) {
+  const anyScoped = candidates.some(scoped);
+  const ranked = candidates.map((c) => {
+    if (scoped(c)) return { c, r: scopeAllows(c.scopes, want) ? familyRank(c.name, families) >= 0 ? familyRank(c.name, families) : families.length : -1 };
+    return { c, r: familyRank(c.name, families) };
+  }).filter((x) => x.r >= 0).sort((a, b) => a.r - b.r);
+  return { pool: ranked.map((x) => x.c), scopeless: !anyScoped };
+}
+function alignOne(obs, candidates, scale = null) {
+  var _a, _b, _c, _d, _e, _f;
+  const klass = classOf(obs.property);
+  const base = __spreadProps(__spreadValues({}, obs), { klass: klass != null ? klass : "dimension", confidence: "none", autoApply: false });
+  if (!klass) return __spreadProps(__spreadValues({}, base), { reason: `no token family covers "${obs.property}"` });
+  const families = eligibleFamilies(obs.property, obs.nodeType);
+  const { pool, scopeless } = rank(candidates, families, scopeFor(obs.property, obs.nodeType));
+  if (scopeless) base.scopeless = true;
+  if (!pool.length) return __spreadProps(__spreadValues({}, base), { reason: `no ${(_a = families[0]) != null ? _a : "matching"} tokens to match against` });
+  if (klass === "color") {
+    const raw2 = obs.value;
+    const colours = pool.filter((c) => c.resolvedType === "COLOR");
+    const scored = colours.map((c) => ({ c, d: deltaE(raw2, c.value) })).sort((a, b) => a.d - b.d);
+    const best = scored[0];
+    if (best && best.d <= DE_EXACT && ((_b = raw2.a) != null ? _b : 1) >= 1) {
+      const same = scored.filter((x) => x.d <= DE_EXACT);
+      if (same.length > 1) {
+        return __spreadProps(__spreadValues({}, base), {
+          confidence: "ambiguous",
+          delta: best.d,
+          alternatives: same.map((x) => x.c),
+          reason: `${same.length} tokens resolve to this exact value`
+        });
+      }
+      return __spreadProps(__spreadValues({}, base), {
+        confidence: "exact",
+        match: best.c,
+        delta: best.d,
+        autoApply: true,
+        reason: `identical to ${best.c.name}`
+      });
+    }
+    if (((_c = raw2.a) != null ? _c : 1) < 1) {
+      const flat = composite(raw2, obs.backdrop);
+      const onFlat = colours.map((c) => ({ c, d: deltaE(flat, c.value) })).sort((a, b) => a.d - b.d);
+      if (onFlat[0] && onFlat[0].d <= DE_COMPOSITE) {
+        const ties = onFlat.filter((x) => x.d <= onFlat[0].d + 0.5);
+        return __spreadProps(__spreadValues({}, base), {
+          confidence: "composite",
+          match: onFlat[0].c,
+          delta: onFlat[0].d,
+          alternatives: ties.slice(1).map((t) => t.c),
+          reason: `${Math.round(((_d = raw2.a) != null ? _d : 1) * 100)}% over ${obs.backdrop ? "its backdrop" : "white"} lands on ${onFlat[0].c.name} (\u0394E ${onFlat[0].d.toFixed(1)})`
+        });
+      }
+      return __spreadProps(__spreadValues({}, base), {
+        confidence: "none",
+        reason: `${Math.round(((_e = raw2.a) != null ? _e : 1) * 100)}% alpha, and the composite matches nothing`
+      });
+    }
+    if (best && best.d <= DE_NEAR) {
+      const ties = scored.filter((x) => x.d <= best.d + 0.5);
+      if (ties.length > 1) {
+        return __spreadProps(__spreadValues({}, base), {
+          confidence: "ambiguous",
+          delta: best.d,
+          alternatives: ties.map((t) => t.c),
+          reason: `${ties.length} tokens are equally close`
+        });
+      }
+      return __spreadProps(__spreadValues({}, base), {
+        confidence: "nearest",
+        match: best.c,
+        delta: best.d,
+        reason: `closest is ${best.c.name} (\u0394E ${best.d.toFixed(1)})`
+      });
+    }
+    return __spreadProps(__spreadValues({}, base), { confidence: "none", delta: best == null ? void 0 : best.d, reason: "no token is close" });
+  }
+  const raw = obs.value;
+  const numeric = pool.filter((c) => c.resolvedType === "FLOAT");
+  const at = (v) => numeric.map((c) => ({ c, d: Math.abs(v - c.value) })).sort((a, b) => a.d - b.d);
+  const direct = at(raw);
+  if (direct[0] && direct[0].d <= PX_EXACT) {
+    return __spreadProps(__spreadValues({}, base), {
+      confidence: "exact",
+      match: direct[0].c,
+      delta: direct[0].d,
+      autoApply: true,
+      reason: `equals ${direct[0].c.name}`
+    });
+  }
+  if (scale && scale !== 1) {
+    const unscaled = at(raw / scale);
+    if (unscaled[0] && unscaled[0].d <= PX_EXACT) {
+      return __spreadProps(__spreadValues({}, base), {
+        confidence: "scaled",
+        match: unscaled[0].c,
+        delta: unscaled[0].d,
+        scale,
+        autoApply: true,
+        reason: `${round2(raw)} \xF7 ${round2(scale)} = ${round2(raw / scale)}, which is ${unscaled[0].c.name}`
+      });
+    }
+  }
+  if (direct[0] && direct[0].d <= PX_NEAR) {
+    const ties = direct.filter((x) => x.d <= direct[0].d + 0.01);
+    if (ties.length > 1) {
+      return __spreadProps(__spreadValues({}, base), {
+        confidence: "ambiguous",
+        delta: direct[0].d,
+        alternatives: ties.map((t) => t.c),
+        reason: `${ties.length} tokens are equally close`
+      });
+    }
+    return __spreadProps(__spreadValues({}, base), {
+      confidence: "nearest",
+      match: direct[0].c,
+      delta: direct[0].d,
+      reason: `${round2(raw)} is ${round2(direct[0].d)} off ${direct[0].c.name}`
+    });
+  }
+  return __spreadProps(__spreadValues({}, base), { confidence: "none", delta: (_f = direct[0]) == null ? void 0 : _f.d, reason: "no token is close" });
+}
+var round2 = (n) => Math.round(n * 100) / 100;
+function align(observations, candidates) {
+  const dims = observations.filter((o) => classOf(o.property) === "dimension").map((o) => o.value);
+  const tokenDims = candidates.filter((c) => c.resolvedType === "FLOAT" && familyRank(c.name, ["spacing", "border-radius", "radius", "border-width"]) >= 0).map((c) => c.value);
+  const scale = dims.length && tokenDims.length ? detectScale(dims, tokenDims) : null;
+  const findings = observations.map((o) => {
+    var _a;
+    return alignOne(o, candidates, (_a = scale == null ? void 0 : scale.factor) != null ? _a : null);
+  });
+  const summary = { exact: 0, scaled: 0, composite: 0, nearest: 0, ambiguous: 0, none: 0 };
+  for (const f of findings) summary[f.confidence]++;
+  return { findings, scale, summary };
 }
 
 // src/contract-build.ts
@@ -1228,6 +1564,113 @@ async function checkDocFrame(frame) {
 }
 
 // src/code.ts
+var S2A_LIBRARY_NAME = "S2A / Foundations";
+var S2A_COLLECTION_KEYS = /* @__PURE__ */ new Set([
+  "0eea5cc0320ff548eeb8c5bf34f6ede103b0df06",
+  // Primitives / Dimension / Static
+  "23dfb9688d347020258cb5a8b587fd4c5c7287bc",
+  // Primitives / Color / Theme
+  "6c6b35ec4a5a89cf0598ba78e6c7482370d719ad",
+  // Semantic / Dimension / Static
+  "3659e0dcd09c2dca905bb94def94c5029e4d83ac",
+  // Semantic / Color / Theme
+  "ce424e312b8d55fff344955c7626321200e2bd3f",
+  // Responsive / Container / Grid
+  "d5b5966991929840c34a545607368bdf53922716",
+  // Min-Max
+  "385ccb572e36d571d2cf40d8310b862762468728"
+  // Design Guides
+]);
+function isS2AToken(variableName, collectionName) {
+  return /^s2a[\/.]/i.test(variableName.trim()) || /^s2a\b/i.test(collectionName.trim());
+}
+async function importS2ALibraryVariables() {
+  try {
+    const all = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
+    let mine = all.filter((c) => c.libraryName === S2A_LIBRARY_NAME);
+    if (!mine.length) mine = all.filter((c) => S2A_COLLECTION_KEYS.has(c.key));
+    if (!mine.length) mine = all.filter((c) => /^s2a\s*\//i.test(c.name));
+    const out = [];
+    for (const collection of mine) {
+      try {
+        const libVars = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(collection.key);
+        const imported = await Promise.allSettled(libVars.map((v) => figma.variables.importVariableByKeyAsync(v.key)));
+        for (const r of imported) if (r.status === "fulfilled") out.push(r.value);
+      } catch (e) {
+      }
+    }
+    return out;
+  } catch (e) {
+    return [];
+  }
+}
+var PRIMITIVE_COLLECTION = /primitive|core|raw/i;
+var PRIMITIVE_LEAF = /\/\d+(\.\d+)?$/;
+async function tokenCandidates() {
+  var _a, _b, _c, _d, _e;
+  const local = await figma.variables.getLocalVariablesAsync();
+  const library = await importS2ALibraryVariables();
+  const byId = /* @__PURE__ */ new Map();
+  for (const v of [...local, ...library]) byId.set(v.id, v);
+  const collections = /* @__PURE__ */ new Map();
+  const need = [...new Set([...byId.values()].map((v) => v.variableCollectionId))];
+  const fetched = await Promise.all(need.map((id) => figma.variables.getVariableCollectionByIdAsync(id).catch(() => null)));
+  need.forEach((id, i) => {
+    const c = fetched[i];
+    if (c) collections.set(id, c);
+  });
+  const resolve = async (v, modeId, depth) => {
+    var _a2, _b2, _c2, _d2, _e2, _f, _g, _h;
+    const collection = collections.get(v.variableCollectionId);
+    const raw = (_b2 = v.valuesByMode[modeId]) != null ? _b2 : v.valuesByMode[(_a2 = collection == null ? void 0 : collection.defaultModeId) != null ? _a2 : ""];
+    const alias = raw;
+    if (alias && typeof alias === "object" && alias.type === "VARIABLE_ALIAS") {
+      if (depth > 8) return null;
+      let target = byId.get(alias.id);
+      if (!target) {
+        target = (_c2 = await figma.variables.getVariableByIdAsync(alias.id).catch(() => null)) != null ? _c2 : void 0;
+        if (target) byId.set(target.id, target);
+      }
+      if (!target) return null;
+      let targetCollection = collections.get(target.variableCollectionId);
+      if (!targetCollection) {
+        targetCollection = (_d2 = await figma.variables.getVariableCollectionByIdAsync(target.variableCollectionId).catch(() => null)) != null ? _d2 : void 0;
+        if (targetCollection) collections.set(targetCollection.id, targetCollection);
+      }
+      const wanted = (_e2 = collection == null ? void 0 : collection.modes.find((m) => m.modeId === modeId)) == null ? void 0 : _e2.name;
+      const targetMode = (_h = (_g = (_f = targetCollection == null ? void 0 : targetCollection.modes.find((m) => m.name === wanted)) == null ? void 0 : _f.modeId) != null ? _g : targetCollection == null ? void 0 : targetCollection.defaultModeId) != null ? _h : modeId;
+      return resolve(target, targetMode, depth + 1);
+    }
+    return raw;
+  };
+  const candidates = [];
+  let fromLibrary = 0;
+  const libraryIds = new Set(library.map((v) => v.id));
+  for (const v of byId.values()) {
+    if (v.resolvedType !== "COLOR" && v.resolvedType !== "FLOAT") continue;
+    const collection = collections.get(v.variableCollectionId);
+    const collectionName = (_a = collection == null ? void 0 : collection.name) != null ? _a : "";
+    if (!isS2AToken(v.name, collectionName)) continue;
+    if (PRIMITIVE_COLLECTION.test(collectionName)) continue;
+    if (PRIMITIVE_LEAF.test(v.name)) continue;
+    const defaultMode = (_c = (_b = collection == null ? void 0 : collection.defaultModeId) != null ? _b : Object.keys(v.valuesByMode)[0]) != null ? _c : "";
+    const value = await resolve(v, defaultMode, 0);
+    if (v.resolvedType === "COLOR" && (value == null || typeof value !== "object")) continue;
+    if (v.resolvedType === "FLOAT" && typeof value !== "number") continue;
+    const other = (_d = collection == null ? void 0 : collection.modes.find((m) => m.modeId !== defaultMode)) == null ? void 0 : _d.modeId;
+    const darkValue = other ? await resolve(v, other, 0) : null;
+    candidates.push(__spreadValues({
+      id: v.id,
+      name: v.name,
+      collection: collectionName,
+      resolvedType: v.resolvedType,
+      value,
+      scopes: (_e = v.scopes) != null ? _e : []
+    }, darkValue != null ? { darkValue } : {}));
+    if (libraryIds.has(v.id)) fromLibrary++;
+  }
+  return { candidates, fromLibrary };
+}
 function serializeVariable(v) {
   return {
     id: v.id,
@@ -1674,17 +2117,93 @@ figma.on("currentpagechange", () => {
   });
 });
 var PLUGIN_VERSION = "0.2.1";
+globalThis.S2A = {
+  version: PLUGIN_VERSION,
+  /** Evidence for one node, exactly as the Extract button produces it. */
+  extract: (node) => {
+    var _a;
+    return extractEvidence({
+      fileKey: (_a = figma.fileKey) != null ? _a : null,
+      fileName: figma.root.name,
+      pluginVersion: PLUGIN_VERSION,
+      getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
+      getVariableCollectionByIdAsync: (id) => figma.variables.getVariableCollectionByIdAsync(id),
+      getStyleByIdAsync: (id) => figma.getStyleByIdAsync(id)
+    }, node);
+  },
+  /** The two helpers a caller needs to hash and compare what it got. */
+  hashableBody,
+  canonicalJson
+};
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
 function genAnonId() {
   const rnd = () => Math.floor(Math.random() * 4294967295).toString(16).padStart(8, "0");
   return (rnd() + rnd()).slice(0, 16);
 }
 figma.ui.onmessage = async (msg) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S, _T;
   switch (msg.type) {
     case "ui-ready":
       notifySelection();
       break;
+    // Walk every component page and record what each published set is built
+    // from. The plugin is the only thing that can read the file, so the
+    // composition snapshot is refreshed from here rather than pasted in by hand.
+    case "contract-scan-composition": {
+      try {
+        const GROUPS = {
+          "\u{1F9E9} Atoms": "atom",
+          "\u{1F9EC} Molecules": "molecule",
+          "\u{1F9EB} Organisms": "organism",
+          "\u{1F0CF} Cards": "card",
+          "\u{1F9F1} Foundations ": "foundation",
+          "\u{1F6E0}\uFE0F Tooling": "tooling",
+          "\u{1F3E0} Internal": "internal",
+          "\u{1F9ED} Exploration": "exploration",
+          "\u{1F4D0} Templates": "template"
+        };
+        const groups = {};
+        const pages = [];
+        let current = null;
+        for (const p of figma.root.children) {
+          if (Object.prototype.hasOwnProperty.call(GROUPS, p.name)) {
+            current = GROUPS[p.name];
+            continue;
+          }
+          if (/^-+$/.test(p.name.trim())) {
+            current = null;
+            continue;
+          }
+          if (!p.name.startsWith("   \u21B3")) {
+            current = null;
+            continue;
+          }
+          if (!current) continue;
+          groups[p.name.replace("   \u21B3 ", "").trim()] = current;
+          if (["atom", "molecule", "organism", "card"].includes(current)) pages.push(p);
+        }
+        const composes = {};
+        for (const page of pages) {
+          await page.loadAsync();
+          const units = page.findAllWithCriteria({ types: ["COMPONENT_SET", "COMPONENT"] }).filter((n) => !(n.type === "COMPONENT" && n.parent && n.parent.type === "COMPONENT_SET"));
+          for (const u of units) {
+            const kids = /* @__PURE__ */ new Set();
+            for (const ins of u.findAllWithCriteria({ types: ["INSTANCE"] })) {
+              const m = await ins.getMainComponentAsync();
+              if (!m) continue;
+              const set = m.parent && m.parent.type === "COMPONENT_SET" ? m.parent : m;
+              if (set.id === u.id) continue;
+              kids.add(set.name.replace(/^\u{1F6AB}\s*/u, ""));
+            }
+            composes[u.name.replace(/^\u{1F6AB}\s*/u, "")] = [...kids];
+          }
+        }
+        figma.ui.postMessage({ type: "contract:composition", composes, groups, fileKey: (_a = figma.fileKey) != null ? _a : null });
+      } catch (err) {
+        figma.ui.postMessage({ type: "contract:composition", error: (err == null ? void 0 : err.message) || String(err) });
+      }
+      break;
+    }
     // Provision the anonymous telemetry id (and opt-out flag) for the UI.
     case "telemetry:init": {
       let anonId = await figma.clientStorage.getAsync("telemetry-anon-id");
@@ -1699,7 +2218,7 @@ figma.ui.onmessage = async (msg) => {
     // GitHub PAT for the Token Release feature — persisted in clientStorage
     // (local to this user's Figma install; never written into the document).
     case "gh-token:get": {
-      const token = (_a = await figma.clientStorage.getAsync("gh-token")) != null ? _a : "";
+      const token = (_b = await figma.clientStorage.getAsync("gh-token")) != null ? _b : "";
       figma.ui.postMessage({ type: "gh-token:value", token });
       break;
     }
@@ -1733,19 +2252,19 @@ figma.ui.onmessage = async (msg) => {
     case "request:capture": {
       let user = null;
       try {
-        user = (_c = (_b = figma.currentUser) == null ? void 0 : _b.name) != null ? _c : null;
+        user = (_d = (_c = figma.currentUser) == null ? void 0 : _c.name) != null ? _d : null;
       } catch (e) {
       }
-      const sel = (_d = figma.currentPage.selection[0]) != null ? _d : null;
+      const sel = (_e = figma.currentPage.selection[0]) != null ? _e : null;
       let tokenName = "";
       if (sel) {
         try {
-          const bv = (_e = sel.boundVariables) != null ? _e : {};
+          const bv = (_f = sel.boundVariables) != null ? _f : {};
           let firstId = "";
           for (const k of Object.keys(bv)) {
             const val = bv[k];
             if (!val) continue;
-            const id = Array.isArray(val) ? ((_f = val.find((v) => v == null ? void 0 : v.id)) != null ? _f : {}).id : val == null ? void 0 : val.id;
+            const id = Array.isArray(val) ? ((_g = val.find((v) => v == null ? void 0 : v.id)) != null ? _g : {}).id : val == null ? void 0 : val.id;
             if (id) {
               firstId = id;
               break;
@@ -1766,7 +2285,7 @@ figma.ui.onmessage = async (msg) => {
       } catch (e) {
       }
       try {
-        fileKey = (_g = figma.fileKey) != null ? _g : null;
+        fileKey = (_h = figma.fileKey) != null ? _h : null;
       } catch (e) {
       }
       try {
@@ -1839,13 +2358,13 @@ figma.ui.onmessage = async (msg) => {
     case "contract:build-set": {
       try {
         const plan = msg.plan;
-        const anchored = ((_h = plan == null ? void 0 : plan.anchors) == null ? void 0 : _h.nodeId) ? await figma.getNodeByIdAsync(plan.anchors.nodeId) : null;
+        const anchored = ((_i = plan == null ? void 0 : plan.anchors) == null ? void 0 : _i.nodeId) ? await figma.getNodeByIdAsync(plan.anchors.nodeId) : null;
         const report = anchored && "clone" in anchored ? await normalizeFromSource(plan, { adopt: Boolean(msg.adopt) }) : await buildSetFromPlan(plan);
-        const drift = (_j = (_i = report.drift) == null ? void 0 : _i.length) != null ? _j : 0;
+        const drift = (_k = (_j = report.drift) == null ? void 0 : _j.length) != null ? _k : 0;
         figma.notify(`Built ${report.set}: ${report.variants} variant${report.variants === 1 ? "" : "s"}, ${report.layers} layers${drift ? `, ${drift} token drift` : ""}`);
         figma.ui.postMessage({ type: "contract:build-set:done", report });
       } catch (err) {
-        figma.ui.postMessage({ type: "contract:build-set:done", error: ((err == null ? void 0 : err.message) || String(err)) + ((err == null ? void 0 : err.stack) ? " @ " + ((_k = String(err.stack).split("\n")[1]) == null ? void 0 : _k.trim()) : "") });
+        figma.ui.postMessage({ type: "contract:build-set:done", error: ((err == null ? void 0 : err.message) || String(err)) + ((err == null ? void 0 : err.stack) ? " @ " + ((_l = String(err.stack).split("\n")[1]) == null ? void 0 : _l.trim()) : "") });
       }
       break;
     }
@@ -1855,7 +2374,7 @@ figma.ui.onmessage = async (msg) => {
     case "contract:extract": {
       const startedAt = Date.now();
       try {
-        let node = msg.setId ? await figma.getNodeByIdAsync(msg.setId) : (_l = figma.currentPage.selection[0]) != null ? _l : null;
+        let node = msg.setId ? await figma.getNodeByIdAsync(msg.setId) : (_m = figma.currentPage.selection[0]) != null ? _m : null;
         if (node && node.type === "INSTANCE") node = await node.getMainComponentAsync();
         const EXTRACTABLE = ["COMPONENT_SET", "COMPONENT", "FRAME", "SECTION", "GROUP"];
         if (!node || !EXTRACTABLE.includes(node.type)) {
@@ -1866,7 +2385,7 @@ figma.ui.onmessage = async (msg) => {
         const isFrameLike = node.type === "FRAME" || node.type === "SECTION" || node.type === "GROUP";
         if (candidateName && isFrameLike && msg.rename) node.name = candidateName;
         const evidence = await extractEvidence({
-          fileKey: (_m = figma.fileKey) != null ? _m : null,
+          fileKey: (_n = figma.fileKey) != null ? _n : null,
           fileName: figma.root.name,
           pluginVersion: PLUGIN_VERSION,
           getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
@@ -1885,7 +2404,86 @@ figma.ui.onmessage = async (msg) => {
           durationMs: Date.now() - startedAt
         });
       } catch (err) {
-        figma.ui.postMessage({ type: "contract:evidence", error: ((err == null ? void 0 : err.message) || String(err)) + ((err == null ? void 0 : err.stack) ? " @ " + ((_n = String(err.stack).split("\n")[1]) == null ? void 0 : _n.trim()) : "") });
+        figma.ui.postMessage({ type: "contract:evidence", error: ((err == null ? void 0 : err.message) || String(err)) + ((err == null ? void 0 : err.stack) ? " @ " + ((_o = String(err.stack).split("\n")[1]) == null ? void 0 : _o.trim()) : "") });
+      }
+      break;
+    }
+    case "contract-align": {
+      const startedAt = Date.now();
+      try {
+        let node = msg.setId ? await figma.getNodeByIdAsync(msg.setId) : (_p = figma.currentPage.selection[0]) != null ? _p : null;
+        if (node && node.type === "INSTANCE") node = await node.getMainComponentAsync();
+        const ALIGNABLE = ["COMPONENT_SET", "COMPONENT", "FRAME", "SECTION", "GROUP"];
+        if (!node || !ALIGNABLE.includes(node.type)) {
+          figma.ui.postMessage({ type: "contract:align", error: "Select a frame, a component or a component set to align" });
+          break;
+        }
+        const evidence = await extractEvidence({
+          fileKey: (_q = figma.fileKey) != null ? _q : null,
+          fileName: figma.root.name,
+          pluginVersion: PLUGIN_VERSION,
+          getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
+          getVariableCollectionByIdAsync: (id) => figma.variables.getVariableCollectionByIdAsync(id),
+          getStyleByIdAsync: (id) => figma.getStyleByIdAsync(id)
+        }, node);
+        const { candidates, fromLibrary } = await tokenCandidates();
+        if (!candidates.length) {
+          figma.ui.postMessage({ type: "contract:align", error: "No S2A variables are reachable from this file. Enable the S2A / Foundations library here, then try again." });
+          break;
+        }
+        const seen = /* @__PURE__ */ new Set();
+        const observations = [];
+        for (const u of (_r = evidence.unboundValues) != null ? _r : []) {
+          const key = `${u.nodeId}:${u.property}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          observations.push({
+            node: u.node,
+            nodeId: u.nodeId,
+            nodeType: u.nodeType,
+            property: u.property,
+            value: u.value,
+            backdrop: u.backdrop,
+            source: "hardcoded"
+          });
+        }
+        const vars = evidence.variables;
+        for (const b of evidence.bindings) {
+          if (!b.variable) continue;
+          const v = vars[b.variable];
+          if (!v || isS2AToken(v.name, v.collection)) continue;
+          const key = `${b.nodeId}:${b.property}`;
+          if (seen.has(key)) continue;
+          const resolved = Object.values((_s = v.resolved) != null ? _s : {})[0];
+          if (resolved == null || typeof resolved !== "number" && typeof resolved !== "object") continue;
+          seen.add(key);
+          observations.push({
+            node: b.node,
+            nodeId: b.nodeId,
+            nodeType: b.nodeType,
+            property: b.property,
+            value: resolved,
+            source: "wrong-library",
+            currentBinding: v.name
+          });
+        }
+        const result2 = align(observations, candidates);
+        const foreign = result2.findings.filter((f) => f.source === "wrong-library").length;
+        figma.ui.postMessage({
+          type: "contract:align",
+          target: { id: node.id, name: evidence.set.name, type: node.type },
+          bound: evidence.counts.bindings,
+          candidates: candidates.length,
+          fromLibrary,
+          scopeless: result2.findings.some((f) => f.scopeless),
+          foreign,
+          scale: result2.scale,
+          summary: result2.summary,
+          findings: result2.findings,
+          durationMs: Date.now() - startedAt
+        });
+      } catch (err) {
+        figma.ui.postMessage({ type: "contract:align", error: (err == null ? void 0 : err.message) || String(err) });
       }
       break;
     }
@@ -1926,7 +2524,7 @@ figma.ui.onmessage = async (msg) => {
         return id ? (_b2 = varNames.get(id)) != null ? _b2 : "" : "";
       };
       var bvLabel = bvLabel2;
-      const categories = new Set((_o = msg.categories) != null ? _o : []);
+      const categories = new Set((_t = msg.categories) != null ? _t : []);
       const selection = figma.currentPage.selection;
       if (!selection.length) {
         figma.ui.postMessage({ type: "annotate:result", error: "No selection" });
@@ -1940,7 +2538,7 @@ figma.ui.onmessage = async (msg) => {
       }
       const varIdSet = /* @__PURE__ */ new Set();
       for (const n of allNodes) {
-        const bv = (_p = n.boundVariables) != null ? _p : {};
+        const bv = (_u = n.boundVariables) != null ? _u : {};
         for (const key of Object.keys(bv)) {
           const val = bv[key];
           if (!val) continue;
@@ -1960,19 +2558,19 @@ figma.ui.onmessage = async (msg) => {
       }));
       let annotated = 0;
       for (const n of allNodes) {
-        const bv = (_q = n.boundVariables) != null ? _q : {};
+        const bv = (_v = n.boundVariables) != null ? _v : {};
         const anns = [];
-        const pdVar = (_s = (_r = n.getPluginData) == null ? void 0 : _r.call(n, "s2aTokenVar")) != null ? _s : "";
-        const pdProp = (_u = (_t = n.getPluginData) == null ? void 0 : _t.call(n, "s2aTokenProp")) != null ? _u : "";
+        const pdVar = (_x = (_w = n.getPluginData) == null ? void 0 : _w.call(n, "s2aTokenVar")) != null ? _x : "";
+        const pdProp = (_z = (_y = n.getPluginData) == null ? void 0 : _y.call(n, "s2aTokenProp")) != null ? _z : "";
         if (categories.has("color-fg") && n.type === "TEXT") {
-          if (((_w = (_v = bv.fills) == null ? void 0 : _v.length) != null ? _w : 0) > 0) {
+          if (((_B = (_A = bv.fills) == null ? void 0 : _A.length) != null ? _B : 0) > 0) {
             anns.push({ label: bvLabel2(bv, "fills") || "color-fg", properties: [{ type: "fills" }] });
           } else if (pdVar && pdProp === "fills") {
             anns.push({ label: pdVar, properties: [{ type: "fills" }] });
           }
         }
         if (categories.has("color-bg") && n.type !== "TEXT") {
-          if (((_y = (_x = bv.fills) == null ? void 0 : _x.length) != null ? _y : 0) > 0) {
+          if (((_D = (_C = bv.fills) == null ? void 0 : _C.length) != null ? _D : 0) > 0) {
             anns.push({ label: bvLabel2(bv, "fills") || "color-bg", properties: [{ type: "fills" }] });
           } else if (pdVar && pdProp === "fills") {
             anns.push({ label: pdVar, properties: [{ type: "fills" }] });
@@ -2008,15 +2606,15 @@ figma.ui.onmessage = async (msg) => {
         }
         if (categories.has("typography") && n.type === "TEXT") {
           const tp = [];
-          if (((_A = (_z = bv.fontFamily) == null ? void 0 : _z.length) != null ? _A : 0) > 0) tp.push({ type: "fontFamily" });
-          if (((_C = (_B = bv.fontSize) == null ? void 0 : _B.length) != null ? _C : 0) > 0) tp.push({ type: "fontSize" });
-          if (((_E = (_D = bv.lineHeight) == null ? void 0 : _D.length) != null ? _E : 0) > 0) tp.push({ type: "lineHeight" });
-          if (((_G = (_F = bv.letterSpacing) == null ? void 0 : _F.length) != null ? _G : 0) > 0) tp.push({ type: "letterSpacing" });
+          if (((_F = (_E = bv.fontFamily) == null ? void 0 : _E.length) != null ? _F : 0) > 0) tp.push({ type: "fontFamily" });
+          if (((_H = (_G = bv.fontSize) == null ? void 0 : _G.length) != null ? _H : 0) > 0) tp.push({ type: "fontSize" });
+          if (((_J = (_I = bv.lineHeight) == null ? void 0 : _I.length) != null ? _J : 0) > 0) tp.push({ type: "lineHeight" });
+          if (((_L = (_K = bv.letterSpacing) == null ? void 0 : _K.length) != null ? _L : 0) > 0) tp.push({ type: "letterSpacing" });
           if (tp.length) {
             const lbl = bvLabel2(bv, "fontSize") || bvLabel2(bv, "fontFamily") || "typography";
             anns.push({ label: lbl, properties: tp });
           }
-          if (((_I = (_H = bv.fontStyle) == null ? void 0 : _H.length) != null ? _I : 0) > 0) {
+          if (((_N = (_M = bv.fontStyle) == null ? void 0 : _M.length) != null ? _N : 0) > 0) {
             const lbl = bvLabel2(bv, "fontStyle");
             anns.push({ label: lbl || "font-weight", properties: [{ type: "fontWeight" }] });
           }
@@ -2056,7 +2654,7 @@ figma.ui.onmessage = async (msg) => {
       let cleared = 0;
       for (const n of all) {
         try {
-          if (((_J = n.annotations) == null ? void 0 : _J.length) > 0) {
+          if (((_O = n.annotations) == null ? void 0 : _O.length) > 0) {
             n.annotations = [];
             cleared++;
           }
@@ -2086,12 +2684,12 @@ figma.ui.onmessage = async (msg) => {
     case "studio:swap-targets": {
       try {
         let node = await figma.getNodeByIdAsync(msg.setId);
-        if (node && node.type === "COMPONENT" && ((_K = node.parent) == null ? void 0 : _K.type) === "COMPONENT_SET") node = node.parent;
+        if (node && node.type === "COMPONENT" && ((_P = node.parent) == null ? void 0 : _P.type) === "COMPONENT_SET") node = node.parent;
         if (!node || node.type !== "COMPONENT_SET" && node.type !== "COMPONENT") {
           figma.ui.postMessage({ type: "studio:swap-targets-result", targets: {} });
           break;
         }
-        const defs = (_L = node.componentPropertyDefinitions) != null ? _L : {};
+        const defs = (_Q = node.componentPropertyDefinitions) != null ? _Q : {};
         const setNameOf = (n) => !n ? null : n.parent && n.parent.type === "COMPONENT_SET" ? n.parent.name : n.name;
         const targets = {};
         for (const [prop, def] of Object.entries(defs)) {
@@ -2111,7 +2709,7 @@ figma.ui.onmessage = async (msg) => {
             } catch (e) {
             }
           }
-          for (const pv of (_M = def.preferredValues) != null ? _M : []) {
+          for (const pv of (_R = def.preferredValues) != null ? _R : []) {
             try {
               const imported = pv.type === "COMPONENT_SET" ? await figma.importComponentSetByKeyAsync(pv.key) : await figma.importComponentByKeyAsync(pv.key);
               add("preferred", setNameOf(imported));
@@ -2191,7 +2789,7 @@ figma.ui.onmessage = async (msg) => {
         }
         const bColls = await figma.variables.getLocalVariableCollectionsAsync();
         const themeColl = bColls.find((c) => c.id === "VariableCollectionId:6:17");
-        const darkModeId = (_N = themeColl == null ? void 0 : themeColl.modes.find((m) => m.name === "Dark")) == null ? void 0 : _N.modeId;
+        const darkModeId = (_S = themeColl == null ? void 0 : themeColl.modes.find((m) => m.name === "Dark")) == null ? void 0 : _S.modeId;
         const [cLabel, cCaption, cBody] = await Promise.all([
           figma.variables.getVariableByIdAsync("VariableID:2483:41392"),
           // content/label
@@ -2341,7 +2939,7 @@ figma.ui.onmessage = async (msg) => {
         if (slotsRow) {
           let usesSlots = false;
           try {
-            usesSlots = !!((_O = variants[0]) == null ? void 0 : _O.findOne((n) => n.type === "SLOT"));
+            usesSlots = !!((_T = variants[0]) == null ? void 0 : _T.findOne((n) => n.type === "SLOT"));
           } catch (e) {
           }
           slotsRow.visible = usesSlots;

@@ -1,6 +1,19 @@
 import { build, context } from 'esbuild';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 
+// The plugin sandbox has no CommonJS. If src/code.ts ever gains a top-level
+// `export`, esbuild closes the CJS bundle with `module.exports = …` and the
+// plugin fails to load at all — a ReferenceError long before any of its code
+// runs, with nothing in it to point at the cause. Catch it at build time.
+function assertNoCommonJs(file) {
+  const out = readFileSync(file, 'utf8');
+  if (/\bmodule\.exports\b/.test(out)) {
+    throw new Error(
+      `${file} contains module.exports, which the Figma plugin sandbox cannot load.\n` +
+      `Something in src/code.ts is exported — remove the export keyword; code.ts is an entry point, not a module.`);
+  }
+}
+
 const isWatch = process.argv.includes('--watch');
 
 const codeConfig = {
@@ -70,6 +83,7 @@ async function run() {
     console.log('Watching for changes...');
   } else {
     await build(codeConfig);
+    assertNoCommonJs(codeConfig.outfile);
     await build(uiConfig);
     buildUiHtml();
     console.log('Build complete.');

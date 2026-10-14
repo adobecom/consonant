@@ -1,0 +1,55 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "merch-card-select-promo",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "state-collapsed",
+      "name": "state: collapsed",
+      "args": {
+        "state": "collapsed"
+      }
+    }
+  ],
+  "existing": [],
+  "deferred": [
+    "state-collapsed"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": "State",
+    "cols": [
+      "collapsed"
+    ],
+    "rows": [
+      ""
+    ],
+    "rowValues": [
+      {}
+    ],
+    "cell": {
+      "w": 442,
+      "h": 96,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {},
+        "forced": null,
+        "label": "collapsed",
+        "nodeId": "10320:102006"
+      }
+    ],
+    "missing": []
+  }
+}

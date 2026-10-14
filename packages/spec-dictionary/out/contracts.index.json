@@ -3,7 +3,7 @@
     "name": "s2a-spec-transform",
     "version": "1"
   },
-  "count": 37,
+  "count": 42,
   "items": [
     {
       "slug": "action-card",
@@ -22,12 +22,18 @@
     {
       "slug": "app-icon",
       "name": "AppIcon",
-      "figmaNodeId": "3582-130846",
+      "figmaNodeId": "8175:77406",
       "specPath": "packages/components/src/app-icon/app-icon.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:16aad98096660bd7dc5a1f301611d069a34c04b843741c55f2556fd8b2c47dfb",
+        "extractedAt": "2026-10-08T19:04:30.101Z",
+        "setId": "8175:77406"
+      },
+      "codeEvidence": {
+        "hash": "sha256:59d84aa6a7ba150f89f305c45c3fc7c9865810be05d0ca8f31b9acb579305478"
+      }
     },
     {
       "slug": "bento",
@@ -47,12 +53,12 @@
       "generated": true,
       "hasDefs": true,
       "figmaEvidence": {
-        "hash": "sha256:7cc116068e4427e60712c6bc0222a0b3fad278c3374d48a0024b11a00cc2dc62",
-        "extractedAt": "2026-09-25T16:25:39.053Z",
+        "hash": "sha256:272da36a5cfe50d05961859a2dcbf77135423946e616abd7d31d8d4f77662243",
+        "extractedAt": "2026-10-08T18:04:29.532Z",
         "setId": "10715:35477"
       },
       "codeEvidence": {
-        "hash": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7"
+        "hash": "sha256:cb552889722afdf9bb6bb687236b1d7ae1f69dccbaff086d6b06582ee6faccf2"
       }
     },
     {
@@ -68,42 +74,66 @@
     {
       "slug": "checkbox",
       "name": "Checkbox",
-      "figmaNodeId": null,
+      "figmaNodeId": "10559:113870",
       "specPath": "packages/components/src/checkbox/checkbox.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:77f258b68d6fe82f32fbe4456595467fd6310a6ddcf7cec6b258af73aa8dbd4b",
+        "extractedAt": "2026-10-07T17:24:17.391Z",
+        "setId": "10559:113870"
+      },
+      "codeEvidence": {
+        "hash": "sha256:777ec90b5a7b704aca286d335b66d3622f00d671d7ea95ed00f217f4fb85701b"
+      }
     },
     {
       "slug": "collapsible",
       "name": "Collapsible",
-      "figmaNodeId": null,
+      "figmaNodeId": "10564:116547",
       "specPath": "packages/components/src/collapsible/collapsible.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:48ab8d052f0f3d8ce72c54ea66ded6dc382ad99b274dfb2d98f18c3052bf9460",
+        "extractedAt": "2026-10-09T02:05:09.964Z",
+        "setId": "10564:116547"
+      },
+      "codeEvidence": {
+        "hash": "sha256:e5f6cef477753f93c19b559416d84270223ad8c5bdc3ef442d3fbabb440cc556"
+      }
     },
     {
       "slug": "control-button",
       "name": "ControlButton",
-      "figmaNodeId": null,
+      "figmaNodeId": "11180:181592",
       "specPath": "packages/components/src/control-button/control-button.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:237421ed5ace4091353b24979f92eb452174f3c1becad23a8791c53c07533f7d",
+        "extractedAt": "2026-10-08T17:55:19.787Z",
+        "setId": "11180:181592"
+      },
+      "codeEvidence": {
+        "hash": "sha256:153748d201c2d4db882bcf73f038453b738a85820fa3ba26fcbcf932bf833772"
+      }
     },
     {
       "slug": "divider",
       "name": "Divider",
-      "figmaNodeId": null,
+      "figmaNodeId": "10910:17760",
       "specPath": "packages/components/src/divider/divider.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:b80198e29a290c7797446fdaee1299f27524421fdfd35f524fb93b7452c2905c",
+        "extractedAt": "2026-10-08T17:55:20.791Z",
+        "setId": "10910:17760"
+      },
+      "codeEvidence": {
+        "hash": "sha256:c7563d6cc0817825c0d995ae2793d1eefc0a9e4e8573f09687a2860e016a7459"
+      }
     },
     {
       "slug": "dot-pagination",
@@ -111,15 +141,9 @@
       "figmaNodeId": "8350:234686",
       "specPath": "packages/components/src/dot-pagination/dot-pagination.spec.json",
       "generated": true,
-      "hasDefs": true,
-      "figmaEvidence": {
-        "hash": "sha256:1e5a277c66d64f07af742506ee4dec50ee0794bd6414a7de2536277a195b364e",
-        "extractedAt": "2026-10-05T16:32:17.362Z",
-        "setId": "8350:234686"
-      },
-      "codeEvidence": {
-        "hash": "sha256:20933c11a15da36bfc7addca568112e6cd646d3683523e27ac1d1511c9a6dc48"
-      }
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
     },
     {
       "slug": "elastic-card",
@@ -144,12 +168,18 @@
     {
       "slug": "helper-text",
       "name": "HelperText",
-      "figmaNodeId": null,
+      "figmaNodeId": "10243:101699",
       "specPath": "packages/components/src/helper-text/helper-text.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:fb2131416bffcfd52b0e9b46ead03558ce1476cb4c29fc1087466aa536ede2bc",
+        "extractedAt": "2026-10-08T17:51:42.740Z",
+        "setId": "10243:101699"
+      },
+      "codeEvidence": {
+        "hash": "sha256:1e687685d1f3ee5970ea1509b14730a010d515bb44efde684b43c6a35af10e78"
+      }
     },
     {
       "slug": "icon-button",
@@ -184,22 +214,34 @@
     {
       "slug": "link",
       "name": "Link",
-      "figmaNodeId": null,
+      "figmaNodeId": "12823:184375",
       "specPath": "packages/components/src/link/link.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:7a2a5b7cb3e52353dd9a14e8cbf2e38302d13dfbd984c9cfe9f9219b9780ce09",
+        "extractedAt": "2026-10-08T18:04:34.863Z",
+        "setId": "12823:184375"
+      },
+      "codeEvidence": {
+        "hash": "sha256:90f82a6cf058cfb16badfc8670c655403001f6811ae86985b156e0707073fd8b"
+      }
     },
     {
       "slug": "list",
       "name": "List",
-      "figmaNodeId": null,
+      "figmaNodeId": "10320:102094",
       "specPath": "packages/components/src/list/list.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:535dd6b941b51d8252066998b05f9f23686cda407486c09d697e45c2ac7e5296",
+        "extractedAt": "2026-10-08T17:51:25.575Z",
+        "setId": "10320:102094"
+      },
+      "codeEvidence": {
+        "hash": "sha256:52d6b3854329a2e3828464df962c47b067e230f9fea9194236ebb46190735ae4"
+      }
     },
     {
       "slug": "logo",
@@ -234,11 +276,73 @@
     {
       "slug": "merch-card",
       "name": "MerchCard",
-      "figmaNodeId": null,
+      "figmaNodeId": "10826:13312",
       "specPath": "packages/components/src/merch-card/merch-card.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:eed5f2ea94f4997896f683b5974f7ff4f4e382b49308241f55d1b3bf48ff6b8d",
+        "extractedAt": "2026-10-08T18:04:27.073Z",
+        "setId": "10826:13312"
+      },
+      "codeEvidence": {
+        "hash": "sha256:3b9cbc4521e8e39538c0c1a4a55791dd20f5acb1723cd1ccc03d0a1df6f3df22"
+      }
+    },
+    {
+      "slug": "merch-card-feature-section",
+      "name": "MerchCardFeatureSection",
+      "figmaNodeId": "10320:102040",
+      "specPath": "packages/components/src/merch-card-feature-section/merch-card-feature-section.spec.json",
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:5ffbb816e1f31e6810d51950b8fdd81aacec085fbf2e00b99ba567060133ee2c",
+        "extractedAt": "2026-10-08T17:51:46.444Z",
+        "setId": "10320:102040"
+      },
+      "codeEvidence": null
+    },
+    {
+      "slug": "merch-card-pricing-display",
+      "name": "MerchCardPricingDisplay",
+      "figmaNodeId": "10328:103581",
+      "specPath": "packages/components/src/merch-card-pricing-display/merch-card-pricing-display.spec.json",
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:c34ac6abb41dfa19e9c559e1c82a439c302aa222cf74671d2ce79188a3ba6955",
+        "extractedAt": "2026-10-08T17:51:10.014Z",
+        "setId": "10328:103581"
+      },
+      "codeEvidence": null
+    },
+    {
+      "slug": "merch-card-select-promo",
+      "name": "MerchCardSelectPromo",
+      "figmaNodeId": "10320:102024",
+      "specPath": "packages/components/src/merch-card-select-promo/merch-card-select-promo.spec.json",
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:943c3f0ed2252749f743fe8aee6d193d2181ca6c79a42b344fa32745523d368e",
+        "extractedAt": "2026-10-08T17:51:13.647Z",
+        "setId": "10320:102024"
+      },
+      "codeEvidence": null
+    },
+    {
+      "slug": "merch-card-trust-badge",
+      "name": "MerchCardTrustBadge",
+      "figmaNodeId": "10327:103546",
+      "specPath": "packages/components/src/merch-card-trust-badge/merch-card-trust-badge.spec.json",
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:d7f87a80395c68ef455a6bf66d085e8d9610bc7b7b6c05ba6c9709ee61fa8228",
+        "extractedAt": "2026-10-08T17:51:21.908Z",
+        "setId": "10327:103546"
+      },
       "codeEvidence": null
     },
     {
@@ -264,12 +368,18 @@
     {
       "slug": "product-lockup",
       "name": "ProductLockup",
-      "figmaNodeId": null,
+      "figmaNodeId": "11272:217527",
       "specPath": "packages/components/src/product-lockup/product-lockup.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:ac169c4df0a40101b2316342443d9218771c4ef3c01487959abaa458262acd3f",
+        "extractedAt": "2026-10-08T18:04:27.716Z",
+        "setId": "11272:217527"
+      },
+      "codeEvidence": {
+        "hash": "sha256:43d2743a58a2016c0cb1308b7a78a8facb299dbd3d897fa6cc2dc54d7a3fb6d4"
+      }
     },
     {
       "slug": "progress-bar",
@@ -297,25 +407,25 @@
       "figmaNodeId": "9334:3814",
       "specPath": "packages/components/src/quote-card/quote-card.spec.json",
       "generated": true,
-      "hasDefs": true,
-      "figmaEvidence": {
-        "hash": "sha256:1514272a63e6ce5a860c03dd92a4f9cc44b744ac1f52f9ae6a70c83051404327",
-        "extractedAt": "2026-09-17T16:52:26.957Z",
-        "setId": "9334:3814"
-      },
-      "codeEvidence": {
-        "hash": "sha256:54759300b02463c7cb780dba82725572758af914b4d0c10e927e021cb579e6ee"
-      }
+      "hasDefs": false,
+      "figmaEvidence": null,
+      "codeEvidence": null
     },
     {
       "slug": "radio",
       "name": "Radio",
-      "figmaNodeId": null,
+      "figmaNodeId": "11586:206620",
       "specPath": "packages/components/src/radio/radio.spec.json",
-      "generated": false,
-      "hasDefs": false,
-      "figmaEvidence": null,
-      "codeEvidence": null
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:3f2fde1def9bb8ef20067ee35bf80452c2eb35a3caf309949bab794a08c4adc5",
+        "extractedAt": "2026-10-09T16:13:56.211Z",
+        "setId": "11586:206620"
+      },
+      "codeEvidence": {
+        "hash": "sha256:006b14ea4e44c5333aae3a879d95f2fc77a125a2f6651b656aa0f15c2ccb43e0"
+      }
     },
     {
       "slug": "rich-content",
@@ -353,11 +463,9 @@
       "figmaNodeId": "12102:175374",
       "specPath": "packages/components/src/social-proof-carousel/social-proof-carousel.spec.json",
       "generated": true,
-      "hasDefs": true,
+      "hasDefs": false,
       "figmaEvidence": null,
-      "codeEvidence": {
-        "hash": "sha256:1fb7be7580d481700553d6af9c62d6b5b8e76abe472aa0ab416a02c6f5d78484"
-      }
+      "codeEvidence": null
     },
     {
       "slug": "surface",
@@ -394,9 +502,29 @@
       "name": "TextCard",
       "figmaNodeId": "11362:245184",
       "specPath": "packages/components/src/text-card/text-card.spec.json",
+      "generated": true,
+      "hasDefs": true,
+      "figmaEvidence": {
+        "hash": "sha256:bc7565267593ba73a20478eb5f1c18ff0691503e6b077c7513c256b61ba52574",
+        "extractedAt": "2026-10-08T18:04:34.113Z",
+        "setId": "11362:245184"
+      },
+      "codeEvidence": {
+        "hash": "sha256:c1519f88ff735df8654ae3bb8e2ecc6f285e2751c84857d4c7b3dd030deb16c6"
+      }
+    },
+    {
+      "slug": "filter-list",
+      "name": "FilterList",
+      "figmaNodeId": "14885:82999",
+      "specPath": null,
       "generated": false,
       "hasDefs": false,
-      "figmaEvidence": null,
+      "figmaEvidence": {
+        "hash": "sha256:307ef44abd118fe71a810c592808a94c24ee6e2c731da010c1e33c6e813a03ba",
+        "extractedAt": "2026-10-05T18:54:50.072Z",
+        "setId": "14885:82999"
+      },
       "codeEvidence": null
     }
   ]

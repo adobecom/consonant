@@ -1,79 +1,569 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "AppIcon",
   "slug": "app-icon",
-  "figmaNodeId": "3582-130846",
-  "figmaSource": "https://www.figma.com/design/eGSyBcD5XdFXR8rJXJmVNY/S2A---Foundations?node-id=3582-130846",
-  "figmaLibrarySource": "https://www.figma.com/design/8or0zCnGc5fiTnQ1NeIRnh/App-Icons-Library?node-id=0-1",
   "cssClass": "c-app-icon",
+  "figmaNodeId": "8175:77406",
   "storybookId": "app-icon",
-  "description": "Adobe product icon tile displayed at a fixed size. Uses the S2A Foundations AppIcon component set for sizing and the published App Icons Library for app tile options.",
+  "description": "AppIcon",
   "variants": {
-    "size": ["xs", "sm", "md", "lg"]
+    "Size": [
+      "16",
+      "18",
+      "24",
+      "32",
+      "48",
+      "80"
+    ]
   },
   "props": [
     {
       "name": "app",
       "type": "string",
-      "defaultValue": "\"experience-cloud\"",
-      "description": "App slug. Must be a key in APP_LIBRARY; unknown values fall back to Experience Cloud.",
-      "enumSource": "APP_OPTIONS",
-      "enumCount": 37,
-      "libraryEnumSource": "APP_LIBRARY_OPTIONS",
-      "libraryEnumCount": 102
+      "defaultValue": "\"acrobat-pro\"",
+      "description": "Figma calls the instance swap \"Icon\"; the component calls it \"app\" and takes a key into APP_LIBRARY rather than a node. Same idea, two vocabularies.",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon#3582:54",
+          "verified": true
+        },
+        "code": {
+          "prop": "app",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
     },
     {
       "name": "size",
       "type": "string",
-      "defaultValue": "\"md\"",
-      "enum": ["xs", "sm", "md", "lg"],
-      "description": "Matches the Figma Size variant."
+      "defaultValue": "\"24\"",
+      "enum": [
+        "16",
+        "18",
+        "24",
+        "32",
+        "48",
+        "80"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "verified": true,
+          "options": [
+            "16",
+            "18",
+            "24",
+            "32",
+            "48",
+            "80"
+          ]
+        },
+        "code": {
+          "prop": "size",
+          "attr": "data-size",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "ariaLabel",
+      "type": "string",
+      "description": "The accessible name. Authored whenever the icon carries meaning.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "ariaLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
     },
     {
       "name": "ariaHidden",
       "type": "boolean",
       "defaultValue": "true",
-      "description": "Set false and provide ariaLabel when icon conveys meaning standalone."
-    },
-    {
-      "name": "ariaLabel",
-      "type": "string",
-      "description": "Required when ariaHidden is false. Falls back to the app label."
+      "description": "Decorative by default — a product mnemonic beside a label is usually noise to a screen reader. Set false and give an ariaLabel when the icon is the only content.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "ariaHidden",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
     },
     {
       "name": "loading",
       "type": "string",
       "defaultValue": "\"lazy\"",
-      "enum": ["lazy", "eager"]
+      "description": "Integration detail: the <img> loading hint. No design counterpart.",
+      "lever": false,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "loading",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
     },
     {
       "name": "importance",
       "type": "string",
       "defaultValue": "\"auto\"",
-      "enum": ["auto", "high", "low"]
+      "description": "Integration detail: fetch priority. No design counterpart.",
+      "lever": false,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "importance",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
     }
   ],
   "tokenBindings": {
-    "width:xs": "--s2a-spacing-md",
-    "width:md": "--s2a-spacing-lg",
-    "width:lg": "--s2a-spacing-xl"
+    "root-gap": "--s2a-spacing-none",
+    "root-padding-bottom": "--s2a-spacing-none",
+    "root-padding-left": "--s2a-spacing-none",
+    "root-padding-right": "--s2a-spacing-none",
+    "root-padding-top": "--s2a-spacing-none"
   },
-  "primitiveExceptions": [
+  "tier": "component",
+  "composedOf": [],
+  "a11y": {
+    "contrast": "AA",
+    "role": "img",
+    "wcag": [
+      "1.1.1",
+      "4.1.2"
+    ],
+    "notes": [
+      "1.1.1 Non-text Content: the icon either carries an accessible name (ariaLabel) or is explicitly hidden (ariaHidden). Never a bare image with no alt.",
+      "Decorative is the default. Beside a visible label the mnemonic repeats information, so aria-hidden is correct and ariaLabel is not needed.",
+      "Not interactive: no role=button, no tabindex. Wrap it in the control if it needs to be clickable."
+    ]
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".c-app-icon",
+    "figma": ".root",
+    "element": "span",
+    "layout": {
+      "display": "flex",
+      "direction": "column"
+    },
+    "tokens": {
+      "gap": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      },
+      "padding-bottom": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      },
+      "padding-left": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      },
+      "padding-right": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      },
+      "padding-top": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      }
+    },
+    "tokensByProp": [
+      {
+        "prop": "size",
+        "map": {
+          "16": {
+            "width": {
+              "value": "raw:16px",
+              "raw": true,
+              "tokens": []
+            },
+            "height": {
+              "value": "raw:16px",
+              "raw": true,
+              "tokens": []
+            }
+          },
+          "18": {
+            "width": {
+              "value": "raw:18px",
+              "raw": true,
+              "tokens": []
+            },
+            "height": {
+              "value": "raw:18px",
+              "raw": true,
+              "tokens": []
+            }
+          },
+          "24": {
+            "width": {
+              "value": "raw:24px",
+              "raw": true,
+              "tokens": []
+            },
+            "height": {
+              "value": "raw:24px",
+              "raw": true,
+              "tokens": []
+            }
+          },
+          "32": {
+            "width": {
+              "value": "raw:32px",
+              "raw": true,
+              "tokens": []
+            },
+            "height": {
+              "value": "raw:32px",
+              "raw": true,
+              "tokens": []
+            }
+          },
+          "48": {
+            "width": {
+              "value": "raw:48px",
+              "raw": true,
+              "tokens": []
+            },
+            "height": {
+              "value": "raw:48px",
+              "raw": true,
+              "tokens": []
+            }
+          },
+          "80": {
+            "width": {
+              "value": "raw:80px",
+              "raw": true,
+              "tokens": []
+            },
+            "height": {
+              "value": "raw:80px",
+              "raw": true,
+              "tokens": []
+            }
+          }
+        }
+      }
+    ],
+    "parts": {
+      "img": {
+        "selector": ".c-app-icon__img",
+        "figma": "/B_app_CreativeCloud",
+        "tokensByProp": [
+          {
+            "prop": "size",
+            "map": {
+              "16": {
+                "width": {
+                  "value": "raw:16px",
+                  "raw": true,
+                  "tokens": []
+                },
+                "height": {
+                  "value": "raw:16px",
+                  "raw": true,
+                  "tokens": []
+                }
+              },
+              "18": {
+                "width": {
+                  "value": "raw:18px",
+                  "raw": true,
+                  "tokens": []
+                },
+                "height": {
+                  "value": "raw:18px",
+                  "raw": true,
+                  "tokens": []
+                }
+              },
+              "24": {
+                "width": {
+                  "value": "raw:24px",
+                  "raw": true,
+                  "tokens": []
+                },
+                "height": {
+                  "value": "raw:24px",
+                  "raw": true,
+                  "tokens": []
+                }
+              },
+              "32": {
+                "width": {
+                  "value": "raw:32px",
+                  "raw": true,
+                  "tokens": []
+                },
+                "height": {
+                  "value": "raw:32px",
+                  "raw": true,
+                  "tokens": []
+                }
+              },
+              "48": {
+                "width": {
+                  "value": "raw:48px",
+                  "raw": true,
+                  "tokens": []
+                },
+                "height": {
+                  "value": "raw:48px",
+                  "raw": true,
+                  "tokens": []
+                }
+              },
+              "80": {
+                "width": {
+                  "value": "raw:80px",
+                  "raw": true,
+                  "tokens": []
+                },
+                "height": {
+                  "value": "raw:80px",
+                  "raw": true,
+                  "tokens": []
+                }
+              }
+            }
+          }
+        ],
+        "asset": {
+          "prop": "app",
+          "manifest": "adobe-product-icons",
+          "field": "filename",
+          "element": "img"
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "8175:77406",
+        "nodeName": "AppIcon",
+        "componentSetKey": "f35ab6b534f0adf17d33e238b40a49b6e532009b",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:16aad98096660bd7dc5a1f301611d069a34c04b843741c55f2556fd8b2c47dfb",
+        "extractedAt": "2026-10-08T19:04:30.101Z",
+        "meta": {
+          "version": "1.1.1",
+          "status": "active",
+          "updated": "2026-09-10",
+          "changelog": "1.1.1   2026-09-10  patch        Fixed Size=48 and Size=80 (added in 1.1.0) — their nested icon layer wasn't wired to the exposed Icon instance-swap property, so switching to those sizes silently reset the icon to the default (CreativeCloud) instead of preserving the selected app mnemonic. Re-linked componentPropertyReferences to match the other 4 sizes.\n1.1.0   2026-09-08  minor        Size variant renamed from t-shirt (xs/sm/md/lg) to pixel values (16/18/24/32); added 48 and 80 to support the new Product Marquee_Grid XL lockup. Non-breaking in Figma (instances auto-relabel); code side (size prop enum, spec.json) needs a matching update.\n1.0.0   2026-08-04  init         Initial release"
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/app-icon/app-icon.js",
+        "export": "AppIcon",
+        "controller": null,
+        "cssClass": "c-app-icon"
+      },
+      "evidence": {
+        "hash": "sha256:59d84aa6a7ba150f89f305c45c3fc7c9865810be05d0ca8f31b9acb579305478"
+      }
+    }
+  },
+  "decisions": [
     {
-      "property": "border-radius",
-      "comment": "Primitive: AppIcon tiles use ~18% corner radius in Figma until semantic token exists"
+      "id": "ai-archetype-untemplated",
+      "question": "The archetype read as \"none\", which has no template in the dictionary (it has: link-card, card, collection, button, checkbox / radio, toggle / switch, input / field, badge / tag / chip, pagination, accordion, select / dropdown, helper text, list). Without one the draft gets no HTML element, no accessibility floor and no base CSS — the root falls back to <div>. Which archetype is this, really?",
+      "chose": "drafted with no archetype floor; root element defaults to div",
+      "confidence": "low",
+      "fix": "Set \"archetype\" in the defs to one the dictionary templates, or re-scaffold with --archetype=<name>. If none fit, the dictionary needs a new entry.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "no signal identified a kind — decide it rather than inheriting a default"
     },
     {
-      "property": "width:sm",
-      "comment": "Primitive: No semantic token for 18px yet"
+      "id": "ai-archetype",
+      "question": "Scaffolded as none (no signal identified a kind — decide it rather than inheriting a default). Confirm, or re-run npm run specs:scaffold -- --slug=app-icon --archetype=<link-card|card|collection>.",
+      "chose": "none — no signal identified a kind — decide it rather than inheriting a default",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=app-icon --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces none; state axis none"
+    },
+    {
+      "id": "ai-match",
+      "question": "Structural match says extend-or-new: closest existing contract is Checkbox (score 0.58). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Checkbox (match extend-or-new, score 0.58)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Checkbox instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Checkbox (0.58) is closest; extend it with nothing structural or start a new contract."
+    },
+    {
+      "id": "ai-code-only-props",
+      "question": "app, ariaHidden, ariaLabel, loading, importance exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 5 code-only props as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "app-icon.code.evidence.json"
+    },
+    {
+      "id": "ai-extra-art",
+      "question": "Additional shape layers outside the media group (/B_app_CreativeCloud/tile/colors). Fold them into the Media instance or name them as parts.",
+      "chose": "treated 1 shape layer as art, not as parts",
+      "confidence": "medium",
+      "fix": "Fold the layers into the Media instance in Figma, or name them as parts in anatomy.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "app-icon.figma.evidence.json anatomy"
+    },
+    {
+      "id": "ai-unbound-paint",
+      "question": "132 painted layers carry no variable (/B_app_CreativeCloud/tile/tile fills, /B_app_CreativeCloud/tile/colors/Ellipse 11 fills, /B_app_CreativeCloud/tile/colors/Ellipse 14 fills, /B_app_CreativeCloud/tile/colors/Ellipse 6 fills, /B_app_CreativeCloud/tile/colors/Ellipse 8 fills, /B_app_CreativeCloud/tile/colors/Ellipse 12 fills, …). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "confidence": "high",
+      "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "app-icon.figma.evidence.json unboundPaint"
+    },
+    {
+      "id": "ai-layer-names",
+      "question": "20 layers carry Figma-generated names (/B_app_CreativeCloud/tile/colors/Ellipse 11, /B_app_CreativeCloud/tile/colors/Ellipse 14, /B_app_CreativeCloud/tile/colors/Ellipse 6, /B_app_CreativeCloud/tile/colors/Ellipse 8, /B_app_CreativeCloud/tile/colors/Ellipse 12, …). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "app-icon.figma.evidence.json anatomy"
+    },
+    {
+      "id": "ai-hardcoded-values",
+      "question": "18 values in the design are set with no variable behind them: root width@size=16 = 16px; root height@size=16 = 16px; root width@size=18 = 18px; root height@size=18 = 18px; root width@size=24 = 24px; root height@size=24 = 24px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "app-icon.figma.evidence.json unboundValues"
+    },
+    {
+      "id": "ai-restored",
+      "question": "The defs was replaced by a forced re-draft on 2026-10-08; this is the curation rebuilt from the packed contract (@adobecom/s2a-specs dist/contracts/app-icon.json, 11:58).",
+      "decision": "props, anatomy (asset-backed img), a11y and semantics restored from the contract; evidence and anchors kept from the fresh extraction",
+      "status": "decided",
+      "owner": "Matt",
+      "evidence": "packages/s2a-specs/dist/contracts/app-icon.json"
+    },
+    {
+      "id": "ai-size-from-design",
+      "question": "Each Size variant is a FIXED box in the design (16…80px). Carried as raw: literals per size until a size token ships.",
+      "decision": "width/height per size from the variants; the img fills the box",
+      "status": "decided",
+      "owner": "Matt",
+      "evidence": "app-icon.figma.evidence.json unboundValues"
     }
   ],
-  "a11y": {
-    "role": "img",
-    "wcag": ["1.1.1"],
-    "notes": [
-      "By default ariaHidden=true because the icon is decorative when used inside ProductLockup.",
-      "When used standalone, set ariaHidden=false and provide ariaLabel.",
-      "The inner <img> always carries alt='' and aria-hidden='true'. Accessible label lives on the wrapper <span role='img'>."
-    ]
+  "provenance": {
+    "defs": "sha256:73af9f9a88d29a4b426a93dd16dc38bf80f66b12d731e5f63aff987d88d1f315",
+    "codeEvidence": "sha256:59d84aa6a7ba150f89f305c45c3fc7c9865810be05d0ca8f31b9acb579305478",
+    "figmaEvidence": "sha256:16aad98096660bd7dc5a1f301611d069a34c04b843741c55f2556fd8b2c47dfb",
+    "generator": "s2a-spec-transform@1"
   }
 }

@@ -1,0 +1,56 @@
+{
+  "title": "Rich Content",
+  "subtitle": "Jump Links · Design-to-code review",
+  "fileKey": "kEJ8qfXSgEqInVtJL7P6Ld",
+  "pageId": "1:2209",
+  "stressTestId": "4286:29367",
+  "checkout": "context/milo",
+  "root": "libs/c2/blocks",
+  "block": "rich-content",
+  "source": "libs/c2/blocks/rich-content/rich-content.css",
+  "behaviorSource": "libs/c2/blocks/rich-content/rich-content.js",
+  "inspection": ".tmp/validators/rich-content-page-inspection.json",
+  "output": ".tmp/validators/rich-content-leadership",
+  "photoHash": "c4495b597838ae5ab566b337a9f3c5a0904acbc1",
+  "expected": {
+    "errors": 58,
+    "warnings": 91,
+    "examples": 6,
+    "missingPhotos": 3,
+    "mediaQueries": 23
+  },
+  "examples": [
+    { "nodeId": "4286:29372", "label": "XL · Scrim on", "photo": true },
+    { "nodeId": "4286:42893", "label": "XL · Scrim off", "photo": true },
+    { "nodeId": "4286:29377", "label": "LG · Example A", "photo": false },
+    { "nodeId": "4286:29382", "label": "LG · Example B", "photo": true },
+    { "nodeId": "4286:42473", "label": "MD", "photo": false },
+    { "nodeId": "4286:42683", "label": "SM", "photo": false }
+  ],
+  "errorRules": [
+    {
+      "code": "PRIMITIVE_TOKEN",
+      "label": "Direct primitive tokens",
+      "count": 41
+    },
+    {
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "label": "Nonstandard width boundaries",
+      "count": 6
+    },
+    { "code": "HARDCODED_RGB", "label": "Literal color functions", "count": 6 },
+    {
+      "code": "MQ_MOBILE_FIRST",
+      "label": "Mobile-first / reflow review",
+      "count": 5
+    }
+  ],
+  "warningRules": [
+    { "code": "HARDCODED_PX", "label": "Raw pixel dimensions", "count": 64 },
+    {
+      "code": "UNKNOWN_TOKEN",
+      "label": "Unresolved runtime tokens",
+      "count": 27
+    }
+  ]
+}

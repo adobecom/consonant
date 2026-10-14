@@ -1,0 +1,95 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.checkbox",
+  "name": "Checkbox",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "A single checkbox with a label — toggles one independent option on or off.",
+  "archetype": "checkbox / radio",
+  "semantics": {
+    "element": "input"
+  },
+  "props": [
+    {
+      "name": "style",
+      "type": {
+        "enum": [
+          "default"
+        ]
+      },
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style"
+        },
+        "code": {
+          "prop": "style"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "input",
+      "layout": {
+        "display": "inline-flex",
+        "direction": "row",
+        "align": "center"
+      },
+      "parts": {
+        "checkbox": {},
+        "label": {
+          "layout": {
+            "display": "flex",
+            "direction": "row",
+            "grow": true
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.3.1",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Native input with a real <label>, so the hit area includes the text.",
+      "Indeterminate is a property, not a third value.",
+      "Group related controls in a fieldset with a legend (1.3.1).",
+      "Exposes a native checkbox role with the label programmatically associated, so assistive tech announces the label and the checked/unchecked state (WCAG 2.2 AA · SC 4.1.2 Name, Role, Value; SC 1.3.1 Info & Relationships).",
+      "Keyboard: Tab moves focus to the checkbox, Space toggles it; the focused state shows a visible focus ring (SC 2.1.1 Keyboard; SC 2.4.7 Focus Visible).",
+      "Because the checkmark and label use s2a/color/content/default, contrast is maintained in both light and dark themes (SC 1.4.3 Contrast Minimum)."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "b54325d5cfb373ea25b4f7772bfd9d648012827b",
+        "nodeId": "10559:113870"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/checkbox/checkbox.js",
+        "export": "Checkbox"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:4793d3f3c1eac7d83f4eb02c744c0500ce40d9dd4d2b5c350c4b0ea7102d2b7a",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:777ec90b5a7b704aca286d335b66d3622f00d671d7ea95ed00f217f4fb85701b"
+    }
+  }
+}

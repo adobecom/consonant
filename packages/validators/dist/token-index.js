@@ -15,7 +15,7 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 /** Matches a custom-property DEFINITION: `--s2a-foo: value`. */
-const DEF_RE = /(--s2a-[a-z0-9-]+)\s*:/g;
+const DEF_RE = /(--s2a-[a-z0-9_-]+)\s*:/g;
 /** Load the token index from the built token CSS under a repo root. */
 export function loadTokenIndex(dsRoot) {
     const dir = resolve(dsRoot, "dist/packages/tokens/css/dev");

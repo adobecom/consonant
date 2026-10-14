@@ -1,0 +1,55 @@
+/* MerchCardFeatureSection — generated from merch-card-feature-section.contract.json.
+ * Re-run: npm run specs:render -- --slug=merch-card-feature-section --target=milo */
+
+.merch-card-feature-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-12, 12px);
+  width: 418px;
+}
+
+.merch-card-feature-section .divider {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.merch-card-feature-section .title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1 1 auto;
+  gap: var(--s2a-spacing-8, 8px);
+  padding-bottom: var(--s2a-spacing-0, 0);
+  padding-left: var(--s2a-spacing-0, 0);
+  padding-right: var(--s2a-spacing-0, 0);
+  padding-top: var(--s2a-spacing-0, 0);
+}
+
+.merch-card-feature-section .s2-icon-acrobat-pdfedit-20-n {
+  display: flex;
+  flex-direction: row;
+  width: 20px;
+  height: 20px;
+}
+
+.merch-card-feature-section .title-text {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-heading, #000);
+  font-family: var(--s2a-font-family-label, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-label, 0.875rem);
+  font-weight: var(--s2a-font-weight-label, 700);
+  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
+  line-height: var(--s2a-typography-line-height-label, 18px);
+}
+
+.merch-card-feature-section .items {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: var(--s2a-spacing-8, 8px);
+  padding-bottom: var(--s2a-spacing-0, 0);
+  padding-left: var(--s2a-spacing-32, 32px);
+  padding-right: var(--s2a-spacing-0, 0);
+  padding-top: var(--s2a-spacing-0, 0);
+}

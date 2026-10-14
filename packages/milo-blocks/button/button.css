@@ -1,0 +1,336 @@
+/* Button — generated from button.contract.json.
+ * Re-run: npm run specs:render -- --slug=button --target=milo */
+
+.button {
+  box-sizing: border-box;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  min-width: 0;
+  appearance: none;
+  height: 40px; /* hardcoded: Figma Button v2 md is 40px tall and no semantic size token exists yet */
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--s2a-border-radius-999, 999px);
+  gap: var(--s2a-spacing-xs, 8px);
+  padding-left: var(--s2a-spacing-lg, 24px);
+  padding-right: var(--s2a-spacing-lg, 24px);
+  padding-top: 14px;
+  padding-bottom: 14px;
+  box-shadow: inset 0 0 0 var(--button-bw, 0) var(--button-bc, transparent);
+}
+
+.button:disabled,
+.button[data-state="disabled"] {
+  opacity: var(--s2a-opacity-disabled, 48%);
+}
+
+.button:focus-visible,
+.button[data-state="focus"] {
+  outline-color: var(--s2a-color-focus-ring-default, #3b63fb);
+  outline-width: var(--s2a-border-width-sm, 1px);
+  outline-style: solid;
+  outline-offset: 1px;
+}
+
+.button.outlined {
+  background-color: var(--s2a-color-button-background-outlined-default, rgb(255 255 255 / 0));
+  --button-bw: var(--s2a-border-width-md, 2px);
+  --button-bc: var(--s2a-color-border-knockout, #000);
+}
+
+.button.transparent {
+  background-color: var(--s2a-color-button-background-transparent-default, rgb(0 0 0 / 0));
+  --button-bw: var(--s2a-border-width-sm, 1px);
+}
+
+.button.solid {
+  background-color: var(--s2a-color-button-background-solid-default, #000);
+  --button-bw: var(--s2a-border-width-sm, 1px);
+}
+
+.button.accent {
+  background-color: var(--s2a-color-button-background-accent-default, #3b63fb);
+}
+
+.button.knockout {
+  background-color: var(--s2a-color-button-background-knockout-default, #fff);
+  --button-bw: var(--s2a-border-width-md, 2px);
+  --button-bc: var(--s2a-color-button-border-knockout-default, #fff);
+}
+
+.button.outline-inverse {
+  background-color: var(--s2a-color-button-background-outline-inverse-default, rgb(255 255 255 / 0));
+  --button-bw: var(--s2a-border-width-md, 2px);
+  --button-bc: var(--s2a-color-button-border-outline-inverse-default, #fff);
+}
+
+.button.outlined:hover,
+.button.outlined[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-outlined-hover, rgb(0 0 0 / 8%));
+}
+
+.button.transparent:hover,
+.button.transparent[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-transparent-hover, rgb(0 0 0 / 8%));
+}
+
+.button.solid:hover,
+.button.solid[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-solid-hover, rgb(0 0 0 / 64%));
+  --button-bw: var(--s2a-border-width-md, 2px);
+  --button-bc: var(--s2a-color-border-knockout, #000);
+}
+
+.button.accent:hover,
+.button.accent[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-accent-hover, #274dea);
+}
+
+.button.knockout:hover,
+.button.knockout[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-knockout-hover, #f8f8f8);
+}
+
+.button.outline-inverse:hover,
+.button.outline-inverse[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-outline-inverse-hover, rgb(255 255 255 / 8%));
+}
+
+.button.outlined:active,
+.button.outlined[data-state="active"] {
+  background-color: var(--s2a-color-button-background-outlined-active, #000);
+}
+
+.button.transparent:active,
+.button.transparent[data-state="active"] {
+  background-color: var(--s2a-color-button-background-transparent-active, rgb(0 0 0 / 12%));
+}
+
+.button.solid:active,
+.button.solid[data-state="active"] {
+  background-color: var(--s2a-color-button-background-solid-active, #000);
+}
+
+.button.accent:active,
+.button.accent[data-state="active"] {
+  background-color: var(--s2a-color-button-background-accent-active, #1d3ecf);
+}
+
+.button.knockout:active,
+.button.knockout[data-state="active"] {
+  background-color: var(--s2a-color-button-background-knockout-active, #e9e9e9);
+  --button-bw: 1px;
+}
+
+.button.outline-inverse:active,
+.button.outline-inverse[data-state="active"] {
+  background-color: var(--s2a-color-button-background-outline-inverse-active, rgb(255 255 255 / 16%));
+  --button-bw: 1px;
+}
+
+.button.accent:focus-visible,
+.button.accent[data-state="focus"] {
+  background-color: var(--s2a-color-blue-1100, #1d3ecf);
+  --button-bw: var(--s2a-border-width-sm, 1px);
+}
+
+.button .icon-start {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: currentColor;
+  width: 12px;
+  height: 12px;
+}
+
+.button .icon-start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button .icon-start > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.button.solid:disabled .icon-start,
+.button.solid[data-state="disabled"] .icon-start {
+  opacity: var(--s2a-opacity-disabled, 48%);
+}
+
+.button.accent:disabled .icon-start,
+.button.accent[data-state="disabled"] .icon-start {
+  opacity: var(--s2a-opacity-48, 48%);
+}
+
+.button .frame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+}
+
+.button .s2-icon-circle-20-n {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.button .icon-color {
+  width: 12px;
+  height: 12px;
+}
+
+.button.outlined .icon-color {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.button.transparent .icon-color {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.button.solid .icon-color {
+  color: var(--s2a-color-content-inverse, #000);
+}
+
+.button.accent .icon-color {
+  color: var(--s2a-color-content-inverse, #000);
+}
+
+.button.knockout .icon-color {
+  color: var(--s2a-color-button-content-knockout, #000);
+}
+
+.button.outline-inverse .icon-color {
+  color: var(--s2a-color-button-content-outline-inverse, #fff);
+}
+
+.button .label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-family: var(--s2a-font-family-label, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-label, 0.875rem);
+  font-weight: var(--s2a-font-weight-label, 700);
+  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
+  line-height: var(--s2a-typography-line-height-label, 18px);
+}
+
+.button:disabled .label,
+.button[data-state="disabled"] .label {
+  opacity: var(--s2a-opacity-disabled, 48%);
+}
+
+.button.outlined .label {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.button.transparent .label {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.button.solid .label {
+  color: var(--s2a-color-button-content-primary-solid-default, #fff);
+}
+
+.button.accent .label {
+  color: var(--s2a-color-content-knockout, #fff);
+}
+
+.button.knockout .label {
+  color: var(--s2a-color-button-content-knockout, #000);
+}
+
+.button.outline-inverse .label {
+  color: var(--s2a-color-button-content-outline-inverse, #fff);
+}
+
+.button.outlined:active .label,
+.button.outlined[data-state="active"] .label {
+  color: var(--s2a-color-button-content-outlined-active, #fff);
+}
+
+.button .icon-end {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: currentColor;
+  width: 12px;
+  height: 12px;
+}
+
+.button .icon-end {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button .icon-end > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.button:disabled .icon-end,
+.button[data-state="disabled"] .icon-end {
+  opacity: var(--s2a-opacity-48, 48%);
+}
+
+.button .frame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+}
+
+.button .s2a-icon-chevron-right {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.button .icon-color {
+  width: 12px;
+  height: 12px;
+}
+
+.button:disabled .icon-color,
+.button[data-state="disabled"] .icon-color {
+  opacity: var(--s2a-opacity-disabled, 48%);
+}
+
+.button.outlined .icon-color {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.button.transparent .icon-color {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.button.solid .icon-color {
+  color: var(--s2a-color-content-inverse, #000);
+}
+
+.button.accent .icon-color {
+  color: var(--s2a-color-content-inverse, #000);
+}
+
+.button.knockout .icon-color {
+  color: var(--s2a-color-button-content-knockout, #000);
+}
+
+.button.outline-inverse .icon-color {
+  color: var(--s2a-color-button-content-outline-inverse, #fff);
+}

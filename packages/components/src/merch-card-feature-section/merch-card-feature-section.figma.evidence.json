@@ -1,0 +1,783 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T17:51:46.444Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": null
+  },
+  "set": {
+    "id": "10320:102040",
+    "key": "9dedd45e22ee2649c1f34b5bfdd1b317a3caae7b",
+    "name": "MerchCard/FeatureSection",
+    "type": "COMPONENT",
+    "description": "",
+    "meta": {
+      "version": "",
+      "status": "",
+      "updated": "",
+      "changelog": ""
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": ".items#10324:140",
+      "type": "SLOT",
+      "defaultValue": {
+        "guid": {
+          "sessionID": -1,
+          "localID": -1
+        }
+      }
+    },
+    {
+      "name": "Icon#10320:107",
+      "type": "INSTANCE_SWAP",
+      "defaultValue": "8406:176161",
+      "preferredValues": []
+    },
+    {
+      "name": "Show Divider#10564:7",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "Title#10320:104",
+      "type": "TEXT",
+      "defaultValue": "Section title"
+    }
+  ],
+  "variants": [
+    {
+      "id": "10320:102040",
+      "key": "9dedd45e22ee2649c1f34b5bfdd1b317a3caae7b",
+      "name": "MerchCard/FeatureSection",
+      "props": {},
+      "width": 418,
+      "height": 63
+    }
+  ],
+  "anatomy": {
+    "variant": "MerchCard/FeatureSection",
+    "tree": {
+      "name": "MerchCard/FeatureSection",
+      "type": "COMPONENT",
+      "id": "10320:102040",
+      "layoutMode": "VERTICAL",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "HUG"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "MIN"
+      },
+      "children": [
+        {
+          "name": "Divider",
+          "type": "INSTANCE",
+          "id": "10564:116003",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "FIXED"
+          }
+        },
+        {
+          "name": ".title",
+          "type": "FRAME",
+          "id": "10320:102041",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "CENTER"
+          },
+          "children": [
+            {
+              "name": ".icon",
+              "type": "INSTANCE",
+              "id": "10320:102042",
+              "layoutMode": "HORIZONTAL",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "align": {
+                "primary": "MIN",
+                "counter": "MIN"
+              },
+              "children": [
+                {
+                  "name": "Frame",
+                  "type": "FRAME",
+                  "id": "I10320:102042;604:1003",
+                  "sizing": {
+                    "horizontal": "FILL",
+                    "vertical": "FILL"
+                  },
+                  "children": [
+                    {
+                      "name": "iconPrimary",
+                      "type": "VECTOR",
+                      "id": "I10320:102042;604:1004",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "iconPrimary",
+                      "type": "VECTOR",
+                      "id": "I10320:102042;604:1005",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "iconPrimary",
+                      "type": "VECTOR",
+                      "id": "I10320:102042;604:1006",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": ".title-text",
+              "type": "TEXT",
+              "id": "10320:102047",
+              "text": "Section title",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": ".items",
+          "type": "SLOT",
+          "id": "10322:102334",
+          "layoutMode": "VERTICAL",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "MIN"
+          }
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "",
+      "nodeId": "10320:102040",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:1:84"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/Divider",
+      "nodeId": "10564:116003",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:10910:17753"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title",
+      "nodeId": "10320:102041",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "variable": "VariableID:1:83"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title",
+      "nodeId": "10320:102041",
+      "nodeType": "FRAME",
+      "property": "paddingBottom",
+      "variable": "VariableID:1:80"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title",
+      "nodeId": "10320:102041",
+      "nodeType": "FRAME",
+      "property": "paddingLeft",
+      "variable": "VariableID:1:80"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title",
+      "nodeId": "10320:102041",
+      "nodeType": "FRAME",
+      "property": "paddingRight",
+      "variable": "VariableID:1:80"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title",
+      "nodeId": "10320:102041",
+      "nodeType": "FRAME",
+      "property": "paddingTop",
+      "variable": "VariableID:1:80"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon/Frame/iconPrimary",
+      "nodeId": "I10320:102042;604:1004",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon/Frame/iconPrimary",
+      "nodeId": "I10320:102042;604:1005",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon/Frame/iconPrimary",
+      "nodeId": "I10320:102042;604:1006",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.title-text",
+      "nodeId": "10320:102047",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41398"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.title-text",
+      "nodeId": "10320:102047",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.title-text",
+      "nodeId": "10320:102047",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.title-text",
+      "nodeId": "10320:102047",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.title-text",
+      "nodeId": "10320:102047",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.title-text",
+      "nodeId": "10320:102047",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.title-text",
+      "nodeId": "10320:102047",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.items",
+      "nodeId": "10322:102334",
+      "nodeType": "SLOT",
+      "property": "itemSpacing",
+      "variable": "VariableID:1:83"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.items",
+      "nodeId": "10322:102334",
+      "nodeType": "SLOT",
+      "property": "paddingBottom",
+      "variable": "VariableID:1:80"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.items",
+      "nodeId": "10322:102334",
+      "nodeType": "SLOT",
+      "property": "paddingLeft",
+      "variable": "VariableID:1:88"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.items",
+      "nodeId": "10322:102334",
+      "nodeType": "SLOT",
+      "property": "paddingRight",
+      "variable": "VariableID:1:80"
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.items",
+      "nodeId": "10322:102334",
+      "nodeType": "SLOT",
+      "property": "paddingTop",
+      "variable": "VariableID:1:80"
+    }
+  ],
+  "variables": {
+    "VariableID:10910:17753": {
+      "name": "s2a/color/divider/subtle",
+      "key": "42022e2f828d99c8d6d71e5a3f13bcfd2c5b922f",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-border-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/12"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/white/24"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.11999999731779099
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.23999999463558197
+        }
+      }
+    },
+    "VariableID:1:80": {
+      "name": "s2a/spacing/0",
+      "key": "b4abea735cd11a1b894b1b2356e35817c2532b33",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-0)"
+      },
+      "valuesByMode": {
+        "Mode 1": 0
+      },
+      "resolved": {
+        "Mode 1": 0
+      }
+    },
+    "VariableID:1:83": {
+      "name": "s2a/spacing/8",
+      "key": "3c812173a07b52d6377e121893ec037efbbfefc6",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-8)"
+      },
+      "valuesByMode": {
+        "Mode 1": 8
+      },
+      "resolved": {
+        "Mode 1": 8
+      }
+    },
+    "VariableID:1:84": {
+      "name": "s2a/spacing/12",
+      "key": "da730f1b1d612bc5d23fa762834ba375c6c95351",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-12)"
+      },
+      "valuesByMode": {
+        "Mode 1": 12
+      },
+      "resolved": {
+        "Mode 1": 12
+      }
+    },
+    "VariableID:1:88": {
+      "name": "s2a/spacing/32",
+      "key": "af06e16de2556f59a44cb33fa00872c8ffe2760c",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-32)"
+      },
+      "valuesByMode": {
+        "Mode 1": 32
+      },
+      "resolved": {
+        "Mode 1": 32
+      }
+    },
+    "VariableID:2352:1217": {
+      "name": "s2a/typography/font-size/label",
+      "key": "8ebd95ce11fc03c86dd89ef3b4ba2ffb5bf961d6",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:2352:1233": {
+      "name": "s2a/typography/letter-spacing/label",
+      "key": "c00a7571dfaa364481c1c6eb5472b3581201c594",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1243": {
+      "name": "s2a/typography/line-height/label",
+      "key": "538ddff11a55de6e862611ebdcec139ce6328c78",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:2483:41398": {
+      "name": "s2a/color/content/heading",
+      "key": "fb5caee478bd93ef589911d85832be534995bf76",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-heading)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/content/default"
+        },
+        "Dark": {
+          "alias": "s2a/color/content/knockout"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2557:832": {
+      "name": "s2a/font/family/label",
+      "key": "02174aaffa99806ace49456aa5121f60a606ed73",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:5388:44678": {
+      "name": "s2a/font/weight/label",
+      "key": "68a1c8cf3dbedb7bb77987c1db773b0a69a7eb8c",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:6:82": {
+      "name": "s2a/color/content/default",
+      "key": "83bc2006f8e7edc6ff9f04044d27a204d84f2d6a",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "6:15543": {
+      "name": "s2a/typography/label",
+      "key": "04764cbcfd7418f4c004046716f9d7db9a741db8"
+    }
+  },
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/Divider",
+      "nodeId": "10564:116003",
+      "mainComponent": {
+        "id": "10910:21033",
+        "key": "78bae762f5771a2e6a258c3e551e5b2afa4049e7",
+        "name": "Style=subtle"
+      },
+      "set": {
+        "id": "10910:17760",
+        "key": "943550fa170b6c953a27449f060743c87560f962",
+        "name": "Divider"
+      },
+      "props": {
+        "Style": "subtle"
+      }
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon",
+      "nodeId": "10320:102042",
+      "mainComponent": {
+        "id": "8406:176161",
+        "key": "9a8bbe89559c4b905a33c868b8e8c73b1cdf8c23",
+        "name": "S2_Icon_AcrobatPDFEdit_20_N"
+      },
+      "set": null
+    }
+  ],
+  "counts": {
+    "variants": 1,
+    "nodes": 10,
+    "bindings": 22,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "",
+      "nodeId": "10320:102040",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/Divider",
+      "nodeId": "10564:116003",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon",
+      "nodeId": "10320:102042",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon",
+      "nodeId": "10320:102042",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon/Frame/iconPrimary",
+      "nodeId": "I10320:102042;604:1004",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 8
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon/Frame/iconPrimary",
+      "nodeId": "I10320:102042;604:1004",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 7.78
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon/Frame/iconPrimary",
+      "nodeId": "I10320:102042;604:1005",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon/Frame/iconPrimary",
+      "nodeId": "I10320:102042;604:1005",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 17
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon/Frame/iconPrimary",
+      "nodeId": "I10320:102042;604:1006",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 9.99
+    },
+    {
+      "variant": "MerchCard/FeatureSection",
+      "node": "/.title/.icon/Frame/iconPrimary",
+      "nodeId": "I10320:102042;604:1006",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 9.97
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:5ffbb816e1f31e6810d51950b8fdd81aacec085fbf2e00b99ba567060133ee2c"
+  }
+}

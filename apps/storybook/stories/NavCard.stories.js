@@ -5,7 +5,7 @@ export default {
   title: "Organisms/NavCard/Promo",
   tags: ["autodocs"],
   render: (args) => html`
-    <div style="padding: 32px; background: #f5f5f5; display: inline-flex;">
+    <div style="padding: var(--s2a-spacing-xl); background: var(--s2a-color-surface-subtle); display: inline-flex;">
       ${NavCard(args)}
     </div>
   `,
@@ -77,7 +77,7 @@ export const HoverState = {
 
 export const EmptyStates = {
   render: () => html`
-    <div style="display: flex; gap: 24px; padding: 32px; background: #f5f5f5; flex-wrap: wrap; align-items: flex-start;">
+    <div style="display: flex; gap: var(--s2a-spacing-lg); padding: var(--s2a-spacing-xl); background: var(--s2a-color-surface-subtle); flex-wrap: wrap; align-items: flex-start;">
       ${NavCard({
         eyebrow: "No CTA link",
         title: "Card with button only.",

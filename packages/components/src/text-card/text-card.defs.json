@@ -1,0 +1,369 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "TextCard",
+  "slug": "text-card",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from text-card.figma.evidence.json (sha256:bc756526…) through packages/spec-dictionary/dictionary.json (card)",
+    "date": "2026-10-08",
+    "reviewer": "Matt"
+  },
+  "description": "Text-only news / content card. Headline, optional body copy, and inline read-more CTA. No media. Use in 3-up news grids on light surfaces.",
+  "archetype": "card",
+  "version": "2.1.1",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "11362:245184",
+      "nodeName": "TextCard — v2",
+      "componentSetKey": "db93874630fe07525d42cfbac86b77e52e217e9f",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"?\"; 30 nodes, 72 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/text-card/text-card.js",
+      "export": "TextCard",
+      "cssClass": "c-text-card"
+    }
+  },
+  "props": [
+    {
+      "name": "body",
+      "lever": true,
+      "type": "string",
+      "default": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants.",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Body#9554:2"
+      },
+      "code": {
+        "prop": "body"
+      }
+    },
+    {
+      "name": "cta",
+      "lever": true,
+      "type": "string",
+      "figma": {
+        "kind": "INSTANCE_SWAP",
+        "property": "CTA#9561:0"
+      },
+      "code": {
+        "prop": "cta"
+      }
+    },
+    {
+      "name": "headline",
+      "lever": true,
+      "type": "string",
+      "default": "Adobe apps are top choice for Sundance filmmakers.",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Headline#9554:0"
+      },
+      "code": {
+        "prop": "headline"
+      }
+    },
+    {
+      "name": "showBody",
+      "lever": true,
+      "type": "boolean",
+      "default": true,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show Body#9554:6"
+      },
+      "code": {
+        "prop": "showBody"
+      }
+    },
+    {
+      "name": "showCta",
+      "lever": false,
+      "type": "boolean",
+      "default": true,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show CTA#9554:8"
+      },
+      "code": {
+        "prop": "showCta"
+      },
+      "notes": "Figma authoring toggle for the \"CTA\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes."
+    },
+    {
+      "name": "style",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "default",
+        "centered"
+      ],
+      "default": "default",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Style"
+      },
+      "code": {
+        "prop": "style",
+        "attr": "data-style"
+      }
+    },
+    {
+      "name": "ctaLabel",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "ctaLabel"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "ctaHref",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "ctaHref"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    }
+  ],
+  "states": [],
+  "composition": [
+    {
+      "name": "Link — v2",
+      "treatment": "contract",
+      "slug": "link"
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-text-card",
+      "figma": ".root",
+      "element": "article",
+      "tokens": {
+        "background-color": "{s2a.color.background.subtle}",
+        "border-radius": "{s2a.border.radius.md}",
+        "gap": "{s2a.spacing.lg}",
+        "padding-bottom": "{s2a.spacing.none}",
+        "padding-left": "{s2a.spacing.lg}",
+        "padding-right": "{s2a.spacing.lg}",
+        "padding-top": "{s2a.spacing.lg}",
+        "width": "raw:488px"
+      },
+      "layout": {
+        "display": "flex",
+        "direction": "column"
+      },
+      "parts": {
+        "headline-body": {
+          "selector": ".c-text-card__headline-body",
+          "figma": "/.headline-body",
+          "tokens": {
+            "gap": "{s2a.spacing.xs}"
+          },
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "grow": true
+          },
+          "element": "div",
+          "parts": {
+            "headline": {
+              "selector": ".c-text-card__headline",
+              "figma": "/.headline-body/.headline",
+              "tokens": {
+                "color": "{s2a.color.content.heading}",
+                "font-family": "{s2a.font.family.heading}",
+                "font-size": "{s2a.typography.font-size.heading-5}",
+                "font-weight": "{s2a.font.weight.heading}",
+                "letter-spacing": "{s2a.font.letter-spacing.4xl}",
+                "line-height": "{s2a.typography.line-height.heading-5}"
+              },
+              "layout": {
+                "grow": true
+              },
+              "element": "span",
+              "slot": {
+                "name": "headline",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "default": {
+                  "text": "Adobe apps are top choice for Sundance filmmakers."
+                }
+              }
+            },
+            "body": {
+              "selector": ".c-text-card__body",
+              "figma": "/.headline-body/.body",
+              "tokens": {
+                "color": "{s2a.color.content.body-subtle}",
+                "font-family": "{s2a.font.family.body}",
+                "font-size": "{s2a.typography.font-size.body-md}",
+                "font-weight": "{s2a.font.weight.body}",
+                "letter-spacing": "{s2a.typography.letter-spacing.body-md}",
+                "line-height": "{s2a.typography.line-height.body-md}"
+              },
+              "layout": {
+                "grow": true
+              },
+              "element": "span",
+              "slot": {
+                "name": "body",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "default": {
+                  "text": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants."
+                }
+              }
+            }
+          }
+        },
+        "link": {
+          "selector": ".c-text-card__link",
+          "figma": "/.cta",
+          "layout": {
+            "display": "flex",
+            "direction": "column"
+          },
+          "slot": {
+            "name": ".cta",
+            "accepts": [
+              "Link"
+            ],
+            "acceptsMode": "restrict",
+            "default": {
+              "figma": "Link — v2",
+              "slug": "link",
+              "props": {
+                "Underline": false,
+                "Show Icon End": true,
+                "Label": "Read story",
+                "Emphasis": "default",
+                "Kind": "action",
+                "State": "default"
+              }
+            },
+            "notes": "Composes Link (link)."
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ],
+    "notes": [
+      "Actions inside the card are native links or buttons; the card itself has no role."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "tc-archetype",
+      "question": "Scaffolded as card (named \"TextCard — v2\"). Confirm, or re-run npm run specs:scaffold -- --slug=text-card --archetype=<link-card|card|collection>.",
+      "chose": "card — named \"TextCard — v2\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=text-card --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×2; state axis none"
+    },
+    {
+      "id": "tc-part-selectors",
+      "question": "headline-body, headline, body, link have no class of their own in text-card.css. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to text-card.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/text-card/text-card.css"
+    },
+    {
+      "id": "tc-match",
+      "question": "Structural match says extend: closest existing contract is MerchCard (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending MerchCard (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to MerchCard instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "MerchCard (1) already covers this; extend it."
+    },
+    {
+      "id": "tc-code-only-props",
+      "question": "ctaLabel, ctaHref exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 2 code-only props as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "text-card.code.evidence.json"
+    },
+    {
+      "id": "tc-classify-1",
+      "question": "\"Show CTA\" treated as a Figma visibility helper for \"CTA\", not a code lever. Confirm, or change it in props/states.",
+      "chose": "\"Show CTA\" treated as a Figma visibility helper for \"CTA\", not a code lever",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "text-card.figma.evidence.json axes"
+    },
+    {
+      "id": "tc-composes",
+      "question": "Built from 1 component set, all of which already have a contract: Link ×2. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 1 composed set, 1 already contracted",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "scaffold",
+      "evidence": "text-card.figma.evidence.json instances"
+    },
+    {
+      "id": "tc-layer-names",
+      "question": "2 layers carry Figma-generated names (/.cta/end-icon/Frame, /.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "text-card.figma.evidence.json anatomy"
+    },
+    {
+      "id": "tc-hardcoded-values",
+      "question": "1 value in the design is set with no variable behind it: root width = 488px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried it through as raw: value so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "text-card.figma.evidence.json unboundValues"
+    }
+  ]
+}

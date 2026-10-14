@@ -202,6 +202,20 @@
     <!-- Tokens -->
     <div class="panel" id="tokensPanel">
 
+      <!-- ── Align a design ───────────────────────────────────────────── -->
+      <!-- The other half of this tab. Token release PUBLISHES tokens; this is
+           what it takes to CONSUME them — reading someone else's frame and
+           saying which of its literals are already ours. Reports only: nothing
+           in the document moves until an apply step, because a confident wrong
+           bind costs more than an unbound value somebody can see. -->
+      <div id="sec-token-align" class="section-label">Align a design</div>
+      <div class="muted" style="margin:0 2px 8px;">Select a frame, component or set that came from outside S2A. This matches every unbound colour, size and type value against the tokens in this file.</div>
+      <div class="btn-row">
+        <button class="btn" id="contractAlignBtn" disabled title="Select a frame, component or component set in Figma" style="flex:1;">Align to S2A tokens</button>
+      </div>
+      <div class="contract-composes" id="contractAlign" style="display:none;"></div>
+      <div style="height:18px;"></div>
+
       <!-- ── Token release ────────────────────────────────────────────── -->
       <div id="sec-token-release" class="section-label">Token release</div>
 

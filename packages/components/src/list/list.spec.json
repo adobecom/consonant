@@ -1,50 +1,301 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "List",
   "slug": "list",
   "cssClass": "c-list",
+  "figmaNodeId": "10320:102094",
   "storybookId": "list",
-  "description": "Stacked feature sections, each with an optional divider, an icon + bold title row, and an indented list of supporting items. Used inside MerchCard to show what's included in a plan.",
-  "figma": {
-    "listComponentId": "10320:102094",
-    "listItemComponentId": "10320:102025",
-    "sectionComponentId": "10320:102040",
-    "page": "   ↳ List"
-  },
+  "description": "A sequence of like items — features, links, steps. The items are the content; the list is the rhythm.",
   "variants": {},
   "props": [
-    { "name": "sections", "type": "Array<{ title: string, icon?: TemplateResult, divider?: boolean, items: string[] }>", "defaultValue": "[]", "description": "Section descriptors. title = Figma TEXT prop, icon = Figma INSTANCE_SWAP prop (20x20), divider = Figma 'Show Divider' BOOLEAN prop, items = Figma .items SLOT of ListItem instances." }
+    {
+      "name": "sections",
+      "type": "array",
+      "defaultValue": "[]",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "sections",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
   ],
   "tokenBindings": {
-    "gap:root": "--s2a-spacing-md",
-    "gap:section": "--s2a-spacing-sm",
-    "background-color:divider": "--s2a-color-border-subtle",
-    "gap:title": "--s2a-spacing-xs",
-    "color:title": "--s2a-color-content-default",
-    "font-family:title": "--s2a-font-family-label",
-    "font-weight:title": "--s2a-font-weight-label",
-    "font-size:title": "--s2a-font-size-sm",
-    "line-height:title": "--s2a-font-line-height-xs",
-    "gap:items": "--s2a-spacing-xs",
-    "padding-left:items": "--s2a-spacing-xl",
-    "padding-block:item": "--s2a-spacing-3xs",
-    "color:item": "--s2a-color-content-subtle",
-    "font-family:item": "--s2a-font-family-body",
-    "font-weight:item": "--s2a-font-weight-body",
-    "font-size:item": "--s2a-font-size-sm",
-    "line-height:item": "--s2a-font-line-height-xs"
+    "root-gap": "--s2a-spacing-16",
+    "root-padding-bottom": "--s2a-spacing-none",
+    "root-padding-left": "--s2a-spacing-none",
+    "root-padding-right": "--s2a-spacing-none",
+    "root-padding-top": "--s2a-spacing-none"
   },
-  "notes": [
-    "Figma binds primitive spacing variables (s2a/spacing/2, /8, /12, /16, /32); CSS uses the semantic aliases at the same px values (3xs=2, xs=8, sm=12, md=16, xl=32) per the repo's semantic-tokens-only rule.",
-    "The Figma divider is a Divider/Style=subtle instance whose fill token s2a/color/divider/subtle emits codeSyntax var(--s2a-color-border-subtle); rendered here as a self-contained <hr> bound to that same custom property.",
-    "The --s2a-hover-list-* tokens from tokens 0.0.21 belong to a different hover-list pattern and are NOT used by this Figma component; none are bound here."
+  "tier": "component",
+  "composedOf": [
+    "merch-card-feature-section"
   ],
   "a11y": {
-    "role": "list semantics via native <ul>/<li>",
-    "requiredAriaAttrs": [],
-    "wcag": ["1.3.1"],
+    "wcag": [
+      "1.3.1"
+    ],
     "notes": [
-      "Items render as <li> inside a <ul> with list-style removed via CSS; each section is a <section> landmark grouping divider, title, and items.",
-      "Section icons are decorative and wrapped in a span with aria-hidden='true'."
+      "A real <ul>/<li> so the count and position are announced (1.3.1)."
     ]
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".c-list",
+    "figma": ".root",
+    "element": "ul",
+    "layout": {
+      "display": "flex",
+      "direction": "column"
+    },
+    "tokens": {
+      "gap": {
+        "value": "{s2a.spacing.16}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.16}",
+            "cssVar": "--s2a-spacing-16",
+            "figma": "s2a/spacing/16",
+            "shipped": true,
+            "value": "16px"
+          }
+        ]
+      },
+      "padding-bottom": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      },
+      "padding-left": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      },
+      "padding-right": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      },
+      "padding-top": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      },
+      "width": {
+        "value": "raw:418px",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "parts": {
+      "merch-card-feature-section": {
+        "selector": ".c-list__merch-card-feature-section",
+        "figma": "/list-1",
+        "layout": {
+          "display": "flex",
+          "direction": "column",
+          "grow": true
+        },
+        "slot": {
+          "name": "list-1",
+          "accepts": [
+            "MerchCardFeatureSection"
+          ],
+          "acceptsMode": "restrict",
+          "default": {
+            "figma": "MerchCard/FeatureSection",
+            "slug": "merch-card-feature-section",
+            "props": {
+              "Show Divider": true,
+              "Title": "Section title"
+            }
+          },
+          "notes": "Composes MerchCardFeatureSection (merch-card-feature-section)."
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "10320:102094",
+        "nodeName": "List",
+        "componentSetKey": "4aeccd1ccd926c9c44fabe920de5126a94a19f5c",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:535dd6b941b51d8252066998b05f9f23686cda407486c09d697e45c2ac7e5296",
+        "extractedAt": "2026-10-08T17:51:25.575Z",
+        "meta": {
+          "version": "",
+          "status": "",
+          "updated": "",
+          "changelog": ""
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/list/list.js",
+        "export": "List",
+        "controller": null,
+        "cssClass": "c-list"
+      },
+      "evidence": {
+        "hash": "sha256:52d6b3854329a2e3828464df962c47b067e230f9fea9194236ebb46190735ae4"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "l-archetype",
+      "question": "Scaffolded as list (named \"List\"). Confirm, or re-run npm run specs:scaffold -- --slug=list --archetype=<link-card|card|collection>.",
+      "chose": "list — named \"List\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=list --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating."
+      ],
+      "evidence": "decided by heuristic; token namespaces none; state axis none"
+    },
+    {
+      "id": "l-part-selectors",
+      "question": "merch-card-feature-section has no class of its own in list.css. The design names this part separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to list.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/list/list.css"
+    },
+    {
+      "id": "l-stray-text",
+      "question": "A text layer carries no recognisable role (not heading, body, eyebrow or label). Is it content (add a lever) or part of the illustration (fold into media)? Layers: /list-1/.items/ListItem/List item, /list-1/.items/ListItem/List item, /list-1/.items/ListItem/List item, /list-1/.items/ListItem/List item.",
+      "chose": "left 4 text layers out of the anatomy",
+      "confidence": "low",
+      "fix": "Name the layer in Figma so it claims a role, or add it under anatomy.root.parts here.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "list.figma.evidence.json anatomy"
+    },
+    {
+      "id": "l-match",
+      "question": "Structural match says extend: closest existing contract is MerchCardFeatureSection (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending MerchCardFeatureSection (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to MerchCardFeatureSection instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "MerchCardFeatureSection (1) already covers this; extend it."
+    },
+    {
+      "id": "l-code-only-props",
+      "question": "sections exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 1 code-only prop as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "list.code.evidence.json"
+    },
+    {
+      "id": "l-composes",
+      "question": "Built from 1 component set, all of which already have a contract: MerchCard/FeatureSection. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 1 composed set, 1 already contracted",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "scaffold",
+      "evidence": "list.figma.evidence.json instances"
+    },
+    {
+      "id": "l-layer-names",
+      "question": "1 layers carry Figma-generated names (/list-1/.title/.icon/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "list.figma.evidence.json anatomy"
+    },
+    {
+      "id": "l-hardcoded-values",
+      "question": "1 value in the design is set with no variable behind it: root width = 418px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried it through as raw: value so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "list.figma.evidence.json unboundValues"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:a2fdd73a29c4e919d2454d5d62d60f174dfe1512056a2390e6169985167545e9",
+    "codeEvidence": "sha256:52d6b3854329a2e3828464df962c47b067e230f9fea9194236ebb46190735ae4",
+    "figmaEvidence": "sha256:535dd6b941b51d8252066998b05f9f23686cda407486c09d697e45c2ac7e5296",
+    "generator": "s2a-spec-transform@1"
   }
 }

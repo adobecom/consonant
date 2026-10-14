@@ -1,0 +1,208 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "radio",
+  "storybookId": "radio",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "selected-on",
+      "name": "selected on",
+      "args": {
+        "selected": true
+      }
+    },
+    {
+      "id": "selected-off",
+      "name": "selected off",
+      "args": {
+        "selected": false
+      }
+    },
+    {
+      "id": "disabled-on",
+      "name": "disabled on",
+      "args": {
+        "disabled": true
+      }
+    },
+    {
+      "id": "disabled-off",
+      "name": "disabled off",
+      "args": {
+        "disabled": false
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "atoms-radio--unselected",
+      "name": "Unselected",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "name"
+      ]
+    },
+    {
+      "id": "atoms-radio--selected",
+      "name": "Selected",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "name"
+      ]
+    },
+    {
+      "id": "atoms-radio--disabled",
+      "name": "Disabled",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "name"
+      ]
+    },
+    {
+      "id": "atoms-radio--disabled-selected",
+      "name": "Disabled Selected",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "name"
+      ]
+    },
+    {
+      "id": "atoms-radio--group",
+      "name": "Group",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "name"
+      ]
+    }
+  ],
+  "deferred": [
+    "selected-on"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": "State",
+    "cols": [
+      "default",
+      "hover",
+      "focus",
+      "disabled"
+    ],
+    "rows": [
+      "false",
+      "true"
+    ],
+    "rowValues": [
+      {
+        "Selected": "false"
+      },
+      {
+        "Selected": "true"
+      }
+    ],
+    "cell": {
+      "w": 117,
+      "h": 44,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "selected": false
+        },
+        "forced": null,
+        "label": "false / default",
+        "nodeId": "11586:206580"
+      },
+      {
+        "row": 0,
+        "col": 1,
+        "args": {
+          "selected": false
+        },
+        "forced": "hover",
+        "label": "false / hover",
+        "nodeId": "11586:206584"
+      },
+      {
+        "row": 0,
+        "col": 2,
+        "args": {
+          "selected": false
+        },
+        "forced": "focus",
+        "label": "false / focus",
+        "nodeId": "11586:206589"
+      },
+      {
+        "row": 0,
+        "col": 3,
+        "args": {
+          "selected": false
+        },
+        "forced": "disabled",
+        "label": "false / disabled",
+        "nodeId": "11586:206594"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "selected": true
+        },
+        "forced": null,
+        "label": "true / default",
+        "nodeId": "11586:206598"
+      },
+      {
+        "row": 1,
+        "col": 1,
+        "args": {
+          "selected": true
+        },
+        "forced": "hover",
+        "label": "true / hover",
+        "nodeId": "11586:206603"
+      },
+      {
+        "row": 1,
+        "col": 2,
+        "args": {
+          "selected": true
+        },
+        "forced": "focus",
+        "label": "true / focus",
+        "nodeId": "11586:206609"
+      },
+      {
+        "row": 1,
+        "col": 3,
+        "args": {
+          "selected": true
+        },
+        "forced": "disabled",
+        "label": "true / disabled",
+        "nodeId": "11586:206615"
+      }
+    ],
+    "missing": []
+  }
+}

@@ -1,0 +1,27 @@
+/* MerchCardTrustBadge — generated from merch-card-trust-badge.contract.json.
+ * Re-run: npm run specs:render -- --slug=merch-card-trust-badge --target=milo */
+
+.merch-card-trust-badge {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--s2a-spacing-8, 8px);
+  width: 129px;
+  height: 20px;
+}
+
+.merch-card-trust-badge .s2-icon-lock-20-n {
+  display: flex;
+  flex-direction: row;
+  width: 16px;
+  height: 16px;
+}
+
+.merch-card-trust-badge .secure-transaction {
+  color: var(--s2a-color-content-subtle, rgb(0 0 0 / 64%));
+  font-family: var(--s2a-font-family-body, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-body-sm, 0.875rem);
+  font-weight: var(--s2a-font-weight-body, 400);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm, 0);
+  line-height: var(--s2a-typography-line-height-body-sm, 18px);
+}

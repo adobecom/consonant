@@ -1,0 +1,150 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.helper-text",
+  "name": "HelperText",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+  "semantics": {
+    "element": "p"
+  },
+  "props": [
+    {
+      "name": "intent",
+      "type": {
+        "enum": [
+          "neutral",
+          "error"
+        ]
+      },
+      "default": "\"neutral\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Intent"
+        },
+        "code": {
+          "prop": "intent"
+        }
+      }
+    },
+    {
+      "name": "text",
+      "type": "text",
+      "default": "\"Helpful hint about this field.\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Text#10243:2"
+        },
+        "code": {
+          "prop": "text"
+        }
+      }
+    },
+    {
+      "name": "id",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "\"\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "id"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "p",
+      "layout": {
+        "display": "flex",
+        "direction": "row"
+      },
+      "literals": {
+        "width": "418px"
+      },
+      "parts": {
+        "text": {
+          "element": "span",
+          "layout": {
+            "grow": true
+          },
+          "tokens": {
+            "font-family": "{s2a.font.family.caption}",
+            "font-size": "{s2a.typography.font-size.caption}",
+            "font-weight": "{s2a.font.weight.caption}",
+            "letter-spacing": "{s2a.typography.letter-spacing.caption}",
+            "line-height": "{s2a.typography.line-height.caption}"
+          },
+          "slot": {
+            "name": "text",
+            "accepts": [
+              "kind:text"
+            ],
+            "acceptsMode": "prefer",
+            "defaultContent": [
+              {
+                "id": "text",
+                "text": "Helpful hint about this field."
+              }
+            ]
+          },
+          "tokensByProp": [
+            {
+              "prop": "intent",
+              "map": {
+                "neutral": {
+                  "color": "{s2a.color.content.subtle}"
+                },
+                "error": {
+                  "color": "{s2a.color.content.utility.error}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.3.1",
+      "3.3.1",
+      "3.3.3"
+    ],
+    "notes": [
+      "Described-by is the relationship; colour alone is not the error signal (1.4.1, 3.3.1).",
+      "The message says what is wrong and, where possible, how to fix it (3.3.3)."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "1cd9f8578e3737a891771ea7c4ee875ee7fd7f29",
+        "nodeId": "10243:101699"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/helper-text/helper-text.js",
+        "export": "HelperText"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:e79e04010521e4e2544f49191b2f6506d93c8d3a9624e6d6fb20356db1e97241",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:1e687685d1f3ee5970ea1509b14730a010d515bb44efde684b43c6a35af10e78"
+    }
+  }
+}

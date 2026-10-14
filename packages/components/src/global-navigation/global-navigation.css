@@ -4,19 +4,19 @@
   min-height: 64px;
   display: flex;
   align-items: center;
-  gap: var(--s2a-spacing-lg, 24px);
-  padding-inline: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-lg);
+  padding-inline: var(--s2a-spacing-md);
   /* Primitive: fixed dark navigation has no theme-invariant surface alias. */
-  background: var(--s2a-gnav-background, #000);
-  color: var(--s2a-color-content-knockout, #fff);
+  background: var(--s2a-color-background-knockout);
+  color: var(--s2a-color-content-knockout);
   font:
-    700 14px/1.3 var(--s2a-font-family-label, Arial),
+    700 14px/1.3 var(--s2a-font-family-label),
     sans-serif;
 }
 .c-global-navigation a {
   color: inherit;
   text-decoration: none;
-  letter-spacing: 0;
+  letter-spacing: var(--s2a-font-letter-spacing-6xl);
 }
 .gnav-brand {
   display: flex;
@@ -26,7 +26,7 @@
 }
 .gnav-desktop {
   display: flex;
-  gap: var(--s2a-spacing-lg, 24px);
+  gap: var(--s2a-spacing-lg);
   align-items: center;
 }
 .gnav-desktop a {
@@ -56,8 +56,8 @@
   text-underline-offset: 4px;
 }
 .c-global-navigation :focus-visible {
-  outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
-  outline-offset: 3px;
+  outline: var(--s2a-border-width-md) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-2xs);
 }
 @media (max-width: 1023px) {
   .gnav-desktop {
@@ -87,8 +87,8 @@
     inset: 100% 0 auto;
     display: flex;
     flex-direction: column;
-    padding: var(--s2a-spacing-lg, 24px);
-    background: var(--s2a-gnav-background, #000);
+    padding: var(--s2a-spacing-lg);
+    background: var(--s2a-color-background-knockout);
   }
   .gnav-mobile nav a {
     min-height: 48px;

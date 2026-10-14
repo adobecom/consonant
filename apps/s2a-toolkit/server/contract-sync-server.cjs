@@ -38,9 +38,14 @@ function canonicalJson(value) {
   }
   return JSON.stringify(value === undefined ? null : value);
 }
+// MUST stay identical to hashableBody() in apps/s2a-toolkit/src/contract-extract.ts.
+// The plugin hashes before sending and the server re-hashes on receipt, so any
+// field one of them drops and the other keeps rejects every publish with a 409.
+// That is exactly what happened when unboundValues was added: the plugin
+// excluded it, this did not, and the two hashes could never agree.
 function hashEvidence(evidence) {
-  const { extractedAt, provenance, ...rest } = evidence;
-  void extractedAt; void provenance;
+  const { extractedAt, provenance, unboundValues, ...rest } = evidence;
+  void extractedAt; void provenance; void unboundValues;
   return "sha256:" + crypto.createHash("sha256").update(canonicalJson(rest)).digest("hex");
 }
 
@@ -191,12 +196,24 @@ function freeAxes(evidence, defs) {
 // real scaffolder instead of a second copy of its logic that could drift.
 async function draftDef(evidence, slug, name) {
   const { pathToFileURL } = require("node:url");
-  const { scaffoldDefs } = await import(pathToFileURL(path.join(REPO_ROOT, "packages", "spec-dictionary", "scaffold.mjs")).href);
+  // Cache-bust the dynamic import: ESM modules are cached per specifier for the
+  // life of the process, so a long-running server kept serving the copy of
+  // scaffold.mjs it loaded at startup — through every edit. That cost an
+  // afternoon of "the fix is not working" when the fix was fine and simply was
+  // not reaching this process.
+  // Each module busts on its OWN mtime: stamping archetype.mjs with
+  // scaffold.mjs's time kept serving a stale decider through every edit to it.
+  const stampOf = (p) => { try { return fs.statSync(p).mtimeMs; } catch { return Date.now(); } };
+  const scaffoldPath = path.join(REPO_ROOT, "packages", "spec-dictionary", "scaffold.mjs");
+  const archetypePath = path.join(REPO_ROOT, "packages", "spec-dictionary", "lib", "archetype.mjs");
+  const { scaffoldDefs } = await import(`${pathToFileURL(scaffoldPath).href}?v=${stampOf(scaffoldPath)}`);
+  const { deriveArchetype } = await import(`${pathToFileURL(archetypePath).href}?v=${stampOf(archetypePath)}`);
   const contracts = (() => { try { return loadContracts(REPO_ROOT); } catch { return null; } })();
   // Curate against BOTH evidence pools when the component already has code.
   const codeFile = path.join(SRC_DIR, slug, `${slug}.code.evidence.json`);
   const code = fs.existsSync(codeFile) ? JSON.parse(fs.readFileSync(codeFile, "utf8")) : null;
-  const defs = scaffoldDefs(evidence, { slug, name, contracts, code });
+  const archetype = await deriveArchetype(evidence);
+  const defs = scaffoldDefs(evidence, { slug, name, contracts, code, archetype });
   return {
     def: defs,
     // Our scaffold already records every judgment call with a confidence and a

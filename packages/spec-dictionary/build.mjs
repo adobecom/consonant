@@ -18,7 +18,7 @@ import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { canonicalJson, hashOf } from "./lib/canonical.mjs";
 import { loadShippedTokens } from "./lib/tokens.mjs";
-import { buildIR } from "./lib/ir.mjs";
+import { buildIR, allTokenNodes } from "./lib/ir.mjs";
 import { specJson } from "./lib/formats/spec-json.mjs";
 import { contractJson } from "./lib/formats/contract-json.mjs";
 import catalogAdapter from "./adapters/catalog.mjs";
@@ -119,7 +119,7 @@ function main() {
       } else {
         const { ir, outputs } = buildOne(slug, opts);
         for (const [file, content] of Object.entries(outputs)) { mkdirSync(dirname(file), { recursive: true }); writeFileSync(file, content); }
-        const unshipped = ir.anatomy.parts.flatMap((p) => Object.values(p.tokens).flatMap((t) => t.tokens.filter((x) => !x.shipped).map((x) => x.cssVar)));
+        const unshipped = ir.anatomy.parts.flatMap((p) => allTokenNodes(p).flatMap((t) => t.tokens.filter((x) => !x.shipped).map((x) => x.cssVar)));
         console.log(`BUILT  ${slug.padEnd(24)} ${ir.props.length} props (${ir.props.filter((p) => p.lever).length} levers) · ${ir.anatomy.parts.length} parts · ${Object.keys(ir.tokenBindings).length} token bindings${unshipped.length ? ` · ${unshipped.length} unshipped: ${[...new Set(unshipped)].join(", ")}` : ""} · figma evidence ${ir.figmaEvidence ? "yes" : "no"} · ${ir.decisions.filter((d) => d.status === "open").length} open decisions`);
       }
     } catch (err) { console.log(`ERROR  ${slug}: ${err.message}`); failures++; }

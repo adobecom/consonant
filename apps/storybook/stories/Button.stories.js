@@ -90,11 +90,11 @@ export default {
 const darkMedia = (content) => html`
   <div
     style="
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
-      padding: 40px 32px;
-      border-radius: 24px;
+      background: linear-gradient(135deg, var(--s2a-color-background-knockout) 0%, var(--s2a-color-background-knockout) 60%, var(--s2a-color-border-accent) 100%);
+      padding: var(--s2a-spacing-2xl) var(--s2a-spacing-xl);
+      border-radius: var(--s2a-border-radius-lg);
       display: flex;
-      gap: 16px;
+      gap: var(--s2a-spacing-md);
       flex-wrap: wrap;
       align-items: center;
     "
@@ -136,7 +136,7 @@ export const OutlineInverse = {
 
 export const IconSlots = {
   render: () => html`
-    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+    <div style="display: flex; gap: var(--s2a-spacing-md); flex-wrap: wrap;">
       ${createButton({
         label: "Download presets",
         showIconStart: true,
@@ -160,15 +160,15 @@ export const AllStylesMatrix = {
     const themeStyles = ["solid", "outlined", "transparent", "accent"];
     const mediaStyles = ["knockout", "outline-inverse"];
     return html`
-      <div style="display: grid; gap: 28px;">
+      <div style="display: grid; gap: var(--s2a-spacing-lg);">
         ${themeStyles.map(
           (style) => html`
-            <div style="display: grid; gap: 12px;">
+            <div style="display: grid; gap: var(--s2a-spacing-sm);">
               <strong
                 style="font-family:var(--s2a-font-family-label);font-size:var(--s2a-typography-font-size-label);font-weight:var(--s2a-font-weight-label);text-transform:capitalize;color:var(--s2a-color-content-default);"
                 >${style}</strong
               >
-              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+              <div style="display:flex;gap:var(--s2a-spacing-sm);align-items:center;flex-wrap:wrap;">
                 ${states.map((state) => createButton({ label: state, style, state }))}
               </div>
             </div>
@@ -176,7 +176,7 @@ export const AllStylesMatrix = {
         )}
         ${mediaStyles.map(
           (style) => html`
-            <div style="display: grid; gap: 12px;">
+            <div style="display: grid; gap: var(--s2a-spacing-sm);">
               <strong
                 style="font-family:var(--s2a-font-family-label);font-size:var(--s2a-typography-font-size-label);font-weight:var(--s2a-font-weight-label);text-transform:capitalize;color:var(--s2a-color-content-default);"
                 >${style} (media surface)</strong
@@ -195,11 +195,11 @@ export const BackdropBlur = {
   render: () => html`
     <div
       style="
-        background: linear-gradient(135deg, #e040fb 0%, #00b0ff 50%, #69f0ae 100%);
-        padding: 40px 32px;
-        border-radius: 24px;
+        background: linear-gradient(135deg, var(--s2a-color-border-accent) 0%, var(--s2a-color-border-accent) 50%, var(--s2a-color-surface-default) 100%);
+        padding: var(--s2a-spacing-2xl) var(--s2a-spacing-xl);
+        border-radius: var(--s2a-border-radius-lg);
         display: flex;
-        gap: 16px;
+        gap: var(--s2a-spacing-md);
         flex-wrap: wrap;
         align-items: center;
       "

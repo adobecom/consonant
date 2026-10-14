@@ -1,0 +1,30 @@
+/* Generated from action-card.contract.json. Re-run: npm run specs:render -- --slug=action-card */
+
+.c-action-card [hidden],
+.c-action-card[hidden] {
+  display: none !important;
+}
+
+.c-action-card {
+  background-color: var(--s2a-color-surface-subtle);
+  border-radius: var(--s2a-border-radius-lg);
+  gap: var(--s2a-spacing-md);
+}
+
+.ac-copy {
+  padding: var(--s2a-spacing-none) var(--s2a-spacing-2xl) var(--s2a-spacing-2xl) var(--s2a-spacing-2xl);
+  gap: var(--s2a-spacing-md);
+}
+
+.ac-headline {
+  font-family: var(--s2a-font-family-heading);
+  font-weight: var(--s2a-font-weight-heading);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  line-height: var(--s2a-typography-line-height-heading-5);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-5);
+  color: var(--s2a-color-content-heading);
+}
+
+.ac-chevron {
+  color: var(--s2a-color-content-default);
+}

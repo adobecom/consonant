@@ -1,0 +1,404 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T17:55:20.791Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": null
+  },
+  "set": {
+    "id": "10910:17760",
+    "key": "943550fa170b6c953a27449f060743c87560f962",
+    "name": "Divider",
+    "type": "COMPONENT_SET",
+    "description": "— s2a:meta —\nversion:    1.0.0\nstatus:     active\nupdated:    2026-08-04\nchangelog:\n  1.0.0   2026-08-04  init         Initial release",
+    "meta": {
+      "version": "1.0.0",
+      "status": "active",
+      "updated": "2026-08-04",
+      "changelog": "1.0.0   2026-08-04  init         Initial release"
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "defaultValue": "default",
+      "options": [
+        "default",
+        "subtle",
+        "knockout",
+        "inverse",
+        "subtle-inverse"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "10563:115905",
+      "key": "8f806f2fd0714175008cd71c18aed4c2ba3f874e",
+      "name": "Style=default",
+      "props": {
+        "Style": "default"
+      },
+      "width": 418,
+      "height": 1
+    },
+    {
+      "id": "10910:21033",
+      "key": "78bae762f5771a2e6a258c3e551e5b2afa4049e7",
+      "name": "Style=subtle",
+      "props": {
+        "Style": "subtle"
+      },
+      "width": 418,
+      "height": 1
+    },
+    {
+      "id": "10910:21034",
+      "key": "b6ca035a3ab2a488219623ab0d504c726e394e20",
+      "name": "Style=knockout",
+      "props": {
+        "Style": "knockout"
+      },
+      "width": 418,
+      "height": 1
+    },
+    {
+      "id": "10910:21035",
+      "key": "6f34f658beaff317823ad79b91341d0538bc8bcc",
+      "name": "Style=inverse",
+      "props": {
+        "Style": "inverse"
+      },
+      "width": 418,
+      "height": 1
+    },
+    {
+      "id": "10910:21037",
+      "key": "b5fa11c9b73a4ab6925d2b61410203d38cbb1597",
+      "name": "Style=subtle-inverse",
+      "props": {
+        "Style": "subtle-inverse"
+      },
+      "width": 418,
+      "height": 1
+    }
+  ],
+  "anatomy": {
+    "variant": "Style=default",
+    "tree": {
+      "name": "Style=default",
+      "type": "COMPONENT",
+      "id": "10563:115905",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "FIXED"
+      }
+    }
+  },
+  "bindings": [
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "10563:115905",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:10910:17752"
+    },
+    {
+      "variant": "Style=subtle",
+      "node": "",
+      "nodeId": "10910:21033",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:10910:17753"
+    },
+    {
+      "variant": "Style=knockout",
+      "node": "",
+      "nodeId": "10910:21034",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:10910:17755"
+    },
+    {
+      "variant": "Style=inverse",
+      "node": "",
+      "nodeId": "10910:21035",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:10910:17756"
+    },
+    {
+      "variant": "Style=subtle-inverse",
+      "node": "",
+      "nodeId": "10910:21037",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:10910:21036"
+    }
+  ],
+  "variables": {
+    "VariableID:10910:17752": {
+      "name": "s2a/color/divider/default",
+      "key": "70de3ae184dba2b4f72185406f64ddead28bfb05",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-border-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/800"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/300"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0.16078431904315948,
+          "g": 0.16078431904315948,
+          "b": 0.16078431904315948,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.8549019694328308,
+          "g": 0.8549019694328308,
+          "b": 0.8549019694328308,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:10910:17753": {
+      "name": "s2a/color/divider/subtle",
+      "key": "42022e2f828d99c8d6d71e5a3f13bcfd2c5b922f",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-border-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/12"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/white/24"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.11999999731779099
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.23999999463558197
+        }
+      }
+    },
+    "VariableID:10910:17755": {
+      "name": "s2a/color/divider/knockout",
+      "key": "f0906254a728678a8c83a0890c29996185284969",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-border-knockout)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:10910:17756": {
+      "name": "s2a/color/divider/inverse",
+      "key": "19995e4ba76b65e89c63814c0feafb3e788424ab",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-border-inverse)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/25"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/1000"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:10910:21036": {
+      "name": "s2a/color/divider/subtle-inverse",
+      "key": "7400122baf2d80900aaa48e130ac600ac356dbea",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-border-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/white/16"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/black/16"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.1599999964237213
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.1599999964237213
+        }
+      }
+    }
+  },
+  "textStyles": {},
+  "explicitModes": [],
+  "instances": [],
+  "counts": {
+    "variants": 5,
+    "nodes": 5,
+    "bindings": 5,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "10563:115905",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "10563:115905",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Style=subtle",
+      "node": "",
+      "nodeId": "10910:21033",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "Style=subtle",
+      "node": "",
+      "nodeId": "10910:21033",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Style=knockout",
+      "node": "",
+      "nodeId": "10910:21034",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "Style=knockout",
+      "node": "",
+      "nodeId": "10910:21034",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Style=inverse",
+      "node": "",
+      "nodeId": "10910:21035",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "Style=inverse",
+      "node": "",
+      "nodeId": "10910:21035",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Style=subtle-inverse",
+      "node": "",
+      "nodeId": "10910:21037",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "Style=subtle-inverse",
+      "node": "",
+      "nodeId": "10910:21037",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 1
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:b80198e29a290c7797446fdaee1299f27524421fdfd35f524fb93b7452c2905c"
+  }
+}

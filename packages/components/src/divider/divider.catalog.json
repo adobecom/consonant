@@ -1,0 +1,31 @@
+{
+  "id": "s2a.divider",
+  "name": "Divider",
+  "slug": "divider",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": null,
+  "props": [
+    {
+      "name": "style",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root"
+  ],
+  "slots": [],
+  "tokens": 5,
+  "a11y": null,
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/divider/divider.js",
+      "export": "Divider",
+      "controller": null,
+      "cssClass": "c-divider"
+    },
+    "figma": "10910:17760"
+  },
+  "openDecisions": 3
+}

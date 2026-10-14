@@ -10,15 +10,16 @@
 .c-segmented-control {
   display: inline-flex;
   align-items: stretch;
-  border-radius: var(--s2a-border-radius-md, 16px);
-  background-color: var(--s2a-color-transparent-black-04, rgb(0 0 0 / 0.04));
+  border-radius: var(--s2a-border-radius-md);
+  background-color: var(--s2a-color-transparent-black-04);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
 }
 
 .c-segmented-control__item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: var(--s2a-spacing-2xl, 40px);
+  height: var(--s2a-spacing-2xl);
   margin: 0;
   border: 0;
   padding: 0;
@@ -32,31 +33,34 @@
   align-items: center;
   justify-content: center;
   /* 20px inline padding per Figma — no semantic rung at 20; primitive keeps it pipeline-bound */
-  padding-inline: var(--s2a-spacing-20, 20px);
+  padding-inline: var(--s2a-spacing-20);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
   height: 100%;
-  border-radius: var(--s2a-border-radius-round, 999px);
-  font-family: var(--s2a-font-family-label, "Adobe Clean");
-  font-weight: var(--s2a-font-weight-adobe-clean-bold, 700);
-  font-size: var(--s2a-typography-font-size-label, 14px);
-  line-height: var(--s2a-typography-line-height-label, 18px);
-  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
-  color: var(--s2a-color-transparent-black-64, rgb(0 0 0 / 0.64));
+  border-radius: var(--s2a-border-radius-round);
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  color: var(--s2a-color-transparent-black-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
   white-space: nowrap;
 }
 
 /* Active segment — black pill inset 4px top/bottom, white label */
 .c-segmented-control__item[aria-selected="true"] {
-  padding-block: var(--s2a-spacing-3xs, 4px);
+  padding-block: var(--s2a-spacing-3xs);
 }
 
 .c-segmented-control__item[aria-selected="true"] .c-segmented-control__cta {
-  background-color: var(--s2a-color-background-knockout, #000);
-  color: var(--s2a-color-content-knockout, #fff);
+  background-color: var(--s2a-color-background-knockout);
+  color: var(--s2a-color-content-knockout);
 }
 
 /* Hover on inactive segments — full-strength label (no Figma hover variant; minimal affordance) */
-.c-segmented-control__item:not([aria-selected="true"]):hover .c-segmented-control__cta {
-  color: var(--s2a-color-content-default, #000);
+.c-segmented-control__item:not([aria-selected="true"]):hover
+  .c-segmented-control__cta {
+  color: var(--s2a-color-content-default);
 }
 
 /* Focus ring — same convention as .c-button */
@@ -65,7 +69,7 @@
 }
 
 .c-segmented-control__item:focus-visible .c-segmented-control__cta {
-  box-shadow: 0 0 0 var(--s2a-spacing-2xs, 2px) var(--s2a-color-focus-ring-default, #3b63fb);
+  box-shadow: 0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
 }
 
 @media (prefers-reduced-motion: no-preference) {

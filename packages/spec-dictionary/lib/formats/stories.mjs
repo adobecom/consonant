@@ -2,6 +2,8 @@
 // value of a lever, one per boolean lever switched on, plus Default; diffed
 // against the stories Storybook actually has so scope shows as "deferred"
 // rather than as a silent gap.
+import { matrixSpec } from "./matrix.mjs";
+
 export function storiesManifest(ir) {
   const derived = [{ id: "default", name: "Default", args: {} }];
   for (const p of ir.props.filter((x) => x.lever)) {
@@ -30,5 +32,10 @@ export function storiesManifest(ir) {
     // story is surplus. Matching on NAME instead would flag every human-titled
     // story ("Five Dots" never equals "count: 5") and say nothing at all.
     extra: existing.filter((e) => !derived.some((d) => storyCovers(e, d))).map((e) => e.id),
+    // The state matrix: every variant on one grid. Null when the set has no
+    // State axis, or no Figma evidence to point the cells at. It rides in the
+    // manifest so the story and the golden compositor read one description of
+    // the grid rather than each deriving its own and drifting.
+    matrix: matrixSpec(ir),
   };
 }

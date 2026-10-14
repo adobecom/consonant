@@ -69,7 +69,7 @@ export const MerchCard = ({
           ${planLabel
             ? html`
                 <div class="c-merch-card__header">
-                  <span class="c-merch-card__lockup-icon" aria-hidden="true">${AppIcon({ app, size: "sm" })}</span>
+                  <span class="c-merch-card__lockup-icon" aria-hidden="true">${AppIcon({ app, size: "18" })}</span>
                   <span class="c-merch-card__lockup-label">${planLabel}</span>
                 </div>
               `

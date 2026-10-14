@@ -8,7 +8,7 @@ const section = (bg, content, dark = false) => html`
   <div data-theme=${dark ? "dark" : nothing} style="
     width: 100%;
     box-sizing: border-box;
-    padding: 80px 120px;
+    padding: var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);
     background: ${bg};
     display: flex;
     flex-direction: column;
@@ -21,7 +21,7 @@ const section = (bg, content, dark = false) => html`
 export default {
   title: "Molecules/SectionHeader",
   tags: ["autodocs"],
-  render: (args) => section("#ffffff", SectionHeader(args)),
+  render: (args) => section("var(--s2a-color-surface-default)", SectionHeader(args)),
   parameters: {
     layout: "fullscreen",
     docs: {
@@ -64,19 +64,19 @@ Centered section-level heading block — eyebrow + heading-2 title + optional bo
 
 export const OnLight = {
   name: "On Light",
-  render: (args) => section("#ffffff", SectionHeader(args)),
+  render: (args) => section("var(--s2a-color-surface-default)", SectionHeader(args)),
 };
 
 export const OnDark = {
   name: "On Dark",
-  render: (args) => section("#0f0d0c", SectionHeader(args), true),
+  render: (args) => section("var(--s2a-color-background-knockout)", SectionHeader(args), true),
 };
 
 export const WithActions = {
   name: "With Actions",
   render: (args) =>
     section(
-      "#ffffff",
+      "var(--s2a-color-surface-default)",
       SectionHeader({
         ...args,
         showActions: true,
@@ -92,7 +92,7 @@ export const OnDarkWithActions = {
   name: "On Dark — With Actions",
   render: (args) =>
     section(
-      "#0f0d0c",
+      "var(--s2a-color-background-knockout)",
       SectionHeader({
         ...args,
         showActions: true,
@@ -109,7 +109,7 @@ export const TitleOnly = {
   name: "Title Only",
   render: () =>
     section(
-      "#f8f8f8",
+      "var(--s2a-color-surface-subtle)",
       SectionHeader({
         showEyebrow: false,
         title: "Everything you need to make anything.",

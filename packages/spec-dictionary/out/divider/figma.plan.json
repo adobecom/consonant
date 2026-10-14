@@ -1,0 +1,49 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Divider",
+  "setName": "Divider",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "div",
+    "bindings": {},
+    "slot": null,
+    "children": []
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10910:17760",
+    "nodeName": "Divider",
+    "componentSetKey": "943550fa170b6c953a27449f060743c87560f962",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "subtle",
+        "knockout",
+        "inverse",
+        "subtle-inverse"
+      ],
+      "defaultValue": "default"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-divider",
+      "bindings": {}
+    }
+  ],
+  "textStyles": []
+}

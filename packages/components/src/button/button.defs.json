@@ -4,29 +4,29 @@
   "slug": "button",
   "status": "curated-draft",
   "curated": {
-    "by": "specs:scaffold from button.figma.evidence.json (sha256:7cc11606\u2026) through packages/spec-dictionary/dictionary.json (card)",
-    "date": "2026-09-25",
+    "by": "specs:scaffold from button.figma.evidence.json (sha256:272da36a…) through packages/spec-dictionary/dictionary.json (button)",
+    "date": "2026-10-08",
     "reviewer": "Matt"
   },
-  "description": "A button. Renders a native button, or an anchor when href is set, so it keeps the right keyboard and activation behaviour either way.",
+  "description": "The primary action trigger — a text button with optional leading and trailing icons, in six styles. Light and dark are handled automatically by page-level modes, so you choose a style, not a theme.",
   "archetype": "button",
+  "version": "2.0.0",
   "anchors": {
     "figma": {
       "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
       "kind": "component-set",
       "nodeId": "10715:35477",
-      "nodeName": "Button \u2014 v2",
-      "componentSetKey": "d91a1f5f4a290b66b0aadb6f24e1a30b6cc9e3ba",
+      "nodeName": "Button — v2",
+      "componentSetKey": "5f8ea5d99d51480bb7a6183cff2a06ad64570cd1",
       "deprecated": false,
       "successorNodeId": null,
       "usages": [],
-      "notes": "Component set on page \"\u21b3 Button\"; 456 nodes, 759 token bindings."
+      "notes": "Component set on page \"?\"; 456 nodes, 729 token bindings."
     },
     "code": {
       "importPath": "packages/components/src/button/button.js",
       "export": "Button",
-      "cssClass": "c-button",
-      "pending": true
+      "cssClass": "c-button"
     }
   },
   "props": [
@@ -79,7 +79,7 @@
       "code": {
         "prop": "showIconEnd"
       },
-      "notes": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not \u2014 this is not a prop a consumer passes."
+      "notes": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes."
     },
     {
       "name": "showIconStart",
@@ -93,24 +93,7 @@
       "code": {
         "prop": "showIconStart"
       },
-      "notes": "Figma authoring toggle for the \"Icon Start\" swap. In code the slot either has content or it does not \u2014 this is not a prop a consumer passes."
-    },
-    {
-      "name": "size",
-      "lever": true,
-      "type": "string",
-      "enum": [
-        "md"
-      ],
-      "default": "md",
-      "figma": {
-        "kind": "VARIANT",
-        "property": "Size"
-      },
-      "code": {
-        "prop": "size",
-        "attr": "data-size"
-      }
+      "notes": "Figma authoring toggle for the \"Icon Start\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes."
     },
     {
       "name": "style",
@@ -145,14 +128,36 @@
       "notes": "Exists in the component, has no design counterpart."
     },
     {
-      "name": "state",
+      "name": "size",
       "lever": true,
       "type": "string",
       "figma": "NONE",
       "code": {
-        "prop": "state"
+        "prop": "size"
       },
       "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "state",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "focus"
+      ],
+      "default": "default",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State"
+      },
+      "code": {
+        "prop": "state",
+        "attr": "data-state"
+      },
+      "notes": "The State axis, forceable from code. At runtime the states come from interaction; forcing one is for previews, docs and the state matrix. The hand-written component used data-force-state; generated code uses data-state."
     },
     {
       "name": "onClick",
@@ -215,6 +220,16 @@
       "notes": "Runtime state, never an authored prop."
     }
   ],
+  "composition": [
+    {
+      "name": "S2_Icon_Circle_20_N",
+      "treatment": "icon"
+    },
+    {
+      "name": "S2a_Icon_Chevron_Right",
+      "treatment": "icon"
+    }
+  ],
   "anatomy": {
     "root": {
       "selector": ".c-button",
@@ -223,40 +238,386 @@
       "elementByProp": {
         "prop": "href",
         "map": {
-          "set": "a",
-          "unset": "button"
+          "": "button",
+          "*": "a"
         }
       },
       "tokens": {
-        "background-color": "{s2a.color.background.subtle}",
-        "border-radius": "{s2a.border-radius.md}",
-        "padding": "{s2a.spacing.xl}",
-        "gap": "{s2a.spacing.md}"
+        "border-radius": "{s2a.border.radius.999}",
+        "gap": "{s2a.spacing.xs}",
+        "padding-left": "{s2a.spacing.lg}",
+        "padding-right": "{s2a.spacing.lg}",
+        "padding-top": "raw:14px",
+        "padding-bottom": "raw:14px"
+      },
+      "states": {
+        "disabled": {
+          "opacity": "{s2a.opacity.disabled}"
+        },
+        "focus": {
+          "outline-color": "{s2a.color.focus-ring.default}",
+          "outline-width": "{s2a.border.width.sm}",
+          "outline-style": "raw:solid",
+          "outline-offset": "raw:1px"
+        }
+      },
+      "tokensByProp": [
+        {
+          "prop": "style",
+          "map": {
+            "outlined": {
+              "background-color": "{s2a.color.button.background.outlined.default}",
+              "border-width": "{s2a.border.width.md}",
+              "border-color": "{s2a.color.border.knockout}"
+            },
+            "transparent": {
+              "background-color": "{s2a.color.button.background.transparent.default}",
+              "border-width": "{s2a.border.width.sm}"
+            },
+            "solid": {
+              "background-color": "{s2a.color.button.background.solid.default}",
+              "border-width": "{s2a.border.width.sm}"
+            },
+            "accent": {
+              "background-color": "{s2a.color.button.background.accent.default}"
+            },
+            "knockout": {
+              "background-color": "{s2a.color.button.background.knockout.default}",
+              "border-width": "{s2a.border.width.md}",
+              "border-color": "{s2a.color.button.border.knockout.default}"
+            },
+            "outline-inverse": {
+              "background-color": "{s2a.color.button.background.outline-inverse.default}",
+              "border-width": "{s2a.border.width.md}",
+              "border-color": "{s2a.color.button.border.outline-inverse.default}"
+            }
+          }
+        }
+      ],
+      "statesByProp": [
+        {
+          "prop": "style",
+          "state": "hover",
+          "map": {
+            "outlined": {
+              "background-color": "{s2a.color.button.background.outlined.hover}"
+            },
+            "transparent": {
+              "background-color": "{s2a.color.button.background.transparent.hover}"
+            },
+            "solid": {
+              "background-color": "{s2a.color.button.background.solid.hover}",
+              "border-width": "{s2a.border.width.md}",
+              "border-color": "{s2a.color.border.knockout}"
+            },
+            "accent": {
+              "background-color": "{s2a.color.button.background.accent.hover}"
+            },
+            "knockout": {
+              "background-color": "{s2a.color.button.background.knockout.hover}"
+            },
+            "outline-inverse": {
+              "background-color": "{s2a.color.button.background.outline-inverse.hover}"
+            }
+          }
+        },
+        {
+          "prop": "style",
+          "state": "active",
+          "map": {
+            "outlined": {
+              "background-color": "{s2a.color.button.background.outlined.active}"
+            },
+            "transparent": {
+              "background-color": "{s2a.color.button.background.transparent.active}"
+            },
+            "solid": {
+              "background-color": "{s2a.color.button.background.solid.active}"
+            },
+            "accent": {
+              "background-color": "{s2a.color.button.background.accent.active}"
+            },
+            "knockout": {
+              "background-color": "{s2a.color.button.background.knockout.active}",
+              "border-width": "raw:1px"
+            },
+            "outline-inverse": {
+              "background-color": "{s2a.color.button.background.outline-inverse.active}",
+              "border-width": "raw:1px"
+            }
+          }
+        },
+        {
+          "prop": "style",
+          "state": "focus",
+          "map": {
+            "accent": {
+              "background-color": "{s2a.color.blue.1100}",
+              "border-width": "{s2a.border.width.sm}"
+            }
+          }
+        }
+      ],
+      "layout": {
+        "display": "inline-flex",
+        "direction": "row",
+        "justify": "center",
+        "align": "center"
       },
       "parts": {
         "icon-start": {
-          "selector": ".c-button__icon",
+          "selector": ".c-button__icon-start",
           "figma": "/Icon Start",
+          "tokens": {
+            "width": "raw:12px",
+            "height": "raw:12px"
+          },
+          "statesByProp": [
+            {
+              "prop": "style",
+              "state": "disabled",
+              "map": {
+                "solid": {
+                  "opacity": "{s2a.opacity.disabled}"
+                },
+                "accent": {
+                  "opacity": "{s2a.opacity.48}"
+                }
+              }
+            }
+          ],
+          "element": "div",
+          "parts": {
+            "frame": {
+              "selector": ".c-button__frame",
+              "figma": "/Icon Start/Frame",
+              "tokens": {
+                "width": "raw:12px",
+                "height": "raw:12px"
+              },
+              "layout": {
+                "display": "flex",
+                "direction": "row",
+                "justify": "center",
+                "align": "center"
+              },
+              "element": "div",
+              "parts": {
+                "s2-icon-circle-20-n": {
+                  "selector": ".c-button__s2-icon-circle-20-n",
+                  "figma": "/Icon Start/Frame/S2_Icon_Circle_20_N",
+                  "layout": {
+                    "display": "flex",
+                    "direction": "row",
+                    "grow": true
+                  }
+                }
+              }
+            },
+            "icon-color": {
+              "selector": ".c-button__icon-color",
+              "figma": "/Icon Start/Icon color",
+              "tokens": {
+                "width": "raw:12px",
+                "height": "raw:12px"
+              },
+              "tokensByProp": [
+                {
+                  "prop": "style",
+                  "map": {
+                    "outlined": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "transparent": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "solid": {
+                      "color": "{s2a.color.content.inverse}"
+                    },
+                    "accent": {
+                      "color": "{s2a.color.content.inverse}"
+                    },
+                    "knockout": {
+                      "color": "{s2a.color.button.content.knockout}"
+                    },
+                    "outline-inverse": {
+                      "color": "{s2a.color.button.content.outline-inverse}"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           "slot": {
             "name": "Icon Start",
-            "accepts": [],
+            "accepts": [
+              "kind:icon"
+            ],
             "acceptsMode": "prefer",
-            "notes": "Instance-swap property \"Icon Start\" \u2014 list what it accepts once those contracts exist."
+            "notes": "Instance-swap property \"Icon Start\" — list what it accepts once those contracts exist.",
+            "default": {
+              "figma": "S2_Icon_Circle_20_N",
+              "visible": false,
+              "manifest": "s2a-icons",
+              "icon": "circle"
+            }
           }
         },
         "label": {
           "selector": ".c-button__label",
           "figma": "/Label",
-          "element": "span"
+          "tokens": {
+            "font-family": "{s2a.font.family.label}",
+            "font-size": "{s2a.typography.font-size.label}",
+            "font-weight": "{s2a.font.weight.label}",
+            "letter-spacing": "{s2a.typography.letter-spacing.label}",
+            "line-height": "{s2a.typography.line-height.label}"
+          },
+          "states": {
+            "disabled": {
+              "opacity": "{s2a.opacity.disabled}"
+            }
+          },
+          "tokensByProp": [
+            {
+              "prop": "style",
+              "map": {
+                "outlined": {
+                  "color": "{s2a.color.content.default}"
+                },
+                "transparent": {
+                  "color": "{s2a.color.content.default}"
+                },
+                "solid": {
+                  "color": "{s2a.color.button.content.primary.solid.default}"
+                },
+                "accent": {
+                  "color": "{s2a.color.content.knockout}"
+                },
+                "knockout": {
+                  "color": "{s2a.color.button.content.knockout}"
+                },
+                "outline-inverse": {
+                  "color": "{s2a.color.button.content.outline-inverse}"
+                }
+              }
+            }
+          ],
+          "statesByProp": [
+            {
+              "prop": "style",
+              "state": "active",
+              "map": {
+                "outlined": {
+                  "color": "{s2a.color.button.content.outlined.active}"
+                }
+              }
+            }
+          ],
+          "element": "span",
+          "slot": {
+            "name": "Label",
+            "accepts": [
+              "kind:text"
+            ],
+            "acceptsMode": "prefer",
+            "default": {
+              "text": "Label"
+            }
+          }
         },
         "icon-end": {
-          "selector": ".c-button__icon",
+          "selector": ".c-button__icon-end",
           "figma": "/Icon End",
+          "tokens": {
+            "width": "raw:12px",
+            "height": "raw:12px"
+          },
+          "states": {
+            "disabled": {
+              "opacity": "{s2a.opacity.48}"
+            }
+          },
+          "element": "div",
+          "parts": {
+            "frame": {
+              "selector": ".c-button__frame",
+              "figma": "/Icon End/Frame",
+              "tokens": {
+                "width": "raw:12px",
+                "height": "raw:12px"
+              },
+              "layout": {
+                "display": "flex",
+                "direction": "row",
+                "justify": "center",
+                "align": "center"
+              },
+              "element": "div",
+              "parts": {
+                "s2a-icon-chevron-right": {
+                  "selector": ".c-button__s2a-icon-chevron-right",
+                  "figma": "/Icon End/Frame/Size=200, Direction=right",
+                  "layout": {
+                    "display": "flex",
+                    "direction": "row",
+                    "grow": true
+                  }
+                }
+              }
+            },
+            "icon-color": {
+              "selector": ".c-button__icon-color",
+              "figma": "/Icon End/Icon color",
+              "tokens": {
+                "width": "raw:12px",
+                "height": "raw:12px"
+              },
+              "states": {
+                "disabled": {
+                  "opacity": "{s2a.opacity.disabled}"
+                }
+              },
+              "tokensByProp": [
+                {
+                  "prop": "style",
+                  "map": {
+                    "outlined": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "transparent": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "solid": {
+                      "color": "{s2a.color.content.inverse}"
+                    },
+                    "accent": {
+                      "color": "{s2a.color.content.inverse}"
+                    },
+                    "knockout": {
+                      "color": "{s2a.color.button.content.knockout}"
+                    },
+                    "outline-inverse": {
+                      "color": "{s2a.color.button.content.outline-inverse}"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           "slot": {
             "name": "Icon End",
-            "accepts": [],
+            "accepts": [
+              "kind:icon"
+            ],
             "acceptsMode": "prefer",
-            "notes": "Instance-swap property \"Icon End\" \u2014 list what it accepts once those contracts exist."
+            "notes": "Instance-swap property \"Icon End\" — list what it accepts once those contracts exist.",
+            "default": {
+              "figma": "S2a_Icon_Chevron_Right",
+              "visible": false,
+              "manifest": "s2a-icons",
+              "icon": "chevron-right"
+            }
           }
         }
       }
@@ -272,57 +633,49 @@
       "2.5.8",
       "4.1.2"
     ],
-    "keyboard": [
-      {
-        "key": "Enter",
-        "action": "Activates the control."
-      },
-      {
-        "key": "Space",
-        "action": "Activates the control when it renders as a button. An anchor activates on Enter only."
-      }
-    ],
     "notes": [
-      "Native button or anchor, so role, focus order and activation come from the element \u2014 do not add role=\"button\".",
-      "An icon-only button needs an accessible name from the label prop; the icon is decorative and must not be the only name.",
-      "disabled is a real attribute on the button form, not a class. An anchor cannot be disabled \u2014 remove href instead."
+      "Renders a native <button>, or an <a> when it navigates — never a div with a click handler.",
+      "The label is the accessible name; an icon-only button needs an aria-label.",
+      "Focus is visible on the control itself (2.4.7) and the target is at least 24x24 (2.5.8).",
+      "Disabled is conveyed to assistive tech, not by colour alone (1.4.1).",
+      "Give it an accessible name. The Label provides it; for an icon-only button, set an aria-label. WCAG 4.1.2 Name, Role, Value.",
+      "Real button semantics. Render as <button> (or <a> when it navigates via href). Tab to focus, Enter / Space to activate. WCAG 2.1.1 Keyboard.",
+      "Ship the focus ring. The focus state's ring must exist in code so keyboard focus stays visible. WCAG 2.4.7 Focus Visible.",
+      "Mind contrast on inverse styles. On media or colored surfaces keep the label and icons at 4.5:1 (text) / 3:1 (UI) against the background — add a scrim if needed. WCAG 1.4.3 & 1.4.11.",
+      "Target size at least 24x24px (44x44 on touch). WCAG 2.5.8 Target Size (Minimum).",
+      "disabled is communicated, not just dimmed — remove it from the tab order and expose the state to assistive tech."
     ]
   },
   "decisions": [
     {
-      "id": "b-code-only-props",
-      "question": "href, state, onClick exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false). \"state\" collides with the State axis, which this draft read as runtime states \u2014 decide whether the code prop or the state axis is the truth.",
-      "chose": "added 3 code-only props as levers with no design binding",
-      "confidence": "low",
-      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
-      "status": "open",
-      "owner": "Matt",
-      "evidence": "button.code.evidence.json"
-    },
-    {
       "id": "b-part-selectors",
-      "question": "icon-start, icon-end have no class of their own in button.css \u2014 they all share .c-button__icon. The design names these parts separately and the code does not. Split the class, or model them as one part.",
-      "chose": "pointed icon-start and icon-end at .c-button__icon",
+      "question": "icon-start, frame, s2-icon-circle-20-n, icon-color, icon-end, frame, s2a-icon-chevron-right, icon-color have no class of their own in button.css — they all share .c-button__icon. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "pointed icon-start and frame and s2-icon-circle-20-n and icon-color and icon-end and frame and s2a-icon-chevron-right and icon-color at .c-button__icon",
       "confidence": "low",
       "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to button.css.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "packages/components/src/button/button.css"
     },
     {
-      "id": "b-archetype",
-      "question": "Scaffolded as card (default when no stronger signal is present). Confirm, or re-run npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection>.",
-      "chose": "archetype button",
-      "confidence": "high",
-      "fix": "npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection> --force",
-      "status": "decided",
-      "owner": "Matt",
-      "alternatives": [
-        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
-        "collection: A row, grid or scroller of one repeated unit."
-      ],
-      "evidence": "roles media, eyebrow, icon; pattern n/a",
-      "decision": "Button, not card. The scaffold fell back to card because no signal was stronger, and that default propagated: the contract declared its root element as article and described itself as a non-interactive content card. button.js settles it \u2014 createButton does document.createElement(href ? 'a' : 'button') and decorateButton decorates an existing anchor or button. \"button\" is in upstream's closed archetype enum, so it emits."
+      "id": "b-match",
+      "question": "Structural match says extend: closest existing contract is ProductLockup (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending ProductLockup (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to ProductLockup instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "ProductLockup (1) already covers this; extend it."
+    },
+    {
+      "id": "b-code-only-props",
+      "question": "href, size, onClick exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 3 code-only props as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.code.evidence.json"
     },
     {
       "id": "b-classify-1",
@@ -331,7 +684,7 @@
       "confidence": "medium",
       "fix": "Edit props[] or states[] in this file.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json axes"
     },
     {
@@ -341,26 +694,70 @@
       "confidence": "medium",
       "fix": "Edit props[] or states[] in this file.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json axes"
     },
     {
       "id": "b-classify-3",
+      "question": "\"Size\" has a single value (md) — read as fixed, not as a prop; add the prop when a second value exists. Confirm, or change it in props/states.",
+      "chose": "\"Size\" has a single value (md) — read as fixed, not as a prop; add the prop when a second value exists",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-classify-4",
       "question": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop. Confirm, or change it in props/states.",
       "chose": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop",
       "confidence": "medium",
       "fix": "Edit props[] or states[] in this file.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json axes"
     },
     {
+      "id": "b-classify-5",
+      "question": "\"state\" read as the code's handle on the \"State\" axis (data-force-state), so every state can be rendered without a pointer. Confirm, or change it in props/states.",
+      "chose": "\"state\" read as the code's handle on the \"State\" axis (data-force-state), so every state can be rendered without a pointer",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-archetype",
+      "question": "Scaffolded as button (binds s2a/color/button/* (24 variables); interactive: state axis has hover, active, disabled, focus; named \"Button — v2\"). Confirm, or re-run npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection>.",
+      "chose": "button — binds s2a/color/button/* (24 variables); interactive: state axis has hover, active, disabled, focus; named \"Button — v2\"",
+      "confidence": "high",
+      "fix": "npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces button×24, content×3, blue×1, focus-ring×1, border×1; state axis default/hover/active/disabled/focus"
+    },
+    {
       "id": "b-unbound-paint",
-      "question": "30 painted layers carry no variable (/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, \u2026). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "question": "30 painted layers carry no variable (/Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, /Icon Start/Frame/S2_Icon_Circle_20_N/Frame/iconPrimary fills, …). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
       "confidence": "high",
       "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json unboundPaint"
     },
     {
@@ -369,16 +766,68 @@
       "confidence": "high",
       "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json anatomy"
     },
     {
-      "id": "b-code-pending",
-      "question": "No code exists yet. Generate packages/components/src/button/button.js from the spec (/spec-to-html), run npm run evidence:code -- --slug=button, then remove anchors.code.pending.",
-      "confidence": "high",
-      "fix": "Once packages/components/src/button/button.js exists, run npm run evidence:code -- --slug=button and delete anchors.code.pending.",
+      "id": "b-navigates-as-anchor",
+      "question": "\"href\" navigates, but the archetype's element is <button>. Rendered as <button> it is not reachable as a link, cannot be middle-clicked or opened in a new tab, and is announced with the wrong role. Should this component navigate at all?",
+      "chose": "drafted elementByProp: href empty -> <button>, present -> <a>",
+      "confidence": "medium",
+      "fix": "If it should never navigate, remove the \"href\" prop. If it always navigates, set anatomy.root.element to \"a\" and drop elementByProp.",
       "status": "open",
-      "owner": "Matt"
+      "owner": "scaffold",
+      "evidence": "WCAG 2.1.1 Keyboard"
+    },
+    {
+      "id": "b-icon-defaults",
+      "question": "The design fills the \"icon-start\" slot with S2_Icon_Circle_20_N and the \"icon-end\" slot with S2a_Icon_Chevron_Right. The contract records the design's choice; binding it to the code icon library (packages/components/src/icons, manifest s2a-icons) is a decision — Heal in the Contract Book makes it when the names match, or set slot.default.manifest and slot.default.icon by hand.",
+      "chose": "recorded the design's default instance; left the library binding open",
+      "confidence": "medium",
+      "fix": "Set anatomy.root.parts.<part>.slot.default to { \"manifest\": \"s2a-icons\", \"icon\": \"<name>\" }; add the SVG to packages/components/src/icons if it is missing, then npm run specs:assets.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.figma.evidence.json instances"
+    },
+    {
+      "id": "b-hardcoded-values",
+      "question": "16 values in the design are set with no variable behind them: root padding-top = 14px; root padding-bottom = 14px; root border-width@style=knockout:active = 1px; root border-width@style=outline-inverse:active = 1px; root/icon-start width = 12px; root/icon-start height = 12px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.figma.evidence.json unboundValues"
+    },
+    {
+      "id": "heal-icon-icon-start",
+      "question": "The design fills the root/icon-start slot with S2_Icon_Circle_20_N. Which code icon is that?",
+      "chose": "S2_Icon_Circle_20_N → s2a-icons/circle (circle.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "decision": "S2_Icon_Circle_20_N → s2a-icons/circle (circle.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "button.figma.evidence.json instances · packages/spec-dictionary/out/assets/s2a-icons.json",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-icon-icon-end",
+      "question": "The design fills the root/icon-end slot with S2a_Icon_Chevron_Right. Which code icon is that?",
+      "chose": "S2a_Icon_Chevron_Right → s2a-icons/chevron-right (chevron-right.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "decision": "S2a_Icon_Chevron_Right → s2a-icons/chevron-right (chevron-right.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "button.figma.evidence.json instances · packages/spec-dictionary/out/assets/s2a-icons.json",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-focus-ring",
+      "question": "Figma draws the focus state's ring as a child layer (/Focus Ring) stroked with s2a/color/focus-ring/default, on the State=focus variant. A child layer is how a design file paints outside the shape without resizing it. Carry it as a part, a border, or an outline?",
+      "chose": "outline on the root in the focus state: colour s2a/color/focus-ring/default, width s2a/border/width/sm, offset 1px — the ring is a 83px box with a 1px OUTSIDE stroke around the 81px root. A part would put a box inside the shape; a border would resize it.",
+      "decision": "outline on the root in the focus state: colour s2a/color/focus-ring/default, width s2a/border/width/sm, offset 1px — the ring is a 83px box with a 1px OUTSIDE stroke around the 81px root. A part would put a box inside the shape; a border would resize it.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "button.figma.evidence.json bindings, variant \"Style=solid, Size=md, State=focus\", node /Focus Ring",
+      "confidence": "high"
     }
   ]
 }

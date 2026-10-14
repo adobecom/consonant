@@ -1,0 +1,41 @@
+{
+  "id": "s2a.merch-card-trust-badge",
+  "name": "MerchCardTrustBadge",
+  "slug": "merch-card-trust-badge",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": null,
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.s2-icon-lock-20-n",
+    "root.secure-transaction"
+  ],
+  "slots": [
+    {
+      "path": "root.secure-transaction",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 7,
+  "a11y": null,
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/merch-card-trust-badge/merch-card-trust-badge.js",
+      "export": "MerchCardTrustBadge",
+      "controller": null,
+      "cssClass": "c-merch-card-trust-badge"
+    },
+    "figma": "10327:103546"
+  },
+  "openDecisions": 6
+}

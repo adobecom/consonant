@@ -1,0 +1,89 @@
+{
+  "name": "validators",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/validators/src",
+  "projectType": "library",
+  "targets": {
+    "capture-rich-content": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["tokens:build"],
+      "options": {
+        "command": "node --import tsx packages/validators/scripts/rich-content-evidence.mjs"
+      }
+    },
+    "report-rich-content": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["tokens:build"],
+      "options": {
+        "command": "node --import tsx packages/validators/scripts/rich-content-report.mjs"
+      }
+    },
+    "audit-library": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["tokens:build"],
+      "options": {
+        "command": "node --env-file-if-exists=.env --import tsx packages/validators/src/library-cli.ts"
+      }
+    },
+    "check-figma": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["tokens:build"],
+      "options": {
+        "command": "node --env-file-if-exists=.env --import tsx packages/validators/src/library-cli.ts --source figma"
+      }
+    },
+    "audit-c2": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["tokens:build"],
+      "options": {
+        "command": "node --import tsx packages/validators/src/library-cli.ts --source milo --milo context/milo --layer c2 --audit --json .tmp/validators/milo-c2-library.json --markdown .tmp/validators/milo-c2-library.md"
+      }
+    },
+    "report-elastic-carousel": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node --import tsx packages/validators/scripts/leadership-report.mjs"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": { "command": "tsc -p packages/validators/tsconfig.json" }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "inputs": ["default"],
+      "options": {
+        "command": "node --import tsx --test packages/validators/test/*.test.ts"
+      }
+    },
+    "audit-media": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node --import tsx packages/validators/src/media-cli.ts"
+      }
+    },
+    "audit-milo": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node --import tsx packages/validators/src/media-cli.ts --milo context/milo --audit --json .tmp/validators/milo.json --markdown .tmp/validators/milo.md"
+      }
+    },
+    "check-media": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node --import tsx packages/validators/src/media-cli.ts --root packages/components/src --root packages/grid/src --root packages/milo-blocks --baseline packages/validators/baselines/blocks.json --json .tmp/validators/blocks.json --markdown .tmp/validators/blocks.md"
+      }
+    }
+  },
+  "tags": ["scope:validators", "type:package"]
+}

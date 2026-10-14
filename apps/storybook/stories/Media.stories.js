@@ -90,11 +90,11 @@ export const Video = {
 export const AllAspectRatios = {
   parameters: { controls: { disable: true } },
   render: () => html`
-    <div style="display: grid; grid-template-columns: repeat(3, 160px); gap: 16px;">
+    <div style="display: grid; grid-template-columns: repeat(3, 160px); gap: var(--s2a-spacing-md);">
       ${ASPECT_RATIOS.map(
         (aspectRatio) => html`
           <div>
-            <div style="margin-bottom: 8px; font: 12px monospace; color: #717171;">${aspectRatio}</div>
+            <div style="margin-bottom: var(--s2a-spacing-xs); font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body); color: var(--s2a-color-content-body-subtle);">${aspectRatio}</div>
             ${Media({ src: fireflyImage, aspectRatio, size: "full" })}
           </div>
         `,
@@ -106,11 +106,11 @@ export const AllAspectRatios = {
 export const ObjectFitComparison = {
   parameters: { controls: { disable: true } },
   render: () => html`
-    <div style="display: grid; grid-template-columns: repeat(3, 160px); gap: 16px;">
+    <div style="display: grid; grid-template-columns: repeat(3, 160px); gap: var(--s2a-spacing-md);">
       ${OBJECT_FITS.map(
         (objectFit) => html`
           <div>
-            <div style="margin-bottom: 8px; font: 12px monospace; color: #717171;">${objectFit}</div>
+            <div style="margin-bottom: var(--s2a-spacing-xs); font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body); color: var(--s2a-color-content-body-subtle);">${objectFit}</div>
             ${Media({ src: fireflyImage, aspectRatio: "1:1", objectFit, size: "full" })}
           </div>
         `,

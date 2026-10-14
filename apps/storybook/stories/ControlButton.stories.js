@@ -13,7 +13,7 @@ import {
 
 const media = (content) => html`
   <div
-    style="padding:32px;background:url('https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=600&q=80') center/cover;border-radius:12px;display:inline-flex;gap:12px;align-items:center;"
+    style="padding:var(--s2a-spacing-xl);background:url('https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=600&q=80') center/cover;border-radius:var(--s2a-border-radius-sm);display:inline-flex;gap:var(--s2a-spacing-sm);align-items:center;"
   >
     ${content}
   </div>
@@ -58,7 +58,7 @@ export const Default = {
       ${ControlButton({ icon: IconPlay(), label: "Play", size: "xl" })}
       ${ControlButton({ icon: IconArrowRight(), label: "Next", size: "xl" })}
       ${ControlButton({ icon: IconCross(), label: "Close", size: "xl" })}
-      <span style="width:1px;height:32px;background:rgba(255,255,255,0.16)"></span>
+      <span style="width:1px;height:32px;background:var(--s2a-color-border-knockout)"></span>
       ${ControlButton({ icon: IconPause(), label: "Pause", size: "md" })}
       ${ControlButton({ icon: IconPlay(), label: "Play", size: "md" })}
       ${ControlButton({ icon: IconArrowRight(), label: "Next", size: "md" })}
@@ -92,7 +92,7 @@ export const NavigationIcons = {
     media(html`
       ${ControlButton({ icon: IconNavBackLeft(), label: "Back to start", size: "xl" })}
       ${ControlButton({ icon: IconNavBackRight(), label: "Skip to end", size: "xl" })}
-      <span style="width:1px;height:32px;background:rgba(255,255,255,0.16)"></span>
+      <span style="width:1px;height:32px;background:var(--s2a-color-border-knockout)"></span>
       ${ControlButton({ icon: IconNavBackLeft(), label: "Back to start", size: "md" })}
       ${ControlButton({ icon: IconNavBackRight(), label: "Skip to end", size: "md" })}
     `),

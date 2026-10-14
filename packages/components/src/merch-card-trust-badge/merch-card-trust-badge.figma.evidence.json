@@ -1,0 +1,472 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T17:51:21.908Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": null
+  },
+  "set": {
+    "id": "10327:103546",
+    "key": "1220f8083276c6e5972109c631310150f5deb818",
+    "name": "MerchCard/TrustBadge",
+    "type": "COMPONENT",
+    "description": "",
+    "meta": {
+      "version": "",
+      "status": "",
+      "updated": "",
+      "changelog": ""
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Label#10327:141",
+      "type": "TEXT",
+      "defaultValue": "Secure transaction"
+    }
+  ],
+  "variants": [
+    {
+      "id": "10327:103546",
+      "key": "1220f8083276c6e5972109c631310150f5deb818",
+      "name": "MerchCard/TrustBadge",
+      "props": {},
+      "width": 129,
+      "height": 20
+    }
+  ],
+  "anatomy": {
+    "variant": "MerchCard/TrustBadge",
+    "tree": {
+      "name": "MerchCard/TrustBadge",
+      "type": "COMPONENT",
+      "id": "10327:103546",
+      "layoutMode": "HORIZONTAL",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "FIXED"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "CENTER"
+      },
+      "children": [
+        {
+          "name": "S2_Icon_Lock_20_N",
+          "type": "INSTANCE",
+          "id": "10327:103547",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "MIN"
+          },
+          "children": [
+            {
+              "name": "Frame",
+              "type": "FRAME",
+              "id": "I10327:103547;8089:39",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "FILL"
+              },
+              "children": [
+                {
+                  "name": "iconPrimary",
+                  "type": "VECTOR",
+                  "id": "I10327:103547;8089:40",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                },
+                {
+                  "name": "iconPrimary",
+                  "type": "VECTOR",
+                  "id": "I10327:103547;8089:41",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Secure transaction",
+          "type": "TEXT",
+          "id": "10327:103551",
+          "text": "Secure transaction",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "HUG"
+          }
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "",
+      "nodeId": "10327:103546",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:1:83"
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/S2_Icon_Lock_20_N/Frame/iconPrimary",
+      "nodeId": "I10327:103547;8089:40",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/S2_Icon_Lock_20_N/Frame/iconPrimary",
+      "nodeId": "I10327:103547;8089:41",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/Secure transaction",
+      "nodeId": "10327:103551",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/Secure transaction",
+      "nodeId": "10327:103551",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/Secure transaction",
+      "nodeId": "10327:103551",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1219"
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/Secure transaction",
+      "nodeId": "10327:103551",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/Secure transaction",
+      "nodeId": "10327:103551",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1244"
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/Secure transaction",
+      "nodeId": "10327:103551",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1214"
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/Secure transaction",
+      "nodeId": "10327:103551",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15539"
+    }
+  ],
+  "variables": {
+    "VariableID:1:83": {
+      "name": "s2a/spacing/8",
+      "key": "3c812173a07b52d6377e121893ec037efbbfefc6",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-8)"
+      },
+      "valuesByMode": {
+        "Mode 1": 8
+      },
+      "resolved": {
+        "Mode 1": 8
+      }
+    },
+    "VariableID:2352:1214": {
+      "name": "s2a/typography/line-height/body-sm",
+      "key": "3d5273fc189ea037305da8b93a7327f2221e2953",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-body-sm)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:2352:1219": {
+      "name": "s2a/typography/font-size/body-sm",
+      "key": "9f720a1eb06494625075e0656d4ec953777beb09",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-body-sm)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:2352:1244": {
+      "name": "s2a/typography/letter-spacing/body-sm",
+      "key": "138baee5e6441edd39d3975d1c0697655ce70e2d",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-body-sm)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2557:831": {
+      "name": "s2a/font/family/body",
+      "key": "43970d360f3eb862bd1e6a2e31be0d2ac683234e",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:5388:44676": {
+      "name": "s2a/font/weight/body",
+      "key": "62bc118c0c3bdad19075db8627094145c491b8dc",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/regular"
+        }
+      },
+      "resolved": {
+        "Value": "Regular"
+      }
+    },
+    "VariableID:6:84": {
+      "name": "s2a/color/content/subtle",
+      "key": "8779680478f5ea7993841e307feea91070b8e2db",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/64"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/white/64"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.6399999856948853
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "6:15539": {
+      "name": "s2a/typography/body-sm",
+      "key": "5c1f4eb90381d9149ae4fed206ddff805990e3c8"
+    }
+  },
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/S2_Icon_Lock_20_N",
+      "nodeId": "10327:103547",
+      "mainComponent": {
+        "id": "8406:176157",
+        "key": "8410d39f6e68af0fb52e6575c886dffe3131ffc2",
+        "name": "S2_Icon_Lock_20_N"
+      },
+      "set": null
+    }
+  ],
+  "counts": {
+    "variants": 1,
+    "nodes": 6,
+    "bindings": 10,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "",
+      "nodeId": "10327:103546",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 129
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "",
+      "nodeId": "10327:103546",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/S2_Icon_Lock_20_N",
+      "nodeId": "10327:103547",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/S2_Icon_Lock_20_N",
+      "nodeId": "10327:103547",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/S2_Icon_Lock_20_N/Frame/iconPrimary",
+      "nodeId": "I10327:103547;8089:40",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 2
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/S2_Icon_Lock_20_N/Frame/iconPrimary",
+      "nodeId": "I10327:103547;8089:40",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 3
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/S2_Icon_Lock_20_N/Frame/iconPrimary",
+      "nodeId": "I10327:103547;8089:41",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 11.2
+    },
+    {
+      "variant": "MerchCard/TrustBadge",
+      "node": "/S2_Icon_Lock_20_N/Frame/iconPrimary",
+      "nodeId": "I10327:103547;8089:41",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 13.2
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:d7f87a80395c68ef455a6bf66d085e8d9610bc7b7b6c05ba6c9709ee61fa8228"
+  }
+}

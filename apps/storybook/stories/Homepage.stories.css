@@ -8,8 +8,8 @@
   min-width: 0;
 }
 .homepage-story :is(h1, h2, h3, p) {
-  letter-spacing: 0;
+  letter-spacing: var(--s2a-font-letter-spacing-6xl);
 }
 .homepage-story .c-hub-router {
-  padding-block: var(--s2a-layout-lg, 124px) 0;
+  padding-block: var(--s2a-layout-lg) 0;
 }

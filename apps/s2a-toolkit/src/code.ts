@@ -1,4 +1,132 @@
 import { extractEvidence, hashableBody, canonicalJson } from './contract-extract';
+import { align, type TokenCandidate, type Observed } from './token-align';
+
+// --- token candidates ------------------------------------------------------
+// Every S2A variable we could bind to, resolved.
+//
+// Local variables are not enough. In the S2A file the tokens are local; in a
+// handoff file they live in the enabled library and getLocalVariablesAsync
+// returns nothing, which is the difference between this working and reporting
+// "no tokens to match against" on exactly the files it exists for. So the
+// library collections are imported first, by the same three-step fallback the
+// specs plugin uses: library name, then known collection keys, then a name
+// prefix — each step covers a way the library can be renamed or re-published.
+const S2A_LIBRARY_NAME = 'S2A / Foundations';
+const S2A_COLLECTION_KEYS = new Set([
+  '0eea5cc0320ff548eeb8c5bf34f6ede103b0df06', // Primitives / Dimension / Static
+  '23dfb9688d347020258cb5a8b587fd4c5c7287bc', // Primitives / Color / Theme
+  '6c6b35ec4a5a89cf0598ba78e6c7482370d719ad', // Semantic / Dimension / Static
+  '3659e0dcd09c2dca905bb94def94c5029e4d83ac', // Semantic / Color / Theme
+  'ce424e312b8d55fff344955c7626321200e2bd3f', // Responsive / Container / Grid
+  'd5b5966991929840c34a545607368bdf53922716', // Min-Max
+  '385ccb572e36d571d2cf40d8310b862762468728', // Design Guides
+]);
+
+// Is this one of ours? Used both to pick candidates and to spot a foreign
+// binding. NOT exported: code.ts is bundled as CJS, and a single export turns
+// the output into a module with `module.exports` at the bottom — which the
+// Figma plugin sandbox has no `module` for, so the whole plugin dies on load
+// with "ReferenceError: 'module' is not defined". The build now checks for it.
+function isS2AToken(variableName: string, collectionName: string): boolean {
+  return /^s2a[\/.]/i.test(variableName.trim()) || /^s2a\b/i.test(collectionName.trim());
+}
+
+async function importS2ALibraryVariables(): Promise<Variable[]> {
+  try {
+    const all = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
+    let mine = all.filter(c => c.libraryName === S2A_LIBRARY_NAME);
+    if (!mine.length) mine = all.filter(c => S2A_COLLECTION_KEYS.has(c.key));
+    if (!mine.length) mine = all.filter(c => /^s2a\s*\//i.test(c.name));
+    const out: Variable[] = [];
+    for (const collection of mine) {
+      try {
+        const libVars = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(collection.key);
+        const imported = await Promise.allSettled(libVars.map(v => figma.variables.importVariableByKeyAsync(v.key)));
+        for (const r of imported) if (r.status === 'fulfilled') out.push(r.value);
+      } catch { /* one unreadable collection must not sink the rest */ }
+    }
+    return out;
+  } catch {
+    // No library access (a draft file, or the plugin lacks permission). Local
+    // variables may still be enough, so this is not an error on its own.
+    return [];
+  }
+}
+
+// Primitives are excluded here rather than in the matcher: a primitive is a
+// real value with a real name, so it WILL match, and binding one is exactly the
+// mistake the token hierarchy exists to prevent. Two signals catch them — the
+// collection says "primitive", or the last path segment is a bare number
+// (s2a/spacing/16 is a rung, s2a/spacing/md is a decision).
+const PRIMITIVE_COLLECTION = /primitive|core|raw/i;
+const PRIMITIVE_LEAF = /\/\d+(\.\d+)?$/;
+
+async function tokenCandidates(): Promise<{ candidates: TokenCandidate[]; fromLibrary: number }> {
+  const local = await figma.variables.getLocalVariablesAsync();
+  const library = await importS2ALibraryVariables();
+  const byId = new Map<string, Variable>();
+  for (const v of [...local, ...library]) byId.set(v.id, v);
+
+  const collections = new Map<string, VariableCollection>();
+  const need = [...new Set([...byId.values()].map(v => v.variableCollectionId))];
+  const fetched = await Promise.all(need.map(id => figma.variables.getVariableCollectionByIdAsync(id).catch(() => null)));
+  need.forEach((id, i) => { const c = fetched[i]; if (c) collections.set(id, c); });
+
+  // Alias chains can leave the imported set, so misses are fetched and cached.
+  const resolve = async (v: Variable, modeId: string, depth: number): Promise<unknown> => {
+    const collection = collections.get(v.variableCollectionId);
+    const raw = v.valuesByMode[modeId] ?? v.valuesByMode[collection?.defaultModeId ?? ''];
+    const alias = raw as any;
+    if (alias && typeof alias === 'object' && alias.type === 'VARIABLE_ALIAS') {
+      if (depth > 8) return null;
+      let target = byId.get(alias.id);
+      if (!target) {
+        target = (await figma.variables.getVariableByIdAsync(alias.id).catch(() => null)) ?? undefined;
+        if (target) byId.set(target.id, target);
+      }
+      if (!target) return null;
+      let targetCollection = collections.get(target.variableCollectionId);
+      if (!targetCollection) {
+        targetCollection = (await figma.variables.getVariableCollectionByIdAsync(target.variableCollectionId).catch(() => null)) ?? undefined;
+        if (targetCollection) collections.set(targetCollection.id, targetCollection);
+      }
+      // Follow by mode NAME, so a theme or breakpoint chain lands on the same
+      // rung instead of silently dropping to the target's default.
+      const wanted = collection?.modes.find(m => m.modeId === modeId)?.name;
+      const targetMode = targetCollection?.modes.find(m => m.name === wanted)?.modeId
+        ?? targetCollection?.defaultModeId ?? modeId;
+      return resolve(target, targetMode, depth + 1);
+    }
+    return raw;
+  };
+
+  const candidates: TokenCandidate[] = [];
+  let fromLibrary = 0;
+  const libraryIds = new Set(library.map(v => v.id));
+  for (const v of byId.values()) {
+    if (v.resolvedType !== 'COLOR' && v.resolvedType !== 'FLOAT') continue;
+    const collection = collections.get(v.variableCollectionId);
+    const collectionName = collection?.name ?? '';
+    if (!isS2AToken(v.name, collectionName)) continue;
+    if (PRIMITIVE_COLLECTION.test(collectionName)) continue;
+    if (PRIMITIVE_LEAF.test(v.name)) continue;
+    const defaultMode = collection?.defaultModeId ?? Object.keys(v.valuesByMode)[0] ?? '';
+    const value = await resolve(v, defaultMode, 0);
+    if (v.resolvedType === 'COLOR' && (value == null || typeof value !== 'object')) continue;
+    if (v.resolvedType === 'FLOAT' && typeof value !== 'number') continue;
+    const other = collection?.modes.find(m => m.modeId !== defaultMode)?.modeId;
+    const darkValue = other ? await resolve(v, other, 0) : null;
+    candidates.push({
+      id: v.id, name: v.name, collection: collectionName,
+      resolvedType: v.resolvedType, value: value as any,
+      scopes: (v.scopes as unknown as string[]) ?? [],
+      ...(darkValue != null ? { darkValue: darkValue as any } : {}),
+    });
+    if (libraryIds.has(v.id)) fromLibrary++;
+  }
+  return { candidates, fromLibrary };
+}
+
 import { buildSetFromPlan } from './contract-build';
 import { normalizeFromSource } from './contract-normalize';
 import { checkDocFrame } from './doc-check';
@@ -472,6 +600,36 @@ figma.on('currentpagechange', () => {
 
 const PLUGIN_VERSION = '0.2.1';
 
+/**
+ * Hand the extractor to the sandbox.
+ *
+ * figma_execute runs inside THIS plugin — the toolkit is the Desktop Bridge —
+ * so an agent already has the whole plugin API. What it does not have is the
+ * plugin's own code: esbuild scopes the bundle, so `extractEvidence` is
+ * unreachable from an evaluated snippet and the only alternative is shipping a
+ * second copy of the extractor as a code payload. A second copy drifts, and a
+ * drifted extractor produces evidence that disagrees with the plugin's for
+ * reasons nobody can see.
+ *
+ * So the same function the Extract button calls is published here, with the
+ * api already wired to figma.*. One extractor, one behaviour, whoever drives it.
+ */
+(globalThis as unknown as { S2A?: unknown }).S2A = {
+  version: PLUGIN_VERSION,
+  /** Evidence for one node, exactly as the Extract button produces it. */
+  extract: (node: BaseNode) => extractEvidence({
+    fileKey: figma.fileKey ?? null,
+    fileName: figma.root.name,
+    pluginVersion: PLUGIN_VERSION,
+    getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
+    getVariableCollectionByIdAsync: (id) => figma.variables.getVariableCollectionByIdAsync(id),
+    getStyleByIdAsync: (id) => figma.getStyleByIdAsync(id),
+  }, node as never),
+  /** The two helpers a caller needs to hash and compare what it got. */
+  hashableBody,
+  canonicalJson,
+};
+
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
 
 // Anonymous, random per-install id for usage telemetry. Not tied to identity —
@@ -735,6 +893,93 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         });
       } catch (err: any) {
         figma.ui.postMessage({ type: 'contract:evidence', error: (err?.message || String(err)) + (err?.stack ? ' @ ' + String(err.stack).split('\n')[1]?.trim() : '') });
+      }
+      break;
+    }
+
+    case 'contract-align': {
+      // Report only. It reads the selection and says which literals are which
+      // tokens and how sure that is; nothing in the document changes. Applying
+      // is a separate, gated action, because a confident wrong bind costs more
+      // than an unbound value somebody can see.
+      const startedAt = Date.now();
+      try {
+        let node: BaseNode | null = msg.setId ? await figma.getNodeByIdAsync(msg.setId as string) : (figma.currentPage.selection[0] ?? null);
+        if (node && node.type === 'INSTANCE') node = await (node as InstanceNode).getMainComponentAsync();
+        const ALIGNABLE = ['COMPONENT_SET', 'COMPONENT', 'FRAME', 'SECTION', 'GROUP'];
+        if (!node || !ALIGNABLE.includes(node.type)) {
+          figma.ui.postMessage({ type: 'contract:align', error: 'Select a frame, a component or a component set to align' });
+          break;
+        }
+        const evidence = await extractEvidence({
+          fileKey: figma.fileKey ?? null,
+          fileName: figma.root.name,
+          pluginVersion: PLUGIN_VERSION,
+          getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
+          getVariableCollectionByIdAsync: (id) => figma.variables.getVariableCollectionByIdAsync(id),
+          getStyleByIdAsync: (id) => figma.getStyleByIdAsync(id),
+        }, node as any);
+
+        const { candidates, fromLibrary } = await tokenCandidates();
+        if (!candidates.length) {
+          figma.ui.postMessage({ type: 'contract:align', error: 'No S2A variables are reachable from this file. Enable the S2A / Foundations library here, then try again.' });
+          break;
+        }
+
+        // One finding per node+property. A ten-variant set repeats the same
+        // layer ten times, and reporting the same raw hex ten times buries the
+        // ten that are actually different.
+        const seen = new Set<string>();
+        const observations: Observed[] = [];
+        for (const u of evidence.unboundValues ?? []) {
+          const key = `${u.nodeId}:${u.property}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          observations.push({
+            node: u.node, nodeId: u.nodeId, nodeType: u.nodeType,
+            property: u.property, value: u.value, backdrop: u.backdrop, source: 'hardcoded',
+          });
+        }
+
+        // Bound, but to somebody else's variable. This looks compliant in the
+        // layers panel and passes any check that only asks "is this bound?",
+        // which makes it the easiest thing in a handoff to miss — and the most
+        // common thing to find when the other team has tokens of their own.
+        const vars = evidence.variables as Record<string, { name: string; collection: string; resolved: Record<string, unknown> }>;
+        for (const b of evidence.bindings) {
+          if (!b.variable) continue;
+          const v = vars[b.variable];
+          if (!v || isS2AToken(v.name, v.collection)) continue;
+          const key = `${b.nodeId}:${b.property}`;
+          if (seen.has(key)) continue;
+          const resolved = Object.values(v.resolved ?? {})[0];
+          if (resolved == null || (typeof resolved !== 'number' && typeof resolved !== 'object')) continue;
+          seen.add(key);
+          observations.push({
+            node: b.node, nodeId: b.nodeId, nodeType: b.nodeType,
+            property: b.property, value: resolved as any,
+            source: 'wrong-library', currentBinding: v.name,
+          });
+        }
+
+        const result = align(observations, candidates);
+        const foreign = result.findings.filter(f => f.source === 'wrong-library').length;
+
+        figma.ui.postMessage({
+          type: 'contract:align',
+          target: { id: node.id, name: evidence.set.name, type: node.type },
+          bound: evidence.counts.bindings,
+          candidates: candidates.length,
+          fromLibrary,
+          scopeless: result.findings.some(f => f.scopeless),
+          foreign,
+          scale: result.scale,
+          summary: result.summary,
+          findings: result.findings,
+          durationMs: Date.now() - startedAt,
+        });
+      } catch (err: any) {
+        figma.ui.postMessage({ type: 'contract:align', error: (err?.message || String(err)) });
       }
       break;
     }

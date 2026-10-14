@@ -1,0 +1,128 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "checkbox",
+  "storybookId": "checkbox",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "atoms-checkbox--unchecked",
+      "name": "Unchecked",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "tile"
+      ]
+    },
+    {
+      "id": "atoms-checkbox--checked",
+      "name": "Checked",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "tile"
+      ]
+    },
+    {
+      "id": "atoms-checkbox--disabled",
+      "name": "Disabled",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "tile"
+      ]
+    },
+    {
+      "id": "atoms-checkbox--disabled-checked",
+      "name": "Disabled Checked",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "tile"
+      ]
+    },
+    {
+      "id": "atoms-checkbox--tile",
+      "name": "Tile",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "tile"
+      ]
+    },
+    {
+      "id": "atoms-checkbox--tile-checked",
+      "name": "Tile Checked",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "tile"
+      ]
+    },
+    {
+      "id": "atoms-checkbox--group",
+      "name": "Group",
+      "argKeys": [
+        "label",
+        "checked",
+        "disabled",
+        "tile"
+      ]
+    }
+  ],
+  "deferred": [],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      "default"
+    ],
+    "rowValues": [
+      {
+        "Style": "default"
+      }
+    ],
+    "cell": {
+      "w": 366,
+      "h": 44,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "style": "default"
+        },
+        "forced": null,
+        "label": "default / default",
+        "nodeId": "10559:113854"
+      }
+    ],
+    "missing": []
+  }
+}

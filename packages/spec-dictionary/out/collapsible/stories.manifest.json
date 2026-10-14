@@ -1,0 +1,206 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "collapsible",
+  "storybookId": "collapsible",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "size-default",
+      "name": "size: default",
+      "args": {
+        "size": "default"
+      }
+    },
+    {
+      "id": "size-lg",
+      "name": "size: lg",
+      "args": {
+        "size": "lg"
+      }
+    },
+    {
+      "id": "open-on",
+      "name": "open on",
+      "args": {
+        "open": true
+      }
+    },
+    {
+      "id": "open-off",
+      "name": "open off",
+      "args": {
+        "open": false
+      }
+    },
+    {
+      "id": "style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      }
+    },
+    {
+      "id": "style-control",
+      "name": "style: control",
+      "args": {
+        "style": "control"
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "molecules-collapsible--closed",
+      "name": "Closed",
+      "argKeys": [
+        "label",
+        "open",
+        "content"
+      ]
+    },
+    {
+      "id": "molecules-collapsible--open",
+      "name": "Open",
+      "argKeys": [
+        "label",
+        "open",
+        "content"
+      ]
+    },
+    {
+      "id": "molecules-collapsible--custom-label",
+      "name": "Custom Label",
+      "argKeys": [
+        "label",
+        "open",
+        "content"
+      ]
+    },
+    {
+      "id": "molecules-collapsible--with-media",
+      "name": "With media content",
+      "argKeys": [
+        "label",
+        "open",
+        "content"
+      ]
+    }
+  ],
+  "deferred": [
+    "size-lg",
+    "style-control"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": "State",
+    "cols": [
+      "open",
+      "closed"
+    ],
+    "rows": [
+      "default / default",
+      "lg / default",
+      "lg / control"
+    ],
+    "rowValues": [
+      {
+        "Size": "default",
+        "Style": "default"
+      },
+      {
+        "Size": "lg",
+        "Style": "default"
+      },
+      {
+        "Size": "lg",
+        "Style": "control"
+      }
+    ],
+    "cell": {
+      "w": 410,
+      "h": 160,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "size": "default",
+          "style": "default",
+          "open": true
+        },
+        "forced": null,
+        "label": "default / default / open",
+        "nodeId": "10564:116533"
+      },
+      {
+        "row": 0,
+        "col": 1,
+        "args": {
+          "size": "default",
+          "style": "default",
+          "open": false
+        },
+        "forced": null,
+        "label": "default / default / closed",
+        "nodeId": "10564:116540"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "size": "lg",
+          "style": "default",
+          "open": true
+        },
+        "forced": null,
+        "label": "lg / default / open",
+        "nodeId": "13542:44870"
+      },
+      {
+        "row": 1,
+        "col": 1,
+        "args": {
+          "size": "lg",
+          "style": "default",
+          "open": false
+        },
+        "forced": null,
+        "label": "lg / default / closed",
+        "nodeId": "13542:44865"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "size": "lg",
+          "style": "control",
+          "open": true
+        },
+        "forced": null,
+        "label": "lg / control / open",
+        "nodeId": "14278:197881"
+      },
+      {
+        "row": 2,
+        "col": 1,
+        "args": {
+          "size": "lg",
+          "style": "control",
+          "open": false
+        },
+        "forced": null,
+        "label": "lg / control / closed",
+        "nodeId": "14278:197866"
+      }
+    ],
+    "missing": []
+  }
+}

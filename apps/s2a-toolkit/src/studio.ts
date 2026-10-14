@@ -111,6 +111,60 @@ export function acceptNames(state: StudioState): string[] {
   return [...new Set(items.map((c) => c?.name).filter(Boolean))].sort() as string[];
 }
 
+// --- what a slot's own name says belongs in it -------------------------------
+//
+// The matcher elsewhere deliberately distrusts layer names, because those are
+// the REDESIGN TEAM's names and they rename them freely. These are OURS: the
+// layer-naming rule in CLAUDE.md says a slot is .icon-start, .media, .label.
+// Reading that is reading a label we wrote and enforce, not guessing at someone
+// else's — so it is a fact here where it would be a guess there.
+//
+// Offering all 37 contracts for a slot called .icon-start was not neutral; it
+// was noise that made the real answer harder to find, and the real answer for
+// an icon slot is never MerchCard.
+
+const SLOT_ROLE: Array<[RegExp, string]> = [
+  [/(^|[.\-_])icons?([.\-_]|$)|chevron|arrow|glyph|mnemonic|caret/i, 'icon'],
+  [/media|asset|image|thumb|video|overlay|picture/i, 'media'],
+  [/label|headline|title|heading|body|text|eyebrow|quote|caption/i, 'text'],
+  [/cta|action|button|link/i, 'action'],
+];
+
+/** The role a slot name implies, or null when the name is deliberately generic. */
+export function slotRole(path: string): string | null {
+  const leaf = String(path).split('.').pop() ?? '';
+  // A generic name is a real choice: "element-start" says "anything goes" in a
+  // way "icon-start" does not. Honour it rather than inferring from a substring.
+  if (/^(element|slot|item|child|content|lockup|group|inner)([.\-_]|$)/i.test(leaf)) return null;
+  for (const [re, role] of SLOT_ROLE) if (re.test(leaf)) return role;
+  return null;
+}
+
+/** The roles a contract can fill, from its own name. */
+export function contractRoles(name: string): Set<string> {
+  const n = String(name).toLowerCase();
+  const roles = new Set<string>();
+  if (/icon|logo|mnemonic|chevron|arrow/.test(n)) roles.add('icon');
+  if (/media|image|asset|thumbnail|video|overlay|surface/.test(n)) roles.add('media');
+  if (/label|head|title|text|eyebrow|paragraph|quote|rich|meta/.test(n)) roles.add('text');
+  if (/button|link|cta|jumplink/.test(n)) roles.add('action');
+  return roles;
+}
+
+/**
+ * Split the accept options into the ones this slot's name points at and the
+ * rest. Never filters the rest away — acceptsMode "open" exists because a
+ * designer sometimes has a reason — it just stops them being the first thing
+ * read.
+ */
+export function rankAccepts(names: string[], path: string): { role: string | null; likely: string[]; other: string[] } {
+  const role = slotRole(path);
+  if (!role) return { role: null, likely: [], other: names };
+  const likely: string[] = [], other: string[] = [];
+  for (const n of names) (contractRoles(n).has(role) ? likely : other).push(n);
+  return { role, likely, other };
+}
+
 // A prop derived from a real axis. VARIANT becomes an enum, BOOLEAN a boolean,
 // TEXT a string — the axis type decides, never a guess.
 export function propFromAxis(axis: any): StudioDef {

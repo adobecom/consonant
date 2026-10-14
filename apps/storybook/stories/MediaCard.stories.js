@@ -12,7 +12,7 @@ export default {
   title: "Cards/MediaCard",
   tags: ["autodocs"],
   render: (args) => html`
-    <div style="max-width: 488px; padding: 24px;">
+    <div style="max-width: 488px; padding: var(--s2a-spacing-lg);">
       ${MediaCard(args)}
     </div>
   `,
@@ -37,7 +37,7 @@ Both variants use \`aspect-ratio\` so the media scales with the container. At �
   <div class="c-media-card__media">
     <img class="c-media-card__media-img" src="…" alt="…" loading="lazy" />
     <span class="c-media-card__icon" aria-hidden="true">
-      <span class="c-app-icon" data-size="md">…</span>
+      <span class="c-app-icon" data-size="24">…</span>
     </span>
   </div>
   <div class="c-media-card__copy">
@@ -100,7 +100,7 @@ Both variants use \`aspect-ratio\` so the media scales with the container. At �
 export const Card = {
   name: "Card (4:3)",
   render: (args) => html`
-    <div style="max-width: 488px; padding: 24px;">
+    <div style="max-width: 488px; padding: var(--s2a-spacing-lg);">
       ${MediaCard(args)}
     </div>
   `,
@@ -111,7 +111,7 @@ export const Card = {
 export const Feature = {
   name: "Feature (16:7)",
   render: (args) => html`
-    <div style="max-width: 1480px; padding: 24px;">
+    <div style="max-width: 1480px; padding: var(--s2a-spacing-lg);">
       ${MediaCard(args)}
     </div>
   `,
@@ -131,8 +131,8 @@ export const Feature = {
 export const ThreeUpGrid = {
   name: "3-Up Grid (homepage pattern)",
   render: () => html`
-    <div style="padding: 24px;">
-      <div style="display: flex; gap: 8px; align-items: flex-start; width: 100%;">
+    <div style="padding: var(--s2a-spacing-lg);">
+      <div style="display: flex; gap: var(--s2a-spacing-xs); align-items: flex-start; width: 100%;">
         ${MediaCard({
           size: "card",
           app: "acrobat",
@@ -174,9 +174,9 @@ export const FullSection = {
     <div style="
       display: flex;
       flex-direction: column;
-      gap: 64px;
-      padding: 80px 120px;
-      background: #fff;
+      gap: var(--s2a-spacing-4xl);
+      padding: var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);
+      background: var(--s2a-color-surface-default);
       width: 100%;
       box-sizing: border-box;
     ">
@@ -189,7 +189,7 @@ export const FullSection = {
         ctaLabel: "Explore Premiere",
         ctaHref: "#",
       })}
-      <div style="display: flex; gap: 8px; align-items: flex-start;">
+      <div style="display: flex; gap: var(--s2a-spacing-xs); align-items: flex-start;">
         ${MediaCard({
           size: "card",
           app: "acrobat",
@@ -235,7 +235,7 @@ export const NoIcon = {
     ctaHref: "#",
   },
   render: (args) => html`
-    <div style="max-width: 488px; padding: 24px;">
+    <div style="max-width: 488px; padding: var(--s2a-spacing-lg);">
       ${MediaCard(args)}
     </div>
   `,

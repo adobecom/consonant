@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-09-17T15:02:36.039Z",
+  "extractedAt": "2026-10-07T02:28:13.685Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -19,7 +19,7 @@
     "spec": {
       "path": "packages/components/src/button/button.spec.json",
       "storybookId": "atoms-button",
-      "figmaNodeId": null
+      "figmaNodeId": "10715:35477"
     }
   },
   "sources": {
@@ -1104,6 +1104,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7"
+    "hash": "sha256:cb552889722afdf9bb6bb687236b1d7ae1f69dccbaff086d6b06582ee6faccf2"
   }
 }

@@ -1,0 +1,93 @@
+/* Generated from radio.contract.json. Re-run: npm run specs:render -- --slug=radio */
+
+.c-radio [hidden],
+.c-radio[hidden] {
+  display: none !important;
+}
+
+.c-radio {
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--s2a-spacing-xs);
+}
+
+.c-radio__control {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  width: 20px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 20px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  border-radius: 50%;
+}
+
+.c-radio:hover .c-radio__control,
+.c-radio[data-state="hover"] .c-radio__control {
+  background-color: var(--s2a-color-background-subtle);
+}
+
+.c-radio__ring {
+  grid-area: 1 / 1;
+  --c-radio__ring-bc: var(--s2a-color-content-default);
+  --c-radio__ring-bw: 1.5px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  width: 18px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 18px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 var(--c-radio__ring-bw, 0) var(--c-radio__ring-bc, transparent);
+}
+
+.c-radio:has(:disabled) .c-radio__ring,
+.c-radio[data-state="disabled"] .c-radio__ring {
+  --c-radio__ring-bc: var(--s2a-color-content-subtle);
+}
+
+.c-radio__dot {
+  grid-area: 1 / 1;
+  background-color: var(--s2a-color-content-default);
+  width: 8px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 8px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  border-radius: 50%;
+  display: none;
+}
+
+.c-radio:has(:disabled) .c-radio__dot,
+.c-radio[data-state="disabled"] .c-radio__dot {
+  background-color: var(--s2a-color-content-subtle);
+}
+
+.c-radio[data-selected="true"] .c-radio__dot {
+  display: block;
+}
+
+.c-radio__label {
+  font-family: var(--s2a-font-family-label);
+  font-size: var(--s2a-typography-font-size-label);
+  font-weight: var(--s2a-font-weight-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  line-height: var(--s2a-typography-line-height-label);
+}
+
+.c-radio[data-selected="false"] .c-radio__label {
+  color: var(--s2a-color-content-subtle);
+}
+
+.c-radio[data-selected="true"] .c-radio__label {
+  color: var(--s2a-color-content-default);
+}
+
+.c-radio__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}

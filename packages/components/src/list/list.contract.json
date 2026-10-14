@@ -1,0 +1,106 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.list",
+  "name": "List",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "A sequence of like items — features, links, steps. The items are the content; the list is the rhythm.",
+  "semantics": {
+    "element": "ul"
+  },
+  "props": [
+    {
+      "name": "sections",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "[]",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "sections"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "ul",
+      "layout": {
+        "display": "flex",
+        "direction": "column"
+      },
+      "tokens": {
+        "gap": "{s2a.spacing.16}",
+        "padding-bottom": "{s2a.spacing.none}",
+        "padding-left": "{s2a.spacing.none}",
+        "padding-right": "{s2a.spacing.none}",
+        "padding-top": "{s2a.spacing.none}"
+      },
+      "literals": {
+        "width": "418px"
+      },
+      "parts": {
+        "merch-card-feature-section": {
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "grow": true
+          },
+          "slot": {
+            "name": "list-1",
+            "accepts": [
+              "MerchCardFeatureSection"
+            ],
+            "acceptsMode": "restrict",
+            "defaultContent": [
+              {
+                "id": "merch-card-feature-section",
+                "props": {
+                  "figma": "MerchCard/FeatureSection",
+                  "Show Divider": true,
+                  "Title": "Section title"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.3.1"
+    ],
+    "notes": [
+      "A real <ul>/<li> so the count and position are announced (1.3.1)."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "4aeccd1ccd926c9c44fabe920de5126a94a19f5c",
+        "nodeId": "10320:102094"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/list/list.js",
+        "export": "List"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:a2fdd73a29c4e919d2454d5d62d60f174dfe1512056a2390e6169985167545e9",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:52d6b3854329a2e3828464df962c47b067e230f9fea9194236ebb46190735ae4"
+    }
+  }
+}

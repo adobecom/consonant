@@ -1,0 +1,2253 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-09T16:13:56.211Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": {
+      "id": "11944:223275",
+      "name": "   ↳ Radio"
+    }
+  },
+  "set": {
+    "id": "11586:206620",
+    "key": "d469c02b526f01dd8985387fbae75c1f6626ba3a",
+    "name": "Radio",
+    "type": "COMPONENT_SET",
+    "description": "— s2a:meta —\nversion:    1.0.0\nstatus:     active\nupdated:    2026-08-04\nchangelog:\n  1.0.0   2026-08-04  init         Initial release",
+    "meta": {
+      "version": "1.0.0",
+      "status": "active",
+      "updated": "2026-08-04",
+      "changelog": "1.0.0   2026-08-04  init         Initial release"
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Label#11586:0",
+      "type": "TEXT",
+      "defaultValue": "Individuals"
+    },
+    {
+      "name": "Selected",
+      "type": "VARIANT",
+      "defaultValue": "false",
+      "options": [
+        "false",
+        "true"
+      ]
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "defaultValue": "default",
+      "options": [
+        "default",
+        "hover",
+        "focus",
+        "disabled"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "11586:206580",
+      "key": "842be6f1d9965c55587a1bddaf0523f154195bb2",
+      "name": "Selected=false, State=default",
+      "props": {
+        "Selected": "false",
+        "State": "default"
+      },
+      "width": 93,
+      "height": 20
+    },
+    {
+      "id": "11586:206584",
+      "key": "c70fd8ba72ae11a4f4b9939ed260836ea8ba0491",
+      "name": "Selected=false, State=hover",
+      "props": {
+        "Selected": "false",
+        "State": "hover"
+      },
+      "width": 93,
+      "height": 20
+    },
+    {
+      "id": "11586:206589",
+      "key": "069ec125171f833d53d2211d9e96b732f161ebe7",
+      "name": "Selected=false, State=focus",
+      "props": {
+        "Selected": "false",
+        "State": "focus"
+      },
+      "width": 93,
+      "height": 20
+    },
+    {
+      "id": "11586:206594",
+      "key": "5e472581bb120cf33e1333f9eddaa87537ecef86",
+      "name": "Selected=false, State=disabled",
+      "props": {
+        "Selected": "false",
+        "State": "disabled"
+      },
+      "width": 93,
+      "height": 20
+    },
+    {
+      "id": "11586:206598",
+      "key": "55a79c2ecf4a59fcd91aa5127715a434de406d01",
+      "name": "Selected=true, State=default",
+      "props": {
+        "Selected": "true",
+        "State": "default"
+      },
+      "width": 93,
+      "height": 20
+    },
+    {
+      "id": "11586:206603",
+      "key": "f7ed59fc39205d3033da36da6e9e79c0d17e7f68",
+      "name": "Selected=true, State=hover",
+      "props": {
+        "Selected": "true",
+        "State": "hover"
+      },
+      "width": 93,
+      "height": 20
+    },
+    {
+      "id": "11586:206609",
+      "key": "0e51c9add7c719764752f9d10317d8b04f9bbb86",
+      "name": "Selected=true, State=focus",
+      "props": {
+        "Selected": "true",
+        "State": "focus"
+      },
+      "width": 93,
+      "height": 20
+    },
+    {
+      "id": "11586:206615",
+      "key": "9927548492668041e187acdf7fd877af020bc190",
+      "name": "Selected=true, State=disabled",
+      "props": {
+        "Selected": "true",
+        "State": "disabled"
+      },
+      "width": 93,
+      "height": 20
+    }
+  ],
+  "anatomy": {
+    "variant": "Selected=false, State=default",
+    "tree": {
+      "name": "Selected=false, State=default",
+      "type": "COMPONENT",
+      "id": "11586:206580",
+      "layoutMode": "HORIZONTAL",
+      "sizing": {
+        "horizontal": "HUG",
+        "vertical": "HUG"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "CENTER"
+      },
+      "children": [
+        {
+          "name": "_radio",
+          "type": "INSTANCE",
+          "id": "11586:206581",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": ".ring",
+              "type": "ELLIPSE",
+              "id": "I11586:206581;11586:206555",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            }
+          ]
+        },
+        {
+          "name": ".label",
+          "type": "TEXT",
+          "id": "11586:206583",
+          "text": "Individuals",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "HUG"
+          }
+        }
+      ]
+    },
+    "variants": {
+      "Selected=false, State=default": {
+        "name": "Selected=false, State=default",
+        "type": "COMPONENT",
+        "id": "11586:206580",
+        "layoutMode": "HORIZONTAL",
+        "sizing": {
+          "horizontal": "HUG",
+          "vertical": "HUG"
+        },
+        "align": {
+          "primary": "MIN",
+          "counter": "CENTER"
+        },
+        "children": [
+          {
+            "name": "_radio",
+            "type": "INSTANCE",
+            "id": "11586:206581",
+            "sizing": {
+              "horizontal": "FIXED",
+              "vertical": "FIXED"
+            },
+            "children": [
+              {
+                "name": ".ring",
+                "type": "ELLIPSE",
+                "id": "I11586:206581;11586:206555",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              }
+            ]
+          },
+          {
+            "name": ".label",
+            "type": "TEXT",
+            "id": "11586:206583",
+            "text": "Individuals",
+            "sizing": {
+              "horizontal": "HUG",
+              "vertical": "HUG"
+            }
+          }
+        ]
+      },
+      "Selected=false, State=hover": {
+        "name": "Selected=false, State=hover",
+        "type": "COMPONENT",
+        "id": "11586:206584",
+        "layoutMode": "HORIZONTAL",
+        "sizing": {
+          "horizontal": "HUG",
+          "vertical": "HUG"
+        },
+        "align": {
+          "primary": "MIN",
+          "counter": "CENTER"
+        },
+        "children": [
+          {
+            "name": "_radio",
+            "type": "INSTANCE",
+            "id": "11586:206585",
+            "sizing": {
+              "horizontal": "FIXED",
+              "vertical": "FIXED"
+            },
+            "children": [
+              {
+                "name": "[hover halo]",
+                "type": "ELLIPSE",
+                "id": "I11586:206585;11586:206557",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              },
+              {
+                "name": ".ring",
+                "type": "ELLIPSE",
+                "id": "I11586:206585;11586:206558",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              }
+            ]
+          },
+          {
+            "name": ".label",
+            "type": "TEXT",
+            "id": "11586:206588",
+            "text": "Individuals",
+            "sizing": {
+              "horizontal": "HUG",
+              "vertical": "HUG"
+            }
+          }
+        ]
+      },
+      "Selected=false, State=focus": {
+        "name": "Selected=false, State=focus",
+        "type": "COMPONENT",
+        "id": "11586:206589",
+        "layoutMode": "HORIZONTAL",
+        "sizing": {
+          "horizontal": "HUG",
+          "vertical": "HUG"
+        },
+        "align": {
+          "primary": "MIN",
+          "counter": "CENTER"
+        },
+        "children": [
+          {
+            "name": "_radio",
+            "type": "INSTANCE",
+            "id": "11586:206590",
+            "sizing": {
+              "horizontal": "FIXED",
+              "vertical": "FIXED"
+            },
+            "children": [
+              {
+                "name": ".ring",
+                "type": "ELLIPSE",
+                "id": "I11586:206590;11586:206560",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              },
+              {
+                "name": "[focus ring]",
+                "type": "ELLIPSE",
+                "id": "I11586:206590;11586:206561",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              }
+            ]
+          },
+          {
+            "name": ".label",
+            "type": "TEXT",
+            "id": "11586:206593",
+            "text": "Individuals",
+            "sizing": {
+              "horizontal": "HUG",
+              "vertical": "HUG"
+            }
+          }
+        ]
+      },
+      "Selected=false, State=disabled": {
+        "name": "Selected=false, State=disabled",
+        "type": "COMPONENT",
+        "id": "11586:206594",
+        "layoutMode": "HORIZONTAL",
+        "sizing": {
+          "horizontal": "HUG",
+          "vertical": "HUG"
+        },
+        "align": {
+          "primary": "MIN",
+          "counter": "CENTER"
+        },
+        "children": [
+          {
+            "name": "_radio",
+            "type": "INSTANCE",
+            "id": "11586:206595",
+            "sizing": {
+              "horizontal": "FIXED",
+              "vertical": "FIXED"
+            },
+            "children": [
+              {
+                "name": ".ring",
+                "type": "ELLIPSE",
+                "id": "I11586:206595;11586:206563",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              }
+            ]
+          },
+          {
+            "name": ".label",
+            "type": "TEXT",
+            "id": "11586:206597",
+            "text": "Individuals",
+            "sizing": {
+              "horizontal": "HUG",
+              "vertical": "HUG"
+            }
+          }
+        ]
+      },
+      "Selected=true, State=default": {
+        "name": "Selected=true, State=default",
+        "type": "COMPONENT",
+        "id": "11586:206598",
+        "layoutMode": "HORIZONTAL",
+        "sizing": {
+          "horizontal": "HUG",
+          "vertical": "HUG"
+        },
+        "align": {
+          "primary": "MIN",
+          "counter": "CENTER"
+        },
+        "children": [
+          {
+            "name": "_radio",
+            "type": "INSTANCE",
+            "id": "11586:206599",
+            "sizing": {
+              "horizontal": "FIXED",
+              "vertical": "FIXED"
+            },
+            "children": [
+              {
+                "name": ".ring",
+                "type": "ELLIPSE",
+                "id": "I11586:206599;11586:206565",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              },
+              {
+                "name": ".dot",
+                "type": "ELLIPSE",
+                "id": "I11586:206599;11586:206566",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              }
+            ]
+          },
+          {
+            "name": ".label",
+            "type": "TEXT",
+            "id": "11586:206602",
+            "text": "Individuals",
+            "sizing": {
+              "horizontal": "HUG",
+              "vertical": "HUG"
+            }
+          }
+        ]
+      },
+      "Selected=true, State=hover": {
+        "name": "Selected=true, State=hover",
+        "type": "COMPONENT",
+        "id": "11586:206603",
+        "layoutMode": "HORIZONTAL",
+        "sizing": {
+          "horizontal": "HUG",
+          "vertical": "HUG"
+        },
+        "align": {
+          "primary": "MIN",
+          "counter": "CENTER"
+        },
+        "children": [
+          {
+            "name": "_radio",
+            "type": "INSTANCE",
+            "id": "11586:206604",
+            "sizing": {
+              "horizontal": "FIXED",
+              "vertical": "FIXED"
+            },
+            "children": [
+              {
+                "name": "[hover halo]",
+                "type": "ELLIPSE",
+                "id": "I11586:206604;11586:206568",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              },
+              {
+                "name": ".ring",
+                "type": "ELLIPSE",
+                "id": "I11586:206604;11586:206569",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              },
+              {
+                "name": ".dot",
+                "type": "ELLIPSE",
+                "id": "I11586:206604;11586:206570",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              }
+            ]
+          },
+          {
+            "name": ".label",
+            "type": "TEXT",
+            "id": "11586:206608",
+            "text": "Individuals",
+            "sizing": {
+              "horizontal": "HUG",
+              "vertical": "HUG"
+            }
+          }
+        ]
+      },
+      "Selected=true, State=focus": {
+        "name": "Selected=true, State=focus",
+        "type": "COMPONENT",
+        "id": "11586:206609",
+        "layoutMode": "HORIZONTAL",
+        "sizing": {
+          "horizontal": "HUG",
+          "vertical": "HUG"
+        },
+        "align": {
+          "primary": "MIN",
+          "counter": "CENTER"
+        },
+        "children": [
+          {
+            "name": "_radio",
+            "type": "INSTANCE",
+            "id": "11586:206610",
+            "sizing": {
+              "horizontal": "FIXED",
+              "vertical": "FIXED"
+            },
+            "children": [
+              {
+                "name": ".ring",
+                "type": "ELLIPSE",
+                "id": "I11586:206610;11586:206572",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              },
+              {
+                "name": ".dot",
+                "type": "ELLIPSE",
+                "id": "I11586:206610;11586:206573",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              },
+              {
+                "name": "[focus ring]",
+                "type": "ELLIPSE",
+                "id": "I11586:206610;11586:206574",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              }
+            ]
+          },
+          {
+            "name": ".label",
+            "type": "TEXT",
+            "id": "11586:206614",
+            "text": "Individuals",
+            "sizing": {
+              "horizontal": "HUG",
+              "vertical": "HUG"
+            }
+          }
+        ]
+      },
+      "Selected=true, State=disabled": {
+        "name": "Selected=true, State=disabled",
+        "type": "COMPONENT",
+        "id": "11586:206615",
+        "layoutMode": "HORIZONTAL",
+        "sizing": {
+          "horizontal": "HUG",
+          "vertical": "HUG"
+        },
+        "align": {
+          "primary": "MIN",
+          "counter": "CENTER"
+        },
+        "children": [
+          {
+            "name": "_radio",
+            "type": "INSTANCE",
+            "id": "11586:206616",
+            "sizing": {
+              "horizontal": "FIXED",
+              "vertical": "FIXED"
+            },
+            "children": [
+              {
+                "name": ".ring",
+                "type": "ELLIPSE",
+                "id": "I11586:206616;11586:206576",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              },
+              {
+                "name": ".dot",
+                "type": "ELLIPSE",
+                "id": "I11586:206616;11586:206577",
+                "sizing": {
+                  "horizontal": "FIXED",
+                  "vertical": "FIXED"
+                }
+              }
+            ]
+          },
+          {
+            "name": ".label",
+            "type": "TEXT",
+            "id": "11586:206619",
+            "text": "Individuals",
+            "sizing": {
+              "horizontal": "HUG",
+              "vertical": "HUG"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "bindings": [
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206581;11586:206555",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206583",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206583",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206583",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206583",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206583",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206583",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206583",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio/[hover halo]",
+      "nodeId": "I11586:206585;11586:206557",
+      "nodeType": "ELLIPSE",
+      "property": "fills",
+      "variable": "VariableID:6:47"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206585;11586:206558",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206588",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206588",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206588",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206588",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206588",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206588",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206588",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206590;11586:206560",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206590;11586:206561",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:2072:39569"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206593",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206593",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206593",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206593",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206593",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206593",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206593",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206595;11586:206563",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206597",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206597",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206597",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206597",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206597",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206597",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206597",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206599;11586:206565",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206599;11586:206566",
+      "nodeType": "ELLIPSE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206602",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206602",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206602",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206602",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206602",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206602",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/.label",
+      "nodeId": "11586:206602",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/[hover halo]",
+      "nodeId": "I11586:206604;11586:206568",
+      "nodeType": "ELLIPSE",
+      "property": "fills",
+      "variable": "VariableID:6:47"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206604;11586:206569",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206604;11586:206570",
+      "nodeType": "ELLIPSE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206608",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206608",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206608",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206608",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206608",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206608",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/.label",
+      "nodeId": "11586:206608",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206610;11586:206572",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206610;11586:206573",
+      "nodeType": "ELLIPSE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206610;11586:206574",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:2072:39569"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206614",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206614",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206614",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206614",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206614",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206614",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/.label",
+      "nodeId": "11586:206614",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206616;11586:206576",
+      "nodeType": "ELLIPSE",
+      "property": "strokes",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206616;11586:206577",
+      "nodeType": "ELLIPSE",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206619",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206619",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206619",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206619",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206619",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206619",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/.label",
+      "nodeId": "11586:206619",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    }
+  ],
+  "variables": {
+    "VariableID:2072:39569": {
+      "name": "s2a/color/focus-ring/default",
+      "key": "6347b2b3ecd73ece4df7728c3f2e66a69ad5ab9d",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-focus-ring-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/blue/900"
+        },
+        "Dark": {
+          "alias": "s2a/color/blue/500"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0.23137255012989044,
+          "g": 0.38823530077934265,
+          "b": 0.9843137264251709,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.5568627715110779,
+          "g": 0.7254902124404907,
+          "b": 0.9882352948188782,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2352:1217": {
+      "name": "s2a/typography/font-size/label",
+      "key": "8ebd95ce11fc03c86dd89ef3b4ba2ffb5bf961d6",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:2352:1233": {
+      "name": "s2a/typography/letter-spacing/label",
+      "key": "c00a7571dfaa364481c1c6eb5472b3581201c594",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1243": {
+      "name": "s2a/typography/line-height/label",
+      "key": "538ddff11a55de6e862611ebdcec139ce6328c78",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:2557:832": {
+      "name": "s2a/font/family/label",
+      "key": "02174aaffa99806ace49456aa5121f60a606ed73",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:5388:44678": {
+      "name": "s2a/font/weight/label",
+      "key": "68a1c8cf3dbedb7bb77987c1db773b0a69a7eb8c",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:6:47": {
+      "name": "s2a/color/background/subtle",
+      "key": "162805c4146db47171ed3ef22622f94296c20620",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-background-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/50"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/700"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0.9725490212440491,
+          "g": 0.9725490212440491,
+          "b": 0.9725490212440491,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.3137255012989044,
+          "g": 0.3137255012989044,
+          "b": 0.3137255012989044,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:6:82": {
+      "name": "s2a/color/content/default",
+      "key": "83bc2006f8e7edc6ff9f04044d27a204d84f2d6a",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:6:84": {
+      "name": "s2a/color/content/subtle",
+      "key": "8779680478f5ea7993841e307feea91070b8e2db",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/64"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/white/64"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.6399999856948853
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "6:15543": {
+      "name": "s2a/typography/label",
+      "key": "04764cbcfd7418f4c004046716f9d7db9a741db8"
+    }
+  },
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/_radio",
+      "nodeId": "11586:206581",
+      "mainComponent": {
+        "id": "11586:206554",
+        "key": "eee6205b7a2a7f1819473909be72928b909f137b",
+        "name": "Selected=false, State=default"
+      },
+      "set": {
+        "id": "11586:206578",
+        "key": "94128f8f7909895c0aebafd3db76bb603427847a",
+        "name": "_radio"
+      },
+      "props": {
+        "Selected": "false",
+        "State": "default"
+      }
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio",
+      "nodeId": "11586:206585",
+      "mainComponent": {
+        "id": "11586:206556",
+        "key": "ec0d5411fb5ecc86c96a324d790211fa0acf9c91",
+        "name": "Selected=false, State=hover"
+      },
+      "set": {
+        "id": "11586:206578",
+        "key": "94128f8f7909895c0aebafd3db76bb603427847a",
+        "name": "_radio"
+      },
+      "props": {
+        "Selected": "false",
+        "State": "hover"
+      }
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio",
+      "nodeId": "11586:206590",
+      "mainComponent": {
+        "id": "11586:206559",
+        "key": "831e48293894c088954b193aa188e8c809663698",
+        "name": "Selected=false, State=focus"
+      },
+      "set": {
+        "id": "11586:206578",
+        "key": "94128f8f7909895c0aebafd3db76bb603427847a",
+        "name": "_radio"
+      },
+      "props": {
+        "Selected": "false",
+        "State": "focus"
+      }
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/_radio",
+      "nodeId": "11586:206595",
+      "mainComponent": {
+        "id": "11586:206562",
+        "key": "9bcee1c6c81c3b54fe5e26ae3311a437ca8634f0",
+        "name": "Selected=false, State=disabled"
+      },
+      "set": {
+        "id": "11586:206578",
+        "key": "94128f8f7909895c0aebafd3db76bb603427847a",
+        "name": "_radio"
+      },
+      "props": {
+        "Selected": "false",
+        "State": "disabled"
+      }
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio",
+      "nodeId": "11586:206599",
+      "mainComponent": {
+        "id": "11586:206564",
+        "key": "f19a89a974aa052753b9365a386a81a1377f89cd",
+        "name": "Selected=true, State=default"
+      },
+      "set": {
+        "id": "11586:206578",
+        "key": "94128f8f7909895c0aebafd3db76bb603427847a",
+        "name": "_radio"
+      },
+      "props": {
+        "Selected": "true",
+        "State": "default"
+      }
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio",
+      "nodeId": "11586:206604",
+      "mainComponent": {
+        "id": "11586:206567",
+        "key": "c46b0a18aec1bd8bd8a04d6a5dbf690d0482b1d5",
+        "name": "Selected=true, State=hover"
+      },
+      "set": {
+        "id": "11586:206578",
+        "key": "94128f8f7909895c0aebafd3db76bb603427847a",
+        "name": "_radio"
+      },
+      "props": {
+        "Selected": "true",
+        "State": "hover"
+      }
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio",
+      "nodeId": "11586:206610",
+      "mainComponent": {
+        "id": "11586:206571",
+        "key": "3bacca2efad8f5f1d2d93d5683bd30425d87a0a0",
+        "name": "Selected=true, State=focus"
+      },
+      "set": {
+        "id": "11586:206578",
+        "key": "94128f8f7909895c0aebafd3db76bb603427847a",
+        "name": "_radio"
+      },
+      "props": {
+        "Selected": "true",
+        "State": "focus"
+      }
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio",
+      "nodeId": "11586:206616",
+      "mainComponent": {
+        "id": "11586:206575",
+        "key": "dc30bcf9d78c927a67c70737f0e4c3ae73ceb2ad",
+        "name": "Selected=true, State=disabled"
+      },
+      "set": {
+        "id": "11586:206578",
+        "key": "94128f8f7909895c0aebafd3db76bb603427847a",
+        "name": "_radio"
+      },
+      "props": {
+        "Selected": "true",
+        "State": "disabled"
+      }
+    }
+  ],
+  "counts": {
+    "variants": 8,
+    "nodes": 40,
+    "bindings": 72,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "Selected=false, State=default",
+      "node": "",
+      "nodeId": "11586:206580",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "value": 8
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/_radio",
+      "nodeId": "11586:206581",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/_radio",
+      "nodeId": "11586:206581",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206581;11586:206555",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 1.5
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206581;11586:206555",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206581;11586:206555",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Selected=false, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206581;11586:206555",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "",
+      "nodeId": "11586:206584",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "value": 8
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio",
+      "nodeId": "11586:206585",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio",
+      "nodeId": "11586:206585",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio/[hover halo]",
+      "nodeId": "I11586:206585;11586:206557",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio/[hover halo]",
+      "nodeId": "I11586:206585;11586:206557",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206585;11586:206558",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 1.5
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206585;11586:206558",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206585;11586:206558",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Selected=false, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206585;11586:206558",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "",
+      "nodeId": "11586:206589",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "value": 8
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio",
+      "nodeId": "11586:206590",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio",
+      "nodeId": "11586:206590",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206590;11586:206560",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 1.5
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206590;11586:206560",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206590;11586:206560",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206590;11586:206560",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206590;11586:206561",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 2
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206590;11586:206561",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "OUTSIDE"
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206590;11586:206561",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206590;11586:206561",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "",
+      "nodeId": "11586:206594",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "value": 8
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/_radio",
+      "nodeId": "11586:206595",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/_radio",
+      "nodeId": "11586:206595",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206595;11586:206563",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 1.5
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206595;11586:206563",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206595;11586:206563",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Selected=false, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206595;11586:206563",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "",
+      "nodeId": "11586:206598",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio",
+      "nodeId": "11586:206599",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio",
+      "nodeId": "11586:206599",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206599;11586:206565",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 1.5
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206599;11586:206565",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206599;11586:206565",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206599;11586:206565",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206599;11586:206566",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=default",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206599;11586:206566",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "",
+      "nodeId": "11586:206603",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio",
+      "nodeId": "11586:206604",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio",
+      "nodeId": "11586:206604",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/[hover halo]",
+      "nodeId": "I11586:206604;11586:206568",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/[hover halo]",
+      "nodeId": "I11586:206604;11586:206568",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206604;11586:206569",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 1.5
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206604;11586:206569",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206604;11586:206569",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206604;11586:206569",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206604;11586:206570",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=hover",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206604;11586:206570",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "",
+      "nodeId": "11586:206609",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio",
+      "nodeId": "11586:206610",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio",
+      "nodeId": "11586:206610",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206610;11586:206572",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 1.5
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206610;11586:206572",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206610;11586:206572",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206610;11586:206572",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206610;11586:206573",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206610;11586:206573",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206610;11586:206574",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 2
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206610;11586:206574",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "OUTSIDE"
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206610;11586:206574",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=focus",
+      "node": "/_radio/[focus ring]",
+      "nodeId": "I11586:206610;11586:206574",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "",
+      "nodeId": "11586:206615",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio",
+      "nodeId": "11586:206616",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio",
+      "nodeId": "11586:206616",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 20
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206616;11586:206576",
+      "nodeType": "ELLIPSE",
+      "property": "strokeWeight",
+      "value": 1.5
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206616;11586:206576",
+      "nodeType": "ELLIPSE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206616;11586:206576",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 18
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio/.ring",
+      "nodeId": "I11586:206616;11586:206576",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206616;11586:206577",
+      "nodeType": "ELLIPSE",
+      "property": "width",
+      "value": 8
+    },
+    {
+      "variant": "Selected=true, State=disabled",
+      "node": "/_radio/.dot",
+      "nodeId": "I11586:206616;11586:206577",
+      "nodeType": "ELLIPSE",
+      "property": "height",
+      "value": 8
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:3f2fde1def9bb8ef20067ee35bf80452c2eb35a3caf309949bab794a08c4adc5"
+  }
+}

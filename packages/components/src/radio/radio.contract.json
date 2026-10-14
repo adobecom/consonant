@@ -1,0 +1,281 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.radio",
+  "name": "Radio",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "A selection control with a checked state, usually paired with a label.",
+  "archetype": "checkbox / radio",
+  "semantics": {
+    "element": "label"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "text",
+      "default": "\"Individuals\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label#11586:0"
+        },
+        "code": {
+          "prop": "label"
+        }
+      }
+    },
+    {
+      "name": "selected",
+      "type": "boolean",
+      "description": "The hand-written component calls this \"checked\"; generated code binds to it.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Selected",
+          "valueMap": {
+            "true": "true",
+            "false": "false"
+          }
+        },
+        "code": {
+          "prop": "checked"
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "disabled"
+        }
+      }
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "\"radio-group\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "name"
+        }
+      }
+    },
+    {
+      "name": "value",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "undefined",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "value"
+        }
+      }
+    },
+    {
+      "name": "forceState",
+      "type": {
+        "enum": [
+          "default",
+          "hover",
+          "focus",
+          "disabled"
+        ]
+      },
+      "description": "The State axis, forceable from code for previews, docs and the state matrix. At runtime the states come from interaction.",
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State"
+        },
+        "code": {
+          "prop": "forceState"
+        }
+      }
+    }
+  ],
+  "states": [
+    "hover",
+    "focus-visible",
+    "disabled"
+  ],
+  "anatomy": {
+    "root": {
+      "element": "label",
+      "layout": {
+        "display": "inline-flex",
+        "direction": "row",
+        "align": "center"
+      },
+      "literals": {
+        "gap": "8px"
+      },
+      "parts": {
+        "control": {
+          "element": "div",
+          "layout": {
+            "display": "grid",
+            "align": "center",
+            "justify": "center"
+          },
+          "literals": {
+            "width": "20px",
+            "height": "20px",
+            "border-radius": "50%"
+          },
+          "states": {
+            "hover": {
+              "background-color": "{s2a.color.background.subtle}"
+            }
+          },
+          "parts": {
+            "ring": {
+              "element": "div",
+              "layout": {
+                "stack": true
+              },
+              "tokens": {
+                "border-color": "{s2a.color.content.default}"
+              },
+              "literals": {
+                "border-width": "1.5px",
+                "width": "18px",
+                "height": "18px",
+                "border-radius": "50%",
+                "box-sizing": "border-box"
+              },
+              "states": {
+                "disabled": {
+                  "border-color": "{s2a.color.content.subtle}"
+                }
+              }
+            },
+            "dot": {
+              "element": "div",
+              "layout": {
+                "stack": true
+              },
+              "tokens": {
+                "background-color": "{s2a.color.content.default}"
+              },
+              "literals": {
+                "width": "8px",
+                "height": "8px",
+                "border-radius": "50%",
+                "display": "none"
+              },
+              "states": {
+                "disabled": {
+                  "background-color": "{s2a.color.content.subtle}"
+                }
+              },
+              "literalsByProp": [
+                {
+                  "prop": "selected",
+                  "map": {
+                    "true": {
+                      "display": "block"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "label": {
+          "element": "span",
+          "tokens": {
+            "font-family": "{s2a.font.family.label}",
+            "font-size": "{s2a.typography.font-size.label}",
+            "font-weight": "{s2a.font.weight.label}",
+            "letter-spacing": "{s2a.typography.letter-spacing.label}",
+            "line-height": "{s2a.typography.line-height.label}"
+          },
+          "slot": {
+            "name": "label",
+            "accepts": [
+              "kind:text"
+            ],
+            "acceptsMode": "prefer",
+            "defaultContent": [
+              {
+                "id": "text",
+                "text": "Individuals"
+              }
+            ]
+          },
+          "tokensByProp": [
+            {
+              "prop": "selected",
+              "map": {
+                "false": {
+                  "color": "{s2a.color.content.subtle}"
+                },
+                "true": {
+                  "color": "{s2a.color.content.default}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.3.1",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Native input with a real <label>, so the hit area includes the text.",
+      "Indeterminate is a property, not a third value.",
+      "Group related controls in a fieldset with a legend (1.3.1)."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "d469c02b526f01dd8985387fbae75c1f6626ba3a",
+        "nodeId": "11586:206620"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/radio/radio.js",
+        "export": "Radio"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:157ef56e35f43ef35c06e7307803da289fa1904beb51ebe9fef7b38a980b5ac1",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:006b14ea4e44c5333aae3a879d95f2fc77a125a2f6651b656aa0f15c2ccb43e0"
+    }
+  }
+}

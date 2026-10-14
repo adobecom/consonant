@@ -1,0 +1,106 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "helper-text",
+  "storybookId": "helper-text",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "intent-neutral",
+      "name": "intent: neutral",
+      "args": {
+        "intent": "neutral"
+      }
+    },
+    {
+      "id": "intent-error",
+      "name": "intent: error",
+      "args": {
+        "intent": "error"
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "atoms-helpertext--neutral",
+      "name": "Neutral",
+      "argKeys": [
+        "text",
+        "intent",
+        "id"
+      ]
+    },
+    {
+      "id": "atoms-helpertext--error",
+      "name": "Error",
+      "argKeys": [
+        "text",
+        "intent",
+        "id"
+      ]
+    },
+    {
+      "id": "atoms-helpertext--in-field-context",
+      "name": "In a field context",
+      "argKeys": [
+        "text",
+        "intent",
+        "id"
+      ]
+    }
+  ],
+  "deferred": [],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      "neutral",
+      "error"
+    ],
+    "rowValues": [
+      {
+        "Intent": "neutral"
+      },
+      {
+        "Intent": "error"
+      }
+    ],
+    "cell": {
+      "w": 442,
+      "h": 40,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "intent": "neutral"
+        },
+        "forced": null,
+        "label": "neutral / default",
+        "nodeId": "10243:101693"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "intent": "error"
+        },
+        "forced": null,
+        "label": "error / default",
+        "nodeId": "10243:101697"
+      }
+    ],
+    "missing": []
+  }
+}

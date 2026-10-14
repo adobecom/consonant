@@ -1,0 +1,29 @@
+/* Generated from helper-text.contract.json. Re-run: npm run specs:render -- --slug=helper-text */
+
+.c-helper-text [hidden],
+.c-helper-text[hidden] {
+  display: none !important;
+}
+
+.c-helper-text {
+  display: flex;
+  flex-direction: row;
+  width: 418px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-helper-text__text {
+  flex: 1 1 auto;
+  font-family: var(--s2a-font-family-caption);
+  font-size: var(--s2a-typography-font-size-caption);
+  font-weight: var(--s2a-font-weight-caption);
+  letter-spacing: var(--s2a-typography-letter-spacing-caption);
+  line-height: var(--s2a-typography-line-height-caption);
+}
+
+.c-helper-text[data-intent="neutral"] .c-helper-text__text {
+  color: var(--s2a-color-content-subtle);
+}
+
+.c-helper-text[data-intent="error"] .c-helper-text__text {
+  color: var(--s2a-color-content-utility-error);
+}

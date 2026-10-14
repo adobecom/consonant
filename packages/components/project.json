@@ -6,6 +6,7 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
+      "dependsOn": [{ "target": "check-media", "projects": ["validators"] }],
       "options": {
         "command": "node packages/components/scripts/build-components.js",
         "outputs": ["{workspaceRoot}/dist/packages/components"]

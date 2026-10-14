@@ -1,4 +1,6 @@
 export interface Violation {
+    /** Older spec/schema callers omit this; omitted severity means error. */
+    severity?: "error" | "warning";
     /** Stable, diffable code — e.g. PRIMITIVE_TOKEN, HARDCODED_HEX, UNKNOWN_TOKEN. */
     code: string;
     message: string;

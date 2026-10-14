@@ -16,6 +16,9 @@
 //   TOKENS        token bindings resolve in the shipped CSS (legacy specs warn)
 //   FIGMA         design bindings verified against plugin evidence (missing evidence warns)
 //   FRESH         generated specs equal a fresh build; code evidence matches the sources
+//   GRID          the grid/layout contracts: defs schema, generated contracts fresh,
+//                 and every layout rule run against the stylesheet, the shipped
+//                 tokens and the Figma container/grid modes
 //   EVALS (full)  homepage tokens, motion, visual, a11y, perf
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -35,6 +38,8 @@ const updateLock = args.includes("--update-schema-lock");
 const sha = (t) => "sha256:" + createHash("sha256").update(t).digest("hex");
 const readJson = (p) => JSON.parse(readFileSync(p, "utf8"));
 const alnum = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+// A category accept ("kind:icon") rather than a component name.
+const isKind = (s) => String(s).startsWith("kind:");
 
 const findings = [];
 const report = (cls, code, level, where, message) => findings.push({ class: cls, code, level, where, message });
@@ -65,14 +70,44 @@ else for (const [f, h] of Object.entries(current)) if (lock.files[f] !== h) repo
 
 // ── DEFS ──────────────────────────────────────────────────────────────────────
 const defsRun = run("node", ["packages/components/scripts/validate-defs.mjs"]);
-if (defsRun.status !== 0) for (const line of defsRun.stdout.split("\n").filter((l) => l.startsWith("FAIL") || l.startsWith("      "))) report("DEFS", "DEFS_FAILED", "fail", "validate-defs", line.trim());
+// validate-defs prints a FAIL header and its problems indented; warnings come
+// indented too, prefixed "warn:". They are warnings — counting them as
+// failures made every advisory line a red mark the moment one component failed.
+if (defsRun.status !== 0) for (const line of defsRun.stdout.split("\n").filter((l) => l.startsWith("FAIL") || l.startsWith("      "))) {
+  const text = line.trim();
+  if (text.startsWith("warn:")) report("DEFS", "DEFS_WARN", "warn", "validate-defs", text.slice(5).trim());
+  else report("DEFS", "DEFS_FAILED", "fail", "validate-defs", text);
+}
+// Every literal a contract ships, by name. A raw: value is a property the
+// design sets with no variable behind it (or one a curator typed): it renders
+// correctly and is still a token gap, so it is listed here every run until it
+// is bound in Figma or argued for in a decision — never silently shipped.
+for (const slug of defsSlugs) {
+  const defs = readJson(join(SRC, slug, `${slug}.defs.json`));
+  const justified = new Set((defs?.decisions ?? []).filter((d) => d.status === "decided" && /hardcoded|raw/i.test(`${d.id} ${d.decision ?? ""}`)).map((d) => d.id));
+  const walk = (part, path) => {
+    const maps = [["", part.tokens]];
+    for (const [st, m] of Object.entries(part.states ?? {})) maps.push([`:${st}`, m]);
+    for (const e of part.tokensByProp ?? []) for (const [val, m] of Object.entries(e.map ?? {})) maps.push([`@${e.prop}=${val}`, m]);
+    for (const e of part.statesByProp ?? []) for (const [val, m] of Object.entries(e.map ?? {})) maps.push([`@${e.prop}=${val}:${e.state}`, m]);
+    for (const [where, m] of maps) for (const [prop, ref] of Object.entries(m ?? {})) if (String(ref).startsWith("raw:")) {
+      report("DEFS", "DEFS_RAW_VALUE", "warn", `${slug}.defs.json anatomy ${path} ${prop}${where}`,
+        `${ref} is hardcoded — no S2A variable behind it${justified.size ? ` (decision ${[...justified].join(", ")} records why)` : "; bind one in Figma and re-extract, or record why in a decision"}`);
+    }
+    for (const [n, child] of Object.entries(part.parts ?? {})) walk(child, `${path}/${n}`);
+  };
+  if (defs?.anatomy?.root) walk(defs.anatomy.root, "root");
+}
 
 // ── COMPOSITION ───────────────────────────────────────────────────────────────
 const specByAlnum = new Map([...specs.values()].map((s) => [alnum(s.name), s.slug]));
 for (const [slug, spec] of specs) {
-  for (const dep of spec.composedOf ?? []) if (!specs.has(dep) && !specByAlnum.has(alnum(dep))) report("COMPOSITION", "COMPOSITION_UNKNOWN", "fail", `${slug}.spec.json composedOf`, `"${dep}" has no spec.json`);
+  for (const dep of spec.composedOf ?? []) if (!isKind(dep) && !specs.has(dep) && !specByAlnum.has(alnum(dep))) report("COMPOSITION", "COMPOSITION_UNKNOWN", "fail", `${slug}.spec.json composedOf`, `"${dep}" has no spec.json`);
   const walk = (part, path) => {
-    if (part?.slot) for (const a of part.slot.accepts) if (!specs.has(a) && !specByAlnum.has(alnum(a))) report("COMPOSITION", "COMPOSITION_UNKNOWN", "fail", `${slug}.spec.json anatomy ${path}`, `slot ${part.slot.name} accepts "${a}" which has no spec.json`);
+    // "kind:icon" names a category, not a component — the icon rig wraps
+    // hundreds of glyphs that will never each have a spec. There is nothing to
+    // resolve, so there is nothing to fail on.
+    if (part?.slot) for (const a of part.slot.accepts) if (!isKind(a) && !specs.has(a) && !specByAlnum.has(alnum(a))) report("COMPOSITION", "COMPOSITION_UNKNOWN", "fail", `${slug}.spec.json anatomy ${path}`, `slot ${part.slot.name} accepts "${a}" which has no spec.json`);
     for (const [n, c] of Object.entries(part?.parts ?? {})) walk(c, `${path}/${n}`);
   };
   if (spec.anatomy) walk(spec.anatomy, "root");
@@ -97,10 +132,19 @@ for (const slug of slugs) {
   const defs = existsSync(defsPath) ? readJson(defsPath) : null;
   // Icons arrive by the hundred and belong to an icon slot, not a contract each.
   const isIcon = (n) => /icon/i.test(n) && /^(s2|s2a)/i.test(String(n).replace(/^[._]/, ""));
+  // Direct dependencies only. The crawl is a deep walk, so an instance nested
+  // inside another instance is that component's dependency: action-card's
+  // "Overlay" lives inside its Media instance and belongs to Media's contract.
+  // Asking action-card to declare it would bill every component for its
+  // dependencies' dependencies, and the fix would be a lie.
+  const placed = ev.instances
+    .filter((i) => (i.set ?? i.mainComponent)?.name)
+    .map((i) => ({ name: (i.set ?? i.mainComponent).name, path: i.node ?? "" }));
+  const transitive = (p) => placed.some((o) => o.path !== p && p.startsWith(`${o.path}/`));
+
   const composed = new Map();
-  for (const ins of ev.instances) {
-    const name = (ins.set ?? ins.mainComponent)?.name;
-    if (!name || isIcon(name)) continue;
+  for (const { name, path } of placed) {
+    if (isIcon(name) || transitive(path)) continue;
     const clean = String(name).replace(/^[🚫.\s_]+/, "").replace(/\s*—\s*v\d+$/, "").trim();
     if (!clean || alnum(clean) === alnum(spec?.name)) continue;
     composed.set(alnum(clean), clean);
@@ -110,6 +154,9 @@ for (const slug of slugs) {
   // Anything the contract already accounts for: composedOf, a slot's accepts,
   // or a decision that mentions it by name (how an internal set gets settled).
   const declared = new Set((spec?.composedOf ?? []).map(alnum));
+  // composition[] is the structured ruling and outranks sniffing decision prose:
+  // every entry is an explicit statement about what this dependency is.
+  for (const c of defs?.composition ?? []) declared.add(alnum(c.name));
   const walkSlots = (part) => {
     for (const a of part?.slot?.accepts ?? []) declared.add(alnum(a));
     for (const c of Object.values(part?.parts ?? {})) walkSlots(c);
@@ -197,6 +244,39 @@ if (full) {
   }
 }
 
+// ── GRID ──────────────────────────────────────────────────────────────────────
+// The layout contracts run their own rules; the gate reports the outcome and
+// adopts its exit code. Grid evidence is cheap to regenerate but is NOT
+// regenerated here: a gate that rewrites its own inputs cannot fail on them.
+{
+  const gridValidator = join(ROOT, "packages", "grid", "scripts", "validate-grid-contracts.mjs");
+  const conformancePath = join(ROOT, "packages", "grid", "out", "grid-conformance.json");
+  if (!existsSync(gridValidator)) {
+    report("GRID", "GRID_VALIDATOR_MISSING", "warn", "packages/grid/scripts", "no grid validator on disk");
+  } else {
+    const r = run("node", [gridValidator, "--quiet"]);
+    if (!existsSync(conformancePath)) {
+      report("GRID", "GRID_REPORT_MISSING", "fail", "packages/grid/out/grid-conformance.json", r.stderr?.trim().slice(0, 300) || "validator produced no report");
+    } else {
+      const gc = readJson(conformancePath);
+      for (const s of gc.schema.filter((x) => !x.valid)) {
+        report("GRID", "GRID_SCHEMA_INVALID", "fail", `packages/grid/contracts/${s.slug}.defs.json`, s.errors.join("; ").slice(0, 300));
+      }
+      for (const f of gc.freshness.filter((x) => !x.fresh)) {
+        report("GRID", "GRID_CONTRACT_STALE", "fail", f.file, `${f.reason} — run: npm run grid:build`);
+      }
+      for (const c of gc.contracts) {
+        for (const rule of c.rules.filter((x) => x.status === "fail")) {
+          report("GRID", rule.severity === "fail" ? "GRID_RULE_FAILED" : "GRID_RULE_WARN", rule.severity, `${c.slug}/${rule.id}`, rule.detail);
+        }
+      }
+      for (const f of gc.scaleFindings) {
+        report("GRID", "GRID_SCALE_INVERTED", "warn", `${f.family}/${f.mode}`, f.detail);
+      }
+    }
+  }
+}
+
 // ── Report ────────────────────────────────────────────────────────────────────
 mkdirSync(OUT, { recursive: true });
 const fails = findings.filter((f) => f.level === "fail"), warns = findings.filter((f) => f.level === "warn");
@@ -204,7 +284,7 @@ const summary = { date: new Date().toISOString(), mode: full ? "full" : "static"
 writeFileSync(join(OUT, "gate.json"), JSON.stringify(summary, null, 2) + "\n");
 const byClass = {};
 for (const f of findings) (byClass[f.class] ??= { fail: 0, warn: 0 })[f.level]++;
-for (const cls of ["SCHEMA", "SCHEMA_LOCK", "DEFS", "COMPOSITION", "TOKENS", "FIGMA", "FRESH", ...(full ? ["EVALS"] : [])]) {
+for (const cls of ["SCHEMA", "SCHEMA_LOCK", "DEFS", "COMPOSITION", "TOKENS", "FIGMA", "FRESH", "GRID", ...(full ? ["EVALS"] : [])]) {
   const c = byClass[cls] ?? { fail: 0, warn: 0 };
   console.log(`${(c.fail ? "FAIL" : c.warn ? "WARN" : "PASS").padEnd(5)} ${cls.padEnd(12)} ${c.fail} fail · ${c.warn} warn`);
 }

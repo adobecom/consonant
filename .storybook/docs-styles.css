@@ -1,51 +1,197 @@
 /* Shared accordion styles for component documentation panels in Storybook */
 
 .s2a-doc-accordion {
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
-  margin: 10px 0;
+  border: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+  border-radius: var(--s2a-border-radius-sm);
+  margin: var(--s2a-spacing-xs) 0;
   overflow: hidden;
 }
 
 .s2a-doc-accordion > summary {
   list-style: none;
   cursor: pointer;
-  padding: 12px 18px;
-  font-size: 13px;
-  font-weight: 600;
+  padding: var(--s2a-spacing-sm) var(--s2a-spacing-md);
+  font-size: var(--s2a-font-size-xs);
+  font-weight: var(--s2a-font-weight-label);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #1a1a1a;
+  color: var(--s2a-color-content-default);
   user-select: none;
 }
 
-.s2a-doc-accordion > summary::-webkit-details-marker { display: none; }
+.s2a-doc-accordion > summary::-webkit-details-marker {
+  display: none;
+}
 
 .s2a-doc-accordion[open] > summary {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
 }
 
 .s2a-doc-badge {
-  font-size: 11px;
-  font-weight: 500;
-  color: #666;
-  background: rgba(0, 0, 0, 0.06);
-  border-radius: 20px;
-  padding: 2px 8px;
+  font-size: var(--s2a-font-size-xs);
+  font-weight: var(--s2a-font-weight-label);
+  color: var(--s2a-color-content-body-subtle);
+  background: var(--s2a-color-surface-subtle);
+  border-radius: var(--s2a-border-radius-lg);
+  padding: var(--s2a-spacing-3xs) var(--s2a-spacing-xs);
 }
 
 .s2a-doc-body {
-  padding: 14px 18px 18px;
+  padding: var(--s2a-spacing-sm) var(--s2a-spacing-md) var(--s2a-spacing-md);
 }
 
 .s2a-doc-body p {
-  margin: 0 0 8px;
-  font-size: 13px;
-  color: #444;
-  line-height: 1.5;
+  margin: 0 0 var(--s2a-spacing-xs);
+  font-size: var(--s2a-font-size-xs);
+  color: var(--s2a-color-content-body-subtle);
+  line-height: var(--s2a-font-line-height-xs);
 }
 
-.s2a-doc-body p:last-child { margin-bottom: 0; }
+.s2a-doc-body p:last-child {
+  margin-bottom: 0;
+}
 
-.s2a-doc-body code { font-weight: 600; }
+.s2a-doc-body code {
+  font-weight: var(--s2a-font-weight-label);
+}
+
+/* Storybook 10 emits unclassed MDX elements and an explicit .sb-unstyled
+   wrapper for live stories. Exclude previews so docs styling cannot restyle
+   the components being documented. */
+.sbdocs.sbdocs-wrapper {
+  background: var(--s2a-color-surface-default);
+  color: var(--s2a-color-content-default);
+  padding: var(--s2a-spacing-3xl) var(--s2a-spacing-xl);
+  font-family: var(--s2a-font-family-body);
+  font-size: var(--s2a-font-size-md);
+  line-height: var(--s2a-font-line-height-md);
+}
+.sbdocs.sbdocs-content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.sbdocs.sbdocs-content
+  table:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.sbdocs.sbdocs-content
+  pre:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.sbdocs.sbdocs-content
+  :is(h1, h2, h3, h4):not(
+    :where(.sb-story *, .docs-story *, .sbdocs-preview *)
+  ) {
+  color: var(--s2a-color-content-heading);
+  font-family: var(--s2a-font-family-heading);
+  font-weight: var(--s2a-font-weight-heading);
+  margin-block: var(--s2a-spacing-xl) var(--s2a-spacing-md);
+  border-color: var(--s2a-color-border-subtle);
+}
+.sbdocs.sbdocs-content
+  h1:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  font-size: var(--s2a-typography-font-size-heading-2);
+  line-height: var(--s2a-typography-line-height-heading-2);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-2);
+}
+.sbdocs.sbdocs-content
+  h2:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  font-size: var(--s2a-typography-font-size-heading-4);
+  line-height: var(--s2a-typography-line-height-heading-4);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-4);
+}
+.sbdocs.sbdocs-content
+  :is(h3, h4):not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  font-size: var(--s2a-font-size-2xl);
+  line-height: var(--s2a-font-line-height-lg);
+}
+.sbdocs.sbdocs-content
+  :is(p, li):not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  font-family: var(--s2a-font-family-body);
+  font-size: var(--s2a-font-size-md);
+  line-height: var(--s2a-font-line-height-md);
+  color: var(--s2a-color-content-default);
+}
+.sbdocs.sbdocs-content
+  :is(p, ul, ol):not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  margin-block: var(--s2a-spacing-md);
+}
+.sbdocs.sbdocs-content
+  :is(ul, ol):not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  padding-left: var(--s2a-spacing-lg);
+}
+.sbdocs.sbdocs-content
+  a:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  color: var(--s2a-color-content-default);
+  text-decoration: underline;
+}
+.sbdocs.sbdocs-content
+  :is(code, pre):not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  font-family: var(--s2a-font-family-body);
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-sm);
+  background: var(--s2a-color-surface-subtle);
+  color: var(--s2a-color-content-default);
+  border-color: var(--s2a-color-border-subtle);
+  border-radius: var(--s2a-border-radius-2xs);
+}
+.sbdocs.sbdocs-content
+  :is(th, td):not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  padding: var(--s2a-spacing-sm) var(--s2a-spacing-md);
+  border: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+  font: var(--s2a-font-size-sm)/var(--s2a-font-line-height-sm)
+    var(--s2a-font-family-body);
+  background: var(--s2a-color-surface-default);
+  color: var(--s2a-color-content-default);
+}
+.sbdocs.sbdocs-content
+  th:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  font-weight: var(--s2a-font-weight-label);
+}
+.sbdocs.sbdocs-content
+  hr:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  border: 0;
+  border-top: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+  margin-block: var(--s2a-spacing-xl);
+}
+.sbdocs.sbdocs-content
+  blockquote:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  border-left: var(--s2a-border-width-lg) solid var(--s2a-color-border-subtle);
+  padding-left: var(--s2a-spacing-md);
+  margin-block: var(--s2a-spacing-lg);
+}
+.sbdocs.sbdocs-content
+  .docblock-source:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  background: var(--s2a-color-surface-subtle);
+  border: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+  border-radius: var(--s2a-border-radius-sm);
+  box-shadow: none;
+}
+.sbdocs.sbdocs-content
+  pre:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  padding: var(--s2a-spacing-lg);
+}
+.sbdocs.sbdocs-content
+  pre
+  .token:not(:where(.sb-story *, .docs-story *, .sbdocs-preview *)) {
+  color: var(--s2a-color-content-default) !important;
+}
+.sbdocs.sbdocs-content
+  pre
+  :is(.comment, .prolog, .doctype, .cdata):not(
+    :where(.sb-story *, .docs-story *, .sbdocs-preview *)
+  ) {
+  color: var(--s2a-color-content-body-subtle) !important;
+}
+.sbdocs.sbdocs-content
+  pre
+  :is(.keyword, .property, .selector):not(
+    :where(.sb-story *, .docs-story *, .sbdocs-preview *)
+  ) {
+  color: var(--s2a-color-content-default) !important;
+  font-weight: var(--s2a-font-weight-label);
+}

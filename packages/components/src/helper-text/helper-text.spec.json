@@ -1,34 +1,359 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "HelperText",
   "slug": "helper-text",
   "cssClass": "c-helper-text",
+  "figmaNodeId": "10243:101699",
   "storybookId": "helper-text",
-  "description": "Supporting hint or error text rendered under a form field, in caption type.",
-  "figmaNode": "10243:101699",
+  "description": "Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
   "variants": {
-    "intent": ["neutral", "error"]
+    "Intent": [
+      "neutral",
+      "error"
+    ]
   },
   "props": [
-    { "name": "text", "type": "string", "defaultValue": "\"Helpful hint about this field.\"", "description": "Helper text content." },
-    { "name": "intent", "type": "string", "defaultValue": "\"neutral\"", "enum": ["neutral", "error"], "description": "neutral = subtle hint color, error = utility error color." },
-    { "name": "id", "type": "string", "defaultValue": "\"\"", "description": "id so the paired control can reference this text via aria-describedby." }
+    {
+      "name": "intent",
+      "type": "string",
+      "defaultValue": "\"neutral\"",
+      "enum": [
+        "neutral",
+        "error"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Intent",
+          "verified": true,
+          "options": [
+            "neutral",
+            "error"
+          ]
+        },
+        "code": {
+          "prop": "intent",
+          "attr": "data-intent",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "defaultValue": "\"Helpful hint about this field.\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Text#10243:2",
+          "verified": true
+        },
+        "code": {
+          "prop": "text",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "id",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
   ],
   "tokenBindings": {
-    "color:neutral": "--s2a-color-content-subtle",
-    "color:error": "--s2a-color-content-utility-error",
-    "font-family": "--s2a-font-family-caption",
-    "font-weight": "--s2a-font-weight-caption",
-    "font-size": "--s2a-typography-font-size-caption",
-    "line-height": "--s2a-typography-line-height-caption",
-    "letter-spacing": "--s2a-typography-letter-spacing-caption"
+    "text-font-family": "--s2a-font-family-caption",
+    "text-font-size": "--s2a-typography-font-size-caption",
+    "text-font-weight": "--s2a-font-weight-caption",
+    "text-letter-spacing": "--s2a-typography-letter-spacing-caption",
+    "text-line-height": "--s2a-typography-line-height-caption",
+    "text-color@intent=neutral": "--s2a-color-content-subtle",
+    "text-color@intent=error": "--s2a-color-content-utility-error"
   },
+  "tier": "component",
+  "composedOf": [],
   "a11y": {
-    "role": "none (plain text)",
-    "requiredAriaAttrs": [],
-    "wcag": ["1.3.1", "3.3.1", "3.3.2"],
+    "wcag": [
+      "1.3.1",
+      "3.3.1",
+      "3.3.3"
+    ],
     "notes": [
-      "Give HelperText an id and reference it from the paired control with aria-describedby.",
-      "For error intent, the paired control should also set aria-invalid='true'; color alone must not be the only error signal (WCAG 1.4.1)."
+      "Described-by is the relationship; colour alone is not the error signal (1.4.1, 3.3.1).",
+      "The message says what is wrong and, where possible, how to fix it (3.3.3)."
     ]
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".c-helper-text",
+    "figma": ".root",
+    "element": "p",
+    "layout": {
+      "display": "flex",
+      "direction": "row"
+    },
+    "tokens": {
+      "width": {
+        "value": "raw:418px",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "parts": {
+      "text": {
+        "selector": ".c-helper-text__text",
+        "figma": "/.text",
+        "element": "span",
+        "layout": {
+          "grow": true
+        },
+        "tokens": {
+          "font-family": {
+            "value": "{s2a.font.family.caption}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.font.family.caption}",
+                "cssVar": "--s2a-font-family-caption",
+                "figma": "s2a/font/family/caption",
+                "shipped": true,
+                "value": "\"Adobe Clean\""
+              }
+            ]
+          },
+          "font-size": {
+            "value": "{s2a.typography.font-size.caption}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.typography.font-size.caption}",
+                "cssVar": "--s2a-typography-font-size-caption",
+                "figma": "s2a/typography/font-size/caption",
+                "shipped": true,
+                "value": "0.75rem"
+              }
+            ]
+          },
+          "font-weight": {
+            "value": "{s2a.font.weight.caption}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.font.weight.caption}",
+                "cssVar": "--s2a-font-weight-caption",
+                "figma": "s2a/font/weight/caption",
+                "shipped": true,
+                "value": "700"
+              }
+            ]
+          },
+          "letter-spacing": {
+            "value": "{s2a.typography.letter-spacing.caption}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.typography.letter-spacing.caption}",
+                "cssVar": "--s2a-typography-letter-spacing-caption",
+                "figma": "s2a/typography/letter-spacing/caption",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          },
+          "line-height": {
+            "value": "{s2a.typography.line-height.caption}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.typography.line-height.caption}",
+                "cssVar": "--s2a-typography-line-height-caption",
+                "figma": "s2a/typography/line-height/caption",
+                "shipped": true,
+                "value": "16px"
+              }
+            ]
+          }
+        },
+        "tokensByProp": [
+          {
+            "prop": "intent",
+            "map": {
+              "neutral": {
+                "color": {
+                  "value": "{s2a.color.content.subtle}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.content.subtle}",
+                      "cssVar": "--s2a-color-content-subtle",
+                      "figma": "s2a/color/content/subtle",
+                      "shipped": true,
+                      "value": "rgb(0 0 0 / 64%)",
+                      "dark": "rgb(255 255 255 / 64%)"
+                    }
+                  ]
+                }
+              },
+              "error": {
+                "color": {
+                  "value": "{s2a.color.content.utility.error}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.content.utility.error}",
+                      "cssVar": "--s2a-color-content-utility-error",
+                      "figma": "s2a/color/content/utility/error",
+                      "shipped": true,
+                      "value": "#d73220"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "slot": {
+          "name": "text",
+          "accepts": [
+            "kind:text"
+          ],
+          "acceptsMode": "prefer",
+          "default": {
+            "text": "Helpful hint about this field."
+          }
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "10243:101699",
+        "nodeName": "HelperText",
+        "componentSetKey": "1cd9f8578e3737a891771ea7c4ee875ee7fd7f29",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:fb2131416bffcfd52b0e9b46ead03558ce1476cb4c29fc1087466aa536ede2bc",
+        "extractedAt": "2026-10-08T17:51:42.740Z",
+        "meta": {
+          "version": "1.0.0",
+          "status": "active",
+          "updated": "2026-08-04",
+          "changelog": "1.0.0   2026-08-04  init         Initial release"
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/helper-text/helper-text.js",
+        "export": "HelperText",
+        "controller": null,
+        "cssClass": "c-helper-text"
+      },
+      "evidence": {
+        "hash": "sha256:1e687685d1f3ee5970ea1509b14730a010d515bb44efde684b43c6a35af10e78"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "ht-archetype",
+      "question": "Scaffolded as helper text (named \"HelperText\"). Confirm, or re-run npm run specs:scaffold -- --slug=helper-text --archetype=<link-card|card|collection>.",
+      "chose": "helper text — named \"HelperText\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=helper-text --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×2; state axis none"
+    },
+    {
+      "id": "ht-part-selectors",
+      "question": "text has no class of its own in helper-text.css. The design names this part separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to helper-text.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/helper-text/helper-text.css"
+    },
+    {
+      "id": "ht-stray-text",
+      "question": "A text layer carries no recognisable role (not heading, body, eyebrow or label). Is it content (add a lever) or part of the illustration (fold into media)? Layers: /.text.",
+      "chose": "left 1 text layer out of the anatomy",
+      "confidence": "low",
+      "fix": "Name the layer in Figma so it claims a role, or add it under anatomy.root.parts here.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "helper-text.figma.evidence.json anatomy"
+    },
+    {
+      "id": "ht-code-only-props",
+      "question": "id exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 1 code-only prop as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "helper-text.code.evidence.json"
+    },
+    {
+      "id": "ht-hardcoded-values",
+      "question": "1 value in the design is set with no variable behind it: root width = 418px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried it through as raw: value so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "helper-text.figma.evidence.json unboundValues"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:e79e04010521e4e2544f49191b2f6506d93c8d3a9624e6d6fb20356db1e97241",
+    "codeEvidence": "sha256:1e687685d1f3ee5970ea1509b14730a010d515bb44efde684b43c6a35af10e78",
+    "figmaEvidence": "sha256:fb2131416bffcfd52b0e9b46ead03558ce1476cb4c29fc1087466aa536ede2bc",
+    "generator": "s2a-spec-transform@1"
   }
 }

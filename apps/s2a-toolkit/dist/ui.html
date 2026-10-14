@@ -1084,6 +1084,20 @@ body {
     <!-- Tokens -->
     <div class="panel" id="tokensPanel">
 
+      <!-- ── Align a design ───────────────────────────────────────────── -->
+      <!-- The other half of this tab. Token release PUBLISHES tokens; this is
+           what it takes to CONSUME them — reading someone else's frame and
+           saying which of its literals are already ours. Reports only: nothing
+           in the document moves until an apply step, because a confident wrong
+           bind costs more than an unbound value somebody can see. -->
+      <div id="sec-token-align" class="section-label">Align a design</div>
+      <div class="muted" style="margin:0 2px 8px;">Select a frame, component or set that came from outside S2A. This matches every unbound colour, size and type value against the tokens in this file.</div>
+      <div class="btn-row">
+        <button class="btn" id="contractAlignBtn" disabled title="Select a frame, component or component set in Figma" style="flex:1;">Align to S2A tokens</button>
+      </div>
+      <div class="contract-composes" id="contractAlign" style="display:none;"></div>
+      <div style="height:18px;"></div>
+
       <!-- ── Token release ────────────────────────────────────────────── -->
       <div id="sec-token-release" class="section-label">Token release</div>
 
@@ -1144,23 +1158,44 @@ body {
           </label>
         </div>
 
-        <!-- Extraction and curation are one job, so they are one row. Extract
-             records what Figma says; Open curates it. -->
-        <div class="btn-row">
-          <button class="btn" id="contractExtractBtn" disabled style="flex:2;">Extract contract</button>
-          <button class="btn" id="studioOpenBtn" disabled style="flex:2;">Open contract</button>
+        <!-- One primary action, decided by what the selection already has.
+             The old row offered Extract / Open / Copy / Publish / Scan / Clear
+             at once, which asked the reader to know the pipeline before doing
+             anything. The pipeline has not changed — extract still records what
+             Figma says and curation still happens after — but a step you always
+             take is not a decision worth surfacing. -->
+        <div class="btn-row" id="contractPrimaryRow">
+          <button class="btn" id="contractPrimaryBtn" disabled style="flex:2;">Select a component set</button>
+          <button class="btn btn-ghost" id="contractClearBtn" disabled title="Select a component set" style="flex:1;display:none;">Delete</button>
         </div>
-        <div class="btn-row">
-          <button class="btn btn-ghost" id="contractCopyBtn" disabled title="Copy the evidence JSON" style="flex:1;">Copy evidence</button>
-          <button class="btn btn-ghost" id="contractPublishBtn" disabled title="Send to the sync endpoint" style="flex:1;">Publish evidence</button>
-        </div>
+        <!-- What this component is built from, read off the evidence. Shown
+             rather than asked for: it is a property of the selection, not an
+             action someone should have to think to run. -->
+        <div class="contract-composes" id="contractComposes" style="display:none;"></div>
+
         <div class="status" id="studioListStatus"></div>
         <div class="status" id="contractStatus"></div>
         <pre class="contract-summary" id="contractSummary" style="display:none;"></pre>
         <pre class="contract-summary contract-match" id="contractMatch" style="display:none;"></pre>
-        <div class="btn-row" id="contractBuildRow" style="display:none;">
-          <button class="btn btn-ghost" id="contractBuildBtn" title="Build a component set on this page from the contract's figma.plan.json" style="flex:1;">Build set from contract</button>
-        </div>
+
+        <!-- Everything that is occasional, reversible or diagnostic. Out of the
+             main flow, not out of reach. -->
+        <details class="contract-settings" id="contractMoreDetails">
+          <summary>More</summary>
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="contractCopyBtn" disabled title="Put the extracted evidence JSON on the clipboard" style="flex:1;">Copy evidence</button>
+            <button class="btn btn-ghost" id="contractPublishBtn" disabled title="Re-send the evidence to the sync endpoint" style="flex:1;">Re-publish</button>
+          </div>
+          <div class="btn-row" id="contractBuildRow" style="display:none;">
+            <button class="btn btn-ghost" id="contractBuildBtn" title="Build a component set on this page from the contract's figma.plan.json" style="flex:1;">Build set in Figma</button>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="contractScanBtn" title="Walk every component page and record what each set is built from — refreshes the conversion order" style="flex:1;">Rescan library composition</button>
+          </div>
+          <label class="muted" style="display:flex;align-items:center;gap:6px;font-size:11px;margin:4px 0 2px 2px;cursor:pointer;" title="Figma evidence needs the plugin to recreate — only drop it if you are testing extraction itself">
+            <input type="checkbox" id="contractClearColdInput" style="margin:0;"> Delete also drops the Figma evidence
+          </label>
+        </details>
 
         <div class="section-label" style="margin-top:var(--s-4);">Contracts in the repo</div>
         <div id="studioIndex" class="studio-index"></div>
@@ -1345,8 +1380,8 @@ body {
     disabled: "[disabled] / :disabled"
   };
   function makeState(name2, evidence) {
-    var _a28, _b;
-    const axis = ((_a28 = evidence == null ? void 0 : evidence.axes) != null ? _a28 : []).find((a) => a.type === "VARIANT" && /^(state|interaction|pseudo)s?$/i.test(String(a.name).split("#")[0].trim()));
+    var _a31, _b;
+    const axis = ((_a31 = evidence == null ? void 0 : evidence.axes) != null ? _a31 : []).find((a) => a.type === "VARIANT" && /^(state|interaction|pseudo)s?$/i.test(String(a.name).split("#")[0].trim()));
     return {
       name: name2,
       figma: axis ? { kind: "VARIANT", property: axis.name, notes: `${String(axis.name).split("#")[0].trim()}=${name2}` } : "NONE",
@@ -1355,46 +1390,75 @@ body {
     };
   }
   var stateName = (s) => {
-    var _a28;
-    return typeof s === "string" ? s : (_a28 = s == null ? void 0 : s.name) != null ? _a28 : "";
+    var _a31;
+    return typeof s === "string" ? s : (_a31 = s == null ? void 0 : s.name) != null ? _a31 : "";
   };
   function mutateDef(state, fn) {
-    var _a28;
-    const next = JSON.parse(JSON.stringify((_a28 = state.def) != null ? _a28 : {}));
+    var _a31;
+    const next = JSON.parse(JSON.stringify((_a31 = state.def) != null ? _a31 : {}));
     fn(next);
     return next;
   }
   function slotsOf(def) {
-    var _a28;
+    var _a31;
     const out = [];
     const walk = (node, path) => {
-      var _a29;
+      var _a32;
       if (!node || typeof node !== "object") return;
       if (node.slot) out.push({ path, node });
-      for (const [name2, child] of Object.entries((_a29 = node.parts) != null ? _a29 : {})) walk(child, `${path}.${name2}`);
+      for (const [name2, child] of Object.entries((_a32 = node.parts) != null ? _a32 : {})) walk(child, `${path}.${name2}`);
     };
-    walk((_a28 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a28.root, "root");
+    walk((_a31 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a31.root, "root");
     return out;
   }
   function rootTokens(def) {
-    var _a28, _b, _c;
-    return (_c = (_b = (_a28 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a28.root) == null ? void 0 : _b.tokens) != null ? _c : {};
+    var _a31, _b, _c;
+    return (_c = (_b = (_a31 = def == null ? void 0 : def.anatomy) == null ? void 0 : _a31.root) == null ? void 0 : _b.tokens) != null ? _c : {};
   }
   function unboundAxes(state) {
-    var _a28, _b, _c, _d;
-    const used = new Set(((_b = (_a28 = state.def) == null ? void 0 : _a28.props) != null ? _b : []).map((p) => {
-      var _a29;
-      return (_a29 = p == null ? void 0 : p.figma) == null ? void 0 : _a29.property;
+    var _a31, _b, _c, _d;
+    const used = new Set(((_b = (_a31 = state.def) == null ? void 0 : _a31.props) != null ? _b : []).map((p) => {
+      var _a32;
+      return (_a32 = p == null ? void 0 : p.figma) == null ? void 0 : _a32.property;
     }).filter(Boolean));
     return ((_d = (_c = state.evidence) == null ? void 0 : _c.axes) != null ? _d : []).filter((a) => !used.has(a.name));
   }
   function acceptNames(state) {
-    var _a28;
-    const items = Array.isArray((_a28 = state.index) == null ? void 0 : _a28.items) ? state.index.items : [];
+    var _a31;
+    const items = Array.isArray((_a31 = state.index) == null ? void 0 : _a31.items) ? state.index.items : [];
     return [...new Set(items.map((c) => c == null ? void 0 : c.name).filter(Boolean))].sort();
   }
+  var SLOT_ROLE = [
+    [/(^|[.\-_])icons?([.\-_]|$)|chevron|arrow|glyph|mnemonic|caret/i, "icon"],
+    [/media|asset|image|thumb|video|overlay|picture/i, "media"],
+    [/label|headline|title|heading|body|text|eyebrow|quote|caption/i, "text"],
+    [/cta|action|button|link/i, "action"]
+  ];
+  function slotRole(path) {
+    var _a31;
+    const leaf = (_a31 = String(path).split(".").pop()) != null ? _a31 : "";
+    if (/^(element|slot|item|child|content|lockup|group|inner)([.\-_]|$)/i.test(leaf)) return null;
+    for (const [re, role] of SLOT_ROLE) if (re.test(leaf)) return role;
+    return null;
+  }
+  function contractRoles(name2) {
+    const n = String(name2).toLowerCase();
+    const roles = /* @__PURE__ */ new Set();
+    if (/icon|logo|mnemonic|chevron|arrow/.test(n)) roles.add("icon");
+    if (/media|image|asset|thumbnail|video|overlay|surface/.test(n)) roles.add("media");
+    if (/label|head|title|text|eyebrow|paragraph|quote|rich|meta/.test(n)) roles.add("text");
+    if (/button|link|cta|jumplink/.test(n)) roles.add("action");
+    return roles;
+  }
+  function rankAccepts(names, path) {
+    const role = slotRole(path);
+    if (!role) return { role: null, likely: [], other: names };
+    const likely = [], other = [];
+    for (const n of names) (contractRoles(n).has(role) ? likely : other).push(n);
+    return { role, likely, other };
+  }
   function propFromAxis(axis) {
-    var _a28, _b;
+    var _a31, _b;
     const camel = String(axis.name).replace(/#.*$/, "").trim().replace(/[^A-Za-z0-9]+(.)?/g, (_m, c) => c ? c.toUpperCase() : "").replace(/^(.)/, (c) => c.toLowerCase());
     const base2 = {
       name: camel,
@@ -1404,7 +1468,7 @@ body {
     };
     if (axis.type === "VARIANT") {
       base2.type = "string";
-      base2.enum = (_b = (_a28 = axis.variantOptions) != null ? _a28 : axis.options) != null ? _b : [];
+      base2.enum = (_b = (_a31 = axis.variantOptions) != null ? _a31 : axis.options) != null ? _b : [];
       if (axis.defaultValue !== void 0) base2.default = axis.defaultValue;
       base2.code.attr = `data-${String(axis.name).replace(/#.*$/, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
     } else if (axis.type === "BOOLEAN") {
@@ -1422,8 +1486,8 @@ body {
     return { tone: "bad", text: `\u2717 ${state.validation.errors.slice(0, 2).join("  \xB7  ")}` };
   }
   var canPublish = (s) => {
-    var _a28;
-    return !s.busy && !s.jsonError && Boolean((_a28 = s.validation) == null ? void 0 : _a28.valid);
+    var _a31;
+    return !s.busy && !s.jsonError && Boolean((_a31 = s.validation) == null ? void 0 : _a31.valid);
   };
 
   // node_modules/@marijn/find-cluster-break/src/index.js
@@ -2989,7 +3053,7 @@ body {
       this.id = nextID++;
     }
     dynamicSlot(addresses) {
-      var _a28;
+      var _a31;
       let getter = this.value;
       let compare2 = this.facet.compareInput;
       let id = this.id, idx = addresses[id] >> 1, multi = this.type == 2;
@@ -2999,7 +3063,7 @@ body {
           depDoc = true;
         else if (dep == "selection")
           depSel = true;
-        else if ((((_a28 = addresses[dep.id]) !== null && _a28 !== void 0 ? _a28 : 1) & 1) == 0)
+        else if ((((_a31 = addresses[dep.id]) !== null && _a31 !== void 0 ? _a31 : 1) & 1) == 0)
           depAddrs.push(addresses[dep.id]);
       }
       return {
@@ -3593,7 +3657,7 @@ body {
     }
   }
   function mergeTransaction(a, b, sequential) {
-    var _a28;
+    var _a31;
     let mapForA, mapForB, changes;
     if (sequential) {
       mapForA = b.changes;
@@ -3606,7 +3670,7 @@ body {
     }
     return {
       changes,
-      selection: b.selection ? b.selection.map(mapForB) : (_a28 = a.selection) === null || _a28 === void 0 ? void 0 : _a28.map(mapForA),
+      selection: b.selection ? b.selection.map(mapForB) : (_a31 = a.selection) === null || _a31 === void 0 ? void 0 : _a31.map(mapForA),
       effects: StateEffect.mapEffects(a.effects, mapForA).concat(StateEffect.mapEffects(b.effects, mapForB)),
       annotations: a.annotations.length ? a.annotations.concat(b.annotations) : b.annotations,
       scrollIntoView: a.scrollIntoView || b.scrollIntoView
@@ -6262,7 +6326,7 @@ body {
   }
   var movedOver = "";
   function moveVisually(line, order, dir, start, forward) {
-    var _a28;
+    var _a31;
     if (!line.length)
       return null;
     let startIndex = start.head - line.from, spanI;
@@ -6275,7 +6339,7 @@ body {
         return null;
       startIndex = order[spanI = order.length - 1].side(true, dir);
     } else {
-      spanI = BidiSpan.find(order, startIndex, (_a28 = start.bidiLevel) !== null && _a28 !== void 0 ? _a28 : -1, start.assoc);
+      spanI = BidiSpan.find(order, startIndex, (_a31 = start.bidiLevel) !== null && _a31 !== void 0 ? _a31 : -1, start.assoc);
     }
     let span = order[spanI], spanEnd = span.side(forward, dir);
     if (startIndex == spanEnd) {
@@ -6445,8 +6509,8 @@ body {
       return this;
     }
     destroy(view) {
-      var _a28;
-      if ((_a28 = this.value) === null || _a28 === void 0 ? void 0 : _a28.destroy) {
+      var _a31;
+      if ((_a31 = this.value) === null || _a31 === void 0 ? void 0 : _a31.destroy) {
         try {
           this.value.destroy();
         } catch (e) {
@@ -7231,7 +7295,7 @@ body {
       this.wrapperPos = 0;
     }
     addText(text, marks2, openStart, tile) {
-      var _a28;
+      var _a31;
       this.flushBuffer();
       let parent2 = this.ensureMarks(marks2, openStart);
       let prev = parent2.lastChild;
@@ -7244,7 +7308,7 @@ body {
         let tile2 = parent2.children[parent2.children.length - 1] = new TextTile(prev.dom, prev.text + text);
         tile2.parent = parent2;
       } else {
-        parent2.append(tile || TextTile.of(text, (_a28 = this.cache.find(TextTile)) === null || _a28 === void 0 ? void 0 : _a28.dom));
+        parent2.append(tile || TextTile.of(text, (_a31 = this.cache.find(TextTile)) === null || _a31 === void 0 ? void 0 : _a31.dom));
       }
       this.pos += text.length;
       this.afterWidget = null;
@@ -7326,10 +7390,10 @@ body {
       this.pos += length;
     }
     addLineStart(attrs, dom) {
-      var _a28;
+      var _a31;
       if (!attrs)
         attrs = lineBaseAttrs;
-      let tile = LineTile.start(attrs, dom || ((_a28 = this.cache.find(LineTile)) === null || _a28 === void 0 ? void 0 : _a28.dom), !!dom);
+      let tile = LineTile.start(attrs, dom || ((_a31 = this.cache.find(LineTile)) === null || _a31 === void 0 ? void 0 : _a31.dom), !!dom);
       this.getBlockPos().append(this.lastBlock = this.curLine = tile);
     }
     addLine(tile) {
@@ -7352,7 +7416,7 @@ body {
         this.addLineStart(attrs);
     }
     ensureMarks(marks2, openStart) {
-      var _a28;
+      var _a31;
       let parent2 = this.curLine;
       for (let i2 = marks2.length - 1; i2 >= 0; i2--) {
         let mark = marks2[i2], last2;
@@ -7360,7 +7424,7 @@ body {
           parent2 = last2;
           openStart--;
         } else {
-          let tile = MarkTile.of(mark, (_a28 = this.cache.find(MarkTile, (m) => m.mark.eq(mark))) === null || _a28 === void 0 ? void 0 : _a28.dom);
+          let tile = MarkTile.of(mark, (_a31 = this.cache.find(MarkTile, (m) => m.mark.eq(mark))) === null || _a31 === void 0 ? void 0 : _a31.dom);
           parent2.append(tile);
           parent2 = tile;
           openStart = 0;
@@ -7407,7 +7471,7 @@ body {
       this.wrapperPos = this.pos;
     }
     getBlockPos() {
-      var _a28;
+      var _a31;
       this.updateBlockWrappers();
       let parent2 = this.root;
       for (let wrap of this.wrappers) {
@@ -7415,7 +7479,7 @@ body {
         if (wrap.from < this.pos && last2 instanceof BlockWrapperTile && last2.wrapper.eq(wrap.wrapper)) {
           parent2 = last2;
         } else {
-          let tile = BlockWrapperTile.of(wrap.wrapper, (_a28 = this.cache.find(BlockWrapperTile, (t2) => t2.wrapper.eq(wrap.wrapper))) === null || _a28 === void 0 ? void 0 : _a28.dom);
+          let tile = BlockWrapperTile.of(wrap.wrapper, (_a31 = this.cache.find(BlockWrapperTile, (t2) => t2.wrapper.eq(wrap.wrapper))) === null || _a31 === void 0 ? void 0 : _a31.dom);
           parent2.append(tile);
           parent2 = tile;
         }
@@ -7889,7 +7953,7 @@ body {
     }
     // Update the document view to a given state.
     update(update) {
-      var _a28;
+      var _a31;
       let changedRanges = update.changedRanges;
       if (this.minWidth > 0 && changedRanges.length) {
         if (!changedRanges.every(({ fromA, toA }) => toA < this.minWidthFrom || fromA > this.minWidthTo)) {
@@ -7902,7 +7966,7 @@ body {
       this.updateEditContextFormatting(update);
       let readCompositionAt = -1;
       if (this.view.inputState.composing >= 0 && !this.view.observer.editContext) {
-        if ((_a28 = this.domChanged) === null || _a28 === void 0 ? void 0 : _a28.newSel)
+        if ((_a31 = this.domChanged) === null || _a31 === void 0 ? void 0 : _a31.newSel)
           readCompositionAt = this.domChanged.newSel.head;
         else if (!touchesComposition(update.changes, this.hasComposition) && !update.selectionSet)
           readCompositionAt = update.state.selection.main.head;
@@ -10036,13 +10100,13 @@ body {
     view.inputState.lastContextMenu = Date.now();
   };
   handlers.beforeinput = (view, event) => {
-    var _a28, _b;
+    var _a31, _b;
     if (event.inputType == "insertText" || event.inputType == "insertCompositionText") {
       view.inputState.insertingText = event.data;
       view.inputState.insertingTextAt = Date.now();
     }
     if (event.inputType == "insertReplacementText" && view.observer.editContext) {
-      let text = (_a28 = event.dataTransfer) === null || _a28 === void 0 ? void 0 : _a28.getData("text/plain"), ranges = event.getTargetRanges();
+      let text = (_a31 = event.dataTransfer) === null || _a31 === void 0 ? void 0 : _a31.getData("text/plain"), ranges = event.getTargetRanges();
       if (text && ranges.length) {
         let r = ranges[0];
         let from = view.posAtDOM(r.startContainer, r.startOffset), to = view.posAtDOM(r.endContainer, r.endOffset);
@@ -10056,8 +10120,8 @@ body {
       if (pending.key == "Backspace" || pending.key == "Delete") {
         let startViewHeight = ((_b = window.visualViewport) === null || _b === void 0 ? void 0 : _b.height) || 0;
         setTimeout(() => {
-          var _a29;
-          if ((((_a29 = window.visualViewport) === null || _a29 === void 0 ? void 0 : _a29.height) || 0) > startViewHeight + 10 && view.hasFocus) {
+          var _a32;
+          if ((((_a32 = window.visualViewport) === null || _a32 === void 0 ? void 0 : _a32.height) || 0) > startViewHeight + 10 && view.hasFocus) {
             view.contentDOM.blur();
             view.focus();
           }
@@ -11805,8 +11869,8 @@ body {
         this.printQuery = window.matchMedia("print");
       if (typeof ResizeObserver == "function") {
         this.resizeScroll = new ResizeObserver(() => {
-          var _a28;
-          if (((_a28 = this.view.docView) === null || _a28 === void 0 ? void 0 : _a28.lastUpdate) < Date.now() - 75)
+          var _a31;
+          if (((_a31 = this.view.docView) === null || _a31 === void 0 ? void 0 : _a31.lastUpdate) < Date.now() - 75)
             this.onResize();
         });
         this.resizeScroll.observe(view.scrollDOM);
@@ -11983,7 +12047,7 @@ body {
     // detected (via beforeinput or keydown), and then tries to flush
     // them or, if that has no effect, dispatches the given key.
     delayAndroidKey(key, keyCode) {
-      var _a28;
+      var _a31;
       if (!this.delayedAndroidKey) {
         let flush = () => {
           let key2 = this.delayedAndroidKey;
@@ -12006,7 +12070,7 @@ body {
           // this isn't coming right after another change, in which case
           // it is probably part of a weird chain of updates, and should
           // be ignored if it returns the DOM to its previous state.
-          force: this.lastChange < Date.now() - 50 || !!((_a28 = this.delayedAndroidKey) === null || _a28 === void 0 ? void 0 : _a28.force)
+          force: this.lastChange < Date.now() - 50 || !!((_a31 = this.delayedAndroidKey) === null || _a31 === void 0 ? void 0 : _a31.force)
         };
     }
     clearDelayedAndroidKey() {
@@ -12141,9 +12205,9 @@ body {
       }
     }
     destroy() {
-      var _a28, _b, _c;
+      var _a31, _b, _c;
       this.stop();
-      (_a28 = this.intersection) === null || _a28 === void 0 ? void 0 : _a28.disconnect();
+      (_a31 = this.intersection) === null || _a31 === void 0 ? void 0 : _a31.disconnect();
       (_b = this.gapIntersection) === null || _b === void 0 ? void 0 : _b.disconnect();
       (_c = this.resizeScroll) === null || _c === void 0 ? void 0 : _c.disconnect();
       for (let dom of this.scrollTargets)
@@ -12458,7 +12522,7 @@ body {
     view, so that the user can see the editor.
     */
     constructor(config2 = {}) {
-      var _a28;
+      var _a31;
       this.plugins = [];
       this.pluginMap = /* @__PURE__ */ new Map();
       this.editorAttrs = {};
@@ -12500,7 +12564,7 @@ body {
       this.updateAttrs();
       this.updateState = 0;
       this.requestMeasure();
-      if ((_a28 = document.fonts) === null || _a28 === void 0 ? void 0 : _a28.ready)
+      if ((_a31 = document.fonts) === null || _a31 === void 0 ? void 0 : _a31.ready)
         document.fonts.ready.then(() => {
           this.viewState.mustMeasureContent = "refresh";
           this.requestMeasure();
@@ -13169,8 +13233,8 @@ body {
     Check whether the editor has focus.
     */
     get hasFocus() {
-      var _a28;
-      return (this.dom.ownerDocument.hasFocus() || browser.safari && ((_a28 = this.inputState) === null || _a28 === void 0 ? void 0 : _a28.lastContextMenu) > Date.now() - 3e4) && this.root.activeElement == this.contentDOM;
+      var _a31;
+      return (this.dom.ownerDocument.hasFocus() || browser.safari && ((_a31 = this.inputState) === null || _a31 === void 0 ? void 0 : _a31.lastContextMenu) > Date.now() - 3e4) && this.root.activeElement == this.contentDOM;
     }
     /**
     Put focus on the editor.
@@ -13219,8 +13283,8 @@ body {
     cause it to scroll the given position or range into view.
     */
     static scrollIntoView(pos, options = {}) {
-      var _a28, _b, _c, _d;
-      return scrollIntoView.of(new ScrollTarget(typeof pos == "number" ? EditorSelection.cursor(pos) : pos, (_a28 = options.y) !== null && _a28 !== void 0 ? _a28 : "nearest", (_b = options.x) !== null && _b !== void 0 ? _b : "nearest", (_c = options.yMargin) !== null && _c !== void 0 ? _c : 5, (_d = options.xMargin) !== null && _d !== void 0 ? _d : 5));
+      var _a31, _b, _c, _d;
+      return scrollIntoView.of(new ScrollTarget(typeof pos == "number" ? EditorSelection.cursor(pos) : pos, (_a31 = options.y) !== null && _a31 !== void 0 ? _a31 : "nearest", (_b = options.x) !== null && _b !== void 0 ? _b : "nearest", (_c = options.yMargin) !== null && _c !== void 0 ? _c : 5, (_d = options.xMargin) !== null && _d !== void 0 ? _d : 5));
     }
     /**
     Return an effect that resets the editor to its current (at the
@@ -13324,10 +13388,10 @@ body {
     representation.
     */
     static findFromDOM(dom) {
-      var _a28;
+      var _a31;
       let content2 = dom.querySelector(".cm-content");
       let tile = content2 && Tile.get(content2) || Tile.get(dom);
-      return ((_a28 = tile === null || tile === void 0 ? void 0 : tile.root) === null || _a28 === void 0 ? void 0 : _a28.view) || null;
+      return ((_a31 = tile === null || tile === void 0 ? void 0 : tile.root) === null || _a31 === void 0 ? void 0 : _a31.view) || null;
     }
   };
   EditorView.styleModule = styleModule;
@@ -13474,7 +13538,7 @@ body {
         throw new Error("Key binding " + name2 + " is used both as a regular binding and as a multi-stroke prefix");
     };
     let add2 = (scope, key, command2, preventDefault, stopPropagation) => {
-      var _a28, _b;
+      var _a31, _b;
       let scopeObj = bound[scope] || (bound[scope] = /* @__PURE__ */ Object.create(null));
       let parts = key.split(/ (?!$)/).map((k) => normalizeKeyName(k, platform));
       for (let i2 = 1; i2 < parts.length; i2++) {
@@ -13499,7 +13563,7 @@ body {
       let binding = scopeObj[full] || (scopeObj[full] = {
         preventDefault: false,
         stopPropagation: false,
-        run: ((_b = (_a28 = scopeObj._any) === null || _a28 === void 0 ? void 0 : _a28.run) === null || _b === void 0 ? void 0 : _b.slice()) || []
+        run: ((_b = (_a31 = scopeObj._any) === null || _a31 === void 0 ? void 0 : _a31.run) === null || _b === void 0 ? void 0 : _b.slice()) || []
       });
       if (command2)
         binding.run.push(command2);
@@ -14055,10 +14119,10 @@ body {
   };
   var _supportsTabSize = null;
   function supportsTabSize() {
-    var _a28;
+    var _a31;
     if (_supportsTabSize == null && typeof document != "undefined" && document.body) {
       let styles = document.body.style;
-      _supportsTabSize = ((_a28 = styles.tabSize) !== null && _a28 !== void 0 ? _a28 : styles.MozTabSize) != null;
+      _supportsTabSize = ((_a31 = styles.tabSize) !== null && _a31 !== void 0 ? _a31 : styles.MozTabSize) != null;
     }
     return _supportsTabSize || false;
   }
@@ -14303,8 +14367,8 @@ body {
     return [
       plugin,
       EditorView.contentAttributes.of((view) => {
-        var _a28;
-        return ((_a28 = view.plugin(plugin)) === null || _a28 === void 0 ? void 0 : _a28.isDown) ? showCrosshair : null;
+        var _a31;
+        return ((_a31 = view.plugin(plugin)) === null || _a31 === void 0 ? void 0 : _a31.isDown) ? showCrosshair : null;
       })
     ];
   }
@@ -14320,7 +14384,7 @@ body {
       this.tooltipViews = this.tooltips.map((t2) => prev = createTooltipView(t2, prev));
     }
     update(update, above) {
-      var _a28;
+      var _a31;
       let input = update.state.facet(this.facet);
       let tooltips = input.filter((x) => x);
       if (input === this.input) {
@@ -14354,7 +14418,7 @@ body {
       for (let t2 of this.tooltipViews)
         if (tooltipViews.indexOf(t2) < 0) {
           this.removeTooltipView(t2);
-          (_a28 = t2.destroy) === null || _a28 === void 0 ? void 0 : _a28.call(t2);
+          (_a31 = t2.destroy) === null || _a31 === void 0 ? void 0 : _a31.call(t2);
         }
       if (above) {
         newAbove.forEach((val, i2) => above[i2] = val);
@@ -14372,9 +14436,9 @@ body {
   }
   var tooltipConfig = /* @__PURE__ */ Facet.define({
     combine: (values) => {
-      var _a28, _b, _c;
+      var _a31, _b, _c;
       return {
-        position: browser.ios ? "absolute" : ((_a28 = values.find((conf) => conf.position)) === null || _a28 === void 0 ? void 0 : _a28.position) || "fixed",
+        position: browser.ios ? "absolute" : ((_a31 = values.find((conf) => conf.position)) === null || _a31 === void 0 ? void 0 : _a31.position) || "fixed",
         parent: ((_b = values.find((conf) => conf.parent)) === null || _b === void 0 ? void 0 : _b.parent) || null,
         tooltipSpace: ((_c = values.find((conf) => conf.tooltipSpace)) === null || _c === void 0 ? void 0 : _c.tooltipSpace) || windowSpace
       };
@@ -14482,11 +14546,11 @@ body {
       return tooltipView;
     }
     destroy() {
-      var _a28, _b, _c;
+      var _a31, _b, _c;
       this.view.win.removeEventListener("resize", this.measureSoon);
       for (let tooltipView of this.manager.tooltipViews) {
         tooltipView.dom.remove();
-        (_a28 = tooltipView.destroy) === null || _a28 === void 0 ? void 0 : _a28.call(tooltipView);
+        (_a31 = tooltipView.destroy) === null || _a31 === void 0 ? void 0 : _a31.call(tooltipView);
       }
       if (this.parent)
         this.container.remove();
@@ -14537,7 +14601,7 @@ body {
       };
     }
     writeMeasure(measured) {
-      var _a28;
+      var _a31;
       if (measured.makeAbsolute) {
         this.madeAbsolute = true;
         this.position = "absolute";
@@ -14555,7 +14619,7 @@ body {
         }
         let arrow = tooltip.arrow ? tView.dom.querySelector(".cm-tooltip-arrow") : null;
         let arrowHeight = arrow ? 7 : 0;
-        let width = size.right - size.left, height = (_a28 = knownHeight.get(tView)) !== null && _a28 !== void 0 ? _a28 : size.bottom - size.top;
+        let width = size.right - size.left, height = (_a31 = knownHeight.get(tView)) !== null && _a31 !== void 0 ? _a31 : size.bottom - size.top;
         let offset = tView.offset || noOffset, ltr = this.view.textDirection == Direction.LTR;
         let left = size.width > space.right - space.left ? ltr ? space.left : space.right - size.width : ltr ? Math.max(space.left, Math.min(pos.left - (arrow ? 14 : 0) + offset.x, space.right - width)) : Math.min(Math.max(space.left, pos.left - width + (arrow ? 14 : 0) - offset.x), space.right - width);
         let above = this.above[i2];
@@ -14728,9 +14792,9 @@ body {
       this.manager.update(update);
     }
     destroy() {
-      var _a28;
+      var _a31;
       for (let t2 of this.manager.tooltipViews)
-        (_a28 = t2.destroy) === null || _a28 === void 0 ? void 0 : _a28.call(t2);
+        (_a31 = t2.destroy) === null || _a31 === void 0 ? void 0 : _a31.call(t2);
     }
     passProp(name2) {
       let value = void 0;
@@ -14765,8 +14829,8 @@ body {
     return {
       pos: Math.min(...tooltips.map((t2) => t2.pos)),
       end: Math.max(...tooltips.map((t2) => {
-        var _a28;
-        return (_a28 = t2.end) !== null && _a28 !== void 0 ? _a28 : t2.pos;
+        var _a31;
+        return (_a31 = t2.end) !== null && _a31 !== void 0 ? _a31 : t2.pos;
       })),
       create: HoverTooltipHost.create,
       above: tooltips[0].above,
@@ -14860,13 +14924,13 @@ body {
       return index > -1 ? plugin.manager.tooltipViews[index] : null;
     }
     mousemove(event) {
-      var _a28, _b;
+      var _a31, _b;
       this.lastMove = { x: event.clientX, y: event.clientY, target: event.target, time: Date.now() };
       if (this.hoverTimeout < 0)
         this.hoverTimeout = setTimeout(this.checkHover, this.hoverTime);
       let { active, tooltip } = this;
       if (active.length && !this.locked.has(active) && tooltip && !isInTooltip(tooltip.dom, event) || this.pending) {
-        let { pos } = active[0] || this.pending, end = (_b = (_a28 = active[0]) === null || _a28 === void 0 ? void 0 : _a28.end) !== null && _b !== void 0 ? _b : pos;
+        let { pos } = active[0] || this.pending, end = (_b = (_a31 = active[0]) === null || _a31 === void 0 ? void 0 : _a31.end) !== null && _b !== void 0 ? _b : pos;
         if (pos == end ? this.view.posAtCoords(this.lastMove) != pos : !isOverRange(this.view, pos, end, event.clientX, event.clientY)) {
           this.view.dispatch({ effects: this.setHover.of([]) });
           this.pending = null;
@@ -16220,7 +16284,7 @@ body {
     }
   }
   function resolveNode(node, pos, side, overlays) {
-    var _a28;
+    var _a31;
     while (node.from == node.to || (side < 1 ? node.from >= pos : node.from > pos) || (side > -1 ? node.to <= pos : node.to < pos)) {
       let parent2 = !overlays && node instanceof TreeNode && node.index < 0 ? null : node.parent;
       if (!parent2)
@@ -16230,7 +16294,7 @@ body {
     let mode = overlays ? 0 : IterMode.IgnoreOverlays;
     if (overlays)
       for (let scan = node, parent2 = scan.parent; parent2; scan = parent2, parent2 = scan.parent) {
-        if (scan instanceof TreeNode && scan.index < 0 && ((_a28 = parent2.enter(pos, side, mode)) === null || _a28 === void 0 ? void 0 : _a28.from) != scan.from)
+        if (scan instanceof TreeNode && scan.index < 0 && ((_a31 = parent2.enter(pos, side, mode)) === null || _a31 === void 0 ? void 0 : _a31.from) != scan.from)
           node = parent2;
       }
     for (; ; ) {
@@ -16966,7 +17030,7 @@ body {
     return tree.children.some((ch) => ch instanceof TreeBuffer || !ch.type.isAnonymous || hasChild(ch));
   }
   function buildTree(data) {
-    var _a28;
+    var _a31;
     let { buffer, nodeSet, maxBufferLength = DefaultBufferLength, reused = [], minRepeatType = nodeSet.types.length } = data;
     let cursor = Array.isArray(buffer) ? new FlatBufferCursor(buffer, buffer.length) : buffer;
     let types2 = nodeSet.types;
@@ -17163,7 +17227,7 @@ body {
     let children = [], positions = [];
     while (cursor.pos > 0)
       takeNode(data.start || 0, data.bufferStart || 0, children, positions, -1, 0);
-    let length = (_a28 = data.length) !== null && _a28 !== void 0 ? _a28 : children.length ? positions[0] + children[0].length : 0;
+    let length = (_a31 = data.length) !== null && _a31 !== void 0 ? _a31 : children.length ? positions[0] + children[0].length : 0;
     return new Tree(types2[data.topID], children.reverse(), positions.reverse(), length);
   }
   var nodeSizeCache = /* @__PURE__ */ new WeakMap();
@@ -18277,7 +18341,7 @@ body {
         return true;
       }
       return this.withContext(() => {
-        var _a28;
+        var _a31;
         if (typeof until == "number") {
           let endTime = Date.now() + until;
           until = () => Date.now() > endTime;
@@ -18290,7 +18354,7 @@ body {
           let done = this.parse.advance();
           if (done) {
             this.fragments = this.withoutTempSkipped(TreeFragment.addTree(done, this.fragments, this.parse.stoppedAt != null));
-            this.treeLen = (_a28 = this.parse.stoppedAt) !== null && _a28 !== void 0 ? _a28 : this.state.doc.length;
+            this.treeLen = (_a31 = this.parse.stoppedAt) !== null && _a31 !== void 0 ? _a31 : this.state.doc.length;
             this.tree = done;
             this.parse = null;
             if (this.treeLen < (upto !== null && upto !== void 0 ? upto : this.state.doc.length))
@@ -19014,9 +19078,9 @@ body {
     });
   }
   function findFold(state, from, to) {
-    var _a28;
+    var _a31;
     let found = null;
-    (_a28 = state.field(foldState, false)) === null || _a28 === void 0 ? void 0 : _a28.between(from, to, (from2, to2) => {
+    (_a31 = state.field(foldState, false)) === null || _a31 === void 0 ? void 0 : _a31.between(from, to, (from2, to2) => {
       if (!found || found.from > from2)
         found = { from: from2, to: to2 };
     });
@@ -19194,8 +19258,8 @@ body {
       gutter({
         class: "cm-foldGutter",
         markers(view) {
-          var _a28;
-          return ((_a28 = view.plugin(markers)) === null || _a28 === void 0 ? void 0 : _a28.markers) || RangeSet.empty;
+          var _a31;
+          return ((_a31 = view.plugin(markers)) === null || _a31 === void 0 ? void 0 : _a31.markers) || RangeSet.empty;
         },
         initialSpacer() {
           return new FoldMarker(fullConfig, false);
@@ -19893,9 +19957,9 @@ body {
       return new _HistEvent(this.changes, this.effects, this.mapped, this.startSelection, after);
     }
     toJSON() {
-      var _a28, _b, _c;
+      var _a31, _b, _c;
       return {
-        changes: (_a28 = this.changes) === null || _a28 === void 0 ? void 0 : _a28.toJSON(),
+        changes: (_a31 = this.changes) === null || _a31 === void 0 ? void 0 : _a31.toJSON(),
         mapped: (_b = this.mapped) === null || _b === void 0 ? void 0 : _b.toJSON(),
         startSelection: (_c = this.startSelection) === null || _c === void 0 ? void 0 : _c.toJSON(),
         selectionsAfter: this.selectionsAfter.map((s) => s.toJSON())
@@ -20993,7 +21057,7 @@ body {
     try {
       new RegExp(source, baseFlags);
       return true;
-    } catch (_a28) {
+    } catch (_a31) {
       return false;
     }
   }
@@ -21578,14 +21642,14 @@ body {
     return view.state.facet(searchConfigFacet).createPanel(view);
   }
   function defaultQuery(state, fallback) {
-    var _a28, _b, _c, _d, _e;
+    var _a31, _b, _c, _d, _e;
     let sel = state.selection.main;
     let selText = sel.empty || sel.to > sel.from + 100 ? "" : state.sliceDoc(sel.from, sel.to);
     if (fallback && !selText)
       return fallback;
     let config2 = state.facet(searchConfigFacet);
     return new SearchQuery({
-      search: ((_a28 = fallback === null || fallback === void 0 ? void 0 : fallback.literal) !== null && _a28 !== void 0 ? _a28 : config2.literal) ? selText : selText.replace(/\n/g, "\\n"),
+      search: ((_a31 = fallback === null || fallback === void 0 ? void 0 : fallback.literal) !== null && _a31 !== void 0 ? _a31 : config2.literal) ? selText : selText.replace(/\n/g, "\\n"),
       caseSensitive: (_b = fallback === null || fallback === void 0 ? void 0 : fallback.caseSensitive) !== null && _b !== void 0 ? _b : config2.caseSensitive,
       literal: (_c = fallback === null || fallback === void 0 ? void 0 : fallback.literal) !== null && _c !== void 0 ? _c : config2.literal,
       regexp: (_d = fallback === null || fallback === void 0 ? void 0 : fallback.regexp) !== null && _d !== void 0 ? _d : config2.regexp,
@@ -22355,9 +22419,9 @@ body {
     return assigned;
   }
   function renderDiagnostic(view, diagnostic, inPanel) {
-    var _a28;
+    var _a31;
     let keys2 = inPanel ? assignKeys(diagnostic.actions) : [];
-    return crelt("li", { class: "cm-diagnostic cm-diagnostic-" + diagnostic.severity }, crelt("span", { class: "cm-diagnosticText" }, diagnostic.renderMessage ? diagnostic.renderMessage(view) : diagnostic.message), (_a28 = diagnostic.actions) === null || _a28 === void 0 ? void 0 : _a28.map((action, i2) => {
+    return crelt("li", { class: "cm-diagnostic cm-diagnostic-" + diagnostic.severity }, crelt("span", { class: "cm-diagnosticText" }, diagnostic.renderMessage ? diagnostic.renderMessage(view) : diagnostic.message), (_a31 = diagnostic.actions) === null || _a31 === void 0 ? void 0 : _a31.map((action, i2) => {
       let fired = false, click = (e) => {
         e.preventDefault();
         if (fired)
@@ -22908,7 +22972,7 @@ body {
     @internal
     */
     reduce(action) {
-      var _a28;
+      var _a31;
       let depth = action >> 19, type = action & 65535;
       let { parser: parser2 } = this.p;
       let lookaheadRecord = this.reducePos < this.pos - 25 && this.setLookAhead(this.pos);
@@ -22929,7 +22993,7 @@ body {
       if (type < parser2.minRepeatTerm && start == this.reducePos && this.reducePos < this.pos)
         this.reducePos = this.pos;
       let size = this.reducePos - start;
-      if (size >= 2e3 && !((_a28 = this.p.parser.nodeSet.types[type]) === null || _a28 === void 0 ? void 0 : _a28.isAnonymous)) {
+      if (size >= 2e3 && !((_a31 = this.p.parser.nodeSet.types[type]) === null || _a31 === void 0 ? void 0 : _a31.isAnonymous)) {
         if (start == this.p.lastBigReductionStart) {
           this.p.bigReductionCount++;
           this.p.lastBigReductionSize = size;
@@ -24749,21 +24813,21 @@ body {
           keymap.of([...closeBracketsKeymap, ...defaultKeymap, ...historyKeymap, ...foldKeymap, ...searchKeymap, indentWithTab]),
           editable2.of(EditorView.editable.of(true)),
           EditorView.updateListener.of((u) => {
-            var _a28, _b;
+            var _a31, _b;
             if (!u.docChanged) return;
-            external = (_b = (_a28 = opts.externalDiagnostics) == null ? void 0 : _a28.call(opts)) != null ? _b : [];
+            external = (_b = (_a31 = opts.externalDiagnostics) == null ? void 0 : _a31.call(opts)) != null ? _b : [];
             opts.onChange(u.state.doc.toString());
           })
         ]
       })
     });
     const foldToDepth = (depth) => {
-      var _a28, _b;
+      var _a31, _b;
       unfoldAll(view);
       const effects = [];
       for (let i2 = 1; i2 <= view.state.doc.lines; i2++) {
         const line = view.state.doc.line(i2);
-        const indent = (_b = (_a28 = line.text.match(/^\s*/)) == null ? void 0 : _a28[0].length) != null ? _b : 0;
+        const indent = (_b = (_a31 = line.text.match(/^\s*/)) == null ? void 0 : _a31[0].length) != null ? _b : 0;
         if (indent / 2 < depth) continue;
         const range = foldable(view.state, line.from, line.to);
         if (range) effects.push(foldEffect.of(range));
@@ -24861,6 +24925,10 @@ body {
   var selectSetId = null;
   var docSetId = null;
   var contractSetId = null;
+  var contractSelectedSlug = null;
+  var contractHasDefs = /* @__PURE__ */ new Set();
+  var contractByName = /* @__PURE__ */ new Map();
+  var alnum = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
   var contractEvidence = null;
   var contractIndexCache = null;
   var bridgeConnected = false;
@@ -24930,8 +24998,8 @@ body {
       description: "Copy a shareable link for the selected node(s)",
       category: "Tools",
       uiAction: () => {
-        var _a28;
-        return (_a28 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a28.click();
+        var _a31;
+        return (_a31 = document.getElementById("copyNodeBtn")) == null ? void 0 : _a31.click();
       }
     },
     {
@@ -24997,7 +25065,7 @@ body {
       category: "Tools",
       uiAction: () => runOrReveal(
         "contract",
-        "contractExtractBtn",
+        "contractPrimaryBtn",
         "studioList",
         "Select a component set, instance or frame in Figma first."
       )
@@ -25012,8 +25080,8 @@ body {
       uiAction: () => {
         switchPanel("request");
         setTimeout(() => {
-          var _a28;
-          return (_a28 = document.getElementById("reqSummary")) == null ? void 0 : _a28.focus();
+          var _a31;
+          return (_a31 = document.getElementById("reqSummary")) == null ? void 0 : _a31.focus();
         }, 0);
       }
     },
@@ -25075,13 +25143,13 @@ body {
     "tools:request"
   ];
   function fireFeature(feat) {
-    var _a28;
+    var _a31;
     logEvent(feat.id);
     closePalette();
     if (feat.uiAction) {
       feat.uiAction();
     } else if (feat.pluginAction) {
-      postToPlugin(feat.pluginAction, (_a28 = feat.pluginPayload) != null ? _a28 : {});
+      postToPlugin(feat.pluginAction, (_a31 = feat.pluginPayload) != null ? _a31 : {});
     }
   }
   function badgeHtml(heat) {
@@ -25128,8 +25196,8 @@ body {
   }
   function renderPalette() {
     const groupOf = (f) => {
-      var _a28;
-      return (_a28 = paletteGrouping == null ? void 0 : paletteGrouping.get(f.id)) != null ? _a28 : f.category;
+      var _a31;
+      return (_a31 = paletteGrouping == null ? void 0 : paletteGrouping.get(f.id)) != null ? _a31 : f.category;
     };
     const cats = [...new Set(paletteFiltered.map(groupOf))];
     let globalIdx = 0;
@@ -25160,12 +25228,12 @@ body {
   }
   paletteInput.addEventListener("input", () => filterPalette(paletteInput.value));
   paletteInput.addEventListener("keydown", (e) => {
-    var _a28, _b;
+    var _a31, _b;
     if (e.key === "ArrowDown") {
       e.preventDefault();
       paletteSelected = Math.min(paletteSelected + 1, paletteFiltered.length - 1);
       renderPalette();
-      (_a28 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a28.scrollIntoView({ block: "nearest" });
+      (_a31 = paletteList.querySelector(`[data-selected="true"]`)) == null ? void 0 : _a31.scrollIntoView({ block: "nearest" });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       paletteSelected = Math.max(paletteSelected - 1, 0);
@@ -25229,7 +25297,7 @@ body {
   var _copyFileName = null;
   var _copyAllNodes = [];
   function copyToClipboard(text) {
-    var _a28;
+    var _a31;
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0";
@@ -25242,7 +25310,7 @@ body {
     }
     document.body.removeChild(ta);
     try {
-      (_a28 = navigator.clipboard) == null ? void 0 : _a28.writeText(text).catch(() => {
+      (_a31 = navigator.clipboard) == null ? void 0 : _a31.writeText(text).catch(() => {
       });
     } catch (e) {
     }
@@ -25586,8 +25654,8 @@ body {
     el2.className = "status" + (type ? " " + type : "");
   }
   function updateAnnotateSelection(sel) {
-    var _a28;
-    annotateNodeId = (_a28 = sel == null ? void 0 : sel.id) != null ? _a28 : null;
+    var _a31;
+    annotateNodeId = (_a31 = sel == null ? void 0 : sel.id) != null ? _a31 : null;
     const emptyEl = document.getElementById("annotateSelectionEmpty");
     const infoEl = document.getElementById("annotateSelectionInfo");
     const nameEl = document.getElementById("annotateNodeName");
@@ -25640,9 +25708,9 @@ body {
     el2.className = "status" + (type ? " " + type : "");
   }
   function updateDocSelection(sel) {
-    var _a28, _b;
+    var _a31, _b;
     const isDocable = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT";
-    docSetId = isDocable ? (_a28 = sel == null ? void 0 : sel.id) != null ? _a28 : null : null;
+    docSetId = isDocable ? (_a31 = sel == null ? void 0 : sel.id) != null ? _a31 : null : null;
     const emptyEl = document.getElementById("docSelectionEmpty");
     const infoEl = document.getElementById("docSelectionInfo");
     const nameEl = document.getElementById("docSetName");
@@ -25662,9 +25730,9 @@ body {
   }
   var docCheckId = null;
   function updateDocCheckSelection(sel) {
-    var _a28;
+    var _a31;
     const ok = (sel == null ? void 0 : sel.nodeType) === "FRAME";
-    docCheckId = ok ? (_a28 = sel == null ? void 0 : sel.id) != null ? _a28 : null : null;
+    docCheckId = ok ? (_a31 = sel == null ? void 0 : sel.id) != null ? _a31 : null : null;
     const emptyEl = document.getElementById("docCheckSelectionEmpty");
     const infoEl = document.getElementById("docCheckSelectionInfo");
     const nameEl = document.getElementById("docCheckName");
@@ -25712,34 +25780,43 @@ body {
   var $s = (id) => document.getElementById(id);
   var SYNC_DOWN = `No sync server at ${"{endpoint}"}. Start it: npm run contract-sync (in apps/s2a-toolkit).`;
   var syncDownMessage = () => SYNC_DOWN.replace("{endpoint}", contractEndpoint);
+  var isNetworkError = (err) => {
+    var _a31;
+    return err instanceof TypeError || /failed to fetch|networkerror|load failed|econnrefused/i.test(String((_a31 = err == null ? void 0 : err.message) != null ? _a31 : ""));
+  };
+  var withHint = (err) => isNetworkError(err) ? `. ${syncDownMessage()}` : "";
   async function studioApi(path, init) {
-    var _a28;
+    var _a31;
     try {
-      return await fetch(`${contractEndpoint}${path}`, __spreadProps(__spreadValues({}, init), { headers: __spreadValues({ "content-type": "application/json" }, (_a28 = init == null ? void 0 : init.headers) != null ? _a28 : {}) }));
+      return await fetch(`${contractEndpoint}${path}`, __spreadProps(__spreadValues({}, init), { headers: __spreadValues({ "content-type": "application/json" }, (_a31 = init == null ? void 0 : init.headers) != null ? _a31 : {}) }));
     } catch (e) {
       throw new Error(syncDownMessage());
     }
   }
   function studioSetSelection(sel) {
-    var _a28, _b;
-    const usable = ["COMPONENT_SET", "COMPONENT", "INSTANCE", "FRAME", "SECTION", "GROUP"].includes((_a28 = sel == null ? void 0 : sel.nodeType) != null ? _a28 : "");
+    var _a31, _b;
+    const usable = ["COMPONENT_SET", "COMPONENT", "INSTANCE", "FRAME", "SECTION", "GROUP"].includes((_a31 = sel == null ? void 0 : sel.nodeType) != null ? _a31 : "");
     studioSel = usable ? sel : null;
     const empty2 = $s("studioSelEmpty"), info = $s("studioSelInfo");
-    const btn = $s("studioOpenBtn");
+    const btn = $s("contractPrimaryBtn");
     if (usable && sel) {
       empty2.style.display = "none";
       info.style.display = "flex";
       $s("studioSelName").textContent = sel.name;
       $s("studioSelMeta").textContent = sel.nodeType === "COMPONENT_SET" ? `${(_b = sel.variantCount) != null ? _b : 0} variants` : sel.nodeType.toLowerCase();
-      btn.disabled = false;
     } else {
       empty2.style.display = "block";
       info.style.display = "none";
-      btn.disabled = true;
+    }
+    if (!usable || !sel) {
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Select a component set";
+      }
     }
   }
   async function studioRefreshIndex() {
-    var _a28;
+    var _a31;
     const host = $s("studioIndex");
     host.innerHTML = '<div style="font-size:10.5px; opacity:.6; padding:4px 0;">loading\u2026</div>';
     try {
@@ -25754,14 +25831,14 @@ body {
       }
       host.innerHTML = "";
       for (const c of [...rows].sort((a, b) => {
-        var _a29, _b;
-        return String((_a29 = a.name) != null ? _a29 : a.slug).localeCompare(String((_b = b.name) != null ? _b : b.slug));
+        var _a32, _b;
+        return String((_a32 = a.name) != null ? _a32 : a.slug).localeCompare(String((_b = b.name) != null ? _b : b.slug));
       })) {
         const row = document.createElement("button");
         row.className = "studio-row";
         const name2 = document.createElement("span");
         name2.className = "studio-row-name";
-        name2.textContent = String((_a28 = c.name) != null ? _a28 : c.slug);
+        name2.textContent = String((_a31 = c.name) != null ? _a31 : c.slug);
         const badge = document.createElement("span");
         badge.className = `badge ${c.hasDefs ? "badge-hot" : "badge-cold"}`;
         badge.textContent = c.hasDefs ? "curated" : "evidence only";
@@ -25781,7 +25858,7 @@ body {
     $s("studioEditor").style.display = view === "editor" ? "block" : "none";
   }
   async function studioOpen(ref, by = "slug") {
-    var _a28, _b, _c, _d, _e, _f, _g, _h, _i;
+    var _a31, _b, _c, _d, _e, _f, _g, _h, _i;
     studioUnmountEditor();
     studio = __spreadProps(__spreadValues({}, emptyStudio()), { slug: by === "slug" ? ref : null, busy: true });
     studioResult = null;
@@ -25797,7 +25874,7 @@ body {
         throw new Error(hint);
       }
       const ctx = await res.json();
-      studio.slug = (_a28 = ctx.slug) != null ? _a28 : studio.slug;
+      studio.slug = (_a31 = ctx.slug) != null ? _a31 : studio.slug;
       studio.def = ctx.def;
       studio.evidence = ctx.evidence;
       studio.freeAxes = (_b = ctx.freeAxes) != null ? _b : [];
@@ -25826,13 +25903,13 @@ body {
     studioResult = null;
     window.clearTimeout(studioValidateTimer);
     studioValidateTimer = window.setTimeout(async () => {
-      var _a28;
+      var _a31;
       if (!studio.def) return;
       try {
         const res = await studioApi("/validate", { method: "POST", body: JSON.stringify({ def: studio.def }) });
         studio.validation = res.ok ? await res.json() : { valid: false, errors: [res.status === 404 ? "sync server is running older code \u2014 restart it" : `validate returned ${res.status}`], warnings: [] };
       } catch (err) {
-        studio.validation = { valid: false, errors: [String((_a28 = err == null ? void 0 : err.message) != null ? _a28 : syncDownMessage())], warnings: [] };
+        studio.validation = { valid: false, errors: [String((_a31 = err == null ? void 0 : err.message) != null ? _a31 : syncDownMessage())], warnings: [] };
       }
       studioRenderFooter();
     }, 400);
@@ -25848,12 +25925,12 @@ body {
   }
   var studioResult = null;
   function studioRenderFooter() {
-    var _a28, _b;
+    var _a31, _b;
     const v = studioResult != null ? studioResult : verdictOf(studio);
     const node = $s("studioVerdict");
     node.className = `studio-verdict ${v.tone}`;
     node.textContent = v.text;
-    const warn = ((_b = (_a28 = studio.validation) == null ? void 0 : _a28.warnings) != null ? _b : []).map((w) => `\u26A0 ${w}`).join("\n");
+    const warn = ((_b = (_a31 = studio.validation) == null ? void 0 : _a31.warnings) != null ? _b : []).map((w) => `\u26A0 ${w}`).join("\n");
     $s("studioWarnings").textContent = warn;
     $s("studioWarnings").style.display = warn ? "block" : "none";
     $s("studioPublishBtn").disabled = !canPublish(studio);
@@ -25894,7 +25971,7 @@ body {
   var stripHash = (n) => String(n).split("#")[0].trim();
   var kebabish = (n) => String(n).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   function studioRenderGui() {
-    var _a28, _b, _c, _d, _e, _f, _g, _h;
+    var _a31, _b, _c, _d, _e, _f, _g, _h;
     const host = $s("studioGui");
     host.innerHTML = "";
     const d = studio.def;
@@ -25904,13 +25981,13 @@ body {
     }
     const free = unboundAxes(studio);
     const props = studioSection(
-      `Props \xB7 ${((_a28 = d.props) != null ? _a28 : []).length}`,
+      `Props \xB7 ${((_a31 = d.props) != null ? _a31 : []).length}`,
       studioAddButton(
         "+ from an axis",
         free.map((a) => ({ value: a.name, text: `${a.name} \xB7 ${a.type}` })),
         (name2) => studioEdit((def) => {
-          var _a29, _b2, _c2;
-          const axis = ((_b2 = (_a29 = studio.evidence) == null ? void 0 : _a29.axes) != null ? _b2 : []).find((a) => a.name === name2);
+          var _a32, _b2, _c2;
+          const axis = ((_b2 = (_a32 = studio.evidence) == null ? void 0 : _a32.axes) != null ? _b2 : []).find((a) => a.name === name2);
           if (axis) (def.props = (_c2 = def.props) != null ? _c2 : []).push(propFromAxis(axis));
         })
       )
@@ -25945,8 +26022,8 @@ body {
         STATE_NAMES.filter((n) => !used.includes(n)).map((n) => ({ value: n, text: n })),
         // A state is an object in the schema, not the string the chip shows.
         (n) => studioEdit((def) => {
-          var _a29;
-          (def.states = (_a29 = def.states) != null ? _a29 : []).push(makeState(n, studio.evidence));
+          var _a32;
+          (def.states = (_a32 = def.states) != null ? _a32 : []).push(makeState(n, studio.evidence));
         })
       )
     );
@@ -25983,25 +26060,59 @@ body {
         box.appendChild(head);
         const names = acceptNames(studio);
         const acc = el("div");
-        for (const n of names) {
-          const on = ((_f = node.slot.accepts) != null ? _f : []).includes(n);
+        const toggle = (n) => {
+          var _a32;
+          const on = ((_a32 = node.slot.accepts) != null ? _a32 : []).includes(n);
           const b = el("button", `studio-toggle${on ? " on" : ""}`, n);
           b.addEventListener("click", () => studioEdit((def) => {
-            var _a29;
+            var _a33;
             const t2 = slotsOf(def).find((x) => x.path === path);
             if (!t2) return;
-            const a = t2.node.slot.accepts = (_a29 = t2.node.slot.accepts) != null ? _a29 : [];
+            const a = t2.node.slot.accepts = (_a33 = t2.node.slot.accepts) != null ? _a33 : [];
             const at = a.indexOf(n);
             if (at >= 0) a.splice(at, 1);
             else a.push(n);
           }));
+          return b;
+        };
+        const { role, likely, other } = rankAccepts(names, path);
+        const chosen = new Set((_f = node.slot.accepts) != null ? _f : []);
+        if (role) {
+          const k = `kind:${role}`;
+          const on = chosen.has(k);
+          const b = el("button", `studio-toggle${on ? " on" : ""}`, k);
+          b.title = `Any ${role}, without naming each one`;
+          b.addEventListener("click", () => studioEdit((def) => {
+            var _a32;
+            const t2 = slotsOf(def).find((x) => x.path === path);
+            if (!t2) return;
+            const a = t2.node.slot.accepts = (_a32 = t2.node.slot.accepts) != null ? _a32 : [];
+            const at = a.indexOf(k);
+            if (at >= 0) a.splice(at, 1);
+            else a.unshift(k);
+          }));
           acc.appendChild(b);
+        }
+        const demoted = other.filter((n) => !chosen.has(n));
+        const promoted = role ? [...likely, ...other.filter((n) => chosen.has(n) && !n.startsWith("kind:"))] : names;
+        for (const n of promoted) acc.appendChild(toggle(n));
+        if (role && !likely.length) {
+          acc.appendChild(el("div", "studio-empty", `Nothing contracted can fill a ${role} slot yet.`));
+        }
+        if (role && demoted.length) {
+          const more = el("button", "studio-toggle", `+ ${demoted.length} that are not ${role}s`);
+          more.style.cssText = "opacity:.6;";
+          more.addEventListener("click", () => {
+            more.remove();
+            for (const n of demoted) acc.appendChild(toggle(n));
+          });
+          acc.appendChild(more);
         }
         if (!names.length) acc.appendChild(el("div", "studio-empty", "No other contracts to accept yet."));
         box.appendChild(acc);
         const swapProp = ((_g = d.props) != null ? _g : []).find((p) => {
-          var _a29;
-          return ((_a29 = p.figma) == null ? void 0 : _a29.kind) === "INSTANCE_SWAP" && kebabish(stripHash(p.figma.property)) === path.split(".").pop();
+          var _a32;
+          return ((_a32 = p.figma) == null ? void 0 : _a32.kind) === "INSTANCE_SWAP" && kebabish(stripHash(p.figma.property)) === path.split(".").pop();
         });
         const declared = swapProp ? (_h = studioSwapTargets[swapProp.figma.property]) != null ? _h : [] : [];
         if (declared.length) {
@@ -26013,10 +26124,10 @@ body {
             if (known) {
               const b = el("button", "studio-toggle", `accept ${t2.name}`);
               b.addEventListener("click", () => studioEdit((def) => {
-                var _a29;
+                var _a32;
                 const tgt = slotsOf(def).find((x) => x.path === path);
                 if (!tgt) return;
-                const a = tgt.node.slot.accepts = (_a29 = tgt.node.slot.accepts) != null ? _a29 : [];
+                const a = tgt.node.slot.accepts = (_a32 = tgt.node.slot.accepts) != null ? _a32 : [];
                 if (!a.includes(t2.name)) a.push(t2.name);
               }));
               line.appendChild(b);
@@ -26053,7 +26164,7 @@ body {
     postToPlugin("contract:extract", { setId: studioSel.id, name: name2, rename });
   }
   async function studioOnEvidence(msg) {
-    var _a28, _b, _c, _d;
+    var _a31, _b, _c, _d;
     const reset = () => {
       const b = document.querySelector("#studioGui .btn");
       if (b) {
@@ -26078,7 +26189,7 @@ body {
       const out = await res.json();
       if (!res.ok) throw new Error(out.error || `sync endpoint returned ${res.status}`);
       contractIndexCache = null;
-      studioOpen(String((_c = (_a28 = out.slug) != null ? _a28 : studio.slug) != null ? _c : (_b = evidence.set) == null ? void 0 : _b.name), out.slug ? "slug" : "name");
+      studioOpen(String((_c = (_a31 = out.slug) != null ? _a31 : studio.slug) != null ? _c : (_b = evidence.set) == null ? void 0 : _b.name), out.slug ? "slug" : "name");
     } catch (err) {
       fail(`Could not publish the evidence: ${(_d = err == null ? void 0 : err.message) != null ? _d : err}`);
     }
@@ -26113,8 +26224,8 @@ body {
       btn2.disabled = !studioSel;
       if (!studioSel) btn2.title = "Select the component set in Figma first";
       btn2.addEventListener("click", () => {
-        var _a28;
-        const name2 = (_a28 = nameInput == null ? void 0 : nameInput.value.trim()) != null ? _a28 : "";
+        var _a31;
+        const name2 = (_a31 = nameInput == null ? void 0 : nameInput.value.trim()) != null ? _a31 : "";
         if (isFrame && !name2) {
           nameInput == null ? void 0 : nameInput.focus();
           $s("studioVerdict").className = "studio-verdict bad";
@@ -26132,13 +26243,13 @@ body {
     const btn = el("button", "btn", "Draft a contract from the evidence");
     btn.style.flex = "1";
     btn.addEventListener("click", async () => {
-      var _a28, _b;
+      var _a31, _b;
       btn.disabled = true;
       btn.textContent = "Drafting\u2026";
       try {
         const res = await studioApi("/draft", { method: "POST", body: JSON.stringify({ slug: studio.slug, name: studioSel == null ? void 0 : studioSel.name }) });
         const out = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error((_a28 = out.error) != null ? _a28 : res.status === 404 ? "Sync server is running older code. Restart it: npm run contract-sync (in apps/s2a-toolkit)." : `draft failed (${res.status})`);
+        if (!res.ok) throw new Error((_a31 = out.error) != null ? _a31 : res.status === 404 ? "Sync server is running older code. Restart it: npm run contract-sync (in apps/s2a-toolkit)." : `draft failed (${res.status})`);
         studio.def = out.def;
         studio.dirty = true;
         studio.validation = null;
@@ -26155,9 +26266,9 @@ body {
     host.appendChild(row);
   }
   function studioRenderNotes() {
-    var _a28, _b, _c;
+    var _a31, _b, _c;
     const host = $s("studioDraftNotes");
-    const notes = ((_b = (_a28 = studio.def) == null ? void 0 : _a28.decisions) != null ? _b : []).filter((n) => n.status === "open");
+    const notes = ((_b = (_a31 = studio.def) == null ? void 0 : _a31.decisions) != null ? _b : []).filter((n) => n.status === "open");
     if (!notes.length) {
       host.style.display = "none";
       host.innerHTML = "";
@@ -26182,9 +26293,9 @@ body {
     host.style.display = "block";
   }
   function studioRender() {
-    var _a28, _b, _c, _d, _e, _f, _g;
+    var _a31, _b, _c, _d, _e, _f, _g;
     const d = studio.def;
-    $s("studioId").textContent = (d == null ? void 0 : d.component) ? `${d.component} \xB7 ${studio.slug}` : (_a28 = studio.slug) != null ? _a28 : "\u2014";
+    $s("studioId").textContent = (d == null ? void 0 : d.component) ? `${d.component} \xB7 ${studio.slug}` : (_a31 = studio.slug) != null ? _a31 : "\u2014";
     const set = (_b = studio.evidence) == null ? void 0 : _b.set;
     $s("studioSub").textContent = set ? `${(_c = set.name) != null ? _c : ""} \xB7 ${(_f = (_e = (_d = studio.evidence) == null ? void 0 : _d.axes) == null ? void 0 : _e.length) != null ? _f : 0} axes` : (_g = studio.slug) != null ? _g : "";
     $s("studioDraftChip").style.display = (d == null ? void 0 : d.status) === "curated-draft" ? "inline-block" : "none";
@@ -26217,7 +26328,7 @@ body {
     studioEditor = createJsonEditor(host, {
       doc: text,
       onChange: (value) => {
-        var _a28;
+        var _a31;
         studioResult = null;
         try {
           studio.def = JSON.parse(value);
@@ -26226,7 +26337,7 @@ body {
           studio.dirty = true;
           studioValidate();
         } catch (err) {
-          studio.jsonError = String((_a28 = err == null ? void 0 : err.message) != null ? _a28 : err).replace(/^JSON\.parse: /, "");
+          studio.jsonError = String((_a31 = err == null ? void 0 : err.message) != null ? _a31 : err).replace(/^JSON\.parse: /, "");
           studio.validation = null;
         }
         studioRenderFooter();
@@ -26234,8 +26345,8 @@ body {
       // Schema errors the parser cannot see, mapped onto the whole document —
       // better than a message with no location at all.
       externalDiagnostics: () => {
-        var _a28, _b;
-        return ((_b = (_a28 = studio.validation) == null ? void 0 : _a28.errors) != null ? _b : []).map((message) => ({
+        var _a31, _b;
+        return ((_b = (_a31 = studio.validation) == null ? void 0 : _a31.errors) != null ? _b : []).map((message) => ({
           from: 0,
           to: 0,
           severity: "warning",
@@ -26249,30 +26360,24 @@ body {
     studioEditor = null;
   }
   var _a10;
-  (_a10 = document.getElementById("studioOpenBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
-    if (!studioSel) return;
-    sendTelemetry("action:studio-open");
-    studioOpen(studioSel.name, "name");
-  });
-  var _a11;
-  (_a11 = document.getElementById("studioBackBtn")) == null ? void 0 : _a11.addEventListener("click", () => {
+  (_a10 = document.getElementById("studioBackBtn")) == null ? void 0 : _a10.addEventListener("click", () => {
     studioUnmountEditor();
     studioShow("list");
     studioRefreshIndex();
   });
+  var _a11;
+  (_a11 = document.getElementById("studioModeGui")) == null ? void 0 : _a11.addEventListener("click", () => studioSetMode(false));
   var _a12;
-  (_a12 = document.getElementById("studioModeGui")) == null ? void 0 : _a12.addEventListener("click", () => studioSetMode(false));
-  var _a13;
   for (const [id, depth] of [["studioFold1", 1], ["studioFold2", 2], ["studioFold3", 3]]) {
-    (_a13 = document.getElementById(id)) == null ? void 0 : _a13.addEventListener("click", () => studioEditor == null ? void 0 : studioEditor.foldToDepth(depth));
+    (_a12 = document.getElementById(id)) == null ? void 0 : _a12.addEventListener("click", () => studioEditor == null ? void 0 : studioEditor.foldToDepth(depth));
   }
+  var _a13;
+  (_a13 = document.getElementById("studioUnfold")) == null ? void 0 : _a13.addEventListener("click", () => studioEditor == null ? void 0 : studioEditor.unfoldAll());
   var _a14;
-  (_a14 = document.getElementById("studioUnfold")) == null ? void 0 : _a14.addEventListener("click", () => studioEditor == null ? void 0 : studioEditor.unfoldAll());
+  (_a14 = document.getElementById("studioModeJson")) == null ? void 0 : _a14.addEventListener("click", () => studioSetMode(true));
   var _a15;
-  (_a15 = document.getElementById("studioModeJson")) == null ? void 0 : _a15.addEventListener("click", () => studioSetMode(true));
-  var _a16;
-  (_a16 = document.getElementById("studioPublishBtn")) == null ? void 0 : _a16.addEventListener("click", async () => {
-    var _a28, _b, _c, _d, _e, _f;
+  (_a15 = document.getElementById("studioPublishBtn")) == null ? void 0 : _a15.addEventListener("click", async () => {
+    var _a31, _b, _c, _d, _e, _f;
     if (!canPublish(studio) || !studio.def) return;
     sendTelemetry("action:studio-publish");
     const btn = $s("studioPublishBtn");
@@ -26282,7 +26387,7 @@ body {
     try {
       const res = await studioApi("/evidence", { method: "POST", body: JSON.stringify({ defEdits: [studio.def], slug: studio.slug }) });
       const out = await res.json();
-      studioResult = res.ok ? { tone: "ok", text: `Saved to ${(_c = (_b = (_a28 = out.defs) == null ? void 0 : _a28[0]) == null ? void 0 : _b.path) != null ? _c : "the repo"} \u2014 regenerate and run the gate.` } : { tone: "bad", text: `Failed: ${((_e = out.errors) != null ? _e : [(_d = out.error) != null ? _d : res.status]).slice(0, 2).join(" \xB7 ")}` };
+      studioResult = res.ok ? { tone: "ok", text: `Saved to ${(_c = (_b = (_a31 = out.defs) == null ? void 0 : _a31[0]) == null ? void 0 : _b.path) != null ? _c : "the repo"} \u2014 regenerate and run the gate.` } : { tone: "bad", text: `Failed: ${((_e = out.errors) != null ? _e : [(_d = out.error) != null ? _d : res.status]).slice(0, 2).join(" \xB7 ")}` };
       studio.dirty = !res.ok;
     } catch (err) {
       studioResult = { tone: "bad", text: `Failed: ${(_f = err.message) != null ? _f : err}` };
@@ -26310,7 +26415,14 @@ body {
       if (!res.ok) return null;
       const data = await res.json();
       const slugs = /* @__PURE__ */ new Map();
-      for (const item of data.items) slugs.set(item.slug, item.figmaEvidence ? "evidence" : "spec");
+      contractHasDefs.clear();
+      contractByName.clear();
+      for (const item of data.items) {
+        slugs.set(item.slug, item.figmaEvidence ? "evidence" : "spec");
+        if (item.hasDefs) contractHasDefs.add(item.slug);
+        contractByName.set(alnum(item.name), { slug: item.slug, hasDefs: Boolean(item.hasDefs) });
+        contractByName.set(alnum(item.slug), { slug: item.slug, hasDefs: Boolean(item.hasDefs) });
+      }
       contractIndexCache = { at: Date.now(), slugs };
       return slugs;
     } catch (e) {
@@ -26319,18 +26431,19 @@ body {
   }
   var contractIsFrame = false;
   async function updateContractSelection(sel) {
-    var _a28;
+    var _a31;
     const setLike = (sel == null ? void 0 : sel.nodeType) === "COMPONENT_SET" || (sel == null ? void 0 : sel.nodeType) === "COMPONENT" || (sel == null ? void 0 : sel.nodeType) === "INSTANCE";
     contractIsFrame = (sel == null ? void 0 : sel.nodeType) === "FRAME" || (sel == null ? void 0 : sel.nodeType) === "SECTION" || (sel == null ? void 0 : sel.nodeType) === "GROUP";
+    syncAlignButton(sel);
     const ok = setLike || contractIsFrame;
     document.getElementById("contractNameField").style.display = contractIsFrame ? "block" : "none";
     document.getElementById("contractMatch").style.display = "none";
     document.getElementById("contractBuildRow").style.display = "none";
     if (contractIsFrame && sel) document.getElementById("contractNameInput").placeholder = contractSlug(sel.name) || "candidate-name";
-    contractSetId = ok ? (_a28 = sel == null ? void 0 : sel.id) != null ? _a28 : null : null;
+    contractSetId = ok ? (_a31 = sel == null ? void 0 : sel.id) != null ? _a31 : null : null;
+    contractSelectedSlug = null;
     contractEvidence = null;
     const statusEl = document.getElementById("contractSetStatus");
-    const extract = document.getElementById("contractExtractBtn");
     const copy = document.getElementById("contractCopyBtn");
     const publish = document.getElementById("contractPublishBtn");
     const summary = document.getElementById("contractSummary");
@@ -26339,14 +26452,15 @@ body {
     publish.disabled = true;
     if (!ok || !sel) {
       statusEl.textContent = "";
-      extract.disabled = true;
+      syncContractActions(null, "none");
+      void renderComposes();
       return;
     }
-    extract.disabled = false;
     statusEl.textContent = "checking\u2026";
     const slugs = await contractIndex();
     if (contractSetId !== sel.id) return;
     const slug = contractSlug(sel.name);
+    contractSelectedSlug = contractIsFrame ? null : slug || null;
     if (contractIsFrame) {
       statusEl.textContent = `${sel.nodeType.toLowerCase()} \xB7 candidate; Extract to see repeats and the closest contracts`;
       return;
@@ -26359,6 +26473,9 @@ body {
       statusEl.textContent = `\u2713 ${slug} \xB7 has a contract, no evidence yet`;
       document.getElementById("contractBuildRow").style.display = "flex";
     } else statusEl.textContent = `\u25CB ${slug} \xB7 new`;
+    const st = !slug ? "none" : contractHasDefs.has(slug) ? "draft" : slugs && slugs.get(slug) ? "contract" : "new";
+    syncContractActions(slug, st);
+    void renderComposes();
   }
   function sha256Sync(text) {
     const K = [1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221, 3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580, 3835390401, 4022224774, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, 2554220882, 2821834349, 2952996808, 3210313671, 3336571891, 3584528711, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, 2177026350, 2456956037, 2730485921, 2820302411, 3259730800, 3345764771, 3516065817, 3600352804, 4094571909, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, 2227730452, 2361852424, 2428436474, 2756734187, 3204031479, 3329325298];
@@ -26409,9 +26526,9 @@ body {
     return [h0, h1, h2, h3, h4, h5, h6, h7].map((x) => x.toString(16).padStart(8, "0")).join("");
   }
   async function sha256Hex(text) {
-    var _a28;
+    var _a31;
     try {
-      if ((_a28 = globalThis.crypto) == null ? void 0 : _a28.subtle) {
+      if ((_a31 = globalThis.crypto) == null ? void 0 : _a31.subtle) {
         const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
         return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
       }
@@ -26432,16 +26549,26 @@ body {
     const name2 = contractIsFrame ? document.getElementById("contractNameInput").value.trim() : "";
     const rename = contractIsFrame && document.getElementById("contractRenameLayer").checked;
     contractLog("extract:start", { setId: contractSetId, name: name2 || void 0 });
-    const btn = document.getElementById("contractExtractBtn");
+    const btn = document.getElementById("contractPrimaryBtn");
     btn.disabled = true;
-    btn.textContent = "Extracting\u2026";
+    btn.textContent = "Creating\u2026";
     setContractStatus("");
     postToPlugin("contract:extract", { setId: contractSetId, name: name2, rename });
   }
+  var _a16;
+  (_a16 = document.getElementById("contractPrimaryBtn")) == null ? void 0 : _a16.addEventListener("click", () => {
+    if (contractState === "new") {
+      void runContractExtract();
+      return;
+    }
+    if (contractState === "draft" || contractState === "contract") {
+      if (!studioSel) return;
+      sendTelemetry("action:studio-open");
+      studioOpen(studioSel.name, "name");
+    }
+  });
   var _a17;
-  (_a17 = document.getElementById("contractExtractBtn")) == null ? void 0 : _a17.addEventListener("click", runContractExtract);
-  var _a18;
-  (_a18 = document.getElementById("contractCopyBtn")) == null ? void 0 : _a18.addEventListener("click", async () => {
+  (_a17 = document.getElementById("contractCopyBtn")) == null ? void 0 : _a17.addEventListener("click", async () => {
     if (!contractEvidence) return;
     const text = JSON.stringify(__spreadProps(__spreadValues({}, contractEvidence.evidence), { provenance: { hash: contractEvidence.hash } }), null, 2);
     try {
@@ -26457,8 +26584,8 @@ body {
       setContractStatus(done ? "Evidence JSON copied" : "Copy failed", done ? "ok" : "err");
     }
   });
-  var _a19;
-  (_a19 = document.getElementById("contractPublishBtn")) == null ? void 0 : _a19.addEventListener("click", async () => {
+  var _a18;
+  (_a18 = document.getElementById("contractPublishBtn")) == null ? void 0 : _a18.addEventListener("click", async () => {
     if (!contractEvidence) return;
     sendTelemetry("action:contract-publish");
     contractLog("publish:start", { hash: contractEvidence.hash, endpoint: contractEndpoint });
@@ -26486,15 +26613,13 @@ body {
     }
   });
   async function onContractEvidence(msg) {
-    var _a28, _b;
+    var _a31, _b;
     if (studioAwaitingExtract) {
       studioAwaitingExtract = false;
       void studioOnEvidence(msg);
       return;
     }
-    const btn = document.getElementById("contractExtractBtn");
-    btn.disabled = !contractSetId;
-    btn.textContent = "Extract contract";
+    syncContractActions(contractSelectedSlug, contractState);
     if (msg.error) {
       contractLog("extract:error", msg.error);
       setContractStatus("\u274C " + esc(msg.error), "err");
@@ -26505,7 +26630,12 @@ body {
       const hash = "sha256:" + await sha256Hex(msg.hashInput);
       const setInfo = evidence.set;
       if ((setInfo == null ? void 0 : setInfo.layerName) && setInfo.layerName !== setInfo.name) document.getElementById("studioSelName").textContent = `${setInfo.name} (layer: ${setInfo.layerName})`;
-      contractLog("extract:ok", { set: (_a28 = evidence.set) == null ? void 0 : _a28.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
+      contractLog("extract:ok", { set: (_a31 = evidence.set) == null ? void 0 : _a31.name, counts: evidence.counts, durationMs: msg.durationMs, hash });
+      queueMicrotask(() => {
+        var _a32;
+        (_a32 = document.getElementById("contractPublishBtn")) == null ? void 0 : _a32.click();
+      });
+      void renderComposes();
       contractEvidence = { evidence, canonical: msg.canonical, hash };
       const counts = evidence.counts;
       const axes = evidence.axes;
@@ -26513,8 +26643,8 @@ body {
       const collections = [...new Set(variables.map((v) => v.collection))];
       const instances = evidence.instances;
       const nested = [...new Set(instances.map((i2) => {
-        var _a29;
-        return (_a29 = i2.set) == null ? void 0 : _a29.name;
+        var _a32, _b2, _c;
+        return (_c = (_a32 = i2.set) == null ? void 0 : _a32.name) != null ? _c : (_b2 = i2.mainComponent) == null ? void 0 : _b2.name;
       }).filter(Boolean))];
       const meta2 = evidence.set.meta;
       const pattern = evidence.pattern;
@@ -26563,8 +26693,8 @@ body {
       el2.style.display = "none";
     }
   }
-  var _a20;
-  (_a20 = document.getElementById("contractBuildBtn")) == null ? void 0 : _a20.addEventListener("click", async () => {
+  var _a19;
+  (_a19 = document.getElementById("contractBuildBtn")) == null ? void 0 : _a19.addEventListener("click", async () => {
     const btn = document.getElementById("contractBuildBtn");
     const name2 = document.getElementById("studioSelName").textContent || "";
     const slug = contractSlug(name2);
@@ -26583,8 +26713,8 @@ body {
       btn.textContent = "Build set from contract";
     }
   });
-  var _a21;
-  (_a21 = document.getElementById("contractEndpointSaveBtn")) == null ? void 0 : _a21.addEventListener("click", () => {
+  var _a20;
+  (_a20 = document.getElementById("contractEndpointSaveBtn")) == null ? void 0 : _a20.addEventListener("click", () => {
     const endpoint = document.getElementById("contractEndpointInput").value.trim() || "http://localhost:9410";
     const relayKey = document.getElementById("contractRelayKeyInput").value.trim();
     contractEndpoint = endpoint;
@@ -26594,7 +26724,7 @@ body {
     setContractStatus(`Sync endpoint: <code>${esc(endpoint)}</code>`, "ok");
   });
   window.addEventListener("message", (event) => {
-    var _a28, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
+    var _a31, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
     const msg = event.data.pluginMessage;
     if (!msg) return;
     switch (msg.type) {
@@ -26648,7 +26778,7 @@ body {
           updateCopyBtn(sel, msg.fileKey, msg.fileName, msg.allNodes);
           updateSectionBar(
             !!msg.isSection,
-            (_a28 = msg.sectionCount) != null ? _a28 : 0,
+            (_a31 = msg.sectionCount) != null ? _a31 : 0,
             (_b = msg.sectionName) != null ? _b : sel.name
           );
         } else {
@@ -26670,6 +26800,14 @@ body {
       }
       case "contract:evidence": {
         void onContractEvidence(msg);
+        break;
+      }
+      case "contract:composition": {
+        void onCompositionScanned(msg);
+        break;
+      }
+      case "contract:align": {
+        onAligned(msg);
         break;
       }
       // Sandbox → sync server file drop (PNG goldens, diffs): bytes never pass
@@ -26815,8 +26953,8 @@ body {
     setup.style.display = hasToken ? "none" : "block";
     release.style.display = hasToken ? "block" : "none";
   }
-  var _a22;
-  (_a22 = document.getElementById("ghTokenSaveBtn")) == null ? void 0 : _a22.addEventListener("click", () => {
+  var _a21;
+  (_a21 = document.getElementById("ghTokenSaveBtn")) == null ? void 0 : _a21.addEventListener("click", () => {
     const input = document.getElementById("ghTokenInput");
     const value = input.value.trim();
     if (!value) return;
@@ -26826,8 +26964,8 @@ body {
     syncTokenReleaseAuthUi();
     setTokenReleaseStatus("Token saved to Figma client storage.", "ok");
   });
-  var _a23;
-  (_a23 = document.getElementById("ghTokenClearBtn")) == null ? void 0 : _a23.addEventListener("click", () => {
+  var _a22;
+  (_a22 = document.getElementById("ghTokenClearBtn")) == null ? void 0 : _a22.addEventListener("click", () => {
     ghToken = null;
     postToPlugin("gh-token:set", { token: "" });
     syncTokenReleaseAuthUi();
@@ -26845,9 +26983,9 @@ body {
     if (!res.ok) throw new Error(`GitHub API ${res.status} on ${path}`);
     return res.json();
   }
-  var _a24;
-  (_a24 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a24.addEventListener("click", async () => {
-    var _a28;
+  var _a23;
+  (_a23 = document.getElementById("tokenReleaseBtn")) == null ? void 0 : _a23.addEventListener("click", async () => {
+    var _a31;
     if (!ghToken) return;
     sendTelemetry("action:token-release");
     const btn = document.getElementById("tokenReleaseBtn");
@@ -26870,9 +27008,9 @@ body {
       for (let i2 = 0; i2 < 15 && !run; i2++) {
         await new Promise((r) => setTimeout(r, 2e3));
         const data = await ghJson(`/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`);
-        run = (_a28 = (data.workflow_runs || []).find(
+        run = (_a31 = (data.workflow_runs || []).find(
           (r) => new Date(r.created_at).getTime() >= dispatchedAt - 5e3
-        )) != null ? _a28 : null;
+        )) != null ? _a31 : null;
       }
       if (!run) throw new Error("Dispatched, but no run appeared within 30s \u2014 check the Actions tab.");
       const runLink = `<a href="${run.html_url}" target="_blank">Actions run \u2192</a>`;
@@ -26989,12 +27127,12 @@ body {
     const addBtn = document.getElementById("reqAddImageBtn");
     if (addBtn) addBtn.style.display = reqImages.length >= MAX_IMAGES ? "none" : "";
   }
-  var _a25;
-  (_a25 = document.getElementById("reqAddImageBtn")) == null ? void 0 : _a25.addEventListener("click", () => {
+  var _a24;
+  (_a24 = document.getElementById("reqAddImageBtn")) == null ? void 0 : _a24.addEventListener("click", () => {
     document.getElementById("reqImageInput").click();
   });
-  var _a26;
-  (_a26 = document.getElementById("reqImageInput")) == null ? void 0 : _a26.addEventListener("change", (e) => {
+  var _a25;
+  (_a25 = document.getElementById("reqImageInput")) == null ? void 0 : _a25.addEventListener("change", (e) => {
     const input = e.target;
     const files = Array.from(input.files || []);
     input.value = "";
@@ -27015,9 +27153,9 @@ body {
       reader.readAsDataURL(file);
     }
   });
-  var _a27;
-  (_a27 = document.getElementById("reqSubmitBtn")) == null ? void 0 : _a27.addEventListener("click", async () => {
-    var _a28;
+  var _a26;
+  (_a26 = document.getElementById("reqSubmitBtn")) == null ? void 0 : _a26.addEventListener("click", async () => {
+    var _a31;
     const summaryEl = document.getElementById("reqSummary");
     const useCaseEl = document.getElementById("reqUseCase");
     const summary = summaryEl.value.trim();
@@ -27072,7 +27210,7 @@ body {
             figmaUrl,
             fileName: ctx == null ? void 0 : ctx.fileName,
             page: ctx == null ? void 0 : ctx.page,
-            nodeName: (_a28 = ctx == null ? void 0 : ctx.node) == null ? void 0 : _a28.name,
+            nodeName: (_a31 = ctx == null ? void 0 : ctx.node) == null ? void 0 : _a31.name,
             tokenName: ctx == null ? void 0 : ctx.tokenName,
             requester: ctx == null ? void 0 : ctx.user,
             images: reqImages.map((i2) => ({ name: i2.name, type: i2.type, dataUrl: i2.dataUrl }))
@@ -27128,6 +27266,304 @@ body {
     }
   }, 45e3);
   postToPlugin("telemetry:init");
+  var contractState = "none";
+  function syncContractActions(slug, state) {
+    contractState = state;
+    const primary = document.getElementById("contractPrimaryBtn");
+    const del = document.getElementById("contractClearBtn");
+    const copy = document.getElementById("contractCopyBtn");
+    if (!primary || !del) return;
+    const LABEL = {
+      none: "Select a component set",
+      new: "Create contract",
+      draft: "Open contract",
+      contract: "Open contract"
+    };
+    primary.textContent = LABEL[state];
+    primary.disabled = state === "none";
+    primary.title = state === "new" ? "Record what Figma says about this set, file it, and open it for curation" : state === "none" ? "Select a component set or frame in Figma" : "Curate this contract in the Studio";
+    const deletable = state === "draft" || state === "contract";
+    del.style.display = deletable ? "" : "none";
+    del.disabled = !deletable;
+    del.title = deletable ? `Delete the draft for ${slug} and everything generated from it` : "";
+    if (copy) copy.disabled = !contractEvidence;
+    if (!deletable) clearDisarm();
+  }
+  function syncAlignButton(sel) {
+    const btn = document.getElementById("contractAlignBtn");
+    if (!btn) return;
+    const ALIGNABLE = ["COMPONENT_SET", "COMPONENT", "INSTANCE", "FRAME", "SECTION", "GROUP"];
+    const ok = Boolean(sel && ALIGNABLE.includes(sel.nodeType));
+    btn.disabled = !ok;
+    btn.title = ok ? "Match every unbound colour, size and type value in the selection against S2A tokens" : "Select a frame, component or component set in Figma";
+    if (!ok) {
+      const panel = document.getElementById("contractAlign");
+      if (panel) {
+        panel.style.display = "none";
+        panel.innerHTML = "";
+      }
+    }
+  }
+  async function renderComposes() {
+    var _a31, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
+    const el2 = document.getElementById("contractComposes");
+    if (!el2) return;
+    await contractIndex().catch(() => null);
+    const ev = contractEvidence == null ? void 0 : contractEvidence.evidence;
+    const unbound = ((_b = (_a31 = ev == null ? void 0 : ev.unboundValues) == null ? void 0 : _a31.length) != null ? _b : 0) || ((_d = (_c = ev == null ? void 0 : ev.counts) == null ? void 0 : _c.unboundPaintNodes) != null ? _d : 0);
+    const hint = unbound ? `<div class="muted" style="margin-top:4px;">${unbound} unbound value${unbound === 1 ? "" : "s"} \u2014 Tokens \u203A Align a design matches them first.</div>` : "";
+    const instances = (_e = ev == null ? void 0 : ev.instances) != null ? _e : [];
+    if (!instances.length) {
+      el2.innerHTML = hint;
+      el2.style.display = hint ? "block" : "none";
+      return;
+    }
+    const variants = new Set(instances.map((i2) => i2.variant).filter(Boolean));
+    const totalVariants = Math.max(1, variants.size || ((_g = (_f = ev == null ? void 0 : ev.variants) == null ? void 0 : _f.length) != null ? _g : 1));
+    const isIcon = (n) => /^s2a?[_-]/i.test(n) || /(^|\/)icons?(\/|_|$)/i.test(n);
+    const placed = instances.filter((i2) => {
+      var _a32, _b2, _c2;
+      return (_c2 = (_a32 = i2.set) == null ? void 0 : _a32.name) != null ? _c2 : (_b2 = i2.mainComponent) == null ? void 0 : _b2.name;
+    }).map((i2) => {
+      var _a32;
+      return (_a32 = i2.node) != null ? _a32 : "";
+    });
+    const ownerOf = (p) => {
+      var _a32;
+      return (_a32 = placed.filter((o) => o !== p && p.startsWith(`${o}/`)).sort((a, b) => b.length - a.length)[0]) != null ? _a32 : null;
+    };
+    const seen = /* @__PURE__ */ new Map();
+    let icons = 0;
+    for (const ins of instances) {
+      const name2 = ((_k = (_j = (_h = ins.set) == null ? void 0 : _h.name) != null ? _j : (_i = ins.mainComponent) == null ? void 0 : _i.name) != null ? _k : "").replace(/^[\u{1F6AB}\s]+/u, "");
+      if (!name2) continue;
+      if (isIcon(name2)) {
+        icons++;
+        continue;
+      }
+      if (!seen.has(name2)) seen.set(name2, { name: name2, inVariants: /* @__PURE__ */ new Set(), count: 0, direct: false, via: /* @__PURE__ */ new Set() });
+      const e = seen.get(name2);
+      e.count++;
+      if (ins.variant) e.inVariants.add(ins.variant);
+      const owner = ownerOf((_l = ins.node) != null ? _l : "");
+      if (owner) {
+        const o = instances.find((x) => {
+          var _a32;
+          return ((_a32 = x.node) != null ? _a32 : "") === owner;
+        });
+        const on = (_o = (_m = o == null ? void 0 : o.set) == null ? void 0 : _m.name) != null ? _o : (_n = o == null ? void 0 : o.mainComponent) == null ? void 0 : _n.name;
+        if (on) e.via.add(on);
+      } else e.direct = true;
+    }
+    if (!seen.size && !icons) {
+      el2.innerHTML = hint;
+      el2.style.display = hint ? "block" : "none";
+      return;
+    }
+    const selfName = (_q = (_p = ev == null ? void 0 : ev.set) == null ? void 0 : _p.name) != null ? _q : "";
+    const statusOf = (name2) => {
+      if (name2.startsWith(".") || alnum(name2) === alnum(selfName)) {
+        return { mark: "\xB7", label: "own layer", tone: "muted" };
+      }
+      const hit = contractByName.get(alnum(name2));
+      if (hit == null ? void 0 : hit.hasDefs) return { mark: "\u2713", label: "contract", tone: "ok" };
+      if (hit) return { mark: "~", label: "spec only \u2014 no contract yet", tone: "warn" };
+      return { mark: "\u2717", label: "no contract \u2014 build it, or mark it internal", tone: "warn" };
+    };
+    const rows = [...seen.values()].sort((a, b) => Number(b.direct) - Number(a.direct) || b.count - a.count).map((e) => {
+      const inAll = e.inVariants.size === 0 || e.inVariants.size >= totalVariants;
+      const per = Math.round(e.count / Math.max(1, e.inVariants.size || 1));
+      const where = inAll ? "" : ` <span class="muted">in ${e.inVariants.size} of ${totalVariants} variants</span>`;
+      const st = e.direct ? statusOf(e.name) : { mark: "\xB7", label: `via ${[...e.via].join(", ")} \u2014 their contract`, tone: "muted" };
+      const colour = st.tone === "ok" ? "#2e7d4f" : st.tone === "warn" ? "#b25c00" : "";
+      return `<li><span style="${colour ? `color:${colour};` : ""}font-weight:600;">${st.mark}</span> <code>${esc(e.name)}</code>${per > 1 ? ` <span class="muted">\xD7${per}</span>` : ""}${where} <span class="muted">\u2014 ${esc(st.label)}</span></li>`;
+    });
+    el2.innerHTML = `<div class="muted" style="margin-bottom:4px;">Built from</div><ul style="margin:0;padding-left:16px;">${rows.join("")}</ul>` + (icons ? `<div class="muted" style="margin-top:4px;">+ ${icons} icon instance${icons === 1 ? "" : "s"}</div>` : "") + hint;
+    el2.style.display = "block";
+  }
+  var clearArmed = null;
+  var clearTimer = null;
+  var clearIsCold = () => {
+    var _a31, _b;
+    return (_b = (_a31 = document.getElementById("contractClearColdInput")) == null ? void 0 : _a31.checked) != null ? _b : false;
+  };
+  function clearDisarm() {
+    clearArmed = null;
+    if (clearTimer) {
+      clearTimeout(clearTimer);
+      clearTimer = null;
+    }
+    const btn = document.getElementById("contractClearBtn");
+    if (btn) btn.textContent = "Clear draft\u2026";
+  }
+  var _a27;
+  (_a27 = document.getElementById("contractClearColdInput")) == null ? void 0 : _a27.addEventListener("change", clearDisarm);
+  var _a28;
+  (_a28 = document.getElementById("contractClearBtn")) == null ? void 0 : _a28.addEventListener("click", async () => {
+    var _a31, _b;
+    const btn = document.getElementById("contractClearBtn");
+    const slug = contractSlugForClear();
+    if (!slug) {
+      setContractStatus("Select a component set first \u2014 the slug comes from the selection or the name field.", "err");
+      return;
+    }
+    const cold = clearIsCold();
+    if (clearArmed !== slug) {
+      clearArmed = slug;
+      btn.textContent = cold ? `Clear ${slug} + evidence?` : `Clear ${slug}?`;
+      setContractStatus(
+        `Deletes <code>${esc(slug)}.defs.json</code> and everything generated from it, plus the code evidence (one command to regenerate). The hand-written spec is restored from git. ` + (cold ? `<b>The Figma evidence goes too</b> \u2014 you will need to select the set and press Extract again.` : `<b>The Figma evidence is kept</b>, so you can scaffold again without re-extracting.`) + `<br>Click again to confirm.`,
+        ""
+      );
+      if (clearTimer) clearTimeout(clearTimer);
+      clearTimer = setTimeout(clearDisarm, 8e3);
+      return;
+    }
+    if (clearTimer) {
+      clearTimeout(clearTimer);
+      clearTimer = null;
+    }
+    clearArmed = null;
+    btn.disabled = true;
+    btn.textContent = "Clearing\u2026";
+    sendTelemetry("action:contract-clear");
+    try {
+      const res = await fetch(`${contractEndpoint.replace(/\/$/, "")}/clear`, {
+        method: "POST",
+        headers: contractHeaders(),
+        body: JSON.stringify({ slug, evidence: cold })
+      });
+      const out = await res.json();
+      if (!res.ok) throw new Error(out.error || `Sync endpoint returned ${res.status}`);
+      contractIndexCache = null;
+      const n = (_b = (_a31 = out.cleared) == null ? void 0 : _a31.length) != null ? _b : 0;
+      setContractStatus(
+        `Cleared <code>${esc(slug)}</code> \u2014 ${n} path${n === 1 ? "" : "s"}. ` + (out.keptEvidence ? "Figma evidence kept, so you can scaffold again without re-extracting." : "Cold start: select the set and press Extract to begin again."),
+        "ok"
+      );
+    } catch (err) {
+      setContractStatus(`Clear failed: ${esc((err == null ? void 0 : err.message) || String(err))}${withHint(err)}`, "err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Clear draft\u2026";
+    }
+  });
+  var _a29;
+  (_a29 = document.getElementById("contractScanBtn")) == null ? void 0 : _a29.addEventListener("click", () => {
+    const btn = document.getElementById("contractScanBtn");
+    btn.disabled = true;
+    btn.textContent = "Scanning\u2026";
+    sendTelemetry("action:contract-scan");
+    setContractStatus("Walking every component page \u2014 this takes a few seconds.", "");
+    parent.postMessage({ pluginMessage: { type: "contract-scan-composition" } }, "*");
+  });
+  async function onCompositionScanned(msg) {
+    const btn = document.getElementById("contractScanBtn");
+    btn.disabled = false;
+    btn.textContent = "Scan composition";
+    if (msg.error) {
+      setContractStatus(`Scan failed: ${esc(String(msg.error))}`, "err");
+      return;
+    }
+    try {
+      const res = await fetch(`${contractEndpoint.replace(/\/$/, "")}/composition`, {
+        method: "POST",
+        headers: contractHeaders(),
+        body: JSON.stringify({ composes: msg.composes, groups: msg.groups, fileKey: msg.fileKey })
+      });
+      const out = await res.json();
+      if (!res.ok) throw new Error(out.error || `Sync endpoint returned ${res.status}`);
+      setContractStatus(`Composition refreshed \u2014 ${out.components} components, ${out.edges} edges, ${out.grouped} grouped. See the order with <code>npm run specs:composition</code>.`, "ok");
+    } catch (err) {
+      setContractStatus(`Could not write composition: ${esc((err == null ? void 0 : err.message) || String(err))}${withHint(err)}`, "err");
+    }
+  }
+  function contractSlugForClear() {
+    var _a31, _b, _c;
+    const typed = (_a31 = document.getElementById("contractNameInput")) == null ? void 0 : _a31.value.trim();
+    if (typed) return typed.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/^-+|-+$/g, "");
+    if (contractSelectedSlug) return contractSelectedSlug;
+    const fromEvidence = (_c = (_b = contractEvidence == null ? void 0 : contractEvidence.evidence) == null ? void 0 : _b.set) == null ? void 0 : _c.name;
+    if (!fromEvidence) return null;
+    return String(fromEvidence).replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, "").replace(/\s*[—–-]\s*v\d+(\.\d+)*\s*$/i, "").replace(/([a-z0-9])([A-Z])/g, "$1-$2").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "").toLowerCase() || null;
+  }
+  var ALIGN_LABEL = {
+    exact: "exact",
+    scaled: "scaled",
+    composite: "behind alpha",
+    nearest: "close",
+    ambiguous: "ambiguous",
+    none: "no match"
+  };
+  var ALIGN_ORDER = ["exact", "scaled", "composite", "nearest", "ambiguous", "none"];
+  var _a30;
+  (_a30 = document.getElementById("contractAlignBtn")) == null ? void 0 : _a30.addEventListener("click", () => {
+    const btn = document.getElementById("contractAlignBtn");
+    btn.disabled = true;
+    btn.textContent = "Reading\u2026";
+    sendTelemetry("action:contract-align");
+    parent.postMessage({ pluginMessage: { type: "contract-align" } }, "*");
+  });
+  function onAligned(msg) {
+    var _a31, _b, _c, _d, _e, _f, _g, _h, _i;
+    const btn = document.getElementById("contractAlignBtn");
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "Align to S2A tokens";
+    }
+    const el2 = document.getElementById("contractAlign");
+    if (!el2) return;
+    if (msg.error) {
+      setContractStatus(esc(String(msg.error)), "err");
+      el2.style.display = "none";
+      return;
+    }
+    const summary = (_a31 = msg.summary) != null ? _a31 : {};
+    const findings = (_b = msg.findings) != null ? _b : [];
+    const scale = msg.scale;
+    const total = findings.length;
+    if (!total) {
+      el2.innerHTML = '<div class="muted">Every value in this selection is already bound to an S2A token. Nothing to align.</div>';
+      el2.style.display = "block";
+      setContractStatus(`${String((_c = msg.bound) != null ? _c : 0)} bindings, nothing unbound.`, "ok");
+      return;
+    }
+    const auto = ((_d = summary.exact) != null ? _d : 0) + ((_e = summary.scaled) != null ? _e : 0);
+    const parts = [];
+    const foreign = Number((_f = msg.foreign) != null ? _f : 0);
+    const raw = total - foreign;
+    const where = Number((_g = msg.fromLibrary) != null ? _g : 0) ? `${String((_h = msg.candidates) != null ? _h : 0)} tokens (${String(msg.fromLibrary)} from the library)` : `${String((_i = msg.candidates) != null ? _i : 0)} local tokens`;
+    parts.push(`<div class="muted" style="margin-bottom:4px;">Align \xB7 ${raw} raw value${raw === 1 ? "" : "s"}${foreign ? `, ${foreign} bound to another library` : ""} against ${where}</div>`);
+    if (msg.scopeless) {
+      parts.push('<div class="muted" style="margin-bottom:4px;">No variable in this file sets a scope, so matching falls back to token names.</div>');
+    }
+    if (scale) {
+      parts.push(`<div class="muted" style="margin-bottom:4px;">Scaled by <code>\xD7${Math.round(scale.factor * 1e3) / 1e3}</code> \u2014 it explains ${scale.explains} of ${scale.of} dimensions, so those are matched after dividing it out.</div>`);
+    }
+    const counts = ALIGN_ORDER.filter((k) => {
+      var _a32;
+      return ((_a32 = summary[k]) != null ? _a32 : 0) > 0;
+    }).map((k) => `<li><code>${esc(ALIGN_LABEL[k])}</code> <span class="muted">${summary[k]}</span></li>`).join("");
+    parts.push(`<ul style="margin:0 0 6px;padding-left:16px;">${counts}</ul>`);
+    const needsEyes = findings.filter((f) => !f.autoApply).sort((a, b) => ALIGN_ORDER.indexOf(a.confidence) - ALIGN_ORDER.indexOf(b.confidence)).slice(0, 12);
+    if (needsEyes.length) {
+      const rows = needsEyes.map((f) => {
+        var _a32;
+        const layer2 = esc(String(f.node || "/").split("/").filter(Boolean).pop() || "root");
+        const from = f.source === "wrong-library" ? ` <span class="muted">(now <code>${esc(String((_a32 = f.currentBinding) != null ? _a32 : ""))}</code>)</span>` : "";
+        return `<li><code>${layer2}</code>${from} <span class="muted">${esc(String(f.property))} \u2014 ${esc(String(f.reason))}</span></li>`;
+      }).join("");
+      parts.push(`<div class="muted" style="margin-bottom:2px;">Needs a decision</div><ul style="margin:0;padding-left:16px;">${rows}</ul>`);
+      const more = findings.filter((f) => !f.autoApply).length - needsEyes.length;
+      if (more > 0) parts.push(`<div class="muted" style="margin-top:4px;">+ ${more} more</div>`);
+    }
+    el2.innerHTML = parts.join("");
+    el2.style.display = "block";
+    setContractStatus(
+      auto ? `${auto} of ${total} can be bound without a judgment call. The rest are proposals.` : `None of the ${total} values match a token confidently enough to apply.`,
+      auto ? "ok" : ""
+    );
+  }
 })();
 </script>
 </body>

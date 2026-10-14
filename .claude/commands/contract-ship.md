@@ -73,6 +73,51 @@ Reassembles `@adobecom/s2a-specs`, so `index.json`'s `contracted` count reflects
 
 ---
 
+### 5. Render the implementations, and check them against the design
+
+```bash
+npm run specs:render -- --slug={slug}
+```
+
+Writes the Lit component + stories into `apps/storybook/stories/generated/` and the
+Milo block into `packages/milo-blocks/{slug}/`.
+
+If the set has a **State axis**, the stories file also gets a `State matrix` story —
+every variant on one grid, each state forced with `data-state` rather than pointed
+at. That is the surface the design comparison runs on, so give it a golden and score
+it:
+
+```bash
+npm run goldens:sheet -- --slug={slug}       # one request, one committed PNG
+npm run eval:visual:matrix -- --slug={slug}  # per-cell score + difference codes
+```
+
+`goldens:sheet` is the only step that needs `FIGMA_ACCESS_TOKEN` (it is in `.env`).
+The sheet is committed, so everything downstream — Storybook's Design overlay, the
+diff, a fresh clone, CI — needs no token. Re-shoot it whenever the Figma component
+changes, or the following diff will blame the code for a design edit.
+
+Read the output as a grid. A single bad cell is one variant; a whole column failing
+is one missing rule. Watch for the line that flags a state which is consistently
+worse than the others **without** failing — a thin detail like a focus ring is only
+a few percent of a cell's area, so it hides under a threshold.
+
+The difference codes say which property to look at:
+
+| code | region | likely cause |
+|---|---|---|
+| `VD01 PAINT_OUTSIDE_BOX` | outside the border box | missing `outline` / `box-shadow` (focus ring, shadow) |
+| `VD02 EDGE_DELTA` | the border band | `border-width` / `border-color` / `border-radius` |
+| `VD03 FILL_DELTA` | the interior | `background-color` token resolving wrong |
+| `VD04 TEXT_DELTA` | the text | `color` or type metrics — often just rasterisation noise |
+
+A difference is **not** automatically a code bug. Decide which side is wrong before
+fixing: if the design is wrong, fix Figma, bump its `s2a:meta` version, re-shoot the
+sheet. If the code is wrong, change the **defs** — never the contract and never the
+generated CSS, both of which are overwritten on the following build.
+
+Skip this step for a component whose set has no State axis; `spec.md` will say so.
+
 ## Report back
 
 A short summary, in this shape:
@@ -83,6 +128,8 @@ dot-pagination
   build      4 props · 2 parts · 5 token bindings · figma evidence yes
   gate       GREEN  0 failures, 51 warnings
   coverage   5 of 37 contracted
+  render     lit + milo, 5 files - State matrix 6x5
+  matrix     30/30 cells within 8% - VD01 focus ring missing in 6/6 rows
 ```
 
 Then, if there are any, the composition warnings for this slug and what they imply.

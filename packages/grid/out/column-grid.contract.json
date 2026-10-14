@@ -1,0 +1,504 @@
+{
+  "$generated": {
+    "name": "s2a-grid-contract-transform",
+    "version": "1"
+  },
+  "id": "s2a.grid.column-grid",
+  "slug": "column-grid",
+  "name": "Column grid",
+  "version": "1.0.0",
+  "kind": "grid",
+  "tier": "sectional",
+  "status": "shipped",
+  "supersededBy": null,
+  "description": "The column-span system: children of a row declare how many columns they occupy, and optionally which column they start at, per breakpoint range. Width is column-based — you say 'eight of twelve', not '931px'. This is the first of three grid kinds in the system, and the one most layouts should use. Figma calls it Column flex-Grid-8.",
+  "anchors": {
+    "code": {
+      "stylesheet": "packages/grid/src/s2a-layout-grids.css",
+      "importPath": "@adobecom/s2a-grid/css/grid.css",
+      "rootClass": "row",
+      "childClass": "col-lg-8"
+    },
+    "figma": {
+      "collectionId": "VariableCollectionId:6:178",
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "nodeId": "104:26144",
+      "layerName": "Column flex-Grid-8",
+      "designOnly": true
+    }
+  },
+  "breakpoints": [
+    {
+      "id": "sm",
+      "label": "S — Mobile",
+      "figmaMode": "sm",
+      "figmaLabel": "Mobile",
+      "minWidth": null,
+      "maxWidth": 767,
+      "mediaQuery": null,
+      "columns": 6,
+      "mockWidth": 375,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": null,
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.sm.css",
+        "mediaQuery": null,
+        "minWidth": null
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "md",
+      "label": "M — Tablet landscape",
+      "figmaMode": "md",
+      "figmaLabel": "Tablet",
+      "minWidth": 768,
+      "maxWidth": 1279,
+      "mediaQuery": "@media (width >= 768px)",
+      "columns": 12,
+      "mockWidth": 768,
+      "portraitEscape": 900,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 768px)",
+        "minWidth": 768
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.md.css",
+        "mediaQuery": "@media (width >= 768px)",
+        "minWidth": 768
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "lg",
+      "label": "L — Desktop",
+      "figmaMode": "lg",
+      "figmaLabel": "Desktop",
+      "minWidth": 1280,
+      "maxWidth": 1440,
+      "mediaQuery": "@media (width >= 1280px)",
+      "columns": 12,
+      "mockWidth": 1440,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 1280px)",
+        "minWidth": 1280
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.lg.css",
+        "mediaQuery": "@media (width >= 1280px)",
+        "minWidth": 1280
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "xl",
+      "label": "XL — Desktop HD",
+      "figmaMode": "xl",
+      "figmaLabel": "Desktop XL",
+      "minWidth": 1441,
+      "maxWidth": 2560,
+      "mediaQuery": "@media (width >= 1441px)",
+      "columns": 12,
+      "mockWidth": 2560,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": null,
+      "stylesheetNearest": {
+        "mediaQuery": "@media screen and (min-width: 1440px)",
+        "minWidth": 1440
+      },
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
+        "mediaQuery": "@media (width >= 1441px)",
+        "minWidth": 1441
+      },
+      "boundaryAgrees": false,
+      "inherited": true
+    }
+  ],
+  "breakpointBehavior": [
+    {
+      "breakpoint": "sm",
+      "behavior": "col-sm-1 through col-sm-6 against a 6-column grid. Declared at the top level, so they are the mobile-first base.",
+      "columns": 6
+    },
+    {
+      "breakpoint": "md",
+      "behavior": "col-md-1 through col-md-12 override col-lg-* inside the tablet range, for layouts that need a different stack at tablet.",
+      "columns": 12
+    },
+    {
+      "breakpoint": "lg",
+      "behavior": "col-lg-1 through col-lg-12 re-declared at 1280 so they win back over col-md-*.",
+      "columns": 12
+    },
+    {
+      "breakpoint": "xl",
+      "behavior": "Inherits the lg spans; HD changes the container, not the column count.",
+      "columns": 12
+    }
+  ],
+  "tokens": [
+    {
+      "role": "gutter",
+      "ref": "{s2a.spacing.xs}",
+      "breakpoint": "all",
+      "cssVar": "--s2a-spacing-xs",
+      "shipped": true,
+      "values": {
+        "sm": 8,
+        "md": 8,
+        "lg": 8,
+        "xl": 8
+      }
+    }
+  ],
+  "surface": {
+    "classes": [
+      {
+        "name": "col-sm-1",
+        "purpose": "Span one of six at mobile.",
+        "pattern": "col-sm-{1..6}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "grid-column": "auto / span 1"
+            }
+          }
+        ]
+      },
+      {
+        "name": "col-sm-full",
+        "purpose": "Span the whole row at mobile, whatever the column count.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "grid-column": "1 / -1"
+            }
+          }
+        ]
+      },
+      {
+        "name": "col-md-6",
+        "purpose": "Span six of twelve in the tablet range.",
+        "pattern": "col-md-{1..12}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "grid-column": "auto / span 6"
+            }
+          }
+        ]
+      },
+      {
+        "name": "col-md-full",
+        "purpose": "Span the whole row in the tablet range.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "grid-column": "1 / -1"
+            }
+          }
+        ]
+      },
+      {
+        "name": "col-lg-8",
+        "purpose": "Span eight of twelve from 768 up, re-asserted at 1280.",
+        "pattern": "col-lg-{1..12}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "grid-column": "auto / span 8"
+            }
+          },
+          {
+            "media": "@media (min-width: 1280px)",
+            "declarations": {
+              "grid-column": "auto / span 8"
+            }
+          }
+        ]
+      },
+      {
+        "name": "col-lg-full",
+        "purpose": "Span the whole row from 768 up.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "grid-column": "1 / -1"
+            }
+          },
+          {
+            "media": "@media (min-width: 1280px)",
+            "declarations": {
+              "grid-column": "1 / -1"
+            }
+          }
+        ]
+      },
+      {
+        "name": "start-sm-2",
+        "purpose": "Start at a named column at mobile.",
+        "pattern": "start-sm-{1..6}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "grid-column-start": "2"
+            }
+          }
+        ]
+      },
+      {
+        "name": "start-md-4",
+        "purpose": "Start at a named column in the tablet range.",
+        "pattern": "start-md-{1..12}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "grid-column-start": "4"
+            }
+          }
+        ]
+      },
+      {
+        "name": "start-lg-5",
+        "purpose": "Start at a named column from 768 up — this is how an asymmetric layout is expressed without an empty spacer div.",
+        "pattern": "start-lg-{1..12}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "grid-column-start": "5"
+            }
+          },
+          {
+            "media": "@media (min-width: 1280px)",
+            "declarations": {
+              "grid-column-start": "5"
+            }
+          }
+        ]
+      }
+    ],
+    "customProperties": []
+  },
+  "design": {
+    "collectionId": "VariableCollectionId:6:178",
+    "designOnly": true,
+    "values": {
+      "layout-guide.gap": {
+        "sm": {
+          "value": "{s2a.spacing.xs}",
+          "alias": "{s2a.spacing.xs}",
+          "resolved": 8,
+          "designOnly": false
+        },
+        "md": {
+          "value": "{s2a.spacing.xs}",
+          "alias": "{s2a.spacing.xs}",
+          "resolved": 8,
+          "designOnly": false
+        },
+        "lg": {
+          "value": "{s2a.spacing.xs}",
+          "alias": "{s2a.spacing.xs}",
+          "resolved": 8,
+          "designOnly": false
+        },
+        "xl": {
+          "value": "{s2a.spacing.xs}",
+          "alias": "{s2a.spacing.xs}",
+          "resolved": 8,
+          "designOnly": false
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "id": "COL_ROW_REQUIRED",
+      "statement": "Column classes only mean anything inside a row; the row is what creates the grid they span.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "row"
+      }
+    },
+    {
+      "id": "COL_SM_FULL_SET",
+      "statement": "The mobile range offers a span for every one of its six columns.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "col-sm-6"
+      }
+    },
+    {
+      "id": "COL_SM_NO_7",
+      "statement": "The mobile range stops at six. A col-sm-7 would be a span wider than the grid it sits in.",
+      "severity": "fail",
+      "check": {
+        "type": "classAbsent",
+        "name": "col-sm-7"
+      }
+    },
+    {
+      "id": "COL_LG_FULL_SET",
+      "statement": "The desktop range offers a span for every one of its twelve columns.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "col-lg-12"
+      }
+    },
+    {
+      "id": "COL_MD_FULL_SET",
+      "statement": "The tablet range offers a span for every one of its twelve columns.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "col-md-12"
+      }
+    },
+    {
+      "id": "COL_NO_13",
+      "statement": "No range offers a thirteenth column.",
+      "severity": "fail",
+      "check": {
+        "type": "classAbsent",
+        "name": "col-lg-13"
+      }
+    },
+    {
+      "id": "COL_START_LG",
+      "statement": "Explicit column starts exist for the desktop range, so asymmetric layouts need no spacer elements.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "start-lg-5"
+      }
+    },
+    {
+      "id": "COL_START_MD",
+      "statement": "Explicit column starts exist for the tablet range.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "start-md-5"
+      }
+    },
+    {
+      "id": "COL_MD_AFTER_LG",
+      "statement": "col-md-* must be declared after col-lg-* inside the 768 range, or the tablet override never wins. Source order is load-bearing here.",
+      "severity": "fail",
+      "check": {
+        "type": "manual",
+        "note": "Both families sit in the same @media (min-width: 768px) block with col-md-* second; the 1280 block then re-asserts col-lg-*. Confirmed by reading the stylesheet; a cascade check would need a real CSS cascade model."
+      }
+    },
+    {
+      "id": "COL_GUTTER_FIGMA",
+      "statement": "The gutter between columns is the same 8px Figma's layout guide uses.",
+      "severity": "fail",
+      "check": {
+        "type": "figmaAgrees",
+        "figmaPath": "layout-guide.gap",
+        "mode": "lg",
+        "expected": 8
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "COL_ROW_SPAN_PAIRING",
+      "question": "row-span-* utilities exist for all three ranges but only do anything inside a bento grid, where rows have a fixed height. Should they move to the bento contract or stay general?",
+      "state": "open",
+      "owner": "Matthew Huntsberry",
+      "evidence": "In a plain .row the rows are content-sized, so grid-row: span 2 has no predictable effect. They are documented under bento-grid for now."
+    }
+  ],
+  "visualize": {
+    "demo": "columns",
+    "overlay": true,
+    "spans": [
+      [
+        12
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        4,
+        4,
+        4
+      ],
+      [
+        3,
+        3,
+        3,
+        3
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        9,
+        3
+      ],
+      [
+        2,
+        8,
+        2
+      ]
+    ],
+    "note": "Each row is a real .row with real col-lg-* children, so what you see is the stylesheet, not a drawing of it."
+  },
+  "provenance": {
+    "defs": "sha256:191948a92003ee96c8cd3e8433e871dcbbd7d4b2ae9535d3c5cbe5af12be868d",
+    "code": "sha256:85c23da6c0b0fd1b6f89fbaf19696fa9f2fbf41b2dd5ef7598fab7cf931cf52e",
+    "figma": "sha256:d41aec77220ad4f98ec449c24cba47fd304215b59a049b215cdb8bce11a555dc",
+    "contract": "sha256:8cfc08541a1a9f926c92f6b37f18959f1f732889ba1b8f9c1062d01c4f91261f"
+  }
+}

@@ -1,0 +1,601 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "MerchCard",
+  "setName": "MerchCard — v1",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "article",
+    "bindings": {
+      "gap": [
+        "s2a/spacing/md"
+      ],
+      "border-radius": [
+        "s2a/border/radius/md"
+      ],
+      "padding-bottom": [
+        "s2a/spacing/2xs"
+      ],
+      "padding-left": [
+        "s2a/spacing/2xs"
+      ],
+      "padding-right": [
+        "s2a/spacing/2xs"
+      ],
+      "padding-top": [
+        "s2a/spacing/2xs"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".body",
+        "source": "/.body",
+        "element": "div",
+        "bindings": {
+          "border-radius": [
+            "s2a/border/radius/12"
+          ],
+          "background-color": [
+            "s2a/color/surface/default"
+          ]
+        },
+        "slot": null,
+        "children": [
+          {
+            "name": ".content",
+            "source": "/.body/.content",
+            "element": "div",
+            "bindings": {},
+            "slot": null,
+            "children": [
+              {
+                "name": ".header",
+                "source": "/.body/.content/.header",
+                "element": "div",
+                "bindings": {},
+                "slot": null,
+                "children": [
+                  {
+                    "name": ".header",
+                    "source": "/.body/.content/.header/header",
+                    "element": "div",
+                    "bindings": {},
+                    "slot": null,
+                    "children": [
+                      {
+                        "name": ".product-lockup",
+                        "source": "/.body/.content/.header/header/ProductLockup — v2",
+                        "element": null,
+                        "bindings": {},
+                        "slot": {
+                          "name": "ProductLockup — v2",
+                          "accepts": [
+                            "ProductLockup"
+                          ],
+                          "mode": "restrict"
+                        },
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": ".plan-header",
+                "source": "/.body/.content/.plan-header",
+                "element": "div",
+                "bindings": {
+                  "gap": [
+                    "s2a/spacing/lg"
+                  ]
+                },
+                "slot": null,
+                "children": [
+                  {
+                    "name": ".name-area",
+                    "source": "/.body/.content/.plan-header/.name-area",
+                    "element": "div",
+                    "bindings": {},
+                    "slot": null,
+                    "children": [
+                      {
+                        "name": ".plan-name",
+                        "source": "/.body/.content/.plan-header/.name-area/.plan-name",
+                        "element": "span",
+                        "bindings": {
+                          "color": [
+                            "s2a/color/content/heading"
+                          ],
+                          "font-family": [
+                            "s2a/font/family/heading"
+                          ],
+                          "font-size": [
+                            "s2a/typography/font-size/heading-5"
+                          ],
+                          "font-weight": [
+                            "s2a/font/weight/heading"
+                          ],
+                          "letter-spacing": [
+                            "s2a/font/letter-spacing/4xl"
+                          ],
+                          "line-height": [
+                            "s2a/typography/line-height/heading-5"
+                          ]
+                        },
+                        "slot": {
+                          "name": "plan-name",
+                          "accepts": [
+                            "kind:text"
+                          ],
+                          "mode": "prefer"
+                        },
+                        "children": []
+                      },
+                      {
+                        "name": ".description",
+                        "source": "/.body/.content/.plan-header/.name-area/.description",
+                        "element": "span",
+                        "bindings": {
+                          "color": [
+                            "s2a/color/content/default"
+                          ],
+                          "font-family": [
+                            "s2a/font/family/body"
+                          ],
+                          "font-size": [
+                            "s2a/typography/font-size/body-sm"
+                          ],
+                          "font-weight": [
+                            "s2a/font/weight/body"
+                          ],
+                          "letter-spacing": [
+                            "s2a/typography/letter-spacing/body-sm"
+                          ],
+                          "line-height": [
+                            "s2a/typography/line-height/body-sm"
+                          ]
+                        },
+                        "slot": {
+                          "name": "description",
+                          "accepts": [
+                            "kind:text"
+                          ],
+                          "mode": "prefer"
+                        },
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "name": ".merch-card-pricing-display",
+                    "source": "/.body/.content/.plan-header/MerchCard/PricingDisplay",
+                    "element": null,
+                    "bindings": {},
+                    "slot": {
+                      "name": "MerchCard/PricingDisplay",
+                      "accepts": [
+                        "MerchCardPricingDisplay"
+                      ],
+                      "mode": "restrict"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": ".options",
+                "source": "/.body/.content/options",
+                "element": "div",
+                "bindings": {
+                  "gap": [
+                    "s2a/spacing/xs"
+                  ]
+                },
+                "slot": null,
+                "children": [
+                  {
+                    "name": ".merch-card-select-promo",
+                    "source": "/.body/.content/options/MerchCard/SelectPromo",
+                    "element": null,
+                    "bindings": {},
+                    "slot": {
+                      "name": "MerchCard/SelectPromo",
+                      "accepts": [
+                        "MerchCardSelectPromo"
+                      ],
+                      "mode": "restrict"
+                    },
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": ".cta",
+            "source": "/.body/.cta",
+            "element": "div",
+            "bindings": {},
+            "slot": null,
+            "children": [
+              {
+                "name": ".actions",
+                "source": "/.body/.cta/.actions",
+                "element": "div",
+                "bindings": {},
+                "slot": null,
+                "children": [
+                  {
+                    "name": ".button",
+                    "source": "/.body/.cta/.actions/Button — v2",
+                    "element": null,
+                    "bindings": {},
+                    "slot": {
+                      "name": "Button — v2",
+                      "accepts": [
+                        "Button"
+                      ],
+                      "mode": "restrict"
+                    },
+                    "children": []
+                  },
+                  {
+                    "name": ".button-2",
+                    "source": "/.body/.cta/.actions/Button — v2",
+                    "element": null,
+                    "bindings": {},
+                    "slot": {
+                      "name": "Button — v2",
+                      "accepts": [
+                        "Button"
+                      ],
+                      "mode": "restrict"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": ".merch-card-trust-badge",
+                "source": "/.body/.cta/MerchCard/TrustBadge",
+                "element": null,
+                "bindings": {},
+                "slot": {
+                  "name": "MerchCard/TrustBadge",
+                  "accepts": [
+                    "MerchCardTrustBadge"
+                  ],
+                  "mode": "restrict"
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": ".features",
+        "source": "/features",
+        "element": "div",
+        "bindings": {
+          "padding-bottom": [
+            "s2a/spacing/3xl"
+          ]
+        },
+        "slot": {
+          "name": "features",
+          "accepts": [
+            "List",
+            "Collapsible"
+          ],
+          "mode": "restrict"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10826:13312",
+    "nodeName": "MerchCard — v1",
+    "componentSetKey": "95652c4bf02a6d7776516ddb92158350675e4d82",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Features List",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "closed"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "highlight"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "name": "Description#10466:30",
+      "type": "TEXT",
+      "forProp": "description"
+    },
+    {
+      "name": "Plan Name#10466:29",
+      "type": "TEXT",
+      "forProp": "planName"
+    },
+    {
+      "name": "Show Options#10466:33",
+      "type": "BOOLEAN",
+      "forProp": "showOptions",
+      "defaultValue": true
+    },
+    {
+      "name": "Show Pricing#10466:34",
+      "type": "BOOLEAN",
+      "forProp": "showPricing",
+      "defaultValue": true
+    },
+    {
+      "name": "Show Secondary CTA#10885:0",
+      "type": "BOOLEAN",
+      "forProp": "showSecondaryCta",
+      "defaultValue": true
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-merch-card",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/md"
+        ],
+        "border-radius": [
+          "s2a/border/radius/md"
+        ],
+        "padding-bottom": [
+          "s2a/spacing/2xs"
+        ],
+        "padding-left": [
+          "s2a/spacing/2xs"
+        ],
+        "padding-right": [
+          "s2a/spacing/2xs"
+        ],
+        "padding-top": [
+          "s2a/spacing/2xs"
+        ]
+      }
+    },
+    {
+      "name": "/.body",
+      "selector": ".c-merch-card__body",
+      "bindings": {
+        "border-radius": [
+          "s2a/border/radius/12"
+        ],
+        "background-color": [
+          "s2a/color/surface/default"
+        ]
+      }
+    },
+    {
+      "name": "/.body/.content",
+      "selector": ".c-merch-card__content",
+      "bindings": {}
+    },
+    {
+      "name": "/.body/.content/.header",
+      "selector": ".c-merch-card__header",
+      "bindings": {}
+    },
+    {
+      "name": "/.body/.content/.header/header",
+      "selector": ".c-merch-card__header",
+      "bindings": {}
+    },
+    {
+      "name": "/.body/.content/.header/header/ProductLockup — v2",
+      "selector": ".c-merch-card__product-lockup",
+      "bindings": {},
+      "slot": {
+        "name": "ProductLockup — v2",
+        "accepts": [
+          "ProductLockup"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/.body/.content/.plan-header",
+      "selector": ".c-merch-card__plan-header",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/lg"
+        ]
+      }
+    },
+    {
+      "name": "/.body/.content/.plan-header/.name-area",
+      "selector": ".c-merch-card__name-area",
+      "bindings": {}
+    },
+    {
+      "name": "/.body/.content/.plan-header/.name-area/.plan-name",
+      "selector": ".c-merch-card__plan-name",
+      "bindings": {
+        "color": [
+          "s2a/color/content/heading"
+        ],
+        "font-family": [
+          "s2a/font/family/heading"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/heading-5"
+        ],
+        "font-weight": [
+          "s2a/font/weight/heading"
+        ],
+        "letter-spacing": [
+          "s2a/font/letter-spacing/4xl"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/heading-5"
+        ]
+      },
+      "slot": {
+        "name": "plan-name",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.body/.content/.plan-header/.name-area/.description",
+      "selector": ".c-merch-card__description",
+      "bindings": {
+        "color": [
+          "s2a/color/content/default"
+        ],
+        "font-family": [
+          "s2a/font/family/body"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/body-sm"
+        ],
+        "font-weight": [
+          "s2a/font/weight/body"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/body-sm"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/body-sm"
+        ]
+      },
+      "slot": {
+        "name": "description",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.body/.content/.plan-header/MerchCard/PricingDisplay",
+      "selector": ".c-merch-card__merch-card-pricing-display",
+      "bindings": {},
+      "slot": {
+        "name": "MerchCard/PricingDisplay",
+        "accepts": [
+          "MerchCardPricingDisplay"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/.body/.content/options",
+      "selector": ".c-merch-card__options",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/xs"
+        ]
+      }
+    },
+    {
+      "name": "/.body/.content/options/MerchCard/SelectPromo",
+      "selector": ".c-merch-card__merch-card-select-promo",
+      "bindings": {},
+      "slot": {
+        "name": "MerchCard/SelectPromo",
+        "accepts": [
+          "MerchCardSelectPromo"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/.body/.cta",
+      "selector": ".c-merch-card__cta",
+      "bindings": {}
+    },
+    {
+      "name": "/.body/.cta/.actions",
+      "selector": ".c-merch-card__actions",
+      "bindings": {}
+    },
+    {
+      "name": "/.body/.cta/.actions/Button — v2",
+      "selector": ".c-merch-card__button",
+      "bindings": {},
+      "slot": {
+        "name": "Button — v2",
+        "accepts": [
+          "Button"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/.body/.cta/.actions/Button — v2",
+      "selector": ".c-merch-card__button-2",
+      "bindings": {},
+      "slot": {
+        "name": "Button — v2",
+        "accepts": [
+          "Button"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/.body/.cta/MerchCard/TrustBadge",
+      "selector": ".c-merch-card__merch-card-trust-badge",
+      "bindings": {},
+      "slot": {
+        "name": "MerchCard/TrustBadge",
+        "accepts": [
+          "MerchCardTrustBadge"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/features",
+      "selector": ".c-merch-card__features",
+      "bindings": {
+        "padding-bottom": [
+          "s2a/spacing/3xl"
+        ]
+      },
+      "slot": {
+        "name": "features",
+        "accepts": [
+          "List",
+          "Collapsible"
+        ],
+        "mode": "restrict"
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/heading-5",
+    "s2a/typography/body-sm"
+  ]
+}

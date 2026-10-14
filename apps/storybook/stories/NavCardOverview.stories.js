@@ -37,9 +37,9 @@ export const Variants = () => html`
     style="
       display: flex;
       flex-wrap: wrap;
-      gap: 32px;
-      padding: 32px;
-      background: #f5f5f5;
+      gap: var(--s2a-spacing-xl);
+      padding: var(--s2a-spacing-xl);
+      background: var(--s2a-color-surface-subtle);
     "
   >
     ${NavCard(contentProps)}

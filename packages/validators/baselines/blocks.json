@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "policy": {
+    "id": "will-block-css-v1",
+    "breakpoints": {
+      "MD": 768,
+      "LG": 1280,
+      "XL": 1441
+    },
+    "portraitReflow": [840, 960]
+  },
+  "note": "Existing responsive debt, not approved reflow exceptions. All findings remain in reports. New occurrences fail the regression gate.",
+  "entries": [
+    {
+      "file": "components/src/bento/bento.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/bento/bento.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/bento/bento.css",
+      "query": "(min-width:600px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/global-navigation/global-navigation.css",
+      "query": "(max-width:1023px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/global-navigation/global-navigation.css",
+      "query": "(max-width:1023px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(max-width:1100px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(max-width:1100px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(max-width:1279px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(max-width:1279px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(max-width:420px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(max-width:420px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(max-width:767px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(max-width:767px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(width>=1280px)and(width<1440px)and(height<900px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/homepage-sections/homepage-sections.css",
+      "query": "(width>=1280px)and(width<1440px)and(height<900px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/hub-router/hub-router.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/hub-router/hub-router.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/hub-router/hub-router.css",
+      "query": "(min-width:1024px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/hub-router/hub-router.css",
+      "query": "(min-width:1024px)and(max-width:1279px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 2
+    },
+    {
+      "file": "components/src/hub-router/hub-router.css",
+      "query": "(min-width:1024px)and(max-width:1279px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 4
+    },
+    {
+      "file": "components/src/quote-card/quote-card.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/quote-card/quote-card.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/router-marquee/router-marquee.css",
+      "query": "(max-width:1279px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/router-marquee/router-marquee.css",
+      "query": "(max-width:1279px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/router-marquee/router-marquee.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/router-marquee/router-marquee.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/social-proof-carousel/social-proof-carousel.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_MOBILE_FIRST",
+      "occurrences": 1
+    },
+    {
+      "file": "components/src/social-proof-carousel/social-proof-carousel.css",
+      "query": "(max-width:599px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "grid/src/s2a-layout-grids.css",
+      "query": "(min-width:1440px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    },
+    {
+      "file": "grid/src/s2a-layout-grids.css",
+      "query": "screen and(min-width:1440px)",
+      "code": "MQ_NONSTANDARD_BREAKPOINT",
+      "occurrences": 1
+    }
+  ]
+}

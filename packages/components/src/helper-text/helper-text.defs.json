@@ -1,0 +1,208 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "HelperText",
+  "slug": "helper-text",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from helper-text.figma.evidence.json (sha256:fb213141…) through packages/spec-dictionary/dictionary.json (helper text)",
+    "date": "2026-10-08",
+    "reviewer": "Matt"
+  },
+  "description": "Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+  "archetype": "helper text",
+  "version": "1.0.0",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "10243:101699",
+      "nodeName": "HelperText",
+      "componentSetKey": "1cd9f8578e3737a891771ea7c4ee875ee7fd7f29",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"?\"; 4 nodes, 14 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/helper-text/helper-text.js",
+      "export": "HelperText",
+      "cssClass": "c-helper-text"
+    }
+  },
+  "props": [
+    {
+      "name": "intent",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "neutral",
+        "error"
+      ],
+      "default": "neutral",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Intent"
+      },
+      "code": {
+        "prop": "intent",
+        "attr": "data-intent"
+      }
+    },
+    {
+      "name": "text",
+      "lever": true,
+      "type": "string",
+      "default": "Helpful hint about this field.",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Text#10243:2"
+      },
+      "code": {
+        "prop": "text"
+      }
+    },
+    {
+      "name": "id",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "id"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    }
+  ],
+  "states": [],
+  "anatomy": {
+    "root": {
+      "selector": ".c-helper-text",
+      "figma": ".root",
+      "element": "p",
+      "tokens": {
+        "width": "raw:418px"
+      },
+      "layout": {
+        "display": "flex",
+        "direction": "row"
+      },
+      "parts": {
+        "text": {
+          "selector": ".c-helper-text__text",
+          "figma": "/.text",
+          "tokens": {
+            "font-family": "{s2a.font.family.caption}",
+            "font-size": "{s2a.typography.font-size.caption}",
+            "font-weight": "{s2a.font.weight.caption}",
+            "letter-spacing": "{s2a.typography.letter-spacing.caption}",
+            "line-height": "{s2a.typography.line-height.caption}"
+          },
+          "tokensByProp": [
+            {
+              "prop": "intent",
+              "map": {
+                "neutral": {
+                  "color": "{s2a.color.content.subtle}"
+                },
+                "error": {
+                  "color": "{s2a.color.content.utility.error}"
+                }
+              }
+            }
+          ],
+          "layout": {
+            "grow": true
+          },
+          "element": "span",
+          "slot": {
+            "name": "text",
+            "accepts": [
+              "kind:text"
+            ],
+            "acceptsMode": "prefer",
+            "default": {
+              "text": "Helpful hint about this field."
+            }
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.3.1",
+      "3.3.1",
+      "3.3.3"
+    ],
+    "notes": [
+      "Described-by is the relationship; colour alone is not the error signal (1.4.1, 3.3.1).",
+      "The message says what is wrong and, where possible, how to fix it (3.3.3)."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "ht-archetype",
+      "question": "Scaffolded as helper text (named \"HelperText\"). Confirm, or re-run npm run specs:scaffold -- --slug=helper-text --archetype=<link-card|card|collection>.",
+      "chose": "helper text — named \"HelperText\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=helper-text --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×2; state axis none"
+    },
+    {
+      "id": "ht-part-selectors",
+      "question": "text has no class of its own in helper-text.css. The design names this part separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to helper-text.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/helper-text/helper-text.css"
+    },
+    {
+      "id": "ht-stray-text",
+      "question": "A text layer carries no recognisable role (not heading, body, eyebrow or label). Is it content (add a lever) or part of the illustration (fold into media)? Layers: /.text.",
+      "chose": "left 1 text layer out of the anatomy",
+      "confidence": "low",
+      "fix": "Name the layer in Figma so it claims a role, or add it under anatomy.root.parts here.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "helper-text.figma.evidence.json anatomy"
+    },
+    {
+      "id": "ht-code-only-props",
+      "question": "id exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 1 code-only prop as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "helper-text.code.evidence.json"
+    },
+    {
+      "id": "ht-hardcoded-values",
+      "question": "1 value in the design is set with no variable behind it: root width = 418px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried it through as raw: value so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "helper-text.figma.evidence.json unboundValues"
+    }
+  ]
+}

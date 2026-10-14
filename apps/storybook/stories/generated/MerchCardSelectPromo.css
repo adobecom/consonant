@@ -1,0 +1,65 @@
+/* Generated from merch-card-select-promo.contract.json. Re-run: npm run specs:render -- --slug=merch-card-select-promo */
+
+.c-merch-card-select-promo [hidden],
+.c-merch-card-select-promo[hidden] {
+  display: none !important;
+}
+
+.c-merch-card-select-promo {
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--s2a-border-radius-xs);
+  background-color: var(--s2a-color-background-subtle);
+  width: 418px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-merch-card-select-promo__select-trigger {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1 1 auto;
+  border-radius: var(--s2a-border-radius-xs);
+  background-color: var(--s2a-color-background-default);
+  gap: var(--s2a-spacing-xs);
+  padding-bottom: var(--s2a-spacing-sm);
+  padding-left: var(--s2a-spacing-sm);
+  padding-right: var(--s2a-spacing-sm);
+  padding-top: var(--s2a-spacing-sm);
+  --c-merch-card-select-promo__select-trigger-bw: var(--s2a-border-width-sm);
+  --c-merch-card-select-promo__select-trigger-bc: var(--s2a-color-border-subtle);
+  height: 40px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  box-shadow: inset 0 0 0 var(--c-merch-card-select-promo__select-trigger-bw, 0) var(--c-merch-card-select-promo__select-trigger-bc, transparent);
+}
+
+.c-merch-card-select-promo__value {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-default);
+  font-family: var(--s2a-font-family-label);
+  font-size: var(--s2a-typography-font-size-label);
+  font-weight: var(--s2a-font-weight-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  line-height: var(--s2a-typography-line-height-label);
+}
+
+.c-merch-card-select-promo__s2a-icon-chevron-down {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.c-merch-card-select-promo__helper {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  padding-bottom: var(--s2a-spacing-xs);
+  padding-left: var(--s2a-spacing-sm);
+  padding-right: var(--s2a-spacing-sm);
+  padding-top: var(--s2a-spacing-xs);
+}
+
+.c-merch-card-select-promo__helper-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}

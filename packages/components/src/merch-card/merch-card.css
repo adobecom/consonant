@@ -14,16 +14,16 @@
   width: 474px;
   max-width: 100%;
   box-sizing: border-box;
-  padding: var(--s2a-spacing-2xs, 4px);
-  border-radius: var(--s2a-border-radius-md, 16px);
+  padding: var(--s2a-spacing-2xs);
+  border-radius: var(--s2a-border-radius-md);
   /* surface/* tokens are bound in Figma but not yet in the shipped tokens release;
      until they land, fall back to the shipped background tokens so the outer
      surface still flips with the light/dark theme instead of freezing light. */
-  background: var(--s2a-color-surface-subtle, var(--s2a-color-background-subtle, #f8f8f8));
+  background: var(--s2a-color-surface-subtle);
 }
 
 .c-merch-card[data-style="highlight"] {
-  background: var(--s2a-color-surface-inverse-subtle, var(--s2a-color-background-inverse, #292929));
+  background: var(--s2a-color-surface-inverse-subtle);
 }
 
 .c-merch-card *,
@@ -43,31 +43,37 @@
 .c-merch-card__body {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-lg, 24px);
+  gap: var(--s2a-spacing-lg);
   /* 28px is unbound in Figma and has no matching spacing token (scale jumps
      24 → 32) — kept 1:1, flagged in merch-card.spec.json knownTokenGaps. */
   padding: 28px;
-  border-radius: var(--s2a-border-radius-sm, 12px);
-  background: var(--s2a-color-surface-default, #ffffff);
+  border-radius: var(--s2a-border-radius-sm);
+  background: var(--s2a-color-surface-default);
 
   /* Figma definition-level LIGHT PIN: the card body stays a light surface in
      both themes. The semantic tokens its content uses are re-pinned here to
      theme-invariant primitives so text stays legible when the page theme is
      dark. Remove this block if/when the body's Light pin is lifted in Figma. */
   --s2a-color-content-label: var(--s2a-color-gray-1000);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
   --s2a-color-content-heading: var(--s2a-color-gray-1000);
   --s2a-color-content-default: var(--s2a-color-gray-1000);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
   --s2a-color-content-subtle: var(--s2a-color-transparent-black-64);
   --s2a-color-background-subtle: var(--s2a-color-gray-50);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
   --s2a-color-border-knockout: var(--s2a-color-gray-1000);
-  --s2a-color-button-content-primary-outlined-default: var(--s2a-color-gray-1000);
+  --s2a-color-button-content-primary-outlined-default: var(
+    --s2a-color-gray-1000
+  );
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
   --s2a-color-focus-ring-default: var(--s2a-color-blue-900);
 }
 
 .c-merch-card__content {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-md);
 }
 
 /* ── Header (ProductLockup) ────────────────────────────────────────────── */
@@ -75,7 +81,7 @@
 .c-merch-card__header {
   display: flex;
   align-items: center;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
 }
 
 .c-merch-card__lockup-icon {
@@ -84,11 +90,11 @@
 }
 
 .c-merch-card__lockup-label {
-  font-family: var(--s2a-font-family-label, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-label, 700);
-  font-size: var(--s2a-typography-font-size-label, 14px);
-  line-height: var(--s2a-typography-line-height-label, 18px);
-  color: var(--s2a-color-content-label, #000);
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  color: var(--s2a-color-content-label);
 }
 
 /* ── Plan header ───────────────────────────────────────────────────────── */
@@ -96,30 +102,30 @@
 .c-merch-card__plan-header {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-lg, 24px);
+  gap: var(--s2a-spacing-lg);
 }
 
 .c-merch-card__name-area {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-2xs, 4px);
+  gap: var(--s2a-spacing-2xs);
 }
 
 .c-merch-card__plan-name {
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display", sans-serif);
-  font-weight: var(--s2a-font-weight-heading, 900);
-  font-size: var(--s2a-typography-font-size-heading-5, 24px);
-  line-height: var(--s2a-typography-line-height-heading-5, 24px);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-5, -0.48px);
-  color: var(--s2a-color-content-heading, #000);
+  font-family: var(--s2a-font-family-heading);
+  font-weight: var(--s2a-font-weight-heading);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  line-height: var(--s2a-typography-line-height-heading-5);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-5);
+  color: var(--s2a-color-content-heading);
 }
 
 .c-merch-card__description {
-  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-body, 400);
-  font-size: var(--s2a-typography-font-size-body-sm, 14px);
-  line-height: var(--s2a-typography-line-height-body-sm, 18px);
-  color: var(--s2a-color-content-default, #000);
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-body-sm);
+  line-height: var(--s2a-typography-line-height-body-sm);
+  color: var(--s2a-color-content-default);
 }
 
 /* ── Pricing ───────────────────────────────────────────────────────────── */
@@ -127,26 +133,26 @@
 .c-merch-card__pricing {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-3xs, 2px);
+  gap: var(--s2a-spacing-3xs);
 }
 
 .c-merch-card__compare-price,
 .c-merch-card__price-note,
 .c-merch-card__price-terms {
-  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-body, 400);
-  font-size: var(--s2a-typography-font-size-body-sm, 14px);
-  line-height: var(--s2a-typography-line-height-body-sm, 18px);
-  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-body-sm);
+  line-height: var(--s2a-typography-line-height-body-sm);
+  color: var(--s2a-color-content-subtle);
 }
 
 .c-merch-card__price {
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display", sans-serif);
-  font-weight: var(--s2a-font-weight-heading, 900);
-  font-size: var(--s2a-typography-font-size-heading-5, 24px);
-  line-height: var(--s2a-typography-line-height-heading-5, 24px);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-5, -0.48px);
-  color: var(--s2a-color-content-heading, #000);
+  font-family: var(--s2a-font-family-heading);
+  font-weight: var(--s2a-font-weight-heading);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  line-height: var(--s2a-typography-line-height-heading-5);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-5);
+  color: var(--s2a-color-content-heading);
 }
 
 /* ── Options slot (default SelectPromo) ────────────────────────────────── */
@@ -154,54 +160,54 @@
 .c-merch-card__options {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
 }
 
 .c-merch-card__option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-md);
   width: 100%;
-  padding: var(--s2a-spacing-sm, 12px) var(--s2a-spacing-md, 16px);
+  padding: var(--s2a-spacing-sm) var(--s2a-spacing-md);
   border: none;
-  border-radius: var(--s2a-border-radius-xs, 8px);
-  background: var(--s2a-color-background-subtle, #f8f8f8);
+  border-radius: var(--s2a-border-radius-xs);
+  background: var(--s2a-color-background-subtle);
   text-align: left;
   cursor: pointer;
 }
 
 .c-merch-card__option:focus-visible {
-  outline: 2px solid var(--s2a-color-focus-ring-default, #3b63fb);
-  outline-offset: 2px;
+  outline: var(--s2a-border-width-md) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-3xs);
 }
 
 .c-merch-card__option-text {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-3xs, 2px);
+  gap: var(--s2a-spacing-3xs);
 }
 
 .c-merch-card__option-label {
-  font-family: var(--s2a-font-family-label, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-label, 700);
-  font-size: var(--s2a-typography-font-size-label, 14px);
-  line-height: var(--s2a-typography-line-height-label, 18px);
-  color: var(--s2a-color-content-default, #000);
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  color: var(--s2a-color-content-default);
 }
 
 .c-merch-card__option-promo {
-  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-body, 400);
-  font-size: var(--s2a-typography-font-size-caption, 12px);
-  line-height: var(--s2a-typography-line-height-caption, 16px);
-  color: var(--s2a-color-content-default, #000);
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-caption);
+  line-height: var(--s2a-typography-line-height-caption);
+  color: var(--s2a-color-content-default);
 }
 
 .c-merch-card__option-chevron {
   display: inline-flex;
   flex-shrink: 0;
-  color: var(--s2a-color-content-default, #000);
+  color: var(--s2a-color-content-default);
 }
 
 /* ── CTA region ────────────────────────────────────────────────────────── */
@@ -209,54 +215,54 @@
 .c-merch-card__cta {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
 }
 
 .c-merch-card__actions {
   display: flex;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
 }
 
 .c-merch-card__button {
   flex: 1 1 0;
   min-height: 40px;
-  padding: var(--s2a-spacing-sm, 12px) var(--s2a-spacing-lg, 24px);
+  padding: var(--s2a-spacing-sm) var(--s2a-spacing-lg);
   /* Figma binds primitive --s2a-border-radius-999 (no semantic full-radius
      token yet) — flagged in merch-card.spec.json knownTokenGaps. */
-  border-radius: var(--s2a-border-radius-999, 999px);
+  border-radius: var(--s2a-border-radius-round);
   border: none;
-  font-family: var(--s2a-font-family-label, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-label, 700);
-  font-size: var(--s2a-typography-font-size-label, 14px);
-  line-height: var(--s2a-typography-line-height-label, 18px);
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
   cursor: pointer;
 }
 
 .c-merch-card__button:focus-visible {
-  outline: 2px solid var(--s2a-color-focus-ring-default, #3b63fb);
-  outline-offset: 2px;
+  outline: var(--s2a-border-width-md) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-3xs);
 }
 
 .c-merch-card__button--accent {
-  background: var(--s2a-color-button-background-accent-default, #3b63fb);
-  color: var(--s2a-color-content-knockout, #fff);
+  background: var(--s2a-color-button-background-accent-default);
+  color: var(--s2a-color-content-knockout);
 }
 
 .c-merch-card__button--outlined {
-  background: var(--s2a-color-button-background-primary-outlined-default, transparent);
-  border: 2px solid var(--s2a-color-border-knockout, #000);
-  color: var(--s2a-color-button-content-primary-outlined-default, #000);
+  background: var(--s2a-color-button-background-outlined-default);
+  border: var(--s2a-border-width-md) solid var(--s2a-color-border-knockout);
+  color: var(--s2a-color-button-content-primary-outlined-default);
 }
 
 .c-merch-card__trust {
   display: flex;
   align-items: center;
-  gap: var(--s2a-spacing-xs, 8px);
-  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-body, 400);
-  font-size: var(--s2a-typography-font-size-body-sm, 14px);
-  line-height: var(--s2a-typography-line-height-body-sm, 18px);
-  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+  gap: var(--s2a-spacing-xs);
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-body-sm);
+  line-height: var(--s2a-typography-line-height-body-sm);
+  color: var(--s2a-color-content-subtle);
 }
 
 .c-merch-card__trust-icon {
@@ -271,48 +277,47 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--s2a-spacing-lg, 24px);
-  padding: var(--s2a-spacing-lg, 24px) var(--s2a-spacing-lg, 24px)
-    var(--s2a-spacing-3xl, 48px);
+  gap: var(--s2a-spacing-lg);
+  padding: var(--s2a-spacing-lg) var(--s2a-spacing-lg) var(--s2a-spacing-3xl);
 }
 
 .c-merch-card__features-content {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-md);
   width: 100%;
 }
 
 .c-merch-card__features-title {
-  font-family: var(--s2a-font-family-label, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-label, 700);
-  font-size: var(--s2a-typography-font-size-label, 14px);
-  line-height: var(--s2a-typography-line-height-label, 18px);
-  color: var(--s2a-color-content-default, #000);
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  color: var(--s2a-color-content-default);
 }
 
 .c-merch-card__features-list {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-md);
   padding: 0;
   list-style: none;
 }
 
 .c-merch-card__feature {
-  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-body, 400);
-  font-size: var(--s2a-typography-font-size-body-sm, 14px);
-  line-height: var(--s2a-typography-line-height-body-sm, 18px);
-  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-body-sm);
+  line-height: var(--s2a-typography-line-height-body-sm);
+  color: var(--s2a-color-content-subtle);
 }
 
 /* Highlight: features sit on the inverse-subtle outer surface, so text flips
    opposite the theme (matches Figma content/inverse bindings). */
 .c-merch-card[data-style="highlight"] .c-merch-card__features-title {
-  color: var(--s2a-color-content-inverse, #fff);
+  color: var(--s2a-color-content-inverse);
 }
 
 .c-merch-card[data-style="highlight"] .c-merch-card__feature {
-  color: var(--s2a-color-content-inverse, #fff);
+  color: var(--s2a-color-content-inverse);
 }

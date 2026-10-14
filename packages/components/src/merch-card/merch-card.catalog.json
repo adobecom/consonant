@@ -1,0 +1,231 @@
+{
+  "id": "s2a.merch-card",
+  "name": "MerchCard",
+  "slug": "merch-card",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "A merchandising card for a product plan — plan name, pricing, a feature list, and CTAs — used in pricing tables and plan comparisons. The highlight variant is the featured / recommended plan.",
+  "props": [
+    {
+      "name": "description",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "featuresList",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "features",
+      "type": "expression",
+      "lever": true
+    },
+    {
+      "name": "options",
+      "type": "expression",
+      "lever": true
+    },
+    {
+      "name": "planName",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showOptions",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "showPricing",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "showSecondaryCta",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "style",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "app",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "planLabel",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "price",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "comparePrice",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "priceNote",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "priceTerms",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "optionLabel",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "optionPromo",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "featuresTitle",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "primaryCtaLabel",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "secondaryCtaLabel",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "trustLabel",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "onPrimaryCta",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "onSecondaryCta",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.body",
+    "root.body.content",
+    "root.body.content.header",
+    "root.body.content.header.header",
+    "root.body.content.header.header.product-lockup",
+    "root.body.content.plan-header",
+    "root.body.content.plan-header.name-area",
+    "root.body.content.plan-header.name-area.plan-name",
+    "root.body.content.plan-header.name-area.description",
+    "root.body.content.plan-header.merch-card-pricing-display",
+    "root.body.content.options",
+    "root.body.content.options.merch-card-select-promo",
+    "root.body.cta",
+    "root.body.cta.actions",
+    "root.body.cta.actions.button",
+    "root.body.cta.actions.button-2",
+    "root.body.cta.merch-card-trust-badge",
+    "root.features"
+  ],
+  "slots": [
+    {
+      "path": "root.body.content.header.header.product-lockup",
+      "accepts": [
+        "ProductLockup"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.body.content.plan-header.name-area.plan-name",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.body.content.plan-header.name-area.description",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.body.content.plan-header.merch-card-pricing-display",
+      "accepts": [
+        "MerchCardPricingDisplay"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.body.content.options.merch-card-select-promo",
+      "accepts": [
+        "MerchCardSelectPromo"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.body.cta.actions.button",
+      "accepts": [
+        "Button"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.body.cta.actions.button-2",
+      "accepts": [
+        "Button"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.body.cta.merch-card-trust-badge",
+      "accepts": [
+        "MerchCardTrustBadge"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.features",
+      "accepts": [
+        "List",
+        "Collapsible"
+      ],
+      "mode": "restrict"
+    }
+  ],
+  "tokens": 26,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/merch-card/merch-card.js",
+      "export": "MerchCard",
+      "controller": null,
+      "cssClass": "c-merch-card"
+    },
+    "figma": "10826:13312"
+  },
+  "openDecisions": 11
+}

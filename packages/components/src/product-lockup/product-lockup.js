@@ -6,7 +6,8 @@ import chevronRightSvg from "../icons/chevron-right.svg?raw";
 
 const CaretIcon = () => unsafeHTML(chevronRightSvg);
 
-const ICON_SIZES = new Set(["xs", "sm", "md", "lg"]);
+// AppIcon names its sizes as Figma does — the px is the name.
+const ICON_SIZES = new Set(["16", "18", "24", "32", "48", "80"]);
 const STYLES = new Set(["label", "eyebrow", "knockout", "inverse"]);
 
 const normalizeOrientation = (value) => (value === "vertical" ? "vertical" : "horizontal");
@@ -14,8 +15,8 @@ const normalizeStyle = (value) => (STYLES.has(value) ? value : "label");
 const normalizeWidth = (value) => (value === "fill" ? "fill" : "hug");
 const normalizeIconSize = (value) => {
   if (value && value !== "auto" && ICON_SIZES.has(value)) return value;
-  // Figma v2 keeps the AppIcon at 24px (md) inside the lockup itself.
-  return "md";
+  // Figma v2 keeps the AppIcon at 24px inside the lockup itself.
+  return "24";
 };
 
 /**

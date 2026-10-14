@@ -14,11 +14,8 @@
   "cssClass": "c-button",
   "figmaNodeId": "10715:35477",
   "storybookId": "atoms-button",
-  "description": "A button. Renders a native button, or an anchor when href is set, so it keeps the right keyboard and activation behaviour either way.",
+  "description": "The primary action trigger — a text button with optional leading and trailing icons, in six styles. Light and dark are handled automatically by page-level modes, so you choose a style, not a theme.",
   "variants": {
-    "Size": [
-      "md"
-    ],
     "Style": [
       "solid",
       "outlined",
@@ -26,6 +23,13 @@
       "accent",
       "knockout",
       "outline-inverse"
+    ],
+    "State": [
+      "default",
+      "hover",
+      "active",
+      "disabled",
+      "focus"
     ]
   },
   "props": [
@@ -125,31 +129,6 @@
       }
     },
     {
-      "name": "size",
-      "type": "string",
-      "defaultValue": "\"md\"",
-      "enum": [
-        "md"
-      ],
-      "lever": true,
-      "bindings": {
-        "figma": {
-          "kind": "VARIANT",
-          "property": "Size",
-          "verified": true,
-          "options": [
-            "md"
-          ]
-        },
-        "code": {
-          "prop": "size",
-          "attr": "data-size",
-          "extracted": true,
-          "jsdoc": "'md'"
-        }
-      }
-    },
-    {
       "name": "style",
       "type": "string",
       "defaultValue": "\"solid\"",
@@ -200,16 +179,50 @@
       }
     },
     {
-      "name": "state",
+      "name": "size",
       "type": "string",
-      "defaultValue": "\"default\"",
+      "defaultValue": "\"md\"",
       "description": "Exists in the component, has no design counterpart.",
       "lever": true,
       "bindings": {
         "figma": "NONE",
         "code": {
-          "prop": "state",
+          "prop": "size",
           "attr": null,
+          "extracted": true,
+          "jsdoc": "'md'"
+        }
+      }
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "description": "The State axis, forceable from code. At runtime the states come from interaction; forcing one is for previews, docs and the state matrix. The hand-written component used data-force-state; generated code uses data-state.",
+      "enum": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "focus"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "verified": true,
+          "options": [
+            "default",
+            "hover",
+            "active",
+            "disabled",
+            "focus"
+          ]
+        },
+        "code": {
+          "prop": "state",
+          "attr": "data-state",
           "extracted": true,
           "jsdoc": "'default'|'hover'|'active'|'focus'|'disabled'"
         }
@@ -232,10 +245,66 @@
     }
   ],
   "tokenBindings": {
-    "root-background-color": "--s2a-color-background-subtle",
-    "root-border-radius": "--s2a-border-radius-md",
-    "root-padding": "--s2a-spacing-xl",
-    "root-gap": "--s2a-spacing-md"
+    "root-border-radius": "--s2a-border-radius-999",
+    "root-gap": "--s2a-spacing-xs",
+    "root-padding-left": "--s2a-spacing-lg",
+    "root-padding-right": "--s2a-spacing-lg",
+    "root-opacity:disabled": "--s2a-opacity-disabled",
+    "root-outline-color:focus": "--s2a-color-focus-ring-default",
+    "root-outline-width:focus": "--s2a-border-width-sm",
+    "root-background-color@style=outlined": "--s2a-color-button-background-outlined-default",
+    "root-border-width@style=outlined": "--s2a-border-width-md",
+    "root-border-color@style=outlined": "--s2a-color-border-knockout",
+    "root-background-color@style=transparent": "--s2a-color-button-background-transparent-default",
+    "root-border-width@style=transparent": "--s2a-border-width-sm",
+    "root-background-color@style=solid": "--s2a-color-button-background-solid-default",
+    "root-border-width@style=solid": "--s2a-border-width-sm",
+    "root-background-color@style=accent": "--s2a-color-button-background-accent-default",
+    "root-background-color@style=knockout": "--s2a-color-button-background-knockout-default",
+    "root-border-width@style=knockout": "--s2a-border-width-md",
+    "root-border-color@style=knockout": "--s2a-color-button-border-knockout-default",
+    "root-background-color@style=outline-inverse": "--s2a-color-button-background-outline-inverse-default",
+    "root-border-width@style=outline-inverse": "--s2a-border-width-md",
+    "root-border-color@style=outline-inverse": "--s2a-color-button-border-outline-inverse-default",
+    "root-background-color@style=outlined:hover": "--s2a-color-button-background-outlined-hover",
+    "root-background-color@style=transparent:hover": "--s2a-color-button-background-transparent-hover",
+    "root-background-color@style=solid:hover": "--s2a-color-button-background-solid-hover",
+    "root-border-width@style=solid:hover": "--s2a-border-width-md",
+    "root-border-color@style=solid:hover": "--s2a-color-border-knockout",
+    "root-background-color@style=accent:hover": "--s2a-color-button-background-accent-hover",
+    "root-background-color@style=knockout:hover": "--s2a-color-button-background-knockout-hover",
+    "root-background-color@style=outline-inverse:hover": "--s2a-color-button-background-outline-inverse-hover",
+    "root-background-color@style=outlined:active": "--s2a-color-button-background-outlined-active",
+    "root-background-color@style=transparent:active": "--s2a-color-button-background-transparent-active",
+    "root-background-color@style=solid:active": "--s2a-color-button-background-solid-active",
+    "root-background-color@style=accent:active": "--s2a-color-button-background-accent-active",
+    "root-background-color@style=knockout:active": "--s2a-color-button-background-knockout-active",
+    "root-background-color@style=outline-inverse:active": "--s2a-color-button-background-outline-inverse-active",
+    "root-background-color@style=accent:focus": "--s2a-color-blue-1100",
+    "root-border-width@style=accent:focus": "--s2a-border-width-sm",
+    "icon-start-opacity@style=solid:disabled": "--s2a-opacity-disabled",
+    "icon-start-opacity@style=accent:disabled": "--s2a-opacity-48",
+    "icon-color-color@style=outlined": "--s2a-color-content-default",
+    "icon-color-color@style=transparent": "--s2a-color-content-default",
+    "icon-color-color@style=solid": "--s2a-color-content-inverse",
+    "icon-color-color@style=accent": "--s2a-color-content-inverse",
+    "icon-color-color@style=knockout": "--s2a-color-button-content-knockout",
+    "icon-color-color@style=outline-inverse": "--s2a-color-button-content-outline-inverse",
+    "label-font-family": "--s2a-font-family-label",
+    "label-font-size": "--s2a-typography-font-size-label",
+    "label-font-weight": "--s2a-font-weight-label",
+    "label-letter-spacing": "--s2a-typography-letter-spacing-label",
+    "label-line-height": "--s2a-typography-line-height-label",
+    "label-opacity:disabled": "--s2a-opacity-disabled",
+    "label-color@style=outlined": "--s2a-color-content-default",
+    "label-color@style=transparent": "--s2a-color-content-default",
+    "label-color@style=solid": "--s2a-color-button-content-primary-solid-default",
+    "label-color@style=accent": "--s2a-color-content-knockout",
+    "label-color@style=knockout": "--s2a-color-button-content-knockout",
+    "label-color@style=outline-inverse": "--s2a-color-button-content-outline-inverse",
+    "label-color@style=outlined:active": "--s2a-color-button-content-outlined-active",
+    "icon-end-opacity:disabled": "--s2a-opacity-48",
+    "icon-color-opacity:disabled": "--s2a-opacity-disabled"
   },
   "tier": "component",
   "composedOf": [],
@@ -248,20 +317,17 @@
       "2.5.8",
       "4.1.2"
     ],
-    "keyboard": [
-      {
-        "key": "Enter",
-        "action": "Activates the control."
-      },
-      {
-        "key": "Space",
-        "action": "Activates the control when it renders as a button. An anchor activates on Enter only."
-      }
-    ],
     "notes": [
-      "Native button or anchor, so role, focus order and activation come from the element — do not add role=\"button\".",
-      "An icon-only button needs an accessible name from the label prop; the icon is decorative and must not be the only name.",
-      "disabled is a real attribute on the button form, not a class. An anchor cannot be disabled — remove href instead."
+      "Renders a native <button>, or an <a> when it navigates — never a div with a click handler.",
+      "The label is the accessible name; an icon-only button needs an aria-label.",
+      "Focus is visible on the control itself (2.4.7) and the target is at least 24x24 (2.5.8).",
+      "Disabled is conveyed to assistive tech, not by colour alone (1.4.1).",
+      "Give it an accessible name. The Label provides it; for an icon-only button, set an aria-label. WCAG 4.1.2 Name, Role, Value.",
+      "Real button semantics. Render as <button> (or <a> when it navigates via href). Tab to focus, Enter / Space to activate. WCAG 2.1.1 Keyboard.",
+      "Ship the focus ring. The focus state's ring must exist in code so keyboard focus stays visible. WCAG 2.4.7 Focus Visible.",
+      "Mind contrast on inverse styles. On media or colored surfaces keep the label and icons at 4.5:1 (text) / 3:1 (UI) against the background — add a scrim if needed. WCAG 1.4.3 & 1.4.11.",
+      "Target size at least 24x24px (44x44 on touch). WCAG 2.5.8 Target Size (Minimum).",
+      "disabled is communicated, not just dimmed — remove it from the tab order and expose the state to assistive tech."
     ]
   },
   "states": [
@@ -321,89 +387,1276 @@
     "elementByProp": {
       "prop": "href",
       "map": {
-        "set": "a",
-        "unset": "button"
+        "": "button",
+        "*": "a"
       }
     },
+    "layout": {
+      "display": "inline-flex",
+      "direction": "row",
+      "justify": "center",
+      "align": "center"
+    },
     "tokens": {
-      "background-color": {
-        "value": "{s2a.color.background.subtle}",
-        "raw": false,
-        "tokens": [
-          {
-            "ref": "{s2a.color.background.subtle}",
-            "cssVar": "--s2a-color-background-subtle",
-            "figma": "s2a/color/background/subtle",
-            "shipped": true,
-            "value": "#f8f8f8",
-            "dark": "#505050"
-          }
-        ]
-      },
       "border-radius": {
-        "value": "{s2a.border-radius.md}",
+        "value": "{s2a.border.radius.999}",
         "raw": false,
         "tokens": [
           {
-            "ref": "{s2a.border-radius.md}",
-            "cssVar": "--s2a-border-radius-md",
-            "figma": "s2a/border-radius/md",
+            "ref": "{s2a.border.radius.999}",
+            "cssVar": "--s2a-border-radius-999",
+            "figma": "s2a/border/radius/999",
             "shipped": true,
-            "value": "16px"
-          }
-        ]
-      },
-      "padding": {
-        "value": "{s2a.spacing.xl}",
-        "raw": false,
-        "tokens": [
-          {
-            "ref": "{s2a.spacing.xl}",
-            "cssVar": "--s2a-spacing-xl",
-            "figma": "s2a/spacing/xl",
-            "shipped": true,
-            "value": "32px"
+            "value": "999px"
           }
         ]
       },
       "gap": {
-        "value": "{s2a.spacing.md}",
+        "value": "{s2a.spacing.xs}",
         "raw": false,
         "tokens": [
           {
-            "ref": "{s2a.spacing.md}",
-            "cssVar": "--s2a-spacing-md",
-            "figma": "s2a/spacing/md",
+            "ref": "{s2a.spacing.xs}",
+            "cssVar": "--s2a-spacing-xs",
+            "figma": "s2a/spacing/xs",
             "shipped": true,
-            "value": "16px"
+            "value": "8px"
           }
         ]
+      },
+      "padding-left": {
+        "value": "{s2a.spacing.lg}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.lg}",
+            "cssVar": "--s2a-spacing-lg",
+            "figma": "s2a/spacing/lg",
+            "shipped": true,
+            "value": "24px"
+          }
+        ]
+      },
+      "padding-right": {
+        "value": "{s2a.spacing.lg}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.lg}",
+            "cssVar": "--s2a-spacing-lg",
+            "figma": "s2a/spacing/lg",
+            "shipped": true,
+            "value": "24px"
+          }
+        ]
+      },
+      "padding-top": {
+        "value": "raw:14px",
+        "raw": true,
+        "tokens": []
+      },
+      "padding-bottom": {
+        "value": "raw:14px",
+        "raw": true,
+        "tokens": []
       }
     },
+    "states": {
+      "disabled": {
+        "opacity": {
+          "value": "{s2a.opacity.disabled}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{s2a.opacity.disabled}",
+              "cssVar": "--s2a-opacity-disabled",
+              "figma": "s2a/opacity/disabled",
+              "shipped": true,
+              "value": "48%"
+            }
+          ]
+        }
+      },
+      "focus": {
+        "outline-color": {
+          "value": "{s2a.color.focus-ring.default}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{s2a.color.focus-ring.default}",
+              "cssVar": "--s2a-color-focus-ring-default",
+              "figma": "s2a/color/focus-ring/default",
+              "shipped": true,
+              "value": "#3b63fb",
+              "dark": "#8eb9fc"
+            }
+          ]
+        },
+        "outline-width": {
+          "value": "{s2a.border.width.sm}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{s2a.border.width.sm}",
+              "cssVar": "--s2a-border-width-sm",
+              "figma": "s2a/border/width/sm",
+              "shipped": true,
+              "value": "1px"
+            }
+          ]
+        },
+        "outline-style": {
+          "value": "raw:solid",
+          "raw": true,
+          "tokens": []
+        },
+        "outline-offset": {
+          "value": "raw:1px",
+          "raw": true,
+          "tokens": []
+        }
+      }
+    },
+    "tokensByProp": [
+      {
+        "prop": "style",
+        "map": {
+          "outlined": {
+            "background-color": {
+              "value": "{s2a.color.button.background.outlined.default}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.outlined.default}",
+                  "cssVar": "--s2a-color-button-background-outlined-default",
+                  "figma": "s2a/color/button/background/outlined/default",
+                  "shipped": true,
+                  "value": "rgb(255 255 255 / 0)"
+                }
+              ]
+            },
+            "border-width": {
+              "value": "{s2a.border.width.md}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.border.width.md}",
+                  "cssVar": "--s2a-border-width-md",
+                  "figma": "s2a/border/width/md",
+                  "shipped": true,
+                  "value": "2px"
+                }
+              ]
+            },
+            "border-color": {
+              "value": "{s2a.color.border.knockout}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.border.knockout}",
+                  "cssVar": "--s2a-color-border-knockout",
+                  "figma": "s2a/color/border/knockout",
+                  "shipped": true,
+                  "value": "#000",
+                  "dark": "#fff"
+                }
+              ]
+            }
+          },
+          "transparent": {
+            "background-color": {
+              "value": "{s2a.color.button.background.transparent.default}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.transparent.default}",
+                  "cssVar": "--s2a-color-button-background-transparent-default",
+                  "figma": "s2a/color/button/background/transparent/default",
+                  "shipped": true,
+                  "value": "rgb(0 0 0 / 0)",
+                  "dark": "rgb(255 255 255 / 0)"
+                }
+              ]
+            },
+            "border-width": {
+              "value": "{s2a.border.width.sm}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.border.width.sm}",
+                  "cssVar": "--s2a-border-width-sm",
+                  "figma": "s2a/border/width/sm",
+                  "shipped": true,
+                  "value": "1px"
+                }
+              ]
+            }
+          },
+          "solid": {
+            "background-color": {
+              "value": "{s2a.color.button.background.solid.default}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.solid.default}",
+                  "cssVar": "--s2a-color-button-background-solid-default",
+                  "figma": "s2a/color/button/background/solid/default",
+                  "shipped": true,
+                  "value": "#000",
+                  "dark": "#fff"
+                }
+              ]
+            },
+            "border-width": {
+              "value": "{s2a.border.width.sm}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.border.width.sm}",
+                  "cssVar": "--s2a-border-width-sm",
+                  "figma": "s2a/border/width/sm",
+                  "shipped": true,
+                  "value": "1px"
+                }
+              ]
+            }
+          },
+          "accent": {
+            "background-color": {
+              "value": "{s2a.color.button.background.accent.default}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.accent.default}",
+                  "cssVar": "--s2a-color-button-background-accent-default",
+                  "figma": "s2a/color/button/background/accent/default",
+                  "shipped": true,
+                  "value": "#3b63fb"
+                }
+              ]
+            }
+          },
+          "knockout": {
+            "background-color": {
+              "value": "{s2a.color.button.background.knockout.default}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.knockout.default}",
+                  "cssVar": "--s2a-color-button-background-knockout-default",
+                  "figma": "s2a/color/button/background/knockout/default",
+                  "shipped": true,
+                  "value": "#fff"
+                }
+              ]
+            },
+            "border-width": {
+              "value": "{s2a.border.width.md}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.border.width.md}",
+                  "cssVar": "--s2a-border-width-md",
+                  "figma": "s2a/border/width/md",
+                  "shipped": true,
+                  "value": "2px"
+                }
+              ]
+            },
+            "border-color": {
+              "value": "{s2a.color.button.border.knockout.default}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.border.knockout.default}",
+                  "cssVar": "--s2a-color-button-border-knockout-default",
+                  "figma": "s2a/color/button/border/knockout/default",
+                  "shipped": true,
+                  "value": "#fff"
+                }
+              ]
+            }
+          },
+          "outline-inverse": {
+            "background-color": {
+              "value": "{s2a.color.button.background.outline-inverse.default}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.outline-inverse.default}",
+                  "cssVar": "--s2a-color-button-background-outline-inverse-default",
+                  "figma": "s2a/color/button/background/outline-inverse/default",
+                  "shipped": true,
+                  "value": "rgb(255 255 255 / 0)",
+                  "dark": "rgb(0 0 0 / 0)"
+                }
+              ]
+            },
+            "border-width": {
+              "value": "{s2a.border.width.md}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.border.width.md}",
+                  "cssVar": "--s2a-border-width-md",
+                  "figma": "s2a/border/width/md",
+                  "shipped": true,
+                  "value": "2px"
+                }
+              ]
+            },
+            "border-color": {
+              "value": "{s2a.color.button.border.outline-inverse.default}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.border.outline-inverse.default}",
+                  "cssVar": "--s2a-color-button-border-outline-inverse-default",
+                  "figma": "s2a/color/button/border/outline-inverse/default",
+                  "shipped": true,
+                  "value": "#fff"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "statesByProp": [
+      {
+        "prop": "style",
+        "state": "hover",
+        "map": {
+          "outlined": {
+            "background-color": {
+              "value": "{s2a.color.button.background.outlined.hover}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.outlined.hover}",
+                  "cssVar": "--s2a-color-button-background-outlined-hover",
+                  "figma": "s2a/color/button/background/outlined/hover",
+                  "shipped": true,
+                  "value": "rgb(0 0 0 / 8%)",
+                  "dark": "rgb(255 255 255 / 12%)"
+                }
+              ]
+            }
+          },
+          "transparent": {
+            "background-color": {
+              "value": "{s2a.color.button.background.transparent.hover}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.transparent.hover}",
+                  "cssVar": "--s2a-color-button-background-transparent-hover",
+                  "figma": "s2a/color/button/background/transparent/hover",
+                  "shipped": true,
+                  "value": "rgb(0 0 0 / 8%)",
+                  "dark": "rgb(255 255 255 / 12%)"
+                }
+              ]
+            }
+          },
+          "solid": {
+            "background-color": {
+              "value": "{s2a.color.button.background.solid.hover}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.solid.hover}",
+                  "cssVar": "--s2a-color-button-background-solid-hover",
+                  "figma": "s2a/color/button/background/solid/hover",
+                  "shipped": true,
+                  "value": "rgb(0 0 0 / 64%)",
+                  "dark": "rgb(255 255 255 / 64%)"
+                }
+              ]
+            },
+            "border-width": {
+              "value": "{s2a.border.width.md}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.border.width.md}",
+                  "cssVar": "--s2a-border-width-md",
+                  "figma": "s2a/border/width/md",
+                  "shipped": true,
+                  "value": "2px"
+                }
+              ]
+            },
+            "border-color": {
+              "value": "{s2a.color.border.knockout}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.border.knockout}",
+                  "cssVar": "--s2a-color-border-knockout",
+                  "figma": "s2a/color/border/knockout",
+                  "shipped": true,
+                  "value": "#000",
+                  "dark": "#fff"
+                }
+              ]
+            }
+          },
+          "accent": {
+            "background-color": {
+              "value": "{s2a.color.button.background.accent.hover}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.accent.hover}",
+                  "cssVar": "--s2a-color-button-background-accent-hover",
+                  "figma": "s2a/color/button/background/accent/hover",
+                  "shipped": true,
+                  "value": "#274dea"
+                }
+              ]
+            }
+          },
+          "knockout": {
+            "background-color": {
+              "value": "{s2a.color.button.background.knockout.hover}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.knockout.hover}",
+                  "cssVar": "--s2a-color-button-background-knockout-hover",
+                  "figma": "s2a/color/button/background/knockout/hover",
+                  "shipped": true,
+                  "value": "#f8f8f8"
+                }
+              ]
+            }
+          },
+          "outline-inverse": {
+            "background-color": {
+              "value": "{s2a.color.button.background.outline-inverse.hover}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.outline-inverse.hover}",
+                  "cssVar": "--s2a-color-button-background-outline-inverse-hover",
+                  "figma": "s2a/color/button/background/outline-inverse/hover",
+                  "shipped": true,
+                  "value": "rgb(255 255 255 / 8%)",
+                  "dark": "rgb(0 0 0 / 8%)"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prop": "style",
+        "state": "active",
+        "map": {
+          "outlined": {
+            "background-color": {
+              "value": "{s2a.color.button.background.outlined.active}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.outlined.active}",
+                  "cssVar": "--s2a-color-button-background-outlined-active",
+                  "figma": "s2a/color/button/background/outlined/active",
+                  "shipped": true,
+                  "value": "#000",
+                  "dark": "#fff"
+                }
+              ]
+            }
+          },
+          "transparent": {
+            "background-color": {
+              "value": "{s2a.color.button.background.transparent.active}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.transparent.active}",
+                  "cssVar": "--s2a-color-button-background-transparent-active",
+                  "figma": "s2a/color/button/background/transparent/active",
+                  "shipped": true,
+                  "value": "rgb(0 0 0 / 12%)",
+                  "dark": "rgb(255 255 255 / 24%)"
+                }
+              ]
+            }
+          },
+          "solid": {
+            "background-color": {
+              "value": "{s2a.color.button.background.solid.active}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.solid.active}",
+                  "cssVar": "--s2a-color-button-background-solid-active",
+                  "figma": "s2a/color/button/background/solid/active",
+                  "shipped": true,
+                  "value": "#000",
+                  "dark": "#fff"
+                }
+              ]
+            }
+          },
+          "accent": {
+            "background-color": {
+              "value": "{s2a.color.button.background.accent.active}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.accent.active}",
+                  "cssVar": "--s2a-color-button-background-accent-active",
+                  "figma": "s2a/color/button/background/accent/active",
+                  "shipped": true,
+                  "value": "#1d3ecf"
+                }
+              ]
+            }
+          },
+          "knockout": {
+            "background-color": {
+              "value": "{s2a.color.button.background.knockout.active}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.knockout.active}",
+                  "cssVar": "--s2a-color-button-background-knockout-active",
+                  "figma": "s2a/color/button/background/knockout/active",
+                  "shipped": true,
+                  "value": "#e9e9e9"
+                }
+              ]
+            },
+            "border-width": {
+              "value": "raw:1px",
+              "raw": true,
+              "tokens": []
+            }
+          },
+          "outline-inverse": {
+            "background-color": {
+              "value": "{s2a.color.button.background.outline-inverse.active}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.button.background.outline-inverse.active}",
+                  "cssVar": "--s2a-color-button-background-outline-inverse-active",
+                  "figma": "s2a/color/button/background/outline-inverse/active",
+                  "shipped": true,
+                  "value": "rgb(255 255 255 / 16%)",
+                  "dark": "rgb(0 0 0 / 24%)"
+                }
+              ]
+            },
+            "border-width": {
+              "value": "raw:1px",
+              "raw": true,
+              "tokens": []
+            }
+          }
+        }
+      },
+      {
+        "prop": "style",
+        "state": "focus",
+        "map": {
+          "accent": {
+            "background-color": {
+              "value": "{s2a.color.blue.1100}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.blue.1100}",
+                  "cssVar": "--s2a-color-blue-1100",
+                  "figma": "s2a/color/blue/1100",
+                  "shipped": true,
+                  "value": "#1d3ecf"
+                }
+              ]
+            },
+            "border-width": {
+              "value": "{s2a.border.width.sm}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.border.width.sm}",
+                  "cssVar": "--s2a-border-width-sm",
+                  "figma": "s2a/border/width/sm",
+                  "shipped": true,
+                  "value": "1px"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
     "parts": {
       "icon-start": {
-        "selector": ".c-button__icon",
+        "selector": ".c-button__icon-start",
         "figma": "/Icon Start",
+        "element": "div",
+        "tokens": {
+          "width": {
+            "value": "raw:12px",
+            "raw": true,
+            "tokens": []
+          },
+          "height": {
+            "value": "raw:12px",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "statesByProp": [
+          {
+            "prop": "style",
+            "state": "disabled",
+            "map": {
+              "solid": {
+                "opacity": {
+                  "value": "{s2a.opacity.disabled}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.opacity.disabled}",
+                      "cssVar": "--s2a-opacity-disabled",
+                      "figma": "s2a/opacity/disabled",
+                      "shipped": true,
+                      "value": "48%"
+                    }
+                  ]
+                }
+              },
+              "accent": {
+                "opacity": {
+                  "value": "{s2a.opacity.48}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.opacity.48}",
+                      "cssVar": "--s2a-opacity-48",
+                      "figma": "s2a/opacity/48",
+                      "shipped": true,
+                      "value": "48%"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
         "slot": {
           "name": "Icon Start",
-          "accepts": [],
+          "accepts": [
+            "kind:icon"
+          ],
           "acceptsMode": "prefer",
-          "notes": "Instance-swap property \"Icon Start\" — list what it accepts once those contracts exist."
+          "notes": "Instance-swap property \"Icon Start\" — list what it accepts once those contracts exist.",
+          "default": {
+            "figma": "S2_Icon_Circle_20_N",
+            "visible": false,
+            "manifest": "s2a-icons",
+            "icon": "circle"
+          }
+        },
+        "parts": {
+          "frame": {
+            "selector": ".c-button__frame",
+            "figma": "/Icon Start/Frame",
+            "element": "div",
+            "layout": {
+              "display": "flex",
+              "direction": "row",
+              "justify": "center",
+              "align": "center"
+            },
+            "tokens": {
+              "width": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              },
+              "height": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "parts": {
+              "s2-icon-circle-20-n": {
+                "selector": ".c-button__s2-icon-circle-20-n",
+                "figma": "/Icon Start/Frame/S2_Icon_Circle_20_N",
+                "layout": {
+                  "display": "flex",
+                  "direction": "row",
+                  "grow": true
+                }
+              }
+            }
+          },
+          "icon-color": {
+            "selector": ".c-button__icon-color",
+            "figma": "/Icon Start/Icon color",
+            "tokens": {
+              "width": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              },
+              "height": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "tokensByProp": [
+              {
+                "prop": "style",
+                "map": {
+                  "outlined": {
+                    "color": {
+                      "value": "{s2a.color.content.default}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.default}",
+                          "cssVar": "--s2a-color-content-default",
+                          "figma": "s2a/color/content/default",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "transparent": {
+                    "color": {
+                      "value": "{s2a.color.content.default}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.default}",
+                          "cssVar": "--s2a-color-content-default",
+                          "figma": "s2a/color/content/default",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "solid": {
+                    "color": {
+                      "value": "{s2a.color.content.inverse}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.inverse}",
+                          "cssVar": "--s2a-color-content-inverse",
+                          "figma": "s2a/color/content/inverse",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "accent": {
+                    "color": {
+                      "value": "{s2a.color.content.inverse}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.inverse}",
+                          "cssVar": "--s2a-color-content-inverse",
+                          "figma": "s2a/color/content/inverse",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "knockout": {
+                    "color": {
+                      "value": "{s2a.color.button.content.knockout}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.button.content.knockout}",
+                          "cssVar": "--s2a-color-button-content-knockout",
+                          "figma": "s2a/color/button/content/knockout",
+                          "shipped": true,
+                          "value": "#000"
+                        }
+                      ]
+                    }
+                  },
+                  "outline-inverse": {
+                    "color": {
+                      "value": "{s2a.color.button.content.outline-inverse}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.button.content.outline-inverse}",
+                          "cssVar": "--s2a-color-button-content-outline-inverse",
+                          "figma": "s2a/color/button/content/outline-inverse",
+                          "shipped": true,
+                          "value": "#fff"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
         }
       },
       "label": {
         "selector": ".c-button__label",
         "figma": "/Label",
-        "element": "span"
+        "element": "span",
+        "tokens": {
+          "font-family": {
+            "value": "{s2a.font.family.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.font.family.label}",
+                "cssVar": "--s2a-font-family-label",
+                "figma": "s2a/font/family/label",
+                "shipped": true,
+                "value": "\"Adobe Clean\""
+              }
+            ]
+          },
+          "font-size": {
+            "value": "{s2a.typography.font-size.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.typography.font-size.label}",
+                "cssVar": "--s2a-typography-font-size-label",
+                "figma": "s2a/typography/font-size/label",
+                "shipped": true,
+                "value": "0.875rem"
+              }
+            ]
+          },
+          "font-weight": {
+            "value": "{s2a.font.weight.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.font.weight.label}",
+                "cssVar": "--s2a-font-weight-label",
+                "figma": "s2a/font/weight/label",
+                "shipped": true,
+                "value": "700"
+              }
+            ]
+          },
+          "letter-spacing": {
+            "value": "{s2a.typography.letter-spacing.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.typography.letter-spacing.label}",
+                "cssVar": "--s2a-typography-letter-spacing-label",
+                "figma": "s2a/typography/letter-spacing/label",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          },
+          "line-height": {
+            "value": "{s2a.typography.line-height.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.typography.line-height.label}",
+                "cssVar": "--s2a-typography-line-height-label",
+                "figma": "s2a/typography/line-height/label",
+                "shipped": true,
+                "value": "18px"
+              }
+            ]
+          }
+        },
+        "states": {
+          "disabled": {
+            "opacity": {
+              "value": "{s2a.opacity.disabled}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.opacity.disabled}",
+                  "cssVar": "--s2a-opacity-disabled",
+                  "figma": "s2a/opacity/disabled",
+                  "shipped": true,
+                  "value": "48%"
+                }
+              ]
+            }
+          }
+        },
+        "tokensByProp": [
+          {
+            "prop": "style",
+            "map": {
+              "outlined": {
+                "color": {
+                  "value": "{s2a.color.content.default}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.content.default}",
+                      "cssVar": "--s2a-color-content-default",
+                      "figma": "s2a/color/content/default",
+                      "shipped": true,
+                      "value": "#000",
+                      "dark": "#fff"
+                    }
+                  ]
+                }
+              },
+              "transparent": {
+                "color": {
+                  "value": "{s2a.color.content.default}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.content.default}",
+                      "cssVar": "--s2a-color-content-default",
+                      "figma": "s2a/color/content/default",
+                      "shipped": true,
+                      "value": "#000",
+                      "dark": "#fff"
+                    }
+                  ]
+                }
+              },
+              "solid": {
+                "color": {
+                  "value": "{s2a.color.button.content.primary.solid.default}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.button.content.primary.solid.default}",
+                      "cssVar": "--s2a-color-button-content-primary-solid-default",
+                      "figma": "s2a/color/button/content/primary/solid/default",
+                      "shipped": true,
+                      "value": "#fff",
+                      "dark": "#000"
+                    }
+                  ]
+                }
+              },
+              "accent": {
+                "color": {
+                  "value": "{s2a.color.content.knockout}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.content.knockout}",
+                      "cssVar": "--s2a-color-content-knockout",
+                      "figma": "s2a/color/content/knockout",
+                      "shipped": true,
+                      "value": "#fff"
+                    }
+                  ]
+                }
+              },
+              "knockout": {
+                "color": {
+                  "value": "{s2a.color.button.content.knockout}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.button.content.knockout}",
+                      "cssVar": "--s2a-color-button-content-knockout",
+                      "figma": "s2a/color/button/content/knockout",
+                      "shipped": true,
+                      "value": "#000"
+                    }
+                  ]
+                }
+              },
+              "outline-inverse": {
+                "color": {
+                  "value": "{s2a.color.button.content.outline-inverse}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.button.content.outline-inverse}",
+                      "cssVar": "--s2a-color-button-content-outline-inverse",
+                      "figma": "s2a/color/button/content/outline-inverse",
+                      "shipped": true,
+                      "value": "#fff"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "statesByProp": [
+          {
+            "prop": "style",
+            "state": "active",
+            "map": {
+              "outlined": {
+                "color": {
+                  "value": "{s2a.color.button.content.outlined.active}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.button.content.outlined.active}",
+                      "cssVar": "--s2a-color-button-content-outlined-active",
+                      "figma": "s2a/color/button/content/outlined/active",
+                      "shipped": true,
+                      "value": "#fff",
+                      "dark": "#000"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "slot": {
+          "name": "Label",
+          "accepts": [
+            "kind:text"
+          ],
+          "acceptsMode": "prefer",
+          "default": {
+            "text": "Label"
+          }
+        }
       },
       "icon-end": {
-        "selector": ".c-button__icon",
+        "selector": ".c-button__icon-end",
         "figma": "/Icon End",
+        "element": "div",
+        "tokens": {
+          "width": {
+            "value": "raw:12px",
+            "raw": true,
+            "tokens": []
+          },
+          "height": {
+            "value": "raw:12px",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "states": {
+          "disabled": {
+            "opacity": {
+              "value": "{s2a.opacity.48}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.opacity.48}",
+                  "cssVar": "--s2a-opacity-48",
+                  "figma": "s2a/opacity/48",
+                  "shipped": true,
+                  "value": "48%"
+                }
+              ]
+            }
+          }
+        },
         "slot": {
           "name": "Icon End",
-          "accepts": [],
+          "accepts": [
+            "kind:icon"
+          ],
           "acceptsMode": "prefer",
-          "notes": "Instance-swap property \"Icon End\" — list what it accepts once those contracts exist."
+          "notes": "Instance-swap property \"Icon End\" — list what it accepts once those contracts exist.",
+          "default": {
+            "figma": "S2a_Icon_Chevron_Right",
+            "visible": false,
+            "manifest": "s2a-icons",
+            "icon": "chevron-right"
+          }
+        },
+        "parts": {
+          "frame": {
+            "selector": ".c-button__frame",
+            "figma": "/Icon End/Frame",
+            "element": "div",
+            "layout": {
+              "display": "flex",
+              "direction": "row",
+              "justify": "center",
+              "align": "center"
+            },
+            "tokens": {
+              "width": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              },
+              "height": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "parts": {
+              "s2a-icon-chevron-right": {
+                "selector": ".c-button__s2a-icon-chevron-right",
+                "figma": "/Icon End/Frame/Size=200, Direction=right",
+                "layout": {
+                  "display": "flex",
+                  "direction": "row",
+                  "grow": true
+                }
+              }
+            }
+          },
+          "icon-color": {
+            "selector": ".c-button__icon-color",
+            "figma": "/Icon End/Icon color",
+            "tokens": {
+              "width": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              },
+              "height": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "states": {
+              "disabled": {
+                "opacity": {
+                  "value": "{s2a.opacity.disabled}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.opacity.disabled}",
+                      "cssVar": "--s2a-opacity-disabled",
+                      "figma": "s2a/opacity/disabled",
+                      "shipped": true,
+                      "value": "48%"
+                    }
+                  ]
+                }
+              }
+            },
+            "tokensByProp": [
+              {
+                "prop": "style",
+                "map": {
+                  "outlined": {
+                    "color": {
+                      "value": "{s2a.color.content.default}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.default}",
+                          "cssVar": "--s2a-color-content-default",
+                          "figma": "s2a/color/content/default",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "transparent": {
+                    "color": {
+                      "value": "{s2a.color.content.default}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.default}",
+                          "cssVar": "--s2a-color-content-default",
+                          "figma": "s2a/color/content/default",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "solid": {
+                    "color": {
+                      "value": "{s2a.color.content.inverse}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.inverse}",
+                          "cssVar": "--s2a-color-content-inverse",
+                          "figma": "s2a/color/content/inverse",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "accent": {
+                    "color": {
+                      "value": "{s2a.color.content.inverse}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.inverse}",
+                          "cssVar": "--s2a-color-content-inverse",
+                          "figma": "s2a/color/content/inverse",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "knockout": {
+                    "color": {
+                      "value": "{s2a.color.button.content.knockout}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.button.content.knockout}",
+                          "cssVar": "--s2a-color-button-content-knockout",
+                          "figma": "s2a/color/button/content/knockout",
+                          "shipped": true,
+                          "value": "#000"
+                        }
+                      ]
+                    }
+                  },
+                  "outline-inverse": {
+                    "color": {
+                      "value": "{s2a.color.button.content.outline-inverse}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.button.content.outline-inverse}",
+                          "cssVar": "--s2a-color-button-content-outline-inverse",
+                          "figma": "s2a/color/button/content/outline-inverse",
+                          "shipped": true,
+                          "value": "#fff"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
         }
       }
     }
@@ -415,14 +1668,14 @@
         "kind": "component-set",
         "nodeId": "10715:35477",
         "nodeName": "Button — v2",
-        "componentSetKey": "d91a1f5f4a290b66b0aadb6f24e1a30b6cc9e3ba",
+        "componentSetKey": "5f8ea5d99d51480bb7a6183cff2a06ad64570cd1",
         "deprecated": false,
         "successorNodeId": null,
         "usages": []
       },
       "evidence": {
-        "hash": "sha256:7cc116068e4427e60712c6bc0222a0b3fad278c3374d48a0024b11a00cc2dc62",
-        "extractedAt": "2026-09-25T16:25:39.053Z",
+        "hash": "sha256:272da36a5cfe50d05961859a2dcbf77135423946e616abd7d31d8d4f77662243",
+        "extractedAt": "2026-10-08T18:04:29.532Z",
         "meta": {
           "version": "2.0.0",
           "status": "active",
@@ -439,45 +1692,40 @@
         "cssClass": "c-button"
       },
       "evidence": {
-        "hash": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7"
+        "hash": "sha256:cb552889722afdf9bb6bb687236b1d7ae1f69dccbaff086d6b06582ee6faccf2"
       }
     }
   },
   "decisions": [
     {
-      "id": "b-code-only-props",
-      "question": "href, state, onClick exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false). \"state\" collides with the State axis, which this draft read as runtime states — decide whether the code prop or the state axis is the truth.",
-      "chose": "added 3 code-only props as levers with no design binding",
-      "confidence": "low",
-      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
-      "status": "open",
-      "owner": "Matt",
-      "evidence": "button.code.evidence.json"
-    },
-    {
       "id": "b-part-selectors",
-      "question": "icon-start, icon-end have no class of their own in button.css — they all share .c-button__icon. The design names these parts separately and the code does not. Split the class, or model them as one part.",
-      "chose": "pointed icon-start and icon-end at .c-button__icon",
+      "question": "icon-start, frame, s2-icon-circle-20-n, icon-color, icon-end, frame, s2a-icon-chevron-right, icon-color have no class of their own in button.css — they all share .c-button__icon. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "pointed icon-start and frame and s2-icon-circle-20-n and icon-color and icon-end and frame and s2a-icon-chevron-right and icon-color at .c-button__icon",
       "confidence": "low",
       "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to button.css.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "packages/components/src/button/button.css"
     },
     {
-      "id": "b-archetype",
-      "question": "Scaffolded as card (default when no stronger signal is present). Confirm, or re-run npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection>.",
-      "chose": "archetype button",
-      "confidence": "high",
-      "fix": "npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection> --force",
-      "status": "decided",
-      "owner": "Matt",
-      "alternatives": [
-        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
-        "collection: A row, grid or scroller of one repeated unit."
-      ],
-      "evidence": "roles media, eyebrow, icon; pattern n/a",
-      "decision": "Button, not card. The scaffold fell back to card because no signal was stronger, and that default propagated: the contract declared its root element as article and described itself as a non-interactive content card. button.js settles it — createButton does document.createElement(href ? 'a' : 'button') and decorateButton decorates an existing anchor or button. \"button\" is in upstream's closed archetype enum, so it emits."
+      "id": "b-match",
+      "question": "Structural match says extend: closest existing contract is ProductLockup (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending ProductLockup (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to ProductLockup instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "ProductLockup (1) already covers this; extend it."
+    },
+    {
+      "id": "b-code-only-props",
+      "question": "href, size, onClick exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 3 code-only props as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.code.evidence.json"
     },
     {
       "id": "b-classify-1",
@@ -486,7 +1734,7 @@
       "confidence": "medium",
       "fix": "Edit props[] or states[] in this file.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json axes"
     },
     {
@@ -496,18 +1744,62 @@
       "confidence": "medium",
       "fix": "Edit props[] or states[] in this file.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json axes"
     },
     {
       "id": "b-classify-3",
+      "question": "\"Size\" has a single value (md) — read as fixed, not as a prop; add the prop when a second value exists. Confirm, or change it in props/states.",
+      "chose": "\"Size\" has a single value (md) — read as fixed, not as a prop; add the prop when a second value exists",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-classify-4",
       "question": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop. Confirm, or change it in props/states.",
       "chose": "\"State\" read as runtime states (hover, active, disabled, focus-visible), not as a prop",
       "confidence": "medium",
       "fix": "Edit props[] or states[] in this file.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-classify-5",
+      "question": "\"state\" read as the code's handle on the \"State\" axis (data-force-state), so every state can be rendered without a pointer. Confirm, or change it in props/states.",
+      "chose": "\"state\" read as the code's handle on the \"State\" axis (data-force-state), so every state can be rendered without a pointer",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.figma.evidence.json axes"
+    },
+    {
+      "id": "b-archetype",
+      "question": "Scaffolded as button (binds s2a/color/button/* (24 variables); interactive: state axis has hover, active, disabled, focus; named \"Button — v2\"). Confirm, or re-run npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection>.",
+      "chose": "button — binds s2a/color/button/* (24 variables); interactive: state axis has hover, active, disabled, focus; named \"Button — v2\"",
+      "confidence": "high",
+      "fix": "npm run specs:scaffold -- --slug=button --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces button×24, content×3, blue×1, focus-ring×1, border×1; state axis default/hover/active/disabled/focus"
     },
     {
       "id": "b-unbound-paint",
@@ -515,7 +1807,7 @@
       "confidence": "high",
       "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json unboundPaint"
     },
     {
@@ -524,22 +1816,74 @@
       "confidence": "high",
       "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
       "status": "open",
-      "owner": "Matt",
+      "owner": "scaffold",
       "evidence": "button.figma.evidence.json anatomy"
     },
     {
-      "id": "b-code-pending",
-      "question": "No code exists yet. Generate packages/components/src/button/button.js from the spec (/spec-to-html), run npm run evidence:code -- --slug=button, then remove anchors.code.pending.",
-      "confidence": "high",
-      "fix": "Once packages/components/src/button/button.js exists, run npm run evidence:code -- --slug=button and delete anchors.code.pending.",
+      "id": "b-navigates-as-anchor",
+      "question": "\"href\" navigates, but the archetype's element is <button>. Rendered as <button> it is not reachable as a link, cannot be middle-clicked or opened in a new tab, and is announced with the wrong role. Should this component navigate at all?",
+      "chose": "drafted elementByProp: href empty -> <button>, present -> <a>",
+      "confidence": "medium",
+      "fix": "If it should never navigate, remove the \"href\" prop. If it always navigates, set anatomy.root.element to \"a\" and drop elementByProp.",
       "status": "open",
-      "owner": "Matt"
+      "owner": "scaffold",
+      "evidence": "WCAG 2.1.1 Keyboard"
+    },
+    {
+      "id": "b-icon-defaults",
+      "question": "The design fills the \"icon-start\" slot with S2_Icon_Circle_20_N and the \"icon-end\" slot with S2a_Icon_Chevron_Right. The contract records the design's choice; binding it to the code icon library (packages/components/src/icons, manifest s2a-icons) is a decision — Heal in the Contract Book makes it when the names match, or set slot.default.manifest and slot.default.icon by hand.",
+      "chose": "recorded the design's default instance; left the library binding open",
+      "confidence": "medium",
+      "fix": "Set anatomy.root.parts.<part>.slot.default to { \"manifest\": \"s2a-icons\", \"icon\": \"<name>\" }; add the SVG to packages/components/src/icons if it is missing, then npm run specs:assets.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.figma.evidence.json instances"
+    },
+    {
+      "id": "b-hardcoded-values",
+      "question": "16 values in the design are set with no variable behind them: root padding-top = 14px; root padding-bottom = 14px; root border-width@style=knockout:active = 1px; root border-width@style=outline-inverse:active = 1px; root/icon-start width = 12px; root/icon-start height = 12px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "button.figma.evidence.json unboundValues"
+    },
+    {
+      "id": "heal-icon-icon-start",
+      "question": "The design fills the root/icon-start slot with S2_Icon_Circle_20_N. Which code icon is that?",
+      "chose": "S2_Icon_Circle_20_N → s2a-icons/circle (circle.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "decision": "S2_Icon_Circle_20_N → s2a-icons/circle (circle.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "button.figma.evidence.json instances · packages/spec-dictionary/out/assets/s2a-icons.json",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-icon-icon-end",
+      "question": "The design fills the root/icon-end slot with S2a_Icon_Chevron_Right. Which code icon is that?",
+      "chose": "S2a_Icon_Chevron_Right → s2a-icons/chevron-right (chevron-right.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "decision": "S2a_Icon_Chevron_Right → s2a-icons/chevron-right (chevron-right.svg); the names match letter for letter, so the generated component renders this glyph when the slot is empty.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "button.figma.evidence.json instances · packages/spec-dictionary/out/assets/s2a-icons.json",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-focus-ring",
+      "question": "Figma draws the focus state's ring as a child layer (/Focus Ring) stroked with s2a/color/focus-ring/default, on the State=focus variant. A child layer is how a design file paints outside the shape without resizing it. Carry it as a part, a border, or an outline?",
+      "chose": "outline on the root in the focus state: colour s2a/color/focus-ring/default, width s2a/border/width/sm, offset 1px — the ring is a 83px box with a 1px OUTSIDE stroke around the 81px root. A part would put a box inside the shape; a border would resize it.",
+      "decision": "outline on the root in the focus state: colour s2a/color/focus-ring/default, width s2a/border/width/sm, offset 1px — the ring is a 83px box with a 1px OUTSIDE stroke around the 81px root. A part would put a box inside the shape; a border would resize it.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "button.figma.evidence.json bindings, variant \"Style=solid, Size=md, State=focus\", node /Focus Ring",
+      "confidence": "high"
     }
   ],
   "provenance": {
-    "defs": "sha256:9f466a333017b076256cd370e6240ed90efcb25940b839519a6f20d9d820cae5",
-    "codeEvidence": "sha256:4feb93a61597dfa739bf346e1311a806393f36901b01176767f9334f390007f7",
-    "figmaEvidence": "sha256:7cc116068e4427e60712c6bc0222a0b3fad278c3374d48a0024b11a00cc2dc62",
+    "defs": "sha256:96d91cf3927374969515e64e9095da172084edbce6b62ae6f29401eb3d221af3",
+    "codeEvidence": "sha256:cb552889722afdf9bb6bb687236b1d7ae1f69dccbaff086d6b06582ee6faccf2",
+    "figmaEvidence": "sha256:272da36a5cfe50d05961859a2dcbf77135423946e616abd7d31d8d4f77662243",
     "generator": "s2a-spec-transform@1"
   }
 }

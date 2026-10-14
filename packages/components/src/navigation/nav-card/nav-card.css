@@ -1,20 +1,23 @@
 /* ─── Component tokens ──────────────────────────────────────────────────────── */
 .c-nav-card {
-  --c-nav-card-bg:            var(--s2a-color-background-default, #ffffff);
-  --c-nav-card-eyebrow-color: var(--s2a-color-transparent-black-64, rgba(0, 0, 0, 0.64));
-  --c-nav-card-title-color:   var(--s2a-color-content-default, #000000);
-  --c-nav-card-body-color:    var(--s2a-color-transparent-black-64, rgba(0, 0, 0, 0.64));
-  --c-nav-card-link-color:    var(--s2a-color-content-default, #000000);
-  --c-nav-card-shell-bg:      var(--c-nav-card-bg);
+  --c-nav-card-bg: var(--s2a-color-background-default);
+  --c-nav-card-eyebrow-color: var(--s2a-color-transparent-black-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
+  --c-nav-card-title-color: var(--s2a-color-content-default);
+  --c-nav-card-body-color: var(--s2a-color-transparent-black-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
+  --c-nav-card-link-color: var(--s2a-color-content-default);
+  --c-nav-card-shell-bg: var(--c-nav-card-bg);
 }
 
 .c-nav-card:hover {
-  --c-nav-card-bg:            var(--s2a-color-background-knockout, #000000);
-  --c-nav-card-eyebrow-color: var(--s2a-color-transparent-white-64, rgba(255, 255, 255, 0.64));
-  --c-nav-card-title-color:   var(--s2a-color-content-knockout, #ffffff);
-  --c-nav-card-body-color:    var(--s2a-color-transparent-white-64, rgba(255, 255, 255, 0.64));
-  --c-nav-card-link-color:    var(--s2a-color-content-knockout, #ffffff);
-
+  --c-nav-card-bg: var(--s2a-color-background-knockout);
+  --c-nav-card-eyebrow-color: var(--s2a-color-transparent-white-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
+  --c-nav-card-title-color: var(--s2a-color-content-knockout);
+  --c-nav-card-body-color: var(--s2a-color-transparent-white-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
+  --c-nav-card-link-color: var(--s2a-color-content-knockout);
 }
 
 /* ─── Root ──────────────────────────────────────────────────────────────────── */
@@ -32,17 +35,17 @@
 .c-nav-card__top {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-md);
 }
 
 /* ─── Eyebrow ────────────────────────────────────────────────────────────────── */
 .c-nav-card__eyebrow {
   margin: 0;
-  font-family: var(--s2a-font-family-adobe-clean, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-adobe-clean-bold, 700);
-  font-size: var(--s2a-typography-font-size-label, 14px);
-  line-height: var(--s2a-typography-line-height-label, 18px);
-  letter-spacing: var(--s2a-typography-letter-spacing-label, 0px);
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
   color: var(--c-nav-card-eyebrow-color);
   transition: color 200ms ease;
   /* Match Figma's "Vertical trim: Cap height" — removes leading above cap and below baseline */
@@ -54,17 +57,17 @@
 .c-nav-card__content {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
 }
 
 /* ─── Title ──────────────────────────────────────────────────────────────────── */
 .c-nav-card__title {
   margin: 0;
-  font-family: var(--s2a-font-family-adobe-clean-display, "Adobe Clean Display", sans-serif);
-  font-weight: var(--s2a-font-weight-adobe-clean-display-black, 900);
-  font-size: var(--s2a-typography-font-size-title-4, 24px);
-  line-height: var(--s2a-typography-line-height-title-4, 24px);
-  letter-spacing: var(--s2a-typography-letter-spacing-title-4, -0.48px);
+  font-family: var(--s2a-font-family-heading);
+  font-weight: var(--s2a-font-weight-heading);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  line-height: var(--s2a-typography-line-height-heading-5);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-5);
   color: var(--c-nav-card-title-color);
   transition: color 200ms ease;
 }
@@ -73,17 +76,17 @@
 .c-nav-card__body-area {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-md);
 }
 
 /* ─── Body copy ──────────────────────────────────────────────────────────────── */
 .c-nav-card__body {
   margin: 0;
-  font-family: var(--s2a-font-family-adobe-clean, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-adobe-clean-regular, 400);
-  font-size: var(--s2a-typography-font-size-body-sm, 14px);
-  line-height: var(--s2a-typography-line-height-body-sm, 18px);
-  letter-spacing: var(--s2a-typography-letter-spacing-body-sm, 0.16px);
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-body-sm);
+  line-height: var(--s2a-typography-line-height-body-sm);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm);
   color: var(--c-nav-card-body-color);
   transition: color 200ms ease;
 }
@@ -92,21 +95,21 @@
 .c-nav-card__cta-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--s2a-spacing-xs, 8px);
-  font-family: var(--s2a-font-family-adobe-clean, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-adobe-clean-bold, 700);
-  font-size: var(--s2a-typography-font-size-label, 14px);
-  line-height: var(--s2a-typography-line-height-label, 18px);
-  letter-spacing: var(--s2a-typography-letter-spacing-label, 0px);
+  gap: var(--s2a-spacing-xs);
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
   color: var(--c-nav-card-link-color);
   text-decoration: none;
   transition: color 200ms ease;
 }
 
 .c-nav-card__cta-link:focus-visible {
-  outline: var(--s2a-border-width-sm, 1px) solid var(--s2a-color-focus-ring-default, #1473e6);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: var(--s2a-border-width-sm) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-3xs);
+  border-radius: var(--s2a-border-radius-3xs);
 }
 
 .c-nav-card__cta-link__label {
@@ -127,24 +130,24 @@
    fires but produces no visible change. Also suppress the button's own hover/active
    backgrounds so even the button appears static. */
 .c-nav-card[data-interactive="false"]:hover {
-  --c-nav-card-bg:            var(--s2a-color-background-default, #ffffff);
-  --c-nav-card-eyebrow-color: var(--s2a-color-transparent-black-64, rgba(0, 0, 0, 0.64));
-  --c-nav-card-title-color:   var(--s2a-color-content-default, #000000);
-  --c-nav-card-body-color:    var(--s2a-color-transparent-black-64, rgba(0, 0, 0, 0.64));
-  --c-nav-card-link-color:    var(--s2a-color-content-default, #000000);
+  --c-nav-card-bg: var(--s2a-color-background-default);
+  --c-nav-card-eyebrow-color: var(--s2a-color-transparent-black-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
+  --c-nav-card-title-color: var(--s2a-color-content-default);
+  --c-nav-card-body-color: var(--s2a-color-transparent-black-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
+  --c-nav-card-link-color: var(--s2a-color-content-default);
 }
 
 .c-nav-card:hover .c-nav-card-button__button {
-  background-color: var(--s2a-color-background-default, #ffffff);
-  border-color: var(
-    --s2a-color-transparent-white-00,
-    rgba(255, 255, 255, 0)
-  );
-  color: var(--s2a-color-content-default, #000000);
+  background-color: var(--s2a-color-background-default);
+  border-color: var(--s2a-color-transparent-white-00);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
+  color: var(--s2a-color-content-default);
 }
 
 .c-nav-card[data-interactive="false"]:hover .c-nav-card-button__button {
-  background-color: var(--s2a-color-background-default, #ffffff);
-  border-color: var(--s2a-color-content-default, #000000);
-  color: var(--s2a-color-content-default, #000000);
+  background-color: var(--s2a-color-background-default);
+  border-color: var(--s2a-color-content-default);
+  color: var(--s2a-color-content-default);
 }

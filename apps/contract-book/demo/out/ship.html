@@ -1,0 +1,49 @@
+<!doctype html><meta charset="utf-8"><title>/contract-ship control-button</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap"><style>
+  body { margin: 0; background: #faf9f7; color: #16181d; font: 16px/1.5 "IBM Plex Sans", -apple-system, system-ui, sans-serif; }
+  main { max-width: 1120px; margin: 0 auto; padding: 72px 48px; }
+  h1 { font-size: 34px; margin: 0 0 6px; letter-spacing: -.3px; }
+  .sub { color: #6b7280; font-size: 17px; margin-bottom: 36px; }
+  ol { margin: 0; padding-left: 22px; } li { margin: 6px 0; }
+  code, pre { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  pre { background: #fff; border: 1px solid #e2e0db; border-radius: 8px; padding: 16px 18px; font-size: 12.5px; line-height: 1.5; white-space: pre-wrap; margin: 14px 0 0; }
+  .step { margin: 18px 0; } .step b { font-family: "IBM Plex Mono", monospace; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: #2b5cff; }
+  .muted { color: #6b7280; }
+  .ok { color: #1f7a4d; } .warn { color: #c8641e; } .fail { color: #b42318; }
+</style><main><h1>/contract-ship control-button</h1><div class="sub">the same commands, in order — nothing here is specific to the Book</div><div class="step"><b>validate</b> &nbsp;<code>npm run defs:validate -- --slug=control-button</code><pre>      warn: anatomy root width@size=xl: raw:48px is hardcoded — no S2A variable behind it. Bind one in Figma and re-extract, or keep the raw: value with the reason in a decision
+      warn: anatomy root height@size=xl: raw:48px is hardcoded — no S2A variable behind it. Bind one in Figma and re-extract, or keep the raw: value with the reason in a decision
+      warn: anatomy root/icon width: raw:26px is hardcoded — no S2A variable behind it. Bind one in Figma and re-extract, or keep the raw: value with the reason in a decision
+      warn: anatomy root/icon height: raw:26px is hardcoded — no S2A variable behind it. Bind one in Figma and re-extract, or keep the raw: value with the reason in a decision
+      warn: anatomy root/icon slot: the design fills it with "S2a_Icon_Arrow Right" and the contract has not bound that to a code icon — Heal in the Contract Book, or set slot.default.manifest and slot.default.icon
+1/1 defs pass.</pre></div><div class="step"><b>build</b> &nbsp;<code>npm run specs:build -- --slug=control-button</code><pre>BUILT  control-button           6 props (6 levers) · 2 parts · 10 token bindings · figma evidence yes · 10 open decisions
+1/1 built. Outputs: spec.json + contract.json + catalog.json + spec.md beside each component, stories.manifest.json + figma.plan.json under packages/spec-dictionary/out/.</pre></div><div class="step"><b>render</b> &nbsp;<code>npm run specs:render -- --slug=control-button</code><pre>RENDER control-button           lit + milo   5 files
+5 files written for 1 component(s).</pre></div><div class="step"><b>sheet</b> &nbsp;<code>npm run goldens:sheet -- --slug=control-button</code><pre>control-button: light  720x288  10/10 cells  (5 states x 2 rows, 1 request)</pre></div><div class="step"><b>matrix</b> &nbsp;<code>npm run eval:visual:matrix -- --slug=control-button --theme=light</code><pre>    VD01 PAINT_OUTSIDE_BOX   2/2 rows in "focus"   worst 3.8% of the cell
+         the design paints beyond the component's border box — a focus ring or a shadow the CSS does not draw
+         e.g. design rgb(206,216,254) vs built rgb(255,255,255)
+         look at: outline, box-shadow
+    VD03 FILL_DELTA          2/2 rows in "hover"   worst 1.4% of the cell
+         the interior differs — a background token resolving to the wrong value
+         e.g. design rgb(77,77,77) vs built rgb(51,51,51)
+         look at: background-color
+    VD03 FILL_DELTA          2/2 rows in "active"   worst 1.4% of the cell
+         the interior differs — a background token resolving to the wrong value
+         e.g. design rgb(40,40,40) vs built rgb(10,10,10)
+         look at: background-color
+    VD03 FILL_DELTA          2/2 rows in "default"   worst 1.4% of the cell
+         the interior differs — a background token resolving to the wrong value
+         e.g. design rgb(215,215,215) vs built rgb(92,92,92)
+         look at: background-color
+    VD03 FILL_DELTA          2/2 rows in "focus"   worst 1.4% of the cell
+         the interior differs — a background token resolving to the wrong value
+         e.g. design rgb(215,215,215) vs built rgb(92,92,92)
+         look at: background-color
+    VD03 FILL_DELTA          2/2 rows in "disabled"   worst 1.1% of the cell
+         the interior differs — a background token resolving to the wrong value
+         e.g. design rgb(203,203,203) vs built rgb(173,173,173)
+         look at: background-color</pre></div><div class="step"><b>gate</b> &nbsp;<code>npm run gate</code><pre>  ⚠ GRID_SCALE_INVERTED        section-spacing/md: section-spacing md (24) is smaller than sm (32) at md
+  ⚠ GRID_SCALE_INVERTED        section-spacing/md: section-spacing 3xl (64) is smaller than 2xl (80) at md
+RED: 37 specs, 6 with defs, 15 failures, 68 warnings. Report: evals/gate/out/gate.json</pre></div><div class="step"><b>pack</b> &nbsp;<code>node packages/s2a-specs/pack.mjs</code><pre>  action-card              ActionCard
+  app-icon                 AppIcon
+  button                   Button
+  checkbox                 Checkbox
+  control-button           ControlButton
+  divider                  Divider</pre></div></main>

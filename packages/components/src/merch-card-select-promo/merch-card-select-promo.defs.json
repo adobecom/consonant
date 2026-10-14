@@ -1,0 +1,290 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "MerchCardSelectPromo",
+  "slug": "merch-card-select-promo",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from merch-card-select-promo.figma.evidence.json (sha256:943c3f0e…) through packages/spec-dictionary/dictionary.json (accordion)",
+    "date": "2026-10-08",
+    "reviewer": "Matt"
+  },
+  "description": "A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+  "archetype": "accordion",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "10320:102024",
+      "nodeName": "MerchCard/SelectPromo",
+      "componentSetKey": "21d873b57a741880c8aac50fa2391c6938c5cb94",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"?\"; 10 nodes, 39 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/merch-card-select-promo/merch-card-select-promo.js",
+      "export": "MerchCardSelectPromo",
+      "cssClass": "c-merch-card-select-promo",
+      "pending": true
+    }
+  },
+  "props": [
+    {
+      "name": "state",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "collapsed"
+      ],
+      "default": "collapsed",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State"
+      },
+      "code": {
+        "prop": "state",
+        "attr": "data-state"
+      }
+    }
+  ],
+  "states": [],
+  "composition": [
+    {
+      "name": ".select/trigger",
+      "treatment": "internal",
+      "why": "hidden (dot-prefixed) set in Figma — its variants belong in this contract until it is published on its own"
+    },
+    {
+      "name": "HelperText",
+      "treatment": "contract",
+      "slug": "helper-text"
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-merch-card-select-promo",
+      "figma": ".root",
+      "element": "div",
+      "tokens": {
+        "border-radius": "{s2a.border.radius.8}",
+        "background-color": "{s2a.color.background.subtle}",
+        "width": "raw:418px"
+      },
+      "layout": {
+        "display": "flex",
+        "direction": "column"
+      },
+      "parts": {
+        "select-trigger": {
+          "selector": ".c-merch-card-select-promo__select-trigger",
+          "figma": "/.trigger",
+          "tokens": {
+            "border-radius": "{s2a.border.radius.8}",
+            "background-color": "{s2a.color.background.default}",
+            "gap": "{s2a.spacing.8}",
+            "padding-bottom": "{s2a.spacing.12}",
+            "padding-left": "{s2a.spacing.12}",
+            "padding-right": "{s2a.spacing.12}",
+            "padding-top": "{s2a.spacing.12}",
+            "border-width": "{s2a.border.width.1}",
+            "border-color": "{s2a.color.border.subtle}",
+            "height": "raw:40px"
+          },
+          "layout": {
+            "display": "flex",
+            "direction": "row",
+            "align": "center",
+            "grow": true
+          },
+          "element": "div",
+          "parts": {
+            "value": {
+              "selector": ".c-merch-card-select-promo__value",
+              "figma": "/.trigger/.value",
+              "tokens": {
+                "color": "{s2a.color.content.default}",
+                "font-family": "{s2a.font.family.label}",
+                "font-size": "{s2a.typography.font-size.label}",
+                "font-weight": "{s2a.font.weight.label}",
+                "letter-spacing": "{s2a.typography.letter-spacing.label}",
+                "line-height": "{s2a.typography.line-height.label}"
+              },
+              "layout": {
+                "grow": true
+              },
+              "element": "span",
+              "slot": {
+                "name": "value",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "default": {
+                  "text": "1 License"
+                }
+              }
+            },
+            "s2a-icon-chevron-down": {
+              "selector": ".c-merch-card-select-promo__s2a-icon-chevron-down",
+              "figma": "/.trigger/.icon",
+              "layout": {
+                "display": "inline-flex",
+                "direction": "row"
+              }
+            }
+          }
+        },
+        "helper": {
+          "selector": ".c-merch-card-select-promo__helper",
+          "figma": "/.helper",
+          "tokens": {
+            "padding-bottom": "{s2a.spacing.8}",
+            "padding-left": "{s2a.spacing.12}",
+            "padding-right": "{s2a.spacing.12}",
+            "padding-top": "{s2a.spacing.8}"
+          },
+          "layout": {
+            "display": "flex",
+            "direction": "row",
+            "grow": true
+          },
+          "element": "div",
+          "parts": {
+            "helper-text": {
+              "selector": ".c-merch-card-select-promo__helper-text",
+              "figma": "/.helper/HelperText",
+              "layout": {
+                "display": "flex",
+                "direction": "column",
+                "grow": true
+              },
+              "slot": {
+                "name": "HelperText",
+                "accepts": [
+                  "HelperText"
+                ],
+                "acceptsMode": "restrict",
+                "default": {
+                  "figma": "HelperText",
+                  "slug": "helper-text",
+                  "props": {
+                    "Text": "Save 7.5% your first year with 3+ licenses. See terms",
+                    "Intent": "neutral"
+                  }
+                },
+                "notes": "Composes HelperText (helper-text)."
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.3.1",
+      "2.1.1",
+      "4.1.2"
+    ],
+    "notes": [
+      "The trigger is a real <button>; aria-expanded is the state, aria-controls the relationship (4.1.2).",
+      "Closed content is hidden from everyone, not only visually (1.3.1).",
+      "Keyboard: Enter/Space toggles; focus stays on the trigger (2.1.1)."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "mcsp-stray-text",
+      "question": "A text layer carries no recognisable role (not heading, body, eyebrow or label). Is it content (add a lever) or part of the illustration (fold into media)? Layers: /.trigger/.value, /.helper/HelperText/.text.",
+      "chose": "left 2 text layers out of the anatomy",
+      "confidence": "low",
+      "fix": "Name the layer in Figma so it claims a role, or add it under anatomy.root.parts here.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card-select-promo.figma.evidence.json anatomy"
+    },
+    {
+      "id": "mcsp-match",
+      "question": "Structural match says extend: closest existing contract is Collapsible (score 0.77). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Collapsible (match extend, score 0.77)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Collapsible instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Collapsible (0.77) already covers this; extend it."
+    },
+    {
+      "id": "mcsp-archetype",
+      "question": "Scaffolded as accordion (an expanded/collapsed state). Confirm, or re-run npm run specs:scaffold -- --slug=merch-card-select-promo --archetype=<link-card|card|collection>.",
+      "chose": "accordion — an expanded/collapsed state",
+      "confidence": "medium",
+      "fix": "npm run specs:scaffold -- --slug=merch-card-select-promo --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces background×1; state axis collapsed"
+    },
+    {
+      "id": "mcsp-classify-1",
+      "question": "\"State\" (collapsed) read as a prop, not as runtime states — none of its values is an interaction state. Confirm, or change it in props/states.",
+      "chose": "\"State\" (collapsed) read as a prop, not as runtime states — none of its values is an interaction state",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card-select-promo.figma.evidence.json axes"
+    },
+    {
+      "id": "mcsp-layer-names",
+      "question": "1 layers carry Figma-generated names (/.trigger/.icon/S2_Icon_UIChevron_Size300_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card-select-promo.figma.evidence.json anatomy"
+    },
+    {
+      "id": "mcsp-composes",
+      "question": "Built from 2 component sets; 1 has no contract yet: .select/trigger. A slot or part naming one of these fails the COMPOSITION check until it exists. Contract the leaves first, or record why each is internal to this component.",
+      "chose": "recorded 2 composed sets, 1 already contracted",
+      "confidence": "high",
+      "fix": "Scaffold each missing set first (npm run specs:scaffold -- --slug=<slug>), then declare the slot here. If a set is internal to this component — a Figma section marking it \"do not use directly\" is the usual tell — say so in this decision and model it as a part instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card-select-promo.figma.evidence.json instances"
+    },
+    {
+      "id": "mcsp-code-pending",
+      "question": "No code exists yet. Generate packages/components/src/merch-card-select-promo/merch-card-select-promo.js from the spec (/spec-to-html), run npm run evidence:code -- --slug=merch-card-select-promo, then remove anchors.code.pending.",
+      "confidence": "high",
+      "fix": "Once packages/components/src/merch-card-select-promo/merch-card-select-promo.js exists, run npm run evidence:code -- --slug=merch-card-select-promo and delete anchors.code.pending.",
+      "status": "open",
+      "owner": "scaffold"
+    },
+    {
+      "id": "mcsp-hardcoded-values",
+      "question": "2 values in the design are set with no variable behind them: root width = 418px; root/select-trigger height = 40px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card-select-promo.figma.evidence.json unboundValues"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "id": "s2a.collapsible",
+  "name": "Collapsible",
+  "slug": "collapsible",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+  "props": [
+    {
+      "name": "content",
+      "type": "expression",
+      "lever": true
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "style",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.trigger",
+    "root.trigger.control-button",
+    "root.trigger.label",
+    "root.trigger.s2-icon-chevron-down-20-n",
+    "root.content"
+  ],
+  "slots": [
+    {
+      "path": "root.trigger.control-button",
+      "accepts": [
+        "ControlButton"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.trigger.label",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.trigger.s2-icon-chevron-down-20-n",
+      "accepts": [
+        "kind:icon"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.content",
+      "accepts": [],
+      "mode": "open"
+    }
+  ],
+  "tokens": 16,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.3.1",
+      "2.1.1",
+      "4.1.2"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/collapsible/collapsible.js",
+      "export": "Collapsible",
+      "controller": null,
+      "cssClass": "c-collapsible"
+    },
+    "figma": "10564:116547"
+  },
+  "openDecisions": 9
+}

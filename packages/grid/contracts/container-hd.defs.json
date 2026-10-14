@@ -1,0 +1,42 @@
+{
+  "$schema": "s2a-grid-defs/1",
+  "slug": "container-hd",
+  "name": "HD container",
+  "version": "1.0.0",
+  "kind": "container",
+  "tier": "global",
+  "status": "shipped",
+  "description": "A content container that carries the 1920 HD ceiling at every range above mobile, rather than stepping up to it at 1441 the way the standard container does. For sections that are meant to breathe on large displays — wide media, full-bleed-adjacent hero content — without going edge to edge.",
+  "anchors": {
+    "code": { "stylesheet": "packages/grid/src/s2a-layout-grids.css", "importPath": "@adobecom/s2a-grid/css/grid.css", "rootClass": "container-hd" },
+    "figma": { "collectionId": "VariableCollectionId:6:178", "layerName": "Container", "designOnly": true }
+  },
+  "breakpointBehavior": [
+    { "breakpoint": "sm", "behavior": "Full width with spacing-lg side padding.", "maxWidth": 1920, "margin": "{s2a.spacing.lg}", "columns": 6 },
+    { "breakpoint": "md", "behavior": "Percentage rule, padding cleared, 1920 cap.", "maxWidth": 1920, "margin": "8.33% each side", "columns": 12 },
+    { "breakpoint": "lg", "behavior": "Percentage rule, 1920 cap.", "maxWidth": 1920, "margin": "8.33% each side", "columns": 12 },
+    { "breakpoint": "xl", "behavior": "Percentage rule, 1920 cap. Identical to the standard container here.", "maxWidth": 1920, "margin": "8.33% each side", "columns": 12 }
+  ],
+  "tokens": [{ "role": "margin", "ref": "{s2a.spacing.lg}", "breakpoint": "sm" }],
+  "surface": {
+    "classes": [{ "name": "container-hd", "purpose": "Content container with the HD ceiling at every range." }],
+    "customProperties": [{ "name": "--s2a-grid-hd-max-width", "purpose": "The 1920 HD ceiling." }]
+  },
+  "rules": [
+    { "id": "HD_CLASS", "statement": "The container-hd class exists.", "severity": "fail", "check": { "type": "classPresent", "name": "container-hd" } },
+    { "id": "HD_CAP", "statement": "The cap is the HD custom property, 1920 — not a literal repeated in two places.", "severity": "fail", "check": { "type": "declarationEquals", "class": "container-hd", "media": null, "property": "max-width", "expectedValue": "var(--s2a-grid-hd-max-width)" } },
+    { "id": "HD_CEILING_1920", "statement": "The HD ceiling resolves to 1920px.", "severity": "fail", "check": { "type": "customPropertyEquals", "name": "--s2a-grid-hd-max-width", "media": null, "expectedPx": 1920 } },
+    { "id": "HD_MARGIN_SM", "statement": "Below 768 the side margin is spacing-lg.", "severity": "fail", "check": { "type": "declarationEquals", "class": "container-hd", "media": null, "property": "padding-left", "expectedPx": 24 } },
+    { "id": "HD_PCT_MD", "statement": "From 768 up it switches to the percentage rule and clears its padding.", "severity": "fail", "check": { "type": "declarationEquals", "class": "container-hd", "media": 768, "property": "padding-left", "expectedPx": 0 } }
+  ],
+  "decisions": [
+    {
+      "id": "HD_FIXED_PADDING",
+      "question": "Will's demo renames this container-hd-offset and keeps a fixed spacing-lg padding at every breakpoint instead of switching to the percentage rule at 768. Which behaviour is correct?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "His grid.css comment reads 'HD Offset Container — fixed 24px padding across all breakpoints' and omits the 768 width-switch block that packages/grid has. This is the one genuine behavioural difference between the two stylesheets, not a rename."
+    }
+  ],
+  "visualize": { "demo": "container", "overlay": true }
+}

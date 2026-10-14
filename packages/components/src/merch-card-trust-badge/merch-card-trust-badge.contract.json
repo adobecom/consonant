@@ -1,0 +1,108 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.merch-card-trust-badge",
+  "name": "MerchCardTrustBadge",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "MerchCardTrustBadge",
+  "archetype": "none",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "text",
+      "default": "\"Secure transaction\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label#10327:141"
+        },
+        "code": {
+          "prop": "label"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "div",
+      "layout": {
+        "display": "flex",
+        "direction": "row",
+        "align": "center"
+      },
+      "tokens": {
+        "gap": "{s2a.spacing.8}"
+      },
+      "literals": {
+        "width": "129px",
+        "height": "20px"
+      },
+      "parts": {
+        "s2-icon-lock-20-n": {
+          "layout": {
+            "display": "flex",
+            "direction": "row"
+          },
+          "literals": {
+            "width": "16px",
+            "height": "16px"
+          }
+        },
+        "secure-transaction": {
+          "element": "span",
+          "tokens": {
+            "color": "{s2a.color.content.subtle}",
+            "font-family": "{s2a.font.family.body}",
+            "font-size": "{s2a.typography.font-size.body-sm}",
+            "font-weight": "{s2a.font.weight.body}",
+            "letter-spacing": "{s2a.typography.letter-spacing.body-sm}",
+            "line-height": "{s2a.typography.line-height.body-sm}"
+          },
+          "slot": {
+            "name": "Secure transaction",
+            "accepts": [
+              "kind:text"
+            ],
+            "acceptsMode": "prefer",
+            "defaultContent": [
+              {
+                "id": "text",
+                "text": "Secure transaction"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA"
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "1220f8083276c6e5972109c631310150f5deb818",
+        "nodeId": "10327:103546"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/merch-card-trust-badge/merch-card-trust-badge.js",
+        "export": "MerchCardTrustBadge"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:d21a201df29e85d446ea17195d4ebfce8ddd5e5246cfbb359803556bb2edced5",
+    "source": {
+      "kind": "design",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:d21a201df29e85d446ea17195d4ebfce8ddd5e5246cfbb359803556bb2edced5"
+    }
+  }
+}

@@ -103,7 +103,7 @@
       "figma": ".root",
       "element": "a",
       "tokens": {
-        "background-color": "{s2a.color.background.subtle}",
+        "background-color": "{s2a.color.surface.subtle}",
         "border-radius": "{s2a.border-radius.lg}",
         "gap": "{s2a.spacing.md}"
       },
@@ -252,6 +252,14 @@
       "owner": "Matt",
       "decision": "heading-5 for now (closest rung, one-line headlines). Revisit if the row needs more presence.",
       "evidence": "Figma ActionCard 14226:196789 after 2026-09-21 restructure; golden Row 14226:196800."
+    },
+    {
+      "id": "ac-surface-token",
+      "question": "The contract bound the card surface to background/subtle, but the Figma component binds surface/subtle. Both are #f8f8f8 in light, so the difference is invisible today. Which is the card's token?",
+      "status": "decided",
+      "owner": "Matt",
+      "evidence": "ActionCard 14226:196789 root fills -> s2a/color/surface/subtle; dist/packages/tokens/css/dev/tokens.semantic.light.css (both -> gray-50) and tokens.semantic.dark.css (surface -> gray-900 #131313, background -> gray-700 #505050)",
+      "decision": "surface/subtle, matching the component. The Surface family was added in tokens 0.0.21 for elevation-neutral card surfaces, which is what this is. The two tokens only diverge in dark mode, so the contract would have rendered the card #505050 instead of #131313 the first time anyone themed it — a latent bug rather than a naming preference."
     }
   ]
 }

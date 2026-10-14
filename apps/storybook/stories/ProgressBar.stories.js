@@ -39,12 +39,12 @@ the fill is animated via a CSS \`transform: translateX\` transition driven by
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
 const darkSurface = (content) => html`
-  <div
+  <div data-theme="dark"
     style="
       width: 240px;
-      padding: 24px;
-      background: #111;
-      border-radius: 8px;
+      padding: var(--s2a-spacing-lg);
+      background: var(--s2a-color-background-knockout);
+      border-radius: var(--s2a-border-radius-xs);
     "
   >
     ${content}
@@ -80,21 +80,21 @@ export const Complete = {
 export const AllSteps = {
   name: "All steps (25 / 50 / 75 / 100)",
   render: () => darkSurface(html`
-    <div style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-md);">
       <div>
-        <p style="color: #999; font-size: 11px; margin: 0 0 6px; font-family: sans-serif;">25%</p>
+        <p style="color: var(--s2a-color-content-body-subtle); font-size: var(--s2a-font-size-xs); margin: 0 0 var(--s2a-spacing-2xs); font-family: var(--s2a-font-family-body);">25%</p>
         ${ProgressBar({ progress: 25 })}
       </div>
       <div>
-        <p style="color: #999; font-size: 11px; margin: 0 0 6px; font-family: sans-serif;">50%</p>
+        <p style="color: var(--s2a-color-content-body-subtle); font-size: var(--s2a-font-size-xs); margin: 0 0 var(--s2a-spacing-2xs); font-family: var(--s2a-font-family-body);">50%</p>
         ${ProgressBar({ progress: 50 })}
       </div>
       <div>
-        <p style="color: #999; font-size: 11px; margin: 0 0 6px; font-family: sans-serif;">75%</p>
+        <p style="color: var(--s2a-color-content-body-subtle); font-size: var(--s2a-font-size-xs); margin: 0 0 var(--s2a-spacing-2xs); font-family: var(--s2a-font-family-body);">75%</p>
         ${ProgressBar({ progress: 75 })}
       </div>
       <div>
-        <p style="color: #999; font-size: 11px; margin: 0 0 6px; font-family: sans-serif;">100%</p>
+        <p style="color: var(--s2a-color-content-body-subtle); font-size: var(--s2a-font-size-xs); margin: 0 0 var(--s2a-spacing-2xs); font-family: var(--s2a-font-family-body);">100%</p>
         ${ProgressBar({ progress: 100 })}
       </div>
     </div>

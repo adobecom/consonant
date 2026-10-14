@@ -1,0 +1,599 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "product-lockup",
+  "storybookId": "product-lockup",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "orientation-horizontal",
+      "name": "orientation: horizontal",
+      "args": {
+        "orientation": "horizontal"
+      }
+    },
+    {
+      "id": "orientation-vertical",
+      "name": "orientation: vertical",
+      "args": {
+        "orientation": "vertical"
+      }
+    },
+    {
+      "id": "showappicon-on",
+      "name": "showAppIcon on",
+      "args": {
+        "showAppIcon": true
+      }
+    },
+    {
+      "id": "showappicon-off",
+      "name": "showAppIcon off",
+      "args": {
+        "showAppIcon": false
+      }
+    },
+    {
+      "id": "showiconend-on",
+      "name": "showIconEnd on",
+      "args": {
+        "showIconEnd": true
+      }
+    },
+    {
+      "id": "showiconend-off",
+      "name": "showIconEnd off",
+      "args": {
+        "showIconEnd": false
+      }
+    },
+    {
+      "id": "showsecondappicon-on",
+      "name": "showSecondAppIcon on",
+      "args": {
+        "showSecondAppIcon": true
+      }
+    },
+    {
+      "id": "showsecondappicon-off",
+      "name": "showSecondAppIcon off",
+      "args": {
+        "showSecondAppIcon": false
+      }
+    },
+    {
+      "id": "style-label",
+      "name": "style: label",
+      "args": {
+        "style": "label"
+      }
+    },
+    {
+      "id": "style-eyebrow",
+      "name": "style: eyebrow",
+      "args": {
+        "style": "eyebrow"
+      }
+    },
+    {
+      "id": "style-knockout",
+      "name": "style: knockout",
+      "args": {
+        "style": "knockout"
+      }
+    },
+    {
+      "id": "style-inverse",
+      "name": "style: inverse",
+      "args": {
+        "style": "inverse"
+      }
+    },
+    {
+      "id": "width-hug",
+      "name": "width: hug",
+      "args": {
+        "width": "hug"
+      }
+    },
+    {
+      "id": "width-fill",
+      "name": "width: fill",
+      "args": {
+        "width": "fill"
+      }
+    },
+    {
+      "id": "showsecondicon-on",
+      "name": "showSecondIcon on",
+      "args": {
+        "showSecondIcon": true
+      }
+    },
+    {
+      "id": "showsecondicon-off",
+      "name": "showSecondIcon off",
+      "args": {
+        "showSecondIcon": false
+      }
+    },
+    {
+      "id": "showiconstart-on",
+      "name": "showIconStart on",
+      "args": {
+        "showIconStart": true
+      }
+    },
+    {
+      "id": "showiconstart-off",
+      "name": "showIconStart off",
+      "args": {
+        "showIconStart": false
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "molecules-productlockup--horizontal-label",
+      "name": "Horizontal Label",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    },
+    {
+      "id": "molecules-productlockup--horizontal-eyebrow",
+      "name": "Horizontal Eyebrow",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    },
+    {
+      "id": "molecules-productlockup--horizontal-fill",
+      "name": "Horizontal Fill",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    },
+    {
+      "id": "molecules-productlockup--knockout",
+      "name": "Knockout",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    },
+    {
+      "id": "molecules-productlockup--inverse",
+      "name": "Inverse",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    },
+    {
+      "id": "molecules-productlockup--vertical-label",
+      "name": "Vertical Label",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    },
+    {
+      "id": "molecules-productlockup--vertical-eyebrow",
+      "name": "Vertical Eyebrow",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    },
+    {
+      "id": "molecules-productlockup--label-only",
+      "name": "Label Only",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    },
+    {
+      "id": "molecules-productlockup--no-caret",
+      "name": "No Caret",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    },
+    {
+      "id": "molecules-productlockup--all-variants",
+      "name": "All Variants",
+      "argKeys": [
+        "label",
+        "app",
+        "orientation",
+        "styleVariant",
+        "width",
+        "showIconStart",
+        "showIconEnd",
+        "iconSize"
+      ]
+    }
+  ],
+  "deferred": [
+    "showappicon-off",
+    "showsecondappicon-on",
+    "style-eyebrow",
+    "style-knockout",
+    "style-inverse",
+    "width-fill",
+    "showsecondicon-on"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      "horizontal / label / hug",
+      "horizontal / label / fill",
+      "horizontal / eyebrow / hug",
+      "horizontal / eyebrow / fill",
+      "horizontal / knockout / hug",
+      "horizontal / knockout / fill",
+      "horizontal / inverse / hug",
+      "horizontal / inverse / fill",
+      "vertical / label / hug",
+      "vertical / label / fill",
+      "vertical / eyebrow / hug",
+      "vertical / eyebrow / fill",
+      "vertical / knockout / hug",
+      "vertical / knockout / fill",
+      "vertical / inverse / hug",
+      "vertical / inverse / fill"
+    ],
+    "rowValues": [
+      {
+        "Orientation": "horizontal",
+        "Style": "label",
+        "Width": "hug"
+      },
+      {
+        "Orientation": "horizontal",
+        "Style": "label",
+        "Width": "fill"
+      },
+      {
+        "Orientation": "horizontal",
+        "Style": "eyebrow",
+        "Width": "hug"
+      },
+      {
+        "Orientation": "horizontal",
+        "Style": "eyebrow",
+        "Width": "fill"
+      },
+      {
+        "Orientation": "horizontal",
+        "Style": "knockout",
+        "Width": "hug"
+      },
+      {
+        "Orientation": "horizontal",
+        "Style": "knockout",
+        "Width": "fill"
+      },
+      {
+        "Orientation": "horizontal",
+        "Style": "inverse",
+        "Width": "hug"
+      },
+      {
+        "Orientation": "horizontal",
+        "Style": "inverse",
+        "Width": "fill"
+      },
+      {
+        "Orientation": "vertical",
+        "Style": "label",
+        "Width": "hug"
+      },
+      {
+        "Orientation": "vertical",
+        "Style": "label",
+        "Width": "fill"
+      },
+      {
+        "Orientation": "vertical",
+        "Style": "eyebrow",
+        "Width": "hug"
+      },
+      {
+        "Orientation": "vertical",
+        "Style": "eyebrow",
+        "Width": "fill"
+      },
+      {
+        "Orientation": "vertical",
+        "Style": "knockout",
+        "Width": "hug"
+      },
+      {
+        "Orientation": "vertical",
+        "Style": "knockout",
+        "Width": "fill"
+      },
+      {
+        "Orientation": "vertical",
+        "Style": "inverse",
+        "Width": "hug"
+      },
+      {
+        "Orientation": "vertical",
+        "Style": "inverse",
+        "Width": "fill"
+      }
+    ],
+    "cell": {
+      "w": 178,
+      "h": 80,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        },
+        "forced": null,
+        "label": "horizontal / label / hug / default",
+        "nodeId": "11272:217584"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "fill"
+        },
+        "forced": null,
+        "label": "horizontal / label / fill / default",
+        "nodeId": "11272:217612"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "orientation": "horizontal",
+          "style": "eyebrow",
+          "width": "hug"
+        },
+        "forced": null,
+        "label": "horizontal / eyebrow / hug / default",
+        "nodeId": "11272:217591"
+      },
+      {
+        "row": 3,
+        "col": 0,
+        "args": {
+          "orientation": "horizontal",
+          "style": "eyebrow",
+          "width": "fill"
+        },
+        "forced": null,
+        "label": "horizontal / eyebrow / fill / default",
+        "nodeId": "11272:217619"
+      },
+      {
+        "row": 4,
+        "col": 0,
+        "args": {
+          "orientation": "horizontal",
+          "style": "knockout",
+          "width": "hug"
+        },
+        "forced": null,
+        "label": "horizontal / knockout / hug / default",
+        "nodeId": "11273:218228"
+      },
+      {
+        "row": 5,
+        "col": 0,
+        "args": {
+          "orientation": "horizontal",
+          "style": "knockout",
+          "width": "fill"
+        },
+        "forced": null,
+        "label": "horizontal / knockout / fill / default",
+        "nodeId": "11273:218356"
+      },
+      {
+        "row": 6,
+        "col": 0,
+        "args": {
+          "orientation": "horizontal",
+          "style": "inverse",
+          "width": "hug"
+        },
+        "forced": null,
+        "label": "horizontal / inverse / hug / default",
+        "nodeId": "11320:226620"
+      },
+      {
+        "row": 7,
+        "col": 0,
+        "args": {
+          "orientation": "horizontal",
+          "style": "inverse",
+          "width": "fill"
+        },
+        "forced": null,
+        "label": "horizontal / inverse / fill / default",
+        "nodeId": "11320:226748"
+      },
+      {
+        "row": 8,
+        "col": 0,
+        "args": {
+          "orientation": "vertical",
+          "style": "label",
+          "width": "hug"
+        },
+        "forced": null,
+        "label": "vertical / label / hug / default",
+        "nodeId": "11272:217598"
+      },
+      {
+        "row": 9,
+        "col": 0,
+        "args": {
+          "orientation": "vertical",
+          "style": "label",
+          "width": "fill"
+        },
+        "forced": null,
+        "label": "vertical / label / fill / default",
+        "nodeId": "11272:217626"
+      },
+      {
+        "row": 10,
+        "col": 0,
+        "args": {
+          "orientation": "vertical",
+          "style": "eyebrow",
+          "width": "hug"
+        },
+        "forced": null,
+        "label": "vertical / eyebrow / hug / default",
+        "nodeId": "11272:217605"
+      },
+      {
+        "row": 11,
+        "col": 0,
+        "args": {
+          "orientation": "vertical",
+          "style": "eyebrow",
+          "width": "fill"
+        },
+        "forced": null,
+        "label": "vertical / eyebrow / fill / default",
+        "nodeId": "11272:217633"
+      },
+      {
+        "row": 12,
+        "col": 0,
+        "args": {
+          "orientation": "vertical",
+          "style": "knockout",
+          "width": "hug"
+        },
+        "forced": null,
+        "label": "vertical / knockout / hug / default",
+        "nodeId": "11273:218292"
+      },
+      {
+        "row": 13,
+        "col": 0,
+        "args": {
+          "orientation": "vertical",
+          "style": "knockout",
+          "width": "fill"
+        },
+        "forced": null,
+        "label": "vertical / knockout / fill / default",
+        "nodeId": "11273:218420"
+      },
+      {
+        "row": 14,
+        "col": 0,
+        "args": {
+          "orientation": "vertical",
+          "style": "inverse",
+          "width": "hug"
+        },
+        "forced": null,
+        "label": "vertical / inverse / hug / default",
+        "nodeId": "11320:226684"
+      },
+      {
+        "row": 15,
+        "col": 0,
+        "args": {
+          "orientation": "vertical",
+          "style": "inverse",
+          "width": "fill"
+        },
+        "forced": null,
+        "label": "vertical / inverse / fill / default",
+        "nodeId": "11320:226812"
+      }
+    ],
+    "missing": []
+  }
+}

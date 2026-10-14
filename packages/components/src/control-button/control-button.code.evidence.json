@@ -1,0 +1,367 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-08T17:55:37.164Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "control-button",
+    "name": "ControlButton",
+    "cssClass": "c-control-button",
+    "importPath": "packages/components/src/control-button/control-button.js",
+    "exports": [
+      "ControlButton"
+    ],
+    "render": "ControlButton",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/control-button/control-button.spec.json",
+      "storybookId": "control-button",
+      "figmaNodeId": "11180:181592"
+    }
+  },
+  "sources": {
+    "packages/components/src/control-button/index.js": "sha256:85f90ad3be8b5235e886bcf829a1110145c74ce825d95d9036c727de63acd615",
+    "packages/components/src/control-button/control-button.js": "sha256:710923aa5f5a0309ac2843471ef4adea5007c699b0227f540b7057bc4c9366a6",
+    "packages/components/src/control-button/control-button.css": "sha256:c0d16f434de1cfe0b0ecfbb4cf0c562d2870acb4609710581e8c0a465cbb2af1"
+  },
+  "props": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "label",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "size",
+      "default": "\"md\"",
+      "type": "string"
+    },
+    {
+      "name": "disabled",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "forceState"
+    },
+    {
+      "name": "onClick"
+    }
+  ],
+  "attributes": {
+    "data-force-state": {
+      "values": [
+        "active",
+        "focus",
+        "hover"
+      ],
+      "dynamic": true,
+      "sources": [
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": false
+    },
+    "data-size": {
+      "values": [
+        "md",
+        "xl"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-control-button",
+      "c-control-button__icon"
+    ],
+    "stylesheet": [
+      "c-control-button",
+      "c-control-button__icon"
+    ],
+    "runtime": [
+      "c-control-button",
+      "c-control-button__icon"
+    ],
+    "own": [
+      "c-control-button",
+      "c-control-button__icon"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden",
+      "aria-label"
+    ],
+    "tags": [
+      "button"
+    ]
+  },
+  "imports": [
+    "./control-button.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-blur-8": {
+        "fallback": true
+      },
+      "--s2a-border-radius-6": {
+        "fallback": true
+      },
+      "--s2a-border-width-sm": {
+        "fallback": true
+      },
+      "--s2a-color-content-knockout": {
+        "fallback": false
+      },
+      "--s2a-color-control-button-background-media-active": {
+        "fallback": true
+      },
+      "--s2a-color-control-button-background-media-default": {
+        "fallback": true
+      },
+      "--s2a-color-control-button-background-media-disabled": {
+        "fallback": true
+      },
+      "--s2a-color-control-button-background-media-hover": {
+        "fallback": true
+      },
+      "--s2a-color-control-button-border-media": {
+        "fallback": true
+      },
+      "--s2a-color-focus-ring-default": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-black-32": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-black-64": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-black-80": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-black-96": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-white-24": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-white-48": {
+        "fallback": false
+      },
+      "--s2a-spacing-3xl": {
+        "fallback": true
+      },
+      "--s2a-spacing-md": {
+        "fallback": true
+      },
+      "--s2a-spacing-xl": {
+        "fallback": true
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [
+    ":active",
+    ":disabled",
+    ":focus",
+    ":hover"
+  ],
+  "queries": [],
+  "stories": [
+    {
+      "id": "atoms-controlbutton--default",
+      "name": "Media controls",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__icon"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Pause",
+          "disabled": false
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-controlbutton--states",
+      "name": "All states",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__icon"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Default",
+          "disabled": false
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-controlbutton--disabled",
+      "name": "Disabled",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__icon"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Pause",
+          "disabled": true
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-controlbutton--navigation-icons",
+      "name": "Navigation icons (nav-back)",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__icon"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Back to start",
+          "disabled": false
+        }
+      ],
+      "nodes": 5
+    }
+  ],
+  "counts": {
+    "props": 6,
+    "attributes": 2,
+    "parts": 2,
+    "tokenReferences": 19,
+    "tokenReferencesWithoutFallback": 8,
+    "raw": 0,
+    "stories": 4,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:153748d201c2d4db882bcf73f038453b738a85820fa3ba26fcbcf932bf833772"
+  }
+}

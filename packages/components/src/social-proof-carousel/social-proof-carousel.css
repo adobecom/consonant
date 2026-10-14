@@ -9,10 +9,10 @@
 
 .spc-track {
   display: flex;
-  gap: 8px;
+  gap: var(--s2a-spacing-xs);
   will-change: transform;
   /* Initial state: translate = peek, so first slide is in view */
-  transform: translateX(calc(var(--spc-peek, 11.46%) + var(--s2a-spacing-xs, 8px)));
+  transform: translateX(calc(var(--spc-peek, 11.46%) + var(--s2a-spacing-xs)));
 }
 
 /* ─── Slides ─────────────────────────────────────────────────────────────── */
@@ -35,9 +35,12 @@
   z-index: 10;
 }
 
-.spc-nav--prev { left: 40px; }
-.spc-nav--next { right: 40px; }
-
+.spc-nav--prev {
+  left: 40px;
+}
+.spc-nav--next {
+  right: 40px;
+}
 
 /* ─── Pagination dots ────────────────────────────────────────────────────── */
 
@@ -48,7 +51,7 @@
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s2a-spacing-xs);
   z-index: 10;
 }
 
@@ -57,30 +60,39 @@
    content/knockout. */
 .spc-dot {
   appearance: none;
-  width: var(--s2a-spacing-xs, 8px);
-  height: var(--s2a-spacing-xs, 8px);
-  border-radius: var(--s2a-border-radius-round, 50%);
+  width: var(--s2a-spacing-xs);
+  height: var(--s2a-spacing-xs);
+  border-radius: var(--s2a-border-radius-round);
   border: none;
   padding: 0;
-  background: var(--s2a-color-transparent-white-64, rgba(255, 255, 255, 0.64));
+  background: var(--s2a-color-transparent-white-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
   cursor: pointer;
-  transition: background 200ms ease, transform 200ms ease;
+  transition:
+    background 200ms ease,
+    transform 200ms ease;
 }
 
 .spc-dot[aria-pressed="true"] {
-  background: var(--s2a-color-content-knockout, #fff);
+  background: var(--s2a-color-content-knockout);
   transform: scale(1.25);
 }
 
 .spc-dot:focus-visible {
-  outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
-  outline-offset: 2px;
+  outline: var(--s2a-border-width-md) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-3xs);
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────────────────── */
 @media (max-width: 599px) {
-  .spc-nav { top: auto; bottom: 16px; transform: none; }
-  .spc-pagination { bottom: 32px; }
+  .spc-nav {
+    top: auto;
+    bottom: 16px;
+    transform: none;
+  }
+  .spc-pagination {
+    bottom: 32px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,178 @@
+/* MerchCard — generated from merch-card.contract.json.
+ * Re-run: npm run specs:render -- --slug=merch-card --target=milo */
+
+.merch-card [hidden],
+.merch-card[hidden] {
+  display: none !important;
+}
+
+.merch-card {
+  box-sizing: border-box;
+  border: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s2a-spacing-md, 16px);
+  border-radius: var(--s2a-border-radius-md, 16px);
+  padding-bottom: var(--s2a-spacing-2xs, 4px);
+  padding-left: var(--s2a-spacing-2xs, 4px);
+  padding-right: var(--s2a-spacing-2xs, 4px);
+  padding-top: var(--s2a-spacing-2xs, 4px);
+  width: 100%;
+}
+
+.merch-card.default {
+  background-color: var(--s2a-color-surface-subtle, #f8f8f8);
+}
+
+.merch-card.highlight {
+  background-color: var(--s2a-color-surface-inverse-subtle, #131313);
+}
+
+.merch-card .body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  border-radius: var(--s2a-border-radius-12, 12px);
+  background-color: var(--s2a-color-surface-default, #fff);
+  gap: 24px;
+  padding-top: 28px;
+  padding-right: 28px;
+  padding-bottom: 28px;
+  padding-left: 28px;
+}
+
+.merch-card .content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  gap: 16px;
+}
+
+.merch-card .header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  gap: 10px;
+}
+
+.merch-card .header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  gap: 10px;
+}
+
+.merch-card .product-lockup {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.merch-card .plan-header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  gap: var(--s2a-spacing-lg, 24px);
+}
+
+.merch-card .name-area {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  gap: 4px;
+}
+
+.merch-card .plan-name {
+  align-self: stretch;
+  color: var(--s2a-color-content-heading, #000);
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
+  font-size: var(--s2a-typography-font-size-heading-5, 1.5rem);
+  font-weight: var(--s2a-font-weight-heading, 900);
+  letter-spacing: var(--s2a-font-letter-spacing-4xl, -0.48px);
+  line-height: var(--s2a-typography-line-height-heading-5, 24px);
+}
+
+.merch-card .description {
+  align-self: stretch;
+  color: var(--s2a-color-content-default, #000);
+  font-family: var(--s2a-font-family-body, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-body-sm, 0.875rem);
+  font-weight: var(--s2a-font-weight-body, 400);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm, 0);
+  line-height: var(--s2a-typography-line-height-body-sm, 18px);
+}
+
+.merch-card .merch-card-pricing-display {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.merch-card .options {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  align-self: stretch;
+  gap: var(--s2a-spacing-xs, 8px);
+}
+
+.merch-card .merch-card-select-promo {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.merch-card .cta {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 8px;
+}
+
+.merch-card .actions {
+  display: flex;
+  flex-direction: row;
+  align-self: stretch;
+  gap: 8px;
+}
+
+.merch-card .button {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.merch-card .button-2 {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.merch-card .merch-card-trust-badge {
+  display: flex;
+  flex-direction: column;
+}
+
+.merch-card .features {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  padding-bottom: var(--s2a-spacing-3xl, 48px);
+  padding-top: 24px;
+  padding-right: 24px;
+  padding-left: 24px;
+}
+
+.merch-card.default .features {
+  gap: var(--s2a-spacing-lg, 24px);
+}

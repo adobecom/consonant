@@ -1,15 +1,718 @@
 {
-  "name":"TextCard", "slug":"text-card", "figmaNodeId":"11362:245184", "cssClass":"c-text-card", "storybookId":"pages-homepage--news",
-  "description":"S2A TextCard v2, headline, optional body and native text link. Used below an h2 in the Homepage News section.",
-  "variants":{},
-  "props":[
-    {"name":"headline","type":"string","defaultValue":"\"\""},
-    {"name":"body","type":"string","defaultValue":"\"\""},
-    {"name":"ctaLabel","type":"string","defaultValue":"\"Read story\""},
-    {"name":"ctaHref","type":"string","defaultValue":"\"#\""},
-    {"name":"showBody","type":"boolean","defaultValue":"true"},
-    {"name":"showCta","type":"boolean","defaultValue":"true"}
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
+  "name": "TextCard",
+  "slug": "text-card",
+  "cssClass": "c-text-card",
+  "figmaNodeId": "11362:245184",
+  "storybookId": "pages-homepage--news",
+  "description": "Text-only news / content card. Headline, optional body copy, and inline read-more CTA. No media. Use in 3-up news grids on light surfaces.",
+  "variants": {
+    "Style": [
+      "default",
+      "centered"
+    ]
+  },
+  "props": [
+    {
+      "name": "body",
+      "type": "string",
+      "defaultValue": "\"85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants.\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Body#9554:2",
+          "verified": true
+        },
+        "code": {
+          "prop": "body",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "cta",
+      "type": "string",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "CTA#9561:0",
+          "verified": true
+        },
+        "code": {
+          "prop": "cta",
+          "attr": null,
+          "extracted": false,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "headline",
+      "type": "string",
+      "defaultValue": "\"Adobe apps are top choice for Sundance filmmakers.\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Headline#9554:0",
+          "verified": true
+        },
+        "code": {
+          "prop": "headline",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "showBody",
+      "type": "boolean",
+      "defaultValue": "true",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Body#9554:6",
+          "verified": true
+        },
+        "code": {
+          "prop": "showBody",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "showCta",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Figma authoring toggle for the \"CTA\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "lever": false,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show CTA#9554:8",
+          "verified": true
+        },
+        "code": {
+          "prop": "showCta",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "style",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "enum": [
+        "default",
+        "centered"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style",
+          "verified": true,
+          "options": [
+            "default",
+            "centered"
+          ]
+        },
+        "code": {
+          "prop": "style",
+          "attr": "data-style",
+          "extracted": false,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "ctaLabel",
+      "type": "string",
+      "defaultValue": "\"Read story\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "ctaLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "ctaHref",
+      "type": "string",
+      "defaultValue": "\"#\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "ctaHref",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
   ],
-  "tokenBindings":{"padding":"--s2a-spacing-lg","heading":"--s2a-color-content-heading","body":"--s2a-color-content-body-subtle"},
-  "a11y":{"wcag":["1.3.1","2.1.1","2.4.4","2.4.7"],"notes":["Headline is an h3; caller supplies the section h2.","CTA is a native anchor and must have a meaningful label and URL."]}
+  "tokenBindings": {
+    "root-background-color": "--s2a-color-background-subtle",
+    "root-border-radius": "--s2a-border-radius-md",
+    "root-gap": "--s2a-spacing-lg",
+    "root-padding-bottom": "--s2a-spacing-none",
+    "root-padding-left": "--s2a-spacing-lg",
+    "root-padding-right": "--s2a-spacing-lg",
+    "root-padding-top": "--s2a-spacing-lg",
+    "headline-body-gap": "--s2a-spacing-xs",
+    "headline-color": "--s2a-color-content-heading",
+    "headline-font-family": "--s2a-font-family-heading",
+    "headline-font-size": "--s2a-typography-font-size-heading-5",
+    "headline-font-weight": "--s2a-font-weight-heading",
+    "headline-letter-spacing": "--s2a-font-letter-spacing-4xl",
+    "headline-line-height": "--s2a-typography-line-height-heading-5",
+    "body-color": "--s2a-color-content-body-subtle",
+    "body-font-family": "--s2a-font-family-body",
+    "body-font-size": "--s2a-typography-font-size-body-md",
+    "body-font-weight": "--s2a-font-weight-body",
+    "body-letter-spacing": "--s2a-typography-letter-spacing-body-md",
+    "body-line-height": "--s2a-typography-line-height-body-md"
+  },
+  "tier": "component",
+  "composedOf": [
+    "link"
+  ],
+  "a11y": {
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ],
+    "notes": [
+      "Actions inside the card are native links or buttons; the card itself has no role."
+    ]
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".c-text-card",
+    "figma": ".root",
+    "element": "article",
+    "layout": {
+      "display": "flex",
+      "direction": "column"
+    },
+    "tokens": {
+      "background-color": {
+        "value": "{s2a.color.background.subtle}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.color.background.subtle}",
+            "cssVar": "--s2a-color-background-subtle",
+            "figma": "s2a/color/background/subtle",
+            "shipped": true,
+            "value": "#f8f8f8",
+            "dark": "#505050"
+          }
+        ]
+      },
+      "border-radius": {
+        "value": "{s2a.border.radius.md}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.border.radius.md}",
+            "cssVar": "--s2a-border-radius-md",
+            "figma": "s2a/border/radius/md",
+            "shipped": true,
+            "value": "16px"
+          }
+        ]
+      },
+      "gap": {
+        "value": "{s2a.spacing.lg}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.lg}",
+            "cssVar": "--s2a-spacing-lg",
+            "figma": "s2a/spacing/lg",
+            "shipped": true,
+            "value": "24px"
+          }
+        ]
+      },
+      "padding-bottom": {
+        "value": "{s2a.spacing.none}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.none}",
+            "cssVar": "--s2a-spacing-none",
+            "figma": "s2a/spacing/none",
+            "shipped": true,
+            "value": "0"
+          }
+        ]
+      },
+      "padding-left": {
+        "value": "{s2a.spacing.lg}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.lg}",
+            "cssVar": "--s2a-spacing-lg",
+            "figma": "s2a/spacing/lg",
+            "shipped": true,
+            "value": "24px"
+          }
+        ]
+      },
+      "padding-right": {
+        "value": "{s2a.spacing.lg}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.lg}",
+            "cssVar": "--s2a-spacing-lg",
+            "figma": "s2a/spacing/lg",
+            "shipped": true,
+            "value": "24px"
+          }
+        ]
+      },
+      "padding-top": {
+        "value": "{s2a.spacing.lg}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.lg}",
+            "cssVar": "--s2a-spacing-lg",
+            "figma": "s2a/spacing/lg",
+            "shipped": true,
+            "value": "24px"
+          }
+        ]
+      },
+      "width": {
+        "value": "raw:488px",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "parts": {
+      "headline-body": {
+        "selector": ".c-text-card__headline-body",
+        "figma": "/.headline-body",
+        "element": "div",
+        "layout": {
+          "display": "flex",
+          "direction": "column",
+          "grow": true
+        },
+        "tokens": {
+          "gap": {
+            "value": "{s2a.spacing.xs}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.xs}",
+                "cssVar": "--s2a-spacing-xs",
+                "figma": "s2a/spacing/xs",
+                "shipped": true,
+                "value": "8px"
+              }
+            ]
+          }
+        },
+        "parts": {
+          "headline": {
+            "selector": ".c-text-card__headline",
+            "figma": "/.headline-body/.headline",
+            "element": "span",
+            "layout": {
+              "grow": true
+            },
+            "tokens": {
+              "color": {
+                "value": "{s2a.color.content.heading}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.color.content.heading}",
+                    "cssVar": "--s2a-color-content-heading",
+                    "figma": "s2a/color/content/heading",
+                    "shipped": true,
+                    "value": "#000",
+                    "dark": "#fff"
+                  }
+                ]
+              },
+              "font-family": {
+                "value": "{s2a.font.family.heading}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.font.family.heading}",
+                    "cssVar": "--s2a-font-family-heading",
+                    "figma": "s2a/font/family/heading",
+                    "shipped": true,
+                    "value": "\"Adobe Clean Display\""
+                  }
+                ]
+              },
+              "font-size": {
+                "value": "{s2a.typography.font-size.heading-5}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.font-size.heading-5}",
+                    "cssVar": "--s2a-typography-font-size-heading-5",
+                    "figma": "s2a/typography/font-size/heading-5",
+                    "shipped": true,
+                    "value": "1.5rem",
+                    "sm": "1.125rem"
+                  }
+                ]
+              },
+              "font-weight": {
+                "value": "{s2a.font.weight.heading}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.font.weight.heading}",
+                    "cssVar": "--s2a-font-weight-heading",
+                    "figma": "s2a/font/weight/heading",
+                    "shipped": true,
+                    "value": "900"
+                  }
+                ]
+              },
+              "letter-spacing": {
+                "value": "{s2a.font.letter-spacing.4xl}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.font.letter-spacing.4xl}",
+                    "cssVar": "--s2a-font-letter-spacing-4xl",
+                    "figma": "s2a/font/letter-spacing/4xl",
+                    "shipped": true,
+                    "value": "-0.48px"
+                  }
+                ]
+              },
+              "line-height": {
+                "value": "{s2a.typography.line-height.heading-5}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.line-height.heading-5}",
+                    "cssVar": "--s2a-typography-line-height-heading-5",
+                    "figma": "s2a/typography/line-height/heading-5",
+                    "shipped": true,
+                    "value": "24px",
+                    "sm": "20px"
+                  }
+                ]
+              }
+            },
+            "slot": {
+              "name": "headline",
+              "accepts": [
+                "kind:text"
+              ],
+              "acceptsMode": "prefer",
+              "default": {
+                "text": "Adobe apps are top choice for Sundance filmmakers."
+              }
+            }
+          },
+          "body": {
+            "selector": ".c-text-card__body",
+            "figma": "/.headline-body/.body",
+            "element": "span",
+            "layout": {
+              "grow": true
+            },
+            "tokens": {
+              "color": {
+                "value": "{s2a.color.content.body-subtle}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.color.content.body-subtle}",
+                    "cssVar": "--s2a-color-content-body-subtle",
+                    "figma": "s2a/color/content/body-subtle",
+                    "shipped": true,
+                    "value": "rgb(0 0 0 / 64%)",
+                    "dark": "rgb(255 255 255 / 64%)"
+                  }
+                ]
+              },
+              "font-family": {
+                "value": "{s2a.font.family.body}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.font.family.body}",
+                    "cssVar": "--s2a-font-family-body",
+                    "figma": "s2a/font/family/body",
+                    "shipped": true,
+                    "value": "\"Adobe Clean\""
+                  }
+                ]
+              },
+              "font-size": {
+                "value": "{s2a.typography.font-size.body-md}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.font-size.body-md}",
+                    "cssVar": "--s2a-typography-font-size-body-md",
+                    "figma": "s2a/typography/font-size/body-md",
+                    "shipped": true,
+                    "value": "1rem"
+                  }
+                ]
+              },
+              "font-weight": {
+                "value": "{s2a.font.weight.body}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.font.weight.body}",
+                    "cssVar": "--s2a-font-weight-body",
+                    "figma": "s2a/font/weight/body",
+                    "shipped": true,
+                    "value": "400"
+                  }
+                ]
+              },
+              "letter-spacing": {
+                "value": "{s2a.typography.letter-spacing.body-md}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.letter-spacing.body-md}",
+                    "cssVar": "--s2a-typography-letter-spacing-body-md",
+                    "figma": "s2a/typography/letter-spacing/body-md",
+                    "shipped": true,
+                    "value": "0"
+                  }
+                ]
+              },
+              "line-height": {
+                "value": "{s2a.typography.line-height.body-md}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.typography.line-height.body-md}",
+                    "cssVar": "--s2a-typography-line-height-body-md",
+                    "figma": "s2a/typography/line-height/body-md",
+                    "shipped": true,
+                    "value": "20px"
+                  }
+                ]
+              }
+            },
+            "slot": {
+              "name": "body",
+              "accepts": [
+                "kind:text"
+              ],
+              "acceptsMode": "prefer",
+              "default": {
+                "text": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants."
+              }
+            }
+          }
+        }
+      },
+      "link": {
+        "selector": ".c-text-card__link",
+        "figma": "/.cta",
+        "layout": {
+          "display": "flex",
+          "direction": "column"
+        },
+        "slot": {
+          "name": ".cta",
+          "accepts": [
+            "Link"
+          ],
+          "acceptsMode": "restrict",
+          "default": {
+            "figma": "Link — v2",
+            "slug": "link",
+            "props": {
+              "Underline": false,
+              "Show Icon End": true,
+              "Label": "Read story",
+              "Emphasis": "default",
+              "Kind": "action",
+              "State": "default"
+            }
+          },
+          "notes": "Composes Link (link)."
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "11362:245184",
+        "nodeName": "TextCard — v2",
+        "componentSetKey": "db93874630fe07525d42cfbac86b77e52e217e9f",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:bc7565267593ba73a20478eb5f1c18ff0691503e6b077c7513c256b61ba52574",
+        "extractedAt": "2026-10-08T18:04:34.113Z",
+        "meta": {
+          "version": "2.1.1",
+          "status": "active",
+          "updated": "2026-09-15",
+          "changelog": "2.1.1   2026-09-15  patch        Fixed Style=centered — its .headline/.body text nodes lost componentPropertyReferences during clone (Figma clone() doesn't reliably preserve text-property bindings), so setting Headline/Body via properties updated metadata but not the rendered text. Re-linked both to Headline#9554:0 / Body#9554:2.\n2.1.0   2026-09-15  minor        Added Style=centered variant — center-aligned headline/body text and centered CTA, for use in Bento tiles that need center-orientation copy (matches the Playground mockup reference). Non-breaking, additive.\n2.0.0   2026-08-04  init         Initial release"
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/text-card/text-card.js",
+        "export": "TextCard",
+        "controller": null,
+        "cssClass": "c-text-card"
+      },
+      "evidence": {
+        "hash": "sha256:c1519f88ff735df8654ae3bb8e2ecc6f285e2751c84857d4c7b3dd030deb16c6"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "tc-archetype",
+      "question": "Scaffolded as card (named \"TextCard — v2\"). Confirm, or re-run npm run specs:scaffold -- --slug=text-card --archetype=<link-card|card|collection>.",
+      "chose": "card — named \"TextCard — v2\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=text-card --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×2; state axis none"
+    },
+    {
+      "id": "tc-part-selectors",
+      "question": "headline-body, headline, body, link have no class of their own in text-card.css. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to text-card.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/text-card/text-card.css"
+    },
+    {
+      "id": "tc-match",
+      "question": "Structural match says extend: closest existing contract is MerchCard (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending MerchCard (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to MerchCard instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "MerchCard (1) already covers this; extend it."
+    },
+    {
+      "id": "tc-code-only-props",
+      "question": "ctaLabel, ctaHref exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 2 code-only props as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "text-card.code.evidence.json"
+    },
+    {
+      "id": "tc-classify-1",
+      "question": "\"Show CTA\" treated as a Figma visibility helper for \"CTA\", not a code lever. Confirm, or change it in props/states.",
+      "chose": "\"Show CTA\" treated as a Figma visibility helper for \"CTA\", not a code lever",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "text-card.figma.evidence.json axes"
+    },
+    {
+      "id": "tc-composes",
+      "question": "Built from 1 component set, all of which already have a contract: Link ×2. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 1 composed set, 1 already contracted",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "scaffold",
+      "evidence": "text-card.figma.evidence.json instances"
+    },
+    {
+      "id": "tc-layer-names",
+      "question": "2 layers carry Figma-generated names (/.cta/end-icon/Frame, /.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "text-card.figma.evidence.json anatomy"
+    },
+    {
+      "id": "tc-hardcoded-values",
+      "question": "1 value in the design is set with no variable behind it: root width = 488px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried it through as raw: value so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "text-card.figma.evidence.json unboundValues"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:9fbdc79fba0f5ff8fa57f075808f86b2f456132535471b8a783be7614472f263",
+    "codeEvidence": "sha256:c1519f88ff735df8654ae3bb8e2ecc6f285e2751c84857d4c7b3dd030deb16c6",
+    "figmaEvidence": "sha256:bc7565267593ba73a20478eb5f1c18ff0691503e6b077c7513c256b61ba52574",
+    "generator": "s2a-spec-transform@1"
+  }
 }

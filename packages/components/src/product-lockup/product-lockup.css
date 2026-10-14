@@ -7,21 +7,16 @@
 .c-product-lockup {
   display: inline-flex;
   align-items: center;
-  gap: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-md);
   color: var(--s2a-color-content-label);
-  font-family: var(
-    --s2a-font-family-default,
-    "adobe-clean-display",
-    "Adobe Clean",
-    sans-serif
-  );
+  font-family: var(--s2a-font-family-default);
   text-decoration: none;
 }
 
 .c-product-lockup[data-orientation="vertical"] {
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--s2a-spacing-sm, 12px);
+  gap: var(--s2a-spacing-sm);
 }
 
 /* ── Style axis — ink per Figma v2 bindings ──────────────────────────────── */
@@ -48,7 +43,7 @@
 .c-product-lockup__icons {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: var(--s2a-spacing-3xs);
   flex-shrink: 0;
 }
 
@@ -63,7 +58,7 @@
 .c-product-lockup__label-row {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--s2a-spacing-2xs);
   min-width: 0;
 }
 
@@ -72,7 +67,7 @@
   align-items: center;
   min-width: 0;
   color: inherit;
-  font-weight: var(--s2a-font-weight-adobe-clean-bold, 700);
+  font-weight: var(--s2a-font-weight-label);
   text-box: trim-both cap text;
 }
 
@@ -80,15 +75,15 @@
 .c-product-lockup[data-style="label"] .c-product-lockup__label,
 .c-product-lockup[data-style="knockout"] .c-product-lockup__label,
 .c-product-lockup[data-style="inverse"] .c-product-lockup__label {
-  font-size: var(--s2a-font-size-sm, 14px);
-  line-height: var(--s2a-font-line-height-2xs, 1.285714);
-  letter-spacing: 0;
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-2xs);
+  letter-spacing: var(--s2a-font-letter-spacing-6xl);
 }
 
 .c-product-lockup[data-style="eyebrow"] .c-product-lockup__label {
-  font-size: var(--s2a-font-size-md, 16px);
-  line-height: var(--s2a-font-line-height-sm, 1.25);
-  letter-spacing: 0;
+  font-size: var(--s2a-font-size-md);
+  line-height: var(--s2a-font-line-height-sm);
+  letter-spacing: var(--s2a-font-letter-spacing-6xl);
 }
 
 .c-product-lockup[data-orientation="horizontal"] .c-product-lockup__label {
@@ -106,7 +101,8 @@
   text-overflow: ellipsis;
 }
 
-.c-product-lockup[data-orientation="vertical"][data-width="fill"] .c-product-lockup__label-row {
+.c-product-lockup[data-orientation="vertical"][data-width="fill"]
+  .c-product-lockup__label-row {
   width: 100%;
 }
 

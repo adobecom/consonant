@@ -50,12 +50,12 @@ export default {
       source: {
         language: "html",
         code: `<!-- Medium (24px) — default, used in ProductLockup and MediaCard -->
-<span class="c-app-icon" data-size="md" role="img" aria-hidden="true">
+<span class="c-app-icon" data-size="24" role="img" aria-hidden="true">
   <img class="c-app-icon__img" src="https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
 </span>
 
 <!-- Large (32px) -->
-<span class="c-app-icon" data-size="lg" role="img" aria-label="Adobe Firefly">
+<span class="c-app-icon" data-size="32" role="img" aria-label="Adobe Firefly">
   <img class="c-app-icon__img" src="…/firefly.svg" alt="" width="32" height="32" loading="lazy" decoding="async" />
 </span>`,
       },
@@ -96,15 +96,15 @@ export const Firefly = {
 
 export const Sizes = {
   render: (args) => html`
-    <div style="display: flex; gap: 24px; align-items: center;">
+    <div style="display: flex; gap: var(--s2a-spacing-lg); align-items: center;">
       ${["xs", "sm", "md", "lg"].map(
         (size) => html`
           <div
-            style="display: flex; flex-direction: column; gap: 12px; align-items: center;"
+            style="display: flex; flex-direction: column; gap: var(--s2a-spacing-sm); align-items: center;"
           >
             ${AppIcon({ ...args, size })}
             <span
-              style="color: #767676; font: 12px/1.2 var(--s2a-font-family-adobe-clean, 'Adobe Clean', sans-serif);"
+              style="color: var(--s2a-color-content-body-subtle); font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body);"
               >${size.toUpperCase()}</span
             >
           </div>
@@ -116,30 +116,30 @@ export const Sizes = {
 
 export const AllVariants = {
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 32px;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-xl);">
       ${appsByCategory.map(
         (group) => html`
           <section>
             <h3
-              style="margin: 0 0 16px; font: 700 16px/1.25 var(--s2a-font-family-adobe-clean, 'Adobe Clean', sans-serif);"
+              style="margin: 0 0 var(--s2a-spacing-md); font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body);"
             >
               ${group.category}
             </h3>
             <div
-              style="display: grid; grid-template-columns: repeat(auto-fit, minmax(144px, 1fr)); gap: 20px;"
+              style="display: grid; grid-template-columns: repeat(auto-fit, minmax(144px, 1fr)); gap: var(--s2a-spacing-md);"
             >
               ${group.apps.map(
                 (app) => html`
                   <div
-                    style="display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center;"
+                    style="display: flex; flex-direction: column; gap: var(--s2a-spacing-xs); align-items: center; text-align: center;"
                   >
-                    ${AppIcon({ app: app.slug, size: "lg" })}
+                    ${AppIcon({ app: app.slug, size: "32" })}
                     <span
-                      style="font: 13px/1.3 var(--s2a-font-family-adobe-clean, 'Adobe Clean', sans-serif); color: #555;"
+                      style="font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body); color: var(--s2a-color-content-body-subtle);"
                       >${app.label}</span
                     >
                     <code
-                      style="font: 11px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #767676;"
+                      style="font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body); color: var(--s2a-color-content-body-subtle);"
                       >${app.slug}</code
                     >
                   </div>
@@ -155,29 +155,29 @@ export const AllVariants = {
 
 export const LibraryCatalog = {
   render: () => html`
-    <div style="display: grid; gap: 8px;">
+    <div style="display: grid; gap: var(--s2a-spacing-xs);">
       ${CATALOG_APPS.map(
         (app) => html`
           <div
-            style="display: grid; grid-template-columns: 32px minmax(160px, 1fr) minmax(180px, 1fr) minmax(180px, 1fr); gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.08);"
+            style="display: grid; grid-template-columns: 32px minmax(160px, 1fr) minmax(180px, 1fr) minmax(180px, 1fr); gap: var(--s2a-spacing-sm); align-items: center; padding: var(--s2a-spacing-xs) 0; border-bottom: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);"
           >
             ${RENDERABLE_SLUGS.has(app.slug)
-              ? AppIcon({ app: app.slug, size: "md" })
+              ? AppIcon({ app: app.slug, size: "24" })
               : html`<span
                   title="Library-only asset: not rendered until a verified CDN URL or A4U package asset is wired in."
-                  style="display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 5px; background: #f5f5f5; color: #767676; font: 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"
+                  style="display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: var(--s2a-border-radius-2xs); background: var(--s2a-color-surface-subtle); color: var(--s2a-color-content-body-subtle); font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body);"
                   >A4U</span
                 >`}
             <span
-              style="font: 13px/1.3 var(--s2a-font-family-adobe-clean, 'Adobe Clean', sans-serif);"
+              style="font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body);"
               >${app.label}</span
             >
             <code
-              style="font: 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"
+              style="font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body);"
               >${app.slug}</code
             >
             <code
-              style="font: 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"
+              style="font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body);"
               >${app.figmaName ?? "S2A alias"}</code
             >
           </div>
@@ -197,9 +197,9 @@ export const LibraryCatalog = {
 
 export const AccessibleLabel = {
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 8px;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-xs);">
       <p
-        style="font: 14px/1.4 var(--s2a-font-family-adobe-clean, 'Adobe Clean', sans-serif); color: #333;"
+        style="font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body); color: var(--s2a-color-content-default);"
       >
         Icons are decorative when a visible product name follows. When the icon
         stands alone, pass <code>ariaHidden={false}</code> and an accessible
@@ -209,7 +209,7 @@ export const AccessibleLabel = {
         app: "firefly",
         ariaHidden: false,
         ariaLabel: "Adobe Firefly app icon",
-        size: "lg",
+        size: "32",
       })}
     </div>
   `,

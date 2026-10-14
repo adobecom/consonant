@@ -1,0 +1,184 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "divider",
+  "storybookId": "divider",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      }
+    },
+    {
+      "id": "style-subtle",
+      "name": "style: subtle",
+      "args": {
+        "style": "subtle"
+      }
+    },
+    {
+      "id": "style-knockout",
+      "name": "style: knockout",
+      "args": {
+        "style": "knockout"
+      }
+    },
+    {
+      "id": "style-inverse",
+      "name": "style: inverse",
+      "args": {
+        "style": "inverse"
+      }
+    },
+    {
+      "id": "style-subtle-inverse",
+      "name": "style: subtle-inverse",
+      "args": {
+        "style": "subtle-inverse"
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "atoms-divider--default",
+      "name": "Default",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "atoms-divider--subtle",
+      "name": "Subtle",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "atoms-divider--knockout",
+      "name": "Knockout",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "atoms-divider--inverse",
+      "name": "Inverse",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "atoms-divider--subtle-inverse",
+      "name": "Subtle Inverse",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "atoms-divider--all-styles",
+      "name": "All styles",
+      "argKeys": [
+        "style"
+      ]
+    }
+  ],
+  "deferred": [],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      "default",
+      "subtle",
+      "knockout",
+      "inverse",
+      "subtle-inverse"
+    ],
+    "rowValues": [
+      {
+        "Style": "default"
+      },
+      {
+        "Style": "subtle"
+      },
+      {
+        "Style": "knockout"
+      },
+      {
+        "Style": "inverse"
+      },
+      {
+        "Style": "subtle-inverse"
+      }
+    ],
+    "cell": {
+      "w": 442,
+      "h": 25,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "style": "default"
+        },
+        "forced": null,
+        "label": "default / default",
+        "nodeId": "10563:115905"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "style": "subtle"
+        },
+        "forced": null,
+        "label": "subtle / default",
+        "nodeId": "10910:21033"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "style": "knockout"
+        },
+        "forced": null,
+        "label": "knockout / default",
+        "nodeId": "10910:21034"
+      },
+      {
+        "row": 3,
+        "col": 0,
+        "args": {
+          "style": "inverse"
+        },
+        "forced": null,
+        "label": "inverse / default",
+        "nodeId": "10910:21035"
+      },
+      {
+        "row": 4,
+        "col": 0,
+        "args": {
+          "style": "subtle-inverse"
+        },
+        "forced": null,
+        "label": "subtle-inverse / default",
+        "nodeId": "10910:21037"
+      }
+    ],
+    "missing": []
+  }
+}

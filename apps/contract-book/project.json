@@ -1,0 +1,17 @@
+{
+  "name": "contract-book",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/contract-book",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": { "command": "npx --yes vite --config apps/contract-book/vite.config.ts", "cwd": "{workspaceRoot}" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "npx --yes vite build --config apps/contract-book/vite.config.ts", "cwd": "{workspaceRoot}", "outputs": ["{workspaceRoot}/dist/apps/contract-book"] }
+    }
+  },
+  "tags": ["scope:contract-book", "type:app"]
+}

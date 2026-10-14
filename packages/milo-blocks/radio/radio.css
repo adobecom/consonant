@@ -1,0 +1,94 @@
+/* Radio — generated from radio.contract.json.
+ * Re-run: npm run specs:render -- --slug=radio --target=milo */
+
+.radio [hidden],
+.radio[hidden] {
+  display: none !important;
+}
+
+.radio {
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.radio .control {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.radio:hover .control,
+.radio[data-state="hover"] .control {
+  background-color: var(--s2a-color-background-subtle, #f8f8f8);
+}
+
+.radio .ring {
+  grid-area: 1 / 1;
+  --radio-ring-bc: var(--s2a-color-content-default, #000);
+  --radio-ring-bw: 1.5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 var(--radio-ring-bw, 0) var(--radio-ring-bc, transparent);
+}
+
+.radio:has(:disabled) .ring,
+.radio[data-state="disabled"] .ring {
+  --radio-ring-bc: var(--s2a-color-content-subtle, rgb(0 0 0 / 64%));
+}
+
+.radio .dot {
+  grid-area: 1 / 1;
+  background-color: var(--s2a-color-content-default, #000);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: none;
+}
+
+.radio:has(:disabled) .dot,
+.radio[data-state="disabled"] .dot {
+  background-color: var(--s2a-color-content-subtle, rgb(0 0 0 / 64%));
+}
+
+.radio.true .dot {
+  display: block;
+}
+
+.radio .label {
+  font-family: var(--s2a-font-family-label, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-label, 0.875rem);
+  font-weight: var(--s2a-font-weight-label, 700);
+  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
+  line-height: var(--s2a-typography-line-height-label, 18px);
+}
+
+.radio.false .label {
+  color: var(--s2a-color-content-subtle, rgb(0 0 0 / 64%));
+}
+
+.radio.true .label {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.radio__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}

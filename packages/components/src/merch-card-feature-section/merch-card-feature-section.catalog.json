@@ -1,0 +1,61 @@
+{
+  "id": "s2a.merch-card-feature-section",
+  "name": "MerchCardFeatureSection",
+  "slug": "merch-card-feature-section",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": null,
+  "props": [
+    {
+      "name": "icon",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showDivider",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.divider",
+    "root.title",
+    "root.title.s2-icon-acrobat-pdfedit-20-n",
+    "root.title.title-text",
+    "root.items"
+  ],
+  "slots": [
+    {
+      "path": "root.divider",
+      "accepts": [
+        "Divider"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.title.title-text",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 17,
+  "a11y": null,
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/merch-card-feature-section/merch-card-feature-section.js",
+      "export": "MerchCardFeatureSection",
+      "controller": null,
+      "cssClass": "c-merch-card-feature-section"
+    },
+    "figma": "10320:102040"
+  },
+  "openDecisions": 5
+}

@@ -35,9 +35,9 @@
 /* ── Color bindings (exactly as bound in Figma per variant) ──────────────── */
 .c-logo[data-version="default"],
 .c-logo[data-version="abbreviated"] {
-  color: var(--s2a-color-content-default, #000);
+  color: var(--s2a-color-content-default);
 }
 
 .c-logo[data-version="legacy"] {
-  color: var(--s2a-color-content-subtle, rgba(0, 0, 0, 0.64));
+  color: var(--s2a-color-content-subtle);
 }

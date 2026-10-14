@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: #000;
+  background: var(--s2a-color-background-knockout);
   container-type: inline-size;
 }
 
@@ -38,36 +38,72 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #111;
+  background: var(--s2a-color-background-knockout);
 }
 
-.rm-video, .rm-image {
+.rm-video,
+.rm-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.c-router-marquee[data-single="true"] .rm-controls { display: none; }
-.c-router-marquee[data-single="true"] .rm-content { padding-bottom: var(--s2a-spacing-4xl, 64px); }
+.c-router-marquee[data-single="true"] .rm-controls {
+  display: none;
+}
+.c-router-marquee[data-single="true"] .rm-content {
+  padding-bottom: var(--s2a-spacing-4xl);
+}
 /* Title size/leading come from the responsive heading-1 tokens via RichContent
    (measure="none"); only tracking is pinned to zero per the working rule. */
-.c-router-marquee .c-rich-content__title { letter-spacing: 0; overflow-wrap: anywhere; }
-.c-router-marquee .c-rich-content__body { letter-spacing: 0; }
-.c-router-marquee .c-rich-content { min-width: 0; }
-.c-router-marquee .c-rich-content :is(h2, p, .c-button__label) { overflow-wrap: anywhere; max-width: 100%; }
+.c-router-marquee .c-rich-content__title {
+  letter-spacing: var(--s2a-font-letter-spacing-6xl);
+  overflow-wrap: anywhere;
+}
+.c-router-marquee .c-rich-content__body {
+  letter-spacing: var(--s2a-font-letter-spacing-6xl);
+}
+.c-router-marquee .c-rich-content {
+  min-width: 0;
+}
+.c-router-marquee .c-rich-content :is(h2, p, .c-button__label) {
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
 /* Primitive: retain Button v2's 40px minimum while allowing authored labels to wrap. */
-.c-router-marquee .c-button { height: auto; min-height: 40px; max-width: 100%; padding-block: var(--s2a-spacing-xs, 8px); }
+.c-router-marquee .c-button {
+  height: auto;
+  min-height: 40px;
+  max-width: 100%;
+  padding-block: var(--s2a-spacing-xs);
+}
 /* The supplied hero still carries a baked-in frame label along its bottom edge
    (see the gap register). Until approved clean art lands, bias tall crops upward
    and, where the image is height-bound, oversize it so the bottom stays clipped. */
-.rm-image { object-position: center 30%; }
+.rm-image {
+  object-position: center 30%;
+}
 @media (max-width: 1279px) {
-  .rm-image { height: 108%; object-position: center top; }
+  .rm-image {
+    height: 108%;
+    object-position: center top;
+  }
 }
 @media (max-width: 599px) {
-  .c-router-marquee .rm-image { object-position: 64% top; }
+  .c-router-marquee .rm-image {
+    object-position: 64% top;
+  }
   /* Primitive: the mobile image crop needs a fixed black scrim behind white copy. */
-  .c-router-marquee .rm-overlay { background: linear-gradient(180deg, rgb(0 0 0 / 64%) 0%, rgb(0 0 0 / 56%) 48%, transparent 100%); }
+  .c-router-marquee .rm-overlay {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--s2a-color-background-knockout) 64%, transparent)
+        0%,
+      color-mix(in srgb, var(--s2a-color-background-knockout) 56%, transparent)
+        48%,
+      transparent 100%
+    );
+  }
 }
 
 /* ─── Overlay ─────────────────────────────────────────────────────────────── */
@@ -78,9 +114,10 @@
   z-index: 1;
   background: linear-gradient(
     90deg,
-    rgb(0 0 0 / 72%) 0%,
-    rgb(0 0 0 / 40%) 55%,
-    rgb(0 0 0 / 0%) 100%
+    color-mix(in srgb, var(--s2a-color-background-knockout) 72%, transparent) 0%,
+    color-mix(in srgb, var(--s2a-color-background-knockout) 40%, transparent)
+      55%,
+    transparent 100%
   );
 }
 
@@ -93,8 +130,8 @@
   display: flex;
   align-items: flex-start;
   height: 100%;
-  padding: var(--s2a-spacing-4xl, 64px) var(--s2a-spacing-4xl, 64px)
-    calc(var(--s2a-spacing-lg, 24px) * 2 + 68px);
+  padding: var(--s2a-spacing-4xl) var(--s2a-spacing-4xl)
+    calc(var(--s2a-spacing-lg) * 2 + 68px);
 }
 
 /* ─── Controls — column (mobile default); becomes row at ≥600px ─────────────── */
@@ -106,13 +143,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: var(--s2a-spacing-lg, 24px) var(--s2a-spacing-4xl, 64px);
-  gap: var(--s2a-spacing-lg, 24px);
+  padding: var(--s2a-spacing-lg) var(--s2a-spacing-4xl);
+  gap: var(--s2a-spacing-lg);
 }
 
 .rm-nav-items {
   display: flex;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
   flex-wrap: nowrap;
   width: 100%;
 }
@@ -127,21 +164,23 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid var(--s2a-color-transparent-white-12, rgb(255 255 255 / 12%));
-  background: var(--s2a-color-transparent-black-48, rgb(0 0 0 / 48%));
-  color: var(--s2a-color-content-knockout, #fff);
+  border: var(--s2a-border-width-sm) solid var(--s2a-color-transparent-white-12);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
+  background: var(--s2a-color-transparent-black-48);
+  color: var(--s2a-color-content-knockout);
   cursor: pointer;
-  font-size: 16px;
+  font-size: var(--s2a-font-size-md);
   transition: background 150ms ease;
 }
 
 .rm-play-pause:hover {
-  background: var(--s2a-color-transparent-black-64, rgb(0 0 0 / 64%));
+  background: var(--s2a-color-transparent-black-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
 }
 
 .rm-play-pause:focus-visible {
-  outline: 1px solid var(--s2a-color-focus-ring-default, #1473e6);
-  outline-offset: 2px;
+  outline: var(--s2a-border-width-sm) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-3xs);
 }
 
 .rm-play-pause .rm-icon-play {
@@ -188,12 +227,12 @@
 /* ─── 1280px+: copy and rail offsets from the Homepage WIP (12102:175105) ─── */
 @container (min-width: 1280px) {
   .rm-content {
-    padding-top: calc(var(--s2a-layout-sm, 80px) + var(--s2a-spacing-lg, 24px));
+    padding-top: calc(var(--s2a-layout-sm) + var(--s2a-spacing-lg));
     /* rail height 68 + rail bottom inset 80 + rail top inset 24 */
-    padding-bottom: calc(var(--s2a-layout-sm, 80px) + 68px + var(--s2a-spacing-lg, 24px));
+    padding-bottom: calc(var(--s2a-layout-sm) + 68px + var(--s2a-spacing-lg));
   }
   .rm-controls {
-    padding-bottom: var(--s2a-layout-sm, 80px);
+    padding-bottom: var(--s2a-layout-sm);
   }
 }
 
@@ -201,13 +240,13 @@
 
 @container (min-width: 1024px) and (max-width: 1279px) {
   .rm-controls {
-    padding-left: var(--s2a-spacing-2xl, 40px);
-    padding-right: var(--s2a-spacing-2xl, 40px);
+    padding-left: var(--s2a-spacing-2xl);
+    padding-right: var(--s2a-spacing-2xl);
   }
 
   .rm-content {
-    padding-left: var(--s2a-spacing-2xl, 40px);
-    padding-right: var(--s2a-spacing-2xl, 40px);
+    padding-left: var(--s2a-spacing-2xl);
+    padding-right: var(--s2a-spacing-2xl);
   }
 }
 
@@ -216,15 +255,18 @@
 @container (max-width: 1023px) {
   /* Controls: left inset only — right is open so nav items bleed to edge */
   .rm-controls {
-    padding-left: var(--s2a-spacing-lg, 24px);
+    padding-left: var(--s2a-spacing-lg);
     padding-right: 0;
   }
 
   .rm-content {
-    padding-left: var(--s2a-spacing-lg, 24px);
-    padding-right: var(--s2a-spacing-lg, 24px);
+    padding-left: var(--s2a-spacing-lg);
+    padding-right: var(--s2a-spacing-lg);
     /* Column controls height: 24 top + 40 PP + 24 gap + 48 nav + 24 bottom = 160px */
-    padding-bottom: calc(var(--s2a-spacing-lg, 24px) * 3 + 40px + 48px);
+    padding-bottom: calc(
+      var(--s2a-spacing-lg) * 3 + var(--s2a-spacing-2xl) +
+        var(--s2a-spacing-3xl)
+    );
   }
 
   /* Nav rail: horizontal scrollable, trailing padding so last item scrolls fully into view */
@@ -232,7 +274,7 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-right: var(--s2a-spacing-lg, 24px);
+    padding-right: var(--s2a-spacing-lg);
   }
 
   .rm-nav-items::-webkit-scrollbar {
@@ -246,23 +288,27 @@
     align-items: center;
     width: 192px;
     max-height: 48px;
-    padding: var(--s2a-spacing-sm, 12px);
+    padding: var(--s2a-spacing-sm);
   }
 
   /* ProductLockup: switch from vertical to horizontal */
   .rm-controls .c-product-lockup[data-orientation="vertical"] {
     flex-direction: row;
     align-items: center;
-    gap: var(--s2a-spacing-xs, 8px);
+    gap: var(--s2a-spacing-xs);
   }
 
-  .rm-controls .c-product-lockup[data-orientation="vertical"] .c-product-lockup__label-row {
+  .rm-controls
+    .c-product-lockup[data-orientation="vertical"]
+    .c-product-lockup__label-row {
     width: auto;
     flex: 1;
     min-width: 0;
   }
 
-  .rm-controls .c-product-lockup[data-orientation="vertical"] .c-product-lockup__label {
+  .rm-controls
+    .c-product-lockup[data-orientation="vertical"]
+    .c-product-lockup__label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -273,19 +319,19 @@
 
 @container (max-width: 599px) {
   .rm-content {
-    padding-left: var(--s2a-spacing-md, 16px);
-    padding-right: var(--s2a-spacing-md, 16px);
-    padding-top: var(--s2a-spacing-2xl, 40px);
+    padding-left: var(--s2a-spacing-md);
+    padding-right: var(--s2a-spacing-md);
+    padding-top: var(--s2a-spacing-2xl);
   }
 
   /* Mobile: tighter insets */
   .rm-controls {
-    padding-left: var(--s2a-spacing-md, 16px);
+    padding-left: var(--s2a-spacing-md);
     padding-right: 0;
   }
 
   .rm-nav-items {
-    padding-right: var(--s2a-spacing-md, 16px);
+    padding-right: var(--s2a-spacing-md);
   }
 }
 

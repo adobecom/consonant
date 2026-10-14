@@ -60,9 +60,9 @@ const darkSurface = (content) => html`
   <div
     data-theme="dark"
     style="
-      padding: 24px 32px;
-      background: var(--s2a-color-background-default, #000);
-      border-radius: 8px;
+      padding: var(--s2a-spacing-lg) var(--s2a-spacing-xl);
+      background: var(--s2a-color-background-default);
+      border-radius: var(--s2a-border-radius-xs);
     "
   >
     ${content}
@@ -93,13 +93,13 @@ export const OnDarkTextSubtle = {
 export const AllVariants = {
   parameters: { controls: { disable: true } },
   render: () => html`
-    <div style="display: grid; gap: 16px; justify-items: start;">
+    <div style="display: grid; gap: var(--s2a-spacing-md); justify-items: start;">
       ${Link({ label: "Action link" })}
       ${Link({ label: "Text link", kind: "text", showIconEnd: false })}
       ${Link({ label: "Text link · underline", kind: "text", underline: true, showIconEnd: false })}
       ${Link({ label: "Text subtle", kind: "text", emphasis: "subtle", showIconEnd: false })}
       ${darkSurface(
-        html`<div style="display: grid; gap: 16px; justify-items: start;">
+        html`<div style="display: grid; gap: var(--s2a-spacing-md); justify-items: start;">
           ${Link({ label: "Action on dark" })}
           ${Link({ label: "Text subtle on dark", kind: "text", emphasis: "subtle", showIconEnd: false })}
         </div>`,

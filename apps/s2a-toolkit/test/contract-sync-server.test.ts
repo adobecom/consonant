@@ -126,3 +126,40 @@ test('a Studio publish writes curation only after the same validator accepts it'
 
   assert.equal(server.handleDefEdits({ defEdits: [] })[0], 400);
 });
+
+// --- the two hash implementations have to agree ------------------------------
+// There are two: hashableBody() in the plugin (TypeScript, bundled into Figma)
+// and hashEvidence() here (CommonJS, running in node). The plugin hashes before
+// sending and the server re-hashes on receipt, so a field one drops and the
+// other keeps makes every publish fail with "Hash mismatch". Adding
+// unboundValues did exactly that. This is the test that would have caught it.
+import { hashableBody } from '../src/contract-extract';
+import { createHash } from 'node:crypto';
+
+const sampleEvidence = {
+  $schema: 's2a-figma-evidence/1',
+  extractedAt: '2026-10-06T00:00:00.000Z',
+  extractor: { plugin: 'test', version: '1' },
+  file: { key: 'F', name: 'n', page: null },
+  set: { id: '1:1', key: 'k', name: 'Thing', type: 'COMPONENT_SET', description: '', meta: { version: '', status: '', updated: '', changelog: '' }, documentationLinks: [] },
+  axes: [], variants: [], anatomy: null, bindings: [], variables: {}, textStyles: {},
+  explicitModes: [], instances: [],
+  counts: { variants: 1, nodes: 2, bindings: 0, unboundPaintNodes: 1 },
+  unboundPaint: [{ variant: 'v', node: '/a', nodeId: '1', nodeType: 'FRAME', properties: ['fills'] }],
+  provenance: { hash: null },
+};
+
+test('server and plugin hash the same evidence identically', () => {
+  const serverHash = server.hashEvidence(sampleEvidence);
+  const pluginHash = 'sha256:' + createHash('sha256').update(hashableBody(sampleEvidence as any)).digest('hex');
+  assert.equal(serverHash, pluginHash);
+});
+
+test('both sides ignore unboundValues, so adding it cannot break publishing', () => {
+  const withValues = { ...sampleEvidence, unboundValues: [{ variant: 'v', node: '/a', nodeId: '1', nodeType: 'FRAME', property: 'fills', value: { r: 1, g: 0, b: 0 } }] };
+  assert.equal(server.hashEvidence(withValues), server.hashEvidence(sampleEvidence), 'server hash must not move');
+  assert.equal(hashableBody(withValues as any), hashableBody(sampleEvidence as any), 'plugin hash must not move');
+  const serverHash = server.hashEvidence(withValues);
+  const pluginHash = 'sha256:' + createHash('sha256').update(hashableBody(withValues as any)).digest('hex');
+  assert.equal(serverHash, pluginHash, 'and they must still agree with each other');
+});

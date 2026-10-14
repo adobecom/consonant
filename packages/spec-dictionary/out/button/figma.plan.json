@@ -10,17 +10,17 @@
     "source": ".root",
     "element": "button",
     "bindings": {
-      "background-color": [
-        "s2a/color/background/subtle"
-      ],
       "border-radius": [
-        "s2a/border-radius/md"
-      ],
-      "padding": [
-        "s2a/spacing/xl"
+        "s2a/border/radius/999"
       ],
       "gap": [
-        "s2a/spacing/md"
+        "s2a/spacing/xs"
+      ],
+      "padding-left": [
+        "s2a/spacing/lg"
+      ],
+      "padding-right": [
+        "s2a/spacing/lg"
       ]
     },
     "slot": null,
@@ -28,34 +28,112 @@
       {
         "name": ".icon-start",
         "source": "/Icon Start",
-        "element": null,
+        "element": "div",
         "bindings": {},
         "slot": {
           "name": "Icon Start",
-          "accepts": [],
+          "accepts": [
+            "kind:icon"
+          ],
           "mode": "prefer"
         },
-        "children": []
+        "children": [
+          {
+            "name": ".frame",
+            "source": "/Icon Start/Frame",
+            "element": "div",
+            "bindings": {},
+            "slot": null,
+            "children": [
+              {
+                "name": ".s2-icon-circle-20-n",
+                "source": "/Icon Start/Frame/S2_Icon_Circle_20_N",
+                "element": null,
+                "bindings": {},
+                "slot": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": ".icon-color",
+            "source": "/Icon Start/Icon color",
+            "element": null,
+            "bindings": {},
+            "slot": null,
+            "children": []
+          }
+        ]
       },
       {
         "name": ".label",
         "source": "/Label",
         "element": "span",
-        "bindings": {},
-        "slot": null,
+        "bindings": {
+          "font-family": [
+            "s2a/font/family/label"
+          ],
+          "font-size": [
+            "s2a/typography/font-size/label"
+          ],
+          "font-weight": [
+            "s2a/font/weight/label"
+          ],
+          "letter-spacing": [
+            "s2a/typography/letter-spacing/label"
+          ],
+          "line-height": [
+            "s2a/typography/line-height/label"
+          ]
+        },
+        "slot": {
+          "name": "Label",
+          "accepts": [
+            "kind:text"
+          ],
+          "mode": "prefer"
+        },
         "children": []
       },
       {
         "name": ".icon-end",
         "source": "/Icon End",
-        "element": null,
+        "element": "div",
         "bindings": {},
         "slot": {
           "name": "Icon End",
-          "accepts": [],
+          "accepts": [
+            "kind:icon"
+          ],
           "mode": "prefer"
         },
-        "children": []
+        "children": [
+          {
+            "name": ".frame",
+            "source": "/Icon End/Frame",
+            "element": "div",
+            "bindings": {},
+            "slot": null,
+            "children": [
+              {
+                "name": ".s2a-icon-chevron-right",
+                "source": "/Icon End/Frame/Size=200, Direction=right",
+                "element": null,
+                "bindings": {},
+                "slot": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": ".icon-color",
+            "source": "/Icon End/Icon color",
+            "element": null,
+            "bindings": {},
+            "slot": null,
+            "children": []
+          }
+        ]
       }
     ]
   },
@@ -64,20 +142,12 @@
     "kind": "component-set",
     "nodeId": "10715:35477",
     "nodeName": "Button — v2",
-    "componentSetKey": "d91a1f5f4a290b66b0aadb6f24e1a30b6cc9e3ba",
+    "componentSetKey": "5f8ea5d99d51480bb7a6183cff2a06ad64570cd1",
     "deprecated": false,
     "successorNodeId": null,
     "usages": []
   },
   "properties": [
-    {
-      "name": "Size",
-      "type": "VARIANT",
-      "options": [
-        "md"
-      ],
-      "defaultValue": "md"
-    },
     {
       "name": "Style",
       "type": "VARIANT",
@@ -101,8 +171,7 @@
         "disabled",
         "focus"
       ],
-      "defaultValue": "default",
-      "fromState": "hover"
+      "defaultValue": "default"
     },
     {
       "name": "Icon End#8359:334",
@@ -161,45 +230,104 @@
       "name": ".root",
       "selector": ".c-button",
       "bindings": {
-        "background-color": [
-          "s2a/color/background/subtle"
-        ],
         "border-radius": [
-          "s2a/border-radius/md"
-        ],
-        "padding": [
-          "s2a/spacing/xl"
+          "s2a/border/radius/999"
         ],
         "gap": [
-          "s2a/spacing/md"
+          "s2a/spacing/xs"
+        ],
+        "padding-left": [
+          "s2a/spacing/lg"
+        ],
+        "padding-right": [
+          "s2a/spacing/lg"
         ]
       }
     },
     {
       "name": "/Icon Start",
-      "selector": ".c-button__icon",
+      "selector": ".c-button__icon-start",
       "bindings": {},
       "slot": {
         "name": "Icon Start",
-        "accepts": [],
+        "accepts": [
+          "kind:icon"
+        ],
         "mode": "prefer"
       }
+    },
+    {
+      "name": "/Icon Start/Frame",
+      "selector": ".c-button__frame",
+      "bindings": {}
+    },
+    {
+      "name": "/Icon Start/Frame/S2_Icon_Circle_20_N",
+      "selector": ".c-button__s2-icon-circle-20-n",
+      "bindings": {}
+    },
+    {
+      "name": "/Icon Start/Icon color",
+      "selector": ".c-button__icon-color",
+      "bindings": {}
     },
     {
       "name": "/Label",
       "selector": ".c-button__label",
-      "bindings": {}
+      "bindings": {
+        "font-family": [
+          "s2a/font/family/label"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/label"
+        ],
+        "font-weight": [
+          "s2a/font/weight/label"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/label"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/label"
+        ]
+      },
+      "slot": {
+        "name": "Label",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
     },
     {
       "name": "/Icon End",
-      "selector": ".c-button__icon",
+      "selector": ".c-button__icon-end",
       "bindings": {},
       "slot": {
         "name": "Icon End",
-        "accepts": [],
+        "accepts": [
+          "kind:icon"
+        ],
         "mode": "prefer"
       }
+    },
+    {
+      "name": "/Icon End/Frame",
+      "selector": ".c-button__frame",
+      "bindings": {}
+    },
+    {
+      "name": "/Icon End/Frame/Size=200, Direction=right",
+      "selector": ".c-button__s2a-icon-chevron-right",
+      "bindings": {}
+    },
+    {
+      "name": "/Icon End/Icon color",
+      "selector": ".c-button__icon-color",
+      "bindings": {}
     }
   ],
-  "textStyles": []
+  "textStyles": [
+    "s2a/typography/label"
+  ]
 }

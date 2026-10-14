@@ -1,0 +1,149 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "text-card",
+  "storybookId": "pages-homepage--news",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "showbody-on",
+      "name": "showBody on",
+      "args": {
+        "showBody": true
+      }
+    },
+    {
+      "id": "showbody-off",
+      "name": "showBody off",
+      "args": {
+        "showBody": false
+      }
+    },
+    {
+      "id": "style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      }
+    },
+    {
+      "id": "style-centered",
+      "name": "style: centered",
+      "args": {
+        "style": "centered"
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "cards-textcard--default",
+      "name": "Default",
+      "argKeys": [
+        "headline",
+        "body",
+        "ctaLabel",
+        "ctaHref"
+      ]
+    },
+    {
+      "id": "cards-textcard--no-cta",
+      "name": "No CTA",
+      "argKeys": [
+        "headline",
+        "body",
+        "ctaLabel",
+        "ctaHref",
+        "showCta"
+      ]
+    },
+    {
+      "id": "cards-textcard--no-body",
+      "name": "No body",
+      "argKeys": [
+        "headline",
+        "body",
+        "ctaLabel",
+        "ctaHref",
+        "showBody"
+      ]
+    },
+    {
+      "id": "cards-textcard--headline-only",
+      "name": "Headline only",
+      "argKeys": [
+        "headline",
+        "body",
+        "ctaLabel",
+        "ctaHref",
+        "showBody",
+        "showCta"
+      ]
+    },
+    {
+      "id": "cards-textcard--three-up",
+      "name": "3-up grid",
+      "argKeys": [
+        "headline",
+        "body",
+        "ctaLabel",
+        "ctaHref"
+      ]
+    }
+  ],
+  "deferred": [
+    "style-centered"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      "default",
+      "centered"
+    ],
+    "rowValues": [
+      {
+        "Style": "default"
+      },
+      {
+        "Style": "centered"
+      }
+    ],
+    "cell": {
+      "w": 512,
+      "h": 192,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "style": "default"
+        },
+        "forced": null,
+        "label": "default / default",
+        "nodeId": "11362:245185"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "style": "centered"
+        },
+        "forced": null,
+        "label": "centered / default",
+        "nodeId": "13999:202586"
+      }
+    ],
+    "missing": []
+  }
+}

@@ -1,0 +1,74 @@
+/* Generated from merch-card-pricing-display.contract.json. Re-run: npm run specs:render -- --slug=merch-card-pricing-display */
+
+.c-merch-card-pricing-display [hidden],
+.c-merch-card-pricing-display[hidden] {
+  display: none !important;
+}
+
+.c-merch-card-pricing-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-3xs);
+  width: 418px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-merch-card-pricing-display__pricing {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: var(--s2a-spacing-3xs);
+}
+
+.c-merch-card-pricing-display__strikethrough-zone {
+  display: flex;
+  flex-direction: column;
+  width: 418px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 18px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-merch-card-pricing-display__strikethrough {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-subtle);
+  font-family: var(--s2a-font-family-body);
+  font-size: var(--s2a-typography-font-size-body-sm);
+  font-weight: var(--s2a-font-weight-body);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm);
+  line-height: var(--s2a-typography-line-height-body-sm);
+}
+
+.c-merch-card-pricing-display__price {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-heading);
+  font-family: var(--s2a-font-family-heading);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  font-weight: var(--s2a-font-weight-heading);
+  letter-spacing: var(--s2a-font-letter-spacing-4xl);
+  line-height: var(--s2a-typography-line-height-heading-5);
+}
+
+.c-merch-card-pricing-display__billing {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-subtle);
+  font-family: var(--s2a-font-family-body);
+  font-size: var(--s2a-typography-font-size-body-sm);
+  font-weight: var(--s2a-font-weight-body);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm);
+  line-height: var(--s2a-typography-line-height-body-sm);
+}
+
+.c-merch-card-pricing-display__details-zone {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding-top: var(--s2a-spacing-2xs);
+}
+
+.c-merch-card-pricing-display__details {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-subtle);
+  font-family: var(--s2a-font-family-body);
+  font-size: var(--s2a-typography-font-size-body-sm);
+  font-weight: var(--s2a-font-weight-body);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm);
+  line-height: var(--s2a-typography-line-height-body-sm);
+}

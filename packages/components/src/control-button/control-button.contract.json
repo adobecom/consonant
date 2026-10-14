@@ -1,0 +1,265 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.control-button",
+  "name": "ControlButton",
+  "version": "2.0.0",
+  "status": "draft",
+  "description": "A compact, icon-only button for controlling an interactive container — a media player, carousel, lightbox, or modal. Reach for it when the icon alone carries the action: play/pause, next/previous, mute, expand, close.",
+  "archetype": "button",
+  "semantics": {
+    "element": "button"
+  },
+  "props": [
+    {
+      "name": "icon",
+      "type": "text",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon#8576:43"
+        },
+        "code": {
+          "prop": "icon"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "xl",
+          "md"
+        ]
+      },
+      "default": "\"xl\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size"
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "\"\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "label"
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "disabled"
+        }
+      }
+    },
+    {
+      "name": "forceState",
+      "type": {
+        "enum": [
+          "default",
+          "hover",
+          "active",
+          "disabled",
+          "focus"
+        ]
+      },
+      "description": "The State axis, forceable from code. At runtime the states come from interaction; forcing one is for previews, docs and the state matrix. The hand-written component used data-force-state; generated code uses data-state.",
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State"
+        },
+        "code": {
+          "prop": "forceState"
+        }
+      }
+    },
+    {
+      "name": "onClick",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "onClick"
+        }
+      }
+    }
+  ],
+  "states": [
+    "hover",
+    "active",
+    "disabled",
+    "focus-visible"
+  ],
+  "anatomy": {
+    "root": {
+      "element": "button",
+      "layout": {
+        "display": "flex",
+        "direction": "row",
+        "align": "center",
+        "justify": "center"
+      },
+      "tokens": {
+        "border-radius": "{s2a.border.radius.6}",
+        "background-color": "{s2a.color.control-button.background.media.default}",
+        "border-width": "{s2a.border.width.sm}",
+        "border-color": "{s2a.color.control-button.border.media}"
+      },
+      "states": {
+        "focus-visible": {
+          "background-color": "{s2a.color.control-button.background.media.focus}",
+          "outline-color": "{s2a.color.focus-ring.default}",
+          "outline-width": "{s2a.border.width.sm}"
+        },
+        "disabled": {
+          "background-color": "{s2a.color.control-button.background.media.disabled}"
+        },
+        "active": {
+          "background-color": "{s2a.color.control-button.background.media.active}"
+        },
+        "hover": {
+          "background-color": "{s2a.color.control-button.background.media.hover}"
+        }
+      },
+      "literalsByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "md": {
+              "width": "32px",
+              "height": "32px"
+            },
+            "xl": {
+              "width": "48px",
+              "height": "48px"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "frame": {
+          "element": "div",
+          "layout": {
+            "display": "inline-flex",
+            "direction": "row",
+            "align": "center",
+            "justify": "center"
+          },
+          "parts": {
+            "scale-s2a-icons-scale-rig": {
+              "layout": {
+                "display": "inline-flex",
+                "direction": "row",
+                "align": "center",
+                "justify": "center"
+              }
+            }
+          }
+        },
+        "icon": {
+          "tokens": {
+            "color": "{s2a.color.content.knockout}"
+          },
+          "literals": {
+            "width": "26px",
+            "height": "26px"
+          },
+          "slot": {
+            "name": "Icon",
+            "accepts": [
+              "kind:icon"
+            ],
+            "acceptsMode": "prefer",
+            "defaultContent": [
+              {
+                "id": "s2a-icons:arrow-right",
+                "props": {
+                  "figma": "S2a_Icon_Arrow Right",
+                  "size": "16"
+                }
+              }
+            ]
+          },
+          "states": {
+            "disabled": {
+              "color": "{s2a.color.transparent.white.48}"
+            }
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Renders a native <button>, or an <a> when it navigates — never a div with a click handler.",
+      "The label is the accessible name; an icon-only button needs an aria-label.",
+      "Focus is visible on the control itself (2.4.7) and the target is at least 24x24 (2.5.8).",
+      "Disabled is conveyed to assistive tech, not by colour alone (1.4.1).",
+      "Give every instance an accessible name. It shows only an icon, so set an aria-label that states the action (\"Play\", \"Next slide\", \"Close\"). WCAG 4.1.2 Name, Role, Value — every control exposes a name and role to assistive tech.",
+      "It's a real button. Implement as a <button> so it's reachable by keyboard: Tab moves to it, Enter and Space activate it. WCAG 2.1.1 Keyboard — all functionality works without a mouse.",
+      "The focus state isn't decoration. The focus variant's ring must ship in code so keyboard users can see where they are. WCAG 2.4.7 Focus Visible.",
+      "Watch contrast on media. Over photo or video the glyph can wash out — keep it on the component's scrim so it holds at least 3:1 against the background. WCAG 1.4.11 Non-text Contrast.",
+      "Keep the target big enough. Present at least a 24x24px pointer target (44x44 is better on touch). WCAG 2.5.8 Target Size (Minimum).",
+      "disabled is communicated, not just dimmed. Remove it from the tab order and expose the disabled state to assistive tech."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "acbdd435890be6d30ed53563b536ca03105ea212",
+        "nodeId": "11180:181592"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/control-button/control-button.js",
+        "export": "ControlButton"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:55b6ec09039d189dcef9a10af59e4decf6230f16d2ee3ae62a9e95b1fcd4a5ad",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:153748d201c2d4db882bcf73f038453b738a85820fa3ba26fcbcf932bf833772"
+    }
+  }
+}

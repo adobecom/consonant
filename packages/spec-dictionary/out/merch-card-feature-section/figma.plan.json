@@ -1,0 +1,259 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "MerchCardFeatureSection",
+  "setName": "MerchCard/FeatureSection",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "div",
+    "bindings": {
+      "gap": [
+        "s2a/spacing/12"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".divider",
+        "source": "/Divider",
+        "element": null,
+        "bindings": {},
+        "slot": {
+          "name": "Divider",
+          "accepts": [
+            "Divider"
+          ],
+          "mode": "restrict"
+        },
+        "children": []
+      },
+      {
+        "name": ".title",
+        "source": "/.title",
+        "element": "div",
+        "bindings": {
+          "gap": [
+            "s2a/spacing/8"
+          ],
+          "padding-bottom": [
+            "s2a/spacing/0"
+          ],
+          "padding-left": [
+            "s2a/spacing/0"
+          ],
+          "padding-right": [
+            "s2a/spacing/0"
+          ],
+          "padding-top": [
+            "s2a/spacing/0"
+          ]
+        },
+        "slot": null,
+        "children": [
+          {
+            "name": ".s2-icon-acrobat-pdfedit-20-n",
+            "source": "/.title/.icon",
+            "element": null,
+            "bindings": {},
+            "slot": null,
+            "children": []
+          },
+          {
+            "name": ".title-text",
+            "source": "/.title/.title-text",
+            "element": "span",
+            "bindings": {
+              "color": [
+                "s2a/color/content/heading"
+              ],
+              "font-family": [
+                "s2a/font/family/label"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/label"
+              ],
+              "font-weight": [
+                "s2a/font/weight/label"
+              ],
+              "letter-spacing": [
+                "s2a/typography/letter-spacing/label"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/label"
+              ]
+            },
+            "slot": {
+              "name": "title-text",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".items",
+        "source": "/.items",
+        "element": "div",
+        "bindings": {
+          "gap": [
+            "s2a/spacing/8"
+          ],
+          "padding-bottom": [
+            "s2a/spacing/0"
+          ],
+          "padding-left": [
+            "s2a/spacing/32"
+          ],
+          "padding-right": [
+            "s2a/spacing/0"
+          ],
+          "padding-top": [
+            "s2a/spacing/0"
+          ]
+        },
+        "slot": null,
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10320:102040",
+    "nodeName": "MerchCard/FeatureSection",
+    "componentSetKey": "9dedd45e22ee2649c1f34b5bfdd1b317a3caae7b",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Icon#10320:107",
+      "type": "INSTANCE_SWAP",
+      "forProp": "icon",
+      "defaultValue": "8406:176161"
+    },
+    {
+      "name": "Show Divider#10564:7",
+      "type": "BOOLEAN",
+      "forProp": "showDivider",
+      "defaultValue": true
+    },
+    {
+      "name": "Title#10320:104",
+      "type": "TEXT",
+      "forProp": "title"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-merch-card-feature-section",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/12"
+        ]
+      }
+    },
+    {
+      "name": "/Divider",
+      "selector": ".c-merch-card-feature-section__divider",
+      "bindings": {},
+      "slot": {
+        "name": "Divider",
+        "accepts": [
+          "Divider"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/.title",
+      "selector": ".c-merch-card-feature-section__title",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/8"
+        ],
+        "padding-bottom": [
+          "s2a/spacing/0"
+        ],
+        "padding-left": [
+          "s2a/spacing/0"
+        ],
+        "padding-right": [
+          "s2a/spacing/0"
+        ],
+        "padding-top": [
+          "s2a/spacing/0"
+        ]
+      }
+    },
+    {
+      "name": "/.title/.icon",
+      "selector": ".c-merch-card-feature-section__s2-icon-acrobat-pdfedit-20-n",
+      "bindings": {}
+    },
+    {
+      "name": "/.title/.title-text",
+      "selector": ".c-merch-card-feature-section__title-text",
+      "bindings": {
+        "color": [
+          "s2a/color/content/heading"
+        ],
+        "font-family": [
+          "s2a/font/family/label"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/label"
+        ],
+        "font-weight": [
+          "s2a/font/weight/label"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/label"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/label"
+        ]
+      },
+      "slot": {
+        "name": "title-text",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.items",
+      "selector": ".c-merch-card-feature-section__items",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/8"
+        ],
+        "padding-bottom": [
+          "s2a/spacing/0"
+        ],
+        "padding-left": [
+          "s2a/spacing/32"
+        ],
+        "padding-right": [
+          "s2a/spacing/0"
+        ],
+        "padding-top": [
+          "s2a/spacing/0"
+        ]
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/label"
+  ]
+}

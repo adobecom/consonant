@@ -1,0 +1,185 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "ControlButton",
+  "setName": "ControlButton — v2",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "button",
+    "bindings": {
+      "border-radius": [
+        "s2a/border/radius/6"
+      ],
+      "background-color": [
+        "s2a/color/control-button/background/media/default"
+      ],
+      "border-width": [
+        "s2a/border/width/sm"
+      ],
+      "border-color": [
+        "s2a/color/control-button/border/media"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".frame",
+        "source": "/Frame",
+        "element": "div",
+        "bindings": {},
+        "slot": null,
+        "children": [
+          {
+            "name": ".scale-s2a-icons-scale-rig",
+            "source": "/Frame/Scale/S2a-Icons-scale-rig",
+            "element": null,
+            "bindings": {},
+            "slot": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".icon",
+        "source": "/Icon color",
+        "element": null,
+        "bindings": {
+          "color": [
+            "s2a/color/content/knockout"
+          ]
+        },
+        "slot": {
+          "name": "Icon",
+          "accepts": [
+            "kind:icon"
+          ],
+          "mode": "prefer"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "11180:181592",
+    "nodeName": "ControlButton — v2",
+    "componentSetKey": "acbdd435890be6d30ed53563b536ca03105ea212",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "options": [
+        "xl",
+        "md"
+      ],
+      "defaultValue": "xl"
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "focus"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "name": "Icon#8576:43",
+      "type": "INSTANCE_SWAP",
+      "forProp": "icon",
+      "defaultValue": "9099:1644"
+    }
+  ],
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      }
+    },
+    {
+      "name": "active",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=active"
+      }
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=disabled"
+      }
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      }
+    }
+  ],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-control-button",
+      "bindings": {
+        "border-radius": [
+          "s2a/border/radius/6"
+        ],
+        "background-color": [
+          "s2a/color/control-button/background/media/default"
+        ],
+        "border-width": [
+          "s2a/border/width/sm"
+        ],
+        "border-color": [
+          "s2a/color/control-button/border/media"
+        ]
+      }
+    },
+    {
+      "name": "/Frame",
+      "selector": ".c-control-button__frame",
+      "bindings": {}
+    },
+    {
+      "name": "/Frame/Scale/S2a-Icons-scale-rig",
+      "selector": ".c-control-button__scale-s2a-icons-scale-rig",
+      "bindings": {}
+    },
+    {
+      "name": "/Icon color",
+      "selector": ".c-control-button__icon",
+      "bindings": {
+        "color": [
+          "s2a/color/content/knockout"
+        ]
+      },
+      "slot": {
+        "name": "Icon",
+        "accepts": [
+          "kind:icon"
+        ],
+        "mode": "prefer"
+      }
+    }
+  ],
+  "textStyles": []
+}

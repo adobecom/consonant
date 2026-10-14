@@ -1,0 +1,152 @@
+name: Design system validators
+
+on:
+  pull_request:
+    paths:
+      - "packages/validators/**"
+      - "packages/components/**"
+      - "packages/grid/**"
+      - "packages/milo-blocks/**"
+      - "packages/spec-dictionary/**"
+      - "apps/storybook/**"
+      - ".storybook/**"
+      - "packages/tokens/**"
+      - "package*.json"
+      - "nx.json"
+      - ".github/workflows/validators.yml"
+  push:
+    branches: [main]
+    paths:
+      - "packages/validators/**"
+      - "packages/components/**"
+      - "packages/grid/**"
+      - "packages/milo-blocks/**"
+      - "packages/spec-dictionary/**"
+      - "apps/storybook/**"
+      - ".storybook/**"
+      - "packages/tokens/**"
+      - "package*.json"
+      - "nx.json"
+      - ".github/workflows/validators.yml"
+  workflow_dispatch:
+    inputs:
+      milo:
+        description: Also audit adobecom/milo blocks
+        type: boolean
+        default: false
+      milo_ref:
+        description: Milo branch, tag, or commit to inspect
+        type: string
+        default: main
+      milo_mode:
+        description: Inventory only, or fail on Milo errors
+        type: choice
+        options: [audit, strict]
+        default: audit
+      milo_layer:
+        description: Milo block library
+        type: choice
+        options: [c2, classic, all]
+        default: c2
+      figma_file:
+        description: Figma file key or node URL (empty skips live Figma audit)
+        type: string
+        default: ""
+      figma_fail_on:
+        description: Figma CI failure threshold
+        type: choice
+        options: [error, warning]
+        default: error
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NX_DAEMON: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            packages/validators/package-lock.json
+      - run: npm ci
+      - run: npm ci --prefix packages/validators --ignore-scripts
+      - name: Test and build the reusable validator
+        run: npx nx run-many -t test build -p validators --parallel=1
+      - name: Gate new block breakpoint violations
+        run: npx nx run validators:check-media
+      - name: Build tokens and check Storybook token usage
+        run: |
+          npx nx run tokens:build
+          npx nx run storybook:test-tokens
+          npx nx run storybook:check-tokens
+      - uses: actions/checkout@v4
+        if: inputs.milo
+        with:
+          repository: adobecom/milo
+          ref: ${{ inputs.milo_ref }}
+          path: .tmp/validators/milo-checkout
+          persist-credentials: false
+      - name: Optional Milo audit
+        if: inputs.milo
+        env:
+          MILO_MODE: ${{ inputs.milo_mode }}
+          MILO_LAYER: ${{ inputs.milo_layer }}
+        shell: bash
+        run: |
+          args=()
+          if [ "$MILO_MODE" = audit ]; then args+=(--audit); fi
+          npx nx run validators:audit-library -- --source milo --milo .tmp/validators/milo-checkout --layer "$MILO_LAYER" --json .tmp/validators/milo.json --markdown .tmp/validators/milo.md "${args[@]}"
+      - name: Attach readable block inventories
+        if: always()
+        shell: bash
+        run: |
+          for report in .tmp/validators/blocks.md .tmp/validators/milo.md; do
+            if [ -f "$report" ]; then cat "$report" >> "$GITHUB_STEP_SUMMARY"; fi
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validator-reports
+          path: |
+            .tmp/validators/*.json
+            .tmp/validators/*.md
+            /tmp/s2a-token-audit/audit.json
+          if-no-files-found: ignore
+  figma:
+    if: github.event_name == 'workflow_dispatch' && inputs.figma_file != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NX_DAEMON: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npm ci --prefix packages/validators --ignore-scripts
+      - name: Validate C2 Figma library
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+          FIGMA_FILE: ${{ inputs.figma_file }}
+          FIGMA_FAIL_ON: ${{ inputs.figma_fail_on }}
+        run: npx nx run validators:check-figma -- --figma-url "$FIGMA_FILE" --fail-on "$FIGMA_FAIL_ON" --json .tmp/validators/figma.json --markdown .tmp/validators/figma.md
+      - name: Attach Figma findings
+        if: always()
+        run: |
+          if [ -f .tmp/validators/figma.md ]; then cat .tmp/validators/figma.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: figma-validator-reports
+          path: .tmp/validators/figma.*
+          if-no-files-found: ignore

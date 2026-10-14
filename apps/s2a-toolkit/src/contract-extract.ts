@@ -29,8 +29,18 @@ export interface EvidenceVariant {
 export interface EvidenceLayer {
   name: string;
   type: string;
+  /** The node, so a part can be traced back to the layer it was read from. */
+  id?: string;
+  /** A text layer's characters (first 200), the design's default content for a text part. */
+  text?: string;
+  /** Present and false when the design hides this layer in the variant the tree was read from (a Show Icon toggle off). */
+  visible?: boolean;
   layoutMode?: string;
   sizing?: { horizontal?: string; vertical?: string };
+  /** Figma's alignment on the two axes, i.e. the CSS align-items / justify-content. */
+  align?: { primary?: string; counter?: string };
+  /** Auto-layout wrapping, i.e. flex-wrap. */
+  wrap?: boolean;
   children?: EvidenceLayer[];
 }
 
@@ -61,6 +71,30 @@ export interface EvidenceInstance {
   nodeId: string;
   mainComponent: { id: string; key: string; name: string } | null;
   set: { id: string; key: string; name: string } | null;
+  /** The instance's component properties as set in this design — the overrides a composed part renders with (Label, Style, Show Icon…). Keys carry their #id suffix as Figma names them. */
+  props?: Record<string, string | boolean>;
+}
+
+/**
+ * One unbound property and the literal it actually holds.
+ *
+ * `unboundPaint` says WHICH layers have no variable; it never said what value
+ * they carry, so nothing downstream could match them to a token. This is the
+ * input the aligner reads (see token-align.ts).
+ *
+ * Deliberately outside the evidence hash — see hashableBody. It is an
+ * observation about the same nodes the bindings already cover, so adding it
+ * must not make every extraction in the repo read as stale.
+ */
+export interface UnboundValue {
+  variant: string;
+  node: string;
+  nodeId: string;
+  nodeType: string;
+  property: string;                 // fills | strokes | cornerRadius | itemSpacing | fontSize | strokeAlign | …
+  value: number | string | { r: number; g: number; b: number; a?: number };
+  /** Nearest opaque ancestor fill: what an alpha paint composites over. */
+  backdrop?: { r: number; g: number; b: number };
 }
 
 export interface FigmaEvidence {
@@ -77,7 +111,14 @@ export interface FigmaEvidence {
   };
   axes: EvidenceAxis[];
   variants: EvidenceVariant[];
-  anatomy: { variant: string; tree: EvidenceLayer } | null;
+  /**
+   * The resting variant's layer tree in full, and every variant's tree beside
+   * it. One tree was never enough: Collapsible's Style=control variants carry
+   * a leading `.icon-start` layer and no chevron, and the open variants carry
+   * a ChevronUp — none of which exists in the resting variant. A scaffold that
+   * reads one tree cannot see what the design does across the set.
+   */
+  anatomy: { variant: string; tree: EvidenceLayer; variants?: Record<string, EvidenceLayer> } | null;
   bindings: EvidenceBinding[];
   variables: Record<string, EvidenceVariable>;
   textStyles: Record<string, { name: string; key: string }>;
@@ -86,6 +127,8 @@ export interface FigmaEvidence {
   counts: { variants: number; nodes: number; bindings: number; unboundPaintNodes: number };
   /** Painted layers with no variable on fills/strokes: the design-side audit list (first 200). */
   unboundPaint: Array<{ variant: string; node: string; nodeId: string; nodeType: string; properties: string[] }>;
+  /** Every unbound colour, dimension and type value, with the literal (first 600). */
+  unboundValues?: UnboundValue[];
   /** Present when the extraction target is a frame/section/group rather than a set. */
   pattern?: FramePattern;
   provenance: { hash: string | null };
@@ -125,6 +168,27 @@ export interface ExtractApi {
 }
 
 const PAINT_PROPS = ['fills', 'strokes'];
+
+// Numeric properties worth matching against a token. Width and height are
+// handled separately below: a HUG or FILL size is a layout outcome, but a
+// FIXED one — a 1px divider, a 20px icon box — is a decision the stylesheet
+// needs, and leaving it out is how a contract came to render nothing.
+const DIMENSION_PROPS = [
+  'cornerRadius', 'topLeftRadius', 'topRightRadius', 'bottomLeftRadius', 'bottomRightRadius',
+  'itemSpacing', 'counterAxisSpacing', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+];
+const SIZE_PROPS: Array<[string, string]> = [['width', 'layoutSizingHorizontal'], ['height', 'layoutSizingVertical']];
+const UNBOUND_VALUE_CAP = 1500;
+
+/** The first visible solid paint on a property, with its own alpha. */
+function solidPaint(node: SceneNode, property: string): { r: number; g: number; b: number; a?: number } | null {
+  const paints = (node as any)[property];
+  if (!Array.isArray(paints)) return null;
+  const paint = paints.find((p: any) => p?.visible !== false && p?.type === 'SOLID');
+  if (!paint?.color) return null;
+  const a = typeof paint.opacity === 'number' ? paint.opacity : 1;
+  return { r: paint.color.r, g: paint.color.g, b: paint.color.b, ...(a < 1 ? { a } : {}) };
+}
 
 export function parseVariantName(name: string): Record<string, string> {
   const props: Record<string, string> = {};
@@ -179,12 +243,26 @@ function boundIds(value: unknown): string[] {
 }
 
 function layerTree(node: SceneNode, depth: number): EvidenceLayer {
-  const layer: EvidenceLayer = { name: node.name, type: node.type };
+  const layer: EvidenceLayer = { name: node.name, type: node.type, id: node.id };
+  if ((node as any).visible === false) layer.visible = false;
+  if (node.type === 'TEXT') {
+    const chars = (node as TextNode).characters;
+    if (typeof chars === 'string' && chars.length) layer.text = chars.slice(0, 200);
+  }
   const frame = node as FrameNode;
   if ('layoutMode' in node && frame.layoutMode && frame.layoutMode !== 'NONE') layer.layoutMode = frame.layoutMode;
   try {
     if ('layoutSizingHorizontal' in node) layer.sizing = { horizontal: (node as any).layoutSizingHorizontal, vertical: (node as any).layoutSizingVertical };
   } catch { /* not an auto-layout child */ }
+  // Alignment sits right beside layoutMode and was simply never read, so a
+  // generated stylesheet knew a button was a flex row and not that its contents
+  // are centred — the one thing that makes it look like a button.
+  if (layer.layoutMode) {
+    const primary = (frame as any).primaryAxisAlignItems;
+    const counter = (frame as any).counterAxisAlignItems;
+    if (primary || counter) layer.align = { ...(primary ? { primary } : {}), ...(counter ? { counter } : {}) };
+    if ((frame as any).layoutWrap === 'WRAP') layer.wrap = true;
+  }
   if (depth < 8 && 'children' in node && (node as ChildrenMixin).children.length) {
     layer.children = (node as ChildrenMixin).children.map(c => layerTree(c, depth + 1));
   }
@@ -324,8 +402,9 @@ export async function extractEvidence(api: ExtractApi, set: ExtractTarget): Prom
   let nodeCount = 0;
   let unboundPaintNodes = 0;
   const unboundPaint: FigmaEvidence['unboundPaint'] = [];
+  const unboundValues: UnboundValue[] = [];
 
-  function walk(node: SceneNode, variant: string, path: string): void {
+  function walk(node: SceneNode, variant: string, path: string, backdrop?: { r: number; g: number; b: number }): void {
     nodeCount++;
     const bv = ((node as any).boundVariables ?? {}) as Record<string, unknown>;
     let paintBound = false;
@@ -344,6 +423,58 @@ export async function extractEvidence(api: ExtractApi, set: ExtractTarget): Prom
         if (unboundPaint.length < 200) unboundPaint.push({ variant, node: path, nodeId: node.id, nodeType: node.type, properties: painted });
       }
     }
+    // The literals, so something can match them to a token later. Only the
+    // properties that are NOT already bound: a bound one is already an answer.
+    {
+      const bound = new Set(Object.keys(bv));
+      const here = { variant, node: path, nodeId: node.id, nodeType: node.type };
+      const room = () => unboundValues.length < UNBOUND_VALUE_CAP;
+      for (const property of PAINT_PROPS) {
+        if (bound.has(property) || !room()) continue;
+        const colour = solidPaint(node, property);
+        if (colour) unboundValues.push({ ...here, property, value: colour, ...(backdrop ? { backdrop } : {}) });
+      }
+      for (const property of DIMENSION_PROPS) {
+        if (bound.has(property) || !room()) continue;
+        const value = (node as any)[property];
+        // A zero is almost always "unset" rather than a decision, and figma.mixed
+        // is a symbol, so both fall out of the typeof check or the zero test.
+        if (typeof value === 'number' && value !== 0) unboundValues.push({ ...here, property, value });
+      }
+      // Every node carries strokeWeight: 1 whether or not it has a stroke, so
+      // the weight only means something next to a visible stroke paint.
+      if (!bound.has('strokeWeight') && room() && Array.isArray((node as any).strokes) && (node as any).strokes.some((p: any) => p?.visible !== false)) {
+        const value = (node as any).strokeWeight;
+        if (typeof value === 'number' && value !== 0) unboundValues.push({ ...here, property: 'strokeWeight', value });
+      }
+      // Where a stroke sits relative to its box decides what it translates to:
+      // an INSIDE stroke is a CSS border or inset shadow, an OUTSIDE one on a
+      // ring layer is an outline with an offset. Nothing binds this; it is
+      // still a property the stylesheet cannot do without.
+      if (room() && Array.isArray((node as any).strokes) && (node as any).strokes.some((p: any) => p?.visible !== false)) {
+        const align = (node as any).strokeAlign;
+        if (typeof align === 'string') unboundValues.push({ ...here, property: 'strokeAlign', value: align });
+      }
+      for (const [property, sizing] of SIZE_PROPS) {
+        if (bound.has(property) || !room()) continue;
+        let fixed = false;
+        try { fixed = (node as any)[sizing] === 'FIXED'; } catch { fixed = false; }
+        const value = (node as any)[property];
+        if (fixed && typeof value === 'number' && value > 0) unboundValues.push({ ...here, property, value: Math.round(value * 100) / 100 });
+      }
+      if (node.type === 'TEXT' && room()) {
+        const text = node as TextNode;
+        const styled = typeof text.textStyleId === 'string' && text.textStyleId;
+        // A text style IS the binding for type, so only unstyled text is a finding.
+        if (!styled) {
+          if (typeof text.fontSize === 'number' && !bound.has('fontSize')) unboundValues.push({ ...here, property: 'fontSize', value: text.fontSize });
+          const lh = text.lineHeight as any;
+          if (lh && typeof lh === 'object' && lh.unit === 'PIXELS' && !bound.has('lineHeight')) unboundValues.push({ ...here, property: 'lineHeight', value: lh.value });
+          const ls = text.letterSpacing as any;
+          if (ls && typeof ls === 'object' && ls.unit === 'PIXELS' && ls.value !== 0 && !bound.has('letterSpacing')) unboundValues.push({ ...here, property: 'letterSpacing', value: ls.value });
+        }
+      }
+    }
     if (node.type === 'TEXT') {
       const styleId = (node as TextNode).textStyleId;
       if (typeof styleId === 'string' && styleId) {
@@ -355,7 +486,11 @@ export async function extractEvidence(api: ExtractApi, set: ExtractTarget): Prom
     for (const [collectionId, modeId] of Object.entries(modes)) explicitModes.push({ variant, node: path, collectionId, modeId });
     if (node.type === 'INSTANCE') instanceNodes.push({ variant, node: path, instance: node as InstanceNode });
     if ('children' in node) {
-      for (const child of (node as ChildrenMixin).children) walk(child, variant, path + '/' + child.name);
+      // An opaque fill here is what this node's descendants sit on top of; a
+      // transparent one lets whatever was already behind show through.
+      const own = solidPaint(node, 'fills');
+      const under = own && (own.a ?? 1) >= 1 ? { r: own.r, g: own.g, b: own.b } : backdrop;
+      for (const child of (node as ChildrenMixin).children) walk(child, variant, path + '/' + child.name, under);
     }
   }
   for (const v of variants) walk(v, v.name, '');
@@ -431,10 +566,26 @@ export async function extractEvidence(api: ExtractApi, set: ExtractTarget): Prom
   const instances: EvidenceInstance[] = instanceNodes.map((n, i) => {
     const main = mains[i];
     const parent = main?.parent && main.parent.type === 'COMPONENT_SET' ? (main.parent as ComponentSetNode) : null;
+    // What the design set on this instance. Only VARIANT, BOOLEAN and TEXT
+    // values — an INSTANCE_SWAP value is a node id, which means nothing outside
+    // this file; the swapped-in component shows up as its own instance anyway.
+    let props: Record<string, string | boolean> | undefined;
+    try {
+      const cp = (n.instance as any).componentProperties as Record<string, { type: string; value: unknown }> | undefined;
+      if (cp) {
+        props = {};
+        for (const [name, def] of Object.entries(cp)) {
+          if (def?.type === 'INSTANCE_SWAP') continue;
+          if (typeof def?.value === 'string' || typeof def?.value === 'boolean') props[name] = def.value;
+        }
+        if (!Object.keys(props).length) props = undefined;
+      }
+    } catch { props = undefined; }
     return {
       variant: n.variant, node: n.node, nodeId: n.instance.id,
       mainComponent: main ? { id: main.id, key: main.key, name: main.name } : null,
       set: parent ? { id: parent.id, key: parent.key, name: parent.name } : null,
+      ...(props ? { props } : {}),
     };
   });
 
@@ -470,7 +621,13 @@ export async function extractEvidence(api: ExtractApi, set: ExtractTarget): Prom
     },
     axes,
     variants: variants.map(v => ({ id: v.id, key: (v as any).key ?? '', name: v.name, props: isSetLike ? parseVariantName(v.name) : {}, width: Math.round((v as FrameNode).width), height: Math.round((v as FrameNode).height) })),
-    anatomy: defaultVariant ? { variant: defaultVariant.name, tree: layerTree(defaultVariant, 0) } : null,
+    anatomy: defaultVariant ? {
+      variant: defaultVariant.name,
+      tree: layerTree(defaultVariant, 0),
+      // Shallower than the resting tree: what the scaffold needs from the
+      // other variants is which layers exist, in what order, and how they sit.
+      variants: Object.fromEntries(variants.map(v => [v.name, layerTree(v, 4)])),
+    } : null,
     bindings,
     variables: variableRecords,
     textStyles,
@@ -478,6 +635,7 @@ export async function extractEvidence(api: ExtractApi, set: ExtractTarget): Prom
     instances,
     counts: { variants: variants.length, nodes: nodeCount, bindings: bindings.length, unboundPaintNodes },
     unboundPaint,
+    unboundValues,
     ...(pattern ? { pattern } : {}),
     provenance: { hash: null },
   };
@@ -487,7 +645,11 @@ export async function extractEvidence(api: ExtractApi, set: ExtractTarget): Prom
 // The hash covers everything except the timestamp and the hash itself, so two
 // extractions of an unchanged set are byte-identical after hashing.
 export function hashableBody(evidence: FigmaEvidence): string {
-  const { extractedAt, provenance, ...rest } = evidence;
-  void extractedAt; void provenance;
+  // unboundValues is excluded on purpose. It restates values the walk already
+  // visited rather than adding a new observation, so folding it in would make
+  // every extraction taken before it existed read as stale to the gate's FRESH
+  // check — a schema churn with no finding behind it.
+  const { extractedAt, provenance, unboundValues, ...rest } = evidence;
+  void extractedAt; void provenance; void unboundValues;
   return canonicalJson(rest);
 }

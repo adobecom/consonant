@@ -36,7 +36,7 @@ export default {
         code: `<!-- Horizontal (default) — used in RouterMarquee nav strip and MediaCard -->
 <div class="c-product-lockup" data-orientation="horizontal" data-style="label" data-width="hug">
   <span class="c-product-lockup__icon" aria-hidden="true">
-    <span class="c-app-icon" data-size="md">…</span>
+    <span class="c-app-icon" data-size="24">…</span>
   </span>
   <span class="c-product-lockup__label">Adobe Photoshop</span>
   <span class="c-product-lockup__caret" aria-hidden="true">…</span>
@@ -45,7 +45,7 @@ export default {
 <!-- Vertical — used in RouterNavItem block tiles -->
 <div class="c-product-lockup" data-orientation="vertical" data-style="knockout" data-width="fill">
   <span class="c-product-lockup__icon" aria-hidden="true">
-    <span class="c-app-icon" data-size="md">…</span>
+    <span class="c-app-icon" data-size="24">…</span>
   </span>
   <span class="c-product-lockup__label-row">
     <span class="c-product-lockup__label">Adobe Photoshop</span>
@@ -120,7 +120,7 @@ export const HorizontalEyebrow = {
 
 export const HorizontalFill = {
   render: (args) => html`
-    <div style="background: #f3f3f3; padding: 24px; width: 320px;">
+    <div style="background: var(--s2a-color-surface-subtle); padding: var(--s2a-spacing-lg); width: 320px;">
       ${renderLockup(args, { width: "fill" })}
     </div>
   `,
@@ -128,7 +128,7 @@ export const HorizontalFill = {
 
 export const Knockout = {
   render: (args) => html`
-    <div style="background: #050505; padding: 24px; display: inline-flex;">
+    <div data-theme="dark" style="background: var(--s2a-color-background-knockout); padding: var(--s2a-spacing-lg); display: inline-flex;">
       ${renderLockup(args, { styleVariant: "knockout" })}
     </div>
   `,
@@ -136,7 +136,7 @@ export const Knockout = {
 
 export const Inverse = {
   render: (args) => html`
-    <div style="border: 1px dashed #ccc; padding: 24px; display: inline-flex;">
+    <div style="border: var(--s2a-border-width-sm) dashed var(--s2a-color-border-subtle); padding: var(--s2a-spacing-lg); display: inline-flex;">
       ${renderLockup(args, { styleVariant: "inverse" })}
     </div>
   `,
@@ -203,12 +203,12 @@ export const AllVariants = {
 
     return html`
       <div
-        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;"
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--s2a-spacing-lg);"
       >
         ${combos.map(
           (combo) => html`
             <div
-              style="padding: 16px; border: 1px solid #e1e1e1; border-radius: 12px; background: #fff; min-height: 96px;"
+              style="padding: var(--s2a-spacing-md); border: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle); border-radius: var(--s2a-border-radius-sm); background: var(--s2a-color-surface-default); min-height: 96px;"
             >
               ${renderLockup(args, { ...combo, width: "fill" })}
             </div>

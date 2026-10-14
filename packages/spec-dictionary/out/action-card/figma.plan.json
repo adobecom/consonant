@@ -11,7 +11,7 @@
     "element": "a",
     "bindings": {
       "background-color": [
-        "s2a/color/background/subtle"
+        "s2a/color/surface/subtle"
       ],
       "border-radius": [
         "s2a/border-radius/lg"
@@ -141,7 +141,7 @@
       "selector": ".c-action-card",
       "bindings": {
         "background-color": [
-          "s2a/color/background/subtle"
+          "s2a/color/surface/subtle"
         ],
         "border-radius": [
           "s2a/border-radius/lg"

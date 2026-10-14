@@ -1,0 +1,43 @@
+{
+  "title": "Elastic Carousel",
+  "subtitle": "Responsive standards review",
+  "block": "elastic-carousel",
+  "checkout": "context/milo",
+  "root": "libs/c2/blocks",
+  "source": "libs/c2/blocks/elastic-carousel/elastic-carousel.css",
+  "expected": {
+    "queries": 5,
+    "standard": 2,
+    "failingQueries": 3,
+    "violations": 4
+  },
+  "summary": "Three responsive rules need review to meet the shared block CSS standard.",
+  "interpretation": "The carousel already uses the standard tablet and desktop boundaries. The remaining work concerns mobile-first structure and the reasons for bounded layouts. Customer impact has not been established by this audit.",
+  "recommendation": "Assign a joint design and engineering review, then use this block as a pilot for enforcing responsive standards in CI.",
+  "decisions": [
+    {
+      "title": "Make mobile behavior the starting point",
+      "body": "Move the stacked mobile layout into base styles, then layer on tablet and desktop changes. Verify that the refactor preserves the intended experience.",
+      "owner": "Engineering",
+      "query": "(width < 768px)",
+      "chartLabel": "Mobile stack",
+      "evidence": "Stacked, sticky cards are implemented inside an upper-bound query. The policy expects the mobile layout in the unqueried base."
+    },
+    {
+      "title": "Confirm the tablet-only layout",
+      "body": "Review the tablet-specific height, card width, and padding. Document the reflow need or express the change progressively at standard breakpoints.",
+      "owner": "Design + engineering",
+      "query": "(768px <= width < 1280px)",
+      "chartLabel": "Tablet sizing",
+      "evidence": "The boundaries match MD and LG, but the range is limited to tablet widths. It needs a specific reflow rationale or a mobile-first refactor."
+    },
+    {
+      "title": "Validate the 1700px transition",
+      "body": "Measure the carousel’s centering and edge positioning around 1700px. Retain this custom boundary only if the layout requires it and the exception is documented.",
+      "owner": "Design + engineering",
+      "query": "(768px <= width < 1700px)",
+      "chartLabel": "Centering & edges",
+      "evidence": "This rule changes horizontal positioning below 1700px. Both its bounded form and its nonstandard upper threshold are flagged; the layout rationale needs review."
+    }
+  ]
+}

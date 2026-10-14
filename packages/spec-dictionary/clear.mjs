@@ -22,6 +22,7 @@ import { existsSync, rmSync, readdirSync } from "node:fs";
 import { join, dirname, resolve, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
+import { renderers } from "./lib/renderers/index.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..", "..");
@@ -52,12 +53,18 @@ const codeEvidence = [join(dir, `${slug}.code.evidence.json`)];
 const figmaEvidence = has("evidence") ? [join(dir, `${slug}.figma.evidence.json`)] : [];
 // Generated under the transform's out/.
 const outDir = join(OUT, slug);
+// Rendered implementations. Clearing used to stop at the contract, which left
+// the Storybook story and the Milo block sitting there — generated from a
+// contract that no longer existed, and looking for all the world like current
+// code. Each renderer declares its own paths so this cannot drift from what
+// render.mjs actually writes.
+const rendered = Object.values(renderers).flatMap((r) => (r.paths?.(slug) ?? []).map((rel) => join(ROOT, rel)));
 
 const specPath = join(dir, `${slug}.spec.json`);
 const specTracked = existsSync(specPath) && tracked(specPath);
 
 const plan = [];
-for (const p of [...generated, ...curated, ...codeEvidence, ...figmaEvidence]) {
+for (const p of [...generated, ...curated, ...codeEvidence, ...figmaEvidence, ...rendered]) {
   if (!existsSync(p)) continue;
   plan.push({ action: "remove", path: p });
 }
@@ -71,6 +78,22 @@ if (existsSync(specPath)) {
 }
 
 if (!plan.length) { console.log(`${slug}: nothing to clear.`); process.exit(0); }
+
+// Curation is the one thing here nobody can regenerate. spec.json is restored
+// from git because a hand-written one is irreplaceable — but defs.json was only
+// ever deleted, so a Clear on a component whose curation had not been committed
+// threw that curation away silently. It happened to button: six styles of token
+// mapping, gone, recoverable only because git had an older copy.
+const defsPath = join(dir, `${slug}.defs.json`);
+const defsDirty = existsSync(defsPath) && !has("keep-defs")
+  && (git(["status", "--porcelain", "--", relative(ROOT, defsPath)]) ?? "").trim() !== "";
+if (defsDirty && !has("force")) {
+  console.error(`${slug}: ${slug}.defs.json has uncommitted curation.\n`);
+  console.error(`  Clearing would delete it, and nothing regenerates a decision someone made.`);
+  console.error(`  Commit it first, or pass --force if you really mean to discard it.\n`);
+  console.error(`  git diff -- ${relative(ROOT, defsPath)}`);
+  process.exit(3);
+}
 
 const run = has("yes");
 console.log(`${run ? "Clearing" : "Would clear"} ${slug}:\n`);
@@ -86,6 +109,11 @@ if (!run) { console.log(`\nNothing changed. Add --yes to do it.`); process.exit(
 for (const s of plan) {
   if (s.action === "remove") rmSync(s.path, { recursive: true, force: true });
   else git(["checkout", "HEAD", "--", relative(ROOT, s.path)]);
+}
+// A renderer that writes into its own directory (Milo does) leaves an empty one
+// behind. An empty block directory reads as a block that exists but is broken.
+for (const d of new Set(rendered.map((p) => dirname(p)))) {
+  if (existsSync(d) && !readdirSync(d).length) rmSync(d, { recursive: true, force: true });
 }
 // The index lists every component; rebuilding it keeps the count honest.
 console.log(`\nCleared. Regenerate the code evidence with: npm run evidence:code -- --slug=${slug}`);

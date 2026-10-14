@@ -1,0 +1,19 @@
+/* Checkbox — generated from checkbox.contract.json.
+ * Re-run: npm run specs:render -- --slug=checkbox --target=milo */
+
+.checkbox {
+  box-sizing: border-box;
+  cursor: pointer;
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkbox .label {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}

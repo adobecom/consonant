@@ -1,0 +1,69 @@
+<!doctype html><meta charset="utf-8"><title>Command and prompt ledger</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap"><style>
+  body { margin: 0; background: #faf9f7; color: #16181d; font: 16px/1.5 "IBM Plex Sans", -apple-system, system-ui, sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding: 64px 48px; }
+  h1 { font-size: 34px; margin: 0 0 6px; letter-spacing: -.3px; }
+  .sub { color: #6b7280; font-size: 17px; margin-bottom: 30px; }
+  ol, ul { margin: 0; padding-left: 22px; } li { margin: 8px 0; font-size: 18px; }
+  code, pre { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  pre { background: #fff; border: 1px solid #e2e0db; border-radius: 8px; padding: 16px 18px; font-size: 12.5px; line-height: 1.5; white-space: pre-wrap; margin: 14px 0 0; }
+  .step { margin: 18px 0; } .step b { font-family: "IBM Plex Mono", monospace; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: #2b5cff; }
+  .muted { color: #6b7280; } .ok { color: #1f7a4d; } .warn { color: #c8641e; } .fail { color: #b42318; }
+  .still { display: block; max-width: 100%; max-height: 560px; border: 1px solid #e2e0db; border-radius: 8px; background: #fff; margin-top: 18px; object-fit: contain; }
+  .thesis { font-size: 30px; line-height: 1.3; margin: 28px 0 18px; max-width: 900px; }
+  .quote { border-left: 3px solid #2b5cff; padding: 8px 18px; margin: 14px 0; font-size: 17px; background: #fff; border-radius: 0 8px 8px 0; }
+  .quote small { display: block; color: #6b7280; font-family: "IBM Plex Mono", monospace; font-size: 12px; margin-top: 6px; }
+ .k { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #6b7280; } .cmd { font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 600; margin: 4px 0; } .claude { color: #6b3fd6; }</style><main><h1>Command and prompt ledger</h1><div class="sub">everything run outside the Book during the recording, in order — the terminal chapters show these being typed; this is the same list with the full output</div><div class="step"><span class="k">command</span><div class="cmd ">npm run contract-book</div><div class="muted">already running during the recording; the output is what it prints on start</div><pre>> contract-book
+> vite --config apps/contract-book/vite.config.ts
+
+  VITE v8.2.2  ready in 193 ms
+
+  ➜  Local:   http://localhost:6007/</pre></div><div class="step"><span class="k">prompt</span><div class="cmd claude">/contract-ship collapsible</div><div class="muted">a Claude Code skill: .claude/commands/contract-ship.md — the five commands it runs are shown with their real output</div><pre>── validate  npm run defs:validate -- --slug=collapsible
+      warn: anatomy root/trigger/control-button: selector .c-collapsible__control-button has no matching class in the hand-written template or stylesheet — generated code defines it; implement it there or rename the part
+      warn: anatomy root/trigger/s2-icon-chevron-down-20-n: selector .c-collapsible__s2-icon-chevron-down-20-n has no matching class in the hand-written template or stylesheet — generated code defines it; implement it there or rename the part
+      warn: anatomy root/trigger/s2-icon-chevron-down-20-n width: raw:20px is hardcoded — no S2A variable behind it. Bind one in Figma and re-extract, or keep the raw: value with the reason in a decision
+      warn: anatomy root/trigger/s2-icon-chevron-down-20-n height: raw:20px is hardcoded — no S2A variable behind it. Bind one in Figma and re-extract, or keep the raw: value with the reason in a decision
+      warn: anatomy root/trigger/s2-icon-chevron-down-20-n slot: the design fills it with "S2_Icon_ChevronDown_20_N" and the contract has not bound that to a code icon — Heal in the Contract Book, or set slot.default.manifest and slot.default.icon
+0/1 defs pass.
+
+── build  npm run specs:build -- --slug=collapsible
+BUILT  collapsible              5 props (5 levers) · 6 parts · 17 token bindings · 1 unshipped: --s2a-typography-line-height-title-6 · figma evidence yes · 9 open decisions
+1/1 built. Outputs: spec.json + contract.json + catalog.json + spec.md beside each component, stories.manifest.json + figma.plan.json under packages/spec-dictionary/out/.
+
+── gate  npm run gate
+  ⚠ CODE_EVIDENCE_PENDING      merch-card-select-promo: contract scaffolded from design; no code yet (anchors.code.pending). Generate the component, then npm run evidence:code
+  ⚠ CODE_EVIDENCE_PENDING      merch-card-trust-badge: contract scaffolded from design; no code yet (anchors.code.pending). Generate the component, then npm run evidence:code
+  ⚠ GRID_RULE_WARN             bento-grid/BENTO_ROW_HEIGHT_TOKEN: --s2a-grid-row-height is not in the built token CSS
+  ⚠ GRID_RULE_WARN             container-fluid/FLUID_CAP_2560: .container-fluid has no block in a range beginning at 1441px; nearest is 0px where max-width is 100%
+  ⚠ GRID_SCALE_INVERTED        section-spacing/sm: section-spacing 2xs (8) is smaller than 3xs (16) at sm
+  ⚠ GRID_SCALE_INVERTED        section-spacing/sm: section-spacing 2xl (24) is smaller than xl (40) at sm
+  ⚠ GRID_SCALE_INVERTED        section-spacing/md: section-spacing md (24) is smaller than sm (32) at md
+  ⚠ GRID_SCALE_INVERTED        section-spacing/md: section-spacing 3xl (64) is smaller than 2xl (80) at md
+RED: 41 specs, 17 with defs, 18 failures, 329 warnings. Report: evals/gate/out/gate.json
+
+── pack  node packages/s2a-specs/pack.mjs
+  merch-card-select-promo  MerchCardSelectPromo
+  merch-card-trust-badge   MerchCardTrustBadge
+  product-lockup           ProductLockup
+  text-card                TextCard
+
+── render  npm run specs:render -- --slug=collapsible
+RENDER collapsible              lit + milo   5 files
+5 files written for 1 component(s).</pre></div><div class="step"><span class="k">command</span><div class="cmd ">npm run goldens:sheet -- --slug=collapsible</div><div class="muted">the only step that needs the Figma token; the sheet is committed</div><pre>fetch failed</pre></div><div class="step"><span class="k">command</span><div class="cmd ">npm run eval:visual:matrix -- --slug=collapsible --theme=light</div><div class="muted">cell scores, then the play pass: every closed cell clicked and scored against the open design</div><pre>collapsible: no light sheet. Composite one: npm run goldens:sheet -- --slug=collapsible
+Nothing with a state matrix and a sheet.</pre></div><div class="step"><span class="k">command</span><div class="cmd ">npm run specs:build -- --slug=collapsible &amp;&amp; npm run specs:render -- --slug=collapsible</div><div class="muted">run off camera right after Save; same two commands as the ship step</div><pre>(after Save: rebuild and re-render from the healed defs)</pre></div><div class="step"><span class="k">command</span><div class="cmd ">node apps/contract-book/demo/contract-tree.mjs --url=https://www.figma.com/design/qAF4nlt6O4ThbeXeO7jzdb/CPro?node-id=10826-13312 --dry</div><div class="muted">the crawl behind a MerchCard link: every set it places, leaves first; --dry prints the order without writing</div><pre>crawled 17 nodes in 27.9s; order (leaves first):
+      AppIcon  →  app-icon  [contracted, code]  6 variants, 0 deps
+    ProductLockup — v2  →  product-lockup  [contracted, code]  16 variants, 1 deps
+    MerchCard/PricingDisplay  →  merch-card-pricing-display  [contracted]  1 variants, 0 deps
+      .select/trigger  →  select-trigger  [new]  6 variants, 0 deps
+      HelperText  →  helper-text  [contracted, code]  2 variants, 0 deps
+    MerchCard/SelectPromo  →  merch-card-select-promo  [contracted]  1 variants, 2 deps
+    Button — v2  →  button  [contracted, code]  30 variants, 0 deps
+    MerchCard/TrustBadge  →  merch-card-trust-badge  [contracted]  1 variants, 0 deps
+        Divider  →  divider  [contracted, code]  5 variants, 0 deps
+      MerchCard/FeatureSection  →  merch-card-feature-section  [contracted]  1 variants, 1 deps
+    List  →  list  [contracted, code]  1 variants, 1 deps
+      ControlButton — v2  →  control-button  [contracted, code]  10 variants, 0 deps
+        Link — v2  →  link  [contracted, code]  12 variants, 0 deps
+      TextCard — v2  →  text-card  [contracted, code]  2 variants, 1 deps
+    Collapsible  →  collapsible  [contracted, code]  6 variants, 2 deps
+    🚫 Button — v1  →  button  [contracted, code]  35 variants, 0 deps
+  MerchCard — v1  →  merch-card  [contracted, code]  4 variants, 8 deps</pre></div><div class="step"><span class="k">prompt</span><div class="cmd claude">you had the link to merch cards, so couldn't you have recursively identified all of the components? … how would TJ Pitre / Brad Frost / Nathan Curtis approach this … recursively identify all components, check contracts exist, build leaves, compose … infer behaviour (collapsible, select)</div><div class="muted">the ask that started the recursion</div></div><div class="step"><span class="k">prompt</span><div class="cmd claude">/contract-ship collapsible</div><div class="muted">the ship</div></div><div class="step"><span class="k">prompt</span><div class="cmd claude">why isn't the icon being picked up in the contract … it's obviously there in the design</div><div class="muted">the icon gap</div></div><div class="step"><span class="k">prompt</span><div class="cmd claude">it's supposed to expand and collapse but you're just moving the icon left and right … look at all the cards next to each other … you just play … and self-heal</div><div class="muted">the correction that produced the play pass</div></div><div class="step"><span class="k">prompt</span><div class="cmd claude">if they're not tokens, we should flag that as being hard coded. That should be in the evals</div><div class="muted">the hardcoded-values rule</div></div></main>

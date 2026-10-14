@@ -1,0 +1,49 @@
+<!doctype html><meta charset="utf-8"><title>Before: agentic, but ad hoc</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap"><style>
+  body { margin: 0; background: #faf9f7; color: #16181d; font: 16px/1.5 "IBM Plex Sans", -apple-system, system-ui, sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding: 64px 48px; }
+  h1 { font-size: 34px; margin: 0 0 6px; letter-spacing: -.3px; }
+  .sub { color: #6b7280; font-size: 17px; margin-bottom: 30px; }
+  ol, ul { margin: 0; padding-left: 22px; } li { margin: 8px 0; font-size: 18px; }
+  code, pre { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  pre { background: #fff; border: 1px solid #e2e0db; border-radius: 8px; padding: 16px 18px; font-size: 12.5px; line-height: 1.5; white-space: pre-wrap; margin: 14px 0 0; }
+  .step { margin: 18px 0; } .step b { font-family: "IBM Plex Mono", monospace; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: #2b5cff; }
+  .muted { color: #6b7280; } .ok { color: #1f7a4d; } .warn { color: #c8641e; } .fail { color: #b42318; }
+  .still { display: block; max-width: 100%; max-height: 560px; border: 1px solid #e2e0db; border-radius: 8px; background: #fff; margin-top: 18px; object-fit: contain; }
+  .thesis { font-size: 30px; line-height: 1.3; margin: 28px 0 18px; max-width: 900px; }
+  .quote { border-left: 3px solid #2b5cff; padding: 8px 18px; margin: 14px 0; font-size: 17px; background: #fff; border-radius: 0 8px 8px 0; }
+  .quote small { display: block; color: #6b7280; font-family: "IBM Plex Mono", monospace; font-size: 12px; margin-top: 6px; }
+</style><main><h1>Before: agentic, but ad hoc</h1><div class="sub">4 · generate the stories from the spec — one prompt per component, repeated by hand, drift unmeasured</div><pre>import { html } from "lit";
+import { MediaCard } from "./MediaCard";
+
+// ─── Sample images (Unsplash, stable) ─────────────────────────────────────────
+
+const IMG_WIDE   = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&amp;fit=crop&amp;w=1480&amp;q=80";
+const IMG_CARD_1 = "https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&amp;fit=crop&amp;w=488&amp;q=80";
+const IMG_CARD_2 = "https://images.unsplash.com/photo-1601342630314-8427c38bf5e6?auto=format&amp;fit=crop&amp;w=488&amp;q=80";
+const IMG_CARD_3 = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=488&amp;q=80";
+
+export default {
+  title: "Cards/MediaCard",
+  tags: ["autodocs"],
+  render: (args) => html`
+    &lt;div style="max-width: 488px; padding: 24px;">
+      ${MediaCard(args)}
+    &lt;/div>
+  `,
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component: `
+Media-forward content card. Two sizes:
+- **card** (default) — 488×366 aspect, column copy. Use in 3-up grids.
+- **feature** — 1480×670 aspect, row copy (headline left, CTA right). Use as a full-width hero card above the grid.
+
+Both variants use \`aspect-ratio\` so the media scales with the container. At ≤599px both switch to a fixed 245px media height and column copy.
+
+**Figma:** [elastic-card-updates node 4068:719651](https://www.figma.com/design/oXIFqtnrYNdTIjqb1sbJau/elastic-card-updates?node-id=4068-719651)
+        `,
+      },
+      source: {
+        language: "html",
+…</pre></main>

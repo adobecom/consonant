@@ -1,0 +1,72 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Checkbox",
+  "setName": "Checkbox",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "input",
+    "bindings": {},
+    "slot": null,
+    "children": [
+      {
+        "name": ".checkbox",
+        "source": "/.checkbox",
+        "element": null,
+        "bindings": {},
+        "slot": null,
+        "children": []
+      },
+      {
+        "name": ".label",
+        "source": "/Label",
+        "element": null,
+        "bindings": {},
+        "slot": null,
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10559:113870",
+    "nodeName": "Checkbox",
+    "componentSetKey": "b54325d5cfb373ea25b4f7772bfd9d648012827b",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [
+        "default"
+      ],
+      "defaultValue": "default"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-checkbox",
+      "bindings": {}
+    },
+    {
+      "name": "/.checkbox",
+      "selector": ".checkbox",
+      "bindings": {}
+    },
+    {
+      "name": "/Label",
+      "selector": ".c-checkbox__label",
+      "bindings": {}
+    }
+  ],
+  "textStyles": []
+}

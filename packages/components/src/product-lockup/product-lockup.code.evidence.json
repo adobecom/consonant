@@ -1,0 +1,1120 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-08T17:55:23.986Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "product-lockup",
+    "name": "ProductLockup",
+    "cssClass": "c-product-lockup",
+    "importPath": "packages/components/src/product-lockup/product-lockup.js",
+    "exports": [
+      "ProductLockup"
+    ],
+    "render": "ProductLockup",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/product-lockup/product-lockup.spec.json",
+      "storybookId": "product-lockup",
+      "figmaNodeId": "11272:217527"
+    }
+  },
+  "sources": {
+    "packages/components/src/product-lockup/index.js": "sha256:b5ce9db5b8ced13a88f7b08da6077c677b5480758be30949cdff5ced7889053e",
+    "packages/components/src/product-lockup/product-lockup.js": "sha256:9bd62e2a40cdb212bbb6ca67fdca9255e8158bcf105dc40e582cf49ac31c7124",
+    "packages/components/src/product-lockup/product-lockup.css": "sha256:0cc036ea2a9108937cc3c4b9e9617709265ed74d63bc38de03ac1480a6a40c5b"
+  },
+  "props": [
+    {
+      "name": "label",
+      "default": "\"Product label\"",
+      "type": "string"
+    },
+    {
+      "name": "productName"
+    },
+    {
+      "name": "app",
+      "default": "\"experience-cloud\"",
+      "type": "string"
+    },
+    {
+      "name": "secondApp",
+      "default": "\"experience-cloud\"",
+      "type": "string"
+    },
+    {
+      "name": "showSecondIcon",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "orientation",
+      "default": "\"horizontal\"",
+      "type": "string"
+    },
+    {
+      "name": "styleVariant"
+    },
+    {
+      "name": "width",
+      "default": "\"hug\"",
+      "type": "string"
+    },
+    {
+      "name": "showIconStart",
+      "default": "true",
+      "type": "boolean"
+    },
+    {
+      "name": "showIcon"
+    },
+    {
+      "name": "showIconEnd",
+      "default": "true",
+      "type": "boolean"
+    },
+    {
+      "name": "iconSize",
+      "default": "\"auto\"",
+      "type": "string"
+    },
+    {
+      "name": "caret",
+      "default": "CaretIcon",
+      "type": "expression"
+    }
+  ],
+  "attributes": {
+    "data-has-caret": {
+      "values": [
+        "false",
+        "true"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-has-icon-start": {
+      "values": [
+        "false",
+        "true"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-load-state": {
+      "values": [
+        "error"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-orientation": {
+      "values": [
+        "horizontal",
+        "vertical"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-size": {
+      "values": [
+        "md"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-style": {
+      "values": [
+        "eyebrow",
+        "inverse",
+        "knockout",
+        "label"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-theme": {
+      "values": [],
+      "dynamic": false,
+      "sources": [
+        "stylesheet"
+      ],
+      "onRoot": false
+    },
+    "data-width": {
+      "values": [
+        "fill",
+        "hug"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-product-lockup",
+      "c-product-lockup__caret",
+      "c-product-lockup__icon",
+      "c-product-lockup__icons",
+      "c-product-lockup__label",
+      "c-product-lockup__label-row"
+    ],
+    "stylesheet": [
+      "c-product-lockup",
+      "c-product-lockup__caret",
+      "c-product-lockup__icon",
+      "c-product-lockup__icons",
+      "c-product-lockup__label",
+      "c-product-lockup__label-row",
+      "icons"
+    ],
+    "runtime": [
+      "c-app-icon",
+      "c-app-icon__img",
+      "c-product-lockup",
+      "c-product-lockup__caret",
+      "c-product-lockup__icon",
+      "c-product-lockup__icons",
+      "c-product-lockup__label",
+      "c-product-lockup__label-row"
+    ],
+    "own": [
+      "c-product-lockup",
+      "c-product-lockup__caret",
+      "c-product-lockup__icon",
+      "c-product-lockup__icons",
+      "c-product-lockup__label",
+      "c-product-lockup__label-row"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden"
+    ],
+    "tags": []
+  },
+  "imports": [
+    "../app-icon/app-icon.js",
+    "../icons/chevron-right.svg?raw",
+    "./product-lockup.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-color-content-eyebrow": {
+        "fallback": false
+      },
+      "--s2a-color-content-inverse": {
+        "fallback": false
+      },
+      "--s2a-color-content-knockout": {
+        "fallback": false
+      },
+      "--s2a-color-content-label": {
+        "fallback": false
+      },
+      "--s2a-font-line-height-2xs": {
+        "fallback": true
+      },
+      "--s2a-font-line-height-sm": {
+        "fallback": true
+      },
+      "--s2a-font-size-md": {
+        "fallback": true
+      },
+      "--s2a-font-size-sm": {
+        "fallback": true
+      },
+      "--s2a-font-weight-adobe-clean-bold": {
+        "fallback": true
+      },
+      "--s2a-spacing-md": {
+        "fallback": true
+      },
+      "--s2a-spacing-sm": {
+        "fallback": true
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [],
+  "queries": [],
+  "stories": [
+    {
+      "id": "molecules-productlockup--horizontal-label",
+      "name": "Horizontal Label",
+      "args": {
+        "label": "Adobe Experience Cloud",
+        "app": "experience-cloud",
+        "orientation": "horizontal",
+        "styleVariant": "label",
+        "width": "hug",
+        "showIconStart": true,
+        "showIconEnd": true,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug",
+          "hasIconStart": "true",
+          "hasCaret": "true"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__caret",
+        "c-product-lockup__icon",
+        "c-product-lockup__icons",
+        "c-product-lockup__label"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 9
+    },
+    {
+      "id": "molecules-productlockup--horizontal-eyebrow",
+      "name": "Horizontal Eyebrow",
+      "args": {
+        "label": "Workflow automation",
+        "app": "experience-cloud",
+        "orientation": "horizontal",
+        "styleVariant": "eyebrow",
+        "width": "hug",
+        "showIconStart": true,
+        "showIconEnd": true,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "eyebrow",
+          "width": "hug",
+          "hasIconStart": "true",
+          "hasCaret": "true"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "eyebrow"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "eyebrow"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__caret",
+        "c-product-lockup__icon",
+        "c-product-lockup__icons",
+        "c-product-lockup__label"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 9
+    },
+    {
+      "id": "molecules-productlockup--horizontal-fill",
+      "name": "Horizontal Fill",
+      "args": {
+        "label": "Adobe Experience Cloud",
+        "app": "experience-cloud",
+        "orientation": "horizontal",
+        "styleVariant": "label",
+        "width": "hug",
+        "showIconStart": true,
+        "showIconEnd": true,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "fill",
+          "hasIconStart": "true",
+          "hasCaret": "true"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "fill"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "fill"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__caret",
+        "c-product-lockup__icon",
+        "c-product-lockup__icons",
+        "c-product-lockup__label"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 9
+    },
+    {
+      "id": "molecules-productlockup--knockout",
+      "name": "Knockout",
+      "args": {
+        "label": "Adobe Experience Cloud",
+        "app": "experience-cloud",
+        "orientation": "horizontal",
+        "styleVariant": "label",
+        "width": "hug",
+        "showIconStart": true,
+        "showIconEnd": true,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "knockout",
+          "width": "hug",
+          "hasIconStart": "true",
+          "hasCaret": "true"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "knockout"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "knockout"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__caret",
+        "c-product-lockup__icon",
+        "c-product-lockup__icons",
+        "c-product-lockup__label"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 9
+    },
+    {
+      "id": "molecules-productlockup--inverse",
+      "name": "Inverse",
+      "args": {
+        "label": "Adobe Experience Cloud",
+        "app": "experience-cloud",
+        "orientation": "horizontal",
+        "styleVariant": "label",
+        "width": "hug",
+        "showIconStart": true,
+        "showIconEnd": true,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "inverse",
+          "width": "hug",
+          "hasIconStart": "true",
+          "hasCaret": "true"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "inverse"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "inverse"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__caret",
+        "c-product-lockup__icon",
+        "c-product-lockup__icons",
+        "c-product-lockup__label"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 9
+    },
+    {
+      "id": "molecules-productlockup--vertical-label",
+      "name": "Vertical Label",
+      "args": {
+        "label": "Creative tools",
+        "app": "experience-cloud",
+        "orientation": "vertical",
+        "styleVariant": "label",
+        "width": "hug",
+        "showIconStart": true,
+        "showIconEnd": true,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "vertical",
+          "style": "label",
+          "width": "hug",
+          "hasIconStart": "true",
+          "hasCaret": "true"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "vertical"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "vertical"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__caret",
+        "c-product-lockup__icon",
+        "c-product-lockup__icons",
+        "c-product-lockup__label",
+        "c-product-lockup__label-row"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 10
+    },
+    {
+      "id": "molecules-productlockup--vertical-eyebrow",
+      "name": "Vertical Eyebrow",
+      "args": {
+        "label": "Customer journeys",
+        "app": "experience-cloud",
+        "orientation": "vertical",
+        "styleVariant": "eyebrow",
+        "width": "hug",
+        "showIconStart": true,
+        "showIconEnd": true,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "vertical",
+          "style": "eyebrow",
+          "width": "hug",
+          "hasIconStart": "true",
+          "hasCaret": "true"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "vertical"
+        ],
+        "data-style": [
+          "eyebrow"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "vertical"
+        ],
+        "data-style": [
+          "eyebrow"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__caret",
+        "c-product-lockup__icon",
+        "c-product-lockup__icons",
+        "c-product-lockup__label",
+        "c-product-lockup__label-row"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 10
+    },
+    {
+      "id": "molecules-productlockup--label-only",
+      "name": "Label Only",
+      "args": {
+        "label": "Premium features",
+        "app": "experience-cloud",
+        "orientation": "horizontal",
+        "styleVariant": "label",
+        "width": "hug",
+        "showIconStart": false,
+        "showIconEnd": true,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug",
+          "hasIconStart": "false",
+          "hasCaret": "true"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-product-lockup",
+        "c-product-lockup__caret",
+        "c-product-lockup__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 5
+    },
+    {
+      "id": "molecules-productlockup--no-caret",
+      "name": "No Caret",
+      "args": {
+        "label": "Adobe Experience Cloud",
+        "app": "experience-cloud",
+        "orientation": "horizontal",
+        "styleVariant": "label",
+        "width": "hug",
+        "showIconStart": true,
+        "showIconEnd": false,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug",
+          "hasIconStart": "true",
+          "hasCaret": "false"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "false"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__icon",
+        "c-product-lockup__icons",
+        "c-product-lockup__label"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 6
+    },
+    {
+      "id": "molecules-productlockup--all-variants",
+      "name": "All Variants",
+      "args": {
+        "label": "Adobe Experience Cloud",
+        "app": "experience-cloud",
+        "orientation": "horizontal",
+        "styleVariant": "label",
+        "width": "hug",
+        "showIconStart": true,
+        "showIconEnd": true,
+        "iconSize": "auto"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "fill",
+          "hasIconStart": "true",
+          "hasCaret": "true"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "fill"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-load-state": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "fill"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-caret": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__caret",
+        "c-product-lockup__icon",
+        "c-product-lockup__icons",
+        "c-product-lockup__label"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 9
+    }
+  ],
+  "counts": {
+    "props": 13,
+    "attributes": 8,
+    "parts": 6,
+    "tokenReferences": 11,
+    "tokenReferencesWithoutFallback": 4,
+    "raw": 0,
+    "stories": 10,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:43d2743a58a2016c0cb1308b7a78a8facb299dbd3d897fa6cc2dc54d7a3fb6d4"
+  }
+}

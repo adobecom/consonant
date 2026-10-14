@@ -30,7 +30,7 @@ Status: **curated-draft** · root `c-action-card` · import `packages/components
 ## Anatomy and tokens
 
 - **root** `.c-action-card` ← Figma `.root`
-  - background-color: `--s2a-color-background-subtle` = #f8f8f8 / dark #505050
+  - background-color: `--s2a-color-surface-subtle` = #f8f8f8 / dark #131313
   - border-radius: `--s2a-border-radius-lg` = 22px
   - gap: `--s2a-spacing-md` = 16px
   - **media** `.ac-media` ← Figma `.media` · slot `Media` accepts `Media` (restrict)
@@ -57,6 +57,7 @@ Status: **curated-draft** · root `c-action-card` · import `packages/components
 - ✅ decided `ac-layer-names` (Matt): 11 layers carry Figma-generated names (/Copy >/Chevron/Vector, /Group 2087327847, /Line 87474, /Group 2085666331, /Group 2085666331/Rectangle 2147231707, …). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed. → Rebuilt: .root / .media / .copy / .headline / .chevron. Illustrations exported once and placed as image fills; six instances replace the six hand-drawn frames. _Evidence: Row 13999:205826; golden tiles kept at 14226:196800_
 - ✅ decided `ac-extra-art` (Matt): Additional shape layers outside the media group (/Group 2085666331). Fold them into the Media instance or name them as parts. → Art layers are no longer part of the component; each illustration is an exported asset (PNG@2x + SVG where vector). _Evidence: apps/storybook/stories/assets/action-card/_
 - ✅ decided `ac-type-rung` (Matt): The original headline is 29px, between heading-5 (24) and heading-4 (36). heading-5 keeps one-line headlines like the golden; heading-4 reads closer in weight but wraps four of six. Which rung is the tile's? → heading-5 for now (closest rung, one-line headlines). Revisit if the row needs more presence. _Evidence: Figma ActionCard 14226:196789 after 2026-09-21 restructure; golden Row 14226:196800._
+- ✅ decided `ac-surface-token` (Matt): The contract bound the card surface to background/subtle, but the Figma component binds surface/subtle. Both are #f8f8f8 in light, so the difference is invisible today. Which is the card's token? → surface/subtle, matching the component. The Surface family was added in tokens 0.0.21 for elevation-neutral card surfaces, which is what this is. The two tokens only diverge in dark mode, so the contract would have rendered the card #505050 instead of #131313 the first time anyone themed it — a latent bug rather than a naming preference. _Evidence: ActionCard 14226:196789 root fills -> s2a/color/surface/subtle; dist/packages/tokens/css/dev/tokens.semantic.light.css (both -> gray-50) and tokens.semantic.dark.css (surface -> gray-900 #131313, background -> gray-700 #505050)_
 
 ## Accessibility
 
@@ -70,9 +71,22 @@ WCAG 2.2 AA: `1.1.1`, `1.4.1`, `1.4.3`, `1.4.11`, `2.1.1`, `2.4.4`, `2.4.7`, `2.
 - Headline and description meet 4.5:1 on the card surface; the chevron and any border meet 3:1 (1.4.3, 1.4.11).
 - The arrow is decorative: link purpose comes from the headline text (2.4.4), not from the glyph alone (1.4.1).
 
+## State matrix
+
+Every variant on one grid — 1 row x 1 states, 1 cells.
+States are rendered by setting `data-state`, not by pointing at the component, so all of them can be seen — and diffed — at once.
+
+| | `default` |
+| --- | --- |
+|  | • |
+
+- Story: **Generated/ActionCard → State matrix**, with the Design overlay in the toolbar.
+- Golden: one composited sheet, `evals/datasets/contracts/golden/action-card/sheet.png` — refresh with `npm run goldens:sheet -- --slug=action-card`.
+- Compare: `npm run eval:visual:matrix -- --slug=action-card` scores each cell and names the difference codes.
+
 ## Provenance
 
-- defs: sha256:b6f9290f4243c9dfeb3b0511a4e5bdf5ed525c41ca1d7c5433cf770db0b50777
+- defs: sha256:f81bb4dc70c606e8b9675ae57b9512c53611db138ec9d7515b5a078ca39d1a9d
 - code evidence: —
 - figma evidence: sha256:59b5d8393c34c47549a299c08c860ec4f340c0844ed6a74328d1073e0590a7d6
 

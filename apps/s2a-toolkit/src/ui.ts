@@ -1,6 +1,6 @@
 import { makeState, stateName } from './studio';
 import { createJsonEditor, type JsonEditorHandle } from './json-editor';
-import { emptyStudio, mutateDef, slotsOf, rootTokens, unboundAxes, acceptNames, propFromAxis, verdictOf, canPublish, STATE_NAMES, ACCEPTS_MODES, type StudioState } from './studio';
+import { emptyStudio, mutateDef, slotsOf, rootTokens, unboundAxes, acceptNames, rankAccepts, propFromAxis, verdictOf, canPublish, STATE_NAMES, ACCEPTS_MODES, type StudioState } from './studio';
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function esc(s: string): string {
@@ -113,6 +113,12 @@ let contractSelectedSlug: string | null = null;
 // Which slugs have a curated defs.json. Clear has nothing to do without one,
 // and a button that always looks available teaches people to ignore it.
 const contractHasDefs = new Set<string>();
+// Dependencies are named by the DESIGN ("Label"), contracts by slug ("label").
+// The index already fetches both and was discarding the name, so the panel
+// could list what a component is built from but never say whether any of it
+// exists yet.
+const contractByName = new Map<string, { slug: string; hasDefs: boolean }>();
+const alnum = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 let contractEvidence: { evidence: Record<string, unknown>; canonical: string; hash: string } | null = null;
 let contractIndexCache: { at: number; slugs: Map<string, string> } | null = null;
 let bridgeConnected      = false;
@@ -1010,6 +1016,14 @@ const $s = (id: string) => document.getElementById(id) as HTMLElement;
 const SYNC_DOWN = `No sync server at ${'{endpoint}'}. Start it: npm run contract-sync (in apps/s2a-toolkit).`;
 const syncDownMessage = () => SYNC_DOWN.replace('{endpoint}', contractEndpoint);
 
+// Only a fetch that never reached anything means the server is down. A 400 with
+// a reason in it means the server is up and answering — appending "start the
+// sync server" to that sends someone to restart a process that is working, and
+// buries the actual explanation under a wrong one.
+const isNetworkError = (err: any): boolean =>
+  err instanceof TypeError || /failed to fetch|networkerror|load failed|econnrefused/i.test(String(err?.message ?? ''));
+const withHint = (err: any): string => (isNetworkError(err) ? `. ${syncDownMessage()}` : '');
+
 async function studioApi(path: string, init?: RequestInit) {
   try {
     return await fetch(`${contractEndpoint}${path}`, { ...init, headers: { 'content-type': 'application/json', ...(init?.headers ?? {}) } });
@@ -1275,7 +1289,7 @@ function studioRenderGui() {
       box.appendChild(head);
       const names = acceptNames(studio);
       const acc = el('div');
-      for (const n of names) {
+      const toggle = (n: string) => {
         const on = (node.slot.accepts ?? []).includes(n);
         const b = el('button', `studio-toggle${on ? ' on' : ''}`, n) as HTMLButtonElement;
         b.addEventListener('click', () => studioEdit((def) => {
@@ -1283,7 +1297,45 @@ function studioRenderGui() {
           const a = (t.node.slot.accepts = t.node.slot.accepts ?? []);
           const at = a.indexOf(n); if (at >= 0) a.splice(at, 1); else a.push(n);
         }));
+        return b;
+      };
+      // The slot's own name narrows this. ".icon-start" is OUR naming rule, not
+      // the redesign team's, so reading it is reading a label we enforce — and
+      // offering all 37 contracts for an icon slot buried the real answer.
+      // Nothing is removed: anything already accepted stays visible, and the
+      // rest is one click away for the cases where the name is not the whole story.
+      const { role, likely, other } = rankAccepts(names, path);
+      const chosen = new Set(node.slot.accepts ?? []);
+      // A kind is a category, not a component: the icon rig wraps hundreds of
+      // glyphs that will never each have a contract, so "kind:icon" states the
+      // real constraint instead of pretending to enumerate it. Offered first,
+      // because for a named slot it is usually the right answer.
+      if (role) {
+        const k = `kind:${role}`;
+        const on = chosen.has(k);
+        const b = el('button', `studio-toggle${on ? ' on' : ''}`, k) as HTMLButtonElement;
+        b.title = `Any ${role}, without naming each one`;
+        b.addEventListener('click', () => studioEdit((def) => {
+          const t = slotsOf(def).find((x) => x.path === path); if (!t) return;
+          const a = (t.node.slot.accepts = t.node.slot.accepts ?? []);
+          const at = a.indexOf(k); if (at >= 0) a.splice(at, 1); else a.unshift(k);
+        }));
         acc.appendChild(b);
+      }
+      const demoted = other.filter((n) => !chosen.has(n));
+      const promoted = role ? [...likely, ...other.filter((n) => chosen.has(n) && !n.startsWith('kind:'))] : names;
+      for (const n of promoted) acc.appendChild(toggle(n));
+      if (role && !likely.length) {
+        acc.appendChild(el('div', 'studio-empty', `Nothing contracted can fill a ${role} slot yet.`));
+      }
+      if (role && demoted.length) {
+        const more = el('button', 'studio-toggle', `+ ${demoted.length} that are not ${role}s`) as HTMLButtonElement;
+        more.style.cssText = 'opacity:.6;';
+        more.addEventListener('click', () => {
+          more.remove();
+          for (const n of demoted) acc.appendChild(toggle(n));
+        });
+        acc.appendChild(more);
       }
       if (!names.length) acc.appendChild(el('div', 'studio-empty', 'No other contracts to accept yet.'));
       box.appendChild(acc);
@@ -1596,9 +1648,12 @@ async function contractIndex(): Promise<Map<string, string> | null> {
     const data = await res.json() as { items: Array<{ slug: string; name: string; hasDefs?: boolean; figmaEvidence: { hash: string } | null }> };
     const slugs = new Map<string, string>();
     contractHasDefs.clear();
+    contractByName.clear();
     for (const item of data.items) {
       slugs.set(item.slug, item.figmaEvidence ? 'evidence' : 'spec');
       if (item.hasDefs) contractHasDefs.add(item.slug);
+      contractByName.set(alnum(item.name), { slug: item.slug, hasDefs: Boolean(item.hasDefs) });
+      contractByName.set(alnum(item.slug), { slug: item.slug, hasDefs: Boolean(item.hasDefs) });
     }
     contractIndexCache = { at: Date.now(), slugs };
     return slugs;
@@ -1609,6 +1664,7 @@ let contractIsFrame = false;
 async function updateContractSelection(sel: { id: string; name: string; nodeType: string; variantCount?: number } | null) {
   const setLike = sel?.nodeType === 'COMPONENT_SET' || sel?.nodeType === 'COMPONENT' || sel?.nodeType === 'INSTANCE';
   contractIsFrame = sel?.nodeType === 'FRAME' || sel?.nodeType === 'SECTION' || sel?.nodeType === 'GROUP';
+  syncAlignButton(sel);
   const ok = setLike || contractIsFrame;
   (document.getElementById('contractNameField') as HTMLElement).style.display = contractIsFrame ? 'block' : 'none';
   (document.getElementById('contractMatch') as HTMLElement).style.display = 'none';
@@ -1625,7 +1681,7 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
   const summary  = document.getElementById('contractSummary')    as HTMLElement;
   summary.style.display = 'none';
   copy.disabled = true; publish.disabled = true;
-  if (!ok || !sel) { statusEl.textContent = ''; syncContractActions(null, 'none'); renderComposes(); return; }
+  if (!ok || !sel) { statusEl.textContent = ''; syncContractActions(null, 'none'); void renderComposes(); return; }
   statusEl.textContent = 'checking…';
   const slugs = await contractIndex();
   if (contractSetId !== sel.id) return; // selection moved on
@@ -1641,7 +1697,7 @@ async function updateContractSelection(sel: { id: string; name: string; nodeType
     : slugs && slugs.get(slug) ? 'contract'
     : 'new';
   syncContractActions(slug, st);
-  renderComposes();
+  void renderComposes();
 }
 
 // SHA-256 without WebCrypto: the plugin UI iframe is not a secure context in
@@ -1769,14 +1825,19 @@ async function onContractEvidence(msg: Record<string, unknown>) {
   // record what Figma says and then decline to file it. Re-publish stays under
   // More for the rare case of sending it again.
   queueMicrotask(() => { (document.getElementById('contractPublishBtn') as HTMLButtonElement | null)?.click(); });
-  renderComposes();
+  void renderComposes();
   contractEvidence = { evidence, canonical: msg.canonical as string, hash };
   const counts = evidence.counts as { variants: number; nodes: number; bindings: number; unboundPaintNodes: number };
   const axes = evidence.axes as Array<{ name: string; type: string; options?: string[] }>;
   const variables = Object.values(evidence.variables as Record<string, { name: string; collection: string }>);
   const collections = [...new Set(variables.map(v => v.collection))];
-  const instances = evidence.instances as Array<{ set: { name: string } | null }>;
-  const nested = [...new Set(instances.map(i => i.set?.name).filter(Boolean))];
+  // set ?? mainComponent, the same fallback the evidence writer uses for
+  // pattern.instancedSets. Reading set alone silently drops every instance of a
+  // standalone component — Checkbox reported only its own ".checkbox" layer and
+  // never mentioned the Label it is built from, which is exactly the
+  // composition this panel exists to show.
+  const instances = evidence.instances as Array<{ set: { name: string } | null; mainComponent: { name: string } | null }>;
+  const nested = [...new Set(instances.map(i => i.set?.name ?? i.mainComponent?.name).filter(Boolean))];
   const meta = (evidence.set as { meta: { version: string; status: string } }).meta;
   const pattern = evidence.pattern as { repeats: Array<{ count: number; unit: { name: string }; sharedLayers: string[] }>; genericLayers: number; namedLayers: number; roles: string[]; instancedSets: string[] } | undefined;
   const summary = document.getElementById('contractSummary') as HTMLElement;
@@ -1929,6 +1990,10 @@ window.addEventListener('message', (event) => {
     }
     case 'contract:composition': {
       void onCompositionScanned(msg as Record<string, unknown>);
+      break;
+    }
+    case 'contract:align': {
+      onAligned(msg as Record<string, unknown>);
       break;
     }
     // Sandbox → sync server file drop (PNG goldens, diffs): bytes never pass
@@ -2451,39 +2516,104 @@ function syncContractActions(slug: string | null, state: ContractState) {
   if (!deletable) clearDisarm();
 }
 
+// Align lives in the Tokens tab but reads the same selection, so it follows the
+// selection rather than anything about contracts: it is most use on a frame
+// nobody intends to contract yet.
+function syncAlignButton(sel: { nodeType: string } | null) {
+  const btn = document.getElementById('contractAlignBtn') as HTMLButtonElement | null;
+  if (!btn) return;
+  const ALIGNABLE = ['COMPONENT_SET', 'COMPONENT', 'INSTANCE', 'FRAME', 'SECTION', 'GROUP'];
+  const ok = Boolean(sel && ALIGNABLE.includes(sel.nodeType));
+  btn.disabled = !ok;
+  btn.title = ok
+    ? 'Match every unbound colour, size and type value in the selection against S2A tokens'
+    : 'Select a frame, component or component set in Figma';
+  if (!ok) {
+    const panel = document.getElementById('contractAlign') as HTMLElement | null;
+    if (panel) { panel.style.display = 'none'; panel.innerHTML = ''; }
+  }
+}
+
 // What the selection is built from. This is a property of the thing, already
 // sitting in the evidence, so it is shown rather than asked for. Composition is
 // reported at the SET level because that is what a contract describes — but it
 // is counted per variant, because variance IS the cardinality: a child present
 // in three of ten variants is a slot with min 0, not a part.
-function renderComposes() {
+async function renderComposes() {
   const el = document.getElementById('contractComposes') as HTMLElement | null;
   if (!el) return;
+  // Cached for 30s, so this is free on the repeat calls.
+  await contractIndex().catch(() => null);
   const ev = contractEvidence?.evidence as any;
-  const instances: Array<{ variant?: string; set?: { name?: string }; mainComponent?: { name?: string } }> = ev?.instances ?? [];
-  if (!instances.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  // How much of this selection is still raw. Free — the walk already counted it
+  // — and it is the one thing worth saying before somebody extracts anyway.
+  const unbound = (ev?.unboundValues?.length ?? 0) || (ev?.counts?.unboundPaintNodes ?? 0);
+  const hint = unbound
+    ? `<div class="muted" style="margin-top:4px;">${unbound} unbound value${unbound === 1 ? '' : 's'} \u2014 Tokens \u203a Align a design matches them first.</div>`
+    : '';
+  const instances: Array<{ variant?: string; node?: string; set?: { name?: string }; mainComponent?: { name?: string } }> = ev?.instances ?? [];
+  if (!instances.length) {
+    el.innerHTML = hint;
+    el.style.display = hint ? 'block' : 'none';
+    return;
+  }
   const variants = new Set(instances.map((i) => i.variant).filter(Boolean));
   const totalVariants = Math.max(1, variants.size || (ev?.variants?.length ?? 1));
   const isIcon = (n: string) => /^s2a?[_-]/i.test(n) || /(^|\/)icons?(\/|_|$)/i.test(n);
-  const seen = new Map<string, { name: string; inVariants: Set<string>; count: number }>();
+  // The crawl is a deep walk: an instance nested inside another instance is
+  // that component's dependency, not this one's. action-card's "Overlay" sits
+  // inside its Media instance, so it belongs to Media's contract — flagging it
+  // here would bill every component for its dependencies' dependencies.
+  const placed = instances.filter((i) => (i.set?.name ?? i.mainComponent?.name)).map((i) => i.node ?? '');
+  const ownerOf = (p: string) => placed
+    .filter((o) => o !== p && p.startsWith(`${o}/`))
+    .sort((a, b) => b.length - a.length)[0] ?? null;
+
+  const seen = new Map<string, { name: string; inVariants: Set<string>; count: number; direct: boolean; via: Set<string> }>();
   let icons = 0;
   for (const ins of instances) {
     const name = (ins.set?.name ?? ins.mainComponent?.name ?? '').replace(/^[\u{1F6AB}\s]+/u, '');
     if (!name) continue;
     if (isIcon(name)) { icons++; continue; }
-    if (!seen.has(name)) seen.set(name, { name, inVariants: new Set(), count: 0 });
+    if (!seen.has(name)) seen.set(name, { name, inVariants: new Set(), count: 0, direct: false, via: new Set() });
     const e = seen.get(name)!; e.count++; if (ins.variant) e.inVariants.add(ins.variant);
+    const owner = ownerOf(ins.node ?? '');
+    if (owner) {
+      const o = instances.find((x) => (x.node ?? '') === owner);
+      const on = o?.set?.name ?? o?.mainComponent?.name;
+      if (on) e.via.add(on);
+    } else e.direct = true;
   }
-  if (!seen.size && !icons) { el.style.display = 'none'; el.innerHTML = ''; return; }
-  const rows = [...seen.values()].sort((a, b) => b.count - a.count).map((e) => {
-    const inAll = e.inVariants.size === 0 || e.inVariants.size >= totalVariants;
-    const per = Math.round(e.count / Math.max(1, e.inVariants.size || 1));
-    // "in 3 of 10 variants" is the signal that this is optional, not structural.
-    const where = inAll ? '' : ` <span class="muted">in ${e.inVariants.size} of ${totalVariants} variants</span>`;
-    return `<li><code>${esc(e.name)}</code>${per > 1 ? ` <span class="muted">×${per}</span>` : ''}${where}</li>`;
-  });
+  if (!seen.size && !icons) { el.innerHTML = hint; el.style.display = hint ? 'block' : 'none'; return; }
+  // Naming what a component is built from is only half the answer; the other
+  // half is whether any of it exists yet, which is the thing you act on.
+  const selfName = (ev?.set as { name?: string } | undefined)?.name ?? '';
+  const statusOf = (name: string) => {
+    if (name.startsWith('.') || alnum(name) === alnum(selfName)) {
+      return { mark: '·', label: 'own layer', tone: 'muted' };
+    }
+    const hit = contractByName.get(alnum(name));
+    if (hit?.hasDefs) return { mark: '✓', label: 'contract', tone: 'ok' };
+    if (hit) return { mark: '~', label: 'spec only — no contract yet', tone: 'warn' };
+    return { mark: '✗', label: 'no contract — build it, or mark it internal', tone: 'warn' };
+  };
+  const rows = [...seen.values()]
+    .sort((a, b) => Number(b.direct) - Number(a.direct) || b.count - a.count)
+    .map((e) => {
+      const inAll = e.inVariants.size === 0 || e.inVariants.size >= totalVariants;
+      const per = Math.round(e.count / Math.max(1, e.inVariants.size || 1));
+      // "in 3 of 10 variants" is the signal that this is optional, not structural.
+      const where = inAll ? '' : ` <span class="muted">in ${e.inVariants.size} of ${totalVariants} variants</span>`;
+      const st = e.direct
+        ? statusOf(e.name)
+        : { mark: '·', label: `via ${[...e.via].join(', ')} — their contract`, tone: 'muted' };
+      const colour = st.tone === 'ok' ? '#2e7d4f' : st.tone === 'warn' ? '#b25c00' : '';
+      return `<li><span style="${colour ? `color:${colour};` : ''}font-weight:600;">${st.mark}</span> `
+        + `<code>${esc(e.name)}</code>${per > 1 ? ` <span class="muted">×${per}</span>` : ''}${where}`
+        + ` <span class="muted">— ${esc(st.label)}</span></li>`;
+    });
   el.innerHTML = `<div class="muted" style="margin-bottom:4px;">Built from</div><ul style="margin:0;padding-left:16px;">${rows.join('')}</ul>` +
-    (icons ? `<div class="muted" style="margin-top:4px;">+ ${icons} icon instance${icons === 1 ? '' : 's'}</div>` : '');
+    (icons ? `<div class="muted" style="margin-top:4px;">+ ${icons} icon instance${icons === 1 ? '' : 's'}</div>` : '') + hint;
   el.style.display = 'block';
 }
 
@@ -2562,7 +2692,7 @@ document.getElementById('contractClearBtn')?.addEventListener('click', async () 
         ? 'Figma evidence kept, so you can scaffold again without re-extracting.'
         : 'Cold start: select the set and press Extract to begin again.'), 'ok');
   } catch (err: any) {
-    setContractStatus(`Clear failed: ${esc(err?.message || String(err))}. ${syncDownMessage()}`, 'err');
+    setContractStatus(`Clear failed: ${esc(err?.message || String(err))}${withHint(err)}`, 'err');
   } finally {
     btn.disabled = false; btn.textContent = 'Clear draft…';
   }
@@ -2593,7 +2723,7 @@ async function onCompositionScanned(msg: Record<string, unknown>) {
     if (!res.ok) throw new Error(out.error || `Sync endpoint returned ${res.status}`);
     setContractStatus(`Composition refreshed — ${out.components} components, ${out.edges} edges, ${out.grouped} grouped. See the order with <code>npm run specs:composition</code>.`, 'ok');
   } catch (err: any) {
-    setContractStatus(`Could not write composition: ${esc(err?.message || String(err))}. ${syncDownMessage()}`, 'err');
+    setContractStatus(`Could not write composition: ${esc(err?.message || String(err))}${withHint(err)}`, 'err');
   }
 }
 
@@ -2611,4 +2741,92 @@ function contractSlugForClear(): string | null {
     .replace(/\s*[—–-]\s*v\d+(\.\d+)*\s*$/i, '')
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
     .replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() || null;
+}
+
+// --- Align -----------------------------------------------------------------
+// Which literals in the selection are already S2A tokens, and how sure. Only
+// exact and scaled can ever be applied; everything else is a proposal with its
+// reasoning attached, so the quality of the match is visible before it acts.
+
+const ALIGN_LABEL: Record<string, string> = {
+  exact: 'exact',
+  scaled: 'scaled',
+  composite: 'behind alpha',
+  nearest: 'close',
+  ambiguous: 'ambiguous',
+  none: 'no match',
+};
+const ALIGN_ORDER = ['exact', 'scaled', 'composite', 'nearest', 'ambiguous', 'none'];
+
+document.getElementById('contractAlignBtn')?.addEventListener('click', () => {
+  const btn = document.getElementById('contractAlignBtn') as HTMLButtonElement;
+  btn.disabled = true; btn.textContent = 'Reading…';
+  sendTelemetry('action:contract-align');
+  parent.postMessage({ pluginMessage: { type: 'contract-align' } }, '*');
+});
+
+function onAligned(msg: Record<string, unknown>) {
+  const btn = document.getElementById('contractAlignBtn') as HTMLButtonElement | null;
+  if (btn) { btn.disabled = false; btn.textContent = 'Align to S2A tokens'; }
+  const el = document.getElementById('contractAlign') as HTMLElement | null;
+  if (!el) return;
+  if (msg.error) { setContractStatus(esc(String(msg.error)), 'err'); el.style.display = 'none'; return; }
+
+  const summary = (msg.summary ?? {}) as Record<string, number>;
+  const findings = (msg.findings ?? []) as Array<Record<string, any>>;
+  const scale = msg.scale as { factor: number; explains: number; of: number } | null;
+  const total = findings.length;
+
+  if (!total) {
+    el.innerHTML = '<div class="muted">Every value in this selection is already bound to an S2A token. Nothing to align.</div>';
+    el.style.display = 'block';
+    setContractStatus(`${String(msg.bound ?? 0)} bindings, nothing unbound.`, 'ok');
+    return;
+  }
+
+  const auto = (summary.exact ?? 0) + (summary.scaled ?? 0);
+  const parts: string[] = [];
+  const foreign = Number(msg.foreign ?? 0);
+  const raw = total - foreign;
+  const where = Number(msg.fromLibrary ?? 0) ? `${String(msg.candidates ?? 0)} tokens (${String(msg.fromLibrary)} from the library)` : `${String(msg.candidates ?? 0)} local tokens`;
+  parts.push(`<div class="muted" style="margin-bottom:4px;">Align \u00b7 ${raw} raw value${raw === 1 ? '' : 's'}${foreign ? `, ${foreign} bound to another library` : ''} against ${where}</div>`);
+  // Without scopes the matcher has only the token's name to go on, which is a
+  // weaker gate — worth saying once rather than silently matching differently.
+  if (msg.scopeless) {
+    parts.push('<div class="muted" style="margin-bottom:4px;">No variable in this file sets a scope, so matching falls back to token names.</div>');
+  }
+
+  // The scale factor is the finding that explains all the others, so it leads.
+  if (scale) {
+    parts.push(`<div class="muted" style="margin-bottom:4px;">Scaled by <code>\u00d7${(Math.round(scale.factor * 1000) / 1000)}</code> \u2014 it explains ${scale.explains} of ${scale.of} dimensions, so those are matched after dividing it out.</div>`);
+  }
+
+  const counts = ALIGN_ORDER.filter(k => (summary[k] ?? 0) > 0)
+    .map(k => `<li><code>${esc(ALIGN_LABEL[k])}</code> <span class="muted">${summary[k]}</span></li>`).join('');
+  parts.push(`<ul style="margin:0 0 6px;padding-left:16px;">${counts}</ul>`);
+
+  // The queue a person actually works: what cannot be auto-applied, worst first.
+  const needsEyes = findings
+    .filter(f => !f.autoApply)
+    .sort((a, b) => ALIGN_ORDER.indexOf(a.confidence) - ALIGN_ORDER.indexOf(b.confidence))
+    .slice(0, 12);
+  if (needsEyes.length) {
+    const rows = needsEyes.map(f => {
+      const layer = esc(String(f.node || '/').split('/').filter(Boolean).pop() || 'root');
+      // A foreign binding reads very differently from a raw value, so the row says which.
+      const from = f.source === 'wrong-library' ? ` <span class="muted">(now <code>${esc(String(f.currentBinding ?? ''))}</code>)</span>` : '';
+      return `<li><code>${layer}</code>${from} <span class="muted">${esc(String(f.property))} \u2014 ${esc(String(f.reason))}</span></li>`;
+    }).join('');
+    parts.push(`<div class="muted" style="margin-bottom:2px;">Needs a decision</div><ul style="margin:0;padding-left:16px;">${rows}</ul>`);
+    const more = findings.filter(f => !f.autoApply).length - needsEyes.length;
+    if (more > 0) parts.push(`<div class="muted" style="margin-top:4px;">+ ${more} more</div>`);
+  }
+
+  el.innerHTML = parts.join('');
+  el.style.display = 'block';
+  setContractStatus(
+    auto
+      ? `${auto} of ${total} can be bound without a judgment call. The rest are proposals.`
+      : `None of the ${total} values match a token confidently enough to apply.`,
+    auto ? 'ok' : '');
 }

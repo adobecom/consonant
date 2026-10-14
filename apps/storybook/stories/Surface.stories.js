@@ -47,9 +47,9 @@ Matches Figma component set \`Surface\` (Border=true|false + content slot).
 const sampleContent = html`
   <span
     style="
-      font-family: var(--s2a-font-family-body, 'Adobe Clean', sans-serif);
-      font-size: 14px;
-      color: var(--s2a-color-content-default, #000);
+      font-family: var(--s2a-font-family-body);
+      font-size: var(--s2a-font-size-sm);
+      color: var(--s2a-color-content-default);
     "
     >Slotted content</span
   >
@@ -72,19 +72,19 @@ export const WithRichContent = {
   args: {
     border: true,
     content: html`
-      <div style="display: flex; flex-direction: column; gap: 8px; min-width: 240px;">
+      <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-xs); min-width: 240px;">
         <strong
           style="
-            font-family: var(--s2a-font-family-body, 'Adobe Clean', sans-serif);
-            color: var(--s2a-color-content-heading, #000);
+            font-family: var(--s2a-font-family-body);
+            color: var(--s2a-color-content-heading);
           "
           >Card title</strong
         >
         <span
           style="
-            font-family: var(--s2a-font-family-body, 'Adobe Clean', sans-serif);
-            font-size: 14px;
-            color: var(--s2a-color-content-body-subtle, rgb(0 0 0 / 64%));
+            font-family: var(--s2a-font-family-body);
+            font-size: var(--s2a-font-size-sm);
+            color: var(--s2a-color-content-body-subtle);
           "
           >Supporting description that sits on the surface.</span
         >
@@ -98,17 +98,17 @@ export const WithImage = {
   args: {
     border: true,
     content: html`
-      <figure style="margin: 0; display: flex; flex-direction: column; gap: 12px; max-width: 360px;">
+      <figure style="margin: 0; display: flex; flex-direction: column; gap: var(--s2a-spacing-sm); max-width: 360px;">
         <img
           src=${fireflyImage}
           alt="Adobe Firefly generative artwork"
-          style="width: 100%; display: block; border-radius: var(--s2a-border-radius-xs, 8px);"
+          style="width: 100%; display: block; border-radius: var(--s2a-border-radius-xs);"
         />
         <figcaption
           style="
-            font-family: var(--s2a-font-family-body, 'Adobe Clean', sans-serif);
-            font-size: 14px;
-            color: var(--s2a-color-content-body-subtle, rgb(0 0 0 / 64%));
+            font-family: var(--s2a-font-family-body);
+            font-size: var(--s2a-font-size-sm);
+            color: var(--s2a-color-content-body-subtle);
           "
         >
           Media sits on the surface and inherits its radius language.
@@ -129,7 +129,7 @@ export const WithVideo = {
         muted
         playsinline
         src=${VIDEO_SRC}
-        style="width: 360px; display: block; border-radius: var(--s2a-border-radius-xs, 8px);"
+        style="width: 360px; display: block; border-radius: var(--s2a-border-radius-xs);"
       ></video>
     `,
   },

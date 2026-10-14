@@ -1,0 +1,540 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-07T17:24:17.391Z",
+  "extractor": {
+    "plugin": "s2a-toolkit",
+    "version": "0.2.1"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": {
+      "id": "10885:20649",
+      "name": "   ↳ Checkbox"
+    }
+  },
+  "set": {
+    "id": "10559:113870",
+    "key": "b54325d5cfb373ea25b4f7772bfd9d648012827b",
+    "name": "Checkbox",
+    "type": "COMPONENT_SET",
+    "description": "— s2a:meta —\nversion:    1.0.0\nstatus:     active\nupdated:    2026-08-26\nchangelog:\n  1.0.0   2026-08-04  init         Initial release\n\nA single checkbox with a label — toggles one independent option on or off.\n\n## Good to know\nUse a checkbox for a standalone yes/no choice. For picking one option from several, use Radio; for a full-width selectable row with an icon, use CheckboxTile.\nLight and dark are automatic — the box, checkmark, and label all bind s2a/color/content/default, which re-resolves from the page or surface theme mode. There is no separate dark variant.\nThe whole row is the target — clicking the label toggles the box, not just the box itself.\n\n## Accessibility\nExposes a native checkbox role with the label programmatically associated, so assistive tech announces the label and the checked/unchecked state (WCAG 2.2 AA · SC 4.1.2 Name, Role, Value; SC 1.3.1 Info & Relationships).\nKeyboard: Tab moves focus to the checkbox, Space toggles it; the focused state shows a visible focus ring (SC 2.1.1 Keyboard; SC 2.4.7 Focus Visible).\nBecause the checkmark and label use s2a/color/content/default, contrast is maintained in both light and dark themes (SC 1.4.3 Contrast Minimum).",
+    "meta": {
+      "version": "1.0.0",
+      "status": "active",
+      "updated": "2026-08-26",
+      "changelog": "1.0.0   2026-08-04  init         Initial release"
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "defaultValue": "default",
+      "options": [
+        "default"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "10559:113854",
+      "key": "4c03abc669c7ab6702834ceb32a80d223e7f97da",
+      "name": "Style=default",
+      "props": {
+        "Style": "default"
+      },
+      "width": 342,
+      "height": 20
+    }
+  ],
+  "anatomy": {
+    "variant": "Style=default",
+    "tree": {
+      "name": "Style=default",
+      "type": "COMPONENT",
+      "layoutMode": "HORIZONTAL",
+      "sizing": {
+        "horizontal": "HUG",
+        "vertical": "HUG"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "CENTER"
+      },
+      "children": [
+        {
+          "name": ".checkbox",
+          "type": "INSTANCE",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "S2_Icon_CheckBox_20_N",
+              "type": "INSTANCE",
+              "layoutMode": "HORIZONTAL",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "align": {
+                "primary": "MIN",
+                "counter": "MIN"
+              },
+              "children": [
+                {
+                  "name": "Frame",
+                  "type": "FRAME",
+                  "sizing": {
+                    "horizontal": "FILL",
+                    "vertical": "FILL"
+                  },
+                  "children": [
+                    {
+                      "name": "iconPrimary",
+                      "type": "VECTOR",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    },
+                    {
+                      "name": "iconPrimary",
+                      "type": "VECTOR",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Label",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "MIN"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "Style=default",
+      "node": "/.checkbox/S2_Icon_CheckBox_20_N/Frame/iconPrimary",
+      "nodeId": "I10559:113855;10559:113835;11987:71",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.checkbox/S2_Icon_CheckBox_20_N/Frame/iconPrimary",
+      "nodeId": "I10559:113855;10559:113835;11987:72",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label/Label",
+      "nodeId": "I10559:113860;10559:113853",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:37e4aab70c1b4e190e04c4945427869636094364/7578:1072"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label/Label",
+      "nodeId": "I10559:113860;10559:113853",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label/Label",
+      "nodeId": "I10559:113860;10559:113853",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label/Label",
+      "nodeId": "I10559:113860;10559:113853",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label/Label",
+      "nodeId": "I10559:113860;10559:113853",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label/Label",
+      "nodeId": "I10559:113860;10559:113853",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label/Label",
+      "nodeId": "I10559:113860;10559:113853",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,"
+    }
+  ],
+  "variables": {
+    "VariableID:2352:1217": {
+      "name": "s2a/typography/font-size/label",
+      "key": "4251945d797f40d6226cbd66cdc61224e8b57907",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:2352:1233": {
+      "name": "s2a/typography/letter-spacing/label",
+      "key": "23c0c37e5e02762087e6356ff09f8b225fb86530",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1243": {
+      "name": "s2a/typography/line-height/label",
+      "key": "abb6d9e6cec2ece062e61863bbdd9952bf5c20b7",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:2557:832": {
+      "name": "s2a/font/family/label",
+      "key": "f6adac658998b85abc31ac0ef46213e38e28e430",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:37e4aab70c1b4e190e04c4945427869636094364/7578:1072": {
+      "name": "s2a/color/content/default",
+      "key": "37e4aab70c1b4e190e04c4945427869636094364",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:3659e0dcd09c2dca905bb94def94c5029e4d83ac/2073:2735",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:5388:44678": {
+      "name": "s2a/font/weight/label",
+      "key": "b8019565b44226550b04ed1dd81d36d8b480cac6",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:6:82": {
+      "name": "s2a/color/content/default",
+      "key": "37e4aab70c1b4e190e04c4945427869636094364",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "S:536bbf234b1a0a717cffe0e3c578fb0052669086,": {
+      "name": "s2a/typography/label",
+      "key": "536bbf234b1a0a717cffe0e3c578fb0052669086"
+    }
+  },
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "Style=default",
+      "node": "/.checkbox",
+      "nodeId": "10559:113855",
+      "mainComponent": {
+        "id": "10559:113834",
+        "key": "4f3f1bb2b3170cc4f0b17f0502bc7b6174c56417",
+        "name": "State=checked, Style=default"
+      },
+      "set": {
+        "id": "10559:113849",
+        "key": "e33b9059830c3427fc7270e2ec87f22741ca304c",
+        "name": ".checkbox"
+      }
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.checkbox/S2_Icon_CheckBox_20_N",
+      "nodeId": "I10559:113855;10559:113835",
+      "mainComponent": {
+        "id": "8406:176178",
+        "key": "0ac7b146236d93a84f5222e7201e9cbb0058ea29",
+        "name": "S2_Icon_CheckBox_20_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label",
+      "nodeId": "10559:113860",
+      "mainComponent": {
+        "id": "10559:113852",
+        "key": "3bc1e2a152381625612658f1b3a17d757fa5c114",
+        "name": "Label"
+      },
+      "set": null
+    }
+  ],
+  "counts": {
+    "variants": 1,
+    "nodes": 8,
+    "bindings": 9,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "10559:113854",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "value": 8
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "10559:113854",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.checkbox",
+      "nodeId": "10559:113855",
+      "nodeType": "INSTANCE",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.checkbox/S2_Icon_CheckBox_20_N",
+      "nodeId": "I10559:113855;10559:113835",
+      "nodeType": "INSTANCE",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.checkbox/S2_Icon_CheckBox_20_N/Frame",
+      "nodeId": "I10559:113855;10559:113835;11987:70",
+      "nodeType": "FRAME",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.checkbox/S2_Icon_CheckBox_20_N/Frame/iconPrimary",
+      "nodeId": "I10559:113855;10559:113835;11987:71",
+      "nodeType": "VECTOR",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.checkbox/S2_Icon_CheckBox_20_N/Frame/iconPrimary",
+      "nodeId": "I10559:113855;10559:113835;11987:72",
+      "nodeType": "VECTOR",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label",
+      "nodeId": "10559:113860",
+      "nodeType": "INSTANCE",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=default",
+      "node": "/Label/Label",
+      "nodeId": "I10559:113860;10559:113853",
+      "nodeType": "TEXT",
+      "property": "strokeWeight",
+      "value": 1
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:77f258b68d6fe82f32fbe4456595467fd6310a6ddcf7cec6b258af73aa8dbd4b"
+  }
+}

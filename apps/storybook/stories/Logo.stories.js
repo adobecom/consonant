@@ -42,9 +42,9 @@ const darkSurface = (content) => html`
   <div
     data-theme="dark"
     style="
-      padding: 24px 32px;
-      background: var(--s2a-color-background-default, #000);
-      border-radius: 8px;
+      padding: var(--s2a-spacing-lg) var(--s2a-spacing-xl);
+      background: var(--s2a-color-background-default);
+      border-radius: var(--s2a-border-radius-xs);
     "
   >
     ${content}
@@ -69,13 +69,13 @@ export const OnDark = {
 export const AllVersions = {
   parameters: { controls: { disable: true } },
   render: () => html`
-    <div style="display: grid; gap: 24px; justify-items: start;">
-      <div style="display: flex; gap: 32px; align-items: center;">
+    <div style="display: grid; gap: var(--s2a-spacing-lg); justify-items: start;">
+      <div style="display: flex; gap: var(--s2a-spacing-xl); align-items: center;">
         ${Logo({ version: "default" })} ${Logo({ version: "legacy" })}
         ${Logo({ version: "abbreviated" })}
       </div>
       ${darkSurface(
-        html`<div style="display: flex; gap: 32px; align-items: center;">
+        html`<div style="display: flex; gap: var(--s2a-spacing-xl); align-items: center;">
           ${Logo({ version: "default" })}
           ${Logo({ version: "legacy" })}
           ${Logo({ version: "abbreviated" })}

@@ -1,0 +1,72 @@
+/* AppIcon — generated from app-icon.contract.json.
+ * Re-run: npm run specs:render -- --slug=app-icon --target=milo */
+
+.app-icon {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-none, 0);
+  padding-bottom: var(--s2a-spacing-none, 0);
+  padding-left: var(--s2a-spacing-none, 0);
+  padding-right: var(--s2a-spacing-none, 0);
+  padding-top: var(--s2a-spacing-none, 0);
+}
+
+.app-icon.16 {
+  width: 16px;
+  height: 16px;
+}
+
+.app-icon.18 {
+  width: 18px;
+  height: 18px;
+}
+
+.app-icon.24 {
+  width: 24px;
+  height: 24px;
+}
+
+.app-icon.32 {
+  width: 32px;
+  height: 32px;
+}
+
+.app-icon.48 {
+  width: 48px;
+  height: 48px;
+}
+
+.app-icon.80 {
+  width: 80px;
+  height: 80px;
+}
+
+.app-icon.16 .img {
+  width: 16px;
+  height: 16px;
+}
+
+.app-icon.18 .img {
+  width: 18px;
+  height: 18px;
+}
+
+.app-icon.24 .img {
+  width: 24px;
+  height: 24px;
+}
+
+.app-icon.32 .img {
+  width: 32px;
+  height: 32px;
+}
+
+.app-icon.48 .img {
+  width: 48px;
+  height: 48px;
+}
+
+.app-icon.80 .img {
+  width: 80px;
+  height: 80px;
+}

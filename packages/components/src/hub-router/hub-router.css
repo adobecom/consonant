@@ -34,10 +34,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--s2a-spacing-2xl, 40px);
-  padding-block: var(--s2a-spacing-2xl, 40px);
-  background-color: var(--s2a-color-surface-default, var(--s2a-color-background-default, #ffffff));
-  border-radius: var(--s2a-border-radius-xl, 32px) var(--s2a-border-radius-xl, 32px) 0 0;
+  gap: var(--s2a-spacing-2xl);
+  padding-block: var(--s2a-spacing-2xl);
+  background-color: var(--s2a-color-surface-default);
+  border-radius: var(--s2a-border-radius-xl) var(--s2a-border-radius-xl) 0 0;
   overflow: hidden;
   width: 100%;
 }
@@ -45,25 +45,27 @@
 /* ─── Heading zone ──────────────────────────────────────────────────────────── */
 .c-hub-router__heading {
   width: 100%;
-  padding-inline: var(--s2a-spacing-lg, 24px); /* mobile */
+  padding-inline: var(--s2a-spacing-lg); /* mobile */
 }
 /* The current subtle token is 4.43:1 on the dark card surface. Use the
    accessible foreground until the surface/subtle token pairing is corrected. */
-.c-hub-router .c-elastic-card[data-state="resting"]:not(:hover) .c-elastic-card__body-text {
+.c-hub-router
+  .c-elastic-card[data-state="resting"]:not(:hover)
+  .c-elastic-card__body-text {
   color: var(--s2a-color-content-default);
 }
 
 /* ─── Carousel — BASE: mobile snap-scroll ────────────────────────────────────── */
 .c-hub-router__carousel {
   display: flex;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
   align-items: flex-start;
   width: 100%;
-  padding-inline: var(--s2a-spacing-lg, 24px);
+  padding-inline: var(--s2a-spacing-lg);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   /* Match the content inset so the first card does not auto-snap on load. */
-  scroll-padding-inline: var(--s2a-spacing-lg, 24px);
+  scroll-padding-inline: var(--s2a-spacing-lg);
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -87,13 +89,13 @@
    mobile card width, with the v2 mobile media inset and tighter radius. */
 @media (max-width: 599px) {
   .c-hub-router__carousel .c-elastic-card {
-    inline-size: min(360px, calc(100vw - var(--s2a-spacing-lg, 24px) * 2));
+    inline-size: min(360px, calc(100vw - var(--s2a-spacing-lg) * 2));
   }
   .c-hub-router .c-elastic-card__media {
-    padding-inline: var(--s2a-spacing-2xs, 4px);
+    padding-inline: var(--s2a-spacing-2xs);
   }
   .c-hub-router .c-elastic-card__media > :is(img, picture, .c-media) {
-    border-radius: var(--s2a-border-radius-sm, 12px);
+    border-radius: var(--s2a-border-radius-sm);
     overflow: hidden;
   }
 }
@@ -103,7 +105,7 @@
 @media (min-width: 1024px) and (max-width: 1279px) {
   .c-hub-router {
     --s2a-elastic-card-height-max: 475px; /* 56px header + 325px media + 94px body */
-    --s2a-elastic-card-padding: 16px;
+    --s2a-elastic-card-padding: var(--s2a-spacing-md);
   }
 }
 
@@ -113,7 +115,7 @@
  * Gap stays at 40px (s2a-spacing-2xl) up to 1279px — same as mobile base. */
 @media (min-width: 1024px) {
   .c-hub-router__heading {
-    padding-inline: var(--s2a-layout-lg, 124px);
+    padding-inline: var(--s2a-layout-lg);
   }
 
   .c-hub-router__carousel {
@@ -152,12 +154,15 @@
 @media (min-width: 1024px) and (max-width: 1279px) {
   .c-hub-router__carousel[data-edge="first"] {
     justify-content: flex-start;
-    padding-inline-start: max(8px, calc((100vw - 1242px) / 2));
+    padding-inline-start: max(
+      var(--s2a-spacing-xs),
+      calc((100vw - 1242px) / 2)
+    );
   }
 
   .c-hub-router__carousel[data-edge="last"] {
     justify-content: flex-end;
-    padding-inline-end: max(8px, calc((100vw - 1242px) / 2));
+    padding-inline-end: max(var(--s2a-spacing-xs), calc((100vw - 1242px) / 2));
   }
 }
 
@@ -167,8 +172,8 @@
  * 5×294 + 4×8 = 1502px total resting. Cards overflow < 1502px, fit at ≥ 1502px. */
 @media (min-width: 1280px) {
   .c-hub-router {
-    gap: var(--s2a-spacing-4xl, 64px);
-    padding-block: var(--s2a-spacing-4xl, 64px);
+    gap: var(--s2a-spacing-4xl);
+    padding-block: var(--s2a-spacing-4xl);
   }
 
   .c-hub-router__carousel > [role="listitem"] {
@@ -187,18 +192,25 @@
 @media (min-width: 1280px) {
   .c-hub-router__carousel[data-edge="first"] {
     justify-content: flex-start;
-    padding-inline-start: max(8px, calc((100vw - 1502px) / 2));
+    padding-inline-start: max(
+      var(--s2a-spacing-xs),
+      calc((100vw - 1502px) / 2)
+    );
   }
 
   .c-hub-router__carousel[data-edge="last"] {
     justify-content: flex-end;
-    padding-inline-end: max(8px, calc((100vw - 1502px) / 2));
+    padding-inline-end: max(var(--s2a-spacing-xs), calc((100vw - 1502px) / 2));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .c-hub-router__carousel { scroll-behavior: auto; }
+  .c-hub-router__carousel {
+    scroll-behavior: auto;
+  }
   .c-hub-router__carousel > [role="listitem"],
   .c-hub-router .c-elastic-card,
-  .c-hub-router .c-elastic-card * { transition: none !important; }
+  .c-hub-router .c-elastic-card * {
+    transition: none !important;
+  }
 }

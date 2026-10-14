@@ -1,0 +1,239 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "app-icon",
+  "storybookId": "app-icon",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "size-16",
+      "name": "size: 16",
+      "args": {
+        "size": "16"
+      }
+    },
+    {
+      "id": "size-18",
+      "name": "size: 18",
+      "args": {
+        "size": "18"
+      }
+    },
+    {
+      "id": "size-24",
+      "name": "size: 24",
+      "args": {
+        "size": "24"
+      }
+    },
+    {
+      "id": "size-32",
+      "name": "size: 32",
+      "args": {
+        "size": "32"
+      }
+    },
+    {
+      "id": "size-48",
+      "name": "size: 48",
+      "args": {
+        "size": "48"
+      }
+    },
+    {
+      "id": "size-80",
+      "name": "size: 80",
+      "args": {
+        "size": "80"
+      }
+    },
+    {
+      "id": "ariahidden-on",
+      "name": "ariaHidden on",
+      "args": {
+        "ariaHidden": true
+      }
+    },
+    {
+      "id": "ariahidden-off",
+      "name": "ariaHidden off",
+      "args": {
+        "ariaHidden": false
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "atoms-appicon--creative-cloud",
+      "name": "Creative Cloud",
+      "argKeys": [
+        "app",
+        "size",
+        "ariaHidden"
+      ]
+    },
+    {
+      "id": "atoms-appicon--firefly",
+      "name": "Firefly",
+      "argKeys": [
+        "app",
+        "size",
+        "ariaHidden"
+      ]
+    },
+    {
+      "id": "atoms-appicon--sizes",
+      "name": "Sizes",
+      "argKeys": [
+        "app",
+        "size",
+        "ariaHidden"
+      ]
+    },
+    {
+      "id": "atoms-appicon--all-variants",
+      "name": "All Variants",
+      "argKeys": [
+        "app",
+        "size",
+        "ariaHidden"
+      ]
+    },
+    {
+      "id": "atoms-appicon--library-catalog",
+      "name": "Library Catalog",
+      "argKeys": [
+        "app",
+        "size",
+        "ariaHidden"
+      ]
+    },
+    {
+      "id": "atoms-appicon--accessible-label",
+      "name": "Accessible Label",
+      "argKeys": [
+        "app",
+        "size",
+        "ariaHidden"
+      ]
+    }
+  ],
+  "deferred": [
+    "size-16",
+    "size-18",
+    "size-24",
+    "size-32",
+    "size-48",
+    "size-80",
+    "ariahidden-off"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      "16",
+      "18",
+      "24",
+      "32",
+      "48",
+      "80"
+    ],
+    "rowValues": [
+      {
+        "Size": "16"
+      },
+      {
+        "Size": "18"
+      },
+      {
+        "Size": "24"
+      },
+      {
+        "Size": "32"
+      },
+      {
+        "Size": "48"
+      },
+      {
+        "Size": "80"
+      }
+    ],
+    "cell": {
+      "w": 104,
+      "h": 104,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "size": "16"
+        },
+        "forced": null,
+        "label": "16 / default",
+        "nodeId": "8175:77407"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "size": "18"
+        },
+        "forced": null,
+        "label": "18 / default",
+        "nodeId": "8175:77409"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "size": "24"
+        },
+        "forced": null,
+        "label": "24 / default",
+        "nodeId": "8175:77411"
+      },
+      {
+        "row": 3,
+        "col": 0,
+        "args": {
+          "size": "32"
+        },
+        "forced": null,
+        "label": "32 / default",
+        "nodeId": "8175:77413"
+      },
+      {
+        "row": 4,
+        "col": 0,
+        "args": {
+          "size": "48"
+        },
+        "forced": null,
+        "label": "48 / default",
+        "nodeId": "13738:193173"
+      },
+      {
+        "row": 5,
+        "col": 0,
+        "args": {
+          "size": "80"
+        },
+        "forced": null,
+        "label": "80 / default",
+        "nodeId": "13738:193201"
+      }
+    ],
+    "missing": []
+  }
+}

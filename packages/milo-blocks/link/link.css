@@ -1,0 +1,109 @@
+/* Link — generated from link.contract.json.
+ * Re-run: npm run specs:render -- --slug=link --target=milo */
+
+.link {
+  box-sizing: border-box;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  min-width: 0;
+  appearance: none;
+  height: 40px; /* hardcoded: Figma Button v2 md is 40px tall and no semantic size token exists yet */
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--s2a-spacing-xs, 8px);
+}
+
+.link.action {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.link.text {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.link .label-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.link.default .call-to-action {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.link.subtle .call-to-action {
+  color: var(--s2a-color-content-body-subtle, rgb(0 0 0 / 64%));
+}
+
+.link.action .call-to-action {
+  font-family: var(--s2a-font-family-label, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-label, 0.875rem);
+  font-weight: var(--s2a-font-weight-label, 700);
+  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
+  line-height: var(--s2a-typography-line-height-label, 18px);
+}
+
+.link.text .call-to-action {
+  font-family: var(--s2a-font-family-body, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-body-md, 1rem);
+  font-weight: var(--s2a-font-weight-body, 400);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-md, 0);
+  line-height: var(--s2a-typography-line-height-body-md, 20px);
+}
+
+.link .underline {
+  height: 1px;
+}
+
+.link.default .underline {
+  background-color: var(--s2a-color-content-default, #000);
+}
+
+.link.subtle .underline {
+  background-color: var(--s2a-color-content-body-subtle, rgb(0 0 0 / 64%));
+}
+
+.link.action .underline {
+  width: 33px;
+}
+
+.link.text .underline {
+  width: 36px;
+}
+
+.link .end-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.link .frame {
+  width: 12px;
+  height: 12px;
+}
+
+.link .s2a-icon-chevron-right {
+  display: flex;
+  flex-direction: row;
+  width: 12px;
+  height: 12px;
+}
+
+.link .icon-color {
+  width: 12px;
+  height: 12px;
+}
+
+.link.default .icon-color {
+  color: var(--s2a-color-content-default, #000);
+}
+
+.link.subtle .icon-color {
+  color: var(--s2a-color-content-body-subtle, rgb(0 0 0 / 64%));
+}

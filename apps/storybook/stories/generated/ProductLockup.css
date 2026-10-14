@@ -1,0 +1,74 @@
+/* Generated from product-lockup.contract.json. Re-run: npm run specs:render -- --slug=product-lockup */
+
+.c-product-lockup [hidden],
+.c-product-lockup[hidden] {
+  display: none !important;
+}
+
+.c-product-lockup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  gap: var(--s2a-spacing-md);
+}
+
+.c-product-lockup__frame-1 {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.c-product-lockup[data-orientation="horizontal"] .c-product-lockup__frame-1 {
+  gap: var(--s2a-spacing-md);
+}
+
+.icons {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.c-product-lockup[data-orientation="horizontal"] .icons {
+  gap: var(--s2a-spacing-3xs);
+}
+
+.c-product-lockup__app-icon {
+  display: flex;
+  flex-direction: column;
+}
+
+.c-product-lockup__app-icon-2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.c-product-lockup[data-style="label"] .c-product-lockup__label {
+  color: var(--s2a-color-content-label);
+}
+
+.c-product-lockup[data-style="knockout"] .c-product-lockup__label {
+  color: var(--s2a-color-content-knockout);
+}
+
+.c-product-lockup[data-style="inverse"] .c-product-lockup__label {
+  color: var(--s2a-color-content-inverse);
+}
+
+.c-product-lockup[data-orientation="horizontal"] .c-product-lockup__label {
+  font-family: var(--s2a-font-family-label);
+  font-size: var(--s2a-typography-font-size-label);
+  font-weight: var(--s2a-font-weight-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  line-height: var(--s2a-typography-line-height-label);
+}
+
+.c-product-lockup__s2a-icon-chevron-right {
+  display: flex;
+  flex-direction: row;
+}
+
+.c-product-lockup[data-orientation="horizontal"] .c-product-lockup__s2a-icon-chevron-right {
+  width: 8px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 8px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}

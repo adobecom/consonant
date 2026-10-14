@@ -1,10 +1,10 @@
 .c-helper-text {
   margin: 0;
-  font-family: var(--s2a-font-family-caption, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-caption, 700);
-  font-size: var(--s2a-typography-font-size-caption, 12px);
-  line-height: var(--s2a-typography-line-height-caption, 16px);
-  letter-spacing: var(--s2a-typography-letter-spacing-caption, 0);
+  font-family: var(--s2a-font-family-caption);
+  font-weight: var(--s2a-font-weight-caption);
+  font-size: var(--s2a-typography-font-size-caption);
+  line-height: var(--s2a-typography-line-height-caption);
+  letter-spacing: var(--s2a-typography-letter-spacing-caption);
   color: var(--s2a-color-content-subtle);
 }
 

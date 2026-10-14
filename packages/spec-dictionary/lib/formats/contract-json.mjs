@@ -70,7 +70,7 @@ const mapPropBindings = (p) => {
     const kind = FIGMA_KIND[f.kind] ?? "NONE";
     // A narrowed binding has no property to name upstream; say so rather than
     // pointing at a layer path as if it were a component property.
-    figma = kind === "NONE" ? { kind: "NONE", property: "—" } : { kind, property: f.property ? String(f.property) : "—", ...(f.values ? { values: f.values } : {}) };
+    figma = kind === "NONE" ? { kind: "NONE", property: "—" } : { kind, property: f.property ? String(f.property) : "—", ...(f.values ? { values: f.values } : {}), ...(f.valueMap ? { valueMap: f.valueMap } : {}) };
   }
   // The schema is framework-agnostic — nothing in it is React-shaped; code bindings
   // are {prop, initial, values} and anchors are {importPath, export}. The one hole
@@ -90,9 +90,29 @@ const mapNode = (node) => {
   const description = node.description ?? node.notes;
   if (description) out.description = Array.isArray(description) ? description.join(" ") : String(description);
   if (node.element) out.element = String(node.element);
+  // Upstream has a `layout` field for exactly this. Tokens say what a thing
+  // looks like; layout says how it sits. A contract carrying only the first
+  // renders a button with the right colours and no display property.
+  if (node.layout && typeof node.layout === "object") {
+    const L = {};
+    for (const k of ["display", "direction", "align", "justify", "grow", "wrap", "stretch", "stack"]) if (node.layout[k] !== undefined) L[k] = node.layout[k];
+    if (Object.keys(L).length) out.layout = L;
+  }
   const { tokens, literals } = splitTokens(node.tokens);
   if (Object.keys(tokens).length) out.tokens = tokens;
   if (Object.keys(literals).length) out.literals = literals;
+  // An asset-backed part: the content is a file chosen by a prop, not markup a
+  // consumer passes in. Carried verbatim — a generator needs all of it to emit
+  // a src, and the manifest it names ships alongside the contracts.
+  if (node.asset?.prop && node.asset?.manifest && node.asset?.field) {
+    out.asset = {
+      prop: String(node.asset.prop),
+      manifest: String(node.asset.manifest),
+      field: String(node.asset.field),
+      element: node.asset.element ?? "img",
+      ...(node.asset.altField ? { altField: String(node.asset.altField) } : {}),
+    };
+  }
   if (node.slot) {
     const s = { name: node.slot.name ?? "slot" };
     if (Array.isArray(node.slot.accepts) && node.slot.accepts.length) s.accepts = node.slot.accepts.map(String);
@@ -100,6 +120,32 @@ const mapNode = (node) => {
     if (Number.isInteger(node.slot.min)) s.min = node.slot.min;
     if (Number.isInteger(node.slot.max) && node.slot.max >= 1) s.max = node.slot.max;
     if (typeof node.slot.required === "boolean") s.required = node.slot.required;
+    // The design's default filling, in the upstream shape: defaultContent is a
+    // list of { id, props }. Resolved, the id names the manifest entry
+    // (s2a-icons:arrow-right); unresolved, it names the design's instance so a
+    // consumer can see what is still a decision.
+    if (node.slot.default && typeof node.slot.default === "object") {
+      const d = node.slot.default;
+      const props = {};
+      if (d.figma) props.figma = String(d.figma);
+      if (d.size !== undefined) props.size = String(d.size);
+      for (const [k, v] of Object.entries(d.props ?? {})) props[k] = typeof v === "boolean" ? v : String(v);
+      const id = d.manifest && d.icon ? `${d.manifest}:${d.icon}` : d.slug ? d.slug : d.figma ? `figma:${d.figma}` : d.text !== undefined ? "text" : null;
+      if (id) s.defaultContent = [{ id, ...(Object.keys(props).length ? { props } : {}), ...(d.text !== undefined ? { text: String(d.text) } : {}) }];
+    }
+    // The filling the design switches by a prop value (S2A extension).
+    if (Array.isArray(node.slot.defaultByProp)) {
+      const content = (d) => {
+        const props = {};
+        if (d.figma) props.figma = String(d.figma);
+        for (const [k, v] of Object.entries(d.props ?? {})) props[k] = typeof v === "boolean" ? v : String(v);
+        const id = d.manifest && d.icon ? `${d.manifest}:${d.icon}` : d.slug ? d.slug : d.figma ? `figma:${d.figma}` : "text";
+        return [{ id, ...(Object.keys(props).length ? { props } : {}), ...(d.text !== undefined ? { text: String(d.text) } : {}), ...(d.content ? { children: content(d.content) } : {}) }];
+      };
+      const cc = [];
+      for (const e of node.slot.defaultByProp) for (const [value, d] of Object.entries(e.map ?? {})) cc.push({ prop: String(e.prop), value: String(value), content: content(d) });
+      if (cc.length) s.conditionalContent = cc;
+    }
     out.slot = s;
   }
   if (node.states && typeof node.states === "object" && !Array.isArray(node.states)) {
@@ -111,6 +157,52 @@ const mapNode = (node) => {
       if (Object.keys(st).length) states[key] = st;
     }
     if (Object.keys(states).length) out.states = states;
+  }
+  // The conditional shapes. Upstream already has a vocabulary for all of this
+  // — tokensByProp, statesByProp, tokensByCombination — so emitting is close to
+  // a pass-through: split each map into tokens and literals the same way the
+  // base map is split, and normalise our state names onto their four.
+  const splitMap = (m) => {
+    const tokens = {}, literals = {};
+    for (const [value, decls] of Object.entries(m ?? {})) {
+      const { tokens: t, literals: l } = splitTokens(decls);
+      if (Object.keys(t).length) tokens[value] = t;
+      if (Object.keys(l).length) literals[value] = l;
+    }
+    return { tokens, literals };
+  };
+  if (Array.isArray(node.tokensByProp) && node.tokensByProp.length) {
+    const byProp = [], litByProp = [];
+    for (const e of node.tokensByProp) {
+      const { tokens: t, literals: l } = splitMap(e.map);
+      if (Object.keys(t).length) byProp.push({ prop: String(e.prop), map: t });
+      if (Object.keys(l).length) litByProp.push({ prop: String(e.prop), map: l });
+    }
+    if (byProp.length) out.tokensByProp = byProp;
+    if (litByProp.length) out.literalsByProp = litByProp;
+  }
+  if (Array.isArray(node.statesByProp) && node.statesByProp.length) {
+    const rows = [];
+    for (const e of node.statesByProp) {
+      const key = STATE_ALIAS[e.state] ?? e.state;
+      if (!STATES.has(key)) continue;
+      const { tokens: t } = splitMap(e.map);
+      if (Object.keys(t).length) rows.push({ prop: String(e.prop), state: key, map: t });
+    }
+    if (rows.length) out.statesByProp = rows;
+  }
+  if (Array.isArray(node.tokensByCombination) && node.tokensByCombination.length) {
+    const combos = [];
+    for (const e of node.tokensByCombination) {
+      if (!Array.isArray(e.props) || e.props.length !== 2) continue;
+      const rows = [];
+      for (const r of e.rows ?? []) {
+        const { tokens: t } = splitTokens(r.tokens);
+        if (Object.keys(t).length) rows.push({ values: r.values.map((v) => (v == null ? null : String(v))), tokens: t });
+      }
+      if (rows.length) combos.push({ props: e.props.map(String), rows });
+    }
+    if (combos.length) out.tokensByCombination = combos;
   }
   if (node.parts && Object.keys(node.parts).length) {
     out.parts = Object.fromEntries(Object.entries(node.parts).map(([n, c]) => [n, mapNode(c)]));

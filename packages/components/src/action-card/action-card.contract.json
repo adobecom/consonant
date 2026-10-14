@@ -76,7 +76,7 @@
       "description": "Block-level link, 313px wide in the row. No padding on the root: the media is full-bleed (top, clipped by the card's radius) and the copy block carries its own padding. Hug height; in a row the cards stretch to the tallest. radius/lg (22px) and spacing/2xl (40px) are the tokens nearest the original 26px / 39px.",
       "element": "a",
       "tokens": {
-        "background-color": "{s2a.color.background.subtle}",
+        "background-color": "{s2a.color.surface.subtle}",
         "border-radius": "{s2a.border-radius.lg}",
         "gap": "{s2a.spacing.md}"
       },
@@ -174,11 +174,11 @@
   },
   "provenance": {
     "version": 1,
-    "canonicalRevision": "sha256:b6f9290f4243c9dfeb3b0511a4e5bdf5ed525c41ca1d7c5433cf770db0b50777",
+    "canonicalRevision": "sha256:f81bb4dc70c606e8b9675ae57b9512c53611db138ec9d7515b5a078ca39d1a9d",
     "source": {
       "kind": "design",
       "adapter": "s2a-spec-transform@1",
-      "revision": "sha256:b6f9290f4243c9dfeb3b0511a4e5bdf5ed525c41ca1d7c5433cf770db0b50777"
+      "revision": "sha256:f81bb4dc70c606e8b9675ae57b9512c53611db138ec9d7515b5a078ca39d1a9d"
     }
   }
 }

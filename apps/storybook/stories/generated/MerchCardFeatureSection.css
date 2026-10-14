@@ -1,0 +1,59 @@
+/* Generated from merch-card-feature-section.contract.json. Re-run: npm run specs:render -- --slug=merch-card-feature-section */
+
+.c-merch-card-feature-section [hidden],
+.c-merch-card-feature-section[hidden] {
+  display: none !important;
+}
+
+.c-merch-card-feature-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-sm);
+  width: 418px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-merch-card-feature-section__divider {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.c-merch-card-feature-section__title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1 1 auto;
+  gap: var(--s2a-spacing-xs);
+  padding-bottom: var(--s2a-spacing-none);
+  padding-left: var(--s2a-spacing-none);
+  padding-right: var(--s2a-spacing-none);
+  padding-top: var(--s2a-spacing-none);
+}
+
+.c-merch-card-feature-section__s2-icon-acrobat-pdfedit-20-n {
+  display: flex;
+  flex-direction: row;
+  width: 20px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 20px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-merch-card-feature-section__title-text {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-heading);
+  font-family: var(--s2a-font-family-label);
+  font-size: var(--s2a-typography-font-size-label);
+  font-weight: var(--s2a-font-weight-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  line-height: var(--s2a-typography-line-height-label);
+}
+
+.c-merch-card-feature-section__items {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: var(--s2a-spacing-xs);
+  padding-bottom: var(--s2a-spacing-none);
+  padding-left: var(--s2a-spacing-xl);
+  padding-right: var(--s2a-spacing-none);
+  padding-top: var(--s2a-spacing-none);
+}

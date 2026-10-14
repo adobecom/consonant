@@ -1,0 +1,486 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-09T02:05:46.302Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "collapsible",
+    "name": "Collapsible",
+    "cssClass": "c-collapsible",
+    "importPath": "packages/components/src/collapsible/collapsible.js",
+    "exports": [
+      "Collapsible"
+    ],
+    "render": "Collapsible",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/collapsible/collapsible.spec.json",
+      "storybookId": "collapsible",
+      "figmaNodeId": null
+    }
+  },
+  "sources": {
+    "packages/components/src/collapsible/index.js": "sha256:733f9bd622e467a12b64e1f4f3994687ca2a9445bac5e04ce5216b6d47be6899",
+    "packages/components/src/collapsible/collapsible.js": "sha256:9fd26b20691aa386a3c1e431f1dfcb4bdb21299fd10f36c2b779b9b5869dad9a",
+    "packages/components/src/collapsible/collapsible.css": "sha256:8e83e0862c3904d708e7849d0afbadfa817beb3e658e97352a74cba7f1daaaf8"
+  },
+  "props": [
+    {
+      "name": "label",
+      "default": "\"See what's included:\"",
+      "type": "string"
+    },
+    {
+      "name": "open",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "content",
+      "default": "nothing",
+      "type": "expression"
+    }
+  ],
+  "attributes": {},
+  "parts": {
+    "template": [
+      "c-collapsible",
+      "c-collapsible__chevron",
+      "c-collapsible__content",
+      "c-collapsible__label",
+      "c-collapsible__trigger"
+    ],
+    "stylesheet": [
+      "c-collapsible",
+      "c-collapsible__chevron",
+      "c-collapsible__content",
+      "c-collapsible__label",
+      "c-collapsible__trigger"
+    ],
+    "runtime": [
+      "c-collapsible",
+      "c-collapsible__chevron",
+      "c-collapsible__content",
+      "c-collapsible__label",
+      "c-collapsible__trigger",
+      "c-list",
+      "c-list__item",
+      "c-list__items",
+      "c-list__section",
+      "c-list__title",
+      "c-list__title-text"
+    ],
+    "own": [
+      "c-collapsible",
+      "c-collapsible__chevron",
+      "c-collapsible__content",
+      "c-collapsible__label",
+      "c-collapsible__trigger"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden"
+    ],
+    "tags": []
+  },
+  "imports": [
+    "./collapsible.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-color-content-default": {
+        "fallback": false
+      },
+      "--s2a-font-family-label": {
+        "fallback": true
+      },
+      "--s2a-font-line-height-xs": {
+        "fallback": true
+      },
+      "--s2a-font-size-sm": {
+        "fallback": true
+      },
+      "--s2a-font-weight-label": {
+        "fallback": true
+      },
+      "--s2a-spacing-sm": {
+        "fallback": true
+      },
+      "--s2a-spacing-xs": {
+        "fallback": true
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [],
+  "queries": [],
+  "stories": [
+    {
+      "id": "molecules-collapsible--closed",
+      "name": "Closed",
+      "args": {
+        "label": "See what's included:",
+        "open": false,
+        "content": {
+          "_$litType$": 1,
+          "strings": [
+            "\n  ",
+            "\n"
+          ],
+          "values": [
+            {
+              "_$litType$": 1,
+              "strings": [
+                "\n  <div class=\"c-list\">\n    ",
+                "\n  </div>\n"
+              ],
+              "values": [
+                [
+                  {
+                    "_$litType$": 1,
+                    "strings": [
+                      "\n        <section class=\"c-list__section\">\n          ",
+                      "\n          <div class=\"c-list__title\">\n            ",
+                      "\n            <span class=\"c-list__title-text\">",
+                      "</span>\n          </div>\n          <ul class=\"c-list__items\">\n            ",
+                      "\n          </ul>\n        </section>\n      "
+                    ],
+                    "values": [
+                      null,
+                      null,
+                      "Creative apps",
+                      [
+                        {
+                          "_$litType$": 1,
+                          "strings": [
+                            "\n  <li class=\"c-list__item\">",
+                            "</li>\n"
+                          ],
+                          "values": [
+                            "Photoshop"
+                          ]
+                        },
+                        {
+                          "_$litType$": 1,
+                          "strings": [
+                            "\n  <li class=\"c-list__item\">",
+                            "</li>\n"
+                          ],
+                          "values": [
+                            "Illustrator"
+                          ]
+                        },
+                        {
+                          "_$litType$": 1,
+                          "strings": [
+                            "\n  <li class=\"c-list__item\">",
+                            "</li>\n"
+                          ],
+                          "values": [
+                            "Premiere Pro"
+                          ]
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "root": {
+        "tag": "details",
+        "classes": [
+          "c-collapsible"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-collapsible",
+        "c-collapsible__chevron",
+        "c-collapsible__content",
+        "c-collapsible__label",
+        "c-collapsible__trigger",
+        "c-list",
+        "c-list__item",
+        "c-list__items",
+        "c-list__section",
+        "c-list__title",
+        "c-list__title-text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 14
+    },
+    {
+      "id": "molecules-collapsible--open",
+      "name": "Open",
+      "args": {
+        "label": "See what's included:",
+        "open": true,
+        "content": {
+          "_$litType$": 1,
+          "strings": [
+            "\n  ",
+            "\n"
+          ],
+          "values": [
+            {
+              "_$litType$": 1,
+              "strings": [
+                "\n  <div class=\"c-list\">\n    ",
+                "\n  </div>\n"
+              ],
+              "values": [
+                [
+                  {
+                    "_$litType$": 1,
+                    "strings": [
+                      "\n        <section class=\"c-list__section\">\n          ",
+                      "\n          <div class=\"c-list__title\">\n            ",
+                      "\n            <span class=\"c-list__title-text\">",
+                      "</span>\n          </div>\n          <ul class=\"c-list__items\">\n            ",
+                      "\n          </ul>\n        </section>\n      "
+                    ],
+                    "values": [
+                      null,
+                      null,
+                      "Creative apps",
+                      [
+                        {
+                          "_$litType$": 1,
+                          "strings": [
+                            "\n  <li class=\"c-list__item\">",
+                            "</li>\n"
+                          ],
+                          "values": [
+                            "Photoshop"
+                          ]
+                        },
+                        {
+                          "_$litType$": 1,
+                          "strings": [
+                            "\n  <li class=\"c-list__item\">",
+                            "</li>\n"
+                          ],
+                          "values": [
+                            "Illustrator"
+                          ]
+                        },
+                        {
+                          "_$litType$": 1,
+                          "strings": [
+                            "\n  <li class=\"c-list__item\">",
+                            "</li>\n"
+                          ],
+                          "values": [
+                            "Premiere Pro"
+                          ]
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "root": {
+        "tag": "details",
+        "classes": [
+          "c-collapsible"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-collapsible",
+        "c-collapsible__chevron",
+        "c-collapsible__content",
+        "c-collapsible__label",
+        "c-collapsible__trigger",
+        "c-list",
+        "c-list__item",
+        "c-list__items",
+        "c-list__section",
+        "c-list__title",
+        "c-list__title-text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 14
+    },
+    {
+      "id": "molecules-collapsible--custom-label",
+      "name": "Custom Label",
+      "args": {
+        "label": "Compare plan features:",
+        "open": true,
+        "content": {
+          "_$litType$": 1,
+          "strings": [
+            "\n  ",
+            "\n"
+          ],
+          "values": [
+            {
+              "_$litType$": 1,
+              "strings": [
+                "\n  <div class=\"c-list\">\n    ",
+                "\n  </div>\n"
+              ],
+              "values": [
+                [
+                  {
+                    "_$litType$": 1,
+                    "strings": [
+                      "\n        <section class=\"c-list__section\">\n          ",
+                      "\n          <div class=\"c-list__title\">\n            ",
+                      "\n            <span class=\"c-list__title-text\">",
+                      "</span>\n          </div>\n          <ul class=\"c-list__items\">\n            ",
+                      "\n          </ul>\n        </section>\n      "
+                    ],
+                    "values": [
+                      null,
+                      null,
+                      "Creative apps",
+                      [
+                        {
+                          "_$litType$": 1,
+                          "strings": [
+                            "\n  <li class=\"c-list__item\">",
+                            "</li>\n"
+                          ],
+                          "values": [
+                            "Photoshop"
+                          ]
+                        },
+                        {
+                          "_$litType$": 1,
+                          "strings": [
+                            "\n  <li class=\"c-list__item\">",
+                            "</li>\n"
+                          ],
+                          "values": [
+                            "Illustrator"
+                          ]
+                        },
+                        {
+                          "_$litType$": 1,
+                          "strings": [
+                            "\n  <li class=\"c-list__item\">",
+                            "</li>\n"
+                          ],
+                          "values": [
+                            "Premiere Pro"
+                          ]
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "root": {
+        "tag": "details",
+        "classes": [
+          "c-collapsible"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-collapsible",
+        "c-collapsible__chevron",
+        "c-collapsible__content",
+        "c-collapsible__label",
+        "c-collapsible__trigger",
+        "c-list",
+        "c-list__item",
+        "c-list__items",
+        "c-list__section",
+        "c-list__title",
+        "c-list__title-text"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 14
+    },
+    {
+      "id": "molecules-collapsible--with-media",
+      "name": "With media content",
+      "args": {
+        "label": "See it in action:",
+        "open": true,
+        "content": {
+          "_$litType$": 1,
+          "strings": [
+            "\n      <img\n        src=",
+            "\n        alt=\"GenStudio product walkthrough\"\n        style=\"width: 100%; max-width: 420px; display: block; border-radius: var(--s2a-border-radius-xs, 8px);\"\n      />\n    "
+          ],
+          "values": [
+            "http://127.0.0.1:58592/assets/elastic-card-genstudio-B4_nyhG4.jpg"
+          ]
+        }
+      },
+      "root": {
+        "tag": "details",
+        "classes": [
+          "c-collapsible"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-collapsible",
+        "c-collapsible__chevron",
+        "c-collapsible__content",
+        "c-collapsible__label",
+        "c-collapsible__trigger"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 7
+    }
+  ],
+  "counts": {
+    "props": 3,
+    "attributes": 0,
+    "parts": 5,
+    "tokenReferences": 7,
+    "tokenReferencesWithoutFallback": 1,
+    "raw": 0,
+    "stories": 4,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:e5f6cef477753f93c19b559416d84270223ad8c5bdc3ef442d3fbabb440cc556"
+  }
+}

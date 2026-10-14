@@ -1,0 +1,395 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-09T16:13:56.647Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "radio",
+    "name": "Radio",
+    "cssClass": "c-radio",
+    "importPath": "packages/components/src/radio/radio.js",
+    "exports": [
+      "Radio"
+    ],
+    "render": "Radio",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/radio/radio.spec.json",
+      "storybookId": "radio",
+      "figmaNodeId": null
+    }
+  },
+  "sources": {
+    "packages/components/src/radio/index.js": "sha256:f972bbda10c84f5211a60e7bc4ad1a52e4311ef76e3dd4af134bc868e29aa6e7",
+    "packages/components/src/radio/radio.js": "sha256:ccc8bcc11d56b0fdee0c45060b31a86c021bb952d22ab11e2358bfa4f3661128",
+    "packages/components/src/radio/radio.css": "sha256:68367d88ec3d5662856f9b07e7cffed1f5b4623e415dd21a679c4fb3b25f8b10"
+  },
+  "props": [
+    {
+      "name": "label",
+      "default": "\"Individuals\"",
+      "type": "string"
+    },
+    {
+      "name": "checked",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "disabled",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "name",
+      "default": "\"radio-group\"",
+      "type": "string"
+    },
+    {
+      "name": "value",
+      "default": "undefined",
+      "type": "expression"
+    }
+  ],
+  "attributes": {
+    "data-disabled": {
+      "values": [
+        ""
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-force-state": {
+      "values": [
+        "focus",
+        "hover"
+      ],
+      "dynamic": false,
+      "sources": [
+        "stylesheet"
+      ],
+      "onRoot": false
+    }
+  },
+  "parts": {
+    "template": [
+      "c-radio",
+      "c-radio__control",
+      "c-radio__input",
+      "c-radio__label"
+    ],
+    "stylesheet": [
+      "c-radio",
+      "c-radio__control",
+      "c-radio__input",
+      "c-radio__label",
+      "dot",
+      "label",
+      "ring"
+    ],
+    "runtime": [
+      "c-radio",
+      "c-radio__control",
+      "c-radio__input",
+      "c-radio__label"
+    ],
+    "own": [
+      "c-radio",
+      "c-radio__control",
+      "c-radio__input",
+      "c-radio__label"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden"
+    ],
+    "tags": [
+      "input"
+    ]
+  },
+  "imports": [
+    "./radio.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-border-radius-round": {
+        "fallback": true
+      },
+      "--s2a-border-width-md": {
+        "fallback": true
+      },
+      "--s2a-color-background-subtle": {
+        "fallback": false
+      },
+      "--s2a-color-content-default": {
+        "fallback": false
+      },
+      "--s2a-color-content-subtle": {
+        "fallback": false
+      },
+      "--s2a-color-focus-ring-default": {
+        "fallback": false
+      },
+      "--s2a-font-family-label": {
+        "fallback": false
+      },
+      "--s2a-font-weight-label": {
+        "fallback": false
+      },
+      "--s2a-spacing-xs": {
+        "fallback": false
+      },
+      "--s2a-typography-font-size-label": {
+        "fallback": false
+      },
+      "--s2a-typography-letter-spacing-label": {
+        "fallback": false
+      },
+      "--s2a-typography-line-height-label": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [
+    ":checked",
+    ":focus",
+    ":hover"
+  ],
+  "queries": [],
+  "stories": [
+    {
+      "id": "atoms-radio--unselected",
+      "name": "Unselected",
+      "args": {
+        "label": "Individuals",
+        "checked": false,
+        "disabled": false,
+        "name": "radio-demo"
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__input",
+        "c-radio__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-radio--selected",
+      "name": "Selected",
+      "args": {
+        "label": "Individuals",
+        "checked": true,
+        "disabled": false,
+        "name": "radio-demo"
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__input",
+        "c-radio__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-radio--disabled",
+      "name": "Disabled",
+      "args": {
+        "label": "Individuals",
+        "checked": false,
+        "disabled": true,
+        "name": "radio-demo"
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {
+          "disabled": ""
+        }
+      },
+      "attributes": {
+        "data-disabled": [
+          ""
+        ]
+      },
+      "rootAttributes": {
+        "data-disabled": [
+          ""
+        ]
+      },
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__input",
+        "c-radio__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": true
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-radio--disabled-selected",
+      "name": "Disabled Selected",
+      "args": {
+        "label": "Individuals",
+        "checked": true,
+        "disabled": true,
+        "name": "radio-demo"
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {
+          "disabled": ""
+        }
+      },
+      "attributes": {
+        "data-disabled": [
+          ""
+        ]
+      },
+      "rootAttributes": {
+        "data-disabled": [
+          ""
+        ]
+      },
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__input",
+        "c-radio__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": true
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-radio--group",
+      "name": "Group",
+      "args": {
+        "label": "Individuals",
+        "checked": false,
+        "disabled": false,
+        "name": "radio-demo"
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__input",
+        "c-radio__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 4
+    }
+  ],
+  "counts": {
+    "props": 5,
+    "attributes": 2,
+    "parts": 4,
+    "tokenReferences": 12,
+    "tokenReferencesWithoutFallback": 10,
+    "raw": 0,
+    "stories": 5,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:006b14ea4e44c5333aae3a879d95f2fc77a125a2f6651b656aa0f15c2ccb43e0"
+  }
+}

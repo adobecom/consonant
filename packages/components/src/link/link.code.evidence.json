@@ -1,0 +1,538 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-08T17:55:39.053Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "link",
+    "name": "Link",
+    "cssClass": "c-link",
+    "importPath": "packages/components/src/link/link.js",
+    "exports": [
+      "Link"
+    ],
+    "render": "Link",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/link/link.spec.json",
+      "storybookId": "link",
+      "figmaNodeId": "12823:184375"
+    }
+  },
+  "sources": {
+    "packages/components/src/link/index.js": "sha256:9f263f8ff49b7a79ed97cc7096646fdeab1bfe220caceeb6e421be905f437ee6",
+    "packages/components/src/link/link.js": "sha256:f6e8d432c739ffffa392d967b68e3b732ebcfcea5e39e64adfc220ad9342ebc0",
+    "packages/components/src/link/link.css": "sha256:834de595d8deda2094d8c318aebb8890fecb59656106bc053294fb8375462f99"
+  },
+  "props": [
+    {
+      "name": "label",
+      "default": "\"Label\"",
+      "type": "string"
+    },
+    {
+      "name": "href",
+      "default": "\"#\"",
+      "type": "string"
+    },
+    {
+      "name": "kind",
+      "default": "\"action\"",
+      "type": "string"
+    },
+    {
+      "name": "emphasis",
+      "default": "\"default\"",
+      "type": "string"
+    },
+    {
+      "name": "underline",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "showIconEnd",
+      "default": "true",
+      "type": "boolean"
+    }
+  ],
+  "attributes": {
+    "data-emphasis": {
+      "values": [
+        "default",
+        "subtle"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-kind": {
+      "values": [
+        "action",
+        "text"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-underline": {
+      "values": [
+        ""
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-link",
+      "c-link__icon-end",
+      "c-link__label"
+    ],
+    "stylesheet": [
+      "c-link",
+      "c-link__icon-end"
+    ],
+    "runtime": [
+      "c-link",
+      "c-link__icon-end",
+      "c-link__label"
+    ],
+    "own": [
+      "c-link",
+      "c-link__icon-end",
+      "c-link__label"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden"
+    ],
+    "tags": [
+      "a"
+    ]
+  },
+  "imports": [
+    "./link.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-color-button-content-primary-solid-inverse": {
+        "fallback": true
+      },
+      "--s2a-color-content-body-subtle": {
+        "fallback": true
+      },
+      "--s2a-color-content-default": {
+        "fallback": true
+      },
+      "--s2a-color-focus-ring-default": {
+        "fallback": true
+      },
+      "--s2a-font-family-body": {
+        "fallback": false
+      },
+      "--s2a-font-family-label": {
+        "fallback": false
+      },
+      "--s2a-font-weight-body": {
+        "fallback": false
+      },
+      "--s2a-font-weight-label": {
+        "fallback": false
+      },
+      "--s2a-spacing-xs": {
+        "fallback": true
+      },
+      "--s2a-typography-font-size-body-md": {
+        "fallback": false
+      },
+      "--s2a-typography-font-size-label": {
+        "fallback": false
+      },
+      "--s2a-typography-letter-spacing-body-md": {
+        "fallback": false
+      },
+      "--s2a-typography-letter-spacing-label": {
+        "fallback": false
+      },
+      "--s2a-typography-line-height-body-md": {
+        "fallback": false
+      },
+      "--s2a-typography-line-height-label": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [
+    ":focus"
+  ],
+  "queries": [],
+  "stories": [
+    {
+      "id": "atoms-link--action",
+      "name": "Action",
+      "args": {
+        "label": "Learn more",
+        "href": "#",
+        "kind": "action",
+        "emphasis": "default",
+        "underline": false,
+        "showIconEnd": true
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "kind": "action",
+          "emphasis": "default"
+        }
+      },
+      "attributes": {
+        "data-kind": [
+          "action"
+        ],
+        "data-emphasis": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-kind": [
+          "action"
+        ],
+        "data-emphasis": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__icon-end",
+        "c-link__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 5
+    },
+    {
+      "id": "atoms-link--text-link",
+      "name": "Text Link",
+      "args": {
+        "label": "Read the documentation",
+        "href": "#",
+        "kind": "text",
+        "emphasis": "default",
+        "underline": true,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "kind": "text",
+          "emphasis": "default",
+          "underline": ""
+        }
+      },
+      "attributes": {
+        "data-kind": [
+          "text"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-underline": [
+          ""
+        ]
+      },
+      "rootAttributes": {
+        "data-kind": [
+          "text"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-underline": [
+          ""
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Read the documentation",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-link--text-subtle",
+      "name": "Text Subtle",
+      "args": {
+        "label": "Terms of use",
+        "href": "#",
+        "kind": "text",
+        "emphasis": "subtle",
+        "underline": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "kind": "text",
+          "emphasis": "subtle"
+        }
+      },
+      "attributes": {
+        "data-kind": [
+          "text"
+        ],
+        "data-emphasis": [
+          "subtle"
+        ]
+      },
+      "rootAttributes": {
+        "data-kind": [
+          "text"
+        ],
+        "data-emphasis": [
+          "subtle"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Terms of use",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-link--on-dark",
+      "name": "On Dark",
+      "args": {
+        "label": "Learn more",
+        "href": "#",
+        "kind": "action",
+        "emphasis": "default",
+        "underline": false,
+        "showIconEnd": true
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "kind": "action",
+          "emphasis": "default"
+        }
+      },
+      "attributes": {
+        "data-kind": [
+          "action"
+        ],
+        "data-emphasis": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-kind": [
+          "action"
+        ],
+        "data-emphasis": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__icon-end",
+        "c-link__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 5
+    },
+    {
+      "id": "atoms-link--on-dark-text-subtle",
+      "name": "On Dark Text Subtle",
+      "args": {
+        "label": "Privacy policy",
+        "href": "#",
+        "kind": "text",
+        "emphasis": "subtle",
+        "underline": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "kind": "text",
+          "emphasis": "subtle"
+        }
+      },
+      "attributes": {
+        "data-kind": [
+          "text"
+        ],
+        "data-emphasis": [
+          "subtle"
+        ]
+      },
+      "rootAttributes": {
+        "data-kind": [
+          "text"
+        ],
+        "data-emphasis": [
+          "subtle"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Privacy policy",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-link--all-variants",
+      "name": "All Variants",
+      "args": {
+        "label": "Learn more",
+        "href": "#",
+        "kind": "action",
+        "emphasis": "default",
+        "underline": false,
+        "showIconEnd": true
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "kind": "action",
+          "emphasis": "default"
+        }
+      },
+      "attributes": {
+        "data-kind": [
+          "action"
+        ],
+        "data-emphasis": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-kind": [
+          "action"
+        ],
+        "data-emphasis": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__icon-end",
+        "c-link__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Action link",
+          "disabled": false
+        }
+      ],
+      "nodes": 5
+    }
+  ],
+  "counts": {
+    "props": 6,
+    "attributes": 3,
+    "parts": 3,
+    "tokenReferences": 15,
+    "tokenReferencesWithoutFallback": 10,
+    "raw": 0,
+    "stories": 6,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:90f82a6cf058cfb16badfc8670c655403001f6811ae86985b156e0707073fd8b"
+  }
+}

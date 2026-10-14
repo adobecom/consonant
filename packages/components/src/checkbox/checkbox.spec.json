@@ -1,55 +1,198 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "Checkbox",
   "slug": "checkbox",
   "cssClass": "c-checkbox",
+  "figmaNodeId": "10559:113870",
   "storybookId": "checkbox",
-  "description": "Binary selection control. 20×20 monochrome box + label; optional tile chrome for bordered selection rows. Sourced from Figma Checkbox (10559:113870), .checkbox core (10559:113849), CheckboxTile (10559:114252).",
+  "description": "A single checkbox with a label — toggles one independent option on or off.",
   "variants": {
-    "state": ["unchecked", "checked"],
-    "presentation": ["default", "tile"]
-  },
-  "props": [
-    { "name": "label", "type": "string", "defaultValue": "\"Label\"", "description": "Visible label text" },
-    { "name": "checked", "type": "boolean", "defaultValue": "false", "description": "Checked state (Figma: State=checked)" },
-    { "name": "disabled", "type": "boolean", "defaultValue": "false", "description": "Disabled state (code-side extension; no Figma variant)" },
-    { "name": "tile", "type": "boolean", "defaultValue": "false", "description": "CheckboxTile chrome: full-width bordered row (Figma: CheckboxTile)" },
-    { "name": "icon", "type": "lit template", "defaultValue": "null", "description": "Optional trailing icon, tile mode only (Figma: Show Icon + Icon instance-swap)" },
-    { "name": "name", "type": "string", "defaultValue": "undefined", "description": "Native form field name" },
-    { "name": "value", "type": "string", "defaultValue": "undefined", "description": "Native form field value" }
-  ],
-  "tokenBindings": {
-    "border-color:box": "--s2a-color-content-default",
-    "background-color:box:checked": "--s2a-color-content-default",
-    "color:checkmark": "--s2a-color-background-default",
-    "color:label": "--s2a-color-content-default",
-    "gap:root": "--s2a-spacing-xs",
-    "border-radius:box": "--s2a-border-radius-2xs",
-    "box-shadow:focus": "--s2a-color-focus-ring-default",
-    "border-color:box:disabled": "--s2a-color-content-disabled",
-    "color:label:disabled": "--s2a-color-content-disabled",
-    "background-color:tile": "--s2a-color-background-default",
-    "border-color:tile": "--s2a-color-border-subtle",
-    "border-radius:tile": "--s2a-border-radius-xs",
-    "padding:tile": "--s2a-spacing-md / --s2a-spacing-sm",
-    "font:label": "s2a/typography/label (--s2a-font-family-label et al.)"
-  },
-  "a11y": {
-    "role": "native <input type=\"checkbox\"> inside <label>",
-    "requiredAriaAttrs": [],
-    "wcag": ["1.3.1", "2.1.1", "2.4.7", "4.1.2"],
-    "notes": [
-      "Uses a real checkbox input wrapped in a label — name, state, and keyboard support come for free.",
-      "Focus ring uses --s2a-color-focus-ring-default via :focus-visible, matching Button.",
-      "The 20×20 box is monochrome content/default so it passes contrast and flips with theme mode."
+    "Style": [
+      "default"
     ]
   },
-  "figma": {
-    "fileKey": "oXIFqtnrYNdTIjqb1sbJau",
-    "page": "   ↳ Checkbox",
-    "componentSets": {
-      "Checkbox": "10559:113870",
-      ".checkbox": "10559:113849",
-      "CheckboxTile": "10559:114252"
+  "props": [
+    {
+      "name": "style",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "enum": [
+        "default"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style",
+          "verified": true,
+          "options": [
+            "default"
+          ]
+        },
+        "code": {
+          "prop": "style",
+          "attr": "data-style",
+          "extracted": false,
+          "jsdoc": null
+        }
+      }
     }
+  ],
+  "tokenBindings": {},
+  "tier": "component",
+  "composedOf": [],
+  "a11y": {
+    "wcag": [
+      "1.3.1",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Native input with a real <label>, so the hit area includes the text.",
+      "Indeterminate is a property, not a third value.",
+      "Group related controls in a fieldset with a legend (1.3.1).",
+      "Exposes a native checkbox role with the label programmatically associated, so assistive tech announces the label and the checked/unchecked state (WCAG 2.2 AA · SC 4.1.2 Name, Role, Value; SC 1.3.1 Info & Relationships).",
+      "Keyboard: Tab moves focus to the checkbox, Space toggles it; the focused state shows a visible focus ring (SC 2.1.1 Keyboard; SC 2.4.7 Focus Visible).",
+      "Because the checkmark and label use s2a/color/content/default, contrast is maintained in both light and dark themes (SC 1.4.3 Contrast Minimum)."
+    ]
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".c-checkbox",
+    "figma": ".root",
+    "element": "input",
+    "layout": {
+      "display": "inline-flex",
+      "direction": "row",
+      "align": "center"
+    },
+    "parts": {
+      "checkbox": {
+        "selector": ".checkbox",
+        "figma": "/.checkbox"
+      },
+      "label": {
+        "selector": ".c-checkbox__label",
+        "figma": "/Label",
+        "layout": {
+          "display": "flex",
+          "direction": "row",
+          "grow": true
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "10559:113870",
+        "nodeName": "Checkbox",
+        "componentSetKey": "b54325d5cfb373ea25b4f7772bfd9d648012827b",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:77f258b68d6fe82f32fbe4456595467fd6310a6ddcf7cec6b258af73aa8dbd4b",
+        "extractedAt": "2026-10-07T17:24:17.391Z",
+        "meta": {
+          "version": "1.0.0",
+          "status": "active",
+          "updated": "2026-08-26",
+          "changelog": "1.0.0   2026-08-04  init         Initial release"
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/checkbox/checkbox.js",
+        "export": "Checkbox",
+        "controller": null,
+        "cssClass": "c-checkbox"
+      },
+      "evidence": {
+        "hash": "sha256:777ec90b5a7b704aca286d335b66d3622f00d671d7ea95ed00f217f4fb85701b"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "c-archetype",
+      "question": "Scaffolded as checkbox / radio (named \"Checkbox\"). Confirm, or re-run npm run specs:scaffold -- --slug=checkbox --archetype=<link-card|card|collection>.",
+      "chose": "checkbox / radio — named \"Checkbox\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=checkbox --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "Matt",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×2; state axis none"
+    },
+    {
+      "id": "c-match",
+      "question": "Structural match says extend: closest existing contract is AppIcon (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending AppIcon (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to AppIcon instead.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "AppIcon (1) already covers this; extend it."
+    },
+    {
+      "id": "c-composes",
+      "question": "Built from 1 component set, all of which already have a contract: Label. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 1 composed set, 1 already contracted; 1 icon set left for the icon slot",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "Matt",
+      "evidence": "checkbox.figma.evidence.json instances"
+    },
+    {
+      "id": "c-layer-names",
+      "question": "1 layers carry Figma-generated names (/.checkbox/S2_Icon_CheckBox_20_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "checkbox.figma.evidence.json anatomy"
+    },
+    {
+      "id": "c-code-evidence",
+      "status": "open",
+      "confidence": "high",
+      "question": "checkbox.js exists but its code evidence does not, so the props below were derived from Figma alone and nothing has checked them against the component.",
+      "fix": "npm run evidence:code -- --slug=checkbox, then re-scaffold or reconcile the props by hand.",
+      "owner": "Matt",
+      "evidence": "checkbox.js"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:4793d3f3c1eac7d83f4eb02c744c0500ce40d9dd4d2b5c350c4b0ea7102d2b7a",
+    "codeEvidence": "sha256:777ec90b5a7b704aca286d335b66d3622f00d671d7ea95ed00f217f4fb85701b",
+    "figmaEvidence": "sha256:77f258b68d6fe82f32fbe4456595467fd6310a6ddcf7cec6b258af73aa8dbd4b",
+    "generator": "s2a-spec-transform@1"
   }
 }

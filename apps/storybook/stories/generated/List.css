@@ -1,0 +1,23 @@
+/* Generated from list.contract.json. Re-run: npm run specs:render -- --slug=list */
+
+.c-list [hidden],
+.c-list[hidden] {
+  display: none !important;
+}
+
+.c-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-md);
+  padding-bottom: var(--s2a-spacing-none);
+  padding-left: var(--s2a-spacing-none);
+  padding-right: var(--s2a-spacing-none);
+  padding-top: var(--s2a-spacing-none);
+  width: 418px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-list__merch-card-feature-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}

@@ -64,7 +64,7 @@ export const MediaSection = ({
 export const NewsSection = ({ title = "Adobe News", items = [] } = {}) => html`
   <div class="c-news-section home-section">
     <h2 class="home-news-heading home-reveal">
-      ${AppIcon({ app: "experience-cloud", size: "md" })}<span>${title}</span>
+      ${AppIcon({ app: "experience-cloud", size: "24" })}<span>${title}</span>
     </h2>
     <div class="home-news-grid home-reveal-stagger">
       ${items.map((item) => html`<article>${TextCard({ ...item, headline: item.title })}</article>`)}

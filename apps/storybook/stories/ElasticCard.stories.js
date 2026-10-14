@@ -228,8 +228,8 @@ export const RoutingCarousel = {
     },
   },
   render: () => html`
-    <div style="overflow:hidden; padding-block:24px; background:#f5f5f5; border-radius:24px; width:100%">
-      <div style="display:flex; gap:8px; align-items:stretch; justify-content:center;">
+    <div style="overflow:hidden; padding-block:var(--s2a-spacing-lg); background:var(--s2a-color-surface-subtle); border-radius:var(--s2a-border-radius-lg); width:100%">
+      <div style="display:flex; gap:var(--s2a-spacing-xs); align-items:stretch; justify-content:center;">
         ${ElasticCard({
           label: "Creativity and design",
           app: "firefly",

@@ -20,7 +20,7 @@ import Ajv from "ajv";
 /** Where each canonical schema lives, relative to the repo root. */
 export const SCHEMA_PATHS = {
     defs: join("packages", "components", "defs.schema.json"),
-    contract: join("packages", "specs", "southleft", "contract.schema.json"),
+    contract: join("packages", "spec-dictionary", "southleft", "contract.schema.json"),
 };
 // Parsed once per path. Returning a fresh object each call would defeat the
 // validator cache below AND make ajv reject the second compile of a schema that

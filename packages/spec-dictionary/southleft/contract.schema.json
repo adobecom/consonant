@@ -1090,6 +1090,12 @@
             "flow": {
               "type": "string",
               "const": "row"
+            },
+            "stretch": {
+              "type": "boolean"
+            },
+            "stack": {
+              "type": "boolean"
             }
           },
           "additionalProperties": false
@@ -1896,6 +1902,13 @@
                     "textTemplate": {
                       "type": "boolean",
                       "const": true
+                    },
+                    "valueMap": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "Prop value \u2192 axis value, for a prop whose values are not the axis's (S2A extension)."
                     }
                   },
                   "additionalProperties": false
@@ -1928,12 +1941,94 @@
                   },
                   "text": {
                     "type": "string"
+                  },
+                  "children": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "id"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "props": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {
+                            "type": [
+                              "string",
+                              "boolean"
+                            ]
+                          }
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "description": "Content placed inside this default content (S2A extension)."
                   }
                 },
                 "required": [
                   "id"
                 ],
                 "additionalProperties": false
+              }
+            },
+            "conditionalContent": {
+              "type": "array",
+              "description": "Default content that depends on a prop value (S2A extension): [{ prop, value, content: defaultContent[] }].",
+              "items": {
+                "type": "object",
+                "required": [
+                  "prop",
+                  "value",
+                  "content"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "prop": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "props": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {
+                            "type": [
+                              "string",
+                              "boolean"
+                            ]
+                          }
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                }
               }
             }
           },

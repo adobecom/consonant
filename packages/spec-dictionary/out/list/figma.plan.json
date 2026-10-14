@@ -1,0 +1,95 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "List",
+  "setName": "List",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "ul",
+    "bindings": {
+      "gap": [
+        "s2a/spacing/16"
+      ],
+      "padding-bottom": [
+        "s2a/spacing/none"
+      ],
+      "padding-left": [
+        "s2a/spacing/none"
+      ],
+      "padding-right": [
+        "s2a/spacing/none"
+      ],
+      "padding-top": [
+        "s2a/spacing/none"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".merch-card-feature-section",
+        "source": "/list-1",
+        "element": null,
+        "bindings": {},
+        "slot": {
+          "name": "list-1",
+          "accepts": [
+            "MerchCardFeatureSection"
+          ],
+          "mode": "restrict"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10320:102094",
+    "nodeName": "List",
+    "componentSetKey": "4aeccd1ccd926c9c44fabe920de5126a94a19f5c",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-list",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/16"
+        ],
+        "padding-bottom": [
+          "s2a/spacing/none"
+        ],
+        "padding-left": [
+          "s2a/spacing/none"
+        ],
+        "padding-right": [
+          "s2a/spacing/none"
+        ],
+        "padding-top": [
+          "s2a/spacing/none"
+        ]
+      }
+    },
+    {
+      "name": "/list-1",
+      "selector": ".c-list__merch-card-feature-section",
+      "bindings": {},
+      "slot": {
+        "name": "list-1",
+        "accepts": [
+          "MerchCardFeatureSection"
+        ],
+        "mode": "restrict"
+      }
+    }
+  ],
+  "textStyles": []
+}
