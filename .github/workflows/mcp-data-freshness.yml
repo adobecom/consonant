@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
       # No install needed — the check and copy-data use only Node built-ins.
       - name: Check data snapshot freshness
         run: node apps/s2a-ds-mcp/scripts/check-data-fresh.mjs
