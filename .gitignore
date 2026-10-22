@@ -94,3 +94,6 @@ packages/spec-dictionary/examples/minimal/out/
 
 # Validator audit reports (baselines are tracked separately)
 .tmp/validators/
+
+# assembled GitHub Pages site (scripts/stage-site.mjs) — anchored so apps/site/ stays tracked
+/site/

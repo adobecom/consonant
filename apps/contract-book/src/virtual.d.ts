@@ -24,3 +24,6 @@ declare module "virtual:s2a-data" {
   };
   export default data;
 }
+
+/** True in the GitHub Pages build: data baked in, no dev-server endpoints. Set in vite.config.ts. */
+declare const __BOOK_STATIC__: boolean;

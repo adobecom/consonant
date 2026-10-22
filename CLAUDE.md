@@ -14,9 +14,11 @@ If you just ran the setup script and are new here, this is all you need:
 
 That creates a branch, opens a draft PR, and gives you a live Storybook preview URL. Then just describe what you want to build in plain language and Claude will handle the rest.
 
-**Live Storybook:**
-- Main: `https://adobecom.github.io/consonant`
-- Your PR preview: `https://adobecom.github.io/consonant/pr-preview/pr-<number>/` (posted automatically as a PR comment once CI runs)
+**Live site** (`https://adobecom.github.io/consonant` is a landing page linking to all three):
+- Storybook: `https://adobecom.github.io/consonant/storybook/`
+- Contract Book (read-only snapshot): `https://adobecom.github.io/consonant/contract-book/`
+- S2A Studio: `https://adobecom.github.io/consonant/authoring/`
+- Your PR preview (Storybook): `https://adobecom.github.io/consonant/pr-preview/pr-<number>/` (posted automatically as a PR comment once CI runs)
 
 **MCP servers available (configured by setup script):**
 - `figma-dev-mode-mcp-server` — reads your open Figma file directly

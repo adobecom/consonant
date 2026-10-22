@@ -14,6 +14,12 @@
 import { LitElement, html, nothing, type TemplateResult } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { build, contracted, components, capturedAt, registerDraft, type BuildResult, type Refusal, type Component } from "./engine";
+
+// GitHub Pages serves the Book as a static snapshot (vite.config.ts sets the
+// flag). Everything that reads is there; everything that needs Node — the Figma
+// extractor, headless Chromium for parity, writing to the repo — is not.
+const STATIC: boolean = typeof __BOOK_STATIC__ !== "undefined" && __BOOK_STATIC__;
+const STATIC_NOTE = "Extract, parity, heal and save run on the dev server — clone the repo and run `npm run contract-book`";
 import { mountPreview, type PreviewHandle } from "./preview";
 import { nextPatch, type Patch } from "./heal";
 
@@ -406,8 +412,8 @@ export class ContractBook extends LitElement {
     const warns = r?.refusals.filter((x) => x.severity === "warn").length ?? 0;
     return html`
       <header class="topbar">
-        <span class="topbar__brand"><img src="/contract-book-icon.svg" alt="" width="22" height="22">Contract Book</span>
-        <span class="topbar__sub">the contract loop, on this repo's own components</span>
+        <span class="topbar__brand"><img src="${import.meta.env.BASE_URL}contract-book-icon.svg" alt="" width="22" height="22">Contract Book</span>
+        <span class="topbar__sub">${STATIC ? "a read-only snapshot of the contract loop, hosted from main" : "the contract loop, on this repo's own components"}</span>
         <span class="topbar__spacer"></span>
         <span class="topbar__meta">${contracted.length} contracted · ${components.length} in library · read ${new Date(capturedAt).toLocaleTimeString()}</span>
       </header>
@@ -427,7 +433,7 @@ export class ContractBook extends LitElement {
         <div class="pane__head"><span class="pane__title">Library</span></div>
         <div class="pane__body">
           <div class="rail__group">From Figma</div>
-          <form class="rail__form" @submit=${(e: Event) => { e.preventDefault(); this.extract(); }}>
+          ${STATIC ? html`<div class="rail__form"><span class="rail__hint">${STATIC_NOTE}</span></div>` : html`<form class="rail__form" @submit=${(e: Event) => { e.preventDefault(); this.extract(); }}>
             <input type="url" placeholder="https://www.figma.com/design/…?node-id=…" .value=${this.figmaUrl}
               @input=${(e: Event) => { this.figmaUrl = (e.target as HTMLInputElement).value; }} ?disabled=${this.extracting}>
             <div class="row">
@@ -437,7 +443,7 @@ export class ContractBook extends LitElement {
                 ${this.treeBusy === "crawl" ? html`<span class="spin spin--dark"></span> Crawling…` : "Crawl tree"}</button>
             </div>
             <span class="rail__hint">a component set's link; REST, so it needs <code>FIGMA_ACCESS_TOKEN</code> in <code>.env</code></span>
-          </form>
+          </form>`}
           ${this.extractError ? html`<div class="rail__err">${this.extractError}</div>` : nothing}
           ${this.tree ? this.renderTree(this.tree) : nothing}
 
@@ -488,7 +494,9 @@ export class ContractBook extends LitElement {
           <span class="pane__title">Defs</span>
           <span class="topbar__meta">${this.slug}.defs.json${d ? " · draft" : this.dirty ? " · edited" : ""}</span>
           <span class="topbar__spacer"></span>
-          ${d
+          ${STATIC
+            ? html`<span class="topbar__meta" title=${STATIC_NOTE}>read-only · edits derive live but cannot be saved here</span>`
+            : d
             ? html`<button class="btn btn--ghost" @click=${() => location.reload()}>Discard</button>
                    <button class="btn btn--primary" @click=${() => this.saveDraft(false)} ?disabled=${this.saving || Boolean(this.parseError) || Boolean(d.saved)}>
                      ${this.saving ? "Saving…" : d.onDisk.defs ? "Save evidence" : "Save to repo"}</button>`
@@ -557,7 +565,7 @@ export class ContractBook extends LitElement {
     if (tab === "evidence") return this.renderEvidence();
     if (!r?.ok && tab === "parity") return html`<div class="parity">
       <div class="parity__bar">
-        <button class="btn" @click=${() => this.heal()} ?disabled=${this.healing}>${this.healing ? html`<span class="spin spin--dark"></span> Healing…` : "Heal"}</button>
+        ${STATIC ? nothing : html`<button class="btn" @click=${() => this.heal()} ?disabled=${this.healing}>${this.healing ? html`<span class="spin spin--dark"></span> Healing…` : "Heal"}</button>`}
         <span class="editor__status--fail">the defs does not derive yet — Heal works through the refusals it has evidence for; the rest are yours</span>
       </div>
       ${this.healLog.length || this.healNote ? this.renderHealLog() : nothing}
@@ -616,10 +624,10 @@ export class ContractBook extends LitElement {
             <option value="light" ?selected=${this.parityTheme === "light"}>light</option>
             <option value="dark" ?selected=${this.parityTheme === "dark"}>dark</option>
           </select>
-          <button class="btn btn--primary" @click=${() => this.runParity()} ?disabled=${this.parityBusy || this.healing}>
+          ${STATIC ? html`<span class="editor__status--warn">${STATIC_NOTE}</span>` : html`<button class="btn btn--primary" @click=${() => this.runParity()} ?disabled=${this.parityBusy || this.healing}>
             ${this.parityBusy && !this.healing ? html`<span class="spin"></span> Rendering…` : p ? "Run again" : "Run parity"}</button>
           <button class="btn" @click=${() => this.heal()} ?disabled=${this.parityBusy || this.healing} title="Score, fix what the evidence supports, score again — until it passes or nothing applies">
-            ${this.healing ? html`<span class="spin spin--dark"></span> Healing…` : "Heal"}</button>
+            ${this.healing ? html`<span class="spin spin--dark"></span> Healing…` : "Heal"}</button>`}
           <span class="topbar__meta">${matrix.rows.length} × ${matrix.cols.length} cells · pass &lt; 8%</span>
           ${this.parityStale ? html`<span class="editor__status--warn">defs changed since this run</span>` : nothing}
         </div>

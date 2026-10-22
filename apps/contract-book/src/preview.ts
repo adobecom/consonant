@@ -64,8 +64,8 @@ export function installStorybookFonts(doc: Document) {
   const faces = doc.createElement("style");
   faces.setAttribute("data-s2a-fonts", "");
   faces.textContent = `
-    @font-face { font-family: "adobe-clean-display"; src: url("/fonts/AdobeCleanDisplay-Black.otf") format("opentype"); font-weight: 900; font-style: normal; font-display: block; }
-    @font-face { font-family: "adobe-clean-display"; src: url("/fonts/AdobeCleanDisplay-ExtraBold.otf") format("opentype"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "adobe-clean-display"; src: url("${import.meta.env.BASE_URL}fonts/AdobeCleanDisplay-Black.otf") format("opentype"); font-weight: 900; font-style: normal; font-display: block; }
+    @font-face { font-family: "adobe-clean-display"; src: url("${import.meta.env.BASE_URL}fonts/AdobeCleanDisplay-ExtraBold.otf") format("opentype"); font-weight: 800; font-style: normal; font-display: block; }
     :root { ${FONT_FAMILY_OVERRIDES} }
   `;
   doc.head.appendChild(faces);

@@ -23,9 +23,15 @@ import extract from "./vite-plugin-extract.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, "..", "..");
+// GitHub Pages hosts the Book at /consonant/contract-book/ as a read-only
+// snapshot: the data is baked in at build time, but the extract, parity and
+// save endpoints below are dev-server plugins and do not exist on a static host.
+const pages = process.env.GITHUB_PAGES === "true";
 
 export default defineConfig({
   root: here,
+  base: pages ? process.env.CONTRACT_BOOK_BASE_PATH || "/consonant/contract-book/" : "/",
+  define: { __BOOK_STATIC__: JSON.stringify(pages) },
   plugins: [s2aData({ root: repoRoot }), parity({ root: repoRoot }), extract({ root: repoRoot })],
   resolve: {
     alias: {
