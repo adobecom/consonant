@@ -9,7 +9,7 @@
     },
     "light-breakpoints": {
       "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
-      "section": "9672:83669 (Home — Original Design Specs)",
+      "section": "9672:83669 (Home \u2014 Original Design Specs)",
       "frames": {
         "375": "8278:190283",
         "1024": "8278:189703",
@@ -207,7 +207,7 @@
       "group": "1920-light",
       "section": "social-proof-carousel",
       "node": "8278:188943",
-      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327×542 in both."
+      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327\u00d7542 in both."
     },
     {
       "group": "1920-light",
@@ -250,13 +250,15 @@
     {
       "group": "1440-light",
       "section": "media-section",
-      "node": "8278:189410"
+      "node": "8278:189410",
+      "baseline": 0.4,
+      "why": "CI renders this section 4-5 points further from the golden than a Mac does (36.1 / 37.1 on 2026-10-23 vs 32.6 / 31.9 locally): Linux text rasterisation on a text-heavy section. Same allowance 1920-light already carries."
     },
     {
       "group": "1440-light",
       "section": "social-proof-carousel",
       "node": "8278:189460",
-      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327×542 in both."
+      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327\u00d7542 in both."
     },
     {
       "group": "1440-light",
@@ -299,13 +301,15 @@
     {
       "group": "1024-light",
       "section": "media-section",
-      "node": "8278:189989"
+      "node": "8278:189989",
+      "baseline": 0.4,
+      "why": "CI renders this section 4-5 points further from the golden than a Mac does (36.1 / 37.1 on 2026-10-23 vs 32.6 / 31.9 locally): Linux text rasterisation on a text-heavy section. Same allowance 1920-light already carries."
     },
     {
       "group": "1024-light",
       "section": "social-proof-carousel",
       "node": "8278:190039",
-      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327×542 in both."
+      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327\u00d7542 in both."
     },
     {
       "group": "1024-light",
@@ -355,7 +359,7 @@
       "section": "social-proof-carousel",
       "node": "8278:190566",
       "baseline": 0.6,
-      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327×542 in both."
+      "notes": "375 golden crops the quote above the section and zooms the photo; the card is 327\u00d7542 in both."
     },
     {
       "group": "375-light",
