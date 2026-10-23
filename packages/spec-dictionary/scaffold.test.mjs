@@ -162,13 +162,15 @@ test('"Show X" paired with a real swap is a Figma authoring helper, not a code l
 });
 
 test('instance swaps become both a prop and a slot; text and variants become props', () => {
-  const { props, slots } = fromComponentSet(buttonAxes);
+  const { props, slots, notes } = fromComponentSet(buttonAxes);
   assert.deepEqual(slots.map((s) => s.part).sort(), ['icon-end', 'icon-start']);
   assert.equal(props.find((p) => p.name === 'iconStart').figma.kind, 'INSTANCE_SWAP');
   assert.equal(props.find((p) => p.name === 'label').figma.property, 'Label#8359:192', 'the #id suffix is kept for the binding');
   assert.equal(props.find((p) => p.name === 'label').name, 'label', 'but stripped from the prop name');
   assert.deepEqual(props.find((p) => p.name === 'style').enum, ['solid', 'outlined']);
-  assert.equal(props.find((p) => p.name === 'size').code.attr, 'data-size');
+  // One value is not a choice: Size=md alone is the component's base, not a lever.
+  assert.ok(!props.some((p) => p.name === 'size'), 'a single-value axis is fixed, not a prop');
+  assert.ok(notes.some((n) => /"Size" has a single value \(md\)/.test(n)), 'and the draft says so');
 });
 
 test('a boolean named for a state is both a prop and that state', () => {
@@ -208,9 +210,16 @@ test('code-only props are merged and a state-axis collision is called out', () =
   const defs = scaffoldDefs(buttonAxes, { slug: 'button', code, today: '2026-09-25' });
   const href = defs.props.find((p) => p.name === 'href');
   assert.equal(href.figma, 'NONE', 'a code-only prop declares no design counterpart rather than inventing one');
+  // A code prop named "state" against a State axis is not a collision: it is the
+  // code's handle on that axis, for previews, docs and the state matrix.
+  const state = defs.props.find((p) => p.name === 'state');
+  assert.deepEqual(state.figma, { kind: 'VARIANT', property: 'State' }, 'bound to the axis, not filed as code-only');
+  assert.equal(state.code.attr, 'data-state', 'forced states key on data-state so the generated CSS can select them');
+  assert.deepEqual(state.enum, ['default', 'hover', 'active', 'disabled', 'focus']);
   const note = defs.decisions.find((d) => d.id === 'b-code-only-props');
-  assert.equal(note.confidence, 'low', 'a collision is a guess worth reviewing first');
-  assert.match(note.question, /collides with the State axis/);
+  assert.equal(note.confidence, 'medium', 'href alone is a plain reading, not a collision');
+  assert.doesNotMatch(note.question, /collides/);
+  assert.match(note.question, /^href exist/);
   assert.ok(!defs.props.some((p) => p.name === 'label' && p.figma === 'NONE'), 'a prop present in both is not duplicated');
 });
 

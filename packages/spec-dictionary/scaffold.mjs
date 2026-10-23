@@ -1408,13 +1408,6 @@ export function scaffoldDefs(evidence, { slug, name, archetype: forced, dictiona
       owner: "scaffold", evidence: `${slug}.js` });
   }
 
-  // Triage order: least trustworthy first, so a reviewer reads the guesses before
-  // the readings. Stable within a band, so related notes stay together.
-  const band = { low: 0, medium: 1, high: 2 };
-  decisions.forEach((d, i) => { d._i = i; });
-  decisions.sort((a, b) => (band[a.confidence] ?? 1) - (band[b.confidence] ?? 1) || a._i - b._i);
-  for (const d of decisions) delete d._i;
-
   // A prop that navigates makes the root an anchor. The archetype cannot know
   // this — "button" is the right floor either way — so it is read off the props
   // instead, and drafted rather than left for someone to notice the href being
@@ -1564,6 +1557,19 @@ export function scaffoldDefs(evidence, { slug, name, archetype: forced, dictiona
     })())),
     decisions,
   };
+  // Triage order: least trustworthy first, so a reviewer reads the guesses before
+  // the readings. Stable within a band, so related notes stay together. Done
+  // last, after every note is in — a note pushed after the sort used to land
+  // at the bottom whatever its confidence.
+  const band = { low: 0, medium: 1, high: 2 };
+  decisions.forEach((d, i) => { d._i = i; });
+  decisions.sort((a, b) => (band[a.confidence] ?? 1) - (band[b.confidence] ?? 1) || a._i - b._i);
+  for (const d of decisions) delete d._i;
+  // Working markers (`__describe`, `__variants`, …) ride on part entries while
+  // the anatomy is derived; none of them is part of the defs. The presence walk
+  // removes its own, but a single-variant set never runs it, so scrub here.
+  const scrub = (n) => { if (!n || typeof n !== "object") return; if (Array.isArray(n)) { n.forEach(scrub); return; } for (const k of Object.keys(n)) { if (k.startsWith("__")) delete n[k]; else scrub(n[k]); } };
+  scrub(defs.anatomy);
   return defs;
 }
 
