@@ -90,7 +90,18 @@ function scheduleMetrics(delay = 600) {
   metricsTimer = setTimeout(() => send({ type: "metrics", metrics: collectMetrics() }), delay);
 }
 
-function draw(page: PageDocument, slideIndex = 0) {
+// Progressive first paint: the visitor preview mounts the first section (the
+// hero, which is the LCP) synchronously and yields to the main thread between
+// the rest. Mounting every section in one task was a single ~300 ms task on a
+// throttled phone — all of it counted as blocking. The studio's live updates
+// keep the synchronous path: they re-render one changed section at a time.
+let drawToken = 0;
+const yieldToMain = () =>
+  (globalThis as { scheduler?: { yield?: () => Promise<void> } }).scheduler?.yield?.() ??
+  new Promise<void>((resolve) => setTimeout(resolve, 0));
+
+function draw(page: PageDocument, slideIndex = 0, progressive = false) {
+  const token = ++drawToken;
   validateDocument(page);
   document.documentElement.dataset.theme = page.theme;
   document.documentElement.dataset.editing = String(editing);
@@ -106,7 +117,13 @@ function draw(page: PageDocument, slideIndex = 0) {
       mounts.delete(id);
     }
   const slots = { before: [] as HTMLElement[], main: [] as HTMLElement[], after: [] as HTMLElement[] };
-  page.sections.forEach((section, index) => {
+  const placeAll = () => {
+    // Preserve nodes/controllers across selection, theme changes and reordering.
+    place(root, slots.before, main);
+    place(main, slots.main, null);
+    place(root, slots.after, null);
+  };
+  const mountOne = (section: PageDocument["sections"][number], index: number) => {
     let mount = mounts.get(section.id);
     if (!mount || mount.signature !== JSON.stringify(section)) {
       const active =
@@ -126,12 +143,24 @@ function draw(page: PageDocument, slideIndex = 0) {
     if (editing && section.id === selectedId)
       mount.controller?._goTo?.(slideIndex, true);
     mount.controller?._recalc?.();
-  });
-  // Preserve nodes/controllers across selection, theme changes and reordering.
-  place(root, slots.before, main);
-  place(main, slots.main, null);
-  place(root, slots.after, null);
-  root.dataset.ready = "true";
+  };
+  if (!progressive || page.sections.length <= 1) {
+    page.sections.forEach(mountOne);
+    placeAll();
+    root.dataset.ready = "true";
+    return;
+  }
+  mountOne(page.sections[0], 0);
+  placeAll();
+  void (async () => {
+    for (let index = 1; index < page.sections.length; index++) {
+      await yieldToMain();
+      if (token !== drawToken) return; // a newer draw owns the page now
+      mountOne(page.sections[index], index);
+      placeAll();
+    }
+    root.dataset.ready = "true";
+  })();
 }
 root.addEventListener("click", (event) => {
   if (!editing) return;
@@ -193,6 +222,8 @@ if (embedded) {
       params.get("fixture") === "homepage" ? createHomepage() : params.has("fixture")
         ? createPage()
         : ((await loadDraft())?.document ?? createPage()),
+      0,
+      true,
     );
   } catch (error) {
     heading.textContent =
