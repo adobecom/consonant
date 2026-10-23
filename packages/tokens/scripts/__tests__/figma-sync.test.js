@@ -356,10 +356,26 @@ describe('splitVariablePath', () => {
     expect(result).toEqual(['token', 'color', 'primary', 'token']);
   });
 
-  it('normalizes special characters', () => {
+  it('normalizes special characters but keeps underscores', () => {
     const variable = { name: 'Color/Primary_Value/Base-123' };
     const result = splitVariablePath(variable);
-    expect(result).toEqual(['color', 'primary-value', 'base-123']);
+    // Underscores are meaningful in a variable name and must survive: they
+    // stand in for a decimal point (neg-3_84 is -3.84px) and a leading one
+    // marks a token private/design-only. This case previously expected
+    // 'primary-value', and 762a9b95 changed the slug function to satisfy it —
+    // which renamed every decimal token and let _visibility / _id / _label /
+    // _breakpoint leak into shipped CSS. The expectation was the bug.
+    expect(result).toEqual(['color', 'primary_value', 'base-123']);
+  });
+
+  it('keeps a leading underscore so design-only tokens stay strippable', () => {
+    expect(splitVariablePath({ name: 'S2A/viewport/_visibility' }))
+      .toEqual(['s2a', 'viewport', '_visibility']);
+  });
+
+  it('keeps underscore decimals intact', () => {
+    expect(splitVariablePath({ name: 's2a/font/letter-spacing/neg-3_84' }))
+      .toEqual(['s2a', 'font', 'letter-spacing', 'neg-3_84']);
   });
 
   it('handles whitespace in segments', () => {

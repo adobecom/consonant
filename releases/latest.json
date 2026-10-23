@@ -1,16 +1,16 @@
 {
   "$schema": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/manifest.schema.json",
   "name": "@adobecom/s2a-tokens",
-  "version": "0.0.22",
-  "released": "2026-09-09",
+  "version": "0.0.23",
+  "released": "2026-09-25",
   "spec": "w3c-design-tokens",
   "semver": true,
   "cssVarPrefix": "--s2a-",
   "artifact": {
     "tarball": {
-      "url": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/adobecom-s2a-tokens-0.0.22.tgz",
-      "integrity": "sha256-/4RsuRB/8xpGi8mHvyY+Dq44FTAwJrMI1yB5rThUhuo=",
-      "bytes": 29436
+      "url": "https://raw.githubusercontent.com/adobecom/consonant/main/releases/adobecom-s2a-tokens-0.0.23.tgz",
+      "integrity": "sha256-nxOucmf3+nnFiXtoQQQ3e/cDAwWsH2OM5L6NmpAcMMg=",
+      "bytes": 30008
     },
     "css": {
       "primitives": "css/tokens.primitives.css",
@@ -31,28 +31,6 @@
   },
   "collections": [
     {
-      "name": "S2A / Primitives / Color / Theme",
-      "slug": "s2a-primitives-color-theme",
-      "modes": [
-        "light"
-      ]
-    },
-    {
-      "name": "S2A / Semantic / Dimension / Static",
-      "slug": "s2a-semantic-dimension-static",
-      "modes": [
-        "token",
-        "value"
-      ]
-    },
-    {
-      "name": "Primitives (Core)",
-      "slug": "primitives-core",
-      "modes": [
-        "mode-1"
-      ]
-    },
-    {
       "name": "S2A / Primitives / Dimension / Static",
       "slug": "s2a-primitives-dimension-static",
       "modes": [
@@ -60,11 +38,18 @@
       ]
     },
     {
-      "name": "S2A / Semantic / Color / Theme",
-      "slug": "s2a-semantic-color-theme",
+      "name": "S2A / Semantic / Dimension / Static",
+      "slug": "s2a-semantic-dimension-static",
       "modes": [
-        "light",
-        "dark"
+        "value",
+        "token"
+      ]
+    },
+    {
+      "name": "S2A / Primitives / Color / Theme",
+      "slug": "s2a-primitives-color-theme",
+      "modes": [
+        "light"
       ]
     },
     {
@@ -78,10 +63,11 @@
       ]
     },
     {
-      "name": "Primitives / Color / Theme",
-      "slug": "primitives-color-theme",
+      "name": "Typography",
+      "slug": "typography",
       "modes": [
-        "light"
+        "mode-1",
+        "modeless"
       ]
     },
     {
@@ -92,11 +78,39 @@
       ]
     },
     {
-      "name": "Typography",
-      "slug": "typography",
+      "name": "Primitives (Core)",
+      "slug": "primitives-core",
       "modes": [
-        "modeless",
         "mode-1"
+      ]
+    },
+    {
+      "name": "S2A / Semantic / Color / Theme",
+      "slug": "s2a-semantic-color-theme",
+      "modes": [
+        "light",
+        "dark"
+      ]
+    },
+    {
+      "name": "Primitives / Color / Theme",
+      "slug": "primitives-color-theme",
+      "modes": [
+        "light"
+      ]
+    },
+    {
+      "name": "•S Typography",
+      "slug": "s-typography",
+      "modes": [
+        "mode-1"
+      ]
+    },
+    {
+      "name": "Specs Layout",
+      "slug": "specs-layout",
+      "modes": [
+        "default"
       ]
     },
     {
@@ -117,21 +131,16 @@
       ]
     },
     {
-      "name": "•S Typography",
-      "slug": "s-typography",
+      "name": "S2A / Container",
+      "slug": "s2a-container",
       "modes": [
-        "mode-1"
-      ]
-    },
-    {
-      "name": "Specs Layout",
-      "slug": "specs-layout",
-      "modes": [
-        "default"
+        "default",
+        "fixed",
+        "fluid"
       ]
     }
   ],
-  "tokenCount": 586,
+  "tokenCount": 589,
   "changelog": "https://github.com/adobecom/consonant/blob/main/packages/tokens/CHANGELOG.md",
   "generatedBy": "build-release-manifest.js"
 }
