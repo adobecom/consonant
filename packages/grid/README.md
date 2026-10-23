@@ -9,9 +9,11 @@ component — and the contract is the agreement between them. A grid has the sam
 shape, and the same problem: the breakpoints live in a stylesheet, in four
 shipped token files and in four Figma variable modes, and until now nothing
 compared them. The first thing these contracts found was that the grid
-stylesheet starts the HD range at 1440px while the shipped token CSS starts it
+stylesheet started the HD range at 1440px while the shipped token CSS starts it
 at 1441px — so at exactly 1440, the width every desktop mockup is drawn at, a
-layout takes its columns from one range and its spacing from the other.
+layout took its columns from one range and its spacing from the other. The
+stylesheet now starts that range at 1441px too (decided 2026-10-23); the
+`BP_AGREE_XL` rule is what keeps the two from drifting apart again.
 
 That is the whole argument. A layout rule nobody runs is a convention.
 

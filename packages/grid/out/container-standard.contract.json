@@ -111,17 +111,17 @@
       "mockWidth": 2560,
       "portraitEscape": null,
       "gutterPx": 8,
-      "stylesheet": null,
-      "stylesheetNearest": {
-        "mediaQuery": "@media screen and (min-width: 1440px)",
-        "minWidth": 1440
+      "stylesheet": {
+        "mediaQuery": "@media screen and (min-width: 1441px)",
+        "minWidth": 1441
       },
+      "stylesheetNearest": null,
       "tokenFile": {
         "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
         "mediaQuery": "@media (width >= 1441px)",
         "minWidth": 1441
       },
-      "boundaryAgrees": false,
+      "boundaryAgrees": true,
       "inherited": true
     }
   ],
@@ -200,9 +200,9 @@
             }
           },
           {
-            "media": "@media screen and (min-width: 1440px)",
+            "media": "@media screen and (min-width: 1441px)",
             "declarations": {
-              "max-width": "1440px"
+              "max-width": "var(--s2a-grid-hd-max-width)"
             }
           }
         ]
@@ -423,8 +423,8 @@
   },
   "provenance": {
     "defs": "sha256:b31301cf4dfead007156df607b942435e9b5fdb44940d371f44a4b6893a554e0",
-    "code": "sha256:85c23da6c0b0fd1b6f89fbaf19696fa9f2fbf41b2dd5ef7598fab7cf931cf52e",
-    "figma": "sha256:d41aec77220ad4f98ec449c24cba47fd304215b59a049b215cdb8bce11a555dc",
-    "contract": "sha256:041608c7d4cce6e05eab7684ea8e829fa3838ba9c10c08ff1dd3c9f0286ca25e"
+    "code": "sha256:2d8048246d27d063bf7883e5e461991c5fb2c29f93d62516512512e6a13b73fb",
+    "figma": "sha256:ab9f2703866168d507517b490fc100eb1401a93b3bc07ee3d033b8220e5872ac",
+    "contract": "sha256:709a71b3a0b218c5cd8810b23680c4daa22b636b3ef1f95024a42a503ce430a7"
   }
 }

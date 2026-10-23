@@ -109,17 +109,17 @@
       "mockWidth": 2560,
       "portraitEscape": null,
       "gutterPx": 8,
-      "stylesheet": null,
-      "stylesheetNearest": {
-        "mediaQuery": "@media screen and (min-width: 1440px)",
-        "minWidth": 1440
+      "stylesheet": {
+        "mediaQuery": "@media screen and (min-width: 1441px)",
+        "minWidth": 1441
       },
+      "stylesheetNearest": null,
       "tokenFile": {
         "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
         "mediaQuery": "@media (width >= 1441px)",
         "minWidth": 1441
       },
-      "boundaryAgrees": false,
+      "boundaryAgrees": true,
       "inherited": true
     }
   ],
@@ -227,7 +227,7 @@
             }
           },
           {
-            "media": "@media (min-width: 1440px)",
+            "media": "@media (min-width: 1441px)",
             "declarations": {
               "width": "var(--s2a-grid-container-width)",
               "max-width": "var(--s2a-grid-hd-max-width)",
@@ -450,8 +450,8 @@
   },
   "provenance": {
     "defs": "sha256:c87a9cf77c579cd387be39978b0dafccc459b3f802337c24b51ec916b91569ed",
-    "code": "sha256:85c23da6c0b0fd1b6f89fbaf19696fa9f2fbf41b2dd5ef7598fab7cf931cf52e",
-    "figma": "sha256:d41aec77220ad4f98ec449c24cba47fd304215b59a049b215cdb8bce11a555dc",
-    "contract": "sha256:e99830610fb4fc82044861b524edb103fdc949261789c477fdc56c158c7b0d45"
+    "code": "sha256:2d8048246d27d063bf7883e5e461991c5fb2c29f93d62516512512e6a13b73fb",
+    "figma": "sha256:ab9f2703866168d507517b490fc100eb1401a93b3bc07ee3d033b8220e5872ac",
+    "contract": "sha256:f10d4a9b52723c5dd91ecffb90017543741af5b98fbcd5adf6368187e50f1c02"
   }
 }

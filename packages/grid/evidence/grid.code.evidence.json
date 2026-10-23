@@ -6,8 +6,8 @@
   "kind": "code",
   "source": {
     "path": "packages/grid/src/s2a-layout-grids.css",
-    "hash": "sha256:fb7a1bef5e2d57debd31e244d48deeb9c00c69b97eea294aae21fa53ab578af7",
-    "lines": 372
+    "hash": "sha256:f834aecc3524030546b71fc5cdb0afd6f861c72d57271bfc0c8b9f4fc1c6f13b",
+    "lines": 377
   },
   "mediaQueries": [
     {
@@ -15,16 +15,16 @@
       "minWidth": 768
     },
     {
-      "query": "@media screen and (min-width: 1440px)",
-      "minWidth": 1440
+      "query": "@media screen and (min-width: 1441px)",
+      "minWidth": 1441
     },
     {
       "query": "@media (min-width: 1280px)",
       "minWidth": 1280
     },
     {
-      "query": "@media (min-width: 1440px)",
-      "minWidth": 1440
+      "query": "@media (min-width: 1441px)",
+      "minWidth": 1441
     }
   ],
   "tokenBoundaries": {
@@ -580,9 +580,9 @@
         },
         {
           "selector": ".container",
-          "media": "@media screen and (min-width: 1440px)",
+          "media": "@media screen and (min-width: 1441px)",
           "declarations": {
-            "max-width": "1440px"
+            "max-width": "var(--s2a-grid-hd-max-width)"
           }
         }
       ]
@@ -654,7 +654,7 @@
       "declaredIn": [
         {
           "selector": ".container-hd",
-          "media": "@media screen and (min-width: 1440px)",
+          "media": "@media screen and (min-width: 1441px)",
           "declarations": {
             "max-width": "var(--s2a-grid-hd-max-width)"
           }
@@ -714,7 +714,7 @@
         },
         {
           "selector": ".container-hero-offset",
-          "media": "@media (min-width: 1440px)",
+          "media": "@media (min-width: 1441px)",
           "declarations": {
             "width": "var(--s2a-grid-container-width)",
             "max-width": "var(--s2a-grid-hd-max-width)",
@@ -1960,7 +1960,7 @@
     }
   },
   "provenance": {
-    "hash": "sha256:85c23da6c0b0fd1b6f89fbaf19696fa9f2fbf41b2dd5ef7598fab7cf931cf52e",
+    "hash": "sha256:2d8048246d27d063bf7883e5e461991c5fb2c29f93d62516512512e6a13b73fb",
     "extractor": "s2a-grid-evidence@1"
   }
 }

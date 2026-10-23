@@ -487,8 +487,8 @@
       "kind": "container",
       "tier": "global",
       "status": "shipped",
-      "pass": 7,
-      "fail": 1,
+      "pass": 8,
+      "fail": 0,
       "warn": 0,
       "manual": 0,
       "openDecisions": [
@@ -536,8 +536,8 @@
           "statement": "In HD the cap is 1920, matching Figma's default container family.",
           "severity": "fail",
           "type": "declarationEquals",
-          "status": "fail",
-          "detail": ".container has no block in a range beginning at 1441px; nearest is 1440px where max-width is 1440px"
+          "status": "pass",
+          "detail": "max-width = var(--s2a-grid-hd-max-width) → 1920"
         },
         {
           "id": "STD_FIGMA_XL",
@@ -571,8 +571,8 @@
       "kind": "container",
       "tier": "global",
       "status": "shipped",
-      "pass": 9,
-      "fail": 1,
+      "pass": 10,
+      "fail": 0,
       "warn": 0,
       "manual": 0,
       "openDecisions": [
@@ -620,8 +620,8 @@
           "statement": "In HD the ladder stops and the percentage rule takes over, at the HD boundary of 1441 — not 1440.",
           "severity": "fail",
           "type": "declarationEquals",
-          "status": "fail",
-          "detail": ".container-hero-offset has no block in a range beginning at 1441px; nearest is 1440px where padding-left is 0"
+          "status": "pass",
+          "detail": "padding-left = 0"
         },
         {
           "id": "OFF_FIGMA_SM",
@@ -671,8 +671,8 @@
       "kind": "foundation",
       "tier": "global",
       "status": "shipped",
-      "pass": 14,
-      "fail": 2,
+      "pass": 16,
+      "fail": 0,
       "warn": 0,
       "manual": 1,
       "openDecisions": [
@@ -712,16 +712,16 @@
           "statement": "The HD range begins at 1441px, so that 1440 — the width every desktop mockup is drawn at — is unambiguously inside the desktop range.",
           "severity": "fail",
           "type": "mediaQueryPresent",
-          "status": "fail",
-          "detail": "the stylesheet declares no range beginning at 1441px; nearest is 1440px"
+          "status": "pass",
+          "detail": "2 range(s) begin at 1441px: @media screen and (min-width: 1441px) · @media (min-width: 1441px)"
         },
         {
           "id": "BP_AGREE_XL",
           "statement": "The grid stylesheet and the shipped XL token file must begin the HD range at the same pixel. If they disagree, a layout at that exact width gets its columns from one range and its spacing from the other.",
           "severity": "fail",
           "type": "boundaryAgreement",
-          "status": "fail",
-          "detail": "dist/packages/tokens/css/dev/tokens.responsive.xl.css begins at 1441px but the grid stylesheet begins this range at 1440px — a layout at 1440px takes its columns from one range and its spacing from the other"
+          "status": "pass",
+          "detail": "both begin at 1441px"
         },
         {
           "id": "BP_AGREE_LG",
@@ -1071,8 +1071,8 @@
   "totals": {
     "contracts": 11,
     "rules": 82,
-    "pass": 72,
-    "fail": 4,
+    "pass": 76,
+    "fail": 0,
     "warn": 2,
     "manual": 4,
     "schemaInvalid": 0,

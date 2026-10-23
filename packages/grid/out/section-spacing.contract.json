@@ -110,17 +110,17 @@
       "mockWidth": 2560,
       "portraitEscape": null,
       "gutterPx": 8,
-      "stylesheet": null,
-      "stylesheetNearest": {
-        "mediaQuery": "@media screen and (min-width: 1440px)",
-        "minWidth": 1440
+      "stylesheet": {
+        "mediaQuery": "@media screen and (min-width: 1441px)",
+        "minWidth": 1441
       },
+      "stylesheetNearest": null,
       "tokenFile": {
         "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
         "mediaQuery": "@media (width >= 1441px)",
         "minWidth": 1441
       },
-      "boundaryAgrees": false,
+      "boundaryAgrees": true,
       "inherited": true
     }
   ],
@@ -546,8 +546,8 @@
   },
   "provenance": {
     "defs": "sha256:25086bebb4d3e65f6c452576179cab6315f07920dc49845b8249c3c6db66c84a",
-    "code": "sha256:85c23da6c0b0fd1b6f89fbaf19696fa9f2fbf41b2dd5ef7598fab7cf931cf52e",
-    "figma": "sha256:d41aec77220ad4f98ec449c24cba47fd304215b59a049b215cdb8bce11a555dc",
-    "contract": "sha256:9114f42db453a8904b67838add629a0cc6eca51ed50337b4e6d6a1e7c6f43587"
+    "code": "sha256:2d8048246d27d063bf7883e5e461991c5fb2c29f93d62516512512e6a13b73fb",
+    "figma": "sha256:ab9f2703866168d507517b490fc100eb1401a93b3bc07ee3d033b8220e5872ac",
+    "contract": "sha256:55ba5078213ae61f647057fc7800934bc80901d01c2780008b1c35c2c900546c"
   }
 }
