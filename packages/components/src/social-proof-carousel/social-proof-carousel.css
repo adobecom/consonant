@@ -13,7 +13,7 @@
   will-change: transform;
   /* Initial state: translate = peek, so first slide is in view. The fallbacks
      here and on .spc-slide mirror the controller's numbers per breakpoint
-     (PEEK_NARROW 8.6% below 1600, PEEK_WIDE 11.46% from 1600, 16px on phones)
+     (PEEK_NARROW 8.6% through 1440, PEEK_WIDE 11.46% from XL 1441, 16px on phones)
      so the first paint already matches what the JS measures — a different
      fallback is a layout shift the moment the controller sets the real value. */
   transform: translateX(calc(var(--spc-peek, 8.6%) + var(--s2a-spacing-xs)));
@@ -26,7 +26,7 @@
   min-width: 0;
 }
 
-@media (min-width: 1600px) {
+@media (min-width: 1441px) {
   .spc-track {
     transform: translateX(calc(var(--spc-peek, 11.46%) + var(--s2a-spacing-xs)));
   }

@@ -84,7 +84,10 @@ export class SocialProofCarouselController {
     // Mobile (Home 375 spec 8278:190566): 327px active slide at x=24 with
     // 8px gaps, so 16px of each neighbour peeks.
     if (W < 600) return 16;
-    return Math.round(W * (W >= 1600 ? PEEK_WIDE : PEEK_NARROW));
+    // The design specifies the peek at 1440 (narrow) and 1920 (wide). The switch
+    // sits on the grid's XL boundary (1441, will-block-css-v1) so the stylesheet
+    // can carry the same fallback under a policy breakpoint.
+    return Math.round(W * (W >= 1441 ? PEEK_WIDE : PEEK_NARROW));
   }
 
   _getSlideWidth(peek) {
