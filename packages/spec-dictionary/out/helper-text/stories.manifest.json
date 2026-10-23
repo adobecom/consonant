@@ -28,6 +28,30 @@
   ],
   "existing": [
     {
+      "id": "generated-helpertext--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-helpertext--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-helpertext--intent-neutral",
+      "name": "intent: neutral",
+      "argKeys": [
+        "intent"
+      ]
+    },
+    {
+      "id": "generated-helpertext--intent-error",
+      "name": "intent: error",
+      "argKeys": [
+        "intent"
+      ]
+    },
+    {
       "id": "atoms-helpertext--neutral",
       "name": "Neutral",
       "argKeys": [

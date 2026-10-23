@@ -10,7 +10,7 @@ Status: **curated-draft** · root `c-control-button` · import `packages/compone
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `11180:181592` ControlButton — v2 | evidence sha256:237421ed5ace4091353b24979f92eb452174f3c1becad23a8791c53c07533f7d; used by — |
-| Code | `packages/components/src/control-button/control-button.js` | render `ControlButton`, 19 token references, 4 stories |
+| Code | `packages/components/src/control-button/control-button.js` | render `ControlButton`, 14 token references, 15 stories |
 
 ## Props
 
@@ -103,6 +103,17 @@ WCAG 2.2 AA: `1.4.3`, `1.4.11`, `2.1.1`, `2.4.7`, `2.5.8`, `4.1.2`
 
 ## Stories
 
+- `generated-controlbutton--default` Default
+- `generated-controlbutton--state-matrix` State matrix
+- `generated-controlbutton--size-xl` size: xl
+- `generated-controlbutton--size-md` size: md
+- `generated-controlbutton--disabled-on` disabled on
+- `generated-controlbutton--disabled-off` disabled off
+- `generated-controlbutton--forcestate-default` forceState: default
+- `generated-controlbutton--forcestate-hover` forceState: hover
+- `generated-controlbutton--forcestate-active` forceState: active
+- `generated-controlbutton--forcestate-disabled` forceState: disabled
+- `generated-controlbutton--forcestate-focus` forceState: focus
 - `atoms-controlbutton--default` Media controls
 - `atoms-controlbutton--states` All states
 - `atoms-controlbutton--disabled` Disabled
@@ -125,6 +136,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:55b6ec09039d189dcef9a10af59e4decf6230f16d2ee3ae62a9e95b1fcd4a5ad
-- code evidence: sha256:153748d201c2d4db882bcf73f038453b738a85820fa3ba26fcbcf932bf833772
+- code evidence: sha256:7c4d7021095df6470108bd021d819e1d9c3702c0927ee81758d88517ac1f370b
 - figma evidence: sha256:237421ed5ace4091353b24979f92eb452174f3c1becad23a8791c53c07533f7d
 

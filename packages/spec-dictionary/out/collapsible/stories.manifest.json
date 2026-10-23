@@ -56,6 +56,66 @@
   ],
   "existing": [
     {
+      "id": "generated-collapsible--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-collapsible--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-collapsible--with-content",
+      "name": "With content",
+      "argKeys": [
+        "content",
+        "open"
+      ]
+    },
+    {
+      "id": "generated-collapsible--size-default",
+      "name": "size: default",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-collapsible--size-lg",
+      "name": "size: lg",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-collapsible--open-on",
+      "name": "open on",
+      "argKeys": [
+        "open"
+      ]
+    },
+    {
+      "id": "generated-collapsible--open-off",
+      "name": "open off",
+      "argKeys": [
+        "open"
+      ]
+    },
+    {
+      "id": "generated-collapsible--style-default",
+      "name": "style: default",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-collapsible--style-control",
+      "name": "style: control",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
       "id": "molecules-collapsible--closed",
       "name": "Closed",
       "argKeys": [
@@ -92,10 +152,7 @@
       ]
     }
   ],
-  "deferred": [
-    "size-lg",
-    "style-control"
-  ],
+  "deferred": [],
   "extra": [],
   "matrix": {
     "stateAxis": "State",

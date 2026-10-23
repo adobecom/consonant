@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-08T17:55:39.053Z",
+  "extractedAt": "2026-10-23T16:31:47.435Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -24,7 +24,7 @@
   "sources": {
     "packages/components/src/link/index.js": "sha256:9f263f8ff49b7a79ed97cc7096646fdeab1bfe220caceeb6e421be905f437ee6",
     "packages/components/src/link/link.js": "sha256:f6e8d432c739ffffa392d967b68e3b732ebcfcea5e39e64adfc220ad9342ebc0",
-    "packages/components/src/link/link.css": "sha256:834de595d8deda2094d8c318aebb8890fecb59656106bc053294fb8375462f99"
+    "packages/components/src/link/link.css": "sha256:10f5e737c2d21f6f1c3a0492608968200582f429edd342472717de9fb3367c69"
   },
   "props": [
     {
@@ -110,13 +110,27 @@
     ],
     "runtime": [
       "c-link",
+      "c-link__call-to-action",
+      "c-link__end-icon",
+      "c-link__frame",
+      "c-link__icon-color",
       "c-link__icon-end",
-      "c-link__label"
+      "c-link__label",
+      "c-link__label-wrap",
+      "c-link__s2a-icon-chevron-right",
+      "c-link__underline"
     ],
     "own": [
       "c-link",
+      "c-link__call-to-action",
+      "c-link__end-icon",
+      "c-link__frame",
+      "c-link__icon-color",
       "c-link__icon-end",
-      "c-link__label"
+      "c-link__label",
+      "c-link__label-wrap",
+      "c-link__s2a-icon-chevron-right",
+      "c-link__underline"
     ]
   },
   "aria": {
@@ -133,17 +147,20 @@
   ],
   "tokens": {
     "references": {
+      "--s2a-border-width-sm": {
+        "fallback": false
+      },
       "--s2a-color-button-content-primary-solid-inverse": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-body-subtle": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-focus-ring-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-family-body": {
         "fallback": false
@@ -157,8 +174,14 @@
       "--s2a-font-weight-label": {
         "fallback": false
       },
+      "--s2a-spacing-2xs": {
+        "fallback": false
+      },
+      "--s2a-spacing-3xs": {
+        "fallback": false
+      },
       "--s2a-spacing-xs": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-font-size-body-md": {
         "fallback": false
@@ -187,6 +210,434 @@
   ],
   "queries": [],
   "stories": [
+    {
+      "id": "generated-link--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "emphasis": "default",
+          "kind": "action"
+        }
+      },
+      "attributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 8
+    },
+    {
+      "id": "generated-link--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "emphasis": "default",
+          "kind": "action"
+        }
+      },
+      "attributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 8
+    },
+    {
+      "id": "generated-link--emphasis-default",
+      "name": "emphasis: default",
+      "args": {
+        "emphasis": "default"
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "emphasis": "default",
+          "kind": "action"
+        }
+      },
+      "attributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 8
+    },
+    {
+      "id": "generated-link--emphasis-subtle",
+      "name": "emphasis: subtle",
+      "args": {
+        "emphasis": "subtle"
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "emphasis": "subtle",
+          "kind": "action"
+        }
+      },
+      "attributes": {
+        "data-emphasis": [
+          "subtle"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-emphasis": [
+          "subtle"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 8
+    },
+    {
+      "id": "generated-link--kind-action",
+      "name": "kind: action",
+      "args": {
+        "kind": "action"
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "emphasis": "default",
+          "kind": "action"
+        }
+      },
+      "attributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 8
+    },
+    {
+      "id": "generated-link--kind-text",
+      "name": "kind: text",
+      "args": {
+        "kind": "text"
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "emphasis": "default",
+          "kind": "text"
+        }
+      },
+      "attributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "text"
+        ]
+      },
+      "rootAttributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "text"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 8
+    },
+    {
+      "id": "generated-link--underline-on",
+      "name": "underline on",
+      "args": {
+        "underline": true
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "emphasis": "default",
+          "kind": "action"
+        }
+      },
+      "attributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label true",
+          "disabled": false
+        }
+      ],
+      "nodes": 8
+    },
+    {
+      "id": "generated-link--underline-off",
+      "name": "underline off",
+      "args": {
+        "underline": false
+      },
+      "root": {
+        "tag": "a",
+        "classes": [
+          "c-link"
+        ],
+        "dataset": {
+          "emphasis": "default",
+          "kind": "action"
+        }
+      },
+      "attributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 8
+    },
     {
       "id": "atoms-link--action",
       "name": "Action",
@@ -525,14 +976,14 @@
   "counts": {
     "props": 6,
     "attributes": 3,
-    "parts": 3,
-    "tokenReferences": 15,
-    "tokenReferencesWithoutFallback": 10,
+    "parts": 10,
+    "tokenReferences": 18,
+    "tokenReferencesWithoutFallback": 18,
     "raw": 0,
-    "stories": 6,
+    "stories": 14,
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:90f82a6cf058cfb16badfc8670c655403001f6811ae86985b156e0707073fd8b"
+    "hash": "sha256:ac3cee86108eeaf1ea5a43ead8dbbc364d3bdea433efc0910c358a0b78302018"
   }
 }

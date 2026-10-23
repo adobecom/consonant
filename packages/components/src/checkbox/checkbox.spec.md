@@ -10,13 +10,20 @@ Status: **curated-draft** · root `c-checkbox` · import `packages/components/sr
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `10559:113870` Checkbox | evidence sha256:77f258b68d6fe82f32fbe4456595467fd6310a6ddcf7cec6b258af73aa8dbd4b; used by — |
-| Code | `packages/components/src/checkbox/checkbox.js` | render `Checkbox`, 18 token references, 7 stories |
+| Code | `packages/components/src/checkbox/checkbox.js` | render `Checkbox`, 18 token references, 10 stories |
 
 ## Props
 
 | Prop | Lever | Type | Default | Figma binding | Code |
 | --- | --- | --- | --- | --- | --- |
 | `style` | yes | string (`default`) | `"default"` | VARIANT `Style` ✓ | `data-style` (not extracted) |
+| `label` | yes | string | `"Label"` | NONE | `label` |
+| `checked` | yes | boolean | `false` | NONE | `checked` |
+| `disabled` | yes | boolean | `false` | NONE | `data-disabled` |
+| `tile` | yes | boolean | `false` | NONE | `data-tile` |
+| `icon` | yes | string | `null` | NONE | `icon` |
+| `name` | yes | string | `undefined` | NONE | `name` |
+| `value` | yes | string | `undefined` | NONE | `value` |
 
 ## Anatomy and tokens
 
@@ -53,6 +60,9 @@ WCAG 2.2 AA: `1.3.1`, `1.4.11`, `2.1.1`, `2.4.7`, `2.5.8`, `4.1.2`
 
 ## Stories
 
+- `generated-checkbox--default` Default
+- `generated-checkbox--state-matrix` State matrix
+- `generated-checkbox--style-default` style: default
 - `atoms-checkbox--unchecked` Unchecked
 - `atoms-checkbox--checked` Checked
 - `atoms-checkbox--disabled` Disabled
@@ -76,7 +86,7 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 
 ## Provenance
 
-- defs: sha256:4793d3f3c1eac7d83f4eb02c744c0500ce40d9dd4d2b5c350c4b0ea7102d2b7a
-- code evidence: sha256:777ec90b5a7b704aca286d335b66d3622f00d671d7ea95ed00f217f4fb85701b
+- defs: sha256:f404e212f9283927394a84354c442fa7cff7b84b5ce85a2553a0bb7c2fd4003d
+- code evidence: sha256:f19d5cf1c056dee07952e26a8a2dfd0493fe1f3844e4600335b45a1e819d74c2
 - figma evidence: sha256:77f258b68d6fe82f32fbe4456595467fd6310a6ddcf7cec6b258af73aa8dbd4b
 

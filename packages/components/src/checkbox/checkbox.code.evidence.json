@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-07T17:25:12.657Z",
+  "extractedAt": "2026-10-23T16:31:25.652Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -18,13 +18,13 @@
     "spec": {
       "path": "packages/components/src/checkbox/checkbox.spec.json",
       "storybookId": "checkbox",
-      "figmaNodeId": null
+      "figmaNodeId": "10559:113870"
     }
   },
   "sources": {
     "packages/components/src/checkbox/index.js": "sha256:4ee814c7ef1fe7cb9f39971d95f33c9ae5535d0d1215da0ddab959d12975308f",
     "packages/components/src/checkbox/checkbox.js": "sha256:675c8b0ce7a00b2962b58861ebbeffa5c969f8666452058d883dddc7ce5f7e07",
-    "packages/components/src/checkbox/checkbox.css": "sha256:6dcf6814cec6b5b15a108d1a014746228f49c1ab750eed917523aa29b6e98bd7"
+    "packages/components/src/checkbox/checkbox.css": "sha256:8265c9bce51a9edb3036906ab83e504022aa23df40802fd4169acc8a88833278"
   },
   "props": [
     {
@@ -85,6 +85,16 @@
         "stylesheet"
       ],
       "onRoot": false
+    },
+    "data-style": {
+      "values": [
+        "default"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
     },
     "data-tile": {
       "values": [
@@ -155,10 +165,10 @@
         "fallback": false
       },
       "--s2a-border-width-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-border-width-sm": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-background-default": {
         "fallback": false
@@ -212,6 +222,122 @@
   ],
   "queries": [],
   "stories": [
+    {
+      "id": "generated-checkbox--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "input",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-checkbox"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 1
+    },
+    {
+      "id": "generated-checkbox--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "input",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-checkbox"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 1
+    },
+    {
+      "id": "generated-checkbox--style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "input",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-checkbox"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 1
+    },
     {
       "id": "atoms-checkbox--unchecked",
       "name": "Unchecked",
@@ -528,15 +654,15 @@
   ],
   "counts": {
     "props": 7,
-    "attributes": 3,
+    "attributes": 4,
     "parts": 6,
     "tokenReferences": 18,
-    "tokenReferencesWithoutFallback": 16,
+    "tokenReferencesWithoutFallback": 18,
     "raw": 0,
-    "stories": 7,
+    "stories": 10,
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:777ec90b5a7b704aca286d335b66d3622f00d671d7ea95ed00f217f4fb85701b"
+    "hash": "sha256:f19d5cf1c056dee07952e26a8a2dfd0493fe1f3844e4600335b45a1e819d74c2"
   }
 }

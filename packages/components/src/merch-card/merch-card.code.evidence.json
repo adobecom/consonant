@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-08T17:35:24.074Z",
+  "extractedAt": "2026-10-23T16:31:54.505Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -24,7 +24,7 @@
   "sources": {
     "packages/components/src/merch-card/index.js": "sha256:cd338a154ab7e4a0b98670907ae8892d60caf0b5718dda418b80a6f2d7ad61c6",
     "packages/components/src/merch-card/merch-card.js": "sha256:cbc3e85b86735e39d1d12530d11ba729fa57f616fcfe51c5b34c728e28389c1c",
-    "packages/components/src/merch-card/merch-card.css": "sha256:2416cb94e7d48857f8cd9deb836f9e7998eca67c8b69416d4993893b3f12995c"
+    "packages/components/src/merch-card/merch-card.css": "sha256:d0965b12a7ac57c8a7ed16e769dc1131c3fe5985d29ca2e6c4b4ed9eecb83910"
   },
   "props": [
     {
@@ -149,7 +149,7 @@
     },
     "data-load-state": {
       "values": [
-        "error"
+        "loaded"
       ],
       "dynamic": false,
       "sources": [
@@ -159,7 +159,7 @@
     },
     "data-size": {
       "values": [
-        "sm"
+        "18"
       ],
       "dynamic": false,
       "sources": [
@@ -345,59 +345,59 @@
   ],
   "tokens": {
     "references": {
-      "--s2a-border-radius-999": {
-        "fallback": true
-      },
       "--s2a-border-radius-md": {
-        "fallback": true
+        "fallback": false
+      },
+      "--s2a-border-radius-round": {
+        "fallback": false
       },
       "--s2a-border-radius-sm": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-border-radius-xs": {
-        "fallback": true
+        "fallback": false
       },
-      "--s2a-color-background-inverse": {
-        "fallback": true
+      "--s2a-border-width-md": {
+        "fallback": false
       },
       "--s2a-color-background-subtle": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-blue-900": {
         "fallback": false
       },
       "--s2a-color-border-knockout": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-accent-default": {
-        "fallback": true
+        "fallback": false
       },
-      "--s2a-color-button-background-primary-outlined-default": {
-        "fallback": true
+      "--s2a-color-button-background-outlined-default": {
+        "fallback": false
       },
       "--s2a-color-button-content-primary-outlined-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-heading": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-inverse": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-knockout": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-subtle": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-focus-ring-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-gray-1000": {
         "fallback": false
@@ -406,82 +406,82 @@
         "fallback": false
       },
       "--s2a-color-surface-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-surface-inverse-subtle": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-surface-subtle": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-transparent-black-64": {
         "fallback": false
       },
       "--s2a-font-family-body": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-family-heading": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-family-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-weight-body": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-weight-heading": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-weight-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-2xs": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-3xl": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-3xs": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-lg": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-sm": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-xs": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-font-size-body-sm": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-font-size-caption": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-font-size-heading-5": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-font-size-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-letter-spacing-heading-5": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-line-height-body-sm": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-line-height-caption": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-line-height-heading-5": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-line-height-label": {
-        "fallback": true
+        "fallback": false
       }
     },
     "custom": [
@@ -548,10 +548,10 @@
           "default"
         ],
         "data-size": [
-          "sm"
+          "18"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -674,10 +674,10 @@
           "default"
         ],
         "data-size": [
-          "sm"
+          "18"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -800,10 +800,10 @@
           "closed"
         ],
         "data-size": [
-          "sm"
+          "18"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -922,10 +922,10 @@
           "closed"
         ],
         "data-size": [
-          "sm"
+          "18"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -1044,10 +1044,10 @@
           "closed"
         ],
         "data-size": [
-          "sm"
+          "18"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -1140,10 +1140,10 @@
           "default"
         ],
         "data-size": [
-          "sm"
+          "18"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -1266,10 +1266,10 @@
           "default"
         ],
         "data-size": [
-          "sm"
+          "18"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -1351,12 +1351,12 @@
     "attributes": 4,
     "parts": 33,
     "tokenReferences": 46,
-    "tokenReferencesWithoutFallback": 4,
+    "tokenReferencesWithoutFallback": 46,
     "raw": 0,
     "stories": 7,
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:3b9cbc4521e8e39538c0c1a4a55791dd20f5acb1723cd1ccc03d0a1df6f3df22"
+    "hash": "sha256:432017f49c57ed695ec40e35145a48095ad0c0e04ea9c87490da4ebeb163761e"
   }
 }

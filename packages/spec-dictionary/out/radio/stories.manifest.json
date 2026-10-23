@@ -42,6 +42,52 @@
   ],
   "existing": [
     {
+      "id": "generated-radio--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-radio--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-radio--with-content",
+      "name": "With content",
+      "argKeys": [
+        "value",
+        "selected"
+      ]
+    },
+    {
+      "id": "generated-radio--selected-on",
+      "name": "selected on",
+      "argKeys": [
+        "selected"
+      ]
+    },
+    {
+      "id": "generated-radio--selected-off",
+      "name": "selected off",
+      "argKeys": [
+        "selected"
+      ]
+    },
+    {
+      "id": "generated-radio--disabled-on",
+      "name": "disabled on",
+      "argKeys": [
+        "disabled"
+      ]
+    },
+    {
+      "id": "generated-radio--disabled-off",
+      "name": "disabled off",
+      "argKeys": [
+        "disabled"
+      ]
+    },
+    {
       "id": "atoms-radio--unselected",
       "name": "Unselected",
       "argKeys": [
@@ -92,9 +138,7 @@
       ]
     }
   ],
-  "deferred": [
-    "selected-on"
-  ],
+  "deferred": [],
   "extra": [],
   "matrix": {
     "stateAxis": "State",

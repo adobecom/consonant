@@ -49,6 +49,51 @@
   ],
   "existing": [
     {
+      "id": "generated-divider--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-divider--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-divider--style-default",
+      "name": "style: default",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-divider--style-subtle",
+      "name": "style: subtle",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-divider--style-knockout",
+      "name": "style: knockout",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-divider--style-inverse",
+      "name": "style: inverse",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-divider--style-subtle-inverse",
+      "name": "style: subtle-inverse",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
       "id": "atoms-divider--default",
       "name": "Default",
       "argKeys": [

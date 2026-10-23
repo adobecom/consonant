@@ -10,7 +10,7 @@ Status: **curated-draft** · root `c-list` · import `packages/components/src/li
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `10320:102094` List | evidence sha256:535dd6b941b51d8252066998b05f9f23686cda407486c09d697e45c2ac7e5296; used by — |
-| Code | `packages/components/src/list/list.js` | render `List`, 14 token references, 3 stories |
+| Code | `packages/components/src/list/list.js` | render `List`, 14 token references, 5 stories |
 
 ## Props
 
@@ -63,6 +63,8 @@ WCAG 2.2 AA: `1.3.1`
 
 ## Stories
 
+- `generated-list--default` Default
+- `generated-list--state-matrix` State matrix
 - `molecules-list--single-section` Single Section
 - `molecules-list--multiple-sections` Multiple Sections
 - `molecules-list--no-icons` No Icons
@@ -83,6 +85,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:a2fdd73a29c4e919d2454d5d62d60f174dfe1512056a2390e6169985167545e9
-- code evidence: sha256:52d6b3854329a2e3828464df962c47b067e230f9fea9194236ebb46190735ae4
+- code evidence: sha256:0ea78969ba6e1efbdeaaf4ab95483c01193cdf3224a7b627aa8454f7492d1cc3
 - figma evidence: sha256:535dd6b941b51d8252066998b05f9f23686cda407486c09d697e45c2ac7e5296
 

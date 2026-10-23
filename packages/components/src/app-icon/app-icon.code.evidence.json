@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-07T23:40:20.032Z",
+  "extractedAt": "2026-10-23T16:31:20.068Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -32,7 +32,7 @@
   "sources": {
     "packages/components/src/app-icon/index.js": "sha256:df0f983a46864fa8a818290f18e11040eed7c0a9401cdaadf58e004c9b7b790e",
     "packages/components/src/app-icon/app-icon.js": "sha256:818e589556aac987da33193f430482bf3b4d8c3b9a4225dc537b71c1045908be",
-    "packages/components/src/app-icon/app-icon.css": "sha256:825918b18df146f4a6186f158208a8dfeb232ab6d5b9f9a8a3c73c24532a4515"
+    "packages/components/src/app-icon/app-icon.css": "sha256:b9d7c979ac92cdc7e2dbe3fc49c63fec5e16261d14eab496454d61c47130f395"
   },
   "props": [
     {
@@ -67,7 +67,8 @@
   "attributes": {
     "data-load-state": {
       "values": [
-        "error"
+        "error",
+        "loaded"
       ],
       "dynamic": false,
       "sources": [
@@ -80,12 +81,10 @@
       "values": [
         "16",
         "18",
+        "24",
         "32",
         "48",
-        "80",
-        "lg",
-        "md",
-        "xs"
+        "80"
       ],
       "dynamic": true,
       "sources": [
@@ -133,16 +132,16 @@
   "tokens": {
     "references": {
       "--s2a-spacing-3xl": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-lg": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-xl": {
-        "fallback": true
+        "fallback": false
       }
     },
     "custom": [
@@ -154,6 +153,342 @@
   "states": [],
   "queries": [],
   "stories": [
+    {
+      "id": "generated-appicon--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "16"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "16"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "16"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-16",
+      "name": "size: 16",
+      "args": {
+        "size": "16"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "16"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "16"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "16"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-18",
+      "name": "size: 18",
+      "args": {
+        "size": "18"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "18"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "18"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "18"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-24",
+      "name": "size: 24",
+      "args": {
+        "size": "24"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-32",
+      "name": "size: 32",
+      "args": {
+        "size": "32"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "32"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "32"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "32"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-48",
+      "name": "size: 48",
+      "args": {
+        "size": "48"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "48"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "48"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "48"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-80",
+      "name": "size: 80",
+      "args": {
+        "size": "80"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "80"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "80"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "80"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--ariahidden-on",
+      "name": "ariaHidden on",
+      "args": {
+        "ariaHidden": true
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--ariahidden-off",
+      "name": "ariaHidden off",
+      "args": {
+        "ariaHidden": false
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
     {
       "id": "atoms-appicon--creative-cloud",
       "name": "Creative Cloud",
@@ -168,24 +503,24 @@
           "c-app-icon"
         ],
         "dataset": {
-          "size": "md",
-          "loadState": "error"
+          "size": "24",
+          "loadState": "loaded"
         }
       },
       "attributes": {
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "classes": [
@@ -215,24 +550,24 @@
           "c-app-icon"
         ],
         "dataset": {
-          "size": "md",
-          "loadState": "error"
+          "size": "24",
+          "loadState": "loaded"
         }
       },
       "attributes": {
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "classes": [
@@ -262,24 +597,24 @@
           "c-app-icon"
         ],
         "dataset": {
-          "size": "xs",
-          "loadState": "error"
+          "size": "16",
+          "loadState": "loaded"
         }
       },
       "attributes": {
         "data-size": [
-          "xs"
+          "16"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
         "data-size": [
-          "xs"
+          "16"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "classes": [
@@ -309,24 +644,17 @@
           "c-app-icon"
         ],
         "dataset": {
-          "size": "lg",
-          "loadState": "error"
+          "size": "32"
         }
       },
       "attributes": {
         "data-size": [
-          "lg"
-        ],
-        "data-load-state": [
-          "error"
+          "32"
         ]
       },
       "rootAttributes": {
         "data-size": [
-          "lg"
-        ],
-        "data-load-state": [
-          "error"
+          "32"
         ]
       },
       "classes": [
@@ -356,24 +684,17 @@
           "c-app-icon"
         ],
         "dataset": {
-          "size": "md",
-          "loadState": "error"
+          "size": "24"
         }
       },
       "attributes": {
         "data-size": [
-          "md"
-        ],
-        "data-load-state": [
-          "error"
+          "24"
         ]
       },
       "rootAttributes": {
         "data-size": [
-          "md"
-        ],
-        "data-load-state": [
-          "error"
+          "24"
         ]
       },
       "classes": [
@@ -403,24 +724,24 @@
           "c-app-icon"
         ],
         "dataset": {
-          "size": "lg",
-          "loadState": "error"
+          "size": "32",
+          "loadState": "loaded"
         }
       },
       "attributes": {
         "data-size": [
-          "lg"
+          "32"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
         "data-size": [
-          "lg"
+          "32"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "classes": [
@@ -443,12 +764,12 @@
     "attributes": 2,
     "parts": 2,
     "tokenReferences": 4,
-    "tokenReferencesWithoutFallback": 0,
+    "tokenReferencesWithoutFallback": 4,
     "raw": 0,
-    "stories": 6,
+    "stories": 16,
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:59d84aa6a7ba150f89f305c45c3fc7c9865810be05d0ca8f31b9acb579305478"
+    "hash": "sha256:95e0ba7f1af578291128c68aea8eeeb58ffe5d2b6e4ff6fbcb2a57572a8ad406"
   }
 }

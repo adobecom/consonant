@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-08T17:55:23.986Z",
+  "extractedAt": "2026-10-23T16:31:57.376Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -24,7 +24,7 @@
   "sources": {
     "packages/components/src/product-lockup/index.js": "sha256:b5ce9db5b8ced13a88f7b08da6077c677b5480758be30949cdff5ced7889053e",
     "packages/components/src/product-lockup/product-lockup.js": "sha256:9bd62e2a40cdb212bbb6ca67fdca9255e8158bcf105dc40e582cf49ac31c7124",
-    "packages/components/src/product-lockup/product-lockup.css": "sha256:0cc036ea2a9108937cc3c4b9e9617709265ed74d63bc38de03ac1480a6a40c5b"
+    "packages/components/src/product-lockup/product-lockup.css": "sha256:6c68c886b3c3cff002bccdf9d08f8c150b69ee0c57b93dc07acc3c62d6597d14"
   },
   "props": [
     {
@@ -115,7 +115,7 @@
     },
     "data-load-state": {
       "values": [
-        "error"
+        "loaded"
       ],
       "dynamic": false,
       "sources": [
@@ -138,7 +138,7 @@
     },
     "data-size": {
       "values": [
-        "md"
+        "24"
       ],
       "dynamic": false,
       "sources": [
@@ -205,19 +205,27 @@
       "c-app-icon",
       "c-app-icon__img",
       "c-product-lockup",
+      "c-product-lockup__app-icon",
       "c-product-lockup__caret",
+      "c-product-lockup__frame-1",
       "c-product-lockup__icon",
       "c-product-lockup__icons",
       "c-product-lockup__label",
-      "c-product-lockup__label-row"
+      "c-product-lockup__label-row",
+      "c-product-lockup__s2a-icon-chevron-right",
+      "icons"
     ],
     "own": [
       "c-product-lockup",
+      "c-product-lockup__app-icon",
       "c-product-lockup__caret",
+      "c-product-lockup__frame-1",
       "c-product-lockup__icon",
       "c-product-lockup__icons",
       "c-product-lockup__label",
-      "c-product-lockup__label-row"
+      "c-product-lockup__label-row",
+      "c-product-lockup__s2a-icon-chevron-right",
+      "icons"
     ]
   },
   "aria": {
@@ -246,26 +254,38 @@
       "--s2a-color-content-label": {
         "fallback": false
       },
+      "--s2a-font-family-default": {
+        "fallback": false
+      },
+      "--s2a-font-letter-spacing-6xl": {
+        "fallback": false
+      },
       "--s2a-font-line-height-2xs": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-line-height-sm": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-size-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-size-sm": {
-        "fallback": true
+        "fallback": false
       },
-      "--s2a-font-weight-adobe-clean-bold": {
-        "fallback": true
+      "--s2a-font-weight-label": {
+        "fallback": false
+      },
+      "--s2a-spacing-2xs": {
+        "fallback": false
+      },
+      "--s2a-spacing-3xs": {
+        "fallback": false
       },
       "--s2a-spacing-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-sm": {
-        "fallback": true
+        "fallback": false
       }
     },
     "custom": [],
@@ -274,6 +294,1205 @@
   "states": [],
   "queries": [],
   "stories": [
+    {
+      "id": "generated-productlockup--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--with-content",
+      "name": "With content",
+      "args": {
+        "caret": {
+          "_$litType$": 1,
+          "strings": [
+            "<p style=\"margin:0\">Content placed in the caret slot.</p>"
+          ],
+          "values": []
+        }
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--orientation-horizontal",
+      "name": "orientation: horizontal",
+      "args": {
+        "orientation": "horizontal"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--orientation-vertical",
+      "name": "orientation: vertical",
+      "args": {
+        "orientation": "vertical"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "vertical",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "vertical"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "vertical"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showappicon-on",
+      "name": "showAppIcon on",
+      "args": {
+        "showAppIcon": true
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showappicon-off",
+      "name": "showAppIcon off",
+      "args": {
+        "showAppIcon": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showiconend-on",
+      "name": "showIconEnd on",
+      "args": {
+        "showIconEnd": true
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showiconend-off",
+      "name": "showIconEnd off",
+      "args": {
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showsecondappicon-on",
+      "name": "showSecondAppIcon on",
+      "args": {
+        "showSecondAppIcon": true
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showsecondappicon-off",
+      "name": "showSecondAppIcon off",
+      "args": {
+        "showSecondAppIcon": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--style-label",
+      "name": "style: label",
+      "args": {
+        "style": "label"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--style-eyebrow",
+      "name": "style: eyebrow",
+      "args": {
+        "style": "eyebrow"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "eyebrow",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "eyebrow"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "eyebrow"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--style-knockout",
+      "name": "style: knockout",
+      "args": {
+        "style": "knockout"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "knockout",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "knockout"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "knockout"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--style-inverse",
+      "name": "style: inverse",
+      "args": {
+        "style": "inverse"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "inverse",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "inverse"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "inverse"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--width-hug",
+      "name": "width: hug",
+      "args": {
+        "width": "hug"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--width-fill",
+      "name": "width: fill",
+      "args": {
+        "width": "fill"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "fill"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "fill"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "fill"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showsecondicon-on",
+      "name": "showSecondIcon on",
+      "args": {
+        "showSecondIcon": true
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showsecondicon-off",
+      "name": "showSecondIcon off",
+      "args": {
+        "showSecondIcon": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showiconstart-on",
+      "name": "showIconStart on",
+      "args": {
+        "showIconStart": true
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
+    {
+      "id": "generated-productlockup--showiconstart-off",
+      "name": "showIconStart off",
+      "args": {
+        "showIconStart": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-product-lockup"
+        ],
+        "dataset": {
+          "orientation": "horizontal",
+          "style": "label",
+          "width": "hug"
+        }
+      },
+      "attributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ],
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-orientation": [
+          "horizontal"
+        ],
+        "data-style": [
+          "label"
+        ],
+        "data-width": [
+          "hug"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img",
+        "c-product-lockup",
+        "c-product-lockup__app-icon",
+        "c-product-lockup__frame-1",
+        "c-product-lockup__label",
+        "c-product-lockup__s2a-icon-chevron-right",
+        "icons"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 8
+    },
     {
       "id": "molecules-productlockup--horizontal-label",
       "name": "Horizontal Label",
@@ -317,10 +1536,10 @@
           "true"
         ],
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -401,10 +1620,10 @@
           "true"
         ],
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -485,10 +1704,10 @@
           "true"
         ],
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -569,10 +1788,10 @@
           "true"
         ],
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -653,10 +1872,10 @@
           "true"
         ],
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -737,10 +1956,10 @@
           "true"
         ],
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -822,10 +2041,10 @@
           "true"
         ],
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -979,10 +2198,10 @@
           "false"
         ],
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -1062,10 +2281,10 @@
           "true"
         ],
         "data-size": [
-          "md"
+          "24"
         ],
         "data-load-state": [
-          "error"
+          "loaded"
         ]
       },
       "rootAttributes": {
@@ -1107,14 +2326,14 @@
   "counts": {
     "props": 13,
     "attributes": 8,
-    "parts": 6,
-    "tokenReferences": 11,
-    "tokenReferencesWithoutFallback": 4,
+    "parts": 10,
+    "tokenReferences": 15,
+    "tokenReferencesWithoutFallback": 15,
     "raw": 0,
-    "stories": 10,
+    "stories": 31,
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:43d2743a58a2016c0cb1308b7a78a8facb299dbd3d897fa6cc2dc54d7a3fb6d4"
+    "hash": "sha256:907288e099ed83b3b0e52beeb517273e2c4475f6d22951a953bb412fcbced8ea"
   }
 }

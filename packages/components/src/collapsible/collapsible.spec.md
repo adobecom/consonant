@@ -10,7 +10,7 @@ Status: **curated-draft** · root `c-collapsible` · import `packages/components
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `10564:116547` Collapsible | evidence sha256:48ab8d052f0f3d8ce72c54ea66ded6dc382ad99b274dfb2d98f18c3052bf9460; used by — |
-| Code | `packages/components/src/collapsible/collapsible.js` | render `Collapsible`, 7 token references, 4 stories |
+| Code | `packages/components/src/collapsible/collapsible.js` | render `Collapsible`, 7 token references, 13 stories |
 
 ## Props
 
@@ -91,6 +91,15 @@ WCAG 2.2 AA: `1.3.1`, `2.1.1`, `4.1.2`
 
 ## Stories
 
+- `generated-collapsible--default` Default
+- `generated-collapsible--state-matrix` State matrix
+- `generated-collapsible--with-content` With content
+- `generated-collapsible--size-default` size: default
+- `generated-collapsible--size-lg` size: lg
+- `generated-collapsible--open-on` open on
+- `generated-collapsible--open-off` open off
+- `generated-collapsible--style-default` style: default
+- `generated-collapsible--style-control` style: control
 - `molecules-collapsible--closed` Closed
 - `molecules-collapsible--open` Open
 - `molecules-collapsible--custom-label` Custom Label
@@ -114,6 +123,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:1e82efdff29df59b9781d9bbfe47e97931777f3f99f61ff416e703fd0128865f
-- code evidence: sha256:e5f6cef477753f93c19b559416d84270223ad8c5bdc3ef442d3fbabb440cc556
+- code evidence: sha256:19cf12c3182bcc069a3d4dc11236e6452a4f1de0056da16c9cbc864f87bce97b
 - figma evidence: sha256:48ab8d052f0f3d8ce72c54ea66ded6dc382ad99b274dfb2d98f18c3052bf9460
 

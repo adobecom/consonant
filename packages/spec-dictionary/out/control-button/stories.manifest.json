@@ -77,6 +77,79 @@
   ],
   "existing": [
     {
+      "id": "generated-controlbutton--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-controlbutton--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-controlbutton--size-xl",
+      "name": "size: xl",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--size-md",
+      "name": "size: md",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--disabled-on",
+      "name": "disabled on",
+      "argKeys": [
+        "disabled"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--disabled-off",
+      "name": "disabled off",
+      "argKeys": [
+        "disabled"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-default",
+      "name": "forceState: default",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-hover",
+      "name": "forceState: hover",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-active",
+      "name": "forceState: active",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-disabled",
+      "name": "forceState: disabled",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-focus",
+      "name": "forceState: focus",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
       "id": "atoms-controlbutton--default",
       "name": "Media controls",
       "argKeys": []
@@ -97,14 +170,7 @@
       "argKeys": []
     }
   ],
-  "deferred": [
-    "size-md",
-    "disabled-on",
-    "forcestate-hover",
-    "forcestate-active",
-    "forcestate-disabled",
-    "forcestate-focus"
-  ],
+  "deferred": [],
   "extra": [],
   "matrix": {
     "stateAxis": "State",

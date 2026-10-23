@@ -70,6 +70,72 @@
   ],
   "existing": [
     {
+      "id": "generated-appicon--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-appicon--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-appicon--size-16",
+      "name": "size: 16",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-appicon--size-18",
+      "name": "size: 18",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-appicon--size-24",
+      "name": "size: 24",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-appicon--size-32",
+      "name": "size: 32",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-appicon--size-48",
+      "name": "size: 48",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-appicon--size-80",
+      "name": "size: 80",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-appicon--ariahidden-on",
+      "name": "ariaHidden on",
+      "argKeys": [
+        "ariaHidden"
+      ]
+    },
+    {
+      "id": "generated-appicon--ariahidden-off",
+      "name": "ariaHidden off",
+      "argKeys": [
+        "ariaHidden"
+      ]
+    },
+    {
       "id": "atoms-appicon--creative-cloud",
       "name": "Creative Cloud",
       "argKeys": [
@@ -124,15 +190,7 @@
       ]
     }
   ],
-  "deferred": [
-    "size-16",
-    "size-18",
-    "size-24",
-    "size-32",
-    "size-48",
-    "size-80",
-    "ariahidden-off"
-  ],
+  "deferred": [],
   "extra": [],
   "matrix": {
     "stateAxis": null,

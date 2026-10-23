@@ -10,7 +10,7 @@ Status: **curated-draft** · root `c-button` · import `packages/components/src/
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `10715:35477` Button — v2 | evidence sha256:272da36a5cfe50d05961859a2dcbf77135423946e616abd7d31d8d4f77662243; used by — |
-| Code | `packages/components/src/button/button.js` | render `createButton`, 64 token references, 10 stories |
+| Code | `packages/components/src/button/button.js` | render `createButton`, 46 token references, 10 stories |
 
 ## Props
 
@@ -171,6 +171,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:96d91cf3927374969515e64e9095da172084edbce6b62ae6f29401eb3d221af3
-- code evidence: sha256:cb552889722afdf9bb6bb687236b1d7ae1f69dccbaff086d6b06582ee6faccf2
+- code evidence: sha256:65e516bb3562ec84a858948cd6c4037ff6360ecd99d386c376a2d8561755e0f9
 - figma evidence: sha256:272da36a5cfe50d05961859a2dcbf77135423946e616abd7d31d8d4f77662243
 

@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-07T02:28:13.685Z",
+  "extractedAt": "2026-10-23T16:31:04.762Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -25,7 +25,7 @@
   "sources": {
     "packages/components/src/button/index.js": "sha256:c66b10ad1e03b5caeaa997c5baa56a4bd8747b7a3df5bb80d3f011c537a31e1c",
     "packages/components/src/button/button.js": "sha256:752f2cf965a6b90b81d560530919422cd7187b13b5c12274f4b5c6af4dadc9af",
-    "packages/components/src/button/button.css": "sha256:7555a5988faaee07d32e30f31572947fed0c7900c87660aab3f6d18662bcea36"
+    "packages/components/src/button/button.css": "sha256:1e3adc12fdb5b54555aee009f0bf56a1694e09f8b6b28f154eedc3a789692285"
   },
   "props": [
     {
@@ -172,9 +172,7 @@
     "stylesheet": [
       "c-button",
       "c-button__icon",
-      "c-button__label",
-      "json",
-      "spec"
+      "c-button__label"
     ],
     "runtime": [
       "c-button",
@@ -221,9 +219,6 @@
       "--s2a-color-background-default": {
         "fallback": false
       },
-      "--s2a-color-background-inverse": {
-        "fallback": false
-      },
       "--s2a-color-background-knockout": {
         "fallback": false
       },
@@ -231,138 +226,87 @@
         "fallback": false
       },
       "--s2a-color-button-background-accent-active": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-accent-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-accent-hover": {
-        "fallback": true
-      },
-      "--s2a-color-button-background-accent-solid-on-light-active": {
-        "fallback": false
-      },
-      "--s2a-color-button-background-accent-solid-on-light-default": {
-        "fallback": false
-      },
-      "--s2a-color-button-background-accent-solid-on-light-hover": {
         "fallback": false
       },
       "--s2a-color-button-background-knockout-active": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-knockout-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-knockout-hover": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-outline-inverse-active": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-outline-inverse-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-outline-inverse-hover": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-outlined-active": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-outlined-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-button-background-outlined-hover": {
-        "fallback": true
-      },
-      "--s2a-color-button-background-primary-transparent-on-light-active": {
-        "fallback": false
-      },
-      "--s2a-color-button-background-primary-transparent-on-light-default": {
-        "fallback": false
-      },
-      "--s2a-color-button-background-primary-transparent-on-light-hover": {
         "fallback": false
       },
       "--s2a-color-button-background-solid-active": {
-        "fallback": true
-      },
-      "--s2a-color-button-background-solid-default": {
-        "fallback": true
-      },
-      "--s2a-color-button-background-solid-hover": {
-        "fallback": true
-      },
-      "--s2a-color-button-background-transparent-active": {
-        "fallback": true
-      },
-      "--s2a-color-button-background-transparent-default": {
-        "fallback": true
-      },
-      "--s2a-color-button-background-transparent-hover": {
-        "fallback": true
-      },
-      "--s2a-color-button-border-knockout-default": {
-        "fallback": true
-      },
-      "--s2a-color-button-border-outline-inverse-default": {
-        "fallback": true
-      },
-      "--s2a-color-button-content-accent-default": {
-        "fallback": true
-      },
-      "--s2a-color-button-content-knockout": {
-        "fallback": true
-      },
-      "--s2a-color-button-content-outline-inverse": {
-        "fallback": true
-      },
-      "--s2a-color-button-content-outlined-active": {
-        "fallback": true
-      },
-      "--s2a-color-button-content-primary-solid-default": {
         "fallback": false
       },
-      "--s2a-color-button-content-primary-solid-inverse": {
+      "--s2a-color-button-background-solid-default": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-solid-hover": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-transparent-active": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-transparent-default": {
+        "fallback": false
+      },
+      "--s2a-color-button-background-transparent-hover": {
+        "fallback": false
+      },
+      "--s2a-color-button-border-knockout-default": {
+        "fallback": false
+      },
+      "--s2a-color-button-border-outline-inverse-default": {
+        "fallback": false
+      },
+      "--s2a-color-button-content-accent-default": {
+        "fallback": false
+      },
+      "--s2a-color-button-content-knockout": {
+        "fallback": false
+      },
+      "--s2a-color-button-content-outline-inverse": {
+        "fallback": false
+      },
+      "--s2a-color-button-content-outlined-active": {
         "fallback": false
       },
       "--s2a-color-button-content-solid-default": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-default": {
-        "fallback": false
-      },
-      "--s2a-color-content-inverse": {
-        "fallback": false
-      },
-      "--s2a-color-content-knockout": {
         "fallback": false
       },
       "--s2a-color-focus-ring-default": {
         "fallback": false
       },
       "--s2a-color-focus-ring-knockout": {
-        "fallback": false
-      },
-      "--s2a-color-gray-100": {
-        "fallback": false
-      },
-      "--s2a-color-gray-25": {
-        "fallback": false
-      },
-      "--s2a-color-gray-50": {
-        "fallback": false
-      },
-      "--s2a-color-iconbutton-background-primary-solid-on-light-hover": {
-        "fallback": false
-      },
-      "--s2a-color-transparent-white-00": {
-        "fallback": false
-      },
-      "--s2a-color-transparent-white-08": {
-        "fallback": false
-      },
-      "--s2a-color-transparent-white-16": {
         "fallback": false
       },
       "--s2a-font-family-label": {
@@ -1097,13 +1041,13 @@
     "props": 10,
     "attributes": 6,
     "parts": 5,
-    "tokenReferences": 64,
-    "tokenReferencesWithoutFallback": 39,
+    "tokenReferences": 46,
+    "tokenReferencesWithoutFallback": 46,
     "raw": 0,
     "stories": 10,
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:cb552889722afdf9bb6bb687236b1d7ae1f69dccbaff086d6b06582ee6faccf2"
+    "hash": "sha256:65e516bb3562ec84a858948cd6c4037ff6360ecd99d386c376a2d8561755e0f9"
   }
 }

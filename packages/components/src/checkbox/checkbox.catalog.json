@@ -10,6 +10,41 @@
       "name": "style",
       "type": "string",
       "lever": true
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "tile",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "lever": true
     }
   ],
   "parts": [

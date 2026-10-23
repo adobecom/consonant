@@ -10,7 +10,7 @@ Status: **curated-draft** · root `c-radio` · import `packages/components/src/r
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `11586:206620` Radio | evidence sha256:3f2fde1def9bb8ef20067ee35bf80452c2eb35a3caf309949bab794a08c4adc5; used by — |
-| Code | `packages/components/src/radio/radio.js` | render `Radio`, 12 token references, 5 stories |
+| Code | `packages/components/src/radio/radio.js` | render `Radio`, 12 token references, 12 stories |
 
 ## Props
 
@@ -100,6 +100,13 @@ WCAG 2.2 AA: `1.3.1`, `1.4.11`, `2.1.1`, `2.4.7`, `2.5.8`, `4.1.2`
 
 ## Stories
 
+- `generated-radio--default` Default
+- `generated-radio--state-matrix` State matrix
+- `generated-radio--with-content` With content
+- `generated-radio--selected-on` selected on
+- `generated-radio--selected-off` selected off
+- `generated-radio--disabled-on` disabled on
+- `generated-radio--disabled-off` disabled off
 - `atoms-radio--unselected` Unselected
 - `atoms-radio--selected` Selected
 - `atoms-radio--disabled` Disabled
@@ -123,6 +130,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:157ef56e35f43ef35c06e7307803da289fa1904beb51ebe9fef7b38a980b5ac1
-- code evidence: sha256:006b14ea4e44c5333aae3a879d95f2fc77a125a2f6651b656aa0f15c2ccb43e0
+- code evidence: sha256:d4c852adafdbaf9dd8d04561807d3569115097186a3873b9657dc505de11e9cf
 - figma evidence: sha256:3f2fde1def9bb8ef20067ee35bf80452c2eb35a3caf309949bab794a08c4adc5
 

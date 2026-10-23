@@ -10,7 +10,7 @@ Status: **curated-draft** · root `c-helper-text` · import `packages/components
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `10243:101699` HelperText | evidence sha256:fb2131416bffcfd52b0e9b46ead03558ce1476cb4c29fc1087466aa536ede2bc; used by — |
-| Code | `packages/components/src/helper-text/helper-text.js` | render `HelperText`, 7 token references, 3 stories |
+| Code | `packages/components/src/helper-text/helper-text.js` | render `HelperText`, 7 token references, 7 stories |
 
 ## Props
 
@@ -59,6 +59,10 @@ WCAG 2.2 AA: `1.3.1`, `3.3.1`, `3.3.3`
 
 ## Stories
 
+- `generated-helpertext--default` Default
+- `generated-helpertext--state-matrix` State matrix
+- `generated-helpertext--intent-neutral` intent: neutral
+- `generated-helpertext--intent-error` intent: error
 - `atoms-helpertext--neutral` Neutral
 - `atoms-helpertext--error` Error
 - `atoms-helpertext--in-field-context` In a field context
@@ -80,6 +84,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:e79e04010521e4e2544f49191b2f6506d93c8d3a9624e6d6fb20356db1e97241
-- code evidence: sha256:1e687685d1f3ee5970ea1509b14730a010d515bb44efde684b43c6a35af10e78
+- code evidence: sha256:ea918d416063183611539439a3fee62fe1c52d05aa6e214343c04908603cfdec
 - figma evidence: sha256:fb2131416bffcfd52b0e9b46ead03558ce1476cb4c29fc1087466aa536ede2bc
 

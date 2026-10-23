@@ -56,6 +56,58 @@
   ],
   "existing": [
     {
+      "id": "generated-link--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-link--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-link--emphasis-default",
+      "name": "emphasis: default",
+      "argKeys": [
+        "emphasis"
+      ]
+    },
+    {
+      "id": "generated-link--emphasis-subtle",
+      "name": "emphasis: subtle",
+      "argKeys": [
+        "emphasis"
+      ]
+    },
+    {
+      "id": "generated-link--kind-action",
+      "name": "kind: action",
+      "argKeys": [
+        "kind"
+      ]
+    },
+    {
+      "id": "generated-link--kind-text",
+      "name": "kind: text",
+      "argKeys": [
+        "kind"
+      ]
+    },
+    {
+      "id": "generated-link--underline-on",
+      "name": "underline on",
+      "argKeys": [
+        "underline"
+      ]
+    },
+    {
+      "id": "generated-link--underline-off",
+      "name": "underline off",
+      "argKeys": [
+        "underline"
+      ]
+    },
+    {
       "id": "atoms-link--action",
       "name": "Action",
       "argKeys": [

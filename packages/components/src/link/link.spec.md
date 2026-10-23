@@ -10,7 +10,7 @@ Status: **curated-draft** · root `c-link` · import `packages/components/src/li
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `12823:184375` Link — v2 | evidence sha256:7a2a5b7cb3e52353dd9a14e8cbf2e38302d13dfbd984c9cfe9f9219b9780ce09; used by — |
-| Code | `packages/components/src/link/link.js` | render `Link`, 15 token references, 6 stories |
+| Code | `packages/components/src/link/link.js` | render `Link`, 18 token references, 14 stories |
 
 ## Props
 
@@ -96,6 +96,14 @@ WCAG 2.2 AA: `1.4.3`, `1.4.11`, `2.1.1`, `2.4.7`, `2.5.8`, `4.1.2`
 
 ## Stories
 
+- `generated-link--default` Default
+- `generated-link--state-matrix` State matrix
+- `generated-link--emphasis-default` emphasis: default
+- `generated-link--emphasis-subtle` emphasis: subtle
+- `generated-link--kind-action` kind: action
+- `generated-link--kind-text` kind: text
+- `generated-link--underline-on` underline on
+- `generated-link--underline-off` underline off
 - `atoms-link--action` Action
 - `atoms-link--text-link` Text Link
 - `atoms-link--text-subtle` Text Subtle
@@ -121,6 +129,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:7c2b653b0cb89e9f974564d1b92c81dd11b13d3770a79978d227dedfda5738fa
-- code evidence: sha256:90f82a6cf058cfb16badfc8670c655403001f6811ae86985b156e0707073fd8b
+- code evidence: sha256:ac3cee86108eeaf1ea5a43ead8dbbc364d3bdea433efc0910c358a0b78302018
 - figma evidence: sha256:7a2a5b7cb3e52353dd9a14e8cbf2e38302d13dfbd984c9cfe9f9219b9780ce09
 

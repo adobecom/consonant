@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-08T17:52:21.300Z",
+  "extractedAt": "2026-10-23T16:32:11.583Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -23,7 +23,7 @@
   },
   "sources": {
     "packages/components/src/text-card/text-card.js": "sha256:56028472ac9287e572db22da7ade2cf1cb55c6d0f04a2829ac107f746f2baae8",
-    "packages/components/src/text-card/text-card.css": "sha256:27c358017c1320cf891f6b1e22e988f153a182cc715e260b5a36c774cea85661"
+    "packages/components/src/text-card/text-card.css": "sha256:29e641385225e0cd23a1cd57c38a7dce5c4efb473e1c3e14d994cc3abe4d43a4"
   },
   "props": [
     {
@@ -57,7 +57,39 @@
       "type": "boolean"
     }
   ],
-  "attributes": {},
+  "attributes": {
+    "data-emphasis": {
+      "values": [
+        "default"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-kind": {
+      "values": [
+        "action"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-style": {
+      "values": [
+        "centered",
+        "default"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    }
+  },
   "parts": {
     "template": [
       "c-text-card",
@@ -77,7 +109,19 @@
       "tc-headline-body"
     ],
     "runtime": [
+      "c-link",
+      "c-link__call-to-action",
+      "c-link__end-icon",
+      "c-link__frame",
+      "c-link__icon-color",
+      "c-link__label-wrap",
+      "c-link__s2a-icon-chevron-right",
+      "c-link__underline",
       "c-text-card",
+      "c-text-card__body",
+      "c-text-card__headline",
+      "c-text-card__headline-body",
+      "c-text-card__link",
       "tc-body",
       "tc-cta",
       "tc-cta__icon",
@@ -87,6 +131,10 @@
     ],
     "own": [
       "c-text-card",
+      "c-text-card__body",
+      "c-text-card__headline",
+      "c-text-card__headline-body",
+      "c-text-card__link",
       "tc-body",
       "tc-cta",
       "tc-cta__icon",
@@ -111,67 +159,67 @@
   "tokens": {
     "references": {
       "--s2a-border-radius-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-body-subtle": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-content-heading": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-family-body": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-family-heading": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-family-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-letter-spacing-4xl": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-weight-body": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-weight-heading": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-weight-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-lg": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-sm": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-xs": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-font-size-body-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-font-size-heading-5": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-font-size-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-letter-spacing-body-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-letter-spacing-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-line-height-body-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-line-height-heading-5": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-typography-line-height-label": {
-        "fallback": true
+        "fallback": false
       }
     },
     "custom": [],
@@ -182,6 +230,350 @@
   ],
   "queries": [],
   "stories": [
+    {
+      "id": "generated-textcard--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--showbody-on",
+      "name": "showBody on",
+      "args": {
+        "showBody": true
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--showbody-off",
+      "name": "showBody off",
+      "args": {
+        "showBody": false
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--style-centered",
+      "name": "style: centered",
+      "args": {
+        "style": "centered"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "centered"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "centered"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "centered"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
     {
       "id": "cards-textcard--default",
       "name": "Default",
@@ -368,15 +760,15 @@
   ],
   "counts": {
     "props": 6,
-    "attributes": 0,
-    "parts": 6,
+    "attributes": 3,
+    "parts": 10,
     "tokenReferences": 21,
-    "tokenReferencesWithoutFallback": 0,
+    "tokenReferencesWithoutFallback": 21,
     "raw": 0,
-    "stories": 5,
+    "stories": 11,
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:c1519f88ff735df8654ae3bb8e2ecc6f285e2751c84857d4c7b3dd030deb16c6"
+    "hash": "sha256:9d33a4abcf4ddc8320ae9880021fe211bdfb4189f20e26b93db641bad59ea8d2"
   }
 }

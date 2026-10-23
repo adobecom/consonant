@@ -10,7 +10,7 @@ Status: **curated-draft** · root `c-app-icon` · import `packages/components/sr
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `8175:77406` AppIcon | evidence sha256:16aad98096660bd7dc5a1f301611d069a34c04b843741c55f2556fd8b2c47dfb; used by — |
-| Code | `packages/components/src/app-icon/app-icon.js` | render `AppIcon`, 4 token references, 6 stories |
+| Code | `packages/components/src/app-icon/app-icon.js` | render `AppIcon`, 4 token references, 16 stories |
 
 ## Props
 
@@ -71,6 +71,16 @@ WCAG 2.2 AA: `1.1.1`, `4.1.2`
 
 ## Stories
 
+- `generated-appicon--default` Default
+- `generated-appicon--state-matrix` State matrix
+- `generated-appicon--size-16` size: 16
+- `generated-appicon--size-18` size: 18
+- `generated-appicon--size-24` size: 24
+- `generated-appicon--size-32` size: 32
+- `generated-appicon--size-48` size: 48
+- `generated-appicon--size-80` size: 80
+- `generated-appicon--ariahidden-on` ariaHidden on
+- `generated-appicon--ariahidden-off` ariaHidden off
 - `atoms-appicon--creative-cloud` Creative Cloud
 - `atoms-appicon--firefly` Firefly
 - `atoms-appicon--sizes` Sizes
@@ -99,6 +109,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:73af9f9a88d29a4b426a93dd16dc38bf80f66b12d731e5f63aff987d88d1f315
-- code evidence: sha256:59d84aa6a7ba150f89f305c45c3fc7c9865810be05d0ca8f31b9acb579305478
+- code evidence: sha256:95e0ba7f1af578291128c68aea8eeeb58ffe5d2b6e4ff6fbcb2a57572a8ad406
 - figma evidence: sha256:16aad98096660bd7dc5a1f301611d069a34c04b843741c55f2556fd8b2c47dfb
 

@@ -360,9 +360,14 @@ async function main() {
       const hash = hashBody(evidence);
       evidence.provenance = { hash };
       const file = join(SRC, slug, `${slug}.code.evidence.json`);
-      let previous = null;
-      try { previous = JSON.parse(readFileSync(file, "utf8")).provenance?.hash ?? null; } catch { /* first extraction */ }
-      const status = previous === hash ? "IN-SYNC" : previous ? "UPDATED" : "NEW";
+      let previous = null, previousSources = null;
+      try { const prev = JSON.parse(readFileSync(file, "utf8")); previous = prev.provenance?.hash ?? null; previousSources = prev.sources ?? null; } catch { /* first extraction */ }
+      // The body hash leaves `sources` out (see hashBody), so a source file can change
+      // without changing what was extracted from it — a comment, a reordered rule. The
+      // gate's FRESH check compares source hashes, so that case must still rewrite the
+      // file, or the evidence reads as stale forever while the extractor calls it in sync.
+      const sameSources = JSON.stringify(previousSources) === JSON.stringify(evidence.sources ?? null);
+      const status = previous === hash && sameSources ? "IN-SYNC" : previous ? "UPDATED" : "NEW";
       if (status !== "IN-SYNC" && !has("dry-run")) writeFileSync(file, JSON.stringify(evidence, null, 2) + "\n");
       results.push({ slug, status, hash, counts: evidence.counts, file: `packages/components/src/${slug}/${slug}.code.evidence.json` });
     }

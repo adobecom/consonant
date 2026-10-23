@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-08T17:55:35.564Z",
+  "extractedAt": "2026-10-23T16:31:52.208Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -27,7 +27,7 @@
   "sources": {
     "packages/components/src/list/index.js": "sha256:2e5d529b410447f89e451a03ad27af6142eca867818a682693459b574dd504d5",
     "packages/components/src/list/list.js": "sha256:0d1660b8c8880e744ab21a05c888bdcc432ffca1ff47a123b0fc5758f87fe23a",
-    "packages/components/src/list/list.css": "sha256:a0aabbabae2716fad5d4c9b4539f731e79e29ca5636a6d28ea37c099f80da0d3"
+    "packages/components/src/list/list.css": "sha256:0b9bbb64ec2c369e48aa4845d38441942663e62c4cbb7e85ef0689baf7017f8a"
   },
   "props": [
     {
@@ -36,7 +36,18 @@
       "type": "array"
     }
   ],
-  "attributes": {},
+  "attributes": {
+    "data-style": {
+      "values": [
+        "subtle"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    }
+  },
   "parts": {
     "template": [
       "c-list",
@@ -59,14 +70,22 @@
       "c-list__title-text"
     ],
     "runtime": [
+      "c-divider",
       "c-list",
       "c-list__divider",
       "c-list__icon",
       "c-list__item",
       "c-list__items",
+      "c-list__merch-card-feature-section",
       "c-list__section",
       "c-list__title",
-      "c-list__title-text"
+      "c-list__title-text",
+      "c-merch-card-feature-section",
+      "c-merch-card-feature-section__divider",
+      "c-merch-card-feature-section__items",
+      "c-merch-card-feature-section__s2-icon-acrobat-pdfedit-20-n",
+      "c-merch-card-feature-section__title",
+      "c-merch-card-feature-section__title-text"
     ],
     "own": [
       "c-list",
@@ -74,6 +93,7 @@
       "c-list__icon",
       "c-list__item",
       "c-list__items",
+      "c-list__merch-card-feature-section",
       "c-list__section",
       "c-list__title",
       "c-list__title-text"
@@ -104,37 +124,37 @@
         "fallback": false
       },
       "--s2a-font-family-body": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-family-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-line-height-xs": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-size-sm": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-weight-body": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-font-weight-label": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-3xs": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-sm": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-xl": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-spacing-xs": {
-        "fallback": true
+        "fallback": false
       }
     },
     "custom": [],
@@ -143,6 +163,72 @@
   "states": [],
   "queries": [],
   "stories": [
+    {
+      "id": "generated-list--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "ul",
+        "classes": [
+          "c-list"
+        ],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "subtle"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider",
+        "c-list",
+        "c-list__merch-card-feature-section",
+        "c-merch-card-feature-section",
+        "c-merch-card-feature-section__divider",
+        "c-merch-card-feature-section__items",
+        "c-merch-card-feature-section__s2-icon-acrobat-pdfedit-20-n",
+        "c-merch-card-feature-section__title",
+        "c-merch-card-feature-section__title-text"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 9
+    },
+    {
+      "id": "generated-list--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "ul",
+        "classes": [
+          "c-list"
+        ],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "subtle"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider",
+        "c-list",
+        "c-list__merch-card-feature-section",
+        "c-merch-card-feature-section",
+        "c-merch-card-feature-section__divider",
+        "c-merch-card-feature-section__items",
+        "c-merch-card-feature-section__s2-icon-acrobat-pdfedit-20-n",
+        "c-merch-card-feature-section__title",
+        "c-merch-card-feature-section__title-text"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 9
+    },
     {
       "id": "molecules-list--single-section",
       "name": "Single Section",
@@ -299,15 +385,15 @@
   ],
   "counts": {
     "props": 1,
-    "attributes": 0,
-    "parts": 8,
+    "attributes": 1,
+    "parts": 9,
     "tokenReferences": 14,
-    "tokenReferencesWithoutFallback": 3,
+    "tokenReferencesWithoutFallback": 14,
     "raw": 0,
-    "stories": 3,
+    "stories": 5,
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:52d6b3854329a2e3828464df962c47b067e230f9fea9194236ebb46190735ae4"
+    "hash": "sha256:0ea78969ba6e1efbdeaaf4ab95483c01193cdf3224a7b627aa8454f7492d1cc3"
   }
 }

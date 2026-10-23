@@ -27,6 +27,111 @@
           "prop": "style"
         }
       }
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "The label text. The Figma set shows a nested Label instance but exposes no text property, so there is nothing to bind yet; expose it in Figma and re-extract to close the gap.",
+      "default": "\"Label\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "label"
+        }
+      }
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "description": "Checked state. The Figma set has only a Style axis — no Selected or State axis — so the checked look is not designed yet. Radio binds the same prop to its Selected variant.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "checked"
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "disabled"
+        }
+      }
+    },
+    {
+      "name": "tile",
+      "type": "boolean",
+      "description": "Tile presentation (bordered, padded). Code only; no Figma variant.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "tile"
+        }
+      }
+    },
+    {
+      "name": "icon",
+      "type": "text",
+      "description": "Optional icon beside the label. Code only; the design shows the check glyph as an internal instance, not a swappable slot.",
+      "default": "null",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "icon"
+        }
+      }
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "description": "Form field name, forwarded to the native input.",
+      "default": "undefined",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "name"
+        }
+      }
+    },
+    {
+      "name": "value",
+      "type": "text",
+      "description": "Form field value, forwarded to the native input.",
+      "default": "undefined",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "value"
+        }
+      }
     }
   ],
   "anatomy": {
@@ -85,11 +190,11 @@
   },
   "provenance": {
     "version": 1,
-    "canonicalRevision": "sha256:4793d3f3c1eac7d83f4eb02c744c0500ce40d9dd4d2b5c350c4b0ea7102d2b7a",
+    "canonicalRevision": "sha256:f404e212f9283927394a84354c442fa7cff7b84b5ce85a2553a0bb7c2fd4003d",
     "source": {
       "kind": "code",
       "adapter": "s2a-spec-transform@1",
-      "revision": "sha256:777ec90b5a7b704aca286d335b66d3622f00d671d7ea95ed00f217f4fb85701b"
+      "revision": "sha256:f19d5cf1c056dee07952e26a8a2dfd0493fe1f3844e4600335b45a1e819d74c2"
     }
   }
 }

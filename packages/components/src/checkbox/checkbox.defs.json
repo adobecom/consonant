@@ -4,11 +4,11 @@
   "slug": "checkbox",
   "status": "curated-draft",
   "curated": {
-    "by": "specs:scaffold from checkbox.figma.evidence.json (sha256:77f258b6…) through packages/spec-dictionary/dictionary.json (checkbox / radio)",
+    "by": "specs:scaffold from checkbox.figma.evidence.json (sha256:77f258b6\u2026) through packages/spec-dictionary/dictionary.json (checkbox / radio)",
     "date": "2026-10-07",
     "reviewer": "Matt"
   },
-  "description": "A single checkbox with a label — toggles one independent option on or off.",
+  "description": "A single checkbox with a label \u2014 toggles one independent option on or off.",
   "archetype": "checkbox / radio",
   "version": "1.0.0",
   "anchors": {
@@ -21,7 +21,7 @@
       "deprecated": false,
       "successorNodeId": null,
       "usages": [],
-      "notes": "Component set on page \"↳ Checkbox\"; 8 nodes, 9 token bindings."
+      "notes": "Component set on page \"\u21b3 Checkbox\"; 8 nodes, 9 token bindings."
     },
     "code": {
       "importPath": "packages/components/src/checkbox/checkbox.js",
@@ -46,6 +46,81 @@
         "prop": "style",
         "attr": "data-style"
       }
+    },
+    {
+      "name": "label",
+      "lever": true,
+      "type": "string",
+      "default": "Label",
+      "figma": "NONE",
+      "code": {
+        "prop": "label"
+      },
+      "notes": "The label text. The Figma set shows a nested Label instance but exposes no text property, so there is nothing to bind yet; expose it in Figma and re-extract to close the gap."
+    },
+    {
+      "name": "checked",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": "NONE",
+      "code": {
+        "prop": "checked"
+      },
+      "notes": "Checked state. The Figma set has only a Style axis \u2014 no Selected or State axis \u2014 so the checked look is not designed yet. Radio binds the same prop to its Selected variant."
+    },
+    {
+      "name": "disabled",
+      "lever": true,
+      "type": "boolean",
+      "figma": "NONE",
+      "code": {
+        "prop": "disabled",
+        "attr": "data-disabled"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "tile",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": "NONE",
+      "code": {
+        "prop": "tile",
+        "attr": "data-tile"
+      },
+      "notes": "Tile presentation (bordered, padded). Code only; no Figma variant."
+    },
+    {
+      "name": "icon",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "icon"
+      },
+      "notes": "Optional icon beside the label. Code only; the design shows the check glyph as an internal instance, not a swappable slot."
+    },
+    {
+      "name": "name",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "name"
+      },
+      "notes": "Form field name, forwarded to the native input."
+    },
+    {
+      "name": "value",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "value"
+      },
+      "notes": "Form field value, forwarded to the native input."
     }
   ],
   "states": [],
@@ -91,7 +166,7 @@
       "Native input with a real <label>, so the hit area includes the text.",
       "Indeterminate is a property, not a third value.",
       "Group related controls in a fieldset with a legend (1.3.1).",
-      "Exposes a native checkbox role with the label programmatically associated, so assistive tech announces the label and the checked/unchecked state (WCAG 2.2 AA · SC 4.1.2 Name, Role, Value; SC 1.3.1 Info & Relationships).",
+      "Exposes a native checkbox role with the label programmatically associated, so assistive tech announces the label and the checked/unchecked state (WCAG 2.2 AA \u00b7 SC 4.1.2 Name, Role, Value; SC 1.3.1 Info & Relationships).",
       "Keyboard: Tab moves focus to the checkbox, Space toggles it; the focused state shows a visible focus ring (SC 2.1.1 Keyboard; SC 2.4.7 Focus Visible).",
       "Because the checkmark and label use s2a/color/content/default, contrast is maintained in both light and dark themes (SC 1.4.3 Contrast Minimum)."
     ]
@@ -100,7 +175,7 @@
     {
       "id": "c-archetype",
       "question": "Scaffolded as checkbox / radio (named \"Checkbox\"). Confirm, or re-run npm run specs:scaffold -- --slug=checkbox --archetype=<link-card|card|collection>.",
-      "chose": "checkbox / radio — named \"Checkbox\"",
+      "chose": "checkbox / radio \u2014 named \"Checkbox\"",
       "confidence": "low",
       "fix": "npm run specs:scaffold -- --slug=checkbox --archetype=<link-card|card|collection> --force",
       "status": "open",
@@ -115,7 +190,7 @@
         "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
         "pagination: Moves between pages of content."
       ],
-      "evidence": "decided by heuristic; token namespaces content×2; state axis none"
+      "evidence": "decided by heuristic; token namespaces content\u00d72; state axis none"
     },
     {
       "id": "c-match",

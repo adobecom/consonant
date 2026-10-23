@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-09T16:13:56.647Z",
+  "extractedAt": "2026-10-23T16:32:06.981Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -18,13 +18,13 @@
     "spec": {
       "path": "packages/components/src/radio/radio.spec.json",
       "storybookId": "radio",
-      "figmaNodeId": null
+      "figmaNodeId": "11586:206620"
     }
   },
   "sources": {
     "packages/components/src/radio/index.js": "sha256:f972bbda10c84f5211a60e7bc4ad1a52e4311ef76e3dd4af134bc868e29aa6e7",
     "packages/components/src/radio/radio.js": "sha256:ccc8bcc11d56b0fdee0c45060b31a86c021bb952d22ab11e2358bfa4f3661128",
-    "packages/components/src/radio/radio.css": "sha256:68367d88ec3d5662856f9b07e7cffed1f5b4623e415dd21a679c4fb3b25f8b10"
+    "packages/components/src/radio/radio.css": "sha256:76c384f7b78550e106c5763418e6583f7a09a300eeb122ed47d6c747a1db5703"
   },
   "props": [
     {
@@ -76,6 +76,17 @@
         "stylesheet"
       ],
       "onRoot": false
+    },
+    "data-selected": {
+      "values": [
+        "false",
+        "true"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
     }
   },
   "parts": {
@@ -97,14 +108,18 @@
     "runtime": [
       "c-radio",
       "c-radio__control",
+      "c-radio__dot",
       "c-radio__input",
-      "c-radio__label"
+      "c-radio__label",
+      "c-radio__ring"
     ],
     "own": [
       "c-radio",
       "c-radio__control",
+      "c-radio__dot",
       "c-radio__input",
-      "c-radio__label"
+      "c-radio__label",
+      "c-radio__ring"
     ]
   },
   "aria": {
@@ -122,10 +137,10 @@
   "tokens": {
     "references": {
       "--s2a-border-radius-round": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-border-width-md": {
-        "fallback": true
+        "fallback": false
       },
       "--s2a-color-background-subtle": {
         "fallback": false
@@ -168,6 +183,324 @@
   ],
   "queries": [],
   "stories": [
+    {
+      "id": "generated-radio--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {
+          "selected": "false"
+        }
+      },
+      "attributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__dot",
+        "c-radio__input",
+        "c-radio__label",
+        "c-radio__ring"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-radio--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {
+          "selected": "false"
+        }
+      },
+      "attributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__dot",
+        "c-radio__input",
+        "c-radio__label",
+        "c-radio__ring"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-radio--with-content",
+      "name": "With content",
+      "args": {
+        "value": {
+          "_$litType$": 1,
+          "strings": [
+            "<p style=\"margin:0\">Content placed in the value slot.</p>"
+          ],
+          "values": []
+        },
+        "selected": true
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {
+          "selected": "true"
+        }
+      },
+      "attributes": {
+        "data-selected": [
+          "true"
+        ]
+      },
+      "rootAttributes": {
+        "data-selected": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__dot",
+        "c-radio__input",
+        "c-radio__label",
+        "c-radio__ring"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-radio--selected-on",
+      "name": "selected on",
+      "args": {
+        "selected": true
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {
+          "selected": "true"
+        }
+      },
+      "attributes": {
+        "data-selected": [
+          "true"
+        ]
+      },
+      "rootAttributes": {
+        "data-selected": [
+          "true"
+        ]
+      },
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__dot",
+        "c-radio__input",
+        "c-radio__label",
+        "c-radio__ring"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-radio--selected-off",
+      "name": "selected off",
+      "args": {
+        "selected": false
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {
+          "selected": "false"
+        }
+      },
+      "attributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__dot",
+        "c-radio__input",
+        "c-radio__label",
+        "c-radio__ring"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-radio--disabled-on",
+      "name": "disabled on",
+      "args": {
+        "disabled": true
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {
+          "selected": "false"
+        }
+      },
+      "attributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__dot",
+        "c-radio__input",
+        "c-radio__label",
+        "c-radio__ring"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": true
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-radio--disabled-off",
+      "name": "disabled off",
+      "args": {
+        "disabled": false
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-radio"
+        ],
+        "dataset": {
+          "selected": "false"
+        }
+      },
+      "attributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-selected": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-radio",
+        "c-radio__control",
+        "c-radio__dot",
+        "c-radio__input",
+        "c-radio__label",
+        "c-radio__ring"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
     {
       "id": "atoms-radio--unselected",
       "name": "Unselected",
@@ -381,15 +714,15 @@
   ],
   "counts": {
     "props": 5,
-    "attributes": 2,
-    "parts": 4,
+    "attributes": 3,
+    "parts": 6,
     "tokenReferences": 12,
-    "tokenReferencesWithoutFallback": 10,
+    "tokenReferencesWithoutFallback": 12,
     "raw": 0,
-    "stories": 5,
+    "stories": 12,
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:006b14ea4e44c5333aae3a879d95f2fc77a125a2f6651b656aa0f15c2ccb43e0"
+    "hash": "sha256:d4c852adafdbaf9dd8d04561807d3569115097186a3873b9657dc505de11e9cf"
   }
 }

@@ -17,9 +17,68 @@
       "args": {
         "style": "default"
       }
+    },
+    {
+      "id": "checked-on",
+      "name": "checked on",
+      "args": {
+        "checked": true
+      }
+    },
+    {
+      "id": "checked-off",
+      "name": "checked off",
+      "args": {
+        "checked": false
+      }
+    },
+    {
+      "id": "disabled-on",
+      "name": "disabled on",
+      "args": {
+        "disabled": true
+      }
+    },
+    {
+      "id": "disabled-off",
+      "name": "disabled off",
+      "args": {
+        "disabled": false
+      }
+    },
+    {
+      "id": "tile-on",
+      "name": "tile on",
+      "args": {
+        "tile": true
+      }
+    },
+    {
+      "id": "tile-off",
+      "name": "tile off",
+      "args": {
+        "tile": false
+      }
     }
   ],
   "existing": [
+    {
+      "id": "generated-checkbox--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-checkbox--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-checkbox--style-default",
+      "name": "style: default",
+      "argKeys": [
+        "style"
+      ]
+    },
     {
       "id": "atoms-checkbox--unchecked",
       "name": "Unchecked",

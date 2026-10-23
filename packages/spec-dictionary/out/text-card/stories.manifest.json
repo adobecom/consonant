@@ -42,6 +42,44 @@
   ],
   "existing": [
     {
+      "id": "generated-textcard--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-textcard--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-textcard--showbody-on",
+      "name": "showBody on",
+      "argKeys": [
+        "showBody"
+      ]
+    },
+    {
+      "id": "generated-textcard--showbody-off",
+      "name": "showBody off",
+      "argKeys": [
+        "showBody"
+      ]
+    },
+    {
+      "id": "generated-textcard--style-default",
+      "name": "style: default",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-textcard--style-centered",
+      "name": "style: centered",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
       "id": "cards-textcard--default",
       "name": "Default",
       "argKeys": [
@@ -96,9 +134,7 @@
       ]
     }
   ],
-  "deferred": [
-    "style-centered"
-  ],
+  "deferred": [],
   "extra": [],
   "matrix": {
     "stateAxis": null,

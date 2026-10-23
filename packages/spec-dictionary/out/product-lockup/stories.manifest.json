@@ -140,6 +140,149 @@
   ],
   "existing": [
     {
+      "id": "generated-productlockup--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-productlockup--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-productlockup--with-content",
+      "name": "With content",
+      "argKeys": [
+        "caret"
+      ]
+    },
+    {
+      "id": "generated-productlockup--orientation-horizontal",
+      "name": "orientation: horizontal",
+      "argKeys": [
+        "orientation"
+      ]
+    },
+    {
+      "id": "generated-productlockup--orientation-vertical",
+      "name": "orientation: vertical",
+      "argKeys": [
+        "orientation"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showappicon-on",
+      "name": "showAppIcon on",
+      "argKeys": [
+        "showAppIcon"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showappicon-off",
+      "name": "showAppIcon off",
+      "argKeys": [
+        "showAppIcon"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showiconend-on",
+      "name": "showIconEnd on",
+      "argKeys": [
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showiconend-off",
+      "name": "showIconEnd off",
+      "argKeys": [
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showsecondappicon-on",
+      "name": "showSecondAppIcon on",
+      "argKeys": [
+        "showSecondAppIcon"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showsecondappicon-off",
+      "name": "showSecondAppIcon off",
+      "argKeys": [
+        "showSecondAppIcon"
+      ]
+    },
+    {
+      "id": "generated-productlockup--style-label",
+      "name": "style: label",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-productlockup--style-eyebrow",
+      "name": "style: eyebrow",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-productlockup--style-knockout",
+      "name": "style: knockout",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-productlockup--style-inverse",
+      "name": "style: inverse",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-productlockup--width-hug",
+      "name": "width: hug",
+      "argKeys": [
+        "width"
+      ]
+    },
+    {
+      "id": "generated-productlockup--width-fill",
+      "name": "width: fill",
+      "argKeys": [
+        "width"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showsecondicon-on",
+      "name": "showSecondIcon on",
+      "argKeys": [
+        "showSecondIcon"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showsecondicon-off",
+      "name": "showSecondIcon off",
+      "argKeys": [
+        "showSecondIcon"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showiconstart-on",
+      "name": "showIconStart on",
+      "argKeys": [
+        "showIconStart"
+      ]
+    },
+    {
+      "id": "generated-productlockup--showiconstart-off",
+      "name": "showIconStart off",
+      "argKeys": [
+        "showIconStart"
+      ]
+    },
+    {
       "id": "molecules-productlockup--horizontal-label",
       "name": "Horizontal Label",
       "argKeys": [
@@ -280,15 +423,7 @@
       ]
     }
   ],
-  "deferred": [
-    "showappicon-off",
-    "showsecondappicon-on",
-    "style-eyebrow",
-    "style-knockout",
-    "style-inverse",
-    "width-fill",
-    "showsecondicon-on"
-  ],
+  "deferred": [],
   "extra": [],
   "matrix": {
     "stateAxis": null,

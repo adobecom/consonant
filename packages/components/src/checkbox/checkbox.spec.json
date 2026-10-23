@@ -45,6 +45,118 @@
           "jsdoc": null
         }
       }
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"Label\"",
+      "description": "The label text. The Figma set shows a nested Label instance but exposes no text property, so there is nothing to bind yet; expose it in Figma and re-extract to close the gap.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "label",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Checked state. The Figma set has only a Style axis — no Selected or State axis — so the checked look is not designed yet. Radio binds the same prop to its Selected variant.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "checked",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "disabled",
+          "attr": "data-disabled",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "tile",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Tile presentation (bordered, padded). Code only; no Figma variant.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "tile",
+          "attr": "data-tile",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "defaultValue": "null",
+      "description": "Optional icon beside the label. Code only; the design shows the check glyph as an internal instance, not a swappable slot.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "icon",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Form field name, forwarded to the native input.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "name",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "Form field value, forwarded to the native input.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "value",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
     }
   ],
   "tokenBindings": {},
@@ -125,7 +237,7 @@
         "cssClass": "c-checkbox"
       },
       "evidence": {
-        "hash": "sha256:777ec90b5a7b704aca286d335b66d3622f00d671d7ea95ed00f217f4fb85701b"
+        "hash": "sha256:f19d5cf1c056dee07952e26a8a2dfd0493fe1f3844e4600335b45a1e819d74c2"
       }
     }
   },
@@ -190,8 +302,8 @@
     }
   ],
   "provenance": {
-    "defs": "sha256:4793d3f3c1eac7d83f4eb02c744c0500ce40d9dd4d2b5c350c4b0ea7102d2b7a",
-    "codeEvidence": "sha256:777ec90b5a7b704aca286d335b66d3622f00d671d7ea95ed00f217f4fb85701b",
+    "defs": "sha256:f404e212f9283927394a84354c442fa7cff7b84b5ce85a2553a0bb7c2fd4003d",
+    "codeEvidence": "sha256:f19d5cf1c056dee07952e26a8a2dfd0493fe1f3844e4600335b45a1e819d74c2",
     "figmaEvidence": "sha256:77f258b68d6fe82f32fbe4456595467fd6310a6ddcf7cec6b258af73aa8dbd4b",
     "generator": "s2a-spec-transform@1"
   }

@@ -10,7 +10,7 @@ Status: **curated-draft** · root `c-product-lockup` · import `packages/compone
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `11272:217527` ProductLockup — v2 | evidence sha256:ac169c4df0a40101b2316342443d9218771c4ef3c01487959abaa458262acd3f; used by — |
-| Code | `packages/components/src/product-lockup/product-lockup.js` | render `ProductLockup`, 11 token references, 10 stories |
+| Code | `packages/components/src/product-lockup/product-lockup.js` | render `ProductLockup`, 15 token references, 31 stories |
 
 ## Props
 
@@ -88,6 +88,27 @@ WCAG 2.2 AA: —
 
 ## Stories
 
+- `generated-productlockup--default` Default
+- `generated-productlockup--state-matrix` State matrix
+- `generated-productlockup--with-content` With content
+- `generated-productlockup--orientation-horizontal` orientation: horizontal
+- `generated-productlockup--orientation-vertical` orientation: vertical
+- `generated-productlockup--showappicon-on` showAppIcon on
+- `generated-productlockup--showappicon-off` showAppIcon off
+- `generated-productlockup--showiconend-on` showIconEnd on
+- `generated-productlockup--showiconend-off` showIconEnd off
+- `generated-productlockup--showsecondappicon-on` showSecondAppIcon on
+- `generated-productlockup--showsecondappicon-off` showSecondAppIcon off
+- `generated-productlockup--style-label` style: label
+- `generated-productlockup--style-eyebrow` style: eyebrow
+- `generated-productlockup--style-knockout` style: knockout
+- `generated-productlockup--style-inverse` style: inverse
+- `generated-productlockup--width-hug` width: hug
+- `generated-productlockup--width-fill` width: fill
+- `generated-productlockup--showsecondicon-on` showSecondIcon on
+- `generated-productlockup--showsecondicon-off` showSecondIcon off
+- `generated-productlockup--showiconstart-on` showIconStart on
+- `generated-productlockup--showiconstart-off` showIconStart off
 - `molecules-productlockup--horizontal-label` Horizontal Label
 - `molecules-productlockup--horizontal-eyebrow` Horizontal Eyebrow
 - `molecules-productlockup--horizontal-fill` Horizontal Fill
@@ -130,6 +151,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:5247cca48f797861d474c050501c22ff6c82c8d40e650c6dd51712d59ebdb5e2
-- code evidence: sha256:43d2743a58a2016c0cb1308b7a78a8facb299dbd3d897fa6cc2dc54d7a3fb6d4
+- code evidence: sha256:907288e099ed83b3b0e52beeb517273e2c4475f6d22951a953bb412fcbced8ea
 - figma evidence: sha256:ac169c4df0a40101b2316342443d9218771c4ef3c01487959abaa458262acd3f
 

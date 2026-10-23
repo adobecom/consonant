@@ -8,7 +8,7 @@ Status: **curated-draft** · root `c-divider` · import `packages/components/src
 | Side | Where | Notes |
 | --- | --- | --- |
 | Figma | component-set `10910:17760` Divider | evidence sha256:b80198e29a290c7797446fdaee1299f27524421fdfd35f524fb93b7452c2905c; used by — |
-| Code | `packages/components/src/divider/divider.js` | render `Divider`, 5 token references, 6 stories |
+| Code | `packages/components/src/divider/divider.js` | render `Divider`, 5 token references, 13 stories |
 
 ## Props
 
@@ -37,6 +37,13 @@ Status: **curated-draft** · root `c-divider` · import `packages/components/src
 
 ## Stories
 
+- `generated-divider--default` Default
+- `generated-divider--state-matrix` State matrix
+- `generated-divider--style-default` style: default
+- `generated-divider--style-subtle` style: subtle
+- `generated-divider--style-knockout` style: knockout
+- `generated-divider--style-inverse` style: inverse
+- `generated-divider--style-subtle-inverse` style: subtle-inverse
 - `atoms-divider--default` Default
 - `atoms-divider--subtle` Subtle
 - `atoms-divider--knockout` Knockout
@@ -64,6 +71,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:1d332dd437e297964d1d2ebbb47a931a5227131b99a65173760d0e4f90ae8527
-- code evidence: sha256:c7563d6cc0817825c0d995ae2793d1eefc0a9e4e8573f09687a2860e016a7459
+- code evidence: sha256:7d1d10926bb5490ae022c499f99d1987f729a0c4b79a013f0a8585c77676cfe0
 - figma evidence: sha256:b80198e29a290c7797446fdaee1299f27524421fdfd35f524fb93b7452c2905c
 
