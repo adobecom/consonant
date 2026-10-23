@@ -18,7 +18,7 @@ That creates a branch, opens a draft PR, and gives you a live Storybook preview 
 - Storybook: `https://adobecom.github.io/consonant/storybook/`
 - Contract Book (read-only snapshot): `https://adobecom.github.io/consonant/contract-book/`
 - S2A Studio: `https://adobecom.github.io/consonant/authoring/`
-- Your PR preview (Storybook): `https://adobecom.github.io/consonant/pr-preview/pr-<number>/` (posted automatically as a PR comment once CI runs)
+- Your PR preview: `https://adobecom.github.io/consonant/pr-preview/pr-<number>/` (posted automatically as a PR comment once CI runs) — the same landing page, with `storybook/`, `contract-book/` and `authoring/` under it
 
 **MCP servers available (configured by setup script):**
 - `figma-dev-mode-mcp-server` — reads your open Figma file directly

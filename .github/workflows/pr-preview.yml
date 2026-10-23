@@ -36,17 +36,31 @@ jobs:
         if: github.event.action != 'closed'
         run: npm run tokens:build
 
+      # The preview mirrors the main site: a landing page at pr-preview/pr-N/
+      # with storybook/, contract-book/ and authoring/ beside it, so a reviewer
+      # sees exactly what merging will publish. Storybook deep links on the old
+      # preview root (?path=...) are redirected into storybook/ by the landing page.
       - name: Build Storybook
         if: github.event.action != 'closed'
         run: npm run storybook:build
         env:
-          STORYBOOK_BASE_PATH: /consonant/pr-preview/pr-${{ github.event.pull_request.number }}/
+          STORYBOOK_BASE_PATH: /consonant/pr-preview/pr-${{ github.event.pull_request.number }}/storybook/
 
-      - name: Build and stage S2A Studio
+      - name: Build Contract Book (read-only snapshot)
         if: github.event.action != 'closed'
-        run: npx nx run authoring-poc:stage-pages
+        run: npm run contract-book:build
+        env:
+          CONTRACT_BOOK_BASE_PATH: /consonant/pr-preview/pr-${{ github.event.pull_request.number }}/contract-book/
+
+      - name: Build S2A Studio
+        if: github.event.action != 'closed'
+        run: npx nx run authoring-poc:build
+
+      - name: Stage the site
+        if: github.event.action != 'closed'
+        run: node scripts/stage-site.mjs
 
       - name: Deploy PR preview
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: storybook-static
+          source-dir: site
