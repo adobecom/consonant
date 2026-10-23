@@ -94,6 +94,17 @@ export class SocialProofCarouselController {
 
   _recalc() {
     if (this._destroyed) return;
+    // Not laid out yet (mounted before first layout, display:none, a detached
+    // preview): offsetWidth is 0 and the slide width would come out negative.
+    // A negative length is an invalid declaration, which also discards the
+    // stylesheet's fallback — so the first paint was a zero-width slide that
+    // the ResizeObserver corrected one frame later, a 0.76 layout shift on a
+    // phone. Leave the CSS fallback in charge until there is a real width.
+    if (!this.el.offsetWidth) {
+      this.el.style.removeProperty("--spc-slide-w");
+      this.el.style.removeProperty("--spc-peek");
+      return;
+    }
     const peek = this._getPeek();
     const slideW = this._getSlideWidth(peek);
     this.el.style.setProperty("--spc-slide-w", `${slideW}px`);

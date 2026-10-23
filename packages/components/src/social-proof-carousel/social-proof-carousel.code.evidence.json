@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:28:18.190Z",
+  "extractedAt": "2026-10-23T18:54:13.336Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -24,8 +24,8 @@
   },
   "sources": {
     "packages/components/src/social-proof-carousel/index.js": "sha256:502a6c89d3299ace688a358f452155e56e9e11308188345ecf8644a8373ed1d7",
-    "packages/components/src/social-proof-carousel/social-proof-carousel.js": "sha256:c75599678787f933cf11552b153a0e8370faa600529d8a4f9033792b45538ac3",
-    "packages/components/src/social-proof-carousel/social-proof-carousel.css": "sha256:dd48841c817c9a5ae2c1b5065075252403d697accebcf61b26cb52592b5e662e"
+    "packages/components/src/social-proof-carousel/social-proof-carousel.js": "sha256:fa88a5af6c24ef96ae6496b920f055963aea911586049f3352c976b1bfb56b83",
+    "packages/components/src/social-proof-carousel/social-proof-carousel.css": "sha256:4da03f6a838f40aa67a2505d074bf8b0010ec501e872b38eb1ede0b2d22c2066"
   },
   "props": [
     {
@@ -230,6 +230,7 @@
   ],
   "queries": [
     "@media (max-width: 599px)",
+    "@media (min-width: 1600px)",
     "@media (prefers-reduced-motion: reduce)"
   ],
   "stories": [
@@ -632,6 +633,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:162bae7ae4ed0d8c40a9afedf56d9a4af77f08a9050a05c487a28382bea72a6c"
+    "hash": "sha256:750d8b367680db7f25c8af4193dc718a072494ce93956f22ce6b3b7dc9fcd53d"
   }
 }
