@@ -1,0 +1,345 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.link",
+  "name": "Link",
+  "version": "2.0.1",
+  "status": "draft",
+  "description": "A text link that adapts to light and dark automatically — no Context axis, theme-aware via content/default.",
+  "archetype": "button",
+  "semantics": {
+    "element": "button",
+    "elementByProp": {
+      "prop": "href",
+      "map": {
+        "": "button",
+        "*": "a"
+      }
+    }
+  },
+  "props": [
+    {
+      "name": "emphasis",
+      "type": {
+        "enum": [
+          "default",
+          "subtle"
+        ]
+      },
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Emphasis"
+        },
+        "code": {
+          "prop": "emphasis"
+        }
+      }
+    },
+    {
+      "name": "iconEnd",
+      "type": "text",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon End#2609:0"
+        },
+        "code": {
+          "prop": "iconEnd"
+        }
+      }
+    },
+    {
+      "name": "kind",
+      "type": {
+        "enum": [
+          "action",
+          "text"
+        ]
+      },
+      "default": "\"action\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Kind"
+        },
+        "code": {
+          "prop": "kind"
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "default": "\"Label\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label#2277:4"
+        },
+        "code": {
+          "prop": "label"
+        }
+      }
+    },
+    {
+      "name": "showIconEnd",
+      "type": "boolean",
+      "description": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "default": "true",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Icon End#2541:0"
+        },
+        "code": {
+          "prop": "showIconEnd"
+        }
+      }
+    },
+    {
+      "name": "underline",
+      "type": "boolean",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Underline#10238:0"
+        },
+        "code": {
+          "prop": "underline"
+        }
+      }
+    },
+    {
+      "name": "href",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "\"#\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "href"
+        }
+      }
+    }
+  ],
+  "states": [
+    "hover",
+    "focus-visible",
+    "active"
+  ],
+  "anatomy": {
+    "root": {
+      "element": "button",
+      "layout": {
+        "display": "inline-flex",
+        "direction": "row",
+        "align": "center"
+      },
+      "tokens": {
+        "gap": "{s2a.spacing.xs}"
+      },
+      "literalsByProp": [
+        {
+          "prop": "kind",
+          "map": {
+            "action": {
+              "padding-top": "6px",
+              "padding-bottom": "6px"
+            },
+            "text": {
+              "padding-top": "2px",
+              "padding-bottom": "2px"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "label-wrap": {
+          "element": "div",
+          "layout": {
+            "display": "inline-flex",
+            "direction": "column"
+          },
+          "literals": {
+            "gap": "1px"
+          },
+          "parts": {
+            "call-to-action": {
+              "element": "span",
+              "slot": {
+                "name": "Call to Action",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "defaultContent": [
+                  {
+                    "id": "text",
+                    "text": "Label"
+                  }
+                ]
+              },
+              "tokensByProp": [
+                {
+                  "prop": "emphasis",
+                  "map": {
+                    "default": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "subtle": {
+                      "color": "{s2a.color.content.body-subtle}"
+                    }
+                  }
+                },
+                {
+                  "prop": "kind",
+                  "map": {
+                    "action": {
+                      "font-family": "{s2a.font.family.label}",
+                      "font-size": "{s2a.typography.font-size.label}",
+                      "font-weight": "{s2a.font.weight.label}",
+                      "letter-spacing": "{s2a.typography.letter-spacing.label}",
+                      "line-height": "{s2a.typography.line-height.label}"
+                    },
+                    "text": {
+                      "font-family": "{s2a.font.family.body}",
+                      "font-size": "{s2a.typography.font-size.body-md}",
+                      "font-weight": "{s2a.font.weight.body}",
+                      "letter-spacing": "{s2a.typography.letter-spacing.body-md}",
+                      "line-height": "{s2a.typography.line-height.body-md}"
+                    }
+                  }
+                }
+              ]
+            },
+            "underline": {
+              "literals": {
+                "height": "1px"
+              },
+              "tokensByProp": [
+                {
+                  "prop": "emphasis",
+                  "map": {
+                    "default": {
+                      "background-color": "{s2a.color.content.default}"
+                    },
+                    "subtle": {
+                      "background-color": "{s2a.color.content.body-subtle}"
+                    }
+                  }
+                }
+              ],
+              "literalsByProp": [
+                {
+                  "prop": "kind",
+                  "map": {
+                    "action": {
+                      "width": "33px"
+                    },
+                    "text": {
+                      "width": "36px"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "end-icon": {
+          "element": "div",
+          "literals": {
+            "width": "12px",
+            "height": "12px"
+          },
+          "parts": {
+            "frame": {
+              "element": "div",
+              "literals": {
+                "width": "12px",
+                "height": "12px"
+              },
+              "parts": {
+                "s2a-icon-chevron-right": {
+                  "layout": {
+                    "display": "flex",
+                    "direction": "row"
+                  },
+                  "literals": {
+                    "width": "12px",
+                    "height": "12px"
+                  }
+                }
+              }
+            },
+            "icon-color": {
+              "literals": {
+                "width": "12px",
+                "height": "12px"
+              },
+              "tokensByProp": [
+                {
+                  "prop": "emphasis",
+                  "map": {
+                    "default": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "subtle": {
+                      "color": "{s2a.color.content.body-subtle}"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Renders a native <button>, or an <a> when it navigates — never a div with a click handler.",
+      "The label is the accessible name; an icon-only button needs an aria-label.",
+      "Focus is visible on the control itself (2.4.7) and the target is at least 24x24 (2.5.8).",
+      "Disabled is conveyed to assistive tech, not by colour alone (1.4.1).",
+      "Focus state shows a visible focus ring (WCAG 2.2 AA · SC 2.4.7 Focus Visible). Contrast holds in both themes because content/default resolves to a contrasting value per mode (SC 1.4.3 Contrast Minimum)."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "252b85e9d7c740613b3f2ddfd39c75f394edcd95",
+        "nodeId": "12823:184375"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/link/link.js",
+        "export": "Link"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:7c2b653b0cb89e9f974564d1b92c81dd11b13d3770a79978d227dedfda5738fa",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:ac3cee86108eeaf1ea5a43ead8dbbc364d3bdea433efc0910c358a0b78302018"
+    }
+  }
+}

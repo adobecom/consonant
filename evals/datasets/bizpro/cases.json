@@ -1,0 +1,38 @@
+{
+  "page": "bizpro",
+  "status": "catalog-only",
+  "note": "Section nodes read from the Figma metadata of the BizPro xl frame on 2026-09-15. Most section frames are unnamed (\"Frame 2147230xxx\"), so the ids below are working names; rename the frames in Figma before capturing goldens so the manifest and the file agree. The frame is 2560 wide at the xl breakpoint, not 1920.",
+  "sources": {
+    "xl": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "section": "11333:235687 (xl - 1441+)",
+      "frame": "11333:235688",
+      "captured": null
+    }
+  },
+  "groups": [
+    { "id": "2560", "viewport": { "width": 2560, "height": 1440 }, "theme": "light", "goldenDir": "golden/2560" }
+  ],
+  "sections": {
+    "hero": { "golden": "hero.webp", "selectors": [".page-section[data-component=\"global-navigation\"]", ".page-section[data-component=\"hero\"]"], "notes": "Nav Bar Container + Copy (11333:237557) over five image columns (11333:237598). No Studio recipe yet." },
+    "routing-carousel": { "golden": "routing-carousel.webp", "selectors": [".c-hub-router__heading", ".c-hub-router__carousel"], "notes": "Frame 11333:235831 (\"2560\"): rail at 11333:235833, caption row 11333:235872. Needs a Figma name." },
+    "feature": { "golden": "feature.webp", "selectors": [".page-section[data-component=\"immersive-feature\"]"], "notes": "Frame 11333:235691 → 11333:235692. Needs a Figma name." },
+    "offer": { "golden": "offer.webp", "selectors": [".page-section[data-component=\"offer\"]"], "notes": "Offer 11333:235874 is unresolved in Figma (recorded in the POC plan)." },
+    "flow-grid-to-ui": { "golden": "flow-grid-to-ui.webp", "selectors": [".page-section[data-component=\"flow\"]"], "notes": "Flow - Grid to UI 11333:235876 (5855px tall, motion-driven). Not a Studio section; motion contract candidate." },
+    "whats-new-row-1": { "golden": "whats-new-row-1.webp", "selectors": [".c-media-section"], "notes": "Frame 11333:235966. Media section recipe likely applies; confirm the layout." },
+    "whats-new-row-2": { "golden": "whats-new-row-2.webp", "selectors": [".c-media-section"], "notes": "Section - What's New 11333:237046 (947px tall)." },
+    "hub-merch": { "golden": "hub-merch.webp", "selectors": [".page-section[data-component=\"hub-merch\"]"], "notes": "Frame 11333:237435 (2304px tall). MerchCard pattern; no recipe." },
+    "product-router-footer": { "golden": "product-router-footer.webp", "selectors": [".c-product-router", ".c-site-footer"], "notes": "Inside 11333:235690; locate the named Product Router and Footer frames before capture." }
+  },
+  "cases": [
+    { "group": "2560", "section": "hero", "node": "11333:237556" },
+    { "group": "2560", "section": "routing-carousel", "node": "11333:235831" },
+    { "group": "2560", "section": "feature", "node": "11333:235691" },
+    { "group": "2560", "section": "offer", "node": "11333:235874" },
+    { "group": "2560", "section": "flow-grid-to-ui", "node": "11333:235876" },
+    { "group": "2560", "section": "whats-new-row-1", "node": "11333:235966" },
+    { "group": "2560", "section": "whats-new-row-2", "node": "11333:237046" },
+    { "group": "2560", "section": "hub-merch", "node": "11333:237435" },
+    { "group": "2560", "section": "product-router-footer", "node": "11333:235690" }
+  ]
+}

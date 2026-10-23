@@ -1,0 +1,137 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Divider",
+  "slug": "divider",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from divider.figma.evidence.json (sha256:b80198e2…) through packages/spec-dictionary/dictionary.json (none)",
+    "date": "2026-10-08",
+    "reviewer": "Matt"
+  },
+  "archetype": "none",
+  "version": "1.0.0",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "10910:17760",
+      "nodeName": "Divider",
+      "componentSetKey": "943550fa170b6c953a27449f060743c87560f962",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"?\"; 5 nodes, 5 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/divider/divider.js",
+      "export": "Divider",
+      "cssClass": "c-divider"
+    }
+  },
+  "props": [
+    {
+      "name": "style",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "default",
+        "subtle",
+        "knockout",
+        "inverse",
+        "subtle-inverse"
+      ],
+      "default": "default",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Style"
+      },
+      "code": {
+        "prop": "style",
+        "attr": "data-style"
+      }
+    }
+  ],
+  "states": [],
+  "anatomy": {
+    "root": {
+      "selector": ".c-divider",
+      "figma": ".root",
+      "element": "div",
+      "tokens": {
+        "width": "raw:418px",
+        "height": "raw:1px"
+      },
+      "tokensByProp": [
+        {
+          "prop": "style",
+          "map": {
+            "default": {
+              "background-color": "{s2a.color.divider.default}"
+            },
+            "subtle": {
+              "background-color": "{s2a.color.divider.subtle}"
+            },
+            "knockout": {
+              "background-color": "{s2a.color.divider.knockout}"
+            },
+            "inverse": {
+              "background-color": "{s2a.color.divider.inverse}"
+            },
+            "subtle-inverse": {
+              "background-color": "{s2a.color.divider.subtle-inverse}"
+            }
+          }
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "forbiddenCombinations": [],
+  "decisions": [
+    {
+      "id": "d-archetype-untemplated",
+      "question": "The archetype read as \"none\", which has no template in the dictionary (it has: link-card, card, collection, button, checkbox / radio, toggle / switch, input / field, badge / tag / chip, pagination, accordion, select / dropdown, helper text, list). Without one the draft gets no HTML element, no accessibility floor and no base CSS — the root falls back to <div>. Which archetype is this, really?",
+      "chose": "drafted with no archetype floor; root element defaults to div",
+      "confidence": "low",
+      "fix": "Set \"archetype\" in the defs to one the dictionary templates, or re-scaffold with --archetype=<name>. If none fit, the dictionary needs a new entry.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "no signal identified a kind — decide it rather than inheriting a default"
+    },
+    {
+      "id": "d-archetype",
+      "question": "Scaffolded as none (no signal identified a kind — decide it rather than inheriting a default). Confirm, or re-run npm run specs:scaffold -- --slug=divider --archetype=<link-card|card|collection>.",
+      "chose": "none — no signal identified a kind — decide it rather than inheriting a default",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=divider --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces divider×5; state axis none"
+    },
+    {
+      "id": "d-hardcoded-values",
+      "question": "2 values in the design are set with no variable behind them: root width = 418px; root height = 1px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "divider.figma.evidence.json unboundValues"
+    }
+  ]
+}

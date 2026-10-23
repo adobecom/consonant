@@ -1,0 +1,305 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "control-button",
+  "storybookId": "control-button",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "size-xl",
+      "name": "size: xl",
+      "args": {
+        "size": "xl"
+      }
+    },
+    {
+      "id": "size-md",
+      "name": "size: md",
+      "args": {
+        "size": "md"
+      }
+    },
+    {
+      "id": "disabled-on",
+      "name": "disabled on",
+      "args": {
+        "disabled": true
+      }
+    },
+    {
+      "id": "disabled-off",
+      "name": "disabled off",
+      "args": {
+        "disabled": false
+      }
+    },
+    {
+      "id": "forcestate-default",
+      "name": "forceState: default",
+      "args": {
+        "forceState": "default"
+      }
+    },
+    {
+      "id": "forcestate-hover",
+      "name": "forceState: hover",
+      "args": {
+        "forceState": "hover"
+      }
+    },
+    {
+      "id": "forcestate-active",
+      "name": "forceState: active",
+      "args": {
+        "forceState": "active"
+      }
+    },
+    {
+      "id": "forcestate-disabled",
+      "name": "forceState: disabled",
+      "args": {
+        "forceState": "disabled"
+      }
+    },
+    {
+      "id": "forcestate-focus",
+      "name": "forceState: focus",
+      "args": {
+        "forceState": "focus"
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "generated-controlbutton--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-controlbutton--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-controlbutton--size-xl",
+      "name": "size: xl",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--size-md",
+      "name": "size: md",
+      "argKeys": [
+        "size"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--disabled-on",
+      "name": "disabled on",
+      "argKeys": [
+        "disabled"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--disabled-off",
+      "name": "disabled off",
+      "argKeys": [
+        "disabled"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-default",
+      "name": "forceState: default",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-hover",
+      "name": "forceState: hover",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-active",
+      "name": "forceState: active",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-disabled",
+      "name": "forceState: disabled",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
+      "id": "generated-controlbutton--forcestate-focus",
+      "name": "forceState: focus",
+      "argKeys": [
+        "forceState"
+      ]
+    },
+    {
+      "id": "atoms-controlbutton--default",
+      "name": "Media controls",
+      "argKeys": []
+    },
+    {
+      "id": "atoms-controlbutton--states",
+      "name": "All states",
+      "argKeys": []
+    },
+    {
+      "id": "atoms-controlbutton--disabled",
+      "name": "Disabled",
+      "argKeys": []
+    },
+    {
+      "id": "atoms-controlbutton--navigation-icons",
+      "name": "Navigation icons (nav-back)",
+      "argKeys": []
+    }
+  ],
+  "deferred": [],
+  "extra": [],
+  "matrix": {
+    "stateAxis": "State",
+    "cols": [
+      "default",
+      "hover",
+      "active",
+      "disabled",
+      "focus"
+    ],
+    "rows": [
+      "xl",
+      "md"
+    ],
+    "rowValues": [
+      {
+        "Size": "xl"
+      },
+      {
+        "Size": "md"
+      }
+    ],
+    "cell": {
+      "w": 72,
+      "h": 72,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "size": "xl"
+        },
+        "forced": null,
+        "label": "xl / default",
+        "nodeId": "11180:181673"
+      },
+      {
+        "row": 0,
+        "col": 1,
+        "args": {
+          "size": "xl"
+        },
+        "forced": "hover",
+        "label": "xl / hover",
+        "nodeId": "11180:181665"
+      },
+      {
+        "row": 0,
+        "col": 2,
+        "args": {
+          "size": "xl"
+        },
+        "forced": "active",
+        "label": "xl / active",
+        "nodeId": "11180:181657"
+      },
+      {
+        "row": 0,
+        "col": 3,
+        "args": {
+          "size": "xl"
+        },
+        "forced": "disabled",
+        "label": "xl / disabled",
+        "nodeId": "11180:181649"
+      },
+      {
+        "row": 0,
+        "col": 4,
+        "args": {
+          "size": "xl"
+        },
+        "forced": "focus",
+        "label": "xl / focus",
+        "nodeId": "11180:181640"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "size": "md"
+        },
+        "forced": null,
+        "label": "md / default",
+        "nodeId": "11180:181669"
+      },
+      {
+        "row": 1,
+        "col": 1,
+        "args": {
+          "size": "md"
+        },
+        "forced": "hover",
+        "label": "md / hover",
+        "nodeId": "11180:181661"
+      },
+      {
+        "row": 1,
+        "col": 2,
+        "args": {
+          "size": "md"
+        },
+        "forced": "active",
+        "label": "md / active",
+        "nodeId": "11180:181653"
+      },
+      {
+        "row": 1,
+        "col": 3,
+        "args": {
+          "size": "md"
+        },
+        "forced": "disabled",
+        "label": "md / disabled",
+        "nodeId": "11180:181645"
+      },
+      {
+        "row": 1,
+        "col": 4,
+        "args": {
+          "size": "md"
+        },
+        "forced": "focus",
+        "label": "md / focus",
+        "nodeId": "11180:181635"
+      }
+    ],
+    "missing": []
+  }
+}

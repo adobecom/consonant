@@ -1,0 +1,46 @@
+{
+  "$schema": "s2a-grid-defs/1",
+  "slug": "container-fluid",
+  "name": "Fluid container",
+  "version": "1.0.0",
+  "kind": "container",
+  "tier": "global",
+  "status": "shipped",
+  "description": "An edge-to-edge container: no side margins, no cap in code today. For carousels, sliders and anything that should bleed to the viewport edge while still establishing a grid context for its children. Both of Will's layout notes say fluid should stop at 2560; neither stylesheet implements that, so the rule below is recorded as failing rather than quietly dropped.",
+  "anchors": {
+    "code": { "stylesheet": "packages/grid/src/s2a-layout-grids.css", "importPath": "@adobecom/s2a-grid/css/grid.css", "rootClass": "container-fluid" },
+    "figma": { "collectionId": "VariableCollectionId:6:178", "layerName": "Container (fill)", "designOnly": true }
+  },
+  "breakpointBehavior": [
+    { "breakpoint": "sm", "behavior": "Edge to edge, 6 columns.", "maxWidth": null, "margin": null, "columns": 6 },
+    { "breakpoint": "md", "behavior": "Edge to edge, 12 columns.", "maxWidth": null, "margin": null, "columns": 12 },
+    { "breakpoint": "lg", "behavior": "Edge to edge, 12 columns.", "maxWidth": null, "margin": null, "columns": 12 },
+    { "breakpoint": "xl", "behavior": "Edge to edge. Should stop at 2560 per the design notes; does not today.", "maxWidth": 2560, "margin": null, "columns": 12 }
+  ],
+  "tokens": [],
+  "surface": {
+    "classes": [{ "name": "container-fluid", "purpose": "Edge-to-edge container; overrides the percentage rule to 100%." }],
+    "customProperties": [{ "name": "--s2a-grid-container-width", "purpose": "Overridden locally to 100% so nested rows do not inherit the 83.4% rule." }]
+  },
+  "rules": [
+    { "id": "FLUID_CLASS", "statement": "The fluid container class exists.", "severity": "fail", "check": { "type": "classPresent", "name": "container-fluid" } },
+    { "id": "FLUID_FULL", "statement": "The fluid container is 100% wide with no cap below HD.", "severity": "fail", "check": { "type": "declarationEquals", "class": "container-fluid", "media": null, "property": "width", "expectedValue": "100%" } },
+    { "id": "FLUID_RESETS_PCT", "statement": "It resets the percentage rule to 100% locally, so a nested row does not inherit an 83.4% width it did not ask for.", "severity": "fail", "check": { "type": "declarationEquals", "class": "container-fluid", "media": null, "property": "--s2a-grid-container-width", "expectedValue": "100%" } },
+    {
+      "id": "FLUID_CAP_2560",
+      "statement": "The fluid container stops growing at 2560px. Beyond that the layout is no longer a layout, it is a stretched one.",
+      "severity": "warn",
+      "check": { "type": "declarationEquals", "class": "container-fluid", "media": 1441, "property": "max-width", "expectedPx": 2560 }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "FLUID_2560",
+      "question": "Does the fluid container cap at 2560, as both Figma notes state, or stay genuinely uncapped?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Figma: 'Fluid: edge to edge margins but with a 2560 max' (08/26 V4) and 'Fluid: No max content container. (wip) maybe carousel or sliders etc. 2560 max' (04/23). Neither packages/grid nor Will's hosted demo implements a cap. The FLUID_CAP_2560 rule fails until one of the two changes."
+    }
+  ],
+  "visualize": { "demo": "container", "overlay": true }
+}

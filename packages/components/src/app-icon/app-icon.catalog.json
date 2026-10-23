@@ -1,0 +1,63 @@
+{
+  "id": "s2a.app-icon",
+  "name": "AppIcon",
+  "slug": "app-icon",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "AppIcon",
+  "props": [
+    {
+      "name": "app",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "ariaLabel",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "ariaHidden",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "loading",
+      "type": "string",
+      "lever": false
+    },
+    {
+      "name": "importance",
+      "type": "string",
+      "lever": false
+    }
+  ],
+  "parts": [
+    "root",
+    "root.img"
+  ],
+  "slots": [],
+  "tokens": 5,
+  "a11y": {
+    "role": "img",
+    "wcag": [
+      "1.1.1",
+      "4.1.2"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/app-icon/app-icon.js",
+      "export": "AppIcon",
+      "controller": null,
+      "cssClass": "c-app-icon"
+    },
+    "figma": "8175:77406"
+  },
+  "openDecisions": 8
+}

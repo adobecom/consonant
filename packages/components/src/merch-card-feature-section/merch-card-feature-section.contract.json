@@ -1,0 +1,192 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.merch-card-feature-section",
+  "name": "MerchCardFeatureSection",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "MerchCardFeatureSection",
+  "archetype": "none",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "icon",
+      "type": "text",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon#10320:107"
+        },
+        "code": {
+          "prop": "icon"
+        }
+      }
+    },
+    {
+      "name": "showDivider",
+      "type": "boolean",
+      "default": "true",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Divider#10564:7"
+        },
+        "code": {
+          "prop": "showDivider"
+        }
+      }
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "default": "\"Section title\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Title#10320:104"
+        },
+        "code": {
+          "prop": "title"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "div",
+      "layout": {
+        "display": "flex",
+        "direction": "column"
+      },
+      "tokens": {
+        "gap": "{s2a.spacing.12}"
+      },
+      "literals": {
+        "width": "418px"
+      },
+      "parts": {
+        "divider": {
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "grow": true
+          },
+          "slot": {
+            "name": "Divider",
+            "accepts": [
+              "Divider"
+            ],
+            "acceptsMode": "restrict",
+            "defaultContent": [
+              {
+                "id": "divider",
+                "props": {
+                  "figma": "Divider",
+                  "Style": "subtle"
+                }
+              }
+            ]
+          }
+        },
+        "title": {
+          "element": "div",
+          "layout": {
+            "display": "flex",
+            "direction": "row",
+            "align": "center",
+            "grow": true
+          },
+          "tokens": {
+            "gap": "{s2a.spacing.8}",
+            "padding-bottom": "{s2a.spacing.0}",
+            "padding-left": "{s2a.spacing.0}",
+            "padding-right": "{s2a.spacing.0}",
+            "padding-top": "{s2a.spacing.0}"
+          },
+          "parts": {
+            "s2-icon-acrobat-pdfedit-20-n": {
+              "layout": {
+                "display": "flex",
+                "direction": "row"
+              },
+              "literals": {
+                "width": "20px",
+                "height": "20px"
+              }
+            },
+            "title-text": {
+              "element": "span",
+              "layout": {
+                "grow": true
+              },
+              "tokens": {
+                "color": "{s2a.color.content.heading}",
+                "font-family": "{s2a.font.family.label}",
+                "font-size": "{s2a.typography.font-size.label}",
+                "font-weight": "{s2a.font.weight.label}",
+                "letter-spacing": "{s2a.typography.letter-spacing.label}",
+                "line-height": "{s2a.typography.line-height.label}"
+              },
+              "slot": {
+                "name": "title-text",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "defaultContent": [
+                  {
+                    "id": "text",
+                    "text": "Section title"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "items": {
+          "element": "div",
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "grow": true
+          },
+          "tokens": {
+            "gap": "{s2a.spacing.8}",
+            "padding-bottom": "{s2a.spacing.0}",
+            "padding-left": "{s2a.spacing.32}",
+            "padding-right": "{s2a.spacing.0}",
+            "padding-top": "{s2a.spacing.0}"
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA"
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "9dedd45e22ee2649c1f34b5bfdd1b317a3caae7b",
+        "nodeId": "10320:102040"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/merch-card-feature-section/merch-card-feature-section.js",
+        "export": "MerchCardFeatureSection"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:061db8467e300873af6615afb9e3df500d23810e23fcc6a088c174c33944ebf0",
+    "source": {
+      "kind": "design",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:061db8467e300873af6615afb9e3df500d23810e23fcc6a088c174c33944ebf0"
+    }
+  }
+}

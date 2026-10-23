@@ -1,0 +1,19 @@
+/* List — generated from list.contract.json.
+ * Re-run: npm run specs:render -- --slug=list --target=milo */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-16, 16px);
+  padding-bottom: var(--s2a-spacing-none, 0);
+  padding-left: var(--s2a-spacing-none, 0);
+  padding-right: var(--s2a-spacing-none, 0);
+  padding-top: var(--s2a-spacing-none, 0);
+  width: 418px;
+}
+
+.list .merch-card-feature-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}

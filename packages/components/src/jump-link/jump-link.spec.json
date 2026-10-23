@@ -4,25 +4,55 @@
   "cssClass": "c-jump-link",
   "storybookId": "jump-link",
   "figmaNodeId": "13360:188611",
-  "description": "Single in-page anchor link: a ControlButton (media style, md) paired with a heading-5 label. JumpLinkNav arranges N JumpLinks in a row with a 32px gap. Used in rich-content sections to jump down to further sections on the same page.",
-  "composedOf": ["ControlButton (visual parity only — shares control-button.css, rendered as a non-interactive span so the whole JumpLink stays a single <a>, never a <button> nested inside a link)"],
+  "description": "Single in-page anchor link: a ControlButton (media style, md) paired with a heading-5 label. JumpLinkNav arranges N JumpLinks in a row with a 32px gap. Used in rich-content sections to jump down to further sections on the same page. ControlButton is visual parity only: it shares control-button.css and renders as a non-interactive span so the whole JumpLink stays a single <a>, never a <button> nested inside a link.",
+  "composedOf": [
+    "control-button"
+  ],
   "figma": {
     "component": "JumpLink",
     "nodeId": "13360:188611",
     "wrapper": "JumpLinkNav",
     "wrapperComponentSetId": "13371:188842",
-    "wrapperVariantNodeIds": { "horizontal": "13360:188643", "vertical": "13371:188841" },
+    "wrapperVariantNodeIds": {
+      "horizontal": "13360:188643",
+      "vertical": "13371:188841"
+    },
     "page": "   ↳ JumpLink",
     "sourcePattern": "Rich-content-jump-link-Desktop_Enhancement (13027:189213), CPro — Hub and docementation cleanup file"
   },
   "variants": {
-    "orientation": ["horizontal", "vertical"]
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
   },
   "props": [
-    { "name": "label", "type": "string", "defaultValue": "\"Section\"", "description": "Link text (Figma TEXT prop Label)" },
-    { "name": "href", "type": "string", "defaultValue": "\"#\"", "description": "In-page anchor destination, e.g. \"#photography\"" },
-    { "name": "onClick", "type": "Function" },
-    { "name": "orientation", "type": "string", "defaultValue": "\"horizontal\"", "enum": ["horizontal", "vertical"], "description": "JumpLinkNav only (Figma VARIANT prop Orientation, component set 13371:188842) — matches the Orientation name/values/default already used by Card and ProductLockup" }
+    {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"Section\"",
+      "description": "Link text (Figma TEXT prop Label)"
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "defaultValue": "\"#\"",
+      "description": "In-page anchor destination, e.g. \"#photography\""
+    },
+    {
+      "name": "onClick",
+      "type": "Function"
+    },
+    {
+      "name": "orientation",
+      "type": "string",
+      "defaultValue": "\"horizontal\"",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "description": "JumpLinkNav only (Figma VARIANT prop Orientation, component set 13371:188842) — matches the Orientation name/values/default already used by Card and ProductLockup"
+    }
   ],
   "tokenBindings": {
     "gap:item": "--s2a-spacing-xs",
@@ -44,8 +74,14 @@
   ],
   "a11y": {
     "role": "link (native <a>)",
-    "requiredAriaAttrs": ["aria-hidden=\"true\" (on the decorative icon chip)"],
-    "wcag": ["2.4.4", "2.4.7", "1.4.1"],
+    "requiredAriaAttrs": [
+      "aria-hidden=\"true\" (on the decorative icon chip)"
+    ],
+    "wcag": [
+      "2.4.4",
+      "2.4.7",
+      "1.4.1"
+    ],
     "notes": [
       "Renders as a native <a href=\"#section-id\"> wrapping both the icon and the label — the whole item is one link target, not two separate controls.",
       "The icon chip reuses ControlButton's CSS class for visual parity but is a non-interactive <span aria-hidden=\"true\">, not a nested <button> — a <button> inside an <a> would be invalid, ambiguous-focus markup.",

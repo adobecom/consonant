@@ -1,0 +1,86 @@
+{
+  "name": "authoring-poc",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/authoring-poc/src",
+  "projectType": "application",
+  "tags": ["scope:authoring", "type:app"],
+  "implicitDependencies": ["components", "tokens"],
+  "targets": {
+    "assets": {
+      "command": "node apps/authoring-poc/scripts/prepare-assets.mjs",
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/scripts/prepare-assets.mjs",
+        "{projectRoot}/src/assets.ts",
+        "{workspaceRoot}/apps/storybook/stories/assets/**",
+        "{projectRoot}/reports/*.json",
+        "{workspaceRoot}/package-lock.json"
+      ],
+      "outputs": ["{projectRoot}/public/media", "{projectRoot}/public/reports"]
+    },
+    "serve": {
+      "command": "vite --config apps/authoring-poc/vite.config.ts",
+      "dependsOn": ["assets", { "target": "build", "projects": ["tokens"] }],
+      "continuous": true
+    },
+    "build": {
+      "command": "vite build --config apps/authoring-poc/vite.config.ts",
+      "dependsOn": ["assets", { "target": "build", "projects": ["tokens"] }],
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/apps/storybook/stories/assets/**",
+        "{workspaceRoot}/package-lock.json",
+        { "env": "AUTHORING_BASE_PATH" }
+      ],
+      "outputs": ["{workspaceRoot}/dist/apps/authoring-poc"]
+    },
+    "typecheck": {
+      "command": "tsc --project apps/authoring-poc/tsconfig.json --noEmit",
+      "cache": true
+    },
+    "test": {
+      "command": "vitest run --config apps/authoring-poc/vitest.config.ts",
+      "cache": true
+    },
+    "e2e": {
+      "command": "node apps/authoring-poc/scripts/e2e.mjs",
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "homepage-e2e": {
+      "command": "node apps/authoring-poc/scripts/homepage-e2e.mjs",
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "perf": {
+      "command": "node apps/authoring-poc/scripts/perf.mjs",
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "homepage-perf": {
+      "command": "node apps/authoring-poc/scripts/perf.mjs --fixture=homepage",
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "a11y-audit": {
+      "command": "node apps/authoring-poc/scripts/a11y-audit.mjs",
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "recipe-previews": {
+      "command": "node apps/authoring-poc/scripts/recipe-previews.mjs",
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "inventory": {
+      "command": "node apps/authoring-poc/scripts/inventory.mjs",
+      "cache": false
+    },
+    "stage-pages": {
+      "command": "node apps/authoring-poc/scripts/stage-pages.mjs",
+      "dependsOn": ["build"],
+      "cache": false
+    }
+  }
+}

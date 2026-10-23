@@ -85,14 +85,14 @@ export const ThreeUp = {
     <div style="
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      gap: var(--s2a-spacing-lg);
       max-width: 1200px;
-      background: #f5f5f5;
-      padding: 32px;
-      border-radius: 16px;
+      background: var(--s2a-color-surface-subtle);
+      padding: var(--s2a-spacing-xl);
+      border-radius: var(--s2a-border-radius-md);
     ">
       ${SAMPLE_CARDS.map((card) => html`
-        <div style="background: #fff; border-radius: 16px;">
+        <div style="background: var(--s2a-color-surface-default); border-radius: var(--s2a-border-radius-md);">
           ${TextCard(card)}
         </div>
       `)}

@@ -1,0 +1,828 @@
+{
+  "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+  "pageId": "104:26144",
+  "inspectedAt": "2026-10-12",
+  "gridStyles": [
+    {
+      "id": "S:f83974e7e1b532e4674f6846d684d8a6cc13a44b,",
+      "name": "Grid - mode",
+      "description": "12 col - 8 gap / 6 col tablet",
+      "grids": [
+        {
+          "pattern": "COLUMNS",
+          "visible": true,
+          "color": {
+            "r": 0,
+            "g": 0.4000000059604645,
+            "b": 1,
+            "a": 0.10000000149011612
+          },
+          "gutterSize": 8,
+          "alignment": "STRETCH",
+          "count": 12,
+          "offset": 0,
+          "boundVariables": {
+            "count": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:2485:17"
+            },
+            "gutterSize": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:2357:700"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S:ccd777e4dfd074650aa8a23944fca8060739ce30,",
+      "name": "Grid - 12 col",
+      "description": "12 col - 8 gap",
+      "grids": [
+        {
+          "pattern": "COLUMNS",
+          "visible": true,
+          "color": {
+            "r": 0,
+            "g": 0.4000000059604645,
+            "b": 1,
+            "a": 0.10000000149011612
+          },
+          "gutterSize": 8,
+          "alignment": "STRETCH",
+          "count": 12,
+          "offset": 159.99000549316406,
+          "boundVariables": {
+            "offset": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:2357:689"
+            },
+            "count": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:2485:17"
+            },
+            "gutterSize": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:2357:700"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S:941aa25e540238d84404f69558f1d0dfea1b8ca2,",
+      "name": "Grid - 6 col",
+      "description": "6 col mobile - 8 gap",
+      "grids": [
+        {
+          "pattern": "COLUMNS",
+          "visible": true,
+          "color": {
+            "r": 0,
+            "g": 0.4000000059604645,
+            "b": 1,
+            "a": 0.10000000149011612
+          },
+          "gutterSize": 8,
+          "alignment": "STRETCH",
+          "count": 6,
+          "offset": 0,
+          "boundVariables": {}
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "id": "12861:29688",
+      "text": [
+        "CONTAINERS:  COL container logic ranges: 12 cols (1440+ - 768), 6 cols (up to 768px) \nContainer 12 cols (1440+ - 768), 6 cols (up to 768px)  • Standard: Max 1920px content container.  • Offset: Calls the FIXED value  Max 1920px content container, but margin tokens at breakpoints.  • Fluid: edge to edge margins but with a 2560 max  \n Margins  • Offset: margin tokens used at breakpoints are: --spacing-lg.  • Margin rules are based on % inheritance (auto). Desktop/tablet (1440+-768) is Using 83.4% rules for now.  8.33% set • Margins on mobile (767-360) we will use a spacing token.--grid-margin = --spacing-lg \n Breakpoints  • XL 12 cols (1440+ HD) - stress test ie 2560 HD (used only as needed)  • L 12 cols (1440 - 1280) - most standard desktop range  • M 12 cols (1279 - 768) - Tablet landscape (font shift, ability to customize as needed, mostly “tablet-desktop” feel)  • S 6 cols (up to 767px) - true mobile, but covers tablet portrait as well. Think mobile simplified layouts or mobile experiences "
+      ]
+    },
+    {
+      "id": "12861:29690",
+      "text": [
+        "MODES: fully responsive: viewport, container and gutters per range.  Xl:\nLg:\nMd: starts at max resize to mockup 768\nSm:  Each container has their own set of tokens and rule to support the mode. \nWIP Versions for use to verify with building designers on usefulness\nno modes more raw\nmodes - open col systems (make sense for builders)\nmodes + col/grid system math in place make sense for c2 \nIE col choice are tokens with modes for reflow choices. anything more don’t think about it as a feature may live at this level instead  DISCUSS: c2 systems vs s2a for col. test calling to col from s2a into c2  MOCKUP SIZES: for designers to use to show these break points 2560 VP - content container =1920 max 1920 is ideal  - CC =1440 max\n768 VP - CC @ vp= 628 content container 375 VP - CC @ vp= 300  (Discussion) Yes: XL and Lg have cross over for now on. Unless XL is going to be VP 1921 - 2560  range only.  "
+      ]
+    },
+    {
+      "id": "4907:6970",
+      "text": [
+        "CONTAINERS: Grid Behavior • Desktop (≥1280px): 2–6 cards per row via .two-up through .six-up. • Tablet (768–1279px): Always 2-up. Add .orphan-full to stretch a lone last card full width. • Mobile (<768px): Single column, fully stacked. \nUsage <div class=”ups-grid three-up”> <div class=”ups-grid four-up orphan-full”>   COL container logic ranges: 12 cols (1440+ - 768), 6 cols (up to 768px) \nContainer 12 cols (1440+ - 768), 6 cols (up to 768px)  • Standard: Max 1440px content container.  • HD: Max 1920px content container.  • Hero offset: Max 1920px content container, but margin tokens at breakpoints.  • Fluid: No max content container. (wip) maybe carousel or sliders etc. 2560 max  • No container: Full width/w overflow (wip) flex grid + object-fit etc. \n Margins  • Hero offset: margin tokens used at breakpoints are: --spacing-4xl, --spacing-2xl, --spacing-lg.  • Margin rules are based on % inheritance (auto). Desktop/tablet (1440+-768) is Using 83.4% rules for now.  • Margins on mobile (767-360) we will use a spacing token.--grid-margin = --spacing-lg \n Breakpoints  • XL 12 cols (1440+ HD) - stress test ie 2560 HD (used only as needed)  • L 12 cols (1440 - 1280) - most standard desktop range  • M 12 cols (1279 - 768) - Tablet landscape (font shift, ability to customize as needed, mostly “tablet-desktop” feel)  • S 6 cols (up to 767px) - true mobile, but covers tablet portrait as well. Think mobile simplified layouts or mobile experiences "
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "id": "VariableID:2485:17",
+      "name": "s2a/layout guide/_columns",
+      "values": {
+        "102:0": 12,
+        "102:1": 12,
+        "2297:1": 6,
+        "3933:0": 12
+      },
+      "collection": "S2A / Responsive / Container / Grid",
+      "modes": [
+        {
+          "name": "xl",
+          "modeId": "3933:0"
+        },
+        {
+          "name": "lg",
+          "modeId": "102:0"
+        },
+        {
+          "name": "md",
+          "modeId": "102:1"
+        },
+        {
+          "name": "sm",
+          "modeId": "2297:1"
+        }
+      ]
+    },
+    {
+      "id": "VariableID:2357:700",
+      "name": "s2a/layout guide/gap",
+      "values": {
+        "102:0": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:3:60"
+        },
+        "102:1": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:3:60"
+        },
+        "2297:1": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:3:60"
+        },
+        "3933:0": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:3:60"
+        }
+      },
+      "collection": "S2A / Responsive / Container / Grid",
+      "modes": [
+        {
+          "name": "xl",
+          "modeId": "3933:0"
+        },
+        {
+          "name": "lg",
+          "modeId": "102:0"
+        },
+        {
+          "name": "md",
+          "modeId": "102:1"
+        },
+        {
+          "name": "sm",
+          "modeId": "2297:1"
+        }
+      ]
+    },
+    {
+      "id": "VariableID:2357:689",
+      "name": "s2a/layout guide/container/_padding-inline",
+      "values": {
+        "102:0": 119.98999786376953,
+        "102:1": 85.33000183105469,
+        "2297:1": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:3:56"
+        },
+        "3933:0": 159.99000549316406
+      },
+      "collection": "S2A / Responsive / Container / Grid",
+      "modes": [
+        {
+          "name": "xl",
+          "modeId": "3933:0"
+        },
+        {
+          "name": "lg",
+          "modeId": "102:0"
+        },
+        {
+          "name": "md",
+          "modeId": "102:1"
+        },
+        {
+          "name": "sm",
+          "modeId": "2297:1"
+        }
+      ]
+    },
+    {
+      "id": "VariableID:3:60",
+      "name": "s2a/spacing/xs",
+      "values": {
+        "1:7": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:23b71ce10083ad36573b40200d015a3a1bdfd837/82:292"
+        }
+      },
+      "collection": "S2A / Semantic / Dimension / Static",
+      "modes": [
+        {
+          "name": "Value",
+          "modeId": "1:7"
+        }
+      ]
+    },
+    {
+      "id": "VariableID:3:56",
+      "name": "s2a/spacing/lg",
+      "values": {
+        "1:7": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:fb902c32cb8ef1e272e02afd1e9836065e3d0f28/82:287"
+        }
+      },
+      "collection": "S2A / Semantic / Dimension / Static",
+      "modes": [
+        {
+          "name": "Value",
+          "modeId": "1:7"
+        }
+      ]
+    },
+    {
+      "id": "VariableID:23b71ce10083ad36573b40200d015a3a1bdfd837/82:292",
+      "name": "spacing/8",
+      "values": {
+        "1:0": 8
+      },
+      "collection": "Primitives (Core)",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "modeId": "1:0"
+        }
+      ]
+    },
+    {
+      "id": "VariableID:fb902c32cb8ef1e272e02afd1e9836065e3d0f28/82:287",
+      "name": "spacing/24",
+      "values": {
+        "1:0": 24
+      },
+      "collection": "Primitives (Core)",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "modeId": "1:0"
+        }
+      ]
+    }
+  ],
+  "v4": {
+    "collection": {
+      "id": "VariableCollectionId:12861:30707",
+      "name": "S2A / Container",
+      "modes": [
+        {
+          "name": "Default",
+          "modeId": "12861:0"
+        },
+        {
+          "name": "Fixed",
+          "modeId": "12861:1"
+        },
+        {
+          "name": "Fluid",
+          "modeId": "12861:2"
+        }
+      ]
+    },
+    "variables": [
+      {
+        "name": "Container-Margins/_side-margins-mode",
+        "values": {
+          "12861:0": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:3337:1129"
+          },
+          "12861:1": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:3337:1132"
+          },
+          "12861:2": 0
+        }
+      },
+      {
+        "name": "Container-Margins/_container-max-mode",
+        "values": {
+          "12861:0": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:3332:1118"
+          },
+          "12861:1": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:3337:1130"
+          },
+          "12861:2": 2560
+        }
+      }
+    ],
+    "samples": [
+      {
+        "id": "12975:40280",
+        "width": 2560,
+        "modes": {
+          "VariableCollectionId:6:178": "3933:0",
+          "VariableCollectionId:12861:30707": "12861:0"
+        },
+        "container": {
+          "id": "12975:40282",
+          "width": 1920,
+          "x": 320,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:40543",
+        "width": 1440,
+        "modes": {
+          "VariableCollectionId:6:178": "102:0",
+          "VariableCollectionId:12861:30707": "12861:0"
+        },
+        "container": {
+          "id": "12975:40545",
+          "width": 1200,
+          "x": 120,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:40631",
+        "width": 1280,
+        "modes": {
+          "VariableCollectionId:6:178": "102:0",
+          "VariableCollectionId:12861:30707": "12861:0"
+        },
+        "container": {
+          "id": "12975:40633",
+          "width": 1068,
+          "x": 106,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:40719",
+        "width": 1279,
+        "modes": {
+          "VariableCollectionId:6:178": "102:1",
+          "VariableCollectionId:12861:30707": "12861:0"
+        },
+        "container": {
+          "id": "12975:40721",
+          "width": 1151,
+          "x": 64,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:40874",
+        "width": 768,
+        "modes": {
+          "VariableCollectionId:6:178": "102:1",
+          "VariableCollectionId:12861:30707": "12861:0"
+        },
+        "container": {
+          "id": "12975:40876",
+          "width": 640,
+          "x": 64,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:41250",
+        "width": 767,
+        "modes": {
+          "VariableCollectionId:6:178": "2297:1",
+          "VariableCollectionId:12861:30707": "12861:0"
+        },
+        "container": {
+          "id": "12975:41252",
+          "width": 719,
+          "x": 24,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:41357",
+        "width": 320,
+        "modes": {
+          "VariableCollectionId:6:178": "2297:1",
+          "VariableCollectionId:12861:30707": "12861:0"
+        },
+        "container": {
+          "id": "12975:41359",
+          "width": 272,
+          "x": 24,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:43229",
+        "width": 2560,
+        "modes": {
+          "VariableCollectionId:6:178": "3933:0",
+          "VariableCollectionId:12861:30707": "12861:1"
+        },
+        "container": {
+          "id": "12975:43231",
+          "width": 1920,
+          "x": 320,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:43164",
+        "width": 1440,
+        "modes": {
+          "VariableCollectionId:6:178": "3933:0",
+          "VariableCollectionId:12861:30707": "12861:1"
+        },
+        "container": {
+          "id": "12975:43166",
+          "width": 1392,
+          "x": 24,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:43489",
+        "width": 768,
+        "modes": {
+          "VariableCollectionId:6:178": "102:1",
+          "VariableCollectionId:12861:30707": "12861:1"
+        },
+        "container": {
+          "id": "12975:43491",
+          "width": 720,
+          "x": 24,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:43554",
+        "width": 767,
+        "modes": {
+          "VariableCollectionId:6:178": "2297:1",
+          "VariableCollectionId:12861:30707": "12861:1"
+        },
+        "container": {
+          "id": "12975:43556",
+          "width": 719,
+          "x": 24,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:44078",
+        "width": 2560,
+        "modes": {
+          "VariableCollectionId:6:178": "3933:0",
+          "VariableCollectionId:12861:30707": "12861:2"
+        },
+        "container": {
+          "id": "12975:44080",
+          "width": 2560,
+          "x": 0,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:44013",
+        "width": 1440,
+        "modes": {
+          "VariableCollectionId:6:178": "3933:0",
+          "VariableCollectionId:12861:30707": "12861:2"
+        },
+        "container": {
+          "id": "12975:44015",
+          "width": 1440,
+          "x": 0,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:44338",
+        "width": 768,
+        "modes": {
+          "VariableCollectionId:6:178": "102:1",
+          "VariableCollectionId:12861:30707": "12861:2"
+        },
+        "container": {
+          "id": "12975:44340",
+          "width": 768,
+          "x": 0,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "12975:44403",
+        "width": 767,
+        "modes": {
+          "VariableCollectionId:6:178": "2297:1",
+          "VariableCollectionId:12861:30707": "12861:2"
+        },
+        "container": {
+          "id": "12975:44405",
+          "width": 767,
+          "x": 0,
+          "boundVariables": {
+            "minWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:3332:1119"
+            },
+            "maxWidth": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:12913:39052"
+            },
+            "layoutGrids": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2357:700"
+              },
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:2485:17"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

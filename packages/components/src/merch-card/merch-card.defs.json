@@ -1,0 +1,957 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "MerchCard",
+  "slug": "merch-card",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from merch-card.figma.evidence.json (sha256:eed5f2ea…) through packages/spec-dictionary/dictionary.json (card)",
+    "date": "2026-10-08",
+    "reviewer": "Matt"
+  },
+  "description": "A merchandising card for a product plan — plan name, pricing, a feature list, and CTAs — used in pricing tables and plan comparisons. The highlight variant is the featured / recommended plan.",
+  "archetype": "card",
+  "version": "1.0.0",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "10826:13312",
+      "nodeName": "MerchCard — v1",
+      "componentSetKey": "95652c4bf02a6d7776516ddb92158350675e4d82",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"?\"; 484 nodes, 840 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/merch-card/merch-card.js",
+      "export": "MerchCard",
+      "cssClass": "c-merch-card"
+    }
+  },
+  "props": [
+    {
+      "name": "description",
+      "lever": true,
+      "type": "string",
+      "default": "Plan description goes here.",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Description#10466:30"
+      },
+      "code": {
+        "prop": "description"
+      }
+    },
+    {
+      "name": "featuresList",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "default",
+        "closed"
+      ],
+      "default": "default",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Features List"
+      },
+      "code": {
+        "prop": "featuresList",
+        "attr": "data-features-list"
+      }
+    },
+    {
+      "name": "features",
+      "lever": true,
+      "type": "expression",
+      "figma": {
+        "kind": "SLOT",
+        "property": "features#10466:32"
+      },
+      "code": {
+        "prop": "features"
+      },
+      "notes": "Children. A Figma Slot; anything may be placed here."
+    },
+    {
+      "name": "options",
+      "lever": true,
+      "type": "expression",
+      "figma": {
+        "kind": "SLOT",
+        "property": "options#10466:31"
+      },
+      "code": {
+        "prop": "options"
+      },
+      "notes": "Children. A Figma Slot; anything may be placed here."
+    },
+    {
+      "name": "planName",
+      "lever": true,
+      "type": "string",
+      "default": "Plan Name",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Plan Name#10466:29"
+      },
+      "code": {
+        "prop": "planName"
+      }
+    },
+    {
+      "name": "showOptions",
+      "lever": true,
+      "type": "boolean",
+      "default": true,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show Options#10466:33"
+      },
+      "code": {
+        "prop": "showOptions"
+      }
+    },
+    {
+      "name": "showPricing",
+      "lever": true,
+      "type": "boolean",
+      "default": true,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show Pricing#10466:34"
+      },
+      "code": {
+        "prop": "showPricing"
+      }
+    },
+    {
+      "name": "showSecondaryCta",
+      "lever": true,
+      "type": "boolean",
+      "default": true,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show Secondary CTA#10885:0"
+      },
+      "code": {
+        "prop": "showSecondaryCta"
+      }
+    },
+    {
+      "name": "style",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "default",
+        "highlight"
+      ],
+      "default": "default",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Style"
+      },
+      "code": {
+        "prop": "style",
+        "attr": "data-style"
+      }
+    },
+    {
+      "name": "app",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "app"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "planLabel",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "planLabel"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "price",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "price"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "comparePrice",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "comparePrice"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "priceNote",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "priceNote"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "priceTerms",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "priceTerms"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "optionLabel",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "optionLabel"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "optionPromo",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "optionPromo"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "featuresTitle",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "featuresTitle"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "primaryCtaLabel",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "primaryCtaLabel"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "secondaryCtaLabel",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "secondaryCtaLabel"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "trustLabel",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "trustLabel"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "onPrimaryCta",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "onPrimaryCta"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "onSecondaryCta",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "onSecondaryCta"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    }
+  ],
+  "states": [],
+  "composition": [
+    {
+      "name": "ProductLockup — v2",
+      "treatment": "contract",
+      "slug": "product-lockup"
+    },
+    {
+      "name": "MerchCard/PricingDisplay",
+      "treatment": "contract",
+      "slug": "merch-card-pricing-display"
+    },
+    {
+      "name": "MerchCard/SelectPromo",
+      "treatment": "contract",
+      "slug": "merch-card-select-promo"
+    },
+    {
+      "name": "Button — v2",
+      "treatment": "contract",
+      "slug": "button"
+    },
+    {
+      "name": "MerchCard/TrustBadge",
+      "treatment": "contract",
+      "slug": "merch-card-trust-badge"
+    },
+    {
+      "name": "List",
+      "treatment": "contract",
+      "slug": "list"
+    },
+    {
+      "name": "Collapsible",
+      "treatment": "contract",
+      "slug": "collapsible"
+    },
+    {
+      "name": "🚫 Button — v1",
+      "treatment": "contract",
+      "slug": "button"
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-merch-card",
+      "figma": ".root",
+      "element": "article",
+      "tokens": {
+        "gap": "{s2a.spacing.md}",
+        "border-radius": "{s2a.border.radius.md}",
+        "padding-bottom": "{s2a.spacing.2xs}",
+        "padding-left": "{s2a.spacing.2xs}",
+        "padding-right": "{s2a.spacing.2xs}",
+        "padding-top": "{s2a.spacing.2xs}",
+        "width": "raw:100%"
+      },
+      "tokensByProp": [
+        {
+          "prop": "style",
+          "map": {
+            "default": {
+              "background-color": "{s2a.color.surface.subtle}"
+            },
+            "highlight": {
+              "background-color": "{s2a.color.surface.inverse-subtle}"
+            }
+          }
+        }
+      ],
+      "layout": {
+        "display": "flex",
+        "direction": "column",
+        "align": "stretch"
+      },
+      "parts": {
+        "body": {
+          "selector": ".c-merch-card__body",
+          "figma": "/.body",
+          "tokens": {
+            "border-radius": "{s2a.border.radius.12}",
+            "background-color": "{s2a.color.surface.default}",
+            "gap": "raw:24px",
+            "padding-top": "raw:28px",
+            "padding-right": "raw:28px",
+            "padding-bottom": "raw:28px",
+            "padding-left": "raw:28px"
+          },
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "align": "stretch",
+            "stretch": true
+          },
+          "element": "div",
+          "parts": {
+            "content": {
+              "selector": ".c-merch-card__content",
+              "figma": "/.body/.content",
+              "tokens": {
+                "gap": "raw:16px"
+              },
+              "layout": {
+                "display": "flex",
+                "direction": "column",
+                "align": "stretch",
+                "stretch": true
+              },
+              "element": "div",
+              "parts": {
+                "header": {
+                  "selector": ".c-merch-card__header",
+                  "figma": "/.body/.content/.header",
+                  "tokens": {
+                    "gap": "raw:10px"
+                  },
+                  "layout": {
+                    "display": "flex",
+                    "direction": "column",
+                    "align": "stretch",
+                    "stretch": true
+                  },
+                  "element": "div",
+                  "parts": {
+                    "header": {
+                      "selector": ".c-merch-card__header",
+                      "figma": "/.body/.content/.header/header",
+                      "tokens": {
+                        "gap": "raw:10px"
+                      },
+                      "layout": {
+                        "display": "flex",
+                        "direction": "column",
+                        "align": "stretch",
+                        "stretch": true
+                      },
+                      "element": "div",
+                      "parts": {
+                        "product-lockup": {
+                          "selector": ".c-merch-card__product-lockup",
+                          "figma": "/.body/.content/.header/header/ProductLockup — v2",
+                          "layout": {
+                            "display": "flex",
+                            "direction": "column",
+                            "stretch": true
+                          },
+                          "slot": {
+                            "name": "ProductLockup — v2",
+                            "accepts": [
+                              "ProductLockup"
+                            ],
+                            "acceptsMode": "restrict",
+                            "default": {
+                              "figma": "ProductLockup — v2",
+                              "slug": "product-lockup",
+                              "props": {
+                                "Show Second App Icon": false,
+                                "Show App Icon": true,
+                                "Show Icon End": false,
+                                "Label": "Standard PDF toolset",
+                                "Orientation": "horizontal",
+                                "Style": "label",
+                                "Width": "hug"
+                              }
+                            },
+                            "notes": "Composes ProductLockup (product-lockup)."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "plan-header": {
+                  "selector": ".c-merch-card__plan-header",
+                  "figma": "/.body/.content/.plan-header",
+                  "tokens": {
+                    "gap": "{s2a.spacing.lg}"
+                  },
+                  "layout": {
+                    "display": "flex",
+                    "direction": "column",
+                    "align": "stretch",
+                    "stretch": true
+                  },
+                  "element": "div",
+                  "parts": {
+                    "name-area": {
+                      "selector": ".c-merch-card__name-area",
+                      "figma": "/.body/.content/.plan-header/.name-area",
+                      "tokens": {
+                        "gap": "raw:4px"
+                      },
+                      "layout": {
+                        "display": "flex",
+                        "direction": "column",
+                        "align": "stretch",
+                        "stretch": true
+                      },
+                      "element": "div",
+                      "parts": {
+                        "plan-name": {
+                          "selector": ".c-merch-card__plan-name",
+                          "figma": "/.body/.content/.plan-header/.name-area/.plan-name",
+                          "tokens": {
+                            "color": "{s2a.color.content.heading}",
+                            "font-family": "{s2a.font.family.heading}",
+                            "font-size": "{s2a.typography.font-size.heading-5}",
+                            "font-weight": "{s2a.font.weight.heading}",
+                            "letter-spacing": "{s2a.font.letter-spacing.4xl}",
+                            "line-height": "{s2a.typography.line-height.heading-5}"
+                          },
+                          "layout": {
+                            "stretch": true
+                          },
+                          "element": "span",
+                          "slot": {
+                            "name": "plan-name",
+                            "accepts": [
+                              "kind:text"
+                            ],
+                            "acceptsMode": "prefer",
+                            "default": {
+                              "text": "Plan Name"
+                            }
+                          }
+                        },
+                        "description": {
+                          "selector": ".c-merch-card__description",
+                          "figma": "/.body/.content/.plan-header/.name-area/.description",
+                          "tokens": {
+                            "color": "{s2a.color.content.default}",
+                            "font-family": "{s2a.font.family.body}",
+                            "font-size": "{s2a.typography.font-size.body-sm}",
+                            "font-weight": "{s2a.font.weight.body}",
+                            "letter-spacing": "{s2a.typography.letter-spacing.body-sm}",
+                            "line-height": "{s2a.typography.line-height.body-sm}"
+                          },
+                          "layout": {
+                            "stretch": true
+                          },
+                          "element": "span",
+                          "slot": {
+                            "name": "description",
+                            "accepts": [
+                              "kind:text"
+                            ],
+                            "acceptsMode": "prefer",
+                            "default": {
+                              "text": "Plan description goes here."
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "merch-card-pricing-display": {
+                      "selector": ".c-merch-card__merch-card-pricing-display",
+                      "figma": "/.body/.content/.plan-header/MerchCard/PricingDisplay",
+                      "layout": {
+                        "display": "flex",
+                        "direction": "column",
+                        "stretch": true
+                      },
+                      "slot": {
+                        "name": "MerchCard/PricingDisplay",
+                        "accepts": [
+                          "MerchCardPricingDisplay"
+                        ],
+                        "acceptsMode": "restrict",
+                        "default": {
+                          "figma": "MerchCard/PricingDisplay",
+                          "slug": "merch-card-pricing-display",
+                          "props": {
+                            "Show Details": true,
+                            "Additional Details": "Offer terms apply",
+                            "Strikethrough Pricing": "US$599.88/yr",
+                            "Show Strikethrough": true,
+                            "Billing Cadence": "Billed monthly, cancel anytime",
+                            "Price": "US$49.99/mo",
+                            "variant": "Default"
+                          }
+                        },
+                        "notes": "Composes MerchCardPricingDisplay (merch-card-pricing-display)."
+                      }
+                    }
+                  }
+                },
+                "options": {
+                  "selector": ".c-merch-card__options",
+                  "figma": "/.body/.content/options",
+                  "tokens": {
+                    "gap": "{s2a.spacing.xs}"
+                  },
+                  "layout": {
+                    "display": "flex",
+                    "direction": "column",
+                    "justify": "center",
+                    "align": "stretch",
+                    "stretch": true
+                  },
+                  "element": "div",
+                  "parts": {
+                    "merch-card-select-promo": {
+                      "selector": ".c-merch-card__merch-card-select-promo",
+                      "figma": "/.body/.content/options/MerchCard/SelectPromo",
+                      "layout": {
+                        "display": "flex",
+                        "direction": "column",
+                        "stretch": true
+                      },
+                      "slot": {
+                        "name": "MerchCard/SelectPromo",
+                        "accepts": [
+                          "MerchCardSelectPromo"
+                        ],
+                        "acceptsMode": "restrict",
+                        "default": {
+                          "figma": "MerchCard/SelectPromo",
+                          "slug": "merch-card-select-promo",
+                          "props": {
+                            "State": "collapsed"
+                          }
+                        },
+                        "notes": "Composes MerchCardSelectPromo (merch-card-select-promo)."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "cta": {
+              "selector": ".c-merch-card__cta",
+              "figma": "/.body/.cta",
+              "tokens": {
+                "gap": "raw:8px"
+              },
+              "layout": {
+                "display": "flex",
+                "direction": "column",
+                "stretch": true
+              },
+              "element": "div",
+              "parts": {
+                "actions": {
+                  "selector": ".c-merch-card__actions",
+                  "figma": "/.body/.cta/.actions",
+                  "tokens": {
+                    "gap": "raw:8px"
+                  },
+                  "layout": {
+                    "display": "flex",
+                    "direction": "row",
+                    "stretch": true
+                  },
+                  "element": "div",
+                  "parts": {
+                    "button": {
+                      "selector": ".c-merch-card__button",
+                      "figma": "/.body/.cta/.actions/Button — v2",
+                      "layout": {
+                        "display": "flex",
+                        "direction": "column",
+                        "grow": true
+                      },
+                      "slot": {
+                        "name": "Button — v2",
+                        "accepts": [
+                          "Button"
+                        ],
+                        "acceptsMode": "restrict",
+                        "default": {
+                          "figma": "Button — v2",
+                          "slug": "button",
+                          "props": {
+                            "Label": "Get free app",
+                            "Show Icon End": false,
+                            "Show Icon Start": false,
+                            "Style": "accent",
+                            "Size": "md",
+                            "State": "default"
+                          }
+                        },
+                        "notes": "Composes Button (button)."
+                      }
+                    },
+                    "button-2": {
+                      "selector": ".c-merch-card__button-2",
+                      "figma": "/.body/.cta/.actions/Button — v2",
+                      "layout": {
+                        "display": "flex",
+                        "direction": "column",
+                        "grow": true
+                      },
+                      "slot": {
+                        "name": "Button — v2",
+                        "accepts": [
+                          "Button"
+                        ],
+                        "acceptsMode": "restrict",
+                        "default": {
+                          "figma": "Button — v2",
+                          "slug": "button",
+                          "props": {
+                            "Label": "Label",
+                            "Show Icon End": false,
+                            "Show Icon Start": false,
+                            "Style": "outlined",
+                            "Size": "md",
+                            "State": "default"
+                          }
+                        },
+                        "notes": "Composes Button (button)."
+                      }
+                    }
+                  }
+                },
+                "merch-card-trust-badge": {
+                  "selector": ".c-merch-card__merch-card-trust-badge",
+                  "figma": "/.body/.cta/MerchCard/TrustBadge",
+                  "layout": {
+                    "display": "flex",
+                    "direction": "column"
+                  },
+                  "slot": {
+                    "name": "MerchCard/TrustBadge",
+                    "accepts": [
+                      "MerchCardTrustBadge"
+                    ],
+                    "acceptsMode": "restrict",
+                    "default": {
+                      "figma": "MerchCard/TrustBadge",
+                      "slug": "merch-card-trust-badge",
+                      "props": {
+                        "Label": "Secure transaction"
+                      }
+                    },
+                    "notes": "Composes MerchCardTrustBadge (merch-card-trust-badge)."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "features": {
+          "selector": ".c-merch-card__features",
+          "figma": "/features",
+          "tokens": {
+            "padding-bottom": "{s2a.spacing.3xl}",
+            "padding-top": "raw:24px",
+            "padding-right": "raw:24px",
+            "padding-left": "raw:24px"
+          },
+          "tokensByProp": [
+            {
+              "prop": "featuresList",
+              "map": {
+                "default": {
+                  "gap": "{s2a.spacing.lg}"
+                }
+              }
+            }
+          ],
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "align": "stretch",
+            "stretch": true
+          },
+          "element": "div",
+          "slot": {
+            "name": "features",
+            "accepts": [
+              "List",
+              "Collapsible"
+            ],
+            "acceptsMode": "restrict",
+            "default": {
+              "figma": "List",
+              "slug": "list"
+            },
+            "notes": "Figma Slot; the design fills it with List or Collapsible depending on the variant.",
+            "defaultByProp": [
+              {
+                "prop": "featuresList",
+                "map": {
+                  "closed": {
+                    "figma": "Collapsible",
+                    "slug": "collapsible",
+                    "props": {
+                      "State": "closed",
+                      "Size": "default",
+                      "Style": "default"
+                    },
+                    "content": {
+                      "figma": "List",
+                      "slug": "list"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ],
+    "notes": [
+      "Actions inside the card are native links or buttons; the card itself has no role.",
+      "The Plan Name is the card's accessible name — make it a heading so the plan is announced and the card is navigable by structure. WCAG 1.3.1 Info and Relationships, 2.4.6 Headings and Labels.",
+      "The feature list must be a real list (<ul>) so assistive tech announces the item count and each feature. WCAG 1.3.1.",
+      "Pricing is content, not decoration — expose the price and interval as text, not an image. WCAG 1.1.1 Non-text Content.",
+      "Primary and secondary CTAs are distinct focusable actions with clear names — not one ambiguous target. WCAG 2.4.4 Link Purpose.",
+      "Don't signal \"recommended\" with color alone — pair the highlight with a text label (e.g. \"Most popular\"). WCAG 1.4.1 Use of Color.",
+      "Contrast: the highlight body stays light (dark text on white) in both themes by design; verify the default cards' text clears 4.5:1 on their surface in both modes. WCAG 1.4.3."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "mc-archetype",
+      "question": "Scaffolded as card (named \"MerchCard — v1\"). Confirm, or re-run npm run specs:scaffold -- --slug=merch-card --archetype=<link-card|card|collection>.",
+      "chose": "card — named \"MerchCard — v1\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=merch-card --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces surface×3, content×3; state axis none"
+    },
+    {
+      "id": "mc-part-selectors",
+      "question": "product-lockup, merch-card-pricing-display, merch-card-select-promo, button-2, merch-card-trust-badge have no class of their own in merch-card.css — they all share .c-merch-card, .c-merch-card__button. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "pointed product-lockup and merch-card-pricing-display and merch-card-select-promo and button-2 and merch-card-trust-badge at .c-merch-card, .c-merch-card__button",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to merch-card.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/merch-card/merch-card.css"
+    },
+    {
+      "id": "mc-stray-text",
+      "question": "A text layer carries no recognisable role (not heading, body, eyebrow or label). Is it content (add a lever) or part of the illustration (fold into media)? Layers: /features/List/list-1/.items/ListItem/List item, /features/List/list-1/.items/ListItem/List item, /features/List/list-1/.items/ListItem/List item, /features/List/list-1/.items/ListItem/List item.",
+      "chose": "left 4 text layers out of the anatomy",
+      "confidence": "low",
+      "fix": "Name the layer in Figma so it claims a role, or add it under anatomy.root.parts here.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json anatomy"
+    },
+    {
+      "id": "mc-match",
+      "question": "Structural match says extend: closest existing contract is Bento (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Bento (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Bento instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Bento (1) already covers this; extend it."
+    },
+    {
+      "id": "mc-disclosure-content",
+      "question": "The \"features\" slot holds List at rest and a Collapsible when featuresList=closed, with the disclosure's content slot empty in the design. Read as: the disclosure contains the List.",
+      "chose": "composed Collapsible with List as its content",
+      "confidence": "medium",
+      "fix": "If the collapsed state shows something else, set slot.defaultByProp.map.closed.content.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json instances"
+    },
+    {
+      "id": "mc-code-only-props",
+      "question": "app, planLabel, price, comparePrice, priceNote, priceTerms, optionLabel, optionPromo, featuresTitle, primaryCtaLabel, secondaryCtaLabel, trustLabel, onPrimaryCta, onSecondaryCta exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 14 code-only props as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.code.evidence.json"
+    },
+    {
+      "id": "mc-composes",
+      "question": "Built from 8 component sets, all of which already have a contract: ProductLockup ×4, MerchCard/PricingDisplay ×4, MerchCard/SelectPromo ×4, Button ×4, MerchCard/TrustBadge ×4, List ×2, Collapsible ×2, Button ×4. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 8 composed sets, 8 already contracted",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json instances"
+    },
+    {
+      "id": "mc-unbound-paint",
+      "question": "100 painted layers carry no variable (/.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_AdobeAcrobatPDF/tile fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/tile fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 11 fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 14 fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 6 fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 8 fills, …). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "confidence": "high",
+      "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json unboundPaint"
+    },
+    {
+      "id": "mc-layer-names",
+      "question": "11 layers carry Figma-generated names (/.body/.content/.header/header/ProductLockup — v2/Frame 1, /.body/.content/.header/header/ProductLockup — v2/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame, /.body/.content/options/MerchCard/SelectPromo/.trigger/.icon/S2_Icon_UIChevron_Size300_N/Frame, /.body/.cta/.actions/Button — v2/Icon Start/Frame, /.body/.cta/.actions/Button — v2/Icon Start/Frame/S2_Icon_Circle_20_N/Frame, …). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json anatomy"
+    },
+    {
+      "id": "mc-deprecated-dependency",
+      "question": "The design still composes 🚫 Button — v1 ×4 — a set the file marks deprecated. The contract names it as found; the fix is in Figma: swap the instance for the successor and re-extract.",
+      "chose": "recorded the deprecated set as a contract dependency, as the design has it",
+      "confidence": "high",
+      "fix": "In Figma, swap the instance to the current set (e.g. Button — v2), then re-extract.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json instances"
+    },
+    {
+      "id": "mc-root-width",
+      "question": "The set draws the component 474px wide on its page. Is that the component's width, or the frame it was drawn in?",
+      "chose": "the container's: width 100%. A component's width belongs to where it is placed; the design's number is the artboard.",
+      "confidence": "medium",
+      "fix": "If this component really has an intrinsic width, set anatomy.root.tokens.width to it (raw:474px).",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json variants"
+    },
+    {
+      "id": "mc-hardcoded-values",
+      "question": "15 values in the design are set with no variable behind them: root width = 100%; root/body gap = 24px; root/body padding-top = 28px; root/body padding-right = 28px; root/body padding-bottom = 28px; root/body padding-left = 28px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json unboundValues"
+    }
+  ]
+}

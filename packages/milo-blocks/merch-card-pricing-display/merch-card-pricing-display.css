@@ -1,0 +1,70 @@
+/* MerchCardPricingDisplay — generated from merch-card-pricing-display.contract.json.
+ * Re-run: npm run specs:render -- --slug=merch-card-pricing-display --target=milo */
+
+.merch-card-pricing-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-2, 2px);
+  width: 418px;
+}
+
+.merch-card-pricing-display .pricing {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 2px;
+}
+
+.merch-card-pricing-display .strikethrough-zone {
+  display: flex;
+  flex-direction: column;
+  width: 418px;
+  height: 18px;
+}
+
+.merch-card-pricing-display .strikethrough {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-subtle, rgb(0 0 0 / 64%));
+  font-family: var(--s2a-font-family-body, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-body-sm, 0.875rem);
+  font-weight: var(--s2a-font-weight-body, 400);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm, 0);
+  line-height: var(--s2a-typography-line-height-body-sm, 18px);
+}
+
+.merch-card-pricing-display .price {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-heading, #000);
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
+  font-size: var(--s2a-typography-font-size-heading-5, 1.5rem);
+  font-weight: var(--s2a-font-weight-heading, 900);
+  letter-spacing: var(--s2a-font-letter-spacing-4xl, -0.48px);
+  line-height: var(--s2a-typography-line-height-heading-5, 24px);
+}
+
+.merch-card-pricing-display .billing {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-subtle, rgb(0 0 0 / 64%));
+  font-family: var(--s2a-font-family-body, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-body-sm, 0.875rem);
+  font-weight: var(--s2a-font-weight-body, 400);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm, 0);
+  line-height: var(--s2a-typography-line-height-body-sm, 18px);
+}
+
+.merch-card-pricing-display .details-zone {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding-top: 4px;
+}
+
+.merch-card-pricing-display .details {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-subtle, rgb(0 0 0 / 64%));
+  font-family: var(--s2a-font-family-body, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-body-sm, 0.875rem);
+  font-weight: var(--s2a-font-weight-body, 400);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm, 0);
+  line-height: var(--s2a-typography-line-height-body-sm, 18px);
+}

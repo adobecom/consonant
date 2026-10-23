@@ -1,79 +1,1510 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "MerchCard",
   "slug": "merch-card",
   "cssClass": "c-merch-card",
+  "figmaNodeId": "10826:13312",
   "storybookId": "cards-merchcard",
-  "figmaNode": "10826:13312",
-  "figmaPage": "   ↳ MerchCard (11878:220865)",
   "description": "A merchandising card for a product plan — plan name, pricing, a feature list, and CTAs — used in pricing tables and plan comparisons. The highlight variant is the featured / recommended plan.",
   "variants": {
-    "style": ["default", "highlight"],
-    "featuresList": ["default", "closed"]
+    "Features List": [
+      "default",
+      "closed"
+    ],
+    "Style": [
+      "default",
+      "highlight"
+    ]
   },
   "props": [
-    { "name": "style", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "highlight"], "description": "highlight = featured / recommended plan. Outer surface flips to surface/inverse-subtle; the card body intentionally stays a light surface in both themes (definition-level pin in Figma)." },
-    { "name": "featuresList", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "closed"], "description": "default shows the feature list below the body; closed collapses it to the empty apron." },
-    { "name": "planName", "type": "string", "defaultValue": "\"Plan Name\"", "description": "TEXT prop `Plan Name`. Rendered as a heading — the card's accessible name." },
-    { "name": "description", "type": "string", "defaultValue": "\"Plan description goes here.\"", "description": "TEXT prop `Description`." },
-    { "name": "app", "type": "string", "defaultValue": "\"acrobat\"", "description": "AppIcon slug for the ProductLockup header." },
-    { "name": "planLabel", "type": "string", "defaultValue": "\"\"", "description": "ProductLockup label text (e.g. \"Standard PDF toolset\")." },
-    { "name": "price", "type": "string", "defaultValue": "\"\"", "description": "Main price line (e.g. \"US$49.99/mo\")." },
-    { "name": "comparePrice", "type": "string", "defaultValue": "\"\"", "description": "Annual/compare price line above the main price (e.g. \"US$599.88/yr\")." },
-    { "name": "priceNote", "type": "string", "defaultValue": "\"\"", "description": "Billing note under the price (e.g. \"Billed monthly, cancel anytime\")." },
-    { "name": "priceTerms", "type": "string", "defaultValue": "\"\"", "description": "Terms line (e.g. \"Offer terms apply\")." },
-    { "name": "showPricing", "type": "boolean", "defaultValue": "true", "description": "BOOLEAN prop `Show Pricing`." },
-    { "name": "showOptions", "type": "boolean", "defaultValue": "true", "description": "BOOLEAN prop `Show Options` — toggles the options slot region." },
-    { "name": "options", "type": "lit template | null", "defaultValue": "null", "description": "SLOT `options`. When null and showOptions, renders the default SelectPromo block from optionLabel/optionPromo." },
-    { "name": "optionLabel", "type": "string", "defaultValue": "\"\"", "description": "Default options-slot select label (e.g. \"1 License\")." },
-    { "name": "optionPromo", "type": "string", "defaultValue": "\"\"", "description": "Default options-slot promo caption (e.g. \"Save 7.5%… See terms\")." },
-    { "name": "features", "type": "string[]", "defaultValue": "[]", "description": "SLOT `features` default content — feature list items (rendered as a real <ul>)." },
-    { "name": "featuresTitle", "type": "string", "defaultValue": "\"\"", "description": "Section title above the feature list." },
-    { "name": "primaryCtaLabel", "type": "string", "defaultValue": "\"\"", "description": "Primary (accent) CTA label." },
-    { "name": "secondaryCtaLabel", "type": "string", "defaultValue": "\"\"", "description": "Secondary (outlined) CTA label. Hidden when empty — BOOLEAN prop `Show Secondary CTA`." },
-    { "name": "trustLabel", "type": "string", "defaultValue": "\"\"", "description": "TrustBadge text under the CTAs (e.g. \"Secure transaction\")." }
+    {
+      "name": "description",
+      "type": "string",
+      "defaultValue": "\"Plan description goes here.\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Description#10466:30",
+          "verified": true
+        },
+        "code": {
+          "prop": "description",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "featuresList",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "enum": [
+        "default",
+        "closed"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Features List",
+          "verified": true,
+          "options": [
+            "default",
+            "closed"
+          ]
+        },
+        "code": {
+          "prop": "featuresList",
+          "attr": "data-features-list",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "features",
+      "type": "expression",
+      "defaultValue": "[]",
+      "description": "Children. A Figma Slot; anything may be placed here.",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "SLOT",
+          "property": "features#10466:32",
+          "verified": null
+        },
+        "code": {
+          "prop": "features",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "options",
+      "type": "expression",
+      "defaultValue": "null",
+      "description": "Children. A Figma Slot; anything may be placed here.",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "SLOT",
+          "property": "options#10466:31",
+          "verified": null
+        },
+        "code": {
+          "prop": "options",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "planName",
+      "type": "string",
+      "defaultValue": "\"Plan Name\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Plan Name#10466:29",
+          "verified": true
+        },
+        "code": {
+          "prop": "planName",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "showOptions",
+      "type": "boolean",
+      "defaultValue": "true",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Options#10466:33",
+          "verified": true
+        },
+        "code": {
+          "prop": "showOptions",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "showPricing",
+      "type": "boolean",
+      "defaultValue": "true",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Pricing#10466:34",
+          "verified": true
+        },
+        "code": {
+          "prop": "showPricing",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "showSecondaryCta",
+      "type": "boolean",
+      "defaultValue": "true",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Secondary CTA#10885:0",
+          "verified": true
+        },
+        "code": {
+          "prop": "showSecondaryCta",
+          "attr": null,
+          "extracted": false,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "style",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "enum": [
+        "default",
+        "highlight"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style",
+          "verified": true,
+          "options": [
+            "default",
+            "highlight"
+          ]
+        },
+        "code": {
+          "prop": "style",
+          "attr": "data-style",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "app",
+      "type": "string",
+      "defaultValue": "\"acrobat-pro\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "app",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "planLabel",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "planLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "price",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "price",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "comparePrice",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "comparePrice",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "priceNote",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "priceNote",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "priceTerms",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "priceTerms",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "optionLabel",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "optionLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "optionPromo",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "optionPromo",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "featuresTitle",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "featuresTitle",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "primaryCtaLabel",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "primaryCtaLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "secondaryCtaLabel",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "secondaryCtaLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "trustLabel",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "trustLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "onPrimaryCta",
+      "type": "string",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "onPrimaryCta",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "onSecondaryCta",
+      "type": "string",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "onSecondaryCta",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
   ],
   "tokenBindings": {
-    "background:root:default": "--s2a-color-surface-subtle",
-    "background:root:highlight": "--s2a-color-surface-inverse-subtle",
-    "background:body": "--s2a-color-surface-default",
-    "background:option": "--s2a-color-background-subtle",
-    "border-radius:root": "--s2a-border-radius-md",
-    "border-radius:body": "--s2a-border-radius-sm",
-    "border-radius:option": "--s2a-border-radius-xs",
-    "padding:root": "--s2a-spacing-2xs",
-    "gap:body": "--s2a-spacing-lg",
-    "gap:content": "--s2a-spacing-md",
-    "gap:plan-header": "--s2a-spacing-lg",
-    "gap:name-area": "--s2a-spacing-2xs",
-    "gap:pricing": "--s2a-spacing-3xs",
-    "gap:actions": "--s2a-spacing-xs",
-    "padding:features": "--s2a-spacing-lg / --s2a-spacing-3xl (bottom)",
-    "gap:features-list": "--s2a-spacing-md",
-    "color:plan-name": "--s2a-color-content-heading",
-    "color:description": "--s2a-color-content-default",
-    "color:price": "--s2a-color-content-heading",
-    "color:price-notes": "--s2a-color-content-subtle",
-    "color:lockup-label": "--s2a-color-content-label",
-    "color:features:default": "--s2a-color-content-subtle",
-    "color:features:highlight": "--s2a-color-content-inverse",
-    "background:cta-primary": "--s2a-color-button-background-accent-default",
-    "border:cta-secondary": "--s2a-color-border-knockout",
-    "focus": "--s2a-color-focus-ring-default"
+    "root-gap": "--s2a-spacing-md",
+    "root-border-radius": "--s2a-border-radius-md",
+    "root-padding-bottom": "--s2a-spacing-2xs",
+    "root-padding-left": "--s2a-spacing-2xs",
+    "root-padding-right": "--s2a-spacing-2xs",
+    "root-padding-top": "--s2a-spacing-2xs",
+    "root-background-color@style=default": "--s2a-color-surface-subtle",
+    "root-background-color@style=highlight": "--s2a-color-surface-inverse-subtle",
+    "body-border-radius": "--s2a-border-radius-12",
+    "body-background-color": "--s2a-color-surface-default",
+    "plan-header-gap": "--s2a-spacing-lg",
+    "plan-name-color": "--s2a-color-content-heading",
+    "plan-name-font-family": "--s2a-font-family-heading",
+    "plan-name-font-size": "--s2a-typography-font-size-heading-5",
+    "plan-name-font-weight": "--s2a-font-weight-heading",
+    "plan-name-letter-spacing": "--s2a-font-letter-spacing-4xl",
+    "plan-name-line-height": "--s2a-typography-line-height-heading-5",
+    "description-color": "--s2a-color-content-default",
+    "description-font-family": "--s2a-font-family-body",
+    "description-font-size": "--s2a-typography-font-size-body-sm",
+    "description-font-weight": "--s2a-font-weight-body",
+    "description-letter-spacing": "--s2a-typography-letter-spacing-body-sm",
+    "description-line-height": "--s2a-typography-line-height-body-sm",
+    "options-gap": "--s2a-spacing-xs",
+    "features-padding-bottom": "--s2a-spacing-3xl",
+    "features-gap@featuresList=default": "--s2a-spacing-lg"
   },
-  "knownTokenGaps": [
-    "Body padding is 28px in Figma with no bound variable and no matching spacing token (scale jumps 24→32). Hardcoded 28px pending a Figma rebind or new token.",
-    "CTA pill radius bound to primitive --s2a-border-radius-999 in Figma; no semantic full-radius token exists yet.",
-    "--s2a-color-surface-* and --s2a-color-button-background-accent-* ship with the elastic-card-updates branch token release; fallbacks cover older token versions."
+  "tier": "component",
+  "composedOf": [
+    "product-lockup",
+    "merch-card-pricing-display",
+    "merch-card-select-promo",
+    "button",
+    "merch-card-trust-badge",
+    "list",
+    "collapsible"
   ],
   "a11y": {
-    "wcag": ["1.3.1", "1.1.1", "1.4.1", "1.4.3", "2.4.4", "2.4.6"],
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ],
     "notes": [
-      "Plan Name renders as an <h3> heading — the plan is announced and navigable by structure.",
-      "Feature list is a real <ul> so assistive tech announces item count.",
-      "Pricing is exposed as text, never an image.",
-      "Primary and secondary CTAs are distinct focusable actions with clear names.",
-      "Highlight is paired with structure/text, not signaled by color alone — provide a text label (e.g. 'Most popular') in content when using highlight.",
-      "Highlight body intentionally stays a light surface in both themes (Figma definition-level Light pin); verify default-card text clears 4.5:1 in both modes."
+      "Actions inside the card are native links or buttons; the card itself has no role.",
+      "The Plan Name is the card's accessible name — make it a heading so the plan is announced and the card is navigable by structure. WCAG 1.3.1 Info and Relationships, 2.4.6 Headings and Labels.",
+      "The feature list must be a real list (<ul>) so assistive tech announces the item count and each feature. WCAG 1.3.1.",
+      "Pricing is content, not decoration — expose the price and interval as text, not an image. WCAG 1.1.1 Non-text Content.",
+      "Primary and secondary CTAs are distinct focusable actions with clear names — not one ambiguous target. WCAG 2.4.4 Link Purpose.",
+      "Don't signal \"recommended\" with color alone — pair the highlight with a text label (e.g. \"Most popular\"). WCAG 1.4.1 Use of Color.",
+      "Contrast: the highlight body stays light (dark text on white) in both themes by design; verify the default cards' text clears 4.5:1 on their surface in both modes. WCAG 1.4.3."
     ]
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".c-merch-card",
+    "figma": ".root",
+    "element": "article",
+    "layout": {
+      "display": "flex",
+      "direction": "column",
+      "align": "stretch"
+    },
+    "tokens": {
+      "gap": {
+        "value": "{s2a.spacing.md}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.md}",
+            "cssVar": "--s2a-spacing-md",
+            "figma": "s2a/spacing/md",
+            "shipped": true,
+            "value": "16px"
+          }
+        ]
+      },
+      "border-radius": {
+        "value": "{s2a.border.radius.md}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.border.radius.md}",
+            "cssVar": "--s2a-border-radius-md",
+            "figma": "s2a/border/radius/md",
+            "shipped": true,
+            "value": "16px"
+          }
+        ]
+      },
+      "padding-bottom": {
+        "value": "{s2a.spacing.2xs}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.2xs}",
+            "cssVar": "--s2a-spacing-2xs",
+            "figma": "s2a/spacing/2xs",
+            "shipped": true,
+            "value": "4px"
+          }
+        ]
+      },
+      "padding-left": {
+        "value": "{s2a.spacing.2xs}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.2xs}",
+            "cssVar": "--s2a-spacing-2xs",
+            "figma": "s2a/spacing/2xs",
+            "shipped": true,
+            "value": "4px"
+          }
+        ]
+      },
+      "padding-right": {
+        "value": "{s2a.spacing.2xs}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.2xs}",
+            "cssVar": "--s2a-spacing-2xs",
+            "figma": "s2a/spacing/2xs",
+            "shipped": true,
+            "value": "4px"
+          }
+        ]
+      },
+      "padding-top": {
+        "value": "{s2a.spacing.2xs}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.2xs}",
+            "cssVar": "--s2a-spacing-2xs",
+            "figma": "s2a/spacing/2xs",
+            "shipped": true,
+            "value": "4px"
+          }
+        ]
+      },
+      "width": {
+        "value": "raw:100%",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "tokensByProp": [
+      {
+        "prop": "style",
+        "map": {
+          "default": {
+            "background-color": {
+              "value": "{s2a.color.surface.subtle}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.surface.subtle}",
+                  "cssVar": "--s2a-color-surface-subtle",
+                  "figma": "s2a/color/surface/subtle",
+                  "shipped": true,
+                  "value": "#f8f8f8",
+                  "dark": "#131313"
+                }
+              ]
+            }
+          },
+          "highlight": {
+            "background-color": {
+              "value": "{s2a.color.surface.inverse-subtle}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.surface.inverse-subtle}",
+                  "cssVar": "--s2a-color-surface-inverse-subtle",
+                  "figma": "s2a/color/surface/inverse-subtle",
+                  "shipped": true,
+                  "value": "#131313",
+                  "dark": "#f8f8f8"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "parts": {
+      "body": {
+        "selector": ".c-merch-card__body",
+        "figma": "/.body",
+        "element": "div",
+        "layout": {
+          "display": "flex",
+          "direction": "column",
+          "align": "stretch",
+          "stretch": true
+        },
+        "tokens": {
+          "border-radius": {
+            "value": "{s2a.border.radius.12}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.border.radius.12}",
+                "cssVar": "--s2a-border-radius-12",
+                "figma": "s2a/border/radius/12",
+                "shipped": true,
+                "value": "12px"
+              }
+            ]
+          },
+          "background-color": {
+            "value": "{s2a.color.surface.default}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.color.surface.default}",
+                "cssVar": "--s2a-color-surface-default",
+                "figma": "s2a/color/surface/default",
+                "shipped": true,
+                "value": "#fff",
+                "dark": "#000"
+              }
+            ]
+          },
+          "gap": {
+            "value": "raw:24px",
+            "raw": true,
+            "tokens": []
+          },
+          "padding-top": {
+            "value": "raw:28px",
+            "raw": true,
+            "tokens": []
+          },
+          "padding-right": {
+            "value": "raw:28px",
+            "raw": true,
+            "tokens": []
+          },
+          "padding-bottom": {
+            "value": "raw:28px",
+            "raw": true,
+            "tokens": []
+          },
+          "padding-left": {
+            "value": "raw:28px",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "parts": {
+          "content": {
+            "selector": ".c-merch-card__content",
+            "figma": "/.body/.content",
+            "element": "div",
+            "layout": {
+              "display": "flex",
+              "direction": "column",
+              "align": "stretch",
+              "stretch": true
+            },
+            "tokens": {
+              "gap": {
+                "value": "raw:16px",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "parts": {
+              "header": {
+                "selector": ".c-merch-card__header",
+                "figma": "/.body/.content/.header",
+                "element": "div",
+                "layout": {
+                  "display": "flex",
+                  "direction": "column",
+                  "align": "stretch",
+                  "stretch": true
+                },
+                "tokens": {
+                  "gap": {
+                    "value": "raw:10px",
+                    "raw": true,
+                    "tokens": []
+                  }
+                },
+                "parts": {
+                  "header": {
+                    "selector": ".c-merch-card__header",
+                    "figma": "/.body/.content/.header/header",
+                    "element": "div",
+                    "layout": {
+                      "display": "flex",
+                      "direction": "column",
+                      "align": "stretch",
+                      "stretch": true
+                    },
+                    "tokens": {
+                      "gap": {
+                        "value": "raw:10px",
+                        "raw": true,
+                        "tokens": []
+                      }
+                    },
+                    "parts": {
+                      "product-lockup": {
+                        "selector": ".c-merch-card__product-lockup",
+                        "figma": "/.body/.content/.header/header/ProductLockup — v2",
+                        "layout": {
+                          "display": "flex",
+                          "direction": "column",
+                          "stretch": true
+                        },
+                        "slot": {
+                          "name": "ProductLockup — v2",
+                          "accepts": [
+                            "ProductLockup"
+                          ],
+                          "acceptsMode": "restrict",
+                          "default": {
+                            "figma": "ProductLockup — v2",
+                            "slug": "product-lockup",
+                            "props": {
+                              "Show Second App Icon": false,
+                              "Show App Icon": true,
+                              "Show Icon End": false,
+                              "Label": "Standard PDF toolset",
+                              "Orientation": "horizontal",
+                              "Style": "label",
+                              "Width": "hug"
+                            }
+                          },
+                          "notes": "Composes ProductLockup (product-lockup)."
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "plan-header": {
+                "selector": ".c-merch-card__plan-header",
+                "figma": "/.body/.content/.plan-header",
+                "element": "div",
+                "layout": {
+                  "display": "flex",
+                  "direction": "column",
+                  "align": "stretch",
+                  "stretch": true
+                },
+                "tokens": {
+                  "gap": {
+                    "value": "{s2a.spacing.lg}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.spacing.lg}",
+                        "cssVar": "--s2a-spacing-lg",
+                        "figma": "s2a/spacing/lg",
+                        "shipped": true,
+                        "value": "24px"
+                      }
+                    ]
+                  }
+                },
+                "parts": {
+                  "name-area": {
+                    "selector": ".c-merch-card__name-area",
+                    "figma": "/.body/.content/.plan-header/.name-area",
+                    "element": "div",
+                    "layout": {
+                      "display": "flex",
+                      "direction": "column",
+                      "align": "stretch",
+                      "stretch": true
+                    },
+                    "tokens": {
+                      "gap": {
+                        "value": "raw:4px",
+                        "raw": true,
+                        "tokens": []
+                      }
+                    },
+                    "parts": {
+                      "plan-name": {
+                        "selector": ".c-merch-card__plan-name",
+                        "figma": "/.body/.content/.plan-header/.name-area/.plan-name",
+                        "element": "span",
+                        "layout": {
+                          "stretch": true
+                        },
+                        "tokens": {
+                          "color": {
+                            "value": "{s2a.color.content.heading}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.color.content.heading}",
+                                "cssVar": "--s2a-color-content-heading",
+                                "figma": "s2a/color/content/heading",
+                                "shipped": true,
+                                "value": "#000",
+                                "dark": "#fff"
+                              }
+                            ]
+                          },
+                          "font-family": {
+                            "value": "{s2a.font.family.heading}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.font.family.heading}",
+                                "cssVar": "--s2a-font-family-heading",
+                                "figma": "s2a/font/family/heading",
+                                "shipped": true,
+                                "value": "\"Adobe Clean Display\""
+                              }
+                            ]
+                          },
+                          "font-size": {
+                            "value": "{s2a.typography.font-size.heading-5}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.typography.font-size.heading-5}",
+                                "cssVar": "--s2a-typography-font-size-heading-5",
+                                "figma": "s2a/typography/font-size/heading-5",
+                                "shipped": true,
+                                "value": "1.5rem",
+                                "sm": "1.125rem"
+                              }
+                            ]
+                          },
+                          "font-weight": {
+                            "value": "{s2a.font.weight.heading}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.font.weight.heading}",
+                                "cssVar": "--s2a-font-weight-heading",
+                                "figma": "s2a/font/weight/heading",
+                                "shipped": true,
+                                "value": "900"
+                              }
+                            ]
+                          },
+                          "letter-spacing": {
+                            "value": "{s2a.font.letter-spacing.4xl}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.font.letter-spacing.4xl}",
+                                "cssVar": "--s2a-font-letter-spacing-4xl",
+                                "figma": "s2a/font/letter-spacing/4xl",
+                                "shipped": true,
+                                "value": "-0.48px"
+                              }
+                            ]
+                          },
+                          "line-height": {
+                            "value": "{s2a.typography.line-height.heading-5}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.typography.line-height.heading-5}",
+                                "cssVar": "--s2a-typography-line-height-heading-5",
+                                "figma": "s2a/typography/line-height/heading-5",
+                                "shipped": true,
+                                "value": "24px",
+                                "sm": "20px"
+                              }
+                            ]
+                          }
+                        },
+                        "slot": {
+                          "name": "plan-name",
+                          "accepts": [
+                            "kind:text"
+                          ],
+                          "acceptsMode": "prefer",
+                          "default": {
+                            "text": "Plan Name"
+                          }
+                        }
+                      },
+                      "description": {
+                        "selector": ".c-merch-card__description",
+                        "figma": "/.body/.content/.plan-header/.name-area/.description",
+                        "element": "span",
+                        "layout": {
+                          "stretch": true
+                        },
+                        "tokens": {
+                          "color": {
+                            "value": "{s2a.color.content.default}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.color.content.default}",
+                                "cssVar": "--s2a-color-content-default",
+                                "figma": "s2a/color/content/default",
+                                "shipped": true,
+                                "value": "#000",
+                                "dark": "#fff"
+                              }
+                            ]
+                          },
+                          "font-family": {
+                            "value": "{s2a.font.family.body}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.font.family.body}",
+                                "cssVar": "--s2a-font-family-body",
+                                "figma": "s2a/font/family/body",
+                                "shipped": true,
+                                "value": "\"Adobe Clean\""
+                              }
+                            ]
+                          },
+                          "font-size": {
+                            "value": "{s2a.typography.font-size.body-sm}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.typography.font-size.body-sm}",
+                                "cssVar": "--s2a-typography-font-size-body-sm",
+                                "figma": "s2a/typography/font-size/body-sm",
+                                "shipped": true,
+                                "value": "0.875rem"
+                              }
+                            ]
+                          },
+                          "font-weight": {
+                            "value": "{s2a.font.weight.body}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.font.weight.body}",
+                                "cssVar": "--s2a-font-weight-body",
+                                "figma": "s2a/font/weight/body",
+                                "shipped": true,
+                                "value": "400"
+                              }
+                            ]
+                          },
+                          "letter-spacing": {
+                            "value": "{s2a.typography.letter-spacing.body-sm}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.typography.letter-spacing.body-sm}",
+                                "cssVar": "--s2a-typography-letter-spacing-body-sm",
+                                "figma": "s2a/typography/letter-spacing/body-sm",
+                                "shipped": true,
+                                "value": "0"
+                              }
+                            ]
+                          },
+                          "line-height": {
+                            "value": "{s2a.typography.line-height.body-sm}",
+                            "raw": false,
+                            "tokens": [
+                              {
+                                "ref": "{s2a.typography.line-height.body-sm}",
+                                "cssVar": "--s2a-typography-line-height-body-sm",
+                                "figma": "s2a/typography/line-height/body-sm",
+                                "shipped": true,
+                                "value": "18px"
+                              }
+                            ]
+                          }
+                        },
+                        "slot": {
+                          "name": "description",
+                          "accepts": [
+                            "kind:text"
+                          ],
+                          "acceptsMode": "prefer",
+                          "default": {
+                            "text": "Plan description goes here."
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "merch-card-pricing-display": {
+                    "selector": ".c-merch-card__merch-card-pricing-display",
+                    "figma": "/.body/.content/.plan-header/MerchCard/PricingDisplay",
+                    "layout": {
+                      "display": "flex",
+                      "direction": "column",
+                      "stretch": true
+                    },
+                    "slot": {
+                      "name": "MerchCard/PricingDisplay",
+                      "accepts": [
+                        "MerchCardPricingDisplay"
+                      ],
+                      "acceptsMode": "restrict",
+                      "default": {
+                        "figma": "MerchCard/PricingDisplay",
+                        "slug": "merch-card-pricing-display",
+                        "props": {
+                          "Show Details": true,
+                          "Additional Details": "Offer terms apply",
+                          "Strikethrough Pricing": "US$599.88/yr",
+                          "Show Strikethrough": true,
+                          "Billing Cadence": "Billed monthly, cancel anytime",
+                          "Price": "US$49.99/mo",
+                          "variant": "Default"
+                        }
+                      },
+                      "notes": "Composes MerchCardPricingDisplay (merch-card-pricing-display)."
+                    }
+                  }
+                }
+              },
+              "options": {
+                "selector": ".c-merch-card__options",
+                "figma": "/.body/.content/options",
+                "element": "div",
+                "layout": {
+                  "display": "flex",
+                  "direction": "column",
+                  "justify": "center",
+                  "align": "stretch",
+                  "stretch": true
+                },
+                "tokens": {
+                  "gap": {
+                    "value": "{s2a.spacing.xs}",
+                    "raw": false,
+                    "tokens": [
+                      {
+                        "ref": "{s2a.spacing.xs}",
+                        "cssVar": "--s2a-spacing-xs",
+                        "figma": "s2a/spacing/xs",
+                        "shipped": true,
+                        "value": "8px"
+                      }
+                    ]
+                  }
+                },
+                "parts": {
+                  "merch-card-select-promo": {
+                    "selector": ".c-merch-card__merch-card-select-promo",
+                    "figma": "/.body/.content/options/MerchCard/SelectPromo",
+                    "layout": {
+                      "display": "flex",
+                      "direction": "column",
+                      "stretch": true
+                    },
+                    "slot": {
+                      "name": "MerchCard/SelectPromo",
+                      "accepts": [
+                        "MerchCardSelectPromo"
+                      ],
+                      "acceptsMode": "restrict",
+                      "default": {
+                        "figma": "MerchCard/SelectPromo",
+                        "slug": "merch-card-select-promo",
+                        "props": {
+                          "State": "collapsed"
+                        }
+                      },
+                      "notes": "Composes MerchCardSelectPromo (merch-card-select-promo)."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "cta": {
+            "selector": ".c-merch-card__cta",
+            "figma": "/.body/.cta",
+            "element": "div",
+            "layout": {
+              "display": "flex",
+              "direction": "column",
+              "stretch": true
+            },
+            "tokens": {
+              "gap": {
+                "value": "raw:8px",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "parts": {
+              "actions": {
+                "selector": ".c-merch-card__actions",
+                "figma": "/.body/.cta/.actions",
+                "element": "div",
+                "layout": {
+                  "display": "flex",
+                  "direction": "row",
+                  "stretch": true
+                },
+                "tokens": {
+                  "gap": {
+                    "value": "raw:8px",
+                    "raw": true,
+                    "tokens": []
+                  }
+                },
+                "parts": {
+                  "button": {
+                    "selector": ".c-merch-card__button",
+                    "figma": "/.body/.cta/.actions/Button — v2",
+                    "layout": {
+                      "display": "flex",
+                      "direction": "column",
+                      "grow": true
+                    },
+                    "slot": {
+                      "name": "Button — v2",
+                      "accepts": [
+                        "Button"
+                      ],
+                      "acceptsMode": "restrict",
+                      "default": {
+                        "figma": "Button — v2",
+                        "slug": "button",
+                        "props": {
+                          "Label": "Get free app",
+                          "Show Icon End": false,
+                          "Show Icon Start": false,
+                          "Style": "accent",
+                          "Size": "md",
+                          "State": "default"
+                        }
+                      },
+                      "notes": "Composes Button (button)."
+                    }
+                  },
+                  "button-2": {
+                    "selector": ".c-merch-card__button-2",
+                    "figma": "/.body/.cta/.actions/Button — v2",
+                    "layout": {
+                      "display": "flex",
+                      "direction": "column",
+                      "grow": true
+                    },
+                    "slot": {
+                      "name": "Button — v2",
+                      "accepts": [
+                        "Button"
+                      ],
+                      "acceptsMode": "restrict",
+                      "default": {
+                        "figma": "Button — v2",
+                        "slug": "button",
+                        "props": {
+                          "Label": "Label",
+                          "Show Icon End": false,
+                          "Show Icon Start": false,
+                          "Style": "outlined",
+                          "Size": "md",
+                          "State": "default"
+                        }
+                      },
+                      "notes": "Composes Button (button)."
+                    }
+                  }
+                }
+              },
+              "merch-card-trust-badge": {
+                "selector": ".c-merch-card__merch-card-trust-badge",
+                "figma": "/.body/.cta/MerchCard/TrustBadge",
+                "layout": {
+                  "display": "flex",
+                  "direction": "column"
+                },
+                "slot": {
+                  "name": "MerchCard/TrustBadge",
+                  "accepts": [
+                    "MerchCardTrustBadge"
+                  ],
+                  "acceptsMode": "restrict",
+                  "default": {
+                    "figma": "MerchCard/TrustBadge",
+                    "slug": "merch-card-trust-badge",
+                    "props": {
+                      "Label": "Secure transaction"
+                    }
+                  },
+                  "notes": "Composes MerchCardTrustBadge (merch-card-trust-badge)."
+                }
+              }
+            }
+          }
+        }
+      },
+      "features": {
+        "selector": ".c-merch-card__features",
+        "figma": "/features",
+        "element": "div",
+        "layout": {
+          "display": "flex",
+          "direction": "column",
+          "align": "stretch",
+          "stretch": true
+        },
+        "tokens": {
+          "padding-bottom": {
+            "value": "{s2a.spacing.3xl}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.3xl}",
+                "cssVar": "--s2a-spacing-3xl",
+                "figma": "s2a/spacing/3xl",
+                "shipped": true,
+                "value": "48px"
+              }
+            ]
+          },
+          "padding-top": {
+            "value": "raw:24px",
+            "raw": true,
+            "tokens": []
+          },
+          "padding-right": {
+            "value": "raw:24px",
+            "raw": true,
+            "tokens": []
+          },
+          "padding-left": {
+            "value": "raw:24px",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "tokensByProp": [
+          {
+            "prop": "featuresList",
+            "map": {
+              "default": {
+                "gap": {
+                  "value": "{s2a.spacing.lg}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.spacing.lg}",
+                      "cssVar": "--s2a-spacing-lg",
+                      "figma": "s2a/spacing/lg",
+                      "shipped": true,
+                      "value": "24px"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "slot": {
+          "name": "features",
+          "accepts": [
+            "List",
+            "Collapsible"
+          ],
+          "acceptsMode": "restrict",
+          "default": {
+            "figma": "List",
+            "slug": "list"
+          },
+          "notes": "Figma Slot; the design fills it with List or Collapsible depending on the variant.",
+          "defaultByProp": [
+            {
+              "prop": "featuresList",
+              "map": {
+                "closed": {
+                  "figma": "Collapsible",
+                  "slug": "collapsible",
+                  "props": {
+                    "State": "closed",
+                    "Size": "default",
+                    "Style": "default"
+                  },
+                  "content": {
+                    "figma": "List",
+                    "slug": "list"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "10826:13312",
+        "nodeName": "MerchCard — v1",
+        "componentSetKey": "95652c4bf02a6d7776516ddb92158350675e4d82",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:eed5f2ea94f4997896f683b5974f7ff4f4e382b49308241f55d1b3bf48ff6b8d",
+        "extractedAt": "2026-10-08T18:04:27.073Z",
+        "meta": {
+          "version": "1.0.0",
+          "status": "active",
+          "updated": "2026-08-04",
+          "changelog": "1.0.0   2026-08-04  init         Initial release"
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/merch-card/merch-card.js",
+        "export": "MerchCard",
+        "controller": null,
+        "cssClass": "c-merch-card"
+      },
+      "evidence": {
+        "hash": "sha256:432017f49c57ed695ec40e35145a48095ad0c0e04ea9c87490da4ebeb163761e"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "mc-archetype",
+      "question": "Scaffolded as card (named \"MerchCard — v1\"). Confirm, or re-run npm run specs:scaffold -- --slug=merch-card --archetype=<link-card|card|collection>.",
+      "chose": "card — named \"MerchCard — v1\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=merch-card --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces surface×3, content×3; state axis none"
+    },
+    {
+      "id": "mc-part-selectors",
+      "question": "product-lockup, merch-card-pricing-display, merch-card-select-promo, button-2, merch-card-trust-badge have no class of their own in merch-card.css — they all share .c-merch-card, .c-merch-card__button. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "pointed product-lockup and merch-card-pricing-display and merch-card-select-promo and button-2 and merch-card-trust-badge at .c-merch-card, .c-merch-card__button",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to merch-card.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/merch-card/merch-card.css"
+    },
+    {
+      "id": "mc-stray-text",
+      "question": "A text layer carries no recognisable role (not heading, body, eyebrow or label). Is it content (add a lever) or part of the illustration (fold into media)? Layers: /features/List/list-1/.items/ListItem/List item, /features/List/list-1/.items/ListItem/List item, /features/List/list-1/.items/ListItem/List item, /features/List/list-1/.items/ListItem/List item.",
+      "chose": "left 4 text layers out of the anatomy",
+      "confidence": "low",
+      "fix": "Name the layer in Figma so it claims a role, or add it under anatomy.root.parts here.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json anatomy"
+    },
+    {
+      "id": "mc-match",
+      "question": "Structural match says extend: closest existing contract is Bento (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Bento (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Bento instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Bento (1) already covers this; extend it."
+    },
+    {
+      "id": "mc-disclosure-content",
+      "question": "The \"features\" slot holds List at rest and a Collapsible when featuresList=closed, with the disclosure's content slot empty in the design. Read as: the disclosure contains the List.",
+      "chose": "composed Collapsible with List as its content",
+      "confidence": "medium",
+      "fix": "If the collapsed state shows something else, set slot.defaultByProp.map.closed.content.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json instances"
+    },
+    {
+      "id": "mc-code-only-props",
+      "question": "app, planLabel, price, comparePrice, priceNote, priceTerms, optionLabel, optionPromo, featuresTitle, primaryCtaLabel, secondaryCtaLabel, trustLabel, onPrimaryCta, onSecondaryCta exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 14 code-only props as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.code.evidence.json"
+    },
+    {
+      "id": "mc-composes",
+      "question": "Built from 8 component sets, all of which already have a contract: ProductLockup ×4, MerchCard/PricingDisplay ×4, MerchCard/SelectPromo ×4, Button ×4, MerchCard/TrustBadge ×4, List ×2, Collapsible ×2, Button ×4. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 8 composed sets, 8 already contracted",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json instances"
+    },
+    {
+      "id": "mc-unbound-paint",
+      "question": "100 painted layers carry no variable (/.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_AdobeAcrobatPDF/tile fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/tile fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 11 fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 14 fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 6 fills, /.body/.content/.header/header/ProductLockup — v2/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 8 fills, …). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "confidence": "high",
+      "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json unboundPaint"
+    },
+    {
+      "id": "mc-layer-names",
+      "question": "11 layers carry Figma-generated names (/.body/.content/.header/header/ProductLockup — v2/Frame 1, /.body/.content/.header/header/ProductLockup — v2/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame, /.body/.content/options/MerchCard/SelectPromo/.trigger/.icon/S2_Icon_UIChevron_Size300_N/Frame, /.body/.cta/.actions/Button — v2/Icon Start/Frame, /.body/.cta/.actions/Button — v2/Icon Start/Frame/S2_Icon_Circle_20_N/Frame, …). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json anatomy"
+    },
+    {
+      "id": "mc-deprecated-dependency",
+      "question": "The design still composes 🚫 Button — v1 ×4 — a set the file marks deprecated. The contract names it as found; the fix is in Figma: swap the instance for the successor and re-extract.",
+      "chose": "recorded the deprecated set as a contract dependency, as the design has it",
+      "confidence": "high",
+      "fix": "In Figma, swap the instance to the current set (e.g. Button — v2), then re-extract.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json instances"
+    },
+    {
+      "id": "mc-root-width",
+      "question": "The set draws the component 474px wide on its page. Is that the component's width, or the frame it was drawn in?",
+      "chose": "the container's: width 100%. A component's width belongs to where it is placed; the design's number is the artboard.",
+      "confidence": "medium",
+      "fix": "If this component really has an intrinsic width, set anatomy.root.tokens.width to it (raw:474px).",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json variants"
+    },
+    {
+      "id": "mc-hardcoded-values",
+      "question": "15 values in the design are set with no variable behind them: root width = 100%; root/body gap = 24px; root/body padding-top = 28px; root/body padding-right = 28px; root/body padding-bottom = 28px; root/body padding-left = 28px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "merch-card.figma.evidence.json unboundValues"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:d16b560ae8c36c3b40d5d63397842236b6aa05570f8c9a2aa5f06f51c6bb5c80",
+    "codeEvidence": "sha256:432017f49c57ed695ec40e35145a48095ad0c0e04ea9c87490da4ebeb163761e",
+    "figmaEvidence": "sha256:eed5f2ea94f4997896f683b5974f7ff4f4e382b49308241f55d1b3bf48ff6b8d",
+    "generator": "s2a-spec-transform@1"
   }
 }

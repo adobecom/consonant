@@ -1,0 +1,18 @@
+{
+  "name":"ProductCard", "slug":"product-card", "figmaNodeId":"11370:245496", "cssClass":"c-product-card", "storybookId":"pages-homepage--products",
+  "description":"S2A ProductCard v2 with native whole-card links, visible text at rest, and optional decorative hover image. ProductRouter supplies the Homepage's 254px minimum height.",
+  "variants":{},
+  "props":[
+    {"name":"app","type":"string","defaultValue":"\"creative-cloud\""},
+    {"name":"showIcon","type":"boolean","defaultValue":"true"},
+    {"name":"imageSrc","type":"string"},
+    {"name":"imageAlt","type":"string","defaultValue":"\"\""},
+    {"name":"heading","type":"string","defaultValue":"\"\""},
+    {"name":"body","type":"string","defaultValue":"\"\""},
+    {"name":"href","type":"string"},
+    {"name":"onClick","type":"function"}
+  ],
+  "tokenBindings":{"padding":"--s2a-spacing-lg","heading":"--s2a-color-content-knockout","focus":"--s2a-color-focus-ring-default"},
+  "composedOf":["app-icon"],
+  "a11y":{"wcag":["1.1.1","2.1.1","2.4.4","2.4.7"],"notes":["href produces one native anchor with the heading as its accessible name.","Keyboard focus reveals the same image as hover; reduced motion removes the fade.","This is a fixed dark-surface treatment. The Homepage product band supplies its dark backing."]}
+}

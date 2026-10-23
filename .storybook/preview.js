@@ -3,6 +3,7 @@ import "@phosphor-icons/web/bold";
 
 // Shared accordion styles for component documentation panels
 import "./docs-styles.css";
+import { TokenDocsContainer } from "./token-docs.js";
 
 import { withFigmaOverlay, figmaOverlayGlobals } from "./figma-overlay.js";
 
@@ -122,12 +123,18 @@ const preview = {
     theme: "light",
   },
   parameters: {
+    docs: { container: TokenDocsContainer },
     // Sidebar order mirrors the Figma file taxonomy: 🧱 Foundations → 🧩 Atoms → 🧬 Molecules → 🧫 Organisms → 🃏 Cards
     // Components and stories within each group sort alphabetically.
     options: {
       storySort: {
         method: "alphabetical",
-        order: ["Foundations", "Atoms", "Molecules", "Organisms", "Cards"],
+        // Generated leads: it is the contract pipeline's output and the thing
+        // we walk people through. Anything not listed falls in alphabetically
+        // after these, which is why Generated has to be named explicitly — it
+        // was sorting to the bottom, under the component library it is meant
+        // to be demonstrating.
+        order: ["Generated", "Getting Started", "Foundations", ["Start Here", "Color", "Typography", "Spacing", "Border", "Effects", "Responsive", "Icons", "Layout", "Theming", "Grid", ["Overview", ["Overview", "Contract Index"], "Playground", "Figma styles", "Containers", "Column grid", "Grid kinds", "Breakpoints", "Section spacing", "Conformance"]], "Atoms", "Molecules", "Organisms", "Cards"],
       },
     },
 
@@ -171,7 +178,6 @@ const preview = {
       if (typeof document !== "undefined" && document.documentElement) {
         document.documentElement.setAttribute("data-theme", theme);
         document.body.style.backgroundColor = "var(--s2a-color-background-default)";
-        document.body.style.transition = "background-color 150ms ease";
       }
 
       // Ensure fonts are loaded before rendering

@@ -1,0 +1,31 @@
+/* Generated from divider.contract.json. Re-run: npm run specs:render -- --slug=divider */
+
+.c-divider [hidden],
+.c-divider[hidden] {
+  display: none !important;
+}
+
+.c-divider {
+  width: 418px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 1px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-divider[data-style="default"] {
+  background-color: var(--s2a-color-divider-default);
+}
+
+.c-divider[data-style="subtle"] {
+  background-color: var(--s2a-color-divider-subtle);
+}
+
+.c-divider[data-style="knockout"] {
+  background-color: var(--s2a-color-divider-knockout);
+}
+
+.c-divider[data-style="inverse"] {
+  background-color: var(--s2a-color-divider-inverse);
+}
+
+.c-divider[data-style="subtle-inverse"] {
+  background-color: var(--s2a-color-divider-subtle-inverse);
+}

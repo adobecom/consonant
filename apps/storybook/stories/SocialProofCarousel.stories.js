@@ -80,10 +80,10 @@ export default {
       <span class="c-icon-button__icon" aria-hidden="true"><!-- arrow-right SVG --></span>
     </button>
   </div>
-  <div class="spc-pagination" role="tablist" aria-label="Slide navigation">
-    <button class="spc-dot" role="tab" type="button" aria-label="Slide 1" aria-selected="true"></button>
-    <button class="spc-dot" role="tab" type="button" aria-label="Slide 2" aria-selected="false"></button>
-    <button class="spc-dot" role="tab" type="button" aria-label="Slide 3" aria-selected="false"></button>
+  <div class="spc-pagination" role="group" aria-label="Slide navigation">
+    <button class="spc-dot" type="button" aria-label="Slide 1" aria-pressed="true"></button>
+    <button class="spc-dot" type="button" aria-label="Slide 2" aria-pressed="false"></button>
+    <button class="spc-dot" type="button" aria-label="Slide 3" aria-pressed="false"></button>
   </div>
 </div>`,
       },

@@ -6,7 +6,8 @@ import chevronRightSvg from "../icons/chevron-right.svg?raw";
 
 const CaretIcon = () => unsafeHTML(chevronRightSvg);
 
-const ICON_SIZES = new Set(["xs", "sm", "md", "lg"]);
+// AppIcon names its sizes as Figma does — the px is the name.
+const ICON_SIZES = new Set(["16", "18", "24", "32", "48", "80"]);
 const STYLES = new Set(["label", "eyebrow", "knockout", "inverse"]);
 
 const normalizeOrientation = (value) => (value === "vertical" ? "vertical" : "horizontal");
@@ -14,8 +15,8 @@ const normalizeStyle = (value) => (STYLES.has(value) ? value : "label");
 const normalizeWidth = (value) => (value === "fill" ? "fill" : "hug");
 const normalizeIconSize = (value) => {
   if (value && value !== "auto" && ICON_SIZES.has(value)) return value;
-  // Figma v2 keeps the AppIcon at 24px (md) inside the lockup itself.
-  return "md";
+  // Figma v2 keeps the AppIcon at 24px inside the lockup itself.
+  return "24";
 };
 
 /**
@@ -40,8 +41,6 @@ const normalizeIconSize = (value) => {
  * @param {'hug'|'fill'} opts.width
  * @param {boolean} opts.showIconStart   - Figma "Show App Icon"
  * @param {boolean} opts.showIconEnd     - Figma "Show Icon End" (chevron)
- * @param {'on-light'|'on-dark'} [opts.context] - DEPRECATED v1 alias; "on-dark" maps to
- *                                         styleVariant "knockout" when styleVariant is unset.
  */
 export const ProductLockup = ({
   label = "Product label",
@@ -51,7 +50,6 @@ export const ProductLockup = ({
   showSecondIcon = false,
   orientation = "horizontal",
   styleVariant,
-  context,
   width = "hug",
   showIconStart = true,
   showIcon,
@@ -59,11 +57,7 @@ export const ProductLockup = ({
   iconSize = "auto",
   caret = CaretIcon,
 } = {}) => {
-  // v1 compatibility: context="on-dark" used to swap the ink to knockout white.
-  // v2 expresses that as Style=knockout. Explicit styleVariant always wins.
-  const resolvedStyle = normalizeStyle(
-    styleVariant ?? (context === "on-dark" ? "knockout" : "label"),
-  );
+  const resolvedStyle = normalizeStyle(styleVariant ?? "label");
   const normalizedOrientation = normalizeOrientation(orientation);
   const normalizedWidth = normalizeWidth(width);
   const resolvedShowIconStart =

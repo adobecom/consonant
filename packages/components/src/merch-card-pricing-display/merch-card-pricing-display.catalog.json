@@ -1,0 +1,92 @@
+{
+  "id": "s2a.merch-card-pricing-display",
+  "name": "MerchCardPricingDisplay",
+  "slug": "merch-card-pricing-display",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": null,
+  "props": [
+    {
+      "name": "additionalDetails",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "billingCadence",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "price",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showDetails",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "showStrikethrough",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "strikethroughPricing",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.pricing",
+    "root.pricing.strikethrough-zone",
+    "root.pricing.strikethrough-zone.strikethrough",
+    "root.pricing.price",
+    "root.pricing.billing",
+    "root.details-zone",
+    "root.details-zone.details"
+  ],
+  "slots": [
+    {
+      "path": "root.pricing.strikethrough-zone.strikethrough",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.pricing.price",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.pricing.billing",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.details-zone.details",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 25,
+  "a11y": null,
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/merch-card-pricing-display/merch-card-pricing-display.js",
+      "export": "MerchCardPricingDisplay",
+      "controller": null,
+      "cssClass": "c-merch-card-pricing-display"
+    },
+    "figma": "10328:103581"
+  },
+  "openDecisions": 6
+}

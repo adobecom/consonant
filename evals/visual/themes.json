@@ -1,0 +1,14 @@
+{
+  "$comment": [
+    "Which Figma variable mode is which theme.",
+    "Figma's image endpoint renders a node as it currently stands in the file and takes no mode parameter, so a dark golden means the node must actually be in dark mode when it is shot. That is a property of the file, not of a command-line flag — so the shooter READS the mode back over REST and refuses to write a sheet whose name does not match what it rendered. Without that, one forgotten mode switch produces a light sheet called sheet.dark.png and every dark comparison is quietly wrong.",
+    "Set the mode with the toolkit plugin, or: setExplicitVariableModeForCollection(collection, mode) on the component set."
+  ],
+  "collection": "VariableCollectionId:6:17",
+  "collectionName": "S2A / Semantic / Color / Theme",
+  "modes": {
+    "light": "6:0",
+    "dark": "6:1"
+  },
+  "default": "light"
+}

@@ -1,0 +1,25 @@
+/* HelperText — generated from helper-text.contract.json.
+ * Re-run: npm run specs:render -- --slug=helper-text --target=milo */
+
+.helper-text {
+  display: flex;
+  flex-direction: row;
+  width: 418px;
+}
+
+.helper-text .text {
+  flex: 1 1 auto;
+  font-family: var(--s2a-font-family-caption, "Adobe Clean");
+  font-size: var(--s2a-typography-font-size-caption, 0.75rem);
+  font-weight: var(--s2a-font-weight-caption, 700);
+  letter-spacing: var(--s2a-typography-letter-spacing-caption, 0);
+  line-height: var(--s2a-typography-line-height-caption, 16px);
+}
+
+.helper-text.neutral .text {
+  color: var(--s2a-color-content-subtle, rgb(0 0 0 / 64%));
+}
+
+.helper-text.error .text {
+  color: var(--s2a-color-content-utility-error, #d73220);
+}

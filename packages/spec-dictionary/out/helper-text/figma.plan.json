@@ -1,0 +1,112 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "HelperText",
+  "setName": "HelperText",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "p",
+    "bindings": {},
+    "slot": null,
+    "children": [
+      {
+        "name": ".text",
+        "source": "/.text",
+        "element": "span",
+        "bindings": {
+          "font-family": [
+            "s2a/font/family/caption"
+          ],
+          "font-size": [
+            "s2a/typography/font-size/caption"
+          ],
+          "font-weight": [
+            "s2a/font/weight/caption"
+          ],
+          "letter-spacing": [
+            "s2a/typography/letter-spacing/caption"
+          ],
+          "line-height": [
+            "s2a/typography/line-height/caption"
+          ]
+        },
+        "slot": {
+          "name": "text",
+          "accepts": [
+            "kind:text"
+          ],
+          "mode": "prefer"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10243:101699",
+    "nodeName": "HelperText",
+    "componentSetKey": "1cd9f8578e3737a891771ea7c4ee875ee7fd7f29",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Intent",
+      "type": "VARIANT",
+      "options": [
+        "neutral",
+        "error"
+      ],
+      "defaultValue": "neutral"
+    },
+    {
+      "name": "Text#10243:2",
+      "type": "TEXT",
+      "forProp": "text"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-helper-text",
+      "bindings": {}
+    },
+    {
+      "name": "/.text",
+      "selector": ".c-helper-text__text",
+      "bindings": {
+        "font-family": [
+          "s2a/font/family/caption"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/caption"
+        ],
+        "font-weight": [
+          "s2a/font/weight/caption"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/caption"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/caption"
+        ]
+      },
+      "slot": {
+        "name": "text",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/caption"
+  ]
+}

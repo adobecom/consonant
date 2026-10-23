@@ -1,0 +1,568 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "button",
+  "storybookId": "atoms-button",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "style-solid",
+      "name": "style: solid",
+      "args": {
+        "style": "solid"
+      }
+    },
+    {
+      "id": "style-outlined",
+      "name": "style: outlined",
+      "args": {
+        "style": "outlined"
+      }
+    },
+    {
+      "id": "style-transparent",
+      "name": "style: transparent",
+      "args": {
+        "style": "transparent"
+      }
+    },
+    {
+      "id": "style-accent",
+      "name": "style: accent",
+      "args": {
+        "style": "accent"
+      }
+    },
+    {
+      "id": "style-knockout",
+      "name": "style: knockout",
+      "args": {
+        "style": "knockout"
+      }
+    },
+    {
+      "id": "style-outline-inverse",
+      "name": "style: outline-inverse",
+      "args": {
+        "style": "outline-inverse"
+      }
+    },
+    {
+      "id": "state-default",
+      "name": "state: default",
+      "args": {
+        "state": "default"
+      }
+    },
+    {
+      "id": "state-hover",
+      "name": "state: hover",
+      "args": {
+        "state": "hover"
+      }
+    },
+    {
+      "id": "state-active",
+      "name": "state: active",
+      "args": {
+        "state": "active"
+      }
+    },
+    {
+      "id": "state-disabled",
+      "name": "state: disabled",
+      "args": {
+        "state": "disabled"
+      }
+    },
+    {
+      "id": "state-focus",
+      "name": "state: focus",
+      "args": {
+        "state": "focus"
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "atoms-button--solid",
+      "name": "Solid",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--outlined",
+      "name": "Outlined",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--transparent",
+      "name": "Transparent",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--accent",
+      "name": "Accent",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--disabled",
+      "name": "Disabled",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--knockout",
+      "name": "Knockout (media surface)",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--outline-inverse",
+      "name": "Outline-inverse (media surface)",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--icon-slots",
+      "name": "Icon Slots",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--all-styles-matrix",
+      "name": "All styles × states",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--backdrop-blur",
+      "name": "Backdrop blur (glassy styles)",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    }
+  ],
+  "deferred": [
+    "style-knockout",
+    "style-outline-inverse",
+    "state-hover",
+    "state-active",
+    "state-focus"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": "State",
+    "cols": [
+      "default",
+      "hover",
+      "active",
+      "disabled",
+      "focus"
+    ],
+    "rows": [
+      "solid",
+      "outlined",
+      "transparent",
+      "accent",
+      "knockout",
+      "outline-inverse"
+    ],
+    "rowValues": [
+      {
+        "Style": "solid"
+      },
+      {
+        "Style": "outlined"
+      },
+      {
+        "Style": "transparent"
+      },
+      {
+        "Style": "accent"
+      },
+      {
+        "Style": "knockout"
+      },
+      {
+        "Style": "outline-inverse"
+      }
+    ],
+    "cell": {
+      "w": 105,
+      "h": 64,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "style": "solid"
+        },
+        "forced": null,
+        "label": "solid / default",
+        "nodeId": "10715:35723"
+      },
+      {
+        "row": 0,
+        "col": 1,
+        "args": {
+          "style": "solid"
+        },
+        "forced": "hover",
+        "label": "solid / hover",
+        "nodeId": "10715:35693"
+      },
+      {
+        "row": 0,
+        "col": 2,
+        "args": {
+          "style": "solid"
+        },
+        "forced": "active",
+        "label": "solid / active",
+        "nodeId": "10715:35703"
+      },
+      {
+        "row": 0,
+        "col": 3,
+        "args": {
+          "style": "solid"
+        },
+        "forced": "disabled",
+        "label": "solid / disabled",
+        "nodeId": "10715:35713"
+      },
+      {
+        "row": 0,
+        "col": 4,
+        "args": {
+          "style": "solid"
+        },
+        "forced": "focus",
+        "label": "solid / focus",
+        "nodeId": "10715:35638"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "style": "outlined"
+        },
+        "forced": null,
+        "label": "outlined / default",
+        "nodeId": "10715:35478"
+      },
+      {
+        "row": 1,
+        "col": 1,
+        "args": {
+          "style": "outlined"
+        },
+        "forced": "hover",
+        "label": "outlined / hover",
+        "nodeId": "10715:35518"
+      },
+      {
+        "row": 1,
+        "col": 2,
+        "args": {
+          "style": "outlined"
+        },
+        "forced": "active",
+        "label": "outlined / active",
+        "nodeId": "10715:35558"
+      },
+      {
+        "row": 1,
+        "col": 3,
+        "args": {
+          "style": "outlined"
+        },
+        "forced": "disabled",
+        "label": "outlined / disabled",
+        "nodeId": "10715:35598"
+      },
+      {
+        "row": 1,
+        "col": 4,
+        "args": {
+          "style": "outlined"
+        },
+        "forced": "focus",
+        "label": "outlined / focus",
+        "nodeId": "10715:35649"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "style": "transparent"
+        },
+        "forced": null,
+        "label": "transparent / default",
+        "nodeId": "10715:35498"
+      },
+      {
+        "row": 2,
+        "col": 1,
+        "args": {
+          "style": "transparent"
+        },
+        "forced": "hover",
+        "label": "transparent / hover",
+        "nodeId": "10715:35538"
+      },
+      {
+        "row": 2,
+        "col": 2,
+        "args": {
+          "style": "transparent"
+        },
+        "forced": "active",
+        "label": "transparent / active",
+        "nodeId": "10715:35578"
+      },
+      {
+        "row": 2,
+        "col": 3,
+        "args": {
+          "style": "transparent"
+        },
+        "forced": "disabled",
+        "label": "transparent / disabled",
+        "nodeId": "10715:35618"
+      },
+      {
+        "row": 2,
+        "col": 4,
+        "args": {
+          "style": "transparent"
+        },
+        "forced": "focus",
+        "label": "transparent / focus",
+        "nodeId": "10715:35671"
+      },
+      {
+        "row": 3,
+        "col": 0,
+        "args": {
+          "style": "accent"
+        },
+        "forced": null,
+        "label": "accent / default",
+        "nodeId": "10715:35784"
+      },
+      {
+        "row": 3,
+        "col": 1,
+        "args": {
+          "style": "accent"
+        },
+        "forced": "hover",
+        "label": "accent / hover",
+        "nodeId": "10715:35794"
+      },
+      {
+        "row": 3,
+        "col": 2,
+        "args": {
+          "style": "accent"
+        },
+        "forced": "active",
+        "label": "accent / active",
+        "nodeId": "10715:35804"
+      },
+      {
+        "row": 3,
+        "col": 3,
+        "args": {
+          "style": "accent"
+        },
+        "forced": "disabled",
+        "label": "accent / disabled",
+        "nodeId": "10715:35814"
+      },
+      {
+        "row": 3,
+        "col": 4,
+        "args": {
+          "style": "accent"
+        },
+        "forced": "focus",
+        "label": "accent / focus",
+        "nodeId": "10715:35824"
+      },
+      {
+        "row": 4,
+        "col": 0,
+        "args": {
+          "style": "knockout"
+        },
+        "forced": null,
+        "label": "knockout / default",
+        "nodeId": "11098:184682"
+      },
+      {
+        "row": 4,
+        "col": 1,
+        "args": {
+          "style": "knockout"
+        },
+        "forced": "hover",
+        "label": "knockout / hover",
+        "nodeId": "11098:184697"
+      },
+      {
+        "row": 4,
+        "col": 2,
+        "args": {
+          "style": "knockout"
+        },
+        "forced": "active",
+        "label": "knockout / active",
+        "nodeId": "11098:184712"
+      },
+      {
+        "row": 4,
+        "col": 3,
+        "args": {
+          "style": "knockout"
+        },
+        "forced": "disabled",
+        "label": "knockout / disabled",
+        "nodeId": "11098:184727"
+      },
+      {
+        "row": 4,
+        "col": 4,
+        "args": {
+          "style": "knockout"
+        },
+        "forced": "focus",
+        "label": "knockout / focus",
+        "nodeId": "11098:184742"
+      },
+      {
+        "row": 5,
+        "col": 0,
+        "args": {
+          "style": "outline-inverse"
+        },
+        "forced": null,
+        "label": "outline-inverse / default",
+        "nodeId": "11169:141952"
+      },
+      {
+        "row": 5,
+        "col": 1,
+        "args": {
+          "style": "outline-inverse"
+        },
+        "forced": "hover",
+        "label": "outline-inverse / hover",
+        "nodeId": "11169:141967"
+      },
+      {
+        "row": 5,
+        "col": 2,
+        "args": {
+          "style": "outline-inverse"
+        },
+        "forced": "active",
+        "label": "outline-inverse / active",
+        "nodeId": "11169:141982"
+      },
+      {
+        "row": 5,
+        "col": 3,
+        "args": {
+          "style": "outline-inverse"
+        },
+        "forced": "disabled",
+        "label": "outline-inverse / disabled",
+        "nodeId": "11169:141997"
+      },
+      {
+        "row": 5,
+        "col": 4,
+        "args": {
+          "style": "outline-inverse"
+        },
+        "forced": "focus",
+        "label": "outline-inverse / focus",
+        "nodeId": "11169:142012"
+      }
+    ],
+    "missing": []
+  }
+}

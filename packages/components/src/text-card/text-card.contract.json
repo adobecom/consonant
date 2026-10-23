@@ -1,0 +1,285 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.text-card",
+  "name": "TextCard",
+  "version": "2.1.1",
+  "status": "draft",
+  "description": "Text-only news / content card. Headline, optional body copy, and inline read-more CTA. No media. Use in 3-up news grids on light surfaces.",
+  "archetype": "card",
+  "semantics": {
+    "element": "article"
+  },
+  "props": [
+    {
+      "name": "body",
+      "type": "text",
+      "default": "\"85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants.\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Body#9554:2"
+        },
+        "code": {
+          "prop": "body"
+        }
+      }
+    },
+    {
+      "name": "cta",
+      "type": "text",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "CTA#9561:0"
+        },
+        "code": {
+          "prop": "cta"
+        }
+      }
+    },
+    {
+      "name": "headline",
+      "type": "text",
+      "default": "\"Adobe apps are top choice for Sundance filmmakers.\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Headline#9554:0"
+        },
+        "code": {
+          "prop": "headline"
+        }
+      }
+    },
+    {
+      "name": "showBody",
+      "type": "boolean",
+      "default": "true",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Body#9554:6"
+        },
+        "code": {
+          "prop": "showBody"
+        }
+      }
+    },
+    {
+      "name": "showCta",
+      "type": "boolean",
+      "description": "Figma authoring toggle for the \"CTA\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "default": "true",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show CTA#9554:8"
+        },
+        "code": {
+          "prop": "showCta"
+        }
+      }
+    },
+    {
+      "name": "style",
+      "type": {
+        "enum": [
+          "default",
+          "centered"
+        ]
+      },
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style"
+        },
+        "code": {
+          "prop": "style"
+        }
+      }
+    },
+    {
+      "name": "ctaLabel",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "\"Read story\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "ctaLabel"
+        }
+      }
+    },
+    {
+      "name": "ctaHref",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "\"#\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "ctaHref"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "article",
+      "layout": {
+        "display": "flex",
+        "direction": "column"
+      },
+      "tokens": {
+        "background-color": "{s2a.color.background.subtle}",
+        "border-radius": "{s2a.border.radius.md}",
+        "gap": "{s2a.spacing.lg}",
+        "padding-bottom": "{s2a.spacing.none}",
+        "padding-left": "{s2a.spacing.lg}",
+        "padding-right": "{s2a.spacing.lg}",
+        "padding-top": "{s2a.spacing.lg}"
+      },
+      "literals": {
+        "width": "488px"
+      },
+      "parts": {
+        "headline-body": {
+          "element": "div",
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "grow": true
+          },
+          "tokens": {
+            "gap": "{s2a.spacing.xs}"
+          },
+          "parts": {
+            "headline": {
+              "element": "span",
+              "layout": {
+                "grow": true
+              },
+              "tokens": {
+                "color": "{s2a.color.content.heading}",
+                "font-family": "{s2a.font.family.heading}",
+                "font-size": "{s2a.typography.font-size.heading-5}",
+                "font-weight": "{s2a.font.weight.heading}",
+                "letter-spacing": "{s2a.font.letter-spacing.4xl}",
+                "line-height": "{s2a.typography.line-height.heading-5}"
+              },
+              "slot": {
+                "name": "headline",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "defaultContent": [
+                  {
+                    "id": "text",
+                    "text": "Adobe apps are top choice for Sundance filmmakers."
+                  }
+                ]
+              }
+            },
+            "body": {
+              "element": "span",
+              "layout": {
+                "grow": true
+              },
+              "tokens": {
+                "color": "{s2a.color.content.body-subtle}",
+                "font-family": "{s2a.font.family.body}",
+                "font-size": "{s2a.typography.font-size.body-md}",
+                "font-weight": "{s2a.font.weight.body}",
+                "letter-spacing": "{s2a.typography.letter-spacing.body-md}",
+                "line-height": "{s2a.typography.line-height.body-md}"
+              },
+              "slot": {
+                "name": "body",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "defaultContent": [
+                  {
+                    "id": "text",
+                    "text": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants."
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "link": {
+          "layout": {
+            "display": "flex",
+            "direction": "column"
+          },
+          "slot": {
+            "name": ".cta",
+            "accepts": [
+              "Link"
+            ],
+            "acceptsMode": "restrict",
+            "defaultContent": [
+              {
+                "id": "link",
+                "props": {
+                  "figma": "Link — v2",
+                  "Underline": false,
+                  "Show Icon End": true,
+                  "Label": "Read story",
+                  "Emphasis": "default",
+                  "Kind": "action",
+                  "State": "default"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ],
+    "notes": [
+      "Actions inside the card are native links or buttons; the card itself has no role."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "db93874630fe07525d42cfbac86b77e52e217e9f",
+        "nodeId": "11362:245184"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/text-card/text-card.js",
+        "export": "TextCard"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:9fbdc79fba0f5ff8fa57f075808f86b2f456132535471b8a783be7614472f263",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:9d33a4abcf4ddc8320ae9880021fe211bdfb4189f20e26b93db641bad59ea8d2"
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "$generated": {
+    "name": "s2a-grid-contract-transform",
+    "version": "1"
+  },
+  "collection": "s2a-grid-contracts",
+  "count": 11,
+  "breakpoints": [
+    {
+      "id": "sm",
+      "label": "S — Mobile",
+      "minWidth": null,
+      "maxWidth": 767,
+      "columns": 6
+    },
+    {
+      "id": "md",
+      "label": "M — Tablet landscape",
+      "minWidth": 768,
+      "maxWidth": 1279,
+      "columns": 12
+    },
+    {
+      "id": "lg",
+      "label": "L — Desktop",
+      "minWidth": 1280,
+      "maxWidth": 1440,
+      "columns": 12
+    },
+    {
+      "id": "xl",
+      "label": "XL — Desktop HD",
+      "minWidth": 1441,
+      "maxWidth": 2560,
+      "columns": 12
+    }
+  ],
+  "contracts": [
+    {
+      "id": "s2a.grid.bento-grid",
+      "slug": "bento-grid",
+      "name": "Bento grid",
+      "kind": "grid",
+      "tier": "sectional",
+      "status": "shipped",
+      "version": "1.0.0",
+      "rules": 7,
+      "openDecisions": 1,
+      "demo": "bento",
+      "hash": "sha256:39065fce8647ed12ec840de9680832b994d2dd239152c11c5bdbdd71911d59d3"
+    },
+    {
+      "id": "s2a.grid.column-grid",
+      "slug": "column-grid",
+      "name": "Column grid",
+      "kind": "grid",
+      "tier": "sectional",
+      "status": "shipped",
+      "version": "1.0.0",
+      "rules": 10,
+      "openDecisions": 1,
+      "demo": "columns",
+      "hash": "sha256:dc684b094bb26ba66f460d8bade38cd4cea40a31da459ba76c9382cf52ac7b9b"
+    },
+    {
+      "id": "s2a.grid.container-constrained",
+      "slug": "container-constrained",
+      "name": "Constrained container",
+      "kind": "container",
+      "tier": "sectional",
+      "status": "shipped",
+      "version": "1.0.0",
+      "rules": 5,
+      "openDecisions": 3,
+      "demo": "container",
+      "hash": "sha256:967341f640c4684cf8329e5bbd3ea2722f4dedb8d41297c2a58ebcbb190ac80d"
+    },
+    {
+      "id": "s2a.grid.container-fluid",
+      "slug": "container-fluid",
+      "name": "Fluid container",
+      "kind": "container",
+      "tier": "global",
+      "status": "shipped",
+      "version": "1.0.0",
+      "rules": 4,
+      "openDecisions": 1,
+      "demo": "container",
+      "hash": "sha256:ee8c4f3d74a62c54094deac4d145d9eb54747bd0efcf88c9b7e93fa7275b8896"
+    },
+    {
+      "id": "s2a.grid.container-hd",
+      "slug": "container-hd",
+      "name": "HD container",
+      "kind": "container",
+      "tier": "global",
+      "status": "shipped",
+      "version": "1.0.0",
+      "rules": 5,
+      "openDecisions": 1,
+      "demo": "container",
+      "hash": "sha256:52f567bccbf9c9ed22043e5029af19a52cd682ef2ff1629efb747785a12cd2d8"
+    },
+    {
+      "id": "s2a.grid.container-standard",
+      "slug": "container-standard",
+      "name": "Standard container",
+      "kind": "container",
+      "tier": "global",
+      "status": "shipped",
+      "version": "1.0.0",
+      "rules": 8,
+      "openDecisions": 1,
+      "demo": "container",
+      "hash": "sha256:709a71b3a0b218c5cd8810b23680c4daa22b636b3ef1f95024a42a503ce430a7"
+    },
+    {
+      "id": "s2a.grid.container-token-offset",
+      "slug": "container-token-offset",
+      "name": "Token-offset container",
+      "kind": "container",
+      "tier": "global",
+      "status": "shipped",
+      "version": "1.0.0",
+      "rules": 10,
+      "openDecisions": 1,
+      "demo": "container",
+      "hash": "sha256:f10d4a9b52723c5dd91ecffb90017543741af5b98fbcd5adf6368187e50f1c02"
+    },
+    {
+      "id": "s2a.grid.grid-foundation",
+      "slug": "grid-foundation",
+      "name": "Grid foundation",
+      "kind": "foundation",
+      "tier": "global",
+      "status": "shipped",
+      "version": "1.0.0",
+      "rules": 17,
+      "openDecisions": 1,
+      "demo": "breakpoints",
+      "hash": "sha256:1fadce3bdcb79fd055b04ed4594422db450500c4f1b7d8f69dd3908810cacf07"
+    },
+    {
+      "id": "s2a.grid.object-grid",
+      "slug": "object-grid",
+      "name": "Responsive object grid",
+      "kind": "grid",
+      "tier": "sectional",
+      "status": "proposed",
+      "version": "0.1.0",
+      "rules": 4,
+      "openDecisions": 3,
+      "demo": "objects",
+      "hash": "sha256:c822c61e318b0a7ce7b575d6c4a19d326df1543d2acff17210a0c4266661bb45"
+    },
+    {
+      "id": "s2a.grid.section-spacing",
+      "slug": "section-spacing",
+      "name": "Section spacing",
+      "kind": "spacing",
+      "tier": "sectional",
+      "status": "shipped",
+      "version": "1.0.0",
+      "rules": 7,
+      "openDecisions": 2,
+      "demo": "spacing",
+      "hash": "sha256:55ba5078213ae61f647057fc7800934bc80901d01c2780008b1c35c2c900546c"
+    },
+    {
+      "id": "s2a.grid.ups-grid",
+      "slug": "ups-grid",
+      "name": "Ups grid (N-up)",
+      "kind": "grid",
+      "tier": "block",
+      "status": "proposed",
+      "version": "0.1.0",
+      "rules": 5,
+      "openDecisions": 2,
+      "demo": "ups",
+      "hash": "sha256:53d3b513a7574117c1bfb2917c977437f8480f242e89c1aa4b8a1a0af2bbe4e0"
+    }
+  ]
+}

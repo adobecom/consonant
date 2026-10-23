@@ -1,0 +1,63 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "merch-card-feature-section",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "showdivider-on",
+      "name": "showDivider on",
+      "args": {
+        "showDivider": true
+      }
+    },
+    {
+      "id": "showdivider-off",
+      "name": "showDivider off",
+      "args": {
+        "showDivider": false
+      }
+    }
+  ],
+  "existing": [],
+  "deferred": [
+    "showdivider-on",
+    "showdivider-off"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      ""
+    ],
+    "rowValues": [
+      {}
+    ],
+    "cell": {
+      "w": 442,
+      "h": 87,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {},
+        "forced": null,
+        "label": "default",
+        "nodeId": "10320:102040"
+      }
+    ],
+    "missing": []
+  }
+}

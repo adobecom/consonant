@@ -41,10 +41,10 @@ const lightSurface = (content) => html`
   <div
     style="
       width: 320px;
-      padding: var(--s2a-spacing-lg, 24px);
+      padding: var(--s2a-spacing-lg);
       background: var(--s2a-color-background-default);
-      border: 1px solid var(--s2a-color-border-subtle);
-      border-radius: var(--s2a-border-radius-xs, 8px);
+      border: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+      border-radius: var(--s2a-border-radius-xs);
     "
   >
     ${content}
@@ -52,12 +52,12 @@ const lightSurface = (content) => html`
 `;
 
 const darkSurface = (content) => html`
-  <div
+  <div data-theme="dark"
     style="
       width: 320px;
-      padding: var(--s2a-spacing-lg, 24px);
-      background: var(--s2a-color-background-knockout, #000);
-      border-radius: var(--s2a-border-radius-xs, 8px);
+      padding: var(--s2a-spacing-lg);
+      background: var(--s2a-color-background-knockout);
+      border-radius: var(--s2a-border-radius-xs);
     "
   >
     ${content}
@@ -95,15 +95,15 @@ export const SubtleInverse = {
 export const AllStyles = {
   name: "All styles",
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-md);">
       ${lightSurface(html`
-        <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-md);">
           ${Divider({ style: "default" })} ${Divider({ style: "subtle" })}
           ${Divider({ style: "knockout" })}
         </div>
       `)}
       ${darkSurface(html`
-        <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-md);">
           ${Divider({ style: "inverse" })} ${Divider({ style: "subtle-inverse" })}
         </div>
       `)}

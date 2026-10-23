@@ -20,7 +20,7 @@ context axis drives the same color tokens Figma binds per variant
       },
       source: {
         language: "html",
-        code: `<span class="c-logo" data-version="default" data-context="on-light" role="img" aria-label="Adobe">
+        code: `<span class="c-logo" data-version="default" role="img" aria-label="Adobe">
   <svg><!-- mark --></svg>
 </span>`,
       },
@@ -28,12 +28,10 @@ context axis drives the same color tokens Figma binds per variant
   },
   argTypes: {
     version: { control: "radio", options: ["default", "legacy", "abbreviated"] },
-    context: { control: "radio", options: ["on-light", "on-dark"] },
     label: { control: "text", description: "Accessible name" },
   },
   args: {
     version: "default",
-    context: "on-light",
     label: "Adobe",
   },
 };
@@ -42,10 +40,11 @@ context axis drives the same color tokens Figma binds per variant
 
 const darkSurface = (content) => html`
   <div
+    data-theme="dark"
     style="
-      padding: 24px 32px;
-      background: var(--s2a-color-background-knockout, #000);
-      border-radius: 8px;
+      padding: var(--s2a-spacing-lg) var(--s2a-spacing-xl);
+      background: var(--s2a-color-background-default);
+      border-radius: var(--s2a-border-radius-xs);
     "
   >
     ${content}
@@ -62,24 +61,24 @@ export const Legacy = {
   args: { version: "legacy" },
 };
 
+// Dark is a surface mode, not a prop: the wrapper pins data-theme="dark".
 export const OnDark = {
-  args: { context: "on-dark" },
   render: (args) => darkSurface(Logo(args)),
 };
 
 export const AllVersions = {
   parameters: { controls: { disable: true } },
   render: () => html`
-    <div style="display: grid; gap: 24px; justify-items: start;">
-      <div style="display: flex; gap: 32px; align-items: center;">
+    <div style="display: grid; gap: var(--s2a-spacing-lg); justify-items: start;">
+      <div style="display: flex; gap: var(--s2a-spacing-xl); align-items: center;">
         ${Logo({ version: "default" })} ${Logo({ version: "legacy" })}
         ${Logo({ version: "abbreviated" })}
       </div>
       ${darkSurface(
-        html`<div style="display: flex; gap: 32px; align-items: center;">
-          ${Logo({ version: "default", context: "on-dark" })}
-          ${Logo({ version: "legacy", context: "on-dark" })}
-          ${Logo({ version: "abbreviated", context: "on-dark" })}
+        html`<div style="display: flex; gap: var(--s2a-spacing-xl); align-items: center;">
+          ${Logo({ version: "default" })}
+          ${Logo({ version: "legacy" })}
+          ${Logo({ version: "abbreviated" })}
         </div>`,
       )}
     </div>

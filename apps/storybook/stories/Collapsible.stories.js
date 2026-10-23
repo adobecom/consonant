@@ -82,7 +82,7 @@ export const WithMedia = {
       <img
         src=${genstudioImage}
         alt="GenStudio product walkthrough"
-        style="width: 100%; max-width: 420px; display: block; border-radius: var(--s2a-border-radius-xs, 8px);"
+        style="width: 100%; max-width: 420px; display: block; border-radius: var(--s2a-border-radius-xs);"
       />
     `,
   },

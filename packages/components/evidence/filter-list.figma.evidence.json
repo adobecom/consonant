@@ -1,0 +1,1837 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-05T18:54:50.072Z",
+  "extractor": {
+    "plugin": "s2a-toolkit",
+    "version": "0.2.1"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": {
+      "id": "13:1685",
+      "name": "   ↳ Playground"
+    }
+  },
+  "set": {
+    "id": "14885:82999",
+    "key": "",
+    "name": "FilterList",
+    "type": "FRAME",
+    "description": "",
+    "meta": {
+      "version": "",
+      "status": "",
+      "updated": "",
+      "changelog": ""
+    },
+    "documentationLinks": [],
+    "layerName": "FilterList"
+  },
+  "axes": [],
+  "variants": [
+    {
+      "id": "14885:82999",
+      "key": "",
+      "name": "FilterList",
+      "props": {},
+      "width": 344,
+      "height": 365
+    }
+  ],
+  "anatomy": {
+    "variant": "FilterList",
+    "tree": {
+      "name": "FilterList",
+      "type": "FRAME",
+      "layoutMode": "VERTICAL",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "HUG"
+      },
+      "children": [
+        {
+          "name": "Nav Filter",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nav Filter",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nav Filter",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nav Filter",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nav Filter",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nav Filter",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nav Filter",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filter - Inactive",
+          "type": "FRAME",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "HUG"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            },
+            {
+              "name": "Vector",
+              "type": "VECTOR",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cursor/Pointer",
+          "type": "INSTANCE",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "pointing",
+              "type": "GROUP",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "children": [
+                {
+                  "name": "Shape",
+                  "type": "VECTOR",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                },
+                {
+                  "name": "Shape",
+                  "type": "VECTOR",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                },
+                {
+                  "name": "Shape",
+                  "type": "VECTOR",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                },
+                {
+                  "name": "Shape",
+                  "type": "VECTOR",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                },
+                {
+                  "name": "Shape",
+                  "type": "VECTOR",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "FilterList",
+      "node": "",
+      "nodeId": "14885:82999",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:62"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83000",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:a382eac4c9a3bef1097c32d22008a2640b2bc9a8/2495:683"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83000",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:f2c54c232d87b4a2865235b578c082470eecfa96/237:3"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83000",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83000",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83000",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83000",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83000;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:37e4aab70c1b4e190e04c4945427869636094364/2986:84"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83000;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:f6adac658998b85abc31ac0ef46213e38e28e430/5388:274"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83000;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:4251945d797f40d6226cbd66cdc61224e8b57907/5711:517"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83000;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:b8019565b44226550b04ed1dd81d36d8b480cac6/5388:288"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83000;1633:13291",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:23c0c37e5e02762087e6356ff09f8b225fb86530/5711:533"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83000;1633:13291",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:abb6d9e6cec2ece062e61863bbdd9952bf5c20b7/5711:543"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83000;1633:13291",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,5711:509"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83001",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:58eb78f86fde4baf81f09f84b45827704c2ec140/2495:861"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83001",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:f2c54c232d87b4a2865235b578c082470eecfa96/237:3"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83001",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83001",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83001",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83001",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83001;1633:13296",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:9ae5527fe09c22c103e03ca5b8c96ad1f7378405/2495:758"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83001;1633:13296",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:f6adac658998b85abc31ac0ef46213e38e28e430/5388:274"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83001;1633:13296",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:4251945d797f40d6226cbd66cdc61224e8b57907/5711:517"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83001;1633:13296",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:b8019565b44226550b04ed1dd81d36d8b480cac6/5388:288"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83001;1633:13296",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:23c0c37e5e02762087e6356ff09f8b225fb86530/5711:533"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83001;1633:13296",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:abb6d9e6cec2ece062e61863bbdd9952bf5c20b7/5711:543"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83001;1633:13296",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,5711:509"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83002",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:2713f0f2767c7b424ab71db1ec013f4f31f67ea3/2495:680"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83002",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:f2c54c232d87b4a2865235b578c082470eecfa96/237:3"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83002",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83002",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83002",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83002",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83002;1633:13305",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:9ae5527fe09c22c103e03ca5b8c96ad1f7378405/2495:758"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83002;1633:13305",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:f6adac658998b85abc31ac0ef46213e38e28e430/5388:274"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83002;1633:13305",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:4251945d797f40d6226cbd66cdc61224e8b57907/5711:517"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83002;1633:13305",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:b8019565b44226550b04ed1dd81d36d8b480cac6/5388:288"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83002;1633:13305",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:23c0c37e5e02762087e6356ff09f8b225fb86530/5711:533"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83002;1633:13305",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:abb6d9e6cec2ece062e61863bbdd9952bf5c20b7/5711:543"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83002;1633:13305",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,5711:509"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83003",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:a382eac4c9a3bef1097c32d22008a2640b2bc9a8/2495:683"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83003",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:f2c54c232d87b4a2865235b578c082470eecfa96/237:3"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83003",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83003",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83003",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83003",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83003;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:37e4aab70c1b4e190e04c4945427869636094364/2986:84"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83003;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:f6adac658998b85abc31ac0ef46213e38e28e430/5388:274"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83003;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:4251945d797f40d6226cbd66cdc61224e8b57907/5711:517"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83003;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:b8019565b44226550b04ed1dd81d36d8b480cac6/5388:288"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83003;1633:13291",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:23c0c37e5e02762087e6356ff09f8b225fb86530/5711:533"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83003;1633:13291",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:abb6d9e6cec2ece062e61863bbdd9952bf5c20b7/5711:543"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83003;1633:13291",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,5711:509"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83004",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:a382eac4c9a3bef1097c32d22008a2640b2bc9a8/2495:683"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83004",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:f2c54c232d87b4a2865235b578c082470eecfa96/237:3"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83004",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83004",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83004",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83004",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83004;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:37e4aab70c1b4e190e04c4945427869636094364/2986:84"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83004;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:f6adac658998b85abc31ac0ef46213e38e28e430/5388:274"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83004;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:4251945d797f40d6226cbd66cdc61224e8b57907/5711:517"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83004;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:b8019565b44226550b04ed1dd81d36d8b480cac6/5388:288"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83004;1633:13291",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:23c0c37e5e02762087e6356ff09f8b225fb86530/5711:533"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83004;1633:13291",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:abb6d9e6cec2ece062e61863bbdd9952bf5c20b7/5711:543"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83004;1633:13291",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,5711:509"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83005",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:a382eac4c9a3bef1097c32d22008a2640b2bc9a8/2495:683"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83005",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:f2c54c232d87b4a2865235b578c082470eecfa96/237:3"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83005",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83005",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83005",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83005",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83005;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:37e4aab70c1b4e190e04c4945427869636094364/2986:84"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83005;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:f6adac658998b85abc31ac0ef46213e38e28e430/5388:274"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83005;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:4251945d797f40d6226cbd66cdc61224e8b57907/5711:517"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83005;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:b8019565b44226550b04ed1dd81d36d8b480cac6/5388:288"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83005;1633:13291",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:23c0c37e5e02762087e6356ff09f8b225fb86530/5711:533"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83005;1633:13291",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:abb6d9e6cec2ece062e61863bbdd9952bf5c20b7/5711:543"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83005;1633:13291",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,5711:509"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83006",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:a382eac4c9a3bef1097c32d22008a2640b2bc9a8/2495:683"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83006",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:f2c54c232d87b4a2865235b578c082470eecfa96/237:3"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83006",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83006",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83006",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83006",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83006;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:37e4aab70c1b4e190e04c4945427869636094364/2986:84"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83006;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:f6adac658998b85abc31ac0ef46213e38e28e430/5388:274"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83006;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:4251945d797f40d6226cbd66cdc61224e8b57907/5711:517"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83006;1633:13291",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:b8019565b44226550b04ed1dd81d36d8b480cac6/5388:288"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83006;1633:13291",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:23c0c37e5e02762087e6356ff09f8b225fb86530/5711:533"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83006;1633:13291",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:abb6d9e6cec2ece062e61863bbdd9952bf5c20b7/5711:543"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter/Label",
+      "nodeId": "I14885:83006;1633:13291",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,5711:509"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive",
+      "nodeId": "14885:83007",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "variable": "VariableID:f2c54c232d87b4a2865235b578c082470eecfa96/237:3"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive",
+      "nodeId": "14885:83007",
+      "nodeType": "FRAME",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive",
+      "nodeId": "14885:83007",
+      "nodeType": "FRAME",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive",
+      "nodeId": "14885:83007",
+      "nodeType": "FRAME",
+      "property": "paddingRight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive",
+      "nodeId": "14885:83007",
+      "nodeType": "FRAME",
+      "property": "paddingTop",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive/Label",
+      "nodeId": "14885:83008",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:d031702386e8915c26a56e0bab131af87aae5bfc/4971:180"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive/Label",
+      "nodeId": "14885:83008",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:f6adac658998b85abc31ac0ef46213e38e28e430/5388:274"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive/Label",
+      "nodeId": "14885:83008",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:4251945d797f40d6226cbd66cdc61224e8b57907/5711:517"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive/Label",
+      "nodeId": "14885:83008",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:b8019565b44226550b04ed1dd81d36d8b480cac6/5388:288"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive/Label",
+      "nodeId": "14885:83008",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:23c0c37e5e02762087e6356ff09f8b225fb86530/5711:533"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive/Label",
+      "nodeId": "14885:83008",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:abb6d9e6cec2ece062e61863bbdd9952bf5c20b7/5711:543"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive/Label",
+      "nodeId": "14885:83008",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "S:536bbf234b1a0a717cffe0e3c578fb0052669086,5711:509"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Filter - Inactive/Vector",
+      "nodeId": "14885:83009",
+      "nodeType": "VECTOR",
+      "property": "strokes",
+      "variable": "VariableID:d031702386e8915c26a56e0bab131af87aae5bfc/4971:180"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer",
+      "nodeId": "14885:83010",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:4eb57ca1adf94518734c64eb585c8004a092fa13/237:12"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer",
+      "nodeId": "14885:83010",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:4eb57ca1adf94518734c64eb585c8004a092fa13/237:12"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer",
+      "nodeId": "14885:83010",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:4eb57ca1adf94518734c64eb585c8004a092fa13/237:12"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer",
+      "nodeId": "14885:83010",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:4eb57ca1adf94518734c64eb585c8004a092fa13/237:12"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer/pointing/Shape",
+      "nodeId": "I14885:83010;2:138",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:7620cd44c195e104c3fc8c8875b16c29635cc853/4971:181"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer/pointing/Shape",
+      "nodeId": "I14885:83010;2:139",
+      "nodeType": "VECTOR",
+      "property": "strokes",
+      "variable": "VariableID:d031702386e8915c26a56e0bab131af87aae5bfc/4971:180"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer/pointing/Shape",
+      "nodeId": "I14885:83010;2:140",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:d031702386e8915c26a56e0bab131af87aae5bfc/4971:180"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer/pointing/Shape",
+      "nodeId": "I14885:83010;2:141",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:d031702386e8915c26a56e0bab131af87aae5bfc/4971:180"
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer/pointing/Shape",
+      "nodeId": "I14885:83010;2:142",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:d031702386e8915c26a56e0bab131af87aae5bfc/4971:180"
+    }
+  ],
+  "variables": {
+    "VariableID:11f5166ec34c6428342104cb81888657974bb546/2495:734": {
+      "name": "s2a/spacing/lg",
+      "key": "11f5166ec34c6428342104cb81888657974bb546",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:6c6b35ec4a5a89cf0598ba78e6c7482370d719ad/2073:2682",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-lg)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/24"
+        }
+      },
+      "resolved": {
+        "Value": 24
+      }
+    },
+    "VariableID:23c0c37e5e02762087e6356ff09f8b225fb86530/5711:533": {
+      "name": "s2a/typography/letter-spacing/label",
+      "key": "23c0c37e5e02762087e6356ff09f8b225fb86530",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/5711:500",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/7xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/7xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/7xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/7xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2713f0f2767c7b424ab71db1ec013f4f31f67ea3/2495:680": {
+      "name": "s2a/color/transparent/black/48",
+      "key": "2713f0f2767c7b424ab71db1ec013f4f31f67ea3",
+      "collection": "S2A / Primitives / Color / Theme",
+      "collectionId": "VariableCollectionId:23dfb9688d347020258cb5a8b587fd4c5c7287bc/2073:2569",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-transparent-black-48)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.47999998927116394
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.47999998927116394
+        }
+      }
+    },
+    "VariableID:37e4aab70c1b4e190e04c4945427869636094364/2986:84": {
+      "name": "s2a/color/content/default",
+      "key": "37e4aab70c1b4e190e04c4945427869636094364",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:3659e0dcd09c2dca905bb94def94c5029e4d83ac/2073:2735",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:3:56": {
+      "name": "s2a/spacing/lg",
+      "key": "11f5166ec34c6428342104cb81888657974bb546",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-lg)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/24"
+        }
+      },
+      "resolved": {
+        "Value": 24
+      }
+    },
+    "VariableID:3:62": {
+      "name": "s2a/spacing/2xs",
+      "key": "3a0c386b197de636d181eb476665ea425fcfc213",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-2xs)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/4"
+        }
+      },
+      "resolved": {
+        "Value": 4
+      }
+    },
+    "VariableID:4251945d797f40d6226cbd66cdc61224e8b57907/5711:517": {
+      "name": "s2a/typography/font-size/label",
+      "key": "4251945d797f40d6226cbd66cdc61224e8b57907",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/5711:500",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:42a796ba25bfc3a3f194b982cc14c76bcc8febb2/2495:735": {
+      "name": "s2a/spacing/md",
+      "key": "42a796ba25bfc3a3f194b982cc14c76bcc8febb2",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:6c6b35ec4a5a89cf0598ba78e6c7482370d719ad/2073:2682",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-md)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/16"
+        }
+      },
+      "resolved": {
+        "Value": 16
+      }
+    },
+    "VariableID:4eb57ca1adf94518734c64eb585c8004a092fa13/237:12": {
+      "name": "XS",
+      "key": "4eb57ca1adf94518734c64eb585c8004a092fa13",
+      "collection": "Spacing",
+      "collectionId": "VariableCollectionId:a7a4b53ce153304e022623da67c1cf22bc9d4d46/78:34",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Desktop": 24,
+        "Tablet": 24,
+        "Mobile": 24
+      },
+      "resolved": {
+        "Desktop": 24,
+        "Tablet": 24,
+        "Mobile": 24
+      }
+    },
+    "VariableID:58eb78f86fde4baf81f09f84b45827704c2ec140/2495:861": {
+      "name": "s2a/color/IconButton/background/primary/solid/on-light/default",
+      "key": "58eb78f86fde4baf81f09f84b45827704c2ec140",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:3659e0dcd09c2dca905bb94def94c5029e4d83ac/2073:2735",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-iconbutton-background-primary-solid-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:7620cd44c195e104c3fc8c8875b16c29635cc853/4971:181": {
+      "name": "S2AC/Palette/static/white",
+      "key": "7620cd44c195e104c3fc8c8875b16c29635cc853",
+      "collection": "S2A / Color",
+      "collectionId": "VariableCollectionId:39add3230a451deae82adc825e88e392c4553aa8/3194:748",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:9ae5527fe09c22c103e03ca5b8c96ad1f7378405/2495:758": {
+      "name": "s2a/color/background/default",
+      "key": "9ae5527fe09c22c103e03ca5b8c96ad1f7378405",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:3659e0dcd09c2dca905bb94def94c5029e4d83ac/2073:2735",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-background-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "color/gray/25"
+        },
+        "Dark": {
+          "alias": "color/gray/900"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.07450980693101883,
+          "g": 0.07450980693101883,
+          "b": 0.07450980693101883,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:a382eac4c9a3bef1097c32d22008a2640b2bc9a8/2495:683": {
+      "name": "s2a/color/transparent/black/04",
+      "key": "a382eac4c9a3bef1097c32d22008a2640b2bc9a8",
+      "collection": "S2A / Primitives / Color / Theme",
+      "collectionId": "VariableCollectionId:23dfb9688d347020258cb5a8b587fd4c5c7287bc/2073:2569",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-transparent-black-04)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.03999999910593033
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.03999999910593033
+        }
+      }
+    },
+    "VariableID:abb6d9e6cec2ece062e61863bbdd9952bf5c20b7/5711:543": {
+      "name": "s2a/typography/line-height/label",
+      "key": "abb6d9e6cec2ece062e61863bbdd9952bf5c20b7",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:ce424e312b8d55fff344955c7626321200e2bd3f/5711:500",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:b8019565b44226550b04ed1dd81d36d8b480cac6/5388:288": {
+      "name": "s2a/font/weight/label",
+      "key": "b8019565b44226550b04ed1dd81d36d8b480cac6",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:6c6b35ec4a5a89cf0598ba78e6c7482370d719ad/2073:2682",
+      "resolvedType": "STRING",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:d031702386e8915c26a56e0bab131af87aae5bfc/4971:180": {
+      "name": "S2AC/Palette/static/black",
+      "key": "d031702386e8915c26a56e0bab131af87aae5bfc",
+      "collection": "S2A / Color",
+      "collectionId": "VariableCollectionId:39add3230a451deae82adc825e88e392c4553aa8/3194:748",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:f2c54c232d87b4a2865235b578c082470eecfa96/237:3": {
+      "name": "4 XS",
+      "key": "f2c54c232d87b4a2865235b578c082470eecfa96",
+      "collection": "Spacing",
+      "collectionId": "VariableCollectionId:a7a4b53ce153304e022623da67c1cf22bc9d4d46/78:34",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Desktop": 8,
+        "Tablet": 8,
+        "Mobile": 8
+      },
+      "resolved": {
+        "Desktop": 8,
+        "Tablet": 8,
+        "Mobile": 8
+      }
+    },
+    "VariableID:f6adac658998b85abc31ac0ef46213e38e28e430/5388:274": {
+      "name": "s2a/font/family/label",
+      "key": "f6adac658998b85abc31ac0ef46213e38e28e430",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:6c6b35ec4a5a89cf0598ba78e6c7482370d719ad/2073:2682",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    }
+  },
+  "textStyles": {
+    "S:536bbf234b1a0a717cffe0e3c578fb0052669086,5711:509": {
+      "name": "s2a/typography/label",
+      "key": "536bbf234b1a0a717cffe0e3c578fb0052669086"
+    }
+  },
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83000",
+      "mainComponent": {
+        "id": "8406:177885",
+        "key": "55fa34b89a1a95b317eff7dec3071ba2a38eb45a",
+        "name": "Property 1=Default"
+      },
+      "set": {
+        "id": "8406:177884",
+        "key": "b4cfb225b474dadc97af8dae41fe05d2c58ab291",
+        "name": "Nav Filter"
+      }
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83001",
+      "mainComponent": {
+        "id": "8406:177887",
+        "key": "35f3467565a20a22d43df8e3ad44065d89970771",
+        "name": "Property 1=Active"
+      },
+      "set": {
+        "id": "8406:177884",
+        "key": "b4cfb225b474dadc97af8dae41fe05d2c58ab291",
+        "name": "Nav Filter"
+      }
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83002",
+      "mainComponent": {
+        "id": "8406:177889",
+        "key": "0ae121d5edfa01b02bf2a5e9273eaea1f848937f",
+        "name": "Property 1=Hover"
+      },
+      "set": {
+        "id": "8406:177884",
+        "key": "b4cfb225b474dadc97af8dae41fe05d2c58ab291",
+        "name": "Nav Filter"
+      }
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83003",
+      "mainComponent": {
+        "id": "8406:177885",
+        "key": "55fa34b89a1a95b317eff7dec3071ba2a38eb45a",
+        "name": "Property 1=Default"
+      },
+      "set": {
+        "id": "8406:177884",
+        "key": "b4cfb225b474dadc97af8dae41fe05d2c58ab291",
+        "name": "Nav Filter"
+      }
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83004",
+      "mainComponent": {
+        "id": "8406:177885",
+        "key": "55fa34b89a1a95b317eff7dec3071ba2a38eb45a",
+        "name": "Property 1=Default"
+      },
+      "set": {
+        "id": "8406:177884",
+        "key": "b4cfb225b474dadc97af8dae41fe05d2c58ab291",
+        "name": "Nav Filter"
+      }
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83005",
+      "mainComponent": {
+        "id": "8406:177885",
+        "key": "55fa34b89a1a95b317eff7dec3071ba2a38eb45a",
+        "name": "Property 1=Default"
+      },
+      "set": {
+        "id": "8406:177884",
+        "key": "b4cfb225b474dadc97af8dae41fe05d2c58ab291",
+        "name": "Nav Filter"
+      }
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Nav Filter",
+      "nodeId": "14885:83006",
+      "mainComponent": {
+        "id": "8406:177885",
+        "key": "55fa34b89a1a95b317eff7dec3071ba2a38eb45a",
+        "name": "Property 1=Default"
+      },
+      "set": {
+        "id": "8406:177884",
+        "key": "b4cfb225b474dadc97af8dae41fe05d2c58ab291",
+        "name": "Nav Filter"
+      }
+    },
+    {
+      "variant": "FilterList",
+      "node": "/Cursor/Pointer",
+      "nodeId": "14885:83010",
+      "mainComponent": {
+        "id": "14:11676",
+        "key": "45b86467f55424556fe8b2cdcc9d2300d074cf80",
+        "name": "Cursor/Pointer"
+      },
+      "set": null
+    }
+  ],
+  "counts": {
+    "variants": 1,
+    "nodes": 25,
+    "bindings": 114,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "pattern": {
+    "kind": "frame",
+    "repeats": [
+      {
+        "signature": "152x40:Label",
+        "count": 2,
+        "members": [
+          {
+            "id": "14885:83001",
+            "name": "Nav Filter",
+            "path": "/Nav Filter",
+            "width": 148,
+            "height": 40
+          },
+          {
+            "id": "14885:83006",
+            "name": "Nav Filter",
+            "path": "/Nav Filter",
+            "width": 153,
+            "height": 40
+          }
+        ],
+        "unit": {
+          "name": "Nav Filter",
+          "type": "INSTANCE",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Label",
+              "type": "TEXT",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        "sharedLayers": [
+          "Label"
+        ]
+      }
+    ],
+    "genericLayers": 1,
+    "namedLayers": 24,
+    "roles": [
+      "eyebrow",
+      "media",
+      "text"
+    ],
+    "instancedSets": [
+      "Cursor/Pointer",
+      "Nav Filter"
+    ]
+  },
+  "provenance": {
+    "hash": "sha256:307ef44abd118fe71a810c592808a94c24ee6e2c731da010c1e33c6e813a03ba"
+  }
+}

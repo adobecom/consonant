@@ -1,4 +1,4 @@
-name: Deploy Storybook to GitHub Pages
+name: Deploy site to GitHub Pages
 
 on:
   push:
@@ -9,10 +9,15 @@ permissions:
   contents: write
 
 jobs:
+  authoring-quality:
+    uses: ./.github/workflows/authoring-checks.yml
   deploy:
+    needs: authoring-quality
     runs-on: ubuntu-latest
     env:
       GITHUB_PAGES: true
+      # The site root is the landing page (apps/site); Storybook moved one folder down.
+      STORYBOOK_BASE_PATH: /consonant/storybook/
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,11 +36,17 @@ jobs:
       - name: Build Storybook
         run: npm run storybook:build
 
-      - name: Disable Jekyll (allow _-prefixed assets to be served)
-        run: touch storybook-static/.nojekyll
+      - name: Build Contract Book (read-only snapshot)
+        run: npm run contract-book:build
+
+      - name: Build S2A Studio
+        run: npx nx run authoring-poc:build
+
+      - name: Stage the site (landing page + storybook/ + contract-book/ + authoring/)
+        run: node scripts/stage-site.mjs
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: storybook-static
+          folder: site
           clean-exclude: pr-preview

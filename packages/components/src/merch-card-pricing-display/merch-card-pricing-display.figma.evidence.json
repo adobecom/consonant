@@ -1,0 +1,806 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T17:51:10.014Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": null
+  },
+  "set": {
+    "id": "10328:103581",
+    "key": "d4acacb5413c50ef86f665b290d1d93432a9e3e8",
+    "name": "MerchCard/PricingDisplay",
+    "type": "COMPONENT_SET",
+    "description": "",
+    "meta": {
+      "version": "",
+      "status": "",
+      "updated": "",
+      "changelog": ""
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Additional Details#10328:158",
+      "type": "TEXT",
+      "defaultValue": "Offer terms apply"
+    },
+    {
+      "name": "Billing Cadence#10328:153",
+      "type": "TEXT",
+      "defaultValue": "Billed monthly, cancel anytime"
+    },
+    {
+      "name": "Price#10328:148",
+      "type": "TEXT",
+      "defaultValue": "US$49.99/mo"
+    },
+    {
+      "name": "Show Details#11011:14",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "Show Strikethrough#10466:17",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "Strikethrough Pricing#10328:143",
+      "type": "TEXT",
+      "defaultValue": "US$599.88/yr"
+    },
+    {
+      "name": "variant",
+      "type": "VARIANT",
+      "defaultValue": "Default",
+      "options": [
+        "Default"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "10328:103573",
+      "key": "0b87642f69ec4f952d22d7e280c7a7146377df42",
+      "name": "variant=Default",
+      "props": {
+        "variant": "Default"
+      },
+      "width": 418,
+      "height": 88
+    }
+  ],
+  "anatomy": {
+    "variant": "variant=Default",
+    "tree": {
+      "name": "variant=Default",
+      "type": "COMPONENT",
+      "id": "10328:103573",
+      "layoutMode": "VERTICAL",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "HUG"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "MIN"
+      },
+      "children": [
+        {
+          "name": ".pricing",
+          "type": "FRAME",
+          "id": "11017:117007",
+          "layoutMode": "VERTICAL",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "MIN"
+          },
+          "children": [
+            {
+              "name": ".strikethrough-zone",
+              "type": "FRAME",
+              "id": "10910:16872",
+              "layoutMode": "VERTICAL",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "align": {
+                "primary": "MIN",
+                "counter": "MIN"
+              },
+              "children": [
+                {
+                  "name": ".strikethrough",
+                  "type": "TEXT",
+                  "id": "10466:110273",
+                  "text": "US$599.88/yr",
+                  "sizing": {
+                    "horizontal": "FILL",
+                    "vertical": "HUG"
+                  }
+                }
+              ]
+            },
+            {
+              "name": ".price",
+              "type": "TEXT",
+              "id": "10328:103574",
+              "text": "US$49.99/mo",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              }
+            },
+            {
+              "name": ".billing",
+              "type": "TEXT",
+              "id": "10328:103575",
+              "text": "Billed monthly, cancel anytime",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": ".details-zone",
+          "type": "FRAME",
+          "id": "10842:13614",
+          "layoutMode": "VERTICAL",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "MIN"
+          },
+          "children": [
+            {
+              "name": ".details",
+              "type": "TEXT",
+              "id": "10328:103576",
+              "text": "Offer terms apply",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "variant=Default",
+      "node": "",
+      "nodeId": "10328:103573",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:1:81"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.strikethrough-zone/.strikethrough",
+      "nodeId": "10466:110273",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.strikethrough-zone/.strikethrough",
+      "nodeId": "10466:110273",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.strikethrough-zone/.strikethrough",
+      "nodeId": "10466:110273",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1219"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.strikethrough-zone/.strikethrough",
+      "nodeId": "10466:110273",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.strikethrough-zone/.strikethrough",
+      "nodeId": "10466:110273",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1244"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.strikethrough-zone/.strikethrough",
+      "nodeId": "10466:110273",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1214"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.strikethrough-zone/.strikethrough",
+      "nodeId": "10466:110273",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15539"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.price",
+      "nodeId": "10328:103574",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41398"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.price",
+      "nodeId": "10328:103574",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:1:259"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.price",
+      "nodeId": "10328:103574",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1220"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.price",
+      "nodeId": "10328:103574",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44675"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.price",
+      "nodeId": "10328:103574",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2416:2145"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.price",
+      "nodeId": "10328:103574",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1215"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.price",
+      "nodeId": "10328:103574",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15533"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.billing",
+      "nodeId": "10328:103575",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.billing",
+      "nodeId": "10328:103575",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.billing",
+      "nodeId": "10328:103575",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1219"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.billing",
+      "nodeId": "10328:103575",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.billing",
+      "nodeId": "10328:103575",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1244"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.billing",
+      "nodeId": "10328:103575",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1214"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.billing",
+      "nodeId": "10328:103575",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15539"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.details-zone/.details",
+      "nodeId": "10328:103576",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.details-zone/.details",
+      "nodeId": "10328:103576",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.details-zone/.details",
+      "nodeId": "10328:103576",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1219"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.details-zone/.details",
+      "nodeId": "10328:103576",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.details-zone/.details",
+      "nodeId": "10328:103576",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1244"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.details-zone/.details",
+      "nodeId": "10328:103576",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1214"
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.details-zone/.details",
+      "nodeId": "10328:103576",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15539"
+    }
+  ],
+  "variables": {
+    "VariableID:1:259": {
+      "name": "s2a/font/family/heading",
+      "key": "add9688a96416809b5a0ab2f42ea3d81ad09ae3b",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-heading)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean-display"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean Display"
+      }
+    },
+    "VariableID:1:81": {
+      "name": "s2a/spacing/2",
+      "key": "a64e37922a4cb4d56940b37d234319e4dc007d3a",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-2)"
+      },
+      "valuesByMode": {
+        "Mode 1": 2
+      },
+      "resolved": {
+        "Mode 1": 2
+      }
+    },
+    "VariableID:2352:1214": {
+      "name": "s2a/typography/line-height/body-sm",
+      "key": "3d5273fc189ea037305da8b93a7327f2221e2953",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-body-sm)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:2352:1215": {
+      "name": "s2a/typography/line-height/heading-5",
+      "key": "2733591f237b545fcc1cca5cb521530a8cd4acee",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-heading-5)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/md"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/md"
+        }
+      },
+      "resolved": {
+        "lg": 24,
+        "md": 20,
+        "sm": 20,
+        "xl": 24
+      }
+    },
+    "VariableID:2352:1219": {
+      "name": "s2a/typography/font-size/body-sm",
+      "key": "9f720a1eb06494625075e0656d4ec953777beb09",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-body-sm)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:2352:1220": {
+      "name": "s2a/typography/font-size/heading-5",
+      "key": "85b9cb7ac8b4e41b2bd4a11112d43c317cc4accb",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-heading-5)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/2xl"
+        },
+        "md": {
+          "alias": "s2a/font/size/xl"
+        },
+        "sm": {
+          "alias": "s2a/font/size/lg"
+        },
+        "xl": {
+          "alias": "s2a/font/size/2xl"
+        }
+      },
+      "resolved": {
+        "lg": 24,
+        "md": 20,
+        "sm": 18,
+        "xl": 24
+      }
+    },
+    "VariableID:2352:1244": {
+      "name": "s2a/typography/letter-spacing/body-sm",
+      "key": "138baee5e6441edd39d3975d1c0697655ce70e2d",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-body-sm)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2416:2145": {
+      "name": "s2a/font/letter-spacing/4xl",
+      "key": "63ee700537f272346a9f50ce1b73aa59d9cf0a0a",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-letter-spacing-4xl)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/letter-spacing/neg-0_48"
+        }
+      },
+      "resolved": {
+        "Value": -0.47999998927116394
+      }
+    },
+    "VariableID:2483:41398": {
+      "name": "s2a/color/content/heading",
+      "key": "fb5caee478bd93ef589911d85832be534995bf76",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-heading)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/content/default"
+        },
+        "Dark": {
+          "alias": "s2a/color/content/knockout"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2557:831": {
+      "name": "s2a/font/family/body",
+      "key": "43970d360f3eb862bd1e6a2e31be0d2ac683234e",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:5388:44675": {
+      "name": "s2a/font/weight/heading",
+      "key": "b599da002c11f19b7708d91e04e306295cd60ca4",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-heading)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean-display/black"
+        }
+      },
+      "resolved": {
+        "Value": "Black"
+      }
+    },
+    "VariableID:5388:44676": {
+      "name": "s2a/font/weight/body",
+      "key": "62bc118c0c3bdad19075db8627094145c491b8dc",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/regular"
+        }
+      },
+      "resolved": {
+        "Value": "Regular"
+      }
+    },
+    "VariableID:6:84": {
+      "name": "s2a/color/content/subtle",
+      "key": "8779680478f5ea7993841e307feea91070b8e2db",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/64"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/white/64"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.6399999856948853
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "6:15539": {
+      "name": "s2a/typography/body-sm",
+      "key": "5c1f4eb90381d9149ae4fed206ddff805990e3c8"
+    },
+    "6:15533": {
+      "name": "s2a/typography/heading-5",
+      "key": "532f3890adba713a5d6361c7d801090d22aaa035"
+    }
+  },
+  "explicitModes": [],
+  "instances": [],
+  "counts": {
+    "variants": 1,
+    "nodes": 8,
+    "bindings": 29,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "variant=Default",
+      "node": "",
+      "nodeId": "10328:103573",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing",
+      "nodeId": "11017:117007",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 2
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.strikethrough-zone",
+      "nodeId": "10910:16872",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.pricing/.strikethrough-zone",
+      "nodeId": "10910:16872",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 18
+    },
+    {
+      "variant": "variant=Default",
+      "node": "/.details-zone",
+      "nodeId": "10842:13614",
+      "nodeType": "FRAME",
+      "property": "paddingTop",
+      "value": 4
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:c34ac6abb41dfa19e9c559e1c82a439c302aa222cf74671d2ce79188a3ba6955"
+  }
+}

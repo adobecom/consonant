@@ -9,13 +9,13 @@
 .c-tabs {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--s2a-spacing-lg, 24px);
+  gap: var(--s2a-spacing-lg);
 }
 
 .c-tab {
   display: inline-flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-3xs, 4px);
+  gap: var(--s2a-spacing-3xs);
   padding-block: 1px;
   padding-inline: 0;
   margin: 0;
@@ -26,43 +26,43 @@
 }
 
 .c-tab__label {
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
-  font-weight: var(--s2a-font-weight-adobe-clean-display-black, 900);
-  font-size: var(--s2a-typography-font-size-heading-4, 36px);
-  line-height: var(--s2a-typography-line-height-heading-4, 32px);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-4, -1px);
-  color: var(--s2a-color-content-subtle, rgb(0 0 0 / 0.64));
+  font-family: var(--s2a-font-family-heading);
+  font-weight: var(--s2a-font-weight-heading);
+  font-size: var(--s2a-typography-font-size-heading-4);
+  line-height: var(--s2a-typography-line-height-heading-4);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-4);
+  color: var(--s2a-color-content-subtle);
   white-space: nowrap;
 }
 
 .c-tab__underline {
   height: 2px;
   width: 100%;
-  border-radius: var(--s2a-border-radius-3xs, 2px);
+  border-radius: var(--s2a-border-radius-3xs);
   background-color: transparent;
 }
 
 /* Hover — label darkens (unselected only; selected is already default color) */
 .c-tab:not([disabled]):is(:hover, [data-force-state="hover"]) .c-tab__label {
-  color: var(--s2a-color-content-default, #000);
+  color: var(--s2a-color-content-default);
 }
 
 /* Selected — full-strength label + accent underline */
 .c-tab[aria-selected="true"] .c-tab__label {
-  color: var(--s2a-color-content-default, #000);
+  color: var(--s2a-color-content-default);
 }
 
 .c-tab[aria-selected="true"] .c-tab__underline {
   /* --s2a-color-border-accent is not yet in the shipped token package — Figma binds
      s2a/color/border/accent; hex fallback keeps parity until the token ships. */
-  background-color: var(--s2a-color-border-accent, #3b63fb);
+  background-color: var(--s2a-color-border-accent);
 }
 
 /* Focus ring — same convention as .c-button */
 .c-tab:is(:focus-visible, [data-force-state="focus"]) {
   outline: none;
-  border-radius: var(--s2a-border-radius-3xs, 2px);
-  box-shadow: 0 0 0 var(--s2a-spacing-2xs, 2px) var(--s2a-color-focus-ring-default, #3b63fb);
+  border-radius: var(--s2a-border-radius-3xs);
+  box-shadow: 0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default);
 }
 
 /* Disabled — label stays subtle even when selected; underline drops to subtle */
@@ -71,11 +71,11 @@
 }
 
 .c-tab[disabled] .c-tab__label {
-  color: var(--s2a-color-content-subtle, rgb(0 0 0 / 0.64));
+  color: var(--s2a-color-content-subtle);
 }
 
 .c-tab[disabled][aria-selected="true"] .c-tab__underline {
-  background-color: var(--s2a-color-content-subtle, rgb(0 0 0 / 0.64));
+  background-color: var(--s2a-color-content-subtle);
 }
 
 @media (prefers-reduced-motion: no-preference) {

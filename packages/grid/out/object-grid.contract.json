@@ -1,0 +1,307 @@
+{
+  "$generated": {
+    "name": "s2a-grid-contract-transform",
+    "version": "1"
+  },
+  "id": "s2a.grid.object-grid",
+  "slug": "object-grid",
+  "name": "Responsive object grid",
+  "version": "0.1.0",
+  "kind": "grid",
+  "tier": "sectional",
+  "status": "proposed",
+  "supersededBy": null,
+  "description": "The second grid kind: placement led by the object, not the column. Children declare a minimum and maximum width and the row fits as many as will go, wrapping when they no longer fit. Will's note is the whole specification — 'object based min max lead (can be in or out of a container)' — and the distinction matters because a column grid cannot express 'as many cards as fit, at least 230px each'. Specified in Figma as Responsive-flex-Grid-8 with 120 instances on the layout page; no S2A implementation exists, so every rule here asserts absence and will flip when the CSS lands.",
+  "anchors": {
+    "code": {
+      "stylesheet": "packages/grid/src/s2a-layout-grids.css",
+      "importPath": "@adobecom/s2a-grid/css/grid.css"
+    },
+    "figma": {
+      "collectionId": "VariableCollectionId:6:178",
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "nodeId": "104:26144",
+      "layerName": "Responsive-flex-Grid-8",
+      "designOnly": true
+    }
+  },
+  "breakpoints": [
+    {
+      "id": "sm",
+      "label": "S — Mobile",
+      "figmaMode": "sm",
+      "figmaLabel": "Mobile",
+      "minWidth": null,
+      "maxWidth": 767,
+      "mediaQuery": null,
+      "columns": 6,
+      "mockWidth": 375,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": null,
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.sm.css",
+        "mediaQuery": null,
+        "minWidth": null
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "md",
+      "label": "M — Tablet landscape",
+      "figmaMode": "md",
+      "figmaLabel": "Tablet",
+      "minWidth": 768,
+      "maxWidth": 1279,
+      "mediaQuery": "@media (width >= 768px)",
+      "columns": 12,
+      "mockWidth": 768,
+      "portraitEscape": 900,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 768px)",
+        "minWidth": 768
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.md.css",
+        "mediaQuery": "@media (width >= 768px)",
+        "minWidth": 768
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "lg",
+      "label": "L — Desktop",
+      "figmaMode": "lg",
+      "figmaLabel": "Desktop",
+      "minWidth": 1280,
+      "maxWidth": 1440,
+      "mediaQuery": "@media (width >= 1280px)",
+      "columns": 12,
+      "mockWidth": 1440,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 1280px)",
+        "minWidth": 1280
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.lg.css",
+        "mediaQuery": "@media (width >= 1280px)",
+        "minWidth": 1280
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "xl",
+      "label": "XL — Desktop HD",
+      "figmaMode": "xl",
+      "figmaLabel": "Desktop XL",
+      "minWidth": 1441,
+      "maxWidth": 2560,
+      "mediaQuery": "@media (width >= 1441px)",
+      "columns": 12,
+      "mockWidth": 2560,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media screen and (min-width: 1441px)",
+        "minWidth": 1441
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
+        "mediaQuery": "@media (width >= 1441px)",
+        "minWidth": 1441
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    }
+  ],
+  "breakpointBehavior": [
+    {
+      "breakpoint": "sm",
+      "behavior": "Proposed: one or two per row depending on the declared minimum against a ~327px content width.",
+      "columns": 6
+    },
+    {
+      "breakpoint": "md",
+      "behavior": "Proposed: as many as fit above the minimum; Will's working figure is a 230px floor.",
+      "columns": 12
+    },
+    {
+      "breakpoint": "lg",
+      "behavior": "Proposed: as many as fit, capped by the declared maximum so items do not stretch.",
+      "columns": 12
+    },
+    {
+      "breakpoint": "xl",
+      "behavior": "Proposed: the item count rises with the container rather than the items growing.",
+      "columns": 12
+    }
+  ],
+  "tokens": [
+    {
+      "role": "gutter",
+      "ref": "{s2a.spacing.xs}",
+      "breakpoint": "all",
+      "note": "Figma names the system flex-Grid-8 after this 8px gutter.",
+      "cssVar": "--s2a-spacing-xs",
+      "shipped": true,
+      "values": {
+        "sm": 8,
+        "md": 8,
+        "lg": 8,
+        "xl": 8
+      }
+    }
+  ],
+  "surface": {
+    "classes": [
+      {
+        "name": "object-grid",
+        "purpose": "Proposed: repeat(auto-fit, minmax(min, max)) row that wraps on the item's own minimum.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      },
+      {
+        "name": "object-min-230",
+        "purpose": "Proposed: the 230px floor Will records as covering the current mocks.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      }
+    ],
+    "customProperties": [
+      {
+        "name": "--s2a-object-min",
+        "purpose": "Proposed: the item's minimum width, the value that decides when the row wraps.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      },
+      {
+        "name": "--s2a-object-max",
+        "purpose": "Proposed: the item's maximum width, so a lone item does not stretch across the container.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      }
+    ]
+  },
+  "design": {
+    "collectionId": "VariableCollectionId:6:178",
+    "designOnly": true,
+    "values": {
+      "layout-guide.gap": {
+        "sm": {
+          "value": "{s2a.spacing.xs}",
+          "alias": "{s2a.spacing.xs}",
+          "resolved": 8,
+          "designOnly": false
+        },
+        "md": {
+          "value": "{s2a.spacing.xs}",
+          "alias": "{s2a.spacing.xs}",
+          "resolved": 8,
+          "designOnly": false
+        },
+        "lg": {
+          "value": "{s2a.spacing.xs}",
+          "alias": "{s2a.spacing.xs}",
+          "resolved": 8,
+          "designOnly": false
+        },
+        "xl": {
+          "value": "{s2a.spacing.xs}",
+          "alias": "{s2a.spacing.xs}",
+          "resolved": 8,
+          "designOnly": false
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "id": "OBJ_NOT_IMPLEMENTED",
+      "statement": "No object-grid class exists in S2A yet. This contract is the specification, and this rule is what keeps that honest.",
+      "severity": "fail",
+      "check": {
+        "type": "classAbsent",
+        "name": "object-grid"
+      }
+    },
+    {
+      "id": "OBJ_MIN_ABSENT",
+      "statement": "No object minimum custom property exists yet.",
+      "severity": "fail",
+      "check": {
+        "type": "customPropertyEquals",
+        "name": "--s2a-object-min",
+        "media": null,
+        "expect": "absent"
+      }
+    },
+    {
+      "id": "OBJ_GUTTER_SHIPPED",
+      "statement": "The gutter token the system would use already ships, so the implementation needs no new tokens.",
+      "severity": "fail",
+      "check": {
+        "type": "tokenShipped",
+        "ref": "{s2a.spacing.xs}"
+      }
+    },
+    {
+      "id": "OBJ_FIGMA_GUTTER",
+      "statement": "Figma's layout guide confirms the 8px gutter the name refers to.",
+      "severity": "fail",
+      "check": {
+        "type": "figmaAgrees",
+        "figmaPath": "layout-guide.gap",
+        "mode": "md",
+        "expected": 8
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "OBJ_MIN_VALUE",
+      "question": "What is the canonical object minimum — 230px, as Will's note says covers the mocks, or a token on the spacing scale?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Figma note: 'a min of 230 will cover mocks for now'. 230 is not on the spacing scale, which suggests either a new layout token or a rounded value such as 232 (29 × 8)."
+    },
+    {
+      "id": "OBJ_IN_OR_OUT",
+      "question": "Will's note says an object grid can live inside or outside a container. If outside, what supplies its side margins?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "'(can be in our out of a container)'. Outside a container there is no percentage rule and no token ladder, so an uncontained object grid would need its own margin rule or it bleeds to the viewport edge."
+    },
+    {
+      "id": "OBJ_ORPHAN",
+      "question": "Does the object grid need the orphan behaviour the ups grid has, where a lone last item stretches?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Figma's note about the ups grid mentions 'can add orphan feature to last item of a set'. An auto-fit row leaves a lone item at its maximum width rather than stretching, which may already be the desired behaviour."
+    }
+  ],
+  "visualize": {
+    "demo": "objects",
+    "overlay": false,
+    "note": "Rendered from the proposed rules with inline CSS so the behaviour is visible before the stylesheet exists. Labelled as a proposal, not a shipped class."
+  },
+  "provenance": {
+    "defs": "sha256:fbab4f4d3d59d2b169cc79b628019bfc73da19263a0666cb1df596893939536f",
+    "code": "sha256:2d8048246d27d063bf7883e5e461991c5fb2c29f93d62516512512e6a13b73fb",
+    "figma": "sha256:ab9f2703866168d507517b490fc100eb1401a93b3bc07ee3d033b8220e5872ac",
+    "contract": "sha256:c822c61e318b0a7ce7b575d6c4a19d326df1543d2acff17210a0c4266661bb45"
+  }
+}

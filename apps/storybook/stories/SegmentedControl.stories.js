@@ -76,7 +76,7 @@ export const TwoSegments = {
 /** All three Figma Selected variants side by side. */
 export const AllVariants = {
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-lg); align-items: flex-start;">
       ${[0, 1, 2].map((selected) => SegmentedControl({ selected }))}
     </div>
   `,

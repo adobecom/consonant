@@ -4,7 +4,7 @@
   inline-size: 100%;
   overflow: hidden;
   isolation: isolate;
-  background-color: var(--s2a-color-background-subtle, #f5f5f5);
+  background-color: var(--s2a-color-background-subtle);
   border-radius: inherit;
 }
 
@@ -150,9 +150,10 @@
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    var(--s2a-color-transparent-black-48, rgba(0, 0, 0, 0.48)) 0%,
-    var(--s2a-color-transparent-black-08, rgba(0, 0, 0, 0.08)) 100%
+    var(--s2a-color-transparent-black-48) 0%,
+    var(--s2a-color-transparent-black-08) 100%
   );
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
   opacity: 1;
   transition: opacity 160ms ease-in-out;
 }

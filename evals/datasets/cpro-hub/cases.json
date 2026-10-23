@@ -1,0 +1,40 @@
+{
+  "page": "cpro-hub",
+  "status": "catalog-only",
+  "note": "Section nodes named from the Figma metadata of the CPro hub XL frame on 2026-09-15. No goldens are captured yet: run the Figma MCP get_screenshot per node into golden/<group>/ and add cases to score. Sections without an S2A section recipe in Studio are listed so the gap shows up as NO_CANDIDATE rather than silently.",
+  "sources": {
+    "xl-dark": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "section": "12164:44174 (XL : 1441+ — v2)",
+      "frame": "12164:44175",
+      "captured": null
+    }
+  },
+  "groups": [
+    { "id": "1920-dark", "viewport": { "width": 1920, "height": 1080 }, "theme": "dark", "goldenDir": "golden/1920-dark" }
+  ],
+  "sections": {
+    "hero": { "golden": "hero.webp", "selectors": [".page-section[data-component=\"global-navigation\"]", ".page-section[data-component=\"hero\"]"], "notes": "Nav, centered copy with App ID eyebrow, PromoCTA v2, five image columns. No Studio recipe yet." },
+    "routing-carousel": { "golden": "routing-carousel.webp", "selectors": [".c-hub-router__heading", ".c-hub-router__carousel"], "notes": "Three ElasticCards (Firefly, Acrobat, GenStudio) plus a logo wall. Hub router recipe covers the rail; the logo wall is unbuilt." },
+    "immersive-feature": { "golden": "immersive-feature.webp", "selectors": [".page-section[data-component=\"immersive-feature\"]"], "notes": "Title 2 + ImmersiveCard + FeatureColumn (ImmersiveCard + TextCard). No Studio recipe yet." },
+    "offer": { "golden": "offer.webp", "selectors": [".page-section[data-component=\"offer\"]"], "notes": "doc-mix collage with copy. Unresolved wrappers in Figma; no recipe." },
+    "globe": { "golden": "globe.webp", "selectors": [".page-section[data-component=\"globe\"]"], "notes": "Raster screenshots only in Figma; not a component." },
+    "typographic-social-proof": { "golden": "typographic-social-proof.webp", "selectors": [".page-section[data-component=\"typographic-social-proof\"]"], "notes": "Typographic Social Proof instance with Attribution. No recipe; the Homepage quote carousel is a different pattern." },
+    "use-case-bento": { "golden": "use-case-bento.webp", "selectors": [".page-section[data-component=\"bento\"]"], "notes": "Eyebrow + headline + Bento v2 pair. Bento exists in code (evals/visual bento cases); page recipe pending." },
+    "plans": { "golden": "plans.webp", "selectors": [".page-section[data-component=\"plans\"]"], "notes": "LG - Photo - Dark: Tabs + SegmentedControl + four MerchCards. MerchCard recreations exist in Figma; no recipe." },
+    "agentic-search": { "golden": "agentic-search.webp", "selectors": [".page-section[data-component=\"agentic-search\"]"], "notes": "Headline + input group. No recipe." },
+    "site-footer": { "golden": "site-footer.webp", "selectors": [".c-site-footer"], "notes": "Same footer pattern as the Homepage, with Featured Products and legal rows." }
+  },
+  "cases": [
+    { "group": "1920-dark", "section": "hero", "node": "12164:44178" },
+    { "group": "1920-dark", "section": "routing-carousel", "node": "12164:44344" },
+    { "group": "1920-dark", "section": "immersive-feature", "node": "12164:44425" },
+    { "group": "1920-dark", "section": "offer", "node": "12164:44444" },
+    { "group": "1920-dark", "section": "globe", "node": "12164:44512" },
+    { "group": "1920-dark", "section": "typographic-social-proof", "node": "12164:44516" },
+    { "group": "1920-dark", "section": "use-case-bento", "node": "12164:44658" },
+    { "group": "1920-dark", "section": "plans", "node": "12164:44518" },
+    { "group": "1920-dark", "section": "agentic-search", "node": "12164:44539" },
+    { "group": "1920-dark", "section": "site-footer", "node": "12164:44562" }
+  ]
+}

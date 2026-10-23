@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rich Content — Leadership review</title>
+    <meta
+      name="description"
+      content="Evidence-led review of C2 Jump Links in Figma and Rich Content in Milo."
+    />
+    <style>
+      {{styles}}
+    </style>
+  </head>
+  <body class="rich-report">
+    <nav class="toolbar" aria-label="Report actions">
+      <span>Leadership review · 4 pages · Internal</span
+      ><button type="button" onclick="window.print()">Print / save PDF</button>
+    </nav>
+    <main>
+      <article class="page" aria-label="Executive summary">
+        {{masthead}}
+        <section class="hero">
+          <div class="hero-top">
+            <span class="eyebrow muted">Design system quality · C2</span
+            ><span class="status">Review required</span>
+          </div>
+          <h1>Rich Content</h1>
+          <p class="subtitle">Jump Links · Design-to-code review</p>
+          <p class="lead">
+            Preserve content across variants and align the build with the
+            intended container, spacing, and scrim rules.
+          </p>
+        </section>
+        <section class="metrics" aria-label="Findings by source">
+          <div class="metric">
+            <span class="metric-value">{{examples}}</span
+            ><span class="metric-label"
+              >Figma examples<small>Latest stress-test section</small></span
+            >
+          </div>
+          <div class="metric">
+            <span class="metric-value">{{missingPhotos}}</span
+            ><span class="metric-label"
+              >Missing photo overrides<small>Saved Figma instances</small></span
+            >
+          </div>
+          <div class="metric">
+            <span class="metric-value">{{errors}}</span
+            ><span class="metric-label"
+              >Milo errors<small>Static CSS policy checks</small></span
+            >
+          </div>
+          <div class="metric">
+            <span class="metric-value">{{warnings}}</span
+            ><span class="metric-label"
+              >Milo warnings<small>Items requiring review</small></span
+            >
+          </div>
+        </section>
+        <p class="interpretation">
+          The two sources expose different gaps. Counts are individual findings,
+          not unique defects or a measure of customer impact.
+        </p>
+        <figure class="cover-image">
+          <img
+            src="{{photoXL}}"
+            alt="Figma XL Jump Link example with the Creative Cloud Pro photo, headline, scrim, and three jump links."
+          />
+          <figcaption>
+            <a href="{{nodeXL}}"
+              >Figma · XL example with photo override and scrim enabled ↗</a
+            >
+          </figcaption>
+        </figure>
+        <aside class="recommendation">
+          <div class="eyebrow">Recommended action</div>
+          <p>
+            Assign joint design and engineering owners. Reproduce the reported
+            image-preservation issue, agree on the layout contract, and add
+            behavior checks alongside token and breakpoint validation.
+          </p>
+        </aside>
+        {{footer1}}
+      </article>
+
+      <article class="page" aria-label="Figma image-preservation evidence">
+        {{masthead}}
+        <h2 class="page-title">The photo is absent in three examples</h2>
+        <p class="page-intro">
+          The latest saved LG, MD, and SM examples retain the checkerboard
+          placeholder but lack the photo fill override.
+        </p>
+        <div class="evidence-strip">
+          <figure class="shot">
+            <div class="image">
+              <img
+                src="{{photoLG}}"
+                alt="LG example with checkerboard background and no photo."
+              />
+            </div>
+            <figcaption>
+              <strong>LG · 1440px</strong
+              ><a href="{{nodeLG}}">Example A · Photo absent ↗</a>
+            </figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="image">
+              <img
+                src="{{photoMD}}"
+                alt="MD example with checkerboard background and no photo."
+              />
+            </div>
+            <figcaption>
+              <strong>MD · 1024px</strong
+              ><a href="{{nodeMD}}">Photo absent ↗</a>
+            </figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="image">
+              <img
+                src="{{photoSM}}"
+                alt="SM example with checkerboard background and vertically stacked jump links."
+              />
+            </div>
+            <figcaption>
+              <strong>SM · 375px</strong><a href="{{nodeSM}}">Photo absent ↗</a>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="section-heading">
+          <h2>All six inspected instances</h2>
+          <span class="eyebrow muted">Observed state</span>
+        </div>
+        <table class="snapshot-table">
+          <thead>
+            <tr>
+              <th scope="col">Figma example</th>
+              <th scope="col">Frame width</th>
+              <th scope="col">Photo override</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{instanceRows}}
+          </tbody>
+        </table>
+        <div class="paired-notes">
+          <section>
+            <h3>Confirmed in the file</h3>
+            <p>
+              The shared path is
+              <strong>Background Slot / Background Media</strong>. Photo-bearing
+              instances carry a fill override; the three above do not.
+            </p>
+          </section>
+          <section>
+            <h3>Still to reproduce</h3>
+            <p>
+              Switch an image-bearing instance through XL, LG, MD, SM, then
+              back. Saved-state inspection did not test this transition or
+              establish the cause.
+            </p>
+          </section>
+        </div>
+        <aside class="recommendation">
+          <div class="eyebrow">Proposed acceptance criterion</div>
+          <p>
+            The chosen image survives size changes and a round trip. Crop and
+            layout may adapt; content should remain unless an explicit
+            art-direction rule changes it.
+          </p>
+        </aside>
+        <p class="mini-note">
+          Screenshots and widths describe saved Figma examples. CSS breakpoint
+          thresholds are listed on page 3.
+        </p>
+        {{footer2}}
+      </article>
+
+      <article class="page" aria-label="System intent and decisions">
+        {{masthead}}
+        <h2 class="page-title">Make system intent testable</h2>
+        <p class="page-intro">
+          The page documents a shared layout direction. It also leaves specific
+          height and indent choices open for design sign-off.
+        </p>
+        <section
+          class="policy"
+          aria-label="Will's approved block breakpoint policy"
+        >
+          <div>
+            <strong>SM · Base</strong><span>Mobile without a query</span>
+          </div>
+          <div><strong>MD · ≥ 768px</strong><span>Standard boundary</span></div>
+          <div>
+            <strong>LG · ≥ 1280px</strong><span>Standard boundary</span>
+          </div>
+          <div>
+            <strong>XL · ≥ 1441px</strong><span>Standard boundary</span>
+          </div>
+        </section>
+        <table class="contract">
+          <thead>
+            <tr>
+              <th scope="col">Area</th>
+              <th scope="col">Documented intent</th>
+              <th scope="col">Source evidence / decision</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Container</strong><small>Design + engineering</small>
+              </td>
+              <td>
+                Fixed container with optional indent. Use the shared container
+                and margin system.
+              </td>
+              <td>
+                Milo applies block-specific inline padding, then switches to
+                grid padding at 1920px. Confirm one container rule.<small
+                  ><a href="{{css}}#L77">Base rules ↗</a> ·
+                  <a href="{{css}}#L523">Large-screen rules ↗</a></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Section spacing</strong><small>Design system</small>
+              </td>
+              <td>
+                The design-intent note calls for sectional
+                <strong>4xl top / lg bottom</strong>.
+              </td>
+              <td>
+                Milo selects different spacing tokens by width. Agree on one
+                semantic mapping.<small
+                  ><a href="{{css}}#L479">Spacing overrides ↗</a></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Indent</strong><small>Decision needed</small></td>
+              <td>
+                Optional indent; no indent on mobile. Notes discuss a possible
+                <strong>16 / 8 / 0</strong> scale.
+              </td>
+              <td>
+                Milo uses <code>--s2a-spacing-md</code> from 768px. Confirm the
+                scale and author override rules.<small
+                  ><a href="{{css}}#L408">Indent implementation ↗</a></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Scrim</strong><small>Design + engineering</small></td>
+              <td>
+                A reusable overlay system with deliberate on/off control. The
+                latest Figma instances expose <strong>Show Scrim</strong>.
+              </td>
+              <td>
+                Milo has default gradients and authored overrides. Define
+                matching semantic presets and explicit controls.<small
+                  ><a href="{{css}}#L312">Default gradients ↗</a> ·
+                  <a href="{{js}}#L170">Authored override ↗</a></small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Height</strong><small>Decision needed</small></td>
+              <td>
+                The reconciliation notes explicitly request sign-off on image
+                height at each breakpoint.
+              </td>
+              <td>
+                Milo uses a 584px mobile minimum and 580 / 814 / 1085px heights.
+                Approve one sizing policy before enforcing it.<small
+                  ><a href="{{css}}#L84">Mobile minimum ↗</a> ·
+                  <a href="{{css}}#L388">Responsive height rules ↗</a></small
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <aside class="recommendation">
+          <div class="eyebrow">Separate approved rules from proposals</div>
+          <p>
+            Enforce the established breakpoint policy now. Treat unresolved
+            height, indent, and overlay decisions as review items until the
+            shared contract is approved.
+          </p>
+        </aside>
+        <p class="mini-note">
+          <a href="{{intent}}">Design intent, September 30 ↗</a> ·
+          <a href="{{reconcile}}">Reconciliation notes and standard rules ↗</a>
+          · <a href="{{scrim}}">Scrim discussion ↗</a><br />Source comparison is
+          static. No browser layout or pixel-equivalence test was performed.
+        </p>
+        {{footer3}}
+      </article>
+
+      <article class="page" aria-label="Audit results and next validation work">
+        {{masthead}}
+        <h2 class="page-title">What the validators catch today</h2>
+        <p class="page-intro">
+          One Milo CSS file · {{mediaQueries}} media-query occurrences ·
+          Error-level gate fails. Findings span the whole Rich Content block,
+          including behavior beyond Jump Links.
+        </p>
+        <div class="audit-columns">
+          <section aria-label="Error categories">
+            <div class="audit-head">
+              <strong>{{errors}}</strong><span>Errors</span>
+            </div>
+            {{errorBars}}
+            <p class="chart-note">
+              Errors fail the default gate. Primitive bindings need semantic
+              aliases or documented exceptions.
+            </p>
+          </section>
+          <section class="warning-chart" aria-label="Warning categories">
+            <div class="audit-head">
+              <strong>{{warnings}}</strong><span>Warnings</span>
+            </div>
+            {{warningBars}}
+            <p class="chart-note">
+              Review dimension intent and runtime token sources. Unknown
+              references are not proven broken; shared definitions may be
+              provided elsewhere.
+            </p>
+            <p class="chart-note">
+              Bar lengths show each rule’s share within its own severity group.
+              Counts are occurrences, not unique defects.
+            </p>
+          </section>
+        </div>
+        <section class="roadmap" aria-label="Proposed next validation work">
+          <h2>Next validation work</h2>
+          <div class="roadmap-row">
+            <span class="number">01</span>
+            <div>
+              <strong>Reproduce and protect content preservation</strong>
+              <p>
+                Add a controlled Figma variant-switch check that verifies the
+                chosen image survives all size changes.
+              </p>
+              <span class="owner"
+                >Proposed owner: Figma library maintainers · Not
+                implemented</span
+              >
+            </div>
+          </div>
+          <div class="roadmap-row">
+            <span class="number">02</span>
+            <div>
+              <strong>Define the shared component contract</strong>
+              <p>
+                Record approved container, sectional spacing, indent, height,
+                and scrim rules for both design and code.
+              </p>
+              <span class="owner"
+                >Proposed owner: Design system + Milo engineering · Decisions
+                pending</span
+              >
+            </div>
+          </div>
+          <div class="roadmap-row">
+            <span class="number">03</span>
+            <div>
+              <strong>Add browser acceptance checks</strong>
+              <p>
+                Verify the approved behavior around breakpoint boundaries, with
+                long copy, image changes, and scrim toggles.
+              </p>
+              <span class="owner"
+                >Proposed owner: Engineering + QA · Not implemented</span
+              >
+            </div>
+          </div>
+        </section>
+        <section class="method" aria-label="Evidence and limitations">
+          <p>
+            <strong>Evidence:</strong>
+            <a href="{{stressTest}}">Figma October 13 stress test ↗</a>; six
+            saved instances. Inspection captured {{inspectionDate}}. Screenshots
+            captured {{screenshotDate}}.
+          </p>
+          <p>
+            <strong>Milo:</strong>
+            <a href="{{css}}">rich-content.css · {{revisionShort}} ↗</a>. The
+            generator reruns the static audit and verifies the reviewed counts.
+            Complete findings are included in the companion
+            <strong>audit.json</strong> and <strong>audit.md</strong>.
+          </p>
+          <p>
+            <strong>Limits:</strong> No full Figma-library token audit,
+            variant-switch replay, production browser validation, accessibility
+            assessment, or customer-impact measurement. Figma observations and
+            Milo finding totals must not be combined into one defect count.
+          </p>
+        </section>
+        {{footer4}}
+      </article>
+    </main>
+  </body>
+</html>

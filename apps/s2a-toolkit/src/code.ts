@@ -1,3 +1,136 @@
+import { extractEvidence, hashableBody, canonicalJson } from './contract-extract';
+import { align, type TokenCandidate, type Observed } from './token-align';
+
+// --- token candidates ------------------------------------------------------
+// Every S2A variable we could bind to, resolved.
+//
+// Local variables are not enough. In the S2A file the tokens are local; in a
+// handoff file they live in the enabled library and getLocalVariablesAsync
+// returns nothing, which is the difference between this working and reporting
+// "no tokens to match against" on exactly the files it exists for. So the
+// library collections are imported first, by the same three-step fallback the
+// specs plugin uses: library name, then known collection keys, then a name
+// prefix — each step covers a way the library can be renamed or re-published.
+const S2A_LIBRARY_NAME = 'S2A / Foundations';
+const S2A_COLLECTION_KEYS = new Set([
+  '0eea5cc0320ff548eeb8c5bf34f6ede103b0df06', // Primitives / Dimension / Static
+  '23dfb9688d347020258cb5a8b587fd4c5c7287bc', // Primitives / Color / Theme
+  '6c6b35ec4a5a89cf0598ba78e6c7482370d719ad', // Semantic / Dimension / Static
+  '3659e0dcd09c2dca905bb94def94c5029e4d83ac', // Semantic / Color / Theme
+  'ce424e312b8d55fff344955c7626321200e2bd3f', // Responsive / Container / Grid
+  'd5b5966991929840c34a545607368bdf53922716', // Min-Max
+  '385ccb572e36d571d2cf40d8310b862762468728', // Design Guides
+]);
+
+// Is this one of ours? Used both to pick candidates and to spot a foreign
+// binding. NOT exported: code.ts is bundled as CJS, and a single export turns
+// the output into a module with `module.exports` at the bottom — which the
+// Figma plugin sandbox has no `module` for, so the whole plugin dies on load
+// with "ReferenceError: 'module' is not defined". The build now checks for it.
+function isS2AToken(variableName: string, collectionName: string): boolean {
+  return /^s2a[\/.]/i.test(variableName.trim()) || /^s2a\b/i.test(collectionName.trim());
+}
+
+async function importS2ALibraryVariables(): Promise<Variable[]> {
+  try {
+    const all = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
+    let mine = all.filter(c => c.libraryName === S2A_LIBRARY_NAME);
+    if (!mine.length) mine = all.filter(c => S2A_COLLECTION_KEYS.has(c.key));
+    if (!mine.length) mine = all.filter(c => /^s2a\s*\//i.test(c.name));
+    const out: Variable[] = [];
+    for (const collection of mine) {
+      try {
+        const libVars = await figma.teamLibrary.getVariablesInLibraryCollectionAsync(collection.key);
+        const imported = await Promise.allSettled(libVars.map(v => figma.variables.importVariableByKeyAsync(v.key)));
+        for (const r of imported) if (r.status === 'fulfilled') out.push(r.value);
+      } catch { /* one unreadable collection must not sink the rest */ }
+    }
+    return out;
+  } catch {
+    // No library access (a draft file, or the plugin lacks permission). Local
+    // variables may still be enough, so this is not an error on its own.
+    return [];
+  }
+}
+
+// Primitives are excluded here rather than in the matcher: a primitive is a
+// real value with a real name, so it WILL match, and binding one is exactly the
+// mistake the token hierarchy exists to prevent. Two signals catch them — the
+// collection says "primitive", or the last path segment is a bare number
+// (s2a/spacing/16 is a rung, s2a/spacing/md is a decision).
+const PRIMITIVE_COLLECTION = /primitive|core|raw/i;
+const PRIMITIVE_LEAF = /\/\d+(\.\d+)?$/;
+
+async function tokenCandidates(): Promise<{ candidates: TokenCandidate[]; fromLibrary: number }> {
+  const local = await figma.variables.getLocalVariablesAsync();
+  const library = await importS2ALibraryVariables();
+  const byId = new Map<string, Variable>();
+  for (const v of [...local, ...library]) byId.set(v.id, v);
+
+  const collections = new Map<string, VariableCollection>();
+  const need = [...new Set([...byId.values()].map(v => v.variableCollectionId))];
+  const fetched = await Promise.all(need.map(id => figma.variables.getVariableCollectionByIdAsync(id).catch(() => null)));
+  need.forEach((id, i) => { const c = fetched[i]; if (c) collections.set(id, c); });
+
+  // Alias chains can leave the imported set, so misses are fetched and cached.
+  const resolve = async (v: Variable, modeId: string, depth: number): Promise<unknown> => {
+    const collection = collections.get(v.variableCollectionId);
+    const raw = v.valuesByMode[modeId] ?? v.valuesByMode[collection?.defaultModeId ?? ''];
+    const alias = raw as any;
+    if (alias && typeof alias === 'object' && alias.type === 'VARIABLE_ALIAS') {
+      if (depth > 8) return null;
+      let target = byId.get(alias.id);
+      if (!target) {
+        target = (await figma.variables.getVariableByIdAsync(alias.id).catch(() => null)) ?? undefined;
+        if (target) byId.set(target.id, target);
+      }
+      if (!target) return null;
+      let targetCollection = collections.get(target.variableCollectionId);
+      if (!targetCollection) {
+        targetCollection = (await figma.variables.getVariableCollectionByIdAsync(target.variableCollectionId).catch(() => null)) ?? undefined;
+        if (targetCollection) collections.set(targetCollection.id, targetCollection);
+      }
+      // Follow by mode NAME, so a theme or breakpoint chain lands on the same
+      // rung instead of silently dropping to the target's default.
+      const wanted = collection?.modes.find(m => m.modeId === modeId)?.name;
+      const targetMode = targetCollection?.modes.find(m => m.name === wanted)?.modeId
+        ?? targetCollection?.defaultModeId ?? modeId;
+      return resolve(target, targetMode, depth + 1);
+    }
+    return raw;
+  };
+
+  const candidates: TokenCandidate[] = [];
+  let fromLibrary = 0;
+  const libraryIds = new Set(library.map(v => v.id));
+  for (const v of byId.values()) {
+    if (v.resolvedType !== 'COLOR' && v.resolvedType !== 'FLOAT') continue;
+    const collection = collections.get(v.variableCollectionId);
+    const collectionName = collection?.name ?? '';
+    if (!isS2AToken(v.name, collectionName)) continue;
+    if (PRIMITIVE_COLLECTION.test(collectionName)) continue;
+    if (PRIMITIVE_LEAF.test(v.name)) continue;
+    const defaultMode = collection?.defaultModeId ?? Object.keys(v.valuesByMode)[0] ?? '';
+    const value = await resolve(v, defaultMode, 0);
+    if (v.resolvedType === 'COLOR' && (value == null || typeof value !== 'object')) continue;
+    if (v.resolvedType === 'FLOAT' && typeof value !== 'number') continue;
+    const other = collection?.modes.find(m => m.modeId !== defaultMode)?.modeId;
+    const darkValue = other ? await resolve(v, other, 0) : null;
+    candidates.push({
+      id: v.id, name: v.name, collection: collectionName,
+      resolvedType: v.resolvedType, value: value as any,
+      scopes: (v.scopes as unknown as string[]) ?? [],
+      ...(darkValue != null ? { darkValue: darkValue as any } : {}),
+    });
+    if (libraryIds.has(v.id)) fromLibrary++;
+  }
+  return { candidates, fromLibrary };
+}
+
+import { buildSetFromPlan } from './contract-build';
+import { normalizeFromSource } from './contract-normalize';
+import { checkDocFrame } from './doc-check';
+
 // ── Serializers ──────────────────────────────────────────────────────────────
 
 function serializeVariable(v: Variable): Record<string, unknown> {
@@ -164,6 +297,91 @@ async function handleBridgeMethod(method: string, params: Record<string, any>): 
           fileKey: figma.fileKey || null,
           fileName: figma.root.name,
           page: { id: figma.currentPage.id, name: figma.currentPage.name },
+        },
+      };
+    }
+
+    // CAPTURE_SCREENSHOT — export a node (or the current page) as PNG/JPG/SVG via
+    // exportAsync; mirrors the bundled Desktop Bridge so figma_capture_screenshot works
+    // through the toolkit. Scale is capped so the longest side is ≤ 1568px (Claude's
+    // vision ceiling) — larger exports only cost bandwidth and tokens.
+    case 'CAPTURE_SCREENSHOT': {
+      const node = params.nodeId ? await figma.getNodeByIdAsync(params.nodeId as string) : figma.currentPage;
+      if (!node) throw new Error('Node not found: ' + params.nodeId);
+      if (!('exportAsync' in node)) throw new Error('Node type ' + node.type + ' does not support export');
+      const format = ((params.format as string) || 'PNG').toUpperCase() as 'PNG' | 'JPG' | 'SVG';
+      const requestedScale = Number(params.scale) > 0 ? Number(params.scale) : 1;
+      let scale = requestedScale;
+      const AI_MAX_DIMENSION = 1568;
+      let w = 0, h = 0;
+      if (node.type === 'PAGE') {
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        for (const child of (node as PageNode).children) {
+          const bb = (child as SceneNode).absoluteBoundingBox;
+          if (child.visible !== false && bb) {
+            minX = Math.min(minX, bb.x); minY = Math.min(minY, bb.y);
+            maxX = Math.max(maxX, bb.x + bb.width); maxY = Math.max(maxY, bb.y + bb.height);
+          }
+        }
+        if (minX !== Infinity) { w = maxX - minX; h = maxY - minY; }
+      } else if ('width' in node && 'height' in node) {
+        w = (node as SceneNode & { width: number; height: number }).width;
+        h = (node as SceneNode & { width: number; height: number }).height;
+      }
+      if (w > 0 && h > 0) {
+        const longest = Math.max(w, h);
+        if (longest * scale > AI_MAX_DIMENSION) scale = AI_MAX_DIMENSION / longest;
+      }
+      const advice: string[] = [];
+      if (scale < requestedScale) advice.push('Scale capped from ' + requestedScale + 'x to ' + scale.toFixed(2) + 'x (AI vision max: 1568px).');
+      if (node.type === 'PAGE' && scale < 0.5) advice.push('Full-page capture at ' + scale.toFixed(2) + 'x — text may be unreadable. Pass a nodeId to target a specific frame.');
+      const settings: ExportSettings = format === 'SVG'
+        ? { format: 'SVG' }
+        : { format, constraint: { type: 'SCALE', value: scale } };
+      const bytes = await (node as ExportMixin).exportAsync(settings);
+      const bounds = 'absoluteBoundingBox' in node ? (node as SceneNode).absoluteBoundingBox : null;
+      return {
+        image: {
+          base64: figma.base64Encode(bytes),
+          format,
+          scale,
+          byteLength: bytes.length,
+          node: { id: node.id, name: node.name, type: node.type },
+          bounds,
+          formatAdvice: advice.join(' '),
+        },
+      };
+    }
+
+    // CREATE_SLOT — add a native Slot to a COMPONENT (one call per variant for a set).
+    // createSlot() takes no arguments; renaming the returned node is the naming API.
+    case 'CREATE_SLOT': {
+      const target = await figma.getNodeByIdAsync(params.nodeId as string);
+      if (!target) throw new Error('Node not found: ' + params.nodeId);
+      if (target.type !== 'COMPONENT') {
+        throw new Error('Node must be a COMPONENT (standalone or a variant inside a COMPONENT_SET). Got: ' + target.type + '. For a COMPONENT_SET, call this once per variant component.');
+      }
+      const comp = target as ComponentNode & { createSlot?: () => SceneNode & FrameNode };
+      if (typeof comp.createSlot !== 'function') {
+        throw new Error('createSlot() is not available. Update Figma Desktop to a version with Slots support.');
+      }
+      const slot = comp.createSlot();
+      if (params.name) slot.name = String(params.name);
+      if (params.layoutMode === 'GRID') throw new Error('GRID layoutMode is not allowed on slot nodes');
+      if (params.layoutMode) slot.layoutMode = params.layoutMode as 'NONE' | 'HORIZONTAL' | 'VERTICAL';
+      if (params.width !== undefined || params.height !== undefined) {
+        slot.resize(params.width !== undefined ? Number(params.width) : slot.width,
+                    params.height !== undefined ? Number(params.height) : slot.height);
+      }
+      let propertyKey: string | null = null;
+      try {
+        const refs = (slot as SceneNode & { componentPropertyReferences?: Record<string, string> }).componentPropertyReferences;
+        if (refs && refs.slotContentId) propertyKey = refs.slotContentId;
+      } catch { /* ignore */ }
+      return {
+        slot: {
+          id: slot.id, name: slot.name, type: slot.type, propertyKey,
+          width: slot.width, height: slot.height, layoutMode: slot.layoutMode,
         },
       };
     }
@@ -380,6 +598,38 @@ figma.on('currentpagechange', () => {
 
 // ── Message handler ──────────────────────────────────────────────────────────
 
+const PLUGIN_VERSION = '0.2.1';
+
+/**
+ * Hand the extractor to the sandbox.
+ *
+ * figma_execute runs inside THIS plugin — the toolkit is the Desktop Bridge —
+ * so an agent already has the whole plugin API. What it does not have is the
+ * plugin's own code: esbuild scopes the bundle, so `extractEvidence` is
+ * unreachable from an evaluated snippet and the only alternative is shipping a
+ * second copy of the extractor as a code payload. A second copy drifts, and a
+ * drifted extractor produces evidence that disagrees with the plugin's for
+ * reasons nobody can see.
+ *
+ * So the same function the Extract button calls is published here, with the
+ * api already wired to figma.*. One extractor, one behaviour, whoever drives it.
+ */
+(globalThis as unknown as { S2A?: unknown }).S2A = {
+  version: PLUGIN_VERSION,
+  /** Evidence for one node, exactly as the Extract button produces it. */
+  extract: (node: BaseNode) => extractEvidence({
+    fileKey: figma.fileKey ?? null,
+    fileName: figma.root.name,
+    pluginVersion: PLUGIN_VERSION,
+    getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
+    getVariableCollectionByIdAsync: (id) => figma.variables.getVariableCollectionByIdAsync(id),
+    getStyleByIdAsync: (id) => figma.getStyleByIdAsync(id),
+  }, node as never),
+  /** The two helpers a caller needs to hash and compare what it got. */
+  hashableBody,
+  canonicalJson,
+};
+
 figma.showUI(__html__, { width: 320, height: 480, themeColors: true });
 
 // Anonymous, random per-install id for usage telemetry. Not tied to identity —
@@ -394,6 +644,54 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
     case 'ui-ready':
       notifySelection();
       break;
+
+    // Walk every component page and record what each published set is built
+    // from. The plugin is the only thing that can read the file, so the
+    // composition snapshot is refreshed from here rather than pasted in by hand.
+    case 'contract-scan-composition': {
+      try {
+        // Atomic level lives in page ORDER, not nesting: a separator page opens
+        // a group, and every indented page after it belongs to that group.
+        const GROUPS: Record<string, string> = {
+          '\u{1F9E9} Atoms': 'atom', '\u{1F9EC} Molecules': 'molecule', '\u{1F9EB} Organisms': 'organism',
+          '\u{1F0CF} Cards': 'card', '\u{1F9F1} Foundations ': 'foundation', '\u{1F6E0}\u{FE0F} Tooling': 'tooling',
+          '\u{1F3E0} Internal': 'internal', '\u{1F9ED} Exploration': 'exploration', '\u{1F4D0} Templates': 'template',
+        };
+        const groups: Record<string, string> = {};
+        const pages: PageNode[] = [];
+        let current: string | null = null;
+        for (const p of figma.root.children) {
+          if (Object.prototype.hasOwnProperty.call(GROUPS, p.name)) { current = GROUPS[p.name]; continue; }
+          if (/^-+$/.test(p.name.trim())) { current = null; continue; }
+          if (!p.name.startsWith('   \u21B3')) { current = null; continue; }
+          if (!current) continue;
+          groups[p.name.replace('   \u21B3 ', '').trim()] = current;
+          if (['atom', 'molecule', 'organism', 'card'].includes(current)) pages.push(p);
+        }
+        const composes: Record<string, string[]> = {};
+        for (const page of pages) {
+          await page.loadAsync();
+          // A COMPONENT inside a COMPONENT_SET is a variant, not a unit of its own.
+          const units = page.findAllWithCriteria({ types: ['COMPONENT_SET', 'COMPONENT'] })
+            .filter((n) => !(n.type === 'COMPONENT' && n.parent && n.parent.type === 'COMPONENT_SET'));
+          for (const u of units) {
+            const kids = new Set<string>();
+            for (const ins of u.findAllWithCriteria({ types: ['INSTANCE'] })) {
+              const m = await ins.getMainComponentAsync();
+              if (!m) continue;
+              const set = m.parent && m.parent.type === 'COMPONENT_SET' ? m.parent : m;
+              if (set.id === u.id) continue;
+              kids.add(set.name.replace(/^\u{1F6AB}\s*/u, ''));
+            }
+            composes[u.name.replace(/^\u{1F6AB}\s*/u, '')] = [...kids];
+          }
+        }
+        figma.ui.postMessage({ type: 'contract:composition', composes, groups, fileKey: figma.fileKey ?? null });
+      } catch (err) {
+        figma.ui.postMessage({ type: 'contract:composition', error: (err as Error)?.message || String(err) });
+      }
+      break;
+    }
 
     // Provision the anonymous telemetry id (and opt-out flag) for the UI.
     case 'telemetry:init': {
@@ -414,6 +712,22 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
     case 'gh-token:get': {
       const token = (await figma.clientStorage.getAsync('gh-token')) ?? '';
       figma.ui.postMessage({ type: 'gh-token:value', token });
+      break;
+    }
+
+    // Contract sync endpoint: localhost:9410 in development, the relay when
+    // published. Per user, never in the document. The relay key is optional.
+    case 'contract-endpoint:get': {
+      const endpoint = ((await figma.clientStorage.getAsync('contract-endpoint')) as string | undefined) || 'http://localhost:9410';
+      const relayKey = ((await figma.clientStorage.getAsync('contract-relay-key')) as string | undefined) || '';
+      figma.ui.postMessage({ type: 'contract-endpoint:value', endpoint, relayKey });
+      break;
+    }
+    case 'contract-endpoint:set': {
+      const endpoint = ((msg.endpoint as string) || '').trim();
+      const relayKey = ((msg.relayKey as string) || '').trim();
+      if (endpoint) await figma.clientStorage.setAsync('contract-endpoint', endpoint); else await figma.clientStorage.deleteAsync('contract-endpoint');
+      if (relayKey) await figma.clientStorage.setAsync('contract-relay-key', relayKey); else await figma.clientStorage.deleteAsync('contract-relay-key');
       break;
     }
 
@@ -508,6 +822,165 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
 
     case 'notify': {
       figma.notify(msg.message as string);
+      break;
+    }
+
+    // Build a component set from a contract's figma.plan.json (see contract-build.ts).
+    // Export a node as PNG and hand it to the sync server through the UI
+    // (see ui.ts contract:artifact). { nodeId, name, scale? } → file on disk.
+    case 'contract:export': {
+      try {
+        const node = await figma.getNodeByIdAsync(String(msg.nodeId)) as SceneNode | null;
+        if (!node || !('exportAsync' in node)) throw new Error(`node ${msg.nodeId} not exportable`);
+        const bytes = await (node as ExportMixin).exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: Number(msg.scale) || 1 } });
+        figma.ui.postMessage({ type: 'contract:artifact', name: String(msg.name || `${node.name}.png`), b64: figma.base64Encode(bytes) });
+      } catch (err: any) { figma.ui.postMessage({ type: 'contract:artifact:saved', name: msg.name, error: err?.message || String(err) }); }
+      break;
+    }
+    case 'contract:build-set': {
+      try {
+        // Golden first: when the contract's anchor is in this file, clone it and
+        // apply the contract (names, properties, matching tokens, drift report).
+        // The dictionary scaffold is only for contracts with no design here.
+        const plan = msg.plan as any;
+        const anchored = plan?.anchors?.nodeId ? await figma.getNodeByIdAsync(plan.anchors.nodeId) : null;
+        const report = anchored && 'clone' in anchored ? await normalizeFromSource(plan, { adopt: Boolean(msg.adopt) }) : await buildSetFromPlan(plan);
+        const drift = (report as any).drift?.length ?? 0;
+        figma.notify(`Built ${report.set}: ${report.variants} variant${report.variants === 1 ? '' : 's'}, ${report.layers} layers${drift ? `, ${drift} token drift` : ''}`);
+        figma.ui.postMessage({ type: 'contract:build-set:done', report });
+      } catch (err: any) {
+        figma.ui.postMessage({ type: 'contract:build-set:done', error: (err?.message || String(err)) + (err?.stack ? ' @ ' + String(err.stack).split('\n')[1]?.trim() : '') });
+      }
+      break;
+    }
+
+    // Contract evidence: a deterministic walk of the selected component set
+    // (or the set behind a selected variant / instance). No judgment here; the
+    // UI hashes and publishes the result to the sync server.
+    case 'contract:extract': {
+      const startedAt = Date.now();
+      try {
+        let node: BaseNode | null = msg.setId ? await figma.getNodeByIdAsync(msg.setId as string) : (figma.currentPage.selection[0] ?? null);
+        if (node && node.type === 'INSTANCE') node = await (node as InstanceNode).getMainComponentAsync();
+        const EXTRACTABLE = ['COMPONENT_SET', 'COMPONENT', 'FRAME', 'SECTION', 'GROUP'];
+        if (!node || !EXTRACTABLE.includes(node.type)) {
+          figma.ui.postMessage({ type: 'contract:evidence', error: 'Select a component set, a variant, an instance, or a frame to extract as a candidate' });
+          break;
+        }
+        const candidateName = ((msg.name as string) || '').trim();
+        const isFrameLike = node.type === 'FRAME' || node.type === 'SECTION' || node.type === 'GROUP';
+        if (candidateName && isFrameLike && msg.rename) node.name = candidateName;
+        const evidence = await extractEvidence({
+          fileKey: figma.fileKey ?? null,
+          fileName: figma.root.name,
+          pluginVersion: PLUGIN_VERSION,
+          getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
+          getVariableCollectionByIdAsync: (id) => figma.variables.getVariableCollectionByIdAsync(id),
+          getStyleByIdAsync: (id) => figma.getStyleByIdAsync(id),
+        }, node as any);
+        if (candidateName && isFrameLike) {
+          // The layer name stays on record; the candidate name is what the
+          // contract, the slug and the proposal use.
+          (evidence.set as any).layerName = msg.rename ? candidateName : node.name;
+          evidence.set.name = candidateName;
+        }
+        figma.ui.postMessage({
+          type: 'contract:evidence',
+          evidence,
+          hashInput: hashableBody(evidence),
+          canonical: canonicalJson(evidence),
+          durationMs: Date.now() - startedAt,
+        });
+      } catch (err: any) {
+        figma.ui.postMessage({ type: 'contract:evidence', error: (err?.message || String(err)) + (err?.stack ? ' @ ' + String(err.stack).split('\n')[1]?.trim() : '') });
+      }
+      break;
+    }
+
+    case 'contract-align': {
+      // Report only. It reads the selection and says which literals are which
+      // tokens and how sure that is; nothing in the document changes. Applying
+      // is a separate, gated action, because a confident wrong bind costs more
+      // than an unbound value somebody can see.
+      const startedAt = Date.now();
+      try {
+        let node: BaseNode | null = msg.setId ? await figma.getNodeByIdAsync(msg.setId as string) : (figma.currentPage.selection[0] ?? null);
+        if (node && node.type === 'INSTANCE') node = await (node as InstanceNode).getMainComponentAsync();
+        const ALIGNABLE = ['COMPONENT_SET', 'COMPONENT', 'FRAME', 'SECTION', 'GROUP'];
+        if (!node || !ALIGNABLE.includes(node.type)) {
+          figma.ui.postMessage({ type: 'contract:align', error: 'Select a frame, a component or a component set to align' });
+          break;
+        }
+        const evidence = await extractEvidence({
+          fileKey: figma.fileKey ?? null,
+          fileName: figma.root.name,
+          pluginVersion: PLUGIN_VERSION,
+          getVariableByIdAsync: (id) => figma.variables.getVariableByIdAsync(id),
+          getVariableCollectionByIdAsync: (id) => figma.variables.getVariableCollectionByIdAsync(id),
+          getStyleByIdAsync: (id) => figma.getStyleByIdAsync(id),
+        }, node as any);
+
+        const { candidates, fromLibrary } = await tokenCandidates();
+        if (!candidates.length) {
+          figma.ui.postMessage({ type: 'contract:align', error: 'No S2A variables are reachable from this file. Enable the S2A / Foundations library here, then try again.' });
+          break;
+        }
+
+        // One finding per node+property. A ten-variant set repeats the same
+        // layer ten times, and reporting the same raw hex ten times buries the
+        // ten that are actually different.
+        const seen = new Set<string>();
+        const observations: Observed[] = [];
+        for (const u of evidence.unboundValues ?? []) {
+          const key = `${u.nodeId}:${u.property}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          observations.push({
+            node: u.node, nodeId: u.nodeId, nodeType: u.nodeType,
+            property: u.property, value: u.value, backdrop: u.backdrop, source: 'hardcoded',
+          });
+        }
+
+        // Bound, but to somebody else's variable. This looks compliant in the
+        // layers panel and passes any check that only asks "is this bound?",
+        // which makes it the easiest thing in a handoff to miss — and the most
+        // common thing to find when the other team has tokens of their own.
+        const vars = evidence.variables as Record<string, { name: string; collection: string; resolved: Record<string, unknown> }>;
+        for (const b of evidence.bindings) {
+          if (!b.variable) continue;
+          const v = vars[b.variable];
+          if (!v || isS2AToken(v.name, v.collection)) continue;
+          const key = `${b.nodeId}:${b.property}`;
+          if (seen.has(key)) continue;
+          const resolved = Object.values(v.resolved ?? {})[0];
+          if (resolved == null || (typeof resolved !== 'number' && typeof resolved !== 'object')) continue;
+          seen.add(key);
+          observations.push({
+            node: b.node, nodeId: b.nodeId, nodeType: b.nodeType,
+            property: b.property, value: resolved as any,
+            source: 'wrong-library', currentBinding: v.name,
+          });
+        }
+
+        const result = align(observations, candidates);
+        const foreign = result.findings.filter(f => f.source === 'wrong-library').length;
+
+        figma.ui.postMessage({
+          type: 'contract:align',
+          target: { id: node.id, name: evidence.set.name, type: node.type },
+          bound: evidence.counts.bindings,
+          candidates: candidates.length,
+          fromLibrary,
+          scopeless: result.findings.some(f => f.scopeless),
+          foreign,
+          scale: result.scale,
+          summary: result.summary,
+          findings: result.findings,
+          durationMs: Date.now() - startedAt,
+        });
+      } catch (err: any) {
+        figma.ui.postMessage({ type: 'contract:align', error: (err?.message || String(err)) });
+      }
       break;
     }
 
@@ -707,6 +1180,80 @@ figma.ui.onmessage = async (msg: { type: string; [key: string]: unknown }) => {
         figma.ui.postMessage({ type: 'bridge:command-result', requestId, success: true, ...result });
       } catch (e: any) {
         figma.ui.postMessage({ type: 'bridge:command-result', requestId, success: false, error: e.message || String(e) });
+      }
+      break;
+    }
+
+    // Clicking a reported issue jumps to the layer it is about — a finding you
+    // cannot locate is barely a finding.
+    // An INSTANCE_SWAP already declares what belongs in it: a default component
+    // and Figma's preferred-values list. Reading that beats asking a person to
+    // scan every contract in the repo for the one the set already points at.
+    case 'studio:swap-targets': {
+      try {
+        let node = await figma.getNodeByIdAsync(msg.setId as string);
+        if (node && node.type === 'COMPONENT' && node.parent?.type === 'COMPONENT_SET') node = node.parent;
+        if (!node || (node.type !== 'COMPONENT_SET' && node.type !== 'COMPONENT')) {
+          figma.ui.postMessage({ type: 'studio:swap-targets-result', targets: {} });
+          break;
+        }
+        const defs = (node as ComponentSetNode).componentPropertyDefinitions ?? {};
+        // A variant resolves to its set: "Chevron / down" is the Chevron contract.
+        const setNameOf = (n: BaseNode | null) => !n ? null : (n.parent && n.parent.type === 'COMPONENT_SET' ? n.parent.name : n.name);
+        const targets: Record<string, Array<{ role: string; name: string }>> = {};
+        for (const [prop, def] of Object.entries(defs)) {
+          if ((def as any).type !== 'INSTANCE_SWAP') continue;
+          const found: Array<{ role: string; name: string }> = [];
+          const seen = new Set<string>();
+          const add = (role: string, name: string | null) => { if (name && !seen.has(name)) { seen.add(name); found.push({ role, name }); } };
+          const dv = (def as any).defaultValue as string | undefined;
+          if (dv) { try { add('default', setNameOf(await figma.getNodeByIdAsync(dv))); } catch { /* the default may live in a library */ } }
+          for (const pv of ((def as any).preferredValues ?? []) as Array<{ type: string; key: string }>) {
+            try {
+              const imported = pv.type === 'COMPONENT_SET'
+                ? await figma.importComponentSetByKeyAsync(pv.key)
+                : await figma.importComponentByKeyAsync(pv.key);
+              add('preferred', setNameOf(imported));
+            } catch { /* an unpublished or unreachable key is not an error here */ }
+          }
+          targets[prop] = found;
+        }
+        figma.ui.postMessage({ type: 'studio:swap-targets-result', targets });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'studio:swap-targets-result', targets: {}, error: e.message || String(e) });
+      }
+      break;
+    }
+
+    case 'docs:reveal': {
+      const node = await figma.getNodeByIdAsync(msg.nodeId as string);
+      if (!node || !('visible' in node)) { figma.notify('That layer is gone — re-run the check'); break; }
+      const page = (() => { let n: BaseNode | null = node; while (n && n.type !== 'PAGE') n = n.parent; return n as PageNode | null; })();
+      if (page && page !== figma.currentPage) await figma.setCurrentPageAsync(page);
+      figma.currentPage.selection = [node as SceneNode];
+      figma.viewport.scrollAndZoomIntoView([node as SceneNode]);
+      break;
+    }
+
+    case 'docs:check': {
+      try {
+        const node = await figma.getNodeByIdAsync(msg.nodeId as string);
+        if (!node || node.type !== 'FRAME') {
+          figma.ui.postMessage({ type: 'docs:check-result', error: 'Select a documentation frame' });
+          break;
+        }
+        const { issues, textNodes, theme } = await checkDocFrame(node as FrameNode);
+        figma.ui.postMessage({
+          type: 'docs:check-result',
+          name: node.name,
+          textNodes,
+          theme,
+          fails: issues.filter(i => i.level === 'fail').length,
+          warns: issues.filter(i => i.level === 'warn').length,
+          issues,
+        });
+      } catch (e: any) {
+        figma.ui.postMessage({ type: 'docs:check-result', error: e.message || String(e) });
       }
       break;
     }

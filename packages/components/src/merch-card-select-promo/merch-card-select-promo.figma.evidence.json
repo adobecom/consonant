@@ -1,0 +1,1106 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T17:51:13.647Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": null
+  },
+  "set": {
+    "id": "10320:102024",
+    "key": "21d873b57a741880c8aac50fa2391c6938c5cb94",
+    "name": "MerchCard/SelectPromo",
+    "type": "COMPONENT_SET",
+    "description": "",
+    "meta": {
+      "version": "",
+      "status": "",
+      "updated": "",
+      "changelog": ""
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "defaultValue": "collapsed",
+      "options": [
+        "collapsed"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "10320:102006",
+      "key": "0b5891cf4f40c16a8bebeb6a37bc92e6f90bd449",
+      "name": "State=collapsed",
+      "props": {
+        "State": "collapsed"
+      },
+      "width": 418,
+      "height": 72
+    }
+  ],
+  "anatomy": {
+    "variant": "State=collapsed",
+    "tree": {
+      "name": "State=collapsed",
+      "type": "COMPONENT",
+      "id": "10320:102006",
+      "layoutMode": "VERTICAL",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "HUG"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "MIN"
+      },
+      "children": [
+        {
+          "name": ".trigger",
+          "type": "INSTANCE",
+          "id": "10320:102007",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "FIXED"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "CENTER"
+          },
+          "children": [
+            {
+              "name": ".value",
+              "type": "TEXT",
+              "id": "I10320:102007;10298:101866",
+              "text": "1 License",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              }
+            },
+            {
+              "name": ".icon",
+              "type": "INSTANCE",
+              "id": "I10320:102007;10298:101867",
+              "layoutMode": "HORIZONTAL",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              },
+              "align": {
+                "primary": "MIN",
+                "counter": "MIN"
+              },
+              "children": [
+                {
+                  "name": "S2_Icon_UIChevron_Size300_N",
+                  "type": "INSTANCE",
+                  "id": "I10320:102007;10298:101867;8873:23277",
+                  "layoutMode": "HORIZONTAL",
+                  "sizing": {
+                    "horizontal": "FILL",
+                    "vertical": "FIXED"
+                  },
+                  "align": {
+                    "primary": "MIN",
+                    "counter": "MIN"
+                  },
+                  "children": [
+                    {
+                      "name": "Frame",
+                      "type": "FRAME",
+                      "id": "I10320:102007;10298:101867;8873:23277;214:91",
+                      "sizing": {
+                        "horizontal": "FILL",
+                        "vertical": "FILL"
+                      },
+                      "children": [
+                        {
+                          "name": "iconPrimary",
+                          "type": "VECTOR",
+                          "id": "I10320:102007;10298:101867;8873:23277;214:92",
+                          "sizing": {
+                            "horizontal": "FIXED",
+                            "vertical": "FIXED"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": ".helper",
+          "type": "FRAME",
+          "id": "10320:102013",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "MIN"
+          },
+          "children": [
+            {
+              "name": "HelperText",
+              "type": "INSTANCE",
+              "id": "10324:102970",
+              "layoutMode": "HORIZONTAL",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              },
+              "align": {
+                "primary": "MIN",
+                "counter": "MIN"
+              },
+              "children": [
+                {
+                  "name": ".text",
+                  "type": "TEXT",
+                  "id": "I10324:102970;10243:101694",
+                  "text": "Save 7.5% your first year with 3+ licenses. See terms",
+                  "sizing": {
+                    "horizontal": "FILL",
+                    "vertical": "HUG"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "State=collapsed",
+      "node": "",
+      "nodeId": "10320:102006",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:48"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "",
+      "nodeId": "10320:102006",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:48"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "",
+      "nodeId": "10320:102006",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:6:47"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "",
+      "nodeId": "10320:102006",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:48"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "",
+      "nodeId": "10320:102006",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:48"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:1:48"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:1:48"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "fills",
+      "variable": "VariableID:6:49"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:1:83"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "variable": "VariableID:1:84"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "paddingLeft",
+      "variable": "VariableID:1:84"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "paddingRight",
+      "variable": "VariableID:1:84"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "variable": "VariableID:1:84"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:1:53"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:1:53"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:1:53"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:1:53"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "strokes",
+      "variable": "VariableID:6:22"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:1:48"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "topRightRadius",
+      "variable": "VariableID:1:48"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.value",
+      "nodeId": "I10320:102007;10298:101866",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.value",
+      "nodeId": "I10320:102007;10298:101866",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.value",
+      "nodeId": "I10320:102007;10298:101866",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.value",
+      "nodeId": "I10320:102007;10298:101866",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.value",
+      "nodeId": "I10320:102007;10298:101866",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.value",
+      "nodeId": "I10320:102007;10298:101866",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.value",
+      "nodeId": "I10320:102007;10298:101866",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.icon/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I10320:102007;10298:101867;8873:23277;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper",
+      "nodeId": "10320:102013",
+      "nodeType": "FRAME",
+      "property": "paddingBottom",
+      "variable": "VariableID:1:83"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper",
+      "nodeId": "10320:102013",
+      "nodeType": "FRAME",
+      "property": "paddingLeft",
+      "variable": "VariableID:1:84"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper",
+      "nodeId": "10320:102013",
+      "nodeType": "FRAME",
+      "property": "paddingRight",
+      "variable": "VariableID:1:84"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper",
+      "nodeId": "10320:102013",
+      "nodeType": "FRAME",
+      "property": "paddingTop",
+      "variable": "VariableID:1:83"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper/HelperText/.text",
+      "nodeId": "I10324:102970;10243:101694",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper/HelperText/.text",
+      "nodeId": "I10324:102970;10243:101694",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:834"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper/HelperText/.text",
+      "nodeId": "I10324:102970;10243:101694",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1239"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper/HelperText/.text",
+      "nodeId": "I10324:102970;10243:101694",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44679"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper/HelperText/.text",
+      "nodeId": "I10324:102970;10243:101694",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1230"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper/HelperText/.text",
+      "nodeId": "I10324:102970;10243:101694",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1238"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper/HelperText/.text",
+      "nodeId": "I10324:102970;10243:101694",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15545"
+    }
+  ],
+  "variables": {
+    "VariableID:1:48": {
+      "name": "s2a/border/radius/8",
+      "key": "3ee9a28013925bcacb9756ba8c74efe5a08d14be",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-radius-8)"
+      },
+      "valuesByMode": {
+        "Mode 1": 8
+      },
+      "resolved": {
+        "Mode 1": 8
+      }
+    },
+    "VariableID:1:53": {
+      "name": "s2a/border/width/1",
+      "key": "e1fa9599454a140f65edec5f358cce95e30eca24",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-width-1)"
+      },
+      "valuesByMode": {
+        "Mode 1": 1
+      },
+      "resolved": {
+        "Mode 1": 1
+      }
+    },
+    "VariableID:1:83": {
+      "name": "s2a/spacing/8",
+      "key": "3c812173a07b52d6377e121893ec037efbbfefc6",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-8)"
+      },
+      "valuesByMode": {
+        "Mode 1": 8
+      },
+      "resolved": {
+        "Mode 1": 8
+      }
+    },
+    "VariableID:1:84": {
+      "name": "s2a/spacing/12",
+      "key": "da730f1b1d612bc5d23fa762834ba375c6c95351",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-12)"
+      },
+      "valuesByMode": {
+        "Mode 1": 12
+      },
+      "resolved": {
+        "Mode 1": 12
+      }
+    },
+    "VariableID:2352:1217": {
+      "name": "s2a/typography/font-size/label",
+      "key": "8ebd95ce11fc03c86dd89ef3b4ba2ffb5bf961d6",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:2352:1230": {
+      "name": "s2a/typography/letter-spacing/caption",
+      "key": "194d13406b6e555d520de6634253e2b3eda2c9d8",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-caption)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1233": {
+      "name": "s2a/typography/letter-spacing/label",
+      "key": "c00a7571dfaa364481c1c6eb5472b3581201c594",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1238": {
+      "name": "s2a/typography/line-height/caption",
+      "key": "ae9b48f9cf931a781538dae38d4434fe4dfcfa78",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-caption)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/2xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/2xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/2xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/2xs"
+        }
+      },
+      "resolved": {
+        "lg": 16,
+        "md": 16,
+        "sm": 16,
+        "xl": 16
+      }
+    },
+    "VariableID:2352:1239": {
+      "name": "s2a/typography/font-size/caption",
+      "key": "797e3471c5588b2a7d8352b5d6539b864f7acb9a",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-caption)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/xs"
+        },
+        "md": {
+          "alias": "s2a/font/size/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/size/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/size/xs"
+        }
+      },
+      "resolved": {
+        "lg": 12,
+        "md": 12,
+        "sm": 12,
+        "xl": 12
+      }
+    },
+    "VariableID:2352:1243": {
+      "name": "s2a/typography/line-height/label",
+      "key": "538ddff11a55de6e862611ebdcec139ce6328c78",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:2557:832": {
+      "name": "s2a/font/family/label",
+      "key": "02174aaffa99806ace49456aa5121f60a606ed73",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:2557:834": {
+      "name": "s2a/font/family/caption",
+      "key": "6b593b572bce8f65400eb0fabc542027014d6a10",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-caption)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:5388:44678": {
+      "name": "s2a/font/weight/label",
+      "key": "68a1c8cf3dbedb7bb77987c1db773b0a69a7eb8c",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:5388:44679": {
+      "name": "s2a/font/weight/caption",
+      "key": "09f37d849b0ab4560b95ea2a87db9caef2a26854",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-caption)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:6:22": {
+      "name": "s2a/color/border/subtle",
+      "key": "93ac7ba1961cf3244548a16d1a4d5fc6e6ebeb92",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-border-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/300"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/300"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0.8549019694328308,
+          "g": 0.8549019694328308,
+          "b": 0.8549019694328308,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.8549019694328308,
+          "g": 0.8549019694328308,
+          "b": 0.8549019694328308,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:6:47": {
+      "name": "s2a/color/background/subtle",
+      "key": "162805c4146db47171ed3ef22622f94296c20620",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-background-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/50"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/700"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0.9725490212440491,
+          "g": 0.9725490212440491,
+          "b": 0.9725490212440491,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.3137255012989044,
+          "g": 0.3137255012989044,
+          "b": 0.3137255012989044,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:6:49": {
+      "name": "s2a/color/background/default",
+      "key": "7cf2d90e9cbe02635e5445626245c21e250d22ec",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-background-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/25"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/900"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.07450980693101883,
+          "g": 0.07450980693101883,
+          "b": 0.07450980693101883,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:6:82": {
+      "name": "s2a/color/content/default",
+      "key": "83bc2006f8e7edc6ff9f04044d27a204d84f2d6a",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "6:15543": {
+      "name": "s2a/typography/label",
+      "key": "04764cbcfd7418f4c004046716f9d7db9a741db8"
+    },
+    "6:15545": {
+      "name": "s2a/typography/caption",
+      "key": "cb8d5466b26b3aa1333bc4d1e550a36c3f8aea7e"
+    }
+  },
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "mainComponent": {
+        "id": "10298:101865",
+        "key": "8706fa3cd156aef5fbed11230602702c71a9402f",
+        "name": "State=default"
+      },
+      "set": {
+        "id": "10298:101937",
+        "key": "c9d499e34eaa626bc7ba5539036b60a99f290aed",
+        "name": ".select/trigger"
+      },
+      "props": {
+        "Show Icon#10298:57": true,
+        "Value#10298:44": "1 License",
+        "State": "default"
+      }
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.icon",
+      "nodeId": "I10320:102007;10298:101867",
+      "mainComponent": {
+        "id": "8873:23276",
+        "key": "f6a8056e0e6a5b40c2f72553724f1e662b7675e5",
+        "name": "S2a_Icon_Chevron_Down"
+      },
+      "set": null
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.icon/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I10320:102007;10298:101867;8873:23277",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.helper/HelperText",
+      "nodeId": "10324:102970",
+      "mainComponent": {
+        "id": "10243:101693",
+        "key": "f7c071a1d9a451bd9b24babfd173681481c00496",
+        "name": "Intent=neutral"
+      },
+      "set": {
+        "id": "10243:101699",
+        "key": "1cd9f8578e3737a891771ea7c4ee875ee7fd7f29",
+        "name": "HelperText"
+      },
+      "props": {
+        "Text#10243:2": "Save 7.5% your first year with 3+ licenses. See terms",
+        "Intent": "neutral"
+      }
+    }
+  ],
+  "counts": {
+    "variants": 1,
+    "nodes": 10,
+    "bindings": 39,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "State=collapsed",
+      "node": "",
+      "nodeId": "10320:102006",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 8
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "",
+      "nodeId": "10320:102006",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "cornerRadius",
+      "value": 8
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger",
+      "nodeId": "10320:102007",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 40
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.icon/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I10320:102007;10298:101867;8873:23277",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.icon/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I10320:102007;10298:101867;8873:23277;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 10.71
+    },
+    {
+      "variant": "State=collapsed",
+      "node": "/.trigger/.icon/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I10320:102007;10298:101867;8873:23277;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 6.21
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:943c3f0ed2252749f743fe8aee6d193d2181ca6c79a42b344fa32745523d368e"
+  }
+}

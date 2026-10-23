@@ -1,0 +1,602 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.button",
+  "name": "Button",
+  "version": "2.0.0",
+  "status": "draft",
+  "description": "The primary action trigger — a text button with optional leading and trailing icons, in six styles. Light and dark are handled automatically by page-level modes, so you choose a style, not a theme.",
+  "archetype": "button",
+  "semantics": {
+    "element": "button",
+    "elementByProp": {
+      "prop": "href",
+      "map": {
+        "": "button",
+        "*": "a"
+      }
+    }
+  },
+  "props": [
+    {
+      "name": "iconEnd",
+      "type": "text",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon End#8359:334"
+        },
+        "code": {
+          "prop": "iconEnd"
+        }
+      }
+    },
+    {
+      "name": "iconStart",
+      "type": "text",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon Start#8359:263"
+        },
+        "code": {
+          "prop": "iconStart"
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "default": "\"Label\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label#8359:192"
+        },
+        "code": {
+          "prop": "label"
+        }
+      }
+    },
+    {
+      "name": "showIconEnd",
+      "type": "boolean",
+      "description": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Icon End#8359:121"
+        },
+        "code": {
+          "prop": "showIconEnd"
+        }
+      }
+    },
+    {
+      "name": "showIconStart",
+      "type": "boolean",
+      "description": "Figma authoring toggle for the \"Icon Start\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Icon Start#8359:50"
+        },
+        "code": {
+          "prop": "showIconStart"
+        }
+      }
+    },
+    {
+      "name": "style",
+      "type": {
+        "enum": [
+          "solid",
+          "outlined",
+          "transparent",
+          "accent",
+          "knockout",
+          "outline-inverse"
+        ]
+      },
+      "default": "\"solid\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style"
+        },
+        "code": {
+          "prop": "style"
+        }
+      }
+    },
+    {
+      "name": "href",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "href"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "\"md\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "state",
+      "type": {
+        "enum": [
+          "default",
+          "hover",
+          "active",
+          "disabled",
+          "focus"
+        ]
+      },
+      "description": "The State axis, forceable from code. At runtime the states come from interaction; forcing one is for previews, docs and the state matrix. The hand-written component used data-force-state; generated code uses data-state.",
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State"
+        },
+        "code": {
+          "prop": "state"
+        }
+      }
+    },
+    {
+      "name": "onClick",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "onClick"
+        }
+      }
+    }
+  ],
+  "states": [
+    "hover",
+    "active",
+    "disabled",
+    "focus-visible"
+  ],
+  "anatomy": {
+    "root": {
+      "element": "button",
+      "layout": {
+        "display": "inline-flex",
+        "direction": "row",
+        "align": "center",
+        "justify": "center"
+      },
+      "tokens": {
+        "border-radius": "{s2a.border.radius.999}",
+        "gap": "{s2a.spacing.xs}",
+        "padding-left": "{s2a.spacing.lg}",
+        "padding-right": "{s2a.spacing.lg}"
+      },
+      "literals": {
+        "padding-top": "14px",
+        "padding-bottom": "14px"
+      },
+      "states": {
+        "disabled": {
+          "opacity": "{s2a.opacity.disabled}"
+        },
+        "focus-visible": {
+          "outline-color": "{s2a.color.focus-ring.default}",
+          "outline-width": "{s2a.border.width.sm}"
+        }
+      },
+      "tokensByProp": [
+        {
+          "prop": "style",
+          "map": {
+            "outlined": {
+              "background-color": "{s2a.color.button.background.outlined.default}",
+              "border-width": "{s2a.border.width.md}",
+              "border-color": "{s2a.color.border.knockout}"
+            },
+            "transparent": {
+              "background-color": "{s2a.color.button.background.transparent.default}",
+              "border-width": "{s2a.border.width.sm}"
+            },
+            "solid": {
+              "background-color": "{s2a.color.button.background.solid.default}",
+              "border-width": "{s2a.border.width.sm}"
+            },
+            "accent": {
+              "background-color": "{s2a.color.button.background.accent.default}"
+            },
+            "knockout": {
+              "background-color": "{s2a.color.button.background.knockout.default}",
+              "border-width": "{s2a.border.width.md}",
+              "border-color": "{s2a.color.button.border.knockout.default}"
+            },
+            "outline-inverse": {
+              "background-color": "{s2a.color.button.background.outline-inverse.default}",
+              "border-width": "{s2a.border.width.md}",
+              "border-color": "{s2a.color.button.border.outline-inverse.default}"
+            }
+          }
+        }
+      ],
+      "statesByProp": [
+        {
+          "prop": "style",
+          "state": "hover",
+          "map": {
+            "outlined": {
+              "background-color": "{s2a.color.button.background.outlined.hover}"
+            },
+            "transparent": {
+              "background-color": "{s2a.color.button.background.transparent.hover}"
+            },
+            "solid": {
+              "background-color": "{s2a.color.button.background.solid.hover}",
+              "border-width": "{s2a.border.width.md}",
+              "border-color": "{s2a.color.border.knockout}"
+            },
+            "accent": {
+              "background-color": "{s2a.color.button.background.accent.hover}"
+            },
+            "knockout": {
+              "background-color": "{s2a.color.button.background.knockout.hover}"
+            },
+            "outline-inverse": {
+              "background-color": "{s2a.color.button.background.outline-inverse.hover}"
+            }
+          }
+        },
+        {
+          "prop": "style",
+          "state": "active",
+          "map": {
+            "outlined": {
+              "background-color": "{s2a.color.button.background.outlined.active}"
+            },
+            "transparent": {
+              "background-color": "{s2a.color.button.background.transparent.active}"
+            },
+            "solid": {
+              "background-color": "{s2a.color.button.background.solid.active}"
+            },
+            "accent": {
+              "background-color": "{s2a.color.button.background.accent.active}"
+            },
+            "knockout": {
+              "background-color": "{s2a.color.button.background.knockout.active}"
+            },
+            "outline-inverse": {
+              "background-color": "{s2a.color.button.background.outline-inverse.active}"
+            }
+          }
+        },
+        {
+          "prop": "style",
+          "state": "focus-visible",
+          "map": {
+            "accent": {
+              "background-color": "{s2a.color.blue.1100}",
+              "border-width": "{s2a.border.width.sm}"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "icon-start": {
+          "element": "div",
+          "literals": {
+            "width": "12px",
+            "height": "12px"
+          },
+          "slot": {
+            "name": "Icon Start",
+            "accepts": [
+              "kind:icon"
+            ],
+            "acceptsMode": "prefer",
+            "defaultContent": [
+              {
+                "id": "s2a-icons:circle",
+                "props": {
+                  "figma": "S2_Icon_Circle_20_N"
+                }
+              }
+            ]
+          },
+          "statesByProp": [
+            {
+              "prop": "style",
+              "state": "disabled",
+              "map": {
+                "solid": {
+                  "opacity": "{s2a.opacity.disabled}"
+                },
+                "accent": {
+                  "opacity": "{s2a.opacity.48}"
+                }
+              }
+            }
+          ],
+          "parts": {
+            "frame": {
+              "element": "div",
+              "layout": {
+                "display": "flex",
+                "direction": "row",
+                "align": "center",
+                "justify": "center"
+              },
+              "literals": {
+                "width": "12px",
+                "height": "12px"
+              },
+              "parts": {
+                "s2-icon-circle-20-n": {
+                  "layout": {
+                    "display": "flex",
+                    "direction": "row",
+                    "grow": true
+                  }
+                }
+              }
+            },
+            "icon-color": {
+              "literals": {
+                "width": "12px",
+                "height": "12px"
+              },
+              "tokensByProp": [
+                {
+                  "prop": "style",
+                  "map": {
+                    "outlined": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "transparent": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "solid": {
+                      "color": "{s2a.color.content.inverse}"
+                    },
+                    "accent": {
+                      "color": "{s2a.color.content.inverse}"
+                    },
+                    "knockout": {
+                      "color": "{s2a.color.button.content.knockout}"
+                    },
+                    "outline-inverse": {
+                      "color": "{s2a.color.button.content.outline-inverse}"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "label": {
+          "element": "span",
+          "tokens": {
+            "font-family": "{s2a.font.family.label}",
+            "font-size": "{s2a.typography.font-size.label}",
+            "font-weight": "{s2a.font.weight.label}",
+            "letter-spacing": "{s2a.typography.letter-spacing.label}",
+            "line-height": "{s2a.typography.line-height.label}"
+          },
+          "slot": {
+            "name": "Label",
+            "accepts": [
+              "kind:text"
+            ],
+            "acceptsMode": "prefer",
+            "defaultContent": [
+              {
+                "id": "text",
+                "text": "Label"
+              }
+            ]
+          },
+          "states": {
+            "disabled": {
+              "opacity": "{s2a.opacity.disabled}"
+            }
+          },
+          "tokensByProp": [
+            {
+              "prop": "style",
+              "map": {
+                "outlined": {
+                  "color": "{s2a.color.content.default}"
+                },
+                "transparent": {
+                  "color": "{s2a.color.content.default}"
+                },
+                "solid": {
+                  "color": "{s2a.color.button.content.primary.solid.default}"
+                },
+                "accent": {
+                  "color": "{s2a.color.content.knockout}"
+                },
+                "knockout": {
+                  "color": "{s2a.color.button.content.knockout}"
+                },
+                "outline-inverse": {
+                  "color": "{s2a.color.button.content.outline-inverse}"
+                }
+              }
+            }
+          ],
+          "statesByProp": [
+            {
+              "prop": "style",
+              "state": "active",
+              "map": {
+                "outlined": {
+                  "color": "{s2a.color.button.content.outlined.active}"
+                }
+              }
+            }
+          ]
+        },
+        "icon-end": {
+          "element": "div",
+          "literals": {
+            "width": "12px",
+            "height": "12px"
+          },
+          "slot": {
+            "name": "Icon End",
+            "accepts": [
+              "kind:icon"
+            ],
+            "acceptsMode": "prefer",
+            "defaultContent": [
+              {
+                "id": "s2a-icons:chevron-right",
+                "props": {
+                  "figma": "S2a_Icon_Chevron_Right"
+                }
+              }
+            ]
+          },
+          "states": {
+            "disabled": {
+              "opacity": "{s2a.opacity.48}"
+            }
+          },
+          "parts": {
+            "frame": {
+              "element": "div",
+              "layout": {
+                "display": "flex",
+                "direction": "row",
+                "align": "center",
+                "justify": "center"
+              },
+              "literals": {
+                "width": "12px",
+                "height": "12px"
+              },
+              "parts": {
+                "s2a-icon-chevron-right": {
+                  "layout": {
+                    "display": "flex",
+                    "direction": "row",
+                    "grow": true
+                  }
+                }
+              }
+            },
+            "icon-color": {
+              "literals": {
+                "width": "12px",
+                "height": "12px"
+              },
+              "states": {
+                "disabled": {
+                  "opacity": "{s2a.opacity.disabled}"
+                }
+              },
+              "tokensByProp": [
+                {
+                  "prop": "style",
+                  "map": {
+                    "outlined": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "transparent": {
+                      "color": "{s2a.color.content.default}"
+                    },
+                    "solid": {
+                      "color": "{s2a.color.content.inverse}"
+                    },
+                    "accent": {
+                      "color": "{s2a.color.content.inverse}"
+                    },
+                    "knockout": {
+                      "color": "{s2a.color.button.content.knockout}"
+                    },
+                    "outline-inverse": {
+                      "color": "{s2a.color.button.content.outline-inverse}"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Renders a native <button>, or an <a> when it navigates — never a div with a click handler.",
+      "The label is the accessible name; an icon-only button needs an aria-label.",
+      "Focus is visible on the control itself (2.4.7) and the target is at least 24x24 (2.5.8).",
+      "Disabled is conveyed to assistive tech, not by colour alone (1.4.1).",
+      "Give it an accessible name. The Label provides it; for an icon-only button, set an aria-label. WCAG 4.1.2 Name, Role, Value.",
+      "Real button semantics. Render as <button> (or <a> when it navigates via href). Tab to focus, Enter / Space to activate. WCAG 2.1.1 Keyboard.",
+      "Ship the focus ring. The focus state's ring must exist in code so keyboard focus stays visible. WCAG 2.4.7 Focus Visible.",
+      "Mind contrast on inverse styles. On media or colored surfaces keep the label and icons at 4.5:1 (text) / 3:1 (UI) against the background — add a scrim if needed. WCAG 1.4.3 & 1.4.11.",
+      "Target size at least 24x24px (44x44 on touch). WCAG 2.5.8 Target Size (Minimum).",
+      "disabled is communicated, not just dimmed — remove it from the tab order and expose the state to assistive tech."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "5f8ea5d99d51480bb7a6183cff2a06ad64570cd1",
+        "nodeId": "10715:35477"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/button/button.js",
+        "export": "Button"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:96d91cf3927374969515e64e9095da172084edbce6b62ae6f29401eb3d221af3",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:65e516bb3562ec84a858948cd6c4037ff6360ecd99d386c376a2d8561755e0f9"
+    }
+  }
+}

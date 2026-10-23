@@ -9,7 +9,7 @@ const IMG_2 = 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto
 const IMG_3 = 'https://images.unsplash.com/photo-1561736778-92e52a7769ef?auto=format&fit=crop&w=976&q=80';
 
 const darkSurface = (content) => html`
-  <div style="padding:48px;background:#1a1a1a;border-radius:16px;display:inline-flex;align-items:flex-start;justify-content:flex-start;">
+  <div data-theme="dark" style="padding:var(--s2a-spacing-3xl);background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-md);display:inline-flex;align-items:flex-start;justify-content:flex-start;">
     <div style="width:488px;">
       ${content}
     </div>
@@ -22,7 +22,7 @@ export default {
   render: (args) => darkSurface(ProductCard(args)),
   parameters: {
     layout: 'centered',
-    backgrounds: { default: 'dark', values: [{ name: 'dark', value: '#1a1a1a' }] },
+    backgrounds: { default: 'dark', values: [{ name: 'dark', value: 'var(--s2a-color-background-knockout)' }] },
     docs: {
       description: {
         component: `
@@ -113,7 +113,7 @@ export const LongCopy = {
 export const AllApps = {
   name: 'All apps — 3-up grid',
   render: () => html`
-    <div style="padding:48px;background:#1a1a1a;border-radius:16px;display:grid;grid-template-columns:repeat(3,488px);gap:16px;">
+    <div data-theme="dark" style="padding:var(--s2a-spacing-3xl);background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-md);display:grid;grid-template-columns:repeat(3,488px);gap:var(--s2a-spacing-md);">
       ${[
         { app: 'creative-cloud',  heading: 'Creative Cloud',    body: 'All your creative apps.',              imageSrc: IMG_1 },
         { app: 'photoshop',       heading: 'Photoshop',         body: 'Professional image editing.',          imageSrc: IMG_2 },
@@ -126,7 +126,7 @@ export const AllApps = {
 export const GhostGrid = {
   name: 'Ghost tiles — no image',
   render: () => html`
-    <div style="padding:48px;background:#1a1a1a;border-radius:16px;display:grid;grid-template-columns:repeat(3,488px);gap:16px;">
+    <div data-theme="dark" style="padding:var(--s2a-spacing-3xl);background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-md);display:grid;grid-template-columns:repeat(3,488px);gap:var(--s2a-spacing-md);">
       ${[
         { app: 'creative-cloud',   heading: 'Creative Cloud',     body: 'All your creative apps.' },
         { app: 'experience-cloud', heading: 'Experience Cloud',   body: 'Customer experience tools.' },

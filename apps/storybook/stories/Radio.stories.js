@@ -63,7 +63,7 @@ export const DisabledSelected = {
 
 export const Group = {
   render: () => html`
-    <div style="display: flex; gap: 24px;" role="radiogroup" aria-label="Audience">
+    <div style="display: flex; gap: var(--s2a-spacing-lg);" role="radiogroup" aria-label="Audience">
       ${Radio({ label: "Individuals", checked: true, name: "audience", value: "individuals" })}
       ${Radio({ label: "Business", name: "audience", value: "business" })}
       ${Radio({ label: "Students & teachers", name: "audience", value: "edu" })}

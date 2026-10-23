@@ -109,7 +109,7 @@ export const MinimalNoOptionalRegions = {
  */
 export const OnDarkSurface = {
   render: (args) => html`
-    <div style="padding: 48px; background: #131313; border-radius: 8px; display: flex; gap: 24px;">
+    <div data-theme="dark" style="padding: var(--s2a-spacing-3xl); background: var(--s2a-color-background-knockout); border-radius: var(--s2a-border-radius-xs); display: flex; gap: var(--s2a-spacing-lg);">
       ${MerchCard(args)} ${MerchCard({ ...args, style: "highlight" })}
     </div>
   `,
@@ -118,7 +118,7 @@ export const OnDarkSurface = {
 
 export const PlanComparisonRow = {
   render: (args) => html`
-    <div style="display: flex; gap: 16px; align-items: flex-start;">
+    <div style="display: flex; gap: var(--s2a-spacing-md); align-items: flex-start;">
       ${MerchCard({ ...args, planName: "Acrobat Standard", price: "US$22.99/mo" })}
       ${MerchCard({
         ...args,

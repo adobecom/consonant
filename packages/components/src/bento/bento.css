@@ -10,11 +10,11 @@
   flex-direction: column;
   justify-content: flex-end; /* text lockup anchored to the bottom */
   width: 100%;
-  padding: var(--s2a-spacing-xl, 32px);
-  border-radius: var(--s2a-border-radius-lg, 16px);
+  padding: var(--s2a-spacing-xl);
+  border-radius: var(--s2a-border-radius-lg);
   overflow: hidden;
   box-sizing: border-box;
-  background: var(--s2a-color-background-subtle, #f8f8f8);
+  background: var(--s2a-color-background-subtle);
 
   /* Aspect matches the Figma "Bento — v2" examples per S2A breakpoint.        */
   /* Mobile-first (Small): both widths are a tall portrait — 327 × 469.         */
@@ -34,7 +34,7 @@
     aspect-ratio: 484 / 527;
   }
   .c-bento {
-    padding: var(--s2a-spacing-xl, 32px);
+    padding: var(--s2a-spacing-xl);
   }
 }
 
@@ -51,11 +51,11 @@
 /* Small: tighten the inset so the lockup keeps room on the 327-wide tile */
 @media (max-width: 599px) {
   .c-bento {
-    padding: var(--s2a-spacing-lg, 24px);
+    padding: var(--s2a-spacing-lg);
   }
   .c-bento__icon {
-    top: var(--s2a-spacing-lg, 24px);
-    left: var(--s2a-spacing-lg, 24px);
+    top: var(--s2a-spacing-lg);
+    left: var(--s2a-spacing-lg);
   }
 }
 
@@ -78,15 +78,15 @@
 .c-bento__placeholder {
   position: absolute;
   inset: 0;
-  background: var(--s2a-color-background-subtle, #f8f8f8);
+  background: var(--s2a-color-background-subtle);
 }
 
 /* ─── App icon (top-left) ────────────────────────────────────────────────────── */
 
 .c-bento__icon {
   position: absolute;
-  top: var(--s2a-spacing-xl, 32px);
-  left: var(--s2a-spacing-xl, 32px);
+  top: var(--s2a-spacing-xl);
+  left: var(--s2a-spacing-xl);
   z-index: 1;
   display: flex;
   width: 32px;
@@ -100,7 +100,7 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-lg, 24px);
+  gap: var(--s2a-spacing-lg);
   width: 100%;
   max-width: 450px; /* keeps the lockup readable on wide full-width tiles */
 }
@@ -108,28 +108,38 @@
 .c-bento__headline-body {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
   min-width: 0;
+}
+
+/* Text Alignment=centered (Figma Bento — v2 / TextCard — v2 Style=centered) */
+.c-bento[data-text-align="center"] .c-bento__text {
+  align-items: center;
+}
+
+.c-bento[data-text-align="center"] .c-bento__headline,
+.c-bento[data-text-align="center"] .c-bento__body {
+  text-align: center;
 }
 
 .c-bento__headline {
   margin: 0;
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display", sans-serif);
-  font-weight: var(--s2a-font-weight-heading, 900);
-  font-size: var(--s2a-typography-font-size-heading-5, 24px);
-  line-height: var(--s2a-typography-line-height-heading-5, 24px);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-5, -0.48px);
-  color: var(--s2a-color-content-heading, #000);
+  font-family: var(--s2a-font-family-heading);
+  font-weight: var(--s2a-font-weight-heading);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  line-height: var(--s2a-typography-line-height-heading-5);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-5);
+  color: var(--s2a-color-content-heading);
 }
 
 .c-bento__body {
   margin: 0;
-  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-body, 400);
-  font-size: var(--s2a-typography-font-size-body-md, 16px);
-  line-height: var(--s2a-typography-line-height-body-md, 20px);
-  letter-spacing: var(--s2a-typography-letter-spacing-body-md, 0px);
-  color: var(--s2a-color-content-body-subtle, rgba(0, 0, 0, 0.64));
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-body-md);
+  line-height: var(--s2a-typography-line-height-body-md);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-md);
+  color: var(--s2a-color-content-body-subtle);
 }
 
 /* ─── CTA (inline link) ──────────────────────────────────────────────────────── */
@@ -137,16 +147,20 @@
 .c-bento__cta {
   display: inline-flex;
   align-items: center;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
   align-self: flex-start;
   text-decoration: none;
-  color: var(--s2a-color-content-heading, #000);
-  font-family: var(--s2a-font-family-label, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-label, 700);
-  font-size: var(--s2a-typography-font-size-label, 14px);
-  line-height: var(--s2a-typography-line-height-label, 18px);
-  letter-spacing: var(--s2a-typography-letter-spacing-label, 0px);
+  color: var(--s2a-color-content-heading);
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
   transition: opacity 150ms ease;
+}
+
+.c-bento[data-text-align="center"] .c-bento__cta {
+  align-self: center;
 }
 
 .c-bento__cta:hover {
@@ -157,18 +171,18 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  width: var(--s2a-spacing-sm, 12px);
-  height: var(--s2a-spacing-sm, 12px);
+  width: var(--s2a-spacing-sm);
+  height: var(--s2a-spacing-sm);
 }
 
 .c-bento__cta-icon svg {
   display: block;
-  width: var(--s2a-spacing-sm, 12px);
-  height: var(--s2a-spacing-sm, 12px);
+  width: var(--s2a-spacing-sm);
+  height: var(--s2a-spacing-sm);
 }
 
 .c-bento__cta:focus-visible {
-  outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: var(--s2a-border-width-md) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-3xs);
+  border-radius: var(--s2a-border-radius-3xs);
 }

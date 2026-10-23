@@ -1,0 +1,668 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-23T16:31:25.652Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "checkbox",
+    "name": "Checkbox",
+    "cssClass": "c-checkbox",
+    "importPath": "packages/components/src/checkbox/checkbox.js",
+    "exports": [
+      "Checkbox"
+    ],
+    "render": "Checkbox",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/checkbox/checkbox.spec.json",
+      "storybookId": "checkbox",
+      "figmaNodeId": "10559:113870"
+    }
+  },
+  "sources": {
+    "packages/components/src/checkbox/index.js": "sha256:4ee814c7ef1fe7cb9f39971d95f33c9ae5535d0d1215da0ddab959d12975308f",
+    "packages/components/src/checkbox/checkbox.js": "sha256:675c8b0ce7a00b2962b58861ebbeffa5c969f8666452058d883dddc7ce5f7e07",
+    "packages/components/src/checkbox/checkbox.css": "sha256:8265c9bce51a9edb3036906ab83e504022aa23df40802fd4169acc8a88833278"
+  },
+  "props": [
+    {
+      "name": "label",
+      "default": "\"Label\"",
+      "type": "string"
+    },
+    {
+      "name": "checked",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "disabled",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "tile",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "icon",
+      "default": "null",
+      "type": "expression"
+    },
+    {
+      "name": "name",
+      "default": "undefined",
+      "type": "expression"
+    },
+    {
+      "name": "value",
+      "default": "undefined",
+      "type": "expression"
+    }
+  ],
+  "attributes": {
+    "data-disabled": {
+      "values": [
+        ""
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-force-state": {
+      "values": [
+        "focus"
+      ],
+      "dynamic": false,
+      "sources": [
+        "stylesheet"
+      ],
+      "onRoot": false
+    },
+    "data-style": {
+      "values": [
+        "default"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    },
+    "data-tile": {
+      "values": [
+        ""
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-checkbox",
+      "c-checkbox__box",
+      "c-checkbox__check",
+      "c-checkbox__icon",
+      "c-checkbox__input",
+      "c-checkbox__label"
+    ],
+    "stylesheet": [
+      "c-checkbox",
+      "c-checkbox__box",
+      "c-checkbox__check",
+      "c-checkbox__icon",
+      "c-checkbox__input",
+      "c-checkbox__label",
+      "checkbox",
+      "css"
+    ],
+    "runtime": [
+      "c-checkbox",
+      "c-checkbox__box",
+      "c-checkbox__check",
+      "c-checkbox__input",
+      "c-checkbox__label"
+    ],
+    "own": [
+      "c-checkbox",
+      "c-checkbox__box",
+      "c-checkbox__check",
+      "c-checkbox__icon",
+      "c-checkbox__input",
+      "c-checkbox__label"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden"
+    ],
+    "tags": [
+      "input"
+    ]
+  },
+  "imports": [
+    "./checkbox.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-border-radius-2xs": {
+        "fallback": false
+      },
+      "--s2a-border-radius-xs": {
+        "fallback": false
+      },
+      "--s2a-border-width-md": {
+        "fallback": false
+      },
+      "--s2a-border-width-sm": {
+        "fallback": false
+      },
+      "--s2a-color-background-default": {
+        "fallback": false
+      },
+      "--s2a-color-border-subtle": {
+        "fallback": false
+      },
+      "--s2a-color-content-default": {
+        "fallback": false
+      },
+      "--s2a-color-content-disabled": {
+        "fallback": false
+      },
+      "--s2a-color-focus-ring-default": {
+        "fallback": false
+      },
+      "--s2a-font-family-label": {
+        "fallback": false
+      },
+      "--s2a-font-weight-label": {
+        "fallback": false
+      },
+      "--s2a-spacing-2xs": {
+        "fallback": false
+      },
+      "--s2a-spacing-md": {
+        "fallback": false
+      },
+      "--s2a-spacing-sm": {
+        "fallback": false
+      },
+      "--s2a-spacing-xs": {
+        "fallback": false
+      },
+      "--s2a-typography-font-size-label": {
+        "fallback": false
+      },
+      "--s2a-typography-letter-spacing-label": {
+        "fallback": false
+      },
+      "--s2a-typography-line-height-label": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [
+    ":checked",
+    ":focus"
+  ],
+  "queries": [],
+  "stories": [
+    {
+      "id": "generated-checkbox--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "input",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-checkbox"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 1
+    },
+    {
+      "id": "generated-checkbox--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "input",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-checkbox"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 1
+    },
+    {
+      "id": "generated-checkbox--style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "input",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-checkbox"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 1
+    },
+    {
+      "id": "atoms-checkbox--unchecked",
+      "name": "Unchecked",
+      "args": {
+        "label": "Label",
+        "checked": false,
+        "disabled": false,
+        "tile": false
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-checkbox",
+        "c-checkbox__box",
+        "c-checkbox__check",
+        "c-checkbox__input",
+        "c-checkbox__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "atoms-checkbox--checked",
+      "name": "Checked",
+      "args": {
+        "label": "Label",
+        "checked": true,
+        "disabled": false,
+        "tile": false
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-checkbox",
+        "c-checkbox__box",
+        "c-checkbox__check",
+        "c-checkbox__input",
+        "c-checkbox__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "atoms-checkbox--disabled",
+      "name": "Disabled",
+      "args": {
+        "label": "Label",
+        "checked": false,
+        "disabled": true,
+        "tile": false
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "disabled": ""
+        }
+      },
+      "attributes": {
+        "data-disabled": [
+          ""
+        ]
+      },
+      "rootAttributes": {
+        "data-disabled": [
+          ""
+        ]
+      },
+      "classes": [
+        "c-checkbox",
+        "c-checkbox__box",
+        "c-checkbox__check",
+        "c-checkbox__input",
+        "c-checkbox__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": true
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "atoms-checkbox--disabled-checked",
+      "name": "Disabled Checked",
+      "args": {
+        "label": "Label",
+        "checked": true,
+        "disabled": true,
+        "tile": false
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "disabled": ""
+        }
+      },
+      "attributes": {
+        "data-disabled": [
+          ""
+        ]
+      },
+      "rootAttributes": {
+        "data-disabled": [
+          ""
+        ]
+      },
+      "classes": [
+        "c-checkbox",
+        "c-checkbox__box",
+        "c-checkbox__check",
+        "c-checkbox__input",
+        "c-checkbox__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": true
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "atoms-checkbox--tile",
+      "name": "Tile",
+      "args": {
+        "label": "Photography",
+        "checked": false,
+        "disabled": false,
+        "tile": true
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "tile": ""
+        }
+      },
+      "attributes": {
+        "data-tile": [
+          ""
+        ]
+      },
+      "rootAttributes": {
+        "data-tile": [
+          ""
+        ]
+      },
+      "classes": [
+        "c-checkbox",
+        "c-checkbox__box",
+        "c-checkbox__check",
+        "c-checkbox__input",
+        "c-checkbox__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "atoms-checkbox--tile-checked",
+      "name": "Tile Checked",
+      "args": {
+        "label": "Photography",
+        "checked": true,
+        "disabled": false,
+        "tile": true
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {
+          "tile": ""
+        }
+      },
+      "attributes": {
+        "data-tile": [
+          ""
+        ]
+      },
+      "rootAttributes": {
+        "data-tile": [
+          ""
+        ]
+      },
+      "classes": [
+        "c-checkbox",
+        "c-checkbox__box",
+        "c-checkbox__check",
+        "c-checkbox__input",
+        "c-checkbox__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "atoms-checkbox--group",
+      "name": "Group",
+      "args": {
+        "label": "Label",
+        "checked": false,
+        "disabled": false,
+        "tile": false
+      },
+      "root": {
+        "tag": "label",
+        "classes": [
+          "c-checkbox"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-checkbox",
+        "c-checkbox__box",
+        "c-checkbox__check",
+        "c-checkbox__input",
+        "c-checkbox__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "input",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    }
+  ],
+  "counts": {
+    "props": 7,
+    "attributes": 4,
+    "parts": 6,
+    "tokenReferences": 18,
+    "tokenReferencesWithoutFallback": 18,
+    "raw": 0,
+    "stories": 10,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:f19d5cf1c056dee07952e26a8a2dfd0493fe1f3844e4600335b45a1e819d74c2"
+  }
+}

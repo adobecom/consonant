@@ -14,14 +14,11 @@
   },
   "props": [
     { "name": "version", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "legacy", "abbreviated"], "description": "Which mark to render" },
-    { "name": "context", "type": "string", "defaultValue": "\"on-light\"", "enum": ["on-light", "on-dark"], "description": "Surface context — drives the color token" },
     { "name": "label", "type": "string", "defaultValue": "\"Adobe\"", "description": "Accessible name (role='img' aria-label)" }
   ],
   "tokenBindings": {
     "color:default/abbreviated:on-light": "--s2a-color-content-default",
-    "color:default/abbreviated:on-dark": "--s2a-color-content-knockout",
-    "color:legacy:on-light": "--s2a-color-transparent-black-64",
-    "color:legacy:on-dark": "--s2a-color-transparent-white-48"
+    "color:legacy:on-light": "--s2a-color-transparent-black-64"
   },
   "a11y": {
     "role": "img",

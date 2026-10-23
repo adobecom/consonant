@@ -1,0 +1,18 @@
+{
+  "name": "GlobalNavigation",
+  "slug": "global-navigation",
+  "figmaNodeId": "5011:275645",
+  "cssClass": "c-global-navigation",
+  "storybookId": "pages-homepage--global-navigation",
+  "description": "Link-only implementation of the GNav bar geometry. Fixed dark context, native mobile disclosure, responsive non-clipping labels. Partial parity: mega-menus, App Switcher, signed-in states, and remaining context/background axes are not implemented.",
+  "variants": {},
+  "props": [
+    {"name":"links","type":"Array<{label: string, href: string}>","defaultValue":"[]"},
+    {"name":"brandHref","type":"string","defaultValue":"\"https://www.adobe.com/\""},
+    {"name":"signInLabel","type":"string","defaultValue":"\"Sign in\""},
+    {"name":"signInHref","type":"string","defaultValue":"\"https://account.adobe.com/\""}
+  ],
+  "tokenBindings": {"gap":"--s2a-spacing-lg","padding":"--s2a-spacing-md","content":"--s2a-color-content-knockout","focus":"--s2a-color-focus-ring-default"},
+  "composedOf": ["logo", "button"],
+  "a11y": {"wcag":["2.1.1","2.4.4","2.4.7","1.4.10"],"notes":["Native anchors navigate; no inert dropdown affordances.","Mobile summary toggles the navigation. Escape closes it and returns focus.","Initialize GlobalNavigationController and destroy it when unmounting."]}
+}

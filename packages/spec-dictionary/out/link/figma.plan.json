@@ -1,0 +1,225 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Link",
+  "setName": "Link — v2",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "button",
+    "bindings": {
+      "gap": [
+        "s2a/spacing/xs"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".label-wrap",
+        "source": "/.label-wrap",
+        "element": "div",
+        "bindings": {},
+        "slot": null,
+        "children": [
+          {
+            "name": ".call-to-action",
+            "source": "/.label-wrap/Call to Action",
+            "element": "span",
+            "bindings": {},
+            "slot": {
+              "name": "Call to Action",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          },
+          {
+            "name": ".underline",
+            "source": "/.label-wrap/.underline",
+            "element": null,
+            "bindings": {},
+            "slot": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".end-icon",
+        "source": "/end-icon",
+        "element": "div",
+        "bindings": {},
+        "slot": null,
+        "children": [
+          {
+            "name": ".frame",
+            "source": "/end-icon/Frame",
+            "element": "div",
+            "bindings": {},
+            "slot": null,
+            "children": [
+              {
+                "name": ".s2a-icon-chevron-right",
+                "source": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+                "element": null,
+                "bindings": {},
+                "slot": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": ".icon-color",
+            "source": "/end-icon/Icon color",
+            "element": null,
+            "bindings": {},
+            "slot": null,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "12823:184375",
+    "nodeName": "Link — v2",
+    "componentSetKey": "252b85e9d7c740613b3f2ddfd39c75f394edcd95",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Emphasis",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "subtle"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "name": "Kind",
+      "type": "VARIANT",
+      "options": [
+        "action",
+        "text"
+      ],
+      "defaultValue": "action"
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "hover",
+        "focus",
+        "active"
+      ],
+      "defaultValue": "default",
+      "fromState": "hover"
+    },
+    {
+      "name": "Icon End#2609:0",
+      "type": "INSTANCE_SWAP",
+      "forProp": "iconEnd",
+      "defaultValue": "8873:23272"
+    },
+    {
+      "name": "Label#2277:4",
+      "type": "TEXT",
+      "forProp": "label"
+    },
+    {
+      "name": "Underline#10238:0",
+      "type": "BOOLEAN",
+      "forProp": "underline",
+      "defaultValue": false
+    }
+  ],
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      }
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      }
+    },
+    {
+      "name": "active",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=active"
+      }
+    }
+  ],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-link",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/xs"
+        ]
+      }
+    },
+    {
+      "name": "/.label-wrap",
+      "selector": ".c-link__label-wrap",
+      "bindings": {}
+    },
+    {
+      "name": "/.label-wrap/Call to Action",
+      "selector": ".c-link__call-to-action",
+      "bindings": {},
+      "slot": {
+        "name": "Call to Action",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.label-wrap/.underline",
+      "selector": ".c-link__underline",
+      "bindings": {}
+    },
+    {
+      "name": "/end-icon",
+      "selector": ".c-link__end-icon",
+      "bindings": {}
+    },
+    {
+      "name": "/end-icon/Frame",
+      "selector": ".c-link__frame",
+      "bindings": {}
+    },
+    {
+      "name": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "selector": ".c-link__s2a-icon-chevron-right",
+      "bindings": {}
+    },
+    {
+      "name": "/end-icon/Icon color",
+      "selector": ".c-link__icon-color",
+      "bindings": {}
+    }
+  ],
+  "textStyles": []
+}

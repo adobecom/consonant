@@ -1,0 +1,379 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "MerchCardPricingDisplay",
+  "setName": "MerchCard/PricingDisplay",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "div",
+    "bindings": {
+      "gap": [
+        "s2a/spacing/2"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".pricing",
+        "source": "/.pricing",
+        "element": "div",
+        "bindings": {},
+        "slot": null,
+        "children": [
+          {
+            "name": ".strikethrough-zone",
+            "source": "/.pricing/.strikethrough-zone",
+            "element": "div",
+            "bindings": {},
+            "slot": null,
+            "children": [
+              {
+                "name": ".strikethrough",
+                "source": "/.pricing/.strikethrough-zone/.strikethrough",
+                "element": "span",
+                "bindings": {
+                  "color": [
+                    "s2a/color/content/subtle"
+                  ],
+                  "font-family": [
+                    "s2a/font/family/body"
+                  ],
+                  "font-size": [
+                    "s2a/typography/font-size/body-sm"
+                  ],
+                  "font-weight": [
+                    "s2a/font/weight/body"
+                  ],
+                  "letter-spacing": [
+                    "s2a/typography/letter-spacing/body-sm"
+                  ],
+                  "line-height": [
+                    "s2a/typography/line-height/body-sm"
+                  ]
+                },
+                "slot": {
+                  "name": "strikethrough",
+                  "accepts": [
+                    "kind:text"
+                  ],
+                  "mode": "prefer"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": ".price",
+            "source": "/.pricing/.price",
+            "element": "span",
+            "bindings": {
+              "color": [
+                "s2a/color/content/heading"
+              ],
+              "font-family": [
+                "s2a/font/family/heading"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/heading-5"
+              ],
+              "font-weight": [
+                "s2a/font/weight/heading"
+              ],
+              "letter-spacing": [
+                "s2a/font/letter-spacing/4xl"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/heading-5"
+              ]
+            },
+            "slot": {
+              "name": "price",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          },
+          {
+            "name": ".billing",
+            "source": "/.pricing/.billing",
+            "element": "span",
+            "bindings": {
+              "color": [
+                "s2a/color/content/subtle"
+              ],
+              "font-family": [
+                "s2a/font/family/body"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/body-sm"
+              ],
+              "font-weight": [
+                "s2a/font/weight/body"
+              ],
+              "letter-spacing": [
+                "s2a/typography/letter-spacing/body-sm"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/body-sm"
+              ]
+            },
+            "slot": {
+              "name": "billing",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".details-zone",
+        "source": "/.details-zone",
+        "element": "div",
+        "bindings": {},
+        "slot": null,
+        "children": [
+          {
+            "name": ".details",
+            "source": "/.details-zone/.details",
+            "element": "span",
+            "bindings": {
+              "color": [
+                "s2a/color/content/subtle"
+              ],
+              "font-family": [
+                "s2a/font/family/body"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/body-sm"
+              ],
+              "font-weight": [
+                "s2a/font/weight/body"
+              ],
+              "letter-spacing": [
+                "s2a/typography/letter-spacing/body-sm"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/body-sm"
+              ]
+            },
+            "slot": {
+              "name": "details",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10328:103581",
+    "nodeName": "MerchCard/PricingDisplay",
+    "componentSetKey": "d4acacb5413c50ef86f665b290d1d93432a9e3e8",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Additional Details#10328:158",
+      "type": "TEXT",
+      "forProp": "additionalDetails"
+    },
+    {
+      "name": "Billing Cadence#10328:153",
+      "type": "TEXT",
+      "forProp": "billingCadence"
+    },
+    {
+      "name": "Price#10328:148",
+      "type": "TEXT",
+      "forProp": "price"
+    },
+    {
+      "name": "Show Details#11011:14",
+      "type": "BOOLEAN",
+      "forProp": "showDetails",
+      "defaultValue": true
+    },
+    {
+      "name": "Show Strikethrough#10466:17",
+      "type": "BOOLEAN",
+      "forProp": "showStrikethrough",
+      "defaultValue": true
+    },
+    {
+      "name": "Strikethrough Pricing#10328:143",
+      "type": "TEXT",
+      "forProp": "strikethroughPricing"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-merch-card-pricing-display",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/2"
+        ]
+      }
+    },
+    {
+      "name": "/.pricing",
+      "selector": ".c-merch-card-pricing-display__pricing",
+      "bindings": {}
+    },
+    {
+      "name": "/.pricing/.strikethrough-zone",
+      "selector": ".c-merch-card-pricing-display__strikethrough-zone",
+      "bindings": {}
+    },
+    {
+      "name": "/.pricing/.strikethrough-zone/.strikethrough",
+      "selector": ".c-merch-card-pricing-display__strikethrough",
+      "bindings": {
+        "color": [
+          "s2a/color/content/subtle"
+        ],
+        "font-family": [
+          "s2a/font/family/body"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/body-sm"
+        ],
+        "font-weight": [
+          "s2a/font/weight/body"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/body-sm"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/body-sm"
+        ]
+      },
+      "slot": {
+        "name": "strikethrough",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.pricing/.price",
+      "selector": ".c-merch-card-pricing-display__price",
+      "bindings": {
+        "color": [
+          "s2a/color/content/heading"
+        ],
+        "font-family": [
+          "s2a/font/family/heading"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/heading-5"
+        ],
+        "font-weight": [
+          "s2a/font/weight/heading"
+        ],
+        "letter-spacing": [
+          "s2a/font/letter-spacing/4xl"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/heading-5"
+        ]
+      },
+      "slot": {
+        "name": "price",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.pricing/.billing",
+      "selector": ".c-merch-card-pricing-display__billing",
+      "bindings": {
+        "color": [
+          "s2a/color/content/subtle"
+        ],
+        "font-family": [
+          "s2a/font/family/body"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/body-sm"
+        ],
+        "font-weight": [
+          "s2a/font/weight/body"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/body-sm"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/body-sm"
+        ]
+      },
+      "slot": {
+        "name": "billing",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.details-zone",
+      "selector": ".c-merch-card-pricing-display__details-zone",
+      "bindings": {}
+    },
+    {
+      "name": "/.details-zone/.details",
+      "selector": ".c-merch-card-pricing-display__details",
+      "bindings": {
+        "color": [
+          "s2a/color/content/subtle"
+        ],
+        "font-family": [
+          "s2a/font/family/body"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/body-sm"
+        ],
+        "font-weight": [
+          "s2a/font/weight/body"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/body-sm"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/body-sm"
+        ]
+      },
+      "slot": {
+        "name": "details",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/body-sm",
+    "s2a/typography/heading-5"
+  ]
+}

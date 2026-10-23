@@ -1,0 +1,1439 @@
+{
+  "date": "2026-09-17T16:56:14.912Z",
+  "source": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "captured": "2026-09-15",
+    "note": "Variable bindings per section node from the Figma MCP get_variable_defs (Home 1441+ v2 Dark 12102:175100 sections; ElasticCard v2 11280:224039; Home — Original Design Specs light frames for the mobile/tablet samples). Values are the variable defaults, not mode-resolved. Keys of the form var(--s2a-*) are S2A variables with a code name; s2a/* paths are S2A variables without one; everything else is a legacy or product palette binding the Figma audit should clear."
+  },
+  "shippedTokens": 490,
+  "results": [
+    {
+      "id": "global-navigation",
+      "nodes": [
+        "12102:175224"
+      ],
+      "css": [
+        "packages/components/src/global-navigation/global-navigation.css",
+        "packages/components/src/button/button.css"
+      ],
+      "status": "PASS",
+      "counts": {
+        "figmaBound": 15,
+        "textStyles": 1,
+        "codeRefs": 66,
+        "shippedTokens": 490
+      },
+      "unresolved": [
+        {
+          "name": "--s2a-gnav-background",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-solid-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-outlined-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-accent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-knockout",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-border-knockout-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-outline-inverse",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-border-outline-inverse-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-active",
+          "fallback": true
+        }
+      ],
+      "unshipped": [
+        "--s2a-color-button-background-primary-solid-on-dark"
+      ],
+      "unbound": [
+        "--s2a-color-button-background-primary-solid-on"
+      ],
+      "codeOnly": [
+        "--s2a-gnav",
+        "--s2a-color-focus-ring",
+        "--s2a-border-radius",
+        "--s2a-opacity",
+        "--s2a-font-size",
+        "--s2a-blur",
+        "--s2a-color-button-background-solid",
+        "--s2a-color-button-content-solid",
+        "--s2a-color-button-content-primary-solid",
+        "--s2a-color-iconbutton-background-primary-solid-on-light",
+        "--s2a-border-width",
+        "--s2a-color-border",
+        "--s2a-color-button-background-outlined",
+        "--s2a-color-transparent-white",
+        "--s2a-color-button-background-primary-transparent-on-light",
+        "--s2a-color-button-content-outlined",
+        "--s2a-color-button-background-transparent",
+        "--s2a-color-button-background-accent",
+        "--s2a-color-button-background-accent-solid-on-light",
+        "--s2a-color-button-content-accent",
+        "--s2a-color-button-background-knockout",
+        "--s2a-color-gray",
+        "--s2a-color-button-content",
+        "--s2a-color-button-border-knockout",
+        "--s2a-color-button-background-outline-inverse",
+        "--s2a-color-button-content-outline",
+        "--s2a-color-button-border-outline-inverse"
+      ],
+      "raw": [],
+      "figma": {
+        "primitive": [],
+        "unprefixed": [],
+        "foreign": []
+      }
+    },
+    {
+      "id": "router-marquee",
+      "nodes": [
+        "12102:175105"
+      ],
+      "css": [
+        "packages/components/src/router-marquee/router-marquee.css",
+        "packages/components/src/router-nav-item/router-nav-item.css",
+        "packages/components/src/rich-content/rich-content.css",
+        "packages/components/src/product-lockup/product-lockup.css",
+        "packages/components/src/app-icon/app-icon.css",
+        "packages/components/src/button/button.css"
+      ],
+      "status": "PASS",
+      "counts": {
+        "figmaBound": 42,
+        "textStyles": 4,
+        "codeRefs": 111,
+        "shippedTokens": 490
+      },
+      "unresolved": [
+        {
+          "name": "--s2a-color-router-nav-item-background-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-router-nav-item-content-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-grid-container-measure-narrow-_max-width",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-solid-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-outlined-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-accent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-knockout",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-border-knockout-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-outline-inverse",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-border-outline-inverse-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-active",
+          "fallback": true
+        }
+      ],
+      "unshipped": [
+        "--s2a-color-button-background-knockout-default",
+        "--s2a-color-button-border-knockout-default",
+        "--s2a-product-lockup-gap-block",
+        "--s2a-color-router-nav-item-content-active",
+        "--s2a-color-router-nav-item-background-active"
+      ],
+      "unbound": [
+        "--s2a-product-lockup-gap"
+      ],
+      "codeOnly": [
+        "--s2a-color-transparent-white",
+        "--s2a-color-transparent-black",
+        "--s2a-color-focus-ring",
+        "--s2a-color-gray",
+        "--s2a-grid-container-measure-narrow-_max",
+        "--s2a-font-size",
+        "--s2a-font-line-height",
+        "--s2a-font-weight-adobe-clean",
+        "--s2a-opacity",
+        "--s2a-color-button-background-solid",
+        "--s2a-color-button-content-solid",
+        "--s2a-color-button-content-primary-solid",
+        "--s2a-color-iconbutton-background-primary-solid-on-light",
+        "--s2a-color-border",
+        "--s2a-color-button-background-outlined",
+        "--s2a-color-button-background-primary-transparent-on-light",
+        "--s2a-color-button-content-outlined",
+        "--s2a-color-button-background-transparent",
+        "--s2a-color-button-background-accent",
+        "--s2a-color-button-background-accent-solid-on-light",
+        "--s2a-color-button-content-accent",
+        "--s2a-color-button-content",
+        "--s2a-color-button-background-outline-inverse",
+        "--s2a-color-button-content-outline",
+        "--s2a-color-button-border-outline-inverse"
+      ],
+      "raw": [
+        "packages/components/src/router-marquee/router-marquee.css:5 background: #000;",
+        "packages/components/src/router-marquee/router-marquee.css:41 background: #111;",
+        "packages/components/src/router-marquee/router-marquee.css:134 font-size: 16px;",
+        "packages/components/src/router-marquee/router-marquee.css:227 padding-bottom: calc(var(--s2a-spacing-lg, 24px) * 3 + 40px + 48px);"
+      ],
+      "figma": {
+        "primitive": [
+          "--s2a-border-radius-999 (12102:175105)",
+          "--s2a-color-transparent-white-00 (12102:175105)",
+          "--s2a-color-transparent-black-48 (12102:175105)",
+          "--s2a-color-transparent-white-12 (12102:175105)"
+        ],
+        "unprefixed": [],
+        "foreign": [
+          "Cross Cloud/tile (12102:175105)",
+          "S2AC/Palette/static/white (12102:175105)",
+          "4 XS (12102:175105)",
+          "S2AC/Palette/transparent-black/500 (12102:175105)",
+          "S2AC/Palette/transparent-white/100 (12102:175105)",
+          "Corporate/red (12102:175105)"
+        ]
+      }
+    },
+    {
+      "id": "hub-router",
+      "nodes": [
+        "12102:175264",
+        "11280:224039",
+        "8278:190405"
+      ],
+      "css": [
+        "packages/components/src/hub-router/hub-router.css",
+        "packages/components/src/elastic-card/elastic-card.css",
+        "packages/components/src/product-lockup/product-lockup.css",
+        "packages/components/src/app-icon/app-icon.css",
+        "packages/components/src/media/media.css"
+      ],
+      "status": "PASS",
+      "counts": {
+        "figmaBound": 52,
+        "textStyles": 7,
+        "codeRefs": 55,
+        "shippedTokens": 490
+      },
+      "unresolved": [
+        {
+          "name": "--s2a-elastic-card-width-resting",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-router-card-height-max",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-router-card-padding",
+          "fallback": true
+        }
+      ],
+      "unshipped": [
+        "--s2a-product-lockup-gap-inline-start",
+        "--s2a-product-lockup-gap-inline",
+        "--s2a-router-card-padding",
+        "--s2a-router-card-height-max",
+        "--s2a-color-button-primary-primary-content"
+      ],
+      "unbound": [
+        "--s2a-color-content-body",
+        "--s2a-product-lockup-gap-inline",
+        "--s2a-product-lockup-gap",
+        "--s2a-blur",
+        "--s2a-border-width",
+        "--s2a-color-button-primary-primary"
+      ],
+      "codeOnly": [
+        "--s2a-layout",
+        "--s2a-elastic-card-width",
+        "--s2a-color-focus-ring",
+        "--s2a-color-border",
+        "--s2a-color-transparent-white",
+        "--s2a-font-weight-adobe-clean",
+        "--s2a-font-size",
+        "--s2a-font-line-height",
+        "--s2a-color-transparent-black"
+      ],
+      "raw": [
+        "packages/components/src/hub-router/hub-router.css:155 padding-inline-start: max(8px, calc((100vw - 1242px) / 2));",
+        "packages/components/src/hub-router/hub-router.css:160 padding-inline-end: max(8px, calc((100vw - 1242px) / 2));",
+        "packages/components/src/hub-router/hub-router.css:190 padding-inline-start: max(8px, calc((100vw - 1502px) / 2));",
+        "packages/components/src/hub-router/hub-router.css:195 padding-inline-end: max(8px, calc((100vw - 1502px) / 2));"
+      ],
+      "figma": {
+        "primitive": [
+          "--s2a-border-radius-12 (11280:224039)",
+          "--s2a-border-radius-6 (11280:224039)",
+          "--s2a-color-gray-800 (11280:224039)",
+          "--s2a-color-gray-700 (11280:224039)"
+        ],
+        "unprefixed": [],
+        "foreign": [
+          "Cross Cloud/tile (12102:175264)",
+          "S (12102:175264)",
+          "Cross Cloud/tile (11280:224039)",
+          "Icon/primary/gray/default (11280:224039)",
+          "font/weight/adobe-clean-display/black (8278:190405)",
+          "font/family/adobe-clean-display (8278:190405)",
+          "font/weight/adobe-clean/regular (8278:190405)",
+          "font/family/adobe-clean (8278:190405)",
+          "Black (8278:190405)",
+          "Photography & Digital Imaging/tile (8278:190405)",
+          "Photography & Digital Imaging/mnemonic (8278:190405)",
+          "X Dark (8278:190405)",
+          "Light (8278:190405)",
+          "DC/dark red (8278:190405)",
+          "DC/trefoil white (8278:190405)",
+          "2X Dark (8278:190405)",
+          "Corporate/red (8278:190405)",
+          "Desktop/Label (8278:190405)",
+          "XS (8278:190405)",
+          "3 XS (8278:190405)",
+          "5 XS (8278:190405)",
+          "Desktop/Eyebrow (8278:190405)",
+          "Desktop/Body Medium (8278:190405)",
+          "2 XS (8278:190405)",
+          "4 XS (8278:190405)"
+        ]
+      }
+    },
+    {
+      "id": "media-section",
+      "nodes": [
+        "12102:175360",
+        "8278:189410",
+        "8278:189989"
+      ],
+      "css": [
+        "packages/components/src/homepage-sections/homepage-sections.css",
+        "packages/components/src/media-card/media-card.css",
+        "packages/components/src/link/link.css"
+      ],
+      "status": "PASS",
+      "counts": {
+        "figmaBound": 47,
+        "textStyles": 7,
+        "codeRefs": 35,
+        "shippedTokens": 490
+      },
+      "unresolved": [
+        {
+          "name": "--s2a-homepage-dark-surface",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-content-label-hover",
+          "fallback": true
+        }
+      ],
+      "unshipped": [],
+      "unbound": [
+        "--s2a-typography-letter-spacing-heading",
+        "--s2a-color-border",
+        "--s2a-font-letter-spacing",
+        "--s2a-font-weight-adobe-clean"
+      ],
+      "codeOnly": [
+        "--s2a-homepage-dark",
+        "--s2a-color-focus-ring",
+        "--s2a-color-background",
+        "--s2a-border-radius",
+        "--s2a-color-gray",
+        "--s2a-color-content-label",
+        "--s2a-color-button-content-primary-solid"
+      ],
+      "raw": [
+        "packages/components/src/media-card/media-card.css:164 padding-top: 11px;"
+      ],
+      "figma": {
+        "primitive": [
+          "--s2a-color-transparent-black-16 (12102:175360)",
+          "--s2a-color-transparent-black-64 (12102:175360)"
+        ],
+        "unprefixed": [],
+        "foreign": [
+          "font/weight/adobe-clean-display/black (12102:175360)",
+          "font/family/adobe-clean-display (12102:175360)",
+          "font/family/adobe-clean (8278:189410)",
+          "font/weight/adobe-clean-display/black (8278:189410)",
+          "font/family/adobe-clean-display (8278:189410)",
+          "font/weight/adobe-clean/regular (8278:189410)",
+          "2 XS (8278:189410)",
+          "font/weight/adobe-clean/bold (8278:189410)",
+          "XS (8278:189410)",
+          "DC/trefoil white (8278:189410)",
+          "Photography & Digital Imaging/tile (8278:189410)",
+          "Photography & Digital Imaging/mnemonic (8278:189410)",
+          "font/family/adobe-clean (8278:189989)",
+          "font/weight/adobe-clean-display/black (8278:189989)",
+          "font/family/adobe-clean-display (8278:189989)",
+          "font/weight/adobe-clean/regular (8278:189989)",
+          "2 XS (8278:189989)",
+          "font/weight/adobe-clean/bold (8278:189989)",
+          "XS (8278:189989)",
+          "DC/trefoil white (8278:189989)",
+          "Photography & Digital Imaging/tile (8278:189989)",
+          "Photography & Digital Imaging/mnemonic (8278:189989)"
+        ]
+      }
+    },
+    {
+      "id": "social-proof-carousel",
+      "nodes": [
+        "12102:175374",
+        "8278:190566"
+      ],
+      "css": [
+        "packages/components/src/social-proof-carousel/social-proof-carousel.css",
+        "packages/components/src/quote-card/quote-card.css",
+        "packages/components/src/icon-button/icon-button.css",
+        "packages/components/src/button/button.css"
+      ],
+      "status": "PASS",
+      "counts": {
+        "figmaBound": 40,
+        "textStyles": 4,
+        "codeRefs": 102,
+        "shippedTokens": 490
+      },
+      "unresolved": [
+        {
+          "name": "--s2a-color-icon-button-background-solid-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-content-solid",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-background-solid-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-background-solid-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-background-transparent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-content-transparent",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-background-transparent-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-background-transparent-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-background-knockout-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-content-knockout",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-background-knockout-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-icon-button-background-knockout-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-solid-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-outlined-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-accent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-knockout",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-border-knockout-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-outline-inverse",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-border-outline-inverse-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-active",
+          "fallback": true
+        }
+      ],
+      "unshipped": [
+        "--s2a-color-icon-button-content-knockout",
+        "--s2a-color-icon-button-background-knockout-default",
+        "--s2a-font-weight-black",
+        "--s2a-font-family-title",
+        "--s2a-font-weight-bold"
+      ],
+      "unbound": [
+        "--s2a-typography-letter-spacing-heading",
+        "--s2a-color-button-background-primary-solid-on-dark"
+      ],
+      "codeOnly": [
+        "--s2a-color-transparent-white",
+        "--s2a-color-focus-ring",
+        "--s2a-color-transparent-black",
+        "--s2a-opacity",
+        "--s2a-color-icon-button-background-solid",
+        "--s2a-color-background",
+        "--s2a-color-iconbutton-content-primary-solid",
+        "--s2a-color-border",
+        "--s2a-color-iconbutton-background-primary-solid-on-light",
+        "--s2a-color-icon-button-background-transparent",
+        "--s2a-color-iconbutton-background-primary-transparent-on-light",
+        "--s2a-color-gray",
+        "--s2a-font-size",
+        "--s2a-blur",
+        "--s2a-color-button-background-solid",
+        "--s2a-color-button-content-solid",
+        "--s2a-color-button-background-outlined",
+        "--s2a-color-button-background-primary-transparent-on-light",
+        "--s2a-color-button-content-outlined",
+        "--s2a-color-button-background-transparent",
+        "--s2a-color-button-background-accent",
+        "--s2a-color-button-background-accent-solid-on-light",
+        "--s2a-color-button-content-accent",
+        "--s2a-color-button-background-knockout",
+        "--s2a-color-button-content",
+        "--s2a-color-button-border-knockout",
+        "--s2a-color-button-background-outline-inverse",
+        "--s2a-color-button-content-outline",
+        "--s2a-color-button-border-outline-inverse"
+      ],
+      "raw": [
+        "packages/components/src/quote-card/quote-card.css:119 font-size: 48px;"
+      ],
+      "figma": {
+        "primitive": [
+          "--s2a-color-transparent-black-16 (12102:175374)",
+          "--s2a-color-transparent-black-64 (12102:175374)",
+          "--s2a-border-radius-999 (12102:175374)",
+          "--s2a-color-transparent-white-64 (12102:175374)"
+        ],
+        "unprefixed": [
+          "--typography-letter-spacing-title-2 (8278:190566)",
+          "--typography-font-size-title-2 (8278:190566)",
+          "--typography-line-height-title-2 (8278:190566)",
+          "--typography-letter-spacing-eyebrow (8278:190566)",
+          "--typography-font-size-eyebrow (8278:190566)",
+          "--typography-line-height-eyebrow (8278:190566)"
+        ],
+        "foreign": [
+          "X Light (12102:175374)",
+          "White (12102:175374)",
+          "M (12102:175374)",
+          "2 XS (8278:190566)",
+          "s2c/typography/title-2 (8278:190566)",
+          "s2c/typography/eyebow (8278:190566)",
+          "font/weight/adobe-clean/regular (8278:190566)",
+          "font/family/adobe-clean (8278:190566)",
+          "S2AC/Palette/static/black (8278:190566)",
+          "font/weight/adobe-clean/bold (8278:190566)",
+          "S2AC/Palette/static/white (8278:190566)",
+          "XS (8278:190566)",
+          "S2AC/Palette/transparent-black/100 (8278:190566)"
+        ]
+      }
+    },
+    {
+      "id": "news-section",
+      "nodes": [
+        "12102:175420"
+      ],
+      "css": [
+        "packages/components/src/homepage-sections/homepage-sections.css",
+        "packages/components/src/link/link.css"
+      ],
+      "status": "PASS",
+      "counts": {
+        "figmaBound": 30,
+        "textStyles": 4,
+        "codeRefs": 26,
+        "shippedTokens": 490
+      },
+      "unresolved": [
+        {
+          "name": "--s2a-homepage-dark-surface",
+          "fallback": true
+        }
+      ],
+      "unshipped": [],
+      "unbound": [
+        "--s2a-font-letter-spacing",
+        "--s2a-typography-font-size-heading",
+        "--s2a-typography-line-height-heading"
+      ],
+      "codeOnly": [
+        "--s2a-layout",
+        "--s2a-homepage-dark",
+        "--s2a-color-focus-ring",
+        "--s2a-color-background",
+        "--s2a-color-gray",
+        "--s2a-color-button-content-primary-solid"
+      ],
+      "raw": [],
+      "figma": {
+        "primitive": [],
+        "unprefixed": [],
+        "foreign": [
+          "Black (12102:175420)",
+          "2X Dark (12102:175420)",
+          "2X Light (12102:175420)",
+          "S (12102:175420)"
+        ]
+      }
+    },
+    {
+      "id": "product-router",
+      "nodes": [
+        "12102:175429"
+      ],
+      "css": [
+        "packages/components/src/homepage-sections/homepage-sections.css",
+        "packages/components/src/product-card/product-card.css",
+        "packages/components/src/button/button.css"
+      ],
+      "status": "PASS",
+      "counts": {
+        "figmaBound": 31,
+        "textStyles": 5,
+        "codeRefs": 83,
+        "shippedTokens": 490
+      },
+      "unresolved": [
+        {
+          "name": "--s2a-homepage-dark-surface",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-solid-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-solid-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outlined-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-outlined-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-transparent-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-accent-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-accent-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-knockout",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-border-knockout-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-knockout-active",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-content-outline-inverse",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-border-outline-inverse-default",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-hover",
+          "fallback": true
+        },
+        {
+          "name": "--s2a-color-button-background-outline-inverse-active",
+          "fallback": true
+        }
+      ],
+      "unshipped": [
+        "--s2a-color-button-background-outline-inverse-default",
+        "--s2a-color-button-border-outline-inverse-default"
+      ],
+      "unbound": [
+        "--s2a-typography-letter-spacing-heading",
+        "--s2a-font-letter-spacing"
+      ],
+      "codeOnly": [
+        "--s2a-homepage-dark",
+        "--s2a-color-focus-ring",
+        "--s2a-color-background",
+        "--s2a-color-gray",
+        "--s2a-color-transparent-white",
+        "--s2a-opacity",
+        "--s2a-font-size",
+        "--s2a-color-button-background-solid",
+        "--s2a-color-button-content-solid",
+        "--s2a-color-button-content-primary-solid",
+        "--s2a-color-iconbutton-background-primary-solid-on-light",
+        "--s2a-color-border",
+        "--s2a-color-button-background-outlined",
+        "--s2a-color-button-background-primary-transparent-on-light",
+        "--s2a-color-button-content-outlined",
+        "--s2a-color-button-background-transparent",
+        "--s2a-color-button-background-accent",
+        "--s2a-color-button-background-accent-solid-on-light",
+        "--s2a-color-button-content-accent",
+        "--s2a-color-button-background-knockout",
+        "--s2a-color-button-content",
+        "--s2a-color-button-border-knockout",
+        "--s2a-color-button-content-outline"
+      ],
+      "raw": [],
+      "figma": {
+        "primitive": [
+          "--s2a-border-radius-999 (12102:175429)",
+          "--s2a-color-transparent-white-64 (12102:175429)",
+          "--s2a-color-transparent-white-08 (12102:175429)"
+        ],
+        "unprefixed": [],
+        "foreign": [
+          "4 XS (12102:175429)",
+          "XS (12102:175429)",
+          "DC/dark red (12102:175429)",
+          "DC/trefoil white (12102:175429)",
+          "Photography & Digital Imaging/tile (12102:175429)",
+          "Photography & Digital Imaging/mnemonic (12102:175429)",
+          "DVA/tile (12102:175429)",
+          "DVA/mnemonic (12102:175429)",
+          "Corporate/red (12102:175429)",
+          "Cross Cloud/tile (12102:175429)"
+        ]
+      }
+    },
+    {
+      "id": "site-footer",
+      "nodes": [
+        "12102:175540"
+      ],
+      "css": [
+        "packages/components/src/homepage-sections/homepage-sections.css"
+      ],
+      "status": "PASS",
+      "counts": {
+        "figmaBound": 20,
+        "textStyles": 2,
+        "codeRefs": 14,
+        "shippedTokens": 490
+      },
+      "unresolved": [
+        {
+          "name": "--s2a-homepage-dark-surface",
+          "fallback": true
+        }
+      ],
+      "unshipped": [
+        "--s2a-font-weight-bold"
+      ],
+      "unbound": [
+        "--s2a-typography-letter-spacing",
+        "--s2a-typography-font-size",
+        "--s2a-font-weight",
+        "--s2a-typography-line-height",
+        "--s2a-color-content-body",
+        "--s2a-typography-letter-spacing-body",
+        "--s2a-typography-font-size-body",
+        "--s2a-typography-line-height-body"
+      ],
+      "codeOnly": [
+        "--s2a-layout",
+        "--s2a-homepage-dark",
+        "--s2a-color-focus-ring",
+        "--s2a-color-background",
+        "--s2a-border-radius",
+        "--s2a-color-gray"
+      ],
+      "raw": [],
+      "figma": {
+        "primitive": [],
+        "unprefixed": [
+          "--typography-letter-spacing-caption (12102:175540)",
+          "--typography-font-size-caption (12102:175540)",
+          "--typography-line-height-caption (12102:175540)"
+        ],
+        "foreign": [
+          "Black (12102:175540)",
+          "s2c/typography/caption (12102:175540)",
+          "5 XS (12102:175540)"
+        ]
+      }
+    }
+  ],
+  "pipeline": {
+    "--s2a-gnav-background": {
+      "fallback": true,
+      "sections": [
+        "global-navigation"
+      ]
+    },
+    "--s2a-color-button-background-solid-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-content-solid-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-solid-hover": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-solid-active": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-outlined-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-outlined-hover": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-outlined-active": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-content-outlined-active": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-transparent-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-transparent-hover": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-transparent-active": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-accent-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-content-accent-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-accent-hover": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-accent-active": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-knockout-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-content-knockout": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-border-knockout-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-knockout-hover": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-knockout-active": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-outline-inverse-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-content-outline-inverse": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-border-outline-inverse-default": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-outline-inverse-hover": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-button-background-outline-inverse-active": {
+      "fallback": true,
+      "sections": [
+        "global-navigation",
+        "router-marquee",
+        "social-proof-carousel",
+        "product-router"
+      ]
+    },
+    "--s2a-color-router-nav-item-background-active": {
+      "fallback": true,
+      "sections": [
+        "router-marquee"
+      ]
+    },
+    "--s2a-color-router-nav-item-content-active": {
+      "fallback": true,
+      "sections": [
+        "router-marquee"
+      ]
+    },
+    "--s2a-grid-container-measure-narrow-_max-width": {
+      "fallback": true,
+      "sections": [
+        "router-marquee"
+      ]
+    },
+    "--s2a-elastic-card-width-resting": {
+      "fallback": true,
+      "sections": [
+        "hub-router"
+      ]
+    },
+    "--s2a-router-card-height-max": {
+      "fallback": true,
+      "sections": [
+        "hub-router"
+      ]
+    },
+    "--s2a-router-card-padding": {
+      "fallback": true,
+      "sections": [
+        "hub-router"
+      ]
+    },
+    "--s2a-homepage-dark-surface": {
+      "fallback": true,
+      "sections": [
+        "media-section",
+        "news-section",
+        "product-router",
+        "site-footer"
+      ]
+    },
+    "--s2a-color-content-label-hover": {
+      "fallback": true,
+      "sections": [
+        "media-section"
+      ]
+    },
+    "--s2a-color-icon-button-background-solid-default": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-content-solid": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-background-solid-hover": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-background-solid-active": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-background-transparent-default": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-content-transparent": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-background-transparent-hover": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-background-transparent-active": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-background-knockout-default": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-content-knockout": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-background-knockout-hover": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    },
+    "--s2a-color-icon-button-background-knockout-active": {
+      "fallback": true,
+      "sections": [
+        "social-proof-carousel"
+      ]
+    }
+  }
+}

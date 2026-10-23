@@ -50,10 +50,15 @@
   }
 }
 
-/* desktop 1440+ — standard container is full 12-col (1440px) */
-@media screen and (min-width: 1440px) {
+/* desktop 1441+ — standard container rises to the HD cap. The range begins
+   at 1441 so that 1440, the width every desktop mockup is drawn at, is
+   unambiguously inside the desktop range; the token CSS (tokens.responsive.xl)
+   and the grid-foundation contract start their top range at the same width. */
+@media screen and (min-width: 1441px) {
   .container {
-    max-width: 1440px;
+    /* HD cap: 1920, as decided in container-standard STD_MAX_1440_OR_1920 —
+       1440 through LG, 1920 from XL, matching Figma's default container family. */
+    max-width: var(--s2a-grid-hd-max-width);
   }
 
   .container-hd {
@@ -109,7 +114,7 @@
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1441px) {
   .container-hero-offset {
     width: var(--s2a-grid-container-width);
     max-width: var(--s2a-grid-hd-max-width);

@@ -1,0 +1,465 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "s2a-grid-defs/1",
+  "title": "S2A grid/layout contract defs (curation)",
+  "description": "The judgment layer of a grid contract. Evidence can read what the CSS and the Figma grid modes say; it cannot say which container family is canonical, which tier owns a rule, or what should happen at a boundary. Those live here, are written by people, and are reviewed in PRs. out/<slug>.contract.json is generated from defs + evidence and must never be hand-edited.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "slug",
+    "name",
+    "kind",
+    "tier",
+    "status",
+    "description",
+    "anchors",
+    "rules",
+    "decisions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "const": "s2a-grid-defs/1"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver for the generated contract. Omitted means 0.1.0."
+    },
+    "kind": {
+      "enum": [
+        "foundation",
+        "container",
+        "grid",
+        "spacing"
+      ],
+      "description": "foundation: the shared vocabulary (breakpoints, columns, gutters). container: a width/margin family. grid: a placement system children opt into. spacing: the vertical rhythm between sections."
+    },
+    "tier": {
+      "enum": [
+        "global",
+        "sectional",
+        "block"
+      ],
+      "description": "Who owns the rule. Will Blanton's framing: global and sectional belong to S2A, block-level belongs to C2. A block-tier contract is documented here but must not add shipped tokens to S2A."
+    },
+    "status": {
+      "enum": [
+        "shipped",
+        "proposed",
+        "deprecated"
+      ],
+      "description": "shipped: implemented in packages/grid and verified. proposed: specified in Figma or in Will's layout page with no S2A implementation yet; rules assert absence so the gate stays honest. deprecated: superseded, kept so consumers can migrate."
+    },
+    "supersededBy": {
+      "type": "string",
+      "description": "Slug of the contract that replaces this one. Required when status is deprecated."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20
+    },
+    "anchors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "stylesheet": {
+              "type": "string",
+              "description": "Repo-relative path to the stylesheet of record."
+            },
+            "importPath": {
+              "type": "string"
+            },
+            "rootClass": {
+              "type": "string",
+              "description": "The class a consumer puts on the element. Null for a foundation contract that defines no class of its own."
+            },
+            "childClass": {
+              "type": "string",
+              "description": "The class the children of rootClass carry, when the system has one."
+            }
+          }
+        },
+        "figma": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fileKey": {
+              "type": "string"
+            },
+            "nodeId": {
+              "type": "string",
+              "description": "The frame or section of record on Will's layout page."
+            },
+            "pageName": {
+              "type": "string"
+            },
+            "collectionId": {
+              "type": "string",
+              "description": "Variable collection the values come from, e.g. VariableCollectionId:6:178."
+            },
+            "layerName": {
+              "type": "string",
+              "description": "The layer-name convention this contract corresponds to, e.g. 'Column flex-Grid-8'."
+            },
+            "designOnly": {
+              "type": "boolean",
+              "description": "True when the Figma variables behind this contract are design-only by intent (underscore-prefixed, stripped by build-tokens.js). Design-only means the values are evidence to check code against, never a source for shipped CSS."
+            }
+          }
+        }
+      }
+    },
+    "breakpointBehavior": {
+      "type": "array",
+      "description": "What this contract does in each breakpoint range. One entry per breakpoint id the foundation defines.",
+      "items": {
+        "type": "object",
+        "required": [
+          "breakpoint",
+          "behavior"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "breakpoint": {
+            "enum": [
+              "sm",
+              "md",
+              "lg",
+              "xl"
+            ]
+          },
+          "behavior": {
+            "type": "string",
+            "minLength": 4
+          },
+          "maxWidth": {
+            "type": [
+              "string",
+              "number",
+              "null"
+            ],
+            "description": "Resolved max width, a token ref in {s2a.\u2026} form, or null for unconstrained."
+          },
+          "margin": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Token ref or percentage rule for the side margins."
+          },
+          "columns": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "breakpoints": {
+      "type": "array",
+      "description": "Foundation contracts only: the canonical ranges. Every other contract references these by id.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "minWidth",
+          "mediaQuery",
+          "columns"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "enum": [
+              "sm",
+              "md",
+              "lg",
+              "xl"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "figmaMode": {
+            "type": "string",
+            "description": "Mode name in the Figma responsive collection."
+          },
+          "figmaLabel": {
+            "type": "string",
+            "description": "The _breakpoint label Will set on the mode, e.g. 'Desktop XL'."
+          },
+          "minWidth": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Null for the mobile-first base range, which carries no media query."
+          },
+          "maxWidth": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "mediaQuery": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "columns": {
+            "type": "integer"
+          },
+          "mockWidth": {
+            "type": "integer",
+            "description": "The static mockup width designers draw at in this range."
+          },
+          "portraitEscape": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The agreed portrait-reflow breakpoint inside this range, when one exists."
+          }
+        }
+      }
+    },
+    "tokens": {
+      "type": "array",
+      "description": "Every token this contract binds, by role. Refs use {s2a.\u2026} dotted form (Figma variable names with slashes as dots).",
+      "items": {
+        "type": "object",
+        "required": [
+          "role",
+          "ref"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "What the token does here: gutter, margin, max-width, row-height, section-gap."
+          },
+          "ref": {
+            "type": "string",
+            "pattern": "^\\{s2a\\.[a-z0-9.-]+\\}$"
+          },
+          "breakpoint": {
+            "enum": [
+              "sm",
+              "md",
+              "lg",
+              "xl",
+              "all"
+            ]
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "surface": {
+      "type": "object",
+      "description": "The code surface a consumer touches. Validated against the extracted code evidence.",
+      "additionalProperties": false,
+      "properties": {
+        "classes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "purpose"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "purpose": {
+                "type": "string"
+              },
+              "pattern": {
+                "type": "string",
+                "description": "For a family, the shape of the name, e.g. 'col-{bp}-{1..12}'."
+              },
+              "expect": {
+                "enum": [
+                  "present",
+                  "absent"
+                ],
+                "default": "present"
+              }
+            }
+          }
+        },
+        "customProperties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "purpose"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^--[a-z0-9-]+$"
+              },
+              "purpose": {
+                "type": "string"
+              },
+              "expect": {
+                "enum": [
+                  "present",
+                  "absent"
+                ],
+                "default": "present"
+              }
+            }
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "description": "Machine-checkable assertions. This is the whole point: a layout rule nobody can check is a convention, not a contract. Each rule names a check type the validator implements.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "statement",
+          "severity",
+          "check"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Z0-9_]+$"
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 10,
+            "description": "The rule in plain language, as a designer or dev would read it."
+          },
+          "severity": {
+            "enum": [
+              "fail",
+              "warn"
+            ]
+          },
+          "check": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "mediaQueryPresent",
+                  "boundaryAgreement",
+                  "classPresent",
+                  "classAbsent",
+                  "customPropertyEquals",
+                  "declarationEquals",
+                  "tokenShipped",
+                  "figmaAgrees",
+                  "manual"
+                ],
+                "description": "mediaQueryPresent: the grid stylesheet declares a range starting at minWidth. boundaryAgreement: the grid stylesheet and the shipped responsive token file agree on where a breakpoint begins. classPresent/classAbsent: the class exists (or deliberately does not yet). customPropertyEquals: a --s2a-grid-* property resolves to a px value in a given range. declarationEquals: a declaration on a class resolves, through var() chains, to a px value. tokenShipped: the token reference exists in the built token CSS. figmaAgrees: the Figma grid mode holds the value this contract claims, so a change in the design file surfaces here. manual: a rule a person must confirm; recorded so it is visible, never counted as passing."
+              }
+            }
+          }
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "description": "The questions evidence cannot answer. An open decision is not a blocker; it is the thing the contract is honest about.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "question",
+          "state"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "open",
+              "decided"
+            ]
+          },
+          "owner": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "visualize": {
+      "type": "object",
+      "description": "How Storybook should render this contract. The story reads the generated contract, so a visualization cannot drift from the rules it illustrates.",
+      "additionalProperties": false,
+      "properties": {
+        "demo": {
+          "enum": [
+            "breakpoints",
+            "container",
+            "columns",
+            "bento",
+            "ups",
+            "objects",
+            "spacing",
+            "none"
+          ]
+        },
+        "spans": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "description": "Example span rows to render, e.g. [[6,6],[8,4],[4,4,4]]."
+        },
+        "overlay": {
+          "type": "boolean",
+          "description": "Whether the column overlay applies to this demo."
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

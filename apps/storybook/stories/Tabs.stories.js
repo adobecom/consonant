@@ -73,10 +73,10 @@ export const WithDisabledTab = {
 /** All Selected × State combinations from the Figma set. */
 export const AllStates = {
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 32px;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-xl);">
       ${[false, true].map(
         (selected) => html`
-          <div style="display: flex; gap: 40px; align-items: center;">
+          <div style="display: flex; gap: var(--s2a-spacing-2xl); align-items: center;">
             ${createTab({ label: "Default", selected })}
             ${createTab({ label: "Hover", selected, forceState: "hover" })}
             ${createTab({ label: "Focus", selected, forceState: "focus" })}

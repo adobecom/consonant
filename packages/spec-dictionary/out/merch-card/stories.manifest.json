@@ -1,0 +1,348 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "merch-card",
+  "storybookId": "cards-merchcard",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "featureslist-default",
+      "name": "featuresList: default",
+      "args": {
+        "featuresList": "default"
+      }
+    },
+    {
+      "id": "featureslist-closed",
+      "name": "featuresList: closed",
+      "args": {
+        "featuresList": "closed"
+      }
+    },
+    {
+      "id": "showoptions-on",
+      "name": "showOptions on",
+      "args": {
+        "showOptions": true
+      }
+    },
+    {
+      "id": "showoptions-off",
+      "name": "showOptions off",
+      "args": {
+        "showOptions": false
+      }
+    },
+    {
+      "id": "showpricing-on",
+      "name": "showPricing on",
+      "args": {
+        "showPricing": true
+      }
+    },
+    {
+      "id": "showpricing-off",
+      "name": "showPricing off",
+      "args": {
+        "showPricing": false
+      }
+    },
+    {
+      "id": "showsecondarycta-on",
+      "name": "showSecondaryCta on",
+      "args": {
+        "showSecondaryCta": true
+      }
+    },
+    {
+      "id": "showsecondarycta-off",
+      "name": "showSecondaryCta off",
+      "args": {
+        "showSecondaryCta": false
+      }
+    },
+    {
+      "id": "style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      }
+    },
+    {
+      "id": "style-highlight",
+      "name": "style: highlight",
+      "args": {
+        "style": "highlight"
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "cards-merchcard--default",
+      "name": "Default",
+      "argKeys": [
+        "style",
+        "featuresList",
+        "planName",
+        "description",
+        "planLabel",
+        "app",
+        "comparePrice",
+        "price",
+        "priceNote",
+        "priceTerms",
+        "showPricing",
+        "showOptions",
+        "optionLabel",
+        "optionPromo",
+        "featuresTitle",
+        "features",
+        "primaryCtaLabel",
+        "secondaryCtaLabel",
+        "trustLabel"
+      ]
+    },
+    {
+      "id": "cards-merchcard--highlight",
+      "name": "Highlight",
+      "argKeys": [
+        "style",
+        "featuresList",
+        "planName",
+        "description",
+        "planLabel",
+        "app",
+        "comparePrice",
+        "price",
+        "priceNote",
+        "priceTerms",
+        "showPricing",
+        "showOptions",
+        "optionLabel",
+        "optionPromo",
+        "featuresTitle",
+        "features",
+        "primaryCtaLabel",
+        "secondaryCtaLabel",
+        "trustLabel"
+      ]
+    },
+    {
+      "id": "cards-merchcard--features-closed",
+      "name": "Features Closed",
+      "argKeys": [
+        "style",
+        "featuresList",
+        "planName",
+        "description",
+        "planLabel",
+        "app",
+        "comparePrice",
+        "price",
+        "priceNote",
+        "priceTerms",
+        "showPricing",
+        "showOptions",
+        "optionLabel",
+        "optionPromo",
+        "featuresTitle",
+        "features",
+        "primaryCtaLabel",
+        "secondaryCtaLabel",
+        "trustLabel"
+      ]
+    },
+    {
+      "id": "cards-merchcard--highlight-features-closed",
+      "name": "Highlight Features Closed",
+      "argKeys": [
+        "style",
+        "featuresList",
+        "planName",
+        "description",
+        "planLabel",
+        "app",
+        "comparePrice",
+        "price",
+        "priceNote",
+        "priceTerms",
+        "showPricing",
+        "showOptions",
+        "optionLabel",
+        "optionPromo",
+        "featuresTitle",
+        "features",
+        "primaryCtaLabel",
+        "secondaryCtaLabel",
+        "trustLabel"
+      ]
+    },
+    {
+      "id": "cards-merchcard--minimal-no-optional-regions",
+      "name": "Minimal No Optional Regions",
+      "argKeys": [
+        "style",
+        "featuresList",
+        "planName",
+        "description",
+        "planLabel",
+        "app",
+        "comparePrice",
+        "price",
+        "priceNote",
+        "priceTerms",
+        "showPricing",
+        "showOptions",
+        "optionLabel",
+        "optionPromo",
+        "featuresTitle",
+        "features",
+        "primaryCtaLabel",
+        "secondaryCtaLabel",
+        "trustLabel"
+      ]
+    },
+    {
+      "id": "cards-merchcard--on-dark-surface",
+      "name": "On Dark Surface",
+      "argKeys": [
+        "style",
+        "featuresList",
+        "planName",
+        "description",
+        "planLabel",
+        "app",
+        "comparePrice",
+        "price",
+        "priceNote",
+        "priceTerms",
+        "showPricing",
+        "showOptions",
+        "optionLabel",
+        "optionPromo",
+        "featuresTitle",
+        "features",
+        "primaryCtaLabel",
+        "secondaryCtaLabel",
+        "trustLabel"
+      ]
+    },
+    {
+      "id": "cards-merchcard--plan-comparison-row",
+      "name": "Plan Comparison Row",
+      "argKeys": [
+        "style",
+        "featuresList",
+        "planName",
+        "description",
+        "planLabel",
+        "app",
+        "comparePrice",
+        "price",
+        "priceNote",
+        "priceTerms",
+        "showPricing",
+        "showOptions",
+        "optionLabel",
+        "optionPromo",
+        "featuresTitle",
+        "features",
+        "primaryCtaLabel",
+        "secondaryCtaLabel",
+        "trustLabel"
+      ]
+    }
+  ],
+  "deferred": [
+    "showsecondarycta-off"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      "default / default",
+      "default / highlight",
+      "closed / default",
+      "closed / highlight"
+    ],
+    "rowValues": [
+      {
+        "Features List": "default",
+        "Style": "default"
+      },
+      {
+        "Features List": "default",
+        "Style": "highlight"
+      },
+      {
+        "Features List": "closed",
+        "Style": "default"
+      },
+      {
+        "Features List": "closed",
+        "Style": "highlight"
+      }
+    ],
+    "cell": {
+      "w": 498,
+      "h": 682,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "featuresList": "default",
+          "style": "default"
+        },
+        "forced": null,
+        "label": "default / default / default",
+        "nodeId": "10826:13313"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "featuresList": "default",
+          "style": "highlight"
+        },
+        "forced": null,
+        "label": "default / highlight / default",
+        "nodeId": "10826:13343"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "featuresList": "closed",
+          "style": "default"
+        },
+        "forced": null,
+        "label": "closed / default / default",
+        "nodeId": "10826:13328"
+      },
+      {
+        "row": 3,
+        "col": 0,
+        "args": {
+          "featuresList": "closed",
+          "style": "highlight"
+        },
+        "forced": null,
+        "label": "closed / highlight / default",
+        "nodeId": "10826:13358"
+      }
+    ],
+    "missing": []
+  }
+}

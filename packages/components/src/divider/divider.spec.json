@@ -1,40 +1,267 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "Divider",
   "slug": "divider",
   "cssClass": "c-divider",
+  "figmaNodeId": "10910:17760",
   "storybookId": "divider",
-  "description": "1px horizontal rule separating content regions. Style follows the surface it sits on — default/subtle for light surfaces, knockout/inverse/subtle-inverse for dark or media surfaces.",
-  "figmaNode": "10910:17760",
   "variants": {
-    "style": ["default", "subtle", "knockout", "inverse", "subtle-inverse"]
+    "Style": [
+      "default",
+      "subtle",
+      "knockout",
+      "inverse",
+      "subtle-inverse"
+    ]
   },
   "props": [
     {
       "name": "style",
       "type": "string",
       "defaultValue": "\"default\"",
-      "enum": ["default", "subtle", "knockout", "inverse", "subtle-inverse"],
-      "description": "Divider color for the surface context. default = standard border on light, subtle = low-emphasis on light, knockout = always-black, inverse = always-white, subtle-inverse = low-emphasis on dark."
+      "enum": [
+        "default",
+        "subtle",
+        "knockout",
+        "inverse",
+        "subtle-inverse"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style",
+          "verified": true,
+          "options": [
+            "default",
+            "subtle",
+            "knockout",
+            "inverse",
+            "subtle-inverse"
+          ]
+        },
+        "code": {
+          "prop": "style",
+          "attr": "data-style",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
     }
   ],
   "tokenBindings": {
-    "background-color:default": "--s2a-color-border-default",
-    "background-color:subtle": "--s2a-color-border-subtle",
-    "background-color:knockout": "--s2a-color-border-knockout",
-    "background-color:inverse": "--s2a-color-border-inverse",
-    "background-color:subtle-inverse": "--s2a-color-transparent-white-16"
+    "root-background-color@style=default": "--s2a-color-divider-default",
+    "root-background-color@style=subtle": "--s2a-color-divider-subtle",
+    "root-background-color@style=knockout": "--s2a-color-divider-knockout",
+    "root-background-color@style=inverse": "--s2a-color-divider-inverse",
+    "root-background-color@style=subtle-inverse": "--s2a-color-divider-subtle-inverse"
   },
-  "tokenNotes": [
-    "Figma binds all fills to s2a/color/divider/* variables which have not shipped in @adobecom/s2a-tokens yet — the CSS uses each variable's declared codeSyntax.WEB (border tokens) until they do.",
-    "subtle-inverse has no shipped semantic equivalent (known border/subtle-inverse gap); --s2a-color-transparent-white-16 is the exact resolved value from Figma (white @ 16%)."
-  ],
+  "tier": "component",
+  "composedOf": [],
   "a11y": {
-    "role": "separator",
-    "requiredAriaAttrs": [],
-    "wcag": ["1.3.1"],
-    "notes": [
-      "Rendered as <hr> with role='separator' — announced as a thematic break by screen readers.",
-      "Purely decorative separators inside tightly-grouped composites may instead use aria-hidden='true' at the usage site."
-    ]
+    "wcag": []
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".c-divider",
+    "figma": ".root",
+    "element": "div",
+    "tokens": {
+      "width": {
+        "value": "raw:418px",
+        "raw": true,
+        "tokens": []
+      },
+      "height": {
+        "value": "raw:1px",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "tokensByProp": [
+      {
+        "prop": "style",
+        "map": {
+          "default": {
+            "background-color": {
+              "value": "{s2a.color.divider.default}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.divider.default}",
+                  "cssVar": "--s2a-color-divider-default",
+                  "figma": "s2a/color/divider/default",
+                  "shipped": true,
+                  "value": "#292929",
+                  "dark": "#dadada"
+                }
+              ]
+            }
+          },
+          "subtle": {
+            "background-color": {
+              "value": "{s2a.color.divider.subtle}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.divider.subtle}",
+                  "cssVar": "--s2a-color-divider-subtle",
+                  "figma": "s2a/color/divider/subtle",
+                  "shipped": true,
+                  "value": "rgb(0 0 0 / 12%)",
+                  "dark": "rgb(255 255 255 / 24%)"
+                }
+              ]
+            }
+          },
+          "knockout": {
+            "background-color": {
+              "value": "{s2a.color.divider.knockout}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.divider.knockout}",
+                  "cssVar": "--s2a-color-divider-knockout",
+                  "figma": "s2a/color/divider/knockout",
+                  "shipped": true,
+                  "value": "#000",
+                  "dark": "#fff"
+                }
+              ]
+            }
+          },
+          "inverse": {
+            "background-color": {
+              "value": "{s2a.color.divider.inverse}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.divider.inverse}",
+                  "cssVar": "--s2a-color-divider-inverse",
+                  "figma": "s2a/color/divider/inverse",
+                  "shipped": true,
+                  "value": "#fff",
+                  "dark": "#000"
+                }
+              ]
+            }
+          },
+          "subtle-inverse": {
+            "background-color": {
+              "value": "{s2a.color.divider.subtle-inverse}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.divider.subtle-inverse}",
+                  "cssVar": "--s2a-color-divider-subtle-inverse",
+                  "figma": "s2a/color/divider/subtle-inverse",
+                  "shipped": true,
+                  "value": "rgb(255 255 255 / 16%)",
+                  "dark": "rgb(0 0 0 / 16%)"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "parts": {}
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "10910:17760",
+        "nodeName": "Divider",
+        "componentSetKey": "943550fa170b6c953a27449f060743c87560f962",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:b80198e29a290c7797446fdaee1299f27524421fdfd35f524fb93b7452c2905c",
+        "extractedAt": "2026-10-08T17:55:20.791Z",
+        "meta": {
+          "version": "1.0.0",
+          "status": "active",
+          "updated": "2026-08-04",
+          "changelog": "1.0.0   2026-08-04  init         Initial release"
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/divider/divider.js",
+        "export": "Divider",
+        "controller": null,
+        "cssClass": "c-divider"
+      },
+      "evidence": {
+        "hash": "sha256:7d1d10926bb5490ae022c499f99d1987f729a0c4b79a013f0a8585c77676cfe0"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "d-archetype-untemplated",
+      "question": "The archetype read as \"none\", which has no template in the dictionary (it has: link-card, card, collection, button, checkbox / radio, toggle / switch, input / field, badge / tag / chip, pagination, accordion, select / dropdown, helper text, list). Without one the draft gets no HTML element, no accessibility floor and no base CSS — the root falls back to <div>. Which archetype is this, really?",
+      "chose": "drafted with no archetype floor; root element defaults to div",
+      "confidence": "low",
+      "fix": "Set \"archetype\" in the defs to one the dictionary templates, or re-scaffold with --archetype=<name>. If none fit, the dictionary needs a new entry.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "no signal identified a kind — decide it rather than inheriting a default"
+    },
+    {
+      "id": "d-archetype",
+      "question": "Scaffolded as none (no signal identified a kind — decide it rather than inheriting a default). Confirm, or re-run npm run specs:scaffold -- --slug=divider --archetype=<link-card|card|collection>.",
+      "chose": "none — no signal identified a kind — decide it rather than inheriting a default",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=divider --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces divider×5; state axis none"
+    },
+    {
+      "id": "d-hardcoded-values",
+      "question": "2 values in the design are set with no variable behind them: root width = 418px; root height = 1px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "divider.figma.evidence.json unboundValues"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:1d332dd437e297964d1d2ebbb47a931a5227131b99a65173760d0e4f90ae8527",
+    "codeEvidence": "sha256:7d1d10926bb5490ae022c499f99d1987f729a0c4b79a013f0a8585c77676cfe0",
+    "figmaEvidence": "sha256:b80198e29a290c7797446fdaee1299f27524421fdfd35f524fb93b7452c2905c",
+    "generator": "s2a-spec-transform@1"
   }
 }

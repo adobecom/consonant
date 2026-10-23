@@ -1,0 +1,46 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "action-card",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    }
+  ],
+  "existing": [],
+  "deferred": [],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      ""
+    ],
+    "rowValues": [
+      {}
+    ],
+    "cell": {
+      "w": 337,
+      "h": 323,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {},
+        "forced": null,
+        "label": "default",
+        "nodeId": "14226:196789"
+      }
+    ],
+    "missing": []
+  }
+}

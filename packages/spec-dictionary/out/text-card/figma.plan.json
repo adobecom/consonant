@@ -1,0 +1,292 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "TextCard",
+  "setName": "TextCard — v2",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "article",
+    "bindings": {
+      "background-color": [
+        "s2a/color/background/subtle"
+      ],
+      "border-radius": [
+        "s2a/border/radius/md"
+      ],
+      "gap": [
+        "s2a/spacing/lg"
+      ],
+      "padding-bottom": [
+        "s2a/spacing/none"
+      ],
+      "padding-left": [
+        "s2a/spacing/lg"
+      ],
+      "padding-right": [
+        "s2a/spacing/lg"
+      ],
+      "padding-top": [
+        "s2a/spacing/lg"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".headline-body",
+        "source": "/.headline-body",
+        "element": "div",
+        "bindings": {
+          "gap": [
+            "s2a/spacing/xs"
+          ]
+        },
+        "slot": null,
+        "children": [
+          {
+            "name": ".headline",
+            "source": "/.headline-body/.headline",
+            "element": "span",
+            "bindings": {
+              "color": [
+                "s2a/color/content/heading"
+              ],
+              "font-family": [
+                "s2a/font/family/heading"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/heading-5"
+              ],
+              "font-weight": [
+                "s2a/font/weight/heading"
+              ],
+              "letter-spacing": [
+                "s2a/font/letter-spacing/4xl"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/heading-5"
+              ]
+            },
+            "slot": {
+              "name": "headline",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          },
+          {
+            "name": ".body",
+            "source": "/.headline-body/.body",
+            "element": "span",
+            "bindings": {
+              "color": [
+                "s2a/color/content/body-subtle"
+              ],
+              "font-family": [
+                "s2a/font/family/body"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/body-md"
+              ],
+              "font-weight": [
+                "s2a/font/weight/body"
+              ],
+              "letter-spacing": [
+                "s2a/typography/letter-spacing/body-md"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/body-md"
+              ]
+            },
+            "slot": {
+              "name": "body",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".link",
+        "source": "/.cta",
+        "element": null,
+        "bindings": {},
+        "slot": {
+          "name": ".cta",
+          "accepts": [
+            "Link"
+          ],
+          "mode": "restrict"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "11362:245184",
+    "nodeName": "TextCard — v2",
+    "componentSetKey": "db93874630fe07525d42cfbac86b77e52e217e9f",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "centered"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "name": "Body#9554:2",
+      "type": "TEXT",
+      "forProp": "body"
+    },
+    {
+      "name": "CTA#9561:0",
+      "type": "INSTANCE_SWAP",
+      "forProp": "cta",
+      "defaultValue": "12823:184376"
+    },
+    {
+      "name": "Headline#9554:0",
+      "type": "TEXT",
+      "forProp": "headline"
+    },
+    {
+      "name": "Show Body#9554:6",
+      "type": "BOOLEAN",
+      "forProp": "showBody",
+      "defaultValue": true
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-text-card",
+      "bindings": {
+        "background-color": [
+          "s2a/color/background/subtle"
+        ],
+        "border-radius": [
+          "s2a/border/radius/md"
+        ],
+        "gap": [
+          "s2a/spacing/lg"
+        ],
+        "padding-bottom": [
+          "s2a/spacing/none"
+        ],
+        "padding-left": [
+          "s2a/spacing/lg"
+        ],
+        "padding-right": [
+          "s2a/spacing/lg"
+        ],
+        "padding-top": [
+          "s2a/spacing/lg"
+        ]
+      }
+    },
+    {
+      "name": "/.headline-body",
+      "selector": ".c-text-card__headline-body",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/xs"
+        ]
+      }
+    },
+    {
+      "name": "/.headline-body/.headline",
+      "selector": ".c-text-card__headline",
+      "bindings": {
+        "color": [
+          "s2a/color/content/heading"
+        ],
+        "font-family": [
+          "s2a/font/family/heading"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/heading-5"
+        ],
+        "font-weight": [
+          "s2a/font/weight/heading"
+        ],
+        "letter-spacing": [
+          "s2a/font/letter-spacing/4xl"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/heading-5"
+        ]
+      },
+      "slot": {
+        "name": "headline",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.headline-body/.body",
+      "selector": ".c-text-card__body",
+      "bindings": {
+        "color": [
+          "s2a/color/content/body-subtle"
+        ],
+        "font-family": [
+          "s2a/font/family/body"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/body-md"
+        ],
+        "font-weight": [
+          "s2a/font/weight/body"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/body-md"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/body-md"
+        ]
+      },
+      "slot": {
+        "name": "body",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.cta",
+      "selector": ".c-text-card__link",
+      "bindings": {},
+      "slot": {
+        "name": ".cta",
+        "accepts": [
+          "Link"
+        ],
+        "mode": "restrict"
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/heading-5",
+    "s2a/typography/body-md"
+  ]
+}

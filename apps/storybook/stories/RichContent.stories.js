@@ -1,4 +1,4 @@
-import { html } from "lit";
+import { html, nothing } from "lit";
 
 import { RichContent } from "./RichContent";
 import { createButton as Button } from "../../../packages/components/src/button/button.js";
@@ -7,11 +7,12 @@ import { createButton as Button } from "../../../packages/components/src/button/
 // width: 100% so it fills the Storybook canvas at any viewport.
 // padding mirrors S2A grid section padding (80px H / 64px V at desktop).
 
-const section = (bg, content, { align = "flex-start" } = {}) => html`
-  <div style="
+// dark = pin the surface's theme mode (data-theme="dark"); RichContent reads theme tokens inside it.
+const section = (bg, content, { align = "flex-start", dark = false } = {}) => html`
+  <div data-theme=${dark ? "dark" : nothing} style="
     width: 100%;
     box-sizing: border-box;
-    padding: 64px 80px;
+    padding: var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);
     background: ${bg};
     display: flex;
     flex-direction: column;
@@ -44,7 +45,7 @@ Marketing text content block: eyebrow + title + body paragraph + optional Action
       },
       source: {
         language: "html",
-        code: `<div class="c-rich-content" data-theme="on-light" data-density="tight" data-justify="start" data-measure="narrow" data-has-actions="false">
+        code: `<div class="c-rich-content" data-density="tight" data-justify="start" data-measure="narrow" data-has-actions="false">
   <div class="c-rich-content__text">
     <p class="c-rich-content__eyebrow">Eyebrow</p>
     <h2 class="c-rich-content__title">Section heading.</h2>
@@ -53,7 +54,7 @@ Marketing text content block: eyebrow + title + body paragraph + optional Action
 </div>
 
 <!-- With centered layout and wide measure (used in SectionHeader) -->
-<div class="c-rich-content" data-theme="on-light" data-density="tight" data-justify="center" data-measure="wide" data-has-actions="true">
+<div class="c-rich-content" data-density="tight" data-justify="center" data-measure="wide" data-has-actions="true">
   <div class="c-rich-content__text">
     <h2 class="c-rich-content__title">Everything you need to make anything.</h2>
   </div>
@@ -63,10 +64,6 @@ Marketing text content block: eyebrow + title + body paragraph + optional Action
     },
   },
   argTypes: {
-    theme: {
-      control: { type: "select" },
-      options: ["on-light", "on-dark"],
-    },
     density: {
       control: { type: "select" },
       options: ["tight", "regular"],
@@ -85,7 +82,6 @@ Marketing text content block: eyebrow + title + body paragraph + optional Action
     showActions: { control: "boolean" },
   },
   args: {
-    theme: "on-light",
     density: "tight",
     justifyContent: "start",
     measure: "narrow",
@@ -108,9 +104,8 @@ Marketing text content block: eyebrow + title + body paragraph + optional Action
 export const Example_3069_5370 = {
   name: "3069-5370 · Hero Center / On Light",
   render: () => section(
-    "#f8f8f8",
+    "var(--s2a-color-surface-subtle)",
     RichContent({
-      theme: "on-light",
       density: "tight",
       justifyContent: "center",
       measure: "none",
@@ -135,9 +130,8 @@ export const Example_3069_5370 = {
 export const Example_3063_5190 = {
   name: "3063-5190 · Product Feature / Acrobat",
   render: () => section(
-    "#f8f8f8",
+    "var(--s2a-color-surface-subtle)",
     RichContent({
-      theme: "on-light",
       density: "tight",
       justifyContent: "start",
       measure: "wide",
@@ -165,9 +159,8 @@ export const Example_3063_5190 = {
 export const Example_3119_9377 = {
   name: "3119-9377 · Testimonial / On Dark",
   render: () => section(
-    "#0f0d0c",
+    "var(--s2a-color-background-knockout)",
     RichContent({
-      theme: "on-dark",
       density: "tight",
       justifyContent: "start",
       measure: "wide",
@@ -178,7 +171,8 @@ export const Example_3119_9377 = {
       actions: html`
         ${Button({ label: "Create with Firefly", style: "knockout" })}
       `,
-    })
+    }),
+    { dark: true }
   ),
 };
 
@@ -194,9 +188,8 @@ export const Example_3119_9377 = {
 export const Example_3135_4661 = {
   name: "3135-4661 · Tools / On Dark Photo",
   render: () => section(
-    "linear-gradient(135deg, #2c1f14 0%, #1a120a 40%, #251a0e 70%, #1c1408 100%)",
+    "linear-gradient(135deg, var(--s2a-color-background-knockout) 0%, var(--s2a-color-background-knockout) 40%, var(--s2a-color-background-knockout) 70%, var(--s2a-color-background-knockout) 100%)",
     RichContent({
-      theme: "on-dark",
       density: "tight",
       justifyContent: "center",
       measure: "wide",
@@ -207,7 +200,7 @@ export const Example_3135_4661 = {
         ${Button({ label: "See all products", style: "outline-inverse" })}
       `,
     }),
-    { align: "center" }
+    { align: "center", dark: true }
   ),
 };
 
@@ -223,9 +216,8 @@ export const Example_3135_4661 = {
 export const Example_3119_9356 = {
   name: "3119-9356 · Features Center / On Light",
   render: () => section(
-    "#ffffff",
+    "var(--s2a-color-surface-default)",
     RichContent({
-      theme: "on-light",
       density: "tight",
       justifyContent: "center",
       measure: "wide",
@@ -250,9 +242,8 @@ export const AllExamples = {
   render: () => html`
     <div style="display: flex; flex-direction: column; width: 100%;">
 
-      <div style="width:100%;box-sizing:border-box;padding:64px 80px;background:#f8f8f8;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:var(--s2a-color-surface-subtle);display:flex;flex-direction:column;align-items:center;">
         ${RichContent({
-          theme: "on-light",
           density: "tight",
           justifyContent: "center",
           measure: "none",
@@ -263,9 +254,8 @@ export const AllExamples = {
         })}
       </div>
 
-      <div style="width:100%;box-sizing:border-box;padding:64px 80px;background:#f8f8f8;display:flex;flex-direction:column;align-items:flex-start;">
+      <div style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:var(--s2a-color-surface-subtle);display:flex;flex-direction:column;align-items:flex-start;">
         ${RichContent({
-          theme: "on-light",
           density: "tight",
           justifyContent: "start",
           measure: "wide",
@@ -280,9 +270,8 @@ export const AllExamples = {
         })}
       </div>
 
-      <div style="width:100%;box-sizing:border-box;padding:64px 80px;background:#0f0d0c;display:flex;flex-direction:column;align-items:flex-start;">
+      <div data-theme="dark" style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:var(--s2a-color-background-knockout);display:flex;flex-direction:column;align-items:flex-start;">
         ${RichContent({
-          theme: "on-dark",
           density: "tight",
           justifyContent: "start",
           measure: "wide",
@@ -296,9 +285,8 @@ export const AllExamples = {
         })}
       </div>
 
-      <div style="width:100%;box-sizing:border-box;padding:64px 80px;background:linear-gradient(135deg,#2c1f14 0%,#1a120a 40%,#251a0e 70%,#1c1408 100%);display:flex;flex-direction:column;align-items:center;">
+      <div data-theme="dark" style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:linear-gradient(135deg,var(--s2a-color-background-knockout) 0%,var(--s2a-color-background-knockout) 40%,var(--s2a-color-background-knockout) 70%,var(--s2a-color-background-knockout) 100%);display:flex;flex-direction:column;align-items:center;">
         ${RichContent({
-          theme: "on-dark",
           density: "tight",
           justifyContent: "center",
           measure: "wide",
@@ -311,9 +299,8 @@ export const AllExamples = {
         })}
       </div>
 
-      <div style="width:100%;box-sizing:border-box;padding:64px 80px;background:#ffffff;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:100%;box-sizing:border-box;padding:var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);background:var(--s2a-color-surface-default);display:flex;flex-direction:column;align-items:center;">
         ${RichContent({
-          theme: "on-light",
           density: "tight",
           justifyContent: "center",
           measure: "wide",

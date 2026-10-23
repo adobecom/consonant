@@ -17,7 +17,7 @@ export default {
       source: {
         language: "html",
         code: `<!-- Always render tabs inside a role="tablist" container -->
-<div role="tablist" aria-label="Product categories" style="display: flex; gap: 8px;">
+<div role="tablist" aria-label="Product categories" style="display: flex; gap: var(--s2a-spacing-xs);">
   <button class="c-nav-filter" role="tab" aria-selected="true" type="button">
     <span class="c-nav-filter__label">All</span>
   </button>
@@ -82,7 +82,7 @@ export const ForcedStates = {
   render: () => {
     const states = ["default", "hover", "active", "focus", "disabled"];
     return html`
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+      <div style="display: flex; gap: var(--s2a-spacing-xs); flex-wrap: wrap; align-items: center;">
         ${states.map((state) =>
           NavFilter({ label: state, state }),
         )}
@@ -107,7 +107,7 @@ export const InAGroup = {
       <div
         role="tablist"
         aria-label="Product categories"
-        style="display: flex; gap: 8px; flex-wrap: wrap;"
+        style="display: flex; gap: var(--s2a-spacing-xs); flex-wrap: wrap;"
       >
         ${labels.map((label, i) =>
           NavFilter({ label, active: i === 0, onClick: handleClick }),

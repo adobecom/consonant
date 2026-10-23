@@ -13,7 +13,7 @@ import "./social-proof-carousel.css";
  * @param {number}   opts.activeIndex — initially active slide (0-based)
  */
 export const SocialProofCarousel = ({ slides = [], activeIndex = 0 } = {}) => html`
-  <div class="c-social-proof-carousel" data-active=${activeIndex}>
+  <div class="c-social-proof-carousel" data-active=${activeIndex} data-single=${String(slides.length < 2)}>
     <div class="spc-track">
       ${slides.map(
         (slide, i) => html`
@@ -37,15 +37,14 @@ export const SocialProofCarousel = ({ slides = [], activeIndex = 0 } = {}) => ht
       ${IconButton({ icon: "arrow-right", style: "knockout", size: "lg", ariaLabel: "Next slide" })}
     </div>
 
-    <div class="spc-pagination" role="tablist" aria-label="Slide navigation">
+    <div class="spc-pagination" role="group" aria-label="Slide navigation">
       ${slides.map(
         (_, i) => html`
           <button
             class="spc-dot"
-            role="tab"
             type="button"
             aria-label="Slide ${i + 1}"
-            aria-selected=${i === activeIndex ? "true" : "false"}
+            aria-pressed=${i === activeIndex ? "true" : "false"}
           ></button>
         `
       )}
@@ -72,6 +71,8 @@ export class SocialProofCarouselController {
     this.nextBtn = el.querySelector(".spc-nav--next .c-icon-button");
     this.activeIndex = Number(el.dataset.active ?? 0);
     this._ro = null;
+    this._events = new AbortController();
+    this._destroyed = false;
 
     this._bindEvents();
     this._recalc();
@@ -80,13 +81,35 @@ export class SocialProofCarouselController {
 
   _getPeek() {
     const W = this.el.offsetWidth;
-    return Math.round(W * (W >= 1600 ? PEEK_WIDE : PEEK_NARROW));
+    // Mobile (Home 375 spec 8278:190566): 327px active slide at x=24 with
+    // 8px gaps, so 16px of each neighbour peeks.
+    if (W < 600) return 16;
+    // The design specifies the peek at 1440 (narrow) and 1920 (wide). The switch
+    // sits on the grid's XL boundary (1441, will-block-css-v1) so the stylesheet
+    // can carry the same fallback under a policy breakpoint.
+    return Math.round(W * (W >= 1441 ? PEEK_WIDE : PEEK_NARROW));
+  }
+
+  _getSlideWidth(peek) {
+    const W = this.el.offsetWidth;
+    return peek ? W - 2 * peek - 2 * GAP : W;
   }
 
   _recalc() {
-    const W = this.el.offsetWidth;
+    if (this._destroyed) return;
+    // Not laid out yet (mounted before first layout, display:none, a detached
+    // preview): offsetWidth is 0 and the slide width would come out negative.
+    // A negative length is an invalid declaration, which also discards the
+    // stylesheet's fallback — so the first paint was a zero-width slide that
+    // the ResizeObserver corrected one frame later, a 0.76 layout shift on a
+    // phone. Leave the CSS fallback in charge until there is a real width.
+    if (!this.el.offsetWidth) {
+      this.el.style.removeProperty("--spc-slide-w");
+      this.el.style.removeProperty("--spc-peek");
+      return;
+    }
     const peek = this._getPeek();
-    const slideW = W - 2 * peek - 2 * GAP;
+    const slideW = this._getSlideWidth(peek);
     this.el.style.setProperty("--spc-slide-w", `${slideW}px`);
     this.el.style.setProperty("--spc-peek", `${peek}px`);
     // Reposition without transition on resize
@@ -94,9 +117,13 @@ export class SocialProofCarouselController {
   }
 
   _goTo(index, instant = false) {
+    if (this._destroyed) return;
+    index = Math.max(0, Math.min(this.slides.length - 1, Number.isFinite(index) ? Math.trunc(index) : 0));
     const peek = this._getPeek();
-    const slideW = this.el.offsetWidth - 2 * peek - 2 * GAP;
-    const translateX = -(index * (slideW + GAP)) + peek;
+    const slideW = this._getSlideWidth(peek);
+    // Active slide sits peek + gap from the edge so both neighbours peek by the
+    // same amount (Home 375 spec 8278:190566: 327px slide at x=24, 16px peek, 8px gap).
+    const translateX = -(index * (slideW + GAP)) + peek + GAP;
 
     this.track.style.transition = instant
       ? "none"
@@ -117,12 +144,12 @@ export class SocialProofCarouselController {
 
     // Dots
     this.dots.forEach((dot, i) => {
-      dot.setAttribute("aria-selected", i === index ? "true" : "false");
+      dot.setAttribute("aria-pressed", i === index ? "true" : "false");
     });
 
     // Button disabled states
     if (this.prevBtn) this.prevBtn.disabled = index === 0;
-    if (this.nextBtn) this.nextBtn.disabled = index === this.slides.length - 1;
+    if (this.nextBtn) this.nextBtn.disabled = index >= this.slides.length - 1;
 
     this.el.dataset.active = index;
     this.activeIndex = index;
@@ -134,18 +161,20 @@ export class SocialProofCarouselController {
   }
 
   _bindEvents() {
-    this.prevBtn?.addEventListener("click", () => this._advance(-1));
-    this.nextBtn?.addEventListener("click", () => this._advance(1));
+    const options = { signal: this._events.signal };
+    this.prevBtn?.addEventListener("click", () => this._advance(-1), options);
+    this.nextBtn?.addEventListener("click", () => this._advance(1), options);
 
     this.dots.forEach((dot, i) => {
-      dot.addEventListener("click", () => this._goTo(i));
+      dot.addEventListener("click", () => this._goTo(i), options);
     });
 
     // Keyboard navigation
     this.el.addEventListener("keydown", (e) => {
+      if (e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
       if (e.key === "ArrowLeft") { e.preventDefault(); this._advance(-1); }
       if (e.key === "ArrowRight") { e.preventDefault(); this._advance(1); }
-    });
+    }, options);
 
     // Resize observer
     if (typeof ResizeObserver !== "undefined") {
@@ -155,6 +184,9 @@ export class SocialProofCarouselController {
   }
 
   destroy() {
+    if (this._destroyed) return;
+    this._destroyed = true;
+    this._events.abort();
     this._ro?.disconnect();
   }
 }

@@ -1,0 +1,86 @@
+{
+  "id": "s2a.link",
+  "name": "Link",
+  "slug": "link",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "A text link that adapts to light and dark automatically — no Context axis, theme-aware via content/default.",
+  "props": [
+    {
+      "name": "emphasis",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "iconEnd",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showIconEnd",
+      "type": "boolean",
+      "lever": false
+    },
+    {
+      "name": "underline",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.label-wrap",
+    "root.label-wrap.call-to-action",
+    "root.label-wrap.underline",
+    "root.end-icon",
+    "root.end-icon.frame",
+    "root.end-icon.frame.s2a-icon-chevron-right",
+    "root.end-icon.icon-color"
+  ],
+  "slots": [
+    {
+      "path": "root.label-wrap.call-to-action",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 17,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/link/link.js",
+      "export": "Link",
+      "controller": null,
+      "cssClass": "c-link"
+    },
+    "figma": "12823:184375"
+  },
+  "openDecisions": 9
+}

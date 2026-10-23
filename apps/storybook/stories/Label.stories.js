@@ -39,17 +39,17 @@ export const Default = {};
 export const WithControl = {
   name: "Paired with a control",
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 8px; width: 280px;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-xs); width: 280px;">
       ${Label({ text: "Email address", for: "sb-label-demo-input" })}
       <input
         id="sb-label-demo-input"
         type="email"
         placeholder="you@example.com"
         style="
-          padding: 12px 16px;
+          padding: var(--s2a-spacing-sm) var(--s2a-spacing-md);
           font: inherit;
-          border: 1px solid var(--s2a-color-border-subtle, #dadada);
-          border-radius: var(--s2a-border-radius-sm, 12px);
+          border: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+          border-radius: var(--s2a-border-radius-sm);
         "
       />
     </div>

@@ -1,0 +1,329 @@
+/* Semantic tokens control presentation. Letter page sizes, screenshot boxes,
+   chart proportions and column fractions are document/data geometry. */
+.rich-report .page {
+  gap: 0;
+}
+.rich-report .hero {
+  padding-top: var(--s2a-spacing-md);
+}
+.rich-report .hero h1 {
+  margin-top: var(--s2a-spacing-xs);
+}
+.rich-report .lead {
+  font-size: var(--s2a-font-size-lg);
+  line-height: var(--s2a-font-line-height-md);
+}
+.rich-report .metrics {
+  margin-top: var(--s2a-spacing-lg);
+}
+.rich-report .metric {
+  padding-left: var(--s2a-spacing-md);
+}
+.rich-report .metric:first-child {
+  padding-left: 0;
+}
+.rich-report .metric-label small {
+  display: block;
+  color: var(--s2a-color-content-body-subtle);
+  font: inherit;
+}
+.cover-image {
+  margin-top: var(--s2a-spacing-sm);
+}
+.cover-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--s2a-border-radius-xs);
+}
+.rich-report figcaption {
+  margin-top: var(--s2a-spacing-xs);
+}
+.rich-report .page-title {
+  font-size: var(--s2a-font-size-3xl);
+  line-height: var(--s2a-font-line-height-xl);
+  margin-top: var(--s2a-spacing-lg);
+}
+.rich-report .page-intro {
+  font-size: var(--s2a-font-size-md);
+  line-height: var(--s2a-font-line-height-md);
+}
+.rich-report .recommendation {
+  margin-top: var(--s2a-spacing-md);
+}
+.rich-report .recommendation p {
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-sm);
+}
+.rich-report .footer {
+  padding-top: var(--s2a-spacing-sm);
+  border-top: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+}
+.evidence-strip {
+  display: grid;
+  grid-template-columns: 1.8fr 1.8fr 0.8fr;
+  gap: var(--s2a-spacing-sm);
+  margin-top: var(--s2a-spacing-lg);
+}
+.shot {
+  min-width: 0;
+}
+.shot .image {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--s2a-color-surface-inverse);
+  border-radius: var(--s2a-border-radius-xs);
+  overflow: hidden;
+}
+.shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.shot strong {
+  font-size: var(--s2a-font-size-sm);
+  font-weight: var(--s2a-font-weight-label);
+  display: block;
+}
+.shot figcaption {
+  font-size: var(--s2a-font-size-xs);
+  line-height: var(--s2a-font-line-height-xs);
+}
+.label {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--s2a-border-radius-round);
+  padding: var(--s2a-spacing-3xs) var(--s2a-spacing-xs);
+  background: var(--s2a-color-surface-subtle);
+  font-size: var(--s2a-font-size-xs);
+  font-weight: var(--s2a-font-weight-label);
+  white-space: nowrap;
+}
+.label.review {
+  border: var(--s2a-border-width-sm) solid var(--s2a-color-border-accent);
+  background: var(--s2a-color-surface-default);
+}
+.snapshot-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--s2a-spacing-sm);
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-sm);
+}
+.snapshot-table th {
+  text-align: left;
+  color: var(--s2a-color-content-body-subtle);
+  font-size: var(--s2a-font-size-xs);
+  font-weight: var(--s2a-font-weight-label);
+}
+.snapshot-table th,
+.snapshot-table td {
+  padding: var(--s2a-spacing-xs) 0;
+  border-bottom: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+}
+.snapshot-table td:last-child {
+  width: 36%;
+}
+.snapshot-table a {
+  text-decoration-color: var(--s2a-color-border-subtle);
+}
+.paired-notes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s2a-spacing-lg);
+  margin-top: var(--s2a-spacing-lg);
+}
+.paired-notes h3 {
+  font-size: var(--s2a-font-size-md);
+}
+.paired-notes p {
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-sm);
+  margin-top: var(--s2a-spacing-2xs);
+}
+.rich-report .policy {
+  margin: var(--s2a-spacing-lg) 0 var(--s2a-spacing-md);
+}
+.contract {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-sm);
+}
+.contract th {
+  text-align: left;
+  padding: var(--s2a-spacing-xs) 0;
+  border-bottom: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+  font-size: var(--s2a-font-size-xs);
+  color: var(--s2a-color-content-body-subtle);
+  font-weight: var(--s2a-font-weight-label);
+}
+.contract td {
+  vertical-align: top;
+  padding: var(--s2a-spacing-sm) var(--s2a-spacing-sm) var(--s2a-spacing-sm) 0;
+  border-bottom: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+}
+.contract th:first-child {
+  width: 21%;
+}
+.contract th:nth-child(2) {
+  width: 37%;
+}
+.contract small {
+  display: block;
+  font-size: var(--s2a-font-size-xs);
+  line-height: var(--s2a-font-line-height-xs);
+  color: var(--s2a-color-content-body-subtle);
+  margin-top: var(--s2a-spacing-2xs);
+}
+.contract code {
+  font: inherit;
+  overflow-wrap: anywhere;
+}
+.mini-note {
+  margin-top: var(--s2a-spacing-xs);
+  font-size: var(--s2a-font-size-xs);
+  line-height: var(--s2a-font-line-height-xs);
+  color: var(--s2a-color-content-body-subtle);
+}
+.audit-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s2a-spacing-xl);
+  margin-top: var(--s2a-spacing-lg);
+}
+.audit-head {
+  display: flex;
+  gap: var(--s2a-spacing-sm);
+  align-items: baseline;
+  padding-bottom: var(--s2a-spacing-xs);
+  border-bottom: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+}
+.audit-head strong {
+  font-family: var(--s2a-font-family-heading);
+  font-size: var(--s2a-font-size-5xl);
+  line-height: var(--s2a-font-line-height-2xl);
+}
+.audit-head span {
+  font-size: var(--s2a-font-size-lg);
+}
+.audit-bar {
+  margin-top: var(--s2a-spacing-sm);
+}
+.audit-bar .bar-label {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s2a-spacing-xs);
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-sm);
+}
+.bar-track {
+  height: var(--s2a-spacing-xs);
+  margin-top: var(--s2a-spacing-2xs);
+  background: var(--s2a-color-surface-subtle);
+  border-radius: var(--s2a-border-radius-round);
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  width: var(--share);
+  background: var(--s2a-color-border-accent);
+  border-radius: inherit;
+}
+.warning-chart .bar-fill {
+  background: var(--s2a-color-content-body-subtle);
+}
+.chart-note {
+  font-size: var(--s2a-font-size-xs);
+  line-height: var(--s2a-font-line-height-xs);
+  color: var(--s2a-color-content-body-subtle);
+  margin-top: var(--s2a-spacing-sm);
+}
+.roadmap {
+  margin-top: var(--s2a-spacing-lg);
+}
+.roadmap h2 {
+  margin-bottom: var(--s2a-spacing-xs);
+}
+.roadmap-row {
+  display: grid;
+  grid-template-columns: var(--s2a-spacing-lg) 1fr;
+  gap: var(--s2a-spacing-xs);
+  padding: var(--s2a-spacing-xs) 0;
+  border-bottom: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
+}
+.roadmap-row strong {
+  font-size: var(--s2a-font-size-sm);
+}
+.roadmap-row p {
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-sm);
+}
+.roadmap-row .owner {
+  display: block;
+  margin-top: var(--s2a-spacing-2xs);
+  white-space: normal;
+}
+.rich-report .method {
+  margin-top: var(--s2a-spacing-md);
+}
+.shot .image {
+  height: 168px;
+}
+.label {
+  line-height: var(--s2a-font-line-height-xs);
+}
+.snapshot-table th,
+.snapshot-table td {
+  padding-block: var(--s2a-spacing-2xs);
+}
+.paired-notes {
+  margin-top: var(--s2a-spacing-md);
+}
+.contract td {
+  padding-block: var(--s2a-spacing-xs);
+}
+.roadmap {
+  margin-top: var(--s2a-spacing-md);
+}
+.roadmap-row .owner {
+  line-height: var(--s2a-font-line-height-xs);
+}
+@media screen and (max-width: 840px) {
+  .rich-report .page-title {
+    font-size: var(--s2a-font-size-2xl);
+    line-height: var(--s2a-font-line-height-lg);
+  }
+  .evidence-strip {
+    grid-template-columns: 1fr;
+  }
+  .shot .image {
+    height: auto;
+    min-height: 180px;
+  }
+  .shot img {
+    max-height: 360px;
+    height: auto;
+  }
+  .paired-notes,
+  .audit-columns {
+    grid-template-columns: 1fr;
+  }
+  .contract {
+    font-size: var(--s2a-font-size-xs);
+    line-height: var(--s2a-font-line-height-xs);
+  }
+  .contract th:first-child {
+    width: 23%;
+  }
+  .snapshot-table {
+    font-size: var(--s2a-font-size-xs);
+  }
+  .snapshot-table .label {
+    white-space: normal;
+  }
+}

@@ -11,6 +11,7 @@ const CtaArrow = () => html`<span class="c-media-card__cta-arrow" aria-hidden="t
 
 export const MediaCard = ({
   size = "card",
+  density = "comfortable",
   app = "experience-cloud",
   showIcon = true,
   mediaSrc,
@@ -38,16 +39,16 @@ export const MediaCard = ({
     : nothing;
 
   return html`
-    <div class="c-media-card" data-size=${resolvedSize}>
+    <div class="c-media-card" data-size=${resolvedSize} data-density=${density === "compact" ? "compact" : "comfortable"}>
       <div class="c-media-card__media">
         ${mediaContent}
         ${showIcon
-          ? html`<span class="c-media-card__icon" aria-hidden="true">${AppIcon({ app, size: "md" })}</span>`
+          ? html`<span class="c-media-card__icon" aria-hidden="true">${AppIcon({ app, size: "24" })}</span>`
           : nothing}
       </div>
       <div class="c-media-card__copy">
         <div class="c-media-card__headline-body">
-          ${title ? html`<p class="c-media-card__title">${title}</p>` : nothing}
+          ${title ? html`<h3 class="c-media-card__title">${title}</h3>` : nothing}
           ${body ? html`<p class="c-media-card__body">${body}</p>` : nothing}
         </div>
         ${ctaNode}

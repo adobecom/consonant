@@ -71,7 +71,7 @@ export const TileChecked = {
 
 export const Group = {
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-sm);">
       ${Checkbox({ label: "Creative Cloud", checked: true, name: "apps", value: "cc" })}
       ${Checkbox({ label: "Photoshop", name: "apps", value: "ps" })}
       ${Checkbox({ label: "Lightroom", name: "apps", value: "lr" })}

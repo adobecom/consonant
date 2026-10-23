@@ -1,0 +1,92 @@
+name: Publish Specs
+
+# Publishes @adobecom/s2a-specs to GitHub Packages when its version bumps on
+# main. Mirrors publish-validators.yml: the merge is gated by CODEOWNERS review,
+# and the registry push additionally requires an environment reviewer.
+#
+# This is the package a consumer installs to READ our component contracts —
+# props, variants, states, token bindings, accessibility and composition. Until
+# it existed, "build from our contracts" was not an instruction anyone could
+# follow, because there was nothing to install.
+#
+# Publishing runs on GitHub's own GITHUB_TOKEN (packages: write) — no personal
+# token, nothing on anyone's machine. It is idempotent: a version already on the
+# registry is skipped (registries are immutable per version).
+#
+# The tarball is assembled by the package's `prepack` (pack.mjs), which gathers
+# the contracts from beside each component into a flat dist/. Build tooling is
+# deliberately not shipped — consumers read contracts, they do not regenerate
+# them.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/s2a-specs/package.json" # version bump = a release
+  workflow_dispatch: # manual re-publish of the current version
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish-specs
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: token-release
+    defaults:
+      run:
+        working-directory: packages/s2a-specs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node (GitHub Packages)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@adobecom"
+
+      # pack.mjs is dependency-free (node builtins only), so there is nothing to
+      # install. It reads the committed contracts from packages/components/src,
+      # which is why the full checkout above matters.
+      - name: Assemble dist/
+        run: node ./pack.mjs
+
+      - name: Read package version
+        id: v
+        run: echo "version=$(npm pkg get version | tr -d '\"')" >> "$GITHUB_OUTPUT"
+
+      - name: Publish (skip if the version already exists)
+        id: publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          OUT=$(npm publish 2>&1); CODE=$?
+          echo "$OUT"
+          if [ $CODE -eq 0 ]; then
+            echo "result=published" >> "$GITHUB_OUTPUT"
+          elif echo "$OUT" | grep -qiE "cannot publish over|already exists|E409|EPUBLISHCONFLICT|conflict"; then
+            echo "::notice::@adobecom/s2a-specs@${{ steps.v.outputs.version }} is already on the registry — skipping."
+            echo "result=skipped" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Publish failed for a reason other than a version conflict."
+            exit $CODE
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          V="${{ steps.v.outputs.version }}"
+          case "${{ steps.publish.outputs.result }}" in
+            published) echo "### 📦 Published @adobecom/s2a-specs@$V to GitHub Packages" >> "$GITHUB_STEP_SUMMARY" ;;
+            skipped)   echo "### ⏭️ @adobecom/s2a-specs@$V was already published — nothing to do" >> "$GITHUB_STEP_SUMMARY" ;;
+            *)         echo "### ⚠️ Publish did not complete for @adobecom/s2a-specs@$V" >> "$GITHUB_STEP_SUMMARY" ;;
+          esac

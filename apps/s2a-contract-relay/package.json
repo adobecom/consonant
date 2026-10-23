@@ -1,0 +1,16 @@
+{
+  "name": "@adobecom/s2a-contract-relay",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Relay that lets the S2A toolkit plugin publish Figma evidence into a branch + workflow dispatch without holding a repository token.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "local": "node local.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.124.0"
+  }
+}

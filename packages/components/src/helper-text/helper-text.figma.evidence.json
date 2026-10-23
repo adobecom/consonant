@@ -1,0 +1,436 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T17:51:42.740Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": null
+  },
+  "set": {
+    "id": "10243:101699",
+    "key": "1cd9f8578e3737a891771ea7c4ee875ee7fd7f29",
+    "name": "HelperText",
+    "type": "COMPONENT_SET",
+    "description": "— s2a:meta —\nversion:    1.0.0\nstatus:     active\nupdated:    2026-08-04\nchangelog:\n  1.0.0   2026-08-04  init         Initial release",
+    "meta": {
+      "version": "1.0.0",
+      "status": "active",
+      "updated": "2026-08-04",
+      "changelog": "1.0.0   2026-08-04  init         Initial release"
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Intent",
+      "type": "VARIANT",
+      "defaultValue": "neutral",
+      "options": [
+        "neutral",
+        "error"
+      ]
+    },
+    {
+      "name": "Text#10243:2",
+      "type": "TEXT",
+      "defaultValue": "Helpful hint about this field."
+    }
+  ],
+  "variants": [
+    {
+      "id": "10243:101693",
+      "key": "f7c071a1d9a451bd9b24babfd173681481c00496",
+      "name": "Intent=neutral",
+      "props": {
+        "Intent": "neutral"
+      },
+      "width": 418,
+      "height": 16
+    },
+    {
+      "id": "10243:101697",
+      "key": "2ec94abbf83ce6e39813555112ad173a6dc39454",
+      "name": "Intent=error",
+      "props": {
+        "Intent": "error"
+      },
+      "width": 418,
+      "height": 16
+    }
+  ],
+  "anatomy": {
+    "variant": "Intent=neutral",
+    "tree": {
+      "name": "Intent=neutral",
+      "type": "COMPONENT",
+      "id": "10243:101693",
+      "layoutMode": "HORIZONTAL",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "HUG"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "MIN"
+      },
+      "children": [
+        {
+          "name": ".text",
+          "type": "TEXT",
+          "id": "10243:101694",
+          "text": "Helpful hint about this field.",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "HUG"
+          }
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "Intent=neutral",
+      "node": "/.text",
+      "nodeId": "10243:101694",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:84"
+    },
+    {
+      "variant": "Intent=neutral",
+      "node": "/.text",
+      "nodeId": "10243:101694",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:834"
+    },
+    {
+      "variant": "Intent=neutral",
+      "node": "/.text",
+      "nodeId": "10243:101694",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1239"
+    },
+    {
+      "variant": "Intent=neutral",
+      "node": "/.text",
+      "nodeId": "10243:101694",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44679"
+    },
+    {
+      "variant": "Intent=neutral",
+      "node": "/.text",
+      "nodeId": "10243:101694",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1230"
+    },
+    {
+      "variant": "Intent=neutral",
+      "node": "/.text",
+      "nodeId": "10243:101694",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1238"
+    },
+    {
+      "variant": "Intent=neutral",
+      "node": "/.text",
+      "nodeId": "10243:101694",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15545"
+    },
+    {
+      "variant": "Intent=error",
+      "node": "/.text",
+      "nodeId": "10243:101698",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:104"
+    },
+    {
+      "variant": "Intent=error",
+      "node": "/.text",
+      "nodeId": "10243:101698",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:834"
+    },
+    {
+      "variant": "Intent=error",
+      "node": "/.text",
+      "nodeId": "10243:101698",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1239"
+    },
+    {
+      "variant": "Intent=error",
+      "node": "/.text",
+      "nodeId": "10243:101698",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44679"
+    },
+    {
+      "variant": "Intent=error",
+      "node": "/.text",
+      "nodeId": "10243:101698",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1230"
+    },
+    {
+      "variant": "Intent=error",
+      "node": "/.text",
+      "nodeId": "10243:101698",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1238"
+    },
+    {
+      "variant": "Intent=error",
+      "node": "/.text",
+      "nodeId": "10243:101698",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15545"
+    }
+  ],
+  "variables": {
+    "VariableID:2352:1230": {
+      "name": "s2a/typography/letter-spacing/caption",
+      "key": "194d13406b6e555d520de6634253e2b3eda2c9d8",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-caption)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1238": {
+      "name": "s2a/typography/line-height/caption",
+      "key": "ae9b48f9cf931a781538dae38d4434fe4dfcfa78",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-caption)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/2xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/2xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/2xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/2xs"
+        }
+      },
+      "resolved": {
+        "lg": 16,
+        "md": 16,
+        "sm": 16,
+        "xl": 16
+      }
+    },
+    "VariableID:2352:1239": {
+      "name": "s2a/typography/font-size/caption",
+      "key": "797e3471c5588b2a7d8352b5d6539b864f7acb9a",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-caption)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/xs"
+        },
+        "md": {
+          "alias": "s2a/font/size/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/size/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/size/xs"
+        }
+      },
+      "resolved": {
+        "lg": 12,
+        "md": 12,
+        "sm": 12,
+        "xl": 12
+      }
+    },
+    "VariableID:2557:834": {
+      "name": "s2a/font/family/caption",
+      "key": "6b593b572bce8f65400eb0fabc542027014d6a10",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-caption)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:5388:44679": {
+      "name": "s2a/font/weight/caption",
+      "key": "09f37d849b0ab4560b95ea2a87db9caef2a26854",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-caption)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:6:104": {
+      "name": "s2a/color/content/utility/error",
+      "key": "c5cd19f42c21463d848d39e63f1c1d16c5a01425",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-utility-error)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/red/900"
+        },
+        "Dark": {
+          "alias": "s2a/color/red/900"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0.843137264251709,
+          "g": 0.19607843458652496,
+          "b": 0.125490203499794,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.843137264251709,
+          "g": 0.19607843458652496,
+          "b": 0.125490203499794,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:6:84": {
+      "name": "s2a/color/content/subtle",
+      "key": "8779680478f5ea7993841e307feea91070b8e2db",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/64"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/white/64"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.6399999856948853
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "6:15545": {
+      "name": "s2a/typography/caption",
+      "key": "cb8d5466b26b3aa1333bc4d1e550a36c3f8aea7e"
+    }
+  },
+  "explicitModes": [],
+  "instances": [],
+  "counts": {
+    "variants": 2,
+    "nodes": 4,
+    "bindings": 14,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "Intent=neutral",
+      "node": "",
+      "nodeId": "10243:101693",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    },
+    {
+      "variant": "Intent=error",
+      "node": "",
+      "nodeId": "10243:101697",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 418
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:fb2131416bffcfd52b0e9b46ead03558ce1476cb4c29fc1087466aa536ede2bc"
+  }
+}

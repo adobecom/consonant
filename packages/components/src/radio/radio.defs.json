@@ -1,0 +1,402 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Radio",
+  "slug": "radio",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from radio.figma.evidence.json (sha256:3f2fde1d…) through packages/spec-dictionary/dictionary.json (checkbox / radio)",
+    "date": "2026-10-09",
+    "reviewer": "Matt"
+  },
+  "description": "A selection control with a checked state, usually paired with a label.",
+  "archetype": "checkbox / radio",
+  "version": "1.0.0",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "11586:206620",
+      "nodeName": "Radio",
+      "componentSetKey": "d469c02b526f01dd8985387fbae75c1f6626ba3a",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"↳ Radio\"; 40 nodes, 72 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/radio/radio.js",
+      "export": "Radio",
+      "cssClass": "c-radio"
+    }
+  },
+  "props": [
+    {
+      "name": "label",
+      "lever": true,
+      "type": "string",
+      "default": "Individuals",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Label#11586:0"
+      },
+      "code": {
+        "prop": "label"
+      }
+    },
+    {
+      "name": "selected",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Selected",
+        "valueMap": {
+          "true": "true",
+          "false": "false"
+        }
+      },
+      "code": {
+        "prop": "checked",
+        "attr": "data-selected"
+      },
+      "notes": "The hand-written component calls this \"checked\"; generated code binds to it."
+    },
+    {
+      "name": "disabled",
+      "lever": true,
+      "type": "boolean",
+      "figma": "NONE",
+      "code": {
+        "prop": "disabled"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "name",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "name"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "value",
+      "lever": true,
+      "type": "expression",
+      "figma": "NONE",
+      "code": {
+        "prop": "value"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "forceState",
+      "lever": false,
+      "type": "string",
+      "enum": [
+        "default",
+        "hover",
+        "focus",
+        "disabled"
+      ],
+      "default": "default",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State"
+      },
+      "code": {
+        "prop": "forceState",
+        "attr": "data-state"
+      },
+      "notes": "The State axis, forceable from code for previews, docs and the state matrix. At runtime the states come from interaction."
+    }
+  ],
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      },
+      "code": {
+        "mechanism": ":hover"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      },
+      "code": {
+        "mechanism": ":focus-visible"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=disabled"
+      },
+      "code": {
+        "mechanism": "[disabled] / :disabled"
+      },
+      "notes": "Runtime state, never an authored prop."
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-radio",
+      "figma": ".root",
+      "element": "label",
+      "tokens": {
+        "gap": "raw:8px"
+      },
+      "layout": {
+        "display": "inline-flex",
+        "direction": "row",
+        "align": "center"
+      },
+      "parts": {
+        "control": {
+          "selector": ".c-radio__control",
+          "figma": "/_radio",
+          "tokens": {
+            "width": "raw:20px",
+            "height": "raw:20px",
+            "border-radius": "raw:50%"
+          },
+          "element": "div",
+          "states": {
+            "hover": {
+              "background-color": "{s2a.color.background.subtle}"
+            }
+          },
+          "parts": {
+            "ring": {
+              "selector": ".c-radio__ring",
+              "figma": "/_radio/.ring",
+              "tokens": {
+                "border-color": "{s2a.color.content.default}",
+                "border-width": "raw:1.5px",
+                "width": "raw:18px",
+                "height": "raw:18px",
+                "border-radius": "raw:50%",
+                "box-sizing": "raw:border-box"
+              },
+              "states": {
+                "disabled": {
+                  "border-color": "{s2a.color.content.subtle}"
+                }
+              },
+              "element": "div",
+              "layout": {
+                "stack": true
+              }
+            },
+            "dot": {
+              "selector": ".c-radio__dot",
+              "figma": "/_radio/.dot",
+              "tokens": {
+                "background-color": "{s2a.color.content.default}",
+                "width": "raw:8px",
+                "height": "raw:8px",
+                "border-radius": "raw:50%",
+                "display": "raw:none"
+              },
+              "states": {
+                "disabled": {
+                  "background-color": "{s2a.color.content.subtle}"
+                }
+              },
+              "element": "div",
+              "tokensByProp": [
+                {
+                  "prop": "selected",
+                  "map": {
+                    "true": {
+                      "display": "raw:block"
+                    }
+                  }
+                }
+              ],
+              "layout": {
+                "stack": true
+              }
+            }
+          },
+          "layout": {
+            "display": "grid",
+            "align": "center",
+            "justify": "center"
+          }
+        },
+        "label": {
+          "selector": ".c-radio__label",
+          "figma": "/.label",
+          "tokens": {
+            "font-family": "{s2a.font.family.label}",
+            "font-size": "{s2a.typography.font-size.label}",
+            "font-weight": "{s2a.font.weight.label}",
+            "letter-spacing": "{s2a.typography.letter-spacing.label}",
+            "line-height": "{s2a.typography.line-height.label}"
+          },
+          "tokensByProp": [
+            {
+              "prop": "selected",
+              "map": {
+                "false": {
+                  "color": "{s2a.color.content.subtle}"
+                },
+                "true": {
+                  "color": "{s2a.color.content.default}"
+                }
+              }
+            }
+          ],
+          "element": "span",
+          "slot": {
+            "name": "label",
+            "accepts": [
+              "kind:text"
+            ],
+            "acceptsMode": "prefer",
+            "default": {
+              "text": "Individuals"
+            }
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.3.1",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Native input with a real <label>, so the hit area includes the text.",
+      "Indeterminate is a property, not a third value.",
+      "Group related controls in a fieldset with a legend (1.3.1)."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "r-archetype",
+      "question": "Scaffolded as checkbox / radio (interactive: state axis has hover, focus, disabled; named \"Radio\"). Confirm, or re-run npm run specs:scaffold -- --slug=radio --archetype=<link-card|card|collection>.",
+      "chose": "checkbox / radio — interactive: state axis has hover, focus, disabled; named \"Radio\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=radio --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×2; state axis default/hover/focus/disabled"
+    },
+    {
+      "id": "r-code-only-props",
+      "question": "disabled, name, value exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false). \"disabled\" collides with the State axis, which this draft read as runtime states — decide whether the code prop or the state axis is the truth.",
+      "chose": "added 3 code-only props as levers with no design binding",
+      "confidence": "low",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.code.evidence.json"
+    },
+    {
+      "id": "r-part-selectors",
+      "question": "radio, ring, dot have no class of their own in radio.css. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to radio.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/radio/radio.css"
+    },
+    {
+      "id": "r-match",
+      "question": "Structural match says extend: closest existing contract is Logo (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Logo (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Logo instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Logo (1) already covers this; extend it."
+    },
+    {
+      "id": "r-classify-1",
+      "question": "\"Selected\" (false|true) read as the boolean prop \"selected\"; the design's true is true. Confirm, or change it in props/states.",
+      "chose": "\"Selected\" (false|true) read as the boolean prop \"selected\"; the design's true is true",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json axes"
+    },
+    {
+      "id": "r-classify-2",
+      "question": "\"State\" read as runtime states (hover, focus-visible, disabled), not as a prop. Confirm, or change it in props/states.",
+      "chose": "\"State\" read as runtime states (hover, focus-visible, disabled), not as a prop",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json axes"
+    },
+    {
+      "id": "r-classify-3",
+      "question": "\"selected\" (design) and \"checked\" (code) read as one prop. Confirm, or change it in props/states.",
+      "chose": "\"selected\" (design) and \"checked\" (code) read as one prop",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json axes"
+    },
+    {
+      "id": "r-classify-4",
+      "question": "\"forceState\" added for the \"State\" axis so every state can be rendered without a pointer. Confirm, or change it in props/states.",
+      "chose": "\"forceState\" added for the \"State\" axis so every state can be rendered without a pointer",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json axes"
+    },
+    {
+      "id": "r-hardcoded-values",
+      "question": "8 values in the design are set with no variable behind them: root gap = 8px; root/control width = 20px; root/control height = 20px; root/control/ring border-width = 1.5px; root/control/ring width = 18px; root/control/ring height = 18px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json unboundValues"
+    }
+  ]
+}

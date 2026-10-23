@@ -1,0 +1,895 @@
+{
+  "purpose": "Known token gaps after the Storybook audit. These are tracked debt, not a claim of token compliance. The check rejects new findings rather than hiding these.",
+  "geometry": "Fixed layout constraints, measured Figma fixtures, chart coordinates, SVG artwork and viewport presets are reported separately in the full audit.",
+  "findings": [
+    {
+      "file": "apps/storybook/stories/generated/Button.css",
+      "property": "padding-top",
+      "kind": "literal-style",
+      "detail": "14px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/Button.css",
+      "property": "padding-bottom",
+      "kind": "literal-style",
+      "detail": "14px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/Button.css",
+      "property": "background-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-blue-1100",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "apps/storybook/stories/generated/Collapsible.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "grid-template-rows 240ms ease, visibility 0s linear 0s",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "apps/storybook/stories/generated/Collapsible.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "grid-template-rows 240ms ease, visibility 0s linear 240ms",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "apps/storybook/stories/generated/ControlButton.css",
+      "property": "border-radius",
+      "kind": "primitive-token",
+      "detail": "--s2a-border-radius-6",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "apps/storybook/stories/generated/ControlButton.css",
+      "property": "color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-48",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "apps/storybook/stories/generated/Link.css",
+      "property": "padding-top",
+      "kind": "literal-style",
+      "detail": "6px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/Link.css",
+      "property": "padding-bottom",
+      "kind": "literal-style",
+      "detail": "6px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/Link.css",
+      "property": "gap",
+      "kind": "literal-style",
+      "detail": "1px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/MerchCard.css",
+      "property": "padding-top",
+      "kind": "literal-style",
+      "detail": "28px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/MerchCard.css",
+      "property": "padding-right",
+      "kind": "literal-style",
+      "detail": "28px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/MerchCard.css",
+      "property": "padding-bottom",
+      "kind": "literal-style",
+      "detail": "28px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/MerchCard.css",
+      "property": "padding-left",
+      "kind": "literal-style",
+      "detail": "28px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/MerchCard.css",
+      "property": "gap",
+      "kind": "literal-style",
+      "detail": "10px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "apps/storybook/stories/generated/Radio.css",
+      "property": "--c-radio__ring-bw",
+      "kind": "literal-style",
+      "detail": "1.5px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/app-icon/app-icon.css",
+      "property": "--c-app-icon-size",
+      "kind": "literal-style",
+      "detail": "18px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/app-icon/app-icon.css",
+      "property": "--c-app-icon-size",
+      "kind": "literal-style",
+      "detail": "80px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/bento/bento.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "opacity 150ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/button/button.css",
+      "property": "padding",
+      "kind": "literal-style",
+      "detail": "14px var(--s2a-spacing-lg)",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/button/button.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 200ms ease,\n    border-color 200ms ease,\n    color 200ms ease,\n    box-shadow 200ms ease,\n    opacity 120ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/card/card.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 150ms ease,\n    border-color 150ms ease,\n    color 150ms ease,\n    box-shadow 150ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/checkbox/checkbox.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 130ms ease,\n    border-color 130ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/checkbox/checkbox.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "opacity 130ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/collapsible/collapsible.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "transform 200ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/control-button/control-button.css",
+      "property": "border-radius",
+      "kind": "primitive-token",
+      "detail": "--s2a-border-radius-6",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/control-button/control-button.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background 0.15s ease,\n    border-color 0.15s ease,\n    color 0.15s ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/control-button/control-button.css",
+      "property": "color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-48",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/divider/divider.css",
+      "property": "background-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-16",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/dot-pagination/dot-pagination.css",
+      "property": "background-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/elastic-card/elastic-card.css",
+      "property": "block-size",
+      "kind": "unknown-token",
+      "detail": "--s2a-router-card-height-max",
+      "reason": "Documented Figma binding is not present in the shipped token CSS; the component still uses its measured fallback. Requires a token-source update."
+    },
+    {
+      "file": "packages/components/src/elastic-card/elastic-card.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "inline-size 220ms ease,\n    background-color 200ms ease,\n    color 200ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/elastic-card/elastic-card.css",
+      "property": "color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/elastic-card/elastic-card.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "opacity 200ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/global-navigation/global-navigation.css",
+      "property": "font",
+      "kind": "literal-style",
+      "detail": "700 14px/1.3 var(--s2a-font-family-label),\n    sans-serif",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "font",
+      "kind": "literal-style",
+      "detail": "700 16px/20px var(--s2a-font-family-label),\n    sans-serif",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "font",
+      "kind": "literal-style",
+      "detail": "400 14px/20px var(--s2a-font-family-body),\n    sans-serif",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-gray-1000",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "--home-reveal-y",
+      "kind": "literal-style",
+      "detail": "100px",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "--home-rail-start-margin",
+      "kind": "literal-style",
+      "detail": "200px",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "--home-rail-start-gap",
+      "kind": "literal-style",
+      "detail": "2.75rem",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "--home-rail-end-gap",
+      "kind": "literal-style",
+      "detail": "0.25rem",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "--home-rail-start-gap",
+      "kind": "literal-style",
+      "detail": "2.25rem",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "--home-rail-start-gap",
+      "kind": "literal-style",
+      "detail": "1.75rem",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "--home-rail-start-gap",
+      "kind": "literal-style",
+      "detail": "1rem",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "--home-rail-start-gap",
+      "kind": "literal-style",
+      "detail": "0.5rem",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/homepage-sections/homepage-sections.css",
+      "property": "--home-stagger-drift",
+      "kind": "literal-style",
+      "detail": "48px",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/hub-router/hub-router.css",
+      "property": "inline-size",
+      "kind": "unknown-token",
+      "detail": "--s2a-elastic-card-width-resting",
+      "reason": "Documented Figma binding is not present in the shipped token CSS; the component still uses its measured fallback. Requires a token-source update."
+    },
+    {
+      "file": "packages/components/src/hub-router/hub-router.css",
+      "property": "--s2a-elastic-card-height-max",
+      "kind": "literal-style",
+      "detail": "475px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/hub-router/hub-router.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "flex-basis 280ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/hub-router/hub-router.css",
+      "property": "padding-inline-start",
+      "kind": "literal-style",
+      "detail": "max(\n      var(--s2a-spacing-xs),\n      calc((100vw - 1242px) / 2)\n    )",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/hub-router/hub-router.css",
+      "property": "padding-inline-end",
+      "kind": "literal-style",
+      "detail": "max(var(--s2a-spacing-xs), calc((100vw - 1242px) / 2))",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/hub-router/hub-router.css",
+      "property": "padding-inline-start",
+      "kind": "literal-style",
+      "detail": "max(\n      var(--s2a-spacing-xs),\n      calc((100vw - 1502px) / 2)\n    )",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/hub-router/hub-router.css",
+      "property": "padding-inline-end",
+      "kind": "literal-style",
+      "detail": "max(var(--s2a-spacing-xs), calc((100vw - 1502px) / 2))",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/icon-button/icon-button.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 200ms ease,\n    border-color 200ms ease,\n    color 200ms ease,\n    opacity 120ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/link/link.css",
+      "property": "padding-block",
+      "kind": "literal-style",
+      "detail": "6px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/media/media.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-48",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/media/media.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-08",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/media/media.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "opacity 160ms ease-in-out",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/media-card/media-card.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "transform 750ms cubic-bezier(0.42, 0, 0, 1)",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/media-card/media-card.css",
+      "property": "padding-top",
+      "kind": "literal-style",
+      "detail": "11px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/merch-card/merch-card.css",
+      "property": "padding",
+      "kind": "literal-style",
+      "detail": "28px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/merch-card/merch-card.css",
+      "property": "--s2a-color-content-label",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-gray-1000",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/merch-card/merch-card.css",
+      "property": "--s2a-color-content-heading",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-gray-1000",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/merch-card/merch-card.css",
+      "property": "--s2a-color-content-default",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-gray-1000",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/merch-card/merch-card.css",
+      "property": "--s2a-color-content-subtle",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/merch-card/merch-card.css",
+      "property": "--s2a-color-background-subtle",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-gray-50",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/merch-card/merch-card.css",
+      "property": "--s2a-color-border-knockout",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-gray-1000",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/merch-card/merch-card.css",
+      "property": "--s2a-color-button-content-primary-outlined-default",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-gray-1000",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/merch-card/merch-card.css",
+      "property": "--s2a-color-focus-ring-default",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-blue-900",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/nav-filter/nav-filter.css",
+      "property": "--c-nav-filter-bg",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-04",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/nav-filter/nav-filter.css",
+      "property": "--c-nav-filter-bg",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-48",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/nav-filter/nav-filter.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 200ms ease,\n    color 200ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card/nav-card.css",
+      "property": "--c-nav-card-eyebrow-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card/nav-card.css",
+      "property": "--c-nav-card-body-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card/nav-card.css",
+      "property": "--c-nav-card-eyebrow-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card/nav-card.css",
+      "property": "--c-nav-card-body-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card/nav-card.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 200ms ease,\n    color 200ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card/nav-card.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "color 200ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card/nav-card.css",
+      "property": "border-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-00",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card-button/nav-card-button.css",
+      "property": "backdrop-filter",
+      "kind": "literal-style",
+      "detail": "blur(18.75px)",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card-button/nav-card-button.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 180ms ease,\n    border-color 180ms ease,\n    color 180ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card-button/nav-card-button.css",
+      "property": "border-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-00",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/navigation/nav-card-menu-item/nav-card-menu-item.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "color 160ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/product-card/product-card.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-08",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/product-card/product-card.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 300ms cubic-bezier(0.42, 0, 0, 1)",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/product-card/product-card.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-12",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/product-card/product-card.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "opacity 0.3s ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/product-card/product-card.css",
+      "property": "color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/progress-bar/progress-bar.css",
+      "property": "background-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-00",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/progress-bar/progress-bar.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "width 200ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/promo-cta/promo-cta.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "opacity 150ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/promo-cta/promo-cta.css",
+      "property": "border-radius",
+      "kind": "primitive-token",
+      "detail": "--s2a-border-radius-6",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/promo-cta/promo-cta.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background 150ms ease,\n    border-color 150ms ease,\n    color 150ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/quote-card/quote-card.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/quote-card/quote-card.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-16",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/radio/radio.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 130ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/radio/radio.css",
+      "property": "border",
+      "kind": "literal-style",
+      "detail": "1.5px solid var(--s2a-color-content-default)",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/radio/radio.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "border-color 130ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/radio/radio.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "opacity 130ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/radio/radio.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "color 130ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/rich-content/rich-content.css",
+      "property": "max-width",
+      "kind": "unknown-token",
+      "detail": "--s2a-grid-container-measure-narrow-_max-width",
+      "reason": "Documented Figma binding is not present in the shipped token CSS; the component still uses its measured fallback. Requires a token-source update."
+    },
+    {
+      "file": "packages/components/src/router-marquee/router-marquee.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "transform 300ms cubic-bezier(0.42, 0, 0, 1)",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/router-marquee/router-marquee.css",
+      "property": "padding",
+      "kind": "literal-style",
+      "detail": "var(--s2a-spacing-4xl) var(--s2a-spacing-4xl)\n    calc(var(--s2a-spacing-lg) * 2 + 68px)",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/router-marquee/router-marquee.css",
+      "property": "border",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-12",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/router-marquee/router-marquee.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-48",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/router-marquee/router-marquee.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background 150ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/router-marquee/router-marquee.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/router-marquee/router-marquee.css",
+      "property": "padding-bottom",
+      "kind": "literal-style",
+      "detail": "calc(var(--s2a-layout-sm) + 68px + var(--s2a-spacing-lg))",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/router-nav-item/router-nav-item.css",
+      "property": "box-shadow",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-12",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/router-nav-item/router-nav-item.css",
+      "property": "background-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-48",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/router-nav-item/router-nav-item.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background-color 150ms ease,\n    box-shadow 150ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/router-nav-item/router-nav-item.css",
+      "property": "background-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-00",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/router-nav-item/router-nav-item.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "opacity 150ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/segmented-control/segmented-control.css",
+      "property": "background-color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-04",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/segmented-control/segmented-control.css",
+      "property": "padding-inline",
+      "kind": "primitive-token",
+      "detail": "--s2a-spacing-20",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/segmented-control/segmented-control.css",
+      "property": "color",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-black-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/segmented-control/segmented-control.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "color 130ms ease-out,\n      background-color 130ms ease-out",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/social-proof-carousel/social-proof-carousel.css",
+      "property": "background",
+      "kind": "primitive-token",
+      "detail": "--s2a-color-transparent-white-64",
+      "reason": "Existing component binding has no approved semantic alias. Primitive usage is documented inline; do not choose a different color role only because its value matches."
+    },
+    {
+      "file": "packages/components/src/social-proof-carousel/social-proof-carousel.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "background 200ms ease,\n    transform 200ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/tabs/tabs.css",
+      "property": "padding-block",
+      "kind": "literal-style",
+      "detail": "1px",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/tabs/tabs.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "color 130ms ease-out,\n      background-color 130ms ease-out",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/components/src/text-card/text-card.css",
+      "property": "padding",
+      "kind": "literal-style",
+      "detail": "6px 0",
+      "reason": "Exact component or Figma layout value has no shipped semantic alias; preserve its geometry pending a token decision."
+    },
+    {
+      "file": "packages/components/src/text-card/text-card.css",
+      "property": "transition",
+      "kind": "literal-style",
+      "detail": "opacity 150ms ease",
+      "reason": "The shipped token set has no motion family. Preserve the current interaction until duration/easing/animation roles are defined."
+    },
+    {
+      "file": "packages/grid/src/s2a-layout-grids.css",
+      "property": "--s2a-grid-hd-max-width",
+      "kind": "literal-style",
+      "detail": "1920px",
+      "reason": "Definition in the shipped grid implementation, recorded as source evidence by the grid conformance reports."
+    },
+    {
+      "file": "packages/grid/src/s2a-layout-grids.css",
+      "property": "--s2a-grid-row-height",
+      "kind": "literal-style",
+      "detail": "120px",
+      "reason": "Definition in the shipped grid implementation, recorded as source evidence by the grid conformance reports."
+    },
+    {
+      "file": "packages/grid/src/s2a-layout-grids.css",
+      "property": "--s2a-grid-max-width",
+      "kind": "literal-style",
+      "detail": "1440px",
+      "reason": "Definition in the shipped grid implementation, recorded as source evidence by the grid conformance reports."
+    }
+  ]
+}

@@ -1,0 +1,430 @@
+{
+  "$generated": {
+    "name": "s2a-grid-contract-transform",
+    "version": "1"
+  },
+  "id": "s2a.grid.container-standard",
+  "slug": "container-standard",
+  "name": "Standard container",
+  "version": "1.0.0",
+  "kind": "container",
+  "tier": "global",
+  "status": "shipped",
+  "supersededBy": null,
+  "description": "The default content container: centred, 83.4% of the viewport from 768 up, capped at 1440 through the desktop range and at 1920 in HD. This is the container almost every section should use. The two caps are not a contradiction — Figma records them as two families, legacy-retire (1440 everywhere) and default (1920 at HD), and the name of the first says which way this is going.",
+  "anchors": {
+    "code": {
+      "stylesheet": "packages/grid/src/s2a-layout-grids.css",
+      "importPath": "@adobecom/s2a-grid/css/grid.css",
+      "rootClass": "container"
+    },
+    "figma": {
+      "collectionId": "VariableCollectionId:6:178",
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "nodeId": "104:26144",
+      "layerName": "Container",
+      "designOnly": true
+    }
+  },
+  "breakpoints": [
+    {
+      "id": "sm",
+      "label": "S — Mobile",
+      "figmaMode": "sm",
+      "figmaLabel": "Mobile",
+      "minWidth": null,
+      "maxWidth": 767,
+      "mediaQuery": null,
+      "columns": 6,
+      "mockWidth": 375,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": null,
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.sm.css",
+        "mediaQuery": null,
+        "minWidth": null
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "md",
+      "label": "M — Tablet landscape",
+      "figmaMode": "md",
+      "figmaLabel": "Tablet",
+      "minWidth": 768,
+      "maxWidth": 1279,
+      "mediaQuery": "@media (width >= 768px)",
+      "columns": 12,
+      "mockWidth": 768,
+      "portraitEscape": 900,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 768px)",
+        "minWidth": 768
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.md.css",
+        "mediaQuery": "@media (width >= 768px)",
+        "minWidth": 768
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "lg",
+      "label": "L — Desktop",
+      "figmaMode": "lg",
+      "figmaLabel": "Desktop",
+      "minWidth": 1280,
+      "maxWidth": 1440,
+      "mediaQuery": "@media (width >= 1280px)",
+      "columns": 12,
+      "mockWidth": 1440,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 1280px)",
+        "minWidth": 1280
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.lg.css",
+        "mediaQuery": "@media (width >= 1280px)",
+        "minWidth": 1280
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "xl",
+      "label": "XL — Desktop HD",
+      "figmaMode": "xl",
+      "figmaLabel": "Desktop XL",
+      "minWidth": 1441,
+      "maxWidth": 2560,
+      "mediaQuery": "@media (width >= 1441px)",
+      "columns": 12,
+      "mockWidth": 2560,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media screen and (min-width: 1441px)",
+        "minWidth": 1441
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
+        "mediaQuery": "@media (width >= 1441px)",
+        "minWidth": 1441
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    }
+  ],
+  "breakpointBehavior": [
+    {
+      "breakpoint": "sm",
+      "behavior": "Full width with a spacing-lg gutter on each side. Padding-based, not percentage-based.",
+      "maxWidth": null,
+      "margin": "{s2a.spacing.lg}",
+      "columns": 6
+    },
+    {
+      "breakpoint": "md",
+      "behavior": "Switches to the percentage rule: 83.4% of the viewport, centred, padding removed.",
+      "maxWidth": 1151,
+      "margin": "8.33% each side",
+      "columns": 12
+    },
+    {
+      "breakpoint": "lg",
+      "behavior": "83.4% of the viewport, centred, capped at 1440.",
+      "maxWidth": 1440,
+      "margin": "8.33% each side",
+      "columns": 12
+    },
+    {
+      "breakpoint": "xl",
+      "behavior": "Cap rises to 1920 (the HD ceiling) so HD viewports are not stranded inside a 1440 box.",
+      "maxWidth": 1920,
+      "margin": "8.33% each side",
+      "columns": 12
+    }
+  ],
+  "tokens": [
+    {
+      "role": "margin",
+      "ref": "{s2a.spacing.lg}",
+      "breakpoint": "sm",
+      "note": "Will: --grid-margin = --spacing-lg below 768.",
+      "cssVar": "--s2a-spacing-lg",
+      "shipped": true,
+      "values": {
+        "sm": 24,
+        "md": 24,
+        "lg": 24,
+        "xl": 24
+      }
+    }
+  ],
+  "surface": {
+    "classes": [
+      {
+        "name": "container",
+        "purpose": "The centred content container. Wraps a .row; never carries column classes itself.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "width": "100%",
+              "max-width": "var(--s2a-grid-max-width)",
+              "margin-left": "auto",
+              "margin-right": "auto",
+              "padding-left": "var(--s2a-spacing-lg)",
+              "padding-right": "var(--s2a-spacing-lg)",
+              "position": "relative"
+            }
+          },
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "width": "var(--s2a-grid-container-width)",
+              "padding-left": "0",
+              "padding-right": "0"
+            }
+          },
+          {
+            "media": "@media screen and (min-width: 1441px)",
+            "declarations": {
+              "max-width": "var(--s2a-grid-hd-max-width)"
+            }
+          }
+        ]
+      }
+    ],
+    "customProperties": [
+      {
+        "name": "--s2a-grid-max-width",
+        "purpose": "The cap for the current range: 100% at sm, 1440 from 768 up.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "selector": ":root",
+            "value": "100%"
+          },
+          {
+            "media": "@media (min-width: 768px)",
+            "selector": ":root",
+            "value": "1440px"
+          }
+        ]
+      },
+      {
+        "name": "--s2a-grid-container-width",
+        "purpose": "83.4%, the percentage rule at 768 and up.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "selector": ":root",
+            "value": "83.4%"
+          },
+          {
+            "media": "@media (min-width: 768px)",
+            "selector": ":root",
+            "value": "83.4%"
+          },
+          {
+            "media": null,
+            "selector": ".container-fluid",
+            "value": "100%"
+          }
+        ]
+      }
+    ]
+  },
+  "design": {
+    "collectionId": "VariableCollectionId:6:178",
+    "designOnly": true,
+    "values": {
+      "containers.default._grid-container-max-width": {
+        "sm": {
+          "value": 719,
+          "alias": null,
+          "resolved": 719,
+          "designOnly": true
+        },
+        "md": {
+          "value": 1151,
+          "alias": null,
+          "resolved": 1151,
+          "designOnly": true
+        },
+        "lg": {
+          "value": 1200,
+          "alias": null,
+          "resolved": 1200,
+          "designOnly": true
+        },
+        "xl": {
+          "value": 1920,
+          "alias": null,
+          "resolved": 1920,
+          "designOnly": true
+        }
+      },
+      "containers.legacy-retire._grid-container-max-width": {
+        "sm": {
+          "value": 719,
+          "alias": null,
+          "resolved": 719,
+          "designOnly": true
+        },
+        "md": {
+          "value": 1067,
+          "alias": null,
+          "resolved": 1067,
+          "designOnly": true
+        },
+        "lg": {
+          "value": 1440,
+          "alias": null,
+          "resolved": 1440,
+          "designOnly": true
+        },
+        "xl": {
+          "value": 1440,
+          "alias": null,
+          "resolved": 1440,
+          "designOnly": true
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "id": "STD_CLASS",
+      "statement": "The container class exists.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "container"
+      }
+    },
+    {
+      "id": "STD_MARGIN_SM",
+      "statement": "Below 768 the side margin is the spacing-lg token, 24px — not a percentage and not a literal.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container",
+        "media": null,
+        "property": "padding-left",
+        "expectedPx": 24
+      }
+    },
+    {
+      "id": "STD_PCT_MD",
+      "statement": "From 768 up the container width is the 83.4% percentage rule.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container",
+        "media": 768,
+        "property": "width",
+        "expectedValue": "var(--s2a-grid-container-width)"
+      }
+    },
+    {
+      "id": "STD_PAD_CLEARED",
+      "statement": "From 768 up the padding is cleared, because the percentage rule now supplies the margins. Leaving both on is how a container ends up double-indented.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container",
+        "media": 768,
+        "property": "padding-left",
+        "expectedPx": 0
+      }
+    },
+    {
+      "id": "STD_XL_1920",
+      "statement": "In HD the cap is 1920, matching Figma's default container family.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container",
+        "media": 1441,
+        "property": "max-width",
+        "expectedPx": 1920
+      }
+    },
+    {
+      "id": "STD_FIGMA_XL",
+      "statement": "Figma's default container family says 1920 in the HD mode.",
+      "severity": "fail",
+      "check": {
+        "type": "figmaAgrees",
+        "figmaPath": "containers.default._grid-container-max-width",
+        "mode": "xl",
+        "expected": 1920
+      }
+    },
+    {
+      "id": "STD_FIGMA_LEGACY",
+      "statement": "Figma's legacy-retire family — the 1440-everywhere behaviour the stylesheet currently implements — is on its way out, by its own name.",
+      "severity": "warn",
+      "check": {
+        "type": "figmaAgrees",
+        "figmaPath": "containers.legacy-retire._grid-container-max-width",
+        "mode": "xl",
+        "expected": 1440
+      }
+    },
+    {
+      "id": "STD_MARGIN_SHIPPED",
+      "statement": "The mobile margin token ships.",
+      "severity": "fail",
+      "check": {
+        "type": "tokenShipped",
+        "ref": "{s2a.spacing.lg}"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "STD_MAX_1440_OR_1920",
+      "question": "Does the standard container cap at 1440 or 1920?",
+      "state": "decided",
+      "owner": "William Blanton",
+      "answer": "Both, by range: 1440 through LG, 1920 from XL. Will's hosted demo implements exactly this, and Figma holds the two behaviours as two families where the 1440-everywhere one is named legacy-retire.",
+      "evidence": "acom-prototypes.vercel.app/s2a-grids/grid.css adds @media screen and (width >= 1441px) { .container { max-width: var(--s2a-grid-hd-max-width) } }; Figma containers.default vs containers.legacy-retire in collection 6:178."
+    },
+    {
+      "id": "STD_VS_HD_REDUNDANT",
+      "question": "Once the standard container rises to 1920 in HD, is container-hd still a distinct family or does it collapse into this one?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "The remaining difference is behaviour below HD: container-hd keeps a 1920 cap and the percentage rule from 768 up, where the standard container caps at 1440 until 1441. If no section needs 1920 below HD, the two merge."
+    }
+  ],
+  "visualize": {
+    "demo": "container",
+    "overlay": true
+  },
+  "provenance": {
+    "defs": "sha256:b31301cf4dfead007156df607b942435e9b5fdb44940d371f44a4b6893a554e0",
+    "code": "sha256:2d8048246d27d063bf7883e5e461991c5fb2c29f93d62516512512e6a13b73fb",
+    "figma": "sha256:ab9f2703866168d507517b490fc100eb1401a93b3bc07ee3d033b8220e5872ac",
+    "contract": "sha256:709a71b3a0b218c5cd8810b23680c4daa22b636b3ef1f95024a42a503ce430a7"
+  }
+}

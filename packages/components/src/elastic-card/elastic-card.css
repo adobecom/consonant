@@ -27,12 +27,12 @@
   inline-size: 294px;
   block-size: var(--s2a-router-card-height-max, 576px);
 
-  border-radius: var(--s2a-border-radius-md, 16px);
-  background-color: var(--s2a-color-surface-subtle, var(--s2a-color-background-subtle));
+  border-radius: var(--s2a-border-radius-md);
+  background-color: var(--s2a-color-surface-subtle);
   color: var(--s2a-color-content-default);
   text-decoration: none;
   font: inherit;
-  font-family: var(--s2a-font-family-default, "Adobe Clean");
+  font-family: var(--s2a-font-family-default);
   text-align: left;
   cursor: default;
 
@@ -52,8 +52,8 @@
 }
 
 .c-elastic-card:focus-visible {
-  outline: 2px solid var(--s2a-color-focus-ring-default);
-  outline-offset: 2px;
+  outline: var(--s2a-border-width-md) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-3xs);
 }
 
 /* ─── Header zone ──────────────────────────────────────────────────────────── */
@@ -61,20 +61,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-md);
 
-  padding: var(--s2a-router-card-padding, 24px);
+  padding: var(--s2a-spacing-lg);
   flex-shrink: 0;
 }
 
 /* Featured header — heading-6 ramp (Adobe Clean Display 900 @ 18px) */
 .c-elastic-card__heading {
   margin: 0;
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
-  font-size: var(--s2a-typography-font-size-heading-6, 18px);
-  line-height: var(--s2a-typography-line-height-heading-6, 18px);
-  font-weight: var(--s2a-font-weight-heading, 900);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-6, -0.2px);
+  font-family: var(--s2a-font-family-heading);
+  font-size: var(--s2a-typography-font-size-heading-6);
+  line-height: var(--s2a-typography-line-height-heading-6);
+  font-weight: var(--s2a-font-weight-heading);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-6);
   color: var(--s2a-color-content-default);
   min-inline-size: 0;
   flex: 1 1 auto;
@@ -90,8 +90,8 @@
 }
 
 .c-elastic-card__action--caret {
-  border-radius: var(--s2a-border-radius-round, 999px);
-  padding: var(--s2a-spacing-2xs, 4px);
+  border-radius: var(--s2a-border-radius-round);
+  padding: var(--s2a-spacing-2xs);
 }
 
 .c-elastic-card__action--caret svg {
@@ -109,9 +109,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--s2a-color-surface-default, var(--s2a-color-background-default));
+  background-color: var(--s2a-color-surface-default);
   color: var(--s2a-color-content-default);
-  border-radius: var(--s2a-border-radius-round, 999px);
+  border-radius: var(--s2a-border-radius-round);
   flex-shrink: 0;
 }
 
@@ -133,22 +133,26 @@
   width: 100%;
   height: 100%;
   margin: 0;
-  border-radius: var(--s2a-border-radius-md, 16px);
+  border-radius: var(--s2a-border-radius-md);
   aspect-ratio: unset;
 }
 
 /* Mobile: 4px inline inset + border-radius-sm (12px) */
 .c-elastic-card[data-state="mobile"] .c-elastic-card__media {
-  padding-inline: var(--s2a-spacing-2xs, 4px);
+  padding-inline: var(--s2a-spacing-2xs);
 }
 
 .c-elastic-card[data-state="mobile"] .c-elastic-card__media .c-media {
-  border-radius: var(--s2a-border-radius-sm, 12px);
+  border-radius: var(--s2a-border-radius-sm);
 }
 
 /* Mobile: match Figma image treatment — 169% height, -9% top offset */
 .c-elastic-card[data-state="mobile"] .c-elastic-card__media .c-media img,
-.c-elastic-card[data-state="mobile"] .c-elastic-card__media .c-media picture > img {
+.c-elastic-card[data-state="mobile"]
+  .c-elastic-card__media
+  .c-media
+  picture
+  > img {
   position: absolute;
   width: 100%;
   height: 169.06%;
@@ -174,14 +178,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: var(--s2a-router-card-padding, 24px);
+  padding: var(--s2a-spacing-lg);
   flex-shrink: 0;
 }
 
 .c-elastic-card__body-content {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-3xs, 2px);
+  gap: var(--s2a-spacing-3xs);
   flex: 1 1 auto;
   min-inline-size: 0;
 }
@@ -196,22 +200,22 @@
 /* card-title: eyebrow ramp + content/default (Figma v2) */
 .c-elastic-card__title {
   margin: 0;
-  font-family: var(--s2a-font-family-eyebrow, "Adobe Clean");
-  font-size: var(--s2a-typography-font-size-eyebrow, 16px);
-  line-height: var(--s2a-typography-line-height-eyebrow, 20px);
-  font-weight: var(--s2a-font-weight-eyebrow, 700);
-  letter-spacing: var(--s2a-typography-letter-spacing-eyebrow, -0.16px);
+  font-family: var(--s2a-font-family-eyebrow);
+  font-size: var(--s2a-typography-font-size-eyebrow);
+  line-height: var(--s2a-typography-line-height-eyebrow);
+  font-weight: var(--s2a-font-weight-eyebrow);
+  letter-spacing: var(--s2a-typography-letter-spacing-eyebrow);
   color: var(--s2a-color-content-default);
 }
 
 /* body-text: body-md ramp + content/subtle (Figma v2) */
 .c-elastic-card__body-text {
   margin: 0;
-  font-family: var(--s2a-font-family-body, "Adobe Clean");
-  font-size: var(--s2a-typography-font-size-body-md, 16px);
-  line-height: var(--s2a-typography-line-height-body-md, 20px);
-  font-weight: var(--s2a-font-weight-body, 400);
-  letter-spacing: var(--s2a-typography-letter-spacing-body-md, 0.16px);
+  font-family: var(--s2a-font-family-body);
+  font-size: var(--s2a-typography-font-size-body-md);
+  line-height: var(--s2a-typography-line-height-body-md);
+  font-weight: var(--s2a-font-weight-body);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-md);
   color: var(--s2a-color-content-subtle);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -225,7 +229,7 @@
    background/inverse. All text flips to content/inverse (theme-aware). */
 .c-elastic-card[data-state="expanded"] {
   inline-size: 496px;
-  background-color: var(--s2a-color-surface-inverse-subtle, var(--s2a-color-background-inverse));
+  background-color: var(--s2a-color-surface-inverse-subtle);
   color: var(--s2a-color-content-inverse);
 }
 
@@ -240,23 +244,29 @@
   color: var(--s2a-color-content-inverse);
 }
 
-.c-elastic-card:is([data-state="expanded"], [data-state="mobile"]) .c-elastic-card__title,
-.c-elastic-card:is([data-state="expanded"], [data-state="mobile"]) .c-elastic-card__heading {
+.c-elastic-card:is([data-state="expanded"], [data-state="mobile"])
+  .c-elastic-card__title,
+.c-elastic-card:is([data-state="expanded"], [data-state="mobile"])
+  .c-elastic-card__heading {
   color: var(--s2a-color-content-inverse);
 }
 
 /* body-text on dark: content/inverse; expanded+featured pins transparent-white-64
    (exact Figma v2 binding) */
-.c-elastic-card:is([data-state="expanded"], [data-state="mobile"]) .c-elastic-card__body-text {
+.c-elastic-card:is([data-state="expanded"], [data-state="mobile"])
+  .c-elastic-card__body-text {
   color: var(--s2a-color-content-inverse);
 }
 
-.c-elastic-card[data-state="expanded"][data-type="featured"] .c-elastic-card__body-text {
+.c-elastic-card[data-state="expanded"][data-type="featured"]
+  .c-elastic-card__body-text {
   color: var(--s2a-color-transparent-white-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
 }
 
 /* ProductLockup label follows the card's dark state (lockup itself is context-free in v2) */
-.c-elastic-card:is([data-state="expanded"], [data-state="mobile"]) .c-product-lockup {
+.c-elastic-card:is([data-state="expanded"], [data-state="mobile"])
+  .c-product-lockup {
   color: var(--s2a-color-content-inverse);
 }
 
@@ -268,7 +278,7 @@
 }
 
 .c-elastic-card[data-state="expanded"] .c-elastic-card__body-content {
-  gap: var(--s2a-spacing-2xs, 4px);
+  gap: var(--s2a-spacing-2xs);
   max-inline-size: 270px;
 }
 
@@ -287,13 +297,13 @@
 }
 
 .c-elastic-card[data-state="mobile"] .c-elastic-card__body-content {
-  gap: var(--s2a-spacing-2xs, 4px);
+  gap: var(--s2a-spacing-2xs);
 }
 
 /* ─── Hover on resting — expands to the expanded-state visuals ─────────────── */
 .c-elastic-card[data-state="resting"]:hover {
   inline-size: 496px;
-  background-color: var(--s2a-color-surface-inverse-subtle, var(--s2a-color-background-inverse));
+  background-color: var(--s2a-color-surface-inverse-subtle);
   color: var(--s2a-color-content-inverse);
 }
 
@@ -308,7 +318,7 @@
 }
 
 .c-elastic-card[data-state="resting"]:hover .c-elastic-card__body-content {
-  gap: var(--s2a-spacing-2xs, 4px);
+  gap: var(--s2a-spacing-2xs);
   max-inline-size: 270px;
 }
 
@@ -316,7 +326,8 @@
   display: flex;
 }
 
-.c-elastic-card[data-state="resting"]:hover :is(.c-elastic-card__title, .c-elastic-card__heading) {
+.c-elastic-card[data-state="resting"]:hover
+  :is(.c-elastic-card__title, .c-elastic-card__heading) {
   color: var(--s2a-color-content-inverse);
 }
 
@@ -324,8 +335,10 @@
   color: var(--s2a-color-content-inverse);
 }
 
-.c-elastic-card[data-state="resting"][data-type="featured"]:hover .c-elastic-card__body-text {
+.c-elastic-card[data-state="resting"][data-type="featured"]:hover
+  .c-elastic-card__body-text {
   color: var(--s2a-color-transparent-white-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
 }
 
 .c-elastic-card[data-state="resting"]:hover .c-product-lockup {

@@ -1,0 +1,170 @@
+{
+  "$schema": "s2a-grid-defs/1",
+  "slug": "grid-foundation",
+  "name": "Grid foundation",
+  "version": "1.0.0",
+  "kind": "foundation",
+  "tier": "global",
+  "status": "shipped",
+  "description": "The shared vocabulary every other layout contract is written in: four breakpoint ranges, the column count in each, the gutter, and the row primitive. Nothing here renders on its own. Everything here is referenced by the container and grid contracts, so a change to one of these numbers is a change to every layout in the system — which is precisely why it belongs in a contract instead of in four places that drift.",
+  "anchors": {
+    "code": {
+      "stylesheet": "packages/grid/src/s2a-layout-grids.css",
+      "importPath": "@adobecom/s2a-grid/css/grid.css",
+      "rootClass": "row"
+    },
+    "figma": {
+      "collectionId": "VariableCollectionId:6:178",
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "nodeId": "104:26144",
+      "pageName": "↳ Layout",
+      "layerName": "MODE (container)",
+      "designOnly": true
+    }
+  },
+  "breakpoints": [
+    {
+      "id": "sm",
+      "label": "S — Mobile",
+      "figmaMode": "sm",
+      "figmaLabel": "Mobile",
+      "minWidth": null,
+      "maxWidth": 767,
+      "mediaQuery": null,
+      "columns": 6,
+      "mockWidth": 375,
+      "portraitEscape": null
+    },
+    {
+      "id": "md",
+      "label": "M — Tablet landscape",
+      "figmaMode": "md",
+      "figmaLabel": "Tablet",
+      "minWidth": 768,
+      "maxWidth": 1279,
+      "mediaQuery": "@media (width >= 768px)",
+      "columns": 12,
+      "mockWidth": 768,
+      "portraitEscape": 900
+    },
+    {
+      "id": "lg",
+      "label": "L — Desktop",
+      "figmaMode": "lg",
+      "figmaLabel": "Desktop",
+      "minWidth": 1280,
+      "maxWidth": 1440,
+      "mediaQuery": "@media (width >= 1280px)",
+      "columns": 12,
+      "mockWidth": 1440,
+      "portraitEscape": null
+    },
+    {
+      "id": "xl",
+      "label": "XL — Desktop HD",
+      "figmaMode": "xl",
+      "figmaLabel": "Desktop XL",
+      "minWidth": 1441,
+      "maxWidth": 2560,
+      "mediaQuery": "@media (width >= 1441px)",
+      "columns": 12,
+      "mockWidth": 2560,
+      "portraitEscape": null
+    }
+  ],
+  "breakpointBehavior": [
+    { "breakpoint": "sm", "behavior": "6 columns, mobile-first base with no media query. Side margins come from a spacing token, not a percentage.", "columns": 6, "margin": "{s2a.spacing.lg}" },
+    { "breakpoint": "md", "behavior": "12 columns. Tablet landscape, and the range where a layout may need a portrait reflow at 900px.", "columns": 12, "margin": "8.33% of viewport (83.4% container)" },
+    { "breakpoint": "lg", "behavior": "12 columns. The most standard desktop range.", "columns": 12, "margin": "8.33% of viewport (83.4% container)" },
+    { "breakpoint": "xl", "behavior": "12 columns. HD and the 2560 stress test; used only as needed.", "columns": 12, "margin": "8.33% of viewport (83.4% container)" }
+  ],
+  "tokens": [
+    { "role": "gutter", "ref": "{s2a.spacing.xs}", "breakpoint": "all", "note": "8px at every breakpoint. Figma calls it layout-guide.gap." },
+    { "role": "margin-mobile", "ref": "{s2a.spacing.lg}", "breakpoint": "sm", "note": "Will's rule: --grid-margin = --spacing-lg below 768." }
+  ],
+  "surface": {
+    "classes": [
+      { "name": "row", "purpose": "The grid wrapper: a CSS grid of --s2a-grid-columns tracks separated by --s2a-grid-gutter." },
+      { "name": "items-center", "purpose": "align-items: center on a row." },
+      { "name": "justify-center", "purpose": "justify-content: center on a row." },
+      { "name": "justify-between", "purpose": "justify-content: space-between on a row." },
+      { "name": "gap-y", "purpose": "Restores row-gap when a layout has set gap-0." },
+      { "name": "gap-0", "purpose": "Collapses the gutter to zero for edge-to-edge children." },
+      { "name": "gutter-32", "purpose": "Gutter override to spacing-xl.", "pattern": "gutter-{0|8|16|32}" },
+      { "name": "gutter-16", "purpose": "Gutter override to spacing-md." },
+      { "name": "gutter-8", "purpose": "Gutter override to spacing-xs (the default, stated explicitly)." }
+    ],
+    "customProperties": [
+      { "name": "--s2a-grid-columns", "purpose": "Column count for the current range. 6 at sm, 12 from 768 up." },
+      { "name": "--s2a-grid-gutter", "purpose": "Space between columns. Always spacing-xs unless a gutter-* class overrides it." },
+      { "name": "--s2a-grid-container-width", "purpose": "The 83.4% percentage rule for side margins at 768 and up." },
+      { "name": "--s2a-grid-max-width", "purpose": "Max content width for the standard container in the current range." },
+      { "name": "--s2a-grid-hd-max-width", "purpose": "The HD ceiling, 1920px." }
+    ]
+  },
+  "rules": [
+    {
+      "id": "BP_SM_NO_QUERY",
+      "statement": "The mobile range carries no media query — the system is mobile-first, so sm is the base and every other range is an override.",
+      "severity": "fail",
+      "check": { "type": "manual", "note": "Verified by the absence of any max-width query in the stylesheet; the sm column classes are declared at the top level." }
+    },
+    { "id": "BP_MD_768", "statement": "The tablet range begins at 768px.", "severity": "fail", "check": { "type": "mediaQueryPresent", "minWidth": 768 } },
+    { "id": "BP_LG_1280", "statement": "The desktop range begins at 1280px.", "severity": "fail", "check": { "type": "mediaQueryPresent", "minWidth": 1280 } },
+    {
+      "id": "BP_XL_1441",
+      "statement": "The HD range begins at 1441px, so that 1440 — the width every desktop mockup is drawn at — is unambiguously inside the desktop range.",
+      "severity": "fail",
+      "check": { "type": "mediaQueryPresent", "minWidth": 1441 }
+    },
+    {
+      "id": "BP_AGREE_XL",
+      "statement": "The grid stylesheet and the shipped XL token file must begin the HD range at the same pixel. If they disagree, a layout at that exact width gets its columns from one range and its spacing from the other.",
+      "severity": "fail",
+      "check": { "type": "boundaryAgreement", "breakpoint": "xl", "expected": 1441 }
+    },
+    { "id": "BP_AGREE_LG", "statement": "The grid stylesheet and the shipped LG token file must begin the desktop range at the same pixel.", "severity": "fail", "check": { "type": "boundaryAgreement", "breakpoint": "lg", "expected": 1280 } },
+    { "id": "BP_AGREE_MD", "statement": "The grid stylesheet and the shipped MD token file must begin the tablet range at the same pixel.", "severity": "fail", "check": { "type": "boundaryAgreement", "breakpoint": "md", "expected": 768 } },
+    { "id": "COLS_SM_6", "statement": "The mobile range has 6 columns.", "severity": "fail", "check": { "type": "customPropertyEquals", "name": "--s2a-grid-columns", "media": null, "expectedPx": 6 } },
+    { "id": "COLS_UP_12", "statement": "Every range from 768 up has 12 columns.", "severity": "fail", "check": { "type": "customPropertyEquals", "name": "--s2a-grid-columns", "media": 768, "expectedPx": 12 } },
+    { "id": "COLS_FIGMA_SM", "statement": "Figma's mobile grid mode also says 6 columns.", "severity": "fail", "check": { "type": "figmaAgrees", "figmaPath": "layout-guide._columns", "mode": "sm", "expected": 6 } },
+    { "id": "COLS_FIGMA_XL", "statement": "Figma's HD grid mode also says 12 columns.", "severity": "fail", "check": { "type": "figmaAgrees", "figmaPath": "layout-guide._columns", "mode": "xl", "expected": 12 } },
+    { "id": "GUTTER_TOKEN", "statement": "The gutter is a semantic token, never a literal. 8px typed by hand is how a grid stops being a system.", "severity": "fail", "check": { "type": "customPropertyEquals", "name": "--s2a-grid-gutter", "media": null, "expectedPx": 8, "requireToken": true } },
+    { "id": "GUTTER_FIGMA", "statement": "Figma's layout guide gap resolves to the same 8px as the code gutter, in every mode.", "severity": "fail", "check": { "type": "figmaAgrees", "figmaPath": "layout-guide.gap", "mode": "xl", "expected": 8 } },
+    { "id": "GUTTER_SHIPPED", "statement": "The gutter token ships in the built token CSS.", "severity": "fail", "check": { "type": "tokenShipped", "ref": "{s2a.spacing.xs}" } },
+    { "id": "MARGIN_SM_SHIPPED", "statement": "The mobile side-margin token ships in the built token CSS.", "severity": "fail", "check": { "type": "tokenShipped", "ref": "{s2a.spacing.lg}" } },
+    { "id": "ROW_EXISTS", "statement": "The row primitive exists and is the only thing that establishes a grid context.", "severity": "fail", "check": { "type": "classPresent", "name": "row" } },
+    {
+      "id": "PORTRAIT_900",
+      "statement": "A tablet-portrait reflow, when a layout needs one, uses 900px — not a value invented per block. Figma records the same number as viewport._min-width-899 in the tablet mode.",
+      "severity": "warn",
+      "check": { "type": "figmaAgrees", "figmaPath": "viewport._min-width-899", "mode": "md", "expected": 900 }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "XL_LG_CROSSOVER",
+      "question": "Figma's grid modes overlap at 1440: the LG mode's viewport._max-width is 1440 and the XL mode's viewport._min-width is also 1440. Which range owns exactly 1440?",
+      "state": "decided",
+      "owner": "William Blanton",
+      "answer": "Desktop (LG) owns 1440. XL begins at 1441, per the dev rules Will published: 'XL @media (width >= 1441px)'. The shipped token CSS already follows this; the grid stylesheet does not yet.",
+      "evidence": "Will's STANDARD RULES message; dist/packages/tokens/css/dev/tokens.responsive.xl.css begins at width >= 1441px; Figma modes xl._min-width=1440 and lg._max-width=1440 show the overlap this resolves."
+    },
+    {
+      "id": "COL_MD_OPTIONAL",
+      "question": "Will's layout page calls the md column range 'optional'; the stylesheet implements col-md-* unconditionally inside the 768 range. Is col-md a required range or an opt-in override?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Figma 'Col-grid range' labels read '1279 - 768 Col-md (optional)'. In code, col-md-* sits inside @media (min-width: 768px) and overrides col-lg-*, so it is always available but only takes effect when an author uses it. The two readings may already agree; it needs one sentence from Will to close."
+    },
+    {
+      "id": "GRID_GEOMETRY_DESIGN_ONLY",
+      "question": "Should the structural grid variables (containers, columns, viewport widths, side margins) be promoted out of design-only so the grid CSS can be generated from them?",
+      "state": "decided",
+      "owner": "William Blanton",
+      "answer": "No. They stay design-only. Will built the container modes as a Figma reflow rig — 'design only inception … viewport, container, margins but for figma reflows' — and confirmed they need no token release. They are read as evidence and checked against code, which is what the rules in these contracts do.",
+      "evidence": "build-tokens.js:48 strips underscore keys as design-only; Will: 'added s2a design only modes for containers', 'do your updates need a token release?' → 'nope'."
+    }
+  ],
+  "visualize": { "demo": "breakpoints", "overlay": true, "note": "Renders the four ranges with the live viewport marked, and flags any boundary the stylesheet and tokens disagree on." }
+}

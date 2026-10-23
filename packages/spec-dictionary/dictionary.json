@@ -1,0 +1,602 @@
+{
+  "$schema": "s2a-spec-dictionary/1",
+  "description": "The spec dictionary: how S2A names, structures, tokenizes and makes accessible each role a design can play. specs:scaffold reads extracted Figma evidence (roles, axes, layers) through this file to draft a <slug>.defs.json in the library's conventions, so every component enters the contract system the same way. Tokens here must be shipped semantic tokens (npm run defs:validate checks).",
+  "naming": {
+    "set": "PascalCase component name; the Figma set and the code export share it",
+    "slug": "lowercase-kebab of the name; folder, file and story ids",
+    "rootClass": "c-{slug}",
+    "partClass": "{abbr}-{part} where abbr is the slug's initials (quote-card \u2192 qc)",
+    "figmaRoot": ".root",
+    "figmaPart": ".{part} (dot-prefixed, kebab-case; text layers match the text property name)",
+    "values": "lowercase-kebab for every variant value"
+  },
+  "roles": {
+    "eyebrow": {
+      "part": "eyebrow",
+      "element": "p",
+      "order": 10,
+      "lever": {
+        "name": "eyebrow",
+        "type": "string"
+      },
+      "tokens": {
+        "font-family": "{s2a.font-family.eyebrow}",
+        "font-weight": "{s2a.font-weight.eyebrow}",
+        "font-size": "{s2a.typography.font-size.label}",
+        "line-height": "{s2a.typography.line-height.label}",
+        "letter-spacing": "{s2a.typography.letter-spacing.label}",
+        "color": "{s2a.color.content.eyebrow}"
+      }
+    },
+    "media": {
+      "part": "media",
+      "element": "div[aria-hidden]",
+      "order": 20,
+      "lever": {
+        "name": "mediaSrc",
+        "type": "string",
+        "notes": "Decorative art; aria-hidden. Use a real Media instance in Figma so the swap is a property, not raw layers."
+      },
+      "slot": {
+        "name": "Media",
+        "accepts": [
+          "Media"
+        ],
+        "acceptsMode": "restrict"
+      }
+    },
+    "icon": {
+      "part": "icon",
+      "element": "span[aria-hidden]",
+      "order": 25,
+      "lever": {
+        "name": "icon",
+        "type": "string",
+        "notes": "Icon name resolved by the AppIcon / icon set; decorative unless it is the only content."
+      },
+      "slot": {
+        "name": "Icon",
+        "accepts": [
+          "AppIcon"
+        ],
+        "acceptsMode": "restrict"
+      }
+    },
+    "heading": {
+      "part": "headline",
+      "element": "h3",
+      "order": 30,
+      "lever": {
+        "name": "headline",
+        "type": "string",
+        "notes": "The card's accessible name when the whole card is a link."
+      },
+      "tokens": {
+        "font-family": "{s2a.font-family.heading}",
+        "font-weight": "{s2a.font-weight.heading}",
+        "font-size": "{s2a.typography.font-size.heading-4}",
+        "line-height": "{s2a.typography.line-height.heading-4}",
+        "letter-spacing": "{s2a.typography.letter-spacing.heading-4}",
+        "color": "{s2a.color.content.heading}"
+      }
+    },
+    "body": {
+      "part": "description",
+      "element": "p",
+      "order": 40,
+      "lever": {
+        "name": "description",
+        "type": "string"
+      },
+      "tokens": {
+        "font-family": "{s2a.font-family.body}",
+        "font-weight": "{s2a.font-weight.body}",
+        "font-size": "{s2a.typography.font-size.body-md}",
+        "line-height": "{s2a.typography.line-height.body-md}",
+        "letter-spacing": "{s2a.typography.letter-spacing.body-md}",
+        "color": "{s2a.color.content.default}"
+      }
+    },
+    "divider": {
+      "part": "divider",
+      "element": "hr",
+      "order": 50,
+      "tokens": {
+        "border-color": "{s2a.color.border.subtle}",
+        "border-width": "raw:1px"
+      },
+      "notes": "1px is a Primitive exception recorded in decisions; Divider is also an S2A component if the rule needs its own props."
+    },
+    "cta": {
+      "part": "cta",
+      "element": "span",
+      "order": 60,
+      "lever": {
+        "name": "ctaLabel",
+        "type": "string",
+        "notes": "Visible label of the action; empty when the affordance is a chevron alone (then the headline carries the accessible name)."
+      },
+      "tokens": {
+        "font-family": "{s2a.font-family.label}",
+        "font-weight": "{s2a.font-weight.label}",
+        "font-size": "{s2a.typography.font-size.label}",
+        "line-height": "{s2a.typography.line-height.label}",
+        "color": "{s2a.color.content.default}"
+      },
+      "parts": {
+        "chevron": {
+          "element": "svg[aria-hidden]",
+          "tokens": {
+            "color": "{s2a.color.content.default}"
+          },
+          "notes": "Decorative arrow; never the only indication of the link (WCAG 1.4.1)."
+        }
+      }
+    },
+    "pagination": {
+      "part": "pagination",
+      "element": "div",
+      "order": 70,
+      "slot": {
+        "name": "Pagination",
+        "accepts": [
+          "DotPagination"
+        ],
+        "acceptsMode": "restrict"
+      }
+    },
+    "text": {
+      "decisionOnly": true,
+      "question": "A text layer carries no recognisable role (not heading, body, eyebrow or label). Is it content (add a lever) or part of the illustration (fold into media)?"
+    }
+  },
+  "archetypes": {
+    "link-card": {
+      "description": "A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+      "when": "roles include heading and cta and the frame does not repeat a unit",
+      "root": {
+        "element": "a",
+        "tokens": {
+          "background-color": "{s2a.color.background.subtle}",
+          "border-radius": "{s2a.border-radius.md}",
+          "padding": "{s2a.spacing.xl}",
+          "gap": "{s2a.spacing.md}"
+        },
+        "notes": "Block-level link; content stacks vertically and the CTA row pins to the bottom. Hover and focus change the surface, never only the colour of the arrow."
+      },
+      "props": [
+        {
+          "name": "href",
+          "lever": true,
+          "type": "string",
+          "figma": "NONE",
+          "code": {
+            "prop": "href"
+          },
+          "notes": "Destination; authoring validates it."
+        },
+        {
+          "name": "target",
+          "lever": false,
+          "type": "string",
+          "figma": "NONE",
+          "code": {
+            "prop": "target"
+          },
+          "notes": "Integration detail; new-window links append an accessible hint."
+        }
+      ],
+      "states": [
+        {
+          "name": "State",
+          "figma": {
+            "kind": "VARIANT",
+            "property": "State",
+            "notes": "default | hover | focused (design only)"
+          },
+          "code": {
+            "mechanism": ":hover and :focus-visible on the root link"
+          },
+          "notes": "Runtime states, never authored props."
+        }
+      ],
+      "a11y": {
+        "role": "link",
+        "wcag": [
+          "1.1.1",
+          "1.4.1",
+          "1.4.3",
+          "1.4.11",
+          "2.1.1",
+          "2.4.4",
+          "2.4.7",
+          "2.5.8"
+        ],
+        "keyboard": [
+          {
+            "key": "Tab",
+            "action": "moves focus to the card as one stop"
+          },
+          {
+            "key": "Enter",
+            "action": "follows the link"
+          }
+        ],
+        "notes": [
+          "One link, one accessible name: the headline text. Media, icon and chevron are aria-hidden so the name is not padded with noise.",
+          "No interactive element may be nested inside the card (a link inside a link is invalid HTML and unreachable by keyboard).",
+          "Focus ring is drawn on the whole card surface (2.4.7) and the target is at least 24\u00d724 (2.5.8).",
+          "Headline and description meet 4.5:1 on the card surface; the chevron and any border meet 3:1 (1.4.3, 1.4.11).",
+          "The arrow is decorative: link purpose comes from the headline text (2.4.4), not from the glyph alone (1.4.1)."
+        ]
+      }
+    },
+    "card": {
+      "description": "A non-interactive content card; actions live in a slot.",
+      "when": "roles include heading and the frame does not repeat a unit; no cta role",
+      "root": {
+        "element": "article",
+        "tokens": {
+          "background-color": "{s2a.color.background.subtle}",
+          "border-radius": "{s2a.border-radius.md}",
+          "padding": "{s2a.spacing.xl}",
+          "gap": "{s2a.spacing.md}"
+        }
+      },
+      "props": [],
+      "states": [],
+      "a11y": {
+        "wcag": [
+          "1.1.1",
+          "1.4.3",
+          "1.4.10"
+        ],
+        "notes": [
+          "Actions inside the card are native links or buttons; the card itself has no role."
+        ]
+      }
+    },
+    "collection": {
+      "description": "A row, grid or scroller of one repeated unit.",
+      "when": "the frame repeats a unit",
+      "root": {
+        "element": "ul",
+        "tokens": {
+          "gap": "{s2a.spacing.xs}"
+        }
+      },
+      "props": [
+        {
+          "name": "layout",
+          "lever": true,
+          "type": "string",
+          "enum": [
+            "row",
+            "grid",
+            "scroll"
+          ],
+          "default": "row",
+          "figma": {
+            "kind": "VARIANT",
+            "property": "Layout"
+          },
+          "code": {
+            "prop": "layout",
+            "attr": "data-layout"
+          },
+          "notes": "row at wide viewports, scroll on phones; grid when the count exceeds one row."
+        }
+      ],
+      "states": [
+        {
+          "name": "Breakpoint",
+          "figma": {
+            "kind": "VARIANT",
+            "property": "Breakpoint"
+          },
+          "code": {
+            "mechanism": "container queries switch row \u2192 scroll"
+          },
+          "notes": "A layout response, not an authored prop."
+        }
+      ],
+      "a11y": {
+        "wcag": [
+          "1.3.1",
+          "1.4.10",
+          "2.1.1",
+          "2.4.3"
+        ],
+        "notes": [
+          "List semantics: ul/li so the count is announced.",
+          "Horizontal scroll must be reachable by keyboard and must not trap focus; content reflows at 320px without two-dimensional scrolling."
+        ]
+      }
+    },
+    "button": {
+      "description": "Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+      "when": "binds the button token namespace, or a State axis with hover/active/focus/disabled",
+      "root": {
+        "element": "button"
+      },
+      "props": [],
+      "states": [],
+      "a11y": {
+        "wcag": [
+          "1.4.3",
+          "1.4.11",
+          "2.1.1",
+          "2.4.7",
+          "2.5.8",
+          "4.1.2"
+        ],
+        "notes": [
+          "Renders a native <button>, or an <a> when it navigates \u2014 never a div with a click handler.",
+          "The label is the accessible name; an icon-only button needs an aria-label.",
+          "Focus is visible on the control itself (2.4.7) and the target is at least 24x24 (2.5.8).",
+          "Disabled is conveyed to assistive tech, not by colour alone (1.4.1)."
+        ]
+      }
+    },
+    "checkbox / radio": {
+      "description": "A selection control with a checked state, usually paired with a label.",
+      "when": "a two-value Selected or Checked axis, usually beside a label",
+      "root": {
+        "element": "label"
+      },
+      "props": [],
+      "states": [],
+      "a11y": {
+        "wcag": [
+          "1.3.1",
+          "1.4.11",
+          "2.1.1",
+          "2.4.7",
+          "2.5.8",
+          "4.1.2"
+        ],
+        "notes": [
+          "Native input with a real <label>, so the hit area includes the text.",
+          "Indeterminate is a property, not a third value.",
+          "Group related controls in a fieldset with a legend (1.3.1)."
+        ]
+      },
+      "behaviour": {
+        "input": "a native <input type=checkbox|radio> inside the <label>, visually hidden but focusable; checked reflects the selected prop, disabled/name/value pass through",
+        "control": "the drawn control (ring, box, dot, check) is decoration: aria-hidden, keyed off the root's data attribute so it follows the native input",
+        "keyboard": "Space toggles a checkbox; arrow keys move within a radio group; nothing else is interactive",
+        "motion": "none required; a short transition on the indicator is acceptable, respect prefers-reduced-motion"
+      }
+    },
+    "toggle / switch": {
+      "description": "A binary on/off control that applies immediately.",
+      "when": "a State axis of on/off, or a Checked boolean with switch semantics",
+      "root": {
+        "element": "button"
+      },
+      "props": [],
+      "states": [],
+      "a11y": {
+        "wcag": [
+          "1.4.11",
+          "2.1.1",
+          "2.4.7",
+          "2.5.8",
+          "4.1.2"
+        ],
+        "notes": [
+          "role=switch with aria-checked; it is not a checkbox and does not wait for submit.",
+          "State must not be carried by colour alone (1.4.1)."
+        ]
+      }
+    },
+    "input / field": {
+      "description": "Accepts typed input. Label, value, placeholder, and an error state.",
+      "when": "a TEXT axis for value or placeholder plus an error or focus state",
+      "root": {
+        "element": "input"
+      },
+      "props": [],
+      "states": [],
+      "a11y": {
+        "wcag": [
+          "1.3.1",
+          "1.4.3",
+          "2.1.1",
+          "2.4.7",
+          "3.3.1",
+          "3.3.2",
+          "4.1.2"
+        ],
+        "notes": [
+          "A visible label, programmatically associated \u2014 placeholder is not a label (3.3.2).",
+          "Errors say what is wrong and how to fix it, in text (3.3.1).",
+          "aria-describedby ties helper and error text to the field."
+        ]
+      }
+    },
+    "badge / tag / chip": {
+      "description": "A small label. Non-interactive unless it is dismissible.",
+      "when": "no state axis and no interactive states; a short text axis",
+      "root": {
+        "element": "span"
+      },
+      "props": [],
+      "states": [],
+      "a11y": {
+        "wcag": [
+          "1.4.3",
+          "1.4.11"
+        ],
+        "notes": [
+          "Not a button. If it dismisses, the dismiss affordance is the control, not the tag.",
+          "Meaning never rests on colour alone (1.4.1)."
+        ]
+      }
+    },
+    "pagination": {
+      "description": "Moves between pages of content.",
+      "when": "a repeated indicator unit with a current/selected state",
+      "root": {
+        "element": "nav"
+      },
+      "props": [],
+      "states": [],
+      "a11y": {
+        "wcag": [
+          "1.4.11",
+          "2.1.1",
+          "2.4.7",
+          "2.5.8",
+          "4.1.2"
+        ],
+        "notes": [
+          "A nav landmark with an accessible name.",
+          "The current page is aria-current, not just a colour change.",
+          "Every indicator is reachable and activatable by keyboard (2.1.1)."
+        ]
+      }
+    },
+    "accordion": {
+      "description": "A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+      "when": "a State axis of open|closed (or expanded|collapsed), a trigger layer and a content layer",
+      "root": {
+        "element": "div"
+      },
+      "props": [],
+      "states": [],
+      "behaviour": {
+        "trigger": "a native <button> with aria-expanded reflecting `open` and aria-controls pointing at the content region",
+        "content": "a region (role=region, aria-labelledby the trigger) that is hidden when closed \u2014 hidden attribute, not display:none alone, so it is out of the accessibility tree too",
+        "keyboard": "Enter and Space on the trigger toggle it; nothing else is interactive",
+        "motion": "expand and collapse are transitions on the content's height or grid-template-rows; respect prefers-reduced-motion"
+      },
+      "a11y": {
+        "wcag": [
+          "1.3.1",
+          "2.1.1",
+          "4.1.2"
+        ],
+        "notes": [
+          "The trigger is a real <button>; aria-expanded is the state, aria-controls the relationship (4.1.2).",
+          "Closed content is hidden from everyone, not only visually (1.3.1).",
+          "Keyboard: Enter/Space toggles; focus stays on the trigger (2.1.1)."
+        ]
+      }
+    },
+    "select / dropdown": {
+      "description": "A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+      "when": "a trigger layer with a chevron and a menu of options, or a .select/.trigger hidden set",
+      "root": {
+        "element": "div"
+      },
+      "props": [],
+      "states": [],
+      "behaviour": {
+        "control": "a native <select> is the control \u2014 keyboard, screen reader and mobile pickers come for free; the styled trigger is its visual, never a div that pretends",
+        "label": "a visible <label for> or aria-labelledby; a placeholder is not a label",
+        "menu": "the options list is the browser's unless the design needs rich option content, in which case it becomes a listbox (role=listbox/option) with full keyboard support \u2014 a separate, larger contract"
+      },
+      "a11y": {
+        "wcag": [
+          "1.3.1",
+          "2.1.1",
+          "3.3.2",
+          "4.1.2"
+        ],
+        "notes": [
+          "Native <select> keeps name, role and value correct without ARIA (4.1.2).",
+          "Every select has a programmatic label (3.3.2).",
+          "Arrow keys change the value; Space/Enter opens (2.1.1)."
+        ]
+      }
+    },
+    "helper text": {
+      "description": "Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+      "when": "a short text layer with an optional leading icon, named helper, hint, message or error",
+      "root": {
+        "element": "p"
+      },
+      "props": [],
+      "states": [],
+      "behaviour": {
+        "association": "the field's aria-describedby names this element's id; an error also sets aria-invalid on the field",
+        "live": "an error that appears on submit is announced: role=alert or aria-live=polite on the message container"
+      },
+      "a11y": {
+        "wcag": [
+          "1.3.1",
+          "3.3.1",
+          "3.3.3"
+        ],
+        "notes": [
+          "Described-by is the relationship; colour alone is not the error signal (1.4.1, 3.3.1).",
+          "The message says what is wrong and, where possible, how to fix it (3.3.3)."
+        ]
+      }
+    },
+    "list": {
+      "description": "A sequence of like items \u2014 features, links, steps. The items are the content; the list is the rhythm.",
+      "when": "a repeated child layer (ListItem, Item) under a vertical frame",
+      "root": {
+        "element": "ul"
+      },
+      "props": [],
+      "states": [],
+      "behaviour": {
+        "items": "each item is an <li>; an item with a leading icon keeps the icon decorative (aria-hidden) unless it carries meaning"
+      },
+      "a11y": {
+        "wcag": [
+          "1.3.1"
+        ],
+        "notes": [
+          "A real <ul>/<li> so the count and position are announced (1.3.1)."
+        ]
+      }
+    }
+  },
+  "decisions": {
+    "unboundPaint": {
+      "question": "{count} painted layers carry no variable ({list}). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "confidence": "high",
+      "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy."
+    },
+    "genericLayers": {
+      "question": "{count} layers carry Figma-generated names ({list}). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set."
+    },
+    "codePending": {
+      "question": "No code exists yet. Generate {importPath} from the spec (/spec-to-html), run npm run evidence:code -- --slug={slug}, then remove anchors.code.pending.",
+      "confidence": "high",
+      "fix": "Once {importPath} exists, run npm run evidence:code -- --slug={slug} and delete anchors.code.pending."
+    },
+    "archetype": {
+      "question": "Scaffolded as {archetype} ({why}). Confirm, or re-run npm run specs:scaffold -- --slug={slug} --archetype=<link-card|card|collection>.",
+      "chose": "archetype {archetype}, because {why}",
+      "confidence": "medium",
+      "fix": "npm run specs:scaffold -- --slug={slug} --archetype=<link-card|card|collection> --force"
+    },
+    "levers": {
+      "question": "Levers were derived from roles ({roles}), not from component properties. Confirm names and which are authored (lever true) versus integration (lever false).",
+      "chose": "levers from roles: {roles}",
+      "confidence": "medium",
+      "fix": "Edit props[] in this file: rename a lever, or set lever:false where it is integration rather than authoring."
+    },
+    "match": {
+      "question": "Structural match says {verdict}: closest existing contract is {name} (score {score}). Extend it instead of adding a component?",
+      "chose": "a new component, over extending {name} (match {verdict}, score {score})",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to {name} instead."
+    },
+    "strayText": {
+      "confidence": "low",
+      "fix": "Name the layer in Figma so it claims a role, or add it under anatomy.root.parts here."
+    },
+    "extraArt": {
+      "confidence": "medium",
+      "fix": "Fold the layers into the Media instance in Figma, or name them as parts in anatomy."
+    }
+  }
+}

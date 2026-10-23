@@ -1,0 +1,342 @@
+/* Generated from button.contract.json. Re-run: npm run specs:render -- --slug=button */
+
+.c-button [hidden],
+.c-button[hidden] {
+  display: none !important;
+}
+
+.c-button {
+  box-sizing: border-box;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  min-width: 0;
+  appearance: none;
+  height: 40px; /* hardcoded: Figma Button v2 md is 40px tall and no semantic size token exists yet */
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--s2a-border-radius-round);
+  gap: var(--s2a-spacing-xs);
+  padding-left: var(--s2a-spacing-lg);
+  padding-right: var(--s2a-spacing-lg);
+  padding-top: 14px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  padding-bottom: 14px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  box-shadow: inset 0 0 0 var(--c-button-bw, 0) var(--c-button-bc, transparent);
+}
+
+.c-button:disabled,
+.c-button[data-state="disabled"] {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.c-button:focus-visible,
+.c-button[data-state="focus"] {
+  outline-color: var(--s2a-color-focus-ring-default);
+  outline-width: var(--s2a-border-width-sm);
+  outline-style: solid;
+  outline-offset: var(--s2a-border-width-sm);
+}
+
+.c-button[data-style="outlined"] {
+  background-color: var(--s2a-color-button-background-outlined-default);
+  --c-button-bw: var(--s2a-border-width-md);
+  --c-button-bc: var(--s2a-color-border-knockout);
+}
+
+.c-button[data-style="transparent"] {
+  background-color: var(--s2a-color-button-background-transparent-default);
+  --c-button-bw: var(--s2a-border-width-sm);
+}
+
+.c-button[data-style="solid"] {
+  background-color: var(--s2a-color-button-background-solid-default);
+  --c-button-bw: var(--s2a-border-width-sm);
+}
+
+.c-button[data-style="accent"] {
+  background-color: var(--s2a-color-button-background-accent-default);
+}
+
+.c-button[data-style="knockout"] {
+  background-color: var(--s2a-color-button-background-knockout-default);
+  --c-button-bw: var(--s2a-border-width-md);
+  --c-button-bc: var(--s2a-color-button-border-knockout-default);
+}
+
+.c-button[data-style="outline-inverse"] {
+  background-color: var(--s2a-color-button-background-outline-inverse-default);
+  --c-button-bw: var(--s2a-border-width-md);
+  --c-button-bc: var(--s2a-color-button-border-outline-inverse-default);
+}
+
+.c-button[data-style="outlined"]:hover,
+.c-button[data-style="outlined"][data-state="hover"] {
+  background-color: var(--s2a-color-button-background-outlined-hover);
+}
+
+.c-button[data-style="transparent"]:hover,
+.c-button[data-style="transparent"][data-state="hover"] {
+  background-color: var(--s2a-color-button-background-transparent-hover);
+}
+
+.c-button[data-style="solid"]:hover,
+.c-button[data-style="solid"][data-state="hover"] {
+  background-color: var(--s2a-color-button-background-solid-hover);
+  --c-button-bw: var(--s2a-border-width-md);
+  --c-button-bc: var(--s2a-color-border-knockout);
+}
+
+.c-button[data-style="accent"]:hover,
+.c-button[data-style="accent"][data-state="hover"] {
+  background-color: var(--s2a-color-button-background-accent-hover);
+}
+
+.c-button[data-style="knockout"]:hover,
+.c-button[data-style="knockout"][data-state="hover"] {
+  background-color: var(--s2a-color-button-background-knockout-hover);
+}
+
+.c-button[data-style="outline-inverse"]:hover,
+.c-button[data-style="outline-inverse"][data-state="hover"] {
+  background-color: var(--s2a-color-button-background-outline-inverse-hover);
+}
+
+.c-button[data-style="outlined"]:active,
+.c-button[data-style="outlined"][data-state="active"] {
+  background-color: var(--s2a-color-button-background-outlined-active);
+}
+
+.c-button[data-style="transparent"]:active,
+.c-button[data-style="transparent"][data-state="active"] {
+  background-color: var(--s2a-color-button-background-transparent-active);
+}
+
+.c-button[data-style="solid"]:active,
+.c-button[data-style="solid"][data-state="active"] {
+  background-color: var(--s2a-color-button-background-solid-active);
+}
+
+.c-button[data-style="accent"]:active,
+.c-button[data-style="accent"][data-state="active"] {
+  background-color: var(--s2a-color-button-background-accent-active);
+}
+
+.c-button[data-style="knockout"]:active,
+.c-button[data-style="knockout"][data-state="active"] {
+  background-color: var(--s2a-color-button-background-knockout-active);
+  --c-button-bw: var(--s2a-border-width-sm);
+}
+
+.c-button[data-style="outline-inverse"]:active,
+.c-button[data-style="outline-inverse"][data-state="active"] {
+  background-color: var(--s2a-color-button-background-outline-inverse-active);
+  --c-button-bw: var(--s2a-border-width-sm);
+}
+
+.c-button[data-style="accent"]:focus-visible,
+.c-button[data-style="accent"][data-state="focus"] {
+  background-color: var(--s2a-color-blue-1100); /* Primitive: source contract has no approved semantic alias for this binding. */
+  --c-button-bw: var(--s2a-border-width-sm);
+}
+
+.c-button__icon-start {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: currentColor;
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-button__icon-start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c-button__icon-start > svg,
+.c-button__icon-start > [data-open-state] > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.c-button[data-style="solid"]:disabled .c-button__icon-start,
+.c-button[data-style="solid"][data-state="disabled"] .c-button__icon-start {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.c-button[data-style="accent"]:disabled .c-button__icon-start,
+.c-button[data-style="accent"][data-state="disabled"] .c-button__icon-start {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.c-button__frame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-button__s2-icon-circle-20-n {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.c-button__icon-color {
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-button[data-style="outlined"] .c-button__icon-color {
+  color: var(--s2a-color-content-default);
+}
+
+.c-button[data-style="transparent"] .c-button__icon-color {
+  color: var(--s2a-color-content-default);
+}
+
+.c-button[data-style="solid"] .c-button__icon-color {
+  color: var(--s2a-color-content-inverse);
+}
+
+.c-button[data-style="accent"] .c-button__icon-color {
+  color: var(--s2a-color-content-inverse);
+}
+
+.c-button[data-style="knockout"] .c-button__icon-color {
+  color: var(--s2a-color-button-content-knockout);
+}
+
+.c-button[data-style="outline-inverse"] .c-button__icon-color {
+  color: var(--s2a-color-button-content-outline-inverse);
+}
+
+.c-button__label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-family: var(--s2a-font-family-label);
+  font-size: var(--s2a-typography-font-size-label);
+  font-weight: var(--s2a-font-weight-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  line-height: var(--s2a-typography-line-height-label);
+}
+
+.c-button:disabled .c-button__label,
+.c-button[data-state="disabled"] .c-button__label {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.c-button[data-style="outlined"] .c-button__label {
+  color: var(--s2a-color-content-default);
+}
+
+.c-button[data-style="transparent"] .c-button__label {
+  color: var(--s2a-color-content-default);
+}
+
+.c-button[data-style="solid"] .c-button__label {
+  color: var(--s2a-color-button-content-primary-solid-default);
+}
+
+.c-button[data-style="accent"] .c-button__label {
+  color: var(--s2a-color-content-knockout);
+}
+
+.c-button[data-style="knockout"] .c-button__label {
+  color: var(--s2a-color-button-content-knockout);
+}
+
+.c-button[data-style="outline-inverse"] .c-button__label {
+  color: var(--s2a-color-button-content-outline-inverse);
+}
+
+.c-button[data-style="outlined"]:active .c-button__label,
+.c-button[data-style="outlined"][data-state="active"] .c-button__label {
+  color: var(--s2a-color-button-content-outlined-active);
+}
+
+.c-button__icon-end {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: currentColor;
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-button__icon-end {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c-button__icon-end > svg,
+.c-button__icon-end > [data-open-state] > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.c-button:disabled .c-button__icon-end,
+.c-button[data-state="disabled"] .c-button__icon-end {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.c-button__frame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-button__s2a-icon-chevron-right {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.c-button__icon-color {
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-button:disabled .c-button__icon-color,
+.c-button[data-state="disabled"] .c-button__icon-color {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.c-button[data-style="outlined"] .c-button__icon-color {
+  color: var(--s2a-color-content-default);
+}
+
+.c-button[data-style="transparent"] .c-button__icon-color {
+  color: var(--s2a-color-content-default);
+}
+
+.c-button[data-style="solid"] .c-button__icon-color {
+  color: var(--s2a-color-content-inverse);
+}
+
+.c-button[data-style="accent"] .c-button__icon-color {
+  color: var(--s2a-color-content-inverse);
+}
+
+.c-button[data-style="knockout"] .c-button__icon-color {
+  color: var(--s2a-color-button-content-knockout);
+}
+
+.c-button[data-style="outline-inverse"] .c-button__icon-color {
+  color: var(--s2a-color-button-content-outline-inverse);
+}

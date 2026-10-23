@@ -1,0 +1,76 @@
+/* Generated from app-icon.contract.json. Re-run: npm run specs:render -- --slug=app-icon */
+
+.c-app-icon [hidden],
+.c-app-icon[hidden] {
+  display: none !important;
+}
+
+.c-app-icon {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2a-spacing-none);
+  padding-bottom: var(--s2a-spacing-none);
+  padding-left: var(--s2a-spacing-none);
+  padding-right: var(--s2a-spacing-none);
+  padding-top: var(--s2a-spacing-none);
+}
+
+.c-app-icon[data-size="16"] {
+  width: 16px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 16px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="18"] {
+  width: 18px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 18px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="24"] {
+  width: 24px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 24px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="32"] {
+  width: 32px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 32px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="48"] {
+  width: 48px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 48px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="80"] {
+  width: 80px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 80px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="16"] .c-app-icon__img {
+  width: 16px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 16px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="18"] .c-app-icon__img {
+  width: 18px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 18px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="24"] .c-app-icon__img {
+  width: 24px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 24px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="32"] .c-app-icon__img {
+  width: 32px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 32px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="48"] .c-app-icon__img {
+  width: 48px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 48px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-app-icon[data-size="80"] .c-app-icon__img {
+  width: 80px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 80px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}

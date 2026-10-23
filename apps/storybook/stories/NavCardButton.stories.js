@@ -5,7 +5,7 @@ export default {
   title: "Organisms/NavCard/CTA Button",
   tags: ["autodocs"],
   render: (args) =>
-    html`<div style="padding: 32px; background: #f5f5f5; width: 340px;">${NavCardButton(args)}</div>`,
+    html`<div style="padding: var(--s2a-spacing-xl); background: var(--s2a-color-surface-subtle); width: 340px;">${NavCardButton(args)}</div>`,
   parameters: {
     docs: {
       description: {

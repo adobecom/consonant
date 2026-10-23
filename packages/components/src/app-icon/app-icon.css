@@ -1,5 +1,5 @@
 .c-app-icon {
-  --c-app-icon-size: var(--s2a-spacing-lg, 24px);
+  --c-app-icon-size: var(--s2a-spacing-lg);
   --c-app-icon-radius: calc(var(--c-app-icon-size) * 0.18);
   /* Primitive: AppIcon tiles use ~18% corner radius in Figma until semantic token exists */
   display: inline-flex;
@@ -16,17 +16,26 @@
   visibility: hidden;
 }
 
-.c-app-icon[data-size="xs"] {
-  --c-app-icon-size: var(--s2a-spacing-md, 16px);
+.c-app-icon[data-size="16"] {
+  --c-app-icon-size: var(--s2a-spacing-md);
 }
 
-.c-app-icon[data-size="sm"] {
+.c-app-icon[data-size="18"] {
   --c-app-icon-size: 18px;
   /* Primitive: No semantic token for 18px yet */
 }
 
-.c-app-icon[data-size="lg"] {
-  --c-app-icon-size: var(--s2a-spacing-xl, 32px);
+.c-app-icon[data-size="32"] {
+  --c-app-icon-size: var(--s2a-spacing-xl);
+}
+
+.c-app-icon[data-size="48"] {
+  --c-app-icon-size: var(--s2a-spacing-3xl);
+}
+
+.c-app-icon[data-size="80"] {
+  --c-app-icon-size: 80px;
+  /* Primitive: no semantic rung at 80px; the scale stops at 4xl (64px) */
 }
 
 .c-app-icon__img {

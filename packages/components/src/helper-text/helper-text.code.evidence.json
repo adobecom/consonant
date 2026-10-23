@@ -1,0 +1,366 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-23T16:31:44.517Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "helper-text",
+    "name": "HelperText",
+    "cssClass": "c-helper-text",
+    "importPath": "packages/components/src/helper-text/helper-text.js",
+    "exports": [
+      "HelperText"
+    ],
+    "render": "HelperText",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/helper-text/helper-text.spec.json",
+      "storybookId": "helper-text",
+      "figmaNodeId": "10243:101699"
+    }
+  },
+  "sources": {
+    "packages/components/src/helper-text/index.js": "sha256:c81d6d900f576f610228352e7d55ba75a1c0dc4ea802fdcd86442a3bfd28a236",
+    "packages/components/src/helper-text/helper-text.js": "sha256:560a29bc7e31bdf7966ef03a6ed65b33d39fa414206d518e25391de4d540c56c",
+    "packages/components/src/helper-text/helper-text.css": "sha256:70daada6b144cc57594e33e90ecb3bb393e16f20ac65a2ae7776bdb3c071e916"
+  },
+  "props": [
+    {
+      "name": "text",
+      "default": "\"Helpful hint about this field.\"",
+      "type": "string"
+    },
+    {
+      "name": "intent",
+      "default": "\"neutral\"",
+      "type": "string"
+    },
+    {
+      "name": "id",
+      "default": "\"\"",
+      "type": "string"
+    }
+  ],
+  "attributes": {
+    "data-intent": {
+      "values": [
+        "error",
+        "neutral"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-helper-text"
+    ],
+    "stylesheet": [
+      "c-helper-text"
+    ],
+    "runtime": [
+      "c-helper-text",
+      "c-helper-text__text"
+    ],
+    "own": [
+      "c-helper-text",
+      "c-helper-text__text"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [],
+    "tags": []
+  },
+  "imports": [
+    "./helper-text.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-color-content-subtle": {
+        "fallback": false
+      },
+      "--s2a-color-content-utility-error": {
+        "fallback": false
+      },
+      "--s2a-font-family-caption": {
+        "fallback": false
+      },
+      "--s2a-font-weight-caption": {
+        "fallback": false
+      },
+      "--s2a-typography-font-size-caption": {
+        "fallback": false
+      },
+      "--s2a-typography-letter-spacing-caption": {
+        "fallback": false
+      },
+      "--s2a-typography-line-height-caption": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [],
+  "queries": [],
+  "stories": [
+    {
+      "id": "generated-helpertext--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "p",
+        "classes": [
+          "c-helper-text"
+        ],
+        "dataset": {
+          "intent": "neutral"
+        }
+      },
+      "attributes": {
+        "data-intent": [
+          "neutral"
+        ]
+      },
+      "rootAttributes": {
+        "data-intent": [
+          "neutral"
+        ]
+      },
+      "classes": [
+        "c-helper-text",
+        "c-helper-text__text"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-helpertext--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "p",
+        "classes": [
+          "c-helper-text"
+        ],
+        "dataset": {
+          "intent": "neutral"
+        }
+      },
+      "attributes": {
+        "data-intent": [
+          "neutral"
+        ]
+      },
+      "rootAttributes": {
+        "data-intent": [
+          "neutral"
+        ]
+      },
+      "classes": [
+        "c-helper-text",
+        "c-helper-text__text"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-helpertext--intent-neutral",
+      "name": "intent: neutral",
+      "args": {
+        "intent": "neutral"
+      },
+      "root": {
+        "tag": "p",
+        "classes": [
+          "c-helper-text"
+        ],
+        "dataset": {
+          "intent": "neutral"
+        }
+      },
+      "attributes": {
+        "data-intent": [
+          "neutral"
+        ]
+      },
+      "rootAttributes": {
+        "data-intent": [
+          "neutral"
+        ]
+      },
+      "classes": [
+        "c-helper-text",
+        "c-helper-text__text"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-helpertext--intent-error",
+      "name": "intent: error",
+      "args": {
+        "intent": "error"
+      },
+      "root": {
+        "tag": "p",
+        "classes": [
+          "c-helper-text"
+        ],
+        "dataset": {
+          "intent": "error"
+        }
+      },
+      "attributes": {
+        "data-intent": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-intent": [
+          "error"
+        ]
+      },
+      "classes": [
+        "c-helper-text",
+        "c-helper-text__text"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-helpertext--neutral",
+      "name": "Neutral",
+      "args": {
+        "text": "Helpful hint about this field.",
+        "intent": "neutral",
+        "id": ""
+      },
+      "root": {
+        "tag": "p",
+        "classes": [
+          "c-helper-text"
+        ],
+        "dataset": {
+          "intent": "neutral"
+        }
+      },
+      "attributes": {
+        "data-intent": [
+          "neutral"
+        ]
+      },
+      "rootAttributes": {
+        "data-intent": [
+          "neutral"
+        ]
+      },
+      "classes": [
+        "c-helper-text"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "atoms-helpertext--error",
+      "name": "Error",
+      "args": {
+        "text": "Enter a valid email address.",
+        "intent": "error",
+        "id": ""
+      },
+      "root": {
+        "tag": "p",
+        "classes": [
+          "c-helper-text"
+        ],
+        "dataset": {
+          "intent": "error"
+        }
+      },
+      "attributes": {
+        "data-intent": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-intent": [
+          "error"
+        ]
+      },
+      "classes": [
+        "c-helper-text"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "atoms-helpertext--in-field-context",
+      "name": "In a field context",
+      "args": {
+        "text": "Helpful hint about this field.",
+        "intent": "neutral",
+        "id": ""
+      },
+      "root": {
+        "tag": "p",
+        "classes": [
+          "c-helper-text"
+        ],
+        "dataset": {
+          "intent": "error"
+        }
+      },
+      "attributes": {
+        "data-intent": [
+          "error"
+        ]
+      },
+      "rootAttributes": {
+        "data-intent": [
+          "error"
+        ]
+      },
+      "classes": [
+        "c-helper-text"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    }
+  ],
+  "counts": {
+    "props": 3,
+    "attributes": 1,
+    "parts": 2,
+    "tokenReferences": 7,
+    "tokenReferencesWithoutFallback": 7,
+    "raw": 0,
+    "stories": 7,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:ea918d416063183611539439a3fee62fe1c52d05aa6e214343c04908603cfdec"
+  }
+}

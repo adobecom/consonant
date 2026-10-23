@@ -1,14 +1,14 @@
 .c-list {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-md, 16px);
+  gap: var(--s2a-spacing-md);
   width: 100%;
 }
 
 .c-list__section {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-sm, 12px);
+  gap: var(--s2a-spacing-sm);
 }
 
 .c-list__divider {
@@ -22,7 +22,7 @@
 .c-list__title {
   display: flex;
   align-items: center;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
 }
 
 .c-list__icon {
@@ -34,27 +34,27 @@
 }
 
 .c-list__title-text {
-  font-family: var(--s2a-font-family-label, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-label, 700);
-  font-size: var(--s2a-font-size-sm, 14px);
-  line-height: var(--s2a-font-line-height-xs, 18px);
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-xs);
   color: var(--s2a-color-content-default);
 }
 
 .c-list__items {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
   margin: 0;
-  padding: 0 0 0 var(--s2a-spacing-xl, 32px);
+  padding: 0 0 0 var(--s2a-spacing-xl);
   list-style: none;
 }
 
 .c-list__item {
-  padding-block: var(--s2a-spacing-3xs, 2px);
-  font-family: var(--s2a-font-family-body, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-body, 400);
-  font-size: var(--s2a-font-size-sm, 14px);
-  line-height: var(--s2a-font-line-height-xs, 18px);
+  padding-block: var(--s2a-spacing-3xs);
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-xs);
   color: var(--s2a-color-content-subtle);
 }

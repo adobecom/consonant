@@ -1,0 +1,888 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-23T16:31:34.353Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "control-button",
+    "name": "ControlButton",
+    "cssClass": "c-control-button",
+    "importPath": "packages/components/src/control-button/control-button.js",
+    "exports": [
+      "ControlButton"
+    ],
+    "render": "ControlButton",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/control-button/control-button.spec.json",
+      "storybookId": "control-button",
+      "figmaNodeId": "11180:181592"
+    }
+  },
+  "sources": {
+    "packages/components/src/control-button/index.js": "sha256:85f90ad3be8b5235e886bcf829a1110145c74ce825d95d9036c727de63acd615",
+    "packages/components/src/control-button/control-button.js": "sha256:710923aa5f5a0309ac2843471ef4adea5007c699b0227f540b7057bc4c9366a6",
+    "packages/components/src/control-button/control-button.css": "sha256:5114323c603eb366e36b4479c0eca4d18943876aea1aaa517dce276ef2d3a886"
+  },
+  "props": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "label",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "size",
+      "default": "\"md\"",
+      "type": "string"
+    },
+    {
+      "name": "disabled",
+      "default": "false",
+      "type": "boolean"
+    },
+    {
+      "name": "forceState"
+    },
+    {
+      "name": "onClick"
+    }
+  ],
+  "attributes": {
+    "data-force-state": {
+      "values": [
+        "active",
+        "focus",
+        "hover"
+      ],
+      "dynamic": true,
+      "sources": [
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": false
+    },
+    "data-size": {
+      "values": [
+        "md",
+        "xl"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    },
+    "data-state": {
+      "values": [
+        "active",
+        "disabled",
+        "focus",
+        "hover"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-control-button",
+      "c-control-button__icon"
+    ],
+    "stylesheet": [
+      "c-control-button",
+      "c-control-button__icon"
+    ],
+    "runtime": [
+      "c-control-button",
+      "c-control-button__frame",
+      "c-control-button__icon",
+      "c-control-button__scale-s2a-icons-scale-rig"
+    ],
+    "own": [
+      "c-control-button",
+      "c-control-button__frame",
+      "c-control-button__icon",
+      "c-control-button__scale-s2a-icons-scale-rig"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden",
+      "aria-label"
+    ],
+    "tags": [
+      "button"
+    ]
+  },
+  "imports": [
+    "./control-button.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-blur-xs": {
+        "fallback": false
+      },
+      "--s2a-border-radius-6": {
+        "fallback": false
+      },
+      "--s2a-border-width-sm": {
+        "fallback": false
+      },
+      "--s2a-color-content-knockout": {
+        "fallback": false
+      },
+      "--s2a-color-control-button-background-media-active": {
+        "fallback": false
+      },
+      "--s2a-color-control-button-background-media-default": {
+        "fallback": false
+      },
+      "--s2a-color-control-button-background-media-disabled": {
+        "fallback": false
+      },
+      "--s2a-color-control-button-background-media-hover": {
+        "fallback": false
+      },
+      "--s2a-color-control-button-border-media": {
+        "fallback": false
+      },
+      "--s2a-color-focus-ring-default": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-white-48": {
+        "fallback": false
+      },
+      "--s2a-spacing-3xl": {
+        "fallback": false
+      },
+      "--s2a-spacing-md": {
+        "fallback": false
+      },
+      "--s2a-spacing-xl": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [
+    ":active",
+    ":disabled",
+    ":focus",
+    ":hover"
+  ],
+  "queries": [],
+  "stories": [
+    {
+      "id": "generated-controlbutton--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--size-xl",
+      "name": "size: xl",
+      "args": {
+        "size": "xl"
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--size-md",
+      "name": "size: md",
+      "args": {
+        "size": "md"
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "md"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "md"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "md"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--disabled-on",
+      "name": "disabled on",
+      "args": {
+        "disabled": true
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--disabled-off",
+      "name": "disabled off",
+      "args": {
+        "disabled": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--forcestate-default",
+      "name": "forceState: default",
+      "args": {
+        "forceState": "default"
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--forcestate-hover",
+      "name": "forceState: hover",
+      "args": {
+        "forceState": "hover"
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl",
+          "state": "hover"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ],
+        "data-state": [
+          "hover"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ],
+        "data-state": [
+          "hover"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--forcestate-active",
+      "name": "forceState: active",
+      "args": {
+        "forceState": "active"
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl",
+          "state": "active"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ],
+        "data-state": [
+          "active"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ],
+        "data-state": [
+          "active"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--forcestate-disabled",
+      "name": "forceState: disabled",
+      "args": {
+        "forceState": "disabled"
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl",
+          "state": "disabled"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ],
+        "data-state": [
+          "disabled"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ],
+        "data-state": [
+          "disabled"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "generated-controlbutton--forcestate-focus",
+      "name": "forceState: focus",
+      "args": {
+        "forceState": "focus"
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl",
+          "state": "focus"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ],
+        "data-state": [
+          "focus"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ],
+        "data-state": [
+          "focus"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__frame",
+        "c-control-button__icon",
+        "c-control-button__scale-s2a-icons-scale-rig"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "",
+          "disabled": false
+        }
+      ],
+      "nodes": 6
+    },
+    {
+      "id": "atoms-controlbutton--default",
+      "name": "Media controls",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__icon"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Pause",
+          "disabled": false
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-controlbutton--states",
+      "name": "All states",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__icon"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Default",
+          "disabled": false
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-controlbutton--disabled",
+      "name": "Disabled",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__icon"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Pause",
+          "disabled": true
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-controlbutton--navigation-icons",
+      "name": "Navigation icons (nav-back)",
+      "args": {},
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-control-button"
+        ],
+        "dataset": {
+          "size": "xl"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "xl"
+        ]
+      },
+      "classes": [
+        "c-control-button",
+        "c-control-button__icon"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Back to start",
+          "disabled": false
+        }
+      ],
+      "nodes": 5
+    }
+  ],
+  "counts": {
+    "props": 6,
+    "attributes": 3,
+    "parts": 4,
+    "tokenReferences": 14,
+    "tokenReferencesWithoutFallback": 14,
+    "raw": 0,
+    "stories": 15,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:7c4d7021095df6470108bd021d819e1d9c3702c0927ee81758d88517ac1f370b"
+  }
+}

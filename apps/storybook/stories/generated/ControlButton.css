@@ -1,0 +1,101 @@
+/* Generated from control-button.contract.json. Re-run: npm run specs:render -- --slug=control-button */
+
+.c-control-button [hidden],
+.c-control-button[hidden] {
+  display: none !important;
+}
+
+.c-control-button {
+  box-sizing: border-box;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  min-width: 0;
+  appearance: none;
+  height: 40px; /* hardcoded: Figma Button v2 md is 40px tall and no semantic size token exists yet */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--s2a-border-radius-6); /* Primitive: source contract has no approved semantic alias for this binding. */
+  background-color: var(--s2a-color-control-button-background-media-default);
+  --c-control-button-bw: var(--s2a-border-width-sm);
+  --c-control-button-bc: var(--s2a-color-control-button-border-media);
+  box-shadow: inset 0 0 0 var(--c-control-button-bw, 0) var(--c-control-button-bc, transparent);
+}
+
+.c-control-button:focus-visible,
+.c-control-button[data-state="focus"] {
+  background-color: var(--s2a-color-control-button-background-media-focus);
+  outline-color: var(--s2a-color-focus-ring-default);
+  outline-width: var(--s2a-border-width-sm);
+  outline-style: solid;
+  outline-offset: var(--s2a-border-width-sm);
+}
+
+.c-control-button:disabled,
+.c-control-button[data-state="disabled"] {
+  background-color: var(--s2a-color-control-button-background-media-disabled);
+}
+
+.c-control-button:active,
+.c-control-button[data-state="active"] {
+  background-color: var(--s2a-color-control-button-background-media-active);
+  --c-control-button-bw: var(--s2a-border-width-sm);
+}
+
+.c-control-button:hover,
+.c-control-button[data-state="hover"] {
+  background-color: var(--s2a-color-control-button-background-media-hover);
+}
+
+.c-control-button[data-size="md"] {
+  width: 32px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 32px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-control-button[data-size="xl"] {
+  width: 48px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 48px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-control-button__frame {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.c-control-button__scale-s2a-icons-scale-rig {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.c-control-button__icon {
+  color: var(--s2a-color-content-knockout);
+  width: 26px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 26px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.c-control-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c-control-button__icon > svg,
+.c-control-button__icon > [data-open-state] > svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.c-control-button:disabled .c-control-button__icon,
+.c-control-button[data-state="disabled"] .c-control-button__icon {
+  color: var(--s2a-color-transparent-white-48); /* Primitive: source contract has no approved semantic alias for this binding. */
+}

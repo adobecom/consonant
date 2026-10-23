@@ -1,17 +1,24 @@
 {
   "name": "@s2a/s2a-toolkit",
   "version": "0.2.1",
-  "description": "S2A design system Swiss Army knife \u2014 Bridge, Variables, Select",
+  "description": "S2A design system Swiss Army knife — Bridge, Variables, Select",
   "private": true,
   "scripts": {
     "build": "node esbuild.config.mjs",
     "watch": "node esbuild.config.mjs --watch",
-    "prototype-server": "node server/prototype-server.js"
+    "prototype-server": "node server/prototype-server.js",
+    "contract-sync": "node server/contract-sync-server.cjs",
+    "test": "node --import tsx --test test/*.test.ts"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.100.0",
     "esbuild": "^0.28.1",
     "typescript": "^5.7.0"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@codemirror/lang-json": "^6.0.2",
+    "@codemirror/lint": "^6.9.7",
+    "codemirror": "^6.0.2"
+  }
 }

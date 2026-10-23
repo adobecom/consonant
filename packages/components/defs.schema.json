@@ -1,0 +1,885 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "s2a-defs/1",
+  "title": "S2A component defs (curation)",
+  "description": "The judgment layer of a component contract: which extracted props are design levers, what each slot accepts, which design axes are props versus runtime states, per-part token bindings, and the questions extraction cannot answer. Generated files (spec.json) are built from defs + evidence; defs are written by people and reviewed in PRs.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "component",
+    "slug",
+    "status",
+    "anchors",
+    "props",
+    "anatomy",
+    "decisions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "const": "s2a-defs/1"
+    },
+    "component": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "status": {
+      "enum": [
+        "curated-draft",
+        "reviewed",
+        "approved"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver for the generated contract. Mirrors the s2a:meta stamp on the Figma set. Omitted means the contract ships 0.1.0."
+    },
+    "archetype": {
+      "type": "string",
+      "description": "The upstream archetype this component reads as (southleft/ds-contracts-poc's closed enum). Set by the scaffold; only emitted into the contract when it is one of their values."
+    },
+    "tier": {
+      "enum": [
+        "component",
+        "block"
+      ],
+      "default": "component",
+      "description": "What this contract describes. A component is a single thing with its own anatomy. A block is an arrangement of other contracts \u2014 it is composed, so it must declare at least one slot. Absent means component, so every existing contract stays valid."
+    },
+    "curated": {
+      "type": "object",
+      "properties": {
+        "by": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        }
+      }
+    },
+    "description": {
+      "type": "string"
+    },
+    "anchors": {
+      "type": "object",
+      "required": [
+        "figma",
+        "code"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "figma": {
+          "type": "object",
+          "required": [
+            "fileKey",
+            "kind"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "fileKey": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "component-set",
+                "pattern-frame",
+                "none"
+              ]
+            },
+            "nodeId": {
+              "type": "string"
+            },
+            "nodeName": {
+              "type": "string"
+            },
+            "componentSetKey": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "deprecated": {
+              "type": "boolean"
+            },
+            "successorNodeId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "usages": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "code": {
+          "type": "object",
+          "required": [
+            "importPath",
+            "export",
+            "cssClass"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "importPath": {
+              "type": "string"
+            },
+            "export": {
+              "type": "string"
+            },
+            "controller": {
+              "type": "string"
+            },
+            "cssClass": {
+              "type": "string"
+            },
+            "pending": {
+              "type": "boolean",
+              "description": "true while the component has no code yet (scaffolded from design evidence): code-conformance checks are skipped and reported as warnings until the code exists and its evidence is extracted."
+            }
+          }
+        }
+      }
+    },
+    "props": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/prop"
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/state"
+      }
+    },
+    "anatomy": {
+      "type": "object",
+      "required": [
+        "root"
+      ],
+      "properties": {
+        "root": {
+          "$ref": "#/definitions/part"
+        }
+      }
+    },
+    "forbiddenCombinations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/decision"
+      }
+    },
+    "a11y": {
+      "type": "object",
+      "required": [
+        "wcag"
+      ],
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "requiredAriaAttrs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "wcag": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "keyboard": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "key",
+              "action"
+            ],
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "action": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "The accessibility contract (WCAG 2.2 AA criteria, keyboard map, notes). Judgment, so it lives here and is copied into the generated spec."
+    },
+    "composition": {
+      "type": "array",
+      "description": "What this component is built from, and whether each dependency needs a contract of its own. The design file is crawled for nested instances; this is where the judgment about each one is recorded. One entry per distinct Figma component or set name, exactly as the evidence reports it. Replaces inferring intent from decision prose, which could only ever guess.",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "treatment"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The Figma component or set name as it appears in figma.evidence.json instances."
+          },
+          "treatment": {
+            "enum": [
+              "contract",
+              "internal",
+              "icon"
+            ],
+            "description": "contract: a real component that must have its own contract \u2014 public, reusable, someone else can place it. internal: implementation detail of this component; never published, never contracted, and `why` must say so. icon: belongs to the icon rig, a category (kind:icon) rather than a component."
+          },
+          "slug": {
+            "type": "string",
+            "description": "The component slug this resolves to, when one exists."
+          },
+          "why": {
+            "type": "string",
+            "description": "Required for internal: why this is not a component in its own right."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "figmaBinding": {
+      "oneOf": [
+        {
+          "const": "NONE"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "property"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "VARIANT",
+                "BOOLEAN",
+                "TEXT",
+                "INSTANCE_SWAP",
+                "SLOT",
+                "INSTANCE",
+                "LAYER"
+              ]
+            },
+            "property": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "layer": {
+              "type": "string",
+              "description": "Layer path (anatomy names) the property drives when Figma has no direct link, e.g. \".content/.actions\" for a boolean toggle or \".media\" for an instance swap. Used by the plugin Build set to wire the property."
+            },
+            "valueMap": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "For a boolean (or renamed) prop driven by a VARIANT axis: prop value \u2192 axis value, e.g. { \"true\": \"open\", \"false\": \"closed\" }. Collapsible's State axis is open|closed, which is the `open` prop, not an interaction state."
+            }
+          }
+        }
+      ]
+    },
+    "prop": {
+      "type": "object",
+      "required": [
+        "name",
+        "lever",
+        "figma",
+        "code"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "lever": {
+          "type": "boolean",
+          "description": "true = a design decision an author makes; false = an integration/runtime detail kept out of the contract's curated surface"
+        },
+        "type": {
+          "type": "string"
+        },
+        "enum": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "default": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        "figma": {
+          "$ref": "#/definitions/figmaBinding"
+        },
+        "code": {
+          "type": "object",
+          "required": [
+            "prop"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "prop": {
+              "type": "string"
+            },
+            "attr": {
+              "type": "string"
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "required": [
+        "name",
+        "figma",
+        "code"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "figma": {
+          "$ref": "#/definitions/figmaBinding"
+        },
+        "code": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "attr": {
+              "type": "string"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "mechanism": {
+              "type": "string"
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "part": {
+      "type": "object",
+      "required": [
+        "selector"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "selector": {
+          "type": "string"
+        },
+        "figma": {
+          "type": "string",
+          "description": "layer name in the anchored set, e.g. .content"
+        },
+        "element": {
+          "type": "string"
+        },
+        "tokens": {
+          "$ref": "#/definitions/tokenMap",
+          "description": "The part's tokens when no variant or state applies \u2014 the resting case."
+        },
+        "slot": {
+          "type": "object",
+          "required": [
+            "name",
+            "accepts",
+            "acceptsMode"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "accepts": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(kind:(icon|media|text|action)|[A-Za-z][A-Za-z0-9 /\u2014._-]*)$"
+              },
+              "description": "What may fill the slot. Two kinds of entry:\n  \u2022 a component name, exactly as a spec.json carries it \u2014 \"Button\", \"Media\"\n  \u2022 kind:<icon|media|text|action> \u2014 a CATEGORY rather than one component\nA category exists for the case where naming every member is wrong: .icon-start takes an icon, and the icon rig wraps hundreds of glyphs that will never each have a contract. kind:icon says the true constraint without pretending to enumerate it. Use a component name whenever you actually mean that component."
+            },
+            "acceptsMode": {
+              "enum": [
+                "restrict",
+                "prefer",
+                "open"
+              ]
+            },
+            "notes": {
+              "type": "string"
+            },
+            "min": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Fewest children this slot needs to be meaningful. Absent means optional."
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Most children this slot accepts. Absent means unbounded."
+            },
+            "default": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "What fills the slot when the consumer passes nothing \u2014 read from the design's default instance. `figma` is the layer the design uses (evidence, recorded by the scaffold); `manifest`/`icon` resolve it to the code library (a decision \u2014 Heal in the Book makes it when the names match, or set it by hand). A generated component renders the manifest entry when the slot prop is empty, so the state matrix shows the glyph the design shows.",
+              "properties": {
+                "figma": {
+                  "type": "string",
+                  "description": "The design's default instance, by component name (e.g. S2a_Icon_Arrow Right)."
+                },
+                "manifest": {
+                  "type": "string",
+                  "description": "An asset manifest built by npm run specs:assets (e.g. s2a-icons)."
+                },
+                "icon": {
+                  "type": "string",
+                  "description": "The entry key in that manifest (e.g. arrow-right)."
+                },
+                "size": {
+                  "type": "number",
+                  "description": "The glyph's box in the design, px, when it differs from the part."
+                },
+                "props": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": [
+                      "string",
+                      "boolean"
+                    ]
+                  },
+                  "description": "For a composed component: the design's overrides on the instance, by Figma property name (Label, Style, Show Icon End\u2026). The generated parent renders the child with these when the slot is empty."
+                },
+                "text": {
+                  "type": "string",
+                  "description": "For a text part: the design's characters, rendered when the slot's prop is empty."
+                },
+                "slug": {
+                  "type": "string",
+                  "description": "For a composed component: the slug of the contract the design's instance resolves to (button, product-lockup). Set when the child is contracted; absent means the leaf is not done yet."
+                },
+                "visible": {
+                  "type": "boolean",
+                  "description": "false when the design hides this slot's layer in the resting variant (Button's icon slots behind a Show Icon toggle). A generated component then renders the slot only when its prop is given."
+                },
+                "content": {
+                  "$ref": "#/definitions/part/properties/slot/properties/default",
+                  "description": "For a composed component with a content slot (a disclosure): what the design places inside it \u2014 another default, rendered through that child's contract and passed as its content prop."
+                }
+              }
+            },
+            "defaultByProp": {
+              "type": "array",
+              "description": "The design fills this slot differently per variant: MerchCard's features slot holds a List when Features List=default and a Collapsible when closed. One entry per driving prop; the map's keys are the prop's values and each value is a default (figma, slug, props\u2026) like slot.default. The generated component renders the matching filling when the slot prop is empty.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "prop",
+                  "map"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "prop": {
+                    "type": "string"
+                  },
+                  "map": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/definitions/part/properties/slot/properties/default"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parts": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/part"
+          }
+        },
+        "notes": {
+          "type": "string"
+        },
+        "elementByProp": {
+          "type": "object",
+          "required": [
+            "prop",
+            "map"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "prop": {
+              "type": "string"
+            },
+            "map": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "When the rendered tag depends on a prop rather than being fixed. Button is the case: an anchor when href is set, a button otherwise. `element` stays the default, and this says what changes it. Upstream already defines semantics.elementByProp; this is the input side of it."
+        },
+        "states": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "hover",
+              "active",
+              "pressed",
+              "focus",
+              "focused",
+              "focus-visible",
+              "disabled"
+            ]
+          },
+          "additionalProperties": {
+            "$ref": "#/definitions/tokenMap"
+          },
+          "description": "Tokens that change in a runtime state, for every variant. `pressed` and `focused` are accepted and normalise to the contract's `active` / `focus-visible`."
+        },
+        "tokensByProp": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "prop",
+              "map"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "prop": {
+                "type": "string",
+                "description": "a prop name declared in props[]"
+              },
+              "map": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/definitions/tokenMap"
+                },
+                "description": "prop value \u2192 the tokens that differ at that value"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Tokens that differ by one prop \u2014 the common case: style=knockout paints a different background from style=solid. Only the properties that CHANGE belong here; anything constant stays in `tokens`."
+        },
+        "statesByProp": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "prop",
+              "state",
+              "map"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "prop": {
+                "type": "string"
+              },
+              "state": {
+                "enum": [
+                  "hover",
+                  "active",
+                  "pressed",
+                  "focus",
+                  "focused",
+                  "focus-visible",
+                  "disabled"
+                ]
+              },
+              "map": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/definitions/tokenMap"
+                }
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "A state whose tokens depend on a variant \u2014 knockout's hover is not solid's hover. Use `states` when the state is the same across variants."
+        },
+        "tokensByCombination": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "props",
+              "rows"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "props": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "rows": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "values",
+                    "tokens"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "values": {
+                      "type": "array",
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "minItems": 2,
+                      "maxItems": 2,
+                      "description": "one value per prop, in the order given by `props`; null means \"any\""
+                    },
+                    "tokens": {
+                      "$ref": "#/definitions/tokenMap"
+                    }
+                  }
+                }
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Tokens that depend on TWO props at once and cannot be decomposed \u2014 upstream caps this at two on purpose. Reach for tokensByProp first."
+        },
+        "layout": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "display": {
+              "enum": [
+                "flex",
+                "inline-flex",
+                "grid"
+              ]
+            },
+            "direction": {
+              "enum": [
+                "row",
+                "column",
+                "row-reverse",
+                "column-reverse"
+              ]
+            },
+            "align": {
+              "enum": [
+                "start",
+                "center",
+                "end",
+                "stretch",
+                "baseline"
+              ]
+            },
+            "justify": {
+              "enum": [
+                "start",
+                "center",
+                "end",
+                "space-between"
+              ]
+            },
+            "grow": {
+              "type": "boolean"
+            },
+            "wrap": {
+              "type": "boolean"
+            },
+            "stretch": {
+              "type": "boolean",
+              "description": "FILL across the parent's main axis: align-self: stretch."
+            },
+            "stack": {
+              "type": "boolean",
+              "description": "Sits on top of its siblings in the parent's single grid cell (grid-area: 1 / 1): a ring and a dot drawn in the same 20px box."
+            }
+          },
+          "description": "How the part lays its children out, read from the Figma auto-layout rather than guessed. Mirrors the contract's own `layout` field. Tokens say what things look like; this says how they sit \u2014 a stylesheet needs both, and emitting only the tokens produced a button with correct colours and no display property."
+        },
+        "asset": {
+          "type": "object",
+          "description": "This part's content is an ASSET chosen by a prop, not text passed in. AppIcon's image is not a slot and not a token: the author picks a product (app=\"photoshop\") and the component resolves that to a file. Without this a generated component can only emit an empty element, because the mapping lives in code the contract cannot see. The lookup table is referenced by name and shipped beside the contracts, so 92 rows are not copied into every component that uses them \u2014 and so a consumer who never reads our JavaScript can still resolve a src.",
+          "required": [
+            "prop",
+            "manifest",
+            "field"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "prop": {
+              "type": "string",
+              "description": "The prop whose value is the lookup key."
+            },
+            "manifest": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*$",
+              "description": "Name of the shipped asset manifest, e.g. \"adobe-product-icons\"."
+            },
+            "field": {
+              "type": "string",
+              "description": "Which field of the manifest entry is the file, e.g. \"filename\"."
+            },
+            "element": {
+              "enum": [
+                "img",
+                "svg",
+                "picture"
+              ],
+              "default": "img",
+              "description": "What to render. Defaults to img."
+            },
+            "altField": {
+              "type": "string",
+              "description": "Manifest field holding the accessible name. Omit when the asset is decorative and the name lives on the root."
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "description": "One judgment call the draft made or deferred. chose/alternatives/confidence/fix are the draft notes: what the scaffold decided, what else it could have been, how much to trust it, and the one-line edit that corrects it. Reviewing these is the curation step.",
+      "required": [
+        "id",
+        "question",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "chose": {
+          "type": "string",
+          "description": "What the draft actually did, stated as a fact. Absent when the draft made no choice and is only reporting something the reviewer must act on."
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The other readings the evidence would support."
+        },
+        "confidence": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "description": "high = read straight from the evidence; medium = derived through the dictionary or a heuristic; low = a guess on thin or conflicting evidence. Review low first."
+        },
+        "fix": {
+          "type": "string",
+          "description": "The one-line edit that corrects this if the draft got it wrong."
+        },
+        "decision": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "open",
+            "decided"
+          ]
+        },
+        "owner": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "string"
+        }
+      }
+    },
+    "tokenMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^(raw:.+|\\{s2a\\.[a-z0-9.-]+\\}( \\{s2a\\.[a-z0-9.-]+\\})*)$"
+      },
+      "description": "CSS property \u2192 {s2a.path.to.token} (Figma variable name with slashes as dots; shorthands may list several, space-separated) or raw:<value> with the reason in decisions"
+    }
+  }
+}

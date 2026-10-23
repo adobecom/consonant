@@ -1,0 +1,102 @@
+/* ControlButton — generated from control-button.contract.json.
+ * Re-run: npm run specs:render -- --slug=control-button --target=milo */
+
+.control-button [hidden],
+.control-button[hidden] {
+  display: none !important;
+}
+
+.control-button {
+  box-sizing: border-box;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  min-width: 0;
+  appearance: none;
+  height: 40px; /* hardcoded: Figma Button v2 md is 40px tall and no semantic size token exists yet */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--s2a-border-radius-6, 6px);
+  background-color: var(--s2a-color-control-button-background-media-default, rgb(0 0 0 / 64%));
+  --control-button-bw: var(--s2a-border-width-sm, 1px);
+  --control-button-bc: var(--s2a-color-control-button-border-media, rgb(255 255 255 / 24%));
+  box-shadow: inset 0 0 0 var(--control-button-bw, 0) var(--control-button-bc, transparent);
+}
+
+.control-button:focus-visible,
+.control-button[data-state="focus"] {
+  background-color: var(--s2a-color-control-button-background-media-focus, rgb(0 0 0 / 64%));
+  outline-color: var(--s2a-color-focus-ring-default, #3b63fb);
+  outline-width: var(--s2a-border-width-sm, 1px);
+  outline-style: solid;
+  outline-offset: 1px;
+}
+
+.control-button:disabled,
+.control-button[data-state="disabled"] {
+  background-color: var(--s2a-color-control-button-background-media-disabled, rgb(0 0 0 / 32%));
+}
+
+.control-button:active,
+.control-button[data-state="active"] {
+  background-color: var(--s2a-color-control-button-background-media-active, rgb(0 0 0 / 96%));
+  --control-button-bw: 1px;
+}
+
+.control-button:hover,
+.control-button[data-state="hover"] {
+  background-color: var(--s2a-color-control-button-background-media-hover, rgb(0 0 0 / 80%));
+}
+
+.control-button.md {
+  width: 32px;
+  height: 32px;
+}
+
+.control-button.xl {
+  width: 48px;
+  height: 48px;
+}
+
+.control-button .frame {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-button .scale-s2a-icons-scale-rig {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-button .icon {
+  color: var(--s2a-color-content-knockout, #fff);
+  width: 26px;
+  height: 26px;
+}
+
+.control-button .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-button .icon > svg,
+.control-button .icon > [data-open-state] > svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.control-button:disabled .icon,
+.control-button[data-state="disabled"] .icon {
+  color: var(--s2a-color-transparent-white-48, rgb(255 255 255 / 48%));
+}

@@ -1,0 +1,636 @@
+{
+  "$schema": "s2a-composition/1",
+  "$note": "What each Figma component set is built from, and which page group it sits in. Captured from the design file, which is the visual source of truth. Refresh with: npm run specs:composition -- --refresh (prints the figma-console script to run), then paste the result here. A snapshot, not a derivation — it goes stale when the file changes.",
+  "capturedAt": "2026-10-05",
+  "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+  "groups": {
+    "Start Here": "foundation",
+    "Border": "foundation",
+    "Color": "foundation",
+    "Effects": "foundation",
+    "Typography": "foundation",
+    "Spacing": "foundation",
+    "Responsive": "foundation",
+    "Icons": "foundation",
+    "Layout": "foundation",
+    "Theming": "foundation",
+    "AppIcon": "atom",
+    "Button": "atom",
+    "Checkbox": "atom",
+    "ControlButton": "atom",
+    "PlayButton": "atom",
+    "Divider": "atom",
+    "DotPagination": "atom",
+    "HelperText": "atom",
+    "JumpLink": "atom",
+    "Label": "atom",
+    "Link": "atom",
+    "Logo": "atom",
+    "Media": "atom",
+    "ProgressBar": "atom",
+    "Radio": "atom",
+    "RollerNavItem": "atom",
+    "SegmentedControl": "atom",
+    "Selector": "atom",
+    "Surface": "atom",
+    "Tabs": "atom",
+    "Tag": "atom",
+    "Text": "atom",
+    "Tooltips": "atom",
+    "Actions": "molecule",
+    "Cards": "molecule",
+    "Collapsible": "molecule",
+    "List": "molecule",
+    "ProductLockup": "molecule",
+    "PromoCTA": "molecule",
+    "RichContent": "molecule",
+    "SectionHeader": "molecule",
+    "Accordion": "organism",
+    "AllProductsRollerCarousel": "organism",
+    "Footer": "organism",
+    "RouterMarquee": "organism",
+    "ElasticCard": "card",
+    "ImmersiveCard": "card",
+    "ProductCard": "card",
+    "MerchCard": "card",
+    "MerchCardPro | WIP": "card",
+    "MediaCard": "card",
+    "QuoteCard": "card",
+    "TextCard": "card",
+    "MCP Server": "tooling",
+    "Prototyping": "tooling",
+    "Token Pipeline": "tooling",
+    "Current Progress": "internal",
+    "Select": "internal",
+    "Playground": "exploration",
+    "C2": "exploration"
+  },
+  "composes": {
+    "AppIcon": [
+      "B_app_CreativeCloud"
+    ],
+    ".🚫 Button/Core/Primary": [
+      "S2_Icon_Circle_20_N",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    ".🚫 Button/Core/Accent": [
+      "S2_Icon_Circle_20_N",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    ".🚫 IconButton/Core/Primary": [
+      "S2_Cross"
+    ],
+    ".🚫 IconButton/Core/Accent": [
+      "S2_Cross"
+    ],
+    ".🚫 IconButton/Core/Neutral": [
+      "PromoCTA/Icon/Arrow Right",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "Button / Primary / Solid / On Light": [
+      ".🚫 Button/Core/Primary",
+      "S2_Icon_Circle_20_N",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "Button / Primary / Outlined / On Light": [
+      ".🚫 Button/Core/Primary",
+      "S2_Icon_Circle_20_N",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "Button / Primary / Transparent / On Light": [
+      ".🚫 Button/Core/Primary",
+      "S2_Icon_Circle_20_N",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "Button / Accent / Solid / On Light": [
+      ".Button/Core/Accent",
+      "S2_Icon_Circle_20_N",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "Button / Primary / Solid / On Dark": [
+      ".🚫 Button/Core/Primary",
+      "S2_Icon_Circle_20_N",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "Button / Primary / Outlined / On Dark": [
+      ".🚫 Button/Core/Primary",
+      "S2_Icon_Circle_20_N",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "Button / Primary / Transparent / On Dark": [
+      ".🚫 Button/Core/Primary",
+      "S2_Icon_Circle_20_N",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "IconButton / Primary / Solid / On Light": [
+      ".🚫 IconButton/Core/Primary",
+      "S2_Cross"
+    ],
+    "IconButton / Primary / Outlined / On Light": [
+      ".🚫 IconButton/Core/Primary",
+      "S2_Cross"
+    ],
+    "IconButton / Primary / Transparent / On Light": [
+      ".🚫 IconButton/Core/Primary",
+      "S2_Cross"
+    ],
+    "IconButton / Core / Accent / On Light": [
+      ".🚫 IconButton/Core/Accent",
+      "S2_Cross"
+    ],
+    "IconButton / Primary / Solid / On Dark": [
+      ".🚫 IconButton/Core/Primary",
+      "S2_Cross"
+    ],
+    "IconButton / Primary / Outlined / On Dark": [
+      ".🚫 IconButton/Core/Primary",
+      "S2_Cross"
+    ],
+    "IconButton / Primary / Transparent / On Dark": [
+      ".🚫 IconButton/Core/Primary"
+    ],
+    ".🚫 IconButton/Core/Neutral/OnSolid": [
+      "PromoCTA/Icon/Arrow Right",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    ".🚫 IconButton/Core/Neutral/OnVideo": [
+      "PromoCTA/Icon/Arrow Right",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    ".🚫 IconButton/Core/Neutral/OnImage": [
+      "PromoCTA/Icon/Arrow Right",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "Button — v1": [
+      "S2_Icon_Circle_20_N",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "IconButton — v1": [
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N"
+    ],
+    "Button — v2": [
+      "S2_Icon_Circle_20_N",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "IconButton — v2": [
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N"
+    ],
+    "CheckboxTile": [
+      "Checkbox",
+      ".checkbox",
+      "S2_Icon_CheckBox_20_N",
+      "Label",
+      "S2a_Icon_Sparkle"
+    ],
+    "Checkbox": [
+      ".checkbox",
+      "S2_Icon_CheckBox_20_N",
+      "Label"
+    ],
+    ".checkbox": [
+      "S2_Icon_CheckBox_20_N"
+    ],
+    "ControlButton — v2": [
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N"
+    ],
+    "ControlButton — v1": [
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N"
+    ],
+    "PlayButton — v1": [
+      "S2a_Icon_Play"
+    ],
+    "Divider": [],
+    "DotPagination": [
+      "Dot"
+    ],
+    "Dot": [],
+    "HelperText": [],
+    "JumpLinkNav": [
+      "JumpLink",
+      "ControlButton — v2",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N"
+    ],
+    "JumpLink": [
+      "ControlButton — v2",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N"
+    ],
+    "Label": [],
+    "Link": [
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "Link — v2": [
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "Logo": [],
+    "Overlay": [],
+    "Media": [
+      "Overlay"
+    ],
+    "ProgressBar": [],
+    "_radio": [],
+    "Radio": [
+      "_radio"
+    ],
+    "RollerNavItem": [],
+    "SegmentItem": [],
+    "SegmentedControl/3-up": [
+      "SegmentItem"
+    ],
+    "Selector": [],
+    "Surface": [],
+    "_tab": [],
+    "Tabs": [
+      "_tab"
+    ],
+    "Tag": [],
+    "Heading": [],
+    "Paragraph": [],
+    "Eyebrow": [],
+    "Meta/Name": [],
+    "Meta/Role": [],
+    "MetaLine": [
+      "Meta/Name",
+      "Meta/Role"
+    ],
+    "Inline text tool tip": [],
+    "Actions": [
+      "Button — v1",
+      "S2_Icon_Circle_20_N",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "ElasticCard — v1": [
+      "ProductLockup — v1",
+      "AppIcon",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "Media",
+      "Overlay",
+      "S2_Chevron",
+      "Heading",
+      "ControlButton — v1",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Add",
+      "S2_Icon_UIAdd_Size300_N"
+    ],
+    "ProductCard — v1": [
+      "AppIcon",
+      "B_app_CreativeCloud"
+    ],
+    "Collapsible": [
+      "S2_Icon_ChevronDown_20_N",
+      "S2_Icon_ChevronUp_20_N",
+      "ControlButton — v2",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N",
+      "S2a_Icon_Arrow Down",
+      "TextCard — v2",
+      "Link — v2",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "ListItem": [],
+    "List": [
+      "MerchCard/FeatureSection",
+      "Divider",
+      "S2_Icon_AcrobatPDFEdit_20_N",
+      "ListItem"
+    ],
+    "ProductLockup — v2": [
+      "AppIcon",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "ProductLockup — v1": [
+      "AppIcon",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "PromoCTA/Button": [
+      "PromoCTA/Icon/Arrow Right",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "IconButton / Neutral / Transparent / On Solid (On Light)": [
+      ".IconButton/Core/Neutral/on-light/md/default",
+      "PromoCTA/Icon/Arrow Right",
+      "S2_Icon_UIArrow_N",
+      "S2_Icon_UIArrow_Size200_N"
+    ],
+    "PromoCTA — v1": [
+      "B_app_CreativeCloud",
+      "ControlButton — v1",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N"
+    ],
+    "PromoCTA — v2": [
+      "B_app_CreativeCloud",
+      "PromoCTA/Arrow Button",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N"
+    ],
+    "PromoCTA/Arrow Button": [
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Arrow Right",
+      "S2_Icon_UIArrow_Size300_N"
+    ],
+    "RichContent": [
+      "Eyebrow",
+      "Heading",
+      "Paragraph",
+      "Actions",
+      "Button — v1",
+      "S2_Icon_Circle_20_N",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "SectionHeader": [
+      "RichContent",
+      "Eyebrow",
+      "Heading",
+      "Paragraph",
+      "Actions",
+      "Button — v1",
+      "S2_Icon_Circle_20_N",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "Accordion": [
+      "Collapsible",
+      "S2_Icon_ChevronUp_20_N",
+      "Divider",
+      "S2_Icon_ChevronDown_20_N",
+      "ControlButton — v2",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Arrow Down",
+      "S2_Icon_UIArrow_Size300_N",
+      "TextCard — v2",
+      "Link — v2",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "S2a_Icon_Arrow Right"
+    ],
+    "RollerNavList": [
+      "RollerNavItem"
+    ],
+    "AllProductsRollerCarousel": [
+      "Divider",
+      "RollerNavList",
+      "RollerNavItem",
+      "Media",
+      "Overlay",
+      "B_app_AfterEffects"
+    ],
+    ".Footer/Link": [
+      "Link",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "RouterNavItem — v1": [
+      "ProductLockup — v1",
+      "AppIcon",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "ProgressBar"
+    ],
+    "MediaControl": [
+      "ControlButton — v1",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Pause"
+    ],
+    "RouterNavItem — v2": [
+      "ProductLockup — v2",
+      "AppIcon",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "ProgressBar"
+    ],
+    "ElasticCard — v2": [
+      "ProductLockup — v2",
+      "AppIcon",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "Media",
+      "Overlay",
+      "S2_Chevron",
+      "Heading",
+      "ControlButton — v1",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Add",
+      "S2_Icon_UIAdd_Size300_N"
+    ],
+    "ImmersiveCard": [
+      "Media",
+      "Overlay",
+      "ControlButton — v1",
+      "Scale/S2a-Icons-scale-rig",
+      "S2a_Icon_Pause"
+    ],
+    "ProductCard — v2": [
+      "AppIcon",
+      "B_app_CreativeCloud"
+    ],
+    "MerchCard — v1": [
+      "ProductLockup — v2",
+      "AppIcon",
+      "B_app_AdobeAcrobatPDF",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "MerchCard/PricingDisplay",
+      "MerchCard/SelectPromo",
+      ".select/trigger",
+      "S2a_Icon_Chevron_Down",
+      "HelperText",
+      "Button — v2",
+      "S2_Icon_Circle_20_N",
+      "MerchCard/TrustBadge",
+      "S2_Icon_Lock_20_N",
+      "List",
+      "MerchCard/FeatureSection",
+      "Divider",
+      "S2_Icon_AcrobatPDFEdit_20_N",
+      "ListItem",
+      "Collapsible",
+      "S2_Icon_ChevronDown_20_N",
+      "Button — v1"
+    ],
+    "CardGrid": [
+      "MerchCard — v1",
+      "ProductLockup — v2",
+      "AppIcon",
+      "B_app_AdobeAcrobatPDF",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "MerchCard/PricingDisplay",
+      "MerchCard/SelectPromo",
+      ".select/trigger",
+      "S2a_Icon_Chevron_Down",
+      "HelperText",
+      "Button — v1",
+      "S2_Icon_Circle_20_N",
+      "Button — v2",
+      "MerchCard/TrustBadge",
+      "S2_Icon_Lock_20_N",
+      "Collapsible",
+      "S2_Icon_ChevronDown_20_N"
+    ],
+    "CardRow": [
+      "MerchCard — v1",
+      "ProductLockup — v2",
+      "AppIcon",
+      "B_app_AdobeAcrobatPDF",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "MerchCard/PricingDisplay",
+      "MerchCard/SelectPromo",
+      ".select/trigger",
+      "S2a_Icon_Chevron_Down",
+      "HelperText",
+      "Button — v1",
+      "S2_Icon_Circle_20_N",
+      "Button — v2",
+      "MerchCard/TrustBadge",
+      "S2_Icon_Lock_20_N",
+      "List",
+      "MerchCard/FeatureSection",
+      "Divider",
+      "S2_Icon_AcrobatPDFEdit_20_N",
+      "ListItem",
+      "CheckboxTile",
+      "Checkbox",
+      ".checkbox",
+      "S2_Icon_CheckBox_20_N",
+      "Label",
+      "S2a_Icon_Sparkle"
+    ],
+    "MerchCard/SelectPromo": [
+      ".select/trigger",
+      "S2a_Icon_Chevron_Down",
+      "S2_Icon_UIChevron_Size300_N",
+      "HelperText"
+    ],
+    "MerchCard/FeatureSection": [
+      "Divider",
+      "S2_Icon_AcrobatPDFEdit_20_N"
+    ],
+    "MerchCard/TrustBadge": [
+      "S2_Icon_Lock_20_N"
+    ],
+    "MerchCard/PricingDisplay": [],
+    "MerchCardPro — v1": [
+      "ProductLockup — v2",
+      "AppIcon",
+      "B_app_AdobeAcrobatPDF",
+      "B_app_CreativeCloud",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "MerchCard/PricingDisplay",
+      "MerchCard/SelectPromo",
+      ".select/trigger",
+      "S2a_Icon_Chevron_Down",
+      "HelperText",
+      "Button — v2",
+      "S2_Icon_Circle_20_N",
+      "MerchCard/TrustBadge",
+      "S2_Icon_Lock_20_N",
+      "List",
+      "MerchCard/FeatureSection",
+      "Divider",
+      "S2_Icon_AcrobatPDFEdit_20_N",
+      "ListItem"
+    ],
+    "MediaCard": [
+      "Media",
+      "Overlay",
+      "B_app_AdobeFirefly",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    ".QuoteCard": [
+      "Media",
+      "Overlay",
+      "Heading",
+      "MetaLine",
+      "Meta/Name",
+      "Meta/Role",
+      "Actions",
+      "Button — v1",
+      "S2_Icon_Circle_20_N",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "DotPagination",
+      "Dot"
+    ],
+    "QuoteCard — v2": [
+      "Media",
+      "Overlay",
+      "Heading",
+      "MetaLine",
+      "Meta/Name",
+      "Meta/Role",
+      "Actions",
+      "Button — v2",
+      "S2_Icon_Circle_20_N",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N",
+      "DotPagination",
+      "Dot"
+    ],
+    "SplitQuoteCard": [
+      "Heading",
+      "Meta/Name",
+      "Meta/Role",
+      "Media",
+      "Overlay"
+    ],
+    ".TextCard": [
+      "Link",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ],
+    "TextCard — v2": [
+      "Link — v2",
+      "S2a_Icon_Chevron_Right",
+      "S2_Icon_UIChevron_Size300_N"
+    ]
+  }
+}

@@ -1,0 +1,3991 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T18:04:34.863Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": null
+  },
+  "set": {
+    "id": "12823:184375",
+    "key": "252b85e9d7c740613b3f2ddfd39c75f394edcd95",
+    "name": "Link — v2",
+    "type": "COMPONENT_SET",
+    "description": "— s2a:meta —\nversion:    2.0.1\nstatus:     active\nupdated:    2026-09-22\nchangelog:\n  2.0.1   2026-09-22  patch        Wired the Label text property to the \"Call to Action\" text layer on all variants (it existed on the panel but drove nothing, so instance labels could not be set).\n  2.0.0   2026-08-25  major   Dropped Context=on-light/on-dark; token-driven via content/default (flips per theme mode). BREAKING vs v1.\n\nA text link that adapts to light and dark automatically — no Context axis, theme-aware via content/default.\n\n## Good to know\nLight/dark is automatic — the link binds theme-aware semantic tokens (content/default) that re-resolve from the page/surface variable mode. No Context axis, no -dark variant. Axes are Emphasis (default/subtle), Kind (action/text), and State (default/hover/active/focus).\n\n## Accessibility\nFocus state shows a visible focus ring (WCAG 2.2 AA · SC 2.4.7 Focus Visible). Contrast holds in both themes because content/default resolves to a contrasting value per mode (SC 1.4.3 Contrast Minimum).",
+    "meta": {
+      "version": "2.0.1",
+      "status": "active",
+      "updated": "2026-09-22",
+      "changelog": "2.0.1   2026-09-22  patch        Wired the Label text property to the \"Call to Action\" text layer on all variants (it existed on the panel but drove nothing, so instance labels could not be set).\n2.0.0   2026-08-25  major   Dropped Context=on-light/on-dark; token-driven via content/default (flips per theme mode). BREAKING vs v1."
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Emphasis",
+      "type": "VARIANT",
+      "defaultValue": "default",
+      "options": [
+        "default",
+        "subtle"
+      ]
+    },
+    {
+      "name": "Icon End#2609:0",
+      "type": "INSTANCE_SWAP",
+      "defaultValue": "8873:23272",
+      "preferredValues": [
+        {
+          "type": "COMPONENT",
+          "key": "8f8abc61ed9ab5b93c3adc70776a0067d463d0d9"
+        },
+        {
+          "type": "COMPONENT",
+          "key": "898b40541dd33b417fd3827d5f824d80859a2967"
+        }
+      ]
+    },
+    {
+      "name": "Kind",
+      "type": "VARIANT",
+      "defaultValue": "action",
+      "options": [
+        "action",
+        "text"
+      ]
+    },
+    {
+      "name": "Label#2277:4",
+      "type": "TEXT",
+      "defaultValue": "Label"
+    },
+    {
+      "name": "Show Icon End#2541:0",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "defaultValue": "default",
+      "options": [
+        "default",
+        "hover",
+        "focus",
+        "active"
+      ]
+    },
+    {
+      "name": "Underline#10238:0",
+      "type": "BOOLEAN",
+      "defaultValue": false
+    }
+  ],
+  "variants": [
+    {
+      "id": "12823:184376",
+      "key": "d76c0f4bf80a02fee574afe7113519d10f69c793",
+      "name": "Emphasis=default, Kind=action, State=default",
+      "props": {
+        "Emphasis": "default",
+        "Kind": "action",
+        "State": "default"
+      },
+      "width": 53,
+      "height": 24
+    },
+    {
+      "id": "12823:184384",
+      "key": "72cc204dba11b88f381a18d4b3bbfb15eff5607b",
+      "name": "Emphasis=subtle, Kind=text, State=default",
+      "props": {
+        "Emphasis": "subtle",
+        "Kind": "text",
+        "State": "default"
+      },
+      "width": 56,
+      "height": 24
+    },
+    {
+      "id": "12823:184392",
+      "key": "c4e454789f72bdb732076c6a7218ca3830c6b913",
+      "name": "Emphasis=default, Kind=text, State=default",
+      "props": {
+        "Emphasis": "default",
+        "Kind": "text",
+        "State": "default"
+      },
+      "width": 56,
+      "height": 24
+    },
+    {
+      "id": "12823:184416",
+      "key": "30e2977f39772c4c4f7917fb353415ae21a59b12",
+      "name": "Emphasis=default, Kind=action, State=hover",
+      "props": {
+        "Emphasis": "default",
+        "Kind": "action",
+        "State": "hover"
+      },
+      "width": 53,
+      "height": 24
+    },
+    {
+      "id": "12823:184424",
+      "key": "0f8c4dda67965fd1d24c358d8f9de7212823338e",
+      "name": "Emphasis=subtle, Kind=text, State=hover",
+      "props": {
+        "Emphasis": "subtle",
+        "Kind": "text",
+        "State": "hover"
+      },
+      "width": 56,
+      "height": 24
+    },
+    {
+      "id": "12823:184432",
+      "key": "f80d74d3af5c3bb6fe564e9d4558dae055c92395",
+      "name": "Emphasis=default, Kind=text, State=hover",
+      "props": {
+        "Emphasis": "default",
+        "Kind": "text",
+        "State": "hover"
+      },
+      "width": 56,
+      "height": 24
+    },
+    {
+      "id": "12823:184456",
+      "key": "f2d7c1b7a1e00019ee7e0dc5a2dd50e5cdcf20a7",
+      "name": "Emphasis=default, Kind=action, State=active",
+      "props": {
+        "Emphasis": "default",
+        "Kind": "action",
+        "State": "active"
+      },
+      "width": 53,
+      "height": 24
+    },
+    {
+      "id": "12823:184464",
+      "key": "9c7f835cc57604fce36a68872c82bcee8de2da99",
+      "name": "Emphasis=subtle, Kind=text, State=active",
+      "props": {
+        "Emphasis": "subtle",
+        "Kind": "text",
+        "State": "active"
+      },
+      "width": 56,
+      "height": 24
+    },
+    {
+      "id": "12823:184472",
+      "key": "4bab22957c840c7f25e7c060e8bd24613763ead0",
+      "name": "Emphasis=default, Kind=text, State=active",
+      "props": {
+        "Emphasis": "default",
+        "Kind": "text",
+        "State": "active"
+      },
+      "width": 56,
+      "height": 24
+    },
+    {
+      "id": "12823:184496",
+      "key": "353f938f9031537a2c41e2e130b5a2d1a67291b1",
+      "name": "Emphasis=default, Kind=action, State=focus",
+      "props": {
+        "Emphasis": "default",
+        "Kind": "action",
+        "State": "focus"
+      },
+      "width": 53,
+      "height": 24
+    },
+    {
+      "id": "12823:184505",
+      "key": "273adf255398df77df9051b822122d90375437af",
+      "name": "Emphasis=subtle, Kind=text, State=focus",
+      "props": {
+        "Emphasis": "subtle",
+        "Kind": "text",
+        "State": "focus"
+      },
+      "width": 56,
+      "height": 24
+    },
+    {
+      "id": "12823:184514",
+      "key": "1626c67a8a050c665269bda2400d07f77fc45438",
+      "name": "Emphasis=default, Kind=text, State=focus",
+      "props": {
+        "Emphasis": "default",
+        "Kind": "text",
+        "State": "focus"
+      },
+      "width": 56,
+      "height": 24
+    }
+  ],
+  "anatomy": {
+    "variant": "Emphasis=default, Kind=action, State=default",
+    "tree": {
+      "name": "Emphasis=default, Kind=action, State=default",
+      "type": "COMPONENT",
+      "id": "12823:184376",
+      "layoutMode": "HORIZONTAL",
+      "sizing": {
+        "horizontal": "HUG",
+        "vertical": "HUG"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "CENTER"
+      },
+      "children": [
+        {
+          "name": ".label-wrap",
+          "type": "FRAME",
+          "id": "12823:184377",
+          "layoutMode": "VERTICAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "MIN"
+          },
+          "children": [
+            {
+              "name": "Call to Action",
+              "type": "TEXT",
+              "id": "12823:184378",
+              "text": "Label",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              }
+            },
+            {
+              "name": ".underline",
+              "type": "RECTANGLE",
+              "id": "12823:184379",
+              "visible": false,
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            }
+          ]
+        },
+        {
+          "name": "end-icon",
+          "type": "FRAME",
+          "id": "12823:184380",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          },
+          "children": [
+            {
+              "name": "Frame",
+              "type": "FRAME",
+              "id": "12823:184381",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "children": [
+                {
+                  "name": "S2a_Icon_Chevron_Right",
+                  "type": "INSTANCE",
+                  "id": "12823:184382",
+                  "layoutMode": "HORIZONTAL",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  },
+                  "align": {
+                    "primary": "MIN",
+                    "counter": "MIN"
+                  },
+                  "children": [
+                    {
+                      "name": "S2_Icon_UIChevron_Size300_N",
+                      "type": "INSTANCE",
+                      "id": "I12823:184382;8873:23273",
+                      "layoutMode": "HORIZONTAL",
+                      "sizing": {
+                        "horizontal": "FILL",
+                        "vertical": "FIXED"
+                      },
+                      "align": {
+                        "primary": "MIN",
+                        "counter": "MIN"
+                      },
+                      "children": [
+                        {
+                          "name": "Frame",
+                          "type": "FRAME",
+                          "id": "I12823:184382;8873:23273;214:91",
+                          "sizing": {
+                            "horizontal": "FILL",
+                            "vertical": "FILL"
+                          },
+                          "children": [
+                            {
+                              "name": "iconPrimary",
+                              "type": "VECTOR",
+                              "id": "I12823:184382;8873:23273;214:92",
+                              "sizing": {
+                                "horizontal": "FIXED",
+                                "vertical": "FIXED"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Icon color",
+              "type": "RECTANGLE",
+              "id": "12823:184383",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "",
+      "nodeId": "12823:184376",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "",
+      "nodeId": "12823:184376",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184378",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184378",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184378",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184378",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184378",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184378",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184378",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184379",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184382;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184383",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "",
+      "nodeId": "12823:184384",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "",
+      "nodeId": "12823:184384",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184386",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184386",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184386",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184386",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184386",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184386",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184386",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184387",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184390;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184391",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "",
+      "nodeId": "12823:184392",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "",
+      "nodeId": "12823:184392",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184394",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184394",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184394",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184394",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184394",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184394",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184394",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184395",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184398;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184399",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "",
+      "nodeId": "12823:184416",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "",
+      "nodeId": "12823:184416",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184418",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184418",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184418",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184418",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184418",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184418",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184418",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184419",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184422;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184423",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "",
+      "nodeId": "12823:184424",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "",
+      "nodeId": "12823:184424",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184426",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184426",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184426",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184426",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184426",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184426",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184426",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184427",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184430;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184431",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "",
+      "nodeId": "12823:184432",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "",
+      "nodeId": "12823:184432",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184434",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184434",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184434",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184434",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184434",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184434",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184434",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184435",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184438;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184439",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "",
+      "nodeId": "12823:184456",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "",
+      "nodeId": "12823:184456",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184458",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184458",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184458",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184458",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184458",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184458",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184458",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184459",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184462;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184463",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "",
+      "nodeId": "12823:184464",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "",
+      "nodeId": "12823:184464",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184466",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184466",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184466",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184466",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184466",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184466",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184466",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184467",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184470;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184471",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "",
+      "nodeId": "12823:184472",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "",
+      "nodeId": "12823:184472",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184474",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184474",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184474",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184474",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184474",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184474",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184474",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184475",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184478;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184479",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "",
+      "nodeId": "12823:184496",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "",
+      "nodeId": "12823:184496",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184498",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184498",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184498",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184498",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184498",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184498",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184498",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184499",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "strokes",
+      "variable": "VariableID:2072:39569"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "topRightRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184503;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184504",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "",
+      "nodeId": "12823:184505",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "",
+      "nodeId": "12823:184505",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184507",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184507",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184507",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184507",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184507",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184507",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184507",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184508",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "strokes",
+      "variable": "VariableID:2072:39569"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "topRightRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184512;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184513",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "",
+      "nodeId": "12823:184514",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "",
+      "nodeId": "12823:184514",
+      "nodeType": "COMPONENT",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184516",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184516",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184516",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184516",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184516",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184516",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/Call to Action",
+      "nodeId": "12823:184516",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184517",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "strokes",
+      "variable": "VariableID:2072:39569"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "topRightRadius",
+      "variable": "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184521;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184522",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    }
+  ],
+  "variables": {
+    "VariableID:138acab9c2d8bcfd1dc46fe53608ef3b39893ce8/4458:226": {
+      "name": "Focus-radius/focus-radius-50",
+      "key": "138acab9c2d8bcfd1dc46fe53608ef3b39893ce8",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:530eb9fc4e9077abe9390613e61263db0c186e91/4458:183",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Token": 4
+      },
+      "resolved": {
+        "Token": 4
+      }
+    },
+    "VariableID:2072:39569": {
+      "name": "s2a/color/focus-ring/default",
+      "key": "6347b2b3ecd73ece4df7728c3f2e66a69ad5ab9d",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-focus-ring-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/blue/900"
+        },
+        "Dark": {
+          "alias": "s2a/color/blue/500"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0.23137255012989044,
+          "g": 0.38823530077934265,
+          "b": 0.9843137264251709,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.5568627715110779,
+          "g": 0.7254902124404907,
+          "b": 0.9882352948188782,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2352:1217": {
+      "name": "s2a/typography/font-size/label",
+      "key": "8ebd95ce11fc03c86dd89ef3b4ba2ffb5bf961d6",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:2352:1225": {
+      "name": "s2a/typography/line-height/body-md",
+      "key": "165ab27d86033195a82c5905823a544eb17c4741",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-body-md)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/sm"
+        }
+      },
+      "resolved": {
+        "lg": 20,
+        "md": 20,
+        "sm": 20,
+        "xl": 20
+      }
+    },
+    "VariableID:2352:1233": {
+      "name": "s2a/typography/letter-spacing/label",
+      "key": "c00a7571dfaa364481c1c6eb5472b3581201c594",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1235": {
+      "name": "s2a/typography/font-size/body-md",
+      "key": "3587029d598ff06f45ae11414a7fb7af25cf822f",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-body-md)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/md"
+        },
+        "md": {
+          "alias": "s2a/font/size/md"
+        },
+        "sm": {
+          "alias": "s2a/font/size/md"
+        },
+        "xl": {
+          "alias": "s2a/font/size/md"
+        }
+      },
+      "resolved": {
+        "lg": 16,
+        "md": 16,
+        "sm": 16,
+        "xl": 16
+      }
+    },
+    "VariableID:2352:1242": {
+      "name": "s2a/typography/letter-spacing/body-md",
+      "key": "345b9f3f1e7a5023ee5840ca1a75bde0ae6ae8f1",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-body-md)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1243": {
+      "name": "s2a/typography/line-height/label",
+      "key": "538ddff11a55de6e862611ebdcec139ce6328c78",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:2483:41396": {
+      "name": "s2a/color/content/body-subtle",
+      "key": "2ff2a156a3ad790b77605f40573dc94909f239a3",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-body-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/content/subtle"
+        },
+        "Dark": {
+          "alias": "s2a/color/content/subtle"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.6399999856948853
+        }
+      }
+    },
+    "VariableID:2557:831": {
+      "name": "s2a/font/family/body",
+      "key": "43970d360f3eb862bd1e6a2e31be0d2ac683234e",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:2557:832": {
+      "name": "s2a/font/family/label",
+      "key": "02174aaffa99806ace49456aa5121f60a606ed73",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:3:56": {
+      "name": "s2a/spacing/lg",
+      "key": "ff7b61b2fb48ea08fac60f2e9edafbfcc2644a0e",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-lg)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/24"
+        }
+      },
+      "resolved": {
+        "Value": 24
+      }
+    },
+    "VariableID:3:60": {
+      "name": "s2a/spacing/xs",
+      "key": "84cbbc98149eadaf56c21bc4ae274415217fea35",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-xs)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/8"
+        }
+      },
+      "resolved": {
+        "Value": 8
+      }
+    },
+    "VariableID:5388:44676": {
+      "name": "s2a/font/weight/body",
+      "key": "62bc118c0c3bdad19075db8627094145c491b8dc",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/regular"
+        }
+      },
+      "resolved": {
+        "Value": "Regular"
+      }
+    },
+    "VariableID:5388:44678": {
+      "name": "s2a/font/weight/label",
+      "key": "68a1c8cf3dbedb7bb77987c1db773b0a69a7eb8c",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:6:82": {
+      "name": "s2a/color/content/default",
+      "key": "83bc2006f8e7edc6ff9f04044d27a204d84f2d6a",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "6:15543": {
+      "name": "s2a/typography/label",
+      "key": "04764cbcfd7418f4c004046716f9d7db9a741db8"
+    },
+    "6:15537": {
+      "name": "s2a/typography/body-md",
+      "key": "a3e41372e4771f3371364e581dbd559e6848ab28"
+    }
+  },
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184382",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184382;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184390",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184390;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184398",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184398;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184422",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184422;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184430",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184430;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184438",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184438;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184462",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184462;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184470",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184470;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184478",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184478;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184503",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184503;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184512",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184512;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184521",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184521;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    }
+  ],
+  "counts": {
+    "variants": 12,
+    "nodes": 135,
+    "bindings": 159,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "",
+      "nodeId": "12823:184376",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 6
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "",
+      "nodeId": "12823:184376",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 6
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184377",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184379",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 33
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184379",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon",
+      "nodeId": "12823:184380",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon",
+      "nodeId": "12823:184380",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184381",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184381",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184382",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184382",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184382;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184382;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184382;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184383",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=default",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184383",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "",
+      "nodeId": "12823:184384",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "",
+      "nodeId": "12823:184384",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184385",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184387",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 36
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184387",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon",
+      "nodeId": "12823:184388",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon",
+      "nodeId": "12823:184388",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184389",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184389",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184390",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184390",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184390;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184390;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184390;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184391",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=default",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184391",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "",
+      "nodeId": "12823:184392",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "",
+      "nodeId": "12823:184392",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184393",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184395",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 36
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184395",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon",
+      "nodeId": "12823:184396",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon",
+      "nodeId": "12823:184396",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184397",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184397",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184398",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184398",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184398;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184398;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184398;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184399",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=default",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184399",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "",
+      "nodeId": "12823:184416",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 6
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "",
+      "nodeId": "12823:184416",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 6
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184417",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184419",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 33
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184419",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon",
+      "nodeId": "12823:184420",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon",
+      "nodeId": "12823:184420",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184421",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184421",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184422",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184422",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184422;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184422;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184422;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184423",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=hover",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184423",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "",
+      "nodeId": "12823:184424",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "",
+      "nodeId": "12823:184424",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184425",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184427",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 36
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184427",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon",
+      "nodeId": "12823:184428",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon",
+      "nodeId": "12823:184428",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184429",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184429",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184430",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184430",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184430;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184430;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184430;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184431",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=hover",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184431",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "",
+      "nodeId": "12823:184432",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "",
+      "nodeId": "12823:184432",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184433",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184435",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 36
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184435",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon",
+      "nodeId": "12823:184436",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon",
+      "nodeId": "12823:184436",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184437",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184437",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184438",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184438",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184438;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184438;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184438;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184439",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=hover",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184439",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "",
+      "nodeId": "12823:184456",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 6
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "",
+      "nodeId": "12823:184456",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 6
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184457",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184459",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 33
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184459",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon",
+      "nodeId": "12823:184460",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon",
+      "nodeId": "12823:184460",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184461",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184461",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184462",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184462",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184462;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184462;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184462;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184463",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=active",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184463",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "",
+      "nodeId": "12823:184464",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "",
+      "nodeId": "12823:184464",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184465",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184467",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 36
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184467",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon",
+      "nodeId": "12823:184468",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon",
+      "nodeId": "12823:184468",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184469",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184469",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184470",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184470",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184470;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184470;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184470;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184471",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=active",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184471",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "",
+      "nodeId": "12823:184472",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "",
+      "nodeId": "12823:184472",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184473",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184475",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 36
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184475",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon",
+      "nodeId": "12823:184476",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon",
+      "nodeId": "12823:184476",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184477",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184477",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184478",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184478",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184478;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184478;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184478;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184479",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=active",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184479",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "",
+      "nodeId": "12823:184496",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 6
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "",
+      "nodeId": "12823:184496",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 6
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184497",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184499",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 33
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184499",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "cornerRadius",
+      "value": 4
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 59
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184500",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon",
+      "nodeId": "12823:184501",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon",
+      "nodeId": "12823:184501",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184502",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184502",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184503",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184503",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184503;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184503;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184503;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184504",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=action, State=focus",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184504",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "",
+      "nodeId": "12823:184505",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "",
+      "nodeId": "12823:184505",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184506",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184508",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 36
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184508",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "cornerRadius",
+      "value": 4
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 59
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184509",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon",
+      "nodeId": "12823:184510",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon",
+      "nodeId": "12823:184510",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184511",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184511",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184512",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184512",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184512;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184512;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184512;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184513",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=subtle, Kind=text, State=focus",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184513",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "",
+      "nodeId": "12823:184514",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "",
+      "nodeId": "12823:184514",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "value": 2
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap",
+      "nodeId": "12823:184515",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184517",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 36
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/.label-wrap/.underline",
+      "nodeId": "12823:184517",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "cornerRadius",
+      "value": 4
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 58
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/Focus Ring Background",
+      "nodeId": "12823:184518",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon",
+      "nodeId": "12823:184519",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon",
+      "nodeId": "12823:184519",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184520",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame",
+      "nodeId": "12823:184520",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184521",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "12823:184521",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I12823:184521;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184521;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I12823:184521;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184522",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Emphasis=default, Kind=text, State=focus",
+      "node": "/end-icon/Icon color",
+      "nodeId": "12823:184522",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:7a2a5b7cb3e52353dd9a14e8cbf2e38302d13dfbd984c9cfe9f9219b9780ce09"
+  }
+}

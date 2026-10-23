@@ -1,0 +1,553 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-23T16:31:39.743Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "divider",
+    "name": "Divider",
+    "cssClass": "c-divider",
+    "importPath": "packages/components/src/divider/divider.js",
+    "exports": [
+      "Divider"
+    ],
+    "render": "Divider",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/divider/divider.spec.json",
+      "storybookId": "divider",
+      "figmaNodeId": "10910:17760"
+    }
+  },
+  "sources": {
+    "packages/components/src/divider/index.js": "sha256:b5e9f9e6454fb84e01ff409c7db5463cbbfeb7a2aab22249617822951d13f155",
+    "packages/components/src/divider/divider.js": "sha256:624442c34101b29d8378391ac97689bce1bdae1fc80854ff3cba473c2aa2e829",
+    "packages/components/src/divider/divider.css": "sha256:c7eea33cab9b9e208e5798cd4804fa068676fb863068ce4142132024c0fb7ece"
+  },
+  "props": [
+    {
+      "name": "style",
+      "default": "\"default\"",
+      "type": "string"
+    }
+  ],
+  "attributes": {
+    "data-style": {
+      "values": [
+        "default",
+        "inverse",
+        "knockout",
+        "subtle",
+        "subtle-inverse"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-divider"
+    ],
+    "stylesheet": [
+      "c-divider"
+    ],
+    "runtime": [
+      "c-divider"
+    ],
+    "own": [
+      "c-divider"
+    ]
+  },
+  "aria": {
+    "roles": [
+      "separator"
+    ],
+    "attributes": [],
+    "tags": []
+  },
+  "imports": [
+    "./divider.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-color-border-default": {
+        "fallback": false
+      },
+      "--s2a-color-border-inverse": {
+        "fallback": false
+      },
+      "--s2a-color-border-knockout": {
+        "fallback": false
+      },
+      "--s2a-color-border-subtle": {
+        "fallback": false
+      },
+      "--s2a-color-transparent-white-16": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [],
+  "queries": [],
+  "stories": [
+    {
+      "id": "generated-divider--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "generated-divider--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "generated-divider--style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "generated-divider--style-subtle",
+      "name": "style: subtle",
+      "args": {
+        "style": "subtle"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "subtle"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "subtle"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "subtle"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "generated-divider--style-knockout",
+      "name": "style: knockout",
+      "args": {
+        "style": "knockout"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "knockout"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "knockout"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "generated-divider--style-inverse",
+      "name": "style: inverse",
+      "args": {
+        "style": "inverse"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "inverse"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "inverse"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "inverse"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "generated-divider--style-subtle-inverse",
+      "name": "style: subtle-inverse",
+      "args": {
+        "style": "subtle-inverse"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "subtle-inverse"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "subtle-inverse"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "subtle-inverse"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "atoms-divider--default",
+      "name": "Default",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "hr",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "atoms-divider--subtle",
+      "name": "Subtle",
+      "args": {
+        "style": "subtle"
+      },
+      "root": {
+        "tag": "hr",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "subtle"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "subtle"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "subtle"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "atoms-divider--knockout",
+      "name": "Knockout",
+      "args": {
+        "style": "knockout"
+      },
+      "root": {
+        "tag": "hr",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "knockout"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "knockout"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "atoms-divider--inverse",
+      "name": "Inverse",
+      "args": {
+        "style": "inverse"
+      },
+      "root": {
+        "tag": "hr",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "inverse"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "inverse"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "inverse"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "atoms-divider--subtle-inverse",
+      "name": "Subtle Inverse",
+      "args": {
+        "style": "subtle-inverse"
+      },
+      "root": {
+        "tag": "hr",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "subtle-inverse"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "subtle-inverse"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "subtle-inverse"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    },
+    {
+      "id": "atoms-divider--all-styles",
+      "name": "All styles",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "hr",
+        "classes": [
+          "c-divider"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 1
+    }
+  ],
+  "counts": {
+    "props": 1,
+    "attributes": 1,
+    "parts": 1,
+    "tokenReferences": 5,
+    "tokenReferencesWithoutFallback": 5,
+    "raw": 0,
+    "stories": 13,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:7d1d10926bb5490ae022c499f99d1987f729a0c4b79a013f0a8585c77676cfe0"
+  }
+}

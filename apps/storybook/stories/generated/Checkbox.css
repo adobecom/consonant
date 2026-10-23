@@ -1,0 +1,32 @@
+/* Generated from checkbox.contract.json. Re-run: npm run specs:render -- --slug=checkbox */
+
+.c-checkbox [hidden],
+.c-checkbox[hidden] {
+  display: none !important;
+}
+
+.c-checkbox {
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.c-checkbox__label {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.c-checkbox__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}

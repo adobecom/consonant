@@ -8,3 +8,4 @@ This directory houses every rule we expect Codex/Claude/Cursor (and humans!) to 
 - [Figma component authoring](./figma-component-authoring.md)
 
 Add new guardrails here when we discover a policy worth enforcing.
+- [Readability of Figma documentation](figma-documentation-readability.md) — measure, line spacing, contrast and structure for doc frames in the Figma file (not for components).

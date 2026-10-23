@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>S2A Design System</title>
+  <meta name="description" content="The S2A design system's hosted surfaces: Storybook, the Contract Book, and S2A Studio.">
+  <script>
+    // Storybook used to live at this root. Keep its deep links working.
+    if (/[?&]path=/.test(location.search)) location.replace("storybook/" + location.search);
+  </script>
+  <style>
+    :root { color-scheme: light dark;
+      --bg: #f8f8f8; --surface: #fff; --text: #131313; --muted: #505050; --border: #e1e1e1; --accent: #1473e6; --accent-ink: #0d66d0; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #1d1d1d; --surface: #262626; --text: #f2f2f2; --muted: #b3b3b3; --border: #3b3b3b; --accent: #5c9cf5; --accent-ink: #8ab8f8; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 "Adobe Clean", adobe-clean, -apple-system, system-ui, "Segoe UI", sans-serif; padding: 0 20px 56px; }
+    main { max-width: 960px; margin: 0 auto; }
+    header { padding: 64px 0 28px; }
+    .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    h1 { font-size: clamp(30px, 4.5vw, 44px); line-height: 1.1; margin: 0 0 12px; letter-spacing: -.02em; }
+    header p { max-width: 60ch; color: var(--muted); margin: 0; font-size: 17px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    a.card { display: grid; gap: 8px; padding: 22px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: inherit; text-decoration: none; }
+    a.card:hover, a.card:focus-visible { border-color: var(--accent); outline: none; }
+    a.card:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); }
+    .card h2 { margin: 0; font-size: 20px; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    .card .go { color: var(--accent-ink); font-weight: 600; font-size: 14px; margin-top: 4px; }
+    .note { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+    .note code { font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+    .note a { color: var(--accent-ink); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">adobecom / consonant</div>
+      <h1>S2A Design System</h1>
+      <p>Adobe.com's design system, built from Figma and shipped as tokens and components. Three ways to look at it, all built from the main branch.</p>
+    </header>
+    <div class="cards">
+      <a class="card" href="storybook/">
+        <h2>Storybook</h2>
+        <p>Every component, its states and variants, with the Figma design overlaid for comparison.</p>
+        <span class="go">Open Storybook →</span>
+      </a>
+      <a class="card" href="contract-book/">
+        <h2>Contract Book</h2>
+        <p>The contract loop: Figma evidence and code evidence turned into one definition per component, with the parity scores and what each contract refuses.</p>
+        <span class="go">Open the Contract Book →</span>
+      </a>
+      <a class="card" href="authoring/">
+        <h2>S2A Studio</h2>
+        <p>The authoring prototype: compose Milo-style pages from S2A blocks and tokens.</p>
+        <span class="go">Open S2A Studio →</span>
+      </a>
+    </div>
+    <p class="note">This hosted Contract Book is a read-only snapshot. Extracting from Figma, running parity, healing and saving need the dev server: clone the repo and run <code>npm run contract-book</code>. Pull request previews of Storybook live under <code>pr-preview/pr-&lt;number&gt;/</code>. Source on <a href="https://github.com/adobecom/consonant">GitHub</a>.</p>
+  </main>
+</body>
+</html>

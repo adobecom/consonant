@@ -1,0 +1,209 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "ProductLockup",
+  "setName": "ProductLockup — v2",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "div",
+    "bindings": {},
+    "slot": null,
+    "children": [
+      {
+        "name": ".frame-1",
+        "source": "/Frame 1",
+        "element": "div",
+        "bindings": {},
+        "slot": null,
+        "children": [
+          {
+            "name": ".icons",
+            "source": "/Frame 1/.icons",
+            "element": "div",
+            "bindings": {},
+            "slot": null,
+            "children": [
+              {
+                "name": ".app-icon",
+                "source": "/Frame 1/.icons/AppIcon",
+                "element": null,
+                "bindings": {},
+                "slot": {
+                  "name": "AppIcon",
+                  "accepts": [
+                    "AppIcon"
+                  ],
+                  "mode": "restrict"
+                },
+                "children": []
+              },
+              {
+                "name": ".app-icon-2",
+                "source": "/Frame 1/.icons/AppIcon",
+                "element": null,
+                "bindings": {},
+                "slot": {
+                  "name": "AppIcon",
+                  "accepts": [
+                    "AppIcon"
+                  ],
+                  "mode": "restrict"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": ".label",
+            "source": "/Frame 1/Label",
+            "element": "span",
+            "bindings": {},
+            "slot": {
+              "name": "Label",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".s2a-icon-chevron-right",
+        "source": "/S2a_Icon_Chevron_Right",
+        "element": null,
+        "bindings": {},
+        "slot": null,
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "11272:217527",
+    "nodeName": "ProductLockup — v2",
+    "componentSetKey": "8f9c978a2017362ecb1449484809b9920c0be4b9",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Orientation",
+      "type": "VARIANT",
+      "options": [
+        "horizontal",
+        "vertical"
+      ],
+      "defaultValue": "horizontal"
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [
+        "label",
+        "eyebrow",
+        "knockout",
+        "inverse"
+      ],
+      "defaultValue": "label"
+    },
+    {
+      "name": "Width",
+      "type": "VARIANT",
+      "options": [
+        "hug",
+        "fill"
+      ],
+      "defaultValue": "hug"
+    },
+    {
+      "name": "Label#3394:9",
+      "type": "TEXT",
+      "forProp": "label"
+    },
+    {
+      "name": "Show App Icon#9805:0",
+      "type": "BOOLEAN",
+      "forProp": "showAppIcon",
+      "defaultValue": true
+    },
+    {
+      "name": "Show Icon End#3394:27",
+      "type": "BOOLEAN",
+      "forProp": "showIconEnd",
+      "defaultValue": true
+    },
+    {
+      "name": "Show Second App Icon#10894:6",
+      "type": "BOOLEAN",
+      "forProp": "showSecondAppIcon",
+      "defaultValue": false
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-product-lockup",
+      "bindings": {}
+    },
+    {
+      "name": "/Frame 1",
+      "selector": ".c-product-lockup__frame-1",
+      "bindings": {}
+    },
+    {
+      "name": "/Frame 1/.icons",
+      "selector": ".icons",
+      "bindings": {}
+    },
+    {
+      "name": "/Frame 1/.icons/AppIcon",
+      "selector": ".c-product-lockup__app-icon",
+      "bindings": {},
+      "slot": {
+        "name": "AppIcon",
+        "accepts": [
+          "AppIcon"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/Frame 1/.icons/AppIcon",
+      "selector": ".c-product-lockup__app-icon-2",
+      "bindings": {},
+      "slot": {
+        "name": "AppIcon",
+        "accepts": [
+          "AppIcon"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/Frame 1/Label",
+      "selector": ".c-product-lockup__label",
+      "bindings": {},
+      "slot": {
+        "name": "Label",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/S2a_Icon_Chevron_Right",
+      "selector": ".c-product-lockup__s2a-icon-chevron-right",
+      "bindings": {}
+    }
+  ],
+  "textStyles": []
+}

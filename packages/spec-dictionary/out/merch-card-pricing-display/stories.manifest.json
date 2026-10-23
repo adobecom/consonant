@@ -1,0 +1,79 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "merch-card-pricing-display",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "showdetails-on",
+      "name": "showDetails on",
+      "args": {
+        "showDetails": true
+      }
+    },
+    {
+      "id": "showdetails-off",
+      "name": "showDetails off",
+      "args": {
+        "showDetails": false
+      }
+    },
+    {
+      "id": "showstrikethrough-on",
+      "name": "showStrikethrough on",
+      "args": {
+        "showStrikethrough": true
+      }
+    },
+    {
+      "id": "showstrikethrough-off",
+      "name": "showStrikethrough off",
+      "args": {
+        "showStrikethrough": false
+      }
+    }
+  ],
+  "existing": [],
+  "deferred": [
+    "showdetails-on",
+    "showdetails-off",
+    "showstrikethrough-on",
+    "showstrikethrough-off"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      ""
+    ],
+    "rowValues": [
+      {}
+    ],
+    "cell": {
+      "w": 442,
+      "h": 112,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {},
+        "forced": null,
+        "label": "default",
+        "nodeId": "10328:103573"
+      }
+    ],
+    "missing": []
+  }
+}

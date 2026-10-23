@@ -1,0 +1,27 @@
+/* Divider — generated from divider.contract.json.
+ * Re-run: npm run specs:render -- --slug=divider --target=milo */
+
+.divider {
+  width: 418px;
+  height: 1px;
+}
+
+.divider.default {
+  background-color: var(--s2a-color-divider-default, #292929);
+}
+
+.divider.subtle {
+  background-color: var(--s2a-color-divider-subtle, rgb(0 0 0 / 12%));
+}
+
+.divider.knockout {
+  background-color: var(--s2a-color-divider-knockout, #000);
+}
+
+.divider.inverse {
+  background-color: var(--s2a-color-divider-inverse, #fff);
+}
+
+.divider.subtle-inverse {
+  background-color: var(--s2a-color-divider-subtle-inverse, rgb(255 255 255 / 16%));
+}

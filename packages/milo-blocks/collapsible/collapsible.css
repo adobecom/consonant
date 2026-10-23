@@ -1,0 +1,137 @@
+/* Collapsible — generated from collapsible.contract.json.
+ * Re-run: npm run specs:render -- --slug=collapsible --target=milo */
+
+.collapsible [hidden],
+.collapsible[hidden] {
+  display: none !important;
+}
+
+.collapsible {
+  box-sizing: border-box;
+  min-width: 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.collapsible.false {
+  gap: var(--s2a-spacing-2xs, 4px);
+}
+
+.collapsible.true {
+  gap: var(--s2a-spacing-sm, 12px);
+}
+
+.collapsible .trigger {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  gap: var(--s2a-spacing-xs, 8px);
+}
+
+.collapsible.default .trigger {
+  height: 20px;
+}
+
+.collapsible .control-button {
+  display: flex;
+  flex-direction: column;
+}
+
+.collapsible .label {
+  flex: 1 1 auto;
+  color: var(--s2a-color-content-default, #000);
+  font-size: var(--s2a-typography-font-size-label, 0.875rem);
+  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
+  line-height: var(--s2a-typography-line-height-label, 18px);
+}
+
+.collapsible.default .label {
+  font-family: var(--s2a-font-family-label, "Adobe Clean");
+  font-weight: var(--s2a-font-weight-label, 700);
+}
+
+.collapsible.lg .label {
+  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
+  font-size: var(--s2a-typography-font-size-heading-6, 1.125rem);
+  font-weight: var(--s2a-font-weight-heading, 900);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-6, -0.2px);
+  line-height: 18px;
+}
+
+.collapsible.control .label {
+  font-size: var(--s2a-typography-font-size-heading-5, 1.5rem);
+  letter-spacing: var(--s2a-font-letter-spacing-4xl, -0.48px);
+  line-height: var(--s2a-typography-line-height-heading-5, 24px);
+}
+
+.collapsible .s2-icon-chevron-down-20-n {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 20px;
+  height: 20px;
+}
+
+.collapsible .s2-icon-chevron-down-20-n > svg,
+.collapsible .s2-icon-chevron-down-20-n > [data-open-state] > svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.collapsible .content {
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.collapsible [data-open-state] {
+  display: contents;
+}
+
+.collapsible[data-open="true"] [data-open-state="false"],
+.collapsible[data-open="false"] [data-open-state="true"] {
+  display: none;
+}
+
+.collapsible .content {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 240ms ease, visibility 0s linear 0s; /* hardcoded: no motion tokens yet */
+}
+
+.collapsible .content > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.collapsible[data-open="false"] .collapsible .content {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows 240ms ease, visibility 0s linear 240ms; /* hardcoded: no motion tokens yet */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collapsible .content,
+  .collapsible[data-open="false"] .collapsible .content {
+    transition: none;
+  }
+}

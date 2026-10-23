@@ -1,0 +1,542 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Collapsible",
+  "slug": "collapsible",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from collapsible.figma.evidence.json (sha256:48ab8d05…) through packages/spec-dictionary/dictionary.json (accordion)",
+    "date": "2026-10-09",
+    "reviewer": "Matt"
+  },
+  "description": "A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+  "archetype": "accordion",
+  "version": "1.2.1",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "10564:116547",
+      "nodeName": "Collapsible",
+      "componentSetKey": "91da27b825395cc6640593feeb5c3b34a9a956d8",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"↳ Collapsible\"; 67 nodes, 120 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/collapsible/collapsible.js",
+      "export": "Collapsible",
+      "cssClass": "c-collapsible"
+    }
+  },
+  "props": [
+    {
+      "name": "content",
+      "lever": true,
+      "type": "expression",
+      "figma": {
+        "kind": "SLOT",
+        "property": ".content#10564:11"
+      },
+      "code": {
+        "prop": "content"
+      },
+      "notes": "Children. A Figma Slot; anything may be placed here."
+    },
+    {
+      "name": "size",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "default",
+        "lg"
+      ],
+      "default": "default",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Size"
+      },
+      "code": {
+        "prop": "size",
+        "attr": "data-size"
+      }
+    },
+    {
+      "name": "open",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "valueMap": {
+          "true": "open",
+          "false": "closed"
+        }
+      },
+      "code": {
+        "prop": "open",
+        "attr": "data-open"
+      }
+    },
+    {
+      "name": "style",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "default",
+        "control"
+      ],
+      "default": "default",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Style"
+      },
+      "code": {
+        "prop": "style",
+        "attr": "data-style"
+      }
+    },
+    {
+      "name": "label",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "label"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    }
+  ],
+  "states": [],
+  "composition": [
+    {
+      "name": "S2_Icon_ChevronDown_20_N",
+      "treatment": "icon"
+    },
+    {
+      "name": "S2_Icon_ChevronUp_20_N",
+      "treatment": "icon"
+    },
+    {
+      "name": "ControlButton — v2",
+      "treatment": "contract",
+      "slug": "control-button"
+    },
+    {
+      "name": "TextCard — v2",
+      "treatment": "contract",
+      "slug": "text-card"
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-collapsible",
+      "figma": ".root",
+      "element": "div",
+      "tokens": {
+        "width": "raw:100%"
+      },
+      "tokensByProp": [
+        {
+          "prop": "open",
+          "map": {
+            "false": {
+              "gap": "{s2a.spacing.2xs}"
+            },
+            "true": {
+              "gap": "{s2a.spacing.sm}"
+            }
+          }
+        }
+      ],
+      "layout": {
+        "display": "inline-flex",
+        "direction": "column",
+        "align": "stretch"
+      },
+      "parts": {
+        "trigger": {
+          "selector": ".c-collapsible__trigger",
+          "figma": "/.trigger",
+          "tokens": {
+            "gap": "{s2a.spacing.xs}"
+          },
+          "tokensByProp": [
+            {
+              "prop": "style",
+              "map": {
+                "default": {
+                  "height": "raw:20px"
+                }
+              }
+            }
+          ],
+          "layout": {
+            "display": "flex",
+            "direction": "row",
+            "justify": "space-between",
+            "align": "center",
+            "stretch": true
+          },
+          "element": "div",
+          "parts": {
+            "control-button": {
+              "selector": ".c-collapsible__control-button",
+              "figma": "/.trigger/.icon-start",
+              "layout": {
+                "display": "flex",
+                "direction": "column"
+              },
+              "slot": {
+                "name": ".icon-start",
+                "accepts": [
+                  "ControlButton"
+                ],
+                "acceptsMode": "restrict",
+                "default": {
+                  "visible": false
+                },
+                "notes": "Composes ControlButton (control-button).",
+                "defaultByProp": [
+                  {
+                    "prop": "style",
+                    "map": {
+                      "default": {
+                        "visible": false
+                      }
+                    }
+                  },
+                  {
+                    "prop": "open",
+                    "map": {
+                      "false": {
+                        "figma": "ControlButton — v2",
+                        "slug": "control-button",
+                        "props": {
+                          "Style": "media",
+                          "Size": "md",
+                          "State": "default",
+                          "Icon": "arrow-right"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "prop": "style",
+                    "map": {
+                      "control": {
+                        "figma": "ControlButton — v2",
+                        "slug": "control-button",
+                        "props": {
+                          "Style": "media",
+                          "Size": "md",
+                          "State": "default",
+                          "Icon": "arrow-down"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "label": {
+              "selector": ".c-collapsible__label",
+              "figma": "/.trigger/.label",
+              "tokens": {
+                "color": "{s2a.color.content.default}",
+                "font-size": "{s2a.typography.font-size.label}",
+                "letter-spacing": "{s2a.typography.letter-spacing.label}",
+                "line-height": "{s2a.typography.line-height.label}"
+              },
+              "tokensByProp": [
+                {
+                  "prop": "size",
+                  "map": {
+                    "default": {
+                      "font-family": "{s2a.font.family.label}",
+                      "font-weight": "{s2a.font.weight.label}"
+                    },
+                    "lg": {
+                      "font-family": "{s2a.font.family.heading}",
+                      "font-size": "{s2a.typography.font-size.heading-6}",
+                      "font-weight": "{s2a.font.weight.heading}",
+                      "letter-spacing": "{s2a.typography.letter-spacing.heading-6}",
+                      "line-height": "raw:18px"
+                    }
+                  }
+                },
+                {
+                  "prop": "style",
+                  "map": {
+                    "control": {
+                      "font-size": "{s2a.typography.font-size.heading-5}",
+                      "letter-spacing": "{s2a.font.letter-spacing.4xl}",
+                      "line-height": "{s2a.typography.line-height.heading-5}"
+                    }
+                  }
+                }
+              ],
+              "layout": {
+                "grow": true
+              },
+              "element": "span",
+              "slot": {
+                "name": "label",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "default": {
+                  "text": "See what's included:"
+                }
+              }
+            },
+            "s2-icon-chevron-down-20-n": {
+              "selector": ".c-collapsible__s2-icon-chevron-down-20-n",
+              "figma": "/.trigger/S2_Icon_ChevronDown_20_N",
+              "tokens": {
+                "width": "raw:20px",
+                "height": "raw:20px"
+              },
+              "layout": {
+                "display": "flex",
+                "direction": "row",
+                "align": "stretch"
+              },
+              "slot": {
+                "name": "S2_Icon_ChevronDown_20_N",
+                "accepts": [
+                  "kind:icon"
+                ],
+                "acceptsMode": "restrict",
+                "default": {
+                  "figma": "S2_Icon_ChevronDown_20_N",
+                  "size": 20,
+                  "manifest": "s2a-icons",
+                  "icon": "s2-chevron-down"
+                },
+                "defaultByProp": [
+                  {
+                    "prop": "style",
+                    "map": {
+                      "control": {
+                        "visible": false
+                      }
+                    }
+                  },
+                  {
+                    "prop": "open",
+                    "map": {
+                      "true": {
+                        "figma": "S2_Icon_ChevronUp_20_N",
+                        "size": 20,
+                        "manifest": "s2a-icons",
+                        "icon": "s2-chevron-up"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "content": {
+          "selector": ".c-collapsible__content",
+          "figma": "/.content",
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "stretch": true
+          },
+          "element": "div",
+          "notes": "The design shows TextCard — v2 here as an example; the slot is open.",
+          "slot": {
+            "name": ".content",
+            "accepts": [],
+            "acceptsMode": "open",
+            "notes": "Figma Slot \".content\": children go here."
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.3.1",
+      "2.1.1",
+      "4.1.2"
+    ],
+    "notes": [
+      "The trigger is a real <button>; aria-expanded is the state, aria-controls the relationship (4.1.2).",
+      "Closed content is hidden from everyone, not only visually (1.3.1).",
+      "Keyboard: Enter/Space toggles; focus stays on the trigger (2.1.1)."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "c-archetype",
+      "question": "Scaffolded as accordion (named \"Collapsible\"). Confirm, or re-run npm run specs:scaffold -- --slug=collapsible --archetype=<link-card|card|collection>.",
+      "chose": "accordion — named \"Collapsible\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=collapsible --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×1; state axis open/closed"
+    },
+    {
+      "id": "c-part-selectors",
+      "question": "control-button, s2-icon-chevron-down-20-n have no class of their own in collapsible.css. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to collapsible.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/collapsible/collapsible.css"
+    },
+    {
+      "id": "c-match",
+      "question": "Structural match says extend: closest existing contract is ControlButton (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending ControlButton (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to ControlButton instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "ControlButton (1) already covers this; extend it."
+    },
+    {
+      "id": "c-code-only-props",
+      "question": "label exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 1 code-only prop as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "collapsible.code.evidence.json"
+    },
+    {
+      "id": "c-classify-1",
+      "question": "\"State\" (open|closed) read as the boolean prop \"open\", not as runtime states — a consumer sets it; the design's open is true. Confirm, or change it in props/states.",
+      "chose": "\"State\" (open|closed) read as the boolean prop \"open\", not as runtime states — a consumer sets it; the design's open is true",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "collapsible.figma.evidence.json axes"
+    },
+    {
+      "id": "c-composes",
+      "question": "Built from 2 component sets, all of which already have a contract: ControlButton ×2, TextCard. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 2 composed sets, 2 already contracted; 2 icon sets left for the icon slot",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "scaffold",
+      "evidence": "collapsible.figma.evidence.json instances"
+    },
+    {
+      "id": "c-layer-names",
+      "question": "1 layers carry Figma-generated names (/.trigger/S2_Icon_ChevronDown_20_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "collapsible.figma.evidence.json anatomy"
+    },
+    {
+      "id": "c-icon-defaults",
+      "question": "The design fills the \"s2-icon-chevron-down-20-n\" slot with S2_Icon_ChevronDown_20_N. The contract records the design's choice; binding it to the code icon library (packages/components/src/icons, manifest s2a-icons) is a decision — Heal in the Contract Book makes it when the names match, or set slot.default.manifest and slot.default.icon by hand.",
+      "chose": "recorded the design's default instance; left the library binding open",
+      "confidence": "medium",
+      "fix": "Set anatomy.root.parts.<part>.slot.default to { \"manifest\": \"s2a-icons\", \"icon\": \"<name>\" }; add the SVG to packages/components/src/icons if it is missing, then npm run specs:assets.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "collapsible.figma.evidence.json instances"
+    },
+    {
+      "id": "c-root-width",
+      "question": "The set draws the component at a fixed width on its page. Is that the component's width, or the frame it was drawn in?",
+      "chose": "the container's: width 100%. A component's width belongs to where it is placed; the design's number is the artboard.",
+      "confidence": "medium",
+      "fix": "If this component really has an intrinsic width, set anatomy.root.tokens.width to it.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "collapsible.figma.evidence.json variants"
+    },
+    {
+      "id": "c-hardcoded-values",
+      "question": "4 values in the design are set with no variable behind them: root width = 100%; root/trigger height@style=default = 20px; root/trigger/s2-icon-chevron-down-20-n width = 20px; root/trigger/s2-icon-chevron-down-20-n height = 20px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "collapsible.figma.evidence.json unboundValues"
+    },
+    {
+      "id": "heal-token-line-height-title-6",
+      "question": "The design binds s2a/typography/line-height/title-6 and the built token CSS does not ship it. Carry the literal until it does?",
+      "chose": "{s2a.typography.line-height.title-6} → raw:18px, the value the design resolves to. A token-pipeline gap: when s2a/typography/line-height/title-6 ships, replace the literal with {s2a.typography.line-height.title-6}.",
+      "decision": "{s2a.typography.line-height.title-6} → raw:18px, the value the design resolves to. A token-pipeline gap: when s2a/typography/line-height/title-6 ships, replace the literal with {s2a.typography.line-height.title-6}.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "collapsible.figma.evidence.json variables · dist/packages/tokens/css/dev",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-icon-root-trigger-control-button-open-false-icon",
+      "question": "The design swaps S2a_Icon_Arrow Right into ControlButton — v2's Icon at root/trigger/control-button @open=false. Which code icon is that?",
+      "chose": "S2a_Icon_Arrow Right → s2a-icons/arrow-right (arrow-right.svg): the library entry for exactly this glyph.",
+      "decision": "S2a_Icon_Arrow Right → s2a-icons/arrow-right (arrow-right.svg): the library entry for exactly this glyph.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "collapsible.figma.evidence.json instances · packages/spec-dictionary/out/assets/s2a-icons.json",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-icon-root-trigger-control-button-style-control-icon",
+      "question": "The design swaps S2a_Icon_Arrow Down into ControlButton — v2's Icon at root/trigger/control-button @style=control. Which code icon is that?",
+      "chose": "S2a_Icon_Arrow Down → s2a-icons/arrow-down (arrow-down.svg): the library entry for exactly this glyph.",
+      "decision": "S2a_Icon_Arrow Down → s2a-icons/arrow-down (arrow-down.svg): the library entry for exactly this glyph.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "collapsible.figma.evidence.json instances · packages/spec-dictionary/out/assets/s2a-icons.json",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-icon-root-trigger-s2-icon-chevron-down-20-n",
+      "question": "The design fills root/trigger/s2-icon-chevron-down-20-n with S2_Icon_ChevronDown_20_N. Which code icon is that?",
+      "chose": "S2_Icon_ChevronDown_20_N → s2a-icons/s2-chevron-down (s2-chevron-down.svg): the library entry for exactly this glyph.",
+      "decision": "S2_Icon_ChevronDown_20_N → s2a-icons/s2-chevron-down (s2-chevron-down.svg): the library entry for exactly this glyph.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "collapsible.figma.evidence.json instances · packages/spec-dictionary/out/assets/s2a-icons.json",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-icon-root-trigger-s2-icon-chevron-down-20-n-open-true",
+      "question": "The design fills root/trigger/s2-icon-chevron-down-20-n @open=true with S2_Icon_ChevronUp_20_N. Which code icon is that?",
+      "chose": "S2_Icon_ChevronUp_20_N → s2a-icons/s2-chevron-up (s2-chevron-up.svg): the library entry for exactly this glyph.",
+      "decision": "S2_Icon_ChevronUp_20_N → s2a-icons/s2-chevron-up (s2-chevron-up.svg): the library entry for exactly this glyph.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "collapsible.figma.evidence.json instances · packages/spec-dictionary/out/assets/s2a-icons.json",
+      "confidence": "high"
+    }
+  ]
+}

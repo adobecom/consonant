@@ -1,0 +1,275 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "MerchCardSelectPromo",
+  "setName": "MerchCard/SelectPromo",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "div",
+    "bindings": {
+      "border-radius": [
+        "s2a/border/radius/8"
+      ],
+      "background-color": [
+        "s2a/color/background/subtle"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".select-trigger",
+        "source": "/.trigger",
+        "element": "div",
+        "bindings": {
+          "border-radius": [
+            "s2a/border/radius/8"
+          ],
+          "background-color": [
+            "s2a/color/background/default"
+          ],
+          "gap": [
+            "s2a/spacing/8"
+          ],
+          "padding-bottom": [
+            "s2a/spacing/12"
+          ],
+          "padding-left": [
+            "s2a/spacing/12"
+          ],
+          "padding-right": [
+            "s2a/spacing/12"
+          ],
+          "padding-top": [
+            "s2a/spacing/12"
+          ],
+          "border-width": [
+            "s2a/border/width/1"
+          ],
+          "border-color": [
+            "s2a/color/border/subtle"
+          ]
+        },
+        "slot": null,
+        "children": [
+          {
+            "name": ".value",
+            "source": "/.trigger/.value",
+            "element": "span",
+            "bindings": {
+              "color": [
+                "s2a/color/content/default"
+              ],
+              "font-family": [
+                "s2a/font/family/label"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/label"
+              ],
+              "font-weight": [
+                "s2a/font/weight/label"
+              ],
+              "letter-spacing": [
+                "s2a/typography/letter-spacing/label"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/label"
+              ]
+            },
+            "slot": {
+              "name": "value",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          },
+          {
+            "name": ".s2a-icon-chevron-down",
+            "source": "/.trigger/.icon",
+            "element": null,
+            "bindings": {},
+            "slot": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".helper",
+        "source": "/.helper",
+        "element": "div",
+        "bindings": {
+          "padding-bottom": [
+            "s2a/spacing/8"
+          ],
+          "padding-left": [
+            "s2a/spacing/12"
+          ],
+          "padding-right": [
+            "s2a/spacing/12"
+          ],
+          "padding-top": [
+            "s2a/spacing/8"
+          ]
+        },
+        "slot": null,
+        "children": [
+          {
+            "name": ".helper-text",
+            "source": "/.helper/HelperText",
+            "element": null,
+            "bindings": {},
+            "slot": {
+              "name": "HelperText",
+              "accepts": [
+                "HelperText"
+              ],
+              "mode": "restrict"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10320:102024",
+    "nodeName": "MerchCard/SelectPromo",
+    "componentSetKey": "21d873b57a741880c8aac50fa2391c6938c5cb94",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "options": [
+        "collapsed"
+      ],
+      "defaultValue": "collapsed"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-merch-card-select-promo",
+      "bindings": {
+        "border-radius": [
+          "s2a/border/radius/8"
+        ],
+        "background-color": [
+          "s2a/color/background/subtle"
+        ]
+      }
+    },
+    {
+      "name": "/.trigger",
+      "selector": ".c-merch-card-select-promo__select-trigger",
+      "bindings": {
+        "border-radius": [
+          "s2a/border/radius/8"
+        ],
+        "background-color": [
+          "s2a/color/background/default"
+        ],
+        "gap": [
+          "s2a/spacing/8"
+        ],
+        "padding-bottom": [
+          "s2a/spacing/12"
+        ],
+        "padding-left": [
+          "s2a/spacing/12"
+        ],
+        "padding-right": [
+          "s2a/spacing/12"
+        ],
+        "padding-top": [
+          "s2a/spacing/12"
+        ],
+        "border-width": [
+          "s2a/border/width/1"
+        ],
+        "border-color": [
+          "s2a/color/border/subtle"
+        ]
+      }
+    },
+    {
+      "name": "/.trigger/.value",
+      "selector": ".c-merch-card-select-promo__value",
+      "bindings": {
+        "color": [
+          "s2a/color/content/default"
+        ],
+        "font-family": [
+          "s2a/font/family/label"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/label"
+        ],
+        "font-weight": [
+          "s2a/font/weight/label"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/label"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/label"
+        ]
+      },
+      "slot": {
+        "name": "value",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.trigger/.icon",
+      "selector": ".c-merch-card-select-promo__s2a-icon-chevron-down",
+      "bindings": {}
+    },
+    {
+      "name": "/.helper",
+      "selector": ".c-merch-card-select-promo__helper",
+      "bindings": {
+        "padding-bottom": [
+          "s2a/spacing/8"
+        ],
+        "padding-left": [
+          "s2a/spacing/12"
+        ],
+        "padding-right": [
+          "s2a/spacing/12"
+        ],
+        "padding-top": [
+          "s2a/spacing/8"
+        ]
+      }
+    },
+    {
+      "name": "/.helper/HelperText",
+      "selector": ".c-merch-card-select-promo__helper-text",
+      "bindings": {},
+      "slot": {
+        "name": "HelperText",
+        "accepts": [
+          "HelperText"
+        ],
+        "mode": "restrict"
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/label"
+  ]
+}

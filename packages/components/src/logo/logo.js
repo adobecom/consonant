@@ -56,18 +56,15 @@ const MARKS = {
  *
  * @param {Object} args
  * @param {"default"|"legacy"|"abbreviated"} args.version - which mark to render
- * @param {"on-light"|"on-dark"} args.context - surface context (drives color token)
  * @param {string} args.label - accessible name
  */
 export const Logo = ({
   version = "default",
-  context = "on-light",
   label = "Adobe",
 } = {}) => html`
   <span
     class="c-logo"
     data-version=${version}
-    data-context=${context}
     role="img"
     aria-label=${label}
   >

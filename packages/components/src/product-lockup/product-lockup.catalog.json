@@ -1,0 +1,137 @@
+{
+  "id": "s2a.product-lockup",
+  "name": "ProductLockup",
+  "slug": "product-lockup",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "Combines an Adobe app icon, a product label, and an optional caret into a single reusable identity unit — the building block for global nav, cards, and product tiles.",
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "orientation",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showAppIcon",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "showIconEnd",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "showSecondAppIcon",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "style",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "width",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "productName",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "app",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "secondApp",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showSecondIcon",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "styleVariant",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showIconStart",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "showIcon",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "iconSize",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "caret",
+      "type": "expression",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.frame-1",
+    "root.frame-1.icons",
+    "root.frame-1.icons.app-icon",
+    "root.frame-1.icons.app-icon-2",
+    "root.frame-1.label",
+    "root.s2a-icon-chevron-right"
+  ],
+  "slots": [
+    {
+      "path": "root.frame-1.icons.app-icon",
+      "accepts": [
+        "AppIcon"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.frame-1.icons.app-icon-2",
+      "accepts": [
+        "AppIcon"
+      ],
+      "mode": "restrict"
+    },
+    {
+      "path": "root.frame-1.label",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 8,
+  "a11y": {
+    "role": null,
+    "wcag": []
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/product-lockup/product-lockup.js",
+      "export": "ProductLockup",
+      "controller": null,
+      "cssClass": "c-product-lockup"
+    },
+    "figma": "11272:217527"
+  },
+  "openDecisions": 8
+}

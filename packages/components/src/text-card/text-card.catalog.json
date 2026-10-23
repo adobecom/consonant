@@ -1,0 +1,99 @@
+{
+  "id": "s2a.text-card",
+  "name": "TextCard",
+  "slug": "text-card",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "Text-only news / content card. Headline, optional body copy, and inline read-more CTA. No media. Use in 3-up news grids on light surfaces.",
+  "props": [
+    {
+      "name": "body",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "cta",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "headline",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "showBody",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "showCta",
+      "type": "boolean",
+      "lever": false
+    },
+    {
+      "name": "style",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "ctaLabel",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "ctaHref",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.headline-body",
+    "root.headline-body.headline",
+    "root.headline-body.body",
+    "root.link"
+  ],
+  "slots": [
+    {
+      "path": "root.headline-body.headline",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.headline-body.body",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    },
+    {
+      "path": "root.link",
+      "accepts": [
+        "Link"
+      ],
+      "mode": "restrict"
+    }
+  ],
+  "tokens": 20,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.10"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/text-card/text-card.js",
+      "export": "TextCard",
+      "controller": null,
+      "cssClass": "c-text-card"
+    },
+    "figma": "11362:245184"
+  },
+  "openDecisions": 7
+}

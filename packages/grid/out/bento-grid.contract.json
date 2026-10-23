@@ -1,0 +1,347 @@
+{
+  "$generated": {
+    "name": "s2a-grid-contract-transform",
+    "version": "1"
+  },
+  "id": "s2a.grid.bento-grid",
+  "slug": "bento-grid",
+  "name": "Bento grid",
+  "version": "1.0.0",
+  "kind": "grid",
+  "tier": "sectional",
+  "status": "shipped",
+  "supersededBy": null,
+  "description": "A modular grid with fixed-height rows and dense packing: children declare both a column span and a row span, and the browser backfills gaps. For tile walls and bento sections where cards are deliberately different sizes. The fixed row height is what makes row spans predictable — in a normal row, rows are content-sized and a row span means nothing.",
+  "anchors": {
+    "code": {
+      "stylesheet": "packages/grid/src/s2a-layout-grids.css",
+      "importPath": "@adobecom/s2a-grid/css/grid.css",
+      "rootClass": "bento-grid",
+      "childClass": "row-span-lg-2"
+    },
+    "figma": {
+      "collectionId": "VariableCollectionId:6:178",
+      "layerName": "UPS grid",
+      "designOnly": true
+    }
+  },
+  "breakpoints": [
+    {
+      "id": "sm",
+      "label": "S — Mobile",
+      "figmaMode": "sm",
+      "figmaLabel": "Mobile",
+      "minWidth": null,
+      "maxWidth": 767,
+      "mediaQuery": null,
+      "columns": 6,
+      "mockWidth": 375,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": null,
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.sm.css",
+        "mediaQuery": null,
+        "minWidth": null
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "md",
+      "label": "M — Tablet landscape",
+      "figmaMode": "md",
+      "figmaLabel": "Tablet",
+      "minWidth": 768,
+      "maxWidth": 1279,
+      "mediaQuery": "@media (width >= 768px)",
+      "columns": 12,
+      "mockWidth": 768,
+      "portraitEscape": 900,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 768px)",
+        "minWidth": 768
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.md.css",
+        "mediaQuery": "@media (width >= 768px)",
+        "minWidth": 768
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "lg",
+      "label": "L — Desktop",
+      "figmaMode": "lg",
+      "figmaLabel": "Desktop",
+      "minWidth": 1280,
+      "maxWidth": 1440,
+      "mediaQuery": "@media (width >= 1280px)",
+      "columns": 12,
+      "mockWidth": 1440,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 1280px)",
+        "minWidth": 1280
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.lg.css",
+        "mediaQuery": "@media (width >= 1280px)",
+        "minWidth": 1280
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "xl",
+      "label": "XL — Desktop HD",
+      "figmaMode": "xl",
+      "figmaLabel": "Desktop XL",
+      "minWidth": 1441,
+      "maxWidth": 2560,
+      "mediaQuery": "@media (width >= 1441px)",
+      "columns": 12,
+      "mockWidth": 2560,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media screen and (min-width: 1441px)",
+        "minWidth": 1441
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
+        "mediaQuery": "@media (width >= 1441px)",
+        "minWidth": 1441
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    }
+  ],
+  "breakpointBehavior": [
+    {
+      "breakpoint": "sm",
+      "behavior": "6 columns, 120px rows, dense packing. row-span-sm-* applies.",
+      "columns": 6
+    },
+    {
+      "breakpoint": "md",
+      "behavior": "12 columns, 120px rows. row-span-md-* overrides row-span-lg-* in this range.",
+      "columns": 12
+    },
+    {
+      "breakpoint": "lg",
+      "behavior": "12 columns, 120px rows. row-span-lg-* re-asserted at 1280.",
+      "columns": 12
+    },
+    {
+      "breakpoint": "xl",
+      "behavior": "Inherits lg. The tiles grow with the container, not the row height.",
+      "columns": 12
+    }
+  ],
+  "tokens": [
+    {
+      "role": "gutter",
+      "ref": "{s2a.spacing.xs}",
+      "breakpoint": "all",
+      "cssVar": "--s2a-spacing-xs",
+      "shipped": true,
+      "values": {
+        "sm": 8,
+        "md": 8,
+        "lg": 8,
+        "xl": 8
+      }
+    }
+  ],
+  "surface": {
+    "classes": [
+      {
+        "name": "bento-grid",
+        "purpose": "Dense-packed modular grid with fixed row height.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "display": "grid",
+              "grid-template-columns": "repeat(var(--s2a-grid-columns), 1fr)",
+              "grid-auto-rows": "var(--s2a-grid-row-height)",
+              "grid-auto-flow": "dense",
+              "gap": "var(--s2a-grid-gutter)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "row-span-sm-2",
+        "purpose": "Occupy two rows at mobile.",
+        "pattern": "row-span-sm-{1..12|full}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "grid-row": "span 2"
+            }
+          }
+        ]
+      },
+      {
+        "name": "row-span-md-2",
+        "purpose": "Occupy two rows in the tablet range.",
+        "pattern": "row-span-md-{1..12|full}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "grid-row": "span 2"
+            }
+          }
+        ]
+      },
+      {
+        "name": "row-span-lg-2",
+        "purpose": "Occupy two rows from 768 up.",
+        "pattern": "row-span-lg-{1..12|full}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "grid-row": "span 2"
+            }
+          },
+          {
+            "media": "@media (min-width: 1280px)",
+            "declarations": {
+              "grid-row": "span 2"
+            }
+          }
+        ]
+      }
+    ],
+    "customProperties": [
+      {
+        "name": "--s2a-grid-row-height",
+        "purpose": "The fixed row height, 120px. The one number in the grid system that is not yet a token.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "selector": ":root",
+            "value": "120px"
+          }
+        ]
+      }
+    ]
+  },
+  "design": {
+    "collectionId": "VariableCollectionId:6:178",
+    "designOnly": true,
+    "values": {}
+  },
+  "rules": [
+    {
+      "id": "BENTO_CLASS",
+      "statement": "The bento grid class exists.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "bento-grid"
+      }
+    },
+    {
+      "id": "BENTO_ROW_HEIGHT",
+      "statement": "Rows are a fixed 120px, which is what makes a row span mean something.",
+      "severity": "fail",
+      "check": {
+        "type": "customPropertyEquals",
+        "name": "--s2a-grid-row-height",
+        "media": null,
+        "expectedPx": 120
+      }
+    },
+    {
+      "id": "BENTO_DENSE",
+      "statement": "Packing is dense, so a short tile backfills a hole left by a tall one instead of leaving a gap.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "bento-grid",
+        "media": null,
+        "property": "grid-auto-flow",
+        "expectedValue": "dense"
+      }
+    },
+    {
+      "id": "BENTO_SPANS_SM",
+      "statement": "Row spans exist for the mobile range.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "row-span-sm-2"
+      }
+    },
+    {
+      "id": "BENTO_SPANS_MD",
+      "statement": "Row spans exist for the tablet range.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "row-span-md-2"
+      }
+    },
+    {
+      "id": "BENTO_SPANS_LG",
+      "statement": "Row spans exist for the desktop range.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "row-span-lg-2"
+      }
+    },
+    {
+      "id": "BENTO_ROW_HEIGHT_TOKEN",
+      "statement": "The row height should be a semantic token like every other dimension in the grid, not a literal in the stylesheet.",
+      "severity": "warn",
+      "check": {
+        "type": "tokenShipped",
+        "ref": "{s2a.grid.row-height}"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "BENTO_ROW_HEIGHT_RESPONSIVE",
+      "question": "Should the 120px row height change per breakpoint? It is currently fixed at every range, so a two-row tile is 248px tall on a phone and on a 2560 display.",
+      "state": "open",
+      "owner": "Matthew Huntsberry",
+      "evidence": "The Bento component and its visual eval pass at 120px today (10/10 within 8%), so this is a question about the general grid rather than a defect in the shipped component."
+    }
+  ],
+  "visualize": {
+    "demo": "bento",
+    "overlay": false,
+    "note": "Tiles carry both a column span and a row span; the dense packing is visible where a small tile backfills."
+  },
+  "provenance": {
+    "defs": "sha256:c767ccca41ba92a825d096d6e390f51b8dd606ffb0bb5f641a8b5d70caf0f034",
+    "code": "sha256:2d8048246d27d063bf7883e5e461991c5fb2c29f93d62516512512e6a13b73fb",
+    "figma": "sha256:ab9f2703866168d507517b490fc100eb1401a93b3bc07ee3d033b8220e5872ac",
+    "contract": "sha256:39065fce8647ed12ec840de9680832b994d2dd239152c11c5bdbdd71911d59d3"
+  }
+}

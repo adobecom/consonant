@@ -54,7 +54,7 @@ export const Error = {
 export const InFieldContext = {
   name: "In a field context",
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 8px; width: 280px;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-xs); width: 280px;">
       <label class="c-label" for="sb-helper-demo-input">Email address</label>
       <input
         id="sb-helper-demo-input"
@@ -63,10 +63,10 @@ export const InFieldContext = {
         aria-invalid="true"
         placeholder="you@example.com"
         style="
-          padding: 12px 16px;
+          padding: var(--s2a-spacing-sm) var(--s2a-spacing-md);
           font: inherit;
-          border: 1px solid var(--s2a-color-border-utility-error, #d73220);
-          border-radius: var(--s2a-border-radius-sm, 12px);
+          border: var(--s2a-border-width-sm) solid var(--s2a-color-border-utility-error);
+          border-radius: var(--s2a-border-radius-sm);
         "
       />
       ${HelperText({

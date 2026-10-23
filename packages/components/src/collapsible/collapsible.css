@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
   cursor: pointer;
   list-style: none;
   color: var(--s2a-color-content-default);
@@ -18,10 +18,10 @@
 }
 
 .c-collapsible__label {
-  font-family: var(--s2a-font-family-label, "Adobe Clean", sans-serif);
-  font-weight: var(--s2a-font-weight-label, 700);
-  font-size: var(--s2a-font-size-sm, 14px);
-  line-height: var(--s2a-font-line-height-xs, 18px);
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-font-size-sm);
+  line-height: var(--s2a-font-line-height-xs);
   color: var(--s2a-color-content-default);
 }
 
@@ -36,5 +36,5 @@
 }
 
 .c-collapsible__content {
-  margin-top: var(--s2a-spacing-sm, 12px);
+  margin-top: var(--s2a-spacing-sm);
 }

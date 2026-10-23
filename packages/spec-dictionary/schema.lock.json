@@ -1,0 +1,8 @@
+{
+  "note": "Hashes of the vendored contract schemas. A change here is deliberate: validate every spec and defs against the new schema (npm run gate), then npm run gate:lock.",
+  "updated": "2026-10-23",
+  "files": {
+    "apps/s2a-ds-mcp/src/spec-schema.ts": "sha256:a46d466e719dd86e132c60fc96e1a03ebcc93f53d168a795da3bb1ece41472bf",
+    "packages/components/defs.schema.json": "sha256:ebfb258d15f0ac7e2e9b960ea103c506f6d9b0340432a4217ea97dd2d48321b9"
+  }
+}

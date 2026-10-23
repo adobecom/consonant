@@ -24,7 +24,7 @@ export interface TokenIndex {
 }
 
 /** Matches a custom-property DEFINITION: `--s2a-foo: value`. */
-const DEF_RE = /(--s2a-[a-z0-9-]+)\s*:/g;
+const DEF_RE = /(--s2a-[a-z0-9_-]+)\s*:/g;
 
 /** Load the token index from the built token CSS under a repo root. */
 export function loadTokenIndex(dsRoot: string): TokenIndex {
@@ -33,7 +33,9 @@ export function loadTokenIndex(dsRoot: string): TokenIndex {
   const known = new Set<string>();
 
   if (!existsSync(dir)) {
-    throw new Error(`[s2a-validators] built token CSS not found at ${dir}. Run the token build first.`);
+    throw new Error(
+      `[s2a-validators] built token CSS not found at ${dir}. Run the token build first.`,
+    );
   }
 
   for (const fileName of readdirSync(dir)) {

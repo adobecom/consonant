@@ -39,7 +39,7 @@
   flex: none;
   width: 20px;
   height: 20px;
-  border-radius: var(--s2a-border-radius-round, 50%);
+  border-radius: var(--s2a-border-radius-round);
   transition: background-color 130ms ease;
 }
 
@@ -78,7 +78,8 @@
 /* [focus ring] — 2px focus-ring/default */
 .c-radio__input:focus-visible + .c-radio__control,
 .c-radio[data-force-state="focus"] .c-radio__control {
-  box-shadow: 0 0 0 var(--s2a-border-width-md, 2px) var(--s2a-color-focus-ring-default);
+  box-shadow: 0 0 0 var(--s2a-border-width-md)
+    var(--s2a-color-focus-ring-default);
 }
 
 /* .label — subtle when unselected, default when selected (per Figma) */

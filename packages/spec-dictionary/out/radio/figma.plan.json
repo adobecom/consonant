@@ -1,0 +1,202 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Radio",
+  "setName": "Radio",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "label",
+    "bindings": {},
+    "slot": null,
+    "children": [
+      {
+        "name": ".control",
+        "source": "/_radio",
+        "element": "div",
+        "bindings": {},
+        "slot": null,
+        "children": [
+          {
+            "name": ".ring",
+            "source": "/_radio/.ring",
+            "element": "div",
+            "bindings": {
+              "border-color": [
+                "s2a/color/content/default"
+              ]
+            },
+            "slot": null,
+            "children": []
+          },
+          {
+            "name": ".dot",
+            "source": "/_radio/.dot",
+            "element": "div",
+            "bindings": {
+              "background-color": [
+                "s2a/color/content/default"
+              ]
+            },
+            "slot": null,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".label",
+        "source": "/.label",
+        "element": "span",
+        "bindings": {
+          "font-family": [
+            "s2a/font/family/label"
+          ],
+          "font-size": [
+            "s2a/typography/font-size/label"
+          ],
+          "font-weight": [
+            "s2a/font/weight/label"
+          ],
+          "letter-spacing": [
+            "s2a/typography/letter-spacing/label"
+          ],
+          "line-height": [
+            "s2a/typography/line-height/label"
+          ]
+        },
+        "slot": {
+          "name": "label",
+          "accepts": [
+            "kind:text"
+          ],
+          "mode": "prefer"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "11586:206620",
+    "nodeName": "Radio",
+    "componentSetKey": "d469c02b526f01dd8985387fbae75c1f6626ba3a",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Selected",
+      "type": "VARIANT",
+      "options": [],
+      "defaultValue": false
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "hover",
+        "focus",
+        "disabled"
+      ],
+      "defaultValue": "default",
+      "fromState": "hover"
+    },
+    {
+      "name": "Label#11586:0",
+      "type": "TEXT",
+      "forProp": "label"
+    }
+  ],
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      }
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      }
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=disabled"
+      }
+    }
+  ],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-radio",
+      "bindings": {}
+    },
+    {
+      "name": "/_radio",
+      "selector": ".c-radio__control",
+      "bindings": {}
+    },
+    {
+      "name": "/_radio/.ring",
+      "selector": ".c-radio__ring",
+      "bindings": {
+        "border-color": [
+          "s2a/color/content/default"
+        ]
+      }
+    },
+    {
+      "name": "/_radio/.dot",
+      "selector": ".c-radio__dot",
+      "bindings": {
+        "background-color": [
+          "s2a/color/content/default"
+        ]
+      }
+    },
+    {
+      "name": "/.label",
+      "selector": ".c-radio__label",
+      "bindings": {
+        "font-family": [
+          "s2a/font/family/label"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/label"
+        ],
+        "font-weight": [
+          "s2a/font/weight/label"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/label"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/label"
+        ]
+      },
+      "slot": {
+        "name": "label",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/label"
+  ]
+}

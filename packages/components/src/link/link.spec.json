@@ -1,50 +1,856 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "Link",
   "slug": "link",
   "cssClass": "c-link",
+  "figmaNodeId": "12823:184375",
   "storybookId": "link",
-  "description": "Standalone text link atom. Two kinds: action (label-ramp CTA link with chevron) and text (body-md inline link). Matches Figma component set 2609:873 on the ↳ Link page.",
-  "figma": {
-    "componentSetId": "2609:873",
-    "fileKey": "oXIFqtnrYNdTIjqb1sbJau"
-  },
+  "description": "A text link that adapts to light and dark automatically — no Context axis, theme-aware via content/default.",
   "variants": {
-    "kind": ["action", "text"],
-    "emphasis": ["default", "subtle"],
-    "context": ["on-light", "on-dark"]
-  },
-  "props": [
-    { "name": "label", "type": "string", "defaultValue": "\"Label\"", "description": "Link text (Figma TEXT prop Label)" },
-    { "name": "href", "type": "string", "defaultValue": "\"#\"", "description": "Destination URL" },
-    { "name": "kind", "type": "string", "defaultValue": "\"action\"", "enum": ["action", "text"], "description": "action = 14px Bold label ramp; text = 16px Regular body-md ramp" },
-    { "name": "emphasis", "type": "string", "defaultValue": "\"default\"", "enum": ["default", "subtle"], "description": "text kind only — subtle uses content/body-subtle" },
-    { "name": "context", "type": "string", "defaultValue": "\"on-light\"", "enum": ["on-light", "on-dark"], "description": "on-dark switches to content/knockout" },
-    { "name": "underline", "type": "boolean", "defaultValue": "false", "description": "Persistent underline (Figma BOOLEAN prop Underline)" },
-    { "name": "showIconEnd", "type": "boolean", "defaultValue": "true", "description": "Trailing 12px chevron (Figma Show Icon End)" }
-  ],
-  "tokenBindings": {
-    "color:action:on-light": "--s2a-color-button-content-primary-solid-inverse",
-    "color:text:on-light": "--s2a-color-content-default",
-    "color:text-subtle:on-light": "--s2a-color-content-body-subtle",
-    "color:on-dark": "--s2a-color-content-knockout",
-    "outline-color:focus": "--s2a-color-focus-ring-default",
-    "outline-color:focus:on-dark": "--s2a-color-focus-ring-knockout",
-    "gap": "--s2a-spacing-xs",
-    "typography:action": "label ramp (--s2a-*-label)",
-    "typography:text": "body-md ramp (--s2a-typography-*-body-md)"
-  },
-  "a11y": {
-    "role": "link (native <a>)",
-    "wcag": ["2.4.4", "2.4.7", "1.4.1"],
-    "notes": [
-      "Rendered as a native <a href> — no ARIA needed.",
-      "Focus ring is 1px focus-ring/default at 3px offset via :focus-visible.",
-      "Per Figma, hover/active states carry no visual change; when the link sits in body copy, set underline=true so color is not the only affordance (WCAG 1.4.1)."
+    "Emphasis": [
+      "default",
+      "subtle"
+    ],
+    "Kind": [
+      "action",
+      "text"
     ]
   },
-  "notes": [
-    "Figma's on-light text/default variant has an unbound raw #000 fill; code binds --s2a-color-content-default as the semantic equivalent.",
-    "Block padding (6px action / 2px text) is structural — no spacing token rung exists for 6px.",
-    "on-light action binds --s2a-color-button-content-primary-solid-inverse exactly as Figma does, even though a content/* token might seem more natural."
-  ]
+  "props": [
+    {
+      "name": "emphasis",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "enum": [
+        "default",
+        "subtle"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Emphasis",
+          "verified": true,
+          "options": [
+            "default",
+            "subtle"
+          ]
+        },
+        "code": {
+          "prop": "emphasis",
+          "attr": "data-emphasis",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "iconEnd",
+      "type": "string",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon End#2609:0",
+          "verified": true
+        },
+        "code": {
+          "prop": "iconEnd",
+          "attr": null,
+          "extracted": false,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "defaultValue": "\"action\"",
+      "enum": [
+        "action",
+        "text"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Kind",
+          "verified": true,
+          "options": [
+            "action",
+            "text"
+          ]
+        },
+        "code": {
+          "prop": "kind",
+          "attr": "data-kind",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"Label\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label#2277:4",
+          "verified": true
+        },
+        "code": {
+          "prop": "label",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "showIconEnd",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Figma authoring toggle for the \"Icon End\" swap. In code the slot either has content or it does not — this is not a prop a consumer passes.",
+      "lever": false,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Icon End#2541:0",
+          "verified": true
+        },
+        "code": {
+          "prop": "showIconEnd",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "underline",
+      "type": "boolean",
+      "defaultValue": "false",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Underline#10238:0",
+          "verified": true
+        },
+        "code": {
+          "prop": "underline",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "defaultValue": "\"#\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "href",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
+  ],
+  "tokenBindings": {
+    "root-gap": "--s2a-spacing-xs",
+    "call-to-action-color@emphasis=default": "--s2a-color-content-default",
+    "call-to-action-color@emphasis=subtle": "--s2a-color-content-body-subtle",
+    "call-to-action-font-family@kind=action": "--s2a-font-family-label",
+    "call-to-action-font-size@kind=action": "--s2a-typography-font-size-label",
+    "call-to-action-font-weight@kind=action": "--s2a-font-weight-label",
+    "call-to-action-letter-spacing@kind=action": "--s2a-typography-letter-spacing-label",
+    "call-to-action-line-height@kind=action": "--s2a-typography-line-height-label",
+    "call-to-action-font-family@kind=text": "--s2a-font-family-body",
+    "call-to-action-font-size@kind=text": "--s2a-typography-font-size-body-md",
+    "call-to-action-font-weight@kind=text": "--s2a-font-weight-body",
+    "call-to-action-letter-spacing@kind=text": "--s2a-typography-letter-spacing-body-md",
+    "call-to-action-line-height@kind=text": "--s2a-typography-line-height-body-md",
+    "underline-background-color@emphasis=default": "--s2a-color-content-default",
+    "underline-background-color@emphasis=subtle": "--s2a-color-content-body-subtle",
+    "icon-color-color@emphasis=default": "--s2a-color-content-default",
+    "icon-color-color@emphasis=subtle": "--s2a-color-content-body-subtle"
+  },
+  "tier": "component",
+  "composedOf": [],
+  "a11y": {
+    "wcag": [
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Renders a native <button>, or an <a> when it navigates — never a div with a click handler.",
+      "The label is the accessible name; an icon-only button needs an aria-label.",
+      "Focus is visible on the control itself (2.4.7) and the target is at least 24x24 (2.5.8).",
+      "Disabled is conveyed to assistive tech, not by colour alone (1.4.1).",
+      "Focus state shows a visible focus ring (WCAG 2.2 AA · SC 2.4.7 Focus Visible). Contrast holds in both themes because content/default resolves to a contrasting value per mode (SC 1.4.3 Contrast Minimum)."
+    ]
+  },
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      },
+      "code": {
+        "mechanism": ":hover"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      },
+      "code": {
+        "mechanism": ":focus-visible"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "active",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=active"
+      },
+      "code": {
+        "mechanism": ":active"
+      },
+      "notes": "Runtime state, never an authored prop."
+    }
+  ],
+  "anatomy": {
+    "selector": ".c-link",
+    "figma": ".root",
+    "element": "button",
+    "elementByProp": {
+      "prop": "href",
+      "map": {
+        "": "button",
+        "*": "a"
+      }
+    },
+    "layout": {
+      "display": "inline-flex",
+      "direction": "row",
+      "align": "center"
+    },
+    "tokens": {
+      "gap": {
+        "value": "{s2a.spacing.xs}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.xs}",
+            "cssVar": "--s2a-spacing-xs",
+            "figma": "s2a/spacing/xs",
+            "shipped": true,
+            "value": "8px"
+          }
+        ]
+      }
+    },
+    "tokensByProp": [
+      {
+        "prop": "kind",
+        "map": {
+          "action": {
+            "padding-top": {
+              "value": "raw:6px",
+              "raw": true,
+              "tokens": []
+            },
+            "padding-bottom": {
+              "value": "raw:6px",
+              "raw": true,
+              "tokens": []
+            }
+          },
+          "text": {
+            "padding-top": {
+              "value": "raw:2px",
+              "raw": true,
+              "tokens": []
+            },
+            "padding-bottom": {
+              "value": "raw:2px",
+              "raw": true,
+              "tokens": []
+            }
+          }
+        }
+      }
+    ],
+    "parts": {
+      "label-wrap": {
+        "selector": ".c-link__label-wrap",
+        "figma": "/.label-wrap",
+        "element": "div",
+        "layout": {
+          "display": "inline-flex",
+          "direction": "column"
+        },
+        "tokens": {
+          "gap": {
+            "value": "raw:1px",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "parts": {
+          "call-to-action": {
+            "selector": ".c-link__call-to-action",
+            "figma": "/.label-wrap/Call to Action",
+            "element": "span",
+            "tokensByProp": [
+              {
+                "prop": "emphasis",
+                "map": {
+                  "default": {
+                    "color": {
+                      "value": "{s2a.color.content.default}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.default}",
+                          "cssVar": "--s2a-color-content-default",
+                          "figma": "s2a/color/content/default",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "subtle": {
+                    "color": {
+                      "value": "{s2a.color.content.body-subtle}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.body-subtle}",
+                          "cssVar": "--s2a-color-content-body-subtle",
+                          "figma": "s2a/color/content/body-subtle",
+                          "shipped": true,
+                          "value": "rgb(0 0 0 / 64%)",
+                          "dark": "rgb(255 255 255 / 64%)"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "prop": "kind",
+                "map": {
+                  "action": {
+                    "font-family": {
+                      "value": "{s2a.font.family.label}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.font.family.label}",
+                          "cssVar": "--s2a-font-family-label",
+                          "figma": "s2a/font/family/label",
+                          "shipped": true,
+                          "value": "\"Adobe Clean\""
+                        }
+                      ]
+                    },
+                    "font-size": {
+                      "value": "{s2a.typography.font-size.label}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.typography.font-size.label}",
+                          "cssVar": "--s2a-typography-font-size-label",
+                          "figma": "s2a/typography/font-size/label",
+                          "shipped": true,
+                          "value": "0.875rem"
+                        }
+                      ]
+                    },
+                    "font-weight": {
+                      "value": "{s2a.font.weight.label}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.font.weight.label}",
+                          "cssVar": "--s2a-font-weight-label",
+                          "figma": "s2a/font/weight/label",
+                          "shipped": true,
+                          "value": "700"
+                        }
+                      ]
+                    },
+                    "letter-spacing": {
+                      "value": "{s2a.typography.letter-spacing.label}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.typography.letter-spacing.label}",
+                          "cssVar": "--s2a-typography-letter-spacing-label",
+                          "figma": "s2a/typography/letter-spacing/label",
+                          "shipped": true,
+                          "value": "0"
+                        }
+                      ]
+                    },
+                    "line-height": {
+                      "value": "{s2a.typography.line-height.label}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.typography.line-height.label}",
+                          "cssVar": "--s2a-typography-line-height-label",
+                          "figma": "s2a/typography/line-height/label",
+                          "shipped": true,
+                          "value": "18px"
+                        }
+                      ]
+                    }
+                  },
+                  "text": {
+                    "font-family": {
+                      "value": "{s2a.font.family.body}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.font.family.body}",
+                          "cssVar": "--s2a-font-family-body",
+                          "figma": "s2a/font/family/body",
+                          "shipped": true,
+                          "value": "\"Adobe Clean\""
+                        }
+                      ]
+                    },
+                    "font-size": {
+                      "value": "{s2a.typography.font-size.body-md}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.typography.font-size.body-md}",
+                          "cssVar": "--s2a-typography-font-size-body-md",
+                          "figma": "s2a/typography/font-size/body-md",
+                          "shipped": true,
+                          "value": "1rem"
+                        }
+                      ]
+                    },
+                    "font-weight": {
+                      "value": "{s2a.font.weight.body}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.font.weight.body}",
+                          "cssVar": "--s2a-font-weight-body",
+                          "figma": "s2a/font/weight/body",
+                          "shipped": true,
+                          "value": "400"
+                        }
+                      ]
+                    },
+                    "letter-spacing": {
+                      "value": "{s2a.typography.letter-spacing.body-md}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.typography.letter-spacing.body-md}",
+                          "cssVar": "--s2a-typography-letter-spacing-body-md",
+                          "figma": "s2a/typography/letter-spacing/body-md",
+                          "shipped": true,
+                          "value": "0"
+                        }
+                      ]
+                    },
+                    "line-height": {
+                      "value": "{s2a.typography.line-height.body-md}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.typography.line-height.body-md}",
+                          "cssVar": "--s2a-typography-line-height-body-md",
+                          "figma": "s2a/typography/line-height/body-md",
+                          "shipped": true,
+                          "value": "20px"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ],
+            "slot": {
+              "name": "Call to Action",
+              "accepts": [
+                "kind:text"
+              ],
+              "acceptsMode": "prefer",
+              "default": {
+                "text": "Label"
+              }
+            }
+          },
+          "underline": {
+            "selector": ".c-link__underline",
+            "figma": "/.label-wrap/.underline",
+            "tokens": {
+              "height": {
+                "value": "raw:1px",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "tokensByProp": [
+              {
+                "prop": "emphasis",
+                "map": {
+                  "default": {
+                    "background-color": {
+                      "value": "{s2a.color.content.default}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.default}",
+                          "cssVar": "--s2a-color-content-default",
+                          "figma": "s2a/color/content/default",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "subtle": {
+                    "background-color": {
+                      "value": "{s2a.color.content.body-subtle}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.body-subtle}",
+                          "cssVar": "--s2a-color-content-body-subtle",
+                          "figma": "s2a/color/content/body-subtle",
+                          "shipped": true,
+                          "value": "rgb(0 0 0 / 64%)",
+                          "dark": "rgb(255 255 255 / 64%)"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "prop": "kind",
+                "map": {
+                  "action": {
+                    "width": {
+                      "value": "raw:33px",
+                      "raw": true,
+                      "tokens": []
+                    }
+                  },
+                  "text": {
+                    "width": {
+                      "value": "raw:36px",
+                      "raw": true,
+                      "tokens": []
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "end-icon": {
+        "selector": ".c-link__end-icon",
+        "figma": "/end-icon",
+        "element": "div",
+        "tokens": {
+          "width": {
+            "value": "raw:12px",
+            "raw": true,
+            "tokens": []
+          },
+          "height": {
+            "value": "raw:12px",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "parts": {
+          "frame": {
+            "selector": ".c-link__frame",
+            "figma": "/end-icon/Frame",
+            "element": "div",
+            "tokens": {
+              "width": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              },
+              "height": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "parts": {
+              "s2a-icon-chevron-right": {
+                "selector": ".c-link__s2a-icon-chevron-right",
+                "figma": "/end-icon/Frame/S2a_Icon_Chevron_Right",
+                "layout": {
+                  "display": "flex",
+                  "direction": "row"
+                },
+                "tokens": {
+                  "width": {
+                    "value": "raw:12px",
+                    "raw": true,
+                    "tokens": []
+                  },
+                  "height": {
+                    "value": "raw:12px",
+                    "raw": true,
+                    "tokens": []
+                  }
+                }
+              }
+            }
+          },
+          "icon-color": {
+            "selector": ".c-link__icon-color",
+            "figma": "/end-icon/Icon color",
+            "tokens": {
+              "width": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              },
+              "height": {
+                "value": "raw:12px",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "tokensByProp": [
+              {
+                "prop": "emphasis",
+                "map": {
+                  "default": {
+                    "color": {
+                      "value": "{s2a.color.content.default}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.default}",
+                          "cssVar": "--s2a-color-content-default",
+                          "figma": "s2a/color/content/default",
+                          "shipped": true,
+                          "value": "#000",
+                          "dark": "#fff"
+                        }
+                      ]
+                    }
+                  },
+                  "subtle": {
+                    "color": {
+                      "value": "{s2a.color.content.body-subtle}",
+                      "raw": false,
+                      "tokens": [
+                        {
+                          "ref": "{s2a.color.content.body-subtle}",
+                          "cssVar": "--s2a-color-content-body-subtle",
+                          "figma": "s2a/color/content/body-subtle",
+                          "shipped": true,
+                          "value": "rgb(0 0 0 / 64%)",
+                          "dark": "rgb(255 255 255 / 64%)"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "12823:184375",
+        "nodeName": "Link — v2",
+        "componentSetKey": "252b85e9d7c740613b3f2ddfd39c75f394edcd95",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:7a2a5b7cb3e52353dd9a14e8cbf2e38302d13dfbd984c9cfe9f9219b9780ce09",
+        "extractedAt": "2026-10-08T18:04:34.863Z",
+        "meta": {
+          "version": "2.0.1",
+          "status": "active",
+          "updated": "2026-09-22",
+          "changelog": "2.0.1   2026-09-22  patch        Wired the Label text property to the \"Call to Action\" text layer on all variants (it existed on the panel but drove nothing, so instance labels could not be set).\n2.0.0   2026-08-25  major   Dropped Context=on-light/on-dark; token-driven via content/default (flips per theme mode). BREAKING vs v1."
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/link/link.js",
+        "export": "Link",
+        "controller": null,
+        "cssClass": "c-link"
+      },
+      "evidence": {
+        "hash": "sha256:ac3cee86108eeaf1ea5a43ead8dbbc364d3bdea433efc0910c358a0b78302018"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "l-archetype",
+      "question": "Scaffolded as button (interactive: state axis has hover, focus, active; interactive, but nothing says which kind). Confirm, or re-run npm run specs:scaffold -- --slug=link --archetype=<link-card|card|collection>.",
+      "chose": "button — interactive: state axis has hover, focus, active; interactive, but nothing says which kind",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=link --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×2, focus-ring×1; state axis default/hover/focus/active"
+    },
+    {
+      "id": "l-part-selectors",
+      "question": "label-wrap, call-to-action, underline, end-icon, frame, s2a-icon-chevron-right, icon-color have no class of their own in link.css. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to link.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/link/link.css"
+    },
+    {
+      "id": "l-match",
+      "question": "Structural match says extend: closest existing contract is Collapsible (score 0.88). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Collapsible (match extend, score 0.88)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Collapsible instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Collapsible (0.88) already covers this; extend it with divider."
+    },
+    {
+      "id": "l-code-only-props",
+      "question": "href exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 1 code-only prop as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.code.evidence.json"
+    },
+    {
+      "id": "l-classify-1",
+      "question": "\"Show Icon End\" treated as a Figma visibility helper for \"Icon End\", not a code lever. Confirm, or change it in props/states.",
+      "chose": "\"Show Icon End\" treated as a Figma visibility helper for \"Icon End\", not a code lever",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.figma.evidence.json axes"
+    },
+    {
+      "id": "l-classify-2",
+      "question": "\"State\" read as runtime states (hover, focus-visible, active), not as a prop. Confirm, or change it in props/states.",
+      "chose": "\"State\" read as runtime states (hover, focus-visible, active), not as a prop",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.figma.evidence.json axes"
+    },
+    {
+      "id": "l-layer-names",
+      "question": "2 layers carry Figma-generated names (/end-icon/Frame, /end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.figma.evidence.json anatomy"
+    },
+    {
+      "id": "l-navigates-as-anchor",
+      "question": "\"href\" navigates, but the archetype's element is <button>. Rendered as <button> it is not reachable as a link, cannot be middle-clicked or opened in a new tab, and is announced with the wrong role. Should this component navigate at all?",
+      "chose": "drafted elementByProp: href empty -> <button>, present -> <a>",
+      "confidence": "medium",
+      "fix": "If it should never navigate, remove the \"href\" prop. If it always navigates, set anatomy.root.element to \"a\" and drop elementByProp.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "WCAG 2.1.1 Keyboard"
+    },
+    {
+      "id": "l-hardcoded-values",
+      "question": "16 values in the design are set with no variable behind them: root padding-top@kind=action = 6px; root padding-bottom@kind=action = 6px; root padding-top@kind=text = 2px; root padding-bottom@kind=text = 2px; root/label-wrap gap = 1px; root/label-wrap/underline height = 1px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "link.figma.evidence.json unboundValues"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:7c2b653b0cb89e9f974564d1b92c81dd11b13d3770a79978d227dedfda5738fa",
+    "codeEvidence": "sha256:ac3cee86108eeaf1ea5a43ead8dbbc364d3bdea433efc0910c358a0b78302018",
+    "figmaEvidence": "sha256:7a2a5b7cb3e52353dd9a14e8cbf2e38302d13dfbd984c9cfe9f9219b9780ce09",
+    "generator": "s2a-spec-transform@1"
+  }
 }

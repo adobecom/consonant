@@ -10,7 +10,7 @@
 .c-media-card__media {
   position: relative;
   width: 100%;
-  border-radius: var(--s2a-border-radius-lg, 16px);
+  border-radius: var(--s2a-border-radius-lg);
   overflow: hidden;
   /* card default: 488 × 366 ≈ 4:3 */
   aspect-ratio: 488 / 366;
@@ -41,18 +41,29 @@
   pointer-events: none;
 }
 
+/* Hover zoom mirrors Milo's base-card media (scale 1.03 over 750ms). Only for
+   hover-capable pointers and only when motion is allowed. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .c-media-card__media img {
+    transition: transform 750ms cubic-bezier(0.42, 0, 0, 1);
+  }
+  .c-media-card:hover .c-media-card__media img {
+    transform: scale(1.03);
+  }
+}
+
 .c-media-card__media-placeholder {
   position: absolute;
   inset: 0;
-  background: var(--s2a-color-background-subtle, #f8f8f8);
+  background: var(--s2a-color-background-subtle);
 }
 
 /* ─── App icon badge ─────────────────────────────────────────────────────────── */
 
 .c-media-card__icon {
   position: absolute;
-  top: var(--s2a-spacing-lg, 24px);
-  left: var(--s2a-spacing-lg, 24px);
+  top: var(--s2a-spacing-lg);
+  left: var(--s2a-spacing-lg);
   z-index: 1;
   display: flex;
   align-items: center;
@@ -63,8 +74,8 @@
 
 @container (max-width: 1023px) {
   .c-media-card__icon {
-    top: var(--s2a-spacing-md, 16px);
-    left: var(--s2a-spacing-md, 16px);
+    top: var(--s2a-spacing-md);
+    left: var(--s2a-spacing-md);
   }
 }
 
@@ -73,8 +84,16 @@
 .c-media-card__copy {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-lg, 24px);
-  padding: var(--s2a-spacing-lg, 24px) var(--s2a-spacing-lg, 24px) 0;
+  gap: var(--s2a-spacing-lg);
+  padding: var(--s2a-spacing-lg) var(--s2a-spacing-lg) 0;
+}
+.c-media-card[data-density="compact"] .c-media-card__copy {
+  gap: var(--s2a-spacing-md);
+  padding: var(--s2a-spacing-md) var(--s2a-spacing-md) 0;
+}
+.c-media-card :is(h3, p) {
+  margin: 0;
+  overflow-wrap: anywhere;
 }
 
 /* Feature: headline left (flex-1), CTA right — row layout */
@@ -86,8 +105,8 @@
 /* Tablet: tighter side padding */
 @container (max-width: 1023px) {
   .c-media-card__copy {
-    padding-left: var(--s2a-spacing-md, 16px);
-    padding-right: var(--s2a-spacing-md, 16px);
+    padding-left: var(--s2a-spacing-md);
+    padding-right: var(--s2a-spacing-md);
   }
 }
 
@@ -103,27 +122,27 @@
 .c-media-card__headline-body {
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
   flex: 1 0 0;
   min-width: 0;
 }
 
 .c-media-card__title {
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
-  font-weight: var(--s2a-font-weight-heading, 900);
-  font-size: var(--s2a-typography-font-size-heading-5, 24px);
-  line-height: var(--s2a-typography-line-height-heading-5, 24px);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-5, -0.48px);
-  color: var(--s2a-color-content-heading, #000);
+  font-family: var(--s2a-font-family-heading);
+  font-weight: var(--s2a-font-weight-heading);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  line-height: var(--s2a-typography-line-height-heading-5);
+  letter-spacing: var(--s2a-font-letter-spacing-6xl);
+  color: var(--s2a-color-content-heading);
 }
 
 .c-media-card__body {
-  font-family: var(--s2a-font-family-body, "Adobe Clean");
-  font-weight: var(--s2a-font-weight-body, 400);
-  font-size: var(--s2a-typography-font-size-body-md, 16px);
-  line-height: var(--s2a-typography-line-height-body-md, 20px);
-  letter-spacing: var(--s2a-typography-letter-spacing-body-md, 0);
-  color: var(--s2a-color-content-body-subtle, rgba(0, 0, 0, 0.64));
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-body-md);
+  line-height: var(--s2a-typography-line-height-body-md);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-md);
+  color: var(--s2a-color-content-body-subtle);
 }
 
 /* ─── CTA inline link ────────────────────────────────────────────────────────── */
@@ -131,7 +150,8 @@
 .c-media-card__cta {
   display: inline-flex;
   align-items: center;
-  gap: var(--s2a-spacing-xs, 8px);
+  min-height: var(--s2a-spacing-lg); /* WCAG 2.2 target size */
+  gap: var(--s2a-spacing-xs);
   text-decoration: none;
   background: none;
   border: none;
@@ -155,28 +175,28 @@
 }
 
 .c-media-card__cta-label {
-  font-family: var(--s2a-font-family-label, "Adobe Clean");
-  font-weight: var(--s2a-font-weight-label, 700);
-  font-size: var(--s2a-typography-font-size-label, 14px);
-  line-height: var(--s2a-typography-line-height-label, 18px);
-  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
-  color: var(--s2a-color-content-label, #000);
-  white-space: nowrap;
+  font-family: var(--s2a-font-family-label);
+  font-weight: var(--s2a-font-weight-label);
+  font-size: var(--s2a-typography-font-size-label);
+  line-height: var(--s2a-typography-line-height-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  color: var(--s2a-color-content-label);
+  overflow-wrap: anywhere;
 }
 
 .c-media-card__cta-arrow {
   flex-shrink: 0;
-  color: var(--s2a-color-content-label, #000);
+  color: var(--s2a-color-content-label);
 }
 
 .c-media-card__cta:hover .c-media-card__cta-label,
 .c-media-card__cta:hover .c-media-card__cta-arrow {
-  color: var(--s2a-color-content-label-hover, var(--s2a-color-content-label, #000));
+  color: var(--s2a-color-content-label);
   opacity: 0.8;
 }
 
 .c-media-card__cta:focus-visible {
-  outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: var(--s2a-border-width-md) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-3xs);
+  border-radius: var(--s2a-border-radius-3xs);
 }

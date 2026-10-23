@@ -5,8 +5,14 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": { "s2a-validate-css": "./dist/cli.js" },
-  "files": ["dist"],
+  "bin": {
+    "s2a-validate-css": "./dist/cli.js",
+    "s2a-validate-media": "./dist/media-cli.js",
+    "s2a-validate-library": "./dist/library-cli.js"
+  },
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
@@ -19,11 +25,16 @@
     "build": "tsc -p tsconfig.json",
     "prepack": "tsc -p tsconfig.json",
     "demo": "tsx demo.ts",
-    "validate:css": "tsx src/cli.ts"
+    "validate:css": "tsx src/cli.ts",
+    "validate:media": "tsx src/media-cli.ts"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0"
+  },
+  "dependencies": {
+    "ajv": "^8.18.0",
+    "postcss": "^8.5.30"
   }
 }

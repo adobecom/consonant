@@ -1,0 +1,371 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.collapsible",
+  "name": "Collapsible",
+  "version": "1.2.1",
+  "status": "draft",
+  "description": "A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+  "archetype": "accordion",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "content",
+      "type": "text",
+      "description": "Children. A Figma Slot; anything may be placed here.",
+      "default": "nothing",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "content"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "default",
+          "lg"
+        ]
+      },
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size"
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "valueMap": {
+            "true": "open",
+            "false": "closed"
+          }
+        },
+        "code": {
+          "prop": "open"
+        }
+      }
+    },
+    {
+      "name": "style",
+      "type": {
+        "enum": [
+          "default",
+          "control"
+        ]
+      },
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style"
+        },
+        "code": {
+          "prop": "style"
+        }
+      }
+    },
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Exists in the component, has no design counterpart.",
+      "default": "\"See what's included:\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "label"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "div",
+      "layout": {
+        "display": "inline-flex",
+        "direction": "column",
+        "align": "stretch"
+      },
+      "literals": {
+        "width": "100%"
+      },
+      "tokensByProp": [
+        {
+          "prop": "open",
+          "map": {
+            "false": {
+              "gap": "{s2a.spacing.2xs}"
+            },
+            "true": {
+              "gap": "{s2a.spacing.sm}"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "trigger": {
+          "element": "div",
+          "layout": {
+            "display": "flex",
+            "direction": "row",
+            "align": "center",
+            "justify": "space-between",
+            "stretch": true
+          },
+          "tokens": {
+            "gap": "{s2a.spacing.xs}"
+          },
+          "literalsByProp": [
+            {
+              "prop": "style",
+              "map": {
+                "default": {
+                  "height": "20px"
+                }
+              }
+            }
+          ],
+          "parts": {
+            "control-button": {
+              "layout": {
+                "display": "flex",
+                "direction": "column"
+              },
+              "slot": {
+                "name": ".icon-start",
+                "accepts": [
+                  "ControlButton"
+                ],
+                "acceptsMode": "restrict",
+                "conditionalContent": [
+                  {
+                    "prop": "style",
+                    "value": "default",
+                    "content": [
+                      {
+                        "id": "text"
+                      }
+                    ]
+                  },
+                  {
+                    "prop": "open",
+                    "value": "false",
+                    "content": [
+                      {
+                        "id": "control-button",
+                        "props": {
+                          "figma": "ControlButton — v2",
+                          "Style": "media",
+                          "Size": "md",
+                          "State": "default",
+                          "Icon": "arrow-right"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "prop": "style",
+                    "value": "control",
+                    "content": [
+                      {
+                        "id": "control-button",
+                        "props": {
+                          "figma": "ControlButton — v2",
+                          "Style": "media",
+                          "Size": "md",
+                          "State": "default",
+                          "Icon": "arrow-down"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "label": {
+              "element": "span",
+              "layout": {
+                "grow": true
+              },
+              "tokens": {
+                "color": "{s2a.color.content.default}",
+                "font-size": "{s2a.typography.font-size.label}",
+                "letter-spacing": "{s2a.typography.letter-spacing.label}",
+                "line-height": "{s2a.typography.line-height.label}"
+              },
+              "slot": {
+                "name": "label",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "defaultContent": [
+                  {
+                    "id": "text",
+                    "text": "See what's included:"
+                  }
+                ]
+              },
+              "tokensByProp": [
+                {
+                  "prop": "size",
+                  "map": {
+                    "default": {
+                      "font-family": "{s2a.font.family.label}",
+                      "font-weight": "{s2a.font.weight.label}"
+                    },
+                    "lg": {
+                      "font-family": "{s2a.font.family.heading}",
+                      "font-size": "{s2a.typography.font-size.heading-6}",
+                      "font-weight": "{s2a.font.weight.heading}",
+                      "letter-spacing": "{s2a.typography.letter-spacing.heading-6}"
+                    }
+                  }
+                },
+                {
+                  "prop": "style",
+                  "map": {
+                    "control": {
+                      "font-size": "{s2a.typography.font-size.heading-5}",
+                      "letter-spacing": "{s2a.font.letter-spacing.4xl}",
+                      "line-height": "{s2a.typography.line-height.heading-5}"
+                    }
+                  }
+                }
+              ],
+              "literalsByProp": [
+                {
+                  "prop": "size",
+                  "map": {
+                    "lg": {
+                      "line-height": "18px"
+                    }
+                  }
+                }
+              ]
+            },
+            "s2-icon-chevron-down-20-n": {
+              "layout": {
+                "display": "flex",
+                "direction": "row",
+                "align": "stretch"
+              },
+              "literals": {
+                "width": "20px",
+                "height": "20px"
+              },
+              "slot": {
+                "name": "S2_Icon_ChevronDown_20_N",
+                "accepts": [
+                  "kind:icon"
+                ],
+                "acceptsMode": "restrict",
+                "defaultContent": [
+                  {
+                    "id": "s2a-icons:s2-chevron-down",
+                    "props": {
+                      "figma": "S2_Icon_ChevronDown_20_N",
+                      "size": "20"
+                    }
+                  }
+                ],
+                "conditionalContent": [
+                  {
+                    "prop": "style",
+                    "value": "control",
+                    "content": [
+                      {
+                        "id": "text"
+                      }
+                    ]
+                  },
+                  {
+                    "prop": "open",
+                    "value": "true",
+                    "content": [
+                      {
+                        "id": "s2a-icons:s2-chevron-up",
+                        "props": {
+                          "figma": "S2_Icon_ChevronUp_20_N"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "content": {
+          "description": "The design shows TextCard — v2 here as an example; the slot is open.",
+          "element": "div",
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "stretch": true
+          },
+          "slot": {
+            "name": ".content",
+            "acceptsMode": "open"
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.3.1",
+      "2.1.1",
+      "4.1.2"
+    ],
+    "notes": [
+      "The trigger is a real <button>; aria-expanded is the state, aria-controls the relationship (4.1.2).",
+      "Closed content is hidden from everyone, not only visually (1.3.1).",
+      "Keyboard: Enter/Space toggles; focus stays on the trigger (2.1.1)."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "91da27b825395cc6640593feeb5c3b34a9a956d8",
+        "nodeId": "10564:116547"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/collapsible/collapsible.js",
+        "export": "Collapsible"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:1e82efdff29df59b9781d9bbfe47e97931777f3f99f61ff416e703fd0128865f",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:19cf12c3182bcc069a3d4dc11236e6452a4f1de0056da16c9cbc864f87bce97b"
+    }
+  }
+}

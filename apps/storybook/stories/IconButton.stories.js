@@ -13,7 +13,7 @@ const renderIconButton = (args = {}) => IconButton(args);
 
 const darkMedia = (content) => html`
   <div
-    style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); padding: 16px; border-radius: 16px; display: inline-flex; gap: 12px; align-items: center;"
+    style="background: linear-gradient(135deg, var(--s2a-color-background-knockout) 0%, var(--s2a-color-background-knockout) 60%, var(--s2a-color-border-accent) 100%); padding: var(--s2a-spacing-md); border-radius: var(--s2a-border-radius-md); display: inline-flex; gap: var(--s2a-spacing-sm); align-items: center;"
   >
     ${content}
   </div>
@@ -105,7 +105,7 @@ export const Disabled = {
 export const S2aIcons = {
   name: "S2A Icons",
   render: () => html`
-    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+    <div style="display: flex; gap: var(--s2a-spacing-md); flex-wrap: wrap; align-items: center;">
       ${renderIconButton({ ariaLabel: "Play media", icon: "play", size: "lg", style: "solid" })}
       ${renderIconButton({ ariaLabel: "Pause media", icon: "pause", size: "lg", style: "solid" })}
       ${renderIconButton({ ariaLabel: "Add", icon: "add", size: "lg", style: "transparent" })}
@@ -120,7 +120,7 @@ export const S2aIcons = {
 
 export const Sizes = {
   render: () => html`
-    <div style="display: flex; gap: 16px; align-items: center;">
+    <div style="display: flex; gap: var(--s2a-spacing-md); align-items: center;">
       ${renderIconButton({ ariaLabel: "Play (sm)", icon: "play", size: "sm" })}
       ${renderIconButton({ ariaLabel: "Play (md)", icon: "play", size: "md" })}
       ${renderIconButton({ ariaLabel: "Pause (lg)", icon: "pause", size: "lg" })}
@@ -133,15 +133,15 @@ export const AllStylesMatrix = {
   render: () => {
     const states = ["default", "hover", "active", "focus", "disabled"];
     return html`
-      <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-md);">
         ${["solid", "transparent"].map(
           (style) => html`
-            <div style="display: grid; gap: 8px;">
+            <div style="display: grid; gap: var(--s2a-spacing-xs);">
               <strong
                 style="font-family:var(--s2a-font-family-label);font-size:var(--s2a-typography-font-size-label);font-weight:var(--s2a-font-weight-label);text-transform:capitalize;color:var(--s2a-color-content-default);"
                 >${style}</strong
               >
-              <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+              <div style="display: flex; gap: var(--s2a-spacing-md); flex-wrap: wrap; align-items: center;">
                 ${states.map((state) =>
                   renderIconButton({
                     icon: forcedStateIcon(state),
@@ -155,7 +155,7 @@ export const AllStylesMatrix = {
             </div>
           `,
         )}
-        <div style="display: grid; gap: 8px;">
+        <div style="display: grid; gap: var(--s2a-spacing-xs);">
           <strong
             style="font-family:var(--s2a-font-family-label);font-size:var(--s2a-typography-font-size-label);font-weight:var(--s2a-font-weight-label);color:var(--s2a-color-content-default);"
             >Knockout (media surface)</strong
@@ -181,7 +181,7 @@ export const ForcedStates = {
   render: () => {
     const states = ["default", "hover", "active", "focus", "disabled"];
     const renderRow = (sizeLabel, sizeValue) => html`
-      <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+      <div style="display: flex; gap: var(--s2a-spacing-md); flex-wrap: wrap; align-items: center;">
         ${states.map((state) =>
           renderIconButton({
             icon: forcedStateIcon(state),
@@ -194,12 +194,12 @@ export const ForcedStates = {
     `;
 
     return html`
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <span style="font: 12px/1.4 var(--s2a-font-family-default, 'Adobe Clean', sans-serif); color: var(--s2a-color-content-body-subtle);">Large (lg · 40px)</span>
+      <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-md);">
+        <span style="font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body); color: var(--s2a-color-content-body-subtle);">Large (lg · 40px)</span>
         ${renderRow("Large", "lg")}
-        <span style="font: 12px/1.4 var(--s2a-font-family-default, 'Adobe Clean', sans-serif); color: var(--s2a-color-content-body-subtle);">Medium (md · 32px)</span>
+        <span style="font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body); color: var(--s2a-color-content-body-subtle);">Medium (md · 32px)</span>
         ${renderRow("Medium", "md")}
-        <span style="font: 12px/1.4 var(--s2a-font-family-default, 'Adobe Clean', sans-serif); color: var(--s2a-color-content-body-subtle);">Small (sm · 24px)</span>
+        <span style="font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body); color: var(--s2a-color-content-body-subtle);">Small (sm · 24px)</span>
         ${renderRow("Small", "sm")}
       </div>
     `;
@@ -209,7 +209,7 @@ export const ForcedStates = {
 /** Focus ring appears when tabbing to the button. */
 export const FocusStates = {
   render: () => html`
-    <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 20px; align-items: center;">
+    <div style="display: flex; flex-wrap: wrap; gap: var(--s2a-spacing-md); padding: var(--s2a-spacing-md); align-items: center;">
       ${renderIconButton({ style: "solid", ariaLabel: "Pause (tab to focus)", state: "focus", icon: "pause", size: "lg" })}
       ${renderIconButton({ style: "transparent", ariaLabel: "Pause (tab to focus)", state: "focus", icon: "pause", size: "lg" })}
     </div>

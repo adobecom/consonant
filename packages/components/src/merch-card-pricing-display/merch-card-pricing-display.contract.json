@@ -1,0 +1,289 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.merch-card-pricing-display",
+  "name": "MerchCardPricingDisplay",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "MerchCardPricingDisplay",
+  "archetype": "none",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "additionalDetails",
+      "type": "text",
+      "default": "\"Offer terms apply\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Additional Details#10328:158"
+        },
+        "code": {
+          "prop": "additionalDetails"
+        }
+      }
+    },
+    {
+      "name": "billingCadence",
+      "type": "text",
+      "default": "\"Billed monthly, cancel anytime\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Billing Cadence#10328:153"
+        },
+        "code": {
+          "prop": "billingCadence"
+        }
+      }
+    },
+    {
+      "name": "price",
+      "type": "text",
+      "default": "\"US$49.99/mo\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Price#10328:148"
+        },
+        "code": {
+          "prop": "price"
+        }
+      }
+    },
+    {
+      "name": "showDetails",
+      "type": "boolean",
+      "default": "true",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Details#11011:14"
+        },
+        "code": {
+          "prop": "showDetails"
+        }
+      }
+    },
+    {
+      "name": "showStrikethrough",
+      "type": "boolean",
+      "default": "true",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show Strikethrough#10466:17"
+        },
+        "code": {
+          "prop": "showStrikethrough"
+        }
+      }
+    },
+    {
+      "name": "strikethroughPricing",
+      "type": "text",
+      "default": "\"US$599.88/yr\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Strikethrough Pricing#10328:143"
+        },
+        "code": {
+          "prop": "strikethroughPricing"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "div",
+      "layout": {
+        "display": "flex",
+        "direction": "column"
+      },
+      "tokens": {
+        "gap": "{s2a.spacing.2}"
+      },
+      "literals": {
+        "width": "418px"
+      },
+      "parts": {
+        "pricing": {
+          "element": "div",
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "grow": true
+          },
+          "literals": {
+            "gap": "2px"
+          },
+          "parts": {
+            "strikethrough-zone": {
+              "element": "div",
+              "layout": {
+                "display": "flex",
+                "direction": "column"
+              },
+              "literals": {
+                "width": "418px",
+                "height": "18px"
+              },
+              "parts": {
+                "strikethrough": {
+                  "element": "span",
+                  "layout": {
+                    "grow": true
+                  },
+                  "tokens": {
+                    "color": "{s2a.color.content.subtle}",
+                    "font-family": "{s2a.font.family.body}",
+                    "font-size": "{s2a.typography.font-size.body-sm}",
+                    "font-weight": "{s2a.font.weight.body}",
+                    "letter-spacing": "{s2a.typography.letter-spacing.body-sm}",
+                    "line-height": "{s2a.typography.line-height.body-sm}"
+                  },
+                  "slot": {
+                    "name": "strikethrough",
+                    "accepts": [
+                      "kind:text"
+                    ],
+                    "acceptsMode": "prefer",
+                    "defaultContent": [
+                      {
+                        "id": "text",
+                        "text": "US$599.88/yr"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "price": {
+              "element": "span",
+              "layout": {
+                "grow": true
+              },
+              "tokens": {
+                "color": "{s2a.color.content.heading}",
+                "font-family": "{s2a.font.family.heading}",
+                "font-size": "{s2a.typography.font-size.heading-5}",
+                "font-weight": "{s2a.font.weight.heading}",
+                "letter-spacing": "{s2a.font.letter-spacing.4xl}",
+                "line-height": "{s2a.typography.line-height.heading-5}"
+              },
+              "slot": {
+                "name": "price",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "defaultContent": [
+                  {
+                    "id": "text",
+                    "text": "US$49.99/mo"
+                  }
+                ]
+              }
+            },
+            "billing": {
+              "element": "span",
+              "layout": {
+                "grow": true
+              },
+              "tokens": {
+                "color": "{s2a.color.content.subtle}",
+                "font-family": "{s2a.font.family.body}",
+                "font-size": "{s2a.typography.font-size.body-sm}",
+                "font-weight": "{s2a.font.weight.body}",
+                "letter-spacing": "{s2a.typography.letter-spacing.body-sm}",
+                "line-height": "{s2a.typography.line-height.body-sm}"
+              },
+              "slot": {
+                "name": "billing",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "defaultContent": [
+                  {
+                    "id": "text",
+                    "text": "Billed monthly, cancel anytime"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "details-zone": {
+          "element": "div",
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "grow": true
+          },
+          "literals": {
+            "padding-top": "4px"
+          },
+          "parts": {
+            "details": {
+              "element": "span",
+              "layout": {
+                "grow": true
+              },
+              "tokens": {
+                "color": "{s2a.color.content.subtle}",
+                "font-family": "{s2a.font.family.body}",
+                "font-size": "{s2a.typography.font-size.body-sm}",
+                "font-weight": "{s2a.font.weight.body}",
+                "letter-spacing": "{s2a.typography.letter-spacing.body-sm}",
+                "line-height": "{s2a.typography.line-height.body-sm}"
+              },
+              "slot": {
+                "name": "details",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "defaultContent": [
+                  {
+                    "id": "text",
+                    "text": "Offer terms apply"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA"
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "d4acacb5413c50ef86f665b290d1d93432a9e3e8",
+        "nodeId": "10328:103581"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/merch-card-pricing-display/merch-card-pricing-display.js",
+        "export": "MerchCardPricingDisplay"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:e61c3476d871f555a168c79193b9d0d6e4e01c588aa3afae091593665614d3c8",
+    "source": {
+      "kind": "design",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:e61c3476d871f555a168c79193b9d0d6e4e01c588aa3afae091593665614d3c8"
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "AppIcon",
+  "setName": "AppIcon",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "span",
+    "bindings": {
+      "gap": [
+        "s2a/spacing/none"
+      ],
+      "padding-bottom": [
+        "s2a/spacing/none"
+      ],
+      "padding-left": [
+        "s2a/spacing/none"
+      ],
+      "padding-right": [
+        "s2a/spacing/none"
+      ],
+      "padding-top": [
+        "s2a/spacing/none"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".img",
+        "source": "/B_app_CreativeCloud",
+        "element": null,
+        "bindings": {},
+        "slot": null,
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "8175:77406",
+    "nodeName": "AppIcon",
+    "componentSetKey": "f35ab6b534f0adf17d33e238b40a49b6e532009b",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "options": [
+        "16",
+        "18",
+        "24",
+        "32",
+        "48",
+        "80"
+      ],
+      "defaultValue": "24"
+    },
+    {
+      "name": "Icon#3582:54",
+      "type": "INSTANCE_SWAP",
+      "forProp": "app",
+      "defaultValue": "9264:819"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-app-icon",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/none"
+        ],
+        "padding-bottom": [
+          "s2a/spacing/none"
+        ],
+        "padding-left": [
+          "s2a/spacing/none"
+        ],
+        "padding-right": [
+          "s2a/spacing/none"
+        ],
+        "padding-top": [
+          "s2a/spacing/none"
+        ]
+      }
+    },
+    {
+      "name": "/B_app_CreativeCloud",
+      "selector": ".c-app-icon__img",
+      "bindings": {}
+    }
+  ],
+  "textStyles": []
+}

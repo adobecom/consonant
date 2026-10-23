@@ -1,0 +1,775 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-23T16:31:20.068Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "app-icon",
+    "name": "AppIcon",
+    "cssClass": "c-app-icon",
+    "importPath": "packages/components/src/app-icon/app-icon.js",
+    "exports": [
+      "APP_LIBRARY",
+      "APP_LIBRARY_OPTIONS",
+      "APP_OPTIONS",
+      "AppIcon",
+      "CDN_BASE_URL",
+      "DEFAULT_APP",
+      "configureAppIconAssets"
+    ],
+    "render": "AppIcon",
+    "otherRenders": [
+      "configureAppIconAssets"
+    ],
+    "spec": {
+      "path": "packages/components/src/app-icon/app-icon.spec.json",
+      "storybookId": "app-icon",
+      "figmaNodeId": "8175:77406"
+    }
+  },
+  "sources": {
+    "packages/components/src/app-icon/index.js": "sha256:df0f983a46864fa8a818290f18e11040eed7c0a9401cdaadf58e004c9b7b790e",
+    "packages/components/src/app-icon/app-icon.js": "sha256:818e589556aac987da33193f430482bf3b4d8c3b9a4225dc537b71c1045908be",
+    "packages/components/src/app-icon/app-icon.css": "sha256:b9d7c979ac92cdc7e2dbe3fc49c63fec5e16261d14eab496454d61c47130f395"
+  },
+  "props": [
+    {
+      "name": "app",
+      "default": "DEFAULT_APP",
+      "type": "expression"
+    },
+    {
+      "name": "size",
+      "default": "\"24\"",
+      "type": "string"
+    },
+    {
+      "name": "ariaHidden",
+      "default": "true",
+      "type": "boolean"
+    },
+    {
+      "name": "ariaLabel"
+    },
+    {
+      "name": "loading",
+      "default": "\"lazy\"",
+      "type": "string"
+    },
+    {
+      "name": "importance",
+      "default": "\"auto\"",
+      "type": "string"
+    }
+  ],
+  "attributes": {
+    "data-load-state": {
+      "values": [
+        "error",
+        "loaded"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime",
+        "stylesheet"
+      ],
+      "onRoot": true
+    },
+    "data-size": {
+      "values": [
+        "16",
+        "18",
+        "24",
+        "32",
+        "48",
+        "80"
+      ],
+      "dynamic": true,
+      "sources": [
+        "runtime",
+        "stylesheet",
+        "template"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-app-icon",
+      "c-app-icon__img"
+    ],
+    "stylesheet": [
+      "c-app-icon",
+      "c-app-icon__img"
+    ],
+    "runtime": [
+      "c-app-icon",
+      "c-app-icon__img"
+    ],
+    "own": [
+      "c-app-icon",
+      "c-app-icon__img"
+    ]
+  },
+  "aria": {
+    "roles": [
+      "img"
+    ],
+    "attributes": [
+      "aria-hidden",
+      "aria-label"
+    ],
+    "tags": [
+      "img"
+    ]
+  },
+  "imports": [
+    "./app-icon.css",
+    "./app-library.js"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-spacing-3xl": {
+        "fallback": false
+      },
+      "--s2a-spacing-lg": {
+        "fallback": false
+      },
+      "--s2a-spacing-md": {
+        "fallback": false
+      },
+      "--s2a-spacing-xl": {
+        "fallback": false
+      }
+    },
+    "custom": [
+      "--c-app-icon-radius",
+      "--c-app-icon-size"
+    ],
+    "raw": []
+  },
+  "states": [],
+  "queries": [],
+  "stories": [
+    {
+      "id": "generated-appicon--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "16"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "16"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "16"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-16",
+      "name": "size: 16",
+      "args": {
+        "size": "16"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "16"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "16"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "16"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-18",
+      "name": "size: 18",
+      "args": {
+        "size": "18"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "18"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "18"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "18"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-24",
+      "name": "size: 24",
+      "args": {
+        "size": "24"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-32",
+      "name": "size: 32",
+      "args": {
+        "size": "32"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "32"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "32"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "32"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-48",
+      "name": "size: 48",
+      "args": {
+        "size": "48"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "48"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "48"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "48"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--size-80",
+      "name": "size: 80",
+      "args": {
+        "size": "80"
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "80"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "80"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "80"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--ariahidden-on",
+      "name": "ariaHidden on",
+      "args": {
+        "ariaHidden": true
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-appicon--ariahidden-off",
+      "name": "ariaHidden off",
+      "args": {
+        "ariaHidden": false
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-appicon--creative-cloud",
+      "name": "Creative Cloud",
+      "args": {
+        "app": "experience-cloud",
+        "size": "md",
+        "ariaHidden": true
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24",
+          "loadState": "loaded"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ],
+        "data-load-state": [
+          "loaded"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ],
+        "data-load-state": [
+          "loaded"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-appicon--firefly",
+      "name": "Firefly",
+      "args": {
+        "app": "firefly",
+        "size": "md",
+        "ariaHidden": true
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24",
+          "loadState": "loaded"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ],
+        "data-load-state": [
+          "loaded"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ],
+        "data-load-state": [
+          "loaded"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-appicon--sizes",
+      "name": "Sizes",
+      "args": {
+        "app": "experience-cloud",
+        "size": "md",
+        "ariaHidden": true
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "16",
+          "loadState": "loaded"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "16"
+        ],
+        "data-load-state": [
+          "loaded"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "16"
+        ],
+        "data-load-state": [
+          "loaded"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-appicon--all-variants",
+      "name": "All Variants",
+      "args": {
+        "app": "experience-cloud",
+        "size": "md",
+        "ariaHidden": true
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "32"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "32"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "32"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-appicon--library-catalog",
+      "name": "Library Catalog",
+      "args": {
+        "app": "experience-cloud",
+        "size": "md",
+        "ariaHidden": true
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "24"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "24"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-appicon--accessible-label",
+      "name": "Accessible Label",
+      "args": {
+        "app": "experience-cloud",
+        "size": "md",
+        "ariaHidden": true
+      },
+      "root": {
+        "tag": "span",
+        "classes": [
+          "c-app-icon"
+        ],
+        "dataset": {
+          "size": "32",
+          "loadState": "loaded"
+        }
+      },
+      "attributes": {
+        "data-size": [
+          "32"
+        ],
+        "data-load-state": [
+          "loaded"
+        ]
+      },
+      "rootAttributes": {
+        "data-size": [
+          "32"
+        ],
+        "data-load-state": [
+          "loaded"
+        ]
+      },
+      "classes": [
+        "c-app-icon",
+        "c-app-icon__img"
+      ],
+      "roles": [
+        "img"
+      ],
+      "aria": [
+        "aria-hidden",
+        "aria-label"
+      ],
+      "interactive": [],
+      "nodes": 2
+    }
+  ],
+  "counts": {
+    "props": 6,
+    "attributes": 2,
+    "parts": 2,
+    "tokenReferences": 4,
+    "tokenReferencesWithoutFallback": 4,
+    "raw": 0,
+    "stories": 16,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:95e0ba7f1af578291128c68aea8eeeb58ffe5d2b6e4ff6fbcb2a57572a8ad406"
+  }
+}

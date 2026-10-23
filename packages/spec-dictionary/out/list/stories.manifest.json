@@ -1,0 +1,78 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "list",
+  "storybookId": "list",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    }
+  ],
+  "existing": [
+    {
+      "id": "generated-list--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-list--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "molecules-list--single-section",
+      "name": "Single Section",
+      "argKeys": [
+        "sections"
+      ]
+    },
+    {
+      "id": "molecules-list--multiple-sections",
+      "name": "Multiple Sections",
+      "argKeys": [
+        "sections"
+      ]
+    },
+    {
+      "id": "molecules-list--no-icons",
+      "name": "No Icons",
+      "argKeys": [
+        "sections"
+      ]
+    }
+  ],
+  "deferred": [],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      ""
+    ],
+    "rowValues": [
+      {}
+    ],
+    "cell": {
+      "w": 442,
+      "h": 181,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {},
+        "forced": null,
+        "label": "default",
+        "nodeId": "10320:102094"
+      }
+    ],
+    "missing": []
+  }
+}

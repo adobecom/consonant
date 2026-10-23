@@ -1,37 +1,120 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "DotPagination",
   "slug": "dot-pagination",
   "cssClass": "c-dot-pagination",
+  "figmaNodeId": "8350:234686",
   "storybookId": "dot-pagination",
-  "description": "Row of round dots indicating carousel/slideshow position. Knockout styling (white dots) — designed for dark or media surfaces.",
-  "figma": {
-    "componentId": "8350:234686",
-    "dotSetId": "8350:234693",
-    "page": "   ↳ DotPagination",
-    "version": "1.0.0"
-  },
-  "variants": {
-    "dotState": ["active", "inactive"]
-  },
+  "description": "A row of round dots marking position in a carousel or slideshow. Knockout styling (white dots) — built for dark and media surfaces.",
+  "variants": {},
   "props": [
-    { "name": "count", "type": "string | number", "defaultValue": "3", "description": "Number of dots, clamped 1–5 (mirrors Figma's Show Dot 1–5 booleans; defaults match Figma: dots 1–3 on)" },
-    { "name": "activeIndex", "type": "string | number", "defaultValue": "0", "description": "Zero-based index of the active dot, clamped to count" },
-    { "name": "ariaLabel", "type": "string", "defaultValue": "\"Slide navigation\"", "description": "Accessible name for the nav landmark" },
-    { "name": "onSelect", "type": "Function", "defaultValue": "undefined", "description": "Optional click handler receiving the selected dot index" }
+    {
+      "name": "count",
+      "type": "number",
+      "defaultValue": "3",
+      "description": "How many dots. The range is closed at five, so it is enumerable rather than open: Figma caps it with five Show Dot booleans (1–3 on by default) and the code clamps to the same 1–5. Values are strings because the defs schema types enum members that way; the code accepts either and parses. Figma has no single property for this — a component there cannot vary its child count, so the same decision is spelled five ways. One number is the API. See decision dp-count-booleans.",
+      "enum": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "count",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "activeIndex",
+      "type": "number",
+      "defaultValue": "0",
+      "description": "Zero-based index of the active dot, clamped to count. In Figma the equivalent is which child instance is set to State=active.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "activeIndex",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "ariaLabel",
+      "type": "string",
+      "defaultValue": "\"Slide navigation\"",
+      "description": "Accessible name for the nav landmark. Authored because the surrounding carousel should name itself.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "ariaLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "onSelect",
+      "type": "function",
+      "description": "Integration detail, not a design decision: receives the selected dot index. Omitting it leaves the dots as non-interactive indicators.",
+      "lever": false,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "onSelect",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
   ],
   "tokenBindings": {
-    "gap": "--s2a-spacing-xs",
-    "width:dot": "--s2a-spacing-xs",
-    "height:dot": "--s2a-spacing-xs",
-    "border-radius:dot": "--s2a-border-radius-round",
-    "background-color:dot:active": "--s2a-color-content-knockout",
-    "background-color:dot:inactive": "--s2a-color-transparent-white-64",
-    "outline-color:dot:focus": "--s2a-color-focus-ring-knockout"
+    "root-gap": "--s2a-spacing-xs",
+    "dot-width": "--s2a-spacing-xs",
+    "dot-height": "--s2a-spacing-xs",
+    "dot-border-radius": "--s2a-border-radius-round",
+    "dot-background-color": "--s2a-color-transparent-white-64"
   },
+  "tier": "component",
+  "composedOf": [],
   "a11y": {
     "role": "navigation",
-    "requiredAriaAttrs": ["aria-label", "aria-current"],
-    "wcag": ["2.1.1", "2.4.7", "4.1.2"],
+    "wcag": [
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "keyboard": [
+      {
+        "key": "Tab",
+        "action": "moves focus through the dots, one stop each"
+      },
+      {
+        "key": "Enter / Space",
+        "action": "selects that slide when onSelect is wired"
+      }
+    ],
     "notes": [
       "Dots are real <button> elements inside a <nav> landmark — keyboard operable (2.1.1).",
       "Active dot carries aria-current='true'; each dot has an aria-label naming its slide (4.1.2).",
@@ -39,8 +122,187 @@
       "8px hit area is below the 24px target-size guideline (2.5.8 AA) — acceptable as an inline indicator, but pair with adjacent prev/next controls for primary navigation."
     ]
   },
-  "notes": [
-    "Figma component is knockout-only (white dots on dark) — no on-light variant exists in the set; do not invent one.",
-    "Figma caps at 5 dots via Show Dot 1–5 booleans; the count prop mirrors that clamp."
-  ]
+  "states": [
+    {
+      "name": "active",
+      "figma": "NONE",
+      "code": {
+        "attr": "data-state",
+        "values": [
+          "active",
+          "inactive"
+        ],
+        "mechanism": "data-state on each dot, derived from activeIndex"
+      },
+      "notes": "Not an authored prop — a rendering of activeIndex. Figma models it as the internal Dot set's State variant; see decision dp-dot-internal."
+    },
+    {
+      "name": "focus",
+      "figma": "NONE",
+      "code": {
+        "mechanism": ":focus-visible on the dot"
+      },
+      "notes": "Runtime state. Ring uses focus-ring/knockout so it stays visible on the dark surfaces this component targets."
+    }
+  ],
+  "anatomy": {
+    "selector": ".c-dot-pagination",
+    "figma": ".root",
+    "element": "nav",
+    "tokens": {
+      "gap": {
+        "value": "{s2a.spacing.xs}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{s2a.spacing.xs}",
+            "cssVar": "--s2a-spacing-xs",
+            "figma": "s2a/spacing/xs",
+            "shipped": true,
+            "value": "8px"
+          }
+        ]
+      }
+    },
+    "notes": "A nav landmark named by ariaLabel. Lays out inline so it can sit over media without reserving a row.",
+    "parts": {
+      "dot": {
+        "selector": ".c-dot-pagination__dot",
+        "figma": ".dot-1",
+        "element": "button",
+        "tokens": {
+          "width": {
+            "value": "{s2a.spacing.xs}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.xs}",
+                "cssVar": "--s2a-spacing-xs",
+                "figma": "s2a/spacing/xs",
+                "shipped": true,
+                "value": "8px"
+              }
+            ]
+          },
+          "height": {
+            "value": "{s2a.spacing.xs}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.spacing.xs}",
+                "cssVar": "--s2a-spacing-xs",
+                "figma": "s2a/spacing/xs",
+                "shipped": true,
+                "value": "8px"
+              }
+            ]
+          },
+          "border-radius": {
+            "value": "{s2a.border-radius.round}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.border-radius.round}",
+                "cssVar": "--s2a-border-radius-round",
+                "figma": "s2a/border-radius/round",
+                "shipped": true,
+                "value": "999px"
+              }
+            ]
+          },
+          "background-color": {
+            "value": "{s2a.color.transparent.white.64}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.color.transparent.white.64}",
+                "cssVar": "--s2a-color-transparent-white-64",
+                "figma": "s2a/color/transparent/white/64",
+                "shipped": true,
+                "value": "rgb(255 255 255 / 64%)"
+              }
+            ]
+          }
+        },
+        "notes": "One part, repeated 1–5 times — count decides how many. Figma names the instances .dot-1 … .dot-5 and builds each from an internal Dot component set; in code they share one class and differ only by data-state. Active dot takes color/content/knockout; the focus ring takes color/focus-ring/knockout."
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "pattern-frame",
+        "nodeId": "8350:234686",
+        "nodeName": "DotPagination",
+        "componentSetKey": "5195dbddad9b4d108a4c2b46eb5684eaed814f4c",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:1e5a277c66d64f07af742506ee4dec50ee0794bd6414a7de2536277a195b364e",
+        "extractedAt": "2026-10-05T16:32:17.362Z",
+        "meta": {
+          "version": "",
+          "status": "",
+          "updated": "",
+          "changelog": ""
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/dot-pagination/dot-pagination.js",
+        "export": "DotPagination",
+        "controller": null,
+        "cssClass": "c-dot-pagination"
+      },
+      "evidence": {
+        "hash": "sha256:20933c11a15da36bfc7addca568112e6cd646d3683523e27ac1d1511c9a6dc48"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "dp-count-booleans",
+      "status": "decided",
+      "question": "Figma exposes five booleans (Show Dot 1–5); the code exposes one `count`. Which is the contract's API?",
+      "decision": "count. The booleans are a Figma authoring affordance — a component there cannot vary its child count, so the same decision is spelled five ways. No consumer rebuilding this would implement showDot3; they would implement count. The booleans stay visible in the Figma evidence and in the prop notes rather than in the API.",
+      "confidence": "high"
+    },
+    {
+      "id": "dp-dot-internal",
+      "status": "decided",
+      "question": "Figma builds the dots from a separate `Dot` component set. Should Dot be its own contract, and the dots a slot?",
+      "decision": "No. The Dot set lives in a Figma section named \"🚫 Internal — Do not use directly\", so the design file already treats it as an implementation detail. Code has no Dot component at all — the dot is a part with one class. Modelled as a repeated part, not a slot.",
+      "confidence": "high"
+    },
+    {
+      "id": "dp-anatomy-repeat",
+      "status": "decided",
+      "question": "Five explicit parts (.dot-1 … .dot-5) as the docs sheet lists them, or one repeated part?",
+      "decision": "One part. Anatomy selectors are checked against classes the template and stylesheet actually define, and there is exactly one (.c-dot-pagination__dot). Five parts would name four selectors that do not exist. The Figma naming is recorded on the part instead.",
+      "confidence": "high"
+    },
+    {
+      "id": "dp-knockout-only",
+      "status": "decided",
+      "question": "Is there an on-light treatment?",
+      "decision": "No. The Figma component is knockout-only — white dots for dark and media surfaces — and no on-light variant exists in the set. Do not invent one; if a light surface needs pagination, that is a new request, not a variant.",
+      "confidence": "high"
+    },
+    {
+      "id": "dp-version-unstamped",
+      "status": "open",
+      "question": "The Figma component carries s2a:meta version 0.0.0 with an empty changelog, so the contract has no version to mirror. Stamp it 1.0.0 in Figma and re-extract?",
+      "confidence": "medium"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:d12e6177dad3f5913af5e04485d6ddbf3eea907136f36f4782807b78d16a5a6b",
+    "codeEvidence": "sha256:20933c11a15da36bfc7addca568112e6cd646d3683523e27ac1d1511c9a6dc48",
+    "figmaEvidence": "sha256:1e5a277c66d64f07af742506ee4dec50ee0794bd6414a7de2536277a195b364e",
+    "generator": "s2a-spec-transform@1"
+  }
 }

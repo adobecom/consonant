@@ -1,0 +1,94 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "s2a.divider",
+  "name": "Divider",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "Divider",
+  "archetype": "none",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "style",
+      "type": {
+        "enum": [
+          "default",
+          "subtle",
+          "knockout",
+          "inverse",
+          "subtle-inverse"
+        ]
+      },
+      "default": "\"default\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style"
+        },
+        "code": {
+          "prop": "style"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "div",
+      "literals": {
+        "width": "418px",
+        "height": "1px"
+      },
+      "tokensByProp": [
+        {
+          "prop": "style",
+          "map": {
+            "default": {
+              "background-color": "{s2a.color.divider.default}"
+            },
+            "subtle": {
+              "background-color": "{s2a.color.divider.subtle}"
+            },
+            "knockout": {
+              "background-color": "{s2a.color.divider.knockout}"
+            },
+            "inverse": {
+              "background-color": "{s2a.color.divider.inverse}"
+            },
+            "subtle-inverse": {
+              "background-color": "{s2a.color.divider.subtle-inverse}"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "a11y": {
+    "contrast": "AA"
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "componentSetKey": "943550fa170b6c953a27449f060743c87560f962",
+        "nodeId": "10910:17760"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/divider/divider.js",
+        "export": "Divider"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:1d332dd437e297964d1d2ebbb47a931a5227131b99a65173760d0e4f90ae8527",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:7d1d10926bb5490ae022c499f99d1987f729a0c4b79a013f0a8585c77676cfe0"
+    }
+  }
+}

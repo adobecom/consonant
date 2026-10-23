@@ -1,0 +1,30 @@
+@import "../dist/packages/tokens/css/dev/tokens.primitives.css";
+@import "../dist/packages/tokens/css/dev/tokens.semantic.css";
+@import "../dist/packages/tokens/css/dev/tokens.semantic.light.css";
+
+/* Font installation metadata; UI styles below consume the semantic family. */
+@font-face {
+  font-family: "Adobe Clean";
+  src: local("Adobe Clean");
+  font-display: swap;
+}
+body {
+  font-family: var(--s2a-font-family-body);
+  color: var(--s2a-color-content-default);
+  background: var(--s2a-color-surface-subtle);
+}
+.sidebar-container :is(a, button, input) {
+  font-family: var(--s2a-font-family-body);
+}
+.sidebar-item {
+  font-size: var(--s2a-font-size-sm);
+  border-radius: var(--s2a-border-radius-2xs);
+}
+.sidebar-item svg {
+  color: currentColor;
+}
+.sidebar-subheading {
+  font-size: var(--s2a-font-size-xs);
+  font-weight: var(--s2a-font-weight-label);
+  letter-spacing: var(--s2a-font-letter-spacing-6xl);
+}

@@ -8,7 +8,7 @@ const VID_2 = 'https://www.adobe.com/upp/media_1b79b8d240c8d6ea3dd5235f681a2bea2
 const VID_3 = 'https://www.adobe.com/upp/media_1a42397066428d422823ffd54e7a66ec4998a3fd8.mp4';
 
 const wrap = (width, content) => html`
-  <div style="width:${width}px;background:#111;border-radius:20px;padding:24px;">
+  <div data-theme="dark" style="width:${width}px;background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-lg);padding:var(--s2a-spacing-lg);">
     ${content}
   </div>
 `;
@@ -26,7 +26,7 @@ export default {
   },
   parameters: {
     layout: 'centered',
-    backgrounds: { default: 'dark', values: [{ name: 'dark', value: '#111' }] },
+    backgrounds: { default: 'dark', values: [{ name: 'dark', value: 'var(--s2a-color-background-knockout)' }] },
     docs: {
       description: {
         component: `
@@ -102,14 +102,15 @@ export const Sizes = {
     ];
 
     const root = document.createElement('div');
-    root.style.cssText = 'display:flex;flex-direction:column;gap:24px;padding:40px;background:#111;border-radius:20px;align-items:flex-start;';
+    root.dataset.theme = "dark";
+    root.style.cssText = 'display:flex;flex-direction:column;gap:var(--s2a-spacing-lg);padding:var(--s2a-spacing-2xl);background:var(--s2a-color-background-knockout);border-radius:var(--s2a-border-radius-lg);align-items:flex-start;';
 
     cards.forEach((card) => {
       const row = document.createElement('div');
-      row.style.cssText = 'display:flex;gap:8px;align-items:flex-start;';
+      row.style.cssText = 'display:flex;gap:var(--s2a-spacing-xs);align-items:flex-start;';
 
       const label = document.createElement('span');
-      label.style.cssText = "color:#555;font:11px/2.4 'Adobe Clean',sans-serif;width:48px;flex-shrink:0;";
+      label.style.cssText = "color:var(--s2a-color-content-body-subtle);font: var(--s2a-font-size-xs)/var(--s2a-font-line-height-xs) var(--s2a-font-family-body);width:48px;flex-shrink:0;";
       label.textContent = `${card.width}px`;
 
       const slot = document.createElement('div');

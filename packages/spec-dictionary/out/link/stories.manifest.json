@@ -1,0 +1,251 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "link",
+  "storybookId": "link",
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "emphasis-default",
+      "name": "emphasis: default",
+      "args": {
+        "emphasis": "default"
+      }
+    },
+    {
+      "id": "emphasis-subtle",
+      "name": "emphasis: subtle",
+      "args": {
+        "emphasis": "subtle"
+      }
+    },
+    {
+      "id": "kind-action",
+      "name": "kind: action",
+      "args": {
+        "kind": "action"
+      }
+    },
+    {
+      "id": "kind-text",
+      "name": "kind: text",
+      "args": {
+        "kind": "text"
+      }
+    },
+    {
+      "id": "underline-on",
+      "name": "underline on",
+      "args": {
+        "underline": true
+      }
+    },
+    {
+      "id": "underline-off",
+      "name": "underline off",
+      "args": {
+        "underline": false
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "generated-link--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-link--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-link--emphasis-default",
+      "name": "emphasis: default",
+      "argKeys": [
+        "emphasis"
+      ]
+    },
+    {
+      "id": "generated-link--emphasis-subtle",
+      "name": "emphasis: subtle",
+      "argKeys": [
+        "emphasis"
+      ]
+    },
+    {
+      "id": "generated-link--kind-action",
+      "name": "kind: action",
+      "argKeys": [
+        "kind"
+      ]
+    },
+    {
+      "id": "generated-link--kind-text",
+      "name": "kind: text",
+      "argKeys": [
+        "kind"
+      ]
+    },
+    {
+      "id": "generated-link--underline-on",
+      "name": "underline on",
+      "argKeys": [
+        "underline"
+      ]
+    },
+    {
+      "id": "generated-link--underline-off",
+      "name": "underline off",
+      "argKeys": [
+        "underline"
+      ]
+    },
+    {
+      "id": "atoms-link--action",
+      "name": "Action",
+      "argKeys": [
+        "label",
+        "href",
+        "kind",
+        "emphasis",
+        "underline",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-link--text-link",
+      "name": "Text Link",
+      "argKeys": [
+        "label",
+        "href",
+        "kind",
+        "emphasis",
+        "underline",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-link--text-subtle",
+      "name": "Text Subtle",
+      "argKeys": [
+        "label",
+        "href",
+        "kind",
+        "emphasis",
+        "underline",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-link--on-dark",
+      "name": "On Dark",
+      "argKeys": [
+        "label",
+        "href",
+        "kind",
+        "emphasis",
+        "underline",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-link--on-dark-text-subtle",
+      "name": "On Dark Text Subtle",
+      "argKeys": [
+        "label",
+        "href",
+        "kind",
+        "emphasis",
+        "underline",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-link--all-variants",
+      "name": "All Variants",
+      "argKeys": [
+        "label",
+        "href",
+        "kind",
+        "emphasis",
+        "underline",
+        "showIconEnd"
+      ]
+    }
+  ],
+  "deferred": [],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      "default / action",
+      "default / text",
+      "subtle / text"
+    ],
+    "rowValues": [
+      {
+        "Emphasis": "default",
+        "Kind": "action"
+      },
+      {
+        "Emphasis": "default",
+        "Kind": "text"
+      },
+      {
+        "Emphasis": "subtle",
+        "Kind": "text"
+      }
+    ],
+    "cell": {
+      "w": 80,
+      "h": 48,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "emphasis": "default",
+          "kind": "action"
+        },
+        "forced": null,
+        "label": "default / action / default",
+        "nodeId": "12823:184496"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "emphasis": "default",
+          "kind": "text"
+        },
+        "forced": null,
+        "label": "default / text / default",
+        "nodeId": "12823:184514"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "emphasis": "subtle",
+          "kind": "text"
+        },
+        "forced": null,
+        "label": "subtle / text / default",
+        "nodeId": "12823:184505"
+      }
+    ],
+    "missing": []
+  }
+}

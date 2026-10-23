@@ -1,0 +1,53 @@
+{
+  "$schema": "s2a-grid-defs/1",
+  "slug": "ups-grid",
+  "name": "Ups grid (N-up)",
+  "version": "0.1.0",
+  "kind": "grid",
+  "tier": "block",
+  "status": "proposed",
+  "description": "The third grid kind: a fixed number of equal items per row — two-up through six-up — collapsing to two-up at tablet and a single column on mobile, with an orphan rule that stretches a lone last item. This is the most completely specified layout in the whole system: Figma carries the behaviour, the breakpoints and the markup, and it is implemented nowhere in S2A. It is tier block, which by Will's own rule means C2 owns the implementation and S2A only holds the agreement.",
+  "anchors": {
+    "code": { "stylesheet": "packages/grid/src/s2a-layout-grids.css" },
+    "figma": { "collectionId": "VariableCollectionId:6:178", "fileKey": "qAF4nlt6O4ThbeXeO7jzdb", "nodeId": "104:26144", "layerName": "Ups flex-Grid (3ups)", "designOnly": true }
+  },
+  "breakpointBehavior": [
+    { "breakpoint": "sm", "behavior": "Single column, fully stacked.", "columns": 6 },
+    { "breakpoint": "md", "behavior": "Always two-up, whatever the declared N. A lone last item takes full width when the orphan modifier is set.", "columns": 12 },
+    { "breakpoint": "lg", "behavior": "Two to six per row, as declared by the two-up … six-up modifier.", "columns": 12 },
+    { "breakpoint": "xl", "behavior": "Same count as lg; the items grow with the container.", "columns": 12 }
+  ],
+  "tokens": [{ "role": "gutter", "ref": "{s2a.spacing.xs}", "breakpoint": "all" }],
+  "surface": {
+    "classes": [
+      { "name": "ups-grid", "purpose": "Proposed: the N-up row. Figma documents the markup as <div class=\"ups-grid three-up\">.", "expect": "absent" },
+      { "name": "two-up", "purpose": "Proposed: two items per row at desktop.", "pattern": "{two|three|four|five|six}-up", "expect": "absent" },
+      { "name": "three-up", "purpose": "Proposed: three items per row at desktop.", "expect": "absent" },
+      { "name": "orphan-full", "purpose": "Proposed: a lone last item stretches to full width instead of sitting half-empty.", "expect": "absent" }
+    ]
+  },
+  "rules": [
+    { "id": "UPS_NOT_IN_S2A", "statement": "No ups-grid class exists in S2A. The system is fully specified in Figma and implemented nowhere this repository can see.", "severity": "fail", "check": { "type": "classAbsent", "name": "ups-grid" } },
+    { "id": "UPS_NO_TWO_UP", "statement": "No N-up modifier exists in S2A either.", "severity": "fail", "check": { "type": "classAbsent", "name": "two-up" } },
+    { "id": "UPS_NO_ORPHAN", "statement": "The orphan rule exists in no stylesheet here.", "severity": "fail", "check": { "type": "classAbsent", "name": "orphan-full" } },
+    { "id": "UPS_TIER_BLOCK", "statement": "This is block-tier, so S2A must not add shipped tokens for it. Will: 'if its block level rules it wont be in s2a'.", "severity": "fail", "check": { "type": "manual", "note": "No tokens are declared beyond the shared gutter, which the foundation already ships. Re-check if this contract ever grows a token list of its own." } },
+    { "id": "UPS_GUTTER_SHIPPED", "statement": "The shared gutter token exists, so an implementation needs nothing new from the token pipeline.", "severity": "fail", "check": { "type": "tokenShipped", "ref": "{s2a.spacing.xs}" } }
+  ],
+  "decisions": [
+    {
+      "id": "UPS_OWNER",
+      "question": "Who implements the ups grid — S2A or C2/Milo?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Figma says 'Ups is refactored in milo now. We could put this in figma as a system but its inline for now.' No .ups-grid definition was found in packages/grid, in Will's hosted demo, or under the vendored context/milo c2 and styles directories. Tier is recorded as block on the strength of his rule that block-level work stays in C2, which also makes this contract documentation rather than a build task for S2A."
+    },
+    {
+      "id": "UPS_TABLET_ALWAYS_TWO",
+      "question": "Is 'always two-up at tablet' right for five-up and six-up sets, or should they go three-up at tablet?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Figma states 'Tablet (768–1279px): Always 2-up' without exception. A six-item set then becomes three tablet rows, which may be intended or may be the reflow fix his note permits as a bespoke query."
+    }
+  ],
+  "visualize": { "demo": "ups", "overlay": false, "note": "Rendered from the proposed rules with inline CSS, including the orphan case, so the behaviour can be reviewed before anyone writes it." }
+}

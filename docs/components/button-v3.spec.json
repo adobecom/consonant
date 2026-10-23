@@ -1,0 +1,140 @@
+{
+  "$comment": "Button v3 proposal. Review copy of docs/components/button.md in the shape /json-to-figma consumes. Not a generated spec: once the Figma set exists, extract the contract and let specs:scaffold produce button.defs.json from evidence.",
+  "name": "Button",
+  "slug": "button",
+  "cssClass": "c-button",
+  "figmaNodeId": "",
+  "storybookId": "atoms-button",
+  "version": "3.0.0",
+  "status": "proposal",
+  "description": "The primary action trigger: a label with optional leading and trailing icons, in six styles and three sizes. Light and dark come from variable modes, so you choose a style, not a theme.",
+  "element": { "default": "button", "byProp": { "prop": "href", "map": { "": "button", "*": "a" } } },
+  "variants": {
+    "State": ["default", "hover", "active", "focus", "disabled"],
+    "Size": ["sm", "md", "lg"],
+    "Style": ["solid", "outlined", "transparent", "accent", "knockout", "outline-inverse"]
+  },
+  "variantAxisOrder": ["State", "Size", "Style"],
+  "defaultVariant": { "State": "default", "Size": "md", "Style": "solid" },
+  "phase1": { "Size": ["md"], "variantCount": 30 },
+  "figmaProperties": [
+    { "kind": "VARIANT", "name": "State", "options": ["default", "hover", "active", "focus", "disabled"], "default": "default" },
+    { "kind": "VARIANT", "name": "Size", "options": ["sm", "md", "lg"], "default": "md" },
+    { "kind": "VARIANT", "name": "Style", "options": ["solid", "outlined", "transparent", "accent", "knockout", "outline-inverse"], "default": "solid" },
+    { "kind": "BOOLEAN", "name": "Show Icon Start", "default": false, "controls": ".icon-start" },
+    { "kind": "BOOLEAN", "name": "Show Icon End", "default": false, "controls": ".icon-end" },
+    { "kind": "INSTANCE_SWAP", "name": "Icon Start", "layer": ".icon-start", "accepts": ["S2 icon", "S2a icon"], "default": "S2_Icon_Circle_20_N" },
+    { "kind": "INSTANCE_SWAP", "name": "Icon End", "layer": ".icon-end", "accepts": ["S2 icon", "S2a icon"], "default": "S2a_Icon_Chevron_Right" },
+    { "kind": "TEXT", "name": "Label", "layer": "label", "default": "Label" }
+  ],
+  "props": [
+    { "name": "label", "type": "string", "required": true, "lever": true, "figma": { "kind": "TEXT", "property": "Label" }, "description": "The accessible name. Empty is forbidden; use IconButton." },
+    { "name": "style", "type": "string", "enum": ["solid", "outlined", "transparent", "accent", "knockout", "outline-inverse"], "defaultValue": "solid", "lever": true, "figma": { "kind": "VARIANT", "property": "Style" }, "code": { "attr": "data-style" } },
+    { "name": "size", "type": "string", "enum": ["sm", "md", "lg"], "defaultValue": "md", "lever": true, "figma": { "kind": "VARIANT", "property": "Size" }, "code": { "attr": "data-size" } },
+    { "name": "iconStart", "type": "string", "lever": true, "figma": { "kind": "INSTANCE_SWAP", "property": "Icon Start" }, "description": "Icon name or node. Decorative, aria-hidden." },
+    { "name": "iconEnd", "type": "string", "lever": true, "figma": { "kind": "INSTANCE_SWAP", "property": "Icon End" }, "description": "Icon name or node. Decorative, aria-hidden." },
+    { "name": "href", "type": "string", "lever": true, "figma": "NONE", "description": "Present renders <a>; absent renders <button type=\"button\">." },
+    { "name": "type", "type": "string", "enum": ["button", "submit", "reset"], "defaultValue": "button", "lever": true, "figma": "NONE" },
+    { "name": "disabled", "type": "boolean", "defaultValue": false, "lever": true, "figma": { "kind": "VARIANT", "property": "State", "value": "disabled" }, "description": "Native disabled on <button>; aria-disabled with no href on <a>." },
+    { "name": "fullWidth", "type": "boolean", "defaultValue": false, "lever": true, "figma": "NONE", "description": "Layout only: stretch to the container. In Figma set the instance's horizontal sizing to fill." },
+    { "name": "onClick", "type": "function", "lever": true, "figma": "NONE" },
+    { "name": "state", "type": "string", "enum": ["default", "hover", "active", "focus", "disabled"], "defaultValue": "default", "lever": true, "figma": { "kind": "VARIANT", "property": "State" }, "code": { "attr": "data-state" }, "description": "Forced state for previews, docs and the eval matrix only." },
+    { "name": "showIconStart", "type": "boolean", "defaultValue": false, "lever": false, "figma": { "kind": "BOOLEAN", "property": "Show Icon Start" }, "description": "Figma authoring toggle. Not a code lever." },
+    { "name": "showIconEnd", "type": "boolean", "defaultValue": false, "lever": false, "figma": { "kind": "BOOLEAN", "property": "Show Icon End" }, "description": "Figma authoring toggle. Not a code lever." }
+  ],
+  "states": [
+    { "name": "hover", "code": ":hover" },
+    { "name": "active", "code": ":active" },
+    { "name": "focus", "code": ":focus-visible" },
+    { "name": "disabled", "code": "[disabled], [aria-disabled=\"true\"]" }
+  ],
+  "layers": {
+    ".root": {
+      "layout": { "mode": "HORIZONTAL", "primaryAxisAlign": "CENTER", "counterAxisAlign": "CENTER", "widthSizing": "HUG", "heightSizing": "FIXED" },
+      "children": [".icon-start", "label", ".icon-end", "[focus ring]"]
+    },
+    ".icon-start": { "type": "INSTANCE", "visibleByDefault": false },
+    "label": { "type": "TEXT", "textStyle": "Label", "autoResize": "HEIGHT", "wrap": false },
+    ".icon-end": { "type": "INSTANCE", "visibleByDefault": false },
+    "[focus ring]": { "type": "visual", "onlyIn": { "State": "focus" } }
+  },
+  "tokenBindings": {
+    "root": {
+      "common": {
+        "border-radius": "s2a/border/radius/round",
+        "border-width": "s2a/border/width/md",
+        "min-height": "s2a/button/min-height/{size}",
+        "padding-inline": "s2a/button/padding-inline/{size}",
+        "padding-block": "s2a/spacing/none",
+        "gap": "s2a/button/gap/{size}",
+        "font-family": "s2a/font/family/label",
+        "font-weight": "s2a/font/weight/label",
+        "font-size": "s2a/typography/font-size/label",
+        "line-height": "s2a/typography/line-height/label",
+        "letter-spacing": "s2a/typography/letter-spacing/label"
+      },
+      "byStyle": {
+        "solid": { "background-color": "s2a/color/button/background/solid/{state}", "border-color": { "default": "transparent", "hover": "s2a/color/border/knockout" }, "color": "s2a/color/button/content/solid/default" },
+        "outlined": { "background-color": "s2a/color/button/background/outlined/{state}", "border-color": "s2a/color/border/knockout", "color": { "default": "s2a/color/content/default", "active": "s2a/color/button/content/outlined/active" } },
+        "transparent": { "background-color": "s2a/color/button/background/transparent/{state}", "border-color": "transparent", "color": "s2a/color/content/default" },
+        "accent": { "background-color": "s2a/color/button/background/accent/{state}", "border-color": "transparent", "color": "s2a/color/content/knockout" },
+        "knockout": { "background-color": "s2a/color/button/background/knockout/{state}", "border-color": "s2a/color/button/border/knockout/default", "color": "s2a/color/button/content/knockout", "backdrop-filter": "s2a/blur/md" },
+        "outline-inverse": { "background-color": "s2a/color/button/background/outline-inverse/{state}", "border-color": "s2a/color/button/border/outline-inverse/default", "color": "s2a/color/button/content/outline-inverse", "backdrop-filter": "s2a/blur/md" }
+      },
+      "stateNote": "{state} resolves default | hover | active. focus and disabled reuse default; disabled adds opacity.",
+      "byState": {
+        "focus": { "outline-color": { "themed": "s2a/color/focus-ring/default", "knockout": "s2a/color/focus-ring/knockout", "outline-inverse": "s2a/color/focus-ring/knockout" }, "outline-width": "s2a/border/width/md", "outline-offset": "s2a/spacing/3xs" },
+        "disabled": { "opacity": "s2a/opacity/disabled" }
+      }
+    },
+    "icon": { "width": "s2a/button/icon-size/{size}", "height": "s2a/button/icon-size/{size}", "color": "currentColor" },
+    "label": { "color": "inherits root color" }
+  },
+  "newTokens": {
+    "collection": "S2A / Responsive / Container / Grid",
+    "tokens": {
+      "s2a/button/min-height/sm": 32, "s2a/button/min-height/md": 40, "s2a/button/min-height/lg": 48,
+      "s2a/button/padding-inline/sm": "{s2a.spacing.md}", "s2a/button/padding-inline/md": "{s2a.spacing.lg}", "s2a/button/padding-inline/lg": "{s2a.spacing.xl}",
+      "s2a/button/gap/sm": "{s2a.spacing.2xs}", "s2a/button/gap/md": "{s2a.spacing.xs}", "s2a/button/gap/lg": "{s2a.spacing.xs}",
+      "s2a/button/icon-size/sm": 12, "s2a/button/icon-size/md": 16, "s2a/button/icon-size/lg": 20
+    },
+    "fixes": {
+      "s2a/color/focus-ring/default": "dark mode value is transparent/black/48 (1.07:1 on the dark page). Needs a white-based alpha."
+    }
+  },
+  "forbiddenCombinations": [
+    { "label": "", "why": "No accessible name. Use IconButton." },
+    { "style": "knockout", "surface": "background/default", "mode": "light", "why": "White on white." },
+    { "style": "outline-inverse", "surface": "background/default", "mode": "light", "why": "White on white." },
+    { "href": "*", "disabled": "true", "why": "Render <a aria-disabled> with no href, or a <button>." }
+  ],
+  "a11y": {
+    "role": "button",
+    "roleByProp": { "href": "link" },
+    "requiredAriaAttrs": [],
+    "wcag": ["1.4.1", "1.4.3", "1.4.11", "2.1.1", "2.4.7", "2.4.11", "2.5.8", "4.1.2"],
+    "keyboard": [
+      { "key": "Tab / Shift+Tab", "action": "Move focus to and from the control" },
+      { "key": "Enter", "action": "Activate" },
+      { "key": "Space", "action": "Activate (button element only)" }
+    ],
+    "notes": [
+      "Renders a native <button>, or an <a> when it navigates. Never a div with a click handler.",
+      "The label is the accessible name. Icon-only is forbidden here; use IconButton.",
+      "Focus ring ships in code via :focus-visible with a 2px offset so it is never obscured.",
+      "Disabled is exposed to assistive tech (disabled / aria-disabled), not only dimmed.",
+      "Target size: sm 32px, md 40px, lg 48px. All exceed 24x24. Prefer md or lg on touch.",
+      "On media keep the label at 4.5:1 and borders at 3:1; add a scrim when the image does not deliver it.",
+      "Accent blue measures 4.81:1 under white text. Do not lighten it."
+    ]
+  },
+  "contrast": {
+    "solid/light/default": 21.0, "solid/light/hover": 6.69, "solid/dark/hover": 9.04,
+    "accent/default": 4.81, "accent/hover": 6.3, "accent/active": 7.95, "accent/fill-vs-dark-page": 3.86,
+    "outlined/light": 21.0, "outlined/dark": 18.58,
+    "knockout/default": 21.0, "knockout/hover": 19.77, "knockout/active": 17.3,
+    "focus-ring/light-vs-page": 3.69, "focus-ring/light-vs-solid": 5.69, "focus-ring/dark-vs-page": 1.07,
+    "solid/light/disabled": 2.03
+  },
+  "openQuestions": ["Q1 solid label token", "Q2 md icon size 12 vs 16", "Q3 lg label type size", "Q4 focus-ring dark value", "Q5 active/focus vs pressed/focused", "Q6 outline-inverse naming", "Q7 solid hover border", "Q8 reserved styles negative, glass"]
+}

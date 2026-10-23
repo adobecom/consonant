@@ -5,8 +5,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { readFileSync, existsSync } from "fs";
+import { pathToFileURL } from "url";
 import { resolve } from "path";
-import { loadTokens } from "../loaders/token-loader.js";
 import { loadComponents } from "../loaders/component-loader.js";
 import type { ToolError } from "../types.js";
 
@@ -19,21 +19,69 @@ function err(e: ToolError) {
 
 interface Violation {
   line: number;
-  type: "hardcoded-hex" | "hardcoded-px" | "hardcoded-rgb" | "unknown-token" | "raw-font-size";
+  type: string;
   value: string;
   context: string;
   suggestion?: string;
   severity: "error" | "warning";
 }
 
-const HEX_RE = /#([0-9a-fA-F]{3,8})\b/g;
-const RGB_RE = /rgba?\(\s*\d/g;
-// Font-size with raw px (not inside var())
-const RAW_FONT_SIZE_RE = /font-size\s*:\s*(\d+px)/g;
-// var() that references --s2a-*
-const TOKEN_VAR_RE = /var\((--s2a-[^,)]+)/g;
-// Raw px values in non-var context (heuristic — exclude 0px, 1px borders)
-const RAW_PX_RE = /(?<!var\([^)]*)\b(\d{2,}px)\b/g;
+// validate_css delegates to @adobecom/s2a-validators rather than keeping its own
+// rules. The private copy this replaces had drifted badly in both directions:
+//
+//   • It could not detect primitive tokens AT ALL — the one thing CLAUDE.md
+//     tells people to run this tool for. A primitive resolves in the token
+//     index, so it passed silently.
+//   • It flagged a component's own local --s2a-* aliases as unknown tokens,
+//     which is a false positive on a legitimate pattern.
+//
+// Loaded by path because this repo has no npm workspaces, so a bare specifier
+// does not resolve. Same pattern as the Storybook analytics snapshot.
+type PackageViolation = { code: string; message: string; value?: string; line?: number };
+type PackageResult = { ok: boolean; score: 1 | 2 | 3 | 4 | 5; violations: PackageViolation[] };
+interface ValidatorsModule {
+  loadTokenIndex: (repoRoot: string) => unknown;
+  validateCss: (css: string, index: unknown, opts?: { strict?: boolean }) => PackageResult;
+}
+
+let validatorsPromise: Promise<ValidatorsModule> | null = null;
+function loadValidators(dsRoot: string): Promise<ValidatorsModule> {
+  if (!validatorsPromise) {
+    const dist = resolve(dsRoot, "packages/validators/dist/index.js");
+    if (!existsSync(dist)) {
+      return Promise.reject(
+        new Error(
+          "@adobecom/s2a-validators is not built. Run: npm run validators:build",
+        ),
+      );
+    }
+    validatorsPromise = import(pathToFileURL(dist).href) as Promise<ValidatorsModule>;
+  }
+  return validatorsPromise;
+}
+
+// The package speaks in stable codes; this tool answers an agent that also wants
+// to know what to do next. Severity and the next tool to call live here, because
+// they are about THIS interface, not about what counts as a violation.
+// Enumeration only — which --s2a-* custom properties a file references. Whether
+// any of them is a problem is the package's call, never this pattern's.
+const VAR_USAGE_RE = /var\(\s*(--s2a-[a-z0-9-]+)\s*[,)]/g;
+
+const SEVERITY: Record<string, "error" | "warning"> = {
+  HARDCODED_HEX: "error",
+  HARDCODED_RGB: "error",
+  HARDCODED_PX: "warning",
+  PRIMITIVE_TOKEN: "error",
+  UNKNOWN_TOKEN: "warning",
+};
+
+const NEXT_STEP: Record<string, string> = {
+  HARDCODED_HEX: "Replace with a semantic s2a color token — search_tokens({ query: 'color', type: 'color' }).",
+  HARDCODED_RGB: "Replace with a semantic s2a color token — search_tokens({ type: 'color' }).",
+  HARDCODED_PX: "May map to a spacing or radius token — search_tokens({ type: 'dimension' }).",
+  PRIMITIVE_TOKEN: "Primitives are design-only and must not ship. Use the semantic alias — get_token_aliases({ token }) names it.",
+  UNKNOWN_TOKEN: "Not a known S2A token and not defined in this file — check_token_exists({ token }) or search_tokens.",
+};
 
 export function registerValidateTools(server: McpServer, dsRoot: string): void {
 
@@ -47,94 +95,31 @@ export function registerValidateTools(server: McpServer, dsRoot: string): void {
     },
     async ({ css, strict }) => {
       try {
-        const tokenIndex = loadTokens(dsRoot);
-        const violations: Violation[] = [];
+        const { loadTokenIndex, validateCss } = await loadValidators(dsRoot);
+        const result = validateCss(css, loadTokenIndex(dsRoot), { strict });
+
+        // Line context is what makes a violation actionable in a chat reply, and
+        // it is the one thing the package deliberately does not carry.
         const lines = css.split("\n");
+        const violations: Violation[] = result.violations.map((v) => ({
+          line: v.line ?? 0,
+          type: v.code,
+          value: v.value ?? "",
+          context: (lines[(v.line ?? 1) - 1] ?? "").trim(),
+          suggestion: NEXT_STEP[v.code] ?? v.message,
+          severity: SEVERITY[v.code] ?? "warning",
+        }));
 
-        lines.forEach((line, i) => {
-          const lineNum = i + 1;
-          const trimmed = line.trim();
-          if (trimmed.startsWith("/*") || trimmed.startsWith("*")) return;
-
-          // Hardcoded hex colors
-          for (const m of line.matchAll(HEX_RE)) {
-            // Skip if inside a comment
-            violations.push({
-              line: lineNum,
-              type: "hardcoded-hex",
-              value: m[0],
-              context: trimmed,
-              suggestion: "Replace with a semantic s2a color token. Use search_tokens({ query: 'color', type: 'color' }) to find the right one.",
-              severity: "error",
-            });
-          }
-
-          // Hardcoded rgb/rgba
-          for (const m of line.matchAll(RGB_RE)) {
-            violations.push({
-              line: lineNum,
-              type: "hardcoded-rgb",
-              value: m[0],
-              context: trimmed,
-              suggestion: "Replace with an s2a color token. Use search_tokens({ type: 'color' }) to find options.",
-              severity: "error",
-            });
-          }
-
-          // Raw font-size
-          for (const m of line.matchAll(RAW_FONT_SIZE_RE)) {
-            violations.push({
-              line: lineNum,
-              type: "raw-font-size",
-              value: m[0],
-              context: trimmed,
-              suggestion: "Use a typography token via var(--s2a-typography-font-size-*). Check search_tokens({ query: 'font-size' }).",
-              severity: "error",
-            });
-          }
-
-          // Unknown --s2a-* tokens
-          for (const m of line.matchAll(TOKEN_VAR_RE)) {
-            const cssProp = m[1].trim();
-            if (!tokenIndex.byProp.has(cssProp)) {
-              violations.push({
-                line: lineNum,
-                type: "unknown-token",
-                value: cssProp,
-                context: trimmed,
-                suggestion: `"${cssProp}" is not in the token system. Use check_token_exists or search_tokens to find the correct token.`,
-                severity: "warning",
-              });
-            }
-          }
-
-          // Strict: raw px for spacing (>=4px, not border-related)
-          if (strict && !trimmed.includes("border") && !trimmed.includes("outline")) {
-            for (const m of line.matchAll(RAW_PX_RE)) {
-              const px = m[1];
-              const num = parseInt(px);
-              if (num >= 4 && num !== 1) {
-                violations.push({
-                  line: lineNum,
-                  type: "hardcoded-px",
-                  value: px,
-                  context: trimmed,
-                  suggestion: `${px} may map to a spacing token. Use search_tokens({ query: '${px}', type: 'dimension' }) to check.`,
-                  severity: "warning",
-                });
-              }
-            }
-          }
-        });
-
-        const score = Math.max(0, 100 - violations.filter((v) => v.severity === "error").length * 10 - violations.filter((v) => v.severity === "warning").length * 3);
         const errors = violations.filter((v) => v.severity === "error").length;
         const warnings = violations.filter((v) => v.severity === "warning").length;
 
         return ok({
           success: true,
-          valid: violations.length === 0,
-          score,
+          // `ok` is the package's verdict: hard violations only. A file with a
+          // warning is still valid, which the old 0-100 score could not express.
+          valid: result.ok,
+          score: result.score,
+          scoreScale: "1-5 (5 = clean)",
           errorCount: errors,
           warningCount: warnings,
           violations,
@@ -154,7 +139,8 @@ export function registerValidateTools(server: McpServer, dsRoot: string): void {
     },
     async ({ filePath }) => {
       try {
-        const tokenIndex = loadTokens(dsRoot);
+        const { loadTokenIndex, validateCss } = await loadValidators(dsRoot);
+        const index = loadTokenIndex(dsRoot) as { known: Set<string>; primitive: Set<string> };
         const absPath = resolve(dsRoot, filePath);
 
         if (!existsSync(absPath)) {
@@ -168,33 +154,32 @@ export function registerValidateTools(server: McpServer, dsRoot: string): void {
         const css = readFileSync(absPath, "utf-8");
         const lines = css.split("\n");
 
+        // This tool ENUMERATES what a file uses; the package ADJUDICATES what is
+        // wrong with it. So the var() scan stays local, and every verdict about a
+        // token comes from the authoritative index.
+        //
+        // The classification changed with it: design-only used to mean the source
+        // JSON's `hiddenFromPublishing`, which over-flags semantic tokens. The
+        // index decides by which built stylesheet DEFINES the token, which is
+        // what actually ships.
         const usedTokens = new Map<string, { found: boolean; designOnly: boolean; line: number }>();
-        const hardcodedValues: Array<{ line: number; type: string; value: string }> = [];
-
-        lines.forEach((line, i) => {
-          const lineNum = i + 1;
-          const trimmed = line.trim();
-          if (trimmed.startsWith("/*") || trimmed.startsWith("*")) return;
-
-          for (const m of line.matchAll(TOKEN_VAR_RE)) {
+        for (let i = 0; i < lines.length; i++) {
+          const trimmed = lines[i].trim();
+          if (trimmed.startsWith("/*") || trimmed.startsWith("*")) continue;
+          for (const m of lines[i].matchAll(VAR_USAGE_RE)) {
             const cssProp = m[1].trim();
-            if (!usedTokens.has(cssProp)) {
-              const entries = tokenIndex.byProp.get(cssProp);
-              usedTokens.set(cssProp, {
-                found: !!entries,
-                designOnly: entries?.[0]?.designOnly ?? false,
-                line: lineNum,
-              });
-            }
+            if (usedTokens.has(cssProp)) continue;
+            usedTokens.set(cssProp, {
+              found: index.known.has(cssProp) || index.primitive.has(cssProp),
+              designOnly: index.primitive.has(cssProp),
+              line: i + 1,
+            });
           }
+        }
 
-          for (const m of line.matchAll(HEX_RE)) {
-            hardcodedValues.push({ line: lineNum, type: "hex", value: m[0] });
-          }
-          for (const m of line.matchAll(RGB_RE)) {
-            hardcodedValues.push({ line: lineNum, type: "rgb", value: m[0] });
-          }
-        });
+        const hardcodedValues = validateCss(css, index).violations
+          .filter((v) => v.code === "HARDCODED_HEX" || v.code === "HARDCODED_RGB")
+          .map((v) => ({ line: v.line ?? 0, type: v.code === "HARDCODED_HEX" ? "hex" : "rgb", value: v.value ?? "" }));
 
         const found = [...usedTokens.entries()].filter(([, v]) => v.found && !v.designOnly).map(([k]) => k);
         const missing = [...usedTokens.entries()].filter(([, v]) => !v.found).map(([k, v]) => ({ cssProp: k, firstLine: v.line }));

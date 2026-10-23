@@ -14,7 +14,7 @@ export default {
   title: "Organisms/NavCard/Menu",
   tags: ["autodocs"],
   render: (args) =>
-    html`<div style="padding: 32px; background: #f5f5f5; display: inline-flex;">${NavCardMenuItem(args)}</div>`,
+    html`<div style="padding: var(--s2a-spacing-xl); background: var(--s2a-color-surface-subtle); display: inline-flex;">${NavCardMenuItem(args)}</div>`,
   parameters: {
     docs: {
       description: {

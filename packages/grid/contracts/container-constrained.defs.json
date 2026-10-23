@@ -1,0 +1,163 @@
+{
+  "$schema": "s2a-grid-defs/1",
+  "slug": "container-constrained",
+  "name": "Constrained container",
+  "version": "1.0.0",
+  "kind": "container",
+  "tier": "sectional",
+  "status": "shipped",
+  "description": "Column-count caps for a section that should be narrower than the full 12: 10, 8 or 6 columns' worth of width, computed from the 1440 grid rather than typed as a pixel value. These are modifiers, not containers \u2014 each is combined with .container, which supplies the centring and the side margins, and only overrides the cap. This is the right answer to 'I need this section narrower': it keeps the measurement on the grid instead of inventing a max-width, which is the failure Will flagged in Milo's own container code.",
+  "anchors": {
+    "code": {
+      "stylesheet": "packages/grid/src/s2a-layout-grids.css",
+      "importPath": "@adobecom/s2a-grid/css/grid.css",
+      "rootClass": "container"
+    },
+    "figma": {
+      "collectionId": "VariableCollectionId:6:178",
+      "layerName": "Container",
+      "designOnly": true
+    }
+  },
+  "breakpointBehavior": [
+    {
+      "breakpoint": "sm",
+      "behavior": "No effect \u2014 the cap is wider than the viewport, so the container behaves as full width.",
+      "maxWidth": null,
+      "columns": 6
+    },
+    {
+      "breakpoint": "md",
+      "behavior": "No effect in practice at tablet widths.",
+      "maxWidth": null,
+      "columns": 12
+    },
+    {
+      "breakpoint": "lg",
+      "behavior": "Caps the content at N columns' worth of the 1440 grid, gutters included.",
+      "maxWidth": "computed from 1440 and the gutter",
+      "columns": 12
+    },
+    {
+      "breakpoint": "xl",
+      "behavior": "Same cap \u2014 these modifiers are deliberately range-independent, so a narrow section stays the same measure on an HD display.",
+      "maxWidth": "computed from 1440 and the gutter",
+      "columns": 12
+    }
+  ],
+  "tokens": [
+    {
+      "role": "gutter",
+      "ref": "{s2a.spacing.xs}",
+      "breakpoint": "all",
+      "note": "The gutter is part of the width maths, so a gutter change moves these caps with it."
+    }
+  ],
+  "surface": {
+    "classes": [
+      {
+        "name": "container-12",
+        "purpose": "Full 12-column cap, 1440px. Used as .container.container-12.",
+        "pattern": "container container-{6|8|10|12}"
+      },
+      {
+        "name": "container-10",
+        "purpose": "Ten columns' worth of the 1440 grid. Used as .container.container-10."
+      },
+      {
+        "name": "container-8",
+        "purpose": "Eight columns' worth \u2014 the common wide-measure section. Used as .container.container-8."
+      },
+      {
+        "name": "container-6",
+        "purpose": "Six columns' worth \u2014 the common centred-text section. Will notes this is what Milo reaches for as grid-width-6. Used as .container.container-6."
+      }
+    ]
+  },
+  "rules": [
+    {
+      "id": "CON_12",
+      "statement": "The 12-column cap exists and equals 1440.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-12",
+        "media": null,
+        "property": "max-width",
+        "expectedPx": 1440
+      }
+    },
+    {
+      "id": "CON_10",
+      "statement": "The 10-column cap is computed from the grid, not typed as a pixel literal.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-10",
+        "media": null,
+        "property": "max-width",
+        "expectedComputed": true
+      }
+    },
+    {
+      "id": "CON_8",
+      "statement": "The 8-column cap is computed from the grid.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-8",
+        "media": null,
+        "property": "max-width",
+        "expectedComputed": true
+      }
+    },
+    {
+      "id": "CON_6",
+      "statement": "The 6-column cap is computed from the grid.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-6",
+        "media": null,
+        "property": "max-width",
+        "expectedComputed": true
+      }
+    },
+    {
+      "id": "CON_GUTTER_SHIPPED",
+      "statement": "The gutter token the maths depends on ships.",
+      "severity": "fail",
+      "check": {
+        "type": "tokenShipped",
+        "ref": "{s2a.spacing.xs}"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "CON_BASIS_1440",
+      "question": "The caps are computed from a hard-coded 1440 basis rather than from --s2a-grid-max-width. Should they follow the standard container up to 1920 in HD?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "If the standard container rises to 1920 at XL but container-8 stays pinned to a 1440 basis, a 'two-thirds width' section quietly becomes a smaller share of the page in HD. Deliberate or not, it should be stated."
+    },
+    {
+      "id": "CON_DOC_1024",
+      "question": "Will's hosted demo documents these under a heading reading 'Desktop Constraint Variations (1024px+)', but they carry no media query at all in either stylesheet.",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Stale heading on acom-prototypes.vercel.app/s2a-grids/col-system.html, and 1024 is the same wrong number that caused the sectional-token reflow bug. Worth correcting on the page so nobody implements to it."
+    },
+    {
+      "id": "CON_MODIFIER_ALONE",
+      "question": "Should .container-6 used on its own be an error? Alone it sets only a cap \u2014 no centring, no side margins \u2014 so a section that forgets .container silently sits flush left.",
+      "state": "open",
+      "owner": "Matthew Huntsberry",
+      "evidence": "The stylesheet comment calls them 'Desktop Container Modifiers' but nothing enforces the pairing. Caught while building the Storybook demo, which rendered .container-6 alone and produced a left-aligned box."
+    }
+  ],
+  "visualize": {
+    "demo": "container",
+    "overlay": true
+  }
+}

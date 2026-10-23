@@ -9,17 +9,30 @@
 
 .spc-track {
   display: flex;
-  gap: 8px;
+  gap: var(--s2a-spacing-xs);
   will-change: transform;
-  /* Initial state: translate = peek, so first slide is in view */
-  transform: translateX(var(--spc-peek, 11.46%));
+  /* Initial state: translate = peek, so first slide is in view. The fallbacks
+     here and on .spc-slide mirror the controller's numbers per breakpoint
+     (PEEK_NARROW 8.6% through 1440, PEEK_WIDE 11.46% from XL 1441, 16px on phones)
+     so the first paint already matches what the JS measures — a different
+     fallback is a layout shift the moment the controller sets the real value. */
+  transform: translateX(calc(var(--spc-peek, 8.6%) + var(--s2a-spacing-xs)));
 }
 
 /* ─── Slides ─────────────────────────────────────────────────────────────── */
 
 .spc-slide {
-  flex: 0 0 var(--spc-slide-w, calc(100% - 22.92% - 16px));
+  flex: 0 0 var(--spc-slide-w, calc(100% - 17.2% - 16px));
   min-width: 0;
+}
+
+@media (min-width: 1441px) {
+  .spc-track {
+    transform: translateX(calc(var(--spc-peek, 11.46%) + var(--s2a-spacing-xs)));
+  }
+  .spc-slide {
+    flex-basis: var(--spc-slide-w, calc(100% - 22.92% - 16px));
+  }
 }
 
 .spc-slide[data-state="inactive"] {
@@ -35,9 +48,12 @@
   z-index: 10;
 }
 
-.spc-nav--prev { left: 40px; }
-.spc-nav--next { right: 40px; }
-
+.spc-nav--prev {
+  left: 40px;
+}
+.spc-nav--next {
+  right: 40px;
+}
 
 /* ─── Pagination dots ────────────────────────────────────────────────────── */
 
@@ -48,33 +64,55 @@
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s2a-spacing-xs);
   z-index: 10;
 }
 
+/* Dots bind what the .QuoteCard DotPagination binds in Figma (9334:3814):
+   size spacing/xs, radius/round, inactive transparent/white/64, active
+   content/knockout. */
 .spc-dot {
   appearance: none;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: var(--s2a-spacing-xs);
+  height: var(--s2a-spacing-xs);
+  border-radius: var(--s2a-border-radius-round);
   border: none;
   padding: 0;
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--s2a-color-transparent-white-64);
+  /* Primitive: exact component paint/geometry has no approved semantic alias; tracked by the Storybook token audit. */
   cursor: pointer;
-  transition: background 200ms ease, transform 200ms ease;
+  transition:
+    background 200ms ease,
+    transform 200ms ease;
 }
 
-.spc-dot[aria-selected="true"] {
-  background: #fff;
+.spc-dot[aria-pressed="true"] {
+  background: var(--s2a-color-content-knockout);
   transform: scale(1.25);
 }
 
 .spc-dot:focus-visible {
-  outline: 2px solid var(--s2a-color-focus-ring-default, #1473e6);
-  outline-offset: 2px;
+  outline: var(--s2a-border-width-md) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-3xs);
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────────────────── */
+@media (max-width: 599px) {
+  .spc-track {
+    transform: translateX(calc(var(--spc-peek, 16px) + var(--s2a-spacing-xs)));
+  }
+  .spc-slide {
+    flex-basis: var(--spc-slide-w, calc(100% - 48px));
+  }
+  .spc-nav {
+    top: auto;
+    bottom: 16px;
+    transform: none;
+  }
+  .spc-pagination {
+    bottom: 32px;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .spc-track {
@@ -84,4 +122,7 @@
   .spc-dot {
     transition: none;
   }
+}
+.c-social-proof-carousel[data-single="true"] :is(.spc-nav, .spc-pagination) {
+  display: none;
 }

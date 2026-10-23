@@ -54,12 +54,12 @@ Dots render as real \`<button>\` elements in a \`<nav>\` landmark, with
 
 // Knockout component — always present on a dark surface
 const darkSurface = (content) => html`
-  <div
+  <div data-theme="dark"
     style="
       display: inline-flex;
-      padding: 24px 48px;
-      background: var(--s2a-color-background-knockout, #000);
-      border-radius: 8px;
+      padding: var(--s2a-spacing-lg) var(--s2a-spacing-3xl);
+      background: var(--s2a-color-background-knockout);
+      border-radius: var(--s2a-border-radius-xs);
     "
   >
     ${content}

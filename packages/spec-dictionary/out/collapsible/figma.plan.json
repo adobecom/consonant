@@ -1,0 +1,212 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Collapsible",
+  "setName": "Collapsible",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "div",
+    "bindings": {},
+    "slot": null,
+    "children": [
+      {
+        "name": ".trigger",
+        "source": "/.trigger",
+        "element": "div",
+        "bindings": {
+          "gap": [
+            "s2a/spacing/xs"
+          ]
+        },
+        "slot": null,
+        "children": [
+          {
+            "name": ".control-button",
+            "source": "/.trigger/.icon-start",
+            "element": null,
+            "bindings": {},
+            "slot": {
+              "name": ".icon-start",
+              "accepts": [
+                "ControlButton"
+              ],
+              "mode": "restrict"
+            },
+            "children": []
+          },
+          {
+            "name": ".label",
+            "source": "/.trigger/.label",
+            "element": "span",
+            "bindings": {
+              "color": [
+                "s2a/color/content/default"
+              ],
+              "font-size": [
+                "s2a/typography/font-size/label"
+              ],
+              "letter-spacing": [
+                "s2a/typography/letter-spacing/label"
+              ],
+              "line-height": [
+                "s2a/typography/line-height/label"
+              ]
+            },
+            "slot": {
+              "name": "label",
+              "accepts": [
+                "kind:text"
+              ],
+              "mode": "prefer"
+            },
+            "children": []
+          },
+          {
+            "name": ".s2-icon-chevron-down-20-n",
+            "source": "/.trigger/S2_Icon_ChevronDown_20_N",
+            "element": null,
+            "bindings": {},
+            "slot": {
+              "name": "S2_Icon_ChevronDown_20_N",
+              "accepts": [
+                "kind:icon"
+              ],
+              "mode": "restrict"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": ".content",
+        "source": "/.content",
+        "element": "div",
+        "bindings": {},
+        "slot": {
+          "name": ".content",
+          "accepts": [],
+          "mode": "open"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10564:116547",
+    "nodeName": "Collapsible",
+    "componentSetKey": "91da27b825395cc6640593feeb5c3b34a9a956d8",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "lg"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "options": [],
+      "defaultValue": false
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [
+        "default",
+        "control"
+      ],
+      "defaultValue": "default"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-collapsible",
+      "bindings": {}
+    },
+    {
+      "name": "/.trigger",
+      "selector": ".c-collapsible__trigger",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/xs"
+        ]
+      }
+    },
+    {
+      "name": "/.trigger/.icon-start",
+      "selector": ".c-collapsible__control-button",
+      "bindings": {},
+      "slot": {
+        "name": ".icon-start",
+        "accepts": [
+          "ControlButton"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/.trigger/.label",
+      "selector": ".c-collapsible__label",
+      "bindings": {
+        "color": [
+          "s2a/color/content/default"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/label"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/label"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/label"
+        ]
+      },
+      "slot": {
+        "name": "label",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": "/.trigger/S2_Icon_ChevronDown_20_N",
+      "selector": ".c-collapsible__s2-icon-chevron-down-20-n",
+      "bindings": {},
+      "slot": {
+        "name": "S2_Icon_ChevronDown_20_N",
+        "accepts": [
+          "kind:icon"
+        ],
+        "mode": "restrict"
+      }
+    },
+    {
+      "name": "/.content",
+      "selector": ".c-collapsible__content",
+      "bindings": {},
+      "slot": {
+        "name": ".content",
+        "accepts": [],
+        "mode": "open"
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/label"
+  ]
+}

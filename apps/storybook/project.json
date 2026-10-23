@@ -4,23 +4,81 @@
   "sourceRoot": "apps/storybook",
   "projectType": "application",
   "targets": {
+    "test-foundations": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node --test apps/storybook/stories/foundations/token-model.test.mjs",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "check-foundations": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/storybook/scripts/check-foundations.mjs",
+        "cwd": "{workspaceRoot}"
+      }
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node apps/storybook/scripts/prepare-story-data.js && node apps/storybook/scripts/generate-analytics-snapshot.js && npx --yes storybook dev -p 6006",
+        "command": "node apps/storybook/scripts/prepare-token-theme.mjs && node apps/storybook/scripts/prepare-story-data.js && node apps/storybook/scripts/generate-analytics-snapshot.js && npx --yes storybook dev -p 6006",
         "cwd": "{workspaceRoot}"
       }
     },
     "build": {
       "executor": "nx:run-commands",
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build",
+        { "target": "check-media", "projects": ["validators"] }
+      ],
       "options": {
-        "command": "node apps/storybook/scripts/prepare-story-data.js && node apps/storybook/scripts/generate-analytics-snapshot.js && npx --yes storybook build",
+        "command": "node apps/storybook/scripts/prepare-token-theme.mjs && node apps/storybook/scripts/prepare-story-data.js && node apps/storybook/scripts/generate-analytics-snapshot.js && node apps/storybook/scripts/audit-tokens.mjs --check && npx --yes storybook build",
         "cwd": "{workspaceRoot}",
         "outputs": ["{workspaceRoot}/storybook-static"]
+      }
+    },
+    "prepare-token-theme": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/storybook/scripts/prepare-token-theme.mjs",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "audit-tokens": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/storybook/scripts/audit-tokens.mjs",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "render-contracts": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node packages/spec-dictionary/render.mjs --all --target=lit",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "check-token-pages": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/storybook/scripts/check-token-pages.mjs",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "test-tokens": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node --test apps/storybook/scripts/audit-tokens.test.mjs packages/spec-dictionary/build.test.mjs packages/spec-dictionary/archetype.test.mjs",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "check-tokens": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/storybook/scripts/audit-tokens.mjs --check",
+        "cwd": "{workspaceRoot}"
       }
     }
   },
   "tags": ["scope:storybook", "type:app"]
 }
-

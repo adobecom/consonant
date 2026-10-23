@@ -1,0 +1,551 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "ProductLockup",
+  "slug": "product-lockup",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from product-lockup.figma.evidence.json (sha256:ac169c4d…) through packages/spec-dictionary/dictionary.json (none)",
+    "date": "2026-10-08",
+    "reviewer": "Matt"
+  },
+  "description": "Combines an Adobe app icon, a product label, and an optional caret into a single reusable identity unit — the building block for global nav, cards, and product tiles.",
+  "archetype": "none",
+  "version": "2.0.0",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "11272:217527",
+      "nodeName": "ProductLockup — v2",
+      "componentSetKey": "8f9c978a2017362ecb1449484809b9920c0be4b9",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"?\"; 1024 nodes, 343 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/product-lockup/product-lockup.js",
+      "export": "ProductLockup",
+      "cssClass": "c-product-lockup"
+    }
+  },
+  "props": [
+    {
+      "name": "label",
+      "lever": true,
+      "type": "string",
+      "default": "Product label",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Label#3394:9"
+      },
+      "code": {
+        "prop": "label"
+      }
+    },
+    {
+      "name": "orientation",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Orientation"
+      },
+      "code": {
+        "prop": "orientation",
+        "attr": "data-orientation"
+      }
+    },
+    {
+      "name": "showAppIcon",
+      "lever": true,
+      "type": "boolean",
+      "default": true,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show App Icon#9805:0"
+      },
+      "code": {
+        "prop": "showAppIcon"
+      }
+    },
+    {
+      "name": "showIconEnd",
+      "lever": true,
+      "type": "boolean",
+      "default": true,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show Icon End#3394:27"
+      },
+      "code": {
+        "prop": "showIconEnd"
+      }
+    },
+    {
+      "name": "showSecondAppIcon",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show Second App Icon#10894:6"
+      },
+      "code": {
+        "prop": "showSecondAppIcon"
+      }
+    },
+    {
+      "name": "style",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "label",
+        "eyebrow",
+        "knockout",
+        "inverse"
+      ],
+      "default": "label",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Style"
+      },
+      "code": {
+        "prop": "style",
+        "attr": "data-style"
+      }
+    },
+    {
+      "name": "width",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "hug",
+        "fill"
+      ],
+      "default": "hug",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Width"
+      },
+      "code": {
+        "prop": "width",
+        "attr": "data-width"
+      }
+    },
+    {
+      "name": "productName",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "productName"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "app",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "app"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "secondApp",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "secondApp"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "showSecondIcon",
+      "lever": true,
+      "type": "boolean",
+      "figma": "NONE",
+      "code": {
+        "prop": "showSecondIcon"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "styleVariant",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "styleVariant"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "showIconStart",
+      "lever": true,
+      "type": "boolean",
+      "figma": "NONE",
+      "code": {
+        "prop": "showIconStart"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "showIcon",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "showIcon"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "iconSize",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "iconSize"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    },
+    {
+      "name": "caret",
+      "lever": true,
+      "type": "expression",
+      "figma": "NONE",
+      "code": {
+        "prop": "caret"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    }
+  ],
+  "states": [],
+  "composition": [
+    {
+      "name": "AppIcon",
+      "treatment": "contract",
+      "slug": "app-icon"
+    },
+    {
+      "name": "S2a_Icon_Chevron_Right",
+      "treatment": "icon"
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-product-lockup",
+      "figma": ".root",
+      "element": "div",
+      "tokens": {
+        "gap": "raw:16px"
+      },
+      "layout": {
+        "display": "flex",
+        "direction": "row",
+        "justify": "center",
+        "align": "center",
+        "grow": true
+      },
+      "parts": {
+        "frame-1": {
+          "selector": ".c-product-lockup__frame-1",
+          "figma": "/Frame 1",
+          "tokensByProp": [
+            {
+              "prop": "orientation",
+              "map": {
+                "horizontal": {
+                  "gap": "raw:16px"
+                }
+              }
+            }
+          ],
+          "layout": {
+            "display": "inline-flex",
+            "direction": "row",
+            "align": "center"
+          },
+          "element": "div",
+          "parts": {
+            "icons": {
+              "selector": ".icons",
+              "figma": "/Frame 1/.icons",
+              "tokensByProp": [
+                {
+                  "prop": "orientation",
+                  "map": {
+                    "horizontal": {
+                      "gap": "raw:2px"
+                    }
+                  }
+                }
+              ],
+              "layout": {
+                "display": "inline-flex",
+                "direction": "row"
+              },
+              "element": "div",
+              "parts": {
+                "app-icon": {
+                  "selector": ".c-product-lockup__app-icon",
+                  "figma": "/Frame 1/.icons/AppIcon",
+                  "layout": {
+                    "display": "flex",
+                    "direction": "column"
+                  },
+                  "slot": {
+                    "name": "AppIcon",
+                    "accepts": [
+                      "AppIcon"
+                    ],
+                    "acceptsMode": "restrict",
+                    "default": {
+                      "figma": "AppIcon",
+                      "slug": "app-icon",
+                      "props": {
+                        "Size": "24"
+                      }
+                    },
+                    "notes": "Composes AppIcon (app-icon)."
+                  }
+                },
+                "app-icon-2": {
+                  "selector": ".c-product-lockup__app-icon-2",
+                  "figma": "/Frame 1/.icons/AppIcon",
+                  "layout": {
+                    "display": "flex",
+                    "direction": "column"
+                  },
+                  "slot": {
+                    "name": "AppIcon",
+                    "accepts": [
+                      "AppIcon"
+                    ],
+                    "acceptsMode": "restrict",
+                    "default": {
+                      "figma": "AppIcon",
+                      "slug": "app-icon",
+                      "props": {
+                        "Size": "24"
+                      },
+                      "visible": false
+                    },
+                    "notes": "Composes AppIcon (app-icon)."
+                  }
+                }
+              }
+            },
+            "label": {
+              "selector": ".c-product-lockup__label",
+              "figma": "/Frame 1/Label",
+              "tokensByProp": [
+                {
+                  "prop": "style",
+                  "map": {
+                    "label": {
+                      "color": "{s2a.color.content.label}"
+                    },
+                    "knockout": {
+                      "color": "{s2a.color.content.knockout}"
+                    },
+                    "inverse": {
+                      "color": "{s2a.color.content.inverse}"
+                    }
+                  }
+                },
+                {
+                  "prop": "orientation",
+                  "map": {
+                    "horizontal": {
+                      "font-family": "{s2a.font.family.label}",
+                      "font-size": "{s2a.typography.font-size.label}",
+                      "font-weight": "{s2a.font.weight.label}",
+                      "letter-spacing": "{s2a.typography.letter-spacing.label}",
+                      "line-height": "{s2a.typography.line-height.label}"
+                    }
+                  }
+                }
+              ],
+              "element": "span",
+              "slot": {
+                "name": "Label",
+                "accepts": [
+                  "kind:text"
+                ],
+                "acceptsMode": "prefer",
+                "default": {
+                  "text": "Product label"
+                }
+              }
+            }
+          }
+        },
+        "s2a-icon-chevron-right": {
+          "selector": ".c-product-lockup__s2a-icon-chevron-right",
+          "figma": "/S2a_Icon_Chevron_Right",
+          "tokensByProp": [
+            {
+              "prop": "orientation",
+              "map": {
+                "horizontal": {
+                  "width": "raw:8px",
+                  "height": "raw:8px"
+                }
+              }
+            }
+          ],
+          "layout": {
+            "display": "flex",
+            "direction": "row"
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [],
+    "notes": [
+      "The Label is the accessible name — keep it as real text (not an image) so screen readers announce the product. WCAG 1.1.1 / 4.1.2.",
+      "Decorative app icons: if the Label already names the product, mark the app icon aria-hidden so it isn't announced twice. WCAG 1.1.1 Non-text Content.",
+      "When the lockup is a link or nav item, make the whole unit one focusable target with a clear name — not separate tab stops for icon and text. WCAG 2.4.4 Link Purpose.",
+      "Contrast, especially knockout / inverse on media: keep the label and icons at 4.5:1 (text) / 3:1 (UI) against the surface; add a scrim on imagery. WCAG 1.4.3 / 1.4.11.",
+      "Order: the app icon precedes the label in the DOM so it reads in a logical sequence. WCAG 1.3.2 Meaningful Sequence."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "pl-archetype-untemplated",
+      "question": "The archetype read as \"none\", which has no template in the dictionary (it has: link-card, card, collection, button, checkbox / radio, toggle / switch, input / field, badge / tag / chip, pagination, accordion, select / dropdown, helper text, list). Without one the draft gets no HTML element, no accessibility floor and no base CSS — the root falls back to <div>. Which archetype is this, really?",
+      "chose": "drafted with no archetype floor; root element defaults to div",
+      "confidence": "low",
+      "fix": "Set \"archetype\" in the defs to one the dictionary templates, or re-scaffold with --archetype=<name>. If none fit, the dictionary needs a new entry.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "no signal identified a kind — decide it rather than inheriting a default"
+    },
+    {
+      "id": "pl-archetype",
+      "question": "Scaffolded as none (no signal identified a kind — decide it rather than inheriting a default). Confirm, or re-run npm run specs:scaffold -- --slug=product-lockup --archetype=<link-card|card|collection>.",
+      "chose": "none — no signal identified a kind — decide it rather than inheriting a default",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=product-lockup --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×4, gray×1; state axis none"
+    },
+    {
+      "id": "pl-part-selectors",
+      "question": "frame-1, app-icon, app-icon-2, s2a-icon-chevron-right have no class of their own in product-lockup.css. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to product-lockup.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/product-lockup/product-lockup.css"
+    },
+    {
+      "id": "pl-match",
+      "question": "Structural match says extend: closest existing contract is Collapsible (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Collapsible (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Collapsible instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Collapsible (1) already covers this; extend it."
+    },
+    {
+      "id": "pl-code-only-props",
+      "question": "productName, app, secondApp, showSecondIcon, styleVariant, showIconStart, showIcon, iconSize, caret exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 9 code-only props as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "product-lockup.code.evidence.json"
+    },
+    {
+      "id": "pl-composes",
+      "question": "Built from 1 component set, all of which already have a contract: AppIcon ×32. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 1 composed set, 1 already contracted; 1 icon set left for the icon slot",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "scaffold",
+      "evidence": "product-lockup.figma.evidence.json instances"
+    },
+    {
+      "id": "pl-unbound-paint",
+      "question": "200 painted layers carry no variable (/Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/tile fills, /Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 11 fills, /Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 14 fills, /Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 6 fills, /Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 8 fills, /Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 12 fills, …). Bind them to S2A tokens in Figma, or record a raw: exception with the reason.",
+      "confidence": "high",
+      "fix": "Bind the paints in Figma and re-publish evidence, or note the exception on the part in anatomy.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "product-lockup.figma.evidence.json unboundPaint"
+    },
+    {
+      "id": "pl-layer-names",
+      "question": "42 layers carry Figma-generated names (/Frame 1, /Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 11, /Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 14, /Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 6, /Frame 1/.icons/AppIcon/B_app_CreativeCloud/tile/colors/Ellipse 8, …). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "product-lockup.figma.evidence.json anatomy"
+    },
+    {
+      "id": "pl-hardcoded-values",
+      "question": "3 values in the design are set with no variable behind them: root/frame-1/icons gap@orientation=horizontal = 2px; root/s2a-icon-chevron-right width@orientation=horizontal = 8px; root/s2a-icon-chevron-right height@orientation=horizontal = 8px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "product-lockup.figma.evidence.json unboundValues"
+    },
+    {
+      "id": "heal-token-product-lockup-gap-inline",
+      "question": "The design binds s2a/product-lockup/gap-inline and the built token CSS does not ship it. Carry the literal until it does?",
+      "chose": "{s2a.product-lockup.gap-inline} → raw:16px, the value the design resolves to. A token-pipeline gap: when s2a/product-lockup/gap-inline ships, replace the literal with {s2a.product-lockup.gap-inline}.",
+      "decision": "{s2a.product-lockup.gap-inline} → raw:16px, the value the design resolves to. A token-pipeline gap: when s2a/product-lockup/gap-inline ships, replace the literal with {s2a.product-lockup.gap-inline}.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "product-lockup.figma.evidence.json variables · dist/packages/tokens/css/dev",
+      "confidence": "high"
+    },
+    {
+      "id": "heal-token-product-lockup-gap-inline-start",
+      "question": "The design binds s2a/product-lockup/gap-inline-start and the built token CSS does not ship it. Carry the literal until it does?",
+      "chose": "{s2a.product-lockup.gap-inline-start} → raw:16px, the value the design resolves to. A token-pipeline gap: when s2a/product-lockup/gap-inline-start ships, replace the literal with {s2a.product-lockup.gap-inline-start}.",
+      "decision": "{s2a.product-lockup.gap-inline-start} → raw:16px, the value the design resolves to. A token-pipeline gap: when s2a/product-lockup/gap-inline-start ships, replace the literal with {s2a.product-lockup.gap-inline-start}.",
+      "status": "decided",
+      "owner": "heal",
+      "evidence": "product-lockup.figma.evidence.json variables · dist/packages/tokens/css/dev",
+      "confidence": "high"
+    }
+  ]
+}

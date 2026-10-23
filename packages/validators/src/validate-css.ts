@@ -1,30 +1,14 @@
-// validate-css.ts — the ONE authoritative CSS token validator.
-//
-// Consumed by: the s2a-ds MCP (validate_css tool), CI (the cli), and the eval
-// scorers. Because it resolves every --s2a-* usage against the token index's
-// `designOnly` flag, PRIMITIVE_TOKEN is a fact, not a naming guess.
-
+import postcss from "postcss";
 import type { TokenIndex } from "./token-index.js";
 import type { ValidationResult, Violation } from "./types.js";
 
-const HEX_RE = /#[0-9a-fA-F]{3,8}\b/g;
-const RGB_RE = /\brgba?\([^)]*\)/g;
-const VAR_RE = /var\(\s*(--s2a-[a-z0-9-]+)\s*[,)]/g;
-// A local custom-property DEFINITION in the file under test (component alias).
-const LOCAL_DEF_RE = /(--s2a-[a-z0-9-]+)\s*:/g;
-// Raw px in a value, excluding 0/1px (borders) and anything inside var().
-const RAW_PX_RE = /(?<!var\([^)]*)\b([2-9]\d*|1\d+)px\b/g;
-
 export interface ValidateCssOptions {
-  /** Also flag raw px values (off by default — noisy around media queries). */
+  /** Treat raw nonzero pixel dimensions as errors. */
   strict?: boolean;
-}
-
-function scoreFrom(hard: number): 1 | 2 | 3 | 4 | 5 {
-  if (hard === 0) return 5;
-  if (hard <= 1) return 3;
-  if (hard <= 3) return 2;
-  return 1;
+  /** Surface raw dimensions as review warnings when strict is false. */
+  reviewDimensions?: boolean;
+  /** Include unresolved legacy (non-S2A) custom properties. */
+  includeForeignTokens?: boolean;
 }
 
 export function validateCss(
@@ -33,44 +17,107 @@ export function validateCss(
   opts: ValidateCssOptions = {},
 ): ValidationResult {
   const violations: Violation[] = [];
-
-  // Custom properties this file defines itself (component context aliases) are
-  // legitimate targets for var() — treat them as known.
-  const localDefs = new Set<string>();
-  for (const m of css.matchAll(LOCAL_DEF_RE)) localDefs.add(m[1]);
-
-  css.split("\n").forEach((line, i) => {
-    const ln = i + 1;
-
-    for (const m of line.matchAll(HEX_RE)) {
-      violations.push({ code: "HARDCODED_HEX", message: "Hardcoded hex color — use a semantic color token.", value: m[0], line: ln });
+  let root;
+  try {
+    root = postcss.parse(css);
+  } catch (error) {
+    return {
+      ok: false,
+      score: 1,
+      violations: [
+        {
+          code: "CSS_PARSE_ERROR",
+          severity: "error",
+          message: (error as Error).message,
+        },
+      ],
+    };
+  }
+  const local = new Set<string>();
+  root.walkDecls((d) => {
+    if (d.prop.startsWith("--")) local.add(d.prop);
+  });
+  root.walkDecls((d) => {
+    // Inspect declaration values, never selectors, comments, quoted text or URLs.
+    const value = d.value
+      .replace(/\/\*[\s\S]*?\*\//g, " ")
+      .replace(
+        /url\((?:[^()"']|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')*\)|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/gi,
+        " ",
+      );
+    const add = (
+      code: string,
+      severity: "error" | "warning",
+      message: string,
+      value: string,
+    ) => {
+      violations.push({
+        code,
+        severity,
+        message,
+        value,
+        line: d.source?.start?.line,
+        property: d.prop,
+      });
+    };
+    for (const m of value.matchAll(/#[\da-f]{3,8}\b/gi))
+      add("HARDCODED_HEX", "error", "Use a semantic color token.", m[0]);
+    for (const m of value.matchAll(
+      /\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\([^)]*\)/gi,
+    )) {
+      if (!/^\w+\(\s*(?:from\s+)?var\(/i.test(m[0]))
+        add(
+          "HARDCODED_RGB",
+          "error",
+          "Use a semantic color token instead of a literal color function.",
+          m[0],
+        );
     }
-    for (const m of line.matchAll(RGB_RE)) {
-      violations.push({ code: "HARDCODED_RGB", message: "Hardcoded rgb()/rgba() — use a semantic color token.", value: m[0], line: ln });
-    }
-
-    // Authoritative token resolution.
-    for (const m of line.matchAll(VAR_RE)) {
+    for (const m of value.matchAll(/var\(\s*(--[\w-]+)/g)) {
       const name = m[1];
       if (index.primitive.has(name)) {
-        violations.push({ code: "PRIMITIVE_TOKEN", message: `${name} is a design-only primitive — use its semantic alias.`, value: name, line: ln });
-      } else if (!index.known.has(name) && !localDefs.has(name)) {
-        violations.push({ code: "UNKNOWN_TOKEN", message: `${name} is not a known S2A token and is not defined locally.`, value: name, line: ln });
+        const comments = [d.prev(), d.next()].filter(
+          (n) => n?.type === "comment",
+        );
+        const documented = comments.some((n) =>
+          /^Primitive:\s*\S.{15,}/.test((n as postcss.Comment).text),
+        );
+        add(
+          documented ? "PRIMITIVE_EXCEPTION" : "PRIMITIVE_TOKEN",
+          documented ? "warning" : "error",
+          documented
+            ? "Documented primitive exception; replace when a semantic alias exists."
+            : "Primitive binding needs a semantic alias or an adjacent Primitive: explanation.",
+          name,
+        );
+      } else if (
+        !index.known.has(name) &&
+        !local.has(name) &&
+        (opts.includeForeignTokens || name.startsWith("--s2a-"))
+      ) {
+        add(
+          "UNKNOWN_TOKEN",
+          "warning",
+          "Token is absent from the built registry and this file's local definitions; verify its runtime source.",
+          name,
+        );
       }
     }
-
-    if (opts.strict) {
-      for (const m of line.matchAll(RAW_PX_RE)) {
-        violations.push({ code: "HARDCODED_PX", message: "Raw px — likely maps to a spacing/radius token.", value: m[0], line: ln });
+    if (opts.strict || opts.reviewDimensions)
+      for (const m of value.matchAll(/(?<![\w.-])-?(?:\d*\.)?\d+px\b/g)) {
+        if (parseFloat(m[0]) !== 0)
+          add(
+            "HARDCODED_PX",
+            opts.strict ? "error" : "warning",
+            "Review this dimension for a spacing, typography, border, or component token.",
+            m[0],
+          );
       }
-    }
   });
-
-  // HARDCODED_* and PRIMITIVE_TOKEN are hard failures (unambiguous, actionable).
-  // UNKNOWN_TOKEN is a WARNING: component tokens are currently filtered out of the
-  // shipped token CSS, so a var() the global registry doesn't know may still be a
-  // legitimate component token provided at runtime. It informs; it doesn't fail.
-  const HARD = new Set(["HARDCODED_HEX", "HARDCODED_RGB", "HARDCODED_PX", "PRIMITIVE_TOKEN"]);
-  const hard = violations.filter((v) => HARD.has(v.code)).length;
-  return { ok: hard === 0, score: scoreFrom(hard), violations };
+  const hard = violations.filter((v) => v.severity === "error").length;
+  return {
+    ok: hard === 0,
+    score: hard === 0 ? 5 : hard === 1 ? 3 : hard <= 3 ? 2 : 1,
+    violations,
+  };
 }

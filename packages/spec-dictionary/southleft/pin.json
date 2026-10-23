@@ -1,0 +1,10 @@
+{
+  "$comment": "Vendored from southleft/ds-contracts-poc — the upstream contract schema S2A is aligning to. There is no industry standard for component contracts; this repo is the closest thing, so it is the target rather than a reference. Re-vendor with: npm run specs:upstream -- --update",
+  "repo": "southleft/ds-contracts-poc",
+  "vendoredAt": "2026-09-24T20:40:33Z",
+  "repoCommit": "025add66bbecf767641c5d200f6e141c04ac2bd1",
+  "files": {
+    "contract.schema.json": { "path": "contracts/contract.schema.json", "blobSha": "6cd3f2fe89618936447009e3297c8336c5b3aa05" },
+    "golden.button.contract.json": { "path": "contracts/button.contract.json", "blobSha": "e79d5f2e53ccddd25f0711d437542b7147f4a49d" }
+  }
+}

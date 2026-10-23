@@ -8,18 +8,24 @@
 /* s2a/cards/immersive/* to dist/packages/tokens/css/dev/tokens.responsive.*.css  */
 
 :root {
-  --s2a-cards-immersive-padding: var(--s2a-spacing-md, 16px); /* sm + md — confirmed 16px in Figma */
+  --s2a-cards-immersive-padding: var(
+    --s2a-spacing-md
+  ); /* sm + md — confirmed 16px in Figma */
 }
 
 @media (min-width: 1280px) {
   :root {
-    --s2a-cards-immersive-padding: var(--s2a-spacing-2xl, 40px); /* lg — confirmed 40px in Figma */
+    --s2a-cards-immersive-padding: var(
+      --s2a-spacing-2xl
+    ); /* lg — confirmed 40px in Figma */
   }
 }
 
 @media (min-width: 1441px) {
   :root {
-    --s2a-cards-immersive-padding: var(--s2a-spacing-xl, 32px); /* xl — confirmed 32px in Figma */
+    --s2a-cards-immersive-padding: var(
+      --s2a-spacing-xl
+    ); /* xl — confirmed 32px in Figma */
   }
 }
 
@@ -34,7 +40,7 @@
   width: 100%;
   aspect-ratio: 259 / 300;
   padding: var(--s2a-cards-immersive-padding);
-  border-radius: var(--s2a-border-radius-md, 16px);
+  border-radius: var(--s2a-border-radius-md);
   overflow: hidden;
   box-sizing: border-box;
   background: var(--s2a-color-background-default);
@@ -61,7 +67,12 @@
   position: absolute;
   inset: 0;
   /* No overlay token exists yet — raw rgba required. Add s2a/cards/immersive/overlay-gradient when available. */
-  background: linear-gradient(129.1deg, rgba(0, 0, 0, 0.92) 12.2%, rgba(0, 0, 0, 0) 40.9%);
+  background: linear-gradient(
+    129.1deg,
+    color-mix(in srgb, var(--s2a-color-background-knockout) 92%, transparent)
+      12.2%,
+    transparent 40.9%
+  );
   pointer-events: none;
 }
 
@@ -72,29 +83,29 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--s2a-spacing-sm, 12px);
+  gap: var(--s2a-spacing-sm);
   width: 100%;
   overflow: hidden;
 }
 
 .c-immersive-card__headline {
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
-  font-weight: 900;
-  font-size: var(--s2a-typography-font-size-heading-6, 18px);
-  line-height: var(--s2a-typography-line-height-heading-6, 18px);
-  letter-spacing: var(--s2a-typography-letter-spacing-heading-6, -0.2px);
+  font-family: var(--s2a-font-family-heading);
+  font-weight: var(--s2a-font-weight-heading);
+  font-size: var(--s2a-typography-font-size-heading-6);
+  line-height: var(--s2a-typography-line-height-heading-6);
+  letter-spacing: var(--s2a-typography-letter-spacing-heading-6);
   /* ImmersiveCard is always a dark surface — knockout is always white */
-  color: var(--s2a-color-content-knockout, #fff);
+  color: var(--s2a-color-content-knockout);
   margin: 0;
 }
 
 .c-immersive-card__body {
-  font-family: var(--s2a-font-family-body, "Adobe Clean");
-  font-weight: 400;
-  font-size: var(--s2a-typography-font-size-body-md, 16px);
-  line-height: var(--s2a-typography-line-height-body-md, 20px);
-  letter-spacing: var(--s2a-typography-letter-spacing-body-md, 0px);
-  color: var(--s2a-color-content-knockout, #fff);
+  font-family: var(--s2a-font-family-body);
+  font-weight: var(--s2a-font-weight-body);
+  font-size: var(--s2a-typography-font-size-body-md);
+  line-height: var(--s2a-typography-line-height-body-md);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-md);
+  color: var(--s2a-color-content-knockout);
   margin: 0;
 }
 

@@ -1,13 +1,14 @@
-import { html } from "lit";
+import { html, nothing } from "lit";
 
 import { SectionHeader } from "./SectionHeader";
 import { createButton as Button } from "../../../packages/components/src/button/button.js";
 
-const section = (bg, content) => html`
-  <div style="
+// dark = pin the surface's theme mode (data-theme="dark"); the header reads theme tokens inside it.
+const section = (bg, content, dark = false) => html`
+  <div data-theme=${dark ? "dark" : nothing} style="
     width: 100%;
     box-sizing: border-box;
-    padding: 80px 120px;
+    padding: var(--s2a-spacing-4xl) var(--s2a-spacing-4xl);
     background: ${bg};
     display: flex;
     flex-direction: column;
@@ -20,11 +21,7 @@ const section = (bg, content) => html`
 export default {
   title: "Molecules/SectionHeader",
   tags: ["autodocs"],
-  render: (args) =>
-    section(
-      args.theme === "on-dark" ? "#0f0d0c" : "#ffffff",
-      SectionHeader(args)
-    ),
+  render: (args) => section("var(--s2a-color-surface-default)", SectionHeader(args)),
   parameters: {
     layout: "fullscreen",
     docs: {
@@ -37,8 +34,8 @@ Centered section-level heading block — eyebrow + heading-2 title + optional bo
       },
       source: {
         language: "html",
-        code: `<div class="c-section-header" data-theme="on-light">
-  <div class="c-rich-content" data-theme="on-light" data-density="tight" data-justify="center" data-measure="wide">
+        code: `<div class="c-section-header">
+  <div class="c-rich-content" data-density="tight" data-justify="center" data-measure="wide">
     <div class="c-rich-content__text">
       <p class="c-rich-content__eyebrow">Optimized Workflows</p>
       <h2 class="c-rich-content__title">Everything you need to make anything.</h2>
@@ -50,11 +47,6 @@ Centered section-level heading block — eyebrow + heading-2 title + optional bo
     },
   },
   argTypes: {
-    theme: {
-      control: { type: "select" },
-      options: ["on-light", "on-dark"],
-      description: "Surface context — drives RichContent color tokens",
-    },
     eyebrow: { control: "text", description: "Optional eyebrow label above the title" },
     showEyebrow: { control: "boolean" },
     title: { control: "text" },
@@ -62,7 +54,6 @@ Centered section-level heading block — eyebrow + heading-2 title + optional bo
     showActions: { control: "boolean" },
   },
   args: {
-    theme: "on-light",
     eyebrow: "Optimized Workflows",
     showEyebrow: true,
     title: "Everything you need to make anything.",
@@ -73,23 +64,19 @@ Centered section-level heading block — eyebrow + heading-2 title + optional bo
 
 export const OnLight = {
   name: "On Light",
-  render: (args) => section("#ffffff", SectionHeader(args)),
+  render: (args) => section("var(--s2a-color-surface-default)", SectionHeader(args)),
 };
 
 export const OnDark = {
   name: "On Dark",
-  render: (args) =>
-    section("#0f0d0c", SectionHeader({ ...args, theme: "on-dark" })),
-  args: {
-    theme: "on-dark",
-  },
+  render: (args) => section("var(--s2a-color-background-knockout)", SectionHeader(args), true),
 };
 
 export const WithActions = {
   name: "With Actions",
   render: (args) =>
     section(
-      "#ffffff",
+      "var(--s2a-color-surface-default)",
       SectionHeader({
         ...args,
         showActions: true,
@@ -105,31 +92,27 @@ export const OnDarkWithActions = {
   name: "On Dark — With Actions",
   render: (args) =>
     section(
-      "#0f0d0c",
+      "var(--s2a-color-background-knockout)",
       SectionHeader({
         ...args,
-        theme: "on-dark",
         showActions: true,
         actions: html`
           ${Button({ label: "Get started", style: "knockout" })}
           ${Button({ label: "Learn more", style: "outline-inverse" })}
         `,
-      })
+      }),
+      true
     ),
-  args: {
-    theme: "on-dark",
-  },
 };
 
 export const TitleOnly = {
   name: "Title Only",
   render: () =>
     section(
-      "#f8f8f8",
+      "var(--s2a-color-surface-subtle)",
       SectionHeader({
         showEyebrow: false,
         title: "Everything you need to make anything.",
-        theme: "on-light",
       })
     ),
 };

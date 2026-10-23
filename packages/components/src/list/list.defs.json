@@ -1,0 +1,201 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "List",
+  "slug": "list",
+  "status": "curated-draft",
+  "curated": {
+    "by": "specs:scaffold from list.figma.evidence.json (sha256:535dd6b9…) through packages/spec-dictionary/dictionary.json (list)",
+    "date": "2026-10-08",
+    "reviewer": "Matt"
+  },
+  "description": "A sequence of like items — features, links, steps. The items are the content; the list is the rhythm.",
+  "archetype": "list",
+  "anchors": {
+    "figma": {
+      "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+      "kind": "component-set",
+      "nodeId": "10320:102094",
+      "nodeName": "List",
+      "componentSetKey": "4aeccd1ccd926c9c44fabe920de5126a94a19f5c",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"?\"; 19 nodes, 63 token bindings."
+    },
+    "code": {
+      "importPath": "packages/components/src/list/list.js",
+      "export": "List",
+      "cssClass": "c-list"
+    }
+  },
+  "props": [
+    {
+      "name": "sections",
+      "lever": true,
+      "type": "array",
+      "figma": "NONE",
+      "code": {
+        "prop": "sections"
+      },
+      "notes": "Exists in the component, has no design counterpart."
+    }
+  ],
+  "states": [],
+  "composition": [
+    {
+      "name": "MerchCard/FeatureSection",
+      "treatment": "contract",
+      "slug": "merch-card-feature-section"
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".c-list",
+      "figma": ".root",
+      "element": "ul",
+      "tokens": {
+        "gap": "{s2a.spacing.16}",
+        "padding-bottom": "{s2a.spacing.none}",
+        "padding-left": "{s2a.spacing.none}",
+        "padding-right": "{s2a.spacing.none}",
+        "padding-top": "{s2a.spacing.none}",
+        "width": "raw:418px"
+      },
+      "layout": {
+        "display": "flex",
+        "direction": "column"
+      },
+      "parts": {
+        "merch-card-feature-section": {
+          "selector": ".c-list__merch-card-feature-section",
+          "figma": "/list-1",
+          "layout": {
+            "display": "flex",
+            "direction": "column",
+            "grow": true
+          },
+          "slot": {
+            "name": "list-1",
+            "accepts": [
+              "MerchCardFeatureSection"
+            ],
+            "acceptsMode": "restrict",
+            "default": {
+              "figma": "MerchCard/FeatureSection",
+              "slug": "merch-card-feature-section",
+              "props": {
+                "Show Divider": true,
+                "Title": "Section title"
+              }
+            },
+            "notes": "Composes MerchCardFeatureSection (merch-card-feature-section)."
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.3.1"
+    ],
+    "notes": [
+      "A real <ul>/<li> so the count and position are announced (1.3.1)."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "l-archetype",
+      "question": "Scaffolded as list (named \"List\"). Confirm, or re-run npm run specs:scaffold -- --slug=list --archetype=<link-card|card|collection>.",
+      "chose": "list — named \"List\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=list --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "checkbox / radio: A selection control with a checked state, usually paired with a label.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating."
+      ],
+      "evidence": "decided by heuristic; token namespaces none; state axis none"
+    },
+    {
+      "id": "l-part-selectors",
+      "question": "merch-card-feature-section has no class of its own in list.css. The design names this part separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to list.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/list/list.css"
+    },
+    {
+      "id": "l-stray-text",
+      "question": "A text layer carries no recognisable role (not heading, body, eyebrow or label). Is it content (add a lever) or part of the illustration (fold into media)? Layers: /list-1/.items/ListItem/List item, /list-1/.items/ListItem/List item, /list-1/.items/ListItem/List item, /list-1/.items/ListItem/List item.",
+      "chose": "left 4 text layers out of the anatomy",
+      "confidence": "low",
+      "fix": "Name the layer in Figma so it claims a role, or add it under anatomy.root.parts here.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "list.figma.evidence.json anatomy"
+    },
+    {
+      "id": "l-match",
+      "question": "Structural match says extend: closest existing contract is MerchCardFeatureSection (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending MerchCardFeatureSection (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to MerchCardFeatureSection instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "MerchCardFeatureSection (1) already covers this; extend it."
+    },
+    {
+      "id": "l-code-only-props",
+      "question": "sections exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false).",
+      "chose": "added 1 code-only prop as levers with no design binding",
+      "confidence": "medium",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "list.code.evidence.json"
+    },
+    {
+      "id": "l-composes",
+      "question": "Built from 1 component set, all of which already have a contract: MerchCard/FeatureSection. Confirm the anatomy models them as slots or parts deliberately.",
+      "chose": "recorded 1 composed set, 1 already contracted",
+      "confidence": "medium",
+      "status": "decided",
+      "decision": "All composed sets are contracted; anatomy models them deliberately.",
+      "owner": "scaffold",
+      "evidence": "list.figma.evidence.json instances"
+    },
+    {
+      "id": "l-layer-names",
+      "question": "1 layers carry Figma-generated names (/list-1/.title/.icon/Frame). Build set from this contract produces the normalized set (.root, .part names); replace the frame with it once reviewed.",
+      "confidence": "high",
+      "fix": "Run Build set from this contract, then re-anchor anchors.figma.nodeId to the normalized set.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "list.figma.evidence.json anatomy"
+    },
+    {
+      "id": "l-hardcoded-values",
+      "question": "1 value in the design is set with no variable behind it: root width = 418px. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried it through as raw: value so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "list.figma.evidence.json unboundValues"
+    }
+  ]
+}

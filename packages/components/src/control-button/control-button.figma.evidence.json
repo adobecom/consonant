@@ -1,0 +1,3139 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T17:55:19.787Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": null
+  },
+  "set": {
+    "id": "11180:181592",
+    "key": "acbdd435890be6d30ed53563b536ca03105ea212",
+    "name": "ControlButton — v2",
+    "type": "COMPONENT_SET",
+    "description": "— s2a:meta —\nversion:    2.0.0\nstatus:     active\nupdated:    2026-08-04\nchangelog:\n  2.0.0   2026-08-04  init         Initial release\n\nA compact, icon-only button for controlling an interactive container — a media player, carousel, lightbox, or modal. Reach for it when the icon alone carries the action: play/pause, next/previous, mute, expand, close.\n\n## Good to know\n- Light and dark come from the surface, not the component. There's no Context property anymore — drop it on any surface and it adapts through variable modes. Style = media is the overlay-on-imagery treatment.\n- It's icon-only by design. The icon is a swappable instance — use any S2A UI icon. For anything with a text label or a destination, use Button or Link instead.\n- Two sizes: xl (48px) and md (40px). Use xl for full media players, md for compact carousels and inline controls.\n- Replaces the original ControlButton (v1), which baked light/dark into an on-light / on-dark / on-media Context axis. To migrate, swap instances to this set and let the surface mode drive the theme.\n\n## Accessibility\n- Give every instance an accessible name. It shows only an icon, so set an aria-label that states the action (\"Play\", \"Next slide\", \"Close\"). WCAG 4.1.2 Name, Role, Value — every control exposes a name and role to assistive tech.\n- It's a real button. Implement as a <button> so it's reachable by keyboard: Tab moves to it, Enter and Space activate it. WCAG 2.1.1 Keyboard — all functionality works without a mouse.\n- The focus state isn't decoration. The focus variant's ring must ship in code so keyboard users can see where they are. WCAG 2.4.7 Focus Visible.\n- Watch contrast on media. Over photo or video the glyph can wash out — keep it on the component's scrim so it holds at least 3:1 against the background. WCAG 1.4.11 Non-text Contrast.\n- Keep the target big enough. Present at least a 24x24px pointer target (44x44 is better on touch). WCAG 2.5.8 Target Size (Minimum).\n- disabled is communicated, not just dimmed. Remove it from the tab order and expose the disabled state to assistive tech.",
+    "meta": {
+      "version": "2.0.0",
+      "status": "active",
+      "updated": "2026-08-04",
+      "changelog": "2.0.0   2026-08-04  init         Initial release"
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Icon#8576:43",
+      "type": "INSTANCE_SWAP",
+      "defaultValue": "9099:1644",
+      "preferredValues": [
+        {
+          "type": "COMPONENT",
+          "key": "cd732407673bf8fe888d2969b23f5336cade3192"
+        }
+      ]
+    },
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "defaultValue": "xl",
+      "options": [
+        "xl",
+        "md"
+      ]
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "defaultValue": "default",
+      "options": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "focus"
+      ]
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "defaultValue": "media",
+      "options": [
+        "media"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "11180:181635",
+      "key": "22f73a1e72be0cc04921e55a3033fcdf8fff3240",
+      "name": "Style=media, Size=md, State=focus",
+      "props": {
+        "Style": "media",
+        "Size": "md",
+        "State": "focus"
+      },
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": "11180:181640",
+      "key": "cf1fae55f43a02b4ab5fb0f84dff766a70260324",
+      "name": "Style=media, Size=xl, State=focus",
+      "props": {
+        "Style": "media",
+        "Size": "xl",
+        "State": "focus"
+      },
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "11180:181645",
+      "key": "eaa7d1e86559b786db32c783b1b42b69390e5e73",
+      "name": "Style=media, Size=md, State=disabled",
+      "props": {
+        "Style": "media",
+        "Size": "md",
+        "State": "disabled"
+      },
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": "11180:181649",
+      "key": "21d1b55d9e7d819255d45491748fcef88a0f16be",
+      "name": "Style=media, Size=xl, State=disabled",
+      "props": {
+        "Style": "media",
+        "Size": "xl",
+        "State": "disabled"
+      },
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "11180:181653",
+      "key": "7f07fa8e63944b64f62596c164df7348b2e29e60",
+      "name": "Style=media, Size=md, State=active",
+      "props": {
+        "Style": "media",
+        "Size": "md",
+        "State": "active"
+      },
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": "11180:181657",
+      "key": "01df189c9d31e088c9727fea1d66ed1011109fc8",
+      "name": "Style=media, Size=xl, State=active",
+      "props": {
+        "Style": "media",
+        "Size": "xl",
+        "State": "active"
+      },
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "11180:181661",
+      "key": "3b5950511e98a98956532dd3c4f9a0ce4dca2841",
+      "name": "Style=media, Size=md, State=hover",
+      "props": {
+        "Style": "media",
+        "Size": "md",
+        "State": "hover"
+      },
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": "11180:181665",
+      "key": "2c05f6855daab83faae8b128ca85a0cb324e7acc",
+      "name": "Style=media, Size=xl, State=hover",
+      "props": {
+        "Style": "media",
+        "Size": "xl",
+        "State": "hover"
+      },
+      "width": 48,
+      "height": 48
+    },
+    {
+      "id": "11180:181669",
+      "key": "c0520a45930c308c47b4587e2375a6a6b4b1086b",
+      "name": "Style=media, Size=md, State=default",
+      "props": {
+        "Style": "media",
+        "Size": "md",
+        "State": "default"
+      },
+      "width": 32,
+      "height": 32
+    },
+    {
+      "id": "11180:181673",
+      "key": "e58c81b2816728c6b7fa7131700d770a26cc314d",
+      "name": "Style=media, Size=xl, State=default",
+      "props": {
+        "Style": "media",
+        "Size": "xl",
+        "State": "default"
+      },
+      "width": 48,
+      "height": 48
+    }
+  ],
+  "anatomy": {
+    "variant": "Style=media, Size=xl, State=default",
+    "tree": {
+      "name": "Style=media, Size=xl, State=default",
+      "type": "COMPONENT",
+      "id": "11180:181673",
+      "layoutMode": "HORIZONTAL",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "FIXED"
+      },
+      "align": {
+        "primary": "CENTER",
+        "counter": "CENTER"
+      },
+      "children": [
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "id": "11180:181674",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "CENTER",
+            "counter": "CENTER"
+          },
+          "children": [
+            {
+              "name": "Scale/S2a-Icons-scale-rig",
+              "type": "INSTANCE",
+              "id": "11180:181675",
+              "layoutMode": "HORIZONTAL",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              },
+              "align": {
+                "primary": "CENTER",
+                "counter": "CENTER"
+              },
+              "children": [
+                {
+                  "name": "S2a_Icon_Arrow Right",
+                  "type": "INSTANCE",
+                  "id": "I11180:181675;9099:1646",
+                  "layoutMode": "HORIZONTAL",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  },
+                  "align": {
+                    "primary": "MIN",
+                    "counter": "MIN"
+                  },
+                  "children": [
+                    {
+                      "name": "S2_Icon_UIArrow_Size300_N",
+                      "type": "INSTANCE",
+                      "id": "I11180:181675;9099:1646;8873:23263",
+                      "layoutMode": "HORIZONTAL",
+                      "sizing": {
+                        "horizontal": "FILL",
+                        "vertical": "FIXED"
+                      },
+                      "align": {
+                        "primary": "MIN",
+                        "counter": "MIN"
+                      },
+                      "children": [
+                        {
+                          "name": "Frame",
+                          "type": "FRAME",
+                          "id": "I11180:181675;9099:1646;8873:23263;214:46",
+                          "sizing": {
+                            "horizontal": "FILL",
+                            "vertical": "FILL"
+                          },
+                          "children": [
+                            {
+                              "name": "iconPrimary",
+                              "type": "VECTOR",
+                              "id": "I11180:181675;9099:1646;8873:23263;214:47",
+                              "sizing": {
+                                "horizontal": "FIXED",
+                                "vertical": "FIXED"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Icon color",
+          "type": "RECTANGLE",
+          "id": "11180:181676",
+          "sizing": {
+            "horizontal": "FIXED",
+            "vertical": "FIXED"
+          }
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182132"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "strokes",
+      "variable": "VariableID:2072:39569"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181638;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Icon color",
+      "nodeId": "11180:181639",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182132"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "strokes",
+      "variable": "VariableID:2072:39569"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181643;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Icon color",
+      "nodeId": "11180:181644",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182131"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181647;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Icon color",
+      "nodeId": "11180:181648",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:1:245"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182131"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181651;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Icon color",
+      "nodeId": "11180:181652",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:1:245"
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182130"
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181655;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Icon color",
+      "nodeId": "11180:181656",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182130"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181659;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Icon color",
+      "nodeId": "11180:181660",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182129"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181663;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Icon color",
+      "nodeId": "11180:181664",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182129"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181667;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Icon color",
+      "nodeId": "11180:181668",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182128"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181671;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Icon color",
+      "nodeId": "11180:181672",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "fills",
+      "variable": "VariableID:11181:182128"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "strokeBottomWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "strokeLeftWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "strokeRightWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "strokeTopWeight",
+      "variable": "VariableID:2:111"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "strokes",
+      "variable": "VariableID:11181:182140"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:6877:109288"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181675;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Icon color",
+      "nodeId": "11180:181676",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:81"
+    }
+  ],
+  "variables": {
+    "VariableID:11181:182128": {
+      "name": "s2a/color/control-button/background/media/default",
+      "key": "47304b6513f0f5b80e45accedc74c80b33a1a544",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/64"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/black/64"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        }
+      }
+    },
+    "VariableID:11181:182129": {
+      "name": "s2a/color/control-button/background/media/hover",
+      "key": "7faf22e9abd95ba72663fae1934b4cb2985c7f39",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/80"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/black/80"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.800000011920929
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.800000011920929
+        }
+      }
+    },
+    "VariableID:11181:182130": {
+      "name": "s2a/color/control-button/background/media/active",
+      "key": "a0c2920ee03461a71a3188b86fa34f03292e836b",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/96"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/black/96"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.9599999785423279
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.9599999785423279
+        }
+      }
+    },
+    "VariableID:11181:182131": {
+      "name": "s2a/color/control-button/background/media/disabled",
+      "key": "d6677e985b15c83d458b6ce01d1a5e3e93146688",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/32"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/black/32"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.3199999928474426
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.3199999928474426
+        }
+      }
+    },
+    "VariableID:11181:182132": {
+      "name": "s2a/color/control-button/background/media/focus",
+      "key": "a5be38bad26ec01a9f0e0f71b879938b85f72dea",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/black/64"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/black/64"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        },
+        "Dark": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        }
+      }
+    },
+    "VariableID:11181:182140": {
+      "name": "s2a/color/control-button/border/media",
+      "key": "15005329f08b3bbe7cbaab56a64fb055b6861095",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {},
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/transparent/white/24"
+        },
+        "Dark": {
+          "alias": "s2a/color/transparent/white/24"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.23999999463558197
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.23999999463558197
+        }
+      }
+    },
+    "VariableID:1:245": {
+      "name": "s2a/color/transparent/white/48",
+      "key": "c3173642e167fac72a1a11066b1f3fbecf1db9d2",
+      "collection": "S2A / Primitives / Color / Theme",
+      "collectionId": "VariableCollectionId:1:138",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-transparent-white-48)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.47999998927116394
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.47999998927116394
+        }
+      }
+    },
+    "VariableID:2072:39569": {
+      "name": "s2a/color/focus-ring/default",
+      "key": "6347b2b3ecd73ece4df7728c3f2e66a69ad5ab9d",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-focus-ring-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/blue/900"
+        },
+        "Dark": {
+          "alias": "s2a/color/blue/500"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0.23137255012989044,
+          "g": 0.38823530077934265,
+          "b": 0.9843137264251709,
+          "a": 1
+        },
+        "Dark": {
+          "r": 0.5568627715110779,
+          "g": 0.7254902124404907,
+          "b": 0.9882352948188782,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2:111": {
+      "name": "s2a/border/width/sm",
+      "key": "15ff173af6bad250426d171a9d1545ed0dc9a352",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-width-sm)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "border/width/1"
+        }
+      },
+      "resolved": {
+        "Value": 1
+      }
+    },
+    "VariableID:6877:109288": {
+      "name": "s2a/border/radius/6",
+      "key": "1a837218937b80bed7f09e881f8c39df7bd5c531",
+      "collection": "S2A / Primitives / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:44",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-radius-6)"
+      },
+      "valuesByMode": {
+        "Mode 1": 6
+      },
+      "resolved": {
+        "Mode 1": 6
+      }
+    },
+    "VariableID:6:81": {
+      "name": "s2a/color/content/knockout",
+      "key": "572ece4e1c2235e5c83bb16c6a01d276e90f3639",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-knockout)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/25"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:6:82": {
+      "name": "s2a/color/content/default",
+      "key": "83bc2006f8e7edc6ff9f04044d27a204d84f2d6a",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    }
+  },
+  "textStyles": {},
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181638",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181638;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181638;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181643",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181643;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181643;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181647",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181647;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181647;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181651",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181651;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181651;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181655",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181655;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181655;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181659",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181659;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181659;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181663",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181663;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181663;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181667",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181667;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181667;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181671",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181671;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181671;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig",
+      "nodeId": "11180:181675",
+      "mainComponent": {
+        "id": "9099:1644",
+        "key": "14b233239285a18d141c6153cf6f3e8a50ec5bda",
+        "name": "Icon Size=16x16"
+      },
+      "set": {
+        "id": "9099:1627",
+        "key": "99939e0c6ea75264b34d2aaecd6f8778b6e878fc",
+        "name": "Scale/S2a-Icons-scale-rig"
+      },
+      "props": {
+        "Icon Size": "16x16"
+      }
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181675;9099:1646",
+      "mainComponent": {
+        "id": "8873:23262",
+        "key": "224119bc3569982fdfc1a656ee464a40ed0cd2e9",
+        "name": "S2a_Icon_Arrow Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181675;9099:1646;8873:23263",
+      "mainComponent": {
+        "id": "4141:23643",
+        "key": "23a5840b46da038e1e61e357ae872ab9eb5492d9",
+        "name": "S2_Icon_UIArrow_Size300_N"
+      },
+      "set": null
+    }
+  ],
+  "counts": {
+    "variants": 10,
+    "nodes": 82,
+    "bindings": 130,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "",
+      "nodeId": "11180:181635",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "strokeAlign",
+      "value": "OUTSIDE"
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 34
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181636",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 34
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181638;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181638;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181638;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181638;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181638;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Icon color",
+      "nodeId": "11180:181639",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=md, State=focus",
+      "node": "/Icon color",
+      "nodeId": "11180:181639",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "",
+      "nodeId": "11180:181640",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "strokeAlign",
+      "value": "OUTSIDE"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 50
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Focus Ring",
+      "nodeId": "11180:181641",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 50
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181643;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181643;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181643;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181643;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181643;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Icon color",
+      "nodeId": "11180:181644",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=focus",
+      "node": "/Icon color",
+      "nodeId": "11180:181644",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "",
+      "nodeId": "11180:181645",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181647;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181647;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181647;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181647;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181647;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Icon color",
+      "nodeId": "11180:181648",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=md, State=disabled",
+      "node": "/Icon color",
+      "nodeId": "11180:181648",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "",
+      "nodeId": "11180:181649",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181651;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181651;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181651;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181651;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181651;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Icon color",
+      "nodeId": "11180:181652",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=disabled",
+      "node": "/Icon color",
+      "nodeId": "11180:181652",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "",
+      "nodeId": "11180:181653",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181655;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181655;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181655;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181655;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181655;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Icon color",
+      "nodeId": "11180:181656",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=md, State=active",
+      "node": "/Icon color",
+      "nodeId": "11180:181656",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "",
+      "nodeId": "11180:181657",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181659;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181659;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181659;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181659;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181659;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Icon color",
+      "nodeId": "11180:181660",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=active",
+      "node": "/Icon color",
+      "nodeId": "11180:181660",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "",
+      "nodeId": "11180:181661",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181663;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181663;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181663;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181663;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181663;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Icon color",
+      "nodeId": "11180:181664",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=md, State=hover",
+      "node": "/Icon color",
+      "nodeId": "11180:181664",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "",
+      "nodeId": "11180:181665",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181667;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181667;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181667;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181667;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181667;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Icon color",
+      "nodeId": "11180:181668",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=hover",
+      "node": "/Icon color",
+      "nodeId": "11180:181668",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "",
+      "nodeId": "11180:181669",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 32
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181671;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181671;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181671;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181671;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181671;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Icon color",
+      "nodeId": "11180:181672",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=md, State=default",
+      "node": "/Icon color",
+      "nodeId": "11180:181672",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 6
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "strokeWeight",
+      "value": 1
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "strokeAlign",
+      "value": "INSIDE"
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "",
+      "nodeId": "11180:181673",
+      "nodeType": "COMPONENT",
+      "property": "height",
+      "value": 48
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181675;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right",
+      "nodeId": "I11180:181675;9099:1646",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N",
+      "nodeId": "I11180:181675;9099:1646;8873:23263",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 16
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181675;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 14.29
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Frame/Scale/S2a-Icons-scale-rig/S2a_Icon_Arrow Right/S2_Icon_UIArrow_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11180:181675;9099:1646;8873:23263;214:47",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 11.89
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Icon color",
+      "nodeId": "11180:181676",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 26
+    },
+    {
+      "variant": "Style=media, Size=xl, State=default",
+      "node": "/Icon color",
+      "nodeId": "11180:181676",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 26
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:237421ed5ace4091353b24979f92eb452174f3c1becad23a8791c53c07533f7d"
+  }
+}

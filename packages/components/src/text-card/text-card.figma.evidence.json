@@ -1,0 +1,1797 @@
+{
+  "$schema": "s2a-figma-evidence/1",
+  "extractedAt": "2026-10-08T18:04:34.113Z",
+  "extractor": {
+    "plugin": "contract-book/figma-rest",
+    "version": "0.1.0"
+  },
+  "file": {
+    "key": "qAF4nlt6O4ThbeXeO7jzdb",
+    "name": "CPro — Hub and docementation cleanup",
+    "page": null
+  },
+  "set": {
+    "id": "11362:245184",
+    "key": "db93874630fe07525d42cfbac86b77e52e217e9f",
+    "name": "TextCard — v2",
+    "type": "COMPONENT_SET",
+    "description": "— s2a:meta —\nversion:    2.1.1\nstatus:     active\nupdated:    2026-09-15\nchangelog:\n  2.1.1   2026-09-15  patch        Fixed Style=centered — its .headline/.body text nodes lost componentPropertyReferences during clone (Figma clone() doesn't reliably preserve text-property bindings), so setting Headline/Body via properties updated metadata but not the rendered text. Re-linked both to Headline#9554:0 / Body#9554:2.\n  2.1.0   2026-09-15  minor        Added Style=centered variant — center-aligned headline/body text and centered CTA, for use in Bento tiles that need center-orientation copy (matches the Playground mockup reference). Non-breaking, additive.\n  2.0.0   2026-08-04  init         Initial release\n\nText-only news / content card. Headline, optional body copy, and inline read-more CTA. No media. Use in 3-up news grids on light surfaces.",
+    "meta": {
+      "version": "2.1.1",
+      "status": "active",
+      "updated": "2026-09-15",
+      "changelog": "2.1.1   2026-09-15  patch        Fixed Style=centered — its .headline/.body text nodes lost componentPropertyReferences during clone (Figma clone() doesn't reliably preserve text-property bindings), so setting Headline/Body via properties updated metadata but not the rendered text. Re-linked both to Headline#9554:0 / Body#9554:2.\n2.1.0   2026-09-15  minor        Added Style=centered variant — center-aligned headline/body text and centered CTA, for use in Bento tiles that need center-orientation copy (matches the Playground mockup reference). Non-breaking, additive.\n2.0.0   2026-08-04  init         Initial release"
+    },
+    "documentationLinks": []
+  },
+  "axes": [
+    {
+      "name": "Body#9554:2",
+      "type": "TEXT",
+      "defaultValue": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants."
+    },
+    {
+      "name": "CTA#9561:0",
+      "type": "INSTANCE_SWAP",
+      "defaultValue": "12823:184376",
+      "preferredValues": []
+    },
+    {
+      "name": "Headline#9554:0",
+      "type": "TEXT",
+      "defaultValue": "Adobe apps are top choice for Sundance filmmakers."
+    },
+    {
+      "name": "Show Body#9554:6",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "Show CTA#9554:8",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "defaultValue": "default",
+      "options": [
+        "default",
+        "centered"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "11362:245185",
+      "key": "e22894ecd187812c68b9dd6dabfe695c5d6fe468",
+      "name": "Style=default",
+      "props": {
+        "Style": "default"
+      },
+      "width": 488,
+      "height": 168
+    },
+    {
+      "id": "13999:202586",
+      "key": "d340f158c35b4b7d1f5784a5663b7c94002041ce",
+      "name": "Style=centered",
+      "props": {
+        "Style": "centered"
+      },
+      "width": 488,
+      "height": 168
+    }
+  ],
+  "anatomy": {
+    "variant": "Style=default",
+    "tree": {
+      "name": "Style=default",
+      "type": "COMPONENT",
+      "id": "11362:245185",
+      "layoutMode": "VERTICAL",
+      "sizing": {
+        "horizontal": "FIXED",
+        "vertical": "HUG"
+      },
+      "align": {
+        "primary": "MIN",
+        "counter": "MIN"
+      },
+      "children": [
+        {
+          "name": ".headline-body",
+          "type": "FRAME",
+          "id": "11362:245186",
+          "layoutMode": "VERTICAL",
+          "sizing": {
+            "horizontal": "FILL",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "MIN"
+          },
+          "children": [
+            {
+              "name": ".headline",
+              "type": "TEXT",
+              "id": "11362:245187",
+              "text": "Adobe apps are top choice for Sundance filmmakers.",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              }
+            },
+            {
+              "name": ".body",
+              "type": "TEXT",
+              "id": "11362:245188",
+              "text": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants.",
+              "sizing": {
+                "horizontal": "FILL",
+                "vertical": "HUG"
+              }
+            }
+          ]
+        },
+        {
+          "name": ".cta",
+          "type": "INSTANCE",
+          "id": "11362:245189",
+          "layoutMode": "HORIZONTAL",
+          "sizing": {
+            "horizontal": "HUG",
+            "vertical": "HUG"
+          },
+          "align": {
+            "primary": "MIN",
+            "counter": "CENTER"
+          },
+          "children": [
+            {
+              "name": ".label-wrap",
+              "type": "FRAME",
+              "id": "I11362:245189;12823:184377",
+              "layoutMode": "VERTICAL",
+              "sizing": {
+                "horizontal": "HUG",
+                "vertical": "HUG"
+              },
+              "align": {
+                "primary": "MIN",
+                "counter": "MIN"
+              },
+              "children": [
+                {
+                  "name": "Call to Action",
+                  "type": "TEXT",
+                  "id": "I11362:245189;12823:184378",
+                  "text": "Read story",
+                  "sizing": {
+                    "horizontal": "HUG",
+                    "vertical": "HUG"
+                  }
+                },
+                {
+                  "name": ".underline",
+                  "type": "RECTANGLE",
+                  "id": "I11362:245189;12823:184379",
+                  "visible": false,
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "end-icon",
+              "type": "FRAME",
+              "id": "I11362:245189;12823:184380",
+              "sizing": {
+                "horizontal": "FIXED",
+                "vertical": "FIXED"
+              },
+              "children": [
+                {
+                  "name": "Frame",
+                  "type": "FRAME",
+                  "id": "I11362:245189;12823:184381",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  },
+                  "children": [
+                    {
+                      "name": "S2a_Icon_Chevron_Right",
+                      "type": "INSTANCE",
+                      "id": "I11362:245189;12823:184382",
+                      "layoutMode": "HORIZONTAL",
+                      "sizing": {
+                        "horizontal": "FIXED",
+                        "vertical": "FIXED"
+                      },
+                      "align": {
+                        "primary": "MIN",
+                        "counter": "MIN"
+                      },
+                      "children": [
+                        {
+                          "name": "S2_Icon_UIChevron_Size300_N",
+                          "type": "INSTANCE",
+                          "id": "I11362:245189;12823:184382;8873:23273",
+                          "layoutMode": "HORIZONTAL",
+                          "sizing": {
+                            "horizontal": "FILL",
+                            "vertical": "FIXED"
+                          },
+                          "align": {
+                            "primary": "MIN",
+                            "counter": "MIN"
+                          },
+                          "children": [
+                            {
+                              "name": "Frame",
+                              "type": "FRAME",
+                              "id": "I11362:245189;12823:184382;8873:23273;214:91",
+                              "sizing": {
+                                "horizontal": "FILL",
+                                "vertical": "FILL"
+                              },
+                              "children": [
+                                {
+                                  "name": "iconPrimary",
+                                  "type": "VECTOR",
+                                  "id": "I11362:245189;12823:184382;8873:23273;214:92",
+                                  "sizing": {
+                                    "horizontal": "FIXED",
+                                    "vertical": "FIXED"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Icon color",
+                  "type": "RECTANGLE",
+                  "id": "I11362:245189;12823:184383",
+                  "sizing": {
+                    "horizontal": "FIXED",
+                    "vertical": "FIXED"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "paddingRight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body",
+      "nodeId": "11362:245186",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.headline",
+      "nodeId": "11362:245187",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41398"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.headline",
+      "nodeId": "11362:245187",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:1:259"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.headline",
+      "nodeId": "11362:245187",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1220"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.headline",
+      "nodeId": "11362:245187",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44675"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.headline",
+      "nodeId": "11362:245187",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2416:2145"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.headline",
+      "nodeId": "11362:245187",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1215"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.headline",
+      "nodeId": "11362:245187",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15533"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.body",
+      "nodeId": "11362:245188",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.body",
+      "nodeId": "11362:245188",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.body",
+      "nodeId": "11362:245188",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.body",
+      "nodeId": "11362:245188",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.body",
+      "nodeId": "11362:245188",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.body",
+      "nodeId": "11362:245188",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.headline-body/.body",
+      "nodeId": "11362:245188",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta",
+      "nodeId": "11362:245189",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta",
+      "nodeId": "11362:245189",
+      "nodeType": "INSTANCE",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I11362:245189;12823:184378",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I11362:245189;12823:184378",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I11362:245189;12823:184378",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I11362:245189;12823:184378",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I11362:245189;12823:184378",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I11362:245189;12823:184378",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I11362:245189;12823:184378",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/.underline",
+      "nodeId": "I11362:245189;12823:184379",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11362:245189;12823:184382;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Icon color",
+      "nodeId": "I11362:245189;12823:184383",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "bottomLeftRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "bottomRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "paddingBottom",
+      "variable": "VariableID:3:61"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "paddingLeft",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "paddingRight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "paddingTop",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "topLeftRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "topRightRadius",
+      "variable": "VariableID:2:95"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body",
+      "nodeId": "13999:202587",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.headline",
+      "nodeId": "13999:202588",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41398"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.headline",
+      "nodeId": "13999:202588",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:1:259"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.headline",
+      "nodeId": "13999:202588",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1220"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.headline",
+      "nodeId": "13999:202588",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44675"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.headline",
+      "nodeId": "13999:202588",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2416:2145"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.headline",
+      "nodeId": "13999:202588",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1215"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.headline",
+      "nodeId": "13999:202588",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15533"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.body",
+      "nodeId": "13999:202589",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:2483:41396"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.body",
+      "nodeId": "13999:202589",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:831"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.body",
+      "nodeId": "13999:202589",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1235"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.body",
+      "nodeId": "13999:202589",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44676"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.body",
+      "nodeId": "13999:202589",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1242"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.body",
+      "nodeId": "13999:202589",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1225"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.headline-body/.body",
+      "nodeId": "13999:202589",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15537"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta",
+      "nodeId": "13999:202590",
+      "nodeType": "INSTANCE",
+      "property": "itemSpacing",
+      "variable": "VariableID:3:60"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta",
+      "nodeId": "13999:202590",
+      "nodeType": "INSTANCE",
+      "property": "minHeight",
+      "variable": "VariableID:3:56"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I13999:202590;12823:184378",
+      "nodeType": "TEXT",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I13999:202590;12823:184378",
+      "nodeType": "TEXT",
+      "property": "fontFamily",
+      "variable": "VariableID:2557:832"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I13999:202590;12823:184378",
+      "nodeType": "TEXT",
+      "property": "fontSize",
+      "variable": "VariableID:2352:1217"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I13999:202590;12823:184378",
+      "nodeType": "TEXT",
+      "property": "fontStyle",
+      "variable": "VariableID:5388:44678"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I13999:202590;12823:184378",
+      "nodeType": "TEXT",
+      "property": "letterSpacing",
+      "variable": "VariableID:2352:1233"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I13999:202590;12823:184378",
+      "nodeType": "TEXT",
+      "property": "lineHeight",
+      "variable": "VariableID:2352:1243"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/Call to Action",
+      "nodeId": "I13999:202590;12823:184378",
+      "nodeType": "TEXT",
+      "property": "textStyle",
+      "textStyle": "6:15543"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/.underline",
+      "nodeId": "I13999:202590;12823:184379",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I13999:202590;12823:184382;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Icon color",
+      "nodeId": "I13999:202590;12823:184383",
+      "nodeType": "RECTANGLE",
+      "property": "fills",
+      "variable": "VariableID:6:82"
+    }
+  ],
+  "variables": {
+    "VariableID:1:259": {
+      "name": "s2a/font/family/heading",
+      "key": "add9688a96416809b5a0ab2f42ea3d81ad09ae3b",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-heading)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean-display"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean Display"
+      }
+    },
+    "VariableID:2352:1215": {
+      "name": "s2a/typography/line-height/heading-5",
+      "key": "2733591f237b545fcc1cca5cb521530a8cd4acee",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-heading-5)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/md"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/md"
+        }
+      },
+      "resolved": {
+        "lg": 24,
+        "md": 20,
+        "sm": 20,
+        "xl": 24
+      }
+    },
+    "VariableID:2352:1217": {
+      "name": "s2a/typography/font-size/label",
+      "key": "8ebd95ce11fc03c86dd89ef3b4ba2ffb5bf961d6",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/sm"
+        },
+        "md": {
+          "alias": "s2a/font/size/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/size/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/size/sm"
+        }
+      },
+      "resolved": {
+        "lg": 14,
+        "md": 14,
+        "sm": 14,
+        "xl": 14
+      }
+    },
+    "VariableID:2352:1220": {
+      "name": "s2a/typography/font-size/heading-5",
+      "key": "85b9cb7ac8b4e41b2bd4a11112d43c317cc4accb",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-heading-5)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/2xl"
+        },
+        "md": {
+          "alias": "s2a/font/size/xl"
+        },
+        "sm": {
+          "alias": "s2a/font/size/lg"
+        },
+        "xl": {
+          "alias": "s2a/font/size/2xl"
+        }
+      },
+      "resolved": {
+        "lg": 24,
+        "md": 20,
+        "sm": 18,
+        "xl": 24
+      }
+    },
+    "VariableID:2352:1225": {
+      "name": "s2a/typography/line-height/body-md",
+      "key": "165ab27d86033195a82c5905823a544eb17c4741",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-body-md)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/sm"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/sm"
+        }
+      },
+      "resolved": {
+        "lg": 20,
+        "md": 20,
+        "sm": 20,
+        "xl": 20
+      }
+    },
+    "VariableID:2352:1233": {
+      "name": "s2a/typography/letter-spacing/label",
+      "key": "c00a7571dfaa364481c1c6eb5472b3581201c594",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1235": {
+      "name": "s2a/typography/font-size/body-md",
+      "key": "3587029d598ff06f45ae11414a7fb7af25cf822f",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-font-size-body-md)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/size/md"
+        },
+        "md": {
+          "alias": "s2a/font/size/md"
+        },
+        "sm": {
+          "alias": "s2a/font/size/md"
+        },
+        "xl": {
+          "alias": "s2a/font/size/md"
+        }
+      },
+      "resolved": {
+        "lg": 16,
+        "md": 16,
+        "sm": 16,
+        "xl": 16
+      }
+    },
+    "VariableID:2352:1242": {
+      "name": "s2a/typography/letter-spacing/body-md",
+      "key": "345b9f3f1e7a5023ee5840ca1a75bde0ae6ae8f1",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-letter-spacing-body-md)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "md": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "sm": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        },
+        "xl": {
+          "alias": "s2a/font/letter-spacing/6xl"
+        }
+      },
+      "resolved": {
+        "lg": 0,
+        "md": 0,
+        "sm": 0,
+        "xl": 0
+      }
+    },
+    "VariableID:2352:1243": {
+      "name": "s2a/typography/line-height/label",
+      "key": "538ddff11a55de6e862611ebdcec139ce6328c78",
+      "collection": "S2A / Responsive / Container / Grid",
+      "collectionId": "VariableCollectionId:6:178",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-typography-line-height-label)"
+      },
+      "valuesByMode": {
+        "lg": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "md": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "sm": {
+          "alias": "s2a/font/line-height/xs"
+        },
+        "xl": {
+          "alias": "s2a/font/line-height/xs"
+        }
+      },
+      "resolved": {
+        "lg": 18,
+        "md": 18,
+        "sm": 18,
+        "xl": 18
+      }
+    },
+    "VariableID:2416:2145": {
+      "name": "s2a/font/letter-spacing/4xl",
+      "key": "63ee700537f272346a9f50ce1b73aa59d9cf0a0a",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-letter-spacing-4xl)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/letter-spacing/neg-0_48"
+        }
+      },
+      "resolved": {
+        "Value": -0.47999998927116394
+      }
+    },
+    "VariableID:2483:41396": {
+      "name": "s2a/color/content/body-subtle",
+      "key": "2ff2a156a3ad790b77605f40573dc94909f239a3",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-body-subtle)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/content/subtle"
+        },
+        "Dark": {
+          "alias": "s2a/color/content/subtle"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 0.6399999856948853
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 0.6399999856948853
+        }
+      }
+    },
+    "VariableID:2483:41398": {
+      "name": "s2a/color/content/heading",
+      "key": "fb5caee478bd93ef589911d85832be534995bf76",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-heading)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/content/default"
+        },
+        "Dark": {
+          "alias": "s2a/color/content/knockout"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2557:831": {
+      "name": "s2a/font/family/body",
+      "key": "43970d360f3eb862bd1e6a2e31be0d2ac683234e",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:2557:832": {
+      "name": "s2a/font/family/label",
+      "key": "02174aaffa99806ace49456aa5121f60a606ed73",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-family-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/family/adobe-clean"
+        }
+      },
+      "resolved": {
+        "Value": "Adobe Clean"
+      }
+    },
+    "VariableID:2:95": {
+      "name": "s2a/border/radius/md",
+      "key": "114880bfb1c0546eed2ef78cfefd9e34918eb16e",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-border-radius-md)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/border/radius/16"
+        }
+      },
+      "resolved": {
+        "Value": 16
+      }
+    },
+    "VariableID:3:56": {
+      "name": "s2a/spacing/lg",
+      "key": "ff7b61b2fb48ea08fac60f2e9edafbfcc2644a0e",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-lg)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/24"
+        }
+      },
+      "resolved": {
+        "Value": 24
+      }
+    },
+    "VariableID:3:60": {
+      "name": "s2a/spacing/xs",
+      "key": "84cbbc98149eadaf56c21bc4ae274415217fea35",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-xs)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/8"
+        }
+      },
+      "resolved": {
+        "Value": 8
+      }
+    },
+    "VariableID:3:61": {
+      "name": "s2a/spacing/none",
+      "key": "838a9eba555c7695010f538ccd595a33f28fbe49",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "FLOAT",
+      "codeSyntax": {
+        "WEB": "var(--s2a-spacing-none)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "spacing/0"
+        }
+      },
+      "resolved": {
+        "Value": 0
+      }
+    },
+    "VariableID:5388:44675": {
+      "name": "s2a/font/weight/heading",
+      "key": "b599da002c11f19b7708d91e04e306295cd60ca4",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-heading)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean-display/black"
+        }
+      },
+      "resolved": {
+        "Value": "Black"
+      }
+    },
+    "VariableID:5388:44676": {
+      "name": "s2a/font/weight/body",
+      "key": "62bc118c0c3bdad19075db8627094145c491b8dc",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-body)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/regular"
+        }
+      },
+      "resolved": {
+        "Value": "Regular"
+      }
+    },
+    "VariableID:5388:44678": {
+      "name": "s2a/font/weight/label",
+      "key": "68a1c8cf3dbedb7bb77987c1db773b0a69a7eb8c",
+      "collection": "S2A / Semantic / Dimension / Static",
+      "collectionId": "VariableCollectionId:1:251",
+      "resolvedType": "STRING",
+      "codeSyntax": {
+        "WEB": "var(--s2a-font-weight-label)"
+      },
+      "valuesByMode": {
+        "Value": {
+          "alias": "s2a/font/weight/adobe-clean/bold"
+        }
+      },
+      "resolved": {
+        "Value": "Bold"
+      }
+    },
+    "VariableID:6:82": {
+      "name": "s2a/color/content/default",
+      "key": "83bc2006f8e7edc6ff9f04044d27a204d84f2d6a",
+      "collection": "S2A / Semantic / Color / Theme",
+      "collectionId": "VariableCollectionId:6:17",
+      "resolvedType": "COLOR",
+      "codeSyntax": {
+        "WEB": "var(--s2a-color-content-default)"
+      },
+      "valuesByMode": {
+        "Light": {
+          "alias": "s2a/color/gray/1000"
+        },
+        "Dark": {
+          "alias": "s2a/color/gray/25"
+        }
+      },
+      "resolved": {
+        "Light": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "Dark": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    }
+  },
+  "textStyles": {
+    "6:15533": {
+      "name": "s2a/typography/heading-5",
+      "key": "532f3890adba713a5d6361c7d801090d22aaa035"
+    },
+    "6:15537": {
+      "name": "s2a/typography/body-md",
+      "key": "a3e41372e4771f3371364e581dbd559e6848ab28"
+    },
+    "6:15543": {
+      "name": "s2a/typography/label",
+      "key": "04764cbcfd7418f4c004046716f9d7db9a741db8"
+    }
+  },
+  "explicitModes": [],
+  "instances": [
+    {
+      "variant": "Style=default",
+      "node": "/.cta",
+      "nodeId": "11362:245189",
+      "mainComponent": {
+        "id": "12823:184376",
+        "key": "d76c0f4bf80a02fee574afe7113519d10f69c793",
+        "name": "Emphasis=default, Kind=action, State=default"
+      },
+      "set": {
+        "id": "12823:184375",
+        "key": "252b85e9d7c740613b3f2ddfd39c75f394edcd95",
+        "name": "Link — v2"
+      },
+      "props": {
+        "Underline#10238:0": false,
+        "Show Icon End#2541:0": true,
+        "Label#2277:4": "Read story",
+        "Emphasis": "default",
+        "Kind": "action",
+        "State": "default"
+      }
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "I11362:245189;12823:184382",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I11362:245189;12823:184382;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta",
+      "nodeId": "13999:202590",
+      "mainComponent": {
+        "id": "12823:184376",
+        "key": "d76c0f4bf80a02fee574afe7113519d10f69c793",
+        "name": "Emphasis=default, Kind=action, State=default"
+      },
+      "set": {
+        "id": "12823:184375",
+        "key": "252b85e9d7c740613b3f2ddfd39c75f394edcd95",
+        "name": "Link — v2"
+      },
+      "props": {
+        "Underline#10238:0": false,
+        "Show Icon End#2541:0": true,
+        "Label#2277:4": "Read story",
+        "Emphasis": "default",
+        "Kind": "action",
+        "State": "default"
+      }
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "I13999:202590;12823:184382",
+      "mainComponent": {
+        "id": "8873:23272",
+        "key": "0b0bc2e5b595be602dbc299c88dbb600daadbb80",
+        "name": "S2a_Icon_Chevron_Right"
+      },
+      "set": null
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I13999:202590;12823:184382;8873:23273",
+      "mainComponent": {
+        "id": "6989:75924",
+        "key": "0371af04ab4945f3708ea702e02e61944aed0b00",
+        "name": "S2_Icon_UIChevron_Size300_N"
+      },
+      "set": null
+    }
+  ],
+  "counts": {
+    "variants": 2,
+    "nodes": 30,
+    "bindings": 72,
+    "unboundPaintNodes": 0
+  },
+  "unboundPaint": [],
+  "unboundValues": [
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 16
+    },
+    {
+      "variant": "Style=default",
+      "node": "",
+      "nodeId": "11362:245185",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 488
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta",
+      "nodeId": "11362:245189",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "value": 6
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta",
+      "nodeId": "11362:245189",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "value": 6
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap",
+      "nodeId": "I11362:245189;12823:184377",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/.underline",
+      "nodeId": "I11362:245189;12823:184379",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 33
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/.label-wrap/.underline",
+      "nodeId": "I11362:245189;12823:184379",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon",
+      "nodeId": "I11362:245189;12823:184380",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon",
+      "nodeId": "I11362:245189;12823:184380",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame",
+      "nodeId": "I11362:245189;12823:184381",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame",
+      "nodeId": "I11362:245189;12823:184381",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "I11362:245189;12823:184382",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "I11362:245189;12823:184382",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I11362:245189;12823:184382;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11362:245189;12823:184382;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I11362:245189;12823:184382;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Icon color",
+      "nodeId": "I11362:245189;12823:184383",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Style=default",
+      "node": "/.cta/end-icon/Icon color",
+      "nodeId": "I11362:245189;12823:184383",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "cornerRadius",
+      "value": 16
+    },
+    {
+      "variant": "Style=centered",
+      "node": "",
+      "nodeId": "13999:202586",
+      "nodeType": "COMPONENT",
+      "property": "width",
+      "value": 488
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta",
+      "nodeId": "13999:202590",
+      "nodeType": "INSTANCE",
+      "property": "paddingTop",
+      "value": 6
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta",
+      "nodeId": "13999:202590",
+      "nodeType": "INSTANCE",
+      "property": "paddingBottom",
+      "value": 6
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap",
+      "nodeId": "I13999:202590;12823:184377",
+      "nodeType": "FRAME",
+      "property": "itemSpacing",
+      "value": 1
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/.underline",
+      "nodeId": "I13999:202590;12823:184379",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 33
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/.label-wrap/.underline",
+      "nodeId": "I13999:202590;12823:184379",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 1
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon",
+      "nodeId": "I13999:202590;12823:184380",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon",
+      "nodeId": "I13999:202590;12823:184380",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame",
+      "nodeId": "I13999:202590;12823:184381",
+      "nodeType": "FRAME",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame",
+      "nodeId": "I13999:202590;12823:184381",
+      "nodeType": "FRAME",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "I13999:202590;12823:184382",
+      "nodeType": "INSTANCE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right",
+      "nodeId": "I13999:202590;12823:184382",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N",
+      "nodeId": "I13999:202590;12823:184382;8873:23273",
+      "nodeType": "INSTANCE",
+      "property": "height",
+      "value": 12
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I13999:202590;12823:184382;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "width",
+      "value": 6.21
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Frame/S2a_Icon_Chevron_Right/S2_Icon_UIChevron_Size300_N/Frame/iconPrimary",
+      "nodeId": "I13999:202590;12823:184382;8873:23273;214:92",
+      "nodeType": "VECTOR",
+      "property": "height",
+      "value": 10.71
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Icon color",
+      "nodeId": "I13999:202590;12823:184383",
+      "nodeType": "RECTANGLE",
+      "property": "width",
+      "value": 12
+    },
+    {
+      "variant": "Style=centered",
+      "node": "/.cta/end-icon/Icon color",
+      "nodeId": "I13999:202590;12823:184383",
+      "nodeType": "RECTANGLE",
+      "property": "height",
+      "value": 12
+    }
+  ],
+  "provenance": {
+    "hash": "sha256:bc7565267593ba73a20478eb5f1c18ff0691503e6b077c7513c256b61ba52574"
+  }
+}

@@ -8,7 +8,7 @@ import { createJumpLink, createJumpLinkNav } from "./JumpLink";
 
 const media = (content) => html`
   <div
-    style="padding:32px;background:url('https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1200&q=80') center/cover;border-radius:12px;display:inline-flex;"
+    style="padding:var(--s2a-spacing-xl);background:url('https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1200&q=80') center/cover;border-radius:var(--s2a-border-radius-sm);display:inline-flex;"
   >
     ${content}
   </div>

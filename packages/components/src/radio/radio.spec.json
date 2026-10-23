@@ -1,48 +1,705 @@
 {
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
   "name": "Radio",
   "slug": "radio",
   "cssClass": "c-radio",
+  "figmaNodeId": "11586:206620",
   "storybookId": "radio",
-  "description": "Single-choice selection control. 20×20 ring + 8px dot with label; label color promotes from content/subtle to content/default when selected. Sourced from Figma Radio (11586:206620), 8 variants (Selected × State).",
+  "description": "A selection control with a checked state, usually paired with a label.",
   "variants": {
-    "selected": ["false", "true"],
-    "state": ["default", "hover", "focus", "disabled"]
-  },
-  "props": [
-    { "name": "label", "type": "string", "defaultValue": "\"Individuals\"", "description": "Visible label text (Figma TEXT prop Label)" },
-    { "name": "checked", "type": "boolean", "defaultValue": "false", "description": "Selected state (Figma: Selected)" },
-    { "name": "disabled", "type": "boolean", "defaultValue": "false", "description": "Disabled state (Figma: State=disabled)" },
-    { "name": "name", "type": "string", "defaultValue": "\"radio-group\"", "description": "Native radio group name" },
-    { "name": "value", "type": "string", "defaultValue": "undefined", "description": "Native form field value" }
-  ],
-  "tokenBindings": {
-    "border-color:ring": "--s2a-color-content-default",
-    "border-color:ring:disabled": "--s2a-color-content-subtle",
-    "background-color:dot": "--s2a-color-content-default",
-    "background-color:dot:disabled": "--s2a-color-content-subtle",
-    "background-color:halo:hover": "--s2a-color-background-subtle",
-    "box-shadow:focus": "--s2a-color-focus-ring-default",
-    "color:label:unselected": "--s2a-color-content-subtle",
-    "color:label:selected": "--s2a-color-content-default",
-    "gap:root": "--s2a-spacing-xs",
-    "font:label": "s2a/typography/label (--s2a-font-family-label et al.)"
-  },
-  "a11y": {
-    "role": "native <input type=\"radio\"> inside <label>",
-    "requiredAriaAttrs": [],
-    "wcag": ["1.3.1", "2.1.1", "2.4.7", "4.1.2"],
-    "notes": [
-      "Real radio inputs sharing a name attribute get native arrow-key group navigation.",
-      "Hover halo and focus ring reproduce the Figma [hover halo] / [focus ring] layers via CSS states.",
-      "Disabled dims ring/dot to content/subtle per Figma; label color mapping intentionally follows Selected, not disabled."
+    "Selected": [
+      "false",
+      "true"
+    ],
+    "State": [
+      "default",
+      "hover",
+      "focus",
+      "disabled"
     ]
   },
-  "figma": {
-    "fileKey": "oXIFqtnrYNdTIjqb1sbJau",
-    "page": "   ↳ Radio",
-    "componentSets": {
-      "Radio": "11586:206620",
-      "_radio": "11586:206578"
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "defaultValue": "\"Individuals\"",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label#11586:0",
+          "verified": true
+        },
+        "code": {
+          "prop": "label",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "selected",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "The hand-written component calls this \"checked\"; generated code binds to it.",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Selected",
+          "valueMap": {
+            "true": "true",
+            "false": "false"
+          },
+          "verified": true,
+          "options": [
+            "false",
+            "true"
+          ]
+        },
+        "code": {
+          "prop": "checked",
+          "attr": "data-selected",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "disabled",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "defaultValue": "\"radio-group\"",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "name",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "value",
+      "type": "expression",
+      "defaultValue": "undefined",
+      "description": "Exists in the component, has no design counterpart.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "value",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "forceState",
+      "type": "string",
+      "defaultValue": "\"default\"",
+      "description": "The State axis, forceable from code for previews, docs and the state matrix. At runtime the states come from interaction.",
+      "enum": [
+        "default",
+        "hover",
+        "focus",
+        "disabled"
+      ],
+      "lever": false,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "verified": true,
+          "options": [
+            "default",
+            "hover",
+            "focus",
+            "disabled"
+          ]
+        },
+        "code": {
+          "prop": "forceState",
+          "attr": "data-state",
+          "extracted": false,
+          "jsdoc": null
+        }
+      }
     }
+  ],
+  "tokenBindings": {
+    "control-background-color:hover": "--s2a-color-background-subtle",
+    "ring-border-color": "--s2a-color-content-default",
+    "ring-border-color:disabled": "--s2a-color-content-subtle",
+    "dot-background-color": "--s2a-color-content-default",
+    "dot-background-color:disabled": "--s2a-color-content-subtle",
+    "label-font-family": "--s2a-font-family-label",
+    "label-font-size": "--s2a-typography-font-size-label",
+    "label-font-weight": "--s2a-font-weight-label",
+    "label-letter-spacing": "--s2a-typography-letter-spacing-label",
+    "label-line-height": "--s2a-typography-line-height-label",
+    "label-color@selected=false": "--s2a-color-content-subtle",
+    "label-color@selected=true": "--s2a-color-content-default"
+  },
+  "tier": "component",
+  "composedOf": [],
+  "a11y": {
+    "wcag": [
+      "1.3.1",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ],
+    "notes": [
+      "Native input with a real <label>, so the hit area includes the text.",
+      "Indeterminate is a property, not a third value.",
+      "Group related controls in a fieldset with a legend (1.3.1)."
+    ]
+  },
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=hover"
+      },
+      "code": {
+        "mechanism": ":hover"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "focus-visible",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=focus-visible"
+      },
+      "code": {
+        "mechanism": ":focus-visible"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=disabled"
+      },
+      "code": {
+        "mechanism": "[disabled] / :disabled"
+      },
+      "notes": "Runtime state, never an authored prop."
+    }
+  ],
+  "anatomy": {
+    "selector": ".c-radio",
+    "figma": ".root",
+    "element": "label",
+    "layout": {
+      "display": "inline-flex",
+      "direction": "row",
+      "align": "center"
+    },
+    "tokens": {
+      "gap": {
+        "value": "raw:8px",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "parts": {
+      "control": {
+        "selector": ".c-radio__control",
+        "figma": "/_radio",
+        "element": "div",
+        "layout": {
+          "display": "grid",
+          "align": "center",
+          "justify": "center"
+        },
+        "tokens": {
+          "width": {
+            "value": "raw:20px",
+            "raw": true,
+            "tokens": []
+          },
+          "height": {
+            "value": "raw:20px",
+            "raw": true,
+            "tokens": []
+          },
+          "border-radius": {
+            "value": "raw:50%",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "states": {
+          "hover": {
+            "background-color": {
+              "value": "{s2a.color.background.subtle}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{s2a.color.background.subtle}",
+                  "cssVar": "--s2a-color-background-subtle",
+                  "figma": "s2a/color/background/subtle",
+                  "shipped": true,
+                  "value": "#f8f8f8",
+                  "dark": "#505050"
+                }
+              ]
+            }
+          }
+        },
+        "parts": {
+          "ring": {
+            "selector": ".c-radio__ring",
+            "figma": "/_radio/.ring",
+            "element": "div",
+            "layout": {
+              "stack": true
+            },
+            "tokens": {
+              "border-color": {
+                "value": "{s2a.color.content.default}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.color.content.default}",
+                    "cssVar": "--s2a-color-content-default",
+                    "figma": "s2a/color/content/default",
+                    "shipped": true,
+                    "value": "#000",
+                    "dark": "#fff"
+                  }
+                ]
+              },
+              "border-width": {
+                "value": "raw:1.5px",
+                "raw": true,
+                "tokens": []
+              },
+              "width": {
+                "value": "raw:18px",
+                "raw": true,
+                "tokens": []
+              },
+              "height": {
+                "value": "raw:18px",
+                "raw": true,
+                "tokens": []
+              },
+              "border-radius": {
+                "value": "raw:50%",
+                "raw": true,
+                "tokens": []
+              },
+              "box-sizing": {
+                "value": "raw:border-box",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "states": {
+              "disabled": {
+                "border-color": {
+                  "value": "{s2a.color.content.subtle}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.content.subtle}",
+                      "cssVar": "--s2a-color-content-subtle",
+                      "figma": "s2a/color/content/subtle",
+                      "shipped": true,
+                      "value": "rgb(0 0 0 / 64%)",
+                      "dark": "rgb(255 255 255 / 64%)"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "dot": {
+            "selector": ".c-radio__dot",
+            "figma": "/_radio/.dot",
+            "element": "div",
+            "layout": {
+              "stack": true
+            },
+            "tokens": {
+              "background-color": {
+                "value": "{s2a.color.content.default}",
+                "raw": false,
+                "tokens": [
+                  {
+                    "ref": "{s2a.color.content.default}",
+                    "cssVar": "--s2a-color-content-default",
+                    "figma": "s2a/color/content/default",
+                    "shipped": true,
+                    "value": "#000",
+                    "dark": "#fff"
+                  }
+                ]
+              },
+              "width": {
+                "value": "raw:8px",
+                "raw": true,
+                "tokens": []
+              },
+              "height": {
+                "value": "raw:8px",
+                "raw": true,
+                "tokens": []
+              },
+              "border-radius": {
+                "value": "raw:50%",
+                "raw": true,
+                "tokens": []
+              },
+              "display": {
+                "value": "raw:none",
+                "raw": true,
+                "tokens": []
+              }
+            },
+            "states": {
+              "disabled": {
+                "background-color": {
+                  "value": "{s2a.color.content.subtle}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.content.subtle}",
+                      "cssVar": "--s2a-color-content-subtle",
+                      "figma": "s2a/color/content/subtle",
+                      "shipped": true,
+                      "value": "rgb(0 0 0 / 64%)",
+                      "dark": "rgb(255 255 255 / 64%)"
+                    }
+                  ]
+                }
+              }
+            },
+            "tokensByProp": [
+              {
+                "prop": "selected",
+                "map": {
+                  "true": {
+                    "display": {
+                      "value": "raw:block",
+                      "raw": true,
+                      "tokens": []
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "label": {
+        "selector": ".c-radio__label",
+        "figma": "/.label",
+        "element": "span",
+        "tokens": {
+          "font-family": {
+            "value": "{s2a.font.family.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.font.family.label}",
+                "cssVar": "--s2a-font-family-label",
+                "figma": "s2a/font/family/label",
+                "shipped": true,
+                "value": "\"Adobe Clean\""
+              }
+            ]
+          },
+          "font-size": {
+            "value": "{s2a.typography.font-size.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.typography.font-size.label}",
+                "cssVar": "--s2a-typography-font-size-label",
+                "figma": "s2a/typography/font-size/label",
+                "shipped": true,
+                "value": "0.875rem"
+              }
+            ]
+          },
+          "font-weight": {
+            "value": "{s2a.font.weight.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.font.weight.label}",
+                "cssVar": "--s2a-font-weight-label",
+                "figma": "s2a/font/weight/label",
+                "shipped": true,
+                "value": "700"
+              }
+            ]
+          },
+          "letter-spacing": {
+            "value": "{s2a.typography.letter-spacing.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.typography.letter-spacing.label}",
+                "cssVar": "--s2a-typography-letter-spacing-label",
+                "figma": "s2a/typography/letter-spacing/label",
+                "shipped": true,
+                "value": "0"
+              }
+            ]
+          },
+          "line-height": {
+            "value": "{s2a.typography.line-height.label}",
+            "raw": false,
+            "tokens": [
+              {
+                "ref": "{s2a.typography.line-height.label}",
+                "cssVar": "--s2a-typography-line-height-label",
+                "figma": "s2a/typography/line-height/label",
+                "shipped": true,
+                "value": "18px"
+              }
+            ]
+          }
+        },
+        "tokensByProp": [
+          {
+            "prop": "selected",
+            "map": {
+              "false": {
+                "color": {
+                  "value": "{s2a.color.content.subtle}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.content.subtle}",
+                      "cssVar": "--s2a-color-content-subtle",
+                      "figma": "s2a/color/content/subtle",
+                      "shipped": true,
+                      "value": "rgb(0 0 0 / 64%)",
+                      "dark": "rgb(255 255 255 / 64%)"
+                    }
+                  ]
+                }
+              },
+              "true": {
+                "color": {
+                  "value": "{s2a.color.content.default}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{s2a.color.content.default}",
+                      "cssVar": "--s2a-color-content-default",
+                      "figma": "s2a/color/content/default",
+                      "shipped": true,
+                      "value": "#000",
+                      "dark": "#fff"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "slot": {
+          "name": "label",
+          "accepts": [
+            "kind:text"
+          ],
+          "acceptsMode": "prefer",
+          "default": {
+            "text": "Individuals"
+          }
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+        "kind": "component-set",
+        "nodeId": "11586:206620",
+        "nodeName": "Radio",
+        "componentSetKey": "d469c02b526f01dd8985387fbae75c1f6626ba3a",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:3f2fde1def9bb8ef20067ee35bf80452c2eb35a3caf309949bab794a08c4adc5",
+        "extractedAt": "2026-10-09T16:13:56.211Z",
+        "meta": {
+          "version": "1.0.0",
+          "status": "active",
+          "updated": "2026-08-04",
+          "changelog": "1.0.0   2026-08-04  init         Initial release"
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "packages/components/src/radio/radio.js",
+        "export": "Radio",
+        "controller": null,
+        "cssClass": "c-radio"
+      },
+      "evidence": {
+        "hash": "sha256:d4c852adafdbaf9dd8d04561807d3569115097186a3873b9657dc505de11e9cf"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "r-archetype",
+      "question": "Scaffolded as checkbox / radio (interactive: state axis has hover, focus, disabled; named \"Radio\"). Confirm, or re-run npm run specs:scaffold -- --slug=radio --archetype=<link-card|card|collection>.",
+      "chose": "checkbox / radio — interactive: state axis has hover, focus, disabled; named \"Radio\"",
+      "confidence": "low",
+      "fix": "npm run specs:scaffold -- --slug=radio --archetype=<link-card|card|collection> --force",
+      "status": "open",
+      "owner": "scaffold",
+      "alternatives": [
+        "link-card: A card that is one link: illustration or icon, a headline, optional description, an arrow affordance. The whole surface is the target and the headline is the accessible name.",
+        "card: A non-interactive content card; actions live in a slot.",
+        "collection: A row, grid or scroller of one repeated unit.",
+        "button: Triggers an action. A label, optional leading and trailing icons, and the full interactive state set.",
+        "toggle / switch: A binary on/off control that applies immediately.",
+        "input / field: Accepts typed input. Label, value, placeholder, and an error state.",
+        "badge / tag / chip: A small label. Non-interactive unless it is dismissible.",
+        "pagination: Moves between pages of content.",
+        "accordion: A disclosure: a trigger that shows and hides a region of content. Open or closed is a prop a consumer sets, not an interaction state.",
+        "select / dropdown: A choice among options. The native <select> does the choosing; the design styles the trigger around it.",
+        "helper text: Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+        "list: A sequence of like items — features, links, steps. The items are the content; the list is the rhythm."
+      ],
+      "evidence": "decided by heuristic; token namespaces content×2; state axis default/hover/focus/disabled"
+    },
+    {
+      "id": "r-code-only-props",
+      "question": "disabled, name, value exist in the component but have no design counterpart. Confirm each is authored (lever true) or integration-only (lever false). \"disabled\" collides with the State axis, which this draft read as runtime states — decide whether the code prop or the state axis is the truth.",
+      "chose": "added 3 code-only props as levers with no design binding",
+      "confidence": "low",
+      "fix": "Set lever:false on the integration-only ones, or delete any the component should stop accepting.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.code.evidence.json"
+    },
+    {
+      "id": "r-part-selectors",
+      "question": "radio, ring, dot have no class of their own in radio.css. The design names these parts separately and the code does not. Split the class, or model them as one part.",
+      "chose": "kept a derived selector that matches nothing",
+      "confidence": "low",
+      "fix": "Set anatomy.root.parts.<part>.selector to the real class, or add the class to radio.css.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "packages/components/src/radio/radio.css"
+    },
+    {
+      "id": "r-match",
+      "question": "Structural match says extend: closest existing contract is Logo (score 1). Extend it instead of adding a component?",
+      "chose": "a new component, over extending Logo (match extend, score 1)",
+      "confidence": "low",
+      "fix": "If it is the same component, delete this draft and add a variant to Logo instead.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Logo (1) already covers this; extend it."
+    },
+    {
+      "id": "r-classify-1",
+      "question": "\"Selected\" (false|true) read as the boolean prop \"selected\"; the design's true is true. Confirm, or change it in props/states.",
+      "chose": "\"Selected\" (false|true) read as the boolean prop \"selected\"; the design's true is true",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json axes"
+    },
+    {
+      "id": "r-classify-2",
+      "question": "\"State\" read as runtime states (hover, focus-visible, disabled), not as a prop. Confirm, or change it in props/states.",
+      "chose": "\"State\" read as runtime states (hover, focus-visible, disabled), not as a prop",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json axes"
+    },
+    {
+      "id": "r-classify-3",
+      "question": "\"selected\" (design) and \"checked\" (code) read as one prop. Confirm, or change it in props/states.",
+      "chose": "\"selected\" (design) and \"checked\" (code) read as one prop",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json axes"
+    },
+    {
+      "id": "r-classify-4",
+      "question": "\"forceState\" added for the \"State\" axis so every state can be rendered without a pointer. Confirm, or change it in props/states.",
+      "chose": "\"forceState\" added for the \"State\" axis so every state can be rendered without a pointer",
+      "confidence": "medium",
+      "fix": "Edit props[] or states[] in this file.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json axes"
+    },
+    {
+      "id": "r-hardcoded-values",
+      "question": "8 values in the design are set with no variable behind them: root gap = 8px; root/control width = 20px; root/control height = 20px; root/control/ring border-width = 1.5px; root/control/ring width = 18px; root/control/ring height = 18px; …. A literal in a contract is a token gap: bind the property to an S2A variable in Figma and re-extract, or keep the raw: value and record why here.",
+      "chose": "carried them through as raw: values so the render matches the file",
+      "confidence": "low",
+      "fix": "In Figma, bind the layer's property to an S2A variable, then re-extract; or replace the raw: with a {s2a.…} token that resolves to the same value.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "radio.figma.evidence.json unboundValues"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:157ef56e35f43ef35c06e7307803da289fa1904beb51ebe9fef7b38a980b5ac1",
+    "codeEvidence": "sha256:d4c852adafdbaf9dd8d04561807d3569115097186a3873b9657dc505de11e9cf",
+    "figmaEvidence": "sha256:3f2fde1def9bb8ef20067ee35bf80452c2eb35a3caf309949bab794a08c4adc5",
+    "generator": "s2a-spec-transform@1"
   }
 }

@@ -1,0 +1,58 @@
+{
+  "$schema": "s2a-grid-defs/1",
+  "slug": "container-standard",
+  "name": "Standard container",
+  "version": "1.0.0",
+  "kind": "container",
+  "tier": "global",
+  "status": "shipped",
+  "description": "The default content container: centred, 83.4% of the viewport from 768 up, capped at 1440 through the desktop range and at 1920 in HD. This is the container almost every section should use. The two caps are not a contradiction — Figma records them as two families, legacy-retire (1440 everywhere) and default (1920 at HD), and the name of the first says which way this is going.",
+  "anchors": {
+    "code": { "stylesheet": "packages/grid/src/s2a-layout-grids.css", "importPath": "@adobecom/s2a-grid/css/grid.css", "rootClass": "container" },
+    "figma": { "collectionId": "VariableCollectionId:6:178", "fileKey": "qAF4nlt6O4ThbeXeO7jzdb", "nodeId": "104:26144", "layerName": "Container", "designOnly": true }
+  },
+  "breakpointBehavior": [
+    { "breakpoint": "sm", "behavior": "Full width with a spacing-lg gutter on each side. Padding-based, not percentage-based.", "maxWidth": null, "margin": "{s2a.spacing.lg}", "columns": 6 },
+    { "breakpoint": "md", "behavior": "Switches to the percentage rule: 83.4% of the viewport, centred, padding removed.", "maxWidth": 1151, "margin": "8.33% each side", "columns": 12 },
+    { "breakpoint": "lg", "behavior": "83.4% of the viewport, centred, capped at 1440.", "maxWidth": 1440, "margin": "8.33% each side", "columns": 12 },
+    { "breakpoint": "xl", "behavior": "Cap rises to 1920 (the HD ceiling) so HD viewports are not stranded inside a 1440 box.", "maxWidth": 1920, "margin": "8.33% each side", "columns": 12 }
+  ],
+  "tokens": [
+    { "role": "margin", "ref": "{s2a.spacing.lg}", "breakpoint": "sm", "note": "Will: --grid-margin = --spacing-lg below 768." }
+  ],
+  "surface": {
+    "classes": [{ "name": "container", "purpose": "The centred content container. Wraps a .row; never carries column classes itself." }],
+    "customProperties": [
+      { "name": "--s2a-grid-max-width", "purpose": "The cap for the current range: 100% at sm, 1440 from 768 up." },
+      { "name": "--s2a-grid-container-width", "purpose": "83.4%, the percentage rule at 768 and up." }
+    ]
+  },
+  "rules": [
+    { "id": "STD_CLASS", "statement": "The container class exists.", "severity": "fail", "check": { "type": "classPresent", "name": "container" } },
+    { "id": "STD_MARGIN_SM", "statement": "Below 768 the side margin is the spacing-lg token, 24px — not a percentage and not a literal.", "severity": "fail", "check": { "type": "declarationEquals", "class": "container", "media": null, "property": "padding-left", "expectedPx": 24 } },
+    { "id": "STD_PCT_MD", "statement": "From 768 up the container width is the 83.4% percentage rule.", "severity": "fail", "check": { "type": "declarationEquals", "class": "container", "media": 768, "property": "width", "expectedValue": "var(--s2a-grid-container-width)" } },
+    { "id": "STD_PAD_CLEARED", "statement": "From 768 up the padding is cleared, because the percentage rule now supplies the margins. Leaving both on is how a container ends up double-indented.", "severity": "fail", "check": { "type": "declarationEquals", "class": "container", "media": 768, "property": "padding-left", "expectedPx": 0 } },
+    { "id": "STD_XL_1920", "statement": "In HD the cap is 1920, matching Figma's default container family.", "severity": "fail", "check": { "type": "declarationEquals", "class": "container", "media": 1441, "property": "max-width", "expectedPx": 1920 } },
+    { "id": "STD_FIGMA_XL", "statement": "Figma's default container family says 1920 in the HD mode.", "severity": "fail", "check": { "type": "figmaAgrees", "figmaPath": "containers.default._grid-container-max-width", "mode": "xl", "expected": 1920 } },
+    { "id": "STD_FIGMA_LEGACY", "statement": "Figma's legacy-retire family — the 1440-everywhere behaviour the stylesheet currently implements — is on its way out, by its own name.", "severity": "warn", "check": { "type": "figmaAgrees", "figmaPath": "containers.legacy-retire._grid-container-max-width", "mode": "xl", "expected": 1440 } },
+    { "id": "STD_MARGIN_SHIPPED", "statement": "The mobile margin token ships.", "severity": "fail", "check": { "type": "tokenShipped", "ref": "{s2a.spacing.lg}" } }
+  ],
+  "decisions": [
+    {
+      "id": "STD_MAX_1440_OR_1920",
+      "question": "Does the standard container cap at 1440 or 1920?",
+      "state": "decided",
+      "owner": "William Blanton",
+      "answer": "Both, by range: 1440 through LG, 1920 from XL. Will's hosted demo implements exactly this, and Figma holds the two behaviours as two families where the 1440-everywhere one is named legacy-retire.",
+      "evidence": "acom-prototypes.vercel.app/s2a-grids/grid.css adds @media screen and (width >= 1441px) { .container { max-width: var(--s2a-grid-hd-max-width) } }; Figma containers.default vs containers.legacy-retire in collection 6:178."
+    },
+    {
+      "id": "STD_VS_HD_REDUNDANT",
+      "question": "Once the standard container rises to 1920 in HD, is container-hd still a distinct family or does it collapse into this one?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "The remaining difference is behaviour below HD: container-hd keeps a 1920 cap and the percentage rule from 768 up, where the standard container caps at 1440 until 1441. If no section needs 1920 below HD, the two merge."
+    }
+  ],
+  "visualize": { "demo": "container", "overlay": true }
+}

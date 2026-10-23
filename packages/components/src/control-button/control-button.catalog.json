@@ -1,0 +1,77 @@
+{
+  "id": "s2a.control-button",
+  "name": "ControlButton",
+  "slug": "control-button",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "A compact, icon-only button for controlling an interactive container — a media player, carousel, lightbox, or modal. Reach for it when the icon alone carries the action: play/pause, next/previous, mute, expand, close.",
+  "props": [
+    {
+      "name": "icon",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "forceState",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "onClick",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.frame",
+    "root.frame.scale-s2a-icons-scale-rig",
+    "root.icon"
+  ],
+  "slots": [
+    {
+      "path": "root.icon",
+      "accepts": [
+        "kind:icon"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 12,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/control-button/control-button.js",
+      "export": "ControlButton",
+      "controller": null,
+      "cssClass": "c-control-button"
+    },
+    "figma": "11180:181592"
+  },
+  "openDecisions": 11
+}

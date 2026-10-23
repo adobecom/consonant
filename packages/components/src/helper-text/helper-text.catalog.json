@@ -1,0 +1,57 @@
+{
+  "id": "s2a.helper-text",
+  "name": "HelperText",
+  "slug": "helper-text",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "Guidance or a message under a field: hint, error, success. Associated with its field, never floating.",
+  "props": [
+    {
+      "name": "intent",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.text"
+  ],
+  "slots": [
+    {
+      "path": "root.text",
+      "accepts": [
+        "kind:text"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 7,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.3.1",
+      "3.3.1",
+      "3.3.3"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/helper-text/helper-text.js",
+      "export": "HelperText",
+      "controller": null,
+      "cssClass": "c-helper-text"
+    },
+    "figma": "10243:101699"
+  },
+  "openDecisions": 5
+}

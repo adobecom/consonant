@@ -16,7 +16,7 @@ export const TextCard = ({
 } = {}) => html`
   <div class="c-text-card">
     <div class="tc-headline-body">
-      <p class="tc-headline">${headline}</p>
+      <h3 class="tc-headline">${headline}</h3>
       ${showBody && body
         ? html`<p class="tc-body">${body}</p>`
         : nothing}

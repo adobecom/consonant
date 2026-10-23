@@ -1,0 +1,457 @@
+{
+  "$generated": {
+    "name": "s2a-grid-contract-transform",
+    "version": "1"
+  },
+  "id": "s2a.grid.container-token-offset",
+  "slug": "container-token-offset",
+  "name": "Token-offset container",
+  "version": "1.0.0",
+  "kind": "container",
+  "tier": "global",
+  "status": "shipped",
+  "supersededBy": null,
+  "description": "A container whose side margins come from spacing tokens that step up per breakpoint — lg, then 2xl, then 4xl — before handing over to the percentage rule in HD. This is the family for hero and offset sections, where the indent is a deliberate design value rather than a share of the viewport. Figma calls it fixed-offset; the code still calls it hero-offset.",
+  "anchors": {
+    "code": {
+      "stylesheet": "packages/grid/src/s2a-layout-grids.css",
+      "importPath": "@adobecom/s2a-grid/css/grid.css",
+      "rootClass": "container-hero-offset"
+    },
+    "figma": {
+      "collectionId": "VariableCollectionId:6:178",
+      "layerName": "Container (fixed-offset)",
+      "designOnly": true
+    }
+  },
+  "breakpoints": [
+    {
+      "id": "sm",
+      "label": "S — Mobile",
+      "figmaMode": "sm",
+      "figmaLabel": "Mobile",
+      "minWidth": null,
+      "maxWidth": 767,
+      "mediaQuery": null,
+      "columns": 6,
+      "mockWidth": 375,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": null,
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.sm.css",
+        "mediaQuery": null,
+        "minWidth": null
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "md",
+      "label": "M — Tablet landscape",
+      "figmaMode": "md",
+      "figmaLabel": "Tablet",
+      "minWidth": 768,
+      "maxWidth": 1279,
+      "mediaQuery": "@media (width >= 768px)",
+      "columns": 12,
+      "mockWidth": 768,
+      "portraitEscape": 900,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 768px)",
+        "minWidth": 768
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.md.css",
+        "mediaQuery": "@media (width >= 768px)",
+        "minWidth": 768
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "lg",
+      "label": "L — Desktop",
+      "figmaMode": "lg",
+      "figmaLabel": "Desktop",
+      "minWidth": 1280,
+      "maxWidth": 1440,
+      "mediaQuery": "@media (width >= 1280px)",
+      "columns": 12,
+      "mockWidth": 1440,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 1280px)",
+        "minWidth": 1280
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.lg.css",
+        "mediaQuery": "@media (width >= 1280px)",
+        "minWidth": 1280
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "xl",
+      "label": "XL — Desktop HD",
+      "figmaMode": "xl",
+      "figmaLabel": "Desktop XL",
+      "minWidth": 1441,
+      "maxWidth": 2560,
+      "mediaQuery": "@media (width >= 1441px)",
+      "columns": 12,
+      "mockWidth": 2560,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media screen and (min-width: 1441px)",
+        "minWidth": 1441
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
+        "mediaQuery": "@media (width >= 1441px)",
+        "minWidth": 1441
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    }
+  ],
+  "breakpointBehavior": [
+    {
+      "breakpoint": "sm",
+      "behavior": "Side margins of spacing-lg (24px).",
+      "maxWidth": null,
+      "margin": "{s2a.spacing.lg}",
+      "columns": 6
+    },
+    {
+      "breakpoint": "md",
+      "behavior": "Side margins step to spacing-2xl (40px).",
+      "maxWidth": null,
+      "margin": "{s2a.spacing.2xl}",
+      "columns": 12
+    },
+    {
+      "breakpoint": "lg",
+      "behavior": "Side margins step to spacing-4xl (64px).",
+      "maxWidth": null,
+      "margin": "{s2a.spacing.4xl}",
+      "columns": 12
+    },
+    {
+      "breakpoint": "xl",
+      "behavior": "Hands over to the percentage rule, capped at 1920. At 1920 the 8.33% margin is 159.36px, which is where Figma's ladder ends.",
+      "maxWidth": 1920,
+      "margin": "8.33% each side",
+      "columns": 12
+    }
+  ],
+  "tokens": [
+    {
+      "role": "margin",
+      "ref": "{s2a.spacing.lg}",
+      "breakpoint": "sm",
+      "cssVar": "--s2a-spacing-lg",
+      "shipped": true,
+      "values": {
+        "sm": 24,
+        "md": 24,
+        "lg": 24,
+        "xl": 24
+      }
+    },
+    {
+      "role": "margin",
+      "ref": "{s2a.spacing.2xl}",
+      "breakpoint": "md",
+      "cssVar": "--s2a-spacing-2xl",
+      "shipped": true,
+      "values": {
+        "sm": 40,
+        "md": 40,
+        "lg": 40,
+        "xl": 40
+      }
+    },
+    {
+      "role": "margin",
+      "ref": "{s2a.spacing.4xl}",
+      "breakpoint": "lg",
+      "cssVar": "--s2a-spacing-4xl",
+      "shipped": true,
+      "values": {
+        "sm": 64,
+        "md": 64,
+        "lg": 64,
+        "xl": 64
+      }
+    }
+  ],
+  "surface": {
+    "classes": [
+      {
+        "name": "container-hero-offset",
+        "purpose": "Offset container with a per-breakpoint token margin ladder.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "width": "100%",
+              "margin-left": "auto",
+              "margin-right": "auto",
+              "padding-left": "var(--s2a-spacing-lg)",
+              "padding-right": "var(--s2a-spacing-lg)"
+            }
+          },
+          {
+            "media": "@media (min-width: 768px)",
+            "declarations": {
+              "padding-left": "var(--s2a-spacing-2xl)",
+              "padding-right": "var(--s2a-spacing-2xl)"
+            }
+          },
+          {
+            "media": "@media (min-width: 1280px)",
+            "declarations": {
+              "padding-left": "var(--s2a-spacing-4xl)",
+              "padding-right": "var(--s2a-spacing-4xl)"
+            }
+          },
+          {
+            "media": "@media (min-width: 1441px)",
+            "declarations": {
+              "width": "var(--s2a-grid-container-width)",
+              "max-width": "var(--s2a-grid-hd-max-width)",
+              "padding-left": "0",
+              "padding-right": "0",
+              "margin-left": "auto",
+              "margin-right": "auto"
+            }
+          }
+        ]
+      }
+    ],
+    "customProperties": [
+      {
+        "name": "--s2a-token-offset-sm",
+        "purpose": "Mobile margin, spacing-lg. Will's demo introduces this indirection so the ladder is readable in one place.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      },
+      {
+        "name": "--s2a-token-offset-md",
+        "purpose": "Tablet margin, spacing-2xl.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      },
+      {
+        "name": "--s2a-token-offset-lg",
+        "purpose": "Desktop margin, spacing-4xl.",
+        "expect": "absent",
+        "present": false,
+        "declaredIn": []
+      }
+    ]
+  },
+  "design": {
+    "collectionId": "VariableCollectionId:6:178",
+    "designOnly": true,
+    "values": {
+      "viewport.side-margins._margin-offset-reflow": {
+        "sm": {
+          "value": "{s2a.spacing.lg}",
+          "alias": "{s2a.spacing.lg}",
+          "resolved": 24,
+          "designOnly": true
+        },
+        "md": {
+          "value": "{s2a.spacing.lg}",
+          "alias": "{s2a.spacing.lg}",
+          "resolved": 24,
+          "designOnly": true
+        },
+        "lg": {
+          "value": "{s2a.spacing.lg}",
+          "alias": "{s2a.spacing.lg}",
+          "resolved": 24,
+          "designOnly": true
+        },
+        "xl": {
+          "value": "{s2a.spacing.lg}",
+          "alias": "{s2a.spacing.lg}",
+          "resolved": 24,
+          "designOnly": true
+        }
+      },
+      "viewport.side-margins._margin-offset-reflow-legacy": {
+        "sm": {
+          "value": "{s2a.spacing.lg}",
+          "alias": "{s2a.spacing.lg}",
+          "resolved": 24,
+          "designOnly": true
+        },
+        "md": {
+          "value": "{s2a.spacing.2xl}",
+          "alias": "{s2a.spacing.2xl}",
+          "resolved": 40,
+          "designOnly": true
+        },
+        "lg": {
+          "value": "{s2a.spacing.4xl}",
+          "alias": "{s2a.spacing.4xl}",
+          "resolved": 64,
+          "designOnly": true
+        },
+        "xl": {
+          "value": 159.36000061035156,
+          "alias": null,
+          "resolved": 159.36000061035156,
+          "designOnly": true
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "id": "OFF_CLASS",
+      "statement": "The offset container class exists.",
+      "severity": "fail",
+      "check": {
+        "type": "classPresent",
+        "name": "container-hero-offset"
+      }
+    },
+    {
+      "id": "OFF_LADDER_SM",
+      "statement": "The mobile margin is 24px, from spacing-lg.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-hero-offset",
+        "media": null,
+        "property": "padding-left",
+        "expectedPx": 24
+      }
+    },
+    {
+      "id": "OFF_LADDER_MD",
+      "statement": "The tablet margin is 40px, from spacing-2xl.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-hero-offset",
+        "media": 768,
+        "property": "padding-left",
+        "expectedPx": 40
+      }
+    },
+    {
+      "id": "OFF_LADDER_LG",
+      "statement": "The desktop margin is 64px, from spacing-4xl.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-hero-offset",
+        "media": 1280,
+        "property": "padding-left",
+        "expectedPx": 64
+      }
+    },
+    {
+      "id": "OFF_HANDOVER_XL",
+      "statement": "In HD the ladder stops and the percentage rule takes over, at the HD boundary of 1441 — not 1440.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-hero-offset",
+        "media": 1441,
+        "property": "padding-left",
+        "expectedPx": 0
+      }
+    },
+    {
+      "id": "OFF_FIGMA_SM",
+      "statement": "Figma's offset ladder agrees at mobile: 24px.",
+      "severity": "fail",
+      "check": {
+        "type": "figmaAgrees",
+        "figmaPath": "viewport.side-margins._margin-offset-reflow-legacy",
+        "mode": "sm",
+        "expected": 24
+      }
+    },
+    {
+      "id": "OFF_FIGMA_MD",
+      "statement": "Figma's offset ladder agrees at tablet: 40px.",
+      "severity": "fail",
+      "check": {
+        "type": "figmaAgrees",
+        "figmaPath": "viewport.side-margins._margin-offset-reflow-legacy",
+        "mode": "md",
+        "expected": 40
+      }
+    },
+    {
+      "id": "OFF_FIGMA_LG",
+      "statement": "Figma's offset ladder agrees at desktop: 64px.",
+      "severity": "fail",
+      "check": {
+        "type": "figmaAgrees",
+        "figmaPath": "viewport.side-margins._margin-offset-reflow-legacy",
+        "mode": "lg",
+        "expected": 64
+      }
+    },
+    {
+      "id": "OFF_FIGMA_FIXED",
+      "statement": "Figma's fixed offset value is spacing-lg at every mode, which is the value Will quotes as 'fixed offset: --spacing-lg'.",
+      "severity": "warn",
+      "check": {
+        "type": "figmaAgrees",
+        "figmaPath": "viewport.side-margins._margin-offset-reflow",
+        "mode": "xl",
+        "expected": 24
+      }
+    },
+    {
+      "id": "OFF_TOKENS_SHIPPED",
+      "statement": "Every rung of the ladder is a shipped token.",
+      "severity": "fail",
+      "check": {
+        "type": "tokenShipped",
+        "ref": "{s2a.spacing.4xl}"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "OFF_RENAME",
+      "question": "Rename container-hero-offset to container-token-offset, matching Will's demo and Figma's fixed-offset family?",
+      "state": "open",
+      "owner": "Matthew Huntsberry",
+      "evidence": "The margins are not hero-specific — Figma's family is 'fixed-offset' and Will's demo class is 'container-token-offset' with the ladder lifted into --s2a-token-offset-* properties. The values are identical either way, so this is a naming and indirection change, not a behaviour change."
+    }
+  ],
+  "visualize": {
+    "demo": "container",
+    "overlay": true,
+    "note": "The margin ladder is the thing to look at: watch the indent step at 768, 1280 and 1441."
+  },
+  "provenance": {
+    "defs": "sha256:c87a9cf77c579cd387be39978b0dafccc459b3f802337c24b51ec916b91569ed",
+    "code": "sha256:2d8048246d27d063bf7883e5e461991c5fb2c29f93d62516512512e6a13b73fb",
+    "figma": "sha256:ab9f2703866168d507517b490fc100eb1401a93b3bc07ee3d033b8220e5872ac",
+    "contract": "sha256:f10d4a9b52723c5dd91ecffb90017543741af5b98fbcd5adf6368187e50f1c02"
+  }
+}

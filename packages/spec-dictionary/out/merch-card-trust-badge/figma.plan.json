@@ -1,0 +1,130 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "MerchCardTrustBadge",
+  "setName": "MerchCard/TrustBadge",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "div",
+    "bindings": {
+      "gap": [
+        "s2a/spacing/8"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".s2-icon-lock-20-n",
+        "source": "/S2_Icon_Lock_20_N",
+        "element": null,
+        "bindings": {},
+        "slot": null,
+        "children": []
+      },
+      {
+        "name": ".secure-transaction",
+        "source": "/Secure transaction",
+        "element": "span",
+        "bindings": {
+          "color": [
+            "s2a/color/content/subtle"
+          ],
+          "font-family": [
+            "s2a/font/family/body"
+          ],
+          "font-size": [
+            "s2a/typography/font-size/body-sm"
+          ],
+          "font-weight": [
+            "s2a/font/weight/body"
+          ],
+          "letter-spacing": [
+            "s2a/typography/letter-spacing/body-sm"
+          ],
+          "line-height": [
+            "s2a/typography/line-height/body-sm"
+          ]
+        },
+        "slot": {
+          "name": "Secure transaction",
+          "accepts": [
+            "kind:text"
+          ],
+          "mode": "prefer"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "qAF4nlt6O4ThbeXeO7jzdb",
+    "kind": "component-set",
+    "nodeId": "10327:103546",
+    "nodeName": "MerchCard/TrustBadge",
+    "componentSetKey": "1220f8083276c6e5972109c631310150f5deb818",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Label#10327:141",
+      "type": "TEXT",
+      "forProp": "label"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".c-merch-card-trust-badge",
+      "bindings": {
+        "gap": [
+          "s2a/spacing/8"
+        ]
+      }
+    },
+    {
+      "name": "/S2_Icon_Lock_20_N",
+      "selector": ".c-merch-card-trust-badge__s2-icon-lock-20-n",
+      "bindings": {}
+    },
+    {
+      "name": "/Secure transaction",
+      "selector": ".c-merch-card-trust-badge__secure-transaction",
+      "bindings": {
+        "color": [
+          "s2a/color/content/subtle"
+        ],
+        "font-family": [
+          "s2a/font/family/body"
+        ],
+        "font-size": [
+          "s2a/typography/font-size/body-sm"
+        ],
+        "font-weight": [
+          "s2a/font/weight/body"
+        ],
+        "letter-spacing": [
+          "s2a/typography/letter-spacing/body-sm"
+        ],
+        "line-height": [
+          "s2a/typography/line-height/body-sm"
+        ]
+      },
+      "slot": {
+        "name": "Secure transaction",
+        "accepts": [
+          "kind:text"
+        ],
+        "mode": "prefer"
+      }
+    }
+  ],
+  "textStyles": [
+    "s2a/typography/body-sm"
+  ]
+}

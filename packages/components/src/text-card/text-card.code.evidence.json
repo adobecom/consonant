@@ -1,0 +1,774 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-23T16:32:11.583Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "text-card",
+    "name": "TextCard",
+    "cssClass": "c-text-card",
+    "importPath": "packages/components/src/text-card/text-card.js",
+    "exports": [
+      "TextCard"
+    ],
+    "render": "TextCard",
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/text-card/text-card.spec.json",
+      "storybookId": "pages-homepage--news",
+      "figmaNodeId": "11362:245184"
+    }
+  },
+  "sources": {
+    "packages/components/src/text-card/text-card.js": "sha256:56028472ac9287e572db22da7ade2cf1cb55c6d0f04a2829ac107f746f2baae8",
+    "packages/components/src/text-card/text-card.css": "sha256:29e641385225e0cd23a1cd57c38a7dce5c4efb473e1c3e14d994cc3abe4d43a4"
+  },
+  "props": [
+    {
+      "name": "headline",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "body",
+      "default": "\"\"",
+      "type": "string"
+    },
+    {
+      "name": "ctaLabel",
+      "default": "\"Read story\"",
+      "type": "string"
+    },
+    {
+      "name": "ctaHref",
+      "default": "\"#\"",
+      "type": "string"
+    },
+    {
+      "name": "showBody",
+      "default": "true",
+      "type": "boolean"
+    },
+    {
+      "name": "showCta",
+      "default": "true",
+      "type": "boolean"
+    }
+  ],
+  "attributes": {
+    "data-emphasis": {
+      "values": [
+        "default"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-kind": {
+      "values": [
+        "action"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-style": {
+      "values": [
+        "centered",
+        "default"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "c-text-card",
+      "tc-body",
+      "tc-cta",
+      "tc-cta__icon",
+      "tc-cta__label",
+      "tc-headline",
+      "tc-headline-body"
+    ],
+    "stylesheet": [
+      "c-text-card",
+      "tc-body",
+      "tc-cta",
+      "tc-cta__icon",
+      "tc-headline",
+      "tc-headline-body"
+    ],
+    "runtime": [
+      "c-link",
+      "c-link__call-to-action",
+      "c-link__end-icon",
+      "c-link__frame",
+      "c-link__icon-color",
+      "c-link__label-wrap",
+      "c-link__s2a-icon-chevron-right",
+      "c-link__underline",
+      "c-text-card",
+      "c-text-card__body",
+      "c-text-card__headline",
+      "c-text-card__headline-body",
+      "c-text-card__link",
+      "tc-body",
+      "tc-cta",
+      "tc-cta__icon",
+      "tc-cta__label",
+      "tc-headline",
+      "tc-headline-body"
+    ],
+    "own": [
+      "c-text-card",
+      "c-text-card__body",
+      "c-text-card__headline",
+      "c-text-card__headline-body",
+      "c-text-card__link",
+      "tc-body",
+      "tc-cta",
+      "tc-cta__icon",
+      "tc-headline",
+      "tc-headline-body"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-hidden"
+    ],
+    "tags": [
+      "a",
+      "h3"
+    ]
+  },
+  "imports": [
+    "../icons/chevron-right.svg?raw",
+    "./text-card.css"
+  ],
+  "tokens": {
+    "references": {
+      "--s2a-border-radius-md": {
+        "fallback": false
+      },
+      "--s2a-color-content-body-subtle": {
+        "fallback": false
+      },
+      "--s2a-color-content-heading": {
+        "fallback": false
+      },
+      "--s2a-font-family-body": {
+        "fallback": false
+      },
+      "--s2a-font-family-heading": {
+        "fallback": false
+      },
+      "--s2a-font-family-label": {
+        "fallback": false
+      },
+      "--s2a-font-letter-spacing-4xl": {
+        "fallback": false
+      },
+      "--s2a-font-weight-body": {
+        "fallback": false
+      },
+      "--s2a-font-weight-heading": {
+        "fallback": false
+      },
+      "--s2a-font-weight-label": {
+        "fallback": false
+      },
+      "--s2a-spacing-lg": {
+        "fallback": false
+      },
+      "--s2a-spacing-sm": {
+        "fallback": false
+      },
+      "--s2a-spacing-xs": {
+        "fallback": false
+      },
+      "--s2a-typography-font-size-body-md": {
+        "fallback": false
+      },
+      "--s2a-typography-font-size-heading-5": {
+        "fallback": false
+      },
+      "--s2a-typography-font-size-label": {
+        "fallback": false
+      },
+      "--s2a-typography-letter-spacing-body-md": {
+        "fallback": false
+      },
+      "--s2a-typography-letter-spacing-label": {
+        "fallback": false
+      },
+      "--s2a-typography-line-height-body-md": {
+        "fallback": false
+      },
+      "--s2a-typography-line-height-heading-5": {
+        "fallback": false
+      },
+      "--s2a-typography-line-height-label": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "states": [
+    ":hover"
+  ],
+  "queries": [],
+  "stories": [
+    {
+      "id": "generated-textcard--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--showbody-on",
+      "name": "showBody on",
+      "args": {
+        "showBody": true
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--showbody-off",
+      "name": "showBody off",
+      "args": {
+        "showBody": false
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "default"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "generated-textcard--style-centered",
+      "name": "style: centered",
+      "args": {
+        "style": "centered"
+      },
+      "root": {
+        "tag": "article",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {
+          "style": "centered"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "centered"
+        ],
+        "data-emphasis": [
+          "default"
+        ],
+        "data-kind": [
+          "action"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "centered"
+        ]
+      },
+      "classes": [
+        "c-link",
+        "c-link__call-to-action",
+        "c-link__end-icon",
+        "c-link__frame",
+        "c-link__icon-color",
+        "c-link__label-wrap",
+        "c-link__s2a-icon-chevron-right",
+        "c-link__underline",
+        "c-text-card",
+        "c-text-card__body",
+        "c-text-card__headline",
+        "c-text-card__headline-body",
+        "c-text-card__link"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Label false",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "cards-textcard--default",
+      "name": "Default",
+      "args": {
+        "headline": "Adobe apps are top choice for Sundance filmmakers.",
+        "body": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants.",
+        "ctaLabel": "Read story",
+        "ctaHref": "#"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-text-card",
+        "tc-body",
+        "tc-cta",
+        "tc-cta__icon",
+        "tc-cta__label",
+        "tc-headline",
+        "tc-headline-body"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Read story",
+          "disabled": false
+        }
+      ],
+      "nodes": 9
+    },
+    {
+      "id": "cards-textcard--no-cta",
+      "name": "No CTA",
+      "args": {
+        "headline": "Adobe apps are top choice for Sundance filmmakers.",
+        "body": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants.",
+        "ctaLabel": "Read story",
+        "ctaHref": "#",
+        "showCta": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-text-card",
+        "tc-body",
+        "tc-headline",
+        "tc-headline-body"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 4
+    },
+    {
+      "id": "cards-textcard--no-body",
+      "name": "No body",
+      "args": {
+        "headline": "Adobe apps are top choice for Sundance filmmakers.",
+        "body": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants.",
+        "ctaLabel": "Read story",
+        "ctaHref": "#",
+        "showBody": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-text-card",
+        "tc-cta",
+        "tc-cta__icon",
+        "tc-cta__label",
+        "tc-headline",
+        "tc-headline-body"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Read story",
+          "disabled": false
+        }
+      ],
+      "nodes": 8
+    },
+    {
+      "id": "cards-textcard--headline-only",
+      "name": "Headline only",
+      "args": {
+        "headline": "Adobe apps are top choice for Sundance filmmakers.",
+        "body": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants.",
+        "ctaLabel": "Read story",
+        "ctaHref": "#",
+        "showBody": false,
+        "showCta": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-text-card",
+        "tc-headline",
+        "tc-headline-body"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 3
+    },
+    {
+      "id": "cards-textcard--three-up",
+      "name": "3-up grid",
+      "args": {
+        "headline": "Adobe apps are top choice for Sundance filmmakers.",
+        "body": "85% of Sundance Filmmakers Choose Adobe as Company Releases New AI Video Innovations and $10M in Creator Grants.",
+        "ctaLabel": "Read story",
+        "ctaHref": "#"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [
+          "c-text-card"
+        ],
+        "dataset": {}
+      },
+      "attributes": {},
+      "rootAttributes": {},
+      "classes": [
+        "c-text-card",
+        "tc-body",
+        "tc-cta",
+        "tc-cta__icon",
+        "tc-cta__label",
+        "tc-headline",
+        "tc-headline-body"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "a",
+          "role": null,
+          "name": "Read story",
+          "disabled": false
+        }
+      ],
+      "nodes": 9
+    }
+  ],
+  "counts": {
+    "props": 6,
+    "attributes": 3,
+    "parts": 10,
+    "tokenReferences": 21,
+    "tokenReferencesWithoutFallback": 21,
+    "raw": 0,
+    "stories": 11,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:9d33a4abcf4ddc8320ae9880021fe211bdfb4189f20e26b93db641bad59ea8d2"
+  }
+}

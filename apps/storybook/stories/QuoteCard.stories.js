@@ -115,7 +115,7 @@ export const NoImage = {
 export const AllThree = {
   name: "All three slides",
   render: () => html`
-    <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: var(--s2a-spacing-lg);">
       ${SAMPLE_SLIDES.map((slide) => QuoteCard(slide))}
     </div>
   `,

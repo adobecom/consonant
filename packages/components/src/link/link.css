@@ -8,7 +8,7 @@
 .c-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
   text-decoration: none;
   cursor: pointer;
   background: none;
@@ -23,7 +23,7 @@
   line-height: var(--s2a-typography-line-height-label);
   letter-spacing: var(--s2a-typography-letter-spacing-label);
   padding-block: 6px;
-  color: var(--s2a-color-button-content-primary-solid-inverse, #000);
+  color: var(--s2a-color-button-content-primary-solid-inverse);
 }
 
 /* ── Kind: text — body-md ramp (16 Regular), 2px block padding ──────────── */
@@ -33,33 +33,24 @@
   font-size: var(--s2a-typography-font-size-body-md);
   line-height: var(--s2a-typography-line-height-body-md);
   letter-spacing: var(--s2a-typography-letter-spacing-body-md);
-  padding-block: 2px;
-  color: var(--s2a-color-content-default, #000);
+  padding-block: var(--s2a-spacing-3xs);
+  color: var(--s2a-color-content-default);
 }
 
 .c-link[data-kind="text"][data-emphasis="subtle"] {
-  color: var(--s2a-color-content-body-subtle, rgba(0, 0, 0, 0.64));
-}
-
-/* ── Context: on-dark ────────────────────────────────────────────────────── */
-.c-link[data-context="on-dark"] {
-  color: var(--s2a-color-content-knockout, #fff);
+  color: var(--s2a-color-content-body-subtle);
 }
 
 /* ── Underline prop ──────────────────────────────────────────────────────── */
 .c-link[data-underline] {
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-underline-offset: var(--s2a-spacing-3xs);
 }
 
 /* ── Focus ring — 1px, ~3px offset (Figma "Focus Ring Background") ──────── */
 .c-link:focus-visible {
-  outline: 1px solid var(--s2a-color-focus-ring-default, #3b63fb);
-  outline-offset: 3px;
-}
-
-.c-link[data-context="on-dark"]:focus-visible {
-  outline-color: var(--s2a-color-focus-ring-knockout, #fff);
+  outline: var(--s2a-border-width-sm) solid var(--s2a-color-focus-ring-default);
+  outline-offset: var(--s2a-spacing-2xs);
 }
 
 /* ── End icon (12×12 chevron) ────────────────────────────────────────────── */

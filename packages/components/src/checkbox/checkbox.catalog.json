@@ -1,0 +1,78 @@
+{
+  "id": "s2a.checkbox",
+  "name": "Checkbox",
+  "slug": "checkbox",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "A single checkbox with a label — toggles one independent option on or off.",
+  "props": [
+    {
+      "name": "style",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "tile",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.checkbox",
+    "root.label"
+  ],
+  "slots": [],
+  "tokens": 0,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.3.1",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "packages/components/src/checkbox/checkbox.js",
+      "export": "Checkbox",
+      "controller": null,
+      "cssClass": "c-checkbox"
+    },
+    "figma": "10559:113870"
+  },
+  "openDecisions": 4
+}

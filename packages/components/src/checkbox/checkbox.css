@@ -37,7 +37,7 @@
   flex: none;
   width: 20px;
   height: 20px;
-  border: var(--s2a-border-width-md, 2px) solid var(--s2a-color-content-default);
+  border: var(--s2a-border-width-md) solid var(--s2a-color-content-default);
   border-radius: var(--s2a-border-radius-2xs);
   background-color: transparent;
   transition:
@@ -103,7 +103,7 @@
   box-sizing: border-box;
   width: 100%;
   padding: var(--s2a-spacing-md) var(--s2a-spacing-sm);
-  border: var(--s2a-border-width-sm, 1px) solid var(--s2a-color-border-subtle);
+  border: var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle);
   border-radius: var(--s2a-border-radius-xs);
   background-color: var(--s2a-color-background-default);
 }

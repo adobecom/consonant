@@ -1,0 +1,327 @@
+{
+  "$generated": {
+    "name": "s2a-grid-contract-transform",
+    "version": "1"
+  },
+  "id": "s2a.grid.container-constrained",
+  "slug": "container-constrained",
+  "name": "Constrained container",
+  "version": "1.0.0",
+  "kind": "container",
+  "tier": "sectional",
+  "status": "shipped",
+  "supersededBy": null,
+  "description": "Column-count caps for a section that should be narrower than the full 12: 10, 8 or 6 columns' worth of width, computed from the 1440 grid rather than typed as a pixel value. These are modifiers, not containers — each is combined with .container, which supplies the centring and the side margins, and only overrides the cap. This is the right answer to 'I need this section narrower': it keeps the measurement on the grid instead of inventing a max-width, which is the failure Will flagged in Milo's own container code.",
+  "anchors": {
+    "code": {
+      "stylesheet": "packages/grid/src/s2a-layout-grids.css",
+      "importPath": "@adobecom/s2a-grid/css/grid.css",
+      "rootClass": "container"
+    },
+    "figma": {
+      "collectionId": "VariableCollectionId:6:178",
+      "layerName": "Container",
+      "designOnly": true
+    }
+  },
+  "breakpoints": [
+    {
+      "id": "sm",
+      "label": "S — Mobile",
+      "figmaMode": "sm",
+      "figmaLabel": "Mobile",
+      "minWidth": null,
+      "maxWidth": 767,
+      "mediaQuery": null,
+      "columns": 6,
+      "mockWidth": 375,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": null,
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.sm.css",
+        "mediaQuery": null,
+        "minWidth": null
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "md",
+      "label": "M — Tablet landscape",
+      "figmaMode": "md",
+      "figmaLabel": "Tablet",
+      "minWidth": 768,
+      "maxWidth": 1279,
+      "mediaQuery": "@media (width >= 768px)",
+      "columns": 12,
+      "mockWidth": 768,
+      "portraitEscape": 900,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 768px)",
+        "minWidth": 768
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.md.css",
+        "mediaQuery": "@media (width >= 768px)",
+        "minWidth": 768
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "lg",
+      "label": "L — Desktop",
+      "figmaMode": "lg",
+      "figmaLabel": "Desktop",
+      "minWidth": 1280,
+      "maxWidth": 1440,
+      "mediaQuery": "@media (width >= 1280px)",
+      "columns": 12,
+      "mockWidth": 1440,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media (min-width: 1280px)",
+        "minWidth": 1280
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.lg.css",
+        "mediaQuery": "@media (width >= 1280px)",
+        "minWidth": 1280
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    },
+    {
+      "id": "xl",
+      "label": "XL — Desktop HD",
+      "figmaMode": "xl",
+      "figmaLabel": "Desktop XL",
+      "minWidth": 1441,
+      "maxWidth": 2560,
+      "mediaQuery": "@media (width >= 1441px)",
+      "columns": 12,
+      "mockWidth": 2560,
+      "portraitEscape": null,
+      "gutterPx": 8,
+      "stylesheet": {
+        "mediaQuery": "@media screen and (min-width: 1441px)",
+        "minWidth": 1441
+      },
+      "stylesheetNearest": null,
+      "tokenFile": {
+        "file": "dist/packages/tokens/css/dev/tokens.responsive.xl.css",
+        "mediaQuery": "@media (width >= 1441px)",
+        "minWidth": 1441
+      },
+      "boundaryAgrees": true,
+      "inherited": true
+    }
+  ],
+  "breakpointBehavior": [
+    {
+      "breakpoint": "sm",
+      "behavior": "No effect — the cap is wider than the viewport, so the container behaves as full width.",
+      "maxWidth": null,
+      "columns": 6
+    },
+    {
+      "breakpoint": "md",
+      "behavior": "No effect in practice at tablet widths.",
+      "maxWidth": null,
+      "columns": 12
+    },
+    {
+      "breakpoint": "lg",
+      "behavior": "Caps the content at N columns' worth of the 1440 grid, gutters included.",
+      "maxWidth": "computed from 1440 and the gutter",
+      "columns": 12
+    },
+    {
+      "breakpoint": "xl",
+      "behavior": "Same cap — these modifiers are deliberately range-independent, so a narrow section stays the same measure on an HD display.",
+      "maxWidth": "computed from 1440 and the gutter",
+      "columns": 12
+    }
+  ],
+  "tokens": [
+    {
+      "role": "gutter",
+      "ref": "{s2a.spacing.xs}",
+      "breakpoint": "all",
+      "note": "The gutter is part of the width maths, so a gutter change moves these caps with it.",
+      "cssVar": "--s2a-spacing-xs",
+      "shipped": true,
+      "values": {
+        "sm": 8,
+        "md": 8,
+        "lg": 8,
+        "xl": 8
+      }
+    }
+  ],
+  "surface": {
+    "classes": [
+      {
+        "name": "container-12",
+        "purpose": "Full 12-column cap, 1440px. Used as .container.container-12.",
+        "pattern": "container container-{6|8|10|12}",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "max-width": "1440px"
+            }
+          }
+        ]
+      },
+      {
+        "name": "container-10",
+        "purpose": "Ten columns' worth of the 1440 grid. Used as .container.container-10.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "max-width": "calc(((1440px - (11 * var(--s2a-grid-gutter))) / 12) * 10 + (9 * var(--s2a-grid-gutter)))"
+            }
+          }
+        ]
+      },
+      {
+        "name": "container-8",
+        "purpose": "Eight columns' worth — the common wide-measure section. Used as .container.container-8.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "max-width": "calc(((1440px - (11 * var(--s2a-grid-gutter))) / 12) * 8 + (7 * var(--s2a-grid-gutter)))"
+            }
+          }
+        ]
+      },
+      {
+        "name": "container-6",
+        "purpose": "Six columns' worth — the common centred-text section. Will notes this is what Milo reaches for as grid-width-6. Used as .container.container-6.",
+        "expect": "present",
+        "present": true,
+        "declaredIn": [
+          {
+            "media": null,
+            "declarations": {
+              "max-width": "calc(((1440px - (11 * var(--s2a-grid-gutter))) / 12) * 6 + (5 * var(--s2a-grid-gutter)))"
+            }
+          }
+        ]
+      }
+    ],
+    "customProperties": []
+  },
+  "design": {
+    "collectionId": "VariableCollectionId:6:178",
+    "designOnly": true,
+    "values": {}
+  },
+  "rules": [
+    {
+      "id": "CON_12",
+      "statement": "The 12-column cap exists and equals 1440.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-12",
+        "media": null,
+        "property": "max-width",
+        "expectedPx": 1440
+      }
+    },
+    {
+      "id": "CON_10",
+      "statement": "The 10-column cap is computed from the grid, not typed as a pixel literal.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-10",
+        "media": null,
+        "property": "max-width",
+        "expectedComputed": true
+      }
+    },
+    {
+      "id": "CON_8",
+      "statement": "The 8-column cap is computed from the grid.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-8",
+        "media": null,
+        "property": "max-width",
+        "expectedComputed": true
+      }
+    },
+    {
+      "id": "CON_6",
+      "statement": "The 6-column cap is computed from the grid.",
+      "severity": "fail",
+      "check": {
+        "type": "declarationEquals",
+        "class": "container-6",
+        "media": null,
+        "property": "max-width",
+        "expectedComputed": true
+      }
+    },
+    {
+      "id": "CON_GUTTER_SHIPPED",
+      "statement": "The gutter token the maths depends on ships.",
+      "severity": "fail",
+      "check": {
+        "type": "tokenShipped",
+        "ref": "{s2a.spacing.xs}"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "CON_BASIS_1440",
+      "question": "The caps are computed from a hard-coded 1440 basis rather than from --s2a-grid-max-width. Should they follow the standard container up to 1920 in HD?",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "If the standard container rises to 1920 at XL but container-8 stays pinned to a 1440 basis, a 'two-thirds width' section quietly becomes a smaller share of the page in HD. Deliberate or not, it should be stated."
+    },
+    {
+      "id": "CON_DOC_1024",
+      "question": "Will's hosted demo documents these under a heading reading 'Desktop Constraint Variations (1024px+)', but they carry no media query at all in either stylesheet.",
+      "state": "open",
+      "owner": "William Blanton",
+      "evidence": "Stale heading on acom-prototypes.vercel.app/s2a-grids/col-system.html, and 1024 is the same wrong number that caused the sectional-token reflow bug. Worth correcting on the page so nobody implements to it."
+    },
+    {
+      "id": "CON_MODIFIER_ALONE",
+      "question": "Should .container-6 used on its own be an error? Alone it sets only a cap — no centring, no side margins — so a section that forgets .container silently sits flush left.",
+      "state": "open",
+      "owner": "Matthew Huntsberry",
+      "evidence": "The stylesheet comment calls them 'Desktop Container Modifiers' but nothing enforces the pairing. Caught while building the Storybook demo, which rendered .container-6 alone and produced a left-aligned box."
+    }
+  ],
+  "visualize": {
+    "demo": "container",
+    "overlay": true
+  },
+  "provenance": {
+    "defs": "sha256:b1d1ed6d93a905defd94fe5409593d1f200a71129a131df368ae48f3682d8ba5",
+    "code": "sha256:2d8048246d27d063bf7883e5e461991c5fb2c29f93d62516512512e6a13b73fb",
+    "figma": "sha256:ab9f2703866168d507517b490fc100eb1401a93b3bc07ee3d033b8220e5872ac",
+    "contract": "sha256:967341f640c4684cf8329e5bbd3ea2722f4dedb8d41297c2a58ebcbb190ac80d"
+  }
+}

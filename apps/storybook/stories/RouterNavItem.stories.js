@@ -76,7 +76,7 @@ indicate autoplay timing.
   },
   decorators: [
     (story) => html`
-      <div style="background: #1a1a2e; padding: 32px; border-radius: 12px;">
+      <div data-theme="dark" style="background: var(--s2a-color-background-knockout); padding: var(--s2a-spacing-xl); border-radius: var(--s2a-border-radius-sm);">
         ${story()}
       </div>
     `,
@@ -108,17 +108,17 @@ export const InlineActive = {
 export const AllVariants = {
   name: "All variants",
   render: () => html`
-    <div style="background: #1a1a2e; padding: 32px; border-radius: 12px; display: flex; flex-direction: column; gap: 32px;">
+    <div data-theme="dark" style="background: var(--s2a-color-background-knockout); padding: var(--s2a-spacing-xl); border-radius: var(--s2a-border-radius-sm); display: flex; flex-direction: column; gap: var(--s2a-spacing-xl);">
       <div>
-        <p style="color: #666; font-size: 11px; margin: 0 0 12px; font-family: sans-serif; text-transform: uppercase; letter-spacing: 0.08em;">Block</p>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <p style="color: var(--s2a-color-content-body-subtle); font-size: var(--s2a-font-size-xs); margin: 0 0 var(--s2a-spacing-sm); font-family: var(--s2a-font-family-body); text-transform: uppercase; letter-spacing: var(--s2a-font-letter-spacing-6xl);">Block</p>
+        <div style="display: flex; gap: var(--s2a-spacing-sm); flex-wrap: wrap;">
           ${RouterNavItem({ label: "Photoshop", app: "photoshop", orientation: "block", state: "default" })}
           ${RouterNavItem({ label: "Photoshop", app: "photoshop", orientation: "block", state: "active" })}
         </div>
       </div>
       <div>
-        <p style="color: #666; font-size: 11px; margin: 0 0 12px; font-family: sans-serif; text-transform: uppercase; letter-spacing: 0.08em;">Inline</p>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <p style="color: var(--s2a-color-content-body-subtle); font-size: var(--s2a-font-size-xs); margin: 0 0 var(--s2a-spacing-sm); font-family: var(--s2a-font-family-body); text-transform: uppercase; letter-spacing: var(--s2a-font-letter-spacing-6xl);">Inline</p>
+        <div style="display: flex; gap: var(--s2a-spacing-sm); flex-wrap: wrap;">
           ${RouterNavItem({ label: "Photoshop", app: "photoshop", orientation: "inline", state: "default" })}
           ${RouterNavItem({ label: "Photoshop", app: "photoshop", orientation: "inline", state: "active" })}
         </div>
@@ -130,8 +130,8 @@ export const AllVariants = {
 export const MultipleProducts = {
   name: "Multiple products (row)",
   render: () => html`
-    <div style="background: #1a1a2e; padding: 32px; border-radius: 12px;">
-      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+    <div data-theme="dark" style="background: var(--s2a-color-background-knockout); padding: var(--s2a-spacing-xl); border-radius: var(--s2a-border-radius-sm);">
+      <div style="display: flex; gap: var(--s2a-spacing-sm); flex-wrap: wrap;">
         ${RouterNavItem({ label: "Photoshop", app: "photoshop", orientation: "block", state: "active" })}
         ${RouterNavItem({ label: "Illustrator", app: "illustrator", orientation: "block", state: "default" })}
         ${RouterNavItem({ label: "Premiere Pro", app: "premiere-pro", orientation: "block", state: "default" })}
