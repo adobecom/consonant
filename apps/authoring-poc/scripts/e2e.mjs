@@ -99,6 +99,16 @@ try {
       mimeType: "application/json",
       buffer: Buffer.from(JSON.stringify(document)),
     });
+  // saved() can return at once here: the status still says "Saved on this
+  // device" from the step before, and the import has not committed yet. Wait
+  // for the imported title to land in the field, then for the save.
+  const titleField = await page
+    .getByLabel("Page title", { exact: true })
+    .elementHandle();
+  await page.waitForFunction(
+    ({ el, value }) => el.value === value,
+    { el: titleField, value: "Imported page" },
+  );
   await saved(page);
   assert.equal(
     await page.getByLabel("Page title", { exact: true }).inputValue(),
