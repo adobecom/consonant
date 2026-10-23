@@ -3,7 +3,7 @@ import { writeFile, readdir, readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { startBrowserRun, ready, saved, reports } from "./browser-utils.mjs";
-import { profiles, sampleCount, score } from "./perf-score.mjs";
+import { machineFactor, profiles, sampleCount, score } from "./perf-score.mjs";
 const homepage = process.argv.includes("--fixture=homepage");
 // --motion measures with animations allowed; the default keeps the established
 // reduced-motion baseline so runs stay comparable.
@@ -199,6 +199,11 @@ try {
     console.log(JSON.stringify(await measure("mobile"), null, 2));
   } else {
     result.artifactSha256 = artifactHash.digest("hex");
+    const machine = machineFactor();
+    result.machine = machine;
+    console.log(
+      `machine factor ${machine.factor} (benchmark ${machine.benchMs} ms; time budgets scale with it, bytes and CLS do not)`,
+    );
     for (const name of Object.keys(profiles)) {
       const samples = [];
       for (let i = 0; i < sampleCount; i++) {
@@ -208,11 +213,11 @@ try {
         );
       }
       result.samples[name] = samples;
-      result.results[name] = score(samples, name);
+      result.results[name] = score(samples, name, machine.factor);
     }
     const negative = await measure("desktop", "blocking");
     // Use the same measured fault in each scorer slot to isolate gate behavior.
-    const negativeScore = score(Array(sampleCount).fill(negative), "desktop");
+    const negativeScore = score(Array(sampleCount).fill(negative), "desktop", machine.factor);
     result.negative = {
       fixture: "700 ms main-thread block",
       sample: negative,
