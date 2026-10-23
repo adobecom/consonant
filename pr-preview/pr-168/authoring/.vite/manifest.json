@@ -1,0 +1,104 @@
+{
+  "../../node_modules/@phosphor-icons/web/src/regular/Phosphor.svg": {
+    "file": "assets/Phosphor-BXRFlF4V.svg",
+    "src": "../../node_modules/@phosphor-icons/web/src/regular/Phosphor.svg"
+  },
+  "../../node_modules/@phosphor-icons/web/src/regular/Phosphor.ttf": {
+    "file": "assets/Phosphor-CDxgqcPu.ttf",
+    "src": "../../node_modules/@phosphor-icons/web/src/regular/Phosphor.ttf"
+  },
+  "../../node_modules/@phosphor-icons/web/src/regular/Phosphor.woff": {
+    "file": "assets/Phosphor-BdqudwT5.woff",
+    "src": "../../node_modules/@phosphor-icons/web/src/regular/Phosphor.woff"
+  },
+  "../../node_modules/@phosphor-icons/web/src/regular/Phosphor.woff2": {
+    "file": "assets/Phosphor-DtdjzkpE.woff2",
+    "src": "../../node_modules/@phosphor-icons/web/src/regular/Phosphor.woff2"
+  },
+  "_tokens-9OPEQUrS.js": {
+    "file": "assets/tokens-9OPEQUrS.js",
+    "name": "tokens",
+    "css": [
+      "assets/tokens-PKOrS94_.css"
+    ]
+  },
+  "_tokens-PKOrS94_.css": {
+    "file": "assets/tokens-PKOrS94_.css",
+    "src": "_tokens-PKOrS94_.css"
+  },
+  "index.html": {
+    "file": "assets/studio-CUugPvFy.js",
+    "name": "studio",
+    "src": "index.html",
+    "isEntry": true,
+    "imports": [
+      "_tokens-9OPEQUrS.js"
+    ],
+    "css": [
+      "assets/studio-1zIgAG_H.css"
+    ],
+    "assets": [
+      "assets/global-navigation-CFRi5wcQ.webp",
+      "assets/hub-router-CEsT3tHA.webp",
+      "assets/media-section-BZGL8MPK.webp",
+      "assets/news-section-CFVj0hPH.webp",
+      "assets/product-router-DRJCu_6A.webp",
+      "assets/quote-card-CoUCT0m0.webp",
+      "assets/router-marquee-BFyG104O.webp",
+      "assets/site-footer-D-uRXSbR.webp",
+      "assets/social-proof-carousel-CI4eP7Dw.webp",
+      "assets/Phosphor-DtdjzkpE.woff2",
+      "assets/Phosphor-BdqudwT5.woff",
+      "assets/Phosphor-CDxgqcPu.ttf",
+      "assets/Phosphor-BXRFlF4V.svg"
+    ]
+  },
+  "preview.html": {
+    "file": "assets/preview-DPdtmlUc.js",
+    "name": "preview",
+    "src": "preview.html",
+    "isEntry": true,
+    "imports": [
+      "_tokens-9OPEQUrS.js"
+    ],
+    "css": [
+      "assets/preview-BvyYlyow.css"
+    ]
+  },
+  "src/recipe-previews/global-navigation.webp": {
+    "file": "assets/global-navigation-CFRi5wcQ.webp",
+    "src": "src/recipe-previews/global-navigation.webp"
+  },
+  "src/recipe-previews/hub-router.webp": {
+    "file": "assets/hub-router-CEsT3tHA.webp",
+    "src": "src/recipe-previews/hub-router.webp"
+  },
+  "src/recipe-previews/media-section.webp": {
+    "file": "assets/media-section-BZGL8MPK.webp",
+    "src": "src/recipe-previews/media-section.webp"
+  },
+  "src/recipe-previews/news-section.webp": {
+    "file": "assets/news-section-CFVj0hPH.webp",
+    "src": "src/recipe-previews/news-section.webp"
+  },
+  "src/recipe-previews/product-router.webp": {
+    "file": "assets/product-router-DRJCu_6A.webp",
+    "src": "src/recipe-previews/product-router.webp"
+  },
+  "src/recipe-previews/quote-card.webp": {
+    "file": "assets/quote-card-CoUCT0m0.webp",
+    "src": "src/recipe-previews/quote-card.webp"
+  },
+  "src/recipe-previews/router-marquee.webp": {
+    "file": "assets/router-marquee-BFyG104O.webp",
+    "src": "src/recipe-previews/router-marquee.webp"
+  },
+  "src/recipe-previews/site-footer.webp": {
+    "file": "assets/site-footer-D-uRXSbR.webp",
+    "src": "src/recipe-previews/site-footer.webp"
+  },
+  "src/recipe-previews/social-proof-carousel.webp": {
+    "file": "assets/social-proof-carousel-CI4eP7Dw.webp",
+    "src": "src/recipe-previews/social-proof-carousel.webp"
+  }
+}

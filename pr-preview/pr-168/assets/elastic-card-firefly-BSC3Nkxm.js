@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-C0FnF6B9.js";var t;function n(){return(n=e((()=>{t=`/consonant/pr-preview/pr-168/assets/elastic-card-firefly-CDARmW7F.jpg`})))()}export{n,t};

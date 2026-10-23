@@ -1,0 +1,3 @@
+import{n as e}from"./rolldown-runtime-C0FnF6B9.js";import{n as t,t as n}from"./grid-guide-CGcEEseJ.js";var r,i,a;function o(){return(o=e((()=>{n(),r={title:`Foundations/Grid/Playground`,globals:{figmaOverlay:`off`},parameters:{layout:`fullscreen`,controls:{disable:!0},actions:{disable:!0}}},i={render:(e,n)=>t(`playground`,n)},i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:`{
+  render: (_args, context) => renderGridGuide("playground", context)
+}`,...i.parameters?.docs?.source}}},a=[`Explore`]})))()}o();export{i as Explore,a as __namedExportsOrder,r as default};

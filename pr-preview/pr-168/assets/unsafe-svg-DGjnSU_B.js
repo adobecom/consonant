@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-C0FnF6B9.js";import{r as t,t as n}from"./directive-B8vxgYJR.js";import{n as r,t as i}from"./unsafe-html-t7SGSaWI.js";var a,o;function s(){return(s=e((()=>{t(),r(),a=class extends i{},a.directiveName=`unsafeSVG`,a.resultType=2,o=n(a)})))()}function c(){return(c=e((()=>{s()})))()}export{s as n,o as r,c as t};

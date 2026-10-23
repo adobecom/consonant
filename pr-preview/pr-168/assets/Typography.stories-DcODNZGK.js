@@ -1,0 +1,4 @@
+import{n as e}from"./rolldown-runtime-C0FnF6B9.js";import{n as t,t as n}from"./foundation-guide-boDy76Fy.js";var r,i,a;function o(){return(o=e((()=>{n(),r={title:`Foundations/Typography`,globals:{figmaOverlay:`off`},parameters:{layout:`fullscreen`,controls:{disable:!0},actions:{disable:!0}}},i={name:`Guide`,render:(e,n)=>t(`typography`,n)},i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:`{
+  name: "Guide",
+  render: (_args, context) => renderGuide("typography", context)
+}`,...i.parameters?.docs?.source}}},a=[`Guide`]})))()}o();export{i as Guide,a as __namedExportsOrder,r as default};

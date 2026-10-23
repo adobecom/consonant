@@ -1,0 +1,3 @@
+import{n as e}from"./rolldown-runtime-C0FnF6B9.js";import{n as t,t as n}from"./grid-report-CY48xirU.js";var r,i,a;function o(){return(o=e((()=>{n(),r={title:`Foundations/Grid/Conformance`,globals:{figmaOverlay:`off`},parameters:{layout:`fullscreen`,controls:{disable:!0},actions:{disable:!0}}},i={render:()=>t(`conformance`)},i.parameters={...i.parameters,docs:{...i.parameters?.docs,source:{originalSource:`{
+  render: () => renderReport("conformance")
+}`,...i.parameters?.docs?.source}}},a=[`Conformance`]})))()}o();export{i as Conformance,a as __namedExportsOrder,r as default};

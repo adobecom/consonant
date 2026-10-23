@@ -1,0 +1,45 @@
+import{n as e}from"./rolldown-runtime-C0FnF6B9.js";import{c as t,i as n,t as r}from"./lit-DRzJKe3d.js";import{r as i}from"./unsafe-html-t7SGSaWI.js";import{t as a}from"./unsafe-html-BN0uzf8m.js";import{n as o,t as s}from"./button-CjK_LOp6.js";import{i as c,n as l,r as u,t as d}from"./play-7CotRpfO.js";import{n as f,t as p}from"./rich-content-ZPZDrUUm.js";import{n as m,t as h}from"./router-nav-item-DIyC1ztS.js";var g,_,v,y,b,x,S,C;function w(){return(w=e((()=>{r(),a(),o(),f(),m(),u(),d(),g=({slides:e=[],activeIndex:r=0}={})=>t`
+  <div class="c-router-marquee" data-state="paused" data-single=${String(e.length<2)}>
+    <div class="rm-slides">
+      ${e.map((e,i)=>t`
+          <div
+            class="rm-slide"
+            data-state=${i===r?`active`:`inactive`}
+            aria-hidden=${i===r?`false`:`true`}
+            ?inert=${i!==r}
+          >
+            <div class="rm-background">
+              ${e.imageSrc?i===r?t`<img class="rm-image" src=${e.imageSrc} srcset=${e.imageSrcset||n} sizes="100vw" alt=${e.imageAlt||``} width="1920" height="960" loading="eager" fetchpriority="high" decoding="async" />`:t`<img class="rm-image" data-lazy-src=${e.imageSrc} data-lazy-srcset=${e.imageSrcset||n} sizes="100vw" alt=${e.imageAlt||``} width="1920" height="960" decoding="async" />`:n}
+              ${e.videoSrc?t`<video
+                    class="rm-video"
+                    aria-hidden="true"
+                    muted
+                    loop
+                    playsinline
+                    data-lazy-src=${e.videoSrc}
+                    poster=${e.posterSrc??``}
+                  ></video>`:n}
+            </div>
+            <div class="rm-overlay"></div>
+            <div class="rm-content" data-theme="dark">
+              ${p({density:`tight`,measure:`none`,eyebrow:e.eyebrow??``,showEyebrow:!!e.eyebrow,title:e.title??``,body:e.body??``,showActions:!!e.ctaLabel,actions:e.ctaLabel?s({label:e.ctaLabel,href:e.ctaHref??`#`,style:`knockout`}):n})}
+            </div>
+          </div>
+        `)}
+    </div>
+
+    <div class="rm-controls">
+      <button
+        class="rm-play-pause"
+        type="button"
+        aria-label="Play autoplay"
+      >
+        <span class="rm-icon-pause" aria-hidden="true">${i(c)}</span>
+        <span class="rm-icon-play" aria-hidden="true">${i(l)}</span>
+      </button>
+      <div class="rm-nav-items">
+        ${e.map((e,t)=>h({label:e.product,app:e.app??`experience-cloud`,orientation:`block`,state:t===r?`active`:`default`}))}
+      </div>
+    </div>
+  </div>
+`,_=5e3,v=[`.c-rich-content__eyebrow`,`.c-rich-content__title`,`.c-rich-content__body`,`.c-rich-content__actions`],y=60,b=20,x=700,S=`cubic-bezier(0.42, 0, 0, 1)`,C=class{constructor(e,{autoplay:t=!0}={}){this.el=e,this.slides=[...e.querySelectorAll(`.rm-slide`)],this.navItems=[...e.querySelectorAll(`.c-router-nav-item`)],this.fills=[...e.querySelectorAll(`.c-router-nav-item__progress-fill`)],this.playPauseBtn=e.querySelector(`.rm-play-pause`),this.activeIndex=Math.max(0,this.slides.findIndex(e=>e.dataset.state===`active`)),this.abort=new AbortController,this.reducedMotion=matchMedia(`(prefers-reduced-motion: reduce)`),this.paused=!t||this.reducedMotion.matches||this.slides.length<2||document.documentElement.dataset.editing===`true`,this.autoPaused=t&&document.documentElement.dataset.editing===`true`,this.userPaused=!t,this.destroyed=!1,this.timer=null,this._bindEvents(),this._updatePlayPauseUI(),this._goTo(this.activeIndex,!0)}_bindEvents(){let e={signal:this.abort.signal};this.navItems.forEach((t,n)=>{t.addEventListener(`click`,()=>{this.paused=!0,this.userPaused=!0,this._updatePlayPauseUI(),clearTimeout(this.timer),this._goTo(n)},e),t.addEventListener(`keydown`,e=>{let t=e.key===`Home`?0:e.key===`End`?this.slides.length-1:e.key===`ArrowRight`?(n+1)%this.slides.length:e.key===`ArrowLeft`?(n-1+this.slides.length)%this.slides.length:-1;t<0||(e.preventDefault(),this.paused=!0,this.userPaused=!0,this._updatePlayPauseUI(),this._goTo(t,!0),this.navItems[t].focus({preventScroll:!0}))},e)}),this.playPauseBtn?.addEventListener(`click`,()=>this._togglePlayPause(),e),this.reducedMotion.addEventListener(`change`,()=>this.pause(),e),this.visible=!document.hidden,this.inView=!0,this.focusWithin=!1,document.addEventListener(`visibilitychange`,()=>{this.visible=!document.hidden,document.hidden?this._autoPause():this._autoResume()},e),this.el.addEventListener(`focusin`,e=>{e.target!==this.playPauseBtn&&(this.focusWithin=!0,this._autoPause())},e),this.el.addEventListener(`focusout`,e=>{this.el.contains(e.relatedTarget)||(this.focusWithin=!1,this._autoResume())},e),this.observer=new IntersectionObserver(([e])=>{this.inView=e.isIntersecting,e.isIntersecting?this._autoResume():this._autoPause()}),this.observer.observe(this.el)}_goTo(e,t=!1){if(this.destroyed||!this.slides.length)return;e=Math.max(0,Math.min(e,this.slides.length-1)),document.documentElement.dataset.editing===`true`&&(this.paused=!0,this._updatePlayPauseUI()),t||=this.reducedMotion.matches,this.slides.forEach((t,n)=>{let r=n===e;t.dataset.state=r?`active`:`inactive`,t.setAttribute(`aria-hidden`,r?`false`:`true`),r?(t.removeAttribute(`inert`),this._loadImage(t),this._loadAndPlayVideo(t)):(t.setAttribute(`inert`,``),this._pauseVideo(t))}),this.slides.length>1&&this._prefetchNextImage(e),this.navItems.forEach((t,n)=>{t.dataset.state=n===e?`active`:`default`,t.setAttribute(`aria-pressed`,n===e?`true`:`false`)});let n=this.el.querySelector(`.rm-nav-items`),r=this.navItems[e];if(n&&r){let e=r.offsetLeft-n.offsetLeft;e<n.scrollLeft?n.scrollLeft=e:e+r.offsetWidth>n.scrollLeft+n.clientWidth&&(n.scrollLeft=e+r.offsetWidth-n.clientWidth)}this._resetFill(e),this.paused||(cancelAnimationFrame(this.frame),this.frame=requestAnimationFrame(()=>{!this.destroyed&&!this.paused&&this._startFill(e)})),this._staggerContent(e,t),this.activeIndex=e,clearTimeout(this.timer),this.paused||(this.timer=setTimeout(()=>this._advance(),_))}_advance(){let e=(this.activeIndex+1)%this.slides.length;this._goTo(e)}_resetFill(e){let t=this.fills[e];t&&(t.style.transition=`none`,t.style.transform=`translateX(-101%)`,t.offsetHeight)}_startFill(e){let t=this.fills[e];t&&(t.style.transition=`transform ${_}ms linear`,t.style.transform=`translateX(0%)`)}_staggerContent(e,t=!1){let n=this.slides[e];v.forEach((e,r)=>{let i=n?.querySelector(e);if(!i)return;if(t){i.style.cssText=``;return}i.style.transition=`none`,i.style.transform=`translateX(${y+r*b}px)`,i.style.opacity=`0`,i.offsetHeight;let a=r*60;i.style.transition=[`transform ${x}ms ${S} ${a}ms`,`opacity ${x}ms ease ${a}ms`].join(`, `),i.style.transform=`translateX(0)`,i.style.opacity=`1`})}_loadImage(e){let t=e?.querySelector(`.rm-image[data-lazy-src]`);t&&(t.dataset.lazySrcset&&(t.srcset=t.dataset.lazySrcset),t.src=t.dataset.lazySrc,delete t.dataset.lazySrc,delete t.dataset.lazySrcset)}_prefetchNextImage(e){let t=this.slides[(e+1)%this.slides.length],n=this.slides[e]?.querySelector(`.rm-image`),r=()=>{this.destroyed||this._loadImage(t)};!n||n.complete?r():n.addEventListener(`load`,r,{once:!0,signal:this.abort.signal})}_loadAndPlayVideo(e){let t=e.querySelector(`.rm-video`);if(t&&!(this.paused&&!t.dataset.loaded)){if(!t.dataset.loaded){let e=t.dataset.lazySrc;if(e){let n=document.createElement(`source`);n.src=e,n.type=`video/mp4`,t.appendChild(n),t.load(),t.dataset.loaded=`true`}}this.paused?t.pause():t.play().catch(()=>{})}}_pauseVideo(e){if(!e)return;let t=e.querySelector(`.rm-video`);t&&(t.pause(),t.currentTime=0)}_togglePlayPause(){if(!(this.slides.length<2||document.documentElement.dataset.editing===`true`)){if(this.paused=!this.paused,this.userPaused=this.paused,this.autoPaused=!1,this._updatePlayPauseUI(),this.paused){clearTimeout(this.timer),this._pauseVideo(this.slides[this.activeIndex]);let e=this.fills[this.activeIndex];if(e){let t=getComputedStyle(e).transform;e.style.transition=`none`,e.style.transform=t}}else this._goTo(this.activeIndex)}}pause(){this.destroyed||(this.paused||(this.autoPaused=!0),this.paused=!0,this._updatePlayPauseUI(),this._goTo(this.activeIndex,!0))}resume(){this.destroyed||(!this.autoPaused&&this.paused&&!this.userPaused&&(this.autoPaused=!0),this._autoResume())}_autoPause(){this.destroyed||this.paused||(this.paused=!0,this.autoPaused=!0,this._updatePlayPauseUI(),this._goTo(this.activeIndex,!0))}_autoResume(){this.destroyed||!this.autoPaused||this.userPaused||!this.visible||!this.inView||this.focusWithin||this.reducedMotion.matches||document.documentElement.dataset.editing===`true`||this.slides.length<2||(this.autoPaused=!1,this.paused=!1,this._updatePlayPauseUI(),this._goTo(this.activeIndex,!0))}_updatePlayPauseUI(){this.el.dataset.state=this.paused?`paused`:`playing`;let e=this.paused?`Play autoplay`:`Pause autoplay`;this.playPauseBtn?.setAttribute(`aria-label`,e)}destroy(){this.destroyed=!0,clearTimeout(this.timer),cancelAnimationFrame(this.frame),this.abort.abort(),this.observer.disconnect(),this.slides.forEach(e=>this._pauseVideo(e))}}})))()}export{C as n,w as r,g as t};
