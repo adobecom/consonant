@@ -82,13 +82,21 @@ export function matrixSpec(ir) {
   );
   // An axis value is not always the prop value: open|closed is the `open`
   // boolean, so "open" becomes true. The binding's valueMap says how.
-  const propValue = (axis, value) => {
-    const p = ir.props.find((x) => x.bindings?.figma?.property === axis);
+  //
+  // One axis can drive several props — Badge's Style axis (Bold fill | Subtle
+  // fill | Outline) is `subtle` and `outline`, two booleans — so every prop
+  // bound to the axis is set, and a boolean whose map does not name the value
+  // is off, not handed the design's label as if it were a value. A non-boolean
+  // whose map does not name the value is left alone: Status "--" means the
+  // Color axis is in use, and inventing "--" as a variant only produces a
+  // warning from the element.
+  const propsFor = (axis) => ir.props.filter((x) => x.bindings?.figma?.property === axis);
+  const propValue = (p, value) => {
     const map = p?.bindings?.figma?.valueMap;
     if (!map) return value;
     const hit = Object.entries(map).find(([, v]) => v === value)?.[0];
-    if (hit === undefined) return value;
-    return p.type === "boolean" ? hit === "true" : hit;
+    if (p.type === "boolean") return hit === "true";
+    return hit;
   };
 
   // Index the artwork by its axis values.
@@ -107,8 +115,10 @@ export function matrixSpec(ir) {
       // Props the story sets, keyed by code prop name.
       const args = {};
       for (const [axis, value] of Object.entries(rowValues)) {
-        const prop = propFor.get(axis);
-        if (prop) args[prop] = propValue(axis, value);
+        for (const p of propsFor(axis)) {
+          const v = propValue(p, value);
+          if (v !== undefined) args[p.name] = v;
+        }
       }
       // A State axis that is a boolean prop (open|closed → open) is set as an
       // argument, not forced: there is no pseudo-state to fake, the prop IS
@@ -116,7 +126,7 @@ export function matrixSpec(ir) {
       // column was scored against the open design while showing the closed build.
       if (stateAxis) {
         const sp = ir.props.find((x) => x.bindings?.figma?.property === stateAxis);
-        if (sp && sp.type === "boolean" && sp.bindings.figma.valueMap) args[sp.name] = propValue(stateAxis, stateValue);
+        if (sp && sp.type === "boolean" && sp.bindings.figma.valueMap) args[sp.name] = propValue(sp, stateValue);
       }
       cells.push({
         row, col,

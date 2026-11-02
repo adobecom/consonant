@@ -1,0 +1,36 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "ButtonGroup",
+  "setName": "ButtonGroup — v2",
+  "anatomy": {
+    "name": ".root",
+    "source": null,
+    "element": "div",
+    "bindings": {},
+    "slot": null,
+    "children": []
+  },
+  "anchors": {
+    "fileKey": "",
+    "kind": "none",
+    "nodeId": null,
+    "nodeName": null,
+    "componentSetKey": null,
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [],
+  "states": [],
+  "layers": [
+    {
+      "name": ".swc-ButtonGroup",
+      "selector": ".swc-ButtonGroup",
+      "bindings": {}
+    }
+  ],
+  "textStyles": []
+}

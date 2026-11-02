@@ -1,27 +1,32 @@
 /* Divider — generated from divider.contract.json.
  * Re-run: npm run specs:render -- --slug=divider --target=milo */
 
+.divider [hidden],
+.divider[hidden] {
+  display: none !important;
+}
+
 .divider {
-  width: 418px;
-  height: 1px;
+  width: 418px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 1px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
 }
 
 .divider.default {
-  background-color: var(--s2a-color-divider-default, #292929);
+  background-color: var(--s2a-color-divider-default);
 }
 
 .divider.subtle {
-  background-color: var(--s2a-color-divider-subtle, rgb(0 0 0 / 12%));
+  background-color: var(--s2a-color-divider-subtle);
 }
 
 .divider.knockout {
-  background-color: var(--s2a-color-divider-knockout, #000);
+  background-color: var(--s2a-color-divider-knockout);
 }
 
 .divider.inverse {
-  background-color: var(--s2a-color-divider-inverse, #fff);
+  background-color: var(--s2a-color-divider-inverse);
 }
 
 .divider.subtle-inverse {
-  background-color: var(--s2a-color-divider-subtle-inverse, rgb(255 255 255 / 16%));
+  background-color: var(--s2a-color-divider-subtle-inverse);
 }

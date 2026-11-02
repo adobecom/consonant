@@ -1,0 +1,76 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Card",
+  "setName": "Card — v2",
+  "anatomy": {
+    "name": ".root",
+    "source": null,
+    "element": null,
+    "bindings": {},
+    "slot": null,
+    "children": [
+      {
+        "name": ".media",
+        "source": null,
+        "element": null,
+        "bindings": {},
+        "slot": null,
+        "children": []
+      },
+      {
+        "name": ".collection",
+        "source": null,
+        "element": "div",
+        "bindings": {},
+        "slot": null,
+        "children": []
+      },
+      {
+        "name": ".content",
+        "source": null,
+        "element": null,
+        "bindings": {},
+        "slot": null,
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "",
+    "kind": "none",
+    "nodeId": null,
+    "nodeName": null,
+    "componentSetKey": null,
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [],
+  "states": [],
+  "layers": [
+    {
+      "name": ".swc-Card",
+      "selector": ".swc-Card",
+      "bindings": {}
+    },
+    {
+      "name": ".swc-Card-media",
+      "selector": ".swc-Card-media",
+      "bindings": {}
+    },
+    {
+      "name": ".swc-Card-collection",
+      "selector": ".swc-Card-collection",
+      "bindings": {}
+    },
+    {
+      "name": ".swc-Card-content",
+      "selector": ".swc-Card-content",
+      "bindings": {}
+    }
+  ],
+  "textStyles": []
+}

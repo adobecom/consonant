@@ -1,0 +1,350 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Card",
+  "slug": "card",
+  "status": "curated-draft",
+  "description": "Card, as the implementation ships it.",
+  "curated": {
+    "by": "scaffold --from=code, read from card.js, card.css, card.d.ts",
+    "date": "2026-10-29"
+  },
+  "anchors": {
+    "figma": {
+      "fileKey": "",
+      "kind": "none"
+    },
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/card",
+      "export": "Card",
+      "cssClass": "swc-Card"
+    }
+  },
+  "props": [
+    {
+      "name": "variant",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "primary",
+        "secondary",
+        "tertiary",
+        "quiet"
+      ],
+      "default": "primary",
+      "figma": "NONE",
+      "code": {
+        "prop": "variant"
+      },
+      "notes": "The visual variant of the card."
+    },
+    {
+      "name": "density",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "compact",
+        "regular",
+        "spacious"
+      ],
+      "default": "regular",
+      "figma": "NONE",
+      "code": {
+        "prop": "density"
+      },
+      "notes": "The density of the card, controlling internal spacing and gaps."
+    },
+    {
+      "name": "titleAsLink",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": "NONE",
+      "code": {
+        "prop": "titleAsLink"
+      },
+      "notes": "Indicates the consumer has wrapped their `title` slot content in a real link. Extends that link's hit area to cover the card surface while leaving navigation entirely consumer-owned; Card accepts no `href`."
+    },
+    {
+      "name": "selectable",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": "NONE",
+      "code": {
+        "prop": "selectable"
+      },
+      "notes": "Makes the card focusable and captures surface clicks (excluding nested interactive targets) to dispatch a `swc-card-click` event, independent of `titleAsLink`. selection model determines the appropriate role."
+    },
+    {
+      "name": "collection",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "collection"
+      },
+      "notes": "Optional collection images. Assign each image to the slot."
+    },
+    {
+      "name": "media",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "media"
+      },
+      "notes": "Optional overlay content (e.g. a badge or avatar) layered over the preview/collection media region."
+    },
+    {
+      "name": "preview",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "preview"
+      },
+      "notes": "Primary preview content"
+    },
+    {
+      "name": "title",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "title"
+      },
+      "notes": "Card title"
+    },
+    {
+      "name": "actions",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "actions"
+      },
+      "notes": "Optional action controls"
+    },
+    {
+      "name": "description",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "description"
+      },
+      "notes": "Supporting description text"
+    },
+    {
+      "name": "footer",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "footer"
+      },
+      "notes": "Optional footer content"
+    },
+    {
+      "name": "default",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "default"
+      },
+      "notes": "Additional body content"
+    }
+  ],
+  "states": [],
+  "composition": [],
+  "anatomy": {
+    "root": {
+      "selector": ".swc-Card",
+      "tokens": {
+        "position": "raw:relative",
+        "grid-area": "raw:media",
+        "box-sizing": "raw:border-box",
+        "inline-size": "raw:100%",
+        "pointer-events": "raw:none",
+        "aspect-ratio": "raw:1",
+        "object-fit": "raw:cover",
+        "display": "raw:none"
+      },
+      "parts": {
+        "media": {
+          "selector": ".swc-Card-media",
+          "tokens": {
+            "grid-template-areas": "raw:\"preview\" \"collection\"",
+            "grid-template-rows": "raw:repeat(2,auto)",
+            "transition-property": "raw:outline,box-shadow",
+            "display": "raw:grid",
+            "grid-template-columns": "raw:repeat(3, 1fr)",
+            "grid-column-gap": "raw:4px",
+            "column-gap": "raw:4px"
+          }
+        },
+        "collection": {
+          "selector": ".swc-Card-collection",
+          "element": "div",
+          "tokens": {
+            "display": "raw:none",
+            "grid-area": "raw:collection",
+            "grid-template-columns": "raw:subgrid",
+            "margin-block-start": "raw:0",
+            "column-gap": "raw:4px",
+            "grid-row": "raw:-1 / 1",
+            "grid-column": "raw:2 / -1"
+          }
+        },
+        "content": {
+          "selector": ".swc-Card-content",
+          "tokens": {
+            "padding-top": "raw:0",
+            "padding-right": "raw:0",
+            "padding-bottom": "raw:0",
+            "padding-left": "raw:0"
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "decisions": [
+    {
+      "id": "c-rule-0",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:host(:has([slot=\"collection\"])) .swc-Card-collection` conditions on something the props do not express (a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "display: grid"
+    },
+    {
+      "id": "c-rule-1",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:scope:has([slot=collection]) .swc-Card-collection` conditions on something the props do not express (:scope, a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "display: grid"
+    },
+    {
+      "id": "c-rule-2",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:host(:has([slot=\"collection\"]):not(:has([slot=\"preview\"]))) .swc-Card-collection` conditions on something the props do not express (a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "margin-block-start: 0"
+    },
+    {
+      "id": "c-rule-3",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:scope:has([slot=collection]):not(:has([slot=preview])) .swc-Card-collection` conditions on something the props do not express (:scope, a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "margin-block-start: 0"
+    },
+    {
+      "id": "c-rule-4",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:host(:has([slot=\"preview\"]))` conditions on something the props do not express (a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "--_swc-card-media-contains: preview"
+    },
+    {
+      "id": "c-rule-5",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:host(:has([slot=\"collection\"]))` conditions on something the props do not express (a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "--_swc-card-media-contains: collection"
+    },
+    {
+      "id": "c-rule-6",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:scope:not(:has([slot=title])):not(:has([slot=description])):not(:has([slot=actions])):not(:has([slot=footer])) .swc-Card:not(.swc-Card--hasDefault)` conditions on something the props do not express (:scope). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "--_swc-card-media-layout: gallery"
+    },
+    {
+      "id": "c-rule-7",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:scope:has([slot=preview])` conditions on something the props do not express (:scope, a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "--_swc-card-media-contains: preview"
+    },
+    {
+      "id": "c-rule-8",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:scope:has([slot=collection])` conditions on something the props do not express (:scope, a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "--_swc-card-media-contains: collection"
+    },
+    {
+      "id": "c-rule-9",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:host([selectable]:focus-visible) .swc-CardBase-media` conditions on something the props do not express (.swc-CardBase-media). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "position: relative; outline: var(--_swc-card-base-selected-focus-outline)"
+    },
+    {
+      "id": "c-rule-10",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:host([selectable]:focus-visible) .swc-CardBase-media:after` conditions on something the props do not express (.swc-CardBase-media, :after). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "position: absolute; inset: 0; z-index: 2; border-radius: var(--_swc-card-base-border-radius); pointer-events: none; outline: 2px solid rgba(255,255,255,.48); outline-offset: -2px; content: \"\""
+    },
+    {
+      "id": "c-rule-11",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:host([size=\"xs\"]:has([slot=\"preview\"]):has([slot=\"collection\"])) .swc-Card` conditions on something the props do not express (a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "--_swc-card-media-layout: 3col"
+    },
+    {
+      "id": "c-rule-12",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "The rule `:scope:has([slot=preview]):has([slot=collection]) .swc-Card` conditions on something the props do not express (:scope, a :has() structure). It is not in the draft.",
+      "confidence": "high",
+      "fix": "If this is a real variant, add the prop it keys on and re-scaffold; if it is internal state, leave it out.",
+      "evidence": "--_swc-card-media-layout: 3col"
+    },
+    {
+      "id": "c-elements",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "No markup was available to read the element of .swc-Card, .swc-Card-media, .swc-Card-content; the renderer will default.",
+      "confidence": "medium",
+      "fix": "Set element on each part."
+    },
+    {
+      "id": "c-rebuilt-from-code",
+      "status": "decided",
+      "owner": "scaffold",
+      "question": "Drafted from the implementation (@adobe/spectrum-wc/components/card): 32 rules, 12 declared props, 3 parts. The design file was not consulted.",
+      "chose": "code is the source; design is the check",
+      "confidence": "high",
+      "decision": "For a shipped library the stylesheet and the type declarations are the contract. Every token, condition and state here is read from a rule; nothing is transcribed from the design file's layer tree.",
+      "evidence": "packages/spectrum2/src/card/card.js, packages/spectrum2/src/card/card.css, packages/spectrum2/src/card/card.d.ts"
+    }
+  ]
+}

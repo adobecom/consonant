@@ -1,0 +1,4465 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "button",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "variant-primary",
+      "name": "variant: primary",
+      "args": {
+        "variant": "primary"
+      }
+    },
+    {
+      "id": "variant-secondary",
+      "name": "variant: secondary",
+      "args": {
+        "variant": "secondary"
+      }
+    },
+    {
+      "id": "variant-accent",
+      "name": "variant: accent",
+      "args": {
+        "variant": "accent"
+      }
+    },
+    {
+      "id": "variant-negative",
+      "name": "variant: negative",
+      "args": {
+        "variant": "negative"
+      }
+    },
+    {
+      "id": "fillstyle-fill",
+      "name": "fillStyle: fill",
+      "args": {
+        "fillStyle": "fill"
+      }
+    },
+    {
+      "id": "fillstyle-outline",
+      "name": "fillStyle: outline",
+      "args": {
+        "fillStyle": "outline"
+      }
+    },
+    {
+      "id": "staticcolor-white",
+      "name": "staticColor: white",
+      "args": {
+        "staticColor": "white"
+      }
+    },
+    {
+      "id": "staticcolor-black",
+      "name": "staticColor: black",
+      "args": {
+        "staticColor": "black"
+      }
+    },
+    {
+      "id": "size-s",
+      "name": "size: s",
+      "args": {
+        "size": "s"
+      }
+    },
+    {
+      "id": "size-m",
+      "name": "size: m",
+      "args": {
+        "size": "m"
+      }
+    },
+    {
+      "id": "size-l",
+      "name": "size: l",
+      "args": {
+        "size": "l"
+      }
+    },
+    {
+      "id": "size-xl",
+      "name": "size: xl",
+      "args": {
+        "size": "xl"
+      }
+    },
+    {
+      "id": "truncate-on",
+      "name": "truncate on",
+      "args": {
+        "truncate": true
+      }
+    },
+    {
+      "id": "truncate-off",
+      "name": "truncate off",
+      "args": {
+        "truncate": false
+      }
+    },
+    {
+      "id": "justified-on",
+      "name": "justified on",
+      "args": {
+        "justified": true
+      }
+    },
+    {
+      "id": "justified-off",
+      "name": "justified off",
+      "args": {
+        "justified": false
+      }
+    },
+    {
+      "id": "disabled-on",
+      "name": "disabled on",
+      "args": {
+        "disabled": true
+      }
+    },
+    {
+      "id": "disabled-off",
+      "name": "disabled off",
+      "args": {
+        "disabled": false
+      }
+    },
+    {
+      "id": "pending-on",
+      "name": "pending on",
+      "args": {
+        "pending": true
+      }
+    },
+    {
+      "id": "pending-off",
+      "name": "pending off",
+      "args": {
+        "pending": false
+      }
+    }
+  ],
+  "existing": [
+    {
+      "id": "generated-button--default",
+      "name": "Default",
+      "argKeys": []
+    },
+    {
+      "id": "generated-button--state-matrix",
+      "name": "State matrix",
+      "argKeys": []
+    },
+    {
+      "id": "generated-button--style-solid",
+      "name": "style: solid",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-button--style-outlined",
+      "name": "style: outlined",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-button--style-transparent",
+      "name": "style: transparent",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-button--style-accent",
+      "name": "style: accent",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-button--style-knockout",
+      "name": "style: knockout",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-button--style-outline-inverse",
+      "name": "style: outline-inverse",
+      "argKeys": [
+        "style"
+      ]
+    },
+    {
+      "id": "generated-button--state-default",
+      "name": "state: default",
+      "argKeys": [
+        "state"
+      ]
+    },
+    {
+      "id": "generated-button--state-hover",
+      "name": "state: hover",
+      "argKeys": [
+        "state"
+      ]
+    },
+    {
+      "id": "generated-button--state-active",
+      "name": "state: active",
+      "argKeys": [
+        "state"
+      ]
+    },
+    {
+      "id": "generated-button--state-disabled",
+      "name": "state: disabled",
+      "argKeys": [
+        "state"
+      ]
+    },
+    {
+      "id": "generated-button--state-focus",
+      "name": "state: focus",
+      "argKeys": [
+        "state"
+      ]
+    },
+    {
+      "id": "atoms-button--solid",
+      "name": "Solid",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--outlined",
+      "name": "Outlined",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--transparent",
+      "name": "Transparent",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--accent",
+      "name": "Accent",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--disabled",
+      "name": "Disabled",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--knockout",
+      "name": "Knockout (media surface)",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--outline-inverse",
+      "name": "Outline-inverse (media surface)",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--icon-slots",
+      "name": "Icon Slots",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--all-styles-matrix",
+      "name": "All styles × states",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    },
+    {
+      "id": "atoms-button--backdrop-blur",
+      "name": "Backdrop blur (glassy styles)",
+      "argKeys": [
+        "label",
+        "style",
+        "size",
+        "state",
+        "showIconStart",
+        "showIconEnd"
+      ]
+    }
+  ],
+  "deferred": [
+    "variant-secondary",
+    "variant-accent",
+    "variant-negative",
+    "fillstyle-outline",
+    "staticcolor-white",
+    "staticcolor-black",
+    "size-s",
+    "size-l",
+    "size-xl",
+    "truncate-on",
+    "justified-on",
+    "disabled-on",
+    "pending-on"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": "State",
+    "cols": [
+      "Default",
+      "Hover",
+      "Disabled"
+    ],
+    "rows": [
+      "Primary / Fill / Small / False",
+      "Primary / Fill / Medium / False",
+      "Primary / Fill / Large / False",
+      "Primary / Fill / Extra-large / False",
+      "Primary / Outline / Small / False",
+      "Primary / Outline / Medium / False",
+      "Primary / Outline / Large / False",
+      "Primary / Outline / Extra-large / False",
+      "Secondary / Fill / Small / False",
+      "Secondary / Fill / Small / True",
+      "Secondary / Fill / Medium / False",
+      "Secondary / Fill / Medium / True",
+      "Secondary / Fill / Large / False",
+      "Secondary / Fill / Large / True",
+      "Secondary / Fill / Extra-large / False",
+      "Secondary / Fill / Extra-large / True",
+      "Secondary / Outline / Small / False",
+      "Secondary / Outline / Small / True",
+      "Secondary / Outline / Medium / False",
+      "Secondary / Outline / Medium / True",
+      "Secondary / Outline / Large / False",
+      "Secondary / Outline / Large / True",
+      "Secondary / Outline / Extra-large / False",
+      "Secondary / Outline / Extra-large / True",
+      "Accent / Fill / Small / False",
+      "Accent / Fill / Medium / False",
+      "Accent / Fill / Large / False",
+      "Accent / Fill / Extra-large / False",
+      "Negative / Fill / Small / False",
+      "Negative / Fill / Medium / False",
+      "Negative / Fill / Large / False",
+      "Negative / Fill / Extra-large / False",
+      "Primary - Static white / Fill / Small / False",
+      "Primary - Static white / Fill / Medium / False",
+      "Primary - Static white / Fill / Large / False",
+      "Primary - Static white / Fill / Extra-large / False",
+      "Primary - Static white / Outline / Small / False",
+      "Primary - Static white / Outline / Medium / False",
+      "Primary - Static white / Outline / Large / False",
+      "Primary - Static white / Outline / Extra-large / False",
+      "Secondary - Static white / Fill / Small / False",
+      "Secondary - Static white / Fill / Small / True",
+      "Secondary - Static white / Fill / Medium / False",
+      "Secondary - Static white / Fill / Medium / True",
+      "Secondary - Static white / Fill / Large / False",
+      "Secondary - Static white / Fill / Large / True",
+      "Secondary - Static white / Fill / Extra-large / False",
+      "Secondary - Static white / Fill / Extra-large / True",
+      "Secondary - Static white / Outline / Small / False",
+      "Secondary - Static white / Outline / Small / True",
+      "Secondary - Static white / Outline / Medium / False",
+      "Secondary - Static white / Outline / Medium / True",
+      "Secondary - Static white / Outline / Large / False",
+      "Secondary - Static white / Outline / Large / True",
+      "Secondary - Static white / Outline / Extra-large / False",
+      "Secondary - Static white / Outline / Extra-large / True",
+      "Primary - Static black / Fill / Small / False",
+      "Primary - Static black / Fill / Medium / False",
+      "Primary - Static black / Fill / Large / False",
+      "Primary - Static black / Fill / Extra-large / False",
+      "Primary - Static black / Outline / Small / False",
+      "Primary - Static black / Outline / Medium / False",
+      "Primary - Static black / Outline / Large / False",
+      "Primary - Static black / Outline / Extra-large / False",
+      "Secondary - Static black / Fill / Small / False",
+      "Secondary - Static black / Fill / Small / True",
+      "Secondary - Static black / Fill / Medium / False",
+      "Secondary - Static black / Fill / Medium / True",
+      "Secondary - Static black / Fill / Large / False",
+      "Secondary - Static black / Fill / Large / True",
+      "Secondary - Static black / Fill / Extra-large / False",
+      "Secondary - Static black / Fill / Extra-large / True",
+      "Secondary - Static black / Outline / Small / False",
+      "Secondary - Static black / Outline / Small / True",
+      "Secondary - Static black / Outline / Medium / False",
+      "Secondary - Static black / Outline / Medium / True",
+      "Secondary - Static black / Outline / Large / False",
+      "Secondary - Static black / Outline / Large / True",
+      "Secondary - Static black / Outline / Extra-large / False",
+      "Secondary - Static black / Outline / Extra-large / True"
+    ],
+    "rowValues": [
+      {
+        "Variant": "Primary",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary",
+        "Style": "Outline",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary",
+        "Style": "Outline",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary",
+        "Style": "Outline",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary",
+        "Style": "Outline",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Outline",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Outline",
+        "Size": "Small",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Outline",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Outline",
+        "Size": "Medium",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Outline",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Outline",
+        "Size": "Large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Outline",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary",
+        "Style": "Outline",
+        "Size": "Extra-large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Accent",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Accent",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Accent",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Accent",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Negative",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Negative",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Negative",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Negative",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static white",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static white",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static white",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static white",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static white",
+        "Style": "Outline",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static white",
+        "Style": "Outline",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static white",
+        "Style": "Outline",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static white",
+        "Style": "Outline",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Outline",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Outline",
+        "Size": "Small",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Outline",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Outline",
+        "Size": "Medium",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Outline",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Outline",
+        "Size": "Large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Outline",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static white",
+        "Style": "Outline",
+        "Size": "Extra-large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Primary - Static black",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static black",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static black",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static black",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static black",
+        "Style": "Outline",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static black",
+        "Style": "Outline",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static black",
+        "Style": "Outline",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Primary - Static black",
+        "Style": "Outline",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Fill",
+        "Size": "Small",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Fill",
+        "Size": "Medium",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Fill",
+        "Size": "Large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Fill",
+        "Size": "Extra-large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Outline",
+        "Size": "Small",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Outline",
+        "Size": "Small",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Outline",
+        "Size": "Medium",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Outline",
+        "Size": "Medium",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Outline",
+        "Size": "Large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Outline",
+        "Size": "Large",
+        "Pending": "True"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Outline",
+        "Size": "Extra-large",
+        "Pending": "False"
+      },
+      {
+        "Variant": "Secondary - Static black",
+        "Style": "Outline",
+        "Size": "Extra-large",
+        "Pending": "True"
+      }
+    ],
+    "cell": {
+      "w": 102,
+      "h": 72,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Fill / Small / False / Default",
+        "nodeId": "9308:55587"
+      },
+      {
+        "row": 0,
+        "col": 1,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Fill / Small / False / Hover",
+        "nodeId": "9308:56107"
+      },
+      {
+        "row": 0,
+        "col": 2,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary / Fill / Small / False / Disabled",
+        "nodeId": "9308:56267"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Fill / Medium / False / Default",
+        "nodeId": "9308:55592"
+      },
+      {
+        "row": 1,
+        "col": 1,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Fill / Medium / False / Hover",
+        "nodeId": "9308:56112"
+      },
+      {
+        "row": 1,
+        "col": 2,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary / Fill / Medium / False / Disabled",
+        "nodeId": "9308:56272"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Fill / Large / False / Default",
+        "nodeId": "9308:55632"
+      },
+      {
+        "row": 2,
+        "col": 1,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Fill / Large / False / Hover",
+        "nodeId": "9308:56192"
+      },
+      {
+        "row": 2,
+        "col": 2,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary / Fill / Large / False / Disabled",
+        "nodeId": "9308:56352"
+      },
+      {
+        "row": 3,
+        "col": 0,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Fill / Extra-large / False / Default",
+        "nodeId": "9308:55672"
+      },
+      {
+        "row": 3,
+        "col": 1,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Fill / Extra-large / False / Hover",
+        "nodeId": "9308:56152"
+      },
+      {
+        "row": 3,
+        "col": 2,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary / Fill / Extra-large / False / Disabled",
+        "nodeId": "9308:56312"
+      },
+      {
+        "row": 4,
+        "col": 0,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Outline / Small / False / Default",
+        "nodeId": "9308:55747"
+      },
+      {
+        "row": 4,
+        "col": 1,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Outline / Small / False / Hover",
+        "nodeId": "9308:55867"
+      },
+      {
+        "row": 4,
+        "col": 2,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary / Outline / Small / False / Disabled",
+        "nodeId": "9308:55987"
+      },
+      {
+        "row": 5,
+        "col": 0,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Outline / Medium / False / Default",
+        "nodeId": "9308:55752"
+      },
+      {
+        "row": 5,
+        "col": 1,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Outline / Medium / False / Hover",
+        "nodeId": "9308:55872"
+      },
+      {
+        "row": 5,
+        "col": 2,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary / Outline / Medium / False / Disabled",
+        "nodeId": "9308:55992"
+      },
+      {
+        "row": 6,
+        "col": 0,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Outline / Large / False / Default",
+        "nodeId": "9308:55812"
+      },
+      {
+        "row": 6,
+        "col": 1,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Outline / Large / False / Hover",
+        "nodeId": "9308:55932"
+      },
+      {
+        "row": 6,
+        "col": 2,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary / Outline / Large / False / Disabled",
+        "nodeId": "9308:56052"
+      },
+      {
+        "row": 7,
+        "col": 0,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Outline / Extra-large / False / Default",
+        "nodeId": "9308:55782"
+      },
+      {
+        "row": 7,
+        "col": 1,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary / Outline / Extra-large / False / Hover",
+        "nodeId": "9308:55902"
+      },
+      {
+        "row": 7,
+        "col": 2,
+        "args": {
+          "variant": "primary",
+          "staticColor": "Primary",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary / Outline / Extra-large / False / Disabled",
+        "nodeId": "9308:56022"
+      },
+      {
+        "row": 8,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Small / False / Default",
+        "nodeId": "9308:55742"
+      },
+      {
+        "row": 8,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Small / False / Hover",
+        "nodeId": "9308:56262"
+      },
+      {
+        "row": 8,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Small / False / Disabled",
+        "nodeId": "9308:56422"
+      },
+      {
+        "row": 9,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Small / True / Default",
+        "nodeId": "9308:56427"
+      },
+      {
+        "row": 9,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Small / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 9,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Small / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 10,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Medium / False / Default",
+        "nodeId": "9308:55627"
+      },
+      {
+        "row": 10,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Medium / False / Hover",
+        "nodeId": "9308:56147"
+      },
+      {
+        "row": 10,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Medium / False / Disabled",
+        "nodeId": "9308:56307"
+      },
+      {
+        "row": 11,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Medium / True / Default",
+        "nodeId": "9308:56429"
+      },
+      {
+        "row": 11,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Medium / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 11,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Medium / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 12,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Large / False / Default",
+        "nodeId": "9308:55667"
+      },
+      {
+        "row": 12,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Large / False / Hover",
+        "nodeId": "9308:56227"
+      },
+      {
+        "row": 12,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Large / False / Disabled",
+        "nodeId": "9308:56387"
+      },
+      {
+        "row": 13,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Large / True / Default",
+        "nodeId": "9308:56431"
+      },
+      {
+        "row": 13,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 13,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 14,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Extra-large / False / Default",
+        "nodeId": "9308:55707"
+      },
+      {
+        "row": 14,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Extra-large / False / Hover",
+        "nodeId": "9308:56187"
+      },
+      {
+        "row": 14,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Extra-large / False / Disabled",
+        "nodeId": "9308:56347"
+      },
+      {
+        "row": 15,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Extra-large / True / Default",
+        "nodeId": "9308:56433"
+      },
+      {
+        "row": 15,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Extra-large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 15,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Fill / Extra-large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 16,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Small / False / Default",
+        "nodeId": "9308:55862"
+      },
+      {
+        "row": 16,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Small / False / Hover",
+        "nodeId": "9308:55982"
+      },
+      {
+        "row": 16,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Small / False / Disabled",
+        "nodeId": "9308:56102"
+      },
+      {
+        "row": 17,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Small / True / Default",
+        "nodeId": "9308:56435"
+      },
+      {
+        "row": 17,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Small / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 17,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Small / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 18,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Medium / False / Default",
+        "nodeId": "9308:55777"
+      },
+      {
+        "row": 18,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Medium / False / Hover",
+        "nodeId": "9308:55897"
+      },
+      {
+        "row": 18,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Medium / False / Disabled",
+        "nodeId": "9308:56017"
+      },
+      {
+        "row": 19,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Medium / True / Default",
+        "nodeId": "9308:56437"
+      },
+      {
+        "row": 19,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Medium / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 19,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Medium / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 20,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Large / False / Default",
+        "nodeId": "9308:55837"
+      },
+      {
+        "row": 20,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Large / False / Hover",
+        "nodeId": "9308:55957"
+      },
+      {
+        "row": 20,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Large / False / Disabled",
+        "nodeId": "9308:56077"
+      },
+      {
+        "row": 21,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Large / True / Default",
+        "nodeId": "9308:56439"
+      },
+      {
+        "row": 21,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 21,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 22,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Extra-large / False / Default",
+        "nodeId": "9308:55807"
+      },
+      {
+        "row": 22,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Extra-large / False / Hover",
+        "nodeId": "9308:55927"
+      },
+      {
+        "row": 22,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Extra-large / False / Disabled",
+        "nodeId": "9308:56047"
+      },
+      {
+        "row": 23,
+        "col": 0,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Extra-large / True / Default",
+        "nodeId": "9308:56441"
+      },
+      {
+        "row": 23,
+        "col": 1,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Extra-large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 23,
+        "col": 2,
+        "args": {
+          "variant": "secondary",
+          "staticColor": "Secondary",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary / Outline / Extra-large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 24,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Accent / Fill / Small / False / Default",
+        "nodeId": "9308:55732"
+      },
+      {
+        "row": 24,
+        "col": 1,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Accent / Fill / Small / False / Hover",
+        "nodeId": "9308:56252"
+      },
+      {
+        "row": 24,
+        "col": 2,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Accent / Fill / Small / False / Disabled",
+        "nodeId": "9308:56412"
+      },
+      {
+        "row": 25,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Accent / Fill / Medium / False / Default",
+        "nodeId": "9308:55617"
+      },
+      {
+        "row": 25,
+        "col": 1,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Accent / Fill / Medium / False / Hover",
+        "nodeId": "9308:56137"
+      },
+      {
+        "row": 25,
+        "col": 2,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Accent / Fill / Medium / False / Disabled",
+        "nodeId": "9308:56297"
+      },
+      {
+        "row": 26,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Accent / Fill / Large / False / Default",
+        "nodeId": "9308:55657"
+      },
+      {
+        "row": 26,
+        "col": 1,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Accent / Fill / Large / False / Hover",
+        "nodeId": "9308:56217"
+      },
+      {
+        "row": 26,
+        "col": 2,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Accent / Fill / Large / False / Disabled",
+        "nodeId": "9308:56377"
+      },
+      {
+        "row": 27,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Accent / Fill / Extra-large / False / Default",
+        "nodeId": "9308:55697"
+      },
+      {
+        "row": 27,
+        "col": 1,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Accent / Fill / Extra-large / False / Hover",
+        "nodeId": "9308:56177"
+      },
+      {
+        "row": 27,
+        "col": 2,
+        "args": {
+          "variant": "accent",
+          "staticColor": "Accent",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Accent / Fill / Extra-large / False / Disabled",
+        "nodeId": "9308:56337"
+      },
+      {
+        "row": 28,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Negative / Fill / Small / False / Default",
+        "nodeId": "9308:55737"
+      },
+      {
+        "row": 28,
+        "col": 1,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Negative / Fill / Small / False / Hover",
+        "nodeId": "9308:56257"
+      },
+      {
+        "row": 28,
+        "col": 2,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Negative / Fill / Small / False / Disabled",
+        "nodeId": "9308:56417"
+      },
+      {
+        "row": 29,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Negative / Fill / Medium / False / Default",
+        "nodeId": "9308:55622"
+      },
+      {
+        "row": 29,
+        "col": 1,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Negative / Fill / Medium / False / Hover",
+        "nodeId": "9308:56142"
+      },
+      {
+        "row": 29,
+        "col": 2,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Negative / Fill / Medium / False / Disabled",
+        "nodeId": "9308:56302"
+      },
+      {
+        "row": 30,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Negative / Fill / Large / False / Default",
+        "nodeId": "9308:55662"
+      },
+      {
+        "row": 30,
+        "col": 1,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Negative / Fill / Large / False / Hover",
+        "nodeId": "9308:56222"
+      },
+      {
+        "row": 30,
+        "col": 2,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Negative / Fill / Large / False / Disabled",
+        "nodeId": "9308:56382"
+      },
+      {
+        "row": 31,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Negative / Fill / Extra-large / False / Default",
+        "nodeId": "9308:55702"
+      },
+      {
+        "row": 31,
+        "col": 1,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Negative / Fill / Extra-large / False / Hover",
+        "nodeId": "9308:56182"
+      },
+      {
+        "row": 31,
+        "col": 2,
+        "args": {
+          "variant": "negative",
+          "staticColor": "Negative",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Negative / Fill / Extra-large / False / Disabled",
+        "nodeId": "9308:56342"
+      },
+      {
+        "row": 32,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Small / False / Default",
+        "nodeId": "9308:55712"
+      },
+      {
+        "row": 32,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Small / False / Hover",
+        "nodeId": "9308:56232"
+      },
+      {
+        "row": 32,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Small / False / Disabled",
+        "nodeId": "9308:56392"
+      },
+      {
+        "row": 33,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Medium / False / Default",
+        "nodeId": "9308:55597"
+      },
+      {
+        "row": 33,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Medium / False / Hover",
+        "nodeId": "9308:56117"
+      },
+      {
+        "row": 33,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Medium / False / Disabled",
+        "nodeId": "9308:56277"
+      },
+      {
+        "row": 34,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Large / False / Default",
+        "nodeId": "9308:55637"
+      },
+      {
+        "row": 34,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Large / False / Hover",
+        "nodeId": "9308:56197"
+      },
+      {
+        "row": 34,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Large / False / Disabled",
+        "nodeId": "9308:56357"
+      },
+      {
+        "row": 35,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Extra-large / False / Default",
+        "nodeId": "9308:55677"
+      },
+      {
+        "row": 35,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Extra-large / False / Hover",
+        "nodeId": "9308:56157"
+      },
+      {
+        "row": 35,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static white / Fill / Extra-large / False / Disabled",
+        "nodeId": "9308:56317"
+      },
+      {
+        "row": 36,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Small / False / Default",
+        "nodeId": "9308:55842"
+      },
+      {
+        "row": 36,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Small / False / Hover",
+        "nodeId": "9308:55962"
+      },
+      {
+        "row": 36,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Small / False / Disabled",
+        "nodeId": "9308:56082"
+      },
+      {
+        "row": 37,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Medium / False / Default",
+        "nodeId": "9308:55757"
+      },
+      {
+        "row": 37,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Medium / False / Hover",
+        "nodeId": "9308:55877"
+      },
+      {
+        "row": 37,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Medium / False / Disabled",
+        "nodeId": "9308:55997"
+      },
+      {
+        "row": 38,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Large / False / Default",
+        "nodeId": "9308:55817"
+      },
+      {
+        "row": 38,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Large / False / Hover",
+        "nodeId": "9308:55937"
+      },
+      {
+        "row": 38,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Large / False / Disabled",
+        "nodeId": "9308:56057"
+      },
+      {
+        "row": 39,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Extra-large / False / Default",
+        "nodeId": "9308:55787"
+      },
+      {
+        "row": 39,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Extra-large / False / Hover",
+        "nodeId": "9308:55907"
+      },
+      {
+        "row": 39,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static white",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static white / Outline / Extra-large / False / Disabled",
+        "nodeId": "9308:56027"
+      },
+      {
+        "row": 40,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Small / False / Default",
+        "nodeId": "9308:55722"
+      },
+      {
+        "row": 40,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Small / False / Hover",
+        "nodeId": "9308:56242"
+      },
+      {
+        "row": 40,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Small / False / Disabled",
+        "nodeId": "9308:56402"
+      },
+      {
+        "row": 41,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Small / True / Default",
+        "nodeId": "9308:56443"
+      },
+      {
+        "row": 41,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Small / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 41,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Small / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 42,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Medium / False / Default",
+        "nodeId": "9308:55607"
+      },
+      {
+        "row": 42,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Medium / False / Hover",
+        "nodeId": "9308:56127"
+      },
+      {
+        "row": 42,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Medium / False / Disabled",
+        "nodeId": "9308:56287"
+      },
+      {
+        "row": 43,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Medium / True / Default",
+        "nodeId": "9308:56445"
+      },
+      {
+        "row": 43,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Medium / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 43,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Medium / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 44,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Large / False / Default",
+        "nodeId": "9308:55647"
+      },
+      {
+        "row": 44,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Large / False / Hover",
+        "nodeId": "9308:56207"
+      },
+      {
+        "row": 44,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Large / False / Disabled",
+        "nodeId": "9308:56367"
+      },
+      {
+        "row": 45,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Large / True / Default",
+        "nodeId": "9308:56447"
+      },
+      {
+        "row": 45,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 45,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 46,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Extra-large / False / Default",
+        "nodeId": "9308:55687"
+      },
+      {
+        "row": 46,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Extra-large / False / Hover",
+        "nodeId": "9308:56167"
+      },
+      {
+        "row": 46,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Extra-large / False / Disabled",
+        "nodeId": "9308:56327"
+      },
+      {
+        "row": 47,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Extra-large / True / Default",
+        "nodeId": "9308:56449"
+      },
+      {
+        "row": 47,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Extra-large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 47,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Fill / Extra-large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 48,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Small / False / Default",
+        "nodeId": "9308:55852"
+      },
+      {
+        "row": 48,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Small / False / Hover",
+        "nodeId": "9308:55972"
+      },
+      {
+        "row": 48,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Small / False / Disabled",
+        "nodeId": "9308:56092"
+      },
+      {
+        "row": 49,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Small / True / Default",
+        "nodeId": "9308:56451"
+      },
+      {
+        "row": 49,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Small / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 49,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Small / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 50,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Medium / False / Default",
+        "nodeId": "9308:55767"
+      },
+      {
+        "row": 50,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Medium / False / Hover",
+        "nodeId": "9308:55887"
+      },
+      {
+        "row": 50,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Medium / False / Disabled",
+        "nodeId": "9308:56007"
+      },
+      {
+        "row": 51,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Medium / True / Default",
+        "nodeId": "9308:56453"
+      },
+      {
+        "row": 51,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Medium / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 51,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Medium / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 52,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Large / False / Default",
+        "nodeId": "9308:55827"
+      },
+      {
+        "row": 52,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Large / False / Hover",
+        "nodeId": "9308:55947"
+      },
+      {
+        "row": 52,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Large / False / Disabled",
+        "nodeId": "9308:56067"
+      },
+      {
+        "row": 53,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Large / True / Default",
+        "nodeId": "9308:56455"
+      },
+      {
+        "row": 53,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 53,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 54,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Extra-large / False / Default",
+        "nodeId": "9308:55797"
+      },
+      {
+        "row": 54,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Extra-large / False / Hover",
+        "nodeId": "9308:55917"
+      },
+      {
+        "row": 54,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Extra-large / False / Disabled",
+        "nodeId": "9308:56037"
+      },
+      {
+        "row": 55,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Extra-large / True / Default",
+        "nodeId": "9308:56457"
+      },
+      {
+        "row": 55,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Extra-large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 55,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static white",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static white / Outline / Extra-large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 56,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Small / False / Default",
+        "nodeId": "9308:55717"
+      },
+      {
+        "row": 56,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Small / False / Hover",
+        "nodeId": "9308:56237"
+      },
+      {
+        "row": 56,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Small / False / Disabled",
+        "nodeId": "9308:56397"
+      },
+      {
+        "row": 57,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Medium / False / Default",
+        "nodeId": "9308:55602"
+      },
+      {
+        "row": 57,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Medium / False / Hover",
+        "nodeId": "9308:56122"
+      },
+      {
+        "row": 57,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Medium / False / Disabled",
+        "nodeId": "9308:56282"
+      },
+      {
+        "row": 58,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Large / False / Default",
+        "nodeId": "9308:55642"
+      },
+      {
+        "row": 58,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Large / False / Hover",
+        "nodeId": "9308:56202"
+      },
+      {
+        "row": 58,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Large / False / Disabled",
+        "nodeId": "9308:56362"
+      },
+      {
+        "row": 59,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Extra-large / False / Default",
+        "nodeId": "9308:55682"
+      },
+      {
+        "row": 59,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Extra-large / False / Hover",
+        "nodeId": "9308:56162"
+      },
+      {
+        "row": 59,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static black / Fill / Extra-large / False / Disabled",
+        "nodeId": "9308:56322"
+      },
+      {
+        "row": 60,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Small / False / Default",
+        "nodeId": "9308:55847"
+      },
+      {
+        "row": 60,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Small / False / Hover",
+        "nodeId": "9308:55967"
+      },
+      {
+        "row": 60,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Small / False / Disabled",
+        "nodeId": "9308:56087"
+      },
+      {
+        "row": 61,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Medium / False / Default",
+        "nodeId": "9308:55762"
+      },
+      {
+        "row": 61,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Medium / False / Hover",
+        "nodeId": "9308:55882"
+      },
+      {
+        "row": 61,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Medium / False / Disabled",
+        "nodeId": "9308:56002"
+      },
+      {
+        "row": 62,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Large / False / Default",
+        "nodeId": "9308:55822"
+      },
+      {
+        "row": 62,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Large / False / Hover",
+        "nodeId": "9308:55942"
+      },
+      {
+        "row": 62,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Large / False / Disabled",
+        "nodeId": "9308:56062"
+      },
+      {
+        "row": 63,
+        "col": 0,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Extra-large / False / Default",
+        "nodeId": "9308:55792"
+      },
+      {
+        "row": 63,
+        "col": 1,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Extra-large / False / Hover",
+        "nodeId": "9308:55912"
+      },
+      {
+        "row": 63,
+        "col": 2,
+        "args": {
+          "staticColor": "Primary - Static black",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Primary - Static black / Outline / Extra-large / False / Disabled",
+        "nodeId": "9308:56032"
+      },
+      {
+        "row": 64,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Small / False / Default",
+        "nodeId": "9308:55727"
+      },
+      {
+        "row": 64,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Small / False / Hover",
+        "nodeId": "9308:56247"
+      },
+      {
+        "row": 64,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Small / False / Disabled",
+        "nodeId": "9308:56407"
+      },
+      {
+        "row": 65,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Small / True / Default",
+        "nodeId": "9308:56459"
+      },
+      {
+        "row": 65,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Small / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 65,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "s",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Small / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 66,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Medium / False / Default",
+        "nodeId": "9308:55612"
+      },
+      {
+        "row": 66,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Medium / False / Hover",
+        "nodeId": "9308:56132"
+      },
+      {
+        "row": 66,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Medium / False / Disabled",
+        "nodeId": "9308:56292"
+      },
+      {
+        "row": 67,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Medium / True / Default",
+        "nodeId": "9308:56461"
+      },
+      {
+        "row": 67,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Medium / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 67,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "m",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Medium / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 68,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Large / False / Default",
+        "nodeId": "9308:55652"
+      },
+      {
+        "row": 68,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Large / False / Hover",
+        "nodeId": "9308:56212"
+      },
+      {
+        "row": 68,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Large / False / Disabled",
+        "nodeId": "9308:56372"
+      },
+      {
+        "row": 69,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Large / True / Default",
+        "nodeId": "9308:56463"
+      },
+      {
+        "row": 69,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 69,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "l",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 70,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Extra-large / False / Default",
+        "nodeId": "9308:55692"
+      },
+      {
+        "row": 70,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Extra-large / False / Hover",
+        "nodeId": "9308:56172"
+      },
+      {
+        "row": 70,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Extra-large / False / Disabled",
+        "nodeId": "9308:56332"
+      },
+      {
+        "row": 71,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Extra-large / True / Default",
+        "nodeId": "9308:56465"
+      },
+      {
+        "row": 71,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Extra-large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 71,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "fill",
+          "size": "xl",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Fill / Extra-large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 72,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Small / False / Default",
+        "nodeId": "9308:55857"
+      },
+      {
+        "row": 72,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Small / False / Hover",
+        "nodeId": "9308:55977"
+      },
+      {
+        "row": 72,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Small / False / Disabled",
+        "nodeId": "9308:56097"
+      },
+      {
+        "row": 73,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Small / True / Default",
+        "nodeId": "9308:56467"
+      },
+      {
+        "row": 73,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Small / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 73,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "s",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Small / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 74,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Medium / False / Default",
+        "nodeId": "9308:55772"
+      },
+      {
+        "row": 74,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Medium / False / Hover",
+        "nodeId": "9308:55892"
+      },
+      {
+        "row": 74,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Medium / False / Disabled",
+        "nodeId": "9308:56012"
+      },
+      {
+        "row": 75,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Medium / True / Default",
+        "nodeId": "9308:56469"
+      },
+      {
+        "row": 75,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Medium / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 75,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "m",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Medium / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 76,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Large / False / Default",
+        "nodeId": "9308:55832"
+      },
+      {
+        "row": 76,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Large / False / Hover",
+        "nodeId": "9308:55952"
+      },
+      {
+        "row": 76,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Large / False / Disabled",
+        "nodeId": "9308:56072"
+      },
+      {
+        "row": 77,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Large / True / Default",
+        "nodeId": "9308:56471"
+      },
+      {
+        "row": 77,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 77,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "l",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Large / True / Disabled",
+        "nodeId": null
+      },
+      {
+        "row": 78,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Extra-large / False / Default",
+        "nodeId": "9308:55802"
+      },
+      {
+        "row": 78,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Extra-large / False / Hover",
+        "nodeId": "9308:55922"
+      },
+      {
+        "row": 78,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": false,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Extra-large / False / Disabled",
+        "nodeId": "9308:56042"
+      },
+      {
+        "row": 79,
+        "col": 0,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Extra-large / True / Default",
+        "nodeId": "9308:56473"
+      },
+      {
+        "row": 79,
+        "col": 1,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": true,
+          "disabled": false
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Extra-large / True / Hover",
+        "nodeId": null
+      },
+      {
+        "row": 79,
+        "col": 2,
+        "args": {
+          "staticColor": "Secondary - Static black",
+          "fillStyle": "outline",
+          "size": "xl",
+          "pending": true,
+          "disabled": true
+        },
+        "forced": null,
+        "label": "Secondary - Static black / Outline / Extra-large / True / Disabled",
+        "nodeId": null
+      }
+    ],
+    "missing": [
+      "Secondary / Fill / Small / True / Hover",
+      "Secondary / Fill / Small / True / Disabled",
+      "Secondary / Fill / Medium / True / Hover",
+      "Secondary / Fill / Medium / True / Disabled",
+      "Secondary / Fill / Large / True / Hover",
+      "Secondary / Fill / Large / True / Disabled",
+      "Secondary / Fill / Extra-large / True / Hover",
+      "Secondary / Fill / Extra-large / True / Disabled",
+      "Secondary / Outline / Small / True / Hover",
+      "Secondary / Outline / Small / True / Disabled",
+      "Secondary / Outline / Medium / True / Hover",
+      "Secondary / Outline / Medium / True / Disabled",
+      "Secondary / Outline / Large / True / Hover",
+      "Secondary / Outline / Large / True / Disabled",
+      "Secondary / Outline / Extra-large / True / Hover",
+      "Secondary / Outline / Extra-large / True / Disabled",
+      "Secondary - Static white / Fill / Small / True / Hover",
+      "Secondary - Static white / Fill / Small / True / Disabled",
+      "Secondary - Static white / Fill / Medium / True / Hover",
+      "Secondary - Static white / Fill / Medium / True / Disabled",
+      "Secondary - Static white / Fill / Large / True / Hover",
+      "Secondary - Static white / Fill / Large / True / Disabled",
+      "Secondary - Static white / Fill / Extra-large / True / Hover",
+      "Secondary - Static white / Fill / Extra-large / True / Disabled",
+      "Secondary - Static white / Outline / Small / True / Hover",
+      "Secondary - Static white / Outline / Small / True / Disabled",
+      "Secondary - Static white / Outline / Medium / True / Hover",
+      "Secondary - Static white / Outline / Medium / True / Disabled",
+      "Secondary - Static white / Outline / Large / True / Hover",
+      "Secondary - Static white / Outline / Large / True / Disabled",
+      "Secondary - Static white / Outline / Extra-large / True / Hover",
+      "Secondary - Static white / Outline / Extra-large / True / Disabled",
+      "Secondary - Static black / Fill / Small / True / Hover",
+      "Secondary - Static black / Fill / Small / True / Disabled",
+      "Secondary - Static black / Fill / Medium / True / Hover",
+      "Secondary - Static black / Fill / Medium / True / Disabled",
+      "Secondary - Static black / Fill / Large / True / Hover",
+      "Secondary - Static black / Fill / Large / True / Disabled",
+      "Secondary - Static black / Fill / Extra-large / True / Hover",
+      "Secondary - Static black / Fill / Extra-large / True / Disabled",
+      "Secondary - Static black / Outline / Small / True / Hover",
+      "Secondary - Static black / Outline / Small / True / Disabled",
+      "Secondary - Static black / Outline / Medium / True / Hover",
+      "Secondary - Static black / Outline / Medium / True / Disabled",
+      "Secondary - Static black / Outline / Large / True / Hover",
+      "Secondary - Static black / Outline / Large / True / Disabled",
+      "Secondary - Static black / Outline / Extra-large / True / Hover",
+      "Secondary - Static black / Outline / Extra-large / True / Disabled"
+    ]
+  }
+}

@@ -76,14 +76,40 @@ function childFor(part, contractFor) {
   return { slug: c.slug, name, args, argsSrc: `{${entries.join(",")}}`, figma: D.figma, inner: contentSrc?.inner ?? null };
 }
 
+/**
+ * The component's root class.
+ *
+ * The definition states it outright (`anchors.code.cssClass`) and for every S2A
+ * component that is exactly `c-<slug>`, so this changes nothing for us. It
+ * matters for a contract that describes somebody else's component: Spectrum's
+ * is `spectrum-Badge`, and its component-level custom properties are scoped to
+ * that class, so a generated element called `c-badge` never receives them and
+ * renders with no background at all.
+ */
+const rootClass = (ir, slug) => ir?.anchors?.code?.cssClass || `c-${slug}`;
+
 function template(ir, slug, { contractFor } = {}) {
   const root = ir.anatomy.root;
-  const cls = `c-${slug}`;
+  const cls = rootClass(ir, slug);
+  // Which props the stylesheet actually conditions on. Asking the contract is
+  // the only answer that cannot drift: the rules and the attributes come from
+  // the same place. Deciding it from the Figma binding instead meant a boolean
+  // bound to a Figma boolean got no attribute at all, so Avatar's outline rule
+  // was written against [data-outline="true"] and nothing ever set it.
+  const conditioned = new Set();
+  (function collect(part) {
+    for (const e of part?.tokensByProp ?? []) conditioned.add(e.prop);
+    for (const e of part?.statesByProp ?? []) conditioned.add(e.prop);
+    for (const e of part?.tokensByCombination ?? []) for (const prop of e.props ?? []) conditioned.add(prop);
+    for (const kid of Object.values(part?.parts ?? {})) collect(kid);
+  })(ir.anatomy.root);
+
   const attrProps = litProps(ir).filter((p) =>
     (p.type === "string" && Array.isArray(p.enum) && p.enum.length)
     // A boolean standing in for a two-value axis (open|closed) is an
     // attribute too — the stylesheet keys on data-open="true".
-    || (p.type === "boolean" && p.bindings?.figma?.kind === "VARIANT" && p.bindings.figma.valueMap));
+    || (p.type === "boolean" && p.bindings?.figma?.kind === "VARIANT" && p.bindings.figma.valueMap)
+    || conditioned.has(p.name));
   const st = stateProp(ir);
   const dataAttrs = attrProps.map((p) => {
     // The resting state is the absence of a forced one: emitting
@@ -142,6 +168,16 @@ function template(ir, slug, { contractFor } = {}) {
     // An asset-backed part resolves a file from a prop through a shipped
     // manifest. The manifest is imported, never inlined: one table serves every
     // component that uses it, and 102 rows copied into each would drift.
+    // An element whose source is a prop directly, with no table in between —
+    // an avatar's picture is whatever src the consumer passes. The manifest
+    // form below resolves a key to a file; this one has no key to resolve, and
+    // without it the renderer could only emit a placeholder comment.
+    if (part.asset?.prop && !part.asset?.manifest) {
+      const a = part.asset;
+      const el = a.element ?? "img";
+      const alt = a.altProp ? `\${${camel(a.altProp)} ?? ""}` : "";
+      return `${indent}<${el} class="${pcls}" src=\${${camel(a.prop)}} alt="${alt}" />`;
+    }
     if (part.asset?.prop && part.asset?.manifest && part.asset?.field) {
       const a = part.asset;
       const el = a.element ?? "img";
@@ -308,7 +344,7 @@ export function litComponent(ir, slug, opts = {}) {
   const behaviourHelper = behaviour === "disclosure" ? `
 const toggleDisclosure = (e) => {
   const trigger = e.currentTarget;
-  const root = trigger.closest(".${`c-${slug}`}");
+  const root = trigger.closest(".${rootClass(ir, slug)}");
   const region = root && document.getElementById(trigger.getAttribute("aria-controls"));
   const open = root.getAttribute("data-open") !== "true";
   root.setAttribute("data-open", String(open));
@@ -320,7 +356,7 @@ let regionSeq = 0;
 // The native input is the truth; the drawn control reads the root's attribute.
 const syncSelection = (e) => {
   const input = e.currentTarget;
-  const root = input.closest(".${`c-${slug}`}");
+  const root = input.closest(".${rootClass(ir, slug)}");
   if (root) root.setAttribute("${behaviour.attr}", String(input.checked));
 };
 ` : "";
@@ -378,7 +414,7 @@ export default ${name};
 }
 
 export function litStyles(ir, slug) {
-  const cls = `.c-${slug}`;
+  const cls = `.${rootClass(ir, slug)}`;
   return stylesheet(ir, {
     header: [`/* Generated from ${slug}.contract.json. Re-run: npm run specs:render -- --slug=${slug} */`],
     variant,
@@ -402,7 +438,7 @@ const axesOf = (n) => Object.fromEntries(String(n).split(",").map((p) => {
  * without anyone wiring node ids by hand. A story pins some args; the right
  * variant matches those and sits at the component's defaults for the rest.
  */
-function variantNodeId(ir, args) {
+export function variantNodeId(ir, args) {
   const variants = ir.figmaEvidence?.variantNodes ?? [];
   if (!variants.length) return null;
   const defaults = Object.fromEntries(ir.props.filter((p) => p.default != null && typeof p.default !== "object")
@@ -433,7 +469,7 @@ function variantNodeId(ir, args) {
  * outside that box: the Figma sheet has no labels, and anything extra inside
  * the measured element would read as a difference.
  */
-function litMatrix(ir, slug, matrix) {
+export function litMatrix(ir, slug, matrix, opts = {}) {
   if (!matrix) return "";
   const name = pascal(slug);
   const { cols, rows, cell, cells } = matrix;
@@ -457,7 +493,7 @@ export const StateMatrix = {
   parameters: {
     // \`sheet\` points the overlay at the composited golden for the whole set
     // rather than one variant's artwork.
-    figma: { fileKey: ${q(ir.anchors?.figma?.fileKey ?? "")}, sheet: true, slug: ${q(slug)}, selector: '.s2a-matrix' },
+    figma: { fileKey: ${q(ir.anchors?.figma?.fileKey ?? "")}, sheet: true, slug: ${q(opts.slugKey ?? slug)}, selector: '.s2a-matrix' },
     controls: { disable: true },
   },
   render: () => html\`

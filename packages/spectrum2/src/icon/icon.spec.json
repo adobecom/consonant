@@ -1,0 +1,419 @@
+{
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json (not yet published)"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
+  "name": "Icon",
+  "slug": "icon",
+  "cssClass": "swc-Icon",
+  "description": "A glyph at a size, inheriting its colour. Spectrum's smallest leaf: 36 of its 84 components depend on it.",
+  "variants": {},
+  "props": [
+    {
+      "name": "size",
+      "type": "string",
+      "defaultValue": "\"m\"",
+      "description": "Five rungs, one more than the other components: the icon adds xs.",
+      "enum": [
+        "xs",
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "size",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "accessibleLabel",
+      "type": "string",
+      "description": "When empty the host is marked aria-hidden and the glyph is decorative; when set the host is exposed as an image with that label.",
+      "lever": false,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "accessibleLabel",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
+  ],
+  "tokenBindings": {
+    "root-inline-size": "--swc-workflow-icon-medium",
+    "root-block-size": "--swc-workflow-icon-medium",
+    "root-inline-size@size=xs": "--swc-workflow-icon-extra-small",
+    "root-block-size@size=xs": "--swc-workflow-icon-extra-small",
+    "root-inline-size@size=s": "--swc-workflow-icon-small",
+    "root-block-size@size=s": "--swc-workflow-icon-small",
+    "root-inline-size@size=m": "--swc-workflow-icon-medium",
+    "root-block-size@size=m": "--swc-workflow-icon-medium",
+    "root-inline-size@size=l": "--swc-workflow-icon-large",
+    "root-block-size@size=l": "--swc-workflow-icon-large",
+    "root-inline-size@size=xl": "--swc-workflow-icon-extra-large",
+    "root-block-size@size=xl": "--swc-workflow-icon-extra-large"
+  },
+  "tier": "component",
+  "composedOf": [],
+  "a11y": {
+    "wcag": [
+      "1.1.1"
+    ],
+    "notes": [
+      "Decorative by default: the root sets pointer-events none and the glyph carries no accessible name.",
+      "A meaningful icon needs a name on the element that owns the meaning, not on the glyph."
+    ]
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".swc-Icon",
+    "element": "span",
+    "tokens": {
+      "box-sizing": {
+        "value": "raw:border-box",
+        "raw": true,
+        "tokens": []
+      },
+      "display": {
+        "value": "raw:block",
+        "raw": true,
+        "tokens": []
+      },
+      "inline-size": {
+        "value": "{swc.workflow.icon.medium}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{swc.workflow.icon.medium}",
+            "cssVar": "--swc-workflow-icon-medium",
+            "figma": "swc/workflow/icon/medium",
+            "shipped": true,
+            "value": "var(--swc-theme--sizeM, 18px)\n    var(--swc-theme--sizeL, 24px)"
+          }
+        ]
+      },
+      "block-size": {
+        "value": "{swc.workflow.icon.medium}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{swc.workflow.icon.medium}",
+            "cssVar": "--swc-workflow-icon-medium",
+            "figma": "swc/workflow/icon/medium",
+            "shipped": true,
+            "value": "var(--swc-theme--sizeM, 18px)\n    var(--swc-theme--sizeL, 24px)"
+          }
+        ]
+      },
+      "color": {
+        "value": "raw:currentColor",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "tokensByProp": [
+      {
+        "prop": "size",
+        "map": {
+          "xs": {
+            "inline-size": {
+              "value": "{swc.workflow.icon.extra-small}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.extra-small}",
+                  "cssVar": "--swc-workflow-icon-extra-small",
+                  "figma": "swc/workflow/icon/extra-small",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 14px)\n    var(--swc-theme--sizeL, 16px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.workflow.icon.extra-small}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.extra-small}",
+                  "cssVar": "--swc-workflow-icon-extra-small",
+                  "figma": "swc/workflow/icon/extra-small",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 14px)\n    var(--swc-theme--sizeL, 16px)"
+                }
+              ]
+            }
+          },
+          "s": {
+            "inline-size": {
+              "value": "{swc.workflow.icon.small}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.small}",
+                  "cssVar": "--swc-workflow-icon-small",
+                  "figma": "swc/workflow/icon/small",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 16px)\n    var(--swc-theme--sizeL, 18px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.workflow.icon.small}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.small}",
+                  "cssVar": "--swc-workflow-icon-small",
+                  "figma": "swc/workflow/icon/small",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 16px)\n    var(--swc-theme--sizeL, 18px)"
+                }
+              ]
+            }
+          },
+          "m": {
+            "inline-size": {
+              "value": "{swc.workflow.icon.medium}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.medium}",
+                  "cssVar": "--swc-workflow-icon-medium",
+                  "figma": "swc/workflow/icon/medium",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 18px)\n    var(--swc-theme--sizeL, 24px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.workflow.icon.medium}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.medium}",
+                  "cssVar": "--swc-workflow-icon-medium",
+                  "figma": "swc/workflow/icon/medium",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 18px)\n    var(--swc-theme--sizeL, 24px)"
+                }
+              ]
+            }
+          },
+          "l": {
+            "inline-size": {
+              "value": "{swc.workflow.icon.large}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.large}",
+                  "cssVar": "--swc-workflow-icon-large",
+                  "figma": "swc/workflow/icon/large",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 20px)\n    var(--swc-theme--sizeL, 28px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.workflow.icon.large}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.large}",
+                  "cssVar": "--swc-workflow-icon-large",
+                  "figma": "swc/workflow/icon/large",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 20px)\n    var(--swc-theme--sizeL, 28px)"
+                }
+              ]
+            }
+          },
+          "xl": {
+            "inline-size": {
+              "value": "{swc.workflow.icon.extra-large}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.extra-large}",
+                  "cssVar": "--swc-workflow-icon-extra-large",
+                  "figma": "swc/workflow/icon/extra-large",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 22px)\n    var(--swc-theme--sizeL, 30px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.workflow.icon.extra-large}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.workflow.icon.extra-large}",
+                  "cssVar": "--swc-workflow-icon-extra-large",
+                  "figma": "swc/workflow/icon/extra-large",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 22px)\n    var(--swc-theme--sizeL, 30px)"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "parts": {
+      "glyph": {
+        "selector": "svg",
+        "element": "svg",
+        "tokens": {
+          "display": {
+            "value": "raw:block",
+            "raw": true,
+            "tokens": []
+          },
+          "inline-size": {
+            "value": "raw:100%",
+            "raw": true,
+            "tokens": []
+          },
+          "block-size": {
+            "value": "raw:100%",
+            "raw": true,
+            "tokens": []
+          },
+          "fill": {
+            "value": "raw:currentColor",
+            "raw": true,
+            "tokens": []
+          },
+          "--iconPrimary": {
+            "value": "raw:currentColor",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "slot": {
+          "name": "glyph",
+          "accepts": [
+            "kind:icon"
+          ],
+          "acceptsMode": "restrict",
+          "notes": "The glyph itself. Spectrum ships these as a separate package; the manifest is built from it, not authored.",
+          "default": {
+            "manifest": "spectrum-icons",
+            "icon": "add-circle"
+          }
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+        "kind": "none",
+        "nodeId": null,
+        "nodeName": null,
+        "componentSetKey": null,
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": null
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/icon",
+        "export": "Icon",
+        "controller": null,
+        "cssClass": "swc-Icon"
+      },
+      "evidence": {
+        "hash": "sha256:fb8796f875a4248de0e8ace45e51929d938f6a0f54841d438673f807e094e8cc"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "i-no-design-anchor",
+      "question": "Spectrum ships no Icon component set in Figma, so this contract has code evidence only. Accept a code-first contract, or wait for a design anchor that may never exist?",
+      "chose": "accepted code-first; anchors.figma.kind is \"none\"",
+      "confidence": "medium",
+      "fix": "If Spectrum later publishes an Icon set, re-anchor and re-extract.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "S2 / Web lists 142 component sets and none is Icon."
+    },
+    {
+      "id": "i-scale-axis",
+      "question": "Spectrum's tokens carry a scale axis (medium and large) that S2A does not have; the same token resolves to 20px and 24px. Which scale does adobe.com bind to?",
+      "chose": "medium, matching desktop web",
+      "confidence": "medium",
+      "fix": "If a surface needs large scale, the token directory gains a second mode rather than the contract gaining a prop.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "@spectrum-css/tokens 16.0.2 medium-vars.css and large-vars.css"
+    },
+    {
+      "id": "i-implementation",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Which package is Spectrum 2's Icon?",
+      "chose": "@adobe/spectrum-wc (swc-icon)",
+      "decision": "The contract describes @adobe/spectrum-wc. Icon has no module of its own beyond a slot and a size box; its stylesheet is shared, at dist/stylesheets/_lit-styles/icon-base.js.",
+      "fix": "none",
+      "evidence": "Icon.js imports icon-base.js for its only styles and renders a single default slot."
+    },
+    {
+      "id": "i-host-rules",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Every rule in the icon stylesheet is :host or ::slotted — there is not one class in it.",
+      "chose": "Declare swc-Icon as the root class and re-express the host rules on it",
+      "fix": "If the generated component becomes a custom element, drop the class and inherit the host rules.",
+      "evidence": "icon-base.css is :host, :host([size]), and svg,::slotted(*) only. The class is ours, which is why the anatomy cannot be checked against the stylesheet."
+    },
+    {
+      "id": "i-override-seam",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "How does a consumer resize or recolour the icon?",
+      "chose": "--swc-icon-inline-size, --swc-icon-block-size and --swc-icon-color",
+      "decision": "Upstream exposes three custom properties on the host and derives everything else from them, so the size prop and a direct override reach the same place.",
+      "fix": "none",
+      "evidence": "icon-base.css declares all three on :host with the size attribute switching the first two."
+    },
+    {
+      "id": "i-glyph-fill",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Every glyph rendered in its own colour instead of the component's.",
+      "chose": "Map the artwork's own hook to currentColor on the part that holds the glyph",
+      "decision": "Spectrum's workflow SVGs paint with fill=\"var(--iconPrimary, #222)\" rather than currentColor, so with nothing defining that property every glyph fell back to #222 regardless of the colour around it. Setting --iconPrimary to currentColor on the icon part makes a glyph follow its component, and leaves the property available to anyone who wants a different colour.",
+      "fix": "none. The alternative was rewriting 396 vendored SVGs, which would mean editing artwork we do not own.",
+      "evidence": "All 396 entries in spectrum-icons.json carry var(--iconPrimary, #222); all 26 in our own s2a-icons.json use currentColor. Measured: the badge's text was #ffffff while its glyph painted #222222."
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:38d951429a4e3714613ecd0f4adb87e9fc11c5d62e2f9fd2602059f2f092b814",
+    "codeEvidence": "sha256:fb8796f875a4248de0e8ace45e51929d938f6a0f54841d438673f807e094e8cc",
+    "figmaEvidence": null,
+    "generator": "s2a-spec-transform@1"
+  }
+}

@@ -1,0 +1,703 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-29T14:11:29.657Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "card",
+    "name": "Card",
+    "cssClass": "swc-Card",
+    "importPath": "packages/spectrum2/src/card/card.js",
+    "exports": [
+      "Card"
+    ],
+    "render": null,
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/card/card.spec.json",
+      "storybookId": null,
+      "figmaNodeId": null
+    }
+  },
+  "sources": {
+    "packages/spectrum2/src/card/card.js": "sha256:da24709d2a4cc1d907c160517f0bb37ee4c9c0a6c180d0e8e286fd3aaeeb565c",
+    "packages/spectrum2/src/card/card.css": "sha256:d59838765999992206fda5bf832548d856328d62613d710aa46afda8277855b4",
+    "packages/spectrum2/src/card/card.d.ts": "sha256:28c24f58150925172900e01333d6c85c34d00f5e13e3a0eaa324aed2be08a150"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "enum",
+      "values": [
+        "primary",
+        "secondary",
+        "tertiary",
+        "quiet"
+      ],
+      "default": "primary",
+      "description": "The visual variant of the card."
+    },
+    {
+      "name": "density",
+      "type": "enum",
+      "values": [
+        "compact",
+        "regular",
+        "spacious"
+      ],
+      "default": "regular",
+      "description": "The density of the card, controlling internal spacing and gaps."
+    },
+    {
+      "name": "titleAsLink",
+      "type": "boolean",
+      "description": "Indicates the consumer has wrapped their `title` slot content in a real link. Extends that link's hit area to cover the card surface while leaving navigation entirely consumer-owned; Card accepts no `href`."
+    },
+    {
+      "name": "selectable",
+      "type": "boolean",
+      "description": "Makes the card focusable and captures surface clicks (excluding nested interactive targets) to dispatch a `swc-card-click` event, independent of `titleAsLink`. selection model determines the appropriate role."
+    },
+    {
+      "name": "collection",
+      "type": "slot",
+      "description": "Optional collection images. Assign each image to the slot."
+    },
+    {
+      "name": "media",
+      "type": "slot",
+      "description": "Optional overlay content (e.g. a badge or avatar) layered over the preview/collection media region."
+    },
+    {
+      "name": "preview",
+      "type": "slot",
+      "description": "Primary preview content"
+    },
+    {
+      "name": "title",
+      "type": "slot",
+      "description": "Card title"
+    },
+    {
+      "name": "actions",
+      "type": "slot",
+      "description": "Optional action controls"
+    },
+    {
+      "name": "description",
+      "type": "slot",
+      "description": "Supporting description text"
+    },
+    {
+      "name": "footer",
+      "type": "slot",
+      "description": "Optional footer content"
+    },
+    {
+      "name": "default",
+      "type": "slot",
+      "description": "Additional body content"
+    }
+  ],
+  "attributes": {},
+  "parts": {
+    "template": [
+      "swc-Card-collection"
+    ],
+    "stylesheet": [
+      "swc-Card",
+      "swc-Card--hasDefault",
+      "swc-Card-collection",
+      "swc-Card-content",
+      "swc-Card-media",
+      "swc-CardBase-media"
+    ],
+    "runtime": [],
+    "own": [
+      "swc-Card-collection"
+    ]
+  },
+  "declarations": {
+    "element": "swc-card",
+    "slots": [
+      {
+        "name": "collection",
+        "description": "Optional collection images. Assign each image to the slot."
+      },
+      {
+        "name": "media",
+        "description": "Optional overlay content (e.g. a badge or avatar) layered over the preview/collection media region."
+      },
+      {
+        "name": "preview",
+        "description": "Primary preview content"
+      },
+      {
+        "name": "title",
+        "description": "Card title"
+      },
+      {
+        "name": "actions",
+        "description": "Optional action controls"
+      },
+      {
+        "name": "description",
+        "description": "Supporting description text"
+      },
+      {
+        "name": "footer",
+        "description": "Optional footer content"
+      },
+      {
+        "name": "default",
+        "description": "Additional body content"
+      }
+    ],
+    "cssProps": [
+      "--swc-card-base-action-component-height",
+      "--swc-card-base-background-color",
+      "--swc-card-base-border-radius",
+      "--swc-card-base-box-shadow",
+      "--swc-card-base-content-header-gap",
+      "--swc-card-base-content-padding",
+      "--swc-card-base-content-padding-compact",
+      "--swc-card-base-content-padding-regular",
+      "--swc-card-base-content-padding-spacious",
+      "--swc-card-base-description-font-size",
+      "--swc-card-base-max-inline-size",
+      "--swc-card-base-preview-aspect-ratio",
+      "--swc-card-base-title-font-size",
+      "--swc-card-base-title-line-height",
+      "--swc-card-collection-gap",
+      "--swc-card-collection-item-aspect-ratio",
+      "--swc-card-gallery-preview-aspect-ratio"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [],
+    "tags": []
+  },
+  "imports": [
+    "../../stylesheets/_lit-styles/card-template.js",
+    "./card-template.js",
+    "./card.js"
+  ],
+  "tokens": {
+    "references": {
+      "--swc-card-collection-gap": {
+        "fallback": true
+      },
+      "--swc-card-collection-item-aspect-ratio": {
+        "fallback": true
+      },
+      "--swc-card-gallery-preview-aspect-ratio": {
+        "fallback": true
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".swc-Card",
+        "declarations": [
+          {
+            "prop": "--_swc-card-gallery-preview-aspect-ratio",
+            "value": "var(--swc-card-gallery-preview-aspect-ratio, 1)"
+          },
+          {
+            "prop": "--_swc-card-collection-item-aspect-ratio",
+            "value": "var(--swc-card-collection-item-aspect-ratio, 1)"
+          },
+          {
+            "prop": "--_swc-card-collection-gap",
+            "value": "var(--swc-card-collection-gap, 4px)"
+          },
+          {
+            "prop": "--_swc-card-collection-columns",
+            "value": "repeat(3, 1fr)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Card-media",
+        "declarations": [
+          {
+            "prop": "grid-template-areas",
+            "value": "\"preview\" \"collection\""
+          },
+          {
+            "prop": "grid-template-rows",
+            "value": "repeat(2,auto)"
+          }
+        ]
+      },
+      {
+        "selector": "::slotted([slot=\"media\"])",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "relative"
+          },
+          {
+            "prop": "grid-area",
+            "value": "media"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Card-collection",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "none"
+          },
+          {
+            "prop": "grid-area",
+            "value": "collection"
+          },
+          {
+            "prop": "grid-template-columns",
+            "value": "var(--_swc-card-collection-columns)"
+          },
+          {
+            "prop": "margin-block-start",
+            "value": "var(--_swc-card-collection-gap)"
+          },
+          {
+            "prop": "-moz-column-gap",
+            "value": "var(--_swc-card-collection-gap)"
+          },
+          {
+            "prop": "column-gap",
+            "value": "var(--_swc-card-collection-gap)"
+          }
+        ]
+      },
+      {
+        "selector": ":host(:has([slot=\"collection\"])) .swc-Card-collection",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "grid"
+          }
+        ]
+      },
+      {
+        "selector": ":scope:has([slot=collection]) .swc-Card-collection",
+        "context": [
+          "@scope"
+        ],
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "grid"
+          }
+        ]
+      },
+      {
+        "selector": "::slotted([slot=\"collection\"])",
+        "declarations": [
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          },
+          {
+            "prop": "inline-size",
+            "value": "100%"
+          },
+          {
+            "prop": "pointer-events",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": "::slotted(img[slot=\"collection\"])",
+        "declarations": [
+          {
+            "prop": "aspect-ratio",
+            "value": "var(--_swc-card-collection-item-aspect-ratio)"
+          },
+          {
+            "prop": "-o-object-fit",
+            "value": "cover"
+          },
+          {
+            "prop": "object-fit",
+            "value": "cover"
+          }
+        ]
+      },
+      {
+        "selector": "::slotted(swc-asset[slot=\"collection\"])",
+        "declarations": [
+          {
+            "prop": "--swc-asset-aspect-ratio",
+            "value": "var(--_swc-card-collection-item-aspect-ratio)"
+          }
+        ]
+      },
+      {
+        "selector": "::slotted(:nth-child(n + 4 of [slot=\"collection\"]))",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ":host(:has([slot=\"collection\"]):not(:has([slot=\"preview\"]))) .swc-Card-collection",
+        "declarations": [
+          {
+            "prop": "margin-block-start",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ":scope:has([slot=collection]):not(:has([slot=preview])) .swc-Card-collection",
+        "context": [
+          "@scope"
+        ],
+        "declarations": [
+          {
+            "prop": "margin-block-start",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ":host(:not(:has([slot=\"title\"])):not(:has([slot=\"description\"])):not(:has([slot=\"actions\"])):not(:has([slot=\"footer\"]))) .swc-Card:not(.swc-Card--hasDefault)",
+        "declarations": [
+          {
+            "prop": "--_swc-card-media-layout",
+            "value": "gallery"
+          }
+        ]
+      },
+      {
+        "selector": ":host(:has([slot=\"preview\"]))",
+        "declarations": [
+          {
+            "prop": "--_swc-card-media-contains",
+            "value": "preview"
+          }
+        ]
+      },
+      {
+        "selector": ":host(:has([slot=\"collection\"]))",
+        "declarations": [
+          {
+            "prop": "--_swc-card-media-contains",
+            "value": "collection"
+          }
+        ]
+      },
+      {
+        "selector": ":scope:not(:has([slot=title])):not(:has([slot=description])):not(:has([slot=actions])):not(:has([slot=footer])) .swc-Card:not(.swc-Card--hasDefault)",
+        "context": [
+          "@scope"
+        ],
+        "declarations": [
+          {
+            "prop": "--_swc-card-media-layout",
+            "value": "gallery"
+          }
+        ]
+      },
+      {
+        "selector": ":scope:has([slot=preview])",
+        "context": [
+          "@scope"
+        ],
+        "declarations": [
+          {
+            "prop": "--_swc-card-media-contains",
+            "value": "preview"
+          }
+        ]
+      },
+      {
+        "selector": ":scope:has([slot=collection])",
+        "context": [
+          "@scope"
+        ],
+        "declarations": [
+          {
+            "prop": "--_swc-card-media-contains",
+            "value": "collection"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Card-content",
+        "context": [
+          "@container style(--_swc-card-media-layout: gallery)"
+        ],
+        "declarations": [
+          {
+            "prop": "padding",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Card-media",
+        "context": [
+          "@container style(--_swc-card-media-layout: gallery)"
+        ],
+        "declarations": [
+          {
+            "prop": "border-radius",
+            "value": "var(--_swc-card-base-border-radius)"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "var(--_swc-card-base-box-shadow)"
+          },
+          {
+            "prop": "transition-timing-function",
+            "value": "var(--_swc-card-base-transition-timing-function)"
+          },
+          {
+            "prop": "transition-duration",
+            "value": "var(--_swc-card-base-transition-duration)"
+          },
+          {
+            "prop": "transition-property",
+            "value": "outline,box-shadow"
+          }
+        ]
+      },
+      {
+        "selector": ":host([selectable]:focus-visible) .swc-CardBase-media",
+        "context": [
+          "@container style(--_swc-card-media-layout: gallery)"
+        ],
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "relative"
+          },
+          {
+            "prop": "outline",
+            "value": "var(--_swc-card-base-selected-focus-outline)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([selectable]:focus-visible) .swc-CardBase-media:after",
+        "nestedIn": ":host([selectable]:focus-visible) .swc-CardBase-media",
+        "context": [
+          "@container style(--_swc-card-media-layout: gallery)"
+        ],
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "inset",
+            "value": "0"
+          },
+          {
+            "prop": "z-index",
+            "value": "2"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--_swc-card-base-border-radius)"
+          },
+          {
+            "prop": "pointer-events",
+            "value": "none"
+          },
+          {
+            "prop": "outline",
+            "value": "2px solid rgba(255,255,255,.48)"
+          },
+          {
+            "prop": "outline-offset",
+            "value": "-2px"
+          },
+          {
+            "prop": "content",
+            "value": "\"\""
+          }
+        ]
+      },
+      {
+        "selector": "::slotted(img[slot=\"preview\"])",
+        "context": [
+          "@container style(--_swc-card-media-layout: gallery)",
+          "@container not style(--_swc-card-media-contains: collection)"
+        ],
+        "declarations": [
+          {
+            "prop": "aspect-ratio",
+            "value": "var(--_swc-card-gallery-preview-aspect-ratio)"
+          }
+        ]
+      },
+      {
+        "selector": "::slotted(swc-asset[slot=\"preview\"])",
+        "context": [
+          "@container style(--_swc-card-media-layout: gallery)",
+          "@container not style(--_swc-card-media-contains: collection)"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-asset-aspect-ratio",
+            "value": "var(--_swc-card-gallery-preview-aspect-ratio)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"xs\"])",
+        "declarations": [
+          {
+            "prop": "--swc-card-collection-gap",
+            "value": "2px"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"xs\"]:has([slot=\"preview\"]):has([slot=\"collection\"])) .swc-Card",
+        "declarations": [
+          {
+            "prop": "--_swc-card-media-layout",
+            "value": "3col"
+          }
+        ]
+      },
+      {
+        "selector": ":scope:has([slot=preview]):has([slot=collection]) .swc-Card",
+        "context": [
+          "@scope (:host([size=\"xs\"]))"
+        ],
+        "declarations": [
+          {
+            "prop": "--_swc-card-media-layout",
+            "value": "3col"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Card-media",
+        "context": [
+          "@container style(--_swc-card-media-layout: 3col)"
+        ],
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "grid"
+          },
+          {
+            "prop": "grid-template-columns",
+            "value": "var(--_swc-card-collection-columns)"
+          },
+          {
+            "prop": "grid-column-gap",
+            "value": "var(--_swc-card-collection-gap)"
+          },
+          {
+            "prop": "-moz-column-gap",
+            "value": "var(--_swc-card-collection-gap)"
+          },
+          {
+            "prop": "column-gap",
+            "value": "var(--_swc-card-collection-gap)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Card-collection",
+        "context": [
+          "@container style(--_swc-card-media-layout: 3col)"
+        ],
+        "declarations": [
+          {
+            "prop": "grid-template-columns",
+            "value": "subgrid"
+          },
+          {
+            "prop": "grid-row",
+            "value": "-1 / 1"
+          },
+          {
+            "prop": "grid-column",
+            "value": "2 / -1"
+          },
+          {
+            "prop": "margin-block-start",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": "::slotted(img[slot=\"preview\"])",
+        "context": [
+          "@container style(--_swc-card-media-layout: 3col)"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-card-base-preview-aspect-ratio",
+            "value": "var(--_swc-card-collection-item-aspect-ratio)"
+          }
+        ]
+      },
+      {
+        "selector": "::slotted(swc-asset[slot=\"preview\"])",
+        "context": [
+          "@container style(--_swc-card-media-layout: 3col)"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-asset-aspect-ratio",
+            "value": "var(--_swc-card-collection-item-aspect-ratio)"
+          }
+        ]
+      },
+      {
+        "selector": "::slotted(:nth-child(n + 3 of [slot=\"collection\"]))",
+        "context": [
+          "@container style(--_swc-card-media-layout: 3col)"
+        ],
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "none"
+          }
+        ]
+      }
+    ]
+  },
+  "states": [
+    ":focus"
+  ],
+  "queries": [
+    "@container not style(--_swc-card-media-contains: collection)",
+    "@container style(--_swc-card-media-layout: 3col)",
+    "@container style(--_swc-card-media-layout: gallery)"
+  ],
+  "stories": [],
+  "counts": {
+    "props": 12,
+    "attributes": 0,
+    "parts": 1,
+    "tokenReferences": 3,
+    "tokenReferencesWithoutFallback": 0,
+    "raw": 0,
+    "stories": 0,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:6d1dba8dc0acdca5fa98e6b4d97c44fca53314b1010655add610983d110a9010"
+  }
+}

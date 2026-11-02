@@ -87,6 +87,6 @@ States are rendered by setting `data-state`, not by pointing at the component, s
 ## Provenance
 
 - defs: sha256:f404e212f9283927394a84354c442fa7cff7b84b5ce85a2553a0bb7c2fd4003d
-- code evidence: sha256:f19d5cf1c056dee07952e26a8a2dfd0493fe1f3844e4600335b45a1e819d74c2
+- code evidence: sha256:83754ab37739d8e4e590e395946323594c4a6985161f3d6db8986965fe72cbc0
 - figma evidence: sha256:77f258b68d6fe82f32fbe4456595467fd6310a6ddcf7cec6b258af73aa8dbd4b
 

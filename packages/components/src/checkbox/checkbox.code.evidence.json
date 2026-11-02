@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:31:25.652Z",
+  "extractedAt": "2026-10-28T16:23:04.275Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -124,9 +124,7 @@
       "c-checkbox__check",
       "c-checkbox__icon",
       "c-checkbox__input",
-      "c-checkbox__label",
-      "checkbox",
-      "css"
+      "c-checkbox__label"
     ],
     "runtime": [
       "c-checkbox",
@@ -215,6 +213,296 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-checkbox",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "cursor",
+            "value": "pointer"
+          },
+          {
+            "prop": "-webkit-user-select",
+            "value": "none"
+          },
+          {
+            "prop": "user-select",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox__input",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "width",
+            "value": "1px"
+          },
+          {
+            "prop": "height",
+            "value": "1px"
+          },
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "padding",
+            "value": "0"
+          },
+          {
+            "prop": "overflow",
+            "value": "hidden"
+          },
+          {
+            "prop": "clip",
+            "value": "rect(0 0 0 0)"
+          },
+          {
+            "prop": "white-space",
+            "value": "nowrap"
+          },
+          {
+            "prop": "border",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox__box",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "relative"
+          },
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          },
+          {
+            "prop": "flex",
+            "value": "none"
+          },
+          {
+            "prop": "width",
+            "value": "20px"
+          },
+          {
+            "prop": "height",
+            "value": "20px"
+          },
+          {
+            "prop": "border",
+            "value": "var(--s2a-border-width-md) solid var(--s2a-color-content-default)"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--s2a-border-radius-2xs)"
+          },
+          {
+            "prop": "background-color",
+            "value": "transparent"
+          },
+          {
+            "prop": "transition",
+            "value": "background-color 130ms ease,\n    border-color 130ms ease"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox__check",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "inset",
+            "value": "0"
+          },
+          {
+            "prop": "display",
+            "value": "block"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          },
+          {
+            "prop": "height",
+            "value": "100%"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-background-default)"
+          },
+          {
+            "prop": "opacity",
+            "value": "0"
+          },
+          {
+            "prop": "transition",
+            "value": "opacity 130ms ease"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox__input:checked + .c-checkbox__box",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-content-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox__input:checked + .c-checkbox__box .c-checkbox__check",
+        "declarations": [
+          {
+            "prop": "opacity",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox__label",
+        "declarations": [
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-label)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-label)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-label)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-label)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-typography-letter-spacing-label)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox__input:focus-visible + .c-checkbox__box,\n.c-checkbox[data-force-state=\"focus\"] .c-checkbox__box",
+        "declarations": [
+          {
+            "prop": "box-shadow",
+            "value": "0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox[data-disabled]",
+        "declarations": [
+          {
+            "prop": "cursor",
+            "value": "not-allowed"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox[data-disabled] .c-checkbox__box",
+        "declarations": [
+          {
+            "prop": "border-color",
+            "value": "var(--s2a-color-content-disabled)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox[data-disabled] .c-checkbox__input:checked + .c-checkbox__box",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-content-disabled)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox[data-disabled] .c-checkbox__label",
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-disabled)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox[data-tile]",
+        "declarations": [
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          },
+          {
+            "prop": "padding",
+            "value": "var(--s2a-spacing-md) var(--s2a-spacing-sm)"
+          },
+          {
+            "prop": "border",
+            "value": "var(--s2a-border-width-sm) solid var(--s2a-color-border-subtle)"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--s2a-border-radius-xs)"
+          },
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-background-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-checkbox[data-tile] .c-checkbox__icon",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "margin-inline-start",
+            "value": "auto"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          }
+        ]
+      }
+    ]
   },
   "states": [
     ":checked",
@@ -663,6 +951,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:f19d5cf1c056dee07952e26a8a2dfd0493fe1f3844e4600335b45a1e819d74c2"
+    "hash": "sha256:83754ab37739d8e4e590e395946323594c4a6985161f3d6db8986965fe72cbc0"
   }
 }

@@ -1,0 +1,31 @@
+/* HelperText — atom, generated from helper-text.contract.json.
+ * Applied by decorateHelperText() to the element the author wrote.
+ * Re-run: npm run specs:render -- --slug=helper-text --target=milo */
+
+.s2a-helper-text [hidden],
+.s2a-helper-text[hidden] {
+  display: none !important;
+}
+
+.s2a-helper-text {
+  display: flex;
+  flex-direction: row;
+  width: 418px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.s2a-helper-text .text {
+  flex: 1 1 auto;
+  font-family: var(--s2a-font-family-caption);
+  font-size: var(--s2a-typography-font-size-caption);
+  font-weight: var(--s2a-font-weight-caption);
+  letter-spacing: var(--s2a-typography-letter-spacing-caption);
+  line-height: var(--s2a-typography-line-height-caption);
+}
+
+.s2a-helper-text.neutral .text {
+  color: var(--s2a-color-content-subtle);
+}
+
+.s2a-helper-text.error .text {
+  color: var(--s2a-color-content-utility-error);
+}

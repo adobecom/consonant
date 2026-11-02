@@ -1,0 +1,95 @@
+/* Radio — atom, generated from radio.contract.json.
+ * Applied by decorateRadio() to the element the author wrote.
+ * Re-run: npm run specs:render -- --slug=radio --target=milo */
+
+.s2a-radio [hidden],
+.s2a-radio[hidden] {
+  display: none !important;
+}
+
+.s2a-radio {
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--s2a-spacing-xs);
+}
+
+.s2a-radio .control {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  width: 20px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 20px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  border-radius: 50%;
+}
+
+.s2a-radio:hover .control,
+.s2a-radio[data-state="hover"] .control {
+  background-color: var(--s2a-color-background-subtle);
+}
+
+.s2a-radio .ring {
+  grid-area: 1 / 1;
+  --s2a-radio-ring-bc: var(--s2a-color-content-default);
+  --s2a-radio-ring-bw: 1.5px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  width: 18px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 18px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 var(--s2a-radio-ring-bw, 0) var(--s2a-radio-ring-bc, transparent);
+}
+
+.s2a-radio:has(:disabled) .ring,
+.s2a-radio[data-state="disabled"] .ring {
+  --s2a-radio-ring-bc: var(--s2a-color-content-subtle);
+}
+
+.s2a-radio .dot {
+  grid-area: 1 / 1;
+  background-color: var(--s2a-color-content-default);
+  width: 8px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 8px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  border-radius: 50%;
+  display: none;
+}
+
+.s2a-radio:has(:disabled) .dot,
+.s2a-radio[data-state="disabled"] .dot {
+  background-color: var(--s2a-color-content-subtle);
+}
+
+.s2a-radio.true .dot {
+  display: block;
+}
+
+.s2a-radio .label {
+  font-family: var(--s2a-font-family-label);
+  font-size: var(--s2a-typography-font-size-label);
+  font-weight: var(--s2a-font-weight-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  line-height: var(--s2a-typography-line-height-label);
+}
+
+.s2a-radio.false .label {
+  color: var(--s2a-color-content-subtle);
+}
+
+.s2a-radio.true .label {
+  color: var(--s2a-color-content-default);
+}
+
+.s2a-radio__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}

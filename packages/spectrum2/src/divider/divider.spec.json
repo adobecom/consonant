@@ -1,0 +1,280 @@
+{
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json (not yet published)"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
+  "name": "Divider",
+  "slug": "divider",
+  "cssClass": "swc-Divider",
+  "description": "Divider, as the implementation ships it.",
+  "variants": {},
+  "props": [
+    {
+      "name": "size",
+      "type": "string",
+      "defaultValue": "\"m\"",
+      "description": "The size of the divider.",
+      "enum": [
+        "s",
+        "m",
+        "l"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "size",
+          "attr": "data-size",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "vertical",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Whether the divider is vertical. If false, the divider is horizontal. The default is false.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "vertical",
+          "attr": "data-vertical",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "staticColor",
+      "type": "string",
+      "description": "The static color variant to use for the divider.",
+      "enum": [
+        "white",
+        "black"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "staticColor",
+          "attr": "data-static-color",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
+  ],
+  "tokenBindings": {
+    "root-background-color@size=l": "--swc-gray-800"
+  },
+  "tier": "component",
+  "composedOf": [],
+  "a11y": {
+    "wcag": []
+  },
+  "states": [],
+  "anatomy": {
+    "selector": ".swc-Divider",
+    "tokens": {
+      "display": {
+        "value": "raw:block",
+        "raw": true,
+        "tokens": []
+      },
+      "box-sizing": {
+        "value": "raw:border-box",
+        "raw": true,
+        "tokens": []
+      },
+      "inline-size": {
+        "value": "raw:100%",
+        "raw": true,
+        "tokens": []
+      },
+      "block-size": {
+        "value": "raw:2px",
+        "raw": true,
+        "tokens": []
+      },
+      "background-color": {
+        "value": "raw:CanvasText",
+        "raw": true,
+        "tokens": []
+      },
+      "border-radius": {
+        "value": "raw:2px",
+        "raw": true,
+        "tokens": []
+      },
+      "min-inline-size": {
+        "value": "raw:min(100%,200px)",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "tokensByProp": [
+      {
+        "prop": "size",
+        "map": {
+          "l": {
+            "background-color": {
+              "value": "{swc.gray.800}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.gray.800}",
+                  "cssVar": "--swc-gray-800",
+                  "figma": "swc/gray/800",
+                  "shipped": true,
+                  "value": "light-dark(rgb(41, 41, 41), rgb(219, 219, 219))"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "prop": "staticColor",
+        "map": {
+          "white": {
+            "background-color": {
+              "value": "raw:rgba(255, 255, 255, .16)",
+              "raw": true,
+              "tokens": []
+            }
+          },
+          "black": {
+            "background-color": {
+              "value": "raw:rgba(0, 0, 0, .12)",
+              "raw": true,
+              "tokens": []
+            }
+          }
+        }
+      },
+      {
+        "prop": "vertical",
+        "map": {
+          "true": {
+            "align-self": {
+              "value": "raw:stretch",
+              "raw": true,
+              "tokens": []
+            },
+            "inline-size": {
+              "value": "raw:2px",
+              "raw": true,
+              "tokens": []
+            },
+            "block-size": {
+              "value": "raw:100%",
+              "raw": true,
+              "tokens": []
+            },
+            "min-block-size": {
+              "value": "raw:min(100%,200px)",
+              "raw": true,
+              "tokens": []
+            }
+          }
+        }
+      }
+    ],
+    "tokensByCombination": [
+      {
+        "props": [
+          "size",
+          "staticColor"
+        ],
+        "rows": [
+          {
+            "values": [
+              "l",
+              "white"
+            ],
+            "tokens": {
+              "background-color": {
+                "value": "raw:rgba(255, 255, 255, .8)",
+                "raw": true,
+                "tokens": []
+              }
+            }
+          },
+          {
+            "values": [
+              "l",
+              "black"
+            ],
+            "tokens": {
+              "background-color": {
+                "value": "raw:rgba(0, 0, 0, .8)",
+                "raw": true,
+                "tokens": []
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "",
+        "kind": "none",
+        "nodeId": null,
+        "nodeName": null,
+        "componentSetKey": null,
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": null
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/divider",
+        "export": "Divider",
+        "controller": null,
+        "cssClass": "swc-Divider"
+      },
+      "evidence": {
+        "hash": "sha256:fb76fe5cfc531f2d984741b980fdb1cce7c6a63710a36401b64c4e3455eaba78"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "d-elements",
+      "status": "open",
+      "owner": "scaffold",
+      "question": "No markup was available to read the element of .swc-Divider; the renderer will default.",
+      "confidence": "medium",
+      "fix": "Set element on each part."
+    },
+    {
+      "id": "d-rebuilt-from-code",
+      "status": "decided",
+      "owner": "scaffold",
+      "question": "Drafted from the implementation (@adobe/spectrum-wc/components/divider): 13 rules, 3 declared props, 0 parts. The design file was not consulted.",
+      "chose": "code is the source; design is the check",
+      "confidence": "high",
+      "decision": "For a shipped library the stylesheet and the type declarations are the contract. Every token, condition and state here is read from a rule; nothing is transcribed from the design file's layer tree.",
+      "evidence": "packages/spectrum2/src/divider/divider.js, packages/spectrum2/src/divider/divider.css, packages/spectrum2/src/divider/divider.d.ts"
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:9f74751484e3281e81931010325b024b5f626edacef5335234bb843e5326f229",
+    "codeEvidence": "sha256:fb76fe5cfc531f2d984741b980fdb1cce7c6a63710a36401b64c4e3455eaba78",
+    "figmaEvidence": null,
+    "generator": "s2a-spec-transform@1"
+  }
+}

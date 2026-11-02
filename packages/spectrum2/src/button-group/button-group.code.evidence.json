@@ -1,0 +1,260 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-29T14:10:59.125Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "button-group",
+    "name": "ButtonGroup",
+    "cssClass": "swc-ButtonGroup",
+    "importPath": "packages/spectrum2/src/button-group/button-group.js",
+    "exports": [
+      "ButtonGroup"
+    ],
+    "render": null,
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/button-group/button-group.spec.json",
+      "storybookId": null,
+      "figmaNodeId": null
+    }
+  },
+  "sources": {
+    "packages/spectrum2/src/button-group/button-group.js": "sha256:3d45022f459850f0e99cbf80ef1a5f156faae4ecddf26adb1237fb8c923306e5",
+    "packages/spectrum2/src/button-group/button-group.css": "sha256:d34a0ab643a8ab5f4707b6e752e7ad7c22fea780a2dfb33f95f5649596303614",
+    "packages/spectrum2/src/button-group/button-group.d.ts": "sha256:ad579c68cd0de676a29c4d1013b8d1bab242178e4859fdfb318ac9e6235db8f0"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "enum",
+      "values": [
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "default": "m",
+      "description": "The size of the button group. Propagated to all slotted button children."
+    },
+    {
+      "name": "orientation",
+      "type": "enum",
+      "values": [
+        "horizontal",
+        "vertical"
+      ],
+      "description": "The layout direction of the button group. Note: this property does NOT set `aria-orientation` on the host because `aria-orientation` is only meaningful for roles that manage arrow-key navigation (e.g. `toolbar`, `listbox`). Since button-group uses sequential Tab navigation (not roving tabindex), the attribute would be invalid."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Whether all buttons in the group are disabled. When `true`, forces every slotted button child to `disabled`. When `false`, children retain their individual disabled state — a button slotted with `disabled` remains disabled even when the group is enabled."
+    },
+    {
+      "name": "align",
+      "type": "enum",
+      "values": [
+        "start",
+        "center",
+        "end"
+      ],
+      "description": "The alignment of buttons within the group along the main axis."
+    },
+    {
+      "name": "default",
+      "type": "slot",
+      "description": "One or more `swc-button` elements."
+    },
+    {
+      "name": "default",
+      "type": "slot",
+      "description": "One or more `swc-button` elements."
+    }
+  ],
+  "attributes": {},
+  "parts": {
+    "template": [
+      "swc-ButtonGroup"
+    ],
+    "stylesheet": [
+      "swc-ButtonGroup"
+    ],
+    "runtime": [],
+    "own": [
+      "swc-ButtonGroup"
+    ]
+  },
+  "declarations": {
+    "element": "swc-button-group",
+    "slots": [
+      {
+        "name": "default",
+        "description": "One or more `swc-button` elements."
+      },
+      {
+        "name": "default",
+        "description": "One or more `swc-button` elements."
+      }
+    ],
+    "cssProps": [
+      "--swc-button-group-gap",
+      "--swc-button-group-justify-content"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [],
+    "tags": []
+  },
+  "imports": [
+    "./button-group.js"
+  ],
+  "tokens": {
+    "references": {
+      "--swc-button-group-gap": {
+        "fallback": true
+      },
+      "--swc-button-group-justify-content": {
+        "fallback": true
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ":host",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          }
+        ]
+      },
+      {
+        "selector": "*",
+        "declarations": [
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-ButtonGroup",
+        "declarations": [
+          {
+            "prop": "--_swc-button-group-gap",
+            "value": "var(--swc-button-group-gap, 12px)"
+          },
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "flex-direction",
+            "value": "row"
+          },
+          {
+            "prop": "flex-wrap",
+            "value": "wrap"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--_swc-button-group-gap)"
+          },
+          {
+            "prop": "justify-content",
+            "value": "var(--swc-button-group-justify-content, normal)"
+          },
+          {
+            "prop": "inline-size",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"s\"])",
+        "declarations": [
+          {
+            "prop": "--swc-button-group-gap",
+            "value": "8px"
+          }
+        ]
+      },
+      {
+        "selector": ":host([orientation=\"vertical\"]) .swc-ButtonGroup",
+        "declarations": [
+          {
+            "prop": "flex-direction",
+            "value": "column"
+          }
+        ]
+      },
+      {
+        "selector": ":host([align=\"center\"])",
+        "declarations": [
+          {
+            "prop": "--swc-button-group-justify-content",
+            "value": "center"
+          }
+        ]
+      },
+      {
+        "selector": ":host([align=\"end\"])",
+        "declarations": [
+          {
+            "prop": "--swc-button-group-justify-content",
+            "value": "flex-end"
+          }
+        ]
+      },
+      {
+        "selector": ":host([orientation=\"vertical\"][align=\"center\"]) .swc-ButtonGroup",
+        "declarations": [
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "normal"
+          }
+        ]
+      },
+      {
+        "selector": ":host([orientation=\"vertical\"][align=\"end\"]) .swc-ButtonGroup",
+        "declarations": [
+          {
+            "prop": "align-items",
+            "value": "flex-end"
+          },
+          {
+            "prop": "justify-content",
+            "value": "normal"
+          }
+        ]
+      }
+    ]
+  },
+  "states": [],
+  "queries": [],
+  "stories": [],
+  "counts": {
+    "props": 6,
+    "attributes": 0,
+    "parts": 1,
+    "tokenReferences": 2,
+    "tokenReferencesWithoutFallback": 0,
+    "raw": 0,
+    "stories": 0,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:d4f3109886cc89f9fa8eee4728d73891bb7eac322ba188dde424be963a9fc7cb"
+  }
+}

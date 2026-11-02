@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:31:39.743Z",
+  "extractedAt": "2026-10-28T16:23:13.479Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -95,6 +95,80 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-divider",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "block"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          },
+          {
+            "prop": "height",
+            "value": "1px"
+          },
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "border",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-divider[data-style=\"default\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-border-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-divider[data-style=\"subtle\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-border-subtle)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-divider[data-style=\"knockout\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-border-knockout)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-divider[data-style=\"inverse\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-border-inverse)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-divider[data-style=\"subtle-inverse\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-transparent-white-16)"
+          }
+        ]
+      }
+    ]
   },
   "states": [],
   "queries": [],
@@ -548,6 +622,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:7d1d10926bb5490ae022c499f99d1987f729a0c4b79a013f0a8585c77676cfe0"
+    "hash": "sha256:12d2efac1b584f9e88a83eac8c140694485c6a90beca9371ef3bf3e958377c0a"
   }
 }

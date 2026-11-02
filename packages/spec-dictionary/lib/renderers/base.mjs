@@ -83,19 +83,55 @@ export const ARCHETYPE_BASE = {
   },
 };
 
+/**
+ * Several keys above name a family rather than one component — "badge / tag /
+ * chip", "checkbox / radio", "toggle / switch", "input / field". A contract that
+ * names any one member is naming that family, so the lookup accepts either the
+ * whole key or any alternative in it.
+ *
+ * Without this, archetype "badge" matched nothing and the component was rendered
+ * with no base at all: no box-sizing, so min-block-size constrained the content
+ * box and the padding was added on top of it. Every size came out one padding
+ * taller than the design.
+ */
+const BY_ALTERNATIVE = new Map(
+  Object.keys(ARCHETYPE_BASE).flatMap((key) => key.split("/").map((alt) => [alt.trim(), key])),
+);
+
 /** Declarations for a part, with hardcoded values carrying their reason. */
 export function baseFor(archetype, partName) {
-  const entry = ARCHETYPE_BASE[archetype];
+  const entry = ARCHETYPE_BASE[archetype] ?? ARCHETYPE_BASE[BY_ALTERNATIVE.get(String(archetype ?? "").trim())];
   if (!entry) return [];
   const rows = partName === "root" ? entry.root : entry.parts?.[partName];
   return (rows ?? []).map(([prop, value, why]) => (why ? `${prop}: ${value}; /* hardcoded: ${why} */` : `${prop}: ${value};`));
 }
 
 /**
+ * Properties that decide the same thing under different names.
+ *
+ * "The contract wins" has to be about the decision, not the spelling. The base
+ * above pins a button to `height: 40px` because S2A had no size token; a
+ * contract that binds `min-block-size` to a real per-size token has made that
+ * decision, and matching on the literal property name let the floor keep
+ * winning — every size of Adobe's Spectrum button rendered 40px tall, because
+ * `height` and `min-block-size` are different strings.
+ *
+ * Each group names one decision. A contract declaration anywhere in a group
+ * withdraws every base declaration in it.
+ */
+const SYNONYMS = [
+  ["height", "block-size", "min-height", "min-block-size", "max-height", "max-block-size"],
+  ["width", "inline-size", "min-width", "min-inline-size", "max-width", "max-inline-size"],
+];
+const propOf = (d) => String(d).split(":")[0].trim();
+const groupOf = (prop) => SYNONYMS.find((g) => g.includes(prop));
+
+/**
  * A declaration the contract already states wins — base is a floor, never an
  * override. If a component binds border-style one day, this must not fight it.
  */
 export function mergeBase(baseDecls, contractDecls) {
-  const taken = new Set(contractDecls.map((d) => String(d).split(":")[0].trim()));
-  return [...baseDecls.filter((d) => !taken.has(String(d).split(":")[0].trim())), ...contractDecls];
+  const taken = new Set(contractDecls.map(propOf));
+  for (const prop of [...taken]) for (const sibling of groupOf(prop) ?? []) taken.add(sibling);
+  return [...baseDecls.filter((d) => !taken.has(propOf(d))), ...contractDecls];
 }

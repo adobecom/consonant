@@ -24,9 +24,10 @@
 // Needs FIGMA_ACCESS_TOKEN (it is in .env). Nothing else does: the sheet is
 // committed, so rendering and diffing against it need no token at all.
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import { SYSTEMS as DECLARED, locate as locateSystem } from "../../packages/spec-dictionary/systems.mjs";
 // Figma's image export and its S3 download both fail transiently with a bare
 // "fetch failed"; three tries with a short back-off is the difference between
 // a sheet and a missing golden halfway through a ship.
@@ -43,6 +44,23 @@ const ROOT = resolve(__dirname, "..", "..");
 const SRC = join(ROOT, "packages", "components", "src");
 const OUT = join(ROOT, "packages", "spec-dictionary", "out");
 const GOLDEN_DIR = join(ROOT, "evals", "datasets", "contracts", "golden");
+
+/**
+ * Where a component's files live, for a slug that may name another design system.
+ *
+ * The Book addresses a second system's component as `<system>:<name>` and tells
+ * you to composite its sheet with that exact slug. Resolving it here is what
+ * makes that instruction true: the source tree and the manifest come from that
+ * system's own package, while the golden stays filed under the composite slug,
+ * which is the key the parity run looks it up by. Unprefixed slugs are ours and
+ * resolve exactly as before.
+ */
+const SYSTEMS = Object.fromEntries(Object.entries(DECLARED).filter(([id]) => id !== "s2a").map(([id, s]) => [id, { src: s.src, out: s.out }]));
+function locate(slug) {
+  const hit = locateSystem(slug);
+  if (!hit) return null;
+  return { key: hit.key, name: hit.slug, src: hit.system.src, out: hit.system.out };
+}
 const THEMES = JSON.parse(readFileSync(join(__dirname, "themes.json"), "utf8"));
 
 const arg = (k) => process.argv.find((a) => a.startsWith(`--${k}=`))?.slice(k.length + 3);
@@ -168,10 +186,22 @@ const sheetName = (theme) => (theme === THEMES.default ? "sheet.png" : `sheet.${
 
 function subjects() {
   const only = arg("slug");
-  return readdirSync(SRC).filter((slug) => {
-    if (only) return slug === only;
-    return existsSync(join(OUT, slug, "stories.manifest.json"));
-  });
+  if (only) {
+    const hit = locate(only);
+    if (!hit) { console.log(`${only}: no such design system — expected one of ${Object.keys(SYSTEMS).join(", ")} before the colon`); return []; }
+    if (!existsSync(join(hit.src, hit.name))) { console.log(`${only}: no component at ${relative(ROOT, join(hit.src, hit.name))}`); return []; }
+    return [hit];
+  }
+  const all = readdirSync(SRC)
+    .filter((slug) => existsSync(join(OUT, slug, "stories.manifest.json")))
+    .map((slug) => locate(slug));
+  for (const [id, sys] of Object.entries(SYSTEMS)) {
+    if (!existsSync(sys.src)) continue;
+    for (const name of readdirSync(sys.src)) {
+      if (existsSync(join(sys.out, name, "stories.manifest.json"))) all.push(locate(`${id}:${name}`));
+    }
+  }
+  return all;
 }
 
 async function main() {
@@ -189,14 +219,15 @@ async function main() {
   }
 
   let wrote = 0;
-  for (const slug of subjects()) {
-    const manifestPath = join(OUT, slug, "stories.manifest.json");
+  for (const subject of subjects()) {
+    const { key: slug, name, src: srcDir, out: outDir } = subject;
+    const manifestPath = join(outDir, name, "stories.manifest.json");
     if (!existsSync(manifestPath)) { console.log(`${slug}: no manifest — run npm run specs:build`); continue; }
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
     const matrix = manifest.matrix;
     if (!matrix) { console.log(`${slug}: no state matrix (no State axis, or no Figma evidence)`); continue; }
 
-    const contract = JSON.parse(readFileSync(join(SRC, slug, `${slug}.contract.json`), "utf8"));
+    const contract = JSON.parse(readFileSync(join(srcDir, name, `${name}.contract.json`), "utf8"));
     const fileKey = contract?.bindings?.figma?.anchors?.fileKey;
     if (!fileKey) { console.log(`${slug}: contract has no Figma file key`); continue; }
 

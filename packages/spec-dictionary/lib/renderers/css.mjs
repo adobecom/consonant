@@ -54,10 +54,16 @@ const STATE_ATTR = "data-state";
  * Exact non-color aliases replace primitive bindings. Contract-only geometry
  * remains explicit when the token set has no matching semantic role.
  */
-export function declaration(cssProp, node) {
+export function declaration(cssProp, node, system = "s2a") {
   if (!node) return null;
   if (node.raw) {
-    const value = semanticLiteral(cssProp, String(node.value).replace(/^raw:/, ""));
+    // semanticLiteral rewrites a bare 8px into var(--s2a-border-radius-xs).
+    // That is our scale, so it is only ever right for our own components. On a
+    // contract describing somebody else's it emitted an S2A variable into their
+    // component, where nothing defines it: Spectrum's medium badge rendered with
+    // a radius of zero instead of 8px.
+    const raw = String(node.value).replace(/^raw:/, "");
+    const value = system === "s2a" ? semanticLiteral(cssProp, raw) : raw;
     const bare = value.replace(/var\([^)]*\)/g, '');
     const reason = /\d+(?:\.\d+)?px|#[a-f\d]{3,8}|rgba?\(/i.test(bare)
       ? ' /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */' : '';
@@ -93,8 +99,8 @@ const block = (selector, decls) => {
 const STROKE_VAR = { "border-width": "bw", "border-color": "bc" };
 const nsOf = (sel) => sel.replace(/^\./, "").replace(/[^\w-]+/g, "-");
 
-const declsOf = (map, ns = null) => Object.entries(map ?? {}).map(([p, n]) =>
-  declaration(ns && STROKE_VAR[p] ? `--${ns}-${STROKE_VAR[p]}` : p, n));
+const declsOf = (map, ns = null, system = "s2a") => Object.entries(map ?? {}).map(([p, n]) =>
+  declaration(ns && STROKE_VAR[p] ? `--${ns}-${STROKE_VAR[p]}` : p, n, system));
 
 /** Every token map a part can carry, flattened — for "does it stroke at all?". */
 const allMaps = (part) => [
@@ -183,12 +189,12 @@ function statePseudo(sel, rootSel, state, archetype = null) {
   return [one(pseudo), forced && one(forced)].filter(Boolean).join(",\n");
 }
 
-export function rulesForPart(part, sel, variant, rootSel = sel, archetype = null) {
+export function rulesForPart(part, sel, variant, rootSel = sel, archetype = null, system = "s2a") {
   const rules = [];
   // Archetype floor, then layout, then tokens: what this KIND of thing always
   // needs, how it sits, what it looks like. The contract always wins a conflict.
   const ns = strokes(part) && !ownsShadow(part) ? nsOf(sel) : null;
-  const stated = [...layoutDecls(part.layout), ...declsOf(part.tokens, ns)].filter(Boolean);
+  const stated = [...layoutDecls(part.layout), ...declsOf(part.tokens, ns, system)].filter(Boolean);
   // One shorthand, composed from whatever the cascade has resolved. The
   // fallbacks are the resting truth: no width, and a stroke with no paint
   // renders nothing in Figma, so transparent rather than currentColor.
@@ -208,25 +214,35 @@ export function rulesForPart(part, sel, variant, rootSel = sel, archetype = null
   }
 
   for (const [state, map] of Object.entries(part.states ?? {})) {
-    if (PSEUDO[state]) rules.push(block(statePseudo(sel, rootSel, state, archetype), declsOf(map, ns)));
+    if (PSEUDO[state]) rules.push(block(statePseudo(sel, rootSel, state, archetype), declsOf(map, ns, system)));
   }
   for (const entry of part.tokensByProp ?? []) {
     for (const [value, map] of Object.entries(entry.map)) {
-      rules.push(block(scoped(sel, rootSel, variant, entry.prop, value), declsOf(map, ns)));
+      rules.push(block(scoped(sel, rootSel, variant, entry.prop, value), declsOf(map, ns, system)));
     }
   }
   for (const entry of part.statesByProp ?? []) {
     if (!PSEUDO[entry.state]) continue;
     for (const [value, map] of Object.entries(entry.map)) {
-      rules.push(block(statePseudo(scoped(sel, rootSel, variant, entry.prop, value), variant(rootSel, entry.prop, value), entry.state, archetype), declsOf(map, ns)));
+      rules.push(block(statePseudo(scoped(sel, rootSel, variant, entry.prop, value), variant(rootSel, entry.prop, value), entry.state, archetype), declsOf(map, ns, system)));
     }
   }
   for (const entry of part.tokensByCombination ?? []) {
     for (const row of entry.rows) {
+      // Every condition narrows the SAME element, so they are applied to the
+      // root first and the part is scoped to the result once. Calling scoped()
+      // per condition instead fed it a selector it had already narrowed, which
+      // it could not recognise as the root, so a two-condition row came out as
+      // a descendant — `.x[data-a] .x[data-b]`, matching nothing. No contract of
+      // ours uses tokensByCombination, which is why it went unnoticed.
       // A null value in a row means "any", so it contributes no selector.
-      let s = sel;
-      entry.props.forEach((prop, i) => { if (row.values[i] != null) s = scoped(s, rootSel, variant, prop, row.values[i]); });
-      rules.push(block(s, declsOf(row.tokens, ns)));
+      const base = rootSel ?? sel;
+      let narrowed = base;
+      entry.props.forEach((prop, i) => { if (row.values[i] != null) narrowed = variant(narrowed, prop, row.values[i]); });
+      const s = (!rootSel || sel === rootSel) ? narrowed
+        : sel.startsWith(`${rootSel} `) ? `${narrowed}${sel.slice(rootSel.length)}`
+        : `${narrowed} ${sel}`;
+      rules.push(block(s, declsOf(row.tokens, ns, system)));
     }
   }
   return rules.filter(Boolean);
@@ -247,7 +263,7 @@ ${rootSelector}[hidden] {
   for (const part of ir.anatomy.parts) {
     const sel = selectorFor(part);
     if (!sel) continue;
-    const rules = rulesForPart(part, sel, variant, rootSelector, ir.component?.archetype ?? null);
+    const rules = rulesForPart(part, sel, variant, rootSelector, ir.component?.archetype ?? null, ir.component?.system ?? "s2a");
     if (rules.length) out.push(rules.join("\n\n"));
   }
   // A disclosure's region opens and closes by animating its grid row from 0fr

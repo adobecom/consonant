@@ -1,47 +1,52 @@
 /* TextCard — generated from text-card.contract.json.
  * Re-run: npm run specs:render -- --slug=text-card --target=milo */
 
+.text-card [hidden],
+.text-card[hidden] {
+  display: none !important;
+}
+
 .text-card {
   box-sizing: border-box;
   border: 0;
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: var(--s2a-color-background-subtle, #f8f8f8);
-  border-radius: var(--s2a-border-radius-md, 16px);
-  gap: var(--s2a-spacing-lg, 24px);
-  padding-bottom: var(--s2a-spacing-none, 0);
-  padding-left: var(--s2a-spacing-lg, 24px);
-  padding-right: var(--s2a-spacing-lg, 24px);
-  padding-top: var(--s2a-spacing-lg, 24px);
-  width: 488px;
+  background-color: var(--s2a-color-background-subtle);
+  border-radius: var(--s2a-border-radius-md);
+  gap: var(--s2a-spacing-lg);
+  padding-bottom: var(--s2a-spacing-none);
+  padding-left: var(--s2a-spacing-lg);
+  padding-right: var(--s2a-spacing-lg);
+  padding-top: var(--s2a-spacing-lg);
+  width: 488px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
 }
 
 .text-card .headline-body {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
 }
 
 .text-card .headline {
   flex: 1 1 auto;
-  color: var(--s2a-color-content-heading, #000);
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
-  font-size: var(--s2a-typography-font-size-heading-5, 1.5rem);
-  font-weight: var(--s2a-font-weight-heading, 900);
-  letter-spacing: var(--s2a-font-letter-spacing-4xl, -0.48px);
-  line-height: var(--s2a-typography-line-height-heading-5, 24px);
+  color: var(--s2a-color-content-heading);
+  font-family: var(--s2a-font-family-heading);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  font-weight: var(--s2a-font-weight-heading);
+  letter-spacing: var(--s2a-font-letter-spacing-4xl);
+  line-height: var(--s2a-typography-line-height-heading-5);
 }
 
 .text-card .body {
   flex: 1 1 auto;
-  color: var(--s2a-color-content-body-subtle, rgb(0 0 0 / 64%));
-  font-family: var(--s2a-font-family-body, "Adobe Clean");
-  font-size: var(--s2a-typography-font-size-body-md, 1rem);
-  font-weight: var(--s2a-font-weight-body, 400);
-  letter-spacing: var(--s2a-typography-letter-spacing-body-md, 0);
-  line-height: var(--s2a-typography-line-height-body-md, 20px);
+  color: var(--s2a-color-content-body-subtle);
+  font-family: var(--s2a-font-family-body);
+  font-size: var(--s2a-typography-font-size-body-md);
+  font-weight: var(--s2a-font-weight-body);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-md);
+  line-height: var(--s2a-typography-line-height-body-md);
 }
 
 .text-card .link {

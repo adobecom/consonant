@@ -1,0 +1,123 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Avatar",
+  "setName": "Avatar",
+  "anatomy": {
+    "name": ".root",
+    "source": ".root",
+    "element": "span",
+    "bindings": {
+      "inline-size": [
+        "swc/avatar/size/500"
+      ],
+      "block-size": [
+        "swc/avatar/size/500"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".image",
+        "source": "/Photo",
+        "element": "img",
+        "bindings": {},
+        "slot": {
+          "name": "image",
+          "accepts": [
+            "kind:media"
+          ],
+          "mode": "prefer"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+    "kind": "component-set",
+    "nodeId": "9190:562",
+    "nodeName": "Avatar",
+    "componentSetKey": "e97d19aa739914d2acce9f5c3a4ee9f81c5c2d7f",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "options": [
+        "50",
+        "75",
+        "100",
+        "200",
+        "300",
+        "400",
+        "500",
+        "600",
+        "700",
+        "800",
+        "900",
+        "1000",
+        "1100",
+        "1200",
+        "1300",
+        "1400",
+        "1500"
+      ],
+      "defaultValue": "500"
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "options": [],
+      "defaultValue": false
+    },
+    {
+      "name": "Show stroke",
+      "type": "BOOLEAN",
+      "forProp": "outline",
+      "defaultValue": false
+    }
+  ],
+  "states": [
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=Disabled"
+      }
+    }
+  ],
+  "layers": [
+    {
+      "name": ".root",
+      "selector": ".swc-Avatar",
+      "bindings": {
+        "inline-size": [
+          "swc/avatar/size/500"
+        ],
+        "block-size": [
+          "swc/avatar/size/500"
+        ]
+      }
+    },
+    {
+      "name": "/Photo",
+      "selector": ".swc-Avatar-image",
+      "bindings": {},
+      "slot": {
+        "name": "image",
+        "accepts": [
+          "kind:media"
+        ],
+        "mode": "prefer"
+      }
+    }
+  ],
+  "textStyles": []
+}

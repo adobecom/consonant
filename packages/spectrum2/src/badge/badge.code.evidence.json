@@ -1,0 +1,1449 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-28T16:38:20.867Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "badge",
+    "name": "Badge",
+    "cssClass": "swc-Badge",
+    "importPath": "packages/spectrum2/src/badge/badge.js",
+    "exports": [
+      "Badge"
+    ],
+    "render": null,
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/badge/badge.spec.json",
+      "storybookId": null,
+      "figmaNodeId": null
+    }
+  },
+  "sources": {
+    "packages/spectrum2/src/badge/badge.js": "sha256:cd70268f914f33187acce317ccaf69fad960ef8dc9f32ea6cf442fcb101ea8a9",
+    "packages/spectrum2/src/badge/badge.css": "sha256:eb1cbd069d16477c54ebca084965f123f208ad892f099ca616987a87e0cd9967",
+    "packages/spectrum2/src/badge/badge.d.ts": "sha256:e0f1cc6bc3cb51096b1680ee3cdb6d0b6f41337d4fa62554ef25196f8a2bb9b2"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "enum",
+      "values": [
+        "accent",
+        "informative",
+        "neutral",
+        "positive",
+        "notice",
+        "negative",
+        "fuchsia",
+        "indigo",
+        "magenta",
+        "purple",
+        "seafoam",
+        "yellow",
+        "gray",
+        "red",
+        "orange",
+        "chartreuse",
+        "celery",
+        "green",
+        "cyan",
+        "blue",
+        "pink",
+        "turquoise",
+        "brown",
+        "cinnamon",
+        "silver"
+      ],
+      "default": "neutral",
+      "description": "The semantic or non-semantic color variant of the badge."
+    },
+    {
+      "name": "size",
+      "type": "enum",
+      "values": [
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "default": "s",
+      "description": "The size of the badge."
+    },
+    {
+      "name": "fixed",
+      "type": "enum",
+      "values": [
+        "block-start",
+        "block-end",
+        "inline-start",
+        "inline-end"
+      ],
+      "optional": true,
+      "description": "The fixed position of the badge."
+    },
+    {
+      "name": "subtle",
+      "type": "boolean",
+      "description": "Whether the badge is subtle."
+    },
+    {
+      "name": "outline",
+      "type": "boolean",
+      "description": "Whether the badge is outlined. Can only be used with semantic variants."
+    },
+    {
+      "name": "default",
+      "type": "slot",
+      "description": "Text label of the badge."
+    },
+    {
+      "name": "icon",
+      "type": "slot",
+      "description": "Optional icon that appears to the left of the label"
+    }
+  ],
+  "attributes": {},
+  "parts": {
+    "template": [
+      "swc-Badge",
+      "swc-Badge-icon",
+      "swc-Badge-label"
+    ],
+    "stylesheet": [
+      "swc-Badge",
+      "swc-Badge--blue",
+      "swc-Badge--brown",
+      "swc-Badge--celery",
+      "swc-Badge--chartreuse",
+      "swc-Badge--cinnamon",
+      "swc-Badge--cyan",
+      "swc-Badge--fixed-block-end",
+      "swc-Badge--fixed-block-start",
+      "swc-Badge--fixed-inline-end",
+      "swc-Badge--fixed-inline-start",
+      "swc-Badge--fuchsia",
+      "swc-Badge--gray",
+      "swc-Badge--green",
+      "swc-Badge--indigo",
+      "swc-Badge--magenta",
+      "swc-Badge--no-label",
+      "swc-Badge--orange",
+      "swc-Badge--pink",
+      "swc-Badge--purple",
+      "swc-Badge--red",
+      "swc-Badge--seafoam",
+      "swc-Badge--silver",
+      "swc-Badge--subtle",
+      "swc-Badge--turquoise",
+      "swc-Badge--yellow",
+      "swc-Badge-icon",
+      "swc-Badge-label"
+    ],
+    "runtime": [],
+    "own": [
+      "swc-Badge",
+      "swc-Badge-icon",
+      "swc-Badge-label"
+    ]
+  },
+  "declarations": {
+    "element": "swc-badge",
+    "slots": [
+      {
+        "name": "default",
+        "description": "Text label of the badge."
+      },
+      {
+        "name": "icon",
+        "description": "Optional icon that appears to the left of the label"
+      }
+    ],
+    "cssProps": [
+      "--swc-badge-background-color",
+      "--swc-badge-border-color",
+      "--swc-badge-corner-radius",
+      "--swc-badge-font-size",
+      "--swc-badge-gap",
+      "--swc-badge-height",
+      "--swc-badge-icon-size",
+      "--swc-badge-label-icon-color",
+      "--swc-badge-line-height",
+      "--swc-badge-outline-background-color",
+      "--swc-badge-outline-label-icon-color",
+      "--swc-badge-padding-block",
+      "--swc-badge-padding-inline",
+      "--swc-badge-padding-inline-start",
+      "--swc-badge-with-icon-only-padding-block",
+      "--swc-badge-with-icon-only-padding-inline",
+      "--swc-badge-with-icon-padding-inline"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [],
+    "tags": []
+  },
+  "imports": [
+    "../../_virtual/_@oxc-project_runtime@0.124.0/helpers/decorate.js",
+    "./badge.js"
+  ],
+  "tokens": {
+    "references": {
+      "--swc-accent-background-color-default": {
+        "fallback": false
+      },
+      "--swc-accent-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-accent-visual-color": {
+        "fallback": false
+      },
+      "--swc-background-layer-2-color": {
+        "fallback": false
+      },
+      "--swc-badge-background-color": {
+        "fallback": true
+      },
+      "--swc-badge-border-color": {
+        "fallback": true
+      },
+      "--swc-badge-corner-radius": {
+        "fallback": true
+      },
+      "--swc-badge-font-size": {
+        "fallback": true
+      },
+      "--swc-badge-gap": {
+        "fallback": true
+      },
+      "--swc-badge-height": {
+        "fallback": true
+      },
+      "--swc-badge-icon-size": {
+        "fallback": true
+      },
+      "--swc-badge-label-icon-color": {
+        "fallback": true
+      },
+      "--swc-badge-line-height": {
+        "fallback": true
+      },
+      "--swc-badge-outline-background-color": {
+        "fallback": true
+      },
+      "--swc-badge-outline-label-icon-color": {
+        "fallback": true
+      },
+      "--swc-badge-padding-block": {
+        "fallback": true
+      },
+      "--swc-badge-padding-inline": {
+        "fallback": true
+      },
+      "--swc-badge-padding-inline-start": {
+        "fallback": true
+      },
+      "--swc-badge-with-icon-only-padding-block": {
+        "fallback": true
+      },
+      "--swc-badge-with-icon-only-padding-inline": {
+        "fallback": true
+      },
+      "--swc-badge-with-icon-padding-inline": {
+        "fallback": true
+      },
+      "--swc-base-padding-horizontal-extra-large": {
+        "fallback": false
+      },
+      "--swc-base-padding-horizontal-large": {
+        "fallback": false
+      },
+      "--swc-base-padding-horizontal-medium": {
+        "fallback": false
+      },
+      "--swc-base-padding-horizontal-small": {
+        "fallback": false
+      },
+      "--swc-blue-background-color-default": {
+        "fallback": false
+      },
+      "--swc-blue-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-brown-background-color-default": {
+        "fallback": false
+      },
+      "--swc-brown-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-celery-background-color-default": {
+        "fallback": false
+      },
+      "--swc-celery-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-chartreuse-background-color-default": {
+        "fallback": false
+      },
+      "--swc-chartreuse-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-cinnamon-background-color-default": {
+        "fallback": false
+      },
+      "--swc-cinnamon-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-component-height-100": {
+        "fallback": false
+      },
+      "--swc-component-height-200": {
+        "fallback": false
+      },
+      "--swc-component-height-300": {
+        "fallback": false
+      },
+      "--swc-component-height-75": {
+        "fallback": false
+      },
+      "--swc-cyan-background-color-default": {
+        "fallback": false
+      },
+      "--swc-cyan-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-font-size-100": {
+        "fallback": false
+      },
+      "--swc-font-size-200": {
+        "fallback": false
+      },
+      "--swc-font-size-300": {
+        "fallback": false
+      },
+      "--swc-font-size-75": {
+        "fallback": false
+      },
+      "--swc-fuchsia-background-color-default": {
+        "fallback": false
+      },
+      "--swc-fuchsia-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-gray-1000": {
+        "fallback": false
+      },
+      "--swc-gray-background-color-default": {
+        "fallback": false
+      },
+      "--swc-gray-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-green-background-color-default": {
+        "fallback": false
+      },
+      "--swc-green-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-indigo-background-color-default": {
+        "fallback": false
+      },
+      "--swc-indigo-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-informative-background-color-default": {
+        "fallback": false
+      },
+      "--swc-informative-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-informative-visual-color": {
+        "fallback": false
+      },
+      "--swc-line-height-font-size-100": {
+        "fallback": false
+      },
+      "--swc-line-height-font-size-200": {
+        "fallback": false
+      },
+      "--swc-line-height-font-size-300": {
+        "fallback": false
+      },
+      "--swc-line-height-font-size-75": {
+        "fallback": false
+      },
+      "--swc-magenta-background-color-default": {
+        "fallback": false
+      },
+      "--swc-magenta-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-negative-background-color-default": {
+        "fallback": false
+      },
+      "--swc-negative-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-negative-visual-color": {
+        "fallback": false
+      },
+      "--swc-neutral-subdued-background-color-default": {
+        "fallback": false
+      },
+      "--swc-neutral-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-neutral-visual-color": {
+        "fallback": false
+      },
+      "--swc-notice-background-color-default": {
+        "fallback": false
+      },
+      "--swc-notice-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-notice-visual-color": {
+        "fallback": false
+      },
+      "--swc-orange-background-color-default": {
+        "fallback": false
+      },
+      "--swc-orange-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-pink-background-color-default": {
+        "fallback": false
+      },
+      "--swc-pink-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-positive-background-color-default": {
+        "fallback": false
+      },
+      "--swc-positive-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-positive-visual-color": {
+        "fallback": false
+      },
+      "--swc-purple-background-color-default": {
+        "fallback": false
+      },
+      "--swc-purple-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-red-background-color-default": {
+        "fallback": false
+      },
+      "--swc-red-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-seafoam-background-color-default": {
+        "fallback": false
+      },
+      "--swc-seafoam-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-silver-background-color-default": {
+        "fallback": false
+      },
+      "--swc-silver-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-turquoise-background-color-default": {
+        "fallback": false
+      },
+      "--swc-turquoise-subtle-background-color-default": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-extra-large": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-large": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-medium": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-small": {
+        "fallback": false
+      },
+      "--swc-yellow-background-color-default": {
+        "fallback": false
+      },
+      "--swc-yellow-subtle-background-color-default": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ":host",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-self",
+            "value": "start"
+          },
+          {
+            "prop": "justify-self",
+            "value": "start"
+          },
+          {
+            "prop": "place-self",
+            "value": "start"
+          },
+          {
+            "prop": "vertical-align",
+            "value": "middle"
+          }
+        ]
+      },
+      {
+        "selector": "*",
+        "declarations": [
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge",
+        "declarations": [
+          {
+            "prop": "--_swc-badge-border-width",
+            "value": "2px"
+          },
+          {
+            "prop": "--_swc-badge-padding-block",
+            "value": "var(--swc-badge-padding-block, 4px)"
+          },
+          {
+            "prop": "--_swc-badge-padding-inline-start",
+            "value": "var(--swc-badge-padding-inline-start, var(--swc-badge-padding-inline, var(--swc-base-padding-horizontal-small)))"
+          },
+          {
+            "prop": "--_swc-badge-padding-inline",
+            "value": "var(--swc-badge-padding-inline, var(--swc-base-padding-horizontal-small))"
+          },
+          {
+            "prop": "--_swc-badge-line-height",
+            "value": "var(--swc-badge-line-height, var(--swc-line-height-font-size-75))"
+          },
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--swc-badge-gap, 4px)"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "min-block-size",
+            "value": "var(--swc-badge-height, var(--swc-component-height-75))"
+          },
+          {
+            "prop": "padding-block",
+            "value": "calc(var(--_swc-badge-padding-block) - var(--_swc-badge-border-width))"
+          },
+          {
+            "prop": "padding-inline-start",
+            "value": "calc(var(--_swc-badge-padding-inline-start) - var(--_swc-badge-border-width))"
+          },
+          {
+            "prop": "padding-inline-end",
+            "value": "calc(var(--_swc-badge-padding-inline) - var(--_swc-badge-border-width))"
+          },
+          {
+            "prop": "color",
+            "value": "var(--swc-badge-label-icon-color, rgb(255, 255, 255))"
+          },
+          {
+            "prop": "background",
+            "value": "var(--swc-badge-background-color, var(--swc-neutral-subdued-background-color-default))"
+          },
+          {
+            "prop": "border",
+            "value": "var(--_swc-badge-border-width) solid var(--swc-badge-border-color, transparent)"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--swc-badge-corner-radius, 7px)"
+          },
+          {
+            "prop": "cursor",
+            "value": "default"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge:where(:has(.swc-Badge-icon):not(.swc-Badge--no-label))",
+        "declarations": [
+          {
+            "prop": "--swc-badge-padding-inline-start",
+            "value": "var(--swc-badge-with-icon-padding-inline, var(--swc-base-padding-horizontal-small))"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--no-label:where(:has(.swc-Badge-icon))",
+        "declarations": [
+          {
+            "prop": "--swc-badge-padding-block",
+            "value": "var(--swc-badge-with-icon-only-padding-block, 4px)"
+          },
+          {
+            "prop": "--swc-badge-padding-inline-start",
+            "value": "var(--swc-badge-with-icon-only-padding-inline, 4px)"
+          },
+          {
+            "prop": "--swc-badge-padding-inline",
+            "value": "var(--swc-badge-with-icon-only-padding-inline, 4px)"
+          },
+          {
+            "prop": "--swc-badge-gap",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge-label",
+        "declarations": [
+          {
+            "prop": "font-size",
+            "value": "var(--swc-badge-font-size, var(--swc-font-size-75))"
+          },
+          {
+            "prop": "font-weight",
+            "value": "500"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--_swc-badge-line-height)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge-label:lang(ja), .swc-Badge-label:lang(zh), .swc-Badge-label:lang(ko)",
+        "nestedIn": ".swc-Badge-label",
+        "declarations": [
+          {
+            "prop": "--swc-badge-line-height",
+            "value": "1.5"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge-icon",
+        "declarations": [
+          {
+            "prop": "--_swc-badge-icon-size",
+            "value": "var(--swc-workflow-icon-small)"
+          },
+          {
+            "prop": "display",
+            "value": "grid"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          },
+          {
+            "prop": "align-content",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "place-content",
+            "value": "center"
+          },
+          {
+            "prop": "inline-size",
+            "value": "var(--swc-badge-icon-size, var(--_swc-badge-icon-size))"
+          },
+          {
+            "prop": "block-size",
+            "value": "var(--swc-badge-icon-size, var(--_swc-badge-icon-size))"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"m\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-height",
+            "value": "var(--swc-component-height-100)"
+          },
+          {
+            "prop": "--swc-badge-corner-radius",
+            "value": "8px"
+          },
+          {
+            "prop": "--swc-badge-gap",
+            "value": "6px"
+          },
+          {
+            "prop": "--swc-badge-padding-inline",
+            "value": "var(--swc-base-padding-horizontal-medium)"
+          },
+          {
+            "prop": "--swc-badge-with-icon-padding-inline",
+            "value": "var(--swc-base-padding-horizontal-medium)"
+          },
+          {
+            "prop": "--swc-badge-with-icon-only-padding-inline",
+            "value": "7px"
+          },
+          {
+            "prop": "--swc-badge-with-icon-only-padding-block",
+            "value": "7px"
+          },
+          {
+            "prop": "--swc-badge-padding-block",
+            "value": "7px"
+          },
+          {
+            "prop": "--swc-badge-font-size",
+            "value": "var(--swc-font-size-100)"
+          },
+          {
+            "prop": "--swc-badge-icon-size",
+            "value": "var(--swc-workflow-icon-medium)"
+          },
+          {
+            "prop": "--swc-badge-line-height",
+            "value": "var(--swc-line-height-font-size-100)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"l\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-height",
+            "value": "var(--swc-component-height-200)"
+          },
+          {
+            "prop": "--swc-badge-corner-radius",
+            "value": "9px"
+          },
+          {
+            "prop": "--swc-badge-gap",
+            "value": "6px"
+          },
+          {
+            "prop": "--swc-badge-padding-inline",
+            "value": "var(--swc-base-padding-horizontal-large)"
+          },
+          {
+            "prop": "--swc-badge-with-icon-padding-inline",
+            "value": "var(--swc-base-padding-horizontal-large)"
+          },
+          {
+            "prop": "--swc-badge-with-icon-only-padding-inline",
+            "value": "10px"
+          },
+          {
+            "prop": "--swc-badge-with-icon-only-padding-block",
+            "value": "10px"
+          },
+          {
+            "prop": "--swc-badge-padding-block",
+            "value": "10px"
+          },
+          {
+            "prop": "--swc-badge-font-size",
+            "value": "var(--swc-font-size-200)"
+          },
+          {
+            "prop": "--swc-badge-icon-size",
+            "value": "var(--swc-workflow-icon-large)"
+          },
+          {
+            "prop": "--swc-badge-line-height",
+            "value": "var(--swc-line-height-font-size-200)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"xl\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-height",
+            "value": "var(--swc-component-height-300)"
+          },
+          {
+            "prop": "--swc-badge-corner-radius",
+            "value": "10px"
+          },
+          {
+            "prop": "--swc-badge-gap",
+            "value": "6px"
+          },
+          {
+            "prop": "--swc-badge-padding-inline",
+            "value": "var(--swc-base-padding-horizontal-extra-large)"
+          },
+          {
+            "prop": "--swc-badge-with-icon-padding-inline",
+            "value": "var(--swc-base-padding-horizontal-extra-large)"
+          },
+          {
+            "prop": "--swc-badge-with-icon-only-padding-inline",
+            "value": "13px"
+          },
+          {
+            "prop": "--swc-badge-with-icon-only-padding-block",
+            "value": "13px"
+          },
+          {
+            "prop": "--swc-badge-padding-block",
+            "value": "13px"
+          },
+          {
+            "prop": "--swc-badge-font-size",
+            "value": "var(--swc-font-size-300)"
+          },
+          {
+            "prop": "--swc-badge-icon-size",
+            "value": "var(--swc-workflow-icon-extra-large)"
+          },
+          {
+            "prop": "--swc-badge-line-height",
+            "value": "var(--swc-line-height-font-size-300)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--fixed-inline-start",
+        "declarations": [
+          {
+            "prop": "border-start-start-radius",
+            "value": "0"
+          },
+          {
+            "prop": "border-end-start-radius",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--fixed-inline-end",
+        "declarations": [
+          {
+            "prop": "border-start-end-radius",
+            "value": "0"
+          },
+          {
+            "prop": "border-end-end-radius",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--fixed-block-start",
+        "declarations": [
+          {
+            "prop": "border-start-start-radius",
+            "value": "0"
+          },
+          {
+            "prop": "border-start-end-radius",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--fixed-block-end",
+        "declarations": [
+          {
+            "prop": "border-end-start-radius",
+            "value": "0"
+          },
+          {
+            "prop": "border-end-end-radius",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ":host([variant=\"notice\"]),:host([variant=\"celery\"]),:host([variant=\"chartreuse\"]),:host([variant=\"orange\"]),:host([variant=\"yellow\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-label-icon-color",
+            "value": "rgb(0, 0, 0)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([variant=\"accent\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-accent-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([variant=\"informative\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-informative-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([variant=\"negative\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-negative-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([variant=\"positive\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-positive-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([variant=\"notice\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-notice-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--gray",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-gray-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--red",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-red-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--orange",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-orange-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--yellow",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-yellow-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--chartreuse",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-chartreuse-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--celery",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-celery-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--green",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-green-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--seafoam",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-seafoam-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--cyan",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-cyan-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--blue",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-blue-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--indigo",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-indigo-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--purple",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-purple-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--fuchsia",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-fuchsia-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--magenta",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-magenta-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--pink",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-pink-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--turquoise",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-turquoise-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--brown",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-brown-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--cinnamon",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-cinnamon-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--silver",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-silver-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([subtle])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-label-icon-color",
+            "value": "var(--swc-gray-1000)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([subtle][variant=\"neutral\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-neutral-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([subtle][variant=\"accent\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-accent-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([subtle][variant=\"informative\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-informative-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([subtle][variant=\"negative\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-negative-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([subtle][variant=\"positive\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-positive-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([subtle][variant=\"notice\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-notice-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--gray)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-gray-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--red)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-red-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--orange)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-orange-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--yellow)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-yellow-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--chartreuse)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-chartreuse-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--celery)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-celery-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--green)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-green-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--seafoam)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-seafoam-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--cyan)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-cyan-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--blue)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-blue-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--indigo)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-indigo-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--purple)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-purple-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--fuchsia)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-fuchsia-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--magenta)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-magenta-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--pink)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-pink-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--turquoise)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-turquoise-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--brown)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-brown-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--cinnamon)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-cinnamon-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Badge--subtle:where(.swc-Badge--silver)",
+        "nestedIn": ".swc-Badge--subtle",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-silver-subtle-background-color-default)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([outline][variant=\"neutral\"]),:host([outline][variant=\"accent\"]),:host([outline][variant=\"informative\"]),:host([outline][variant=\"negative\"]),:host([outline][variant=\"positive\"]),:host([outline][variant=\"notice\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-background-color",
+            "value": "var(--swc-badge-outline-background-color, var(--swc-background-layer-2-color))"
+          },
+          {
+            "prop": "--swc-badge-label-icon-color",
+            "value": "var(--swc-badge-outline-label-icon-color, var(--swc-gray-1000))"
+          }
+        ]
+      },
+      {
+        "selector": ":host([outline][variant=\"neutral\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-border-color",
+            "value": "var(--swc-neutral-visual-color)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([outline][variant=\"accent\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-border-color",
+            "value": "var(--swc-accent-visual-color)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([outline][variant=\"informative\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-border-color",
+            "value": "var(--swc-informative-visual-color)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([outline][variant=\"negative\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-border-color",
+            "value": "var(--swc-negative-visual-color)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([outline][variant=\"positive\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-border-color",
+            "value": "var(--swc-positive-visual-color)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([outline][variant=\"notice\"])",
+        "declarations": [
+          {
+            "prop": "--swc-badge-border-color",
+            "value": "var(--swc-notice-visual-color)"
+          }
+        ]
+      }
+    ]
+  },
+  "states": [],
+  "queries": [],
+  "stories": [],
+  "counts": {
+    "props": 7,
+    "attributes": 0,
+    "parts": 3,
+    "tokenReferences": 95,
+    "tokenReferencesWithoutFallback": 78,
+    "raw": 0,
+    "stories": 0,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:8d08c7df63831f0e6efd53283268fea1b5296c8a4be61631eff67f03f86145e1"
+  }
+}

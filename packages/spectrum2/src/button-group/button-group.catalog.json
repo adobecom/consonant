@@ -1,0 +1,51 @@
+{
+  "id": "s2a.button-group",
+  "name": "ButtonGroup",
+  "slug": "button-group",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "ButtonGroup, as the implementation ships it.",
+  "props": [
+    {
+      "name": "size",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "orientation",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "align",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "default",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root"
+  ],
+  "slots": [],
+  "tokens": 0,
+  "a11y": null,
+  "anchors": {
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/button-group",
+      "export": "ButtonGroup",
+      "controller": null,
+      "cssClass": "swc-ButtonGroup"
+    },
+    "figma": null
+  },
+  "openDecisions": 0
+}

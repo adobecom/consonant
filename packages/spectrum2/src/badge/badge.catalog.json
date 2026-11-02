@@ -1,0 +1,77 @@
+{
+  "id": "s2a.badge",
+  "name": "Badge",
+  "slug": "badge",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "A small amount of colour-categorised metadata. Layer one: composes an optional Icon.",
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "variant",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "subtle",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "outline",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "fixed",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.icon",
+    "root.label"
+  ],
+  "slots": [
+    {
+      "path": "root.icon",
+      "accepts": [
+        "kind:icon"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 111,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.4.3",
+      "1.4.11"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/badge",
+      "export": "Badge",
+      "controller": null,
+      "cssClass": "swc-Badge"
+    },
+    "figma": null
+  },
+  "openDecisions": 6
+}

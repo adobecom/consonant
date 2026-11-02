@@ -1,0 +1,722 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Badge",
+  "slug": "badge",
+  "status": "curated-draft",
+  "version": "2.0.0",
+  "archetype": "badge",
+  "description": "A small amount of colour-categorised metadata. Layer one: composes an optional Icon.",
+  "curated": {
+    "by": "read from @adobe/spectrum-wc 2.0.0-beta.6 (dist/components/badge/badge.js, the css`` template) and Adobe's component data",
+    "date": "2026-10-27",
+    "reviewer": "Matt"
+  },
+  "anchors": {
+    "figma": {
+      "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+      "kind": "component-set",
+      "nodeName": "Badge",
+      "componentSetKey": "5586ba2e73fbc3afd4bb6cc6317d591958f66f5e",
+      "notes": "S2 / Web library. Description carries Spectrum's implementation flags: green for React Spectrum and for Web Components."
+    },
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/badge",
+      "export": "Badge",
+      "cssClass": "swc-Badge"
+    }
+  },
+  "props": [
+    {
+      "name": "label",
+      "lever": true,
+      "type": "string",
+      "default": "Label",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Label"
+      },
+      "code": {
+        "prop": "default"
+      },
+      "notes": "Rendered into the default slot, which carries the badge text."
+    },
+    {
+      "name": "icon",
+      "lever": true,
+      "type": "string",
+      "figma": {
+        "kind": "INSTANCE_SWAP",
+        "property": "Icon"
+      },
+      "code": {
+        "prop": "icon"
+      },
+      "notes": "The icon slot, placed before the label."
+    },
+    {
+      "name": "variant",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Status",
+        "valueMap": {
+          "accent": "Accent",
+          "informative": "Informative",
+          "neutral": "Neutral",
+          "positive": "Positive",
+          "notice": "Notice",
+          "negative": "Negative"
+        },
+        "notes": "The design splits this in two: a Status axis for the six semantic values and a separate Color axis for the nineteen plain colours, each with a -- value meaning the other axis is in use. The code has one property of twenty-five values, so only the semantic half maps here."
+      },
+      "code": {
+        "prop": "variant"
+      },
+      "type": "string",
+      "enum": [
+        "accent",
+        "informative",
+        "neutral",
+        "positive",
+        "notice",
+        "negative",
+        "fuchsia",
+        "indigo",
+        "magenta",
+        "purple",
+        "seafoam",
+        "yellow",
+        "gray",
+        "red",
+        "orange",
+        "chartreuse",
+        "celery",
+        "green",
+        "cyan",
+        "blue",
+        "pink",
+        "turquoise",
+        "brown",
+        "cinnamon",
+        "silver"
+      ],
+      "default": "neutral",
+      "notes": "Six semantic variants and nineteen plain colours."
+    },
+    {
+      "name": "size",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Size",
+        "valueMap": {
+          "s": "Small",
+          "m": "Medium",
+          "l": "Large",
+          "xl": "Extra-large"
+        }
+      },
+      "code": {
+        "prop": "size"
+      },
+      "type": "string",
+      "enum": [
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "default": "s"
+    },
+    {
+      "name": "subtle",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Style",
+        "valueMap": {
+          "true": "Subtle fill",
+          "false": "Bold fill"
+        }
+      },
+      "code": {
+        "prop": "subtle"
+      },
+      "type": "boolean",
+      "default": false,
+      "notes": "A tinted fill with dark text instead of a solid fill."
+    },
+    {
+      "name": "outline",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Style",
+        "valueMap": {
+          "true": "Outline",
+          "false": "Bold fill"
+        }
+      },
+      "code": {
+        "prop": "outline"
+      },
+      "type": "boolean",
+      "default": false,
+      "notes": "A bordered badge on the layer-2 background. Semantic variants only."
+    },
+    {
+      "name": "fixed",
+      "lever": true,
+      "figma": "NONE",
+      "code": {
+        "prop": "fixed"
+      },
+      "type": "string",
+      "enum": [
+        "block-start",
+        "block-end",
+        "inline-start",
+        "inline-end"
+      ],
+      "notes": "Pins the badge to one edge and squares off the two corners on that edge."
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".swc-Badge",
+      "element": "span",
+      "layout": {
+        "display": "flex",
+        "align": "center"
+      },
+      "tokens": {
+        "display": "raw:inline-flex",
+        "align-items": "raw:center",
+        "min-block-size": "{swc.component.height.75}",
+        "font-size": "{swc.font.size.75}",
+        "line-height": "{swc.line.height.font.size.75}",
+        "padding-inline": "{swc.base.padding.horizontal.small}",
+        "padding-block": "{swc.base.padding.vertical.small}",
+        "gap": "{swc.base.gap.small}",
+        "border-width": "{swc.border.width.200}",
+        "border-color": "raw:transparent",
+        "border-radius": "{swc.corner.radius.medium.size.small}",
+        "background-color": "{swc.neutral.subdued.background.color.default}",
+        "color": "{swc.transparent.static.white.1000}",
+        "cursor": "raw:default",
+        "font-weight": "{swc.medium.font.weight}",
+        "font-family": "{swc.sans.font.family.stack}"
+      },
+      "tokensByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "s": {
+              "min-block-size": "{swc.component.height.75}",
+              "font-size": "{swc.font.size.75}",
+              "line-height": "{swc.line.height.font.size.75}",
+              "padding-inline": "{swc.base.padding.horizontal.small}",
+              "padding-block": "{swc.base.padding.vertical.small}",
+              "gap": "{swc.base.gap.small}",
+              "border-radius": "{swc.corner.radius.medium.size.small}"
+            },
+            "m": {
+              "min-block-size": "{swc.component.height.100}",
+              "font-size": "{swc.font.size.100}",
+              "line-height": "{swc.line.height.font.size.100}",
+              "padding-inline": "{swc.base.padding.horizontal.medium}",
+              "padding-block": "{swc.base.padding.vertical.medium}",
+              "gap": "{swc.base.gap.medium}",
+              "border-radius": "{swc.corner.radius.medium.size.medium}"
+            },
+            "l": {
+              "min-block-size": "{swc.component.height.200}",
+              "font-size": "{swc.font.size.200}",
+              "line-height": "{swc.line.height.font.size.200}",
+              "padding-inline": "{swc.base.padding.horizontal.large}",
+              "padding-block": "{swc.base.padding.vertical.large}",
+              "gap": "{swc.base.gap.large}",
+              "border-radius": "{swc.corner.radius.medium.size.large}"
+            },
+            "xl": {
+              "min-block-size": "{swc.component.height.300}",
+              "font-size": "{swc.font.size.300}",
+              "line-height": "{swc.line.height.font.size.300}",
+              "padding-inline": "{swc.base.padding.horizontal.extra-large}",
+              "padding-block": "{swc.base.padding.vertical.extra-large}",
+              "gap": "{swc.base.gap.extra-large}",
+              "border-radius": "{swc.corner.radius.medium.size.extra-large}"
+            }
+          }
+        },
+        {
+          "prop": "variant",
+          "map": {
+            "accent": {
+              "background-color": "{swc.accent.background.color.default}"
+            },
+            "informative": {
+              "background-color": "{swc.informative.background.color.default}"
+            },
+            "neutral": {
+              "background-color": "{swc.neutral.subdued.background.color.default}"
+            },
+            "positive": {
+              "background-color": "{swc.positive.background.color.default}"
+            },
+            "notice": {
+              "background-color": "{swc.notice.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "negative": {
+              "background-color": "{swc.negative.background.color.default}"
+            },
+            "fuchsia": {
+              "background-color": "{swc.fuchsia.background.color.default}"
+            },
+            "indigo": {
+              "background-color": "{swc.indigo.background.color.default}"
+            },
+            "magenta": {
+              "background-color": "{swc.magenta.background.color.default}"
+            },
+            "purple": {
+              "background-color": "{swc.purple.background.color.default}"
+            },
+            "seafoam": {
+              "background-color": "{swc.seafoam.background.color.default}"
+            },
+            "yellow": {
+              "background-color": "{swc.yellow.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "gray": {
+              "background-color": "{swc.gray.background.color.default}"
+            },
+            "red": {
+              "background-color": "{swc.red.background.color.default}"
+            },
+            "orange": {
+              "background-color": "{swc.orange.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "chartreuse": {
+              "background-color": "{swc.chartreuse.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "celery": {
+              "background-color": "{swc.celery.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "green": {
+              "background-color": "{swc.green.background.color.default}"
+            },
+            "cyan": {
+              "background-color": "{swc.cyan.background.color.default}"
+            },
+            "blue": {
+              "background-color": "{swc.blue.background.color.default}"
+            },
+            "pink": {
+              "background-color": "{swc.pink.background.color.default}"
+            },
+            "turquoise": {
+              "background-color": "{swc.turquoise.background.color.default}"
+            },
+            "brown": {
+              "background-color": "{swc.brown.background.color.default}"
+            },
+            "cinnamon": {
+              "background-color": "{swc.cinnamon.background.color.default}"
+            },
+            "silver": {
+              "background-color": "{swc.silver.background.color.default}"
+            }
+          }
+        },
+        {
+          "prop": "subtle",
+          "map": {
+            "true": {
+              "color": "{swc.gray.1000}"
+            }
+          }
+        },
+        {
+          "prop": "fixed",
+          "map": {
+            "inline-start": {
+              "border-start-start-radius": "raw:0",
+              "border-end-start-radius": "raw:0"
+            },
+            "inline-end": {
+              "border-start-end-radius": "raw:0",
+              "border-end-end-radius": "raw:0"
+            },
+            "block-start": {
+              "border-start-start-radius": "raw:0",
+              "border-start-end-radius": "raw:0"
+            },
+            "block-end": {
+              "border-end-start-radius": "raw:0",
+              "border-end-end-radius": "raw:0"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "icon": {
+          "selector": ".swc-Badge-icon",
+          "element": "span",
+          "tokens": {
+            "inline-size": "{swc.workflow.icon.small}",
+            "block-size": "{swc.workflow.icon.small}",
+            "--iconPrimary": "raw:currentColor"
+          },
+          "tokensByProp": [
+            {
+              "prop": "size",
+              "map": {
+                "s": {
+                  "inline-size": "{swc.workflow.icon.small}",
+                  "block-size": "{swc.workflow.icon.small}"
+                },
+                "m": {
+                  "inline-size": "{swc.workflow.icon.medium}",
+                  "block-size": "{swc.workflow.icon.medium}"
+                },
+                "l": {
+                  "inline-size": "{swc.workflow.icon.large}",
+                  "block-size": "{swc.workflow.icon.large}"
+                },
+                "xl": {
+                  "inline-size": "{swc.workflow.icon.extra-large}",
+                  "block-size": "{swc.workflow.icon.extra-large}"
+                }
+              }
+            }
+          ],
+          "slot": {
+            "name": "icon",
+            "accepts": [
+              "kind:icon"
+            ],
+            "acceptsMode": "prefer",
+            "min": 0,
+            "max": 1,
+            "notes": "Any workflow glyph, not one named component — upstream's slot takes whatever SVG is put in it. The default names a real entry in the spectrum-icons manifest so the slot can be exercised, which a slot with no default cannot be: the preview had nothing to draw and the control was a bare text box.",
+            "default": {
+              "figma": "S2_Icon_Circle_20_N",
+              "manifest": "spectrum-icons",
+              "icon": "add-circle"
+            }
+          }
+        },
+        "label": {
+          "selector": ".swc-Badge-label",
+          "element": "span"
+        }
+      },
+      "tokensByCombination": [
+        {
+          "props": [
+            "subtle",
+            "variant"
+          ],
+          "rows": [
+            {
+              "values": [
+                "true",
+                "accent"
+              ],
+              "tokens": {
+                "background-color": "{swc.accent.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "informative"
+              ],
+              "tokens": {
+                "background-color": "{swc.informative.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "neutral"
+              ],
+              "tokens": {
+                "background-color": "{swc.neutral.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "positive"
+              ],
+              "tokens": {
+                "background-color": "{swc.positive.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "notice"
+              ],
+              "tokens": {
+                "background-color": "{swc.notice.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "negative"
+              ],
+              "tokens": {
+                "background-color": "{swc.negative.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            }
+          ]
+        },
+        {
+          "props": [
+            "outline",
+            "variant"
+          ],
+          "rows": [
+            {
+              "values": [
+                "true",
+                "accent"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.accent.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "informative"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.informative.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "neutral"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.neutral.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "positive"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.positive.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "notice"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.notice.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "negative"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.negative.visual.color}"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "composition": [
+    {
+      "name": "S2_Icon_Circle_20_N",
+      "treatment": "icon",
+      "why": "The placeholder workflow glyph the design drops into the icon slot. It is a member of the icon rig rather than a component in its own right, so it is a category (kind:icon), not a contract."
+    }
+  ],
+  "a11y": {
+    "wcag": [
+      "1.4.3",
+      "1.4.11"
+    ],
+    "notes": [
+      "Colour alone must not carry the meaning; the label does.",
+      "Spectrum flips the label and icon colour to black on orange, yellow, chartreuse and celery to hold contrast."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "b-cjk-line-height",
+      "question": "Spectrum sets a different line height for Japanese, Korean and Chinese. The contract shape has no language condition, so it is recorded in a note and lost on render.",
+      "chose": "noted on the label part, not expressed",
+      "confidence": "low",
+      "fix": "Add a conditional keyed on language to the contract shape, or accept that generated code omits it.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "@spectrum-css/badge index.css, .spectrum-Badge-label:lang(ja)"
+    },
+    {
+      "id": "b-nonsemantic-colours",
+      "question": "Fourteen of the twenty variants are plain colour names with no meaning attached. Do we carry them, or restrict adobe.com to the six semantic ones?",
+      "chose": "carried all twenty, matching Spectrum",
+      "confidence": "medium",
+      "fix": "Narrow the enum if the marketing use only ever needs the semantic set.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "index.css, the non-semantic colors comment block"
+    },
+    {
+      "id": "b-implementation",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Which package is Spectrum 2's Badge?",
+      "chose": "@adobe/spectrum-wc (swc-badge)",
+      "decision": "The contract describes @adobe/spectrum-wc, the Spectrum 2 web components, for the same reason as Button: the S2 design file's variable names are this package's --swc-* tokens.",
+      "fix": "none",
+      "evidence": "Badge ships no standalone stylesheet; its CSS is the css`` template in dist/components/badge/badge.js and is vendored unwrapped."
+    },
+    {
+      "id": "b-host-rules",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Upstream styles the custom element, so size and the semantic variants are :host([size]) and :host([variant]) rules while the nineteen plain colours are .swc-Badge--<colour> classes.",
+      "chose": "Re-express both as one variant axis on the root, which is what a light-DOM contract can carry",
+      "fix": "If the generated component ever becomes a custom element, drop the re-expression and inherit the host rules.",
+      "evidence": "badge.css: :host([variant=\"accent\"]) sets a token; .swc-Badge--blue sets the same token."
+    },
+    {
+      "id": "b-literal-spacing",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Badge writes its vertical padding and gap as literals, while Button binds tokens that hold exactly those values.",
+      "chose": "Bind the tokens, matching Button",
+      "fix": "Worth raising upstream: if the spacing scale moves, Button follows and Badge does not. If they intend Badge to be independent, revert these six bindings to literals.",
+      "evidence": "padding 4/7/10/13 is base-padding-vertical-small..extra-large exactly; gap 4/6/6/6 is base-gap-small..extra-large exactly. This is the one place the contract is more token-bound than the implementation."
+    },
+    {
+      "id": "b-modifier-scope",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Do subtle and outline apply to all twenty-five variants?",
+      "chose": "No. Both are recorded as combinations with the six semantic variants only.",
+      "decision": "Upstream's subtle and outline rules name the six semantic variants and nothing else, so the nineteen plain colours stay solid under either flag.",
+      "fix": "none",
+      "evidence": "badge.css: :host([subtle][variant=\"accent\"]) and the outline rule list accent, informative, neutral, positive, notice and negative. Applying outline unconditionally turned every colour badge white."
+    },
+    {
+      "id": "b-fixed-placement",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "What does the fixed property actually change?",
+      "chose": "Squares the two corners on the named edge, nothing else",
+      "decision": "fixed sets the two logical corner radii on that edge to zero so the badge sits flush against it. It does not position the badge; placement is the parent's job.",
+      "fix": "none",
+      "evidence": "badge.css: each .swc-Badge--fixed-* rule sets exactly two border-*-radius values to 0."
+    },
+    {
+      "id": "b-design-code-gap",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The design models this component differently from the implementation, not just with different spelling.",
+      "chose": "Map what maps and record the rest",
+      "fix": "Raise with the Spectrum team. The style axis in particular is a correctness question, not a naming one.",
+      "evidence": "The design's Style axis is one choice of three (Bold fill, Subtle fill, Outline); the code has two independent booleans, so subtle and outline can both be set at once, which the design cannot express and which no rule in the stylesheet covers. The design splits the variant across a Status axis and a Color axis; the code has one. The code has a fixed property with four values; the design has none."
+    },
+    {
+      "id": "b-medium-radius",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The design file and the implementation disagree about the corner radius at one size.",
+      "chose": "Follow the implementation, 8px, as the rest of this contract does",
+      "fix": "Ask the Spectrum team which is right. The design's sequence across the four sizes is 7, 7, 9, 10, which looks like a skipped step rather than an intent; the implementation's is 7, 8, 9, 10.",
+      "evidence": "Figma Badge Size=Medium is radius 7 in both the Bold fill and Outline styles; badge.css sets --swc-badge-corner-radius to 8px at :host([size=\"m\"]). Measured at identical settings our badge matches the design on box, fill, padding and gap and differs only here."
+    },
+    {
+      "id": "b-label-colour",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The badge label sat on gray-25, which flips with the theme.",
+      "chose": "transparent-static-white-1000, which does not",
+      "decision": "Every badge fill is a saturated or mid colour in both themes, so the label is always white. The subtle and outline treatments are the exception and keep gray-1000, which flips with their tinted fill.",
+      "fix": "none",
+      "evidence": "Upstream's badge writes a literal rgb(255,255,255) for the label and icon colour. Bound to gray-25 the label rendered near-black on a mid grey fill in dark mode."
+    },
+    {
+      "id": "b-warm-label",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Five fills are too light for a white label.",
+      "chose": "notice, celery, chartreuse, orange and yellow take a static black label; the other twenty take static white",
+      "decision": "Both are theme-invariant, because the fills are too. The subtle and outline treatments are the only ones whose label follows the theme, and they keep gray-1000.",
+      "fix": "none",
+      "evidence": "badge.css gives exactly those five a literal rgb(0, 0, 0) label and icon colour."
+    },
+    {
+      "id": "b-radius-gap",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The four corner radii looked like a token gap, since 7, 8, 9 and 10 are off the corner-radius-100..800 scale.",
+      "chose": "Bind corner-radius-medium-size-small through -extra-large, which already hold exactly those four values",
+      "decision": "There is no gap. Spectrum ships a per-size radius family and the badge hardcodes the same numbers instead of referencing it. Our contract binds the tokens.",
+      "fix": "Report upstream: badge.css should reference the corner-radius-medium-size-* family rather than repeat its values.",
+      "evidence": "corner-radius-medium-size-{small,medium,large,extra-large} are 7, 8, 9 and 10px; badge.css writes 7px, 8px, 9px and 10px as literals in its four size blocks."
+    },
+    {
+      "id": "i-glyph-fill",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Every glyph rendered in its own colour instead of the component's.",
+      "chose": "Map the artwork's own hook to currentColor on the part that holds the glyph",
+      "decision": "Spectrum's workflow SVGs paint with fill=\"var(--iconPrimary, #222)\" rather than currentColor, so with nothing defining that property every glyph fell back to #222 regardless of the colour around it. Setting --iconPrimary to currentColor on the icon part makes a glyph follow its component, and leaves the property available to anyone who wants a different colour.",
+      "fix": "none. The alternative was rewriting 396 vendored SVGs, which would mean editing artwork we do not own.",
+      "evidence": "All 396 entries in spectrum-icons.json carry var(--iconPrimary, #222); all 26 in our own s2a-icons.json use currentColor. Measured: the badge's text was #ffffff while its glyph painted #222222."
+    }
+  ]
+}

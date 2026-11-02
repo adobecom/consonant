@@ -1,0 +1,34 @@
+/* Checkbox — atom, generated from checkbox.contract.json.
+ * Applied by decorateCheckbox() to the element the author wrote.
+ * Re-run: npm run specs:render -- --slug=checkbox --target=milo */
+
+.s2a-checkbox [hidden],
+.s2a-checkbox[hidden] {
+  display: none !important;
+}
+
+.s2a-checkbox {
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.s2a-checkbox .label {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.s2a-checkbox__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}

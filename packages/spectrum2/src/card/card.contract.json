@@ -1,0 +1,271 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "spectrum.card",
+  "name": "Card",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "Card, as the implementation ships it.",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": {
+        "enum": [
+          "primary",
+          "secondary",
+          "tertiary",
+          "quiet"
+        ]
+      },
+      "description": "The visual variant of the card.",
+      "default": "\"primary\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "variant"
+        }
+      }
+    },
+    {
+      "name": "density",
+      "type": {
+        "enum": [
+          "compact",
+          "regular",
+          "spacious"
+        ]
+      },
+      "description": "The density of the card, controlling internal spacing and gaps.",
+      "default": "\"regular\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "density"
+        }
+      }
+    },
+    {
+      "name": "titleAsLink",
+      "type": "boolean",
+      "description": "Indicates the consumer has wrapped their `title` slot content in a real link. Extends that link's hit area to cover the card surface while leaving navigation entirely consumer-owned; Card accepts no `href`.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "titleAsLink"
+        }
+      }
+    },
+    {
+      "name": "selectable",
+      "type": "boolean",
+      "description": "Makes the card focusable and captures surface clicks (excluding nested interactive targets) to dispatch a `swc-card-click` event, independent of `titleAsLink`. selection model determines the appropriate role.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "selectable"
+        }
+      }
+    },
+    {
+      "name": "collection",
+      "type": "text",
+      "description": "Optional collection images. Assign each image to the slot.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "collection"
+        }
+      }
+    },
+    {
+      "name": "media",
+      "type": "text",
+      "description": "Optional overlay content (e.g. a badge or avatar) layered over the preview/collection media region.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "media"
+        }
+      }
+    },
+    {
+      "name": "preview",
+      "type": "text",
+      "description": "Primary preview content",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "preview"
+        }
+      }
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "description": "Card title",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "title"
+        }
+      }
+    },
+    {
+      "name": "actions",
+      "type": "text",
+      "description": "Optional action controls",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "actions"
+        }
+      }
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "description": "Supporting description text",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "description"
+        }
+      }
+    },
+    {
+      "name": "footer",
+      "type": "text",
+      "description": "Optional footer content",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "footer"
+        }
+      }
+    },
+    {
+      "name": "default",
+      "type": "text",
+      "description": "Additional body content",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "default"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "literals": {
+        "position": "relative",
+        "grid-area": "media",
+        "box-sizing": "border-box",
+        "inline-size": "100%",
+        "pointer-events": "none",
+        "aspect-ratio": "1",
+        "object-fit": "cover",
+        "display": "none"
+      },
+      "parts": {
+        "media": {
+          "literals": {
+            "grid-template-areas": "\"preview\" \"collection\"",
+            "grid-template-rows": "repeat(2,auto)",
+            "transition-property": "outline,box-shadow",
+            "display": "grid",
+            "grid-template-columns": "repeat(3, 1fr)",
+            "grid-column-gap": "4px",
+            "column-gap": "4px"
+          }
+        },
+        "collection": {
+          "element": "div",
+          "literals": {
+            "display": "none",
+            "grid-area": "collection",
+            "grid-template-columns": "subgrid",
+            "margin-block-start": "0",
+            "column-gap": "4px",
+            "grid-row": "-1 / 1",
+            "grid-column": "2 / -1"
+          }
+        },
+        "content": {
+          "literals": {
+            "padding-top": "0",
+            "padding-right": "0",
+            "padding-bottom": "0",
+            "padding-left": "0"
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA"
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": null,
+        "componentSetKey": null
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/card",
+        "export": "Card"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:b36479c24740e2060697eb1d29d51517b4fb51de395c25880a50531cb6177aba",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:6d1dba8dc0acdca5fa98e6b4d97c44fca53314b1010655add610983d110a9010"
+    }
+  }
+}

@@ -1,0 +1,521 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "spectrum.button",
+  "name": "Button",
+  "version": "2.0.0",
+  "status": "draft",
+  "description": "The primary action trigger. Layer one: composes Icon for its optional leading and trailing glyphs.",
+  "archetype": "button",
+  "semantics": {
+    "element": "button",
+    "role": "button"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Rendered into the default slot, which upstream documents as the visible button label.",
+      "default": "\"Label\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label"
+        },
+        "code": {
+          "prop": "default"
+        }
+      }
+    },
+    {
+      "name": "icon",
+      "type": "text",
+      "description": "The icon slot. Upstream places it before the label and requires it when the label is hidden.",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Leading icon"
+        },
+        "code": {
+          "prop": "icon"
+        }
+      }
+    },
+    {
+      "name": "variant",
+      "type": {
+        "enum": [
+          "primary",
+          "secondary",
+          "accent",
+          "negative"
+        ]
+      },
+      "description": "The visual variant of the button. `outline` fill-style is only supported with `primary` and `secondary`. `static-color` is only supported with `primary` and `secondary`.",
+      "default": "\"primary\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Variant",
+          "valueMap": {
+            "primary": "Primary",
+            "secondary": "Secondary",
+            "accent": "Accent",
+            "negative": "Negative"
+          }
+        },
+        "code": {
+          "prop": "variant"
+        }
+      }
+    },
+    {
+      "name": "fillStyle",
+      "type": {
+        "enum": [
+          "fill",
+          "outline"
+        ]
+      },
+      "description": "fill or outline. Upstream supports outline only with primary and secondary.",
+      "default": "\"fill\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style",
+          "valueMap": {
+            "fill": "Fill",
+            "outline": "Outline"
+          }
+        },
+        "code": {
+          "prop": "fillStyle"
+        }
+      }
+    },
+    {
+      "name": "staticColor",
+      "type": {
+        "enum": [
+          "white",
+          "black"
+        ]
+      },
+      "description": "For use over colour or imagery. Upstream supports it only with primary and secondary.",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Variant"
+        },
+        "code": {
+          "prop": "staticColor"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "s",
+          "m",
+          "l",
+          "xl"
+        ]
+      },
+      "description": "The size of the button.",
+      "default": "\"m\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "valueMap": {
+            "s": "Small",
+            "m": "Medium",
+            "l": "Large",
+            "xl": "Extra-large"
+          }
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "truncate",
+      "type": "boolean",
+      "description": "Overflowing text is ellipsised rather than wrapped. Replaces the first-generation no-wrap attribute.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "truncate"
+        }
+      }
+    },
+    {
+      "name": "justified",
+      "type": "boolean",
+      "description": "Lets the button fill its container.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "justified"
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Removes focusability and prevents interaction.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "valueMap": {
+            "true": "Disabled",
+            "false": "Default"
+          }
+        },
+        "code": {
+          "prop": "disabled"
+        }
+      }
+    },
+    {
+      "name": "pending",
+      "type": "boolean",
+      "description": "Shows a spinner after a one-second delay, so quick work does not flicker.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Pending",
+          "valueMap": {
+            "true": "True",
+            "false": "False"
+          }
+        },
+        "code": {
+          "prop": "pending"
+        }
+      }
+    },
+    {
+      "name": "accessibleLabel",
+      "type": "text",
+      "description": "Forwarded to the inner button as aria-label. Required for an icon-only button.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "accessibleLabel"
+        }
+      }
+    },
+    {
+      "name": "pendingLabel",
+      "type": "text",
+      "description": "Accessible name used while pending.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "pendingLabel"
+        }
+      }
+    },
+    {
+      "name": "pendingActive",
+      "type": "boolean",
+      "description": "Read-only: whether the delayed pending visual is showing. Derived, never set by an author.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "pendingActive"
+        }
+      }
+    }
+  ],
+  "states": [
+    "hover",
+    "active",
+    "focus-visible",
+    "disabled"
+  ],
+  "anatomy": {
+    "root": {
+      "element": "button",
+      "layout": {
+        "display": "inline-flex",
+        "align": "center",
+        "justify": "center"
+      },
+      "tokens": {
+        "min-block-size": "{swc.component.height.100}",
+        "font-size": "{swc.font.size.100}",
+        "font-weight": "{swc.bold.font.weight}",
+        "font-family": "{swc.sans.font.family.stack}",
+        "padding-inline": "{swc.base.padding.horizontal.medium}",
+        "padding-block": "{swc.base.padding.vertical.medium}",
+        "gap": "{swc.base.gap.medium}",
+        "border-width": "{swc.border.width.200}",
+        "background-color": "{swc.neutral.background.color.default}",
+        "color": "{swc.gray.25}"
+      },
+      "literals": {
+        "border-radius": "16px"
+      },
+      "states": {
+        "hover": {
+          "background-color": "{swc.neutral.background.color.hover}",
+          "color": "{swc.gray.25}"
+        },
+        "active": {
+          "background-color": "{swc.neutral.background.color.down}",
+          "color": "{swc.gray.25}"
+        },
+        "focus-visible": {
+          "outline-color": "{swc.focus.indicator.color}",
+          "outline-width": "{swc.focus.indicator.thickness}"
+        },
+        "disabled": {
+          "background-color": "{swc.disabled.background.color}",
+          "color": "{swc.disabled.content.color}"
+        }
+      },
+      "tokensByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "s": {
+              "min-block-size": "{swc.component.height.75}",
+              "font-size": "{swc.font.size.75}",
+              "padding-inline": "{swc.base.padding.horizontal.small}",
+              "padding-block": "{swc.base.padding.vertical.small}",
+              "gap": "{swc.base.gap.small}",
+              "--swc-button-min-block-size": "{swc.component.height.75}",
+              "--swc-button-font-size": "{swc.font.size.75}",
+              "--swc-button-edge-to-text": "{swc.base.padding.horizontal.small}",
+              "--swc-button-padding-vertical": "{swc.base.padding.vertical.small}",
+              "--swc-button-gap": "{swc.base.gap.small}",
+              "--swc-button-icon-size": "{swc.workflow.icon.small}"
+            },
+            "m": {
+              "min-block-size": "{swc.component.height.100}",
+              "font-size": "{swc.font.size.100}",
+              "padding-inline": "{swc.base.padding.horizontal.medium}",
+              "padding-block": "{swc.base.padding.vertical.medium}",
+              "gap": "{swc.base.gap.medium}",
+              "--swc-button-min-block-size": "{swc.component.height.100}",
+              "--swc-button-font-size": "{swc.font.size.100}",
+              "--swc-button-edge-to-text": "{swc.base.padding.horizontal.medium}",
+              "--swc-button-padding-vertical": "{swc.base.padding.vertical.medium}",
+              "--swc-button-gap": "{swc.base.gap.medium}",
+              "--swc-button-icon-size": "{swc.workflow.icon.medium}"
+            },
+            "l": {
+              "min-block-size": "{swc.component.height.200}",
+              "font-size": "{swc.font.size.200}",
+              "padding-inline": "{swc.base.padding.horizontal.large}",
+              "padding-block": "{swc.base.padding.vertical.large}",
+              "gap": "{swc.base.gap.large}",
+              "--swc-button-min-block-size": "{swc.component.height.200}",
+              "--swc-button-font-size": "{swc.font.size.200}",
+              "--swc-button-edge-to-text": "{swc.base.padding.horizontal.large}",
+              "--swc-button-padding-vertical": "{swc.base.padding.vertical.large}",
+              "--swc-button-gap": "{swc.base.gap.large}",
+              "--swc-button-icon-size": "{swc.workflow.icon.large}"
+            },
+            "xl": {
+              "min-block-size": "{swc.component.height.300}",
+              "font-size": "{swc.font.size.300}",
+              "padding-inline": "{swc.base.padding.horizontal.extra-large}",
+              "padding-block": "{swc.base.padding.vertical.extra-large}",
+              "gap": "{swc.base.gap.extra-large}",
+              "--swc-button-min-block-size": "{swc.component.height.300}",
+              "--swc-button-font-size": "{swc.font.size.300}",
+              "--swc-button-edge-to-text": "{swc.base.padding.horizontal.extra-large}",
+              "--swc-button-padding-vertical": "{swc.base.padding.vertical.extra-large}",
+              "--swc-button-gap": "{swc.base.gap.extra-large}",
+              "--swc-button-icon-size": "{swc.workflow.icon.extra-large}"
+            }
+          }
+        },
+        {
+          "prop": "variant",
+          "map": {
+            "accent": {
+              "background-color": "{swc.accent.background.color.default}",
+              "color": "{swc.transparent.static.white.1000}"
+            },
+            "negative": {
+              "background-color": "{swc.negative.background.color.default}",
+              "color": "{swc.transparent.static.white.1000}"
+            },
+            "primary": {
+              "background-color": "{swc.neutral.background.color.default}",
+              "color": "{swc.gray.25}"
+            },
+            "secondary": {
+              "background-color": "{swc.gray.100}",
+              "color": "{swc.gray.800}"
+            }
+          }
+        },
+        {
+          "prop": "fillStyle",
+          "map": {
+            "outline": {
+              "border-color": "{swc.gray.800}"
+            }
+          }
+        }
+      ],
+      "literalsByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "s": {
+              "border-radius": "12px"
+            },
+            "m": {
+              "border-radius": "16px"
+            },
+            "l": {
+              "border-radius": "20px"
+            },
+            "xl": {
+              "border-radius": "24px"
+            }
+          }
+        },
+        {
+          "prop": "fillStyle",
+          "map": {
+            "outline": {
+              "background-color": "transparent"
+            }
+          }
+        }
+      ],
+      "statesByProp": [
+        {
+          "prop": "variant",
+          "state": "hover",
+          "map": {
+            "accent": {
+              "color": "{swc.transparent.static.white.1000}"
+            },
+            "negative": {
+              "color": "{swc.transparent.static.white.1000}"
+            }
+          }
+        },
+        {
+          "prop": "variant",
+          "state": "active",
+          "map": {
+            "accent": {
+              "color": "{swc.transparent.static.white.1000}"
+            },
+            "negative": {
+              "color": "{swc.transparent.static.white.1000}"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "icon": {
+          "description": "Upstream declares exactly one icon slot, before the label. The earlier library's template had a trailing position; Spectrum 2 does not.",
+          "element": "span",
+          "literals": {
+            "--iconPrimary": "currentColor"
+          },
+          "slot": {
+            "name": "icon",
+            "accepts": [
+              "kind:icon"
+            ],
+            "acceptsMode": "prefer",
+            "min": 0,
+            "max": 1,
+            "defaultContent": [
+              {
+                "id": "spectrum-icons:add-circle",
+                "props": {
+                  "figma": "S2_Icon_Circle_20_N"
+                }
+              }
+            ]
+          }
+        },
+        "label": {
+          "element": "span"
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "role": "button",
+    "wcag": [
+      "2.1.1",
+      "2.4.7",
+      "4.1.2",
+      "2.5.8"
+    ],
+    "keyboard": [
+      {
+        "key": "Enter",
+        "action": "Activate"
+      },
+      {
+        "key": "Space",
+        "action": "Activate"
+      }
+    ],
+    "notes": [
+      "An icon-only button needs an accessible name from a label attribute.",
+      "Spectrum ships a real focus ring; it must survive into generated code."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+        "componentSetKey": "2508eb5e189b0c069686e8fd516bf2f6d2188069",
+        "nodeId": "9308:53906"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/button",
+        "export": "Button"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:cda9100188d908c971c79baa9385fce216acca9f7e64b5ab8d256a8d50e67f7e",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:be2dcdae83a47514d51409b3d378d59db043363a38edb50abc3ca652db692d81"
+    }
+  }
+}

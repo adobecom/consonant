@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:31:44.517Z",
+  "extractedAt": "2026-10-28T16:23:19.873Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -108,6 +108,52 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-helper-text",
+        "declarations": [
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-caption)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-caption)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-caption)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-caption)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-typography-letter-spacing-caption)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-subtle)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-helper-text[data-intent=\"error\"]",
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-utility-error)"
+          }
+        ]
+      }
+    ]
   },
   "states": [],
   "queries": [],
@@ -361,6 +407,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:ea918d416063183611539439a3fee62fe1c52d05aa6e214343c04908603cfdec"
+    "hash": "sha256:571412e7eb4884cd822137b5366dd50acc85a4d5239082c3d782215ecc4dad80"
   }
 }

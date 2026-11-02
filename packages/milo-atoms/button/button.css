@@ -1,0 +1,344 @@
+/* Button — atom, generated from button.contract.json.
+ * Applied by decorateButton() to the element the author wrote.
+ * Re-run: npm run specs:render -- --slug=button --target=milo */
+
+.s2a-button [hidden],
+.s2a-button[hidden] {
+  display: none !important;
+}
+
+.s2a-button {
+  box-sizing: border-box;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  min-width: 0;
+  appearance: none;
+  height: 40px; /* hardcoded: Figma Button v2 md is 40px tall and no semantic size token exists yet */
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--s2a-border-radius-round);
+  gap: var(--s2a-spacing-xs);
+  padding-left: var(--s2a-spacing-lg);
+  padding-right: var(--s2a-spacing-lg);
+  padding-top: 14px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  padding-bottom: 14px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  box-shadow: inset 0 0 0 var(--s2a-button-bw, 0) var(--s2a-button-bc, transparent);
+}
+
+.s2a-button:disabled,
+.s2a-button[data-state="disabled"] {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.s2a-button:focus-visible,
+.s2a-button[data-state="focus"] {
+  outline-color: var(--s2a-color-focus-ring-default);
+  outline-width: var(--s2a-border-width-sm);
+  outline-style: solid;
+  outline-offset: var(--s2a-border-width-sm);
+}
+
+.s2a-button.outlined {
+  background-color: var(--s2a-color-button-background-outlined-default);
+  --s2a-button-bw: var(--s2a-border-width-md);
+  --s2a-button-bc: var(--s2a-color-border-knockout);
+}
+
+.s2a-button.transparent {
+  background-color: var(--s2a-color-button-background-transparent-default);
+  --s2a-button-bw: var(--s2a-border-width-sm);
+}
+
+.s2a-button.solid {
+  background-color: var(--s2a-color-button-background-solid-default);
+  --s2a-button-bw: var(--s2a-border-width-sm);
+}
+
+.s2a-button.accent {
+  background-color: var(--s2a-color-button-background-accent-default);
+}
+
+.s2a-button.knockout {
+  background-color: var(--s2a-color-button-background-knockout-default);
+  --s2a-button-bw: var(--s2a-border-width-md);
+  --s2a-button-bc: var(--s2a-color-button-border-knockout-default);
+}
+
+.s2a-button.outline-inverse {
+  background-color: var(--s2a-color-button-background-outline-inverse-default);
+  --s2a-button-bw: var(--s2a-border-width-md);
+  --s2a-button-bc: var(--s2a-color-button-border-outline-inverse-default);
+}
+
+.s2a-button.outlined:hover,
+.s2a-button.outlined[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-outlined-hover);
+}
+
+.s2a-button.transparent:hover,
+.s2a-button.transparent[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-transparent-hover);
+}
+
+.s2a-button.solid:hover,
+.s2a-button.solid[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-solid-hover);
+  --s2a-button-bw: var(--s2a-border-width-md);
+  --s2a-button-bc: var(--s2a-color-border-knockout);
+}
+
+.s2a-button.accent:hover,
+.s2a-button.accent[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-accent-hover);
+}
+
+.s2a-button.knockout:hover,
+.s2a-button.knockout[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-knockout-hover);
+}
+
+.s2a-button.outline-inverse:hover,
+.s2a-button.outline-inverse[data-state="hover"] {
+  background-color: var(--s2a-color-button-background-outline-inverse-hover);
+}
+
+.s2a-button.outlined:active,
+.s2a-button.outlined[data-state="active"] {
+  background-color: var(--s2a-color-button-background-outlined-active);
+}
+
+.s2a-button.transparent:active,
+.s2a-button.transparent[data-state="active"] {
+  background-color: var(--s2a-color-button-background-transparent-active);
+}
+
+.s2a-button.solid:active,
+.s2a-button.solid[data-state="active"] {
+  background-color: var(--s2a-color-button-background-solid-active);
+}
+
+.s2a-button.accent:active,
+.s2a-button.accent[data-state="active"] {
+  background-color: var(--s2a-color-button-background-accent-active);
+}
+
+.s2a-button.knockout:active,
+.s2a-button.knockout[data-state="active"] {
+  background-color: var(--s2a-color-button-background-knockout-active);
+  --s2a-button-bw: var(--s2a-border-width-sm);
+}
+
+.s2a-button.outline-inverse:active,
+.s2a-button.outline-inverse[data-state="active"] {
+  background-color: var(--s2a-color-button-background-outline-inverse-active);
+  --s2a-button-bw: var(--s2a-border-width-sm);
+}
+
+.s2a-button.accent:focus-visible,
+.s2a-button.accent[data-state="focus"] {
+  background-color: var(--s2a-color-blue-1100); /* Primitive: source contract has no approved semantic alias for this binding. */
+  --s2a-button-bw: var(--s2a-border-width-sm);
+}
+
+.s2a-button .icon-start {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: currentColor;
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.s2a-button .icon-start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.s2a-button .icon-start > svg,
+.s2a-button .icon-start > [data-open-state] > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.s2a-button.solid:disabled .icon-start,
+.s2a-button.solid[data-state="disabled"] .icon-start {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.s2a-button.accent:disabled .icon-start,
+.s2a-button.accent[data-state="disabled"] .icon-start {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.s2a-button .frame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.s2a-button .s2-icon-circle-20-n {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.s2a-button .icon-color {
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.s2a-button.outlined .icon-color {
+  color: var(--s2a-color-content-default);
+}
+
+.s2a-button.transparent .icon-color {
+  color: var(--s2a-color-content-default);
+}
+
+.s2a-button.solid .icon-color {
+  color: var(--s2a-color-content-inverse);
+}
+
+.s2a-button.accent .icon-color {
+  color: var(--s2a-color-content-inverse);
+}
+
+.s2a-button.knockout .icon-color {
+  color: var(--s2a-color-button-content-knockout);
+}
+
+.s2a-button.outline-inverse .icon-color {
+  color: var(--s2a-color-button-content-outline-inverse);
+}
+
+.s2a-button .label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-family: var(--s2a-font-family-label);
+  font-size: var(--s2a-typography-font-size-label);
+  font-weight: var(--s2a-font-weight-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  line-height: var(--s2a-typography-line-height-label);
+}
+
+.s2a-button:disabled .label,
+.s2a-button[data-state="disabled"] .label {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.s2a-button.outlined .label {
+  color: var(--s2a-color-content-default);
+}
+
+.s2a-button.transparent .label {
+  color: var(--s2a-color-content-default);
+}
+
+.s2a-button.solid .label {
+  color: var(--s2a-color-button-content-primary-solid-default);
+}
+
+.s2a-button.accent .label {
+  color: var(--s2a-color-content-knockout);
+}
+
+.s2a-button.knockout .label {
+  color: var(--s2a-color-button-content-knockout);
+}
+
+.s2a-button.outline-inverse .label {
+  color: var(--s2a-color-button-content-outline-inverse);
+}
+
+.s2a-button.outlined:active .label,
+.s2a-button.outlined[data-state="active"] .label {
+  color: var(--s2a-color-button-content-outlined-active);
+}
+
+.s2a-button .icon-end {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: currentColor;
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.s2a-button .icon-end {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.s2a-button .icon-end > svg,
+.s2a-button .icon-end > [data-open-state] > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.s2a-button:disabled .icon-end,
+.s2a-button[data-state="disabled"] .icon-end {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.s2a-button .frame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.s2a-button .s2a-icon-chevron-right {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.s2a-button .icon-color {
+  width: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 12px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+}
+
+.s2a-button:disabled .icon-color,
+.s2a-button[data-state="disabled"] .icon-color {
+  opacity: var(--s2a-opacity-disabled);
+}
+
+.s2a-button.outlined .icon-color {
+  color: var(--s2a-color-content-default);
+}
+
+.s2a-button.transparent .icon-color {
+  color: var(--s2a-color-content-default);
+}
+
+.s2a-button.solid .icon-color {
+  color: var(--s2a-color-content-inverse);
+}
+
+.s2a-button.accent .icon-color {
+  color: var(--s2a-color-content-inverse);
+}
+
+.s2a-button.knockout .icon-color {
+  color: var(--s2a-color-button-content-knockout);
+}
+
+.s2a-button.outline-inverse .icon-color {
+  color: var(--s2a-color-button-content-outline-inverse);
+}

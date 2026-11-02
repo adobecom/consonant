@@ -1,0 +1,109 @@
+{
+  "id": "s2a.button",
+  "name": "Button",
+  "slug": "button",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "The primary action trigger. Layer one: composes Icon for its optional leading and trailing glyphs.",
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "variant",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "fillStyle",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "staticColor",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "truncate",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "justified",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "pending",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "accessibleLabel",
+      "type": "string",
+      "lever": false
+    },
+    {
+      "name": "pendingLabel",
+      "type": "string",
+      "lever": false
+    },
+    {
+      "name": "pendingActive",
+      "type": "boolean",
+      "lever": false
+    }
+  ],
+  "parts": [
+    "root",
+    "root.icon",
+    "root.label"
+  ],
+  "slots": [
+    {
+      "path": "root.icon",
+      "accepts": [
+        "kind:icon"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 75,
+  "a11y": {
+    "role": "button",
+    "wcag": [
+      "2.1.1",
+      "2.4.7",
+      "4.1.2",
+      "2.5.8"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/button",
+      "export": "Button",
+      "controller": null,
+      "cssClass": "swc-Button"
+    },
+    "figma": "9308:53906"
+  },
+  "openDecisions": 10
+}

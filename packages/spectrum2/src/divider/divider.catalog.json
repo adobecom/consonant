@@ -1,0 +1,41 @@
+{
+  "id": "s2a.divider",
+  "name": "Divider",
+  "slug": "divider",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "Divider, as the implementation ships it.",
+  "props": [
+    {
+      "name": "size",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "vertical",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "staticColor",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root"
+  ],
+  "slots": [],
+  "tokens": 1,
+  "a11y": null,
+  "anchors": {
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/divider",
+      "export": "Divider",
+      "controller": null,
+      "cssClass": "swc-Divider"
+    },
+    "figma": null
+  },
+  "openDecisions": 1
+}

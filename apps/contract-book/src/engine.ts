@@ -16,6 +16,7 @@
 import { canonicalJson, hashOf } from "../../../packages/spec-dictionary/lib/canonical.mjs";
 // @ts-ignore
 import { tokensFromFiles } from "../../../packages/spec-dictionary/lib/tokens.mjs";
+import { isStructural, rawValueAdvice } from "../../../packages/spec-dictionary/lib/structural.mjs";
 // @ts-ignore
 import { buildIR } from "../../../packages/spec-dictionary/lib/ir.mjs";
 // @ts-ignore
@@ -40,9 +41,41 @@ export const GENERATOR = { name: "s2a-spec-transform", version: "1" };
 export type Component = (typeof data)["components"][number];
 export const components: Component[] = data.components;
 export const contracted = components.filter((c) => c.contracted);
+/** Contracted components grouped by design system, S2A first. */
+export const systems: { id: string; label: string; items: Component[] }[] = (() => {
+  const by = new Map<string, { id: string; label: string; items: Component[] }>();
+  for (const c of contracted) {
+    const id = (c as { system?: string }).system ?? "s2a";
+    const label = (c as { systemLabel?: string }).systemLabel ?? "S2A";
+    if (!by.has(id)) by.set(id, { id, label, items: [] });
+    by.get(id)!.items.push(c);
+  }
+  return [...by.values()].sort((a, b) => (a.id === "s2a" ? -1 : b.id === "s2a" ? 1 : a.id.localeCompare(b.id)));
+})();
 export const capturedAt: string = data.capturedAt;
 
 const tokens = tokensFromFiles(data.tokenFiles);
+// A token namespace belongs to a design system, so the resolver does too.
+// S2A keeps the default; a second system resolves against its own token build.
+const bySystem = (data as { tokenFilesBySystem?: Record<string, Record<string, Record<string, string>>> }).tokenFilesBySystem ?? {};
+const resolvers: Record<string, ReturnType<typeof tokensFromFiles>> = {};
+for (const [id, files] of Object.entries(bySystem)) resolvers[id] = tokensFromFiles(files, { extraChain: ["tokens.component.css"] });
+export const systemOf = (slug: string): string => components.find((c) => c.slug === slug)?.system ?? "s2a";
+/** Storybook's title for a system's stories, lowercased: the first half of every story id. */
+const storybookTitles: Record<string, string> = data.storybookTitleBySystem ?? {};
+export const storyPrefixOf = (slug: string): string => String(storybookTitles[systemOf(slug)] ?? "Generated").toLowerCase();
+const tokensFor = (slug: string) => resolvers[systemOf(slug)] ?? tokens;
+/**
+ * The namespace a component's token references are written in.
+ *
+ * Not the same as the system id: `spectrum.button` is a Spectrum 2 contract, but
+ * its tokens are `{swc.*}` because the implementation is @adobe/spectrum-wc and
+ * that is what its custom properties are called. Deriving one from the other
+ * made every Spectrum reference look foreign and fail the shipped-token check.
+ */
+const tokenNsBySystem: Record<string, string> =
+  (data as { tokenNsBySystem?: Record<string, string> }).tokenNsBySystem ?? {};
+const nsOf = (slug: string) => tokenNsBySystem[systemOf(slug)] ?? systemOf(slug);
 const shippedNames: Set<string> = tokens.names;
 
 // Same rule as build.mjs's slugIndex(): a component's display name or its
@@ -80,6 +113,10 @@ function schemaRefusals(defs: unknown): Refusal[] {
 
 // ── curation (validate-defs.mjs, minus the disk) ─────────────────────────────
 function curationRefusals(defs: any, c: Component): Refusal[] {
+  // The component carries its own system, so the namespace and the shipped-token
+  // set come from it rather than from a constant.
+  const ns = ((c as { system?: string }).system ?? "s2a") === "s2a" ? "s2a" : (c as { system?: string }).system!;
+  const names: Set<string> = (resolvers[(c as { system?: string }).system ?? "s2a"] ?? tokens).names;
   const out: Refusal[] = [];
   const fail = (path: string, message: string) => out.push({ path, message, layer: "curation", severity: "fail" });
   const warn = (path: string, message: string) => out.push({ path, message, layer: "curation", severity: "warn" });
@@ -109,8 +146,16 @@ function curationRefusals(defs: any, c: Component): Refusal[] {
       if (entry.treatment === "internal" && !entry.why?.trim())
         fail(`${p}/why`, `composition "${entry.name}": internal without a why — "internal" is a claim that this is not a component, and it has to be argued`);
       if (entry.treatment === "contract") {
-        const target = entry.slug ?? components.find((k) => alnum(k.slug) === alnum(entry.name))?.slug;
-        const known = target && components.find((k) => k.slug === target);
+        // A composition names a component in its OWN system first. The contract
+        // says `icon`, not `spectrum:icon` — the system is context, not part of
+        // the name — so qualify the lookup here rather than leaking the Book's
+        // key format into published data. Falls back to a global match so an
+        // S2A component can still compose across systems once that is a thing.
+        const sys = (c as { system?: string }).system ?? "s2a";
+        const qualify = (s: string) => (sys === "s2a" ? s : `${sys}:${s}`);
+        const byName = components.find((k) => alnum(k.slug) === alnum(qualify(entry.name)) || alnum(k.slug) === alnum(entry.name));
+        const target = entry.slug ?? byName?.slug;
+        const known = target && (components.find((k) => k.slug === qualify(target)) ?? components.find((k) => k.slug === target));
         if (!known) warn(p, `composition "${entry.name}": treatment "contract" but no component resolves to it yet — it still needs building`);
         else if (!known.contracted) warn(p, `composition "${entry.name}": ${target} has a spec but no contract yet`);
       }
@@ -146,19 +191,28 @@ function curationRefusals(defs: any, c: Component): Refusal[] {
       for (const e of part.statesByProp ?? []) for (const [val, m] of Object.entries(e.map ?? {})) maps.push([`@${e.prop}=${val}:${e.state}`, m]);
       for (const e of part.tokensByCombination ?? []) for (const r of e.rows ?? []) maps.push([`@${(e.props ?? []).map((p: string, i: number) => `${p}=${r.values?.[i] ?? "*"}`).join(",")}`, r.tokens]);
       for (const [where, map] of maps) for (const [prop, ref] of Object.entries(map ?? {}) as [string, string][]) {
-        for (const m of ref.matchAll(/\{s2a\.[a-z0-9.-]+\}/g)) {
+        for (const m of ref.matchAll(new RegExp(`\\{${ns}\\.[a-z0-9.-]+\\}`, "g"))) {
           const v = "--" + m[0].slice(1, -1).replace(/\./g, "-");
-          if (shippedNames.size && !shippedNames.has(v)) fail(`${jp}/tokens/${prop}`, `anatomy ${path} ${prop}${where}: ${m[0]} → ${v} is not a shipped token`);
+          if (names.size && !names.has(v)) fail(`${jp}/tokens/${prop}`, `anatomy ${path} ${prop}${where}: ${m[0]} → ${v} is not a shipped token`);
         }
-        if (ref.startsWith("raw:")) warn(`${jp}/tokens/${prop}`, `anatomy ${path} ${prop}${where}: ${ref} is hardcoded — no S2A variable behind it. Bind one in Figma and re-extract, or keep the raw: value with the reason in a decision`);
+        if (ref.startsWith("raw:") && !isStructural(prop, ref)) {
+          const { label, fix } = rawValueAdvice(ns);
+          warn(`${jp}/tokens/${prop}`, `anatomy ${path} ${prop}${where}: ${ref} is hardcoded — no ${label} variable behind it. ${fix}`);
+        }
       }
 
       if (part.asset) {
         const a = part.asset;
         if (!defs.props.some((pp: any) => pp.name === a.prop)) fail(`${jp}/asset/prop`, `anatomy ${path} asset: names prop "${a.prop}", which this component does not have`);
-        const doc = data.assets[a.manifest];
-        if (!doc) fail(`${jp}/asset/manifest`, `anatomy ${path} asset: manifest "${a.manifest}" has not been built — run npm run specs:assets`);
-        else {
+        if (a.altProp && !defs.props.some((pp: any) => pp.name === a.altProp)) fail(`${jp}/asset/altProp`, `anatomy ${path} asset: names alt prop "${a.altProp}", which this component does not have`);
+        // No manifest means the prop IS the source — an avatar's src, with no
+        // table to look it up in. The checks below are about the lookup, so
+        // they only apply when there is one. The same rule lives in
+        // validate-defs.mjs; the two must agree or the Book refuses what the
+        // gate passes, which is exactly what happened here.
+        const doc = a.manifest ? data.assets[a.manifest] : null;
+        if (a.manifest && !doc) fail(`${jp}/asset/manifest`, `anatomy ${path} asset: manifest "${a.manifest}" has not been built — run npm run specs:assets`);
+        else if (doc) {
           const sample = Object.values(doc.entries ?? {})[0] as Record<string, unknown> ?? {};
           if (!(a.field in sample)) fail(`${jp}/asset/field`, `anatomy ${path} asset: manifest "${a.manifest}" entries have no "${a.field}" field (they have: ${Object.keys(sample).join(", ")})`);
         }
@@ -203,10 +257,10 @@ function curationRefusals(defs: any, c: Component): Refusal[] {
 
 // A composed child renders through its own contract, resolved by slug or by
 // the name a slot accepts. Same rule as render.mjs, over the Book's registry.
-export function contractFor(key: string): { slug: string; name: string; props: any[] } | null {
+export function contractFor(key: string): { slug: string; name: string; props: any[]; archetype: string | null } | null {
   const k = alnum(key);
   const c = components.find((x) => x.contract && (x.slug === key || alnum(x.name) === k || alnum(x.slug) === k));
-  return c ? { slug: c.slug, name: c.contract.name ?? c.name, props: c.contract.props ?? [] } : null;
+  return c ? { slug: c.slug, name: c.contract.name ?? c.name, props: c.contract.props ?? [], archetype: c.contract.archetype ?? null } : null;
 }
 
 // ── the build ─────────────────────────────────────────────────────────────────
@@ -235,10 +289,17 @@ export function build(slug: string, defs: unknown): BuildResult {
   const refusals = curationRefusals(d, c);
   try {
     const withHash = { ...d, $hash: hashOf(d) };
-    const ir = buildIR({ defs: withHash, code: c.code, figma: c.figma, tokens, generator: GENERATOR });
+    // The system travels with the IR, as it does in the Node build. Without it
+    // the renderer assumed ours and rewrote a Spectrum component's literal 16px
+    // radius into var(--s2a-border-radius-md), which nothing defines there — the
+    // Book drew the button with square corners while the gate drew it correctly.
+    const ir = buildIR({ defs: withHash, code: c.code, figma: c.figma, tokens, generator: GENERATOR, system: systemOf(slug) });
     const manifest = { $generated: GENERATOR, ...storiesManifest(ir) };
     const artifacts: Record<string, string> = {
-      [`${slug}.contract.json`]: JSON.stringify(contractJson(ir, { id: `s2a.${slug}` }), null, 2),
+      // `<system>.<component>` — the contract schema's own id shape. The system
+      // comes from the component, not from a constant, so a Spectrum contract is
+      // `spectrum.button` rather than `s2a.spectrum:button`.
+      [`${slug}.contract.json`]: JSON.stringify(contractJson(ir, { id: `${systemOf(slug)}.${slug.includes(":") ? slug.split(":")[1] : slug}` }), null, 2),
       [`${slug}.spec.json`]: JSON.stringify(specJson(ir, { slugOf }), null, 2),
       [`${slug}.catalog.json`]: JSON.stringify(catalogAdapter.artifacts(ir)[0].data, null, 2),
       [`${slug}.spec.md`]: markdown(ir),
@@ -246,7 +307,18 @@ export function build(slug: string, defs: unknown): BuildResult {
       ["figma.plan.json"]: JSON.stringify({ $generated: GENERATOR, ...figmaPlan(ir) }, null, 2),
     };
     const rendered: Record<string, Record<string, string>> = {};
-    for (const [id, r] of Object.entries(renderers) as [string, any][]) rendered[id] = r.files(ir, slug, { manifest, contractFor });
+    // The renderer names classes from the slug. The Book's key is composite
+    // (`spectrum:icon`) so two systems can hold a Button each; a colon is not
+    // legal in a class name, so the renderer gets the component's own slug and
+    // the system stays the Book's business.
+    const bare = slug.includes(":") ? slug.split(":")[1] : slug;
+    // Only the targets that GENERATE from the contract run here. `upstream`
+    // mounts a shipped library's own element and reads that library's files
+    // off disk to do it; the Book shows its result in Storybook's frame instead.
+    for (const [id, r] of Object.entries(renderers) as [string, any][]) {
+      if (id === "upstream") continue;
+      rendered[id] = r.files(ir, bare, { manifest, contractFor });
+    }
     return { slug, ir, refusals, ok: !refusals.some((r) => r.severity === "fail"), artifacts, rendered, manifest };
   } catch (e) {
     // The engine refusing to derive is itself a named outcome, not a crash.

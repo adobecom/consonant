@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:31:20.068Z",
+  "extractedAt": "2026-10-28T16:22:54.874Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -67,8 +67,7 @@
   "attributes": {
     "data-load-state": {
       "values": [
-        "error",
-        "loaded"
+        "error"
       ],
       "dynamic": false,
       "sources": [
@@ -149,6 +148,138 @@
       "--c-app-icon-size"
     ],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-app-icon",
+        "declarations": [
+          {
+            "prop": "--c-app-icon-size",
+            "value": "var(--s2a-spacing-lg)"
+          },
+          {
+            "prop": "--c-app-icon-radius",
+            "value": "calc(var(--c-app-icon-size) * 0.18)"
+          },
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "width",
+            "value": "var(--c-app-icon-size)"
+          },
+          {
+            "prop": "height",
+            "value": "var(--c-app-icon-size)"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--c-app-icon-radius)"
+          },
+          {
+            "prop": "overflow",
+            "value": "hidden"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".c-app-icon[data-load-state=\"error\"]",
+        "declarations": [
+          {
+            "prop": "visibility",
+            "value": "hidden"
+          }
+        ]
+      },
+      {
+        "selector": ".c-app-icon[data-size=\"16\"]",
+        "declarations": [
+          {
+            "prop": "--c-app-icon-size",
+            "value": "var(--s2a-spacing-md)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-app-icon[data-size=\"18\"]",
+        "declarations": [
+          {
+            "prop": "--c-app-icon-size",
+            "value": "18px"
+          }
+        ]
+      },
+      {
+        "selector": ".c-app-icon[data-size=\"32\"]",
+        "declarations": [
+          {
+            "prop": "--c-app-icon-size",
+            "value": "var(--s2a-spacing-xl)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-app-icon[data-size=\"48\"]",
+        "declarations": [
+          {
+            "prop": "--c-app-icon-size",
+            "value": "var(--s2a-spacing-3xl)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-app-icon[data-size=\"80\"]",
+        "declarations": [
+          {
+            "prop": "--c-app-icon-size",
+            "value": "80px"
+          }
+        ]
+      },
+      {
+        "selector": ".c-app-icon__img",
+        "declarations": [
+          {
+            "prop": "width",
+            "value": "100%"
+          },
+          {
+            "prop": "height",
+            "value": "100%"
+          },
+          {
+            "prop": "display",
+            "value": "block"
+          },
+          {
+            "prop": "object-fit",
+            "value": "cover"
+          },
+          {
+            "prop": "border-radius",
+            "value": "inherit"
+          },
+          {
+            "prop": "background-color",
+            "value": "transparent"
+          }
+        ]
+      }
+    ]
   },
   "states": [],
   "queries": [],
@@ -504,7 +635,7 @@
         ],
         "dataset": {
           "size": "24",
-          "loadState": "loaded"
+          "loadState": "error"
         }
       },
       "attributes": {
@@ -512,7 +643,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -520,7 +651,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "classes": [
@@ -551,7 +682,7 @@
         ],
         "dataset": {
           "size": "24",
-          "loadState": "loaded"
+          "loadState": "error"
         }
       },
       "attributes": {
@@ -559,7 +690,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -567,7 +698,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "classes": [
@@ -598,7 +729,7 @@
         ],
         "dataset": {
           "size": "16",
-          "loadState": "loaded"
+          "loadState": "error"
         }
       },
       "attributes": {
@@ -606,7 +737,7 @@
           "16"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -614,7 +745,7 @@
           "16"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "classes": [
@@ -644,17 +775,24 @@
           "c-app-icon"
         ],
         "dataset": {
-          "size": "32"
+          "size": "32",
+          "loadState": "error"
         }
       },
       "attributes": {
         "data-size": [
           "32"
+        ],
+        "data-load-state": [
+          "error"
         ]
       },
       "rootAttributes": {
         "data-size": [
           "32"
+        ],
+        "data-load-state": [
+          "error"
         ]
       },
       "classes": [
@@ -684,17 +822,24 @@
           "c-app-icon"
         ],
         "dataset": {
-          "size": "24"
+          "size": "24",
+          "loadState": "error"
         }
       },
       "attributes": {
         "data-size": [
           "24"
+        ],
+        "data-load-state": [
+          "error"
         ]
       },
       "rootAttributes": {
         "data-size": [
           "24"
+        ],
+        "data-load-state": [
+          "error"
         ]
       },
       "classes": [
@@ -725,7 +870,7 @@
         ],
         "dataset": {
           "size": "32",
-          "loadState": "loaded"
+          "loadState": "error"
         }
       },
       "attributes": {
@@ -733,7 +878,7 @@
           "32"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -741,7 +886,7 @@
           "32"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "classes": [
@@ -770,6 +915,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:95e0ba7f1af578291128c68aea8eeeb58ffe5d2b6e4ff6fbcb2a57572a8ad406"
+    "hash": "sha256:e53f26a594a0e8c0856c61974cf4214ec58a89f4cb547636d025f7165dd4da76"
   }
 }

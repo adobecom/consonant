@@ -11,6 +11,7 @@ import { chromium } from "playwright";
 import { auditMilo } from "../src/audit-milo.ts";
 import { loadTokenIndex } from "../src/token-index.ts";
 import { libraryMarkdown } from "../src/library-report.ts";
+import { captureResponsiveRecording } from "./rich-content-recording.mjs";
 
 const root = process.cwd();
 const out = resolve(".tmp/validators/rich-content-figjam");
@@ -128,10 +129,6 @@ try {
     viewport: { width: 2560, height: 1200 },
     deviceScaleFactor: 1,
     locale: "en-US",
-    recordVideo: {
-      dir: join(out, "video"),
-      size: { width: 1280, height: 720 },
-    },
   });
   const page = await context.newPage();
   const errors = [],
@@ -205,17 +202,14 @@ try {
       .locator(".section")
       .screenshot({ path: join(out, `milo-${width}.png`) });
   }
-  // Capture a denser responsive sweep. Frames are also used for a FigJam GIF.
-  for (let i = 0; i <= 44; i++) {
-    const width = Math.round(2560 - ((2560 - 375) * i) / 44);
-    await page.setViewportSize({ width, height: 1200 });
-    await page.waitForTimeout(110);
-    await page
-      .locator(".section")
-      .screenshot({
-        path: join(out, "frames", `${String(i).padStart(3, "0")}-${width}.png`),
-      });
-  }
+  const recording = await captureResponsiveRecording({
+    browser,
+    page,
+    measure,
+    out,
+    revision,
+    fontCss,
+  });
   const noContext = [];
   await page.goto(url + "?context=unwrapped", { waitUntil: "networkidle" });
   await page.waitForFunction(() => window.auditReady);
@@ -228,7 +222,6 @@ try {
       .locator(".section")
       .screenshot({ path: join(out, `milo-unwrapped-${width}.png`) });
   }
-  const videoPath = await page.video().path();
   await context.close();
   const audit = auditMilo({
     roots: [resolve("context/milo/libs/c2/blocks")],
@@ -300,7 +293,8 @@ try {
     unwrapped: noContext,
     comparisons,
     auditCounts: audit.counts,
-    video: relative(root, videoPath),
+    video: relative(root, recording.path),
+    recording: { ...recording, path: relative(root, recording.path) },
     errors,
     failedRequests,
     limitations: [

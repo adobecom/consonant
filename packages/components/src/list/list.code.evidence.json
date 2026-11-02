@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:31:52.208Z",
+  "extractedAt": "2026-10-28T16:26:35.367Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -159,6 +159,198 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-list",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "flex-direction",
+            "value": "column"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-md)"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "selector": ".c-list__section",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "flex-direction",
+            "value": "column"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-sm)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-list__divider",
+        "declarations": [
+          {
+            "prop": "width",
+            "value": "100%"
+          },
+          {
+            "prop": "height",
+            "value": "1px"
+          },
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "border",
+            "value": "none"
+          },
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-border-subtle)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-list__title",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-list__icon",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "width",
+            "value": "20px"
+          },
+          {
+            "prop": "height",
+            "value": "20px"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-list__title-text",
+        "declarations": [
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-label)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-label)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-font-size-sm)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-font-line-height-xs)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-list__items",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "flex-direction",
+            "value": "column"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "padding",
+            "value": "0 0 0 var(--s2a-spacing-xl)"
+          },
+          {
+            "prop": "list-style",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-list__item",
+        "declarations": [
+          {
+            "prop": "padding-block",
+            "value": "var(--s2a-spacing-3xs)"
+          },
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-body)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-body)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-font-size-sm)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-font-line-height-xs)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-subtle)"
+          }
+        ]
+      }
+    ]
   },
   "states": [],
   "queries": [],
@@ -394,6 +586,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:0ea78969ba6e1efbdeaaf4ab95483c01193cdf3224a7b627aa8454f7492d1cc3"
+    "hash": "sha256:a4ec56c4a8a32a33dfb2a112a61febab608ec83ac0682461db0417d172717f1b"
   }
 }

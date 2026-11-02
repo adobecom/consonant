@@ -1,0 +1,466 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Avatar",
+  "slug": "avatar",
+  "status": "curated-draft",
+  "version": "2.0.0",
+  "archetype": "avatar",
+  "description": "A person or entity, as a circular image. Static: it is a picture, not a control.",
+  "curated": {
+    "by": "read from @adobe/spectrum-wc 2.0.0-beta.6 (dist/components/avatar/avatar.js, the css`` template) and its shipped type declarations; the design file was used to check the result, not to derive it",
+    "date": "2026-10-28",
+    "reviewer": "Matt"
+  },
+  "anchors": {
+    "figma": {
+      "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+      "kind": "component-set",
+      "nodeId": "9190:562",
+      "nodeName": "Avatar",
+      "componentSetKey": "e97d19aa739914d2acce9f5c3a4ee9f81c5c2d7f",
+      "deprecated": false,
+      "successorNodeId": null,
+      "usages": [],
+      "notes": "Component set on page \"Avatar\". The set's Style axis offers four placeholder treatments \u2014 a photo, a generated gradient, initials and a guest glyph. Only the photo exists in the implementation; the rest are sample content drawn in the file. See a-style-axis."
+    },
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/avatar",
+      "export": "Avatar",
+      "cssClass": "swc-Avatar"
+    }
+  },
+  "props": [
+    {
+      "name": "size",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "50",
+        "75",
+        "100",
+        "200",
+        "300",
+        "400",
+        "500",
+        "600",
+        "700",
+        "800",
+        "900",
+        "1000",
+        "1100",
+        "1200",
+        "1300",
+        "1400",
+        "1500"
+      ],
+      "default": "500",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Size",
+        "valueMap": {
+          "50": "50 (16x16)",
+          "75": "75 (20x20)",
+          "100": "100 (24x24)",
+          "200": "200 (28x28)",
+          "300": "300 (32x32)",
+          "400": "400 (36x36)",
+          "500": "500 (40x40)",
+          "600": "600 (44x44)",
+          "700": "700 (48x48)",
+          "800": "800 (52x52)",
+          "900": "900 (56x56)",
+          "1000": "1000 (64x64)",
+          "1100": "1100 (72x72)",
+          "1200": "1200 (80x80)",
+          "1300": "1300 (88x88)",
+          "1400": "1400 (96x96)",
+          "1500": "1500 (104x104)"
+        }
+      },
+      "code": {
+        "prop": "size",
+        "attr": "data-size"
+      },
+      "notes": "Seventeen rungs. The design file labels each with its pixel box, 50 (16x16); the code value is the rung alone."
+    },
+    {
+      "name": "src",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "src"
+      },
+      "notes": "URL of the image. The design file has no counterpart: it draws sample content instead."
+    },
+    {
+      "name": "alt",
+      "lever": true,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "alt"
+      },
+      "notes": "Describes the person or entity. An empty string marks the image decorative and hides it from assistive technology."
+    },
+    {
+      "name": "outline",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": {
+        "kind": "BOOLEAN",
+        "property": "Show stroke"
+      },
+      "code": {
+        "prop": "outline",
+        "attr": "data-outline"
+      },
+      "notes": "A ring around the image, for avatars that overlap or sit on a busy ground."
+    },
+    {
+      "name": "disabled",
+      "lever": true,
+      "type": "boolean",
+      "default": false,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "valueMap": {
+          "true": "Disabled",
+          "false": "Default"
+        }
+      },
+      "code": {
+        "prop": "disabled"
+      }
+    },
+    {
+      "name": "decorative",
+      "lever": false,
+      "type": "boolean",
+      "default": false,
+      "figma": "NONE",
+      "code": {
+        "prop": "decorative"
+      },
+      "notes": "Hides the image from assistive technology without clearing alt."
+    }
+  ],
+  "states": [
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=Disabled"
+      },
+      "code": {
+        "mechanism": "[disabled]"
+      },
+      "notes": "Dims the image and stops pointer events. Not an interactive state: the avatar is static."
+    }
+  ],
+  "composition": [
+    {
+      "name": ".Gradient image",
+      "treatment": "internal",
+      "why": "Sample content drawn in the design file for the Gradient image style. The implementation renders whatever src points at, so there is nothing to contract."
+    },
+    {
+      "name": ".Gradient background",
+      "treatment": "internal",
+      "why": "The same, for the gradient's backing fill."
+    },
+    {
+      "name": ".S2_Icon_Avatar_20_Filled",
+      "treatment": "icon",
+      "why": "The guest placeholder glyph, from the icon rig. Also sample content rather than anatomy."
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".swc-Avatar",
+      "element": "span",
+      "figma": ".root",
+      "tokens": {
+        "display": "raw:inline-block",
+        "box-sizing": "raw:border-box",
+        "inline-size": "{swc.avatar.size.500}",
+        "block-size": "{swc.avatar.size.500}",
+        "border-radius": "raw:50%",
+        "user-select": "raw:none"
+      },
+      "tokensByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "50": {
+              "inline-size": "{swc.avatar.size.50}",
+              "block-size": "{swc.avatar.size.50}"
+            },
+            "75": {
+              "inline-size": "{swc.avatar.size.75}",
+              "block-size": "{swc.avatar.size.75}"
+            },
+            "100": {
+              "inline-size": "{swc.avatar.size.100}",
+              "block-size": "{swc.avatar.size.100}"
+            },
+            "200": {
+              "inline-size": "{swc.avatar.size.200}",
+              "block-size": "{swc.avatar.size.200}"
+            },
+            "300": {
+              "inline-size": "{swc.avatar.size.300}",
+              "block-size": "{swc.avatar.size.300}"
+            },
+            "400": {
+              "inline-size": "{swc.avatar.size.400}",
+              "block-size": "{swc.avatar.size.400}"
+            },
+            "500": {
+              "inline-size": "{swc.avatar.size.500}",
+              "block-size": "{swc.avatar.size.500}"
+            },
+            "600": {
+              "inline-size": "{swc.avatar.size.600}",
+              "block-size": "{swc.avatar.size.600}"
+            },
+            "700": {
+              "inline-size": "{swc.avatar.size.700}",
+              "block-size": "{swc.avatar.size.700}"
+            },
+            "800": {
+              "inline-size": "{swc.avatar.size.800}",
+              "block-size": "{swc.avatar.size.800}"
+            },
+            "900": {
+              "inline-size": "{swc.avatar.size.900}",
+              "block-size": "{swc.avatar.size.900}"
+            },
+            "1000": {
+              "inline-size": "{swc.avatar.size.1000}",
+              "block-size": "{swc.avatar.size.1000}"
+            },
+            "1100": {
+              "inline-size": "{swc.avatar.size.1100}",
+              "block-size": "{swc.avatar.size.1100}"
+            },
+            "1200": {
+              "inline-size": "{swc.avatar.size.1200}",
+              "block-size": "{swc.avatar.size.1200}"
+            },
+            "1300": {
+              "inline-size": "{swc.avatar.size.1300}",
+              "block-size": "{swc.avatar.size.1300}"
+            },
+            "1400": {
+              "inline-size": "{swc.avatar.size.1400}",
+              "block-size": "{swc.avatar.size.1400}"
+            },
+            "1500": {
+              "inline-size": "{swc.avatar.size.1500}",
+              "block-size": "{swc.avatar.size.1500}"
+            }
+          }
+        }
+      ],
+      "states": {
+        "disabled": {
+          "opacity": "{swc.avatar.opacity.disabled}",
+          "pointer-events": "raw:none"
+        }
+      },
+      "parts": {
+        "image": {
+          "selector": ".swc-Avatar-image",
+          "element": "img",
+          "figma": "/Photo",
+          "tokens": {
+            "display": "raw:block",
+            "inline-size": "raw:100%",
+            "block-size": "raw:100%",
+            "border-radius": "raw:50%",
+            "object-fit": "raw:cover"
+          },
+          "tokensByProp": [
+            {
+              "prop": "outline",
+              "map": {
+                "true": {
+                  "outline-style": "raw:solid",
+                  "outline-width": "{swc.border.width.100}",
+                  "outline-color": "{swc.gray.25}"
+                }
+              }
+            }
+          ],
+          "tokensByCombination": [
+            {
+              "props": [
+                "outline",
+                "size"
+              ],
+              "rows": [
+                {
+                  "values": [
+                    "true",
+                    "1000"
+                  ],
+                  "tokens": {
+                    "outline-width": "raw:2px"
+                  }
+                },
+                {
+                  "values": [
+                    "true",
+                    "1100"
+                  ],
+                  "tokens": {
+                    "outline-width": "raw:2px"
+                  }
+                },
+                {
+                  "values": [
+                    "true",
+                    "1200"
+                  ],
+                  "tokens": {
+                    "outline-width": "raw:2px"
+                  }
+                },
+                {
+                  "values": [
+                    "true",
+                    "1300"
+                  ],
+                  "tokens": {
+                    "outline-width": "raw:2px"
+                  }
+                },
+                {
+                  "values": [
+                    "true",
+                    "1400"
+                  ],
+                  "tokens": {
+                    "outline-width": "raw:2px"
+                  }
+                },
+                {
+                  "values": [
+                    "true",
+                    "1500"
+                  ],
+                  "tokens": {
+                    "outline-width": "raw:2px"
+                  }
+                }
+              ]
+            }
+          ],
+          "slot": {
+            "name": "image",
+            "accepts": [
+              "kind:media"
+            ],
+            "acceptsMode": "prefer",
+            "notes": "The picture itself, from src. The design file fills it with a sample photo, exported alongside so a preview has something real to draw rather than an empty circle.",
+            "default": {
+              "figma": "/Photo",
+              "props": {
+                "src": "assets/avatar-sample.png"
+              }
+            }
+          },
+          "asset": {
+            "prop": "src",
+            "altProp": "alt",
+            "element": "img"
+          }
+        }
+      }
+    }
+  },
+  "forbiddenCombinations": [],
+  "a11y": {
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.11"
+    ],
+    "notes": [
+      "An image, not a control. It renders <img> and takes no focus.",
+      "alt describes the person or entity; alt=\"\" or decorative marks it decorative and hides it from assistive technology.",
+      "Disabled dims the image; it conveys no state to assistive technology because the avatar is not interactive."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "a-rebuilt-from-code",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The first contract for this component was scaffolded from the design file and described a row of six boxes.",
+      "chose": "Rebuilt from the implementation, as badge, button and icon were",
+      "decision": "The real component is a sized circle and an image, twenty-four CSS rules in total. The scaffolder had transcribed the design file's node tree \u2014 the gradient artwork, the initials text, the guest glyph and the stroke \u2014 as anatomy, laid them out as flex siblings, and hid none of them, so the preview drew six boxes side by side.",
+      "fix": "none",
+      "evidence": "dist/components/avatar/avatar.js is 2,193 bytes; the scaffolded contract was roughly 900 lines with 327 refusals."
+    },
+    {
+      "id": "a-style-axis",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The design file has a Style axis with four values \u2014 User image, Gradient image, Initials, Guest \u2014 and the implementation has no such property.",
+      "chose": "Left it out of props and recorded it here",
+      "fix": "Ask the Spectrum team whether the generated gradient, the initials and the guest glyph are meant to ship. Today an avatar renders whatever src points at and nothing else, so a consumer wanting initials has to draw them.",
+      "evidence": "Avatar.base.d.ts declares src, alt, size, outline, disabled and decorative. There is no style property, and avatar.js renders one <img>."
+    },
+    {
+      "id": "a-size-naming",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The design labels each size with its pixel box; the code uses the rung alone.",
+      "chose": "The contract carries the code value and maps to the design label",
+      "decision": "size is \"500\" in code and \"500 (40x40)\" in the file. The value map in the size prop is the translation.",
+      "fix": "none",
+      "evidence": "AVATAR_VALID_SIZES is a numeric tuple; the Figma Size axis carries the labels."
+    },
+    {
+      "id": "a-sample-art",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "An avatar with no src is an empty circle, so the preview had nothing to show.",
+      "chose": "Export the design's own placeholder photo into the package and name it on the slot",
+      "decision": "The sample is the design file's art, not something invented. It is a slot default, so it describes what the design puts there; it is never a value the component ships with.",
+      "fix": "The schema has no key for a media slot's sample art, so it is recorded under default.props, whose description covers the design's overrides on the instance. A `sample` key would read better.",
+      "evidence": "exported from the Size=1400 User image variant's Photo layer."
+    },
+    {
+      "id": "a-image-source",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The renderer had no way to emit an image whose src is a prop, so the preview drew a placeholder comment.",
+      "chose": "Declared the image part as an asset whose prop is the source",
+      "decision": "The asset form already emitted <img src=\u2026>, but required a manifest and field because it was built for lookup tables like the product icons. An avatar has no key to resolve: src is the source. Those two fields are now optional.",
+      "fix": "none",
+      "evidence": "The slot is kept alongside: it records what the design fills the picture with, including the exported sample."
+    },
+    {
+      "id": "a-outline-attr",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Toggling outline changed nothing in the preview.",
+      "chose": "Declare the attribute the styling keys on",
+      "decision": "The image's outline rule is written against [data-outline=\"true\"], and the prop declared no attr, so the generated component never set one. A prop that conditions styling has to name the attribute that carries it.",
+      "fix": "none",
+      "evidence": "The rendered root carried data-size and data-disabled but no data-outline, so the rule could not match."
+    }
+  ]
+}

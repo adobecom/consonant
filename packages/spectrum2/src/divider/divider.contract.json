@@ -1,0 +1,141 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "spectrum.divider",
+  "name": "Divider",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "Divider, as the implementation ships it.",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "s",
+          "m",
+          "l"
+        ]
+      },
+      "description": "The size of the divider.",
+      "default": "\"m\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "vertical",
+      "type": "boolean",
+      "description": "Whether the divider is vertical. If false, the divider is horizontal. The default is false.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "vertical"
+        }
+      }
+    },
+    {
+      "name": "staticColor",
+      "type": {
+        "enum": [
+          "white",
+          "black"
+        ]
+      },
+      "description": "The static color variant to use for the divider.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "staticColor"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "literals": {
+        "display": "block",
+        "box-sizing": "border-box",
+        "inline-size": "100%",
+        "block-size": "2px",
+        "background-color": "CanvasText",
+        "border-radius": "2px",
+        "min-inline-size": "min(100%,200px)"
+      },
+      "tokensByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "l": {
+              "background-color": "{swc.gray.800}"
+            }
+          }
+        }
+      ],
+      "literalsByProp": [
+        {
+          "prop": "staticColor",
+          "map": {
+            "white": {
+              "background-color": "rgba(255, 255, 255, .16)"
+            },
+            "black": {
+              "background-color": "rgba(0, 0, 0, .12)"
+            }
+          }
+        },
+        {
+          "prop": "vertical",
+          "map": {
+            "true": {
+              "align-self": "stretch",
+              "inline-size": "2px",
+              "block-size": "100%",
+              "min-block-size": "min(100%,200px)"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "a11y": {
+    "contrast": "AA"
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": null,
+        "componentSetKey": null
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/divider",
+        "export": "Divider"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:9f74751484e3281e81931010325b024b5f626edacef5335234bb843e5326f229",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:fb76fe5cfc531f2d984741b980fdb1cce7c6a63710a36401b64c4e3455eaba78"
+    }
+  }
+}

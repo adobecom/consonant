@@ -11,10 +11,14 @@
  *   featuresList: default | closed
  *   style: default | highlight
  */
+import decorateButton from '../../milo-atoms/button/button.js';
+
 export default function init(el) {
   const rows = [...el.querySelectorAll(':scope > div')];
   rows[0]?.classList.add('body');
   rows[1]?.classList.add('features');
+
+  decorateButton(el);   // Button: upgrades what the author wrote, in place
 
   // Anything the author left out simply is not there — a Milo block degrades to
   // what was written rather than rendering an empty slot.

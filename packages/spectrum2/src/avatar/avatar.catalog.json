@@ -1,0 +1,72 @@
+{
+  "id": "s2a.avatar",
+  "name": "Avatar",
+  "slug": "avatar",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "A person or entity, as a circular image. Static: it is a picture, not a control.",
+  "props": [
+    {
+      "name": "size",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "src",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "alt",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "outline",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "decorative",
+      "type": "boolean",
+      "lever": false
+    }
+  ],
+  "parts": [
+    "root",
+    "root.image"
+  ],
+  "slots": [
+    {
+      "path": "root.image",
+      "accepts": [
+        "kind:media"
+      ],
+      "mode": "prefer"
+    }
+  ],
+  "tokens": 39,
+  "a11y": {
+    "role": null,
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.11"
+    ]
+  },
+  "anchors": {
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/avatar",
+      "export": "Avatar",
+      "controller": null,
+      "cssClass": "swc-Avatar"
+    },
+    "figma": "9190:562"
+  },
+  "openDecisions": 1
+}

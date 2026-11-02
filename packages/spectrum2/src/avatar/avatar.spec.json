@@ -1,0 +1,1130 @@
+{
+  "$generated": {
+    "by": "s2a-spec-transform",
+    "version": "1",
+    "from": [
+      "defs.json",
+      "code.evidence.json",
+      "figma.evidence.json"
+    ],
+    "note": "Generated file: edit the defs, the component, or Figma, then run npm run specs:build. Hand edits fail npm run specs:check."
+  },
+  "name": "Avatar",
+  "slug": "avatar",
+  "cssClass": "swc-Avatar",
+  "figmaNodeId": "9190:562",
+  "description": "A person or entity, as a circular image. Static: it is a picture, not a control.",
+  "variants": {
+    "Size": [
+      "50 (16x16)",
+      "75 (20x20)",
+      "100 (24x24)",
+      "200 (28x28)",
+      "300 (32x32)",
+      "400 (36x36)",
+      "500 (40x40)",
+      "600 (44x44)",
+      "700 (48x48)",
+      "800 (52x52)",
+      "900 (56x56)",
+      "1000 (64x64)",
+      "1100 (72x72)",
+      "1200 (80x80)",
+      "1300 (88x88)",
+      "1400 (96x96)",
+      "1500 (104x104)"
+    ],
+    "State": [
+      "Default",
+      "Disabled"
+    ]
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "string",
+      "defaultValue": "\"500\"",
+      "description": "Seventeen rungs. The design file labels each with its pixel box, 50 (16x16); the code value is the rung alone.",
+      "enum": [
+        "50",
+        "75",
+        "100",
+        "200",
+        "300",
+        "400",
+        "500",
+        "600",
+        "700",
+        "800",
+        "900",
+        "1000",
+        "1100",
+        "1200",
+        "1300",
+        "1400",
+        "1500"
+      ],
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "valueMap": {
+            "50": "50 (16x16)",
+            "75": "75 (20x20)",
+            "100": "100 (24x24)",
+            "200": "200 (28x28)",
+            "300": "300 (32x32)",
+            "400": "400 (36x36)",
+            "500": "500 (40x40)",
+            "600": "600 (44x44)",
+            "700": "700 (48x48)",
+            "800": "800 (52x52)",
+            "900": "900 (56x56)",
+            "1000": "1000 (64x64)",
+            "1100": "1100 (72x72)",
+            "1200": "1200 (80x80)",
+            "1300": "1300 (88x88)",
+            "1400": "1400 (96x96)",
+            "1500": "1500 (104x104)"
+          },
+          "verified": true,
+          "options": [
+            "50 (16x16)",
+            "75 (20x20)",
+            "100 (24x24)",
+            "200 (28x28)",
+            "300 (32x32)",
+            "400 (36x36)",
+            "500 (40x40)",
+            "600 (44x44)",
+            "700 (48x48)",
+            "800 (52x52)",
+            "900 (56x56)",
+            "1000 (64x64)",
+            "1100 (72x72)",
+            "1200 (80x80)",
+            "1300 (88x88)",
+            "1400 (96x96)",
+            "1500 (104x104)"
+          ]
+        },
+        "code": {
+          "prop": "size",
+          "attr": "data-size",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "src",
+      "type": "string",
+      "description": "URL of the image. The design file has no counterpart: it draws sample content instead.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "src",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "alt",
+      "type": "string",
+      "description": "Describes the person or entity. An empty string marks the image decorative and hides it from assistive technology.",
+      "lever": true,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "alt",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "outline",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "A ring around the image, for avatars that overlap or sit on a busy ground.",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show stroke",
+          "verified": false
+        },
+        "code": {
+          "prop": "outline",
+          "attr": "data-outline",
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "defaultValue": "false",
+      "lever": true,
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "valueMap": {
+            "true": "Disabled",
+            "false": "Default"
+          },
+          "verified": true,
+          "options": [
+            "Default",
+            "Disabled"
+          ]
+        },
+        "code": {
+          "prop": "disabled",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    },
+    {
+      "name": "decorative",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "Hides the image from assistive technology without clearing alt.",
+      "lever": false,
+      "bindings": {
+        "figma": "NONE",
+        "code": {
+          "prop": "decorative",
+          "attr": null,
+          "extracted": true,
+          "jsdoc": null
+        }
+      }
+    }
+  ],
+  "tokenBindings": {
+    "root-inline-size": "--swc-avatar-size-500",
+    "root-block-size": "--swc-avatar-size-500",
+    "root-opacity:disabled": "--swc-avatar-opacity-disabled",
+    "root-inline-size@size=50": "--swc-avatar-size-50",
+    "root-block-size@size=50": "--swc-avatar-size-50",
+    "root-inline-size@size=75": "--swc-avatar-size-75",
+    "root-block-size@size=75": "--swc-avatar-size-75",
+    "root-inline-size@size=100": "--swc-avatar-size-100",
+    "root-block-size@size=100": "--swc-avatar-size-100",
+    "root-inline-size@size=200": "--swc-avatar-size-200",
+    "root-block-size@size=200": "--swc-avatar-size-200",
+    "root-inline-size@size=300": "--swc-avatar-size-300",
+    "root-block-size@size=300": "--swc-avatar-size-300",
+    "root-inline-size@size=400": "--swc-avatar-size-400",
+    "root-block-size@size=400": "--swc-avatar-size-400",
+    "root-inline-size@size=500": "--swc-avatar-size-500",
+    "root-block-size@size=500": "--swc-avatar-size-500",
+    "root-inline-size@size=600": "--swc-avatar-size-600",
+    "root-block-size@size=600": "--swc-avatar-size-600",
+    "root-inline-size@size=700": "--swc-avatar-size-700",
+    "root-block-size@size=700": "--swc-avatar-size-700",
+    "root-inline-size@size=800": "--swc-avatar-size-800",
+    "root-block-size@size=800": "--swc-avatar-size-800",
+    "root-inline-size@size=900": "--swc-avatar-size-900",
+    "root-block-size@size=900": "--swc-avatar-size-900",
+    "root-inline-size@size=1000": "--swc-avatar-size-1000",
+    "root-block-size@size=1000": "--swc-avatar-size-1000",
+    "root-inline-size@size=1100": "--swc-avatar-size-1100",
+    "root-block-size@size=1100": "--swc-avatar-size-1100",
+    "root-inline-size@size=1200": "--swc-avatar-size-1200",
+    "root-block-size@size=1200": "--swc-avatar-size-1200",
+    "root-inline-size@size=1300": "--swc-avatar-size-1300",
+    "root-block-size@size=1300": "--swc-avatar-size-1300",
+    "root-inline-size@size=1400": "--swc-avatar-size-1400",
+    "root-block-size@size=1400": "--swc-avatar-size-1400",
+    "root-inline-size@size=1500": "--swc-avatar-size-1500",
+    "root-block-size@size=1500": "--swc-avatar-size-1500",
+    "image-outline-width@outline=true": "--swc-border-width-100",
+    "image-outline-color@outline=true": "--swc-gray-25"
+  },
+  "tier": "component",
+  "composedOf": [],
+  "a11y": {
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.11"
+    ],
+    "notes": [
+      "An image, not a control. It renders <img> and takes no focus.",
+      "alt describes the person or entity; alt=\"\" or decorative marks it decorative and hides it from assistive technology.",
+      "Disabled dims the image; it conveys no state to assistive technology because the avatar is not interactive."
+    ]
+  },
+  "states": [
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=Disabled"
+      },
+      "code": {
+        "mechanism": "[disabled]"
+      },
+      "notes": "Dims the image and stops pointer events. Not an interactive state: the avatar is static."
+    }
+  ],
+  "anatomy": {
+    "selector": ".swc-Avatar",
+    "figma": ".root",
+    "element": "span",
+    "tokens": {
+      "display": {
+        "value": "raw:inline-block",
+        "raw": true,
+        "tokens": []
+      },
+      "box-sizing": {
+        "value": "raw:border-box",
+        "raw": true,
+        "tokens": []
+      },
+      "inline-size": {
+        "value": "{swc.avatar.size.500}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{swc.avatar.size.500}",
+            "cssVar": "--swc-avatar-size-500",
+            "figma": "swc/avatar/size/500",
+            "shipped": true,
+            "value": "var(--swc-theme--sizeM, 40px)\n    var(--swc-theme--sizeL, 44px)"
+          }
+        ]
+      },
+      "block-size": {
+        "value": "{swc.avatar.size.500}",
+        "raw": false,
+        "tokens": [
+          {
+            "ref": "{swc.avatar.size.500}",
+            "cssVar": "--swc-avatar-size-500",
+            "figma": "swc/avatar/size/500",
+            "shipped": true,
+            "value": "var(--swc-theme--sizeM, 40px)\n    var(--swc-theme--sizeL, 44px)"
+          }
+        ]
+      },
+      "border-radius": {
+        "value": "raw:50%",
+        "raw": true,
+        "tokens": []
+      },
+      "user-select": {
+        "value": "raw:none",
+        "raw": true,
+        "tokens": []
+      }
+    },
+    "states": {
+      "disabled": {
+        "opacity": {
+          "value": "{swc.avatar.opacity.disabled}",
+          "raw": false,
+          "tokens": [
+            {
+              "ref": "{swc.avatar.opacity.disabled}",
+              "cssVar": "--swc-avatar-opacity-disabled",
+              "figma": "swc/avatar/opacity/disabled",
+              "shipped": true,
+              "value": "0.3"
+            }
+          ]
+        },
+        "pointer-events": {
+          "value": "raw:none",
+          "raw": true,
+          "tokens": []
+        }
+      }
+    },
+    "tokensByProp": [
+      {
+        "prop": "size",
+        "map": {
+          "50": {
+            "inline-size": {
+              "value": "{swc.avatar.size.50}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.50}",
+                  "cssVar": "--swc-avatar-size-50",
+                  "figma": "swc/avatar/size/50",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 16px)\n    var(--swc-theme--sizeL, 20px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.50}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.50}",
+                  "cssVar": "--swc-avatar-size-50",
+                  "figma": "swc/avatar/size/50",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 16px)\n    var(--swc-theme--sizeL, 20px)"
+                }
+              ]
+            }
+          },
+          "75": {
+            "inline-size": {
+              "value": "{swc.avatar.size.75}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.75}",
+                  "cssVar": "--swc-avatar-size-75",
+                  "figma": "swc/avatar/size/75",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 20px)\n    var(--swc-theme--sizeL, 24px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.75}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.75}",
+                  "cssVar": "--swc-avatar-size-75",
+                  "figma": "swc/avatar/size/75",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 20px)\n    var(--swc-theme--sizeL, 24px)"
+                }
+              ]
+            }
+          },
+          "100": {
+            "inline-size": {
+              "value": "{swc.avatar.size.100}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.100}",
+                  "cssVar": "--swc-avatar-size-100",
+                  "figma": "swc/avatar/size/100",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 24px)\n    var(--swc-theme--sizeL, 28px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.100}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.100}",
+                  "cssVar": "--swc-avatar-size-100",
+                  "figma": "swc/avatar/size/100",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 24px)\n    var(--swc-theme--sizeL, 28px)"
+                }
+              ]
+            }
+          },
+          "200": {
+            "inline-size": {
+              "value": "{swc.avatar.size.200}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.200}",
+                  "cssVar": "--swc-avatar-size-200",
+                  "figma": "swc/avatar/size/200",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 28px)\n    var(--swc-theme--sizeL, 32px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.200}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.200}",
+                  "cssVar": "--swc-avatar-size-200",
+                  "figma": "swc/avatar/size/200",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 28px)\n    var(--swc-theme--sizeL, 32px)"
+                }
+              ]
+            }
+          },
+          "300": {
+            "inline-size": {
+              "value": "{swc.avatar.size.300}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.300}",
+                  "cssVar": "--swc-avatar-size-300",
+                  "figma": "swc/avatar/size/300",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 32px)\n    var(--swc-theme--sizeL, 36px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.300}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.300}",
+                  "cssVar": "--swc-avatar-size-300",
+                  "figma": "swc/avatar/size/300",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 32px)\n    var(--swc-theme--sizeL, 36px)"
+                }
+              ]
+            }
+          },
+          "400": {
+            "inline-size": {
+              "value": "{swc.avatar.size.400}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.400}",
+                  "cssVar": "--swc-avatar-size-400",
+                  "figma": "swc/avatar/size/400",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 36px)\n    var(--swc-theme--sizeL, 40px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.400}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.400}",
+                  "cssVar": "--swc-avatar-size-400",
+                  "figma": "swc/avatar/size/400",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 36px)\n    var(--swc-theme--sizeL, 40px)"
+                }
+              ]
+            }
+          },
+          "500": {
+            "inline-size": {
+              "value": "{swc.avatar.size.500}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.500}",
+                  "cssVar": "--swc-avatar-size-500",
+                  "figma": "swc/avatar/size/500",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 40px)\n    var(--swc-theme--sizeL, 44px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.500}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.500}",
+                  "cssVar": "--swc-avatar-size-500",
+                  "figma": "swc/avatar/size/500",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 40px)\n    var(--swc-theme--sizeL, 44px)"
+                }
+              ]
+            }
+          },
+          "600": {
+            "inline-size": {
+              "value": "{swc.avatar.size.600}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.600}",
+                  "cssVar": "--swc-avatar-size-600",
+                  "figma": "swc/avatar/size/600",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 44px)\n    var(--swc-theme--sizeL, 48px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.600}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.600}",
+                  "cssVar": "--swc-avatar-size-600",
+                  "figma": "swc/avatar/size/600",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 44px)\n    var(--swc-theme--sizeL, 48px)"
+                }
+              ]
+            }
+          },
+          "700": {
+            "inline-size": {
+              "value": "{swc.avatar.size.700}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.700}",
+                  "cssVar": "--swc-avatar-size-700",
+                  "figma": "swc/avatar/size/700",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 48px)\n    var(--swc-theme--sizeL, 52px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.700}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.700}",
+                  "cssVar": "--swc-avatar-size-700",
+                  "figma": "swc/avatar/size/700",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 48px)\n    var(--swc-theme--sizeL, 52px)"
+                }
+              ]
+            }
+          },
+          "800": {
+            "inline-size": {
+              "value": "{swc.avatar.size.800}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.800}",
+                  "cssVar": "--swc-avatar-size-800",
+                  "figma": "swc/avatar/size/800",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 52px)\n    var(--swc-theme--sizeL, 56px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.800}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.800}",
+                  "cssVar": "--swc-avatar-size-800",
+                  "figma": "swc/avatar/size/800",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 52px)\n    var(--swc-theme--sizeL, 56px)"
+                }
+              ]
+            }
+          },
+          "900": {
+            "inline-size": {
+              "value": "{swc.avatar.size.900}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.900}",
+                  "cssVar": "--swc-avatar-size-900",
+                  "figma": "swc/avatar/size/900",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 56px)\n    var(--swc-theme--sizeL, 64px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.900}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.900}",
+                  "cssVar": "--swc-avatar-size-900",
+                  "figma": "swc/avatar/size/900",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 56px)\n    var(--swc-theme--sizeL, 64px)"
+                }
+              ]
+            }
+          },
+          "1000": {
+            "inline-size": {
+              "value": "{swc.avatar.size.1000}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1000}",
+                  "cssVar": "--swc-avatar-size-1000",
+                  "figma": "swc/avatar/size/1000",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 64px)\n    var(--swc-theme--sizeL, 72px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.1000}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1000}",
+                  "cssVar": "--swc-avatar-size-1000",
+                  "figma": "swc/avatar/size/1000",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 64px)\n    var(--swc-theme--sizeL, 72px)"
+                }
+              ]
+            }
+          },
+          "1100": {
+            "inline-size": {
+              "value": "{swc.avatar.size.1100}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1100}",
+                  "cssVar": "--swc-avatar-size-1100",
+                  "figma": "swc/avatar/size/1100",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 72px)\n    var(--swc-theme--sizeL, 80px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.1100}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1100}",
+                  "cssVar": "--swc-avatar-size-1100",
+                  "figma": "swc/avatar/size/1100",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 72px)\n    var(--swc-theme--sizeL, 80px)"
+                }
+              ]
+            }
+          },
+          "1200": {
+            "inline-size": {
+              "value": "{swc.avatar.size.1200}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1200}",
+                  "cssVar": "--swc-avatar-size-1200",
+                  "figma": "swc/avatar/size/1200",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 80px)\n    var(--swc-theme--sizeL, 88px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.1200}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1200}",
+                  "cssVar": "--swc-avatar-size-1200",
+                  "figma": "swc/avatar/size/1200",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 80px)\n    var(--swc-theme--sizeL, 88px)"
+                }
+              ]
+            }
+          },
+          "1300": {
+            "inline-size": {
+              "value": "{swc.avatar.size.1300}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1300}",
+                  "cssVar": "--swc-avatar-size-1300",
+                  "figma": "swc/avatar/size/1300",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 88px)\n    var(--swc-theme--sizeL, 96px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.1300}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1300}",
+                  "cssVar": "--swc-avatar-size-1300",
+                  "figma": "swc/avatar/size/1300",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 88px)\n    var(--swc-theme--sizeL, 96px)"
+                }
+              ]
+            }
+          },
+          "1400": {
+            "inline-size": {
+              "value": "{swc.avatar.size.1400}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1400}",
+                  "cssVar": "--swc-avatar-size-1400",
+                  "figma": "swc/avatar/size/1400",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 96px)\n    var(--swc-theme--sizeL, 104px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.1400}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1400}",
+                  "cssVar": "--swc-avatar-size-1400",
+                  "figma": "swc/avatar/size/1400",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 96px)\n    var(--swc-theme--sizeL, 104px)"
+                }
+              ]
+            }
+          },
+          "1500": {
+            "inline-size": {
+              "value": "{swc.avatar.size.1500}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1500}",
+                  "cssVar": "--swc-avatar-size-1500",
+                  "figma": "swc/avatar/size/1500",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 104px)\n    var(--swc-theme--sizeL, 112px)"
+                }
+              ]
+            },
+            "block-size": {
+              "value": "{swc.avatar.size.1500}",
+              "raw": false,
+              "tokens": [
+                {
+                  "ref": "{swc.avatar.size.1500}",
+                  "cssVar": "--swc-avatar-size-1500",
+                  "figma": "swc/avatar/size/1500",
+                  "shipped": true,
+                  "value": "var(--swc-theme--sizeM, 104px)\n    var(--swc-theme--sizeL, 112px)"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "parts": {
+      "image": {
+        "selector": ".swc-Avatar-image",
+        "figma": "/Photo",
+        "element": "img",
+        "tokens": {
+          "display": {
+            "value": "raw:block",
+            "raw": true,
+            "tokens": []
+          },
+          "inline-size": {
+            "value": "raw:100%",
+            "raw": true,
+            "tokens": []
+          },
+          "block-size": {
+            "value": "raw:100%",
+            "raw": true,
+            "tokens": []
+          },
+          "border-radius": {
+            "value": "raw:50%",
+            "raw": true,
+            "tokens": []
+          },
+          "object-fit": {
+            "value": "raw:cover",
+            "raw": true,
+            "tokens": []
+          }
+        },
+        "tokensByProp": [
+          {
+            "prop": "outline",
+            "map": {
+              "true": {
+                "outline-style": {
+                  "value": "raw:solid",
+                  "raw": true,
+                  "tokens": []
+                },
+                "outline-width": {
+                  "value": "{swc.border.width.100}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{swc.border.width.100}",
+                      "cssVar": "--swc-border-width-100",
+                      "figma": "swc/border/width/100",
+                      "shipped": true,
+                      "value": "1px"
+                    }
+                  ]
+                },
+                "outline-color": {
+                  "value": "{swc.gray.25}",
+                  "raw": false,
+                  "tokens": [
+                    {
+                      "ref": "{swc.gray.25}",
+                      "cssVar": "--swc-gray-25",
+                      "figma": "swc/gray/25",
+                      "shipped": true,
+                      "value": "light-dark(rgb(255, 255, 255), rgb(17, 17, 17))"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "tokensByCombination": [
+          {
+            "props": [
+              "outline",
+              "size"
+            ],
+            "rows": [
+              {
+                "values": [
+                  "true",
+                  "1000"
+                ],
+                "tokens": {
+                  "outline-width": {
+                    "value": "raw:2px",
+                    "raw": true,
+                    "tokens": []
+                  }
+                }
+              },
+              {
+                "values": [
+                  "true",
+                  "1100"
+                ],
+                "tokens": {
+                  "outline-width": {
+                    "value": "raw:2px",
+                    "raw": true,
+                    "tokens": []
+                  }
+                }
+              },
+              {
+                "values": [
+                  "true",
+                  "1200"
+                ],
+                "tokens": {
+                  "outline-width": {
+                    "value": "raw:2px",
+                    "raw": true,
+                    "tokens": []
+                  }
+                }
+              },
+              {
+                "values": [
+                  "true",
+                  "1300"
+                ],
+                "tokens": {
+                  "outline-width": {
+                    "value": "raw:2px",
+                    "raw": true,
+                    "tokens": []
+                  }
+                }
+              },
+              {
+                "values": [
+                  "true",
+                  "1400"
+                ],
+                "tokens": {
+                  "outline-width": {
+                    "value": "raw:2px",
+                    "raw": true,
+                    "tokens": []
+                  }
+                }
+              },
+              {
+                "values": [
+                  "true",
+                  "1500"
+                ],
+                "tokens": {
+                  "outline-width": {
+                    "value": "raw:2px",
+                    "raw": true,
+                    "tokens": []
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "slot": {
+          "name": "image",
+          "accepts": [
+            "kind:media"
+          ],
+          "acceptsMode": "prefer",
+          "notes": "The picture itself, from src. The design file fills it with a sample photo, exported alongside so a preview has something real to draw rather than an empty circle.",
+          "default": {
+            "figma": "/Photo",
+            "props": {
+              "src": "assets/avatar-sample.png"
+            }
+          }
+        },
+        "asset": {
+          "prop": "src",
+          "altProp": "alt",
+          "element": "img"
+        }
+      }
+    }
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+        "kind": "component-set",
+        "nodeId": "9190:562",
+        "nodeName": "Avatar",
+        "componentSetKey": "e97d19aa739914d2acce9f5c3a4ee9f81c5c2d7f",
+        "deprecated": false,
+        "successorNodeId": null,
+        "usages": []
+      },
+      "evidence": {
+        "hash": "sha256:17a157b39f62ce93985cf66782f53cfca9be2243e2bc9815c4897f351a9d8bf7",
+        "extractedAt": "2026-10-28T16:52:50.481Z",
+        "meta": {
+          "version": "",
+          "status": "",
+          "updated": "",
+          "changelog": ""
+        }
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/avatar",
+        "export": "Avatar",
+        "controller": null,
+        "cssClass": "swc-Avatar"
+      },
+      "evidence": {
+        "hash": "sha256:deef533f3c58405abcd15df95b78857bf62e9ab5deab9502e7526ef7b3b5f8f1"
+      }
+    }
+  },
+  "decisions": [
+    {
+      "id": "a-rebuilt-from-code",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The first contract for this component was scaffolded from the design file and described a row of six boxes.",
+      "chose": "Rebuilt from the implementation, as badge, button and icon were",
+      "decision": "The real component is a sized circle and an image, twenty-four CSS rules in total. The scaffolder had transcribed the design file's node tree — the gradient artwork, the initials text, the guest glyph and the stroke — as anatomy, laid them out as flex siblings, and hid none of them, so the preview drew six boxes side by side.",
+      "fix": "none",
+      "evidence": "dist/components/avatar/avatar.js is 2,193 bytes; the scaffolded contract was roughly 900 lines with 327 refusals."
+    },
+    {
+      "id": "a-style-axis",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The design file has a Style axis with four values — User image, Gradient image, Initials, Guest — and the implementation has no such property.",
+      "chose": "Left it out of props and recorded it here",
+      "fix": "Ask the Spectrum team whether the generated gradient, the initials and the guest glyph are meant to ship. Today an avatar renders whatever src points at and nothing else, so a consumer wanting initials has to draw them.",
+      "evidence": "Avatar.base.d.ts declares src, alt, size, outline, disabled and decorative. There is no style property, and avatar.js renders one <img>."
+    },
+    {
+      "id": "a-size-naming",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The design labels each size with its pixel box; the code uses the rung alone.",
+      "chose": "The contract carries the code value and maps to the design label",
+      "decision": "size is \"500\" in code and \"500 (40x40)\" in the file. The value map in the size prop is the translation.",
+      "fix": "none",
+      "evidence": "AVATAR_VALID_SIZES is a numeric tuple; the Figma Size axis carries the labels."
+    },
+    {
+      "id": "a-sample-art",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "An avatar with no src is an empty circle, so the preview had nothing to show.",
+      "chose": "Export the design's own placeholder photo into the package and name it on the slot",
+      "decision": "The sample is the design file's art, not something invented. It is a slot default, so it describes what the design puts there; it is never a value the component ships with.",
+      "fix": "The schema has no key for a media slot's sample art, so it is recorded under default.props, whose description covers the design's overrides on the instance. A `sample` key would read better.",
+      "evidence": "exported from the Size=1400 User image variant's Photo layer."
+    },
+    {
+      "id": "a-image-source",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The renderer had no way to emit an image whose src is a prop, so the preview drew a placeholder comment.",
+      "chose": "Declared the image part as an asset whose prop is the source",
+      "decision": "The asset form already emitted <img src=…>, but required a manifest and field because it was built for lookup tables like the product icons. An avatar has no key to resolve: src is the source. Those two fields are now optional.",
+      "fix": "none",
+      "evidence": "The slot is kept alongside: it records what the design fills the picture with, including the exported sample."
+    },
+    {
+      "id": "a-outline-attr",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Toggling outline changed nothing in the preview.",
+      "chose": "Declare the attribute the styling keys on",
+      "decision": "The image's outline rule is written against [data-outline=\"true\"], and the prop declared no attr, so the generated component never set one. A prop that conditions styling has to name the attribute that carries it.",
+      "fix": "none",
+      "evidence": "The rendered root carried data-size and data-disabled but no data-outline, so the rule could not match."
+    }
+  ],
+  "provenance": {
+    "defs": "sha256:3e69554bd48d973ead0d37986fd08928c18e7a032112ec54d4adc06c0d1fb9ed",
+    "codeEvidence": "sha256:deef533f3c58405abcd15df95b78857bf62e9ab5deab9502e7526ef7b3b5f8f1",
+    "figmaEvidence": "sha256:17a157b39f62ce93985cf66782f53cfca9be2243e2bc9815c4897f351a9d8bf7",
+    "generator": "s2a-spec-transform@1"
+  }
+}

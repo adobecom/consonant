@@ -1,0 +1,648 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "avatar",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "size-50",
+      "name": "size: 50",
+      "args": {
+        "size": "50"
+      }
+    },
+    {
+      "id": "size-75",
+      "name": "size: 75",
+      "args": {
+        "size": "75"
+      }
+    },
+    {
+      "id": "size-100",
+      "name": "size: 100",
+      "args": {
+        "size": "100"
+      }
+    },
+    {
+      "id": "size-200",
+      "name": "size: 200",
+      "args": {
+        "size": "200"
+      }
+    },
+    {
+      "id": "size-300",
+      "name": "size: 300",
+      "args": {
+        "size": "300"
+      }
+    },
+    {
+      "id": "size-400",
+      "name": "size: 400",
+      "args": {
+        "size": "400"
+      }
+    },
+    {
+      "id": "size-500",
+      "name": "size: 500",
+      "args": {
+        "size": "500"
+      }
+    },
+    {
+      "id": "size-600",
+      "name": "size: 600",
+      "args": {
+        "size": "600"
+      }
+    },
+    {
+      "id": "size-700",
+      "name": "size: 700",
+      "args": {
+        "size": "700"
+      }
+    },
+    {
+      "id": "size-800",
+      "name": "size: 800",
+      "args": {
+        "size": "800"
+      }
+    },
+    {
+      "id": "size-900",
+      "name": "size: 900",
+      "args": {
+        "size": "900"
+      }
+    },
+    {
+      "id": "size-1000",
+      "name": "size: 1000",
+      "args": {
+        "size": "1000"
+      }
+    },
+    {
+      "id": "size-1100",
+      "name": "size: 1100",
+      "args": {
+        "size": "1100"
+      }
+    },
+    {
+      "id": "size-1200",
+      "name": "size: 1200",
+      "args": {
+        "size": "1200"
+      }
+    },
+    {
+      "id": "size-1300",
+      "name": "size: 1300",
+      "args": {
+        "size": "1300"
+      }
+    },
+    {
+      "id": "size-1400",
+      "name": "size: 1400",
+      "args": {
+        "size": "1400"
+      }
+    },
+    {
+      "id": "size-1500",
+      "name": "size: 1500",
+      "args": {
+        "size": "1500"
+      }
+    },
+    {
+      "id": "outline-on",
+      "name": "outline on",
+      "args": {
+        "outline": true
+      }
+    },
+    {
+      "id": "outline-off",
+      "name": "outline off",
+      "args": {
+        "outline": false
+      }
+    },
+    {
+      "id": "disabled-on",
+      "name": "disabled on",
+      "args": {
+        "disabled": true
+      }
+    },
+    {
+      "id": "disabled-off",
+      "name": "disabled off",
+      "args": {
+        "disabled": false
+      }
+    }
+  ],
+  "existing": [],
+  "deferred": [
+    "size-50",
+    "size-75",
+    "size-100",
+    "size-200",
+    "size-300",
+    "size-400",
+    "size-500",
+    "size-600",
+    "size-700",
+    "size-800",
+    "size-900",
+    "size-1000",
+    "size-1100",
+    "size-1200",
+    "size-1300",
+    "size-1400",
+    "size-1500",
+    "outline-on",
+    "outline-off",
+    "disabled-on",
+    "disabled-off"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": "State",
+    "cols": [
+      "Default",
+      "Disabled"
+    ],
+    "rows": [
+      "50 (16x16)",
+      "75 (20x20)",
+      "100 (24x24)",
+      "200 (28x28)",
+      "300 (32x32)",
+      "400 (36x36)",
+      "500 (40x40)",
+      "600 (44x44)",
+      "700 (48x48)",
+      "800 (52x52)",
+      "900 (56x56)",
+      "1000 (64x64)",
+      "1100 (72x72)",
+      "1200 (80x80)",
+      "1300 (88x88)",
+      "1400 (96x96)",
+      "1500 (104x104)"
+    ],
+    "rowValues": [
+      {
+        "Size": "50 (16x16)"
+      },
+      {
+        "Size": "75 (20x20)"
+      },
+      {
+        "Size": "100 (24x24)"
+      },
+      {
+        "Size": "200 (28x28)"
+      },
+      {
+        "Size": "300 (32x32)"
+      },
+      {
+        "Size": "400 (36x36)"
+      },
+      {
+        "Size": "500 (40x40)"
+      },
+      {
+        "Size": "600 (44x44)"
+      },
+      {
+        "Size": "700 (48x48)"
+      },
+      {
+        "Size": "800 (52x52)"
+      },
+      {
+        "Size": "900 (56x56)"
+      },
+      {
+        "Size": "1000 (64x64)"
+      },
+      {
+        "Size": "1100 (72x72)"
+      },
+      {
+        "Size": "1200 (80x80)"
+      },
+      {
+        "Size": "1300 (88x88)"
+      },
+      {
+        "Size": "1400 (96x96)"
+      },
+      {
+        "Size": "1500 (104x104)"
+      }
+    ],
+    "cell": {
+      "w": 128,
+      "h": 128,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "size": "50",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "50 (16x16) / Default",
+        "nodeId": "9190:620"
+      },
+      {
+        "row": 0,
+        "col": 1,
+        "args": {
+          "size": "50",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "50 (16x16) / Disabled",
+        "nodeId": "9190:634"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "size": "75",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "75 (20x20) / Default",
+        "nodeId": "9190:648"
+      },
+      {
+        "row": 1,
+        "col": 1,
+        "args": {
+          "size": "75",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "75 (20x20) / Disabled",
+        "nodeId": "9190:662"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "size": "100",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "100 (24x24) / Default",
+        "nodeId": "9190:832"
+      },
+      {
+        "row": 2,
+        "col": 1,
+        "args": {
+          "size": "100",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "100 (24x24) / Disabled",
+        "nodeId": "9190:860"
+      },
+      {
+        "row": 3,
+        "col": 0,
+        "args": {
+          "size": "200",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "200 (28x28) / Default",
+        "nodeId": "9190:676"
+      },
+      {
+        "row": 3,
+        "col": 1,
+        "args": {
+          "size": "200",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "200 (28x28) / Disabled",
+        "nodeId": "9190:690"
+      },
+      {
+        "row": 4,
+        "col": 0,
+        "args": {
+          "size": "300",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "300 (32x32) / Default",
+        "nodeId": "9190:704"
+      },
+      {
+        "row": 4,
+        "col": 1,
+        "args": {
+          "size": "300",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "300 (32x32) / Disabled",
+        "nodeId": "9190:718"
+      },
+      {
+        "row": 5,
+        "col": 0,
+        "args": {
+          "size": "400",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "400 (36x36) / Default",
+        "nodeId": "9190:732"
+      },
+      {
+        "row": 5,
+        "col": 1,
+        "args": {
+          "size": "400",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "400 (36x36) / Disabled",
+        "nodeId": "9190:748"
+      },
+      {
+        "row": 6,
+        "col": 0,
+        "args": {
+          "size": "500",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "500 (40x40) / Default",
+        "nodeId": "9190:763"
+      },
+      {
+        "row": 6,
+        "col": 1,
+        "args": {
+          "size": "500",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "500 (40x40) / Disabled",
+        "nodeId": "9190:779"
+      },
+      {
+        "row": 7,
+        "col": 0,
+        "args": {
+          "size": "600",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "600 (44x44) / Default",
+        "nodeId": "9190:818"
+      },
+      {
+        "row": 7,
+        "col": 1,
+        "args": {
+          "size": "600",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "600 (44x44) / Disabled",
+        "nodeId": "9190:846"
+      },
+      {
+        "row": 8,
+        "col": 0,
+        "args": {
+          "size": "700",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "700 (48x48) / Default",
+        "nodeId": "9190:874"
+      },
+      {
+        "row": 8,
+        "col": 1,
+        "args": {
+          "size": "700",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "700 (48x48) / Disabled",
+        "nodeId": "9190:888"
+      },
+      {
+        "row": 9,
+        "col": 0,
+        "args": {
+          "size": "800",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "800 (52x52) / Default",
+        "nodeId": "9190:1032"
+      },
+      {
+        "row": 9,
+        "col": 1,
+        "args": {
+          "size": "800",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "800 (52x52) / Disabled",
+        "nodeId": "9190:1176"
+      },
+      {
+        "row": 10,
+        "col": 0,
+        "args": {
+          "size": "900",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "900 (56x56) / Default",
+        "nodeId": "9190:1014"
+      },
+      {
+        "row": 10,
+        "col": 1,
+        "args": {
+          "size": "900",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "900 (56x56) / Disabled",
+        "nodeId": "9190:1158"
+      },
+      {
+        "row": 11,
+        "col": 0,
+        "args": {
+          "size": "1000",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "1000 (64x64) / Default",
+        "nodeId": "9190:996"
+      },
+      {
+        "row": 11,
+        "col": 1,
+        "args": {
+          "size": "1000",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "1000 (64x64) / Disabled",
+        "nodeId": "9190:1140"
+      },
+      {
+        "row": 12,
+        "col": 0,
+        "args": {
+          "size": "1100",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "1100 (72x72) / Default",
+        "nodeId": "9190:978"
+      },
+      {
+        "row": 12,
+        "col": 1,
+        "args": {
+          "size": "1100",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "1100 (72x72) / Disabled",
+        "nodeId": "9190:1122"
+      },
+      {
+        "row": 13,
+        "col": 0,
+        "args": {
+          "size": "1200",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "1200 (80x80) / Default",
+        "nodeId": "9190:960"
+      },
+      {
+        "row": 13,
+        "col": 1,
+        "args": {
+          "size": "1200",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "1200 (80x80) / Disabled",
+        "nodeId": "9190:1104"
+      },
+      {
+        "row": 14,
+        "col": 0,
+        "args": {
+          "size": "1300",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "1300 (88x88) / Default",
+        "nodeId": "9190:942"
+      },
+      {
+        "row": 14,
+        "col": 1,
+        "args": {
+          "size": "1300",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "1300 (88x88) / Disabled",
+        "nodeId": "9190:1086"
+      },
+      {
+        "row": 15,
+        "col": 0,
+        "args": {
+          "size": "1400",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "1400 (96x96) / Default",
+        "nodeId": "9190:924"
+      },
+      {
+        "row": 15,
+        "col": 1,
+        "args": {
+          "size": "1400",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "1400 (96x96) / Disabled",
+        "nodeId": "9190:1068"
+      },
+      {
+        "row": 16,
+        "col": 0,
+        "args": {
+          "size": "1500",
+          "disabled": false
+        },
+        "forced": null,
+        "label": "1500 (104x104) / Default",
+        "nodeId": "9190:906"
+      },
+      {
+        "row": 16,
+        "col": 1,
+        "args": {
+          "size": "1500",
+          "disabled": true
+        },
+        "forced": null,
+        "label": "1500 (104x104) / Disabled",
+        "nodeId": "9190:1050"
+      }
+    ],
+    "missing": []
+  }
+}

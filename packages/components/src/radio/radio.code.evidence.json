@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:32:06.981Z",
+  "extractedAt": "2026-10-28T16:26:47.639Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -100,10 +100,7 @@
       "c-radio",
       "c-radio__control",
       "c-radio__input",
-      "c-radio__label",
-      "dot",
-      "label",
-      "ring"
+      "c-radio__label"
     ],
     "runtime": [
       "c-radio",
@@ -175,6 +172,275 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-radio",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "cursor",
+            "value": "pointer"
+          },
+          {
+            "prop": "-webkit-user-select",
+            "value": "none"
+          },
+          {
+            "prop": "user-select",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio__input",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "width",
+            "value": "1px"
+          },
+          {
+            "prop": "height",
+            "value": "1px"
+          },
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "padding",
+            "value": "0"
+          },
+          {
+            "prop": "overflow",
+            "value": "hidden"
+          },
+          {
+            "prop": "clip",
+            "value": "rect(0 0 0 0)"
+          },
+          {
+            "prop": "white-space",
+            "value": "nowrap"
+          },
+          {
+            "prop": "border",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio__control",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "relative"
+          },
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          },
+          {
+            "prop": "flex",
+            "value": "none"
+          },
+          {
+            "prop": "width",
+            "value": "20px"
+          },
+          {
+            "prop": "height",
+            "value": "20px"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--s2a-border-radius-round)"
+          },
+          {
+            "prop": "transition",
+            "value": "background-color 130ms ease"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio__control::before",
+        "declarations": [
+          {
+            "prop": "content",
+            "value": "\"\""
+          },
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "inset",
+            "value": "1px"
+          },
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          },
+          {
+            "prop": "border",
+            "value": "1.5px solid var(--s2a-color-content-default)"
+          },
+          {
+            "prop": "border-radius",
+            "value": "inherit"
+          },
+          {
+            "prop": "transition",
+            "value": "border-color 130ms ease"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio__control::after",
+        "declarations": [
+          {
+            "prop": "content",
+            "value": "\"\""
+          },
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "inset",
+            "value": "6px"
+          },
+          {
+            "prop": "border-radius",
+            "value": "inherit"
+          },
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-content-default)"
+          },
+          {
+            "prop": "opacity",
+            "value": "0"
+          },
+          {
+            "prop": "transition",
+            "value": "opacity 130ms ease"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio__input:checked + .c-radio__control::after",
+        "declarations": [
+          {
+            "prop": "opacity",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio:hover:not([data-disabled]) .c-radio__control,\n.c-radio[data-force-state=\"hover\"] .c-radio__control",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-background-subtle)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio__input:focus-visible + .c-radio__control,\n.c-radio[data-force-state=\"focus\"] .c-radio__control",
+        "declarations": [
+          {
+            "prop": "box-shadow",
+            "value": "0 0 0 var(--s2a-border-width-md)\n    var(--s2a-color-focus-ring-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio__label",
+        "declarations": [
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-label)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-label)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-label)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-label)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-typography-letter-spacing-label)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-subtle)"
+          },
+          {
+            "prop": "transition",
+            "value": "color 130ms ease"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio__input:checked ~ .c-radio__label",
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio[data-disabled]",
+        "declarations": [
+          {
+            "prop": "cursor",
+            "value": "not-allowed"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio[data-disabled] .c-radio__control::before",
+        "declarations": [
+          {
+            "prop": "border-color",
+            "value": "var(--s2a-color-content-subtle)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-radio[data-disabled] .c-radio__control::after",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-content-subtle)"
+          }
+        ]
+      }
+    ]
   },
   "states": [
     ":checked",
@@ -723,6 +989,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:d4c852adafdbaf9dd8d04561807d3569115097186a3873b9657dc505de11e9cf"
+    "hash": "sha256:9d4ac1779837f2da5bad791ff17a296ef395202d7c52ed5c427f28a33c721bce"
   }
 }

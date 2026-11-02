@@ -6,6 +6,7 @@
 // changes, which is the point of having a contract at all.
 import { lit } from "./lit.mjs";
 import { milo } from "./milo.mjs";
+import { upstream } from "./upstream.mjs";
 
-export const renderers = { lit, milo };
+export const renderers = { lit, milo, upstream };
 export const targets = Object.keys(renderers);

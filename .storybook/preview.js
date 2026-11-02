@@ -134,7 +134,7 @@ const preview = {
         // after these, which is why Generated has to be named explicitly — it
         // was sorting to the bottom, under the component library it is meant
         // to be demonstrating.
-        order: ["Generated", "Getting Started", "Foundations", ["Start Here", "Color", "Typography", "Spacing", "Border", "Effects", "Responsive", "Icons", "Layout", "Theming", "Grid", ["Overview", ["Overview", "Contract Index"], "Playground", "Figma styles", "Containers", "Column grid", "Grid kinds", "Breakpoints", "Section spacing", "Conformance"]], "Atoms", "Molecules", "Organisms", "Cards"],
+        order: ["Generated", "Spectrum", "Getting Started", "Foundations", ["Start Here", "Color", "Typography", "Spacing", "Border", "Effects", "Responsive", "Icons", "Layout", "Theming", "Grid", ["Overview", ["Overview", "Contract Index"], "Playground", "Figma styles", "Containers", "Column grid", "Grid kinds", "Breakpoints", "Section spacing", "Conformance"]], "Atoms", "Molecules", "Organisms", "Cards"],
       },
     },
 

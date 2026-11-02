@@ -1,0 +1,246 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-28T16:27:23.251Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "icon",
+    "name": "Icon",
+    "cssClass": "swc-Icon",
+    "importPath": "packages/spectrum2/src/icon/icon.js",
+    "exports": [
+      "Icon"
+    ],
+    "render": null,
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/icon/icon.spec.json",
+      "storybookId": null,
+      "figmaNodeId": null
+    }
+  },
+  "sources": {
+    "packages/spectrum2/src/icon/icon.js": "sha256:e985be70245cc4c3ebdf21e7700ebfaf40560c73e2128752f0401734491d6c21",
+    "packages/spectrum2/src/icon/icon.css": "sha256:a1486e9ed51569eb14bb601e46adf237d59e6750749fc95590650f99b8be9ae8",
+    "packages/spectrum2/src/icon/icon.d.ts": "sha256:ad21bf96208c44c8853b0daf5682f6ae51e0eb1428cad98192dc40f3730c010e"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "enum",
+      "values": [
+        "xs",
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "default": "m",
+      "description": "T-shirt icon size."
+    },
+    {
+      "name": "accessibleLabel",
+      "type": "string",
+      "description": "Accessible label for the icon. When empty the icon is decorative."
+    }
+  ],
+  "attributes": {},
+  "parts": {
+    "template": [],
+    "stylesheet": [],
+    "runtime": [],
+    "own": []
+  },
+  "declarations": {
+    "element": "swc-icon",
+    "slots": [],
+    "cssProps": [
+      "--swc-icon-block-size",
+      "--swc-icon-color",
+      "--swc-icon-inline-size"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [],
+    "tags": []
+  },
+  "imports": [
+    "../../stylesheets/_lit-styles/icon-base.js"
+  ],
+  "tokens": {
+    "references": {
+      "--swc-icon-block-size": {
+        "fallback": false
+      },
+      "--swc-icon-color": {
+        "fallback": true
+      },
+      "--swc-icon-inline-size": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-extra-large": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-extra-small": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-large": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-medium": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-small": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ":host",
+        "declarations": [
+          {
+            "prop": "--swc-icon-inline-size",
+            "value": "var(--swc-workflow-icon-medium)"
+          },
+          {
+            "prop": "--swc-icon-block-size",
+            "value": "var(--swc-workflow-icon-medium)"
+          },
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          },
+          {
+            "prop": "display",
+            "value": "block"
+          },
+          {
+            "prop": "inline-size",
+            "value": "var(--swc-icon-inline-size)"
+          },
+          {
+            "prop": "block-size",
+            "value": "var(--swc-icon-block-size)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--swc-icon-color, currentColor)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"xs\"])",
+        "declarations": [
+          {
+            "prop": "--swc-icon-inline-size",
+            "value": "var(--swc-workflow-icon-extra-small)"
+          },
+          {
+            "prop": "--swc-icon-block-size",
+            "value": "var(--swc-workflow-icon-extra-small)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"s\"])",
+        "declarations": [
+          {
+            "prop": "--swc-icon-inline-size",
+            "value": "var(--swc-workflow-icon-small)"
+          },
+          {
+            "prop": "--swc-icon-block-size",
+            "value": "var(--swc-workflow-icon-small)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"m\"])",
+        "declarations": [
+          {
+            "prop": "--swc-icon-inline-size",
+            "value": "var(--swc-workflow-icon-medium)"
+          },
+          {
+            "prop": "--swc-icon-block-size",
+            "value": "var(--swc-workflow-icon-medium)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"l\"])",
+        "declarations": [
+          {
+            "prop": "--swc-icon-inline-size",
+            "value": "var(--swc-workflow-icon-large)"
+          },
+          {
+            "prop": "--swc-icon-block-size",
+            "value": "var(--swc-workflow-icon-large)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"xl\"])",
+        "declarations": [
+          {
+            "prop": "--swc-icon-inline-size",
+            "value": "var(--swc-workflow-icon-extra-large)"
+          },
+          {
+            "prop": "--swc-icon-block-size",
+            "value": "var(--swc-workflow-icon-extra-large)"
+          }
+        ]
+      },
+      {
+        "selector": "svg,::slotted(*)",
+        "declarations": [
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          },
+          {
+            "prop": "display",
+            "value": "block"
+          },
+          {
+            "prop": "inline-size",
+            "value": "100%"
+          },
+          {
+            "prop": "block-size",
+            "value": "100%"
+          },
+          {
+            "prop": "fill",
+            "value": "var(--swc-icon-color, currentColor)"
+          }
+        ]
+      }
+    ]
+  },
+  "states": [],
+  "queries": [],
+  "stories": [],
+  "counts": {
+    "props": 2,
+    "attributes": 0,
+    "parts": 0,
+    "tokenReferences": 8,
+    "tokenReferencesWithoutFallback": 7,
+    "raw": 0,
+    "stories": 0,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:fb8796f875a4248de0e8ace45e51929d938f6a0f54841d438673f807e094e8cc"
+  }
+}

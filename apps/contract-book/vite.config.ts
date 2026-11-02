@@ -10,8 +10,8 @@
 //
 // Two more plugins put Node-only steps behind dev-server endpoints, because a
 // browser cannot drive Chromium or hold a Figma token:
-//   - parity   screenshots the derived State matrix and scores it against the
-//              golden sheet with evals/visual/matrix-parity.mjs
+//   - parity   screenshots the State matrix story as Storybook renders it and
+//              scores it against the golden sheet with evals/visual/matrix-parity.mjs
 //   - extract  pulls a component set over the Figma REST API through the
 //              toolkit's extractor and drafts its defs with the scaffolder
 import { defineConfig } from "vite";
@@ -51,6 +51,6 @@ export default defineConfig({
   build: {
     outDir: resolve(repoRoot, "dist", "apps", "contract-book"),
     emptyOutDir: true,
-    rollupOptions: { input: { main: resolve(here, "index.html"), matrix: resolve(here, "matrix.html") } },
+    rollupOptions: { input: { main: resolve(here, "index.html") } },
   },
 });

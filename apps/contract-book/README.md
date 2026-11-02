@@ -40,10 +40,9 @@ Two steps cannot run in a browser — driving Chromium, holding a Figma token �
 so they sit behind two dev-server endpoints, each a thin wrapper around code
 that already exists:
 
-- **Parity** (`vite-plugin-parity.mjs`) renders the State matrix story the
-  Book just derived on a bare page (`matrix.html`, which loads the same
-  normalize, tokens, base and fonts as `.storybook/preview.js`), shoots it in
-  headless Chromium at the golden sheet's scale, and scores it with
+- **Parity** (`vite-plugin-parity.mjs`) shoots the State matrix story **as
+  Storybook renders it** — the build on disk, in the running Storybook on
+  6006 — in headless Chromium at the golden sheet's scale, and scores it with
   `evals/visual/matrix-parity.mjs` — the file `npm run eval:visual:matrix`
   runs, imported, not copied. On Button the thirty cell scores agree with the
   CLI's to within 0.03% and the difference codes are identical. When the
@@ -113,8 +112,10 @@ plan and the parity score all move.
 - **Defs** — editable; status line says valid, how many refusals, or that the
   file is not JSON. *Reset* reloads from disk. A draft shows a banner with the
   scaffolder's low-confidence guesses and *Save to repo* / *Discard*.
-- **Output** — Preview (the Lit renderer's own emitted module, evaluated with
-  the real token CSS and Adobe Clean, with prop and theme controls), Parity
+- **Output** — Render (Storybook's own frame for the component's default
+  story: the generated code for ours, the library's own element for Spectrum;
+  not interactive — the controls, story index and design overlay are
+  Storybook's, one click away; *Sign off* rebuilds and the frame follows), Parity
   (the cell grid, click a cell for design / built / diff and its codes, the
   codes rolled up by state), Contract, CSS, Lit, Milo, Figma plan, Spec,
   Evidence (read-only — observed, never edited here; a draft adds the REST

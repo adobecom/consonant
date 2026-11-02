@@ -33,30 +33,45 @@ const SRC = join(ROOT, "packages", "components", "src");
 const OUT = join(__dirname, "out");
 const TOKENS = join(ROOT, "dist", "packages", "tokens", "css", "dev");
 
+/**
+ * Where a component tree, its token build and its contract namespace come from.
+ *
+ * Defaults are ours, so every existing caller — the gate, the Book, npm run
+ * specs:build — behaves exactly as before. A contract that describes somebody
+ * else's component (Adobe's Spectrum 2, under packages/spectrum2) passes its own
+ * three values instead of getting a second, divergent copy of this transform.
+ * Keep these as arguments rather than reading argv at module scope: build.mjs is
+ * imported by tools with their own command lines.
+ */
+export const S2A = { src: SRC, tokensDir: TOKENS, ns: "s2a" };
+
 const readJson = (p) => (existsSync(p) ? JSON.parse(readFileSync(p, "utf8")) : null);
 const alnum = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 
-export function slugIndex() {
+export function slugIndex(src = SRC) {
   const map = new Map();
-  for (const d of readdirSync(SRC)) {
-    const spec = readJson(join(SRC, d, `${d}.spec.json`));
-    const defs = readJson(join(SRC, d, `${d}.defs.json`));
+  for (const d of readdirSync(src)) {
+    const spec = readJson(join(src, d, `${d}.spec.json`));
+    const defs = readJson(join(src, d, `${d}.defs.json`));
     map.set(alnum(spec?.name ?? defs?.component ?? d), d);
     map.set(alnum(d), d);
   }
   return (name) => map.get(alnum(name)) ?? name;
 }
 
-export function buildOne(slug, { tokens = loadShippedTokens(TOKENS), slugOf = slugIndex() } = {}) {
-  const dir = join(SRC, slug);
+export function buildOne(slug, opts = {}) {
+  const { src = SRC, ns = "s2a", out = OUT } = opts;
+  const tokens = opts.tokens ?? loadShippedTokens(opts.tokensDir ?? TOKENS);
+  const slugOf = opts.slugOf ?? slugIndex(src);
+  const dir = join(src, slug);
   const defsRaw = readJson(join(dir, `${slug}.defs.json`));
   if (!defsRaw) throw new Error(`${slug}: no defs.json (step 3)`);
   const defs = { ...defsRaw, $hash: hashOf(defsRaw) };
   const code = readJson(join(dir, `${slug}.code.evidence.json`));
   const figma = readJson(join(dir, `${slug}.figma.evidence.json`));
-  const ir = buildIR({ defs, code, figma, tokens, generator: GENERATOR });
+  const ir = buildIR({ defs, code, figma, tokens, generator: GENERATOR, system: ns });
   const spec = specJson(ir, { slugOf });
-  const contract = contractJson(ir, { id: `s2a.${slug}` });
+  const contract = contractJson(ir, { id: `${ns}.${slug}` });
   const catalog = catalogAdapter.artifacts(ir)[0].data;
   return {
     slug, ir,
@@ -65,8 +80,8 @@ export function buildOne(slug, { tokens = loadShippedTokens(TOKENS), slugOf = sl
       [join(dir, `${slug}.contract.json`)]: JSON.stringify(contract, null, 2) + "\n",
       [join(dir, `${slug}.catalog.json`)]: JSON.stringify(catalog, null, 2) + "\n",
       [join(dir, `${slug}.spec.md`)]: markdown(ir) + "\n",
-      [join(OUT, slug, "stories.manifest.json")]: JSON.stringify({ $generated: GENERATOR, ...storiesManifest(ir) }, null, 2) + "\n",
-      [join(OUT, slug, "figma.plan.json")]: JSON.stringify({ $generated: GENERATOR, ...figmaPlan(ir) }, null, 2) + "\n",
+      [join(out, slug, "stories.manifest.json")]: JSON.stringify({ $generated: GENERATOR, ...storiesManifest(ir) }, null, 2) + "\n",
+      [join(out, slug, "figma.plan.json")]: JSON.stringify({ $generated: GENERATOR, ...figmaPlan(ir) }, null, 2) + "\n",
     },
   };
 }

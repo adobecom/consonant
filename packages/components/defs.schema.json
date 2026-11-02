@@ -776,11 +776,9 @@
         },
         "asset": {
           "type": "object",
-          "description": "This part's content is an ASSET chosen by a prop, not text passed in. AppIcon's image is not a slot and not a token: the author picks a product (app=\"photoshop\") and the component resolves that to a file. Without this a generated component can only emit an empty element, because the mapping lives in code the contract cannot see. The lookup table is referenced by name and shipped beside the contracts, so 92 rows are not copied into every component that uses them \u2014 and so a consumer who never reads our JavaScript can still resolve a src.",
+          "description": "This part's content is an ASSET chosen by a prop, not text passed in. AppIcon's image is not a slot and not a token: the author picks a product (app=\"photoshop\") and the component resolves that to a file. Without this a generated component can only emit an empty element, because the mapping lives in code the contract cannot see. The lookup table is referenced by name and shipped beside the contracts, so 92 rows are not copied into every component that uses them \u2014 and so a consumer who never reads our JavaScript can still resolve a src. When manifest and field are absent the prop is the source itself, which is how an image whose src a consumer passes is expressed.",
           "required": [
-            "prop",
-            "manifest",
-            "field"
+            "prop"
           ],
           "additionalProperties": false,
           "properties": {
@@ -812,6 +810,10 @@
             },
             "notes": {
               "type": "string"
+            },
+            "altProp": {
+              "type": "string",
+              "description": "The prop carrying the alt text, when the element's source is a prop rather than a manifest row."
             }
           }
         }
@@ -877,9 +879,9 @@
       "type": "object",
       "additionalProperties": {
         "type": "string",
-        "pattern": "^(raw:.+|\\{s2a\\.[a-z0-9.-]+\\}( \\{s2a\\.[a-z0-9.-]+\\})*)$"
+        "pattern": "^(raw:.+|\\{[a-z][a-z0-9-]*\\.[a-z0-9.-]+\\}( \\{[a-z][a-z0-9-]*\\.[a-z0-9.-]+\\})*)$"
       },
-      "description": "CSS property \u2192 {s2a.path.to.token} (Figma variable name with slashes as dots; shorthands may list several, space-separated) or raw:<value> with the reason in decisions"
+      "description": "CSS property \u2192 {<system>.path.to.token} (the token's own name with slashes as dots; shorthands may list several, space-separated) or raw:<value> with the reason in decisions. The first segment is the design system's namespace \u2014 s2a for ours, spectrum for a contract describing Adobe's Spectrum 2. This matches what southleft/contract.schema.json already accepts downstream."
     }
   }
 }

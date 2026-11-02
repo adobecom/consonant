@@ -1,0 +1,195 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Icon",
+  "slug": "icon",
+  "status": "curated-draft",
+  "version": "2.0.0",
+  "archetype": "icon",
+  "description": "A glyph at a size, inheriting its colour. Spectrum's smallest leaf: 36 of its 84 components depend on it.",
+  "curated": {
+    "by": "read from @adobe/spectrum-wc 2.0.0-beta.6 (dist/stylesheets/_lit-styles/icon-base.js) and its shipped type declarations",
+    "date": "2026-10-27",
+    "reviewer": "Matt"
+  },
+  "anchors": {
+    "figma": {
+      "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+      "kind": "none",
+      "notes": "Spectrum publishes no Icon component set. The glyphs live in the separate S2 / Icons library as individual components; the size and colour behaviour is CSS only. Still the only contract in either system with no design anchor."
+    },
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/icon",
+      "export": "Icon",
+      "cssClass": "swc-Icon"
+    }
+  },
+  "props": [
+    {
+      "name": "size",
+      "lever": true,
+      "type": "string",
+      "enum": [
+        "xs",
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "default": "m",
+      "figma": "NONE",
+      "code": {
+        "prop": "size"
+      },
+      "notes": "Five rungs, one more than the other components: the icon adds xs."
+    },
+    {
+      "name": "accessibleLabel",
+      "lever": false,
+      "type": "string",
+      "figma": "NONE",
+      "code": {
+        "prop": "accessibleLabel"
+      },
+      "notes": "When empty the host is marked aria-hidden and the glyph is decorative; when set the host is exposed as an image with that label."
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".swc-Icon",
+      "element": "span",
+      "tokens": {
+        "box-sizing": "raw:border-box",
+        "display": "raw:block",
+        "inline-size": "{swc.workflow.icon.medium}",
+        "block-size": "{swc.workflow.icon.medium}",
+        "color": "raw:currentColor"
+      },
+      "tokensByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "xs": {
+              "inline-size": "{swc.workflow.icon.extra-small}",
+              "block-size": "{swc.workflow.icon.extra-small}"
+            },
+            "s": {
+              "inline-size": "{swc.workflow.icon.small}",
+              "block-size": "{swc.workflow.icon.small}"
+            },
+            "m": {
+              "inline-size": "{swc.workflow.icon.medium}",
+              "block-size": "{swc.workflow.icon.medium}"
+            },
+            "l": {
+              "inline-size": "{swc.workflow.icon.large}",
+              "block-size": "{swc.workflow.icon.large}"
+            },
+            "xl": {
+              "inline-size": "{swc.workflow.icon.extra-large}",
+              "block-size": "{swc.workflow.icon.extra-large}"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "glyph": {
+          "selector": "svg",
+          "element": "svg",
+          "tokens": {
+            "display": "raw:block",
+            "inline-size": "raw:100%",
+            "block-size": "raw:100%",
+            "fill": "raw:currentColor",
+            "--iconPrimary": "raw:currentColor"
+          },
+          "slot": {
+            "name": "glyph",
+            "accepts": [
+              "kind:icon"
+            ],
+            "acceptsMode": "restrict",
+            "notes": "The glyph itself. Spectrum ships these as a separate package; the manifest is built from it, not authored.",
+            "default": {
+              "manifest": "spectrum-icons",
+              "icon": "add-circle"
+            }
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "wcag": [
+      "1.1.1"
+    ],
+    "notes": [
+      "Decorative by default: the root sets pointer-events none and the glyph carries no accessible name.",
+      "A meaningful icon needs a name on the element that owns the meaning, not on the glyph."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "i-no-design-anchor",
+      "question": "Spectrum ships no Icon component set in Figma, so this contract has code evidence only. Accept a code-first contract, or wait for a design anchor that may never exist?",
+      "chose": "accepted code-first; anchors.figma.kind is \"none\"",
+      "confidence": "medium",
+      "fix": "If Spectrum later publishes an Icon set, re-anchor and re-extract.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "S2 / Web lists 142 component sets and none is Icon."
+    },
+    {
+      "id": "i-scale-axis",
+      "question": "Spectrum's tokens carry a scale axis (medium and large) that S2A does not have; the same token resolves to 20px and 24px. Which scale does adobe.com bind to?",
+      "chose": "medium, matching desktop web",
+      "confidence": "medium",
+      "fix": "If a surface needs large scale, the token directory gains a second mode rather than the contract gaining a prop.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "@spectrum-css/tokens 16.0.2 medium-vars.css and large-vars.css"
+    },
+    {
+      "id": "i-implementation",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Which package is Spectrum 2's Icon?",
+      "chose": "@adobe/spectrum-wc (swc-icon)",
+      "decision": "The contract describes @adobe/spectrum-wc. Icon has no module of its own beyond a slot and a size box; its stylesheet is shared, at dist/stylesheets/_lit-styles/icon-base.js.",
+      "fix": "none",
+      "evidence": "Icon.js imports icon-base.js for its only styles and renders a single default slot."
+    },
+    {
+      "id": "i-host-rules",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Every rule in the icon stylesheet is :host or ::slotted \u2014 there is not one class in it.",
+      "chose": "Declare swc-Icon as the root class and re-express the host rules on it",
+      "fix": "If the generated component becomes a custom element, drop the class and inherit the host rules.",
+      "evidence": "icon-base.css is :host, :host([size]), and svg,::slotted(*) only. The class is ours, which is why the anatomy cannot be checked against the stylesheet."
+    },
+    {
+      "id": "i-override-seam",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "How does a consumer resize or recolour the icon?",
+      "chose": "--swc-icon-inline-size, --swc-icon-block-size and --swc-icon-color",
+      "decision": "Upstream exposes three custom properties on the host and derives everything else from them, so the size prop and a direct override reach the same place.",
+      "fix": "none",
+      "evidence": "icon-base.css declares all three on :host with the size attribute switching the first two."
+    },
+    {
+      "id": "i-glyph-fill",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Every glyph rendered in its own colour instead of the component's.",
+      "chose": "Map the artwork's own hook to currentColor on the part that holds the glyph",
+      "decision": "Spectrum's workflow SVGs paint with fill=\"var(--iconPrimary, #222)\" rather than currentColor, so with nothing defining that property every glyph fell back to #222 regardless of the colour around it. Setting --iconPrimary to currentColor on the icon part makes a glyph follow its component, and leaves the property available to anyone who wants a different colour.",
+      "fix": "none. The alternative was rewriting 396 vendored SVGs, which would mean editing artwork we do not own.",
+      "evidence": "All 396 entries in spectrum-icons.json carry var(--iconPrimary, #222); all 26 in our own s2a-icons.json use currentColor. Measured: the badge's text was #ffffff while its glyph painted #222222."
+    }
+  ]
+}

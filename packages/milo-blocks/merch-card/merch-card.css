@@ -13,21 +13,21 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--s2a-spacing-md, 16px);
-  border-radius: var(--s2a-border-radius-md, 16px);
-  padding-bottom: var(--s2a-spacing-2xs, 4px);
-  padding-left: var(--s2a-spacing-2xs, 4px);
-  padding-right: var(--s2a-spacing-2xs, 4px);
-  padding-top: var(--s2a-spacing-2xs, 4px);
+  gap: var(--s2a-spacing-md);
+  border-radius: var(--s2a-border-radius-md);
+  padding-bottom: var(--s2a-spacing-2xs);
+  padding-left: var(--s2a-spacing-2xs);
+  padding-right: var(--s2a-spacing-2xs);
+  padding-top: var(--s2a-spacing-2xs);
   width: 100%;
 }
 
 .merch-card.default {
-  background-color: var(--s2a-color-surface-subtle, #f8f8f8);
+  background-color: var(--s2a-color-surface-subtle);
 }
 
 .merch-card.highlight {
-  background-color: var(--s2a-color-surface-inverse-subtle, #131313);
+  background-color: var(--s2a-color-surface-inverse-subtle);
 }
 
 .merch-card .body {
@@ -35,13 +35,13 @@
   flex-direction: column;
   align-items: stretch;
   align-self: stretch;
-  border-radius: var(--s2a-border-radius-12, 12px);
-  background-color: var(--s2a-color-surface-default, #fff);
-  gap: 24px;
-  padding-top: 28px;
-  padding-right: 28px;
-  padding-bottom: 28px;
-  padding-left: 28px;
+  border-radius: var(--s2a-border-radius-sm);
+  background-color: var(--s2a-color-surface-default);
+  gap: var(--s2a-spacing-lg);
+  padding-top: 28px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  padding-right: 28px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  padding-bottom: 28px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  padding-left: 28px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
 }
 
 .merch-card .content {
@@ -49,7 +49,7 @@
   flex-direction: column;
   align-items: stretch;
   align-self: stretch;
-  gap: 16px;
+  gap: var(--s2a-spacing-md);
 }
 
 .merch-card .header {
@@ -57,7 +57,7 @@
   flex-direction: column;
   align-items: stretch;
   align-self: stretch;
-  gap: 10px;
+  gap: 10px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
 }
 
 .merch-card .header {
@@ -65,7 +65,7 @@
   flex-direction: column;
   align-items: stretch;
   align-self: stretch;
-  gap: 10px;
+  gap: 10px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
 }
 
 .merch-card .product-lockup {
@@ -79,7 +79,7 @@
   flex-direction: column;
   align-items: stretch;
   align-self: stretch;
-  gap: var(--s2a-spacing-lg, 24px);
+  gap: var(--s2a-spacing-lg);
 }
 
 .merch-card .name-area {
@@ -87,27 +87,27 @@
   flex-direction: column;
   align-items: stretch;
   align-self: stretch;
-  gap: 4px;
+  gap: var(--s2a-spacing-2xs);
 }
 
 .merch-card .plan-name {
   align-self: stretch;
-  color: var(--s2a-color-content-heading, #000);
-  font-family: var(--s2a-font-family-heading, "Adobe Clean Display");
-  font-size: var(--s2a-typography-font-size-heading-5, 1.5rem);
-  font-weight: var(--s2a-font-weight-heading, 900);
-  letter-spacing: var(--s2a-font-letter-spacing-4xl, -0.48px);
-  line-height: var(--s2a-typography-line-height-heading-5, 24px);
+  color: var(--s2a-color-content-heading);
+  font-family: var(--s2a-font-family-heading);
+  font-size: var(--s2a-typography-font-size-heading-5);
+  font-weight: var(--s2a-font-weight-heading);
+  letter-spacing: var(--s2a-font-letter-spacing-4xl);
+  line-height: var(--s2a-typography-line-height-heading-5);
 }
 
 .merch-card .description {
   align-self: stretch;
-  color: var(--s2a-color-content-default, #000);
-  font-family: var(--s2a-font-family-body, "Adobe Clean");
-  font-size: var(--s2a-typography-font-size-body-sm, 0.875rem);
-  font-weight: var(--s2a-font-weight-body, 400);
-  letter-spacing: var(--s2a-typography-letter-spacing-body-sm, 0);
-  line-height: var(--s2a-typography-line-height-body-sm, 18px);
+  color: var(--s2a-color-content-default);
+  font-family: var(--s2a-font-family-body);
+  font-size: var(--s2a-typography-font-size-body-sm);
+  font-weight: var(--s2a-font-weight-body);
+  letter-spacing: var(--s2a-typography-letter-spacing-body-sm);
+  line-height: var(--s2a-typography-line-height-body-sm);
 }
 
 .merch-card .merch-card-pricing-display {
@@ -122,7 +122,7 @@
   align-items: stretch;
   justify-content: center;
   align-self: stretch;
-  gap: var(--s2a-spacing-xs, 8px);
+  gap: var(--s2a-spacing-xs);
 }
 
 .merch-card .merch-card-select-promo {
@@ -135,14 +135,14 @@
   display: flex;
   flex-direction: column;
   align-self: stretch;
-  gap: 8px;
+  gap: var(--s2a-spacing-xs);
 }
 
 .merch-card .actions {
   display: flex;
   flex-direction: row;
   align-self: stretch;
-  gap: 8px;
+  gap: var(--s2a-spacing-xs);
 }
 
 .merch-card .button {
@@ -167,12 +167,12 @@
   flex-direction: column;
   align-items: stretch;
   align-self: stretch;
-  padding-bottom: var(--s2a-spacing-3xl, 48px);
-  padding-top: 24px;
-  padding-right: 24px;
-  padding-left: 24px;
+  padding-bottom: var(--s2a-spacing-3xl);
+  padding-top: var(--s2a-spacing-lg);
+  padding-right: var(--s2a-spacing-lg);
+  padding-left: var(--s2a-spacing-lg);
 }
 
 .merch-card.default .features {
-  gap: var(--s2a-spacing-lg, 24px);
+  gap: var(--s2a-spacing-lg);
 }

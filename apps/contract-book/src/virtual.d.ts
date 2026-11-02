@@ -10,14 +10,19 @@ declare module "virtual:s2a-data" {
     code: any;
     contract: any;
     hasCode: boolean;
+    /** Which design system the component belongs to ("s2a", "spectrum"), and its label. */
+    system?: string;
+    systemLabel?: string;
     /** Set on a component registered from a Figma extraction and not (yet) on disk. */
     draft?: boolean;
   }
   const data: {
     components: S2AComponent[];
     tokenFiles: Record<string, Record<string, string>>;
-    /** The same token files, verbatim, for stylesheets that need the selectors too. */
-    tokenCss: Record<string, string>;
+    tokenFilesBySystem?: Record<string, Record<string, Record<string, string>>>;
+    tokenNsBySystem?: Record<string, string>;
+    /** Storybook's title for each system's stories ("Generated", "Spectrum"). */
+    storybookTitleBySystem?: Record<string, string>;
     assets: Record<string, any>;
     schemas: { defs: any; contract: any };
     capturedAt: string;

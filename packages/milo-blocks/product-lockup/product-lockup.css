@@ -1,13 +1,18 @@
 /* ProductLockup — generated from product-lockup.contract.json.
  * Re-run: npm run specs:render -- --slug=product-lockup --target=milo */
 
+.product-lockup [hidden],
+.product-lockup[hidden] {
+  display: none !important;
+}
+
 .product-lockup {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   flex: 1 1 auto;
-  gap: 16px;
+  gap: var(--s2a-spacing-md);
 }
 
 .product-lockup .frame-1 {
@@ -17,7 +22,7 @@
 }
 
 .product-lockup.horizontal .frame-1 {
-  gap: 16px;
+  gap: var(--s2a-spacing-md);
 }
 
 .product-lockup .icons {
@@ -26,7 +31,7 @@
 }
 
 .product-lockup.horizontal .icons {
-  gap: 2px;
+  gap: var(--s2a-spacing-3xs);
 }
 
 .product-lockup .app-icon {
@@ -40,23 +45,23 @@
 }
 
 .product-lockup.label .label {
-  color: var(--s2a-color-content-label, #000);
+  color: var(--s2a-color-content-label);
 }
 
 .product-lockup.knockout .label {
-  color: var(--s2a-color-content-knockout, #fff);
+  color: var(--s2a-color-content-knockout);
 }
 
 .product-lockup.inverse .label {
-  color: var(--s2a-color-content-inverse, #000);
+  color: var(--s2a-color-content-inverse);
 }
 
 .product-lockup.horizontal .label {
-  font-family: var(--s2a-font-family-label, "Adobe Clean");
-  font-size: var(--s2a-typography-font-size-label, 0.875rem);
-  font-weight: var(--s2a-font-weight-label, 700);
-  letter-spacing: var(--s2a-typography-letter-spacing-label, 0);
-  line-height: var(--s2a-typography-line-height-label, 18px);
+  font-family: var(--s2a-font-family-label);
+  font-size: var(--s2a-typography-font-size-label);
+  font-weight: var(--s2a-font-weight-label);
+  letter-spacing: var(--s2a-typography-letter-spacing-label);
+  line-height: var(--s2a-typography-line-height-label);
 }
 
 .product-lockup .s2a-icon-chevron-right {
@@ -65,6 +70,6 @@
 }
 
 .product-lockup.horizontal .s2a-icon-chevron-right {
-  width: 8px;
-  height: 8px;
+  width: 8px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
+  height: 8px; /* Primitive: contract value has no approved semantic binding; preserve Figma geometry/paint. */
 }

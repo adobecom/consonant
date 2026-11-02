@@ -1,0 +1,230 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Badge",
+  "setName": "Badge",
+  "anatomy": {
+    "name": ".root",
+    "source": null,
+    "element": "span",
+    "bindings": {
+      "min-block-size": [
+        "swc/component/height/75"
+      ],
+      "font-size": [
+        "swc/font/size/75"
+      ],
+      "line-height": [
+        "swc/line/height/font/size/75"
+      ],
+      "padding-inline": [
+        "swc/base/padding/horizontal/small"
+      ],
+      "padding-block": [
+        "swc/base/padding/vertical/small"
+      ],
+      "gap": [
+        "swc/base/gap/small"
+      ],
+      "border-width": [
+        "swc/border/width/200"
+      ],
+      "border-radius": [
+        "swc/corner/radius/medium/size/small"
+      ],
+      "background-color": [
+        "swc/neutral/subdued/background/color/default"
+      ],
+      "color": [
+        "swc/transparent/static/white/1000"
+      ],
+      "font-weight": [
+        "swc/medium/font/weight"
+      ],
+      "font-family": [
+        "swc/sans/font/family/stack"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".icon",
+        "source": null,
+        "element": "span",
+        "bindings": {
+          "inline-size": [
+            "swc/workflow/icon/small"
+          ],
+          "block-size": [
+            "swc/workflow/icon/small"
+          ]
+        },
+        "slot": {
+          "name": "icon",
+          "accepts": [
+            "kind:icon"
+          ],
+          "mode": "prefer"
+        },
+        "children": []
+      },
+      {
+        "name": ".label",
+        "source": null,
+        "element": "span",
+        "bindings": {},
+        "slot": null,
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+    "kind": "component-set",
+    "nodeId": null,
+    "nodeName": "Badge",
+    "componentSetKey": "5586ba2e73fbc3afd4bb6cc6317d591958f66f5e",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Status",
+      "type": "VARIANT",
+      "options": [
+        "accent",
+        "informative",
+        "neutral",
+        "positive",
+        "notice",
+        "negative",
+        "fuchsia",
+        "indigo",
+        "magenta",
+        "purple",
+        "seafoam",
+        "yellow",
+        "gray",
+        "red",
+        "orange",
+        "chartreuse",
+        "celery",
+        "green",
+        "cyan",
+        "blue",
+        "pink",
+        "turquoise",
+        "brown",
+        "cinnamon",
+        "silver"
+      ],
+      "defaultValue": "neutral"
+    },
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "options": [
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "defaultValue": "s"
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [],
+      "defaultValue": false
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [],
+      "defaultValue": false
+    },
+    {
+      "name": "Label",
+      "type": "TEXT",
+      "forProp": "label"
+    },
+    {
+      "name": "Icon",
+      "type": "INSTANCE_SWAP",
+      "forProp": "icon"
+    }
+  ],
+  "states": [],
+  "layers": [
+    {
+      "name": ".swc-Badge",
+      "selector": ".swc-Badge",
+      "bindings": {
+        "min-block-size": [
+          "swc/component/height/75"
+        ],
+        "font-size": [
+          "swc/font/size/75"
+        ],
+        "line-height": [
+          "swc/line/height/font/size/75"
+        ],
+        "padding-inline": [
+          "swc/base/padding/horizontal/small"
+        ],
+        "padding-block": [
+          "swc/base/padding/vertical/small"
+        ],
+        "gap": [
+          "swc/base/gap/small"
+        ],
+        "border-width": [
+          "swc/border/width/200"
+        ],
+        "border-radius": [
+          "swc/corner/radius/medium/size/small"
+        ],
+        "background-color": [
+          "swc/neutral/subdued/background/color/default"
+        ],
+        "color": [
+          "swc/transparent/static/white/1000"
+        ],
+        "font-weight": [
+          "swc/medium/font/weight"
+        ],
+        "font-family": [
+          "swc/sans/font/family/stack"
+        ]
+      }
+    },
+    {
+      "name": ".swc-Badge-icon",
+      "selector": ".swc-Badge-icon",
+      "bindings": {
+        "inline-size": [
+          "swc/workflow/icon/small"
+        ],
+        "block-size": [
+          "swc/workflow/icon/small"
+        ]
+      },
+      "slot": {
+        "name": "icon",
+        "accepts": [
+          "kind:icon"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": ".swc-Badge-label",
+      "selector": ".swc-Badge-label",
+      "bindings": {}
+    }
+  ],
+  "textStyles": []
+}

@@ -28,6 +28,7 @@ import { PNG } from "pngjs";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { locate } from "../../packages/spec-dictionary/systems.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(__dirname, "..", "..");
@@ -356,7 +357,12 @@ export function summarise(matrix, rows) {
 }
 
 async function run(slug, theme) {
-  const manifestPath = join(OUT, slug, "stories.manifest.json");
+  // `spectrum:badge` is Spectrum's badge: its manifest sits in that system's
+  // package and its stories under that system's title. The golden stays filed
+  // under the composite slug, which is also the key the Book asks for.
+  const where = locate(slug);
+  if (!where) { console.log(`${slug}: no such design system`); return null; }
+  const manifestPath = join(where.system.out, where.slug, "stories.manifest.json");
   if (!existsSync(manifestPath)) return null;
   const matrix = JSON.parse(readFileSync(manifestPath, "utf8")).matrix;
   if (!matrix) return null;
@@ -380,7 +386,7 @@ async function run(slug, theme) {
   // Storybook derives the id from the title "Generated/<PascalName>", which
   // drops the slug's hyphens: control-button is generated-controlbutton. Button
   // has none, which is how this passed for a week with the slug in the id.
-  const storyId = `generated-${slug.replace(/-/g, "")}--state-matrix`;
+  const storyId = `${where.system.storybook.title.toLowerCase()}-${where.slug.replace(/-/g, "")}--state-matrix`;
   await page.goto(`${STORYBOOK}/iframe.html?id=${storyId}&viewMode=story&globals=${encodeURIComponent(globals)}`, { waitUntil: "networkidle" });
   const { png: shot, boxes } = await screenshotMatrix(page, matrix);
   const behaviour = await behaviourPass(page, matrix, sheet).catch((e) => ({ error: e.message }));

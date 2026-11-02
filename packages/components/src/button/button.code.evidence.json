@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:31:04.762Z",
+  "extractedAt": "2026-10-28T16:23:01.879Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -345,6 +345,437 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-button",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "min-width",
+            "value": "0"
+          },
+          {
+            "prop": "height",
+            "value": "40px"
+          },
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          },
+          {
+            "prop": "padding",
+            "value": "14px var(--s2a-spacing-lg)"
+          },
+          {
+            "prop": "border",
+            "value": "none"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--s2a-border-radius-round)"
+          },
+          {
+            "prop": "background-color",
+            "value": "transparent"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          },
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-label)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-label)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-label)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-label)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-typography-letter-spacing-label)"
+          },
+          {
+            "prop": "cursor",
+            "value": "pointer"
+          },
+          {
+            "prop": "text-align",
+            "value": "center"
+          },
+          {
+            "prop": "text-decoration",
+            "value": "none"
+          },
+          {
+            "prop": "transition",
+            "value": "background-color 200ms ease,\n    border-color 200ms ease,\n    color 200ms ease,\n    box-shadow 200ms ease,\n    opacity 120ms ease"
+          },
+          {
+            "prop": "position",
+            "value": "relative"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button:disabled,\n.c-button[data-force-state=\"disabled\"]",
+        "declarations": [
+          {
+            "prop": "opacity",
+            "value": "var(--s2a-opacity-disabled)"
+          },
+          {
+            "prop": "cursor",
+            "value": "not-allowed"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button__label",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "min-width",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button__icon",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          },
+          {
+            "prop": "color",
+            "value": "currentColor"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-font-size-xs)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"outlined\"],\n.c-button[data-style=\"transparent\"],\n.c-button[data-style=\"knockout\"],\n.c-button[data-style=\"outline-inverse\"]",
+        "declarations": [
+          {
+            "prop": "backdrop-filter",
+            "value": "blur(var(--s2a-blur-md))"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"solid\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-solid-default)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-button-content-solid-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"solid\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):hover,\n.c-button[data-style=\"solid\"][data-force-state=\"hover\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-solid-hover)"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "inset 0 0 0 var(--s2a-border-width-md)\n    var(--s2a-color-border-knockout)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"solid\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):active,\n.c-button[data-style=\"solid\"][data-force-state=\"active\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-solid-active)"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"outlined\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-outlined-default)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "inset 0 0 0 var(--s2a-border-width-md)\n    var(--s2a-color-border-knockout)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"outlined\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):hover,\n.c-button[data-style=\"outlined\"][data-force-state=\"hover\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-outlined-hover)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"outlined\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):active,\n.c-button[data-style=\"outlined\"][data-force-state=\"active\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-outlined-active)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-button-content-outlined-active)"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"transparent\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-transparent-default)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"transparent\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):hover,\n.c-button[data-style=\"transparent\"][data-force-state=\"hover\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-transparent-hover)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"transparent\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):active,\n.c-button[data-style=\"transparent\"][data-force-state=\"active\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-transparent-active)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"accent\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-accent-default)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-button-content-accent-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"accent\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):hover,\n.c-button[data-style=\"accent\"][data-force-state=\"hover\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-accent-hover)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"accent\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):active,\n.c-button[data-style=\"accent\"][data-force-state=\"active\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-accent-active)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"knockout\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-knockout-default)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-button-content-knockout)"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "inset 0 0 0 var(--s2a-border-width-md)\n    var(--s2a-color-button-border-knockout-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"knockout\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):hover,\n.c-button[data-style=\"knockout\"][data-force-state=\"hover\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-knockout-hover)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"knockout\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):active,\n.c-button[data-style=\"knockout\"][data-force-state=\"active\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-knockout-active)"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "inset 0 0 0 var(--s2a-border-width-sm)\n    var(--s2a-color-button-border-knockout-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"outline-inverse\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-outline-inverse-default)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-button-content-outline-inverse)"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "inset 0 0 0 var(--s2a-border-width-md)\n    var(--s2a-color-button-border-outline-inverse-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"outline-inverse\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):hover,\n.c-button[data-style=\"outline-inverse\"][data-force-state=\"hover\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-outline-inverse-hover)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"outline-inverse\"]:not(:disabled):not(\n    [data-force-state=\"disabled\"]\n  ):active,\n.c-button[data-style=\"outline-inverse\"][data-force-state=\"active\"]",
+        "declarations": [
+          {
+            "prop": "background-color",
+            "value": "var(--s2a-color-button-background-outline-inverse-active)"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "inset 0 0 0 var(--s2a-border-width-sm)\n    var(--s2a-color-button-border-outline-inverse-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button:is(:focus-visible, [data-force-state=\"focus\"])",
+        "declarations": [
+          {
+            "prop": "outline",
+            "value": "none"
+          },
+          {
+            "prop": "box-shadow",
+            "value": "0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-default),\n    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button:is([data-style=\"knockout\"], [data-style=\"outline-inverse\"]):is(\n    :focus-visible,\n    [data-force-state=\"focus\"]\n  )",
+        "declarations": [
+          {
+            "prop": "box-shadow",
+            "value": "0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-knockout),\n    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-knockout)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"outlined\"]:is(\n    :focus-visible,\n    [data-force-state=\"focus\"]\n  )",
+        "declarations": [
+          {
+            "prop": "box-shadow",
+            "value": "inset 0 0 0 var(--s2a-border-width-md) var(--s2a-color-border-knockout),\n    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-default),\n    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-button[data-style=\"outline-inverse\"]:is(\n    :focus-visible,\n    [data-force-state=\"focus\"]\n  )",
+        "declarations": [
+          {
+            "prop": "box-shadow",
+            "value": "inset 0 0 0 var(--s2a-border-width-md)\n      var(--s2a-color-button-border-outline-inverse-default),\n    0 0 0 var(--s2a-spacing-3xs) var(--s2a-color-background-knockout),\n    0 0 0 var(--s2a-spacing-2xs) var(--s2a-color-focus-ring-knockout)"
+          }
+        ]
+      }
+    ]
   },
   "states": [
     ":active",
@@ -1048,6 +1479,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:65e516bb3562ec84a858948cd6c4037ff6360ecd99d386c376a2d8561755e0f9"
+    "hash": "sha256:961614354c411d679eba849c8a88d0b26cd26880c1c5ef0464a42f0b767038b3"
   }
 }

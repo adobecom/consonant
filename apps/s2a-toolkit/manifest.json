@@ -2,11 +2,21 @@
   "name": "S2A Toolkit",
   "id": "1672001342733547591",
   "api": "1.0.0",
-  "editorType": ["figma"],
+  "editorType": [
+    "figma",
+    "dev",
+    "figjam"
+  ],
+  "capabilities": [
+    "inspect"
+  ],
   "main": "dist/code.js",
   "ui": "dist/ui.html",
   "enablePrivatePluginApi": true,
-  "permissions": ["teamlibrary", "currentuser"],
+  "permissions": [
+    "teamlibrary",
+    "currentuser"
+  ],
   "documentAccess": "dynamic-page",
   "networkAccess": {
     "allowedDomains": [
@@ -17,6 +27,7 @@
       "http://localhost:8787",
       "http://localhost:9410",
       "http://localhost:9420",
+      "http://localhost:6007",
       "https://s2a-contract-relay.mmhuntsberry.workers.dev",
       "https://s2a-telemetry-collector.mmhuntsberry.workers.dev",
       "https://api.github.com",
@@ -34,6 +45,32 @@
       "ws://localhost:9231",
       "ws://localhost:9232"
     ],
-    "reasoning": "Bridge tab connects to figma-console MCP over WebSocket (ports 9220–9232) for Claude Code integration; Extract contract posts design evidence to the local contract sync server (9410), the local relay (9420), or the deployed contract relay."
+    "reasoning": "Bridge tab connects to figma-console MCP over WebSocket (ports 9220-9232) for Claude Code integration; Extract contract posts design evidence to the local contract sync server (9410), the local relay (9420), or the deployed contract relay; the Contract Book dev server (6007) serves the extract and parity endpoints.",
+    "devAllowedDomains": [
+      "http://localhost:6006",
+      "http://localhost:4002",
+      "http://localhost:9300",
+      "http://localhost:9400",
+      "http://localhost:8787",
+      "http://localhost:9410",
+      "http://localhost:9420",
+      "http://localhost:6007",
+      "https://s2a-contract-relay.mmhuntsberry.workers.dev",
+      "https://s2a-telemetry-collector.mmhuntsberry.workers.dev",
+      "https://api.github.com",
+      "ws://localhost:9220",
+      "ws://localhost:9221",
+      "ws://localhost:9222",
+      "ws://localhost:9223",
+      "ws://localhost:9224",
+      "ws://localhost:9225",
+      "ws://localhost:9226",
+      "ws://localhost:9227",
+      "ws://localhost:9228",
+      "ws://localhost:9229",
+      "ws://localhost:9230",
+      "ws://localhost:9231",
+      "ws://localhost:9232"
+    ]
   }
 }

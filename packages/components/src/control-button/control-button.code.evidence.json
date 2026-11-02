@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:31:34.353Z",
+  "extractedAt": "2026-10-28T16:23:09.761Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -175,6 +175,170 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-control-button",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          },
+          {
+            "prop": "padding",
+            "value": "0"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--s2a-border-radius-6)"
+          },
+          {
+            "prop": "border",
+            "value": "var(--s2a-border-width-sm) solid\n    var(--s2a-color-control-button-border-media)"
+          },
+          {
+            "prop": "background",
+            "value": "var(--s2a-color-control-button-background-media-default)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-knockout)"
+          },
+          {
+            "prop": "backdrop-filter",
+            "value": "blur(var(--s2a-blur-xs))"
+          },
+          {
+            "prop": "cursor",
+            "value": "pointer"
+          },
+          {
+            "prop": "transition",
+            "value": "background 0.15s ease,\n    border-color 0.15s ease,\n    color 0.15s ease"
+          }
+        ]
+      },
+      {
+        "selector": ".c-control-button[data-size=\"md\"]",
+        "declarations": [
+          {
+            "prop": "width",
+            "value": "var(--s2a-spacing-xl)"
+          },
+          {
+            "prop": "height",
+            "value": "var(--s2a-spacing-xl)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-control-button[data-size=\"xl\"]",
+        "declarations": [
+          {
+            "prop": "width",
+            "value": "var(--s2a-spacing-3xl)"
+          },
+          {
+            "prop": "height",
+            "value": "var(--s2a-spacing-3xl)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-control-button__icon",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "width",
+            "value": "var(--s2a-spacing-md)"
+          },
+          {
+            "prop": "height",
+            "value": "var(--s2a-spacing-md)"
+          },
+          {
+            "prop": "pointer-events",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-control-button:hover:not(:disabled),\n.c-control-button[data-force-state=\"hover\"]",
+        "declarations": [
+          {
+            "prop": "background",
+            "value": "var(--s2a-color-control-button-background-media-hover)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-control-button:active:not(:disabled),\n.c-control-button[data-force-state=\"active\"]",
+        "declarations": [
+          {
+            "prop": "background",
+            "value": "var(--s2a-color-control-button-background-media-active)"
+          },
+          {
+            "prop": "backdrop-filter",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-control-button:focus-visible,\n.c-control-button[data-force-state=\"focus\"]",
+        "declarations": [
+          {
+            "prop": "outline",
+            "value": "var(--s2a-border-width-sm) solid var(--s2a-color-focus-ring-default)"
+          },
+          {
+            "prop": "outline-offset",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".c-control-button:disabled",
+        "declarations": [
+          {
+            "prop": "background",
+            "value": "var(--s2a-color-control-button-background-media-disabled)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-transparent-white-48)"
+          },
+          {
+            "prop": "cursor",
+            "value": "not-allowed"
+          }
+        ]
+      }
+    ]
   },
   "states": [
     ":active",
@@ -883,6 +1047,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:7c4d7021095df6470108bd021d819e1d9c3702c0927ee81758d88517ac1f370b"
+    "hash": "sha256:e2cdb9a105bd0d79534c25fe7c75af3d51615d2a123958941b3eb27a37aa83cc"
   }
 }

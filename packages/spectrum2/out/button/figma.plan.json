@@ -1,0 +1,226 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Button",
+  "setName": "Button",
+  "anatomy": {
+    "name": ".root",
+    "source": null,
+    "element": "button",
+    "bindings": {
+      "min-block-size": [
+        "swc/component/height/100"
+      ],
+      "font-size": [
+        "swc/font/size/100"
+      ],
+      "font-weight": [
+        "swc/bold/font/weight"
+      ],
+      "font-family": [
+        "swc/sans/font/family/stack"
+      ],
+      "padding-inline": [
+        "swc/base/padding/horizontal/medium"
+      ],
+      "padding-block": [
+        "swc/base/padding/vertical/medium"
+      ],
+      "gap": [
+        "swc/base/gap/medium"
+      ],
+      "border-width": [
+        "swc/border/width/200"
+      ],
+      "background-color": [
+        "swc/neutral/background/color/default"
+      ],
+      "color": [
+        "swc/gray/25"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".icon",
+        "source": null,
+        "element": "span",
+        "bindings": {},
+        "slot": {
+          "name": "icon",
+          "accepts": [
+            "kind:icon"
+          ],
+          "mode": "prefer"
+        },
+        "children": []
+      },
+      {
+        "name": ".label",
+        "source": null,
+        "element": "span",
+        "bindings": {},
+        "slot": null,
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+    "kind": "component-set",
+    "nodeId": "9308:53906",
+    "nodeName": "Button",
+    "componentSetKey": "2508eb5e189b0c069686e8fd516bf2f6d2188069",
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [
+    {
+      "name": "Variant",
+      "type": "VARIANT",
+      "options": [
+        "primary",
+        "secondary",
+        "accent",
+        "negative"
+      ],
+      "defaultValue": "primary"
+    },
+    {
+      "name": "Style",
+      "type": "VARIANT",
+      "options": [
+        "fill",
+        "outline"
+      ],
+      "defaultValue": "fill"
+    },
+    {
+      "name": "Variant",
+      "type": "VARIANT",
+      "options": [
+        "white",
+        "black"
+      ],
+      "defaultValue": null
+    },
+    {
+      "name": "Size",
+      "type": "VARIANT",
+      "options": [
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "defaultValue": "m"
+    },
+    {
+      "name": "State",
+      "type": "VARIANT",
+      "options": [],
+      "defaultValue": false
+    },
+    {
+      "name": "Pending",
+      "type": "VARIANT",
+      "options": [],
+      "defaultValue": false
+    },
+    {
+      "name": "Label",
+      "type": "TEXT",
+      "forProp": "label"
+    },
+    {
+      "name": "Leading icon",
+      "type": "INSTANCE_SWAP",
+      "forProp": "icon"
+    }
+  ],
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=Hover"
+      }
+    },
+    {
+      "name": "active",
+      "figma": "NONE"
+    },
+    {
+      "name": "focus-visible",
+      "figma": "NONE"
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=Disabled"
+      }
+    }
+  ],
+  "layers": [
+    {
+      "name": ".swc-Button",
+      "selector": ".swc-Button",
+      "bindings": {
+        "min-block-size": [
+          "swc/component/height/100"
+        ],
+        "font-size": [
+          "swc/font/size/100"
+        ],
+        "font-weight": [
+          "swc/bold/font/weight"
+        ],
+        "font-family": [
+          "swc/sans/font/family/stack"
+        ],
+        "padding-inline": [
+          "swc/base/padding/horizontal/medium"
+        ],
+        "padding-block": [
+          "swc/base/padding/vertical/medium"
+        ],
+        "gap": [
+          "swc/base/gap/medium"
+        ],
+        "border-width": [
+          "swc/border/width/200"
+        ],
+        "background-color": [
+          "swc/neutral/background/color/default"
+        ],
+        "color": [
+          "swc/gray/25"
+        ]
+      }
+    },
+    {
+      "name": ".swc-Button-icon",
+      "selector": ".swc-Button-icon",
+      "bindings": {},
+      "slot": {
+        "name": "icon",
+        "accepts": [
+          "kind:icon"
+        ],
+        "mode": "prefer"
+      }
+    },
+    {
+      "name": ".swc-Button-label",
+      "selector": ".swc-Button-label",
+      "bindings": {}
+    }
+  ],
+  "textStyles": []
+}

@@ -14,6 +14,7 @@ import { figmaPlan } from "./lib/formats/figma-plan.mjs";
 import { contractJson } from "./lib/formats/contract-json.mjs";
 import { buildOne, checkOne, ROOT } from "./build.mjs";
 import { canonicalJson, hashOf } from "./lib/canonical.mjs";
+import { SYSTEMS } from "./systems.mjs";
 
 const tokens = loadShippedTokens(join(ROOT, "dist", "packages", "tokens", "css", "dev"));
 const generator = { name: "test", version: "0" };
@@ -277,6 +278,43 @@ test("the targets write to separate trees, so neither collides with hand-written
   assert.ok(paths.some((p) => p.startsWith("packages/milo-blocks/")));
 });
 
+// --- atoms are not blocks ---------------------------------------------------
+// Rendering Button as a block gave a <div> with three authored rows — the CSS
+// right, the JavaScript the wrong kind of thing. An atom is what the author
+// already wrote, upgraded in place, like Milo's own decorateButtons().
+test("an atom renders a decorator over authored markup, not a block over rows", () => {
+  const ir = buildIR({ defs: { ...varied, archetype: "button" }, code, evidence: null, tokens, generator });
+  const files = renderers.milo.files(ir, "chip");
+  const js = files["packages/milo-atoms/chip/chip.js"];
+  assert.ok(js, "an atom lands under milo-atoms, not milo-blocks");
+  assert.match(js, /export default function decorateChip\(scope, options = \{\}\)/);
+  assert.match(js, /AUTHORED = 'strong > a, em > a, a\.button, button'/);
+  assert.ok(!/:scope > div/.test(js), "no row convention: an atom is never authored as rows");
+  // The fixture has a size but no style, and a size is not something bold or
+  // italic can mean — so no authoring cue is invented for it.
+  assert.ok(!/CUES/.test(js), "no cue without a style prop");
+  const css = files["packages/milo-atoms/chip/chip.css"];
+  assert.match(css, /\.s2a-chip\.md/);
+  assert.match(css, /\.s2a-chip:hover/);
+});
+
+test("the real Button atom reads Milo's bold/italic cue as solid/outlined", () => {
+  const { ir } = buildOne("button");
+  const js = renderers.milo.files(ir, "button")["packages/milo-atoms/button/button.js"];
+  assert.match(js, /CUES = \{ STRONG: 'solid', EM: 'outlined' \}/);
+  assert.match(js, /label\.className = 'label'/);
+  assert.match(js, /'icon-end' : 'icon-start'/);
+});
+
+test("a block composing an atom calls the atom's decorator instead of drawing it", () => {
+  const contractFor = (name) => (name === "Chip" ? { slug: "chip", name: "Chip", props: [], archetype: "button" } : null);
+  const composed = { ...varied, archetype: "card", anatomy: { root: { ...varied.anatomy.root, parts: { ...varied.anatomy.root.parts, cta: { selector: ".cta", slot: { name: "cta", accepts: ["Chip"], acceptsMode: "restrict" } } } } } };
+  const ir = buildIR({ defs: composed, code, evidence: null, tokens, generator });
+  const js = renderers.milo.files(ir, "card", { contractFor })["packages/milo-blocks/card/card.js"];
+  assert.match(js, /import decorateChip from '\.\.\/\.\.\/milo-atoms\/chip\/chip\.js';/);
+  assert.match(js, /decorateChip\(el\);/);
+});
+
 test("a Milo block documents the authored row order it assumes", () => {
   const ir = buildIR({ defs: varied, code, evidence: null, tokens, generator });
   const js = renderers.milo.files(ir, "chip")["packages/milo-blocks/chip/chip.js"];
@@ -288,7 +326,8 @@ test("a Milo block documents the authored row order it assumes", () => {
 });
 
 test("adding a target is a registry entry, not a change upstream of the contract", () => {
-  assert.deepEqual(targets, ["lit", "milo"]);
+  // lit + milo generate our components; upstream mounts a shipped library's.
+  assert.deepEqual(targets, ["lit", "milo", "upstream"]);
   for (const id of targets) {
     assert.equal(typeof renderers[id].files, "function");
     assert.ok(renderers[id].description);
@@ -419,8 +458,10 @@ test("every renderer's paths() matches the files() it writes", () => {
   const ir = buildIR({ defs: varied, code, evidence: null, tokens, generator });
   for (const [id, r] of Object.entries(renderers)) {
     assert.ok(typeof r.paths === "function", `${id} has no paths()`);
-    const declared = r.paths("chip");
-    const written = Object.keys(r.files(ir, "chip", { manifest: { derived: [{ id: "default", name: "Default", args: {} }] } }));
+    // A target that mounts a library needs to know which one; the others ignore it.
+    const extras = { system: SYSTEMS.spectrum, ir };
+    const declared = r.paths("chip", extras);
+    const written = Object.keys(r.files(ir, "chip", { manifest: { derived: [{ id: "default", name: "Default", args: {} }] }, ...extras }));
     assert.deepEqual([...declared].sort(), [...written].sort(), `${id}: paths() and files() disagree`);
   }
 });

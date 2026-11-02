@@ -10,10 +10,14 @@
  * Variants are classes on the block element:
  *   style: default | centered
  */
+import decorateLink from '../../milo-atoms/link/link.js';
+
 export default function init(el) {
   const rows = [...el.querySelectorAll(':scope > div')];
   rows[0]?.classList.add('headline-body');
   rows[1]?.classList.add('link');
+
+  decorateLink(el);   // Link: upgrades what the author wrote, in place
 
   // Anything the author left out simply is not there — a Milo block degrades to
   // what was written rather than rendering an empty slot.

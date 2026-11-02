@@ -1,0 +1,108 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "button-group",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "size-s",
+      "name": "size: s",
+      "args": {
+        "size": "s"
+      }
+    },
+    {
+      "id": "size-m",
+      "name": "size: m",
+      "args": {
+        "size": "m"
+      }
+    },
+    {
+      "id": "size-l",
+      "name": "size: l",
+      "args": {
+        "size": "l"
+      }
+    },
+    {
+      "id": "size-xl",
+      "name": "size: xl",
+      "args": {
+        "size": "xl"
+      }
+    },
+    {
+      "id": "orientation-horizontal",
+      "name": "orientation: horizontal",
+      "args": {
+        "orientation": "horizontal"
+      }
+    },
+    {
+      "id": "orientation-vertical",
+      "name": "orientation: vertical",
+      "args": {
+        "orientation": "vertical"
+      }
+    },
+    {
+      "id": "disabled-on",
+      "name": "disabled on",
+      "args": {
+        "disabled": true
+      }
+    },
+    {
+      "id": "disabled-off",
+      "name": "disabled off",
+      "args": {
+        "disabled": false
+      }
+    },
+    {
+      "id": "align-start",
+      "name": "align: start",
+      "args": {
+        "align": "start"
+      }
+    },
+    {
+      "id": "align-center",
+      "name": "align: center",
+      "args": {
+        "align": "center"
+      }
+    },
+    {
+      "id": "align-end",
+      "name": "align: end",
+      "args": {
+        "align": "end"
+      }
+    }
+  ],
+  "existing": [],
+  "deferred": [
+    "size-s",
+    "size-m",
+    "size-l",
+    "size-xl",
+    "orientation-horizontal",
+    "orientation-vertical",
+    "disabled-on",
+    "disabled-off",
+    "align-start",
+    "align-center",
+    "align-end"
+  ],
+  "extra": [],
+  "matrix": null
+}

@@ -1,22 +1,23 @@
 // vite-plugin-parity.mjs — the visual eval, behind a dev-server endpoint.
 //
-// POST /__parity/run  { slug, theme, matrix, js, css, stories, exportName }
+// POST /__parity/run  { slug, theme }
 //
-// Renders the State matrix story the Book just derived (not the one on disk —
-// the one from the defs in the editor), screenshots it in headless Chromium at
-// the golden sheet's scale, and scores it cell by cell against that sheet with
-// evals/visual/matrix-parity.mjs. Same screenshot routine, same comparison,
-// same difference codes as `npm run eval:visual:matrix`; the only thing that
-// differs is where the story came from.
+// Scores the State matrix story AS STORYBOOK RENDERS IT against the committed
+// golden sheet, with evals/visual/matrix-parity.mjs — the same screenshot
+// routine, comparison and difference codes as `npm run eval:visual:matrix`.
+// The Book draws nothing of its own: what is scored is what is on disk and
+// built, in the running Storybook, which for a shipped library (Spectrum) is
+// the library's own element and for ours is the generated component. Save the
+// defs, the build regenerates the stories, Storybook reloads, score again.
 //
-// The story is rendered on /matrix.html, a bare page that loads the same
-// normalize, tokens, base and fonts as .storybook/preview.js, so the pixels
-// are Storybook's pixels. Fonts under /fonts/ are served from packages/fonts.
+// Storybook's address is STORYBOOK_URL (default http://localhost:6006). When
+// it is not running the answer says so, with the command.
 import { chromium } from "playwright";
 import { PNG } from "pngjs";
-import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { compare, summarise, screenshotMatrix, behaviourPass, scaleOf, sheetPath, THEMES, PASS } from "../../evals/visual/matrix-parity.mjs";
+import { locate } from "../../packages/spec-dictionary/systems.mjs";
 
 const readBody = (req) => new Promise((resolve, reject) => {
   let raw = "";
@@ -27,72 +28,61 @@ const readBody = (req) => new Promise((resolve, reject) => {
 const json = (res, status, body) => { res.statusCode = status; res.setHeader("Content-Type", "application/json"); res.end(JSON.stringify(body)); };
 const dataUrl = (png) => "data:image/png;base64," + PNG.sync.write(png).toString("base64");
 
-export default function parity({ root }) {
-  const FONTS = join(root, "packages", "fonts");
-  const bundles = new Map();
+/** Storybook derives the id from the title: "Spectrum/ControlButton" → spectrum-controlbutton. */
+export const storyId = (system, slug, story = "state-matrix") => `${system.storybook.title.toLowerCase()}-${slug.replace(/-/g, "")}--${story}`;
+
+export default function parity({ root, storybook = process.env.STORYBOOK_URL || "http://localhost:6006" }) {
   let browser = null;
-  let seq = 0;
 
   return {
     name: "s2a-parity",
     configureServer(server) {
       server.httpServer?.on("close", () => { browser?.close(); browser = null; });
-      const origin = () => {
-        const a = server.httpServer?.address();
-        return `http://localhost:${typeof a === "object" && a ? a.port : server.config.server.port}`;
-      };
 
       server.middlewares.use(async (req, res, next) => {
         const url = new URL(req.url, "http://x");
-
-        // Storybook serves packages/fonts at /fonts; so does the matrix page.
-        if (url.pathname.startsWith("/fonts/")) {
-          const file = join(FONTS, url.pathname.slice("/fonts/".length));
-          if (!file.startsWith(FONTS) || !existsSync(file)) return next();
-          res.setHeader("Content-Type", "font/otf");
-          return createReadStream(file).pipe(res);
-        }
-
-        // The matrix page fetches what to render by id.
-        if (url.pathname.startsWith("/__parity/bundle/")) {
-          const b = bundles.get(url.pathname.slice("/__parity/bundle/".length));
-          return b ? json(res, 200, b) : json(res, 404, { error: "no such bundle" });
-        }
-
         if (req.method !== "POST" || url.pathname !== "/__parity/run") return next();
-        let id = null;
         let page = null;
         try {
-          const { slug, theme = THEMES.default, matrix, js, css, stories, exportName, children = {} } = await readBody(req);
-          if (!slug || !matrix || !js || !stories) return json(res, 400, { ok: false, message: "slug, matrix, js and stories are required" });
+          const { slug, theme = THEMES.default } = await readBody(req);
+          if (!slug) return json(res, 400, { ok: false, message: "slug is required" });
           if (!THEMES.modes[theme]) return json(res, 400, { ok: false, message: `unknown theme "${theme}"` });
+          const where = locate(slug);
+          if (!where) return json(res, 400, { ok: false, message: `no such design system in "${slug}"` });
 
-          const sheetFile = sheetPath(slug, theme);
+          // The matrix on disk — what the build produced and what Storybook shows.
+          const manifestPath = join(where.system.out, where.slug, "stories.manifest.json");
+          if (!existsSync(manifestPath)) return json(res, 200, { ok: false, reason: "no-build", message: `no built manifest for ${slug}; save the defs (the build writes it) or run ${where.system.build(where.slug)}` });
+          const matrix = JSON.parse(readFileSync(manifestPath, "utf8")).matrix;
+          if (!matrix) return json(res, 200, { ok: false, reason: "no-matrix", message: "this set has no State matrix to score" });
+
+          const sheetFile = sheetPath(where.key, theme);
           if (!existsSync(sheetFile)) {
             const flag = theme === THEMES.default ? "" : ` --theme=${theme}`;
-            return json(res, 200, { ok: false, reason: "no-sheet", theme, command: `npm run goldens:sheet -- --slug=${slug}${flag}` });
+            return json(res, 200, { ok: false, reason: "no-sheet", theme, command: `npm run goldens:sheet -- --slug=${where.key}${flag}` });
           }
           const sheet = PNG.sync.read(readFileSync(sheetFile));
           const scale = scaleOf(sheet, matrix);
 
-          id = String(++seq);
-          bundles.set(id, { js, css: css ?? "", stories, exportName, theme, children });
+          try { await fetch(`${storybook}/index.json`); }
+          catch { return json(res, 200, { ok: false, reason: "no-storybook", message: `Storybook is not answering at ${storybook}`, command: "npm run storybook" }); }
+
           browser ??= await chromium.launch();
           page = await browser.newPage({
             deviceScaleFactor: scale,
             viewport: { width: Math.max(900, matrix.cols.length * matrix.cell.w + 240), height: Math.max(700, matrix.rows.length * matrix.cell.h + 240) },
           });
-          await page.goto(`${origin()}/matrix.html?id=${id}`, { waitUntil: "networkidle" });
-          await page.waitForFunction(() => window.__s2aMatrix?.status === "ready" || window.__s2aMatrix?.status === "error", null, { timeout: 20000 });
-          const failed = await page.evaluate(() => window.__s2aMatrix?.error ?? null);
-          if (failed) return json(res, 200, { ok: false, reason: "render", message: failed });
+          const globals = `figmaOverlay:off;theme:${theme}`;
+          await page.goto(`${storybook}/iframe.html?id=${storyId(where.system, where.slug)}&viewMode=story&globals=${encodeURIComponent(globals)}`, { waitUntil: "networkidle" });
+          const missing = await page.evaluate(() => !document.querySelector(".s2a-matrix"));
+          if (missing) return json(res, 200, { ok: false, reason: "no-story", message: `Storybook has no State matrix story for ${slug} (${storyId(where.system, where.slug)}); render the stories and let Storybook pick them up` });
 
           const { png: shot, boxes } = await screenshotMatrix(page, matrix);
           const r = compare({ sheet, shot, matrix, boxes, diff: true });
           // Then play: click every closed cell and score it against the open
           // design. A component that only moves its chevron fails here.
           const behaviour = r.error ? null : await behaviourPass(page, matrix, sheet).catch((e) => ({ error: e.message }));
-          if (r.error) return json(res, 200, { ok: false, reason: "size", message: `${r.error}. The sheet was shot for a different matrix — rebuild and re-composite: npm run specs:render -- --slug=${slug} && npm run goldens:sheet -- --slug=${slug}` });
+          if (r.error) return json(res, 200, { ok: false, reason: "size", message: `${r.error}. The sheet was shot for a different matrix — rebuild and re-composite: npm run goldens:sheet -- --slug=${where.key}` });
 
           return json(res, 200, {
             ok: true, slug, theme, pass: PASS, scale,
@@ -109,7 +99,6 @@ export default function parity({ root }) {
           return json(res, 500, { ok: false, reason: "error", message: e instanceof Error ? e.message : String(e) });
         } finally {
           await page?.close().catch(() => {});
-          if (id) bundles.delete(id);
         }
       });
     },

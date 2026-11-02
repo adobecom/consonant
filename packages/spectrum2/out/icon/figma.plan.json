@@ -1,0 +1,77 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "Icon",
+  "setName": "Icon — v2",
+  "anatomy": {
+    "name": ".root",
+    "source": null,
+    "element": "span",
+    "bindings": {
+      "inline-size": [
+        "swc/workflow/icon/medium"
+      ],
+      "block-size": [
+        "swc/workflow/icon/medium"
+      ]
+    },
+    "slot": null,
+    "children": [
+      {
+        "name": ".glyph",
+        "source": null,
+        "element": "svg",
+        "bindings": {},
+        "slot": {
+          "name": "glyph",
+          "accepts": [
+            "kind:icon"
+          ],
+          "mode": "restrict"
+        },
+        "children": []
+      }
+    ]
+  },
+  "anchors": {
+    "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+    "kind": "none",
+    "nodeId": null,
+    "nodeName": null,
+    "componentSetKey": null,
+    "deprecated": false,
+    "successorNodeId": null,
+    "usages": []
+  },
+  "properties": [],
+  "states": [],
+  "layers": [
+    {
+      "name": ".swc-Icon",
+      "selector": ".swc-Icon",
+      "bindings": {
+        "inline-size": [
+          "swc/workflow/icon/medium"
+        ],
+        "block-size": [
+          "swc/workflow/icon/medium"
+        ]
+      }
+    },
+    {
+      "name": "svg",
+      "selector": "svg",
+      "bindings": {},
+      "slot": {
+        "name": "glyph",
+        "accepts": [
+          "kind:icon"
+        ],
+        "mode": "restrict"
+      }
+    }
+  ],
+  "textStyles": []
+}

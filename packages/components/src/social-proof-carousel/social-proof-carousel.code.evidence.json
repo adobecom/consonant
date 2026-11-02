@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T19:44:56.979Z",
+  "extractedAt": "2026-10-28T16:26:50.510Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -132,7 +132,6 @@
       "spc-track"
     ],
     "stylesheet": [
-      "QuoteCard",
       "c-social-proof-carousel",
       "spc-dot",
       "spc-nav",
@@ -223,6 +222,327 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-social-proof-carousel",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "relative"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          },
+          {
+            "prop": "overflow",
+            "value": "hidden"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-track",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "will-change",
+            "value": "transform"
+          },
+          {
+            "prop": "transform",
+            "value": "translateX(calc(var(--spc-peek, 8.6%) + var(--s2a-spacing-xs)))"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-slide",
+        "declarations": [
+          {
+            "prop": "flex",
+            "value": "0 0 var(--spc-slide-w, calc(100% - 17.2% - 16px))"
+          },
+          {
+            "prop": "min-width",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-track",
+        "context": [
+          "@media (min-width: 1441px)"
+        ],
+        "declarations": [
+          {
+            "prop": "transform",
+            "value": "translateX(calc(var(--spc-peek, 11.46%) + var(--s2a-spacing-xs)))"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-slide",
+        "context": [
+          "@media (min-width: 1441px)"
+        ],
+        "declarations": [
+          {
+            "prop": "flex-basis",
+            "value": "var(--spc-slide-w, calc(100% - 22.92% - 16px))"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-slide[data-state=\"inactive\"]",
+        "declarations": [
+          {
+            "prop": "pointer-events",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-nav",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "top",
+            "value": "50%"
+          },
+          {
+            "prop": "transform",
+            "value": "translateY(-50%)"
+          },
+          {
+            "prop": "z-index",
+            "value": "10"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-nav--prev",
+        "declarations": [
+          {
+            "prop": "left",
+            "value": "40px"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-nav--next",
+        "declarations": [
+          {
+            "prop": "right",
+            "value": "40px"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-pagination",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "bottom",
+            "value": "32px"
+          },
+          {
+            "prop": "left",
+            "value": "50%"
+          },
+          {
+            "prop": "transform",
+            "value": "translateX(-50%)"
+          },
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "z-index",
+            "value": "10"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-dot",
+        "declarations": [
+          {
+            "prop": "appearance",
+            "value": "none"
+          },
+          {
+            "prop": "width",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "height",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--s2a-border-radius-round)"
+          },
+          {
+            "prop": "border",
+            "value": "none"
+          },
+          {
+            "prop": "padding",
+            "value": "0"
+          },
+          {
+            "prop": "background",
+            "value": "var(--s2a-color-transparent-white-64)"
+          },
+          {
+            "prop": "cursor",
+            "value": "pointer"
+          },
+          {
+            "prop": "transition",
+            "value": "background 200ms ease,\n    transform 200ms ease"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-dot[aria-pressed=\"true\"]",
+        "declarations": [
+          {
+            "prop": "background",
+            "value": "var(--s2a-color-content-knockout)"
+          },
+          {
+            "prop": "transform",
+            "value": "scale(1.25)"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-dot:focus-visible",
+        "declarations": [
+          {
+            "prop": "outline",
+            "value": "var(--s2a-border-width-md) solid var(--s2a-color-focus-ring-default)"
+          },
+          {
+            "prop": "outline-offset",
+            "value": "var(--s2a-spacing-3xs)"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-track",
+        "context": [
+          "@media (max-width: 599px)"
+        ],
+        "declarations": [
+          {
+            "prop": "transform",
+            "value": "translateX(calc(var(--spc-peek, 16px) + var(--s2a-spacing-xs)))"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-slide",
+        "context": [
+          "@media (max-width: 599px)"
+        ],
+        "declarations": [
+          {
+            "prop": "flex-basis",
+            "value": "var(--spc-slide-w, calc(100% - 48px))"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-nav",
+        "context": [
+          "@media (max-width: 599px)"
+        ],
+        "declarations": [
+          {
+            "prop": "top",
+            "value": "auto"
+          },
+          {
+            "prop": "bottom",
+            "value": "16px"
+          },
+          {
+            "prop": "transform",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-pagination",
+        "context": [
+          "@media (max-width: 599px)"
+        ],
+        "declarations": [
+          {
+            "prop": "bottom",
+            "value": "32px"
+          }
+        ]
+      },
+      {
+        "selector": ".spc-track",
+        "context": [
+          "@media (prefers-reduced-motion: reduce)"
+        ],
+        "declarations": [
+          {
+            "prop": "transition",
+            "value": "none",
+            "important": true
+          }
+        ]
+      },
+      {
+        "selector": ".spc-dot",
+        "context": [
+          "@media (prefers-reduced-motion: reduce)"
+        ],
+        "declarations": [
+          {
+            "prop": "transition",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-social-proof-carousel[data-single=\"true\"] :is(.spc-nav, .spc-pagination)",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "none"
+          }
+        ]
+      }
+    ]
   },
   "states": [
     ":focus",
@@ -633,6 +953,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:ba5b3b31b4dd072977d5fb967e6b4c8a5c9cdd904e567d434dd0fbc798cca89e"
+    "hash": "sha256:17b27eefbcbc3b7dae86ec90d106f82a3547f7eaed910a031ebd9f0930bbb90a"
   }
 }

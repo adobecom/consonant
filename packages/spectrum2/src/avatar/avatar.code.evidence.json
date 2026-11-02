@@ -1,0 +1,498 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-28T16:27:17.446Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "avatar",
+    "name": "Avatar",
+    "cssClass": "swc-Avatar",
+    "importPath": "packages/spectrum2/src/avatar/avatar.js",
+    "exports": [
+      "Avatar"
+    ],
+    "render": null,
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/avatar/avatar.spec.json",
+      "storybookId": null,
+      "figmaNodeId": "9190:562"
+    }
+  },
+  "sources": {
+    "packages/spectrum2/src/avatar/avatar.js": "sha256:1d2364dc8ca6d26c93b69340b207c1a4db4196fa4ad0690fc6d764c9d263fc15",
+    "packages/spectrum2/src/avatar/avatar.css": "sha256:6a2869c9211b076a5de8d3a47335675662e5574b37177c7749e4a84992a71ba9",
+    "packages/spectrum2/src/avatar/avatar.d.ts": "sha256:01bbfde4dd6bed1262994771091d1836408b98d6a0ae571e919c1ae332703ad2"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "enum",
+      "values": [
+        "50",
+        "75",
+        "100",
+        "200",
+        "300",
+        "400",
+        "500",
+        "600",
+        "700",
+        "800",
+        "900",
+        "1000",
+        "1100",
+        "1200",
+        "1300",
+        "1400",
+        "1500"
+      ],
+      "default": "500",
+      "description": "The size of the avatar. Invalid values fall back to the default (500)."
+    },
+    {
+      "name": "src",
+      "type": "string",
+      "description": "URL of the profile image to display."
+    },
+    {
+      "name": "alt",
+      "type": "string | undefined",
+      "description": "Text description of the avatar image."
+    },
+    {
+      "name": "outline",
+      "type": "boolean",
+      "description": "Renders a visual outline around the avatar image."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Renders the avatar at reduced opacity, indicating the entity is inactive or unavailable."
+    },
+    {
+      "name": "decorative",
+      "type": "boolean",
+      "description": "Marks the avatar as decorative, hiding it from assistive technology."
+    }
+  ],
+  "attributes": {},
+  "parts": {
+    "template": [
+      "swc-Avatar",
+      "swc-Avatar-image"
+    ],
+    "stylesheet": [
+      "swc-Avatar",
+      "swc-Avatar-image"
+    ],
+    "runtime": [],
+    "own": [
+      "swc-Avatar",
+      "swc-Avatar-image"
+    ]
+  },
+  "declarations": {
+    "element": "swc-avatar",
+    "slots": [],
+    "cssProps": [
+      "--swc-avatar-opacity-disabled",
+      "--swc-avatar-outline-color",
+      "--swc-avatar-outline-width",
+      "--swc-avatar-size"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [],
+    "tags": [
+      "img"
+    ]
+  },
+  "imports": [
+    "./avatar.js"
+  ],
+  "tokens": {
+    "references": {
+      "--swc-avatar-opacity-disabled": {
+        "fallback": true
+      },
+      "--swc-avatar-outline-color": {
+        "fallback": true
+      },
+      "--swc-avatar-outline-width": {
+        "fallback": true
+      },
+      "--swc-avatar-size": {
+        "fallback": true
+      },
+      "--swc-avatar-size-100": {
+        "fallback": false
+      },
+      "--swc-avatar-size-1000": {
+        "fallback": false
+      },
+      "--swc-avatar-size-1100": {
+        "fallback": false
+      },
+      "--swc-avatar-size-1200": {
+        "fallback": false
+      },
+      "--swc-avatar-size-1300": {
+        "fallback": false
+      },
+      "--swc-avatar-size-1400": {
+        "fallback": false
+      },
+      "--swc-avatar-size-1500": {
+        "fallback": false
+      },
+      "--swc-avatar-size-200": {
+        "fallback": false
+      },
+      "--swc-avatar-size-300": {
+        "fallback": false
+      },
+      "--swc-avatar-size-400": {
+        "fallback": false
+      },
+      "--swc-avatar-size-50": {
+        "fallback": false
+      },
+      "--swc-avatar-size-500": {
+        "fallback": false
+      },
+      "--swc-avatar-size-600": {
+        "fallback": false
+      },
+      "--swc-avatar-size-700": {
+        "fallback": false
+      },
+      "--swc-avatar-size-75": {
+        "fallback": false
+      },
+      "--swc-avatar-size-800": {
+        "fallback": false
+      },
+      "--swc-avatar-size-900": {
+        "fallback": false
+      },
+      "--swc-border-width-100": {
+        "fallback": false
+      },
+      "--swc-gray-25": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ":host",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-self",
+            "value": "start"
+          },
+          {
+            "prop": "justify-self",
+            "value": "start"
+          },
+          {
+            "prop": "place-self",
+            "value": "start"
+          },
+          {
+            "prop": "vertical-align",
+            "value": "middle"
+          }
+        ]
+      },
+      {
+        "selector": "*",
+        "declarations": [
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"50\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-50)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"75\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-75)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"100\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-100)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"200\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-200)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"300\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-300)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"400\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-400)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"500\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-500)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"600\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-600)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"700\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-700)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"800\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-800)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"900\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-900)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"1000\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-1000)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"1100\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-1100)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"1200\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-1200)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"1300\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-1300)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"1400\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-1400)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"1500\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-size",
+            "value": "var(--swc-avatar-size-1500)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Avatar",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-block"
+          },
+          {
+            "prop": "inline-size",
+            "value": "var(--swc-avatar-size, var(--swc-avatar-size-500))"
+          },
+          {
+            "prop": "block-size",
+            "value": "var(--swc-avatar-size, var(--swc-avatar-size-500))"
+          },
+          {
+            "prop": "border-radius",
+            "value": "50%"
+          },
+          {
+            "prop": "-webkit-user-select",
+            "value": "none"
+          },
+          {
+            "prop": "-moz-user-select",
+            "value": "none"
+          },
+          {
+            "prop": "user-select",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Avatar-image",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "block"
+          },
+          {
+            "prop": "inline-size",
+            "value": "var(--swc-avatar-size, var(--swc-avatar-size-500))"
+          },
+          {
+            "prop": "block-size",
+            "value": "var(--swc-avatar-size, var(--swc-avatar-size-500))"
+          },
+          {
+            "prop": "border-radius",
+            "value": "50%"
+          },
+          {
+            "prop": "-o-object-fit",
+            "value": "cover"
+          },
+          {
+            "prop": "object-fit",
+            "value": "cover"
+          }
+        ]
+      },
+      {
+        "selector": ":host([outline]) .swc-Avatar-image",
+        "declarations": [
+          {
+            "prop": "outline",
+            "value": "var(--swc-avatar-outline-width, var(--swc-border-width-100)) solid var(--swc-avatar-outline-color, var(--swc-gray-25))"
+          }
+        ]
+      },
+      {
+        "selector": ":host([outline][size=\"1000\"]),:host([outline][size=\"1100\"]),:host([outline][size=\"1200\"]),:host([outline][size=\"1300\"]),:host([outline][size=\"1400\"]),:host([outline][size=\"1500\"])",
+        "declarations": [
+          {
+            "prop": "--swc-avatar-outline-width",
+            "value": "2px"
+          }
+        ]
+      },
+      {
+        "selector": ":host([disabled]) .swc-Avatar",
+        "declarations": [
+          {
+            "prop": "pointer-events",
+            "value": "none"
+          },
+          {
+            "prop": "cursor",
+            "value": "default"
+          },
+          {
+            "prop": "opacity",
+            "value": "var(--swc-avatar-opacity-disabled, .3)"
+          }
+        ]
+      }
+    ]
+  },
+  "states": [
+    "[disabled]"
+  ],
+  "queries": [],
+  "stories": [],
+  "counts": {
+    "props": 6,
+    "attributes": 0,
+    "parts": 2,
+    "tokenReferences": 23,
+    "tokenReferencesWithoutFallback": 19,
+    "raw": 0,
+    "stories": 0,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:deef533f3c58405abcd15df95b78857bf62e9ab5deab9502e7526ef7b3b5f8f1"
+  }
+}

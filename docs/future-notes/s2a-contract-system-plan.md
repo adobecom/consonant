@@ -1,5 +1,10 @@
 # S2A Contract System: Plan
 
+> **Superseded in part.** This describes the pipeline for one design system,
+> ours. For contracts against a library we do not own, the Contract Book's
+> intent, and the open schema changes, read
+> [`multi-system-contracts.md`](./multi-system-contracts.md) (2026-10-28) first.
+
 Drafted 2026-09-17. This takes the discipline of the portable "contract system"
 (evidence → curation → transform → gate → generation, with a plugin round trip)
 and builds it into S2A, which already has the piece that system lacked: a token

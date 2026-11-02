@@ -1,0 +1,108 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "card",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "variant-primary",
+      "name": "variant: primary",
+      "args": {
+        "variant": "primary"
+      }
+    },
+    {
+      "id": "variant-secondary",
+      "name": "variant: secondary",
+      "args": {
+        "variant": "secondary"
+      }
+    },
+    {
+      "id": "variant-tertiary",
+      "name": "variant: tertiary",
+      "args": {
+        "variant": "tertiary"
+      }
+    },
+    {
+      "id": "variant-quiet",
+      "name": "variant: quiet",
+      "args": {
+        "variant": "quiet"
+      }
+    },
+    {
+      "id": "density-compact",
+      "name": "density: compact",
+      "args": {
+        "density": "compact"
+      }
+    },
+    {
+      "id": "density-regular",
+      "name": "density: regular",
+      "args": {
+        "density": "regular"
+      }
+    },
+    {
+      "id": "density-spacious",
+      "name": "density: spacious",
+      "args": {
+        "density": "spacious"
+      }
+    },
+    {
+      "id": "titleaslink-on",
+      "name": "titleAsLink on",
+      "args": {
+        "titleAsLink": true
+      }
+    },
+    {
+      "id": "titleaslink-off",
+      "name": "titleAsLink off",
+      "args": {
+        "titleAsLink": false
+      }
+    },
+    {
+      "id": "selectable-on",
+      "name": "selectable on",
+      "args": {
+        "selectable": true
+      }
+    },
+    {
+      "id": "selectable-off",
+      "name": "selectable off",
+      "args": {
+        "selectable": false
+      }
+    }
+  ],
+  "existing": [],
+  "deferred": [
+    "variant-primary",
+    "variant-secondary",
+    "variant-tertiary",
+    "variant-quiet",
+    "density-compact",
+    "density-regular",
+    "density-spacious",
+    "titleaslink-on",
+    "titleaslink-off",
+    "selectable-on",
+    "selectable-off"
+  ],
+  "extra": [],
+  "matrix": null
+}

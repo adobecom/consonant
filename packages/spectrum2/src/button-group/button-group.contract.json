@@ -1,0 +1,165 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "spectrum.button-group",
+  "name": "ButtonGroup",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "ButtonGroup, as the implementation ships it.",
+  "semantics": {
+    "element": "div"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "s",
+          "m",
+          "l",
+          "xl"
+        ]
+      },
+      "description": "The size of the button group. Propagated to all slotted button children.",
+      "default": "\"m\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "orientation",
+      "type": {
+        "enum": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "description": "The layout direction of the button group. Note: this property does NOT set `aria-orientation` on the host because `aria-orientation` is only meaningful for roles that manage arrow-key navigation (e.g. `toolbar`, `listbox`). Since button-group uses sequential Tab navigation (not roving tabindex), the attribute would be invalid.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "orientation"
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Whether all buttons in the group are disabled. When `true`, forces every slotted button child to `disabled`. When `false`, children retain their individual disabled state — a button slotted with `disabled` remains disabled even when the group is enabled.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "disabled"
+        }
+      }
+    },
+    {
+      "name": "align",
+      "type": {
+        "enum": [
+          "start",
+          "center",
+          "end"
+        ]
+      },
+      "description": "The alignment of buttons within the group along the main axis.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "align"
+        }
+      }
+    },
+    {
+      "name": "default",
+      "type": "text",
+      "description": "One or more `swc-button` elements.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "default"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "div",
+      "literals": {
+        "display": "flex",
+        "box-sizing": "border-box",
+        "flex-direction": "row",
+        "flex-wrap": "wrap",
+        "row-gap": "12px",
+        "column-gap": "12px",
+        "justify-content": "normal",
+        "inline-size": "100%"
+      },
+      "literalsByProp": [
+        {
+          "prop": "align",
+          "map": {
+            "center": {
+              "justify-content": "center"
+            },
+            "end": {
+              "justify-content": "flex-end"
+            }
+          }
+        },
+        {
+          "prop": "orientation",
+          "map": {
+            "vertical": {
+              "flex-direction": "column"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "a11y": {
+    "contrast": "AA"
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": null,
+        "componentSetKey": null
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/button-group",
+        "export": "ButtonGroup"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:a3846872db6db4669ea8ef44c6d5103ed5dcb368906e64ba2ed8591004e22cef",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:d4f3109886cc89f9fa8eee4728d73891bb7eac322ba188dde424be963a9fc7cb"
+    }
+  }
+}

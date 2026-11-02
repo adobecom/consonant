@@ -1,0 +1,148 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "spectrum.icon",
+  "name": "Icon",
+  "version": "2.0.0",
+  "status": "draft",
+  "description": "A glyph at a size, inheriting its colour. Spectrum's smallest leaf: 36 of its 84 components depend on it.",
+  "semantics": {
+    "element": "span"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "xs",
+          "s",
+          "m",
+          "l",
+          "xl"
+        ]
+      },
+      "description": "Five rungs, one more than the other components: the icon adds xs.",
+      "default": "\"m\"",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "accessibleLabel",
+      "type": "text",
+      "description": "When empty the host is marked aria-hidden and the glyph is decorative; when set the host is exposed as an image with that label.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "accessibleLabel"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "span",
+      "tokens": {
+        "inline-size": "{swc.workflow.icon.medium}",
+        "block-size": "{swc.workflow.icon.medium}"
+      },
+      "literals": {
+        "box-sizing": "border-box",
+        "display": "block",
+        "color": "currentColor"
+      },
+      "tokensByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "xs": {
+              "inline-size": "{swc.workflow.icon.extra-small}",
+              "block-size": "{swc.workflow.icon.extra-small}"
+            },
+            "s": {
+              "inline-size": "{swc.workflow.icon.small}",
+              "block-size": "{swc.workflow.icon.small}"
+            },
+            "m": {
+              "inline-size": "{swc.workflow.icon.medium}",
+              "block-size": "{swc.workflow.icon.medium}"
+            },
+            "l": {
+              "inline-size": "{swc.workflow.icon.large}",
+              "block-size": "{swc.workflow.icon.large}"
+            },
+            "xl": {
+              "inline-size": "{swc.workflow.icon.extra-large}",
+              "block-size": "{swc.workflow.icon.extra-large}"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "glyph": {
+          "element": "svg",
+          "literals": {
+            "display": "block",
+            "inline-size": "100%",
+            "block-size": "100%",
+            "fill": "currentColor",
+            "--iconPrimary": "currentColor"
+          },
+          "slot": {
+            "name": "glyph",
+            "accepts": [
+              "kind:icon"
+            ],
+            "acceptsMode": "restrict",
+            "defaultContent": [
+              {
+                "id": "spectrum-icons:add-circle"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.1.1"
+    ],
+    "notes": [
+      "Decorative by default: the root sets pointer-events none and the glyph carries no accessible name.",
+      "A meaningful icon needs a name on the element that owns the meaning, not on the glyph."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+        "componentSetKey": null
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/icon",
+        "export": "Icon"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:38d951429a4e3714613ecd0f4adb87e9fc11c5d62e2f9fd2602059f2f092b814",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:fb8796f875a4248de0e8ace45e51929d938f6a0f54841d438673f807e094e8cc"
+    }
+  }
+}

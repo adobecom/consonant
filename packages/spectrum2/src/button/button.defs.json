@@ -1,0 +1,674 @@
+{
+  "$schema": "s2a-defs/1",
+  "component": "Button",
+  "slug": "button",
+  "status": "curated-draft",
+  "version": "2.0.0",
+  "archetype": "button",
+  "description": "The primary action trigger. Layer one: composes Icon for its optional leading and trailing glyphs.",
+  "curated": {
+    "by": "read from @adobe/spectrum-wc 2.0.0-beta.6 (dist/global-button.css, dist/tokens.css) and Adobe's own component data (@adobe/spectrum-design-data components/button.json)",
+    "date": "2026-10-27",
+    "reviewer": "Matt"
+  },
+  "anchors": {
+    "figma": {
+      "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+      "kind": "component-set",
+      "nodeId": "9308:53906",
+      "nodeName": "Button",
+      "componentSetKey": "2508eb5e189b0c069686e8fd516bf2f6d2188069",
+      "notes": "The Spectrum 2 web design file. Its variable names map one-to-one onto this package's --swc-* tokens (Base/Padding/Horizontal/Medium is --swc-base-padding-horizontal-medium), which is how the implementation was identified: the earlier @spectrum-css library carries a different vocabulary and cannot reproduce this file's geometry."
+    },
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/button",
+      "export": "Button",
+      "cssClass": "swc-Button"
+    }
+  },
+  "props": [
+    {
+      "name": "label",
+      "lever": true,
+      "type": "string",
+      "default": "Label",
+      "figma": {
+        "kind": "TEXT",
+        "property": "Label"
+      },
+      "code": {
+        "prop": "default"
+      },
+      "notes": "Rendered into the default slot, which upstream documents as the visible button label."
+    },
+    {
+      "name": "icon",
+      "lever": true,
+      "type": "string",
+      "figma": {
+        "kind": "INSTANCE_SWAP",
+        "property": "Leading icon"
+      },
+      "code": {
+        "prop": "icon"
+      },
+      "notes": "The icon slot. Upstream places it before the label and requires it when the label is hidden."
+    },
+    {
+      "name": "variant",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Variant",
+        "valueMap": {
+          "primary": "Primary",
+          "secondary": "Secondary",
+          "accent": "Accent",
+          "negative": "Negative"
+        }
+      },
+      "code": {
+        "prop": "variant"
+      },
+      "type": "string",
+      "enum": [
+        "primary",
+        "secondary",
+        "accent",
+        "negative"
+      ],
+      "default": "primary",
+      "notes": "The visual variant of the button. `outline` fill-style is only supported with `primary` and `secondary`. `static-color` is only supported with `primary` and `secondary`."
+    },
+    {
+      "name": "fillStyle",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Style",
+        "valueMap": {
+          "fill": "Fill",
+          "outline": "Outline"
+        }
+      },
+      "code": {
+        "prop": "fillStyle"
+      },
+      "type": "string",
+      "enum": [
+        "fill",
+        "outline"
+      ],
+      "default": "fill",
+      "notes": "fill or outline. Upstream supports outline only with primary and secondary."
+    },
+    {
+      "name": "staticColor",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Variant",
+        "notes": "The design folds this into the Variant axis as combined values (Primary - Static white, Secondary - Static black). The code keeps it a separate property, so the mapping is (variant, staticColor) to one axis value and cannot be written as a value map."
+      },
+      "code": {
+        "prop": "staticColor"
+      },
+      "type": "string",
+      "enum": [
+        "white",
+        "black"
+      ],
+      "notes": "For use over colour or imagery. Upstream supports it only with primary and secondary."
+    },
+    {
+      "name": "size",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Size",
+        "valueMap": {
+          "s": "Small",
+          "m": "Medium",
+          "l": "Large",
+          "xl": "Extra-large"
+        }
+      },
+      "code": {
+        "prop": "size"
+      },
+      "type": "string",
+      "enum": [
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "default": "m",
+      "notes": "The size of the button."
+    },
+    {
+      "name": "truncate",
+      "lever": true,
+      "figma": "NONE",
+      "code": {
+        "prop": "truncate"
+      },
+      "type": "boolean",
+      "default": false,
+      "notes": "Overflowing text is ellipsised rather than wrapped. Replaces the first-generation no-wrap attribute."
+    },
+    {
+      "name": "justified",
+      "lever": true,
+      "figma": "NONE",
+      "code": {
+        "prop": "justified"
+      },
+      "type": "boolean",
+      "default": false,
+      "notes": "Lets the button fill its container."
+    },
+    {
+      "name": "disabled",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "valueMap": {
+          "true": "Disabled",
+          "false": "Default"
+        }
+      },
+      "code": {
+        "prop": "disabled"
+      },
+      "type": "boolean",
+      "default": false,
+      "notes": "Removes focusability and prevents interaction."
+    },
+    {
+      "name": "pending",
+      "lever": true,
+      "figma": {
+        "kind": "VARIANT",
+        "property": "Pending",
+        "valueMap": {
+          "true": "True",
+          "false": "False"
+        }
+      },
+      "code": {
+        "prop": "pending"
+      },
+      "type": "boolean",
+      "default": false,
+      "notes": "Shows a spinner after a one-second delay, so quick work does not flicker."
+    },
+    {
+      "name": "accessibleLabel",
+      "lever": false,
+      "figma": "NONE",
+      "code": {
+        "prop": "accessibleLabel"
+      },
+      "type": "string",
+      "notes": "Forwarded to the inner button as aria-label. Required for an icon-only button."
+    },
+    {
+      "name": "pendingLabel",
+      "lever": false,
+      "figma": "NONE",
+      "code": {
+        "prop": "pendingLabel"
+      },
+      "type": "string",
+      "notes": "Accessible name used while pending."
+    },
+    {
+      "name": "pendingActive",
+      "lever": false,
+      "figma": "NONE",
+      "code": {
+        "prop": "pendingActive"
+      },
+      "type": "boolean",
+      "default": false,
+      "notes": "Read-only: whether the delayed pending visual is showing. Derived, never set by an author."
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "selector": ".swc-Button",
+      "element": "button",
+      "layout": {
+        "display": "inline-flex",
+        "align": "center",
+        "justify": "center"
+      },
+      "tokens": {
+        "min-block-size": "{swc.component.height.100}",
+        "font-size": "{swc.font.size.100}",
+        "font-weight": "{swc.bold.font.weight}",
+        "font-family": "{swc.sans.font.family.stack}",
+        "padding-inline": "{swc.base.padding.horizontal.medium}",
+        "padding-block": "{swc.base.padding.vertical.medium}",
+        "gap": "{swc.base.gap.medium}",
+        "border-width": "{swc.border.width.200}",
+        "border-radius": "raw:16px",
+        "background-color": "{swc.neutral.background.color.default}",
+        "color": "{swc.gray.25}"
+      },
+      "states": {
+        "hover": {
+          "background-color": "{swc.neutral.background.color.hover}",
+          "color": "{swc.gray.25}"
+        },
+        "active": {
+          "background-color": "{swc.neutral.background.color.down}",
+          "color": "{swc.gray.25}"
+        },
+        "focus-visible": {
+          "outline-color": "{swc.focus.indicator.color}",
+          "outline-width": "{swc.focus.indicator.thickness}"
+        },
+        "disabled": {
+          "background-color": "{swc.disabled.background.color}",
+          "color": "{swc.disabled.content.color}"
+        }
+      },
+      "parts": {
+        "icon": {
+          "selector": ".swc-Button-icon",
+          "element": "span",
+          "slot": {
+            "name": "icon",
+            "accepts": [
+              "kind:icon"
+            ],
+            "acceptsMode": "prefer",
+            "min": 0,
+            "max": 1,
+            "notes": "Any workflow glyph, not one named component \u2014 upstream's slot takes whatever SVG is put in it. The default names a real entry in the spectrum-icons manifest so the slot can be exercised, which a slot with no default cannot be: the preview had nothing to draw and the control was a bare text box.",
+            "default": {
+              "figma": "S2_Icon_Circle_20_N",
+              "manifest": "spectrum-icons",
+              "icon": "add-circle"
+            }
+          },
+          "notes": "Upstream declares exactly one icon slot, before the label. The earlier library's template had a trailing position; Spectrum 2 does not.",
+          "tokens": {
+            "--iconPrimary": "raw:currentColor"
+          }
+        },
+        "label": {
+          "selector": ".swc-Button-label",
+          "element": "span"
+        }
+      },
+      "tokensByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "s": {
+              "min-block-size": "{swc.component.height.75}",
+              "font-size": "{swc.font.size.75}",
+              "padding-inline": "{swc.base.padding.horizontal.small}",
+              "padding-block": "{swc.base.padding.vertical.small}",
+              "gap": "{swc.base.gap.small}",
+              "--swc-button-min-block-size": "{swc.component.height.75}",
+              "--swc-button-font-size": "{swc.font.size.75}",
+              "--swc-button-edge-to-text": "{swc.base.padding.horizontal.small}",
+              "--swc-button-padding-vertical": "{swc.base.padding.vertical.small}",
+              "--swc-button-gap": "{swc.base.gap.small}",
+              "--swc-button-icon-size": "{swc.workflow.icon.small}",
+              "border-radius": "raw:12px"
+            },
+            "m": {
+              "min-block-size": "{swc.component.height.100}",
+              "font-size": "{swc.font.size.100}",
+              "padding-inline": "{swc.base.padding.horizontal.medium}",
+              "padding-block": "{swc.base.padding.vertical.medium}",
+              "gap": "{swc.base.gap.medium}",
+              "--swc-button-min-block-size": "{swc.component.height.100}",
+              "--swc-button-font-size": "{swc.font.size.100}",
+              "--swc-button-edge-to-text": "{swc.base.padding.horizontal.medium}",
+              "--swc-button-padding-vertical": "{swc.base.padding.vertical.medium}",
+              "--swc-button-gap": "{swc.base.gap.medium}",
+              "--swc-button-icon-size": "{swc.workflow.icon.medium}",
+              "border-radius": "raw:16px"
+            },
+            "l": {
+              "min-block-size": "{swc.component.height.200}",
+              "font-size": "{swc.font.size.200}",
+              "padding-inline": "{swc.base.padding.horizontal.large}",
+              "padding-block": "{swc.base.padding.vertical.large}",
+              "gap": "{swc.base.gap.large}",
+              "--swc-button-min-block-size": "{swc.component.height.200}",
+              "--swc-button-font-size": "{swc.font.size.200}",
+              "--swc-button-edge-to-text": "{swc.base.padding.horizontal.large}",
+              "--swc-button-padding-vertical": "{swc.base.padding.vertical.large}",
+              "--swc-button-gap": "{swc.base.gap.large}",
+              "--swc-button-icon-size": "{swc.workflow.icon.large}",
+              "border-radius": "raw:20px"
+            },
+            "xl": {
+              "min-block-size": "{swc.component.height.300}",
+              "font-size": "{swc.font.size.300}",
+              "padding-inline": "{swc.base.padding.horizontal.extra-large}",
+              "padding-block": "{swc.base.padding.vertical.extra-large}",
+              "gap": "{swc.base.gap.extra-large}",
+              "--swc-button-min-block-size": "{swc.component.height.300}",
+              "--swc-button-font-size": "{swc.font.size.300}",
+              "--swc-button-edge-to-text": "{swc.base.padding.horizontal.extra-large}",
+              "--swc-button-padding-vertical": "{swc.base.padding.vertical.extra-large}",
+              "--swc-button-gap": "{swc.base.gap.extra-large}",
+              "--swc-button-icon-size": "{swc.workflow.icon.extra-large}",
+              "border-radius": "raw:24px"
+            }
+          }
+        },
+        {
+          "prop": "variant",
+          "map": {
+            "accent": {
+              "background-color": "{swc.accent.background.color.default}",
+              "color": "{swc.transparent.static.white.1000}"
+            },
+            "negative": {
+              "background-color": "{swc.negative.background.color.default}",
+              "color": "{swc.transparent.static.white.1000}"
+            },
+            "primary": {
+              "background-color": "{swc.neutral.background.color.default}",
+              "color": "{swc.gray.25}"
+            },
+            "secondary": {
+              "background-color": "{swc.gray.100}",
+              "color": "{swc.gray.800}"
+            }
+          }
+        },
+        {
+          "prop": "fillStyle",
+          "map": {
+            "outline": {
+              "background-color": "raw:transparent",
+              "border-color": "{swc.gray.800}"
+            }
+          }
+        }
+      ],
+      "statesByProp": [
+        {
+          "prop": "variant",
+          "state": "hover",
+          "map": {
+            "accent": {
+              "color": "{swc.transparent.static.white.1000}"
+            },
+            "negative": {
+              "color": "{swc.transparent.static.white.1000}"
+            }
+          }
+        },
+        {
+          "prop": "variant",
+          "state": "active",
+          "map": {
+            "accent": {
+              "color": "{swc.transparent.static.white.1000}"
+            },
+            "negative": {
+              "color": "{swc.transparent.static.white.1000}"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "states": [
+    {
+      "name": "hover",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=Hover"
+      },
+      "code": {
+        "mechanism": ":hover"
+      },
+      "notes": "Runtime state, never an authored prop."
+    },
+    {
+      "name": "active",
+      "figma": "NONE",
+      "code": {
+        "mechanism": ":active"
+      },
+      "notes": "Spectrum calls this down. The Figma set has no variant for it."
+    },
+    {
+      "name": "focus-visible",
+      "figma": "NONE",
+      "code": {
+        "mechanism": ":focus-visible"
+      },
+      "notes": "Spectrum ships a real focus ring. The Figma set has no variant for it."
+    },
+    {
+      "name": "disabled",
+      "figma": {
+        "kind": "VARIANT",
+        "property": "State",
+        "notes": "State=Disabled"
+      },
+      "code": {
+        "mechanism": ":disabled"
+      },
+      "notes": "Also settable as .is-disabled for a non-button element."
+    }
+  ],
+  "composition": [
+    {
+      "name": "S2_Icon_Circle_20_N",
+      "treatment": "icon",
+      "why": "The placeholder workflow glyph the design drops into the icon slot. It is a member of the icon rig rather than a component in its own right, so it is a category (kind:icon), not a contract."
+    },
+    {
+      "name": ".In-field progress circle",
+      "treatment": "internal",
+      "why": "The pending spinner. An author never places it; it appears when the pending property is set, and the implementation renders it from a mixin behind the .swc-PendingSpinner class. Adobe does publish an in-field-progress-circle of its own, so if that is ever contracted this entry becomes a contract rather than internal."
+    }
+  ],
+  "a11y": {
+    "role": "button",
+    "wcag": [
+      "2.1.1",
+      "2.4.7",
+      "4.1.2",
+      "2.5.8"
+    ],
+    "keyboard": [
+      {
+        "key": "Enter",
+        "action": "Activate"
+      },
+      {
+        "key": "Space",
+        "action": "Activate"
+      }
+    ],
+    "notes": [
+      "An icon-only button needs an accessible name from a label attribute.",
+      "Spectrum ships a real focus ring; it must survive into generated code."
+    ]
+  },
+  "decisions": [
+    {
+      "id": "bt-state-gap",
+      "question": "Figma's State axis has default, hover and disabled. The stylesheet also styles down and focus-visible. The design file is missing two states the code has.",
+      "chose": "took the code's four states; recorded the gap",
+      "confidence": "medium",
+      "fix": "Ask the Spectrum team to add down and keyboard focus to the Figma set, or accept the design file as a partial view.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "S2 / Web Button componentPropertyDefinitions vs dist/metadata.json selectors"
+    },
+    {
+      "id": "bt-variant-split",
+      "question": "Figma carries eight Variant values by folding the static-colour pairs into the intent axis. The stylesheet treats static colour as an orthogonal modifier.",
+      "chose": "split into variant and staticColor, following the code",
+      "confidence": "medium",
+      "fix": "If the Figma set is restructured, re-extract and collapse.",
+      "status": "open",
+      "owner": "scaffold",
+      "evidence": "Variant options vs .spectrum-Button--staticWhite in index.css"
+    },
+    {
+      "id": "bt-icon-class-collision",
+      "question": "Leading and trailing icons share the class .spectrum-Icon and are told apart by document order. Our selector vocabulary assumes a class per part.",
+      "chose": "two parts pointing at the same selector",
+      "confidence": "low",
+      "fix": "Either accept the duplicate selector, or add an nth-child qualifier to the part vocabulary.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "dist/metadata.json, .spectrum-Icon + .spectrum-Button-label"
+    },
+    {
+      "id": "bt-mod-seam",
+      "question": "Button exposes 49 override hooks, the richest seam in the library. The contract records token bindings but not the hooks a reskin would actually set.",
+      "chose": "not recorded, pending a contract field",
+      "confidence": "low",
+      "fix": "Add bindings.overrides to the contract shape.",
+      "status": "open",
+      "owner": "Matt",
+      "evidence": "@spectrum-css/button dist/metadata.json modifiers[]"
+    },
+    {
+      "id": "bt-variant-colour",
+      "status": "open",
+      "confidence": "medium",
+      "owner": "Matt",
+      "question": "Spectrum writes the per-variant colours as nested rules in index.css rather than in its theme file, and composes intent with style (accent+outline is its own rule). The contract carries the four intents and treats outline as a separate axis that clears the fill.",
+      "chose": "variant -> background and content; border comes from the outline style, not the intent",
+      "fix": "If a variant and style pair ever disagrees with this, move it to tokensByCombination.",
+      "evidence": "@spectrum-css/button 14.2.0 index.css, nested &.spectrum-Button--* blocks with nested rules excluded from the parent"
+    },
+    {
+      "id": "bt-implementation",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Which package is Spectrum 2 on the web? The contract was first written against @spectrum-css/button 14.",
+      "chose": "@adobe/spectrum-wc (the swc-button custom element)",
+      "fix": "none",
+      "evidence": "Adobe's own component data names @react-spectrum/s2 and @adobe/spectrum-wc as the web implementations, and the S2 - Web Figma file's variable names map one-to-one onto this package's --swc-* tokens. @spectrum-css carries a different vocabulary and cannot reproduce the design file's geometry.",
+      "decision": "The contract describes @adobe/spectrum-wc, the Spectrum 2 web components. @spectrum-css is the earlier library and is not what the S2 design file documents."
+    },
+    {
+      "id": "bt-prop-evidence",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "A web component has no render function, so the prop extractor found nothing.",
+      "chose": "Read the prop surface from the shipped .d.ts, including base classes and mixin interfaces",
+      "fix": "none",
+      "evidence": "Button.d.ts, Button.base.d.ts, Button.types.d.ts and pending-mixin.d.ts are vendored and hashed; the enums come from the .types.d.ts consts so the contract cannot invent a value.",
+      "decision": "The prop surface is read from the shipped type declarations, which are part of the package's published contract and cannot drift from the implementation without a release."
+    },
+    {
+      "id": "bt-line-height",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The design file and the implementation disagree about line height at two sizes.",
+      "chose": "Follow the implementation, which computes round(down, 1.3em, 1px)",
+      "fix": "Ask the Spectrum team which is canonical: the file's explicit per-size values give 16 and 22 at S and XL, the CSS gives 15 and 23. Medium and large agree.",
+      "evidence": "Figma Line height/Font size 75 = 16 vs computed 15; /300 = 22 vs computed 23."
+    },
+    {
+      "id": "bt-border-box",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Upstream pads inside a real 2px border; our renderer draws borders as an inset shadow, which takes no box space.",
+      "chose": "Bind padding to the full token value and let the shadow border overlay it",
+      "fix": "If the renderer ever emits real borders, subtract the border width here.",
+      "evidence": "measured: every size reproduces upstream's outer box exactly \u2014 44x24, 51x32, 62x40, 70x48.",
+      "decision": "Padding is bound to the full token value because the renderer draws the border as an inset shadow, which consumes no box space. Measured: every size reproduces upstream's outer box exactly."
+    },
+    {
+      "id": "bt-colour-tier",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Colour was bound to the palette (gray-800, blue-800, red-800) rather than the alias tier the design file uses.",
+      "chose": "Bind the alias tier, matching what Dev Mode reports on the node",
+      "decision": "Figma's Alias/background/semantic/accent/default is --swc-accent-background-color-default. The two names differ in shape \u2014 the variant moves to the front, 'color' is inserted, 'semantic' is dropped \u2014 so a path-to-dash transform silently lands on the palette instead.",
+      "fix": "none",
+      "evidence": "blue-800 is #4b75ff; the accent alias is #3b63fb. The accent and negative buttons were rendering the wrong blue and red."
+    },
+    {
+      "id": "bt-global-reset",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Upstream's global-button.css ends with `all: revert-layer !important` on .swc-Button and .swc-Button-label, which erases every author declaration on those classes.",
+      "chose": "The generated component carries its own geometry and colour and does not load that stylesheet",
+      "fix": "Ask the Spectrum team whether that reset is intended. It makes the light-DOM 'global' stylesheet un-themeable: an !important `all` reset outranks any layer and any specificity, so a consumer cannot restyle the class at all.",
+      "evidence": "@adobe/spectrum-wc@2.0.0-beta.6 dist/global-button.css:360, shipped in the npm package. With it loaded, accent rendered #292929 instead of #3b63fb; without it, all four variants match the design file."
+    },
+    {
+      "id": "bt-design-code-gap",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The design file and the implementation do not describe the same component.",
+      "chose": "Record the translation in the value maps above and list what has no counterpart on either side",
+      "fix": "Take the list to the Spectrum team. Each item is either a design the code has not built or a capability the design has not drawn.",
+      "evidence": "Figma has a trailing icon (Show trailing icon, Trailing icon); the code has one icon slot and no trailing position. Figma has Show label; the code derives label presence from whether the default slot has content. The code has truncate and justified; the design has neither. Figma's State axis carries Hover, which is a rendering state rather than an API. Every value is spelled differently: Small against s, Primary against primary."
+    },
+    {
+      "id": "bt-geometry",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Upstream computes the radius as half the height with calc(), which the contract cannot express.",
+      "chose": "Record the four values the calc produces: 12, 16, 20 and 24",
+      "fix": "Add arithmetic to the token map, or ask for per-size radius tokens. A pill value renders identically but reports a number neither the design nor the implementation uses, which is worse in a contract than a literal.",
+      "evidence": "Figma Button radius is 12/16/20/24 across the four sizes and global-button.css computes calc(min-block-size / 2), which gives the same four."
+    },
+    {
+      "id": "bt-filled-content",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Which white does the label on a filled button use?",
+      "chose": "transparent-static-white-1000 for accent and negative; gray-25 for primary and secondary",
+      "decision": "gray-25 is a palette rung that flips with the theme, white in light and near-black in dark. That is right for the neutral button, which inverts with the page, and wrong for accent and negative, whose fill stays a saturated colour in both themes.",
+      "fix": "none",
+      "evidence": "Bound to gray-25 the accent button rendered #111111 text on #4069fd in dark mode. Upstream writes a literal rgb(255,255,255) for those two variants; the static token is the same colour with a name."
+    },
+    {
+      "id": "bt-pending-spinner",
+      "status": "open",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "The design builds the pending state from a progress circle the contract never mentioned.",
+      "chose": "Declare it as internal and leave the pending visual out of the anatomy for now",
+      "fix": "Contract the progress circle, then give Button a pending part that composes it. Until then a consumer driving `pending` gets a spinner this contract does not describe.",
+      "evidence": "The design evidence reports an instance of \".In-field progress circle\"; upstream renders .swc-PendingSpinner from PendingMixin. Only surfaced once design evidence existed \u2014 the code alone never showed it."
+    },
+    {
+      "id": "i-glyph-fill",
+      "status": "decided",
+      "confidence": "high",
+      "owner": "Matt",
+      "question": "Every glyph rendered in its own colour instead of the component's.",
+      "chose": "Map the artwork's own hook to currentColor on the part that holds the glyph",
+      "decision": "Spectrum's workflow SVGs paint with fill=\"var(--iconPrimary, #222)\" rather than currentColor, so with nothing defining that property every glyph fell back to #222 regardless of the colour around it. Setting --iconPrimary to currentColor on the icon part makes a glyph follow its component, and leaves the property available to anyone who wants a different colour.",
+      "fix": "none. The alternative was rewriting 396 vendored SVGs, which would mean editing artwork we do not own.",
+      "evidence": "All 396 entries in spectrum-icons.json carry var(--iconPrimary, #222); all 26 in our own s2a-icons.json use currentColor. Measured: the badge's text was #ffffff while its glyph painted #222222."
+    }
+  ]
+}

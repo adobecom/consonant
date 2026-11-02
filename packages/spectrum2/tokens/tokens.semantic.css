@@ -1,0 +1,112 @@
+/* Vendored from @adobe/spectrum-wc@2.0.0-beta.6 — swc.css (theme and scale setup).
+   Not ours and not edited. Staged here only so the code-evidence extractor can
+   read it; the evidence records a hash, so an upstream change shows up as stale
+   rather than silently drifting. Regenerate with: npm run pull -w @s2a/spectrum2 */
+/**
+ * Copyright 2026 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+
+
+/* Global font defaults */
+:root {
+  font-family: var(--swc-sans-font-family-stack);
+  font-size: var(--swc-font-size);
+  font-style: normal;
+  background-color: var(--swc-application-background, var(--swc-gray-25));
+}
+
+/* Theme scaling setup */
+:root,
+.swc-theme,
+.swc-theme--sizeM {
+  --swc-theme-size: var(--swc-theme--sizeM,);
+  --swc-theme--sizeM: var(--swc-theme-size,);
+  --swc-theme--sizeL: var(--swc-theme-size,);
+}
+
+.swc-theme--sizeL {
+  --swc-theme-size: var(--swc-theme--sizeL);
+}
+
+/* Theme colors setup */
+:root,
+.swc-theme--light {
+  color-scheme: light;
+}
+
+.swc-theme--dark {
+  color-scheme: dark;
+}
+
+.swc-theme--adaptive {
+  color-scheme: light dark;
+}
+
+/* Prompt field @property registrations live here, not in prompt-field.css: @property declared inside a shadow root neither delivers its initial-value nor makes the property animatable for that root's own elements. brand-color's default is an interim hardcoded value pending formal delivery from the tokens team. */
+@property --swc-prompt-field-brand-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgb(236, 105, 255);
+}
+@media (color-gamut: p3){
+@property --swc-prompt-field-brand-color {
+  initial-value: color(display-p3 0.86224 0.44237 0.97108);
+}
+}
+
+@property --_swc-prompt-field-con-hue-opacity {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
+}
+
+@property --_swc-prompt-field-bg-stop-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0,0,0,0);
+}
+
+@property --_swc-prompt-field-bg-stop-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0,0,0,0);
+}
+
+@property --_swc-prompt-field-bg-stop-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0,0,0,0);
+}
+
+@property --_swc-prompt-field-bg-stop-4 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0,0,0,0);
+}
+
+@property --_swc-prompt-field-outer-stop-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0,0,0,0);
+}
+
+@property --_swc-prompt-field-outer-stop-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0,0,0,0);
+}
+
+@property --_swc-prompt-field-outer-stop-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0,0,0,0);
+}

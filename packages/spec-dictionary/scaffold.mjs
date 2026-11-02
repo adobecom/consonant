@@ -13,6 +13,8 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, unlin
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import { fromImplementation } from "./lib/from-code.mjs";
+import { loadShippedTokens } from "./lib/tokens.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -1576,7 +1578,8 @@ export function scaffoldDefs(evidence, { slug, name, archetype: forced, dictiona
 async function main() {
   const arg = (k) => process.argv.find((a) => a.startsWith(`--${k}=`))?.slice(k.length + 3);
   const slug = arg("slug");
-  if (!slug) { console.error("usage: npm run specs:scaffold -- --slug=<slug> [--evidence=path] [--archetype=link-card|card|collection] [--name=Name] [--force]"); process.exit(2); }
+  if (!slug) { console.error("usage: npm run specs:scaffold -- --slug=<slug> [--from=code --root=<src> --tokens=<dir>] [--evidence=path] [--archetype=link-card|card|collection] [--name=Name] [--force]"); process.exit(2); }
+  if (arg("from") === "code") return mainFromCode(slug, arg);
   const inSrc = join(SRC, slug, `${slug}.figma.evidence.json`);
   const inInbox = join(EVIDENCE_DIR, `${slug}.figma.evidence.json`);
   const evidencePath = arg("evidence") ? resolve(arg("evidence")) : existsSync(inSrc) ? inSrc : inInbox;
@@ -1606,6 +1609,35 @@ async function main() {
     if (d.fix) console.log(`                 fix: ${d.fix}`);
   }
   console.log(`          next: npm run defs:validate && npm run specs:build && npm run gate, then review the ${low ? "low-confidence " : ""}draft notes`);
+}
+
+// --from=code: the implementation is the source. For a shipped library (Spectrum)
+// the design file cannot be transcribed into anatomy, so the draft is read from
+// the stylesheet and the type declarations, and the design evidence — when it
+// sits beside them — only anchors the set and binds props whose names agree.
+//
+//   node packages/spec-dictionary/scaffold.mjs --slug=avatar --from=code \
+//     --root=packages/spectrum2/src --tokens=packages/spectrum2/tokens [--import=@adobe/spectrum-wc/components/avatar]
+async function mainFromCode(slug, arg) {
+  const src = arg("root") ? resolve(ROOT, arg("root")) : SRC;
+  const dir = join(src, slug);
+  const codePath = join(dir, `${slug}.code.evidence.json`);
+  if (!existsSync(codePath)) { console.error(`no code evidence for ${slug}: expected ${codePath} (run code-evidence.mjs --root=… --slug=${slug} first)`); process.exit(2); }
+  const code = JSON.parse(readFileSync(codePath, "utf8"));
+  if (!code.stylesheet?.rules) { console.error(`${codePath} carries no structured stylesheet; re-extract it`); process.exit(2); }
+  const figmaPath = join(dir, `${slug}.figma.evidence.json`);
+  const figma = existsSync(figmaPath) ? JSON.parse(readFileSync(figmaPath, "utf8")) : null;
+  const tokens = loadShippedTokens(arg("tokens") ? resolve(ROOT, arg("tokens")) : join(ROOT, "dist", "packages", "tokens", "css", "dev"));
+  const modulePath = Object.keys(code.sources ?? {}).find((f) => /\.(js|mjs|ts)$/.test(f) && !/\.d\.ts$/.test(f));
+  const template = modulePath && existsSync(join(ROOT, modulePath)) ? readFileSync(join(ROOT, modulePath), "utf8") : null;
+  const out = join(dir, `${slug}.defs.json`);
+  if (existsSync(out) && !process.argv.includes("--force")) { console.error(`${out} exists; pass --force to overwrite the draft`); process.exit(1); }
+  const defs = fromImplementation(code, { slug, name: arg("name"), tokens, figma, template, importPath: arg("import") ?? undefined });
+  writeFileSync(out, JSON.stringify(defs, null, 2) + "\n");
+  const parts = Object.keys(defs.anatomy.root.parts ?? {});
+  console.log(`SCAFFOLD  ${slug.padEnd(24)} ${defs.component} from code · ${defs.props.length} props · ${parts.length} part${parts.length === 1 ? "" : "s"} · ${defs.states.length} state${defs.states.length === 1 ? "" : "s"}${figma ? " · design anchored" : " · no design evidence"}`);
+  console.log(`          wrote ${out.replace(ROOT + "/", "")}`);
+  for (const d of defs.decisions.filter((x) => x.status === "open")) console.log(`          ↳ ${(d.confidence ?? "").padEnd(6)} ${d.id} — ${d.question.length > 140 ? d.question.slice(0, 137) + "…" : d.question}`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

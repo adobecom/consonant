@@ -1,0 +1,89 @@
+{
+  "id": "s2a.card",
+  "name": "Card",
+  "slug": "card",
+  "tier": "component",
+  "status": "curated-draft",
+  "description": "Card, as the implementation ships it.",
+  "props": [
+    {
+      "name": "variant",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "density",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "titleAsLink",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "selectable",
+      "type": "boolean",
+      "lever": true
+    },
+    {
+      "name": "collection",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "media",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "preview",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "actions",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "footer",
+      "type": "string",
+      "lever": true
+    },
+    {
+      "name": "default",
+      "type": "string",
+      "lever": true
+    }
+  ],
+  "parts": [
+    "root",
+    "root.media",
+    "root.collection",
+    "root.content"
+  ],
+  "slots": [],
+  "tokens": 0,
+  "a11y": null,
+  "anchors": {
+    "code": {
+      "importPath": "@adobe/spectrum-wc/components/card",
+      "export": "Card",
+      "controller": null,
+      "cssClass": "swc-Card"
+    },
+    "figma": null
+  },
+  "openDecisions": 14
+}

@@ -11,10 +11,14 @@
  *   size: default | lg
  *   style: default | control
  */
+import decorateControlButton from '../../milo-atoms/control-button/control-button.js';
+
 export default function init(el) {
   const rows = [...el.querySelectorAll(':scope > div')];
   rows[0]?.classList.add('trigger');
   rows[1]?.classList.add('content');
+
+  decorateControlButton(el);   // ControlButton: upgrades what the author wrote, in place
 
   // Anything the author left out simply is not there — a Milo block degrades to
   // what was written rather than rendering an empty slot.

@@ -339,10 +339,20 @@ Inputs are `.tmp/validators/rich-content-figjam/figma-inspection.json` and
 include the four instances and their container geometry. These evidence inputs
 are local and are not included in the published package.
 
-Outputs in that directory include original browser PNGs at 12 widths, 45 resize
-frames, a WebM recording, `browser-evidence.json`, `geometry-eval.json`, and the
-full CSS audit. Source hashes and the Milo commit identify the exact code tested.
+Outputs in that directory include original browser PNGs at 12 audit widths,
+labelled resize frames, `responsive-labelled.webm`, `recording-manifest.json`,
+`browser-evidence.json`, `geometry-eval.json`, and the full CSS audit.
+Source hashes and the Milo commit identify the exact code tested.
 The unwrapped probe separately checks what happens without the container context.
+
+The recording renders measured browser captures onto a fixed 1920 × 1200 canvas.
+Browser width, block height, padding, content edge, and link direction remain in
+a separate readout above the preview. The complete block uses one constant scale
+throughout; each frame asserts that the image and readout fit without clipping.
+The sweep includes the exact pixel before and at each relevant breakpoint, with
+two-second pauses before and four-second pauses after crossing. It encodes only
+fully rendered labelled frames, so there are no unlabelled loading frames.
+Playwright's bundled encoder is used; `S2A_FFMPEG_PATH` can override its location.
 
 The geometry eval compares height, content left edge, heading width, and top and
 bottom padding at four matched widths, with a 0.5px tolerance. It reports captured
@@ -351,11 +361,11 @@ these sample expectations are not a signed universal grid contract. This new
 browser target is not yet wired into CI. The existing CSS gate remains separate.
 
 The [first FigJam audit](https://www.figma.com/board/YfKMCRYvZhPbK87aQKE9Qg/Agentic-S2A?node-id=2076-4209)
-contains the C2/Milo comparisons, recording poster, measured breakpoint chart,
+contains the C2/Milo comparisons, native video, measured breakpoint chart,
 editable source snippets, validator coverage, limitations, and review decisions.
-The full-resolution WebM and animated GIF remain in the local evidence bundle.
-The connected FigJam asset uploader does not accept video; the uploaded GIF
-rendered blank in the board preview, so a still poster is used on the canvas.
+The video is imported through FigJam's native media picker. The connected asset
+uploader accepts images only. The full-resolution recording remains in the local
+evidence bundle as well.
 
 ## Why it's authoritative (and the JSON approach isn't)
 

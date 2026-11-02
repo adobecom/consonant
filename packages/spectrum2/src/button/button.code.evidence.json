@@ -1,0 +1,3209 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-28T16:27:17.457Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "button",
+    "name": "Button",
+    "cssClass": "swc-Button",
+    "importPath": "packages/spectrum2/src/button/button.js",
+    "exports": [
+      "Button"
+    ],
+    "render": null,
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/button/button.spec.json",
+      "storybookId": null,
+      "figmaNodeId": "9308:53906"
+    }
+  },
+  "sources": {
+    "packages/spectrum2/src/button/button.js": "sha256:527fbe7d944aeaeb90e557ace145fc16096c4ff93c97565992bc0674fca1bd1c",
+    "packages/spectrum2/src/button/button.css": "sha256:b06575a29d5165f54f3645c2795d0ded8b216defc8e595db1ae743a8a6484d63",
+    "packages/spectrum2/src/button/button.d.ts": "sha256:ea02ba557729dcd996d18b4ebc8f003e928ba92d9c2bdfbc29f2f58e05252c23"
+  },
+  "props": [
+    {
+      "name": "variant",
+      "type": "enum",
+      "values": [
+        "primary",
+        "secondary",
+        "accent",
+        "negative"
+      ],
+      "description": "The visual variant of the button. `outline` fill-style is only supported with `primary` and `secondary`. `static-color` is only supported with `primary` and `secondary`."
+    },
+    {
+      "name": "fillStyle",
+      "type": "enum",
+      "values": [
+        "fill",
+        "outline"
+      ],
+      "description": "The fill style of the button. `outline` is only supported with `primary` and `secondary` variants."
+    },
+    {
+      "name": "staticColor",
+      "type": "enum",
+      "values": [
+        "white",
+        "black"
+      ],
+      "optional": true,
+      "description": "Static color treatment for display over colored or image backgrounds. Only supported with `primary` and `secondary` variants."
+    },
+    {
+      "name": "truncate",
+      "type": "boolean",
+      "description": "Whether overflowing text is truncated with an ellipsis rather than wrapping. Replaces the legacy `no-wrap` attribute from 1st-gen."
+    },
+    {
+      "name": "justified",
+      "type": "boolean",
+      "description": "Enables the button to become full-width, if the container allows it."
+    },
+    {
+      "name": "size",
+      "type": "enum",
+      "values": [
+        "s",
+        "m",
+        "l",
+        "xl"
+      ],
+      "default": "m",
+      "description": "The size of the button."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Whether the button is disabled. Removes focusability and prevents interaction."
+    },
+    {
+      "name": "accessibleLabel",
+      "type": "string",
+      "optional": true,
+      "description": "Accessible label forwarded to the internal `<button>` element as `aria-label`. Required for icon-only buttons, which have no visible text."
+    },
+    {
+      "name": "pending",
+      "type": "boolean"
+    },
+    {
+      "name": "pendingLabel",
+      "type": "string",
+      "optional": true
+    },
+    {
+      "name": "pendingActive",
+      "type": "boolean"
+    },
+    {
+      "name": "default",
+      "type": "slot",
+      "description": "Visible button label."
+    },
+    {
+      "name": "icon",
+      "type": "slot",
+      "description": "Leading icon displayed before the label."
+    }
+  ],
+  "attributes": {
+    "data-force-state": {
+      "values": [
+        "active",
+        "disabled",
+        "focus",
+        "hover"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    },
+    "data-has-icon-end": {
+      "values": [
+        "false",
+        "true"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    },
+    "data-has-icon-start": {
+      "values": [
+        "false",
+        "true"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    },
+    "data-size": {
+      "values": [
+        "md"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    },
+    "data-state": {
+      "values": [
+        "active",
+        "disabled",
+        "focus",
+        "hover"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-style": {
+      "values": [
+        "accent",
+        "knockout",
+        "outline-inverse",
+        "outlined",
+        "solid",
+        "transparent"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": true
+    }
+  },
+  "parts": {
+    "template": [
+      "swc-Button",
+      "swc-Button-label"
+    ],
+    "stylesheet": [
+      "swc-Button",
+      "swc-Button--accent",
+      "swc-Button--disabled",
+      "swc-Button--hasIcon",
+      "swc-Button--iconOnly",
+      "swc-Button--justified",
+      "swc-Button--negative",
+      "swc-Button--outline",
+      "swc-Button--primary",
+      "swc-Button--secondary",
+      "swc-Button--sizeL",
+      "swc-Button--sizeS",
+      "swc-Button--sizeXl",
+      "swc-Button--staticBlack",
+      "swc-Button--staticWhite",
+      "swc-Button--truncate",
+      "swc-Button-icon",
+      "swc-Button-label",
+      "swc-PendingSpinner"
+    ],
+    "runtime": [
+      "c-button",
+      "c-button__icon",
+      "c-button__icon--end",
+      "c-button__icon--start",
+      "c-button__label",
+      "s2a-matrix",
+      "s2a-matrix-col",
+      "s2a-matrix-cols",
+      "s2a-matrix-corner",
+      "s2a-matrix-row",
+      "s2a-matrix-rows",
+      "s2a-matrix-wrap",
+      "s2a-matrix__cell"
+    ],
+    "own": [
+      "swc-Button",
+      "swc-Button-label"
+    ]
+  },
+  "declarations": {
+    "element": "swc-button",
+    "slots": [
+      {
+        "name": "default",
+        "description": "Visible button label."
+      },
+      {
+        "name": "icon",
+        "description": "Leading icon displayed before the label."
+      }
+    ],
+    "cssProps": [
+      "--swc-button-background-color-default",
+      "--swc-button-background-color-disabled",
+      "--swc-button-background-color-down",
+      "--swc-button-background-color-focus",
+      "--swc-button-background-color-hover",
+      "--swc-button-border-color-default",
+      "--swc-button-border-color-disabled",
+      "--swc-button-border-color-down",
+      "--swc-button-border-color-focus",
+      "--swc-button-border-color-hover",
+      "--swc-button-border-radius",
+      "--swc-button-content-color-default",
+      "--swc-button-content-color-disabled",
+      "--swc-button-content-color-down",
+      "--swc-button-content-color-focus",
+      "--swc-button-content-color-hover",
+      "--swc-button-down-state-transform",
+      "--swc-button-edge-to-text",
+      "--swc-button-edge-to-visual",
+      "--swc-button-edge-to-visual-only",
+      "--swc-button-focus-indicator-color",
+      "--swc-button-font-size",
+      "--swc-button-gap",
+      "--swc-button-icon-block-size",
+      "--swc-button-icon-inline-size",
+      "--swc-button-icon-size",
+      "--swc-button-max-inline-size",
+      "--swc-button-min-block-size",
+      "--swc-button-padding-vertical"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [
+      "aria-disabled",
+      "aria-label"
+    ],
+    "tags": [
+      "button"
+    ]
+  },
+  "imports": [
+    "../../_virtual/_@oxc-project_runtime@0.124.0/helpers/decorate.js",
+    "../../stylesheets/_lit-styles/pending-spinner.js",
+    "./button-base.js",
+    "./button.js"
+  ],
+  "tokens": {
+    "references": {
+      "--swc-accent-background-color-default": {
+        "fallback": false
+      },
+      "--swc-accent-background-color-down": {
+        "fallback": false
+      },
+      "--swc-accent-background-color-hover": {
+        "fallback": false
+      },
+      "--swc-accent-background-color-key-focus": {
+        "fallback": false
+      },
+      "--swc-base-padding-horizontal-extra-large": {
+        "fallback": false
+      },
+      "--swc-base-padding-horizontal-large": {
+        "fallback": false
+      },
+      "--swc-base-padding-horizontal-medium": {
+        "fallback": false
+      },
+      "--swc-base-padding-horizontal-small": {
+        "fallback": false
+      },
+      "--swc-blue-800": {
+        "fallback": false
+      },
+      "--swc-button-background-color-default": {
+        "fallback": true
+      },
+      "--swc-button-background-color-disabled": {
+        "fallback": true
+      },
+      "--swc-button-background-color-down": {
+        "fallback": true
+      },
+      "--swc-button-background-color-focus": {
+        "fallback": true
+      },
+      "--swc-button-background-color-hover": {
+        "fallback": true
+      },
+      "--swc-button-border-color-default": {
+        "fallback": true
+      },
+      "--swc-button-border-color-disabled": {
+        "fallback": true
+      },
+      "--swc-button-border-color-down": {
+        "fallback": true
+      },
+      "--swc-button-border-color-focus": {
+        "fallback": true
+      },
+      "--swc-button-border-color-hover": {
+        "fallback": true
+      },
+      "--swc-button-border-radius": {
+        "fallback": true
+      },
+      "--swc-button-content-color-default": {
+        "fallback": true
+      },
+      "--swc-button-content-color-disabled": {
+        "fallback": true
+      },
+      "--swc-button-content-color-down": {
+        "fallback": true
+      },
+      "--swc-button-content-color-focus": {
+        "fallback": true
+      },
+      "--swc-button-content-color-hover": {
+        "fallback": true
+      },
+      "--swc-button-down-state-transform": {
+        "fallback": true
+      },
+      "--swc-button-edge-to-text": {
+        "fallback": true
+      },
+      "--swc-button-edge-to-visual": {
+        "fallback": true
+      },
+      "--swc-button-edge-to-visual-only": {
+        "fallback": true
+      },
+      "--swc-button-focus-indicator-color": {
+        "fallback": true
+      },
+      "--swc-button-font-size": {
+        "fallback": true
+      },
+      "--swc-button-gap": {
+        "fallback": true
+      },
+      "--swc-button-icon-block-size": {
+        "fallback": true
+      },
+      "--swc-button-icon-inline-size": {
+        "fallback": true
+      },
+      "--swc-button-icon-size": {
+        "fallback": true
+      },
+      "--swc-button-max-inline-size": {
+        "fallback": true
+      },
+      "--swc-button-min-block-size": {
+        "fallback": true
+      },
+      "--swc-button-padding-vertical": {
+        "fallback": true
+      },
+      "--swc-component-height-100": {
+        "fallback": false
+      },
+      "--swc-component-height-200": {
+        "fallback": false
+      },
+      "--swc-component-height-300": {
+        "fallback": false
+      },
+      "--swc-component-height-75": {
+        "fallback": false
+      },
+      "--swc-font-size-100": {
+        "fallback": false
+      },
+      "--swc-font-size-200": {
+        "fallback": false
+      },
+      "--swc-font-size-300": {
+        "fallback": false
+      },
+      "--swc-font-size-75": {
+        "fallback": false
+      },
+      "--swc-gray-100": {
+        "fallback": false
+      },
+      "--swc-gray-200": {
+        "fallback": false
+      },
+      "--swc-gray-25": {
+        "fallback": false
+      },
+      "--swc-gray-300": {
+        "fallback": false
+      },
+      "--swc-gray-400": {
+        "fallback": false
+      },
+      "--swc-gray-800": {
+        "fallback": false
+      },
+      "--swc-gray-900": {
+        "fallback": false
+      },
+      "--swc-negative-background-color-default": {
+        "fallback": false
+      },
+      "--swc-negative-background-color-down": {
+        "fallback": false
+      },
+      "--swc-negative-background-color-hover": {
+        "fallback": false
+      },
+      "--swc-negative-background-color-key-focus": {
+        "fallback": false
+      },
+      "--swc-sans-font-family-stack": {
+        "fallback": false
+      },
+      "--swc-transparent-static-black-1000": {
+        "fallback": false
+      },
+      "--swc-transparent-static-black-150": {
+        "fallback": false
+      },
+      "--swc-transparent-static-black-300": {
+        "fallback": false
+      },
+      "--swc-transparent-static-black-400": {
+        "fallback": false
+      },
+      "--swc-transparent-static-white-1000": {
+        "fallback": false
+      },
+      "--swc-transparent-static-white-200": {
+        "fallback": false
+      },
+      "--swc-transparent-static-white-300": {
+        "fallback": false
+      },
+      "--swc-transparent-static-white-350": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-extra-large": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-large": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-medium": {
+        "fallback": false
+      },
+      "--swc-workflow-icon-small": {
+        "fallback": false
+      }
+    },
+    "custom": [
+      "--swc-button-background-color-default",
+      "--swc-button-background-color-disabled",
+      "--swc-button-background-color-down",
+      "--swc-button-background-color-focus",
+      "--swc-button-background-color-hover",
+      "--swc-button-border-color-default",
+      "--swc-button-border-color-disabled",
+      "--swc-button-border-color-down",
+      "--swc-button-border-color-focus",
+      "--swc-button-border-color-hover",
+      "--swc-button-border-radius",
+      "--swc-button-content-color-default",
+      "--swc-button-content-color-disabled",
+      "--swc-button-content-color-down",
+      "--swc-button-content-color-focus",
+      "--swc-button-content-color-hover",
+      "--swc-button-edge-to-text",
+      "--swc-button-edge-to-visual",
+      "--swc-button-edge-to-visual-only",
+      "--swc-button-focus-indicator-color",
+      "--swc-button-font-size",
+      "--swc-button-gap",
+      "--swc-button-icon-size",
+      "--swc-button-min-block-size",
+      "--swc-button-padding-vertical"
+    ],
+    "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".swc-Button, .swc-Button *",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "-webkit-tap-highlight-color",
+            "value": "transparent"
+          },
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "position",
+            "value": "relative"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "text-transform",
+            "value": "none"
+          },
+          {
+            "prop": "-webkit-text-decoration",
+            "value": "none"
+          },
+          {
+            "prop": "text-decoration",
+            "value": "none"
+          },
+          {
+            "prop": "border-style",
+            "value": "solid"
+          },
+          {
+            "prop": "overflow",
+            "value": "visible"
+          },
+          {
+            "prop": "-webkit-user-select",
+            "value": "none"
+          },
+          {
+            "prop": "-moz-user-select",
+            "value": "none"
+          },
+          {
+            "prop": "user-select",
+            "value": "none"
+          },
+          {
+            "prop": "--_swc-button-border-width",
+            "value": "2px"
+          },
+          {
+            "prop": "--_swc-button-min-block-size",
+            "value": "var(--swc-button-min-block-size, var(--swc-component-height-100))"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--swc-button-gap, 6px)"
+          },
+          {
+            "prop": "max-inline-size",
+            "value": "var(--swc-button-max-inline-size, inherit)"
+          },
+          {
+            "prop": "min-block-size",
+            "value": "var(--_swc-button-min-block-size)"
+          },
+          {
+            "prop": "padding-block",
+            "value": "calc(var(--swc-button-padding-vertical, 7px) - var(--_swc-button-border-width))"
+          },
+          {
+            "prop": "padding-inline",
+            "value": "calc(var(--swc-button-edge-to-text, var(--swc-base-padding-horizontal-medium)) - var(--_swc-button-border-width))"
+          },
+          {
+            "prop": "font-family",
+            "value": "var(--swc-sans-font-family-stack)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--swc-button-font-size, var(--swc-font-size-100))"
+          },
+          {
+            "prop": "font-weight",
+            "value": "700"
+          },
+          {
+            "prop": "line-height",
+            "value": "round(down, 1.3em, 1px)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--swc-button-content-color-default, var(--swc-gray-25))"
+          },
+          {
+            "prop": "background-color",
+            "value": "var(--swc-button-background-color-default, var(--swc-gray-800))"
+          },
+          {
+            "prop": "border-color",
+            "value": "var(--swc-button-border-color-default, transparent)"
+          },
+          {
+            "prop": "border-width",
+            "value": "var(--_swc-button-border-width)"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--swc-button-border-radius, calc(var(--_swc-button-min-block-size) / 2))"
+          },
+          {
+            "prop": "transition-timing-function",
+            "value": "cubic-bezier(0.45, 0, 0.4, 1)"
+          },
+          {
+            "prop": "transition-duration",
+            "value": "130ms"
+          },
+          {
+            "prop": "transition-property",
+            "value": "outline, border-color, color, background-color, transform"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button:focus-visible",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "outline",
+            "value": "2px solid var(--swc-button-focus-indicator-color, var(--swc-blue-800))"
+          },
+          {
+            "prop": "outline-offset",
+            "value": "2px"
+          },
+          {
+            "prop": "color",
+            "value": "var(--swc-button-content-color-focus, var(--swc-gray-25))"
+          },
+          {
+            "prop": "background-color",
+            "value": "var(--swc-button-background-color-focus, var(--swc-gray-900))"
+          },
+          {
+            "prop": "border-color",
+            "value": "var(--swc-button-border-color-focus, transparent)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button:disabled:is(*, :hover)",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "var(--swc-button-content-color-disabled, var(--swc-gray-400))"
+          },
+          {
+            "prop": "background-color",
+            "value": "var(--swc-button-background-color-disabled, var(--swc-gray-100))"
+          },
+          {
+            "prop": "border-color",
+            "value": "var(--swc-button-border-color-disabled, transparent)"
+          },
+          {
+            "prop": "transform",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--disabled .swc-Button-icon",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "pointer-events",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button:hover",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "var(--swc-button-content-color-hover, var(--swc-gray-25))"
+          },
+          {
+            "prop": "background-color",
+            "value": "var(--swc-button-background-color-hover, var(--swc-gray-900))"
+          },
+          {
+            "prop": "border-color",
+            "value": "var(--swc-button-border-color-hover, transparent)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button:active",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "var(--swc-button-content-color-down, var(--swc-gray-25))"
+          },
+          {
+            "prop": "background-color",
+            "value": "var(--swc-button-background-color-down, var(--swc-gray-900))"
+          },
+          {
+            "prop": "border-color",
+            "value": "var(--swc-button-border-color-down, transparent)"
+          },
+          {
+            "prop": "transform",
+            "value": "var(--swc-button-down-state-transform, perspective(var(--_swc-button-min-block-size)) translate3d(0, 0, -2px))"
+          },
+          {
+            "prop": "will-change",
+            "value": "transform"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button-label",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "text-align",
+            "value": "center"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--hasIcon .swc-Button-label",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "text-align",
+            "value": "start"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button-icon,\n.swc-PendingSpinner",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--_swc-button-icon-size",
+            "value": "var(--swc-button-icon-size, var(--swc-workflow-icon-medium))"
+          },
+          {
+            "prop": "--_swc-button-icon-block-size",
+            "value": "var(--swc-button-icon-block-size, var(--_swc-button-icon-size))"
+          },
+          {
+            "prop": "--_swc-pending-spinner-size",
+            "value": "var(--_swc-button-icon-size)"
+          },
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          },
+          {
+            "prop": "align-self",
+            "value": "flex-start"
+          },
+          {
+            "prop": "inline-size",
+            "value": "var(--swc-button-icon-inline-size, var(--_swc-button-icon-size))"
+          },
+          {
+            "prop": "block-size",
+            "value": "var(--_swc-button-icon-block-size)"
+          },
+          {
+            "prop": "margin-block",
+            "value": "calc((var(--_swc-button-icon-block-size) - 1lh) / 2 * -1)"
+          },
+          {
+            "prop": "margin-inline-start",
+            "value": "calc(var(--swc-button-edge-to-visual, var(--swc-base-padding-horizontal-medium)) - var(--swc-button-edge-to-text, var(--swc-base-padding-horizontal-medium)))"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button-icon",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "inherit"
+          },
+          {
+            "prop": "fill",
+            "value": "currentcolor"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--sizeS",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-min-block-size",
+            "value": "var(--swc-component-height-75)"
+          },
+          {
+            "prop": "--swc-button-font-size",
+            "value": "var(--swc-font-size-75)"
+          },
+          {
+            "prop": "--swc-button-gap",
+            "value": "4px"
+          },
+          {
+            "prop": "--swc-button-edge-to-text",
+            "value": "var(--swc-base-padding-horizontal-small)"
+          },
+          {
+            "prop": "--swc-button-edge-to-visual",
+            "value": "var(--swc-base-padding-horizontal-small)"
+          },
+          {
+            "prop": "--swc-button-edge-to-visual-only",
+            "value": "4px"
+          },
+          {
+            "prop": "--swc-button-padding-vertical",
+            "value": "4px"
+          },
+          {
+            "prop": "--swc-button-icon-size",
+            "value": "var(--swc-workflow-icon-small)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--sizeL",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-min-block-size",
+            "value": "var(--swc-component-height-200)"
+          },
+          {
+            "prop": "--swc-button-font-size",
+            "value": "var(--swc-font-size-200)"
+          },
+          {
+            "prop": "--swc-button-gap",
+            "value": "6px"
+          },
+          {
+            "prop": "--swc-button-edge-to-text",
+            "value": "var(--swc-base-padding-horizontal-large)"
+          },
+          {
+            "prop": "--swc-button-edge-to-visual",
+            "value": "var(--swc-base-padding-horizontal-large)"
+          },
+          {
+            "prop": "--swc-button-edge-to-visual-only",
+            "value": "7px"
+          },
+          {
+            "prop": "--swc-button-padding-vertical",
+            "value": "10px"
+          },
+          {
+            "prop": "--swc-button-icon-size",
+            "value": "var(--swc-workflow-icon-large)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--sizeXl",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-min-block-size",
+            "value": "var(--swc-component-height-300)"
+          },
+          {
+            "prop": "--swc-button-font-size",
+            "value": "var(--swc-font-size-300)"
+          },
+          {
+            "prop": "--swc-button-gap",
+            "value": "6px"
+          },
+          {
+            "prop": "--swc-button-edge-to-text",
+            "value": "var(--swc-base-padding-horizontal-extra-large)"
+          },
+          {
+            "prop": "--swc-button-edge-to-visual",
+            "value": "var(--swc-base-padding-horizontal-extra-large)"
+          },
+          {
+            "prop": "--swc-button-edge-to-visual-only",
+            "value": "9px"
+          },
+          {
+            "prop": "--swc-button-padding-vertical",
+            "value": "13px"
+          },
+          {
+            "prop": "--swc-button-icon-size",
+            "value": "var(--swc-workflow-icon-extra-large)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--accent",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "var(--swc-accent-background-color-default)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "var(--swc-accent-background-color-hover)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "var(--swc-accent-background-color-down)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "var(--swc-accent-background-color-key-focus)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--negative",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "var(--swc-negative-background-color-default)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "var(--swc-negative-background-color-hover)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "var(--swc-negative-background-color-down)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "var(--swc-negative-background-color-key-focus)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--secondary",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "var(--swc-gray-800)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "var(--swc-gray-900)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "var(--swc-gray-900)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "var(--swc-gray-900)"
+          },
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "var(--swc-gray-100)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "var(--swc-gray-200)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "var(--swc-gray-200)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "var(--swc-gray-200)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--primary.swc-Button--outline",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "transparent"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "var(--swc-gray-100)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "var(--swc-gray-100)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "var(--swc-gray-100)"
+          },
+          {
+            "prop": "--swc-button-border-color-default",
+            "value": "var(--swc-gray-800)"
+          },
+          {
+            "prop": "--swc-button-border-color-hover",
+            "value": "var(--swc-gray-900)"
+          },
+          {
+            "prop": "--swc-button-border-color-down",
+            "value": "var(--swc-gray-900)"
+          },
+          {
+            "prop": "--swc-button-border-color-focus",
+            "value": "var(--swc-gray-900)"
+          },
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "var(--swc-gray-800)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "var(--swc-gray-900)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "var(--swc-gray-900)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "var(--swc-gray-900)"
+          },
+          {
+            "prop": "--swc-button-background-color-disabled",
+            "value": "transparent"
+          },
+          {
+            "prop": "--swc-button-border-color-disabled",
+            "value": "var(--swc-gray-300)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--secondary.swc-Button--outline",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "transparent"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "var(--swc-gray-100)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "var(--swc-gray-100)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "var(--swc-gray-100)"
+          },
+          {
+            "prop": "--swc-button-border-color-default",
+            "value": "var(--swc-gray-300)"
+          },
+          {
+            "prop": "--swc-button-border-color-hover",
+            "value": "var(--swc-gray-400)"
+          },
+          {
+            "prop": "--swc-button-border-color-down",
+            "value": "var(--swc-gray-400)"
+          },
+          {
+            "prop": "--swc-button-border-color-focus",
+            "value": "var(--swc-gray-400)"
+          },
+          {
+            "prop": "--swc-button-background-color-disabled",
+            "value": "transparent"
+          },
+          {
+            "prop": "--swc-button-border-color-disabled",
+            "value": "var(--swc-gray-300)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--staticWhite",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-focus-indicator-color",
+            "value": "var(--swc-transparent-static-white-1000)"
+          },
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "rgba(255, 255, 255, 0.8)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "rgb(0, 0, 0)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "rgb(0, 0, 0)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "rgb(0, 0, 0)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "rgb(0, 0, 0)"
+          },
+          {
+            "prop": "--swc-button-background-color-disabled",
+            "value": "var(--swc-transparent-static-white-200)"
+          },
+          {
+            "prop": "--swc-button-border-color-disabled",
+            "value": "transparent"
+          },
+          {
+            "prop": "--swc-button-content-color-disabled",
+            "value": "var(--swc-transparent-static-white-350)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--staticWhite.swc-Button--secondary",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "rgba(255, 255, 255, 0.12)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "rgba(255, 255, 255, 0.16)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "rgba(255, 255, 255, 0.16)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "rgba(255, 255, 255, 0.16)"
+          },
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "rgba(255, 255, 255, 0.8)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "rgba(255, 255, 255, 0.96)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--staticWhite.swc-Button--outline",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "rgba(255, 255, 255, 0)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "rgba(255, 255, 255, 0.12)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "rgba(255, 255, 255, 0.12)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "rgba(255, 255, 255, 0.12)"
+          },
+          {
+            "prop": "--swc-button-border-color-default",
+            "value": "rgba(255, 255, 255, 0.8)"
+          },
+          {
+            "prop": "--swc-button-border-color-hover",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-border-color-down",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-border-color-focus",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "rgba(255, 255, 255, 0.8)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "rgba(255, 255, 255, 0.96)"
+          },
+          {
+            "prop": "--swc-button-background-color-disabled",
+            "value": "rgba(255, 255, 255, 0)"
+          },
+          {
+            "prop": "--swc-button-border-color-disabled",
+            "value": "var(--swc-transparent-static-white-300)"
+          },
+          {
+            "prop": "--swc-button-content-color-disabled",
+            "value": "var(--swc-transparent-static-white-350)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--staticWhite.swc-Button--secondary.swc-Button--outline",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "rgba(255, 255, 255, 0)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "rgba(255, 255, 255, 0.12)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "rgba(255, 255, 255, 0.12)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "rgba(255, 255, 255, 0.12)"
+          },
+          {
+            "prop": "--swc-button-border-color-default",
+            "value": "rgba(255, 255, 255, 0.16)"
+          },
+          {
+            "prop": "--swc-button-border-color-hover",
+            "value": "rgba(255, 255, 255, 0.2)"
+          },
+          {
+            "prop": "--swc-button-border-color-down",
+            "value": "rgba(255, 255, 255, 0.2)"
+          },
+          {
+            "prop": "--swc-button-border-color-focus",
+            "value": "rgba(255, 255, 255, 0.2)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--staticBlack",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-focus-indicator-color",
+            "value": "var(--swc-transparent-static-black-1000)"
+          },
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "rgba(0, 0, 0, 0.8)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "rgb(255, 255, 255)"
+          },
+          {
+            "prop": "--swc-button-background-color-disabled",
+            "value": "var(--swc-transparent-static-black-150)"
+          },
+          {
+            "prop": "--swc-button-border-color-disabled",
+            "value": "transparent"
+          },
+          {
+            "prop": "--swc-button-content-color-disabled",
+            "value": "var(--swc-transparent-static-black-400)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--staticBlack.swc-Button--secondary",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "rgba(0, 0, 0, 0.08)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "rgba(0, 0, 0, 0.12)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "rgba(0, 0, 0, 0.12)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "rgba(0, 0, 0, 0.12)"
+          },
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "rgba(0, 0, 0, 0.8)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "rgba(0, 0, 0, 0.96)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--staticBlack.swc-Button--outline",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "rgba(0, 0, 0, 0.08)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "rgba(0, 0, 0, 0.08)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "rgba(0, 0, 0, 0.08)"
+          },
+          {
+            "prop": "--swc-button-border-color-default",
+            "value": "rgba(0, 0, 0, 0.8)"
+          },
+          {
+            "prop": "--swc-button-border-color-hover",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-border-color-down",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-border-color-focus",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-default",
+            "value": "rgba(0, 0, 0, 0.8)"
+          },
+          {
+            "prop": "--swc-button-content-color-hover",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-down",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-content-color-focus",
+            "value": "rgba(0, 0, 0, 0.96)"
+          },
+          {
+            "prop": "--swc-button-background-color-disabled",
+            "value": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "prop": "--swc-button-border-color-disabled",
+            "value": "var(--swc-transparent-static-black-300)"
+          },
+          {
+            "prop": "--swc-button-content-color-disabled",
+            "value": "var(--swc-transparent-static-black-400)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--staticBlack.swc-Button--secondary.swc-Button--outline",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-background-color-default",
+            "value": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "prop": "--swc-button-background-color-hover",
+            "value": "rgba(0, 0, 0, 0.08)"
+          },
+          {
+            "prop": "--swc-button-background-color-down",
+            "value": "rgba(0, 0, 0, 0.08)"
+          },
+          {
+            "prop": "--swc-button-background-color-focus",
+            "value": "rgba(0, 0, 0, 0.08)"
+          },
+          {
+            "prop": "--swc-button-border-color-default",
+            "value": "rgba(0, 0, 0, 0.16)"
+          },
+          {
+            "prop": "--swc-button-border-color-hover",
+            "value": "rgba(0, 0, 0, 0.24)"
+          },
+          {
+            "prop": "--swc-button-border-color-down",
+            "value": "rgba(0, 0, 0, 0.24)"
+          },
+          {
+            "prop": "--swc-button-border-color-focus",
+            "value": "rgba(0, 0, 0, 0.24)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--iconOnly",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-border-radius",
+            "value": "50%"
+          },
+          {
+            "prop": "--swc-button-gap",
+            "value": "0"
+          },
+          {
+            "prop": "inline-size",
+            "value": "var(--_swc-button-min-block-size)"
+          },
+          {
+            "prop": "padding-inline",
+            "value": "calc(var(--swc-button-edge-to-visual-only, 5px) - var(--_swc-button-border-width))"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--iconOnly .swc-Button-icon",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-button-edge-to-visual",
+            "value": "0"
+          },
+          {
+            "prop": "align-self",
+            "value": "center"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--truncate .swc-Button-label",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "white-space",
+            "value": "nowrap"
+          },
+          {
+            "prop": "overflow",
+            "value": "hidden"
+          },
+          {
+            "prop": "text-overflow",
+            "value": "ellipsis"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button--justified",
+        "context": [
+          "@layer swc-global-elements"
+        ],
+        "declarations": [
+          {
+            "prop": "flex-grow",
+            "value": "1"
+          },
+          {
+            "prop": "justify-self",
+            "value": "stretch"
+          },
+          {
+            "prop": "inline-size",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button",
+        "context": [
+          "@layer swc-global-elements",
+          "@media (prefers-reduced-motion: reduce)"
+        ],
+        "declarations": [
+          {
+            "prop": "transition-duration",
+            "value": "0ms"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Button,\n.swc-Button-label",
+        "declarations": [
+          {
+            "prop": "all",
+            "value": "revert-layer",
+            "important": true
+          }
+        ]
+      }
+    ]
+  },
+  "states": [
+    ":active",
+    ":disabled",
+    ":focus",
+    ":hover"
+  ],
+  "queries": [
+    "@media (prefers-reduced-motion: reduce)"
+  ],
+  "stories": [
+    {
+      "id": "generated-button--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "accent",
+          "knockout",
+          "outline-inverse",
+          "outlined",
+          "solid",
+          "transparent"
+        ],
+        "data-state": [
+          "active",
+          "disabled",
+          "focus",
+          "hover"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label",
+        "s2a-matrix",
+        "s2a-matrix-col",
+        "s2a-matrix-cols",
+        "s2a-matrix-corner",
+        "s2a-matrix-row",
+        "s2a-matrix-rows",
+        "s2a-matrix-wrap",
+        "s2a-matrix__cell"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 108
+    },
+    {
+      "id": "generated-button--style-solid",
+      "name": "style: solid",
+      "args": {
+        "style": "solid"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--style-outlined",
+      "name": "style: outlined",
+      "args": {
+        "style": "outlined"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "outlined"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--style-transparent",
+      "name": "style: transparent",
+      "args": {
+        "style": "transparent"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "transparent"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--style-accent",
+      "name": "style: accent",
+      "args": {
+        "style": "accent"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "accent"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--style-knockout",
+      "name": "style: knockout",
+      "args": {
+        "style": "knockout"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--style-outline-inverse",
+      "name": "style: outline-inverse",
+      "args": {
+        "style": "outline-inverse"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "outline-inverse"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--state-default",
+      "name": "state: default",
+      "args": {
+        "state": "default"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--state-hover",
+      "name": "state: hover",
+      "args": {
+        "state": "hover"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-state": [
+          "hover"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--state-active",
+      "name": "state: active",
+      "args": {
+        "state": "active"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-state": [
+          "active"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--state-disabled",
+      "name": "state: disabled",
+      "args": {
+        "state": "disabled"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-state": [
+          "disabled"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "generated-button--state-focus",
+      "name": "state: focus",
+      "args": {
+        "state": "focus"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-state": [
+          "focus"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 3
+    },
+    {
+      "id": "atoms-button--solid",
+      "name": "Solid",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "solid",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--outlined",
+      "name": "Outlined",
+      "args": {
+        "label": "Label",
+        "style": "outlined",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "outlined",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "outlined"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "outlined"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--transparent",
+      "name": "Transparent",
+      "args": {
+        "label": "Label",
+        "style": "transparent",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "transparent",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "transparent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "transparent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Label",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--accent",
+      "name": "Accent",
+      "args": {
+        "label": "Get started",
+        "style": "accent",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "accent",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "accent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "accent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Get started",
+          "disabled": false
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--disabled",
+      "name": "Disabled",
+      "args": {
+        "label": "Disabled",
+        "style": "solid",
+        "size": "md",
+        "state": "disabled",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "button",
+        "classes": [
+          "c-button"
+        ],
+        "dataset": {
+          "style": "solid",
+          "size": "md",
+          "hasIconStart": "false",
+          "hasIconEnd": "false",
+          "forceState": "disabled"
+        }
+      },
+      "attributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ],
+        "data-force-state": [
+          "disabled"
+        ]
+      },
+      "rootAttributes": {
+        "data-style": [
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ],
+        "data-force-state": [
+          "disabled"
+        ]
+      },
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Disabled",
+          "disabled": true
+        }
+      ],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-button--knockout",
+      "name": "Knockout (media surface)",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Watch now",
+          "disabled": false
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-button--outline-inverse",
+      "name": "Outline-inverse (media surface)",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "outline-inverse"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Learn more",
+          "disabled": false
+        }
+      ],
+      "nodes": 4
+    },
+    {
+      "id": "atoms-button--icon-slots",
+      "name": "Icon Slots",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "accent",
+          "solid"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "true"
+        ],
+        "data-has-icon-end": [
+          "false",
+          "true"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__icon",
+        "c-button__icon--end",
+        "c-button__icon--start",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [
+        "aria-hidden"
+      ],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Download presets",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "Save to library",
+          "disabled": false
+        }
+      ],
+      "nodes": 13
+    },
+    {
+      "id": "atoms-button--all-styles-matrix",
+      "name": "All styles × states",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "accent",
+          "knockout",
+          "outline-inverse",
+          "outlined",
+          "solid",
+          "transparent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ],
+        "data-force-state": [
+          "active",
+          "disabled",
+          "focus",
+          "hover"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "default",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "hover",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "active",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "focus",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "disabled",
+          "disabled": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "default",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "hover",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "active",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "focus",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "disabled",
+          "disabled": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "default",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "hover",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "active",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "focus",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "disabled",
+          "disabled": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "default",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "hover",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "active",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "focus",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "disabled",
+          "disabled": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "default",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "hover",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "active",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "focus",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "disabled",
+          "disabled": true
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "default",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "hover",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "active",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "focus",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "disabled",
+          "disabled": true
+        }
+      ],
+      "nodes": 80
+    },
+    {
+      "id": "atoms-button--backdrop-blur",
+      "name": "Backdrop blur (glassy styles)",
+      "args": {
+        "label": "Label",
+        "style": "solid",
+        "size": "md",
+        "state": "default",
+        "showIconStart": false,
+        "showIconEnd": false
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout",
+          "outline-inverse",
+          "outlined",
+          "transparent"
+        ],
+        "data-size": [
+          "md"
+        ],
+        "data-has-icon-start": [
+          "false"
+        ],
+        "data-has-icon-end": [
+          "false"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-button",
+        "c-button__label"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [
+        {
+          "tag": "button",
+          "role": null,
+          "name": "outlined",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "transparent",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "knockout",
+          "disabled": false
+        },
+        {
+          "tag": "button",
+          "role": null,
+          "name": "outline-inverse",
+          "disabled": false
+        }
+      ],
+      "nodes": 10
+    }
+  ],
+  "counts": {
+    "props": 13,
+    "attributes": 6,
+    "parts": 2,
+    "tokenReferences": 70,
+    "tokenReferencesWithoutFallback": 41,
+    "raw": 0,
+    "stories": 23,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:be2dcdae83a47514d51409b3d378d59db043363a38edb50abc3ca652db692d81"
+  }
+}

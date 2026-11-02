@@ -1,0 +1,1845 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "badge",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "variant-accent",
+      "name": "variant: accent",
+      "args": {
+        "variant": "accent"
+      }
+    },
+    {
+      "id": "variant-informative",
+      "name": "variant: informative",
+      "args": {
+        "variant": "informative"
+      }
+    },
+    {
+      "id": "variant-neutral",
+      "name": "variant: neutral",
+      "args": {
+        "variant": "neutral"
+      }
+    },
+    {
+      "id": "variant-positive",
+      "name": "variant: positive",
+      "args": {
+        "variant": "positive"
+      }
+    },
+    {
+      "id": "variant-notice",
+      "name": "variant: notice",
+      "args": {
+        "variant": "notice"
+      }
+    },
+    {
+      "id": "variant-negative",
+      "name": "variant: negative",
+      "args": {
+        "variant": "negative"
+      }
+    },
+    {
+      "id": "variant-fuchsia",
+      "name": "variant: fuchsia",
+      "args": {
+        "variant": "fuchsia"
+      }
+    },
+    {
+      "id": "variant-indigo",
+      "name": "variant: indigo",
+      "args": {
+        "variant": "indigo"
+      }
+    },
+    {
+      "id": "variant-magenta",
+      "name": "variant: magenta",
+      "args": {
+        "variant": "magenta"
+      }
+    },
+    {
+      "id": "variant-purple",
+      "name": "variant: purple",
+      "args": {
+        "variant": "purple"
+      }
+    },
+    {
+      "id": "variant-seafoam",
+      "name": "variant: seafoam",
+      "args": {
+        "variant": "seafoam"
+      }
+    },
+    {
+      "id": "variant-yellow",
+      "name": "variant: yellow",
+      "args": {
+        "variant": "yellow"
+      }
+    },
+    {
+      "id": "variant-gray",
+      "name": "variant: gray",
+      "args": {
+        "variant": "gray"
+      }
+    },
+    {
+      "id": "variant-red",
+      "name": "variant: red",
+      "args": {
+        "variant": "red"
+      }
+    },
+    {
+      "id": "variant-orange",
+      "name": "variant: orange",
+      "args": {
+        "variant": "orange"
+      }
+    },
+    {
+      "id": "variant-chartreuse",
+      "name": "variant: chartreuse",
+      "args": {
+        "variant": "chartreuse"
+      }
+    },
+    {
+      "id": "variant-celery",
+      "name": "variant: celery",
+      "args": {
+        "variant": "celery"
+      }
+    },
+    {
+      "id": "variant-green",
+      "name": "variant: green",
+      "args": {
+        "variant": "green"
+      }
+    },
+    {
+      "id": "variant-cyan",
+      "name": "variant: cyan",
+      "args": {
+        "variant": "cyan"
+      }
+    },
+    {
+      "id": "variant-blue",
+      "name": "variant: blue",
+      "args": {
+        "variant": "blue"
+      }
+    },
+    {
+      "id": "variant-pink",
+      "name": "variant: pink",
+      "args": {
+        "variant": "pink"
+      }
+    },
+    {
+      "id": "variant-turquoise",
+      "name": "variant: turquoise",
+      "args": {
+        "variant": "turquoise"
+      }
+    },
+    {
+      "id": "variant-brown",
+      "name": "variant: brown",
+      "args": {
+        "variant": "brown"
+      }
+    },
+    {
+      "id": "variant-cinnamon",
+      "name": "variant: cinnamon",
+      "args": {
+        "variant": "cinnamon"
+      }
+    },
+    {
+      "id": "variant-silver",
+      "name": "variant: silver",
+      "args": {
+        "variant": "silver"
+      }
+    },
+    {
+      "id": "size-s",
+      "name": "size: s",
+      "args": {
+        "size": "s"
+      }
+    },
+    {
+      "id": "size-m",
+      "name": "size: m",
+      "args": {
+        "size": "m"
+      }
+    },
+    {
+      "id": "size-l",
+      "name": "size: l",
+      "args": {
+        "size": "l"
+      }
+    },
+    {
+      "id": "size-xl",
+      "name": "size: xl",
+      "args": {
+        "size": "xl"
+      }
+    },
+    {
+      "id": "subtle-on",
+      "name": "subtle on",
+      "args": {
+        "subtle": true
+      }
+    },
+    {
+      "id": "subtle-off",
+      "name": "subtle off",
+      "args": {
+        "subtle": false
+      }
+    },
+    {
+      "id": "outline-on",
+      "name": "outline on",
+      "args": {
+        "outline": true
+      }
+    },
+    {
+      "id": "outline-off",
+      "name": "outline off",
+      "args": {
+        "outline": false
+      }
+    },
+    {
+      "id": "fixed-block-start",
+      "name": "fixed: block-start",
+      "args": {
+        "fixed": "block-start"
+      }
+    },
+    {
+      "id": "fixed-block-end",
+      "name": "fixed: block-end",
+      "args": {
+        "fixed": "block-end"
+      }
+    },
+    {
+      "id": "fixed-inline-start",
+      "name": "fixed: inline-start",
+      "args": {
+        "fixed": "inline-start"
+      }
+    },
+    {
+      "id": "fixed-inline-end",
+      "name": "fixed: inline-end",
+      "args": {
+        "fixed": "inline-end"
+      }
+    }
+  ],
+  "existing": [],
+  "deferred": [
+    "variant-accent",
+    "variant-informative",
+    "variant-neutral",
+    "variant-positive",
+    "variant-notice",
+    "variant-negative",
+    "variant-fuchsia",
+    "variant-indigo",
+    "variant-magenta",
+    "variant-purple",
+    "variant-seafoam",
+    "variant-yellow",
+    "variant-gray",
+    "variant-red",
+    "variant-orange",
+    "variant-chartreuse",
+    "variant-celery",
+    "variant-green",
+    "variant-cyan",
+    "variant-blue",
+    "variant-pink",
+    "variant-turquoise",
+    "variant-brown",
+    "variant-cinnamon",
+    "variant-silver",
+    "size-s",
+    "size-m",
+    "size-l",
+    "size-xl",
+    "subtle-on",
+    "subtle-off",
+    "outline-on",
+    "outline-off",
+    "fixed-block-start",
+    "fixed-block-end",
+    "fixed-inline-start",
+    "fixed-inline-end"
+  ],
+  "extra": [],
+  "matrix": {
+    "stateAxis": null,
+    "cols": [
+      "default"
+    ],
+    "rows": [
+      "Accent / Small / Bold fill",
+      "Accent / Small / Subtle fill",
+      "Accent / Small / Outline",
+      "Accent / Medium / Bold fill",
+      "Accent / Medium / Subtle fill",
+      "Accent / Medium / Outline",
+      "Accent / Large / Bold fill",
+      "Accent / Large / Subtle fill",
+      "Accent / Large / Outline",
+      "Accent / Extra-large / Bold fill",
+      "Accent / Extra-large / Subtle fill",
+      "Accent / Extra-large / Outline",
+      "Informative / Small / Bold fill",
+      "Informative / Small / Subtle fill",
+      "Informative / Small / Outline",
+      "Informative / Medium / Bold fill",
+      "Informative / Medium / Subtle fill",
+      "Informative / Medium / Outline",
+      "Informative / Large / Bold fill",
+      "Informative / Large / Subtle fill",
+      "Informative / Large / Outline",
+      "Informative / Extra-large / Bold fill",
+      "Informative / Extra-large / Subtle fill",
+      "Informative / Extra-large / Outline",
+      "Neutral / Small / Bold fill",
+      "Neutral / Small / Subtle fill",
+      "Neutral / Small / Outline",
+      "Neutral / Medium / Bold fill",
+      "Neutral / Medium / Subtle fill",
+      "Neutral / Medium / Outline",
+      "Neutral / Large / Bold fill",
+      "Neutral / Large / Subtle fill",
+      "Neutral / Large / Outline",
+      "Neutral / Extra-large / Bold fill",
+      "Neutral / Extra-large / Subtle fill",
+      "Neutral / Extra-large / Outline",
+      "Positive / Small / Bold fill",
+      "Positive / Small / Subtle fill",
+      "Positive / Small / Outline",
+      "Positive / Medium / Bold fill",
+      "Positive / Medium / Subtle fill",
+      "Positive / Medium / Outline",
+      "Positive / Large / Bold fill",
+      "Positive / Large / Subtle fill",
+      "Positive / Large / Outline",
+      "Positive / Extra-large / Bold fill",
+      "Positive / Extra-large / Subtle fill",
+      "Positive / Extra-large / Outline",
+      "Notice / Small / Bold fill",
+      "Notice / Small / Subtle fill",
+      "Notice / Small / Outline",
+      "Notice / Medium / Bold fill",
+      "Notice / Medium / Subtle fill",
+      "Notice / Medium / Outline",
+      "Notice / Large / Bold fill",
+      "Notice / Large / Subtle fill",
+      "Notice / Large / Outline",
+      "Notice / Extra-large / Bold fill",
+      "Notice / Extra-large / Subtle fill",
+      "Notice / Extra-large / Outline",
+      "Negative / Small / Bold fill",
+      "Negative / Small / Subtle fill",
+      "Negative / Small / Outline",
+      "Negative / Medium / Bold fill",
+      "Negative / Medium / Subtle fill",
+      "Negative / Medium / Outline",
+      "Negative / Large / Bold fill",
+      "Negative / Large / Subtle fill",
+      "Negative / Large / Outline",
+      "Negative / Extra-large / Bold fill",
+      "Negative / Extra-large / Subtle fill",
+      "Negative / Extra-large / Outline",
+      "-- / Small / Bold fill",
+      "-- / Small / Subtle fill",
+      "-- / Medium / Bold fill",
+      "-- / Medium / Subtle fill",
+      "-- / Large / Bold fill",
+      "-- / Large / Subtle fill",
+      "-- / Extra-large / Bold fill",
+      "-- / Extra-large / Subtle fill"
+    ],
+    "rowValues": [
+      {
+        "Status": "Accent",
+        "Size": "Small",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Small",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Small",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Medium",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Medium",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Medium",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Extra-large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Extra-large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Accent",
+        "Size": "Extra-large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Small",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Small",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Small",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Medium",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Medium",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Medium",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Extra-large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Extra-large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Informative",
+        "Size": "Extra-large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Small",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Small",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Small",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Medium",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Medium",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Medium",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Extra-large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Extra-large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Neutral",
+        "Size": "Extra-large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Small",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Small",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Small",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Medium",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Medium",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Medium",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Extra-large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Extra-large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Positive",
+        "Size": "Extra-large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Small",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Small",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Small",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Medium",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Medium",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Medium",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Extra-large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Extra-large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Notice",
+        "Size": "Extra-large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Small",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Small",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Small",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Medium",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Medium",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Medium",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Extra-large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Extra-large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "Negative",
+        "Size": "Extra-large",
+        "Style": "Outline"
+      },
+      {
+        "Status": "--",
+        "Size": "Small",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "--",
+        "Size": "Small",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "--",
+        "Size": "Medium",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "--",
+        "Size": "Medium",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "--",
+        "Size": "Large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "--",
+        "Size": "Large",
+        "Style": "Subtle fill"
+      },
+      {
+        "Status": "--",
+        "Size": "Extra-large",
+        "Style": "Bold fill"
+      },
+      {
+        "Status": "--",
+        "Size": "Extra-large",
+        "Style": "Subtle fill"
+      }
+    ],
+    "cell": {
+      "w": 129,
+      "h": 72,
+      "pad": 12
+    },
+    "cells": [
+      {
+        "row": 0,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "s",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Accent / Small / Bold fill / default",
+        "nodeId": "9225:2644"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "s",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Accent / Small / Subtle fill / default",
+        "nodeId": "9225:2769"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "s",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Accent / Small / Outline / default",
+        "nodeId": "9225:2894"
+      },
+      {
+        "row": 3,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "m",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Accent / Medium / Bold fill / default",
+        "nodeId": "9225:3260"
+      },
+      {
+        "row": 4,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "m",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Accent / Medium / Subtle fill / default",
+        "nodeId": "9225:3385"
+      },
+      {
+        "row": 5,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "m",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Accent / Medium / Outline / default",
+        "nodeId": "9225:3510"
+      },
+      {
+        "row": 6,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "l",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Accent / Large / Bold fill / default",
+        "nodeId": "9225:3891"
+      },
+      {
+        "row": 7,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "l",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Accent / Large / Subtle fill / default",
+        "nodeId": "9225:4011"
+      },
+      {
+        "row": 8,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "l",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Accent / Large / Outline / default",
+        "nodeId": "9225:4131"
+      },
+      {
+        "row": 9,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "xl",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Accent / Extra-large / Bold fill / default",
+        "nodeId": "9225:4492"
+      },
+      {
+        "row": 10,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "xl",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Accent / Extra-large / Subtle fill / default",
+        "nodeId": "9225:4617"
+      },
+      {
+        "row": 11,
+        "col": 0,
+        "args": {
+          "variant": "accent",
+          "size": "xl",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Accent / Extra-large / Outline / default",
+        "nodeId": "9225:4742"
+      },
+      {
+        "row": 12,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "s",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Informative / Small / Bold fill / default",
+        "nodeId": "9225:2649"
+      },
+      {
+        "row": 13,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "s",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Informative / Small / Subtle fill / default",
+        "nodeId": "9225:2774"
+      },
+      {
+        "row": 14,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "s",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Informative / Small / Outline / default",
+        "nodeId": "9225:2899"
+      },
+      {
+        "row": 15,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "m",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Informative / Medium / Bold fill / default",
+        "nodeId": "9225:3265"
+      },
+      {
+        "row": 16,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "m",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Informative / Medium / Subtle fill / default",
+        "nodeId": "9225:3390"
+      },
+      {
+        "row": 17,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "m",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Informative / Medium / Outline / default",
+        "nodeId": "9225:3515"
+      },
+      {
+        "row": 18,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "l",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Informative / Large / Bold fill / default",
+        "nodeId": "9225:3846"
+      },
+      {
+        "row": 19,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "l",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Informative / Large / Subtle fill / default",
+        "nodeId": "9225:3857"
+      },
+      {
+        "row": 20,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "l",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Informative / Large / Outline / default",
+        "nodeId": "9225:3886"
+      },
+      {
+        "row": 21,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "xl",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Informative / Extra-large / Bold fill / default",
+        "nodeId": "9225:4497"
+      },
+      {
+        "row": 22,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "xl",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Informative / Extra-large / Subtle fill / default",
+        "nodeId": "9225:4622"
+      },
+      {
+        "row": 23,
+        "col": 0,
+        "args": {
+          "variant": "informative",
+          "size": "xl",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Informative / Extra-large / Outline / default",
+        "nodeId": "9225:4747"
+      },
+      {
+        "row": 24,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "s",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Neutral / Small / Bold fill / default",
+        "nodeId": "9225:2654"
+      },
+      {
+        "row": 25,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "s",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Neutral / Small / Subtle fill / default",
+        "nodeId": "9225:2779"
+      },
+      {
+        "row": 26,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "s",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Neutral / Small / Outline / default",
+        "nodeId": "9225:2904"
+      },
+      {
+        "row": 27,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "m",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Neutral / Medium / Bold fill / default",
+        "nodeId": "9225:3270"
+      },
+      {
+        "row": 28,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "m",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Neutral / Medium / Subtle fill / default",
+        "nodeId": "9225:3395"
+      },
+      {
+        "row": 29,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "m",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Neutral / Medium / Outline / default",
+        "nodeId": "9225:3520"
+      },
+      {
+        "row": 30,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "l",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Neutral / Large / Bold fill / default",
+        "nodeId": "9225:3896"
+      },
+      {
+        "row": 31,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "l",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Neutral / Large / Subtle fill / default",
+        "nodeId": "9225:4016"
+      },
+      {
+        "row": 32,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "l",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Neutral / Large / Outline / default",
+        "nodeId": "9225:4136"
+      },
+      {
+        "row": 33,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "xl",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Neutral / Extra-large / Bold fill / default",
+        "nodeId": "9225:4502"
+      },
+      {
+        "row": 34,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "xl",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Neutral / Extra-large / Subtle fill / default",
+        "nodeId": "9225:4632"
+      },
+      {
+        "row": 35,
+        "col": 0,
+        "args": {
+          "variant": "neutral",
+          "size": "xl",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Neutral / Extra-large / Outline / default",
+        "nodeId": "9225:4752"
+      },
+      {
+        "row": 36,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "s",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Positive / Small / Bold fill / default",
+        "nodeId": "9225:2754"
+      },
+      {
+        "row": 37,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "s",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Positive / Small / Subtle fill / default",
+        "nodeId": "9225:2879"
+      },
+      {
+        "row": 38,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "s",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Positive / Small / Outline / default",
+        "nodeId": "9225:2909"
+      },
+      {
+        "row": 39,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "m",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Positive / Medium / Bold fill / default",
+        "nodeId": "9225:3275"
+      },
+      {
+        "row": 40,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "m",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Positive / Medium / Subtle fill / default",
+        "nodeId": "9225:3400"
+      },
+      {
+        "row": 41,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "m",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Positive / Medium / Outline / default",
+        "nodeId": "9225:3525"
+      },
+      {
+        "row": 42,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "l",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Positive / Large / Bold fill / default",
+        "nodeId": "9225:3901"
+      },
+      {
+        "row": 43,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "l",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Positive / Large / Subtle fill / default",
+        "nodeId": "9225:4021"
+      },
+      {
+        "row": 44,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "l",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Positive / Large / Outline / default",
+        "nodeId": "9225:4141"
+      },
+      {
+        "row": 45,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "xl",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Positive / Extra-large / Bold fill / default",
+        "nodeId": "9225:4512"
+      },
+      {
+        "row": 46,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "xl",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Positive / Extra-large / Subtle fill / default",
+        "nodeId": "9225:4637"
+      },
+      {
+        "row": 47,
+        "col": 0,
+        "args": {
+          "variant": "positive",
+          "size": "xl",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Positive / Extra-large / Outline / default",
+        "nodeId": "9225:4757"
+      },
+      {
+        "row": 48,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "s",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Notice / Small / Bold fill / default",
+        "nodeId": "9225:2759"
+      },
+      {
+        "row": 49,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "s",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Notice / Small / Subtle fill / default",
+        "nodeId": "9225:2884"
+      },
+      {
+        "row": 50,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "s",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Notice / Small / Outline / default",
+        "nodeId": "9225:2914"
+      },
+      {
+        "row": 51,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "m",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Notice / Medium / Bold fill / default",
+        "nodeId": "9225:3280"
+      },
+      {
+        "row": 52,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "m",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Notice / Medium / Subtle fill / default",
+        "nodeId": "9225:3405"
+      },
+      {
+        "row": 53,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "m",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Notice / Medium / Outline / default",
+        "nodeId": "9225:3530"
+      },
+      {
+        "row": 54,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "l",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Notice / Large / Bold fill / default",
+        "nodeId": "9225:3906"
+      },
+      {
+        "row": 55,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "l",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Notice / Large / Subtle fill / default",
+        "nodeId": "9225:4026"
+      },
+      {
+        "row": 56,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "l",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Notice / Large / Outline / default",
+        "nodeId": "9225:4146"
+      },
+      {
+        "row": 57,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "xl",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Notice / Extra-large / Bold fill / default",
+        "nodeId": "9225:4517"
+      },
+      {
+        "row": 58,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "xl",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Notice / Extra-large / Subtle fill / default",
+        "nodeId": "9225:4642"
+      },
+      {
+        "row": 59,
+        "col": 0,
+        "args": {
+          "variant": "notice",
+          "size": "xl",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Notice / Extra-large / Outline / default",
+        "nodeId": "9225:4762"
+      },
+      {
+        "row": 60,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "s",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Negative / Small / Bold fill / default",
+        "nodeId": "9225:2764"
+      },
+      {
+        "row": 61,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "s",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Negative / Small / Subtle fill / default",
+        "nodeId": "9225:2889"
+      },
+      {
+        "row": 62,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "s",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Negative / Small / Outline / default",
+        "nodeId": "9225:2919"
+      },
+      {
+        "row": 63,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "m",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Negative / Medium / Bold fill / default",
+        "nodeId": "9225:3285"
+      },
+      {
+        "row": 64,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "m",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Negative / Medium / Subtle fill / default",
+        "nodeId": "9225:3410"
+      },
+      {
+        "row": 65,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "m",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Negative / Medium / Outline / default",
+        "nodeId": "9225:3535"
+      },
+      {
+        "row": 66,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "l",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Negative / Large / Bold fill / default",
+        "nodeId": "9225:3911"
+      },
+      {
+        "row": 67,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "l",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Negative / Large / Subtle fill / default",
+        "nodeId": "9225:4031"
+      },
+      {
+        "row": 68,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "l",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Negative / Large / Outline / default",
+        "nodeId": "9225:4151"
+      },
+      {
+        "row": 69,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "xl",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Negative / Extra-large / Bold fill / default",
+        "nodeId": "9225:4507"
+      },
+      {
+        "row": 70,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "xl",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "Negative / Extra-large / Subtle fill / default",
+        "nodeId": "9225:4627"
+      },
+      {
+        "row": 71,
+        "col": 0,
+        "args": {
+          "variant": "negative",
+          "size": "xl",
+          "subtle": false,
+          "outline": true
+        },
+        "forced": null,
+        "label": "Negative / Extra-large / Outline / default",
+        "nodeId": "9225:4767"
+      },
+      {
+        "row": 72,
+        "col": 0,
+        "args": {
+          "size": "s",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "-- / Small / Bold fill / default",
+        "nodeId": "9225:2749"
+      },
+      {
+        "row": 73,
+        "col": 0,
+        "args": {
+          "size": "s",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "-- / Small / Subtle fill / default",
+        "nodeId": "9225:2874"
+      },
+      {
+        "row": 74,
+        "col": 0,
+        "args": {
+          "size": "m",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "-- / Medium / Bold fill / default",
+        "nodeId": "9225:3380"
+      },
+      {
+        "row": 75,
+        "col": 0,
+        "args": {
+          "size": "m",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "-- / Medium / Subtle fill / default",
+        "nodeId": "9225:3505"
+      },
+      {
+        "row": 76,
+        "col": 0,
+        "args": {
+          "size": "l",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "-- / Large / Bold fill / default",
+        "nodeId": "9225:4006"
+      },
+      {
+        "row": 77,
+        "col": 0,
+        "args": {
+          "size": "l",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "-- / Large / Subtle fill / default",
+        "nodeId": "9225:4126"
+      },
+      {
+        "row": 78,
+        "col": 0,
+        "args": {
+          "size": "xl",
+          "subtle": false,
+          "outline": false
+        },
+        "forced": null,
+        "label": "-- / Extra-large / Bold fill / default",
+        "nodeId": "9225:4612"
+      },
+      {
+        "row": 79,
+        "col": 0,
+        "args": {
+          "size": "xl",
+          "subtle": true,
+          "outline": false
+        },
+        "forced": null,
+        "label": "-- / Extra-large / Subtle fill / default",
+        "nodeId": "9225:4737"
+      }
+    ],
+    "missing": []
+  }
+}

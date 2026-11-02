@@ -1,0 +1,600 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "spectrum.badge",
+  "name": "Badge",
+  "version": "2.0.0",
+  "status": "draft",
+  "description": "A small amount of colour-categorised metadata. Layer one: composes an optional Icon.",
+  "semantics": {
+    "element": "span"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "text",
+      "description": "Rendered into the default slot, which carries the badge text.",
+      "default": "\"Label\"",
+      "bindings": {
+        "figma": {
+          "kind": "TEXT",
+          "property": "Label"
+        },
+        "code": {
+          "prop": "default"
+        }
+      }
+    },
+    {
+      "name": "icon",
+      "type": "text",
+      "description": "The icon slot, placed before the label.",
+      "bindings": {
+        "figma": {
+          "kind": "INSTANCE_SWAP",
+          "property": "Icon"
+        },
+        "code": {
+          "prop": "icon"
+        }
+      }
+    },
+    {
+      "name": "variant",
+      "type": {
+        "enum": [
+          "accent",
+          "informative",
+          "neutral",
+          "positive",
+          "notice",
+          "negative",
+          "fuchsia",
+          "indigo",
+          "magenta",
+          "purple",
+          "seafoam",
+          "yellow",
+          "gray",
+          "red",
+          "orange",
+          "chartreuse",
+          "celery",
+          "green",
+          "cyan",
+          "blue",
+          "pink",
+          "turquoise",
+          "brown",
+          "cinnamon",
+          "silver"
+        ]
+      },
+      "description": "Six semantic variants and nineteen plain colours.",
+      "default": "\"neutral\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Status",
+          "valueMap": {
+            "accent": "Accent",
+            "informative": "Informative",
+            "neutral": "Neutral",
+            "positive": "Positive",
+            "notice": "Notice",
+            "negative": "Negative"
+          }
+        },
+        "code": {
+          "prop": "variant"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "s",
+          "m",
+          "l",
+          "xl"
+        ]
+      },
+      "default": "\"s\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "valueMap": {
+            "s": "Small",
+            "m": "Medium",
+            "l": "Large",
+            "xl": "Extra-large"
+          }
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "subtle",
+      "type": "boolean",
+      "description": "A tinted fill with dark text instead of a solid fill.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style",
+          "valueMap": {
+            "true": "Subtle fill",
+            "false": "Bold fill"
+          }
+        },
+        "code": {
+          "prop": "subtle"
+        }
+      }
+    },
+    {
+      "name": "outline",
+      "type": "boolean",
+      "description": "A bordered badge on the layer-2 background. Semantic variants only.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Style",
+          "valueMap": {
+            "true": "Outline",
+            "false": "Bold fill"
+          }
+        },
+        "code": {
+          "prop": "outline"
+        }
+      }
+    },
+    {
+      "name": "fixed",
+      "type": {
+        "enum": [
+          "block-start",
+          "block-end",
+          "inline-start",
+          "inline-end"
+        ]
+      },
+      "description": "Pins the badge to one edge and squares off the two corners on that edge.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "fixed"
+        }
+      }
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "element": "span",
+      "layout": {
+        "display": "flex",
+        "align": "center"
+      },
+      "tokens": {
+        "min-block-size": "{swc.component.height.75}",
+        "font-size": "{swc.font.size.75}",
+        "line-height": "{swc.line.height.font.size.75}",
+        "padding-inline": "{swc.base.padding.horizontal.small}",
+        "padding-block": "{swc.base.padding.vertical.small}",
+        "gap": "{swc.base.gap.small}",
+        "border-width": "{swc.border.width.200}",
+        "border-radius": "{swc.corner.radius.medium.size.small}",
+        "background-color": "{swc.neutral.subdued.background.color.default}",
+        "color": "{swc.transparent.static.white.1000}",
+        "font-weight": "{swc.medium.font.weight}",
+        "font-family": "{swc.sans.font.family.stack}"
+      },
+      "literals": {
+        "display": "inline-flex",
+        "align-items": "center",
+        "border-color": "transparent",
+        "cursor": "default"
+      },
+      "tokensByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "s": {
+              "min-block-size": "{swc.component.height.75}",
+              "font-size": "{swc.font.size.75}",
+              "line-height": "{swc.line.height.font.size.75}",
+              "padding-inline": "{swc.base.padding.horizontal.small}",
+              "padding-block": "{swc.base.padding.vertical.small}",
+              "gap": "{swc.base.gap.small}",
+              "border-radius": "{swc.corner.radius.medium.size.small}"
+            },
+            "m": {
+              "min-block-size": "{swc.component.height.100}",
+              "font-size": "{swc.font.size.100}",
+              "line-height": "{swc.line.height.font.size.100}",
+              "padding-inline": "{swc.base.padding.horizontal.medium}",
+              "padding-block": "{swc.base.padding.vertical.medium}",
+              "gap": "{swc.base.gap.medium}",
+              "border-radius": "{swc.corner.radius.medium.size.medium}"
+            },
+            "l": {
+              "min-block-size": "{swc.component.height.200}",
+              "font-size": "{swc.font.size.200}",
+              "line-height": "{swc.line.height.font.size.200}",
+              "padding-inline": "{swc.base.padding.horizontal.large}",
+              "padding-block": "{swc.base.padding.vertical.large}",
+              "gap": "{swc.base.gap.large}",
+              "border-radius": "{swc.corner.radius.medium.size.large}"
+            },
+            "xl": {
+              "min-block-size": "{swc.component.height.300}",
+              "font-size": "{swc.font.size.300}",
+              "line-height": "{swc.line.height.font.size.300}",
+              "padding-inline": "{swc.base.padding.horizontal.extra-large}",
+              "padding-block": "{swc.base.padding.vertical.extra-large}",
+              "gap": "{swc.base.gap.extra-large}",
+              "border-radius": "{swc.corner.radius.medium.size.extra-large}"
+            }
+          }
+        },
+        {
+          "prop": "variant",
+          "map": {
+            "accent": {
+              "background-color": "{swc.accent.background.color.default}"
+            },
+            "informative": {
+              "background-color": "{swc.informative.background.color.default}"
+            },
+            "neutral": {
+              "background-color": "{swc.neutral.subdued.background.color.default}"
+            },
+            "positive": {
+              "background-color": "{swc.positive.background.color.default}"
+            },
+            "notice": {
+              "background-color": "{swc.notice.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "negative": {
+              "background-color": "{swc.negative.background.color.default}"
+            },
+            "fuchsia": {
+              "background-color": "{swc.fuchsia.background.color.default}"
+            },
+            "indigo": {
+              "background-color": "{swc.indigo.background.color.default}"
+            },
+            "magenta": {
+              "background-color": "{swc.magenta.background.color.default}"
+            },
+            "purple": {
+              "background-color": "{swc.purple.background.color.default}"
+            },
+            "seafoam": {
+              "background-color": "{swc.seafoam.background.color.default}"
+            },
+            "yellow": {
+              "background-color": "{swc.yellow.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "gray": {
+              "background-color": "{swc.gray.background.color.default}"
+            },
+            "red": {
+              "background-color": "{swc.red.background.color.default}"
+            },
+            "orange": {
+              "background-color": "{swc.orange.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "chartreuse": {
+              "background-color": "{swc.chartreuse.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "celery": {
+              "background-color": "{swc.celery.background.color.default}",
+              "color": "{swc.transparent.static.black.1000}"
+            },
+            "green": {
+              "background-color": "{swc.green.background.color.default}"
+            },
+            "cyan": {
+              "background-color": "{swc.cyan.background.color.default}"
+            },
+            "blue": {
+              "background-color": "{swc.blue.background.color.default}"
+            },
+            "pink": {
+              "background-color": "{swc.pink.background.color.default}"
+            },
+            "turquoise": {
+              "background-color": "{swc.turquoise.background.color.default}"
+            },
+            "brown": {
+              "background-color": "{swc.brown.background.color.default}"
+            },
+            "cinnamon": {
+              "background-color": "{swc.cinnamon.background.color.default}"
+            },
+            "silver": {
+              "background-color": "{swc.silver.background.color.default}"
+            }
+          }
+        },
+        {
+          "prop": "subtle",
+          "map": {
+            "true": {
+              "color": "{swc.gray.1000}"
+            }
+          }
+        }
+      ],
+      "literalsByProp": [
+        {
+          "prop": "fixed",
+          "map": {
+            "inline-start": {
+              "border-start-start-radius": "0",
+              "border-end-start-radius": "0"
+            },
+            "inline-end": {
+              "border-start-end-radius": "0",
+              "border-end-end-radius": "0"
+            },
+            "block-start": {
+              "border-start-start-radius": "0",
+              "border-start-end-radius": "0"
+            },
+            "block-end": {
+              "border-end-start-radius": "0",
+              "border-end-end-radius": "0"
+            }
+          }
+        }
+      ],
+      "tokensByCombination": [
+        {
+          "props": [
+            "subtle",
+            "variant"
+          ],
+          "rows": [
+            {
+              "values": [
+                "true",
+                "accent"
+              ],
+              "tokens": {
+                "background-color": "{swc.accent.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "informative"
+              ],
+              "tokens": {
+                "background-color": "{swc.informative.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "neutral"
+              ],
+              "tokens": {
+                "background-color": "{swc.neutral.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "positive"
+              ],
+              "tokens": {
+                "background-color": "{swc.positive.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "notice"
+              ],
+              "tokens": {
+                "background-color": "{swc.notice.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "negative"
+              ],
+              "tokens": {
+                "background-color": "{swc.negative.subtle.background.color.default}",
+                "color": "{swc.gray.1000}"
+              }
+            }
+          ]
+        },
+        {
+          "props": [
+            "outline",
+            "variant"
+          ],
+          "rows": [
+            {
+              "values": [
+                "true",
+                "accent"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.accent.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "informative"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.informative.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "neutral"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.neutral.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "positive"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.positive.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "notice"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.notice.visual.color}"
+              }
+            },
+            {
+              "values": [
+                "true",
+                "negative"
+              ],
+              "tokens": {
+                "background-color": "{swc.background.layer.2.color}",
+                "color": "{swc.gray.1000}",
+                "border-color": "{swc.negative.visual.color}"
+              }
+            }
+          ]
+        }
+      ],
+      "parts": {
+        "icon": {
+          "element": "span",
+          "tokens": {
+            "inline-size": "{swc.workflow.icon.small}",
+            "block-size": "{swc.workflow.icon.small}"
+          },
+          "literals": {
+            "--iconPrimary": "currentColor"
+          },
+          "slot": {
+            "name": "icon",
+            "accepts": [
+              "kind:icon"
+            ],
+            "acceptsMode": "prefer",
+            "min": 0,
+            "max": 1,
+            "defaultContent": [
+              {
+                "id": "spectrum-icons:add-circle",
+                "props": {
+                  "figma": "S2_Icon_Circle_20_N"
+                }
+              }
+            ]
+          },
+          "tokensByProp": [
+            {
+              "prop": "size",
+              "map": {
+                "s": {
+                  "inline-size": "{swc.workflow.icon.small}",
+                  "block-size": "{swc.workflow.icon.small}"
+                },
+                "m": {
+                  "inline-size": "{swc.workflow.icon.medium}",
+                  "block-size": "{swc.workflow.icon.medium}"
+                },
+                "l": {
+                  "inline-size": "{swc.workflow.icon.large}",
+                  "block-size": "{swc.workflow.icon.large}"
+                },
+                "xl": {
+                  "inline-size": "{swc.workflow.icon.extra-large}",
+                  "block-size": "{swc.workflow.icon.extra-large}"
+                }
+              }
+            }
+          ]
+        },
+        "label": {
+          "element": "span"
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.4.3",
+      "1.4.11"
+    ],
+    "notes": [
+      "Colour alone must not carry the meaning; the label does.",
+      "Spectrum flips the label and icon colour to black on orange, yellow, chartreuse and celery to hold contrast."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+        "componentSetKey": "5586ba2e73fbc3afd4bb6cc6317d591958f66f5e"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/badge",
+        "export": "Badge"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:4fa6c42f751c8632abfdf9d72f6544d99f6e7fd52ce59497402c369263f6a70e",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:8d08c7df63831f0e6efd53283268fea1b5296c8a4be61631eff67f03f86145e1"
+    }
+  }
+}

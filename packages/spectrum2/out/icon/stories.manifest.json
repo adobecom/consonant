@@ -1,0 +1,60 @@
+{
+  "$generated": {
+    "name": "s2a-spec-transform",
+    "version": "1"
+  },
+  "component": "icon",
+  "storybookId": null,
+  "derived": [
+    {
+      "id": "default",
+      "name": "Default",
+      "args": {}
+    },
+    {
+      "id": "size-xs",
+      "name": "size: xs",
+      "args": {
+        "size": "xs"
+      }
+    },
+    {
+      "id": "size-s",
+      "name": "size: s",
+      "args": {
+        "size": "s"
+      }
+    },
+    {
+      "id": "size-m",
+      "name": "size: m",
+      "args": {
+        "size": "m"
+      }
+    },
+    {
+      "id": "size-l",
+      "name": "size: l",
+      "args": {
+        "size": "l"
+      }
+    },
+    {
+      "id": "size-xl",
+      "name": "size: xl",
+      "args": {
+        "size": "xl"
+      }
+    }
+  ],
+  "existing": [],
+  "deferred": [
+    "size-xs",
+    "size-s",
+    "size-m",
+    "size-l",
+    "size-xl"
+  ],
+  "extra": [],
+  "matrix": null
+}

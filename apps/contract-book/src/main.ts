@@ -3,33 +3,49 @@
 // Three panes. Left: the library — every contracted component, with its gate
 // state, and a Figma link field to bring a new one in. Centre: the DEFS,
 // editable. Right: everything derived from it — contract, spec, stylesheet,
-// Lit, Milo, Figma plan — a live render, and the parity score against the
-// golden sheet.
+// Lit, Milo, Figma plan — the component as Storybook has built it, and the
+// parity score against the golden sheet.
 //
 // The centre pane edits the defs, not the contract. That is the one place
 // this departs from the playground it follows, and it is deliberate: in this
 // pipeline the contract is DERIVED and never edited, so putting a cursor in
 // it would teach exactly the wrong habit. Change a decision, watch every
 // surface move. Break a decision, read the refusal by name.
+//
+// The Book draws no component of its own. It did, for a while — a live
+// preview with controls, a story index, a design overlay — and that was a
+// worse Storybook that reconstructed every component from its contract, so
+// every gap in the reconstruction was the Book's to chase. Now the Render tab
+// is Storybook's own frame: for our components the generated code, for a
+// shipped library (Spectrum) the library's own element. Sign off here, the
+// build regenerates the stories, Storybook shows them, parity scores them.
 import { LitElement, html, nothing, type TemplateResult } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { build, contracted, components, capturedAt, registerDraft, type BuildResult, type Refusal, type Component } from "./engine";
+import { build, contracted, components, capturedAt, registerDraft, type BuildResult, type Refusal, type Component, systems, systemOf, storyPrefixOf } from "./engine";
+import { nextPatch, type Patch } from "./heal";
 
 // GitHub Pages serves the Book as a static snapshot (vite.config.ts sets the
 // flag). Everything that reads is there; everything that needs Node — the Figma
 // extractor, headless Chromium for parity, writing to the repo — is not.
 const STATIC: boolean = typeof __BOOK_STATIC__ !== "undefined" && __BOOK_STATIC__;
 const STATIC_NOTE = "Extract, parity, heal and save run on the dev server — clone the repo and run `npm run contract-book`";
-import { mountPreview, type PreviewHandle } from "./preview";
-import { nextPatch, type Patch } from "./heal";
+// Where Storybook is. The site hosts both next to each other; on a dev machine
+// it is the dev server on 6006 (override with VITE_STORYBOOK_URL).
+const STORYBOOK: string = STATIC
+  ? new URL("../storybook/", location.href).href.replace(/\/$/, "")
+  : ((import.meta.env.VITE_STORYBOOK_URL as string | undefined) ?? "http://localhost:6006");
 
 interface HealStep { iteration: number; patch: Patch; before: string; after?: string }
 
-type OutputTab = "preview" | "parity" | "contract" | "css" | "lit" | "milo" | "figma" | "spec" | "evidence" | "refusals";
+type OutputTab = "render" | "parity" | "contract" | "css" | "lit" | "milo" | "figma" | "spec" | "evidence" | "refusals";
 const OUTPUT_TABS: [OutputTab, string][] = [
-  ["preview", "Preview"], ["parity", "Parity"], ["contract", "Contract"], ["css", "CSS"], ["lit", "Lit"],
+  ["render", "Render"], ["parity", "Parity"], ["contract", "Contract"], ["css", "CSS"], ["lit", "Lit"],
   ["milo", "Milo"], ["figma", "Figma plan"], ["spec", "Spec"], ["evidence", "Evidence"],
 ];
+// Lit, CSS and Milo are what the pipeline GENERATES for our own components. A
+// shipped library is not generated from its contract — Storybook mounts the
+// library's element — so those tabs would show a reconstruction nobody ships.
+const GENERATED_TABS = new Set<OutputTab>(["css", "lit", "milo"]);
 
 // What /__parity/run answers — evals/visual/matrix-parity.mjs's rows and summary, plus the three images.
 interface Finding { code: string; name: string; props: string[]; hint: string; pixels: number; area: number; severity: number; sample?: { design: string; built: string } }
@@ -65,7 +81,7 @@ const pct = (x: number, d = 1) => `${(x * 100).toFixed(d)}%`;
 
 @customElement("contract-book")
 export class ContractBook extends LitElement {
-  // Light DOM: the stylesheet is global, and the preview gets its own shadow root.
+  // Light DOM: the stylesheet is global.
   protected createRenderRoot() { return this; }
 
   // Button is the worked example — fully curated, real code, a State axis, a
@@ -75,21 +91,34 @@ export class ContractBook extends LitElement {
   @state() private parsed: unknown = null;
   @state() private parseError: string | null = null;
   @state() private result: BuildResult | null = null;
-  @state() private tab: OutputTab = "preview";
-  @state() private args: Record<string, unknown> = {};
-  @state() private previewTheme: "light" | "dark" = "light";
-  @state() private unresolved: string[] = [];
+  @state() private tab: OutputTab = "render";
   @state() private dirty = false;
+
+  // The Render tab: Storybook's frame, and whether Storybook is there at all.
+  @state() private renderTheme: "light" | "dark" = "light";
+  @state() private storybookUp: boolean | null = null;
 
   // Parity: one run per click, flagged stale as soon as the defs change again.
   @state() private parity: ParityResponse | null = null;
   @state() private parityBusy = false;
   @state() private parityTheme: "light" | "dark" = "light";
   @state() private parityStale = false;
+  /** Where the overlay's wipe sits, 0 = all design, 100 = all built. */
+  @state() private parityWipe = 50;
   @state() private parityCell: number | null = null;
   @state() private healing = false;
   @state() private healLog: HealStep[] = [];
   @state() private healNote: string | null = null;
+
+  /**
+   * Which design system an extraction is for.
+   *
+   * The slug comes from the Figma set's name, and two systems can use the same
+   * one — Adobe's Spectrum 2 Button is called "Button", and so is ours. Without
+   * this the rail could only draft against our tree, so pasting a Spectrum link
+   * produced a replacement for our own component.
+   */
+  @state() private extractSystem = "s2a";
 
   // Extraction: the link field, and the draft it produced (one at a time).
   @state() private figmaUrl = "";
@@ -104,7 +133,6 @@ export class ContractBook extends LitElement {
   @state() private treeBusy: "crawl" | "contract" | null = null;
   @state() private treeLog: string[] = [];
 
-  private preview: PreviewHandle | null = null;
   private debounce = 0;
 
   connectedCallback() {
@@ -113,7 +141,18 @@ export class ContractBook extends LitElement {
     const want = url.searchParams.get("c");
     if (want && contracted.some((c) => c.slug === want)) this.slug = want;
     this.load(this.slug);
+    // Reachability only: an opaque response means something answered.
+    fetch(`${STORYBOOK}/iframe.html`, { mode: "no-cors" }).then(() => { this.storybookUp = true; }, () => { this.storybookUp = false; });
   }
+
+  /**
+   * The component's own slug, without the Book's system prefix. The renderer
+   * names its files and exports from this, so every lookup has to agree.
+   */
+  private bare(slug = this.slug) { return slug.includes(":") ? slug.split(":")[1] : slug; }
+
+  /** Storybook derives the id from "<Title>/<PascalName>": Generated/ControlButton → generated-controlbutton. */
+  private storyId(story = "default") { return `${storyPrefixOf(this.slug)}-${this.bare().replace(/-/g, "")}--${story}`; }
 
   private load(slug: string) {
     const c = components.find((k) => k.slug === slug);
@@ -121,9 +160,9 @@ export class ContractBook extends LitElement {
     this.slug = slug;
     this.text = JSON.stringify(c.defs, null, 2);
     this.dirty = false;
-    this.args = {};
     this.parity = null; this.parityCell = null; this.parityStale = false;
     this.healLog = []; this.healNote = null;
+    this.savedNote = null;
     const url = new URL(location.href); url.searchParams.set("c", slug); history.replaceState(null, "", url);
     this.recompute();
   }
@@ -147,63 +186,10 @@ export class ContractBook extends LitElement {
       return;
     }
     this.result = build(this.slug, this.parsed);
-    this.updateComplete.then(() => this.mount());
   }
 
   private litFile(suffix: string): string | undefined {
-    return this.result?.rendered.lit?.[`apps/storybook/stories/generated/${pascal(this.slug)}${suffix}`];
-  }
-
-  private async mount() {
-    const r = this.result;
-    const host = this.querySelector<HTMLElement>(".preview__host");
-    if (!r?.ok || !host || this.tab !== "preview") return;
-    const name = pascal(this.slug);
-    const js = this.litFile(".js");
-    if (!js) return;
-    this.preview?.dispose();
-    try {
-      this.preview = await mountPreview(host, { js, css: this.litFile(".css") ?? "", exportName: name, resolveChild: (childName) => this.childModule(childName) });
-      this.unresolved = this.preview.unresolved;
-      this.preview.render(this.currentArgs());
-    } catch (e) {
-      this.unresolved = [e instanceof Error ? e.message : String(e)];
-    }
-  }
-
-  // A composed child's generated module and stylesheet, built from its defs
-  // on disk, so a parent's preview renders the children it composes.
-  private childModule(childName: string): { js: string; css: string } | null {
-    const c = components.find((k) => k.contracted && pascal(k.slug) === childName);
-    if (!c?.defs) return null;
-    const r = build(c.slug, c.defs);
-    const js = r.rendered.lit?.[`apps/storybook/stories/generated/${childName}.js`];
-    if (!js) return null;
-    return { js, css: r.rendered.lit?.[`apps/storybook/stories/generated/${childName}.css`] ?? "" };
-  }
-
-  /** Every composed child's module, recursively, keyed by generated name — what the matrix page needs beside the parent. */
-  private childBundle(js: string, out: Record<string, { js: string; css: string }> = {}): Record<string, { js: string; css: string }> {
-    for (const m of js.matchAll(/^import\s+\{\s*(\w+)\s*\}\s+from\s+['"]\.\/(\w+)\.js['"];?/gm)) {
-      const name = m[2];
-      if (out[name]) continue;
-      const child = this.childModule(name);
-      if (!child) continue;
-      out[name] = child;
-      this.childBundle(child.js, out);
-    }
-    return out;
-  }
-
-  private currentArgs(): Record<string, unknown> {
-    const defaults: Record<string, unknown> = {};
-    for (const p of this.result?.ir?.props ?? []) if (p.default !== undefined && p.default !== null) defaults[p.name] = p.default;
-    return { ...defaults, ...this.args };
-  }
-
-  private setArg(name: string, value: unknown) {
-    this.args = { ...this.args, [name]: value };
-    this.preview?.render(this.currentArgs());
+    return this.result?.rendered.lit?.[`apps/storybook/stories/generated/${pascal(this.bare())}${suffix}`];
   }
 
   private jumpTo(path: string) {
@@ -221,20 +207,19 @@ export class ContractBook extends LitElement {
   }
 
   // ── parity ──────────────────────────────────────────────────────────────
+  // Scores what Storybook renders — the build on disk — against the golden
+  // sheet. Unsaved edits are not in it: save, let the build run, score again.
   private async runParity() {
-    const r = this.result;
-    const matrix = r?.manifest?.matrix;
-    const js = this.litFile(".js"), stories = this.litFile(".stories.js");
-    if (!r?.ok || !matrix || !js || !stories) return;
+    if (!this.result?.manifest?.matrix) return;
     this.parityBusy = true;
     try {
       const res = await fetch("/__parity/run", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: this.slug, theme: this.parityTheme, matrix, js, css: this.litFile(".css") ?? "", stories, exportName: pascal(this.slug), children: this.childBundle(js) }),
+        body: JSON.stringify({ slug: this.slug, theme: this.parityTheme }),
       });
       this.parity = await res.json();
       this.parityCell = null;
-      this.parityStale = false;
+      this.parityStale = this.dirty;
     } catch (e) {
       this.parity = { ok: false, reason: "error", message: e instanceof Error ? e.message : String(e) };
     } finally {
@@ -243,9 +228,10 @@ export class ContractBook extends LitElement {
   }
 
   // ── heal ────────────────────────────────────────────────────────────────
-  // Score, fix one thing the evidence supports, score again — until the
-  // matrix passes with nothing flagged, or no fixer has anything to say. Each
-  // step edits the defs in the editor (never disk) and leaves a decision.
+  // Score once, then fix one thing the evidence supports at a time. Each step
+  // edits the defs in the editor (never disk) and leaves a decision. The score
+  // is of what is built, so it does not move until the defs are saved and
+  // rebuilt — the log says "save to rescore" rather than pretending otherwise.
   private scoreLine(): string {
     const p = this.parity;
     if (!p?.ok) return "—";
@@ -259,34 +245,33 @@ export class ContractBook extends LitElement {
     this.healLog = [];
     this.healNote = null;
     try {
+      const scorable = Boolean(this.result?.ok && this.result?.manifest?.matrix);
+      if (scorable && !this.parity) await this.runParity();
+      // Parity refusing (no sheet, no Storybook) is not the end of healing:
+      // the fixers that read only the defs and the refusals — an unshipped
+      // token, an unresolved icon — still run; the ones that need a score wait.
+      if (scorable && !this.parity?.ok) this.healNote = this.parity && "message" in this.parity ? `parity did not run (${this.parity.message ?? this.parity.reason}); healing from the defs and refusals only` : "no parity result";
       for (let i = 1; i <= 6; i++) {
-        // A defs that does not derive yet has refusals to heal before it has
-        // a render to score; parity runs only once there is something to shoot.
-        const scorable = Boolean(this.result?.ok && this.result?.manifest?.matrix);
-        if (scorable) await this.runParity(); else this.parity = null;
-        // Parity refusing (no sheet, a stale sheet) is not the end of healing:
-        // the fixers that read only the defs and the refusals — an unshipped
-        // token, an unresolved icon — still run; the ones that need a score wait.
-        if (scorable && !this.parity?.ok) this.healNote = this.parity && "message" in this.parity ? `parity did not run (${this.parity.message ?? this.parity.reason}); healing from the defs and refusals only` : "no parity result";
         const c = components.find((k) => k.slug === this.slug);
         const patch = await nextPatch({ slug: this.slug, defs: this.parsed, evidence: c?.figma, parity: this.parity?.ok ? { rows: this.parity.rows, summary: this.parity.summary } : null, refusals: this.result?.refusals ?? [] });
         const before = this.scoreLine();
         if (!patch) {
           const s = this.parity?.ok ? this.parity.summary : null;
           const fails = this.result?.refusals.filter((r) => r.severity === "fail").length ?? 0;
-          this.healNote = s && s.failing === 0 && !s.suspicious.length
+          this.healNote = s && s.failing === 0 && !s.suspicious.length && i === 1
             ? `nothing left to heal — ${before}`
             : !s && !fails ? "no refusals left; nothing to score here (no golden sheet or no matrix)"
+            : i > 1 ? `no fixer has more to say; save the defs and run parity to see the new score`
             : `no fixer has evidence for what remains (${s ? before : `${fails} refusal${fails === 1 ? "" : "s"}`}); the rest is a decision for a person`;
           break;
         }
         this.text = JSON.stringify(patch.defs, null, 2);
         this.dirty = true;
+        this.parityStale = Boolean(this.parity);
         this.recompute();
         await this.updateComplete;
-        this.healLog = [...this.healLog, { iteration: i, patch, before }];
-        if (this.result?.ok && this.result?.manifest?.matrix) await this.runParity();
-        this.healLog = this.healLog.map((h, j) => (j === this.healLog.length - 1 ? { ...h, after: this.result?.ok ? this.scoreLine() : `${this.result?.refusals.filter((r) => r.severity === "fail").length ?? 0} refusals` } : h));
+        const fails = this.result?.refusals.filter((r) => r.severity === "fail").length ?? 0;
+        this.healLog = [...this.healLog, { iteration: i, patch, before, after: this.result?.ok ? "save to rescore" : `${fails} refusal${fails === 1 ? "" : "s"}` }];
       }
     } finally {
       this.healing = false;
@@ -299,7 +284,7 @@ export class ContractBook extends LitElement {
     this.extracting = true;
     this.extractError = null;
     try {
-      const res = await fetch("/__extract/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: this.figmaUrl }) });
+      const res = await fetch("/__extract/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: this.figmaUrl, system: this.extractSystem }) });
       const out = await res.json();
       if (!out.ok) { this.extractError = out.message ?? out.reason; return; }
       // Register it as a component the engine can build — in memory, until Save.
@@ -328,7 +313,7 @@ export class ContractBook extends LitElement {
     if (!this.figmaUrl.trim() || this.treeBusy) return;
     this.treeBusy = "crawl"; this.extractError = null; this.tree = null; this.treeLog = [];
     try {
-      const res = await fetch("/__extract/crawl", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: this.figmaUrl }) });
+      const res = await fetch("/__extract/crawl", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: this.figmaUrl, system: this.extractSystem }) });
       const out = await res.json();
       if (!out.ok) { this.extractError = out.message ?? out.reason; return; }
       this.tree = out;
@@ -351,9 +336,9 @@ export class ContractBook extends LitElement {
         if (n.kind !== "set") { log(`skip ${id}: ${n.kind}`); continue; }
         if (!n.slug || n.name?.startsWith(".")) { log(`skip ${n.name}: ${n.slug ? "hidden set, belongs to its parent" : "no slug"}`); continue; }
         if (n.onDisk?.contract && id !== t.root) { log(`have ${n.name} → ${n.slug}`); n.made = "have"; continue; }
-        const d = await post("/__extract/draft", { evidence: n.evidence, slug: n.slug });
+        const d = await post("/__extract/draft", { evidence: n.evidence, slug: n.slug, system: this.extractSystem });
         if (!d.ok) { log(`FAIL ${n.name}: draft — ${d.message ?? d.reason}`); n.made = "fail"; continue; }
-        const s = await post("/__extract/save", { slug: d.slug, evidence: d.evidence, defs: d.defs, overwriteDefs: id === t.root, build: true });
+        const s = await post("/__extract/save", { slug: d.slug, evidence: d.evidence, defs: d.defs, overwriteDefs: id === t.root, build: true, system: this.extractSystem });
         if (!s.ok) { log(`FAIL ${n.name}: save — ${s.message}`); n.made = "fail"; continue; }
         n.made = s.build?.status === "built" ? "made" : "fail";
         log(`${n.made === "made" ? "made" : "FAIL"} ${n.name} → ${d.slug}: defs ${s.defs?.status}, ${s.build?.status ?? "not built"}${s.build?.status !== "built" && s.build?.line ? ` — ${s.build.line}` : ""}`);
@@ -374,7 +359,7 @@ export class ContractBook extends LitElement {
     try {
       const res = await fetch("/__extract/save", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: d.slug, evidence: d.evidence, defs: this.parsed, overwriteDefs }),
+        body: JSON.stringify({ slug: d.slug, evidence: d.evidence, defs: this.parsed, overwriteDefs, system: this.extractSystem }),
       });
       const out = await res.json();
       if (!out.ok) { this.extractError = out.message; return; }
@@ -388,15 +373,18 @@ export class ContractBook extends LitElement {
     }
   }
 
-  // An on-disk defs, edited here (by hand or by Heal): write it back. The data
-  // plugin's watcher reloads the page from disk a moment later.
+  // An on-disk defs, edited here (by hand or by Heal): write it back. The
+  // build runs, the stories regenerate, Storybook picks them up, and the data
+  // plugin's watcher reloads this page from disk a moment later.
   private async saveDefs() {
     if (this.saving || this.parseError || !this.dirty) return;
     this.saving = true;
     try {
       const res = await fetch("/__extract/save-defs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slug: this.slug, defs: this.parsed }) });
       const out = await res.json();
-      this.savedNote = out.ok ? `saved → ${out.defs.path} · next: ${out.next}` : `save failed: ${out.message}`;
+      this.savedNote = out.ok
+        ? `saved → ${out.defs.path}${out.build ? ` · ${out.build.status}${out.build.line ? `: ${out.build.line}` : ""}` : ""}`
+        : `save failed: ${out.message}`;
       if (out.ok) this.dirty = false;
     } catch (e) {
       this.savedNote = `save failed: ${e instanceof Error ? e.message : String(e)}`;
@@ -442,13 +430,21 @@ export class ContractBook extends LitElement {
               <button class="btn" type="button" @click=${() => this.crawl()} ?disabled=${this.extracting || Boolean(this.treeBusy) || !this.figmaUrl.trim()} title="Every set this one composes, to the leaves">
                 ${this.treeBusy === "crawl" ? html`<span class="spin spin--dark"></span> Crawling…` : "Crawl tree"}</button>
             </div>
+            <label class="rail__target">into
+              <select .value=${this.extractSystem} ?disabled=${this.extracting || Boolean(this.treeBusy)}
+                @change=${(e: Event) => { this.extractSystem = (e.target as HTMLSelectElement).value; }}
+                title="Which design system this extraction belongs to. Two systems can name a set the same thing, so the target is chosen here rather than guessed from the name.">
+                ${systems.map((sys) => html`<option value=${sys.id} ?selected=${this.extractSystem === sys.id}>${sys.label}</option>`)}
+              </select>
+            </label>
             <span class="rail__hint">a component set's link; REST, so it needs <code>FIGMA_ACCESS_TOKEN</code> in <code>.env</code></span>
           </form>`}
           ${this.extractError ? html`<div class="rail__err">${this.extractError}</div>` : nothing}
           ${this.tree ? this.renderTree(this.tree) : nothing}
 
-          <div class="rail__group">Contracted · ${contracted.length}</div>
-          ${contracted.map((c) => {
+          ${systems.map((sys) => html`
+          <div class="rail__group">${sys.label} · ${sys.items.length}</div>
+          ${sys.items.map((c) => {
             const probe = c.slug === this.slug ? this.result : build(c.slug, c.defs);
             const f = probe?.refusals.filter((x) => x.severity === "fail").length ?? 0;
             const w = probe?.refusals.filter((x) => x.severity === "warn").length ?? 0;
@@ -456,7 +452,7 @@ export class ContractBook extends LitElement {
               <span class="dot ${f ? "dot--fail" : w ? "dot--warn" : "dot--ok"}"></span>${c.name}
               ${c.draft ? html`<span class="badge">draft</span>` : nothing}
               <small>${f ? `${f} fail` : w ? `${w} warn` : "clean"}</small></button>`;
-          })}
+          })}`)}
           <div class="rail__group">Spec only · ${uncontracted.length}</div>
           <div class="rail__note">${uncontracted.length} components have a hand-written spec and no contract yet. Paste the set's Figma link above, or extract it in the toolkit, and it appears here.</div>
         </div>
@@ -501,7 +497,7 @@ export class ContractBook extends LitElement {
                    <button class="btn btn--primary" @click=${() => this.saveDraft(false)} ?disabled=${this.saving || Boolean(this.parseError) || Boolean(d.saved)}>
                      ${this.saving ? "Saving…" : d.onDisk.defs ? "Save evidence" : "Save to repo"}</button>`
             : html`<button class="btn btn--ghost" @click=${() => this.load(this.slug)} ?disabled=${!this.dirty}>Reset</button>
-                   <button class="btn btn--primary" @click=${() => this.saveDefs()} ?disabled=${!this.dirty || this.saving || Boolean(this.parseError)}>${this.saving ? "Saving…" : "Save defs"}</button>`}
+                   <button class="btn btn--primary" @click=${() => this.saveDefs()} ?disabled=${!this.dirty || this.saving || Boolean(this.parseError)} title="Write the defs, run this system's build, regenerate the stories">${this.saving ? "Saving…" : "Sign off"}</button>`}
         </div>
         ${d ? this.renderDraftBanner(d) : nothing}
         ${!d && this.savedNote ? html`<div class="banner banner--ok"><b>Saved.</b> ${this.savedNote}</div>` : nothing}
@@ -541,11 +537,14 @@ export class ContractBook extends LitElement {
   private renderOutput(fails: number, warns: number) {
     const r = this.result;
     const refusals = r?.refusals ?? [];
+    const generated = systemOf(this.slug) === "s2a";
+    const tabs = OUTPUT_TABS.filter(([id]) => generated || !GENERATED_TABS.has(id));
+    if (!tabs.some(([id]) => id === this.tab) && this.tab !== "refusals") this.tab = "render";
     return html`
       <section class="pane">
         <div class="pane__head">
           <div class="tabs">
-            ${OUTPUT_TABS.map(([id, label]) => html`<button class="tab ${this.tab === id ? "is-active" : ""}" @click=${() => { this.tab = id; this.updateComplete.then(() => this.mount()); }}>
+            ${tabs.map(([id, label]) => html`<button class="tab ${this.tab === id ? "is-active" : ""}" @click=${() => { this.tab = id; }}>
               ${label}${id === "parity" && this.parity?.ok ? html`<span class="count ${this.parity.summary.failing ? "count--fail" : ""}">${this.parity.summary.total - this.parity.summary.failing}/${this.parity.summary.total}</span>` : nothing}
             </button>`)}
             <button class="tab ${this.tab === "refusals" ? "is-active" : ""}" @click=${() => (this.tab = "refusals")}>
@@ -553,7 +552,7 @@ export class ContractBook extends LitElement {
             </button>
           </div>
           <span class="topbar__spacer"></span>
-          <a class="btn btn--ghost" href="http://localhost:6006/?path=/story/generated-${this.slug.replace(/-/g, "")}--default" target="_blank" rel="noopener" title="The generated component in Storybook — the rendered files on disk, with controls and the design overlay">Storybook ↗</a>
+          <a class="btn btn--ghost" href="${STORYBOOK}/?path=/story/${this.storyId()}" target="_blank" rel="noopener" title="This component in Storybook — every story, with controls and the design overlay">Storybook ↗</a>
         </div>
         <div class="pane__body">${this.renderTab(r, refusals)}</div>
       </section>`;
@@ -563,6 +562,7 @@ export class ContractBook extends LitElement {
     const tab = this.tab;
     if (tab === "refusals") return this.renderRefusals(refusals);
     if (tab === "evidence") return this.renderEvidence();
+    if (tab === "render") return this.renderRender();
     if (!r?.ok && tab === "parity") return html`<div class="parity">
       <div class="parity__bar">
         ${STATIC ? nothing : html`<button class="btn" @click=${() => this.heal()} ?disabled=${this.healing}>${this.healing ? html`<span class="spin spin--dark"></span> Healing…` : "Heal"}</button>`}
@@ -574,7 +574,6 @@ export class ContractBook extends LitElement {
     const files = (map: Record<string, string>) => html`<div class="output__files">${Object.entries(map).map(([path, body]) => html`
       <div class="output__file"><div class="output__filehead">${path}<span class="size">${kb(body)}</span></div><pre class="output__code">${body}</pre></div>`)}</div>`;
     switch (tab) {
-      case "preview": return this.renderPreview(r);
       case "parity": return this.renderParity(r);
       case "contract": return html`<pre class="output__code">${r.artifacts[`${this.slug}.contract.json`]}</pre>`;
       case "spec": return html`<pre class="output__code">${r.artifacts[`${this.slug}.spec.md`]}</pre>`;
@@ -586,30 +585,30 @@ export class ContractBook extends LitElement {
     return html``;
   }
 
-  private renderPreview(r: BuildResult) {
-    const props = (r.ir?.props ?? []).filter((p: any) => p.lever !== false || p.name === "state");
-    const args = this.currentArgs();
+  /**
+   * The component, as Storybook has it: the build on disk, in Storybook's own
+   * frame. Not interactive — the controls, the story index and the design
+   * overlay are Storybook's; the link in the corner opens them.
+   */
+  private renderRender() {
+    const id = this.storyId();
+    const globals = `figmaOverlay:off;theme:${this.renderTheme}`;
+    const src = `${STORYBOOK}/iframe.html?id=${id}&viewMode=story&globals=${encodeURIComponent(globals)}`;
+    const generated = systemOf(this.slug) === "s2a";
     return html`
-      <div class="preview">
-        <div class="preview__stage">
-          <div class="preview__host" data-theme=${this.previewTheme}></div>
+      <div class="render">
+        <div class="render__bar">
+          <span class="topbar__meta">${id}</span>
+          <select @change=${(e: Event) => { this.renderTheme = (e.target as HTMLSelectElement).value as "light" | "dark"; }}>
+            <option value="light" ?selected=${this.renderTheme === "light"}>light</option>
+            <option value="dark" ?selected=${this.renderTheme === "dark"}>dark</option>
+          </select>
+          <span class="topbar__spacer"></span>
+          <span class="topbar__meta">${this.dirty ? html`<span class="editor__status--warn">showing the last build — sign off to rebuild</span>` : generated ? "the generated component, as built" : "the library's own element, as it ships"}</span>
         </div>
-        <div>
-          ${this.unresolved.length ? html`<div class="preview__note">Preview could not satisfy: ${this.unresolved.join("; ")}</div>` : nothing}
-          <div class="preview__controls">
-            ${props.map((p: any) => {
-              const v = args[p.name];
-              if (Array.isArray(p.enum) && p.enum.length) return html`<div class="ctl"><label>${p.name}</label>
-                <select @change=${(e: Event) => this.setArg(p.name, (e.target as HTMLSelectElement).value)}>
-                  ${p.enum.map((o: string) => html`<option value=${o} ?selected=${v === o}>${o}</option>`)}</select></div>`;
-              if (p.type === "boolean") return html`<div class="ctl ctl--check"><input type="checkbox" .checked=${Boolean(v)} @change=${(e: Event) => this.setArg(p.name, (e.target as HTMLInputElement).checked)}><label>${p.name}</label></div>`;
-              return html`<div class="ctl"><label>${p.name}</label><input type="text" .value=${String(v ?? "")} @input=${(e: Event) => this.setArg(p.name, (e.target as HTMLInputElement).value)}></div>`;
-            })}
-            <div class="ctl"><label>theme</label>
-              <select @change=${(e: Event) => { this.previewTheme = (e.target as HTMLSelectElement).value as "light" | "dark"; }}>
-                <option value="light">light</option><option value="dark">dark</option></select></div>
-          </div>
-        </div>
+        ${this.storybookUp === false
+          ? html`<div class="empty">Storybook is not running at <code>${STORYBOOK}</code>.<br><small>Start it with <code>npm run storybook</code>; this frame is its <code>${id}</code> story.</small></div>`
+          : html`<iframe class="render__frame" src=${src} title="${id} in Storybook" loading="lazy"></iframe>`}
       </div>`;
   }
 
@@ -625,13 +624,13 @@ export class ContractBook extends LitElement {
             <option value="dark" ?selected=${this.parityTheme === "dark"}>dark</option>
           </select>
           ${STATIC ? html`<span class="editor__status--warn">${STATIC_NOTE}</span>` : html`<button class="btn btn--primary" @click=${() => this.runParity()} ?disabled=${this.parityBusy || this.healing}>
-            ${this.parityBusy && !this.healing ? html`<span class="spin"></span> Rendering…` : p ? "Run again" : "Run parity"}</button>
-          <button class="btn" @click=${() => this.heal()} ?disabled=${this.parityBusy || this.healing} title="Score, fix what the evidence supports, score again — until it passes or nothing applies">
+            ${this.parityBusy && !this.healing ? html`<span class="spin"></span> Scoring…` : p ? "Run again" : "Run parity"}</button>
+          <button class="btn" @click=${() => this.heal()} ?disabled=${this.parityBusy || this.healing} title="Score, then fix what the evidence supports — one patch at a time, in the editor">
             ${this.healing ? html`<span class="spin spin--dark"></span> Healing…` : "Heal"}</button>`}
           <span class="topbar__meta">${matrix.rows.length} × ${matrix.cols.length} cells · pass &lt; 8%</span>
-          ${this.parityStale ? html`<span class="editor__status--warn">defs changed since this run</span>` : nothing}
+          ${this.parityStale ? html`<span class="editor__status--warn">defs edited since this run — sign off to rebuild, then run again</span>` : nothing}
         </div>
-        <div class="parity__note">Renders the State matrix from the defs in the editor, shoots it in headless Chromium at the golden sheet's scale, and scores every cell with <code>evals/visual/matrix-parity.mjs</code> — the same screenshot routine, comparison and difference codes as <code>npm run eval:visual:matrix</code>, on the unsaved defs.</div>
+        <div class="parity__note">Shoots the State matrix story <b>as Storybook renders it</b> — the build on disk — in headless Chromium at the golden sheet's scale, and scores every cell with <code>evals/visual/matrix-parity.mjs</code>: the same screenshot routine, comparison and difference codes as <code>npm run eval:visual:matrix</code>.</div>
         ${this.healLog.length || this.healNote ? this.renderHealLog() : nothing}
         ${!p ? nothing : !p.ok ? this.renderParityRefused(p) : this.renderParityResult(p)}
       </div>`;
@@ -653,6 +652,9 @@ export class ContractBook extends LitElement {
     if (p.reason === "no-sheet") return html`<div class="receipts"><div class="receipt receipt--warn">
       <span class="receipt__tag">golden · missing</span>
       <span class="receipt__msg">No ${p.theme} sheet for this set. Composite one (needs the Figma token, once):<br><code>${p.command}</code></span></div></div>`;
+    if (p.reason === "no-storybook") return html`<div class="receipts"><div class="receipt receipt--warn">
+      <span class="receipt__tag">storybook · down</span>
+      <span class="receipt__msg">${p.message}. Parity scores what Storybook renders, so it needs one:<br><code>${p.command}</code></span></div></div>`;
     return html`<div class="receipts"><div class="receipt receipt--fail">
       <span class="receipt__tag">parity · ${p.reason}</span><span class="receipt__msg">${p.message}</span></div></div>`;
   }
@@ -683,6 +685,23 @@ export class ContractBook extends LitElement {
           <div class="crop">design<i style=${crop(p.images.design, sel)}></i></div>
           <div class="crop">built<i style=${crop(p.images.built, sel)}></i></div>
           <div class="crop">diff<i style=${crop(p.images.diff, sel)}></i></div>
+          <!--
+            The same two crops stacked, with the top one clipped by the slider.
+            Three panels side by side answer "do these differ"; a wipe answers
+            "by how much, and where", which is the question a percentage cannot.
+            Both images are already in the response, so this costs one slider.
+          -->
+          <div class="crop">overlay · drag to wipe
+            <div class="wipe" style="width:${cw}px;height:${ch}px">
+              <i style=${crop(p.images.design, sel)}></i>
+              <i class="wipe__top" style="${crop(p.images.built, sel)};clip-path:inset(0 0 0 ${this.parityWipe}%)"></i>
+              <span class="wipe__seam" style="left:${this.parityWipe}%"></span>
+            </div>
+            <input class="wipe__range" type="range" min="0" max="100" .value=${String(this.parityWipe)}
+              style="width:${cw}px"
+              @input=${(e: Event) => { this.parityWipe = Number((e.target as HTMLInputElement).value); }}>
+            <span class="wipe__ends">design ← → built</span>
+          </div>
         </div>
         ${sel.findings.length ? sel.findings.map((f) => this.renderFinding(f)) : html`<div class="topbar__meta">no difference above the noise floor in any region</div>`}
       </div>` : nothing}
@@ -752,7 +771,7 @@ export class ContractBook extends LitElement {
         <dt>extractor</dt><dd>${f?.extractor ? `${f.extractor.plugin} ${f.extractor.version}` : "—"}</dd>
         <dt>hash</dt><dd><code>${f?.provenance?.hash ?? "—"}</code></dd>
         ${d ? html`<dt>variables</dt><dd>${d.fidelity.resolvedVariables}/${d.fidelity.boundVariables} resolved over REST${d.fidelity.missingVariables.length ? html`<br><small>missing: ${d.fidelity.missingVariables.join(", ")}</small>` : nothing}</dd>` : nothing}
-        <dt>code</dt><dd>${k ? `${k.props?.length ?? 0} props · parts ${(k.parts?.template ?? []).join(", ")}` : "no code evidence"}</dd>
+        <dt>code</dt><dd>${k ? `${k.props?.length ?? 0} props · parts ${(k.parts?.template ?? []).join(", ")}${k.stylesheet?.rules ? ` · ${k.stylesheet.rules.length} rules` : ""}` : "no code evidence"}</dd>
         <dt>extracted</dt><dd>${f?.extractedAt ?? "—"}</dd>
       </dl>
       ${d ? html`<div class="pcodes"><h4>draft notes · ${d.notes.length}</h4>

@@ -96,7 +96,7 @@ function typeOf(defsProp, codeProp) {
   return codeProp.type;
 }
 
-export function buildIR({ defs, code, figma = null, tokens, generator }) {
+export function buildIR({ defs, code, figma = null, tokens, generator, system = "s2a" }) {
   const codeProps = new Map((code?.props ?? []).map((p) => [p.name, p]));
   const figmaAxes = new Map((figma?.axes ?? []).map((a) => [a.name, a]));
 
@@ -199,7 +199,7 @@ export function buildIR({ defs, code, figma = null, tokens, generator }) {
 
   return {
     generator,
-    component: { name: defs.component, slug: defs.slug, description: defs.description ?? null, status: defs.status, version: defs.version ?? null, archetype: defs.archetype ?? null, tier: defs.tier ?? "component", cssClass: defs.anchors.code.cssClass, storybookId: code?.component?.spec?.storybookId ?? null },
+    component: { name: defs.component, slug: defs.slug, system, description: defs.description ?? null, status: defs.status, version: defs.version ?? null, archetype: defs.archetype ?? null, tier: defs.tier ?? "component", cssClass: defs.anchors.code.cssClass, storybookId: code?.component?.spec?.storybookId ?? null },
     anchors: { figma: figmaBlock.anchors, code: { importPath: defs.anchors.code.importPath, export: defs.anchors.code.export, controller: defs.anchors.code.controller ?? null, cssClass: defs.anchors.code.cssClass } },
     figmaEvidence: figmaBlock.evidence,
     props, variants,
@@ -212,7 +212,7 @@ export function buildIR({ defs, code, figma = null, tokens, generator }) {
     a11y: defs.a11y ?? null,
     decisions: defs.decisions ?? [],
     stories,
-    code: code ? { render: code.component.render, exports: code.component.exports, attributes: code.attributes, parts: code.parts, states: code.states, queries: code.queries, tokenReferences: Object.keys(code.tokens.references).length, raw: code.tokens.raw, sources: code.sources } : null,
+    code: code ? { render: code.component.render, exports: code.component.exports, attributes: code.attributes, parts: code.parts, states: code.states, queries: code.queries, tokenReferences: Object.keys(code.tokens.references).length, raw: code.tokens.raw, sources: code.sources, declarations: code.declarations ?? null } : null,
     provenance: {
       defs: defs.$hash ?? null,
       codeEvidence: code?.provenance?.hash ?? null,

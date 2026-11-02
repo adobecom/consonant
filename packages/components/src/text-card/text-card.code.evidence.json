@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:32:11.583Z",
+  "extractedAt": "2026-10-28T16:26:51.217Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -224,6 +224,254 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-text-card",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "flex-direction",
+            "value": "column"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-lg)"
+          },
+          {
+            "prop": "padding",
+            "value": "var(--s2a-spacing-lg)"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--s2a-border-radius-md)"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          },
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          }
+        ]
+      },
+      {
+        "selector": ".tc-headline-body",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "flex-direction",
+            "value": "column"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "overflow",
+            "value": "hidden"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "selector": ".tc-headline",
+        "declarations": [
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-heading)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-heading)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-heading-5)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-heading-5)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-font-letter-spacing-4xl)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-heading)"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "selector": ".tc-body",
+        "declarations": [
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-body)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-body)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-body-md)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-body-md)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-typography-letter-spacing-body-md)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-body-subtle)"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "selector": ".tc-cta",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "padding",
+            "value": "6px 0"
+          },
+          {
+            "prop": "min-height",
+            "value": "24px"
+          },
+          {
+            "prop": "text-decoration",
+            "value": "none"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-heading)"
+          },
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-label)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-label)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-label)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-label)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-typography-letter-spacing-label)"
+          },
+          {
+            "prop": "cursor",
+            "value": "pointer"
+          },
+          {
+            "prop": "transition",
+            "value": "opacity 150ms ease"
+          }
+        ]
+      },
+      {
+        "selector": ".tc-cta:hover",
+        "declarations": [
+          {
+            "prop": "opacity",
+            "value": "0.7"
+          }
+        ]
+      },
+      {
+        "selector": ".tc-cta__icon",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          },
+          {
+            "prop": "width",
+            "value": "var(--s2a-spacing-sm)"
+          },
+          {
+            "prop": "height",
+            "value": "var(--s2a-spacing-sm)"
+          }
+        ]
+      },
+      {
+        "selector": ".tc-cta__icon svg",
+        "declarations": [
+          {
+            "prop": "width",
+            "value": "var(--s2a-spacing-sm)"
+          },
+          {
+            "prop": "height",
+            "value": "var(--s2a-spacing-sm)"
+          },
+          {
+            "prop": "display",
+            "value": "block"
+          }
+        ]
+      }
+    ]
   },
   "states": [
     ":hover"
@@ -769,6 +1017,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:9d33a4abcf4ddc8320ae9880021fe211bdfb4189f20e26b93db641bad59ea8d2"
+    "hash": "sha256:c0e489fb44d05bb29d320d17662bdebe1bd71ac0137086812a15220372cc271c"
   }
 }

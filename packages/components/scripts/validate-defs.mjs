@@ -10,13 +10,36 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createRequire } from "node:module";
+import { isStructural, rawValueAdvice } from "../../spec-dictionary/lib/structural.mjs";
+// One definition of what a token reference looks like, shared with the spec
+// transform. Spelling it again here is how the shipped-token check came to run
+// on our own references only: the pattern was /\{s2a\./, so every Spectrum
+// reference was skipped rather than checked, and 39 of them that resolve to
+// nothing were reported as clean.
+import { REF } from "../../spec-dictionary/lib/tokens.mjs";
 
 const require = createRequire(import.meta.url);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..", "..", "..");
-const SRC = join(ROOT, "packages", "components", "src");
-const TOKENS_DIR = join(ROOT, "dist", "packages", "tokens", "css", "dev");
-const only = process.argv.find((a) => a.startsWith("--slug="))?.slice(7)?.split(",");
+// Which component tree, whose tokens, and whose namespace. All three default to
+// S2A, so every existing call — the gate included — is unchanged. A contract that
+// describes another design system passes its own, which is the only reason the
+// Spectrum contracts were never checked by this: SRC was a constant, so the gate
+// validated our button and reported it as theirs.
+//   --root=packages/spectrum2/src --tokens=packages/spectrum2/tokens --ns=swc
+const flag = (name) => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
+const SRC = resolve(ROOT, flag("root") ?? join("packages", "components", "src"));
+const TOKENS_DIR = resolve(ROOT, flag("tokens") ?? join("dist", "packages", "tokens", "css", "dev"));
+const NS = flag("ns") ?? "s2a";
+// Asset manifests live beside the system that ships them. Ours are built into
+// packages/spec-dictionary/out/assets; a second design system keeps its own, so
+// the lookup takes a list and the first directory holding the file wins.
+const ASSET_DIRS = [
+  ...(flag("assets") ? [resolve(ROOT, flag("assets"))] : []),
+  join(ROOT, "packages", "spec-dictionary", "out", "assets"),
+];
+const manifestPath = (name) => ASSET_DIRS.map((dir) => join(dir, `${name}.json`)).find((f) => existsSync(f)) ?? join(ASSET_DIRS[0], `${name}.json`);
+const only = flag("slug")?.split(",");
 
 // Schema conformance comes from @adobecom/s2a-validators, not a private ajv
 // compile here. Two copies of "what valid means" is how the writer and the
@@ -31,7 +54,7 @@ const { validateDefs } = await import(pathToFileURL(validatorsDist).href);
 const specs = new Map(readdirSync(SRC).filter((d) => existsSync(join(SRC, d, `${d}.spec.json`))).map((d) => [d, JSON.parse(readFileSync(join(SRC, d, `${d}.spec.json`), "utf8"))]));
 const specByName = new Map([...specs.values()].map((s) => [String(s.name).toLowerCase(), s]));
 const shipped = new Set();
-if (existsSync(TOKENS_DIR)) for (const f of readdirSync(TOKENS_DIR)) for (const m of readFileSync(join(TOKENS_DIR, f), "utf8").matchAll(/(--s2a-[a-z0-9_-]+)\s*:/g)) shipped.add(m[1]);
+if (existsSync(TOKENS_DIR)) for (const f of readdirSync(TOKENS_DIR)) for (const m of readFileSync(join(TOKENS_DIR, f), "utf8").matchAll(new RegExp(`(--${NS}-[a-z0-9_-]+)\\s*:`, "g"))) shipped.add(m[1]);
 const toVar = (ref) => "--" + ref.slice(1, -1).replace(/\./g, "-");
 
 function walkParts(part, path, out) {
@@ -123,7 +146,7 @@ for (const slug of slugs) {
       for (const e of part.tokensByCombination ?? []) for (const r of e.rows ?? []) maps.push([`@${(e.props ?? []).map((p, i) => `${p}=${r.values?.[i] ?? "*"}`).join(",")}`, r.tokens]);
       for (const [where, map] of maps) {
         for (const [prop, ref] of Object.entries(map ?? {})) {
-          for (const m of ref.matchAll(/\{s2a\.[a-z0-9.-]+\}/g)) {
+          for (const m of ref.matchAll(REF)) {
             const v = toVar(m[0]);
             if (shipped.size && !shipped.has(v)) problems.push(`anatomy ${path} ${prop}${where}: ${m[0]} → ${v} is not a shipped token`);
           }
@@ -131,9 +154,16 @@ for (const slug of slugs) {
           // design sets with no variable, or one a curator typed. It ships, but
           // never silently — bind it in Figma, or keep it with the reason recorded.
           // Structure, not values: presence (display), a circle's radius and
-          // box-sizing are what a shape IS; no variable could hold them.
-          const structural = prop === "display" || prop === "box-sizing" || (prop === "border-radius" && ref === "raw:50%");
-          if (ref.startsWith("raw:") && !structural) warnings.push(`anatomy ${path} ${prop}${where}: ${ref} is hardcoded — no S2A variable behind it. Bind one in Figma and re-extract, or keep the raw: value with the reason in a decision`);
+          // box-sizing are what a shape IS; no variable could hold them. The
+          // full rule lives in lib/structural.mjs so the Contract Book and this
+          // check cannot drift — they already had, the Book having no rule at all.
+          const structural = isStructural(prop, ref);
+          // The advice names the system that owns the token, and only our own
+          // contracts are told to go bind one in Figma.
+          if (ref.startsWith("raw:") && !structural) {
+            const { label, fix } = rawValueAdvice(NS);
+            warnings.push(`anatomy ${path} ${prop}${where}: ${ref} is hardcoded — no ${label} variable behind it. ${fix}`);
+          }
         }
       }
       // An asset-backed part points at a shipped manifest and a prop. Both have
@@ -144,7 +174,15 @@ for (const slug of slugs) {
         if (!defs.props.some((pp) => pp.name === a.prop)) {
           problems.push(`anatomy ${path} asset: names prop "${a.prop}", which this component does not have`);
         }
-        const mf = join(ROOT, "packages", "spec-dictionary", "out", "assets", `${a.manifest}.json`);
+        // An alt prop is checked the same way as the source prop.
+        if (a.altProp && !defs.props.some((pp) => pp.name === a.altProp)) {
+          problems.push(`anatomy ${path} asset: names alt prop "${a.altProp}", which this component does not have`);
+        }
+        // No manifest means the prop IS the source — an avatar's src, with no
+        // table to look it up in. Everything below checks the lookup, so it
+        // only applies when there is one.
+        if (!a.manifest) continue;
+        const mf = manifestPath(a.manifest);
         if (!existsSync(mf)) {
           problems.push(`anatomy ${path} asset: manifest "${a.manifest}" has not been built — run npm run specs:assets`);
         } else {
@@ -167,7 +205,7 @@ for (const slug of slugs) {
         if (d.manifest || d.icon) {
           if (!d.manifest || !d.icon) problems.push(`anatomy ${path} slot default: needs both manifest and icon (has ${d.manifest ? "manifest" : "icon"} only)`);
           else {
-            const mf = join(ROOT, "packages", "spec-dictionary", "out", "assets", `${d.manifest}.json`);
+            const mf = manifestPath(d.manifest);
             if (!existsSync(mf)) problems.push(`anatomy ${path} slot default: manifest "${d.manifest}" has not been built — run npm run specs:assets`);
             else {
               const doc = JSON.parse(readFileSync(mf, "utf8"));

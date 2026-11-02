@@ -1,0 +1,22 @@
+{
+  "name": "@s2a/spectrum2",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Contracts that describe Adobe's Spectrum 2 components. Evidence is read from upstream, never authored here.",
+  "type": "module",
+  "scripts": {
+    "pull": "node scripts/pull-upstream.mjs && node scripts/pull-icons.mjs",
+    "pull:icons": "node scripts/pull-icons.mjs",
+    "pull:figma": "node scripts/pull-figma.mjs"
+  },
+  "dependencies": {
+    "@adobe/spectrum-css-workflow-icons": "^5.0.0",
+    "@adobe/spectrum-design-data": "^3.7.0",
+    "@adobe/spectrum-tokens": "^15.6.0",
+    "@adobe/spectrum-wc": "^2.0.0-beta.6",
+    "@spectrum-css/badge": "^6.2.0",
+    "@spectrum-css/button": "^14.2.0",
+    "@spectrum-css/icon": "^9.2.0",
+    "@spectrum-css/tokens": "^16.0.2"
+  }
+}

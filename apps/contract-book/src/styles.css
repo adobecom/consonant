@@ -95,18 +95,12 @@ code, pre, textarea.editor__text { font-family: var(--mono); }
 .output__filehead { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--card-2); font-family: var(--mono); font-size: 12px; position: sticky; top: 0; }
 .output__filehead .size { color: var(--muted); margin-left: auto; }
 
-/* ── preview ────────────────────────────────────────────────────────────── */
-.preview { display: grid; grid-template-rows: 1fr auto; height: 100%; }
-.preview__stage { padding: 32px; overflow: auto; background:
-  radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0) 0 0 / 20px 20px; }
-.preview__host { display: inline-block; }
-.preview__host[data-theme="dark"] { background: #131313; padding: 24px; border-radius: 10px; }
-.preview__controls { border-top: 1px solid var(--line); padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 14px 22px; background: var(--card); }
-.ctl { display: flex; flex-direction: column; gap: 4px; }
-.ctl label { font-family: var(--mono); font-size: 11px; color: var(--muted); }
-.ctl select, .ctl input[type=text] { border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; background: var(--card); min-width: 120px; }
-.ctl--check { flex-direction: row; align-items: center; gap: 8px; }
-.preview__note { padding: 8px 16px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); }
+/* ── render (Storybook's frame) ─────────────────────────────────────────── */
+.render { display: flex; flex-direction: column; height: 100%; }
+.render__bar { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+.render__bar select { border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; background: var(--card); }
+/* Not interactive: the controls live in Storybook, one click away. */
+.render__frame { flex: 1; width: 100%; border: 0; background: var(--card); pointer-events: none; }
 
 /* ── receipts (refusals) ────────────────────────────────────────────────── */
 .receipts { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
@@ -174,6 +168,15 @@ code, pre, textarea.editor__text { font-family: var(--mono); }
 .pdetail__crops { display: flex; gap: 14px; flex-wrap: wrap; }
 .crop { display: flex; flex-direction: column; gap: 4px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
 .crop i { display: block; border: 1px solid var(--line); background-repeat: no-repeat; }
+/* The overlay: both crops stacked in the same box, the top one clipped. */
+.wipe { position: relative; border: 1px solid var(--line); overflow: hidden; }
+.wipe i { position: absolute; inset: 0; border: 0; }
+.wipe__top { z-index: 1; }
+.wipe__seam { position: absolute; top: 0; bottom: 0; width: 1px; z-index: 2; background: var(--accent, #3b63fb); box-shadow: 0 0 0 1px rgba(255,255,255,.6); }
+.wipe__range { margin: 2px 0 0; accent-color: var(--accent, #3b63fb); }
+.wipe__ends { font-size: 10px; letter-spacing: .02em; }
+.rail__target { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.rail__target select { flex: 1; font-family: var(--mono); font-size: 11px; }
 .finding { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 12.5px; line-height: 1.45; background: var(--card); }
 .finding__code { font-family: var(--mono); font-weight: 600; font-size: 11px; white-space: nowrap; padding-top: 2px; }
 .finding__meta { grid-column: 2; font-family: var(--mono); font-size: 11px; color: var(--muted); }

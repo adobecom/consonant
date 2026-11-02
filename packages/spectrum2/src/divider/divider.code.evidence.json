@@ -1,0 +1,674 @@
+{
+  "$schema": "s2a-code-evidence/1",
+  "extractedAt": "2026-10-29T14:10:55.590Z",
+  "extractor": {
+    "script": "packages/components/scripts/code-evidence.mjs",
+    "version": "1"
+  },
+  "component": {
+    "slug": "divider",
+    "name": "Divider",
+    "cssClass": "swc-Divider",
+    "importPath": "packages/spectrum2/src/divider/divider.js",
+    "exports": [
+      "Divider"
+    ],
+    "render": null,
+    "otherRenders": [],
+    "spec": {
+      "path": "packages/components/src/divider/divider.spec.json",
+      "storybookId": null,
+      "figmaNodeId": null
+    }
+  },
+  "sources": {
+    "packages/spectrum2/src/divider/divider.js": "sha256:0ff0a385cda8cafc715fafc051cd03da4fed161d8f29080eefb7cad07888da1b",
+    "packages/spectrum2/src/divider/divider.css": "sha256:5cf44f185faec159515879725d12521dca249791f25e6166b44d8427bb960262",
+    "packages/spectrum2/src/divider/divider.d.ts": "sha256:609941022170a9b374efd79b8fb745ddad7d6d732799b090c50d2b6680fdde63"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": "enum",
+      "values": [
+        "s",
+        "m",
+        "l"
+      ],
+      "default": "m",
+      "description": "The size of the divider."
+    },
+    {
+      "name": "vertical",
+      "type": "boolean",
+      "description": "Whether the divider is vertical. If false, the divider is horizontal. The default is false."
+    },
+    {
+      "name": "staticColor",
+      "type": "enum",
+      "values": [
+        "white",
+        "black"
+      ],
+      "optional": true,
+      "description": "The static color variant to use for the divider."
+    }
+  ],
+  "attributes": {
+    "data-style": {
+      "values": [
+        "default",
+        "inverse",
+        "knockout",
+        "subtle",
+        "subtle-inverse"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    },
+    "data-theme": {
+      "values": [
+        "dark"
+      ],
+      "dynamic": false,
+      "sources": [
+        "runtime"
+      ],
+      "onRoot": false
+    }
+  },
+  "parts": {
+    "template": [
+      "swc-Divider"
+    ],
+    "stylesheet": [
+      "swc-Divider",
+      "swc-Divider--sizeL",
+      "swc-Divider--staticBlack",
+      "swc-Divider--staticWhite",
+      "swc-Divider--vertical"
+    ],
+    "runtime": [
+      "c-divider",
+      "s2a-matrix",
+      "s2a-matrix-col",
+      "s2a-matrix-cols",
+      "s2a-matrix-corner",
+      "s2a-matrix-row",
+      "s2a-matrix-rows",
+      "s2a-matrix-wrap",
+      "s2a-matrix__cell"
+    ],
+    "own": [
+      "swc-Divider"
+    ]
+  },
+  "declarations": {
+    "element": "swc-divider",
+    "slots": [],
+    "cssProps": [
+      "--swc-divider-background-color",
+      "--swc-divider-thickness"
+    ]
+  },
+  "aria": {
+    "roles": [],
+    "attributes": [],
+    "tags": []
+  },
+  "imports": [
+    "./divider.js"
+  ],
+  "tokens": {
+    "references": {
+      "--swc-divider-background-color": {
+        "fallback": true
+      },
+      "--swc-divider-thickness": {
+        "fallback": true
+      },
+      "--swc-gray-200": {
+        "fallback": false
+      },
+      "--swc-gray-800": {
+        "fallback": false
+      }
+    },
+    "custom": [],
+    "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ":host",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "block"
+          }
+        ]
+      },
+      {
+        "selector": "*",
+        "declarations": [
+          {
+            "prop": "box-sizing",
+            "value": "border-box"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Divider",
+        "declarations": [
+          {
+            "prop": "--_swc-divider-thickness",
+            "value": "var(--swc-divider-thickness, 2px)"
+          },
+          {
+            "prop": "inline-size",
+            "value": "100%"
+          },
+          {
+            "prop": "block-size",
+            "value": "var(--_swc-divider-thickness)"
+          },
+          {
+            "prop": "background-color",
+            "value": "var(--swc-divider-background-color, var(--swc-gray-200))"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--_swc-divider-thickness)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"s\"])",
+        "declarations": [
+          {
+            "prop": "--swc-divider-thickness",
+            "value": "1px"
+          }
+        ]
+      },
+      {
+        "selector": ":host([size=\"l\"])",
+        "declarations": [
+          {
+            "prop": "--swc-divider-thickness",
+            "value": "4px"
+          },
+          {
+            "prop": "--swc-divider-background-color",
+            "value": "var(--swc-gray-800)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Divider:not(.swc-Divider--vertical)",
+        "declarations": [
+          {
+            "prop": "min-inline-size",
+            "value": "min(100%,200px)"
+          }
+        ]
+      },
+      {
+        "selector": ":host([vertical])",
+        "declarations": [
+          {
+            "prop": "align-self",
+            "value": "stretch"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Divider--vertical",
+        "declarations": [
+          {
+            "prop": "inline-size",
+            "value": "var(--_swc-divider-thickness)"
+          },
+          {
+            "prop": "block-size",
+            "value": "100%"
+          },
+          {
+            "prop": "min-block-size",
+            "value": "min(100%,200px)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Divider--staticWhite",
+        "declarations": [
+          {
+            "prop": "--swc-divider-background-color",
+            "value": "rgba(255, 255, 255, .16)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Divider--staticWhite:where(.swc-Divider--sizeL)",
+        "declarations": [
+          {
+            "prop": "--swc-divider-background-color",
+            "value": "rgba(255, 255, 255, .8)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Divider--staticBlack",
+        "declarations": [
+          {
+            "prop": "--swc-divider-background-color",
+            "value": "rgba(0, 0, 0, .12)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Divider--staticBlack:where(.swc-Divider--sizeL)",
+        "declarations": [
+          {
+            "prop": "--swc-divider-background-color",
+            "value": "rgba(0, 0, 0, .8)"
+          }
+        ]
+      },
+      {
+        "selector": ".swc-Divider",
+        "context": [
+          "@media (forced-colors:active)"
+        ],
+        "declarations": [
+          {
+            "prop": "--swc-divider-background-color",
+            "value": "CanvasText"
+          }
+        ]
+      }
+    ]
+  },
+  "states": [
+    ":active"
+  ],
+  "queries": [
+    "@media (forced-colors:active)"
+  ],
+  "stories": [
+    {
+      "id": "generated-divider--default",
+      "name": "Default",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-divider--state-matrix",
+      "name": "State matrix",
+      "args": {},
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "default",
+          "inverse",
+          "knockout",
+          "subtle",
+          "subtle-inverse"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider",
+        "s2a-matrix",
+        "s2a-matrix-col",
+        "s2a-matrix-cols",
+        "s2a-matrix-corner",
+        "s2a-matrix-row",
+        "s2a-matrix-rows",
+        "s2a-matrix-wrap",
+        "s2a-matrix__cell"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 23
+    },
+    {
+      "id": "generated-divider--style-default",
+      "name": "style: default",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-divider--style-subtle",
+      "name": "style: subtle",
+      "args": {
+        "style": "subtle"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "subtle"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-divider--style-knockout",
+      "name": "style: knockout",
+      "args": {
+        "style": "knockout"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-divider--style-inverse",
+      "name": "style: inverse",
+      "args": {
+        "style": "inverse"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "inverse"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "generated-divider--style-subtle-inverse",
+      "name": "style: subtle-inverse",
+      "args": {
+        "style": "subtle-inverse"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "subtle-inverse"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [],
+      "aria": [],
+      "interactive": [],
+      "nodes": 2
+    },
+    {
+      "id": "atoms-divider--default",
+      "name": "Default",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "default"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 3
+    },
+    {
+      "id": "atoms-divider--subtle",
+      "name": "Subtle",
+      "args": {
+        "style": "subtle"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "subtle"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 3
+    },
+    {
+      "id": "atoms-divider--knockout",
+      "name": "Knockout",
+      "args": {
+        "style": "knockout"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "knockout"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 3
+    },
+    {
+      "id": "atoms-divider--inverse",
+      "name": "Inverse",
+      "args": {
+        "style": "inverse"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-theme": [
+          "dark"
+        ],
+        "data-style": [
+          "inverse"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 3
+    },
+    {
+      "id": "atoms-divider--subtle-inverse",
+      "name": "Subtle Inverse",
+      "args": {
+        "style": "subtle-inverse"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-theme": [
+          "dark"
+        ],
+        "data-style": [
+          "subtle-inverse"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 3
+    },
+    {
+      "id": "atoms-divider--all-styles",
+      "name": "All styles",
+      "args": {
+        "style": "default"
+      },
+      "root": {
+        "tag": "div",
+        "classes": [],
+        "dataset": {}
+      },
+      "attributes": {
+        "data-style": [
+          "default",
+          "inverse",
+          "knockout",
+          "subtle",
+          "subtle-inverse"
+        ],
+        "data-theme": [
+          "dark"
+        ]
+      },
+      "rootAttributes": {},
+      "classes": [
+        "c-divider"
+      ],
+      "roles": [
+        "separator"
+      ],
+      "aria": [],
+      "interactive": [],
+      "nodes": 11
+    }
+  ],
+  "counts": {
+    "props": 3,
+    "attributes": 2,
+    "parts": 1,
+    "tokenReferences": 4,
+    "tokenReferencesWithoutFallback": 2,
+    "raw": 0,
+    "stories": 13,
+    "storiesWithErrors": 0
+  },
+  "provenance": {
+    "hash": "sha256:fb76fe5cfc531f2d984741b980fdb1cce7c6a63710a36401b64c4e3455eaba78"
+  }
+}

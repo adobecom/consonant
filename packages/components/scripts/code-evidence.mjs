@@ -21,18 +21,26 @@
 //   --dry-run           report without writing evidence files
 // See docs/future-notes/s2a-contract-system-plan.md (step 2).
 import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
+import postcss from "postcss";
 import { createHash } from "node:crypto";
-import { join, dirname, resolve, extname } from "node:path";
+import { join, dirname, resolve, extname, relative, sep} from "node:path";
 import { fileURLToPath } from "node:url";
 import http from "node:http";
 
 export const EVIDENCE_SCHEMA = "s2a-code-evidence/1";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..", "..", "..");
-const SRC = join(ROOT, "packages", "components", "src");
 const args = process.argv.slice(2);
 const flag = (name) => args.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
 const has = (name) => args.includes(`--${name}`);
+// Which component tree, and whose tokens. Both default to S2A, so every existing
+// call is unchanged; a second design system passes its own.
+//   --root=packages/spectrum2/src --ns=spectrum
+const SRC = resolve(ROOT, flag("root") ?? join("packages", "components", "src"));
+const NS = flag("ns") ?? "s2a";
+// Evidence records repo-relative paths; the gate re-reads them to decide freshness,
+// so they have to follow --root rather than name one tree.
+const REL = relative(ROOT, SRC).split(sep).join("/");
 
 const sha256 = (text) => "sha256:" + createHash("sha256").update(text).digest("hex");
 const alnum = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -143,6 +151,123 @@ export function parseProps(js, preferredName) {
   return { render: pick.name, props: pick.props, otherRenders: candidates.filter((c) => c !== pick).map((c) => c.name) };
 }
 
+/**
+ * The prop surface of a Lit web component, read from its shipped .d.ts.
+ *
+ * parseProps above reads a render function — `export const Button = ({...}) =>`.
+ * A web component has none: the compiled class is minified and its properties
+ * are installed by decorators, so that reader finds nothing and the contract
+ * looks propless. The declaration file states each public property with its
+ * type, and the sibling `.types.d.ts` states the exact set each type admits:
+ *
+ *   export declare const BUTTON_VARIANTS: readonly ["primary", "secondary", …];
+ *   export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
+ *   export declare class Button extends … { variant: ButtonVariant; }
+ *
+ * so `variant` comes back with its four values. A declaration file is part of
+ * the package's published contract, which makes it better evidence than a
+ * Storybook template — it cannot drift from the implementation without a
+ * release. Properties marked `@internal`, and anything `protected`/`private`
+ * or a method, are not public surface and are skipped.
+ */
+export function parseDts(dts) {
+  const text = String(dts ?? "");
+  // The enums first: a type alias pointing at a `readonly [...]` const.
+  const consts = new Map();
+  // `readonly` is usual but not universal: DIVIDER_VALID_SIZES is a plain tuple.
+  for (const m of text.matchAll(/declare const (\w+)\s*:\s*(?:readonly )?\[([^\]]*)\]/g)) {
+    // Members are quoted strings in most of these, but a numeric scale is
+    // written bare — AVATAR_VALID_SIZES is `readonly [50, 75, 100, …]`. Reading
+    // only the quoted ones lost the whole size axis, and the doc comment in
+    // front of it then attached itself to the next property as a default.
+    const values = [...m[2].matchAll(/["']([^"']+)["']|(-?\d+(?:\.\d+)?)/g)].map((v) => v[1] ?? v[2]);
+    if (values.length) consts.set(m[1], values);
+  }
+  const aliases = new Map();
+  for (const m of text.matchAll(/type (\w+)\s*=\s*\(typeof (\w+)\)\[number\]/g)) {
+    if (consts.has(m[2])) aliases.set(m[1], consts.get(m[2]));
+  }
+  // Then the declared properties of every class in the file, base classes
+  // included — they are vendored alongside precisely so inherited props count.
+  const props = new Map();
+  // Classes and the mixin interfaces they compose. A Lit component's public
+  // surface is spread across both: `size` and `disabled` come from the base
+  // class, `pending` from a mixin's interface.
+  const blocks = [
+    ...text.matchAll(/declare (?:abstract )?class \w+ extends [^{]*\{([\s\S]*?)\n\}/g),
+    ...text.matchAll(/(?:export )?interface \w+(?:\s+extends [^{]*)?\s*\{([\s\S]*?)\n\}/g),
+  ];
+  for (const cls of blocks) {
+    const body = cls[1];
+    // An accessor pair is a property too: `get size(): AvatarSize;` with a
+    // matching setter is how a reactive property with validation is declared,
+    // and reading only `name: Type;` lost the whole size axis. Worse, the doc
+    // comment in front of the getter then attached itself to the next real
+    // property, so `outline` came back with the size's `@default 500`.
+    for (const m of body.matchAll(/(\/\*\*(?:[^*]|\*(?!\/))*\*\/)?\s*((?:readonly|protected|private|abstract|static)\s+)*get\s+([A-Za-z_]\w*)\s*\(\s*\)\s*:\s*([^;{]+)[;{]/g)) {
+      const [, doc = "", modifiers = "", name, rawType] = m;
+      if (/@internal/.test(doc) || props.has(name)) continue;
+      // `static get styles()` is the component's own stylesheet, and a
+      // protected accessor like `hasIcon` is internal bookkeeping. Neither is
+      // public surface a contract can bind to.
+      if (/\b(static|protected|private)\b/.test(modifiers)) continue;
+      const type = rawType.trim();
+      const entry = { name };
+      const values = aliases.get(type) ?? (type.match(/^\(typeof (\w+)\)\[number\]$/) ? consts.get(type.match(/^\(typeof (\w+)\)\[number\]$/)[1]) : undefined);
+      if (values) { entry.type = "enum"; entry.values = values; }
+      else entry.type = type === "boolean" || type === "string" || type === "number" ? type : type;
+      const def = doc.match(/@default\s+(\S+)/)?.[1];
+      if (def !== undefined) entry.default = def;
+      const docLine = doc.replace(/\/\*\*|\*\//g, "").split("\n").map((l) => l.replace(/^\s*\*\s?/, "").trim())
+        .filter((l) => l && !l.startsWith("@")).join(" ").trim();
+      if (docLine) entry.description = docLine;
+      props.set(name, entry);
+    }
+    // Walk declaration by declaration so the doc comment in front of each one
+    // stays attached to it; `@internal` and `@default` both live there.
+    for (const m of body.matchAll(/(\/\*\*(?:[^*]|\*(?!\/))*\*\/)?\s*((?:static|readonly|protected|private|abstract|declare)\s+)*([A-Za-z_]\w*)(\?)?\s*:\s*([^;=]+);/g)) {
+      const [, doc = "", modifiers = "", name, optional, rawType] = m;
+      if (/@internal/.test(doc)) continue;
+      // Not public surface. `protected`/`private` sit between the doc comment
+      // and the name, so an @internal tag on such a member can be missed if the
+      // modifiers are not read — which is how slotPresence and slotText first
+      // came through as props.
+      if (/\b(protected|private|static)\b/.test(modifiers)) continue;
+      // A method signature, not a property: `update(changed: PropertyValues): void`
+      // parses as name `changed` with a type ending in `)`. The one legitimate
+      // type with brackets is an inline enum, `(typeof ICON_VALID_SIZES)[number]`,
+      // so that shape is allowed through and everything else with brackets is not.
+      if (/[()]/.test(rawType) && !/^\(typeof \w+\)\[number\]$/.test(rawType.trim())) continue;
+      const type = rawType.trim();
+      if (!type) continue;
+      // `size: BadgeSize` goes through the alias table; `size: (typeof
+      // ICON_VALID_SIZES)[number]` names the const inline and needs no alias.
+      const inline = type.match(/^\(typeof (\w+)\)\[number\]$/);
+      const values = aliases.get(type) ?? (inline ? consts.get(inline[1]) : undefined);
+      const entry = { name };
+      if (values) { entry.type = "enum"; entry.values = values; }
+      else if (type === "boolean") entry.type = "boolean";
+      else if (type === "string") entry.type = "string";
+      else if (type === "number") entry.type = "number";
+      else entry.type = type;
+      const def = doc.match(/@default\s+(\S+)/)?.[1];
+      if (def !== undefined) entry.default = def;
+      if (optional) entry.optional = true;
+      const docLine = doc.replace(/\/\*\*|\*\//g, "").split("\n").map((l) => l.replace(/^\s*\*\s?/, "").trim())
+        .filter((l) => l && !l.startsWith("@")).join(" ").trim();
+      if (docLine) entry.description = docLine;
+      props.set(name, entry);
+    }
+  }
+  // The documented custom properties, which are the supported override seam.
+  const cssProps = [...text.matchAll(/@cssprop\s+(--[\w-]+)/g)].map((m) => m[1]);
+  // Slots, so a contract can check its own anatomy against them.
+  const slots = [...text.matchAll(/@slot\s*(\S*)\s*-\s*([^\n*]+)/g)]
+    .map((m) => ({ name: m[1] || "default", description: m[2].trim() }));
+  const element = text.match(/@element\s+([\w-]+)/)?.[1] ?? null;
+  return { props: [...props.values()], cssProps: uniq(cssProps), slots, element };
+}
+
 export function parseTemplate(js) {
   const attributes = {};
   for (const m of js.matchAll(/\bdata-([a-z][a-z0-9-]*)\s*=\s*("([^"]*)"|'([^']*)'|\$\{)/g)) {
@@ -166,14 +291,89 @@ export function parseTemplate(js) {
 
 const TOKEN_PROPS = /^(background(-color)?|color|border(-color|-top|-bottom|-left|-right)?|outline(-color)?|box-shadow|fill|stroke|font-size|padding(-[a-z-]+)?|margin(-[a-z-]+)?|gap|row-gap|column-gap|border-radius|border-(?:start|end)-(?:start|end)-radius)$/;
 
-export function parseCss(css) {
+/**
+ * The stylesheet as structure: every rule, with its selector, the at-rules it
+ * sits inside, and its declarations in order.
+ *
+ * parseCss below reads the sheet as a bag — which token names appear, which
+ * classes, which pseudo-states — and that was enough while the only consumer
+ * was a conformance check. It is not enough to derive a contract. A contract
+ * needs to know that `--swc-avatar-size-500` is set under `:host([size="500"])`,
+ * that `outline` applies to `.swc-Avatar-image` only when `[outline]` is on the
+ * host, that the 2px step lives under six size selectors. The bag loses all of
+ * that, so for a library we did not write, four contracts had to be read out of
+ * the CSS by hand. This keeps what the bag drops. Nothing the bag reported
+ * changes; this is a field added beside it.
+ *
+ * postcss rather than regex because selectors nest, at-rules nest, values carry
+ * commas and parentheses, and a minified Lit sheet puts a whole component on one
+ * line. A parse failure is recorded, not thrown: the rest of the evidence is
+ * still worth having.
+ */
+export function cssRules(css) {
+  let root;
+  try { root = postcss.parse(css); }
+  catch (e) { return { rules: [], error: e instanceof Error ? e.message : String(e) }; }
+  const rules = [];
+  // A nested rule (`.a { &:hover {…} }`) is recorded flat, with `&` resolved,
+  // so a reader never has to know the sheet was nested. Each alternative of the
+  // parent list combines with each alternative of the child's.
+  const resolved = (rule) => {
+    const own = splitTop(rule.selector);
+    const parent = rule.parent && rule.parent.type === "rule" ? resolved(rule.parent) : null;
+    if (!parent) return own;
+    const out = [];
+    for (const p of parent) for (const c of own) out.push(c.includes("&") ? c.replace(/&/g, p) : `${p} ${c}`);
+    return out;
+  };
+  root.walkRules((rule) => {
+    const context = [];
+    for (let p = rule.parent; p && p.type !== "root"; p = p.parent) {
+      if (p.type === "atrule") context.unshift(`@${p.name}${p.params ? " " + p.params : ""}`);
+    }
+    const nested = rule.parent && rule.parent.type === "rule";
+    const declarations = [];
+    rule.each((node) => {
+      if (node.type !== "decl") return;
+      declarations.push({ prop: node.prop, value: node.value, ...(node.important ? { important: true } : {}) });
+    });
+    if (!declarations.length) return;
+    rules.push({
+      selector: nested ? resolved(rule).join(", ") : rule.selector,
+      ...(nested ? { nestedIn: rule.parent.selector } : {}),
+      ...(context.length ? { context } : {}),
+      declarations,
+    });
+  });
+  return { rules };
+}
+
+/** Split a selector list on top-level commas (parens and brackets protect). */
+function splitTop(selector) {
+  const out = [];
+  let depth = 0, cur = "";
+  for (const ch of String(selector)) {
+    if (ch === "(" || ch === "[") depth++;
+    else if (ch === ")" || ch === "]") depth--;
+    if (ch === "," && depth === 0) { out.push(cur.trim()); cur = ""; continue; }
+    cur += ch;
+  }
+  if (cur.trim()) out.push(cur.trim());
+  return out;
+}
+
+export function parseCss(css, ns = "s2a") {
   const references = new Map();
-  for (const m of css.matchAll(/var\((--s2a-[a-z0-9_-]+)\s*(,)?/g)) {
+  for (const m of css.matchAll(new RegExp(`var\\((--${ns}-[a-z0-9_-]+)\\s*(,)?`, "g"))) {
     const prev = references.get(m[1]);
     references.set(m[1], { fallback: (prev?.fallback ?? true) && Boolean(m[2]) });
   }
   const custom = uniq([...css.matchAll(/^\s*(--[a-z][a-z0-9-]*)\s*:/gm)].map((m) => m[1]));
-  const classes = uniq([...css.matchAll(/\.([a-zA-Z_][\w-]*)/g)].map((m) => m[1]));
+  // Classes come from selectors only. A comment is prose, and prose has dots in
+  // it — a licence header's apache.org yields "org", a note naming QuoteCard
+  // yields a part that does not exist. The scaffolder learned this separately;
+  // this is the same rule in the second place that needs it.
+  const classes = uniq([...css.replace(/\/\*[\s\S]*?\*\//g, "").matchAll(/\.([a-zA-Z_][\w-]*)/g)].map((m) => m[1]));
   const attributes = {};
   for (const m of css.matchAll(/\[(data-[a-z0-9-]+)(?:\s*[~|^$*]?=\s*"?([^"\]]*)"?)?\]/g)) {
     const entry = (attributes[m[1]] ??= { values: new Set(), dynamic: false, sources: new Set() });
@@ -193,7 +393,9 @@ export function parseCss(css) {
     if (/Primitive:|Figma|spec|golden|Milo|\d+:\d+/i.test(context)) return;
     raw.push({ line: i + 1, declaration: line.trim() });
   });
-  return { references: Object.fromEntries([...references].sort()), custom, classes, attributes, states, queries, raw };
+  const structured = cssRules(css);
+  return { references: Object.fromEntries([...references].sort()), custom, classes, attributes, states, queries, raw,
+    rules: structured.rules, ...(structured.error ? { rulesError: structured.error } : {}) };
 }
 
 // sources: template | stylesheet | runtime; onRoot marks attributes seen on
@@ -220,25 +422,51 @@ export function staticEvidence(slug) {
   const dir = join(SRC, slug);
   // spec.json is generated from this evidence (packages/spec-dictionary), so it is read
   // for identity but never hashed as a source: that would be circular.
-  const files = ["index.js", `${slug}.js`, `${slug}.css`].filter((f) => existsSync(join(dir, f)));
-  const sources = Object.fromEntries(files.map((f) => [`packages/components/src/${slug}/${f}`, sha256(readFileSync(join(dir, f), "utf8"))]));
+  // .d.ts is hashed like any other source: for a web component it is where the
+  // prop surface is read from, so an upstream release that changes it must show
+  // up as stale evidence rather than pass unnoticed.
+  const files = ["index.js", `${slug}.js`, `${slug}.css`, `${slug}.d.ts`].filter((f) => existsSync(join(dir, f)));
+  const sources = Object.fromEntries(files.map((f) => [`${REL}/${slug}/${f}`, sha256(readFileSync(join(dir, f), "utf8"))]));
   const spec = existsSync(join(dir, `${slug}.spec.json`)) ? JSON.parse(readFileSync(join(dir, `${slug}.spec.json`), "utf8")) : null;
   const js = existsSync(join(dir, `${slug}.js`)) ? readFileSync(join(dir, `${slug}.js`), "utf8") : "";
   const css = existsSync(join(dir, `${slug}.css`)) ? readFileSync(join(dir, `${slug}.css`), "utf8") : "";
   const exports = parseExports(js);
-  const { render, props, otherRenders } = parseProps(js, spec?.name ?? slug);
+  // Which export is the component. The definition says so outright when it
+  // exists, and it is the only reliable answer when the export is not named
+  // after the component — Spectrum's templates are all called `Template`, and
+  // a name-based guess picks whichever helper happens to contain the word.
+  const defsForName = existsSync(join(dir, `${slug}.defs.json`)) ? JSON.parse(readFileSync(join(dir, `${slug}.defs.json`), "utf8")) : null;
+  const preferredExport = defsForName?.anchors?.code?.export ?? spec?.name ?? slug;
+  let { render, props, otherRenders } = parseProps(js, preferredExport);
   const template = parseTemplate(js);
-  const style = parseCss(css);
-  const cssClass = spec?.cssClass ?? template.classes.find((c) => c.startsWith("c-")) ?? null;
+  const style = parseCss(css, NS);
+  // A web component declares its props in its .d.ts, not in a render function.
+  // Only consulted when the render reader found none, so nothing about an S2A
+  // component changes.
+  const dtsPath = join(dir, `${slug}.d.ts`);
+  const declarations = !props?.length && existsSync(dtsPath) ? parseDts(readFileSync(dtsPath, "utf8")) : null;
+  if (declarations?.props.length) {
+    // Slots are part of the surface too. A web component takes its visible text
+    // through a slot rather than a property — Spectrum 2's button has a default
+    // slot documented as "Visible button label" — so a contract that binds a
+    // label has something real to point `code.prop` at. Without this the only
+    // way to render any text was a prop upstream does not have.
+    props = [...declarations.props, ...declarations.slots.map((sl) => ({ name: sl.name, type: "slot", description: sl.description }))];
+  }
+  const cssClass = defsForName?.anchors?.code?.cssClass ?? spec?.cssClass ?? template.classes.find((c) => c.startsWith("c-")) ?? null;
   return {
-    component: { slug, name: spec?.name ?? render ?? slug, cssClass, importPath: `packages/components/src/${slug}/${slug}.js`, exports, render, otherRenders: otherRenders ?? [], spec: spec ? { path: `packages/components/src/${slug}/${slug}.spec.json`, storybookId: spec.storybookId ?? null, figmaNodeId: spec.figmaNodeId ?? null } : null },
+    component: { slug, name: spec?.name ?? render ?? slug, cssClass, importPath: `${REL}/${slug}/${slug}.js`, exports, render, otherRenders: otherRenders ?? [], spec: spec ? { path: `packages/components/src/${slug}/${slug}.spec.json`, storybookId: spec.storybookId ?? null, figmaNodeId: spec.figmaNodeId ?? null } : null },
     sources,
     props,
     attributes: mergeAttributes(template.attributes, style.attributes),
     parts: { template: template.classes, stylesheet: style.classes },
+    ...(declarations ? { declarations: { element: declarations.element, slots: declarations.slots, cssProps: declarations.cssProps } } : {}),
     aria: { roles: template.roles, attributes: template.aria, tags: template.tags },
     imports: template.imports,
     tokens: { references: style.references, custom: style.custom, raw: style.raw },
+    // The sheet as rules, so a contract can be derived from the implementation
+    // rather than only checked against it. See cssRules.
+    stylesheet: { rules: style.rules, ...(style.rulesError ? { error: style.rulesError } : {}) },
     states: style.states,
     queries: style.queries,
   };
@@ -369,7 +597,7 @@ async function main() {
       const sameSources = JSON.stringify(previousSources) === JSON.stringify(evidence.sources ?? null);
       const status = previous === hash && sameSources ? "IN-SYNC" : previous ? "UPDATED" : "NEW";
       if (status !== "IN-SYNC" && !has("dry-run")) writeFileSync(file, JSON.stringify(evidence, null, 2) + "\n");
-      results.push({ slug, status, hash, counts: evidence.counts, file: `packages/components/src/${slug}/${slug}.code.evidence.json` });
+      results.push({ slug, status, hash, counts: evidence.counts, file: `${REL}/${slug}/${slug}.code.evidence.json` });
     }
   } finally {
     await browser?.close(); server?.close();

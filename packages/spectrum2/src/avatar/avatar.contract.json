@@ -1,0 +1,328 @@
+{
+  "$schema": "../../../spec-dictionary/southleft/contract.schema.json",
+  "id": "spectrum.avatar",
+  "name": "Avatar",
+  "version": "2.0.0",
+  "status": "draft",
+  "description": "A person or entity, as a circular image. Static: it is a picture, not a control.",
+  "archetype": "avatar",
+  "semantics": {
+    "element": "span"
+  },
+  "props": [
+    {
+      "name": "size",
+      "type": {
+        "enum": [
+          "50",
+          "75",
+          "100",
+          "200",
+          "300",
+          "400",
+          "500",
+          "600",
+          "700",
+          "800",
+          "900",
+          "1000",
+          "1100",
+          "1200",
+          "1300",
+          "1400",
+          "1500"
+        ]
+      },
+      "description": "Seventeen rungs. The design file labels each with its pixel box, 50 (16x16); the code value is the rung alone.",
+      "default": "\"500\"",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "valueMap": {
+            "50": "50 (16x16)",
+            "75": "75 (20x20)",
+            "100": "100 (24x24)",
+            "200": "200 (28x28)",
+            "300": "300 (32x32)",
+            "400": "400 (36x36)",
+            "500": "500 (40x40)",
+            "600": "600 (44x44)",
+            "700": "700 (48x48)",
+            "800": "800 (52x52)",
+            "900": "900 (56x56)",
+            "1000": "1000 (64x64)",
+            "1100": "1100 (72x72)",
+            "1200": "1200 (80x80)",
+            "1300": "1300 (88x88)",
+            "1400": "1400 (96x96)",
+            "1500": "1500 (104x104)"
+          }
+        },
+        "code": {
+          "prop": "size"
+        }
+      }
+    },
+    {
+      "name": "src",
+      "type": "text",
+      "description": "URL of the image. The design file has no counterpart: it draws sample content instead.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "src"
+        }
+      }
+    },
+    {
+      "name": "alt",
+      "type": "text",
+      "description": "Describes the person or entity. An empty string marks the image decorative and hides it from assistive technology.",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "alt"
+        }
+      }
+    },
+    {
+      "name": "outline",
+      "type": "boolean",
+      "description": "A ring around the image, for avatars that overlap or sit on a busy ground.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "BOOLEAN",
+          "property": "Show stroke"
+        },
+        "code": {
+          "prop": "outline"
+        }
+      }
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "State",
+          "valueMap": {
+            "true": "Disabled",
+            "false": "Default"
+          }
+        },
+        "code": {
+          "prop": "disabled"
+        }
+      }
+    },
+    {
+      "name": "decorative",
+      "type": "boolean",
+      "description": "Hides the image from assistive technology without clearing alt.",
+      "default": "false",
+      "bindings": {
+        "figma": {
+          "kind": "NONE",
+          "property": "—"
+        },
+        "code": {
+          "prop": "decorative"
+        }
+      }
+    }
+  ],
+  "states": [
+    "disabled"
+  ],
+  "anatomy": {
+    "root": {
+      "element": "span",
+      "tokens": {
+        "inline-size": "{swc.avatar.size.500}",
+        "block-size": "{swc.avatar.size.500}"
+      },
+      "literals": {
+        "display": "inline-block",
+        "box-sizing": "border-box",
+        "border-radius": "50%",
+        "user-select": "none"
+      },
+      "states": {
+        "disabled": {
+          "opacity": "{swc.avatar.opacity.disabled}"
+        }
+      },
+      "tokensByProp": [
+        {
+          "prop": "size",
+          "map": {
+            "50": {
+              "inline-size": "{swc.avatar.size.50}",
+              "block-size": "{swc.avatar.size.50}"
+            },
+            "75": {
+              "inline-size": "{swc.avatar.size.75}",
+              "block-size": "{swc.avatar.size.75}"
+            },
+            "100": {
+              "inline-size": "{swc.avatar.size.100}",
+              "block-size": "{swc.avatar.size.100}"
+            },
+            "200": {
+              "inline-size": "{swc.avatar.size.200}",
+              "block-size": "{swc.avatar.size.200}"
+            },
+            "300": {
+              "inline-size": "{swc.avatar.size.300}",
+              "block-size": "{swc.avatar.size.300}"
+            },
+            "400": {
+              "inline-size": "{swc.avatar.size.400}",
+              "block-size": "{swc.avatar.size.400}"
+            },
+            "500": {
+              "inline-size": "{swc.avatar.size.500}",
+              "block-size": "{swc.avatar.size.500}"
+            },
+            "600": {
+              "inline-size": "{swc.avatar.size.600}",
+              "block-size": "{swc.avatar.size.600}"
+            },
+            "700": {
+              "inline-size": "{swc.avatar.size.700}",
+              "block-size": "{swc.avatar.size.700}"
+            },
+            "800": {
+              "inline-size": "{swc.avatar.size.800}",
+              "block-size": "{swc.avatar.size.800}"
+            },
+            "900": {
+              "inline-size": "{swc.avatar.size.900}",
+              "block-size": "{swc.avatar.size.900}"
+            },
+            "1000": {
+              "inline-size": "{swc.avatar.size.1000}",
+              "block-size": "{swc.avatar.size.1000}"
+            },
+            "1100": {
+              "inline-size": "{swc.avatar.size.1100}",
+              "block-size": "{swc.avatar.size.1100}"
+            },
+            "1200": {
+              "inline-size": "{swc.avatar.size.1200}",
+              "block-size": "{swc.avatar.size.1200}"
+            },
+            "1300": {
+              "inline-size": "{swc.avatar.size.1300}",
+              "block-size": "{swc.avatar.size.1300}"
+            },
+            "1400": {
+              "inline-size": "{swc.avatar.size.1400}",
+              "block-size": "{swc.avatar.size.1400}"
+            },
+            "1500": {
+              "inline-size": "{swc.avatar.size.1500}",
+              "block-size": "{swc.avatar.size.1500}"
+            }
+          }
+        }
+      ],
+      "parts": {
+        "image": {
+          "element": "img",
+          "literals": {
+            "display": "block",
+            "inline-size": "100%",
+            "block-size": "100%",
+            "border-radius": "50%",
+            "object-fit": "cover"
+          },
+          "slot": {
+            "name": "image",
+            "accepts": [
+              "kind:media"
+            ],
+            "acceptsMode": "prefer",
+            "defaultContent": [
+              {
+                "id": "figma:/Photo",
+                "props": {
+                  "figma": "/Photo",
+                  "src": "assets/avatar-sample.png"
+                }
+              }
+            ]
+          },
+          "tokensByProp": [
+            {
+              "prop": "outline",
+              "map": {
+                "true": {
+                  "outline-width": "{swc.border.width.100}",
+                  "outline-color": "{swc.gray.25}"
+                }
+              }
+            }
+          ],
+          "literalsByProp": [
+            {
+              "prop": "outline",
+              "map": {
+                "true": {
+                  "outline-style": "solid"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "a11y": {
+    "contrast": "AA",
+    "wcag": [
+      "1.1.1",
+      "1.4.3",
+      "1.4.11"
+    ],
+    "notes": [
+      "An image, not a control. It renders <img> and takes no focus.",
+      "alt describes the person or entity; alt=\"\" or decorative marks it decorative and hides it from assistive technology.",
+      "Disabled dims the image; it conveys no state to assistive technology because the avatar is not interactive."
+    ]
+  },
+  "bindings": {
+    "figma": {
+      "anchors": {
+        "fileKey": "xHBWBBIe2eo5vwoCeNrC4Q",
+        "componentSetKey": "e97d19aa739914d2acce9f5c3a4ee9f81c5c2d7f",
+        "nodeId": "9190:562"
+      }
+    },
+    "code": {
+      "anchors": {
+        "importPath": "@adobe/spectrum-wc/components/avatar",
+        "export": "Avatar"
+      }
+    }
+  },
+  "provenance": {
+    "version": 1,
+    "canonicalRevision": "sha256:3e69554bd48d973ead0d37986fd08928c18e7a032112ec54d4adc06c0d1fb9ed",
+    "source": {
+      "kind": "code",
+      "adapter": "s2a-spec-transform@1",
+      "revision": "sha256:deef533f3c58405abcd15df95b78857bf62e9ab5deab9502e7526ef7b3b5f8f1"
+    }
+  }
+}

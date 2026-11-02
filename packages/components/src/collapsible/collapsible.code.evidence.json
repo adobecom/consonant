@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:31:29.647Z",
+  "extractedAt": "2026-10-28T16:23:06.658Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -170,6 +170,125 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-collapsible",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "block"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "selector": ".c-collapsible__trigger",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "space-between"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-xs)"
+          },
+          {
+            "prop": "cursor",
+            "value": "pointer"
+          },
+          {
+            "prop": "list-style",
+            "value": "none"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-collapsible__trigger::-webkit-details-marker",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-collapsible__label",
+        "declarations": [
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-label)"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-label)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-font-size-sm)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-font-line-height-xs)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-collapsible__chevron",
+        "declarations": [
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-default)"
+          },
+          {
+            "prop": "transition",
+            "value": "transform 200ms ease"
+          }
+        ]
+      },
+      {
+        "selector": ".c-collapsible[open] .c-collapsible__chevron",
+        "declarations": [
+          {
+            "prop": "transform",
+            "value": "rotate(180deg)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-collapsible__content",
+        "declarations": [
+          {
+            "prop": "margin-top",
+            "value": "var(--s2a-spacing-sm)"
+          }
+        ]
+      }
+    ]
   },
   "states": [],
   "queries": [],
@@ -1128,7 +1247,7 @@
             "\n        alt=\"GenStudio product walkthrough\"\n        style=\"width: 100%; max-width: 420px; display: block; border-radius: var(--s2a-border-radius-xs);\"\n      />\n    "
           ],
           "values": [
-            "http://127.0.0.1:57477/assets/elastic-card-genstudio-B4_nyhG4.jpg"
+            "http://127.0.0.1:58349/assets/elastic-card-genstudio-B4_nyhG4.jpg"
           ]
         }
       },
@@ -1167,6 +1286,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:19cf12c3182bcc069a3d4dc11236e6452a4f1de0056da16c9cbc864f87bce97b"
+    "hash": "sha256:baffcc4e09f6b66d057e9ae8ea244a3afa1f7359b9faea77752b4d0f0a1f6e2a"
   }
 }

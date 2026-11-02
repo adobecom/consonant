@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:31:57.376Z",
+  "extractedAt": "2026-10-28T16:26:38.172Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -115,7 +115,7 @@
     },
     "data-load-state": {
       "values": [
-        "loaded"
+        "error"
       ],
       "dynamic": false,
       "sources": [
@@ -198,8 +198,7 @@
       "c-product-lockup__icon",
       "c-product-lockup__icons",
       "c-product-lockup__label",
-      "c-product-lockup__label-row",
-      "icons"
+      "c-product-lockup__label-row"
     ],
     "runtime": [
       "c-app-icon",
@@ -224,8 +223,7 @@
       "c-product-lockup__icons",
       "c-product-lockup__label",
       "c-product-lockup__label-row",
-      "c-product-lockup__s2a-icon-chevron-right",
-      "icons"
+      "c-product-lockup__s2a-icon-chevron-right"
     ]
   },
   "aria": {
@@ -290,6 +288,321 @@
     },
     "custom": [],
     "raw": []
+  },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-product-lockup",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-md)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-label)"
+          },
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-default)"
+          },
+          {
+            "prop": "text-decoration",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-orientation=\"vertical\"]",
+        "declarations": [
+          {
+            "prop": "flex-direction",
+            "value": "column"
+          },
+          {
+            "prop": "align-items",
+            "value": "flex-start"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-sm)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-style=\"eyebrow\"]",
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-eyebrow)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-style=\"knockout\"]",
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-knockout)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-style=\"inverse\"]",
+        "declarations": [
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-inverse)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-width=\"fill\"]",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup__icons",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-3xs)"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup__icon",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup__label-row",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-2xs)"
+          },
+          {
+            "prop": "min-width",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup__label",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "min-width",
+            "value": "0"
+          },
+          {
+            "prop": "color",
+            "value": "inherit"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-label)"
+          },
+          {
+            "prop": "text-box",
+            "value": "trim-both cap text"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-style=\"label\"] .c-product-lockup__label,\n.c-product-lockup[data-style=\"knockout\"] .c-product-lockup__label,\n.c-product-lockup[data-style=\"inverse\"] .c-product-lockup__label",
+        "declarations": [
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-font-size-sm)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-font-line-height-2xs)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-font-letter-spacing-6xl)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-style=\"eyebrow\"] .c-product-lockup__label",
+        "declarations": [
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-font-size-md)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-font-line-height-sm)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-font-letter-spacing-6xl)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-orientation=\"horizontal\"] .c-product-lockup__label",
+        "declarations": [
+          {
+            "prop": "white-space",
+            "value": "nowrap"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-orientation=\"vertical\"] .c-product-lockup__label",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "block"
+          },
+          {
+            "prop": "white-space",
+            "value": "normal"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-width=\"fill\"] .c-product-lockup__label",
+        "declarations": [
+          {
+            "prop": "flex",
+            "value": "1"
+          },
+          {
+            "prop": "overflow",
+            "value": "hidden"
+          },
+          {
+            "prop": "text-overflow",
+            "value": "ellipsis"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-orientation=\"vertical\"][data-width=\"fill\"]\n  .c-product-lockup__label-row",
+        "declarations": [
+          {
+            "prop": "width",
+            "value": "100%"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup__caret",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "inline-flex"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          },
+          {
+            "prop": "justify-content",
+            "value": "center"
+          },
+          {
+            "prop": "flex-shrink",
+            "value": "0"
+          },
+          {
+            "prop": "color",
+            "value": "inherit"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup__caret svg",
+        "declarations": [
+          {
+            "prop": "width",
+            "value": "6px"
+          },
+          {
+            "prop": "height",
+            "value": "6px"
+          },
+          {
+            "prop": "display",
+            "value": "block"
+          }
+        ]
+      },
+      {
+        "selector": ".c-product-lockup[data-width=\"fill\"][data-orientation=\"horizontal\"][data-has-caret=\"true\"]\n  .c-product-lockup__caret",
+        "declarations": [
+          {
+            "prop": "margin-left",
+            "value": "auto"
+          }
+        ]
+      }
+    ]
   },
   "states": [],
   "queries": [],
@@ -1539,7 +1852,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -1623,7 +1936,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -1707,7 +2020,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -1791,7 +2104,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -1875,7 +2188,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -1959,7 +2272,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -2044,7 +2357,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -2201,7 +2514,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -2284,7 +2597,7 @@
           "24"
         ],
         "data-load-state": [
-          "loaded"
+          "error"
         ]
       },
       "rootAttributes": {
@@ -2326,7 +2639,7 @@
   "counts": {
     "props": 13,
     "attributes": 8,
-    "parts": 10,
+    "parts": 9,
     "tokenReferences": 15,
     "tokenReferencesWithoutFallback": 15,
     "raw": 0,
@@ -2334,6 +2647,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:907288e099ed83b3b0e52beeb517273e2c4475f6d22951a953bb412fcbced8ea"
+    "hash": "sha256:c772bf971ff3f0ca85c9cca8636da958d7d0573b06c6e9af7be69fddb04cd40b"
   }
 }

@@ -1,6 +1,6 @@
 {
   "$schema": "s2a-code-evidence/1",
-  "extractedAt": "2026-10-23T16:30:20.361Z",
+  "extractedAt": "2026-10-28T16:26:45.940Z",
   "extractor": {
     "script": "packages/components/scripts/code-evidence.mjs",
     "version": "1"
@@ -280,6 +280,382 @@
     "custom": [],
     "raw": []
   },
+  "stylesheet": {
+    "rules": [
+      {
+        "selector": ".c-quote-card",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "relative"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          },
+          {
+            "prop": "overflow",
+            "value": "clip"
+          },
+          {
+            "prop": "border-radius",
+            "value": "var(--s2a-border-radius-md)"
+          },
+          {
+            "prop": "aspect-ratio",
+            "value": "1480 / 824"
+          },
+          {
+            "prop": "container-type",
+            "value": "inline-size"
+          },
+          {
+            "prop": "display",
+            "value": "grid"
+          },
+          {
+            "prop": "align-items",
+            "value": "center"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-media",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "inset",
+            "value": "0"
+          },
+          {
+            "prop": "overflow",
+            "value": "hidden"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-media__img",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "block"
+          },
+          {
+            "prop": "width",
+            "value": "100%"
+          },
+          {
+            "prop": "height",
+            "value": "100%"
+          },
+          {
+            "prop": "object-fit",
+            "value": "cover"
+          },
+          {
+            "prop": "object-position",
+            "value": "center"
+          },
+          {
+            "prop": "pointer-events",
+            "value": "none"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-media__overlay",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "inset",
+            "value": "0"
+          },
+          {
+            "prop": "background",
+            "value": "linear-gradient(\n    139.85deg,\n    var(--s2a-color-transparent-black-64) 0%,\n\n    var(--s2a-color-transparent-black-16) 100%\n  )"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-content",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "relative"
+          },
+          {
+            "prop": "margin",
+            "value": "var(--s2a-spacing-4xl)"
+          },
+          {
+            "prop": "width",
+            "value": "min(532px, calc(100% - 128px))"
+          },
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "flex-direction",
+            "value": "column"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-lg)"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-quote__text",
+        "declarations": [
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-heading), Arial, sans-serif"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-heading)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-heading-2)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-heading-2)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-font-letter-spacing-6xl)"
+          },
+          {
+            "prop": "overflow-wrap",
+            "value": "anywhere"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-knockout)"
+          },
+          {
+            "prop": "position",
+            "value": "relative"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-open-quote",
+        "declarations": [
+          {
+            "prop": "position",
+            "value": "absolute"
+          },
+          {
+            "prop": "transform",
+            "value": "translateX(-100%)"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-attribution",
+        "declarations": [
+          {
+            "prop": "display",
+            "value": "flex"
+          },
+          {
+            "prop": "flex-direction",
+            "value": "column"
+          },
+          {
+            "prop": "gap",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-attribution__name",
+        "declarations": [
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-eyebrow), Arial, sans-serif"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-eyebrow)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-eyebrow)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-eyebrow)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-typography-letter-spacing-eyebrow)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-knockout)"
+          },
+          {
+            "prop": "overflow-wrap",
+            "value": "anywhere"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-attribution__role",
+        "declarations": [
+          {
+            "prop": "font-family",
+            "value": "var(--s2a-font-family-body), Arial, sans-serif"
+          },
+          {
+            "prop": "font-weight",
+            "value": "var(--s2a-font-weight-body)"
+          },
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-typography-font-size-body-md)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-typography-line-height-body-md)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-typography-letter-spacing-body-md)"
+          },
+          {
+            "prop": "color",
+            "value": "var(--s2a-color-content-knockout)"
+          },
+          {
+            "prop": "overflow-wrap",
+            "value": "anywhere"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-actions .c-button",
+        "declarations": [
+          {
+            "prop": "max-width",
+            "value": "100%"
+          },
+          {
+            "prop": "height",
+            "value": "auto"
+          },
+          {
+            "prop": "min-height",
+            "value": "40px"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-actions .c-button__label",
+        "declarations": [
+          {
+            "prop": "overflow-wrap",
+            "value": "anywhere"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-quote__text",
+        "context": [
+          "@container (max-width: 1279px)"
+        ],
+        "declarations": [
+          {
+            "prop": "font-size",
+            "value": "var(--s2a-font-size-6xl)"
+          },
+          {
+            "prop": "line-height",
+            "value": "var(--s2a-font-line-height-2xl)"
+          },
+          {
+            "prop": "letter-spacing",
+            "value": "var(--s2a-font-letter-spacing-6xl)"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-content",
+        "context": [
+          "@container (max-width: 1279px)"
+        ],
+        "declarations": [
+          {
+            "prop": "width",
+            "value": "min(532px, calc(100% - 128px))"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-content",
+        "context": [
+          "@container (max-width: 599px)"
+        ],
+        "declarations": [
+          {
+            "prop": "margin",
+            "value": "0"
+          },
+          {
+            "prop": "width",
+            "value": "auto"
+          },
+          {
+            "prop": "padding",
+            "value": "var(--s2a-spacing-4xl) var(--s2a-spacing-lg)"
+          },
+          {
+            "prop": "gap",
+            "value": "var(--s2a-spacing-lg)"
+          }
+        ]
+      },
+      {
+        "selector": ".c-quote-card",
+        "context": [
+          "@media (max-width: 599px)"
+        ],
+        "declarations": [
+          {
+            "prop": "aspect-ratio",
+            "value": "375 / 620"
+          }
+        ]
+      },
+      {
+        "selector": ".qc-media__img",
+        "context": [
+          "@media (prefers-reduced-motion: reduce)"
+        ],
+        "declarations": [
+          {
+            "prop": "transition",
+            "value": "none"
+          }
+        ]
+      }
+    ]
+  },
   "states": [],
   "queries": [
     "@container (max-width: 1279px)",
@@ -297,7 +673,7 @@
         "attributionRole": "Creator",
         "ctaLabel": "Learn more",
         "ctaHref": "#",
-        "imageSrc": "http://127.0.0.1:57314/assets/slide-1-OrkBQbCA.jpg"
+        "imageSrc": "http://127.0.0.1:59652/assets/slide-1-OrkBQbCA.jpg"
       },
       "root": {
         "tag": "div",
@@ -360,7 +736,7 @@
         "attributionRole": "Creator",
         "ctaLabel": "Learn more",
         "ctaHref": "#",
-        "imageSrc": "http://127.0.0.1:57314/assets/slide-1-OrkBQbCA.jpg"
+        "imageSrc": "http://127.0.0.1:59652/assets/slide-1-OrkBQbCA.jpg"
       },
       "root": {
         "tag": "div",
@@ -423,7 +799,7 @@
         "attributionRole": "Creator",
         "ctaLabel": "Learn more",
         "ctaHref": "#",
-        "imageSrc": "http://127.0.0.1:57314/assets/slide-1-OrkBQbCA.jpg",
+        "imageSrc": "http://127.0.0.1:59652/assets/slide-1-OrkBQbCA.jpg",
         "showAttribution": false
       },
       "root": {
@@ -484,7 +860,7 @@
         "attributionRole": "Creator",
         "ctaLabel": "Learn more",
         "ctaHref": "#",
-        "imageSrc": "http://127.0.0.1:57314/assets/slide-1-OrkBQbCA.jpg",
+        "imageSrc": "http://127.0.0.1:59652/assets/slide-1-OrkBQbCA.jpg",
         "showCta": false
       },
       "root": {
@@ -525,7 +901,7 @@
         "attributionRole": "Creator",
         "ctaLabel": "Learn more",
         "ctaHref": "#",
-        "imageSrc": "http://127.0.0.1:57314/assets/slide-1-OrkBQbCA.jpg",
+        "imageSrc": "http://127.0.0.1:59652/assets/slide-1-OrkBQbCA.jpg",
         "showAttribution": false,
         "showCta": false
       },
@@ -626,7 +1002,7 @@
         "attributionRole": "Creator",
         "ctaLabel": "Learn more",
         "ctaHref": "#",
-        "imageSrc": "http://127.0.0.1:57314/assets/slide-1-OrkBQbCA.jpg"
+        "imageSrc": "http://127.0.0.1:59652/assets/slide-1-OrkBQbCA.jpg"
       },
       "root": {
         "tag": "div",
@@ -692,6 +1068,6 @@
     "storiesWithErrors": 0
   },
   "provenance": {
-    "hash": "sha256:e1729bb0b64f1055eff2d282f642d6cd971f566be43f086bb2019ac697a0bd0b"
+    "hash": "sha256:25b5bc49f7add3d1c55c6dfe6504d0788775fbfdb9d964102d52765d7b821501"
   }
 }

@@ -10,6 +10,7 @@
 // disk when Vite runs, which is the same thing `npm run specs:build` reads —
 // so the Book and the CLI cannot disagree about what a component says.
 import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { SYSTEMS as DECLARED } from "../../packages/spec-dictionary/systems.mjs";
 import { join, resolve } from "node:path";
 
 const VIRTUAL = "virtual:s2a-data";
@@ -21,21 +22,35 @@ export default function s2aData({ root }) {
   const ROOT = resolve(root);
   const SRC = join(ROOT, "packages", "components", "src");
   const TOKENS = join(ROOT, "dist", "packages", "tokens", "css", "dev");
+  // A design system is a source directory plus a token namespace. S2A is one;
+  // packages/spectrum2 is a second, holding contracts that describe Adobe's
+  // Spectrum 2 rather than our own components. Everything downstream groups
+  // on `system`, so adding a third is one entry here.
+  const SYSTEMS = [
+    { id: "s2a", label: "S2A", ns: "s2a", dir: SRC, tokens: TOKENS },
+    // `ns` names the contract (spectrum.button); `tokenNs` names the custom
+    // properties its tokens actually use. For Spectrum 2 those differ: the
+    // implementation is @adobe/spectrum-wc and its variables are --swc-*.
+    { id: "spectrum", label: "Spectrum 2", ns: "spectrum", tokenNs: "swc", dir: join(ROOT, "packages", "spectrum2", "src"), tokens: join(ROOT, "packages", "spectrum2", "tokens") },
+  ].filter((s) => existsSync(s.dir));
   const ASSETS = join(ROOT, "packages", "spec-dictionary", "out", "assets");
   const SCHEMA = join(ROOT, "packages", "components", "defs.schema.json");
   const CONTRACT_SCHEMA = join(ROOT, "packages", "spec-dictionary", "southleft", "contract.schema.json");
 
   function load() {
     const components = [];
-    for (const slug of readdirSync(SRC).sort()) {
-      const dir = join(SRC, slug);
+    for (const system of SYSTEMS)
+    for (const slug of readdirSync(system.dir).sort()) {
+      const dir = join(system.dir, slug);
       const defs = readJson(join(dir, `${slug}.defs.json`));
       const spec = readJson(join(dir, `${slug}.spec.json`));
       // Every component with a spec is in the slug index (specJson needs it to
       // resolve composedOf names); only the contracted ones get a full record.
       if (!spec && !defs) continue;
       components.push({
-        slug,
+        slug: system.id === "s2a" ? slug : `${system.id}:${slug}`,
+        system: system.id,
+        systemLabel: system.label,
         name: spec?.name ?? defs?.component ?? slug,
         contracted: Boolean(defs),
         defs,
@@ -46,29 +61,56 @@ export default function s2aData({ root }) {
       });
     }
 
-    // Token CSS, parsed to plain objects so the pure resolver can take them —
-    // and verbatim, for the preview, which needs the theme selectors intact.
+    // Token CSS, parsed to plain objects so the pure resolver can take them.
     const tokenFiles = {};
-    const tokenCss = {};
-    if (existsSync(TOKENS)) {
-      for (const f of readdirSync(TOKENS)) {
-        const css = readFileSync(join(TOKENS, f), "utf8");
-        const map = {};
-        for (const m of css.matchAll(/(--s2a-[a-z0-9_-]+)\s*:\s*([^;]+);/g)) map[m[1]] = m[2].trim();
-        tokenFiles[f] = map;
-        tokenCss[f] = css;
+    // Per system, because a token namespace belongs to a system, not to the Book.
+    const tokenFilesBySystem = {};
+    for (const sys of SYSTEMS) {
+      const map = {};
+      if (existsSync(sys.tokens)) {
+        const re = new RegExp(`(--${sys.tokenNs ?? sys.ns}-[a-z0-9_-]+)\\s*:\\s*([^;]+);`, "g");
+        for (const f of readdirSync(sys.tokens)) {
+          const css = readFileSync(join(sys.tokens, f), "utf8");
+          const m2 = {};
+          for (const m of css.matchAll(re)) m2[m[1]] = m[2].trim();
+          map[f] = m2;
+          if (sys.id === "s2a") tokenFiles[f] = m2;
+        }
       }
+      // A component's own stylesheet is one more, lowest-priority tier: Spectrum
+      // declares --swc-<component>-* properties there. Read here as well as in
+      // the Node build so the gate and the Book cannot disagree about whether a
+      // reference resolves.
+      const tier = {};
+      if (existsSync(sys.dir)) for (const slug of readdirSync(sys.dir)) {
+        const css = join(sys.dir, slug, `${slug}.css`);
+        if (!existsSync(css)) continue;
+        for (const m of readFileSync(css, "utf8").matchAll(new RegExp(`(--${sys.tokenNs ?? sys.ns}-[a-z0-9_-]+)\\s*:\\s*([^;]+);`, "g"))) tier[m[1]] ??= m[2].trim();
+      }
+      if (Object.keys(tier).length) map["tokens.component.css"] = tier;
+      tokenFilesBySystem[sys.id] = map;
     }
 
+    // Asset manifests are keyed by their own name, so every system's manifests
+    // share one map — a slot says `spectrum-icons` or `s2a-icons` and the name
+    // is the whole address.
     const assets = {};
-    if (existsSync(ASSETS)) {
-      for (const f of readdirSync(ASSETS)) if (f.endsWith(".json")) assets[f.replace(/\.json$/, "")] = readJson(join(ASSETS, f));
+    for (const dir of [ASSETS, join(ROOT, "packages", "spectrum2", "assets")]) {
+      if (!existsSync(dir)) continue;
+      for (const f of readdirSync(dir)) if (f.endsWith(".json")) assets[f.replace(/\.json$/, "")] = readJson(join(dir, f));
     }
 
     return {
       components,
       tokenFiles,
-      tokenCss,
+      tokenFilesBySystem,
+      // Where each system's stories live in Storybook, from the one declaration
+      // of what a system is; the Book builds story ids and links from it.
+      storybookTitleBySystem: Object.fromEntries(SYSTEMS.map((x) => [x.id, DECLARED[x.id]?.storybook?.title ?? "Generated"])),
+      // Contract namespace vs token namespace, per system. The Book needs the
+      // second to decide whether a reference belongs to the system it is
+      // looking at; it cannot derive it from the system id.
+      tokenNsBySystem: Object.fromEntries(SYSTEMS.map((x) => [x.id, x.tokenNs ?? x.ns ?? x.id])),
       assets,
       schemas: { defs: readJson(SCHEMA), contract: readJson(CONTRACT_SCHEMA) },
       capturedAt: new Date().toISOString(),
@@ -85,7 +127,7 @@ export default function s2aData({ root }) {
     // Editing a defs/evidence file on disk should show up in the Book without a
     // restart — the point of running against the repo rather than a snapshot.
     configureServer(server) {
-      const watch = [SRC, TOKENS, ASSETS, SCHEMA, CONTRACT_SCHEMA];
+      const watch = [...SYSTEMS.map((x) => x.dir), TOKENS, ASSETS, join(ROOT, "packages", "spectrum2", "assets"), SCHEMA, CONTRACT_SCHEMA];
       for (const w of watch) if (existsSync(w)) server.watcher.add(w);
       // A save writes three files in a row and the person has a banner to
       // read, so the reload waits a beat and collapses the burst into one.
