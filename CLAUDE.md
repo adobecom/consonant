@@ -1,4 +1,10 @@
+@AGENTS.md
+
 # S2A Design System — Claude Code Rules
+
+Orientation, conventions, the session start/end procedure and where each area's
+STATUS file lives are in `AGENTS.md` (imported above, shared with Codex and
+Cursor). What follows is the designer-facing layer on top of it.
 
 This is the S2A design system for Adobe — a monorepo containing components, tokens, Storybook, and MCP servers. Claude Code is the primary tool for both **designers building features** and **engineers authoring components in Figma**.
 

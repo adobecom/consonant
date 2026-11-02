@@ -1,0 +1,13 @@
+{
+  "description": "Mirror of the Claude Code hooks in .claude/settings.json. Trust once via /hooks after reviewing the scripts in scripts/hooks/.",
+  "hooks": {
+    "SessionStart": [{ "hooks": [{ "type": "command",
+      "command": "bash scripts/hooks/session-start.sh", "timeout": 10, "statusMessage": "Last handoff and work since" }] }],
+    "Stop": [{ "hooks": [{ "type": "command",
+      "command": "bash scripts/hooks/stop-handoff-nudge.sh", "timeout": 10, "statusMessage": "Handoff check" }] }],
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command",
+      "command": "PROMPT_LOG_TOOL=Codex bash scripts/hooks/log-prompt.sh", "timeout": 5, "statusMessage": "Prompt log" }] }],
+    "SessionEnd": [{ "hooks": [{ "type": "command",
+      "command": "bash scripts/hooks/archive-transcript.sh", "timeout": 3, "statusMessage": "Archive transcript" }] }]
+  }
+}

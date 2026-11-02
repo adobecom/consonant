@@ -97,3 +97,18 @@ packages/spec-dictionary/examples/minimal/out/
 
 # assembled GitHub Pages site (scripts/stage-site.mjs) — anchored so apps/site/ stays tracked
 /site/
+
+# --- agent workflow (playbooks/agent-workflow/README.md) ---
+# rough drops stay local; /sort writes the filed version elsewhere
+/inbox/*
+!/inbox/README.md
+
+# session digests quote prompts; local only
+/context/digests/
+
+# notes about people, meetings and access stay on this machine
+/*/notes/
+/*/*/notes/
+
+# installer backups of the project settings
+/.claude/settings.json.bak*
